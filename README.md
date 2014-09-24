@@ -11,6 +11,17 @@ It greatly expands and improves the Minecart system in Minecraft. Adding many ne
 
 The mod was created and is still currently maintained by the user going by the name **CovertJaguar**.
 
+## Why are you posting the Souce Code?
+
+In the words of **CovertJaguar**:
+> As a new modder, I originally feared losing control of my code, my brainchild. However, since that time, I have had the privelege of being Project Lead on two other major Minecraft Mod projects that provided access to the source: [Buildcraft](https://github.com/BuildCraft/BuildCraft) and [Forestry](https://github.com/ForestryMC/ForestryMC). I've generally found this to be a positive experiance resulting in many bug fixes and increased intermod compatibility.  While I still have some concerns, I have come to feel that the benefits of providing others access to my source code outweighs the negatives and unknowns. To that end, despite my missgivings, I made Source Access a [Patreon Milestone Goal](http://www.patreon.com/CovertJaguar). I had no idea whether I'd ever meet that Goal, but I decided to let the community decide, and decide they did, overwhelminging so! My Patrons are awesome. So, as promised, I am posting the Source Code.
+
+## Official Links
+
+* The Blog, Forums, and main download page: http://www.railcraft.info
+* The Wiki: http://railcraft.info/wiki
+* IRC: #railcraft on Esper.net - [WebChat](http://webchat.esper.net/?nick=RailcraftGithub...&channels=railcraft&prompt=1)
+
 ## Issues
 
 Post only confirmed bugs [here](https://github.com/CovertJaguar/Railcraft/issues). Do not post crash logs, you can post pastebin links to FML logs, but no crash logs.
@@ -22,6 +33,8 @@ You must have read and performed the proper support procedure outlined [here](ht
 The Official Railcraft Project welcomes contributions from anyone, provided they have signed the Contributor Licensing Agreement (CLA) found [here](https://www.clahub.com/agreements/CovertJaguar/Railcraft).
 
 Singing the CLA is simple, just follow the link, fill out your name and email, and hit the "I Agree" button and you are good to go.
+
+Regarding new features/behaivor changes, please submit a Suggestion Issue to the Tracker before you write a single line of code. Keeping everyone on the same page saves time and effort and reduces negative experiances all around when a change turns out to be controversial.
 
 ## License
 
