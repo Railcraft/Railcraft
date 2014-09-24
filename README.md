@@ -1,6 +1,6 @@
 # Railcraft - A Minecraft Mod
 
-Here you will find the source and issue tracker for the Official Railcraft Project.
+Here you will find the source and issue tracker for the **Official Railcraft Project**.
 
 
 ## What is Railcraft?
