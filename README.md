@@ -41,7 +41,7 @@ Regarding new features/behaivor changes, please submit a Suggestion Issue to the
 Railcraft is licensed under a custom usage license taliored specifically for the project. It can be read here (insert link).
 
  * Key things to keep in mind:
-  * You may not create works using the Railcraft code (source or binary) without CovertJaguar's explicit permission except in the cases listed in this license.
+  * You may **NOT** create works using the Railcraft code (source or binary) without CovertJaguar's explicit permission except in the cases listed in this license.
   * You may **NOT** create derivative Jars from Railcraft source to distribute to other users.
   * You **MAY** use snippets of Railcraft code in your own projects, but only if your project consists of less than 25% of Railcraft derived code. You must give credit to the Railcraft Project for the code used, including a link to the Github Project. Put this in your class file headers that contain Railcraft code.
   * You **MAY** fork and edit the Github Project for the purpose of contributing to the Official Railcraft Project. You may **NOT** distribute any Jar created from a fork for any reason.
