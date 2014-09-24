@@ -39,6 +39,17 @@ Singing the CLA is simple, just follow the link, fill out your name and email, a
 
 Regarding new features/behaivor changes, please submit a Suggestion Issue to the Tracker before you write a single line of code. Keeping everyone on the same page saves time and effort and reduces negative experiances all around when a change turns out to be controversial.
 
+## Building
+
+The Railcraft Project follows standard Forge conventions for setting up and building a project, with a couple additional details (details to come).
+
+Initial Setup:
+```
+gradlew setupDecomWorkspace eclipse
+```
+
+The [API](https://github.com/CovertJaguar/Railcraft-API) and [Localization](https://github.com/CovertJaguar/Railcraft-Localization) files reside in their own repositories and are pulled automatically into the main repo as git submodules.
+
 ## License
 
 Railcraft is licensed under a custom usage license taliored specifically for the project. It can be read here (insert link).
