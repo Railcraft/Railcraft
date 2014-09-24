@@ -43,7 +43,7 @@ Regarding new features/behaivor changes, please submit a Suggestion Issue to the
 
 The Railcraft Project follows standard Forge conventions for setting up and building a project, with a couple additional details (details to come).
 
-Initial Setup:
+Initial Setup from the Command Line:
 ```
 gradlew setupDecomWorkspace eclipse
 ```
