@@ -52,7 +52,7 @@ The [API](https://github.com/CovertJaguar/Railcraft-API) and [Localization](http
 
 ## License
 
-Railcraft is licensed under a custom usage license tailored specifically for the project. It can be read here (insert link).
+Railcraft is licensed under a custom usage license tailored specifically for the project. It can be read [here](https://github.com/CovertJaguar/Railcraft/blob/master/LICENSE.md).
 
  * Key things to keep in mind:
   * You may **NOT** create works using the Railcraft code (source or binary) without CovertJaguar's explicit permission except in the cases listed in this license.
