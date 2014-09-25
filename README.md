@@ -35,7 +35,7 @@ You must have read and performed the proper support procedure outlined [here](ht
 
 The Official Railcraft Project welcomes contributions from anyone, provided they have signed the Contributor Licensing Agreement (CLA) found [here](https://www.clahub.com/agreements/CovertJaguar/Railcraft).
 
-Singing the CLA is simple, just follow the link, fill out your name and email, and hit the "I Agree" button and you are good to go.
+Signing the CLA is simple, just follow the link, fill out your name and email, and hit the "I Agree" button and you are good to go.
 
 Regarding new features/behavior changes, please submit a Suggestion Issue to the Tracker before you write a single line of code. Keeping everyone on the same page saves time and effort and reduces negative experiences all around when a change turns out to be controversial.
 
