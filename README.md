@@ -7,11 +7,11 @@ Here you will find the source and issue tracker for the **Official Railcraft Pro
 
 Railcraft is a mod written for the hit game [Minecraft](https://minecraft.net/). It is built on top of the [Minecraft Forge](https://github.com/MinecraftForge) API.
 
-It greatly expands and improves the Minecart system in Minecraft. Adding many new blocks, entities, and features. It has been in developement since 2012 and contains over 800 class files and hundreds of thousands of lines of code.
+It greatly expands and improves the Minecart system in Minecraft. Adding many new blocks, entities, and features. It has been in development since 2012 and contains over 800 class files and hundreds of thousands of lines of code.
 
 The mod was created and is still currently maintained by the user going by the name **CovertJaguar**.
 
-## Why are you posting the Souce Code?
+## Why are you posting the Source Code?
 
 In the words of **CovertJaguar**:
 > As a new modder, I originally feared losing control of my code, my brainchild. However, since that time, I have had the privelege of being Project Lead on two other major Minecraft Mod projects that provided access to the source: [Buildcraft](https://github.com/BuildCraft/BuildCraft) and [Forestry](https://github.com/ForestryMC/ForestryMC). I've generally found this to be a positive experiance resulting in many bug fixes and increased intermod compatibility.  While I still have some concerns, I have come to feel that the benefits of providing others access to my source code outweighs the negatives and unknowns. To that end, despite my missgivings, I made Source Access a [Patreon Milestone Goal](http://www.patreon.com/CovertJaguar). I had no idea whether I'd ever meet that Goal, but I decided to let the community decide, and decide they did, overwhelminging so! My Patrons are awesome. So, as promised, I am posting the Source Code.
@@ -37,7 +37,7 @@ The Official Railcraft Project welcomes contributions from anyone, provided they
 
 Singing the CLA is simple, just follow the link, fill out your name and email, and hit the "I Agree" button and you are good to go.
 
-Regarding new features/behaivor changes, please submit a Suggestion Issue to the Tracker before you write a single line of code. Keeping everyone on the same page saves time and effort and reduces negative experiances all around when a change turns out to be controversial.
+Regarding new features/behavior changes, please submit a Suggestion Issue to the Tracker before you write a single line of code. Keeping everyone on the same page saves time and effort and reduces negative experiences all around when a change turns out to be controversial.
 
 ## Building
 
@@ -45,14 +45,14 @@ The Railcraft Project follows standard Forge conventions for setting up and buil
 
 Initial Setup from the Command Line:
 ```
-gradlew setupDecomWorkspace eclipse
+gradlew setupDecompWorkspace eclipse
 ```
 
 The [API](https://github.com/CovertJaguar/Railcraft-API) and [Localization](https://github.com/CovertJaguar/Railcraft-Localization) files reside in their own repositories and are pulled automatically into the main repo as git submodules.
 
 ## License
 
-Railcraft is licensed under a custom usage license taliored specifically for the project. It can be read here (insert link).
+Railcraft is licensed under a custom usage license tailored specifically for the project. It can be read here (insert link).
 
  * Key things to keep in mind:
   * You may **NOT** create works using the Railcraft code (source or binary) without CovertJaguar's explicit permission except in the cases listed in this license.
