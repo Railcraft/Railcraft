@@ -1,0 +1,300 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+	}
+}
+
+apply plugin: 'forge'
+
+version = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
+group = "mods.railcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Railcraft_" + mcversion
+
+ext.apiRailcraft = "./api/railcraft"
+ext.apiForestry = "./api/forestry"
+
+ext.dirLang = "./lang"
+
+ext.dirDest = './build/dist'
+
+minecraft {
+	version = mcversion + "-" + forgeversion
+	runDir = "run"
+
+	replace '@VERSION@', project.version
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir project.apiRailcraft
+			srcDir project.apiForestry
+			exclude '**/forestry/api/apiculture/**'
+			exclude '**/forestry/api/arboriculture/**'
+			exclude '**/forestry/api/circuits/**'
+			exclude '**/forestry/api/core/**'
+			exclude '**/forestry/api/farming/**'
+			exclude '**/forestry/api/food/**'
+			exclude '**/forestry/api/fuels/**'
+			exclude '**/forestry/api/genetics/**'
+			exclude '**/forestry/api/lepidopterology/**'
+			exclude '**/forestry/api/mail/**'
+			exclude '**/forestry/api/world/**'
+		}
+		resources {
+			srcDir project.dirLang
+		}
+	}
+}
+
+repositories {
+	maven {
+		name = "ic2"
+		url = "http://maven.ic2.player.to/"
+	}
+}
+configurations{
+	buildcraft
+	compile.extendsFrom buildcraft
+}
+
+dependencies {
+	compile 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
+	buildcraft 'com.mod-buildcraft:buildcraft:6.0.17+:dev'
+}
+
+processResources
+{
+	// this will ensure that this task is redone when the versions change.
+	inputs.property "version", project.version
+	inputs.property "mcversion", project.minecraft.version
+
+	// replace stuff in mcmod.info, nothing else
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+
+		// replace version and mcversion
+		expand 'version':project.version, 'mcversion':project.minecraft.version
+	}
+
+	// copy everything else, thats not the mcmod.info
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+		exclude '**/*.md'
+	}
+}
+
+runClient {
+	args "--username=${project.mcUsername}"
+	args "--password=${project.mcPassword}"
+}
+
+debugClient {
+	args "--username=${project.mcUsername}"
+	args "--password=${project.mcPassword}"
+}
+
+task echoVersion << {
+	printNextVersion()
+}
+
+def saveVersion() {
+	ant.propertyfile(
+		file: "gradle.properties") {
+		entry( key:"version_major", type:"int", value: version_major)
+		entry( key:"version_series", type:"int", value: version_series)
+		entry( key:"version_revision", type:"int", value: version_revision)
+		entry( key:"version_build", type:"int", value: version_build)
+	}
+	project.version = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
+	printNextVersion()
+}
+
+def printNextVersion(){
+	println '*************************************************************'
+	println 'The next build will be version: ' +  project.version
+	println '*************************************************************'
+}
+
+task bumpMajor << {
+	project.version_major = Integer.parseInt(project.version_major) + 1
+	project.version_series = "0"
+	project.version_revision = "0"
+	project.version_build = "0"
+	saveVersion()
+}
+
+task bumpSeries << {
+	project.version_series = Integer.parseInt(project.version_series) + 1
+	project.version_revision = "0"
+	project.version_build = "0"
+	saveVersion()
+}
+
+task bumpRevision << {
+	project.version_revision = Integer.parseInt(project.version_revision) + 1
+	project.version_build = "0"
+	saveVersion()
+}
+
+task bumpBuild << {
+	project.version_build = Integer.parseInt(project.version_build) + 1
+	saveVersion()
+}
+
+task setBuild << {
+	def console = System.console()
+	if (console) {
+		project.version_build = console.readLine('> What should the build be? ')
+	} else {
+		logger.error "Cannot get console."
+	}
+	saveVersion()
+}
+
+jar {
+	destinationDir = file("build/tmp")
+	archiveName = "main.jar"
+
+	from {
+		configurations.buildcraft.collect {
+			it.isDirectory() ? it : zipTree(it).matching {
+				include '**/api/**'
+			}
+		}
+	}
+}
+
+task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
+	from (zipTree(jar.getArchivePath())) {
+		exclude '**/api/**'
+	}
+
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	destinationDir = file("build/tmp")
+	archiveName = "signed.jar"
+
+	doLast {
+		if (project.hasProperty('signingKeystore')) {
+			ant.signjar(jar: getArchivePath(),
+				alias: signingAlias,
+				keystore: signingKeystore,
+				storepass: signingStorepass)
+		} else {
+			println 'Signing disabled, gradle.properties is missing.'
+		}
+	}
+}
+
+task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
+	from (zipTree(mainJarSigned.getArchivePath())) {
+		include '**'
+	}
+
+	from (zipTree(jar.getArchivePath())) {
+		include '**'
+		exclude '**/uristqwerty/**'
+	}
+
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	destinationDir = file(dirDest)
+	includeEmptyDirs = false
+	extension = 'jar'
+}
+
+task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
+	from(sourceSets.main.output) {
+		exclude '**/api/**'
+	}
+
+	destinationDir = file("build/tmp")
+	archiveName = "signed-dev.jar"
+
+	doLast {
+		if (project.hasProperty('signingKeystore')) {
+			ant.signjar(jar: getArchivePath(),
+				alias: signingAlias,
+				keystore: signingKeystore,
+				storepass: signingStorepass)
+		} else {
+			println 'Signing disabled, gradle.properties is missing.'
+		}
+	}
+}
+
+task devJar ( type: Zip, dependsOn: devJarSigned ) {
+	from (zipTree(devJarSigned.getArchivePath())) {
+		include '**'
+	}
+
+	from(sourceSets.main.allSource) {
+		include '**/api/**'
+	}
+
+	from(sourceSets.main.output) {
+		include '**'
+	}
+
+	from {
+		configurations.buildcraft.collect {
+			it.isDirectory() ? it : zipTree(it).matching {
+				include '**/api/**'
+			}
+		}
+	}
+
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	destinationDir = file(dirDest)
+	extension = 'jar'
+
+	classifier = 'dev'
+}
+
+task apiZip ( type: Zip ) {
+	from project.apiRailcraft
+	destinationDir = file(dirDest)
+	classifier = 'api'
+	extension = 'zip'
+}
+
+task releaseInit << {
+	println '*************************************************************'
+	println 'This build will be version: ' +  project.version
+	println '*************************************************************'
+}
+
+task release << {
+	project.version_build = Integer.parseInt(project.version_build) + 1
+	saveVersion()
+}
+
+release.dependsOn releaseInit, mainJar, devJar, apiZip
+mainJar.shouldRunAfter releaseInit
+devJar.shouldRunAfter releaseInit
+apiZip.shouldRunAfter releaseInit
+release.shouldRunAfter uploadArchives
+
+artifacts {
+	archives mainJar, devJar, apiZip
+}
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			repository(url: "http://files.minecraftforge.net/maven/manage/upload") {
+				authentication(userName: forgeMavenUsername, password: forgeMavenPassword)
+			}
+		}
+	}
+}

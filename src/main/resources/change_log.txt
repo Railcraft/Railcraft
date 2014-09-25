@@ -1,0 +1,1643 @@
+9.3.2.0:
+	CHANGE: Renamed Stone Lamps to Stone Lanterns.
+	CHANGE: Posts now connect to Wire Support Frames.
+	FIX: Fixed Loaders erroring on load and forgetting their contents.
+	FIX: Fixed Locomotives forgetting their destination on load.
+	FIX: Crowbar now allows sneak bypass, enabling shift-click to rotate Locking Track modes in reverse.
+	FIX: Fixed Tracks that were uncraftable in Alternate Recipe Mode due to an improper OreDict tag.
+	FIX: Fixed Item Unloaders blocking when attempting to remove items from inaccessible slots.
+
+9.3.1.1:
+	FIX: Metals and Void Chests should now orient correctly on placement.
+	FIX: Fixed Locking Track sometimes getting stuck in its startup mode and not grabbing carts.
+
+9.3.1.0:
+	FIX: Obligatory recipe fix patch. Never fails, recipes are always broken.
+
+9.3.0.0:
+	NEW: Added Electric Locomotive Sounds!
+	NEW: Ic2 Energy Carts can be used to power the Electric Locomotive. To offset this, theses carts now have a lower speed than normal carts. This can be countered by adding multiple Locomotives.
+	NEW: Locomotives will have their name and destination displayed above them. There will probably be some way to hide/disable this in the future.
+	API: Added IElectricMinecart to allow carts to transfer power throughout the train.
+
+9.2.2.7:
+	NEW: Added Wire Support Frames. Now required in order to place Track on Shunting Wire. Place wire, then click with Frame in hand (other way around works too).
+	NEW: Electric Tracks cause damage to living entities when powered. The Engineer's Overalls will prevent it.
+	FIX: Fixed texture shearing on Posts/Platforms.
+	FIX: Fix version check localization and redirected away from my ailing Dropbox.
+	FIX: Fixed issues with Engineer's Overalls not breaking when preventing damage.
+
+9.2.2.6:
+	FIX: Fix Stone Tie recipe.
+	FIX: Metals chest will no longer delete items if there isn't room in the chest.
+	FIX: The colors man, fix the colors.
+
+9.2.2.5:
+	NEW: Added Copper/Tin Blocks.
+	NEW: Added Lead and associated Poor Ore, Nuggets, Ingots, and Blocks.
+	NEW: Add Metals Chest, a chest that condenses any metal nuggets or ingots inserted into it blocks. Good for dealing with multiple OreDictionary variants of metals.
+	NEW: Added Electric Shunting Wire, made from Copper, Paper, and Lead in a Rolling Machine. Use it to connect Electric Tracks across gaps and non-electrified tracks in the line. Place under the track.
+	NEW: Added Losses display to Electric Meter readout.
+	FIX: Fix missing item recipes.
+
+9.2.2.4:
+	FIX: Added recipes for Electric Tracks and Locomotives.
+	FIX: Fix Feeder Unit so it actually drains power from Ic2 networks.
+	FIX: Fix recipe for Commercial Steam Engine.
+
+9.2.2.3:
+	NEW: Add Electric Locomotive, early draft. Nothing is final.
+	CHANGE: Gear recipes modified to be less dependant on Buildcraft. Now requires a Tin Bushing as the core instead of Stone Gears.
+	CHANGE: Steam Turbine moved from Ic2 Module to Electric Module. No longer requires Ic2.
+
+9.2.2.2:
+	EXP: Removed CraftGuide API files from Jar.
+	FIX: Fix NBT errors with Routing Table.
+	FIX: Fix tooltip localizations on many items.
+
+9.2.2.0:
+	FIX: Fix Forestry Backpacks for real this time, all issues should be resolved and tested.
+
+9.2.1.0:
+	NEW: Liquifaction Coal (32000 HU) and Blazing Pyrotheum (64000 HU) can now be used by Boilers. 
+	CHANGE: Buffed Bleached Bone Brick recipe. Changed recipe to shapeless: 1x Clay Ball + 3x Bomemeal = 1x Bleached Clay, Cook 1x Bleached Clay in Furnace to get 1x Bleached Bone Block.
+	FIX: Fix occasional circular code loop in track item code.
+	FIX: Fix Backpack crash.
+	FIX: The Cart Dispenser and carts in general should be less likely to forget custom Names added by the anvil.
+	FIX: Update Steel Anvil to support new Forge Repair events.
+
+9.2.0.0:
+	INFO: Package for Official Release.
+	FIX: Resolve persistent foreign language file issues.
+	FIX: Firestone retains name when being recharged or broken.
+	CONFIG: Fix Anchor fuel parsing and allow floats.
+
+9.1.0.11:
+	FIX: Fix Foreign Language file formats. Should be UTF-8 not ANSI.
+
+9.1.0.10:
+	INFO: Fix logging added in last build.
+
+9.1.0.9:
+	INFO: Added some debug logging for an issue with tracks.
+
+9.1.0.8:
+	FIX: Convert Localization System to vanilla implementation. Should render us fairly future proof hopefully.
+
+9.1.0.7:
+	FIX: Fix security tool tip crash.
+
+9.1.0.6:
+	INFO: Updated to 1.7.10
+	INFO: Updated IC2 and Forestry APIs.
+	NEW: Added a new lock mode for Locomotives that prevents all GUI access and hotkey use.
+	CHANGE: Tweaked median y spawn levels of Copper and Tin slightly (y70->y60 and y60->y50 respectively).
+	FIX: Fix Forestry Backpack integration. It was crashing NEI.
+	FIX: Steam should not be red!
+	FIX: Poor Iron Ore can be mined with Stone Pickaxe.
+
+9.1.0.0:
+	INFO: Repackage for release.
+
+9.0.0.9:
+	FIX: Refuse to extract zero stack items from inventories, fixes pulling infinite items from Barrels.
+
+9.0.0.8:
+	FIX: Fix broken git-fu.
+
+9.0.0.7 (broken):
+	FIX: Close file resources after loading textures because apparently MC doesn't do it for us.
+	FIX: Removed config options pertaining to IC2 Refined Iron, since it no longer exists and they were crashing with newer Forge versions.
+	FIX: Call markDirty() on inventories.
+
+9.0.0.6:
+	FIX: Snow Slabs are crafted with Snow Layers, not Blocks. Fixes recipe conflict.
+	FIX: Enrolled Villager in a course on economics. No more free Emeralds.
+	FIX: Apply mad hacks to make pathfinding stop trying to jump over my Walls.
+
+9.0.0.5:
+	NEW: Poor Ore Seams. Seams of Poor Ore for Iron, Gold, Tin, and Copper will now spawn in the world. Cook the Ore to get Nuggets.
+	FIX: Various bug fixes mostly related to left over 1.7 issues.
+
+9.0.0.4:
+	FIX: Fix crash in creative mode.
+
+9.0.0.3:
+	FIX: Converted Tank Cart Filter recipes to a Custom Recipe, fixes issues with incorrect items being mapped.
+	FIX: Fix minecart deconstruction recipes, they should now return the cart contents correctly.
+
+9.0.0.2:
+	FIX: Fix server.
+
+9.0.0.1:
+	NEW: Added Railcraft Villager and Structure to Villages. (credits to AEnterprise for the initial code)
+
+9.0.0.0:
+	INFO: Repackage for Official Release.
+
+8.4.0.15:
+	FIX: Added recipe for Trade Station.
+	FIX: Posts and Platforms are now placed with the correct metadata.
+	FIX: Attempt to fix Creosote and buckets.
+	API: Alternate Locomotive Skin Items should now show up in the Creative Menu.
+
+8.4.0.13:
+	INFO: Minor tweaks for public beta release.
+
+8.4.0.12:
+	FIX: Fix startup crash, oops.
+
+8.4.0.11 (broken):
+	CHANGE: Lockdown, Holding, and Boarding Tracks merged into a single Locking Track. Change modes with a Crowbar.
+	API: Reduced the importance of TrackIds, they are now only used for legacy support and network sync. TrackTags strings are used for everything else, including serialization.
+
+8.4.0.10:
+	FIX: Stomp network bugs.
+
+8.4.0.9 (unstable):
+	INFO: Update Thaumcraft & IC2 APIs.
+	NEW: Villagers are aware of Trade Stations and find them interesting.
+	FIX: Fix Steam Oven and Turbine Textures.
+
+8.4.0.8 (unstable):
+	FIX: Walls no longer crash.
+	FIX: Sounds have returned!
+
+8.4.0.7 (unstable):
+	FIX: Fix Post<->Signal connections.
+	FIX: Metal Posts are no longer called Platforms.
+	FIX: Fix issues with Trackman's Goggles initialization.
+	FIX: Fix Golden Ticket GUI.
+
+8.4.0.6 (unstable):
+	NEW: Added Trade Station (work in progress). A block that can trade with Villagers.
+	NEW: If the Bore stops for any reason, it will now activate any attached Locomotives (must be in Run mode to work).
+	CHANGE: Master block of all MultiBlocks moved to the center of the structure if possible to make it possible to rotate them intact.
+	FIX: Cart content rendering.
+	FIX: Force Locomotive renderer to explicitly specify the standard blend function (no more Ghost Trains).
+	FIX: Moved CloudMaster code into its own project and out of Railcraft.
+	FIX: Stairs and Slabs no longer crash.
+	FIX: Signal Aspects blink again.
+
+8.4.0.4 (unstable):
+	INFO: Updated Thaumcraft API.
+	FIX: Package the BC API in the jar removing the hard dep.
+	FIX: Fix key-binding issues.
+
+8.4.0.2 (unstable):
+	FIX: Fix crashes when checking player armor.
+	FIX: Attempt to work around SpecialSource limitations.
+
+8.4.0.1 (unstable):
+	INFO: Updated to MC 1.7.2. The only testing done so far is to create a new world and look around.
+	KNOWN ISSUES: No sounds, vanilla minecarts are not being replaced, Bore won't mine, some blocks harvest weirdly, Buildcraft is hard required because the API isn't being packaged correctly.
+	NEW: Using a Magnifying Glass on a structure will give you some information about why it won't form. Not sure how useful it is.
+	CONFIG: Anchor Fuel options expanded to support multiple items.
+	API: Added framework for creating alternative Locomotive skins.
+
+8.4.0.0:
+	INFO: Updated Thaumcraft API to 4.1.0.
+	CONFIG: Added multiplier for Bore Mining Speed.
+	FIX: Added some checks to prevent the Thaumcraft Plugin from crashing if you disable some of Railcraft's items/blocks.
+	FIX: Train Dispenser was broken in 8.3.0.0, fixed now.
+
+8.3.2.3 (marmot):
+	INFO: This build is built against Buildcraft's "marmot" branch.
+	FIX: Using the Loader Gate Action "Pause" should be less unstable.
+
+8.3.2.2:
+	FIX: Fix possible loop in Tile Entity repair code.
+
+8.3.2.1:
+	NEW: Added Platforms, a variant of Posts.
+
+8.3.2.0:
+	INFO: Forge req bumped to 9.11.1.965 for the Replaceable TileEntity Bug fix.
+	FIX: Catch and handle network sync errors caused by corrupted TileEntities.
+
+8.3.1.1:
+	CHANGE: Energy Detectors now use Tin Plates instead of Tin Ingots.
+	CHANGE: Minor tweak to Boiler fuel use code to fix some weird math when using non-standard config settings.
+	FIX: Fixed a dupe but with copying Routing Tables.
+	FIX: Add some error checking to Engine net sync to prevent crashing if the TE becomes corrupt.
+	FIX: Feed Station no longer crashes when feeding Wolves.
+	FIX: Fixed an infinite loop that could occur if you place certain tracks in odd configurations.
+
+8.3.1.0:
+	FIX: Gift Cart should no longer render as TNT.
+
+8.3.0.0:
+	INFO: Repacked for public release.
+
+8.2.0.16:
+	CHANGE: Stone Lamps now require Slabs instead of Blocks, added Stone and Sandstone variants.
+	FIX: Add some more error checking and handling to the Routing Logic to prevent possible crashes on malformed syntax.
+	FIX: Carts can't collide when dead, fixes some issues with Nether Portals.
+	FIX: Posts can make "hanging drops" again (for Morv).
+
+8.2.0.15:
+	FIX: Various minor performance tweaks to Boilers, Rolling Machines, etc...
+	FIX: Firestone heating bonuses are no longer applied to the cool-down process, only heatup. Oops.
+
+8.2.0.14:
+	CONFIG: Added option to set the output of the Creosote Torch Recipe.
+	FIX: Engines should update neighbors when rotating.
+	FIX: Fix sound crash with Creosote Block Slabs and Stairs.
+
+8.2.0.13:
+	CHANGE: Unified and standardized all Steam production code in all devices.
+	FIX: Fixed rounding error in Steam production code that was preventing 1x1 Boilers and other producers from producing steam.
+
+8.2.0.12:
+	FIX: Firestone Ore, Raw Firestone, etc... are all immune to fire and lava now.
+	FIX: Added names for Creosote Slab/Stairs.
+	FIX: Posts Connect to Stone Lamps now.
+	API: IPostConnection was modified somewhat, in a hopefully non-critical manner.
+
+8.2.0.11:
+	INFO: Updated version check links and scripts to be less likely to fail during a build push.
+
+8.2.0.10:
+	FIX: High Pressure Boilers have the correct Max Temp again.
+
+8.2.0.9:
+	NEW: Add Stone Lamps.
+	NEW: Added MultiPart support for Bricks/Cubes/Glass.
+	NEW: Add Creosote Block variants of Stairs and Slabs.
+	FIX: Register all missing Items with FML for 1.7.
+
+8.2.0.8:
+	EXPERIMENTAL: Reworked Boiler math to eliminate heat-up costs. https://dl.dropboxusercontent.com/u/38558957/Minecraft/Railcraft/boiler_changes.txt
+	CHANGE: Restore previous Charcoal value 800->1600, buff Blaze Rods 800 -> 1000, Coal/Coke remains the same, Coke Oven buff remains.
+	CHANGE: Doubled base Boiler fuel usage, double liquid fuel values, result solids nerfed by half, fluids remain the same.
+
+8.2.0.7:
+	FIX: Fix Gauge weirdness when more than one Turbine.
+
+8.2.0.6:
+	CHANGE: Turbine Gauge is now a TESR. (Renderer provided by Player)
+	FIX: Fix stack overflows and faulty counting in Train Detector.
+
+8.2.0.5:
+	CHANGE: Reduce Coke Oven cook time: 3000 -> 1800
+	CONFIG: Added multiplier for Fuel to Steam Conversion values.
+
+8.2.0.4:
+	CHANGE: Reduce chance of Firestone breaking.
+	FIX: Firestone should not randomly vanish anymore.
+
+8.2.0.3:
+	CHANGE: Re-adjusted fuel values in Railcraft machines: Coal 3200->1600, Charcoal 1600->800, Coke 6400->3200, Coke Block 57600->28800 (This also fixes Short overflow issues with GUIs)
+	FIX: Disabled Train changes, they are broken.
+	FIX: Fix lighting on cart contents rendering in dark places.
+	FIX: Fixed Tank Cart uncrafting recipe returning wrong items.
+
+8.2.0.2 (unstable):
+	EXPERIMENTAL: Add history based Train movement physics that may result in less Train derpyness.
+	CONFIG: Move Fluid configs from World Gen to Fluids where are supposed to be.
+
+8.2.0.1:
+	NEW: Tagged a bunch more stuff with Thaumcraft Aspects.
+	CHANGE: You can now specify a side for the Dismount Track to dismount on.
+	FIX: Firestone no longer crashes the Tunnel Bore.
+	FIX: Attempt two at fixing the Lockdown Reset Bug.
+
+8.2.0.0:
+	CHANGE: Increase Cart render distance significantly.
+
+8.1.0.16:
+	FIX: Update Thaumcraft API and add proper dependencies.
+
+8.1.0.15:
+	NEW: Added Creosote Wood Block.
+	CHANGE: Steam Ovens can be placed with corners touching (experimental).
+	CHANGE: Interlock Box now requires Circuits in the crafting.
+	FIX: Boilers still lose heat if broken.
+	FIX: Quarried Stone can generate again.
+
+8.1.0.14:
+	CHANGE: Adjusted Energy Cart capacities/tiers to match new IC2 values, added CESU Cart, removed MFSU Cart.
+	CHANGE: Signal Capacitor Box can now accept input from Redstone repeaters.
+	FIX: Signal Capacitor Box properly notifies neighboring boxes now.
+
+8.1.0.13:
+	CHANGE: Signal Capacitor Box can now "pass through" a Signal Aspect between two boxes.
+	FIX: Sequencer Box now works properly with Capacitor Boxes.
+
+8.1.0.12:
+	FIX: Reversed order of priority for Interlock Boxes so that greater x,y,z values have higher priority.
+
+8.1.0.11:
+	NEW: Added Signal Interlock Box, each one can be paired with a controller and receiver, chain them together to create an Interlock. http://imgur.com/RoGvSNb
+	CHANGE: Re-enabled Boiler Explosions (they were disabled because of the Fluid update).
+
+8.1.0.10:
+	FIX: Capacitor Boxes can be used as Sequencers outputs.
+	FIX: Sequencers no longer stack overflow if no valid outputs.
+
+8.1.0.9:
+	NEW: Added Signal Sequencer Box, outputs to each side in turn when pulsed by Redstone Repeater/Receiver Box, chainable.
+	NEW: Thaumcraft Integration: Aspects + Thaumium Crowbar
+	CHANGE: Heavily damaged Refined Firestones have a small chance to become Cracked Firestones. Remains usable and can be repaired, but less efficient and other penalties.
+	CHANGE: Heavily damaged Cracked Firestones have a small chance to become Raw Firestones.
+	CHANGE: Firestone heat value reduced 500 -> 250.
+	CHANGE: Firestone heatup bonus reduced 40x -> 30x.
+	FIX: Posts now form mini-platforms again when under blocks instead of forming pillars.
+	FIX: Train Dispenser no longer thinks its inventory is only 3 slots.
+
+8.1.0.4:
+	NEW: Rock Crusher will suck up items tossed on top like a Hopper. Items that can't be crushed will be destroyed. Uses energy.
+	NEW: Rock Crusher will damage Entities on top. Uses energy.
+	CHANGE: Rock Crusher now produces crushed IC2 Ores instead of dusts.
+
+8.1.0.3:
+	FIX: Add Anvil localization.
+
+8.1.0.2:
+	NEW: Added Steel Anvil, twice the durability, can enchant up to level 50.
+
+8.1.0.1:
+	CHANGE: Adjusted Fuel/Biofuel Boiler default heat values as per Player's new balance paradigm. 1/4th previous values.
+	CONFIG: Added configs for scaling Fuel/Biofuel Boiler heat values.
+	FIX: You can now harvest Firestone Ore even without silktouch.
+
+8.1.0.0:
+	NEW: Added Firestone Worldgen.
+	FIX: Wye Tracks switches textures properly again.
+
+8.0.2.21:
+	FIX: Periodic Signal Block validation check should load unloaded chunks while its checking to prevent false positives. Increased validation interval.
+	FIX: Anchor Cart will no longer happily give away their fuel to attached Chest Carts.
+
+8.0.2.20:
+	FIX: Routing Track drops inventory when broken.
+	FIX: Potential fix for Train Lockdown track grabbing the middle of trains on chunk load.
+
+8.0.2.19:
+	FIX: Emblem Posts can be painted.
+	FIX: Breaking a non-painted Emblem Post no longer crashes.
+	FIX: Some of the Rock Crusher recipes weren't matching item damage correctly.
+
+8.0.2.18:
+	NEW: Firestone can now be charged! Toss it into any lake of Lava. Looking for opinions on the effects. Worldgen is next on the todo list.
+	NEW: Firestone can cook blocks in place with a right click. For example Cobblestone into Stone.
+
+8.0.2.17:
+	FIX: Routing Detector is no longer stuck in the redstone "on" position.
+
+8.0.2.15:
+	NEW: Refined Firestone can now be tossed in Lava. Does not currently gain anything from this (soon).
+	CHANGE: Firestone moved to new Magic Module.
+	FIX: Fixed NPE in Undercutter.
+	FIX: Posts connect to Signs (again).
+
+8.0.2.14:
+	NEW: Added Firestone, the perfect heat source. Not available in Survival (yet), and not currently able to be recharged (soon).
+	FIX: Switches should write all state information to NBT now, resulting in fewer instances of split trains on restart.
+
+8.0.2.13:
+	FIX: Routing should ignore carts in the middle of the Train now.
+	FIX: Suspended Signals should render correctly again.
+
+8.0.2.11:
+	FIX: Linking should be more tolerant of "dead" carts, resulting in fewer random disconnects. Portal traversal might even be possible, but its untested.
+
+8.0.2.8:
+	FIX: Removed reference to EnumRarity temporarily.
+
+8.0.2.7:
+	NEW: Added Redstone conditional to Routing Logic: "Redstone=true"
+	CHANGE: Couple/Decouple Tracks merged into single Coupler Track, hit with Crowbar to switch modes. Recipe now requires two crowbars. Existing tracks should be converted automatically.
+	CONFIG: Added option for debug print statements for Cart Linking to track why links are broken.
+	FIX: Engraving Bench now requires materials are present BEFORE it starts working, not only after its done.
+	FIX: Tweaked Lockdown type tracks to hopefully be less likely to break Trains apart.
+	FIX: Tuners and Surveyors now inhibit block activation when used.
+
+8.0.2.6:
+	FIX: Fixed bunch of Server errors related to IconRegister.
+
+8.0.2.5:
+	FIX: Fixed crash in GUIs if Fluids have no Rarity.
+
+8.0.2.4:
+	FIX: More fixes for the StructureHelper.
+
+8.0.2.3:
+	INFO: Updated to MC 1.6.4, Forge 9.11.0.884 (not strictly required, yet).
+	FIX: Fixed issues with some textures on Posts/Concrete.
+	FIX: Signal Boxes should no longer render as breaking in the inventory.
+
+8.0.2.2:
+	FIX: Controller Boxes now properly accept redstone signals from non-dust sources.
+	FIX: Fixed Posts being painted the opposite color of the brush.
+	FIX: Engraving Machine actually requires a Bronze, Steel or Gold ingot now.
+	FIX: Some tweaks to Steam Turbines that might fix some oddness with wires.
+	FIX: Using the StructureHelper to place Boilers should add solid fuel properly now.
+	FIX: Using the StructureHelper to place Steam Ovens and Rock Crushers should no longer crash.
+	API: Minor change to AbstractPair to allow the Tuning Aura to work in the Nether/Mystcraft.
+
+8.0.2.1:
+	NEW: Added Emblems, crafted at the Engraving Bench. Emblems can be put on Locomotives, Metal Posts and Item Frames.
+	NOTE: Emblems are collectibles that you can acquire by finding "Unlock" codes which will be released periodically on the blog/youtube/twitter/etc...
+	NEW: Added Nether Brick based Brick Theme. Cook Nether Brick blocks in a Furnace.
+	FIX: Multi-Block Structures should be more forgiving of invalid states, items will only drop if you break the block containing them.
+	FIX: Fixed alternate track recipe crash.
+	FIX: Fixed possible Tank Gauge Tooltip crash.
+	FIX: Undercutter will now only replace any block if both pattern slots are empty.
+	FIX: Villager Detector should inform the client of what mode its in.
+	API: Added a helper class for placing complete Multi-Block Structures in the world.
+
+8.0.2.0:
+	INFO: Updated IC2 API to version 2.0.140.
+	CHANGE: Backported bufferless auto-balancing from the BC AutoWorkbench to the Rolling Machine.
+
+8.0.1.4:
+	CHANGE: "Dest=null" will match any routable cart without a destination.
+	CHANGE: Undercutter no longer "requires" a filter.
+	FIX: Fixed bug with Undercutter not replacing some blocks.
+	FIX: Fixed issues with Blast Furnace GUI while burning Coal Coke.
+
+8.0.1.3:
+	NEW: Package Deobfuscated version
+
+8.0.1.2:
+	INFO: Updated IC2 API.
+	CHANGE: Posts now connect to Signs.
+	FIX: Creosote shouldn't burn forever.
+	FIX: Steam Turbine can output at 100% again.
+	FIX: Fix possible Fluid renderer crash if somehow a FluidStack was invalid.
+
+8.0.1.1:
+	FIX: Attempt to fix WikiLinks integration.
+
+8.0.1.0:
+	FIX: Added info about the NeedsRefuel routing condition to the manual.
+
+8.0.0.1:
+	INFO: Updated IC2 API to Experimental IC2 branch.
+	FIX: Possible crash when breaking a Signal.
+	FIX: Loaders should be able to insert tickets into Locomotives for real this time.
+
+8.0.0.0:
+	NEW: Added Steel Shears.
+	NEW: Added Cobble versions of all Bricks, product of crushing in Rock Crusher.
+	CONFIG: Added config to disable registration of Fluids. It is not recommended that you change this setting unless conflicts occur with other mods.
+	FIX: Coke Oven & Blast Furnace GUIs now properly sync with server.
+	FIX: Creosote Bucket and Steam Bottle should work better now.
+	FIX: Tank Filling Animation now terminates properly.
+	FIX: Work Cart inventory fixed.
+
+7.3.0.11:
+	FIX: Fix moving empty buckets out of Boiler fuel slots.
+	NEW: Added Coal Block Coke Oven recipe.
+	FIX: Fixed Blast Furnace GUI.
+
+7.3.0.10:
+	INFO: Updated Forge to 9.10.0.818
+	FIX: Fixed sounds.
+	FIX: Engines connect to pipes again.
+
+7.3.0.9:
+	INFO: Updated BC API.
+	API: Tweaked AbstractPair and SignalBlock some to help track down some pair dropping issues.
+
+7.3.0.8:
+	CHANGE: Fluid renders now support Fluid color multipliers (Xycraft specific feature).
+	FIX: Bore can place tracks in Fake Air blocks.
+	FIX: Can place Disposal Track above Fake Air blocks.
+
+7.3.0.7 (unstable):
+	FIX: Remove missed refs to old Liquid API.
+
+7.3.0.6 (unstable):
+	FIX: Locomotives colliding with a player no longer crashes.
+	FIX: Bore colliding with a player no longer crashes.
+	FIX: Fix various other EntityLiving -> EntityLivingBase cast issues.
+	FIX: Creosote Bucket Texture.
+	FIX: Fix server crashing on getCurrentLanguage().
+
+7.3.0.5 (unstable):
+	FIX: Fix file corruption issues (no really).
+
+7.3.0.4 (unstable):
+	INFO: Updated Forestry, IC2, and CraftGuide APIs.
+	FIX: Remove references to Forge ISided.
+
+7.3.0.3 (unstable):
+	FIX: Attempt to fix file corruption issues.
+
+7.3.0.2 (unstable):
+	INFO: Updated to MC 1.6.2
+	NOTE: The APIs for Forestry, IC2, and CraftGuide still need to be updated.
+	NEW: Added "NeedsFuel" conditional to Routing Logic.
+	NEW: Animals/Mob kills by Steam have a 50% chance to drop smelted items.
+	NEW: Added Forestry Carpenter Creosote Torch recipe.
+	NEW: Added Iron Door -> Steel Ingot Blast Furnace recipe.
+	CHANGE: Allow Embarking Track to load smaller slimes.
+	CHANGE: Nerf Water Bottles to contain only 333 water.
+	CHANGE: Iron/Steel Tanks can no longer be filled from the bottom and will instead automatically output Fluid into any adjacent Fluid receptacles below the tank. The mechanics for the next layer up remain the same (can fill/drain, but must pump the liquid out).
+	CHANGE: Disabled Boiler explosions temporarily until Forge adds legacy liquid support.
+	CHANGE: Tanks can now be moved without reseting their contents! Unless you swap master blocks, then it resets.
+
+7.3.0.1:
+	FIX: Fixed CraftGuide crashing on the Rotor Repair recipe if you don't have IC2 installed.
+
+7.3.0.0:
+	NEW: Added Torch recipe using Wool and Creosote.
+	NEW: Made it so the Entity Name is displayed in the Locomotive GUI and added a Name conditional to the Routing Logic.
+	CHANGE: Moved Turbine to IC2 module.
+	CHANGE: Can silk harvest ores.
+	CHANGE: Reduced Geode chances per chunk from 35% to 30%.
+	FIX: Activator Track recipe no longer creates Detector Tracks.
+
+7.2.3.11:
+	CHANGE: Instead of banning Liquid Containers from the Chest cart entirely, they now consume one slot per item regardless of stackability.
+	FIX: Inventory to Inventory interaction should no longer fail-fast, and instead try all slots.
+	FIX: Creosote Bottle should work again.
+	API: Added Track Item tooltip support to TrackSpec. Should be non-breaking, just spammy if it fails.
+
+7.2.3.8:
+	FIX: Fix Startup crash in Forestry module.
+
+7.2.3.7 (broken):
+	FIX: Snow Slabs got a different recipe due to conflicts with Snow Cover. Its now 3 Snow Cover = 3 Snow Slabs.
+	FIX: Added Strengthened Glass dyeing recipes. (damn recipes)
+	FIX: If you have the Coke Oven disabled or the Creosote smelting recipes enabled, you can no longer extract Creosote Liquid from Creosote Bottles. You can still use them to craft Ties.
+
+7.2.3.6:
+	NEW: Added Strengthened Glass.
+
+7.2.3.5:
+	NEW: Added sounds to Steam Traps.
+
+7.2.3.4:
+	NEW: Added Steam Trap and Automated Steam Trap. Uses 32 Buckets of Steam to damage entities in front of it.
+	FIX: Tank blocks now correctly convert the color when being painted.
+
+7.2.3.3:
+	FIX: Double chest interaction should be less derpy.
+	FIX: Added some validation checks to the Routing Table gui to prevent crashing on invalid NBT.
+
+7.2.3.2:
+	CHANGE: Liquid (Un)Loaders now have a mode button similar to Item (Un)Loaders.
+	CHANGE: Increased Liquid (Un)Loader internal tank capacity to 32 buckets.
+	FIX: Liquid Loaders can now usually tell if a cart is empty even if the Loader is empty.
+	FIX: Disembarking Track should work again.
+
+7.2.3.1:
+	FIX: The Railcraft Steam Item can be disabled if another mod adds Steam. (set to 0)
+
+7.2.3.0:
+	FIX: Boilers output to BC Pipes again. (oops)
+
+7.2.2.0:
+	INFO: Updated IC2 API.
+	NEW: Added Steel smelting recipes for Shears and Iron Axe.
+	NEW: Added Locomotive Whistle Hotkey. Defaults to "N".
+	NEW: Added HasWork Gate Triggers to Coke Oven and Blast Furnace.
+	NEW: Turbines will now return water to an adjacent Boiler automatically.
+	CHANGE: Loaders can load Tickets into Locomotives now.
+	CHANGE: Increased idle machine power draw to be in line with BC Machines.
+	FIX: Fixed (Un)Loaders confusing input and output slots.
+	FIX: Fixed crash when Posts are disabled.
+	FIX: Fix Phantom Dupe.
+	LANG: Updated Language files.
+	API: Fixed some bugs in the TrackRegistry and TrackSpec error handling code: minor, self-contained, non-breaking.
+
+7.2.1.0:
+	FIX: Disabling a module that doesn't meet all its load conditions will no longer crash.
+	FIX: BlockBrick sanity checks its getIcon() method.
+
+7.2.0.0:
+	NEW: Added Routing Track, sets the Destination of a Locomotive.
+	NEW: Added Routing Switch Motor, uses a Routing Table to automatically route Locomotives.
+	CHANGE: Item (Un)Loader recipes now require Cobblestone around the edges similar to Dispensers and Droppers.
+	CHANGE: Removed Worldgen Biome config lists and IMCs in favor of BiomeDictionary tags. This should be more compatible out of the box and just simply work for all Biome mods.
+	API: Added getHardness() method to ITrackInstance. As usual, any out of date APIs will spam the log with errors, but not crash.
+	API: Added several new interfaces related to Routing.
+
+7.1.0.12:
+	FIX: Ticket GUI should open in SMP now.
+
+7.1.0.11:
+	FIX: Never check if a player is an Op from the client, plus other tweaks. May fix MCPC+ compatibility.
+
+7.1.0.10:
+	FIX: Fixed AdjecentInventoryCache NPE that affected Item Loaders.
+
+7.1.0.9 (broken):
+	NEW: Routing Table Help page now contains all the information you need to write a set of routing rules.
+	NEW: Routing Detector GUI will display a big red X if your syntax is wrong and the tooltip will attempt to tell you why.
+	NEW: Added custom recipes (Rotor Repair, Ticket/Routing Table cloning) to CraftGuide.
+	FIX: Detectors provide a strong redstone signal again (oops).
+	FIX: Various routing related fixes.
+	FIX: Backpacks use proper wildcards, fixes issue with some items not being accepted.
+
+7.1.0.5:
+	NEW: Tracking Aura added to Goggles. Tracks all player movement over that last 30 minutes, even other players. Used new block ID ("block.hidden"), disabling this block will essentially disable the Tracking Aura.
+	NEW: Significant improvements to the text editing ability of the Routing Table.
+
+7.1.0.4 (unstable):
+	FIX: Added recipe for Routing Detector.
+
+7.1.0.3 (unstable):
+	NEW: Added Routing Detector, yes it works!
+	INFO: Routing Table script (one keyword or condition per line, prefix notation (http://en.wikipedia.org/wiki/Polish_notation)):
+		Keywords:
+			AND, OR, NOT
+		Conditions:
+			Dest=<dest string>    <- this is prefix matched against the ticket in the locomotive (String.startsWith())
+			Color=<primary>,<secondary>
+			Owner=<username>
+		Other Notes:
+			If no keyword is specified, lines are OR'd together.
+	NEW: Added config setting for Locomotive Horsepower, adjust at own risk.
+	NEW: Added vanilla ISidedInventory support when accessing adjacent Inventories.
+	NEW: Added ability to define additional Geode biomes, added condition that checks for deep water (15+).
+	CHANGE: Rewrote Detectors to store the sub-block ID in the Tile Entity instead of metadata. There may be bugs!
+	CHANGE: Solid Fueled Boiler Firebox will pull fuel from an adjacent Steam Oven if below 64 items.
+	CHANGE: More informative tool tips for Iron/Steel Tanks and Boilers.
+	FIX: Force sounds to extract to the correct folder since the MC Launcher fails at setting the working directory.
+
+7.1.0.2:
+	NEW: Receiver Boxes, Relay Boxes, and Switch Motor GUIs have a lock button for securing the GUI.
+	FIX: Fixed up first and third person item rendering a bit so it works correctly with the recent Forge changes.
+	FIX: Buildcraft Gate Triggers and Actions work again (oops).
+
+7.1.0.1 (unstable):
+	INFO: Updated to MC 1.5.2, but it might still work on 1.5.1.
+	NEW: Added hotkeys for controlling the Locomotives in a Train you are riding. Slower/Faster/Mode, Default Keys: < > ?
+	NEW: Locomotives now accept tickets and can be locked.
+	CHANGE: Doubled Turbine Output to 200 EU. WARNING! This will overload any MV machines attached to the Turbine!
+	CHANGE: Changed Loader/Unloader recipes to use Hoppers for real this time.
+	CHANGE: The "New Version" message now displays less frequently based on when it was last posted. (once per three days)
+	CHANGE: Geodes and Quarries now spawn Decorate events with custom EventTypes (RAILCRAFT_GEODE, RAILCRAFT_QUARRY). This should allow better integration with things like Mystcraft.
+	FIX: Tank Cart Item Renderer now renders the Item in 3D in world.
+	FIX: Filtered Tank Cart recipes no longer consume the liquid used to craft them (this bug was introduced when Tank Carts moved to storing filter data in NBT).
+	FIX: Rotating Steam Ovens no longer breaks the structure.
+	FIX: Sound Handler now properly plays Tool hit sounds for blocks.
+	INFO: Receiver Boxes, Relay Boxes, and Switch Motor GUIs have a lock button, but I wouldn't recommend touching it for now. Bad stuff might happen.
+
+7.1.0.0:
+	FIX: Its no longer possible for Locomotive to keep running after running out of fuel.
+
+7.0.0.4:
+	NEW: Added four new variants of each Brick Theme. Each Theme now uses one Block Id, old Bricks moved from Cube Id to new Ids. Conversion should be mostly seamless.
+	NEW: Added Abyssal Stone (Black) and all five brick variants plus slabs and stairs. Abyssal Stone generates in large Geodes beneath the oceans. Cook it in a Furnace to get Abyssal Blocks.
+	INFO: Geodes have a greater than average chance of having Diamonds, Emerald or Lapis Ore inside.
+	NEW: Added Quarried Stone (White) and all five brick variants plus slabs and stairs. Quarried Stone generates in large surface deposit in Forest Biomes. Cook it in a Furnace to get Quarried Blocks.
+	NEW: Added Blood Stained Brick (Red), all five brick variants plus slabs and stairs. Combine Smooth Sandstone with Rotten Flesh or Raw Beef to get Blood Stained Blocks.
+	NEW: Added Bleached Bone Brick (Yellowed), all five brick variants plus slabs and stairs. Combine Bricks and Bone Meal to get Bleached Bone Blocks.
+	CHANGE: Redesigned World Gen section of 'railcraft.cfg'. Added ability to specify new Biomes to spawn some features in. If you are using non-standard settings, please double check your configs.
+	FIX: Train Dispenser no longer crashes with a Stack Overflow.
+	FIX: Fixed Stairs pick block.
+
+7.0.0.3:
+	NEW: Added Coal Coke Blocks. Yes, they can be used as Fuel.
+	NEW: Added HasWork Trigger and Pause Action to Loaders/Unloaders.
+	NEW: Added "Hold Empty" (name pending) to Item Loaders.
+	CHANGE: All Loaders/Unloaders now use Hoppers in the recipe instead of Dispensers.
+	CHANGE: Painted Tank blocks can now be harvested with Silk Touch.
+	FIX: Painted Tank blocks now render correctly on the ground.
+	FIX: Crafting Managers now correctly match metadata.
+	FIX: Fixed possible crash in the Liquid Renderer due to random Forge changes.
+
+7.0.0.2:
+	NEW: Added Slab variants of many blocks. Used one new block ID. Special Feature: Can stack different types.
+	NEW: Added Frost Bound Bricks, made from Lapis and Ice. (Don't use yet, changing in 7.0.0.4)
+	CHANGE: Switch Motors/Levers now switch all adjacent Switch Tracks instead of just the first it finds.
+	CHANGE: Moved Ore blocks to Railcraft Creative Tab.
+	FIX: Railcraft now extracts its sound files to the resources folder and loads them from there, may fix issues some people have with sounds.
+	FIX: Tank Cart inventory code is less bizarre and crashy.
+
+7.0.0.1:
+	CHANGE: Increased Iron Tank blast resistance: 15 -> 20
+	CHANGE: Increased Steel Tank blast resistance: 15 -> 25
+	FIX: Disabling Steel Ingots no longer allows you to craft Steel Nuggets from Iron Ingots.
+	FIX: Disabling Steel Ingots no longer allows you to craft Steel Nuggets into Iron Ingots. It will instead attempt to find a different Steel Ingot in the Ore Dictionary.
+	FIX: Item Unloaders will no longer crash on carts that don't implement IInventory.
+	API: Minor modification to TrackSpec to make it compatible with ID Resolver.
+
+7.0.0.0:
+	INFO: Repackage for release.
+
+6.17.0.38:
+	CHANGE: Moved all Aesthetic blocks to Railcraft Creative Tab.
+	FIX: Iron Tank blocks now produce 4 Steel Nuggets in the Blast Furnace instead of a full Ingot to match the new reduced Iron cost.
+	FIX: Fixed Routing Table copy recipe so it doesn't match empty grids.
+
+6.17.0.37:
+	NEW: Added IMC for adding new Sulfur Biomes, syntax = "sulfur-biome:biomeID"
+	FIX: Sanity check all shaped/shapeless recipes before adding them. Greg, its now impossible for invalid recipes to created, if that was even the problem.
+	FIX: Steel Ingots are now registered with the GameRegistry with the proper tag "ingot.steel".
+
+6.17.0.36:
+	FIX: Cube block can no longer return null icons no matter what faulty input you give it.
+	FIX: Mag Glass returns correct name for tracks in SMP. However, its probably always in English.
+
+6.17.0.35:
+	CHANGE: Off Aspect is now considered more Restrictive than Red.
+	FIX: Attempted to fix possible Icon issue with Cube blocks.
+
+6.17.0.34:
+	FIX: Added more informative error when a liquid isn't registered in the Liquid Dictionary (this is fatal).
+
+6.17.0.33:
+	NEW: Added Iron, Gold, and Diamond Stairs.
+	FIX: Added more informative error for malformed Liquids.
+
+6.17.0.32:
+	NEW: Added Reinforced Crowbar made from Steel.
+	NEW: Added "All" mode to the Item Loader/Unloader. This mode is similar to Transfer, but will move any number of items matching the filter.
+	NEW: Converted Item Loader/Unloader "Wait" button into Redstone Mode controller with three modes: "Immediate", "Complete", and "Manual".
+		Immediate: Same as if "Wait" was false. Sends cart as on the first tick that no items are moved.
+		Complete: Same as if "Wait" was true. Holds cart until the current operation is 100% complete. Even if there are no items being moved currently.
+		Manual: Never sends a Redstone Signal to the Track, you must activate it externally. Or via the "Send Cart" gate action.
+	FIX: Fixed Steel Tank Valve texture.
+	FIX: Actually add the Aspect Triggers to the Provider (duh).
+
+6.17.0.31:
+	NEW: Added Steel Tanks, with 32 Bucket capacity per block.
+	NEW: Iron and Steel Tanks can now be painted.
+	NEW: Added HasWork Gate Trigger and Pause Gate Action to the Steam Oven.
+	NEW: Added Signal Aspect Trigger to various things.
+	CHANGE: Doubled the output of the Iron and Steel Tank recipes.
+
+6.17.0.30:
+	NEW: Full changelog now included in jar.
+	NEW: Added Iron, Gold, and Diamond walls.
+
+6.17.0.25:
+	FIX: Fixed Energy Cart item textures.
+
+6.17.0.24:
+	INFO: Updated IC2 API again, soft requirement of 1.115.304+.
+	NEW: Added help tab to Routing Table.
+
+6.17.0.23:
+	FIX: Fixed Energy Cart datawatcher IDs.
+
+6.17.0.22:
+	INFO: Updated IC2 API again, soft requirement of 1.115.301+.
+	NEW: Various improvements to the Routing Table and added a recipe to copy them.
+
+6.17.0.21:
+	FIX: Fixed Server calling client code in ModuleRouting.
+
+6.17.0.20 (broken):
+	NEW: Added Routing Table. Will not probably not be in the release, but you can play with it for now. ;)
+	FIX: Fixed an issue with the Rock Crusher pattern.
+	FIX: Fixed crash in IC2 Module.
+
+6.17.0.19 (broken):
+	INFO: Updated IC2 API again.
+	CHANGE: Steam Locomotive Water Tank capacity increased to 6 buckets.
+	FIX: Fixed Energy Cart setup.
+	FIX: Fixed possible condition under which the Anchor Cart would load chunks in the wrong order and possibly get stuck.
+
+6.17.0.18:
+	CHANGE: Adjusted Activator Rail name/recipe to match the other Tracks.
+
+6.17.0.17:
+	INFO: Updated IC2 API.
+	CHANGE: Removed IC2/BC Wrench rotation support from all blocks, added Forge Rotation API support.
+	CHANGE: Removed IC2 Painter API support, added Forge Recolour API support.
+	FIX: Get Forestry/Buildcraft liquids from the Liquid Dictionary.
+	FIX: InventoryManipulator actually chooses the correct Manipulator type now (fixes issues with pretty much all inventory interactions involving ISpecialInventory).
+	FIX: Fixed a odd Inventory Util bug that was resulting in strange behavior when moving items.
+
+6.17.0.16:
+	FIX: Fixed more BlockRail casts in the Tunnel Bore.
+	FIX: Fixed BlockRail casts in the Elevator Track.
+	FIX: Fixed Liquid Loader renderer.
+
+6.17.0.15 (broken):
+	FIX: TNT loops should be fixed for sure now.
+	FIX: Fixed crash on placing Priming Track.
+	FIX: "Fixed" vanilla dispensers and carts.
+	FIX: Fixed crash on filling Tank Carts with Liquid Loaders.
+	FIX: Fixed new Tank Cart capacity defaults.
+	FIX: Fixed issues with inventory utilities not inserting items into output slots, mostly.
+
+6.17.0.14:
+	FIX: Attempted to fix potential infinite loop when TNT carts explode.
+	FIX: Calling client method in fuel lookup.
+
+6.17.0.13 (broken):
+	FIX: Fixed Stair lighting bug.
+	API: Added TagList, a collection of ItemStack tags.
+
+6.17.0.12 (broken):
+	NEW: Added Analog variable power output state to the Item Detector.
+	FIX: Bores no longer crash when placed on tracks other than the basic vanilla Track.
+	FIX: Dedicated Server starts now.
+
+6.17.0.11 (broken):
+	WARNING: May eat worlds.
+	INFO: Updated to 1.5.1
+	WARNING: Any BatBox, MFE, or MFSU Carts not in item form will disappear from your world!
+	NEW: Added Analog variable power output state to the Tank Detector.
+	NEW: Added Quartz Walls. Used another Block ID.
+	NEW: Added Stairs for various blocks. Used another Block ID.
+	CHANGE: Wooded Rails are now crafted at the work bench. No Rolling Machine required. Shapeless Recipe: Tie + Iron = 6 Rails.
+	CHANGE: Creosote Oil fuel value in Boilers increased by 50%. 3200 -> 4800
+	CHANGE: Tank Cart default capacity increased to 32 buckets.
+	CHANGE: Chest Carts can no longer move any liquid container with max stack size greater than 1. Config option.
+	CHANGE: Texture files reworked for new texture system.
+	CHANGE: Increased Anchor-Sentinel pairing distance, can now load 25 chunks total. Fuel usage adjusted accordingly.
+	FIX: Fixed another infinite loop in the Anchor Cart inventory code.
+	FIX: Pick Item now works in all RC GUIs.
+	API: Massive changes including a namespace change.
+	API: Removed ItemRegistry in favor of FML's built-in ItemStack Registry in GameRegistry.
+
+6.17.0.5:
+	NEW: Added Smoker, a smoke emitting block, can be disabled via redstone.
+
+6.17.0.4:
+	NEW: Added Admin Anchor, an uncraftable Anchor that never uses fuel (for server admins).
+	FIX: Added recipe for Void Chest, Ender Pearl surrounded by Obsidian.
+	FIX: Fixed some minor lighting issues with some signals.
+
+6.17.0.1:
+	NEW: Added Void Chest, anything put in this chest is deleted.
+	NEW: Added new fail message to Surveying and localized all Surveying messages.
+	NEW: Blast Furnace will now pull fuel from adjacent chests.
+	NEW: Added a reverse setting to the Locomotive speed settings. Not currently settable via Tracks (is that even needed?).
+	CHANGE: Tuner, Surveyor, and Mag Glass moved to Railcraft Creative Tab.
+	FIX: Clicking with a bucket on a block/entity with a tank in creative no longer uses the liquid.
+	FIX: Shift-clicking out of the Steam Oven should now give experience.
+
+6.17.0.0:
+	INFO: Repackage of 6.16.0.3 for release.
+
+6.16.0.3:
+	CHANGE: Steam Ovens are now awesome!
+	CHANGE: Plate recipes now output 4 plates each, instead of 3.
+	FIX: Fixed an infinite loop in the Anchor Cart inventory code.
+	FIX: Signal Boxes can no longer be placed in invalid locations (floating).
+	FIX: Fixed AI pathfinding properly this time.
+	FIX: Fixed various issues with some of the alternate smelting recipes.
+
+6.16.0.2:
+	CHANGE: Reduced chance that the Turbine Rotor will take damage from 1/150 to 1/200.
+	FIX: Added missing GUI trigger for Signal Block Relay Boxes and fixed derpy blinkage (again).
+
+6.16.0.1:
+	NEW: Added Steam Oven, a 2x2x2 Multi-block structure that uses Steam to smelt items.
+	NEW: Added helpful tooltips to all Multi-block items.
+	CHANGE: Banned burning of IC2 Scrap in all RC Machines. "We don't run Boilers on rocks 'round here, nope!"
+	FIX: Changed Nether Brick Wall recipe so it doesn't conflict with Nether Brick Fences.
+
+6.16.0.0:
+	INFO: Updated UE API (Do I even need to list this anymore?).
+	NEW: Added custom Repair Recipe for Turbine Rotors, combine the Rotor with any number of Blades in a crafting grid to repair the Rotor by 2500 per blade (max damage is 30k).
+	NEW: Steel Tools and Armor can now be recycled in the Blast Furnace to get most (but not all) of the materials back, regardless of damage.
+	CHANGE: Painted Metal Posts can now be harvested with Silk Touch without losing their paint.
+	CHANGE: Buffed Blaze Rods to 800 heat.
+	API: Added a new function to the BlastFurnaceCrafting interface. This should be a non-breaking change, it will just log any errors and refuse to add the new recycling recipes. Update at leisure.
+
+6.15.3.4:
+	NEW: Relay Box can now act as a Signal Block Relay allowing you chain blocks together, even around corners. ie. It can be paired with two other Signals (or Relays).
+	NEW: Relay Box can now interact with adjacent Boxes, for example Controller or Capacitor Boxes, and emits redstone.
+	NEW: Undercutter can now place most any block that you can put tracks on. Additionally, it can place blocks to the sides as well.
+	CHANGE: Steam Locomotive water input slot limited a stackSize of 4.
+	CONFIG: Added option to adjust Blast Furnace processing time if you are using Steel in place of IC2 Refined Iron.
+	FIX: Switches and Wyes should be less likely to switch while a Train is traversing them.
+
+6.15.3.3:
+	NEW: Added Signal Block Relay Box, this box simply acts like a Block Signal currently, but expect new features in the future.
+	NEW: Added Signal Circuit. All Block Signals now use this Circuit.
+	CHANGE: Circuits got new textures and recipes and were combined under one item ID. Any existing circuits will disappear from your world.
+	FIX: Increased Locomotive damage to 50 in order to kill Endermen.
+	FIX: Added some additional safety checks to the Iron Tank renderer.
+
+6.15.3.2:
+	CHANGE: Upgrade Signal Block code to use the new pairing API. There may be bugs. Please let me know if existing Signal Blocks fail to convert seamlessly. 
+	CONFIG: Added config options for the itemID of the item used as Anchor Fuel and whether they can be automated with Pipes, etc...
+	FIX: Fixed AI pathfinding with Posts.
+	API: Removed all the Signal Block stuff from the API, its not needed in there and needs to be rewritten anyway.
+
+6.15.3.1:
+	NEW: Added Signal Capacitor Box, when placed next to a Signal Receiver Box, it will emit redstone for a specified duration from the time the Receiver Box starts emitting.
+	NEW: Added Dual-Head Distant Signal. This Signal possesses two receivers and can be paired to two controllers.
+	FIX: Fixed AI pathfinding with Gated Tracks.
+	FIX: Fixed the Rail recycling recipe to match the new Track costs.
+	API: Some minor additions to the Signal API.
+
+6.15.3.0:
+	CHANGE: Tank Detector reworked to be more flexible.
+	CHANGE: Relayer and Undercutter now use Phantom Slots for the pattern.
+	FIX: Completely rewrote the shift-click code to be generic enough to handle all inventories and hopefully prevent future dupe bugs. (fixes Rolling Machine dupe bug)
+	FIX: Fixed bug with Disposal Tracks and Player entities.
+	FIX: Fixed block sounds.
+	FIX: Added ISidedInventory support to the Hobbyist Engine.
+	FIX: Fixed Switch Motors not being powered by redstone from below.
+	LANG: Various language updates, adds pl_PL.
+
+6.15.2.2:
+	NEW: Improved CraftGuide support for Rock Crusher and Coke Oven.
+
+6.15.2.1:
+	FIX: Hobbyist Engine no longer vents Steam when not burning.
+
+6.15.2.0:
+	CHANGE: Doubled the output of all Track recipes.
+	FIX: Fixed Rolling Machine shift-clicking.
+	FIX: Removed the UE API version check, caused more harm than good.
+
+6.15.1.0:
+	NEW: Added ability to adjust a Locomotive's Speed.
+	NEW: Added Limiter Track for controlling Locomotive Speed.
+	NEW: Added Whistle Tuner item for adjusting a Locomotive's Whistle.
+	CHANGE: Boosted Locomotive force.
+	CHANGE: Locomotive Detector now accepts vanilla Dyes in addition to Wool for specifying the color.
+	FIX: Various tweaks to High Speed Tracks and Cart Linking to improve using Locomotives and Trains on HS Track.
+	FIX: Various tweaks to Elevator Tracks and Cart Linking to improve the ability for Trains to use Elevators. Its not perfect, but its better.
+	FIX: Fixed derpyness of World Anchors when a certain (unusual) combination of config settings is set.
+	FIX: Iceman Backpack no longer eats infinite Snowballs when full.
+	FIX: Converted sounds to mono-44100Hz Ogg files, hopefully that fixes issues some people are having with sounds.
+	FIX: Reinforced Switches and Junctions now have explosion resistance like they should.
+	FIX: Fixed issue with East-West High Speed Tracks.
+	LANG: Various translation updates.
+
+6.15.0.0:
+	NEW: Moved Backpacks to a new Forestry Module.
+
+6.14.0.27:
+	NEW: Broke down and added a Creative Tab. *rages at Sengir for abandoning the faith*
+	CHANGE: Steam Engines no longer explode when their energy bar fills up, instead they "blow a valve" and get stuck until someone whacks them with a wrench/crowbar.
+	FIX: Locomotives now properly idle when any cart in the train is held in place by a track.
+	FIX: Creosote Cells are actually registered now.
+
+6.14.0.26:
+	INFO: Updated to Forge 6.6.0.516 (required).
+	NEW: Villager Detectors should now work with custom Villagers.
+
+6.14.0.25:
+	CHANGE: Adjusted Saltpeter worldgen to make Saltpeter Clusters (aka Caliche) less impossible to find.
+
+6.14.0.24:
+	FIX: Removed reference to client function getFloatRainFall().
+	FIX: Improvements to the Ore Spawner to prevent potential "easy mode" exploits.
+
+6.14.0.23:
+	CHANGE: Saltpeter now spawns in any hot and arid sandy biome. It spawns one layer beneath the surface in large uncommon clusters. These clusters will regenerate over time, provided there is still sand at the surface.
+	INFO: New block id was required for the Saltpeter Ore Spawner that handles ore regeneration.
+	CHANGE: Saltpeter -> Fertilizer recipe now requires 2 Dirt and 2 Sand.
+
+6.14.0.22:
+	INFO: Updated UniversalElectricity API.
+	NEW: Added custom death messages for the Tunnel Bore damage.
+	CHANGE: Rebalanced Hobbyist Engines slightly, increase fuel usage per conversion from 6.4 to 8 and reduced the Steam/Water Tanks to 4 Bucket capacities.
+	CHANGE: Water Tanks have positive pressure.
+	FIX: Locomotive Painting Recipes now use a supposedly more efficient custom recipe.
+
+6.14.0.21:
+	CHANGE: High Speed Explosions are now more impressive and spread flames. I can do this because I'm fairly confident that I finally fixed all of the bugs with HS Track.
+	FIX: Completely scrapped the unreliable methods of detecting sudden stops at High Speed in favor of marking tracks as "safe" or "not safe". 
+		Safe tracks are HS straight tracks that are connected to other HS Tracks on both ends. This can include unswitched Turnout Switches, but Wye Switches are never "safe".
+		Carts will explode if they are moving at HS and encounter a "not safe" track.
+	FIX: Fixed a bug in the collision code that could result in random HS Explosions of Trains immediately following a chunk load.
+	FIX: Link drag is only applied if the Locomotive Module is active.
+
+6.14.0.20:
+	NEW: Added Locomotive Track, will set a passing Locomotive's current mode. Whack it with a Crowbar to change modes.
+	NEW: Added Iceman's Backpack, it can pick up and compress Snowballs into blocks and it can also be used to (re)supply you with a steady stream of Snowballs. 
+	CHANGE: Ice/Snow Walls are now added to the Iceman's Backpack instead of the Builder's Backpack.
+
+6.14.0.14:
+	LANG: Added Chinese Translation by crafteverywhere.
+	FIX: Fixed a crash with the Immutable Tank Wrapper.
+	FIX: Train Lockdown Track no longer thinks its a Boarding Track.
+	API: Added a new function (clearPairings()) to AbstractPair in order to fix a minor bug with the Tuning Aura.
+
+6.14.0.13:
+	NEW: Added Tooltips to Locomotive items.
+	NEW: You can now chain multiple Locomotives to pull longer trains.
+	NEW: Head-on collisions are bad.
+	FIX: Fixed Locomotive Mode sync and improved GUI response.
+	FIX: Shutting down the Locomotive actually works correctly now.
+	FIX: Fixed Iron Tank filling animation sync.
+
+6.14.0.12:
+	NEW: Added Locomotive Detector, put Wool in the Slots to represent colors.
+	NEW: Added Train version of the Lockdown Track.
+	NEW: Added Whistle Track, texture modeled after an Irish Whistle Post.
+	FIX: Replaced all server side markBlockForUpdate() calls with a custom packet sender, should help reduce chunk updates that need to be sent. (expect random update bugs)
+	API: The network changes required some changed to the Track API.
+
+6.14.0.10:
+	NEW: Locomotives are now craftable.
+	NEW: Locomotives are now paintable, put it in a crafting table with primary dye above, and secondary dye below.
+	NEW: Locomotive Colors and Whistle are now persistent even when picked up.
+
+6.14.0.9:
+	NEW: Locomotives now whistle occasionally. Each Locomotive will have a uniquely pitched whistle. In the future, this will persist even if the Locomotive is picked up.
+	FIX: Discovered and fixed a misconception related to explosion resistance that caused most blocks to have massively better resistance than intended.
+
+6.14.0.4
+	NEW: Added Obsidian Walls.
+	FIX: Fixed Snow walls.
+
+6.14.0.3:
+	NEW: Locomotives are now painted random colors.
+	CHANGE: Engineer's Overalls now provide some protection from getting hit by a Locomotive.
+	FIX: The Trackman's Backpack will no longer pick up everything.
+	FIX: Liquid Loaders once again obey the Top Off mode.
+	FIX: Ice Walls no long render invisible if there is no Ice in the chunk.
+
+6.14.0.2:
+	FIX: Torches can now be placed on walls.
+	FIX: Coal compressed from Coal Dust in the IC2 Compressor can no longer used in the Coke Oven.
+
+6.14.0.1:
+	NEW: Added custom Walls: Sandy, Infernal, Concrete, Nether Brick, Brick, Stone Brick (all variants), Sandstone (all variants), Snow, and Ice.
+	CHANGE: Changed Infernal Brick recipe to be similar to Sandy Brick. Reduces the Soul Sand cost by a 1/5th.
+
+6.14.0.0:
+	NEW: Added a means to make Steel if the Blast Furnace is disabled. You need to break an Iron Ingot into Iron Nuggets and cook those in a Furnace to get Steel Nuggets.
+	NEW: Added Villager Detector.  *Railcraft Inc. does not condone the enslavement of Villagers for breeding and/or other nefarious purposes.
+	NOTE: The Villager Detector currently only works with vanilla Villagers, mod added villagers will be supported in a later update.
+
+6.13.1.14:
+	NEW: Locomotives kill entities while moving.
+	NEW: Various improvements to Locomotives: gui controls, physics adjustments, etc...
+	CHANGE: Advanced Detector redesigned, it now has filter slots that you can put specific minecarts in.
+	FIX: Fixed a bug with RP Liquid Pipes and Liquid Fueled Boilers.
+
+6.13.1.13:
+	CHANGE: Coal made from UU-Matter can no longer be used in Coke Ovens.
+
+6.13.1.11:
+	FIX: Fixed server crash with Locomotives.
+
+6.13.1.5:
+	FIX: Locomotive fixes: liquid filling, crowbar right-click reverses, smoke only emits when burning, etc...
+
+6.13.1.4:
+	CHANGE: Tweaked Locomotive fuel usage.
+
+6.13.1.3:
+	CHANGE: World Anchors loading fewer than 9 chunks, because they are paired with a Sentinel, now use less fuel.
+	FIX: Fixed a bug in the Pairing network code that broke the Tuning Aura for addons.
+
+6.13.1.2:
+	SNEAK-PEAK: Locomotives, texture is a work in progress (open to suggestions), two-tone rendering isn't in yet, gui is still missing the start/stop/idle buttons, no way to really control the locomotive's initial direction yet, but the basics work.
+	NEW: Explicitly defined BC Facades for Infernal Brick, Sandy Brick, Steel Blocks, and Concrete Blocks.
+	CHANGE: Tweaked Sandy Brick to Coke Oven Brick recipe, it should now have the same cost as directly crafting Coke Oven Brick.
+
+6.13.1.1:
+	NEW: Added Engineer's Overalls. Texture provided courtesy of the user, 'Foreplaying'.
+	NEW: Added Trackman's Backpack, for holding all your Track/Minecart related stuff. Only available if Forestry is installed. Big thanks to Sengir for the API. (there are some issues with the display name still)
+	NEW: Added Creosote Cell (IC2 container).
+	CHANGE: Controller Boxes can now send the OFF aspect.
+
+6.13.1.0:
+	FIX: Fixed a crash if Personal Anchors and World Anchor don't have the same refuel setting.
+	FIX: Disabled Machines will now delete themselves from the world.
+
+6.13.0.0:
+	FIX: Fixed another Rolling Machine dupe bug caused by machines/tubes that don't implement ISpecialInventory.
+
+6.12.2.6:
+	FIX: Personal Anchors will now wait 5 minutes before shutting off (to give you time to reconnect in the case of a DC).
+	FIX: Tank Cart renderer now properly performs multi-layer rendering when rendering Container Items on the side.
+	FIX: Fixed Anchors when fuel is enabled.
+
+6.12.2.5:
+	NEW: Added Personal Anchor Cart.
+
+6.12.2.4:
+	NEW: Added Personal Anchors, these World Anchors only keep chunks loaded if the owner is currently playing. Note: These Anchors do not force load chunks on world load, they only keep already loaded chunks loaded.
+	NEW: Added config to disable Anchor crafting recipes, while still leaving the blocks available to Creative.
+	NEW: Added config to print Anchor locations to the log on world load.
+	NEW: Applying a redstone signal to World Anchors will now shut them off. Just don't expect to be able to turn them back on again without being nearby. No fuel is used while off.
+	FIX: Items dropped when a Railcraft Machine drops its contents on break are no longer stripped of any NBT data.
+
+6.12.2.3:
+	FIX: Fixed a nasty bug with the loot code.
+
+6.12.2.2:
+	NEW: Added Sandy Brick.
+	CHANGE: Updated loot chest code, added Armor as loot, redistributed loot more logically (minecart stuff in mineshafts, tools at a blacksmith, armor in temples, etc...).
+	FIX: Train Dispensers now work better with Anchor Carts.
+	API: Reworked the Controller/Receiver API a bit to make it easier for addons to do many-to-many pairing (there were some minor issues still). Will break anything that includes the Signal Package again. =/
+
+6.12.2.1:
+	INFO: Updated Forestry API.
+	CHANGE: Rewrote the Recipe config section of the config file to use subcats and be more consistent. If you used non-default recipe settings, you will need to change them again.
+
+6.12.2.0
+	FIX: World Anchors should work properly now when the fuel req is disabled.
+
+6.12.1.0
+	CHANGE: Readded old Post transition code for all those people still on 1.2.5.
+
+6.12.0.0
+	API: Entirely new Crowbar interface, shouldn't break any old APIs.
+
+6.11.1.2:
+	INFO: Updated IC2 api.
+	NEW: Steel Armor should work with IC2 Magnetic Poles.
+
+6.11.1.1:
+	INFO: Updated to MC 1.4.6 (test build)
+	CHANGE: Removed old Post transition code that updated old (pre 6.2) worlds to the new Post code.
+
+6.11.1.0:
+	FIX: Added recipe for Lockdown Track.
+
+6.10.0.6:
+	NEW: Added Trankman's Goggles, these goggles when worn allow you see various auras. You can cycle through the Auras by right clicking with them in your hand.
+	CHANGE: Aura Hotkeys removed by default, but if you disable the Goggles (id==0 in the config), you will still be able to use the hotkeys to activate the auras.
+	CHANGE: Doubled Turbine input/output values. You now need 8 gold pipes to max a single Turbine. I suggest just building them next to a Boiler though.
+	FIX: Rewrote the Multi-Block packet to send fewer bytes per packet.
+
+6.10.0.5:
+	FIX: UE integration may be fixed (untested).
+	FIX: World Anchors should now properly request new tickets after the ticket has been released.
+
+6.10.0.4:
+	NEW: Pairing Aura can now be brought up by pressing 'P'. It will draw a line of particles moving from the Controller to the Receiver. Does not display Signal Block pairing, that might get its own Aura in the future.
+	NEW: World Anchors now retain their fuel when broken.
+	NEW: Added Lockdown Track, similar to the Boarding and Holding Tracks, it will grab and hold onto a cart when powered, the difference being that it will not boost carts when it releases them.
+	FIX: Disabling the Anchor fuel req now removes all in game indications that Anchors need fuel.
+	FIX: World Anchors should move correctly with RP Frames now.
+	FIX: Fixed Receiver Boxes not properly updating neighbors when the Controller Aspect changes.
+	LANG: Localized Tuner and Surveyor messages and improved Mag Glass and Anchor pairing messages. These will need to be re-translated.
+	API: Signal Block pairing now uses item NBT (hurray!)
+
+6.10.0.3:
+	INFO: UE integration is completely broken atm.
+	NEW: Anchor Carts will now request Ender Pearls from attached carts.
+	NEW: You can now define block ranges when setting up the Bore config.
+	CHANGE: Default Anchor refuel increased to 12 hours from 6.
+	FIX: Fixed a dupe bug with the Rolling Machine when used with pipes.
+	FIX: Updated some of the newer MC blocks on the Bore whitelist.
+
+6.10.0.2:
+	INFO: This is an extremely experimental release, many things changed under the hood with both Signals and Anchors. I can't promise it won't break existing setups (if it does its a bug that must be fixed before release).
+	INFO: More changes are planned to Signal Block pairing and I will be adding a new aura that will let you see how controller/receiver pairing are setup.
+	NEW: World Anchors and Anchor Carts now require Ender Pearls to fuel their operation (configurable). One Ender Pearl will by default last for 6 hours. Anchor Carts retain their fuel values when broken.
+	CHANGE: Doubled base Boiler fuel usage (3.2 -> 6.4), increased efficiency bonus per tank to 0.08, doubled liquid fuel values. Basically a nerf to solid fuel. (experimental)
+	CHANGE: Reduced chance that the Turbine Rotor will take damage. Extending life to ~60 hours at max output.
+	FIX: Trains and Launcher Tracks now get along better.
+	FIX: Fixed the Ore block item renderer.
+	API: Complete redesign of the Controller/Receiver API. Now supports many to many pairing and is much simpler. Railcraft blocks intentionally limited to 1to1 still. Existing worlds should be able to convert to the new system without breaking any pairings.
+
+6.10.0.1:
+	FIX: Fixed a lighting bug with Engines.
+
+6.10.0.0:
+	CHANGE: Boiler efficiency bonus per tank reduced from 0.04 to 0.03, resulting in ~20% increase in fuel usage of a 36 LP boiler.
+	FIX: The amount of light that machine blocks pass through is now more logical.
+	FIX: Hobbyist Engine now remembers current fuel usage on chunk unload.
+	FIX: Fixed Anchor Cart aura in SMP.
+	FIX: Fixed an issue with Anchor Carts that could result in them not working unless you followed a specific sequence of actions.
+
+6.9.2.2:
+	NEW: Gift Cart, a Christmas themed cart available only in December and January.
+
+6.9.2.1:
+	NEW: Added a new config option that controls whether carts are solid and heavy or ghostly and light.
+	CHANGE: Reorganized config file a bit, should NOT affect Block/Item IDs, but it will affect general tweaks and sub-blocks. If you use any non-default settings you'll want to double check things.
+	CHANGE: Added Iron Armor/Tools + Crowbar to Blast Furnace recipes.
+	CHANGE: Separated Liquid textures from Container textures. The should help prevent lag with HD texture packs.
+	FIX: Fixed a possible crash in the Boiler GUI.
+	FIX: Fixed a crash with the Anchor Cart caused by RP Frames being stupid.
+
+6.9.2.0:
+	FIX: Fixed a crash when breaking Minecarts.
+
+6.9.1.0:
+	NEW: Added a number of alternative sources of iron to the Blast Furnace. (Iron Plates, LP Boiler Tanks, Iron Tanks, Commercial Steam Engines, etc...)
+	CHANGE: Creative Inventory -> Moved machines out of Decorative Tab to Redstone Tab.
+	CHANGE: Steam Turbine recipe now produces 3 blocks instead of 2.
+	CHANGE: Changed Plate recipes AGAIN (yep, I failed to realize it now conflicts with the Block -> Ingot recipe). Its now 4 ingots = 3 plates.
+	FIX: Fixed a potential crash in the Iron Tank renderer.
+
+6.9.0.1:
+	CHANGE: Reduced damage Crowbar takes when smacking minecarts. 5 -> 3
+	FIX: Fixed a potential crash in the Tank Cart item render (was passing the wrong itemstack to a function).
+	FIX: Fixed Liquid Boiler wasting small packets of fuel.
+	FIX: Ridding in Trains at High Speed should be safer.
+
+6.9.0.0:
+	INFO: Updated to Forge 6.4.1.407
+	CHANGE: Tank Cart items now use NBT tags for filter information instead of metadata. You may delete "liquid_filters.cfg" from your config folder if you wish. It is no longer needed.
+
+6.8.0.3:
+	NEW: Solid Fueled Boiler will pull fuel from adjacent inventories.
+	CHANGE: Plate recipes changed to require Iron/Steel Blocks in order to reduce recipe conflicts if the Rolling Machine is disabled.
+	FIX: Moved Chunkloader registration to the correct module.
+	FIX: Feed Station will no longer instantly consume all the Feed in an adjacent chest.
+	FIX: Fixed model updating issue with Switch Lever/Motor.
+	FIX: Fixed a crash when connecting RP liquid tubes to a Water Tank.
+	FIX: Fixed Lava fuel value and reduced to 1000.
+	API: Added getTile() function to ITrackInstance. No one is using (and should not be packaging) that part of the API anyway.
+
+6.8.0.2:
+	CHANGE: Added Minecraft version to filename. This is a build to test my scripts.
+
+6.8.0.1:
+	INFO: Updated to MC 1.4.5b and Forge 6.4.
+	FIX: Clicking on a Liquid Boiler with a bucket now works correctly.
+	FIX: Rolling Machine recipes are now correctly dumped to the Workbench if the Factory Module is disabled.
+
+6.8.0.0:
+	FIX: Turbines now properly accept Steam from RP pipes.
+
+6.7.0.9:
+	INFO: Updated Universal Electricity API.
+	FIX: Fixed a NPE with Iron Tank Valves.
+
+6.7.0.8:
+	FIX: Converted all recipes that use wood slabs to Ore Recipes.
+	FIX: Fixed a bug with the Coke Oven that would allow you to turn Logs into Coal Coke.
+	FIX: More improvements to the Liquid code, specifically the Redpower compatibility stuff.
+
+6.7.0.7:
+	INFO: Updated Buildcraft API
+	FIX: Removed references to deprecated Liquid API code.
+
+6.7.0.6:
+	INFO: Updated to Forge 6.3.0.375
+
+6.7.0.5:
+	INFO: Updated to MC 1.4.4
+	INFO: Migrated Liquid code to the new Forge API.
+
+6.7.0.4:
+	NEW: Added Steel Armor.
+	NEW: Added a config option to allow you to use Steel in Refined Iron recipes.
+	FIX: Fixed Switch Motor recipe.
+	FIX: Steel Tools/Armor can now be repaired with Steel Ingots at an Anvil.
+	FIX: Fixed some minor crafting/display issues with Metal Posts discovered while playing with CraftGuide.
+	FIX: Hobby Engine no longer burns fuel regardless of whether its powered by Redstone.
+	FIX: Structure blocks will tell the master when they are being unloaded now, instead of putting the structure into a faulty state.
+	FIX: Client no longer crashes on startup if Tracks are disabled.
+	FIX: Liquid Boilers can now use fuel in smaller than 1000 increments (emptying the tank basically). This should allow you to pump multiple types of fuel into one Boiler.
+	FIX: Energy Loader GUI buttons should work better now.
+	API: Removed BallastRegistery from the API, replaced with FML InterModComms. Syntax "ballast:blockID@metadata".
+	API: Added InterModComms for Boiler Liquid Fuel (FuelManager was NOT removed though). Syntax "boiler-fuel-liquid:liquidName@heatPerBucket".
+
+6.7.0.3:
+	FIX: Fixed crash with Metal Post recipe definition.
+
+6.7.0.2:
+	FIX: All recipes using wood or dyes are Ore Dictionary aware. Requires Forge 6.2.1.358 to work properly (in other words, things are wonky atm).
+	FIX: Fixed a crash when Turbine Rotors break.
+
+6.7.0.1:
+	NEW: Added Temperature and Maintenance Triggers for Buildcraft Gates.
+	FIX: Fixed sounds for some blocks.
+	FIX: May have fixed an Iron Tank reset bug involving pipes and valve blocks in specific locations.
+	FIX: Fixed the Feed Station's ability to bred Chickens.
+	FIX: Can't shift-click into Item Unloaders anymore.
+	FIX: All recipes that use Blocks of Steel are Ore Dictionary aware. Block of Steel registered in the Ore Dictionary.
+	FIX: Anchors won't spam the logs anymore when there are no chunkloader tickets left.
+	FIX: You can no longer make "valid" boilers using non-matching types of Fireboxes. This should fix a world breaking bug.
+	FIX: Ridden minecarts should no longer move 25% slower, it was breaking the linking code.
+	API: Replaced EnumItemType with the interface IItemType, removing the actual implementation from the API. Fixing the Feed Station required changing EnumItemType, this is the better solution.
+
+6.7.0.0:
+	INFO: Updated Universal Electricity API.
+	NEW: Added the Liquid Fueled Firebox for the Boiler.
+	NEW: Added the Pumpkin Cart for Halloween fun! Similar to the TNT Cart, but each explosion gives you a trick and a treat! Only craftable in Oct-Nov. Recipe = 3 Gunpowder + 5 Wood Slabs + 1 Pumpkin
+	WARNING: The Pumpkin Cart may cause death and/or destruction of property as well general chaos.
+	NEW: ExtraBiomesXL logs should now work in the Coke Oven.
+	CHANGE: Doubled the chance that the Turbine Rotor will take damage. Should last about 41 hrs at 100% output.
+	CHANGE: Turbine recipe now makes 2 blocks.
+	CHANGE: Turbine IC2 output decreased to 50 EU/t.
+	CHANGE: Turbine Universal Electricity output increased to 50 Kilowatts.
+	CHANGE: Creosote can no longer be burned in Biogass Engines, but it can be burned in a Boiler. Its not very effective though.
+	FIX: Fixed Wooden and Speed Wye Tracks.
+	FIX: Fixed Energy Unloader log spam.
+	FIX: Crushed Obsidian now renders when falling again.
+	API: Added the FuelManager to the API.
+
+6.6.0.0:
+	INFO: Official 1.4.2 release.
+	FIX: Attempted to fix some structure render glitches.
+
+6.5.0.1:
+	INFO: Updated to MC 1.4.1.
+	CHANGE: Feed Station recipe now uses Golden Carrots and only produces 1 Feed Station.
+	API: Rolling Machine crafting changed slightly to reflect the changes to IRecipe.
+
+6.4.1.18:
+	CHANGE: New recipe for the Feed Station. 4 Gold Nugget Apples (to be replaced with Golden Carrots) + 1 Steel Plate + 4 Planks = 1 Feed Station
+	API: Added IExplosiveCart.
+
+6.4.1.17:
+	CHANGE: Reduced the efficiency bonus per Boiler Tank.
+	CHANGE: Halved the cold penalty of the Boiler.
+	FIX: IC2 Painters now work on basic Metal Posts again.
+
+6.4.1.16:
+	CHANGE: Adv. Loader/Unloader recipes no longer require an Ender Pearl, they instead require a Steel Shovel in its place.
+	CHANGE: Tweaked some engines values, they should stabilize at a lower stage now.
+	FIX: Still trying to fix the Structure code. *crosses fingers*
+
+6.4.1.15:
+	NEW: Added Steam Turbine, takes steam as input and outputs IC2 or Universal-Electricity power. Built in the same pattern as a Rock Crusher.
+	CHANGE: Boilers no longer reset their water level when you break the structure. (Discovered by blowing a massive hole in the workshop)
+	CHANGE: Machine textures moved to their own texture file. Will break any texture packs.
+	FIX: Fixed Feed Station not feeding.
+	FIX: Might have fixed a potential tank reset bug.
+	FIX: Rewrote High Speed slope interaction code, should result in fewer random explosions.
+
+6.4.1.6:
+	CHANGE: Greatly decreased the efficiency of a cold Boiler.
+	CHANGE: Steam production and usage halved so that a single Gold Pipe can supply an Industrial Steam Engine. Has no affect on fuel usage or MJ per tick.
+	CHANGE: Boiler/Hobby Engine water usage halved.
+	FIX: It no longer matters what config setting the client has for max tank size when connecting to a server. Should prevent crashes and other strangeness.
+
+6.4.1.5:
+	CHANGE: Blast Furnace process time quadrupled (1280 ticks per ingot), fuel per ingot remains the same.
+	CHANGE: Feed Station gets a new recipe: 4 Chests + 4 Planks + 1 Enchanted Golden Apple = 4 Feed Stations
+	CHANGE: Animals bred by the Feed Station now require a certain amount of space to breed and will despawn if too many animals are packed into one area. Should prevent out of control animal farms.
+	FIX: Fixed a liquid dupe bug with GUIs.
+	FIX: Fixed multi-blocks structures wonkyness in regards to neighbor block updates.
+
+6.4.1.4:
+	CHANGE: Coal Coke now provides 6,400 fuel. Coal now provides 3,200 fuel in all Railcraft Machines (does not affect Coke Oven). Charcoal remains at 1600 fuel.
+	CHANGE: Lava Bucket fuel value reduced in all Railcraft Machines: 20,000 -> 2,000
+	FIX: Fixed a few minor, but potentially explosive issues with the Boiler
+
+6.4.1.3:
+	CHANGE: Massive, massive rebalance of Steam. Orders of magnitude massive. The product of an entire day of struggling with numbers, equations, data points, and graphs.
+
+6.4.1.2:
+	NEW: Added High Pressure Boiler.
+	FIX: Attempted to fix Rock Crusher/Macerator integration, and other related stuff.
+
+6.4.1.1:
+	INFO: Re-added Boilers, etc...
+
+6.4.1.0:
+	FIX: Fixes a nasty world breaking crash with Receiver Boxes.
+	NOTE: This build has no Boilers, etc...
+
+6.4.0.2:
+	NEW: Added Industrial Steam Engine
+	FIX: Various improvements and fixes to the Boiler.
+
+6.4.0.1:
+	NEW: Added Low Pressure Boilers and Solid Fuel Fireboxes.
+	NEW: Added Commercial Steam Engine.
+
+6.4.0.0:
+	FIX: Fixed SMP only Effect related crashes with the Embarking Track and World Anchor.
+
+6.3.0.5:
+	INFO: I left a bunch of debug print lines in related to the Anchor Cart.
+	FIX: Fixed Anchor Cart loading the wrong chunks.
+	
+6.3.0.4:
+	FIX: Fixed Anchor Cart crash from last build.
+	
+6.3.0.3:
+	NEW: Added Anchor Sentinels, they can be paired to World Anchors using the Crowbar to load up to 25 chunks in a straight line.
+
+6.3.0.2:
+	NEW: 9x9 Iron Tanks are now an option in the config. Some additional improvements to updates and performance where also made. Also, stacking can be disabled.
+
+6.3.0.1:
+	CHANGE: Linkage system now uses Forge's persistent entity id system, should be more robust, but will break all existing links.
+	FIX: Anchor Carts should now correctly force load chunks on world load.
+
+6.3.0.0:
+	FIX: CraftGuide works now.
+
+6.2.0.4:
+	FIX: Made sure the old CraftGuide API is actually included in the package.
+
+6.2.0.3:
+	FIX: Attempted to include the old CraftGuide API, experimental.
+	FIX: Rolling Machine will now drop items in the crafting grid when broken.
+	FIX: Rock Crusher and Rolling Machine GUIs won't crash anymore if there is no Buildcraft Power Framework installed.
+
+6.2.0.2:
+	FIX: Fixed Loader crash caused by Inventory update fix in last build.
+	FIX: Fixed Steel Block recipe.
+	FIX: Fixed Signal block drops and pick block.
+
+6.2.0.1:
+	INFO: Requires Forge 4.1.4.287+
+	INFO: Updated CraftGuide API, Rolling Machine recipes should now be available. (Dependant on CraftGuide actually using its own API)
+	NEW: World Anchors and Anchor Carts have returned! Recipe modified slightly. Aura is now F9, and much improved.
+	CHANGE: Improved config files with more comments and cleaner look.
+	FIX: Fixed load order mod ids, might help fix some issues with other mods.
+	FIX: Fixed Loaders not sending the cart when it should.
+	FIX: Fixed Inventory updates in some GUIs.
+	FIX: Crushed Obsidian shouldn't appear half a block too high when falling anymore.
+
+6.2.0.0:
+	FIX: Unknown languages will default to English.
+
+6.1.2.3:
+	CHANGE: Posts moved to separate block id from Signals. Existing Posts in world will auto-convert. Used two new block ids. Reasons for the change: performance, networking, maintenance, creative tabs.
+	CHANGE: Signals moved to Transport Tab.
+	FIX: Fixed some issues with Tank Cart Filters.
+	FIX: Update check now runs in a separate thread and doesn't delay startup.
+
+6.1.2.2:
+	NEW: Added an independent version check for beta versions.
+	NEW: Added Wye Switches.
+	NEW: Added Magnifying Glass, an item that can tell you who placed any Cart or any Railcraft Track or Railcraft Machine. Recipe = Stick + Glass Pane
+	CHANGE: Cart Dispenser can now hold 9 carts instead of 3.
+	CHANGE: Holding a Crowbar will protect you from Embarking Tracks.
+	FIX: Item Loaders/Unloaders now properly count ALL stacks of an item type in the filter, instead of just one.
+	FIX: Gunpowder and Fertilizer recipes are now Ore Dictionary aware.
+	FIX: Language files are now correctly loaded in UTF-8 like they are supposed to be (fixes odd text in pt_BR and pt_PT).
+	FIX: Blast Furnace ISpecialInventory.addItem() now obeys the doAdd param. Fixes an item dupe bug.
+	API: Added a function to TrackSpec to create a Track Item.
+	API: Reworked Switch Track API to be more flexible.
+
+6.1.2.1:
+	NEW: Right clicking a cart with a Crowbar will now smack the cart and give it some momentum. Linking is now shift-right click.
+	NEW: TNT Carts are now made out of wood: 5 Plank Slabs + TNT = TNT Cart
+	CHANGE: New texture and effects for the Embarking Track.
+	CHANGE: Disposal Track no longer tries to put the entity on a block.
+	CHANGE: Some minor AI tweaks to bred animals (sitting more often etc...).
+	FIX: Added config check for a few sounds that were missing it.
+
+6.1.2.0:
+	CHANGE: Feeding Station: Bred animals only take 3 min before they can breed again and babies take half as long to grow into adults. Average litter size increased slightly. One food item can now feed two animals.
+	CHANGE: Filter slots limited to 127 stacksize. Not ideal, but it will fix SMP issues for now.
+	CHANGE: Some tweaks to the Post renderer: Improved interaction with Gated Track and Tracks in general, and will connect to most solid blocks except stone, dirt, gravel, sand, etc...
+	FIX: Fixed Embarking Track GUI updates.
+	FIX: Improved Redstone interaction of the Controller Box and Switch Motor.
+	FIX: Fixed a potential crash with the Coke Oven, Iron Tank, and Water Tank GUIs.
+
+6.1.1.4:
+	INFO: Update IC2 API.
+	NEW: Embarking Tracks now have a GUI for adjusting pickup area.
+	CHANGE: Loosened Tile Entity packet sanity checks a tad to see if it helps with updates.
+	FIX: Fixed a crash with Energy Loaders (was not an API issue).
+	
+6.1.1.3:   
+	CHANGE: Feed Station will no longer feed animals "in love" and works with Ocelots. It also no longer prevents future taming of bred animals. Fed animals produce larger litters.
+	CHANGE: Minor boost increase to Control Tracks.
+
+6.1.1.2:
+	NEW: Crowbar works as a Buildcraft Wrench.
+	CHANGE: Feed Station can now breed Wolves and will only feed animals ready to breed.
+	FIX: Pick Block now works on tracks.
+	
+6.1.1.1:
+	NEW: Added Embarking Track, loads a nearby entity into the cart.
+	FIX: Fixed potential crash in liquid renderer.
+
+6.1.1.0:
+	NEW: Added new version message, to inform you when a new version has been released.
+	NEW: Furnace Cart accepts any kind of fuel.
+	FIX: Growth detectors now work on any Ageable entity.
+	FIX: Fixed issues with GUI Gauges (Liquid, Heat, Energy, etc...) not updating properly.
+	FIX: Pipes won't disconnect from Structures anymore.
+	FIX: Client side structures should now request updates from the server if the initial update failed due to unloaded chunks.
+
+6.1.0.3:
+	NEW: More detailed initialization logs.
+	NEW: Performance improvements for the Water Tank liquid output routine.
+	FIX: Tweaked minecart collisions again, should fix putting animals in carts.
+	FIX: Added sanity checks for various GUI stuff that is crashing randomly.
+
+6.1.0.2:
+	NEW: Ores now render the ore texture over top of the current stone texture. This should make it fit in better with texture packs that don't provide Railcraft specific textures.
+	CHANGE: Reduced process time on Wooden Tie's Carpenter recipe: 200 -> 40.
+	FIX: Fixed placement of Metal Posts at y=128.
+	FIX: Fixed a crash when IC2 is detected.
+
+6.1.0.1
+	NEW: Added pt_BR translation.
+	FIX: Fixed Item Loader/Unloader Excess mode to actually move unfiltered items.
+	FIX: Fixed IC2 detection (maybe).
+
+6.1.0.0
+	NEW: Added Directional Detector Track.
+
+6.0.0.3:
+	FIX: Fixed crash when using a language for which there is no translation.
+	FIX: Fixed GUI liquid gauge crash when a non-existent liquid is rendered.
+	FIX: Added a validation check to the tile entity packet handler.
+
+6.0.0.2:
+	NEW: Added Disposal Track, a suspended version of the Disembarking Track.
+	FIX: Fixed placement of Suspended Tracks.
+
+6.0.0.1:
+	CHANGE: Rewrote language system to use java Properties files. Default language files are in the jar ("railcraft/common/lang"). Custom language files go in "config/railcraft/lang".
+
+6.0.0:
+	NEW: Rolling Machine now requires power (5 MJ) to operate and "should" be compatible with RP2, Logistics, etc...
+	NEW: Liquid Containers can be filled via right-click on tanks, etc...
+	NEW: Gate Triggers
+	FIX: Structure blocks can be placed at y=128
+	FIX: Undercutter/Relayer interface with Chestcarts again.
+	FIX: Vanilla Dispensers will no longer crash when attempting to place carts on rails. They instead spit the item out, use a Cart Dispenser for placing carts on rails.
+
+6.0.0pre40:
+	INFO: This will probably be the last pre-release.
+	NEW: Secret Project: Angry Tea Kettle is Live! Well the first tier is, two more tiers planned but largely unimplemented.
+	NEW: Rock Crusher got an Energy gauge. If it is green, the Crusher is operating at full speed (assuming you have BC, Forestry, or the Energy Module installed).
+	CHANGE: Removed World Anchor recipe since they are non-functional anyway.
+	FIX: Fixed crash caused by Forge 236.
+	FIX: Fixed Filters with stackSize > 64 reseting on world load.
+
+6.0.0pre39:
+	FIX: Fixed a multitude of crafting derps.
+
+6.0.0pre38:
+	CHANGE: Default block ids moved to the 450-475 range. Should prevent conflicts with Forestry out of the box. Let me know if any issues are found. Sulfur in the desert for example would be an issue.
+	FIX: Fixed CraftGuide integration and split the CraftGuide code out of the crafting managers. Rolling Machine currently not integrated due to complexity.
+	FIX: Fixed Concurrent Modification error when carts explode at High Speed.
+	FIX: Closing the Liquid Loader/Unloader GUIs no longer affects the liquid amount on the server. Required an architecture change that affected all GUIs with buttons, there may be bugs.
+
+6.0.0pre37:
+	NEW: Added CraftGuide recipe filter to remove Tank Cart recipe spam.
+	CHANGE: Iron Tanks wont validate if there is an entity inside.
+	FIX: Fixed Coke Oven CraftGuide recipes (no liquid).
+	FIX: Filling slots now stack empty buckets.
+
+6.0.0pre36:
+	FIX: Switches won't crash any more.
+	FIX: Undercutter only accepts valid ballast items.
+	FIX: Fixed update issues with track placement.
+
+6.0.0pre35:
+	REQUIREMENT: Forge 223+
+	CHANGE: Removed last global entity id reference, will cause all existing carts to disappear from the world. Break them first if you wish to save them. You have been warned.
+	FIX: Removed the last client call from the server code (hopefully).
+	FIX: Fixed several entity sync issues.
+
+6.0.0pre34:
+	NEW: Added recipe sand+saltpeter=2 fertilizer (Forestry).
+	FIX: Tunnel Bore should be sane now.
+	FIX: Attempted to fix dedicated server issues.
+	FIX: Fixed Dispenser not having a default direction.
+	FIX: Other stuff, maybe.
+
+6.0.0pre33:
+	NEW: Updated to 1.3.2
+	NEW: Sulfur and Saltpeter, in the hills yellow and hot, and in the darkness beneath the parched sky.
+	HINT: 2 W + 1 Y + 1 B = 2 G
+	CHANGE: Storage Detector replaced by Item Detector, new GUI.
+	CHANGE: Signal Sensitivity increased.
+	CHANGE: New Coke Oven texture.
+	WARNING: Could possible break worlds (untested).
+	API: Not stable, major changes across the board.
+	KNOWN ISSUES: "Quit to Menu" may crash, Tank Cart Filter items have render glitches.
+
+6.0.0pre28:
+	INFO: Might be last 1.2.5 build.
+	NEW: Added Steel Tools.
+	CHANGE: Reverted previous world changing changes, expect changes. (anyone who asks gets kicked)
+	FIX: Fixed stacking of larger tanks.
+
+6.0.0pre26:
+	FIX: Gauge on top and bottom of tank now have textures.
+	FIX: Fixed dupe bug with the Blast Furnace.
+	FIX: Tank stacking works again, provided the center blocks between the tanks are Valves.
+
+6.0.0pre25:
+	NEW: Added Forestry Carpenter Recipe for Wooden Ties, costs 3/4 of a bucket of Creosote Oil and takes 20 seconds.
+	NEW: Added IC2 rubber wood as valid Coke Oven input.
+	CHANGE: Gauge can placed on the top or bottom now (but the textures are bugged).
+	FIX: Pipes really should not connect to wall or gauge anymore.
+	FIX: Fixed a crash bug in the Tank Renderer.
+
+6.0.0pre23:
+	CHANGE: No more 90 Degree bends in filling animation.
+	CHANGE: Pipe "might" not connect to wall and gauge anymore.
+	CHANGE: Machine blocks reshuffled, expect oddities.
+	CHANGE: Tank Cart recipe now requires an Iron Tank Gauge.
+	FIX: Fixed SMP GUIs
+
+6.0.0pre1 - 6.0.0pre22:
+	NEW: Updated Buildcraft and Forestry APIs. Any liquids in tanks will be lost, bottle them before updating.
+	NEW: Added Iron Tank, a large multi-block structure for storing any kind of liquid. Comes in various configurations and sizes.
+	NEW: Added Buffer Stop Track (you all can stop pestering me now =P)
+	NEW: Item Loader/Unloader now have Cart Filters.
+	NEW: All filter slots in GUIs no longer consume items.
+	NEW: Liquid Loader/Unloader have been given real dynamic liquid gauges instead of the fake texture gauges on the sides.
+	NEW: Added config option to disable crushing ores in the Rock Crusher.
+	NEW: Added config option to disable crushing Obsidian and Crushed Obsidian in the IC2 Macerator.
+	NEW: Added config option to delete all existing World Anchors and Anchor Carts in the world.
+	CHANGE: Bore is now faster but uses more fuel.
+	CHANGE: Item Loaders redesigned again. Current modes replaced with Transfer, Stock, and Excess.
+	CHANGE: Wooden Track now require Wooden Rails, made in the Rolling Machine with 3 Wooden Ties and 3 Standard Rails.
+	CHANGE: Liquid containers now take half a second to fill/empty rather than one per tick.
+	CHANGE: Launcher Track is now considered Reinforced Track and the recipe has been changed to Reinforced Rails, Steel Blocks and Stone Railbeds.
+	CHANGE: Priming Track is now considered Reinforced Track and the recipe has been changed to Reinforced Rails and Stone Railbeds.
+	CHANGE: Elevator Track now requires 6 Adv. Rails, 1 Standard Rail, and 2 Redstone.
+	CHANGE: Tweaked Crushed Obsidian and Obsidian Dust textures to be easier to differentiate from similar objects.
+	CHANGE: Moved code out of net.minecraft.src.
+	FIX: Crushed Obsidian, Blocks of Steel, Stone Posts and Wooden Posts now play the correct step sound.
+	FIX: Fixed tool usage on all Cube blocks.
+	FIX: Undercutter can now only correctly place Ballast.
+	FIX: Made some adjustment to the link code for SMP and re-enabled the Trains module by default.
+	FIX: Added safety checks to file handling, no more "railcraft.dat" errors.
+	FIX: Set Locale to English while manipulating config files. Should fix Turkish errors, but not sure what affect it might have on other languages.
+	API: Complete redesign. Removed all classes that aren't absolutely necessary. Spit the remainder into isolated sub-packages.

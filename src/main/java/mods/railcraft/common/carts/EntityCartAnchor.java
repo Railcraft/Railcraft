@@ -1,0 +1,334 @@
+/* 
+ * Copyright (c) CovertJaguar, 2014 http://railcraft.info
+ * 
+ * This code is the property of CovertJaguar
+ * and may only be used with explicit written
+ * permission unless otherwise specified on the
+ * license page at http://railcraft.info/wiki/info:license.
+ */
+package mods.railcraft.common.carts;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
+import mods.railcraft.api.carts.ICartContentsTextureProvider;
+import mods.railcraft.api.carts.IItemTransfer;
+import mods.railcraft.api.carts.IMinecart;
+import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.collections.ItemKey;
+import mods.railcraft.common.util.collections.ItemMap;
+import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.misc.ChunkManager;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.IAnchor;
+
+public class EntityCartAnchor extends CartTransferBase implements ICartContentsTextureProvider, IAnchor, IMinecart {
+
+    public static final byte TICKET_FLAG = 6;
+    private static final byte ANCHOR_RADIUS = 1;
+    private static final byte MAX_CHUNKS = 12;
+    protected Ticket ticket;
+    private Set<ChunkCoordIntPair> chunks;
+    private long anchorFuel;
+    private final IInventory invWrapper = new InventoryMapper(this);
+    private int disabled = 0;
+//    private int update = MiscTools.getRand().nextInt();
+
+    public EntityCartAnchor(World world) {
+        super(world);
+        passThrough = true;
+    }
+
+    public EntityCartAnchor(World world, double x, double y, double z) {
+        super(world, x, y, z);
+        passThrough = true;
+    }
+
+    @Override
+    public void initEntityFromItem(ItemStack stack) {
+        super.initEntityFromItem(stack);
+        long fuel = ItemCartAnchor.getFuel(stack);
+        setAnchorFuel(fuel);
+    }
+
+    private boolean hasFuel() {
+        return anchorFuel > 0;
+    }
+
+    public void setAnchorFuel(long fuel) {
+        anchorFuel = fuel;
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if (Game.isNotHost(worldObj)) {
+            if (getFlag(TICKET_FLAG))
+                if (chunks != null)
+                    EffectManager.instance.chunkLoaderEffect(worldObj, this, chunks);
+                else
+                    setupChunks(chunkCoordX, chunkCoordZ);
+            return;
+        }
+
+        if (RailcraftConfig.deleteAnchors()) {
+            setDead();
+            return;
+        }
+
+        if (disabled > 0)
+            disabled--;
+
+        if (needsFuel()) {
+            if (ticket != null && anchorFuel > 0)
+                anchorFuel--;
+            if (anchorFuel <= 0) {
+                stockFuel();
+                ItemStack stack = getStackInSlot(0);
+                if (stack == null || stack.stackSize <= 0) {
+                    setInventorySlotContents(0, null);
+                    releaseTicket();
+                } else if (getFuelMap().containsKey(stack)) {
+                    decrStackSize(0, 1);
+                    anchorFuel = (long) (getFuelMap().get(stack) * RailcraftConstants.TICKS_PER_HOUR);
+                }
+            }
+        }
+
+        if (ticket == null)
+            requestTicket();
+
+//        update++;
+//        if (update % 64 == 0) {
+//            System.out.println("anchor Tick");
+//        }
+    }
+
+    private void stockFuel() {
+        LinkageManager lm = LinkageManager.instance();
+        EntityMinecart link = lm.getLinkedCartA(this);
+        if (link instanceof IItemTransfer)
+            requestFuel((IItemTransfer) link);
+
+        link = lm.getLinkedCartB(this);
+        if (link instanceof IItemTransfer)
+            requestFuel((IItemTransfer) link);
+    }
+
+    private void requestFuel(IItemTransfer cart) {
+        ItemStack stack = getStackInSlot(0);
+        if (stack != null && !getFuelMap().containsKey(stack)) {
+            stack = cart.offerItem(this, stack);
+            setInventorySlotContents(0, stack);
+            return;
+        }
+        for (ItemKey item : getFuelMap().keySet()) {
+            if (stack == null) {
+                stack = cart.requestItem(this, item.asStack());
+                if (stack != null) {
+                    InvTools.moveItemStack(stack, this);
+                    break;
+                }
+            }
+        }
+    }
+
+    protected Ticket getTicketFromForge() {
+        return ForgeChunkManager.requestTicket(Railcraft.getMod(), worldObj, Type.ENTITY);
+    }
+
+    public boolean needsFuel() {
+        return !getFuelMap().isEmpty();
+    }
+
+    @Override
+    public ItemMap<Float> getFuelMap() {
+        return RailcraftConfig.anchorFuelWorld;
+    }
+
+    protected boolean meetsTicketRequirements() {
+        return disabled <= 0 && (hasFuel() || !needsFuel());
+    }
+
+    protected void releaseTicket() {
+        ForgeChunkManager.releaseTicket(ticket);
+        ticket = null;
+        setFlag(TICKET_FLAG, false);
+    }
+
+    private boolean requestTicket() {
+        if (meetsTicketRequirements()) {
+            Ticket chunkTicket = getTicketFromForge();
+            if (chunkTicket != null) {
+//                System.out.println("Request Ticket: " + worldObj.getClass().getSimpleName());
+                chunkTicket.getModData();
+                chunkTicket.setChunkListDepth(MAX_CHUNKS);
+                chunkTicket.bindEntity(this);
+                setChunkTicket(chunkTicket);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setChunkTicket(Ticket tick) {
+        if (this.ticket != tick)
+            ForgeChunkManager.releaseTicket(this.ticket);
+        this.ticket = tick;
+        setFlag(TICKET_FLAG, ticket != null);
+    }
+
+    public void forceChunkLoading(int xChunk, int zChunk) {
+        if (ticket == null)
+            return;
+
+        setupChunks(xChunk, zChunk);
+
+//        System.out.println("Chunks Loaded = " + Arrays.toString(chunks.toArray()));
+        for (ChunkCoordIntPair chunk : chunks) {
+            ForgeChunkManager.forceChunk(ticket, chunk);
+            ForgeChunkManager.reorderChunk(ticket, chunk);
+        }
+
+        ChunkCoordIntPair myChunk = new ChunkCoordIntPair(xChunk, zChunk);
+        ForgeChunkManager.forceChunk(ticket, myChunk);
+        ForgeChunkManager.reorderChunk(ticket, myChunk);
+    }
+
+    public void setupChunks(int xChunk, int zChunk) {
+        if (getFlag(TICKET_FLAG))
+            chunks = ChunkManager.getInstance().getChunksAround(xChunk, zChunk, ANCHOR_RADIUS);
+        else
+            chunks = null;
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound data) {
+        super.writeEntityToNBT(data);
+
+        data.setLong("anchorFuel", anchorFuel);
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound data) {
+        super.readEntityFromNBT(data);
+
+        if (needsFuel())
+            anchorFuel = data.getLong("anchorFuel");
+    }
+
+    @Override
+    public void setDead() {
+        releaseTicket();
+        super.setDead();
+    }
+
+    @Override
+    public boolean doInteract(EntityPlayer player) {
+        if (Game.isHost(worldObj) && needsFuel())
+            GuiHandler.openGui(EnumGui.CART_ANCHOR, player, worldObj, this);
+        return true;
+    }
+
+    @Override
+    public List<ItemStack> getItemsDropped() {
+        List<ItemStack> items = new ArrayList<ItemStack>();
+        items.add(getCartItem());
+        return items;
+    }
+
+    @Override
+    public ItemStack getCartItem() {
+        ItemStack drop = super.getCartItem();
+        if (needsFuel() && hasFuel()) {
+            NBTTagCompound nbt = new NBTTagCompound();
+            nbt.setLong("fuel", anchorFuel);
+            drop.setTagCompound(nbt);
+        }
+        return drop;
+    }
+
+    @Override
+    public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
+        return EnumCart.getCartType(stack) == EnumCart.ANCHOR;
+    }
+
+    @Override
+    public boolean canBeRidden() {
+        return false;
+    }
+
+    @Override
+    public int getSizeInventory() {
+        return needsFuel() ? 1 : 0;
+    }
+
+    @Override
+    public String getInventoryName() {
+        return LocalizationPlugin.translate(EnumCart.ANCHOR.getTag());
+    }
+
+    @Override
+    public Block func_145820_n() {
+        return RailcraftBlocks.getBlockMachineAlpha();
+    }
+
+    @Override
+    public int getDisplayTileData() {
+        return EnumMachineAlpha.WORLD_ANCHOR.ordinal();
+    }
+
+    @Override
+    public IIcon getBlockTextureOnSide(int side) {
+        if (side < 2 && !getFlag(TICKET_FLAG))
+            return EnumMachineAlpha.WORLD_ANCHOR.getTexture(6);
+        return EnumMachineAlpha.WORLD_ANCHOR.getTexture(side);
+    }
+
+    @Override
+    public long getAnchorFuel() {
+        return anchorFuel;
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        if (!RailcraftConfig.anchorsCanInteractWithPipes())
+            return false;
+        return getFuelMap().containsKey(stack);
+    }
+
+    @Override
+    public double getDrag() {
+        return CartConstants.STANDARD_DRAG;
+    }
+
+    @Override
+    public void onActivatorRailPass(int x, int y, int z, boolean powered) {
+        if (powered) {
+            disabled = 10;
+            releaseTicket();
+        }
+    }
+
+}

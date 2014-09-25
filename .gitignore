@@ -1,6 +1,20 @@
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
+build/
+eclipse/
+CREDITS-fml.txt
+LICENSE-fml.txt
+MinecraftForge-Credits.txt
+MinecraftForge-License.txt
+README.txt
+.gradle/
+.nb-gradle/
+.nb-gradle-properties
+.settings/
+.classpath
+.project
+gradle.properties
+push/
+settings.gradle
+.idea/
+*.iml
+run/
+private/

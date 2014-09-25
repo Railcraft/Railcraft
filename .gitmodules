@@ -1,0 +1,9 @@
+[submodule "lang"]
+	path = lang
+	url = git://github.com/CovertJaguar/Railcraft-Localization.git
+[submodule "api/railcraft"]
+	path = api/railcraft
+	url = git://github.com/CovertJaguar/Railcraft-API.git
+[submodule "api/forestry"]
+	path = api/forestry
+	url = git://github.com/ForestryMC/ForestryAPI.git

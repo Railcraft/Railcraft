@@ -1,0 +1,33 @@
+{
+    "uid": "covertjaguar.railcraft",
+    "modId": "Railcraft",
+    "name": "Railcraft",
+    "nemName": "Railcraft",
+    "description": "Redefine your Rails! Railcraft is a mod that focuses on increasing the utility and desirability of minecarts. Additionally, it provides integration with railroad themed power systems such as Steam Power and Electricity.",
+    "urls": {
+        "icon": [ "http://www.railcraft.info/wp-content/uploads/2014/08/track.reinforced.png" ],
+        "logo": [ "http://www.railcraft.info/wp-content/uploads/2014/08/logo.png" ],
+        "website": [ "http://railcraft.info" ],
+        "source": [ "https://github.com/CovertJaguar" ]
+    ],
+    "license": "Railcraft License",
+    "updateUrl": "github://CovertJaguar@Railcraft/quickmod.json",
+    "tags": [ "minecart", "steam", "decorative", "electricity" ],
+    "categories": [ "Wordgen", "Minecarts", "Decorative", "Tech" ],
+    "authors": {
+        "Author": [ "CovertJaguar" ],
+    },
+    "versions": [
+        {
+            "mcCompat": [ "1.7.10" ],
+            "name": "9.2.2.0",
+            "installType": "forgeMod",
+            "urls": [
+                {
+                    "url": "http://adf.ly/947537/minecraft.curseforge.com/mc-mods/51195-railcraft/files/2211418/download",
+                    "downloadType": "sequential"
+                }
+            ]
+        }
+    ]
+}
