@@ -47,6 +47,10 @@ You will need to create a gradle.properties file in the project root with the fo
 ```
 mcversion=1.7.10
 forgeversion=10.13.1.1217
+version_major = 9
+version_series = 3
+version_revision = 2
+version_build = 0
 mcUsername=Steve
 mcPassword=ILoveNotch
 ```
