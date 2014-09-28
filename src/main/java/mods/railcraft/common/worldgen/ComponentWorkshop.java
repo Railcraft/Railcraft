@@ -71,6 +71,9 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         int y = this.boundingBox.minY;
         int z = this.boundingBox.minZ;
 
+        //Clear area
+        fillWithBlocks(world, sbb, 1, 1, 2, 3, 3, 4, Blocks.air, Blocks.air, false);
+        fillWithBlocks(world, sbb, 5, 1, 0, 9, 4, 10, Blocks.air, Blocks.air, false);
         // floor
 //        fillWithBlocks(world, sbb, 0, 0, 0, 11, 0, 11, Blocks.gravel, Blocks.gravel, false);
         fillWithBlocks(world, sbb, 4, 0, 0, 10, 0, 10, Blocks.double_stone_slab, Blocks.double_stone_slab, false);
