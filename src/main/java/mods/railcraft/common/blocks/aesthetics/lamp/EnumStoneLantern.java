@@ -13,7 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
+import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -39,7 +42,9 @@ public enum EnumStoneLantern {
     QUARRIED,
     SANDY,
     SANDSTONE,
-    STONE;
+    STONE,
+    IRON,
+    GOLD;
     public static final EnumStoneLantern[] VALUES = values();
     public static final Map<String, EnumStoneLantern> NAMES = new HashMap<String, EnumStoneLantern>();
     public static final List<EnumStoneLantern> creativeList = new ArrayList<EnumStoneLantern>();
@@ -56,6 +61,8 @@ public enum EnumStoneLantern {
         SANDY.source = BlockBrick.sandy.getItemStack(BlockBrick.BrickVariant.BLOCK, 1);
         SANDSTONE.source = new ItemStack(Blocks.stone_slab, 1, 1);
         STONE.source = new ItemStack(Blocks.stone_slab, 1, 0);
+        IRON.source = BlockRailcraftSlab.getItem(EnumBlockMaterial.IRON);
+        GOLD.source = BlockRailcraftSlab.getItem(EnumBlockMaterial.GOLD);
 
         for (EnumStoneLantern lamp : VALUES) {
             NAMES.put(lamp.name(), lamp);
