@@ -45,15 +45,22 @@ public class RenderBlockOre extends BlockRenderer {
 
     @Override
     public void renderItem(RenderBlocks renderBlocks, ItemStack item, ItemRenderType renderType) {
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        
         BlockOre.renderPass = 0;
         renderItem(renderBlocks, item, getBlock().getIcon(0, item.getItemDamage()));
         BlockOre.renderPass = 1;
         renderItem(renderBlocks, item, getBlock().getIcon(0, item.getItemDamage()));
+        
+        GL11.glPopAttrib();
 
     }
 
     private void renderItem(RenderBlocks renderBlocks, ItemStack item, IIcon texture) {
-        if(texture == null) return;
+        if (texture == null) return;
         int meta = item.getItemDamage();
 
         Block block = getBlock();
@@ -97,4 +104,5 @@ public class RenderBlockOre extends BlockRenderer {
         tess.draw();
         GL11.glTranslatef(0.5F, 0.5F, 0.5F);
     }
+
 }
