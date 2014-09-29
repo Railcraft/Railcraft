@@ -96,13 +96,18 @@ processResources
 }
 
 runClient {
-	args "--username=${project.mcUsername}"
-	args "--password=${project.mcPassword}"
+	if( project.hasProperty('mcUsername') && project.hasProperty('mcPassword') ) {
+		args "--username=${project.mcUsername}"
+		args "--password=${project.mcPassword}"
+	}
+
 }
 
 debugClient {
-	args "--username=${project.mcUsername}"
-	args "--password=${project.mcPassword}"
+	if( project.hasProperty('mcUsername') && project.hasProperty('mcPassword') ) {
+		args "--username=${project.mcUsername}"
+		args "--password=${project.mcPassword}"
+	}
 }
 
 task echoVersion << {
@@ -291,9 +296,11 @@ artifacts {
 
 uploadArchives {
 	repositories {
-		mavenDeployer {
-			repository(url: "http://files.minecraftforge.net/maven/manage/upload") {
-				authentication(userName: forgeMavenUsername, password: forgeMavenPassword)
+		if( project.hasProperty('forgeMavenUsername') && project.hasProperty('forgeMavenPassword') ) {
+			mavenDeployer {
+				repository(url: "http://files.minecraftforge.net/maven/manage/upload") {
+					authentication(userName: forgeMavenUsername, password: forgeMavenPassword)
+				}
 			}
 		}
 	}
