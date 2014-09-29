@@ -1,3 +1,5 @@
+evaluationDependsOn(':version')
+
 buildscript {
 	repositories {
 		mavenCentral()
@@ -17,9 +19,9 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
+
 group = "mods.railcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Railcraft_" + mcversion
+archivesBaseName = "Railcraft_" + project.mcversion
 
 ext.apiRailcraft = "./api/railcraft"
 ext.apiForestry = "./api/forestry"
@@ -29,7 +31,7 @@ ext.dirLang = "./lang"
 ext.dirDest = './build/dist'
 
 minecraft {
-	version = mcversion + "-" + forgeversion
+	version = project.mcversion + "-" + project.forgeversion
 	runDir = "run"
 
 	replace '@VERSION@', project.version
@@ -64,14 +66,15 @@ repositories {
 		url = "http://maven.ic2.player.to/"
 	}
 }
+
 configurations{
-	buildcraft
-	compile.extendsFrom buildcraft
+	api
+	compile.extendsFrom api
 }
 
 dependencies {
-	compile 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
-	buildcraft 'com.mod-buildcraft:buildcraft:6.0.17+:dev'
+	api 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
+	api 'com.mod-buildcraft:buildcraft:6.0.17+:dev'
 }
 
 processResources
@@ -96,71 +99,18 @@ processResources
 }
 
 runClient {
-	args "--username=${project.mcUsername}"
-	args "--password=${project.mcPassword}"
+	if( project.hasProperty('mcUsername') && project.hasProperty('mcPassword') ) {
+		args "--username=${project.mcUsername}"
+		args "--password=${project.mcPassword}"
+	}
+
 }
 
 debugClient {
-	args "--username=${project.mcUsername}"
-	args "--password=${project.mcPassword}"
-}
-
-task echoVersion << {
-	printNextVersion()
-}
-
-def saveVersion() {
-	ant.propertyfile(
-		file: "gradle.properties") {
-		entry( key:"version_major", type:"int", value: version_major)
-		entry( key:"version_series", type:"int", value: version_series)
-		entry( key:"version_revision", type:"int", value: version_revision)
-		entry( key:"version_build", type:"int", value: version_build)
+	if( project.hasProperty('mcUsername') && project.hasProperty('mcPassword') ) {
+		args "--username=${project.mcUsername}"
+		args "--password=${project.mcPassword}"
 	}
-	project.version = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
-	printNextVersion()
-}
-
-def printNextVersion(){
-	println '*************************************************************'
-	println 'The next build will be version: ' +  project.version
-	println '*************************************************************'
-}
-
-task bumpMajor << {
-	project.version_major = Integer.parseInt(project.version_major) + 1
-	project.version_series = "0"
-	project.version_revision = "0"
-	project.version_build = "0"
-	saveVersion()
-}
-
-task bumpSeries << {
-	project.version_series = Integer.parseInt(project.version_series) + 1
-	project.version_revision = "0"
-	project.version_build = "0"
-	saveVersion()
-}
-
-task bumpRevision << {
-	project.version_revision = Integer.parseInt(project.version_revision) + 1
-	project.version_build = "0"
-	saveVersion()
-}
-
-task bumpBuild << {
-	project.version_build = Integer.parseInt(project.version_build) + 1
-	saveVersion()
-}
-
-task setBuild << {
-	def console = System.console()
-	if (console) {
-		project.version_build = console.readLine('> What should the build be? ')
-	} else {
-		logger.error "Cannot get console."
-	}
-	saveVersion()
 }
 
 jar {
@@ -168,9 +118,15 @@ jar {
 	archiveName = "main.jar"
 
 	from {
-		configurations.buildcraft.collect {
+		configurations.api.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
+				exclude '**/buildcraft/api/blueprints/**'
+				exclude '**/buildcraft/api/filler/**'
+				exclude '**/ic2/api/crops/**'
+				exclude '**/ic2/api/network/**'
+				exclude '**/ic2/api/event/**'
+				exclude '**/ic2/api/reactor/**'
 			}
 		}
 	}
@@ -247,9 +203,15 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	}
 
 	from {
-		configurations.buildcraft.collect {
+		configurations.api.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
+				exclude '**/buildcraft/api/blueprints/**'
+				exclude '**/buildcraft/api/filler/**'
+				exclude '**/ic2/api/crops/**'
+				exclude '**/ic2/api/network/**'
+				exclude '**/ic2/api/event/**'
+				exclude '**/ic2/api/reactor/**'
 			}
 		}
 	}
@@ -270,13 +232,11 @@ task apiZip ( type: Zip ) {
 
 task releaseInit << {
 	println '*************************************************************'
-	println 'This build will be version: ' +  project.version
+	println 'This build will be version: ' +  rootProject.version
 	println '*************************************************************'
 }
 
 task release << {
-	project.version_build = Integer.parseInt(project.version_build) + 1
-	saveVersion()
 }
 
 release.dependsOn releaseInit, mainJar, devJar, apiZip
@@ -287,14 +247,4 @@ release.shouldRunAfter uploadArchives
 
 artifacts {
 	archives mainJar, devJar, apiZip
-}
-
-uploadArchives {
-	repositories {
-		mavenDeployer {
-			repository(url: "http://files.minecraftforge.net/maven/manage/upload") {
-				authentication(userName: forgeMavenUsername, password: forgeMavenPassword)
-			}
-		}
-	}
 }

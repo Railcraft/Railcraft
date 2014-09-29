@@ -1,0 +1,66 @@
+rootProject.version = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
+rootProject.ext.mcversion = mcversion
+rootProject.ext.forgeversion = forgeversion
+
+task echoVersion << {
+	printNextVersion()
+}
+
+def saveVersion() {
+	ant.propertyfile(
+		file: "gradle.properties") {
+		entry( key:"version_major", type:"int", value: version_major)
+		entry( key:"version_series", type:"int", value: version_series)
+		entry( key:"version_revision", type:"int", value: version_revision)
+		entry( key:"version_build", type:"int", value: version_build)
+	}
+	rootProject.version = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
+	printNextVersion()
+}
+
+def printNextVersion(){
+	println '*************************************************************'
+	println 'The next build will be version: ' +  rootProject.version
+	println '*************************************************************'
+}
+
+task bumpMajor << {
+	project.version_major = Integer.parseInt(project.version_major) + 1
+	project.version_series = "0"
+	project.version_revision = "0"
+	project.version_build = "0"
+	saveVersion()
+}
+
+task bumpSeries << {
+	project.version_series = Integer.parseInt(project.version_series) + 1
+	project.version_revision = "0"
+	project.version_build = "0"
+	saveVersion()
+}
+
+task bumpRevision << {
+	project.version_revision = Integer.parseInt(project.version_revision) + 1
+	project.version_build = "0"
+	saveVersion()
+}
+
+task bumpBuild << {
+	project.version_build = Integer.parseInt(project.version_build) + 1
+	saveVersion()
+}
+
+task setBuild << {
+	def console = System.console()
+	if (console) {
+		project.version_build = console.readLine('> What should the build be? ')
+	} else {
+		logger.error "Cannot get console."
+	}
+	saveVersion()
+}
+
+task release << {
+	project.version_build = Integer.parseInt(project.version_build) + 1
+	saveVersion()
+}
