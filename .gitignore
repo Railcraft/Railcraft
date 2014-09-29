@@ -13,7 +13,6 @@ README.txt
 .project
 /gradle.properties
 push/
-settings.gradle
 .idea/
 *.iml
 run/
