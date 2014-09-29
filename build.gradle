@@ -34,7 +34,7 @@ minecraft {
 	version = project.mcversion + "-" + project.forgeversion
 	runDir = "run"
 
-	replace '@VERSION@', project.railcraftVersion
+	replace '@VERSION@', project.version
 }
 
 sourceSets {
@@ -66,14 +66,15 @@ repositories {
 		url = "http://maven.ic2.player.to/"
 	}
 }
+
 configurations{
-	buildcraft
-	compile.extendsFrom buildcraft
+	api
+	compile.extendsFrom api
 }
 
 dependencies {
-	compile 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
-	buildcraft 'com.mod-buildcraft:buildcraft:6.0.17+:dev'
+	api 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
+	api 'com.mod-buildcraft:buildcraft:6.0.17+:dev'
 }
 
 processResources
@@ -117,9 +118,15 @@ jar {
 	archiveName = "main.jar"
 
 	from {
-		configurations.buildcraft.collect {
+		configurations.api.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
+				exclude '**/buildcraft/api/blueprints/**'
+				exclude '**/buildcraft/api/filler/**'
+				exclude '**/ic2/api/crops/**'
+				exclude '**/ic2/api/network/**'
+				exclude '**/ic2/api/event/**'
+				exclude '**/ic2/api/reactor/**'
 			}
 		}
 	}
@@ -196,9 +203,15 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	}
 
 	from {
-		configurations.buildcraft.collect {
+		configurations.api.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
+				exclude '**/buildcraft/api/blueprints/**'
+				exclude '**/buildcraft/api/filler/**'
+				exclude '**/ic2/api/crops/**'
+				exclude '**/ic2/api/network/**'
+				exclude '**/ic2/api/event/**'
+				exclude '**/ic2/api/reactor/**'
 			}
 		}
 	}
@@ -219,7 +232,7 @@ task apiZip ( type: Zip ) {
 
 task releaseInit << {
 	println '*************************************************************'
-	println 'This build will be version: ' +  rootProject.railcraftVersion
+	println 'This build will be version: ' +  rootProject.version
 	println '*************************************************************'
 }
 

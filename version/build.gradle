@@ -1,4 +1,4 @@
-rootProject.ext.railcraftVersion = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
+rootProject.version = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
 rootProject.ext.mcversion = mcversion
 rootProject.ext.forgeversion = forgeversion
 
@@ -14,13 +14,13 @@ def saveVersion() {
 		entry( key:"version_revision", type:"int", value: version_revision)
 		entry( key:"version_build", type:"int", value: version_build)
 	}
-	rootProject.ext.railcraftVersion = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
+	rootProject.version = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
 	printNextVersion()
 }
 
 def printNextVersion(){
 	println '*************************************************************'
-	println 'The next build will be version: ' +  rootProject.railcraftVersion
+	println 'The next build will be version: ' +  rootProject.version
 	println '*************************************************************'
 }
 
