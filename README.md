@@ -23,7 +23,7 @@ In the words of **CovertJaguar**:
 * IRC: #railcraft on Esper.net - [WebChat](http://webchat.esper.net/?nick=RailcraftGithub...&channels=railcraft&prompt=1)
 * Patreon Page: http://www.patreon.com/CovertJaguar
 
-![Patreon](http://www.railcraft.info/wp-content/uploads/2014/05/Patreon.png)
+<a href="http://www.patreon.com/CovertJaguar"> ![Patreon](http://www.railcraft.info/wp-content/uploads/2014/05/Patreon.png)</a>
 
 ## Issues
 
@@ -35,7 +35,7 @@ You must have read and performed the proper support procedure outlined [here](ht
 
 The Official Railcraft Project welcomes contributions from anyone, provided they have signed the Contributor Licensing Agreement (CLA) found [here](https://www.clahub.com/agreements/CovertJaguar/Railcraft).
 
-Singing the CLA is simple, just follow the link, fill out your name and email, and hit the "I Agree" button and you are good to go.
+Signing the CLA is simple, just follow the link, fill out your name and email, and hit the "I Agree" button and you are good to go.
 
 Regarding new features/behavior changes, please submit a Suggestion Issue to the Tracker before you write a single line of code. Keeping everyone on the same page saves time and effort and reduces negative experiences all around when a change turns out to be controversial.
 
@@ -47,6 +47,10 @@ You will need to create a gradle.properties file in the project root with the fo
 ```
 mcversion=1.7.10
 forgeversion=10.13.1.1217
+version_major = 9
+version_series = 3
+version_revision = 2
+version_build = 0
 mcUsername=Steve
 mcPassword=ILoveNotch
 ```
