@@ -42,6 +42,7 @@ import mods.railcraft.common.util.misc.BlinkTick;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketHandler;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -237,8 +238,20 @@ public final class Railcraft {
                     mapping.remap(BlockRCAnvil.getBlock());
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
-            } else if (mapping.name.equals("Railcraft:tool.mag.glass") && ItemMagnifyingGlass.item != null)
-                mapping.remap(ItemMagnifyingGlass.item);
+            } else if (mapping.type == GameRegistry.Type.ITEM) {
+                if (mapping.name.equals("Railcraft:tool.mag.glass") && ItemMagnifyingGlass.item != null)
+                    mapping.remap(ItemMagnifyingGlass.item);
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.blockCreosote != null)
+                    mapping.remap(Item.getItemFromBlock(RailcraftFluids.blockCreosote));
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam") && RailcraftFluids.blockSteam != null)
+                    mapping.remap(Item.getItemFromBlock(RailcraftFluids.blockSteam));
+                else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge") && BlockFirestoneRecharge.getBlock() != null)
+                    mapping.remap(Item.getItemFromBlock(BlockFirestoneRecharge.getBlock()));
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && BlockRCAnvil.getBlock() != null)
+                    mapping.remap(Item.getItemFromBlock(BlockRCAnvil.getBlock()));
+                else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
+                    mapping.ignore();
+            }
         }
     }
 
