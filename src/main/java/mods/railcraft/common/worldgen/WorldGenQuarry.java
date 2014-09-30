@@ -106,6 +106,16 @@ public class WorldGenQuarry extends WorldGenerator {
             return false;
         if (isLiquid(world, x, y, z))
             return false;
+        
+        if (WorldPlugin.getBlock(world, x + 1, y + 1, z) != Blocks.air)
+            return false;
+        if (WorldPlugin.getBlock(world, x - 1, y + 1, z) != Blocks.air)
+            return false;
+        if (WorldPlugin.getBlock(world, x, y + 1, z + 1) != Blocks.air)
+            return false;
+        if (WorldPlugin.getBlock(world, x, y + 1, z - 1) != Blocks.air)
+            return false;
+        
         world.setBlock(x, y, z, Blocks.air, 0, 2);
         return true;
     }
