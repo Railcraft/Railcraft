@@ -114,6 +114,10 @@ public class WorldGenQuarry extends WorldGenerator {
 //        if (!world.blockExists(x, y, z)) {
 //            return;
 //        }
+        //Removes tallgrass
+        if (WorldPlugin.getBlock(world, x, y + 1, z) == Blocks.tallgrass)
+            world.setBlock(x, y + 1, z, Blocks.air, 0, 2);
+        
         if (isReplaceable(world, x, y, z))
             world.setBlock(x, y, z, blockStone, meta, 2);
     }
