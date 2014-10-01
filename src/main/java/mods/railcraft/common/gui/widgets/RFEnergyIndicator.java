@@ -37,8 +37,7 @@ public class RFEnergyIndicator extends IndicatorController {
     }
 
     public void updateEnergy(int energy) {
-        //this.energy = (int)((this.energy * 9 + energy) / 10.0);
-	      this.energy = energy;
+        this.energy = (int)((this.energy * 9 + energy) / 10.0);
     }
 
 }

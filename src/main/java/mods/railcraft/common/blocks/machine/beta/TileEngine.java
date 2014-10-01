@@ -148,12 +148,12 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
             TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, direction);
 
             if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
-	              if(energy > 0){
-		                pistonStage = 1;
-		                setActive(true);
-	              }else{
-		                setActive(false);
-	              }
+                if(energy > 0){
+                    pistonStage = 1;
+	                setActive(true);
+	            }else{
+		            setActive(false);
+	            }
             } else
                 setActive(false);
 
@@ -328,39 +328,8 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
         if (energy > maxEnergy())
             energy = maxEnergy();
-	      if (energy < 0)
-		        energy = 0;
-    }
-
-    public int extractEnergy(int min, int max, boolean doExtract) {
-        if (energy < min)
-            return 0;
-
-        int actualMax;
-
-        int combinedMax = maxEnergyExtracted();// + extraEnergy * 0.5;
-        if (max > combinedMax)
-            actualMax = combinedMax;
-        else
-            actualMax = max;
-
-        int extracted;
-
-        if (energy >= actualMax) {
-            extracted = actualMax;
-            if (doExtract) {
-                energy -= actualMax;
-                //extraEnergy -= Math.min(actualMax, extraEnergy);
-            }
-        } else {
-            extracted = energy;
-            if (doExtract) {
-                energy = 0;
-                //extraEnergy = 0;
-            }
-        }
-
-        return extracted;
+        if (energy < 0)
+            energy = 0;
     }
 
     public float getProgress() {
@@ -426,8 +395,8 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         return ConnectOverride.DEFAULT;
     }
 
-		@Override
-		public boolean canConnectEnergy(ForgeDirection from){
-			return from == direction;
-		}
+    @Override
+    public boolean canConnectEnergy(ForgeDirection from){
+        return from == direction;
+    }
 }

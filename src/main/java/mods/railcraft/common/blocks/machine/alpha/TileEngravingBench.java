@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.*;
 
 import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,9 +43,9 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 
-public class TileEngravingBench extends TileMachineItem implements ISidedInventory, IHasWork, IGuiReturnHandler {
+public class TileEngravingBench extends TileMachineItem implements IEnergyHandler, ISidedInventory, IHasWork, IGuiReturnHandler {
 
-    public static enum GuiPacketType {
+	public static enum GuiPacketType {
 
         START_CRAFTING, NORMAL_RETURN, OPEN_UNLOCK, OPEN_NORMAL, UNLOCK_EMBLEM
     };
@@ -330,6 +331,31 @@ public class TileEngravingBench extends TileMachineItem implements ISidedInvento
     public boolean rotateBlock(ForgeDirection axis) {
         flippedAxis = !flippedAxis;
         sendUpdateToClient();
+        return true;
+    }
+
+    @Override
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate){
+        return energyStorage.receiveEnergy(maxReceive, simulate);
+    }
+
+    @Override
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate){
+        return energyStorage.extractEnergy(maxExtract, simulate);
+    }
+
+    @Override
+    public int getEnergyStored(ForgeDirection from){
+        return energyStorage.getEnergyStored();
+    }
+
+    @Override
+	public int getMaxEnergyStored(ForgeDirection from){
+        return energyStorage.getMaxEnergyStored();
+	}
+
+    @Override
+    public boolean canConnectEnergy(ForgeDirection from){
         return true;
     }
 

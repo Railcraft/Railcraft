@@ -163,7 +163,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
         if (RailcraftConfig.machinesRequirePower())
             energyStorage = new EnergyStorage(MAX_ENERGY);
-	      initEnergyStorage();
+	        initEnergyStorage();
     }
 
     @Override
@@ -202,8 +202,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
     private void initEnergyStorage() {
         if (energyStorage != null) {
-	          energyStorage.setMaxTransfer(MAX_RECEIVE);
-	          energyStorage.setCapacity(MAX_ENERGY);
+            energyStorage.setMaxTransfer(MAX_RECEIVE);
+            energyStorage.setCapacity(MAX_ENERGY);
         }
     }
 
@@ -286,9 +286,9 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
                         isWorking = true;
                         if (energyStorage != null) {
                             int energy = energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, true);
-                            if (energy >= CRUSHING_POWER_COST_PER_TICK){
-	                              processTime++;
-	                              energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, false);
+                            if (energy >= CRUSHING_POWER_COST_PER_TICK) {
+                                processTime++;
+                                energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, false);
                             }
                         } else
                             processTime++;
@@ -417,47 +417,47 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
         return false;
     }
 
-		public EnergyStorage getEnergyStorage(){
-				TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-				if (mBlock != null && mBlock.energyStorage != null)
-						return mBlock.energyStorage;
-				return energyStorage;
-		}
+    public EnergyStorage getEnergyStorage(){
+        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
+        if (mBlock != null && mBlock.energyStorage != null)
+            return mBlock.energyStorage;
+        return energyStorage;
+    }
 
-		@Override
-		public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate){
-			if(getEnergyStorage() == null){
-					return 0;
-			}
-			return getEnergyStorage().receiveEnergy(maxReceive, simulate);
-		}
+    @Override
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate){
+        if(getEnergyStorage() == null){
+            return 0;
+        }
+        return getEnergyStorage().receiveEnergy(maxReceive, simulate);
+    }
 
-		@Override
-		public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate){
-			if(getEnergyStorage() == null){
-				return 0;
-			}
-			return getEnergyStorage().extractEnergy(maxExtract, simulate);
-		}
+    @Override
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate){
+        if(getEnergyStorage() == null){
+            return 0;
+        }
+        return getEnergyStorage().extractEnergy(maxExtract, simulate);
+    }
 
-		@Override
-		public int getEnergyStored(ForgeDirection from){
-			if(getEnergyStorage() == null){
-				return 0;
-			}
-			return getEnergyStorage().getEnergyStored();
-		}
+    @Override
+    public int getEnergyStored(ForgeDirection from){
+        if(getEnergyStorage() == null){
+            return 0;
+        }
+        return getEnergyStorage().getEnergyStored();
+    }
 
-		@Override
-		public int getMaxEnergyStored(ForgeDirection from){
-			if(getEnergyStorage() == null){
-				return 0;
-			}
-			return getEnergyStorage().getMaxEnergyStored();
-		}
+    @Override
+    public int getMaxEnergyStored(ForgeDirection from){
+        if(getEnergyStorage() == null){
+            return 0;
+        }
+        return getEnergyStorage().getMaxEnergyStored();
+	}
 
-		@Override
-		public boolean canConnectEnergy(ForgeDirection from){
-			return true;
-		}
+    @Override
+    public boolean canConnectEnergy(ForgeDirection from){
+        return true;
+    }
 }
