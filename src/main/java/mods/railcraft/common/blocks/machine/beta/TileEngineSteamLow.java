@@ -18,7 +18,7 @@ import mods.railcraft.common.util.steam.Steam;
 public class TileEngineSteamLow extends TileEngineSteam
 {
 
-    private static final int OUTPUT_MJ = 4;
+    private static final int OUTPUT_RF = 40;
 
     public TileEngineSteamLow() {
     }
@@ -29,27 +29,27 @@ public class TileEngineSteamLow extends TileEngineSteam
     }
 
     @Override
-    public float getMaxOutputMJ() {
-        return OUTPUT_MJ;
+    public int getMaxOutputRF() {
+        return OUTPUT_RF;
     }
 
     @Override
     public int steamUsedPerTick() {
-        return Steam.STEAM_PER_MJ * OUTPUT_MJ;
+        return Steam.STEAM_PER_10RF * (OUTPUT_RF/10);
     }
 
     @Override
     public int maxEnergy() {
-        return 20000;
+        return 200000;
     }
 
     @Override
     public int maxEnergyReceived() {
-        return 600;
+        return 6000;
     }
 
     @Override
     public int maxEnergyExtracted() {
-        return 80;
+        return 800;
     }
 }

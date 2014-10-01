@@ -43,8 +43,8 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     public static final byte SLOT_FUEL = 0;
     public static final byte SLOT_LIQUID_INPUT = 1;
     public static final byte SLOT_LIQUID_OUTPUT = 2;
-    private static final int OUTPUT_MJ = 2;
-    private static final int STEAM_USED = Steam.STEAM_PER_MJ * OUTPUT_MJ;
+    private static final int OUTPUT_RF = 20;
+    private static final int STEAM_USED = Steam.STEAM_PER_10RF * (OUTPUT_RF/10);
     private static final float FUEL_PER_CONVERSION_MULTIPLIER = 1.25F;
     private static final byte TICKS_PER_BOILER_CYCLE = 20;
     private static final byte TANK_WATER = 1;
@@ -94,8 +94,8 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     @Override
-    public float getMaxOutputMJ() {
-        return OUTPUT_MJ;
+    public int getMaxOutputRF() {
+        return OUTPUT_RF;
     }
 
     @Override
@@ -163,17 +163,17 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
 
     @Override
     public int maxEnergy() {
-        return 10000;
+        return 100000;
     }
 
     @Override
     public int maxEnergyReceived() {
-        return 300;
+        return 3000;
     }
 
     @Override
     public int maxEnergyExtracted() {
-        return 40;
+        return 400;
     }
 
     @Override

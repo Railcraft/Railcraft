@@ -9,13 +9,12 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.gates.IAction;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
+
+import cofh.api.energy.EnergyStorage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -43,23 +42,22 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 
-public class TileEngravingBench extends TileMachineItem implements IPowerReceptor, ISidedInventory, IHasWork, IGuiReturnHandler {
+public class TileEngravingBench extends TileMachineItem implements ISidedInventory, IHasWork, IGuiReturnHandler {
 
     public static enum GuiPacketType {
 
         START_CRAFTING, NORMAL_RETURN, OPEN_UNLOCK, OPEN_NORMAL, UNLOCK_EMBLEM
     };
     private final static int PROCESS_TIME = 100;
-    private final static int ACTIVATION_POWER = 5;
-    private final static int MAX_RECEIVE = 100;
+    private final static int ACTIVATION_POWER = 50;
+    private final static int MAX_RECEIVE = 1000;
     private final static int MAX_ENERGY = ACTIVATION_POWER * (PROCESS_TIME + (PROCESS_TIME / 2));
     private final static int SLOT_INPUT = 0;
     private final static int SLOT_RESULT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private final IInventory invResult = new InventoryMapper(this, SLOT_RESULT, 1, false);
-    private PowerHandler powerHandler;
+    private EnergyStorage energyStorage;
     private int progress;
-    public int guiEnergy;
     public boolean paused, startCrafting, isCrafting, flippedAxis;
     public String currentEmblem = "";
     private final Set<IAction> actions = new HashSet<IAction>();
@@ -69,12 +67,12 @@ public class TileEngravingBench extends TileMachineItem implements IPowerRecepto
 
         @Override
         protected void refreshToolTip() {
-            tip.text = String.format("%d MJ", guiEnergy);
+            tip.text = String.format("%d RF", energyStorage.getEnergyStored());
         }
 
         @Override
         public int getScaledLevel(int size) {
-            float e = Math.min(guiEnergy, MAX_ENERGY);
+            float e = Math.min(energyStorage.getEnergyStored(), MAX_ENERGY);
             return (int) (e * size / MAX_ENERGY);
         }
 
@@ -87,8 +85,8 @@ public class TileEngravingBench extends TileMachineItem implements IPowerRecepto
     public TileEngravingBench() {
         super(2);
         if (RailcraftConfig.machinesRequirePower()) {
-            powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
-            initPowerProvider();
+            energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE);
+	          initEnergyStorage();
         }
     }
 
@@ -97,20 +95,11 @@ public class TileEngravingBench extends TileMachineItem implements IPowerRecepto
         return EnumMachineAlpha.ENGRAVING_BENCH;
     }
 
-    private void initPowerProvider() {
-        if (powerHandler != null) {
-            powerHandler.configure(1, MAX_RECEIVE, ACTIVATION_POWER, MAX_ENERGY);
-            powerHandler.configurePowerPerdition(1, 2);
+    private void initEnergyStorage() {
+        if (energyStorage != null) {
+	          energyStorage.setCapacity(MAX_ENERGY);
+	          energyStorage.setMaxTransfer(MAX_RECEIVE);
         }
-    }
-
-    @Override
-    public PowerReceiver getPowerReceiver(ForgeDirection side) {
-        return powerHandler != null ? powerHandler.getPowerReceiver() : null;
-    }
-
-    @Override
-    public void doWork(PowerHandler workProvider) {
     }
 
     @Override
@@ -132,8 +121,8 @@ public class TileEngravingBench extends TileMachineItem implements IPowerRecepto
         data.setInteger("progress", progress);
         data.setString("currentEmblem", currentEmblem);
 
-        if (powerHandler != null)
-            powerHandler.writeToNBT(data);
+        if (energyStorage != null)
+	          energyStorage.writeToNBT(data);
     }
 
     @Override
@@ -145,9 +134,9 @@ public class TileEngravingBench extends TileMachineItem implements IPowerRecepto
         progress = data.getInteger("progress");
         currentEmblem = data.getString("currentEmblem");
 
-        if (powerHandler != null) {
-            powerHandler.readFromNBT(data);
-            initPowerProvider();
+        if (energyStorage != null) {
+	          energyStorage.readFromNBT(data);
+            initEnergyStorage();
         }
     }
 
@@ -225,9 +214,6 @@ public class TileEngravingBench extends TileMachineItem implements IPowerRecepto
         if (Game.isNotHost(worldObj))
             return;
 
-        if (powerHandler != null)
-            powerHandler.update();
-
         if (clock % 16 == 0)
             processActions();
 
@@ -263,10 +249,12 @@ public class TileEngravingBench extends TileMachineItem implements IPowerRecepto
                 InvTools.moveItemStack(emblem, invResult);
                 progress = 0;
             }
-        } else if (powerHandler != null) {
-            double energy = powerHandler.useEnergy(ACTIVATION_POWER, ACTIVATION_POWER, true);
-            if (energy >= ACTIVATION_POWER)
-                progress++;
+        } else if (energyStorage != null) {
+            int energy = energyStorage.extractEnergy(ACTIVATION_POWER, true);
+            if (energy >= ACTIVATION_POWER){
+	              progress++;
+	              energyStorage.extractEnergy(ACTIVATION_POWER, false);
+            }
         } else
             progress++;
     }
