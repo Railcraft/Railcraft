@@ -132,12 +132,12 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
             pistonProgress += getPistonSpeed();
 
             if (pistonProgress > 0.5 && pistonStage == 1) {
-	              TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, direction);
+                TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, direction);
 
-	              if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
-		                IEnergyHandler handler = (IEnergyHandler)tile;
-		                addEnergy(-handler.receiveEnergy(direction.getOpposite(), Math.min(energy, maxEnergyExtracted()+energy/2), false));
-	              }
+                if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
+                    IEnergyHandler handler = (IEnergyHandler)tile;
+                    addEnergy(-handler.receiveEnergy(direction.getOpposite(), Math.min(energy, maxEnergyExtracted()+energy/2), false));
+                }
 
                 pistonStage = 2;
             } else if (pistonProgress >= 1) {
@@ -150,10 +150,10 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
             if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
                 if(energy > 0){
                     pistonStage = 1;
-	                setActive(true);
-	            }else{
-		            setActive(false);
-	            }
+                    setActive(true);
+                }else{
+    	            setActive(false);
+                }
             } else
                 setActive(false);
 
@@ -359,11 +359,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
         direction = ForgeDirection.getOrientation(data.getByte("direction"));
         powered = data.getBoolean("powered");
-	      if(data.hasKey("energyRF")){
-		      energy = data.getInteger("energyRF");
-	      }else{
-		      energy = (int)data.getFloat("energy");
-	      }
+        energy = data.getInteger("energyRF");
         currentOutput = data.getFloat("currentOutput");
         energyStage = EnergyStage.fromOrdinal(data.getByte("energyStage"));
     }

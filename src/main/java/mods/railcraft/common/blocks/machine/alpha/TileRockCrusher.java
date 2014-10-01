@@ -163,7 +163,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
         if (RailcraftConfig.machinesRequirePower())
             energyStorage = new EnergyStorage(MAX_ENERGY);
-	        initEnergyStorage();
+            initEnergyStorage();
     }
 
     @Override

@@ -45,7 +45,7 @@ import net.minecraft.inventory.ISidedInventory;
 
 public class TileEngravingBench extends TileMachineItem implements IEnergyHandler, ISidedInventory, IHasWork, IGuiReturnHandler {
 
-	public static enum GuiPacketType {
+    public static enum GuiPacketType {
 
         START_CRAFTING, NORMAL_RETURN, OPEN_UNLOCK, OPEN_NORMAL, UNLOCK_EMBLEM
     };
@@ -87,7 +87,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
         super(2);
         if (RailcraftConfig.machinesRequirePower()) {
             energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE);
-	          initEnergyStorage();
+            initEnergyStorage();
         }
     }
 
@@ -98,8 +98,8 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
 
     private void initEnergyStorage() {
         if (energyStorage != null) {
-	          energyStorage.setCapacity(MAX_ENERGY);
-	          energyStorage.setMaxTransfer(MAX_RECEIVE);
+            energyStorage.setCapacity(MAX_ENERGY);
+            energyStorage.setMaxTransfer(MAX_RECEIVE);
         }
     }
 
@@ -123,7 +123,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
         data.setString("currentEmblem", currentEmblem);
 
         if (energyStorage != null)
-	          energyStorage.writeToNBT(data);
+            energyStorage.writeToNBT(data);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
         currentEmblem = data.getString("currentEmblem");
 
         if (energyStorage != null) {
-	          energyStorage.readFromNBT(data);
+            energyStorage.readFromNBT(data);
             initEnergyStorage();
         }
     }
@@ -253,8 +253,8 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
         } else if (energyStorage != null) {
             int energy = energyStorage.extractEnergy(ACTIVATION_POWER, true);
             if (energy >= ACTIVATION_POWER){
-	              progress++;
-	              energyStorage.extractEnergy(ACTIVATION_POWER, false);
+                progress++;
+                energyStorage.extractEnergy(ACTIVATION_POWER, false);
             }
         } else
             progress++;

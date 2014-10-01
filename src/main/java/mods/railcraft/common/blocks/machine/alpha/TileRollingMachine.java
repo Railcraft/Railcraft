@@ -60,7 +60,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     private AdjacentInventoryCache cache = new AdjacentInventoryCache(this, tileCache, null, InventorySorter.SIZE_DECENDING);
     private final Set<IAction> actions = new HashSet<IAction>();
 
-	private static class RollingContainer extends Container {
+    private static class RollingContainer extends Container {
 
         @Override
         public boolean canInteractWith(EntityPlayer entityplayer) {
@@ -71,7 +71,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
 
     public TileRollingMachine() {
         if (RailcraftConfig.machinesRequirePower()) {
-	        energyStorage = new EnergyStorage(MAX_ENERGY);
+            energyStorage = new EnergyStorage(MAX_ENERGY);
             initEnergyStorage();
         }
     }
@@ -100,7 +100,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
         data.setInteger("progress", progress);
 
         if (energyStorage != null)
-	        energyStorage.writeToNBT(data);
+            energyStorage.writeToNBT(data);
 
         invResult.writeToNBT("invResult", data);
         InvTools.writeInvToNBT(craftMatrix, "Crafting", data);
@@ -201,8 +201,8 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
                 if (energyStorage != null) {
                     int energy = energyStorage.extractEnergy(ACTIVATION_POWER, true);
                     if (energy >= ACTIVATION_POWER) {
-	                    progress++;
-	                    energyStorage.extractEnergy(ACTIVATION_POWER, false);
+                        progress++;
+                        energyStorage.extractEnergy(ACTIVATION_POWER, false);
                     }
                 } else
                     progress++;

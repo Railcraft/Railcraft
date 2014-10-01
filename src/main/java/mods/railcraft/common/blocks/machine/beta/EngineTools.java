@@ -19,10 +19,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class EngineTools {
 
     public static boolean isPoweredTile(TileEntity tile, ForgeDirection side) {
-	      if(tile instanceof IEnergyHandler){
-		        IEnergyHandler handler = (IEnergyHandler)tile;
-		        return handler.canConnectEnergy(side);
-	      }
+        if(tile instanceof IEnergyHandler){
+            IEnergyHandler handler = (IEnergyHandler)tile;
+            return handler.canConnectEnergy(side);
+        }
         return false;
     }
 
