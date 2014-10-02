@@ -9,10 +9,10 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.gates.IAction;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
 import java.util.*;
+
+import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyHandler;
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -51,7 +51,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileRockCrusher extends TileMultiBlockInventory implements IPowerReceptor, IHasWork, ISidedInventory {
+public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyHandler, IHasWork, ISidedInventory {
 
     public static void placeRockCrusher(World world, int x, int y, int z, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
         MultiBlockPattern pattern = TileRockCrusher.patterns.get(patternIndex);
@@ -78,10 +78,10 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
     }
 
     private final static int PROCESS_TIME = 100;
-    private final static int CRUSHING_POWER_COST_PER_TICK = 16;
-    private final static int SUCKING_POWER_COST = 512;
-    private final static int KILLING_POWER_COST = 1024;
-    private final static int MAX_RECEIVE = 500;
+    private final static int CRUSHING_POWER_COST_PER_TICK = 160;
+    private final static int SUCKING_POWER_COST = 5120;
+    private final static int KILLING_POWER_COST = 10240;
+    private final static int MAX_RECEIVE = 5000;
     public final static int MAX_ENERGY = CRUSHING_POWER_COST_PER_TICK * PROCESS_TIME;
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -91,7 +91,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
     private int processTime;
     private IInventory invInput = new InventoryMapper(this, 0, 9);
     private IInventory invOutput = new InventoryMapper(this, 9, 9, false);
-    private PowerHandler powerHandler;
+    private EnergyStorage energyStorage;
     private boolean isWorking = false;
     private boolean paused = false;
     private final Set<IAction> actions = new HashSet<IAction>();
@@ -162,8 +162,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
         super(EnumMachineAlpha.ROCK_CRUSHER.getTag() + ".name", 18, patterns);
 
         if (RailcraftConfig.machinesRequirePower())
-            powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
-        initPowerProvider();
+            energyStorage = new EnergyStorage(MAX_ENERGY);
+            initEnergyStorage();
     }
 
     @Override
@@ -200,21 +200,20 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
         return true;
     }
 
-    private void initPowerProvider() {
-        if (powerHandler != null) {
-//            powerProvider = PowerFramework.currentFramework.createPowerProvider();
-            powerHandler.configure(1, MAX_RECEIVE, CRUSHING_POWER_COST_PER_TICK, MAX_ENERGY);
-            powerHandler.configurePowerPerdition(1, 1);
+    private void initEnergyStorage() {
+        if (energyStorage != null) {
+            energyStorage.setMaxTransfer(MAX_RECEIVE);
+            energyStorage.setCapacity(MAX_ENERGY);
         }
     }
 
-    private boolean useMasterEnergy(float amount, boolean doRemove) {
+    private boolean useMasterEnergy(int amount, boolean doRemove) {
         TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
         if (mBlock != null)
-            if (mBlock.powerHandler == null)
+            if (mBlock.energyStorage == null)
                 return true;
             else
-                return mBlock.powerHandler.useEnergy(amount, amount, doRemove) == amount;
+                return mBlock.energyStorage.extractEnergy(amount, !doRemove) == amount;
         return false;
     }
 
@@ -223,9 +222,6 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
         super.updateEntity();
 
         if (Game.isHost(getWorld())) {
-
-            if (powerHandler != null)
-                powerHandler.update();
 
             if (isStructureValid()) {
                 EntityItem item = TileEntityHopper.func_145897_a(worldObj, xCoord, yCoord + 1, zCoord);
@@ -288,10 +284,12 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
 
                     } else {
                         isWorking = true;
-                        if (powerHandler != null) {
-                            double energy = powerHandler.useEnergy(CRUSHING_POWER_COST_PER_TICK, CRUSHING_POWER_COST_PER_TICK, true);
-                            if (energy >= CRUSHING_POWER_COST_PER_TICK)
+                        if (energyStorage != null) {
+                            int energy = energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, true);
+                            if (energy >= CRUSHING_POWER_COST_PER_TICK) {
                                 processTime++;
+                                energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, false);
+                            }
                         } else
                             processTime++;
                     }
@@ -333,8 +331,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
         super.writeToNBT(data);
         data.setInteger("processTime", processTime);
 
-        if (powerHandler != null)
-            powerHandler.writeToNBT(data);
+        if (energyStorage != null)
+            energyStorage.writeToNBT(data);
     }
 
     @Override
@@ -342,9 +340,9 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
         super.readFromNBT(data);
         processTime = data.getInteger("processTime");
 
-        if (powerHandler != null) {
-            powerHandler.readFromNBT(data);
-            initPowerProvider();
+        if (energyStorage != null) {
+            energyStorage.readFromNBT(data);
+            initEnergyStorage();
         }
     }
 
@@ -361,20 +359,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
             mBlock.processTime = processTime;
     }
 
-    public int getProgressScaled(int i) {
-        return (getProcessTime() * i) / PROCESS_TIME;
-    }
-
-    @Override
-    public PowerReceiver getPowerReceiver(ForgeDirection side) {
-        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-        if (mBlock != null && mBlock.powerHandler != null)
-            return mBlock.powerHandler.getPowerReceiver();
-        return powerHandler != null ? powerHandler.getPowerReceiver() : null;
-    }
-
-    @Override
-    public void doWork(PowerHandler workProvider) {
+    public int getProgressScaled(int i){
+	      return (getProcessTime() * i) / PROCESS_TIME;
     }
 
     @Override
@@ -431,4 +417,47 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
         return false;
     }
 
+    public EnergyStorage getEnergyStorage(){
+        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
+        if (mBlock != null && mBlock.energyStorage != null)
+            return mBlock.energyStorage;
+        return energyStorage;
+    }
+
+    @Override
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate){
+        if(getEnergyStorage() == null){
+            return 0;
+        }
+        return getEnergyStorage().receiveEnergy(maxReceive, simulate);
+    }
+
+    @Override
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate){
+        if(getEnergyStorage() == null){
+            return 0;
+        }
+        return getEnergyStorage().extractEnergy(maxExtract, simulate);
+    }
+
+    @Override
+    public int getEnergyStored(ForgeDirection from){
+        if(getEnergyStorage() == null){
+            return 0;
+        }
+        return getEnergyStorage().getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored(ForgeDirection from){
+        if(getEnergyStorage() == null){
+            return 0;
+        }
+        return getEnergyStorage().getMaxEnergyStored();
+	}
+
+    @Override
+    public boolean canConnectEnergy(ForgeDirection from){
+        return true;
+    }
 }

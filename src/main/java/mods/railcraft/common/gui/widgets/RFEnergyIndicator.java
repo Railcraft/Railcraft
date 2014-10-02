@@ -12,18 +12,18 @@ package mods.railcraft.common.gui.widgets;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class MJEnergyIndicator extends IndicatorController {
+public class RFEnergyIndicator extends IndicatorController {
 
-    private double energy;
-    private final double maxEnergy;
+    private int energy;
+    private final int maxEnergy;
 
-    public MJEnergyIndicator(double maxEnergy) {
+    public RFEnergyIndicator(int maxEnergy) {
         this.maxEnergy = maxEnergy;
     }
 
     @Override
     protected void refreshToolTip() {
-        tip.text = String.format("%.0f MJ", energy);
+        tip.text = String.format("%d RF", energy);
     }
 
     @Override
@@ -32,12 +32,12 @@ public class MJEnergyIndicator extends IndicatorController {
         return (int) (e * size / maxEnergy);
     }
 
-    public void setEnergy(double energy) {
+    public void setEnergy(int energy) {
         this.energy = energy;
     }
 
-    public void updateEnergy(double energy) {
-        this.energy = (this.energy * 9.0 + energy) / 10.0;
+    public void updateEnergy(int energy) {
+        this.energy = (int)((this.energy * 9 + energy) / 10.0);
     }
 
 }

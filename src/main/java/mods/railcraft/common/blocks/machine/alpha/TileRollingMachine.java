@@ -9,10 +9,10 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.gates.IAction;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
 import java.util.*;
+
+import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyHandler;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import net.minecraft.inventory.Container;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,18 +41,18 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryIterator;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.ISidedInventory;
 
-public class TileRollingMachine extends TileMachineBase implements IPowerReceptor, ISidedInventory, IHasWork {
+public class TileRollingMachine extends TileMachineBase implements IEnergyHandler, ISidedInventory, IHasWork {
 
     private final static int PROCESS_TIME = 100;
-    private final static int ACTIVATION_POWER = 5;
-    private final static int MAX_RECEIVE = 100;
+    private final static int ACTIVATION_POWER = 50;
+    private final static int MAX_RECEIVE = 1000;
     public final static int MAX_ENERGY = ACTIVATION_POWER * PROCESS_TIME;
     private final static int SLOT_RESULT = 0;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 10);
     private final InventoryCrafting craftMatrix = new InventoryCrafting(new RollingContainer(), 3, 3);
     private final StandaloneInventory invResult = new StandaloneInventory(1, "invResult", (IInventory) this);
     private final IInventory inv = InventoryConcatenator.make().add(invResult).add(craftMatrix);
-    private PowerHandler powerHandler;
+    private EnergyStorage energyStorage;
     public boolean useLast;
     private boolean isWorking, paused;
     private ItemStack currentReceipe;
@@ -71,8 +71,8 @@ public class TileRollingMachine extends TileMachineBase implements IPowerRecepto
 
     public TileRollingMachine() {
         if (RailcraftConfig.machinesRequirePower()) {
-            powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
-            initPowerProvider();
+            energyStorage = new EnergyStorage(MAX_ENERGY);
+            initEnergyStorage();
         }
     }
 
@@ -81,20 +81,11 @@ public class TileRollingMachine extends TileMachineBase implements IPowerRecepto
         return EnumMachineAlpha.ROLLING_MACHINE;
     }
 
-    private void initPowerProvider() {
-        if (powerHandler != null) {
-            powerHandler.configure(1, MAX_RECEIVE, ACTIVATION_POWER, MAX_ENERGY);
-            powerHandler.configurePowerPerdition(1, 2);
+    private void initEnergyStorage(){
+        if(energyStorage != null){
+            energyStorage.setCapacity(MAX_ENERGY);
+            energyStorage.setMaxTransfer(MAX_RECEIVE);
         }
-    }
-
-    @Override
-    public PowerReceiver getPowerReceiver(ForgeDirection side) {
-        return powerHandler != null ? powerHandler.getPowerReceiver() : null;
-    }
-
-    @Override
-    public void doWork(PowerHandler workProvider) {
     }
 
     @Override
@@ -108,8 +99,8 @@ public class TileRollingMachine extends TileMachineBase implements IPowerRecepto
 
         data.setInteger("progress", progress);
 
-        if (powerHandler != null)
-            powerHandler.writeToNBT(data);
+        if (energyStorage != null)
+            energyStorage.writeToNBT(data);
 
         invResult.writeToNBT("invResult", data);
         InvTools.writeInvToNBT(craftMatrix, "Crafting", data);
@@ -121,9 +112,9 @@ public class TileRollingMachine extends TileMachineBase implements IPowerRecepto
 
         progress = data.getInteger("progress");
 
-        if (powerHandler != null) {
-            powerHandler.readFromNBT(data);
-            initPowerProvider();
+        if (energyStorage != null) {
+            energyStorage.readFromNBT(data);
+            initEnergyStorage();
         }
 
         invResult.readFromNBT("invResult", data);
@@ -177,9 +168,6 @@ public class TileRollingMachine extends TileMachineBase implements IPowerRecepto
         if (Game.isNotHost(worldObj))
             return;
 
-        if (powerHandler != null)
-            powerHandler.update();
-
         balanceSlots();
 
         if (clock % 16 == 0)
@@ -210,10 +198,12 @@ public class TileRollingMachine extends TileMachineBase implements IPowerRecepto
                 }
             } else {
                 isWorking = true;
-                if (powerHandler != null) {
-                    double energy = powerHandler.useEnergy(ACTIVATION_POWER, ACTIVATION_POWER, true);
-                    if (energy >= ACTIVATION_POWER)
+                if (energyStorage != null) {
+                    int energy = energyStorage.extractEnergy(ACTIVATION_POWER, true);
+                    if (energy >= ACTIVATION_POWER) {
                         progress++;
+                        energyStorage.extractEnergy(ACTIVATION_POWER, false);
+                    }
                 } else
                     progress++;
             }
@@ -380,6 +370,47 @@ public class TileRollingMachine extends TileMachineBase implements IPowerRecepto
     @Override
     public String getInventoryName() {
         return getName();
+    }
+
+    public EnergyStorage getEnergyStorage(){
+        return energyStorage;
+    }
+
+    @Override
+    public boolean canConnectEnergy(ForgeDirection side){
+        return true;
+    }
+
+    @Override
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate){
+        if(energyStorage == null){
+            return 0;
+        }
+        return energyStorage.receiveEnergy(maxReceive, simulate);
+    }
+
+    @Override
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate){
+        if(energyStorage == null){
+            return 0;
+        }
+        return energyStorage.extractEnergy(maxExtract, simulate);
+    }
+
+    @Override
+    public int getEnergyStored(ForgeDirection from){
+        if(energyStorage == null){
+            return 0;
+        }
+        return energyStorage.getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored(ForgeDirection from){
+        if(energyStorage == null){
+            return 0;
+        }
+        return energyStorage.getMaxEnergyStored();
     }
 
 }

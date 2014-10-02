@@ -17,7 +17,7 @@ import mods.railcraft.common.gui.containers.ContainerEngineSteamHobby;
 public class GuiEngineSteamHobby extends TileGui
 {
 
-    private static final String OUTPUT = "%3.1f MJ";
+    private static final String OUTPUT = "%3.1f RF";
     private final TileEngineSteamHobby tile;
 
     public GuiEngineSteamHobby(InventoryPlayer inv, TileEngineSteamHobby tile)

@@ -8,8 +8,9 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import buildcraft.api.power.PowerHandler.PowerReceiver;
+import cofh.api.energy.EnergyStorage;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
@@ -17,7 +18,6 @@ import mods.railcraft.common.blocks.machine.alpha.TileRockCrusher;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
-import mods.railcraft.common.gui.widgets.MJEnergyIndicator;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -25,13 +25,13 @@ public class ContainerRockCrusher extends RailcraftContainer {
 
     private TileRockCrusher tile;
     private int lastProcessTime;
-    private final MJEnergyIndicator energyIndicator;
+    private final RFEnergyIndicator energyIndicator;
 
     public ContainerRockCrusher(InventoryPlayer inventoryplayer, TileRockCrusher crusher) {
         super(crusher);
         this.tile = crusher;
 
-        energyIndicator = new MJEnergyIndicator(TileRockCrusher.MAX_ENERGY);
+        energyIndicator = new RFEnergyIndicator(TileRockCrusher.MAX_ENERGY);
         addWidget(new IndicatorWidget(energyIndicator, 157, 23, 176, 53, 6, 48));
 
         for (int i = 0; i < 3; i++) {
@@ -60,15 +60,15 @@ public class ContainerRockCrusher extends RailcraftContainer {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        PowerReceiver provider = tile.getPowerReceiver(null);
+        EnergyStorage storage = tile.getEnergyStorage();
         for (int i = 0; i < crafters.size(); i++) {
             ICrafting icrafting = (ICrafting) crafters.get(i);
 
             if (lastProcessTime != tile.getProcessTime())
                 icrafting.sendProgressBarUpdate(this, 0, tile.getProcessTime());
 
-            if (provider != null)
-                icrafting.sendProgressBarUpdate(this, 1, (int) provider.getEnergyStored());
+            if (storage != null)
+                icrafting.sendProgressBarUpdate(this, 1, storage.getEnergyStored());
         }
 
         lastProcessTime = tile.getProcessTime();
@@ -78,9 +78,9 @@ public class ContainerRockCrusher extends RailcraftContainer {
     public void addCraftingToCrafters(ICrafting icrafting) {
         super.addCraftingToCrafters(icrafting);
         icrafting.sendProgressBarUpdate(this, 0, tile.getProcessTime());
-        PowerReceiver provider = tile.getPowerReceiver(null);
-        if (provider != null)
-            icrafting.sendProgressBarUpdate(this, 2, (int) provider.getEnergyStored());
+        EnergyStorage storage = tile.getEnergyStorage();
+        if (storage != null)
+            icrafting.sendProgressBarUpdate(this, 2, storage.getEnergyStored());
     }
 
     @Override

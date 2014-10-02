@@ -94,7 +94,7 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
 
     @Override
     public void burn() {
-        float output = 0;
+        int output = 0;
 
         if (getEnergyStage() != EnergyStage.OVERHEAT) {
             if (isPowered()) {
@@ -114,8 +114,8 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
             if (isPowered()) {
                 if (steamUsed >= steamUsedPerTick()) {
                     steamUsed -= steamUsedPerTick();
-                    output = getMaxOutputMJ();
-                    addEnergy(getMaxOutputMJ());
+                    output = getMaxOutputRF();
+                    addEnergy(getMaxOutputRF());
                 }
             } else {
                 steamUsed = 0;
@@ -136,7 +136,7 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
         getTankManager().drain(TANK_STEAM, 5, true);
     }
 
-    public abstract float getMaxOutputMJ();
+    public abstract int getMaxOutputRF();
 
     public abstract int steamUsedPerTick();
 
