@@ -19,9 +19,13 @@ public class TileAdminFeeder extends TileMachineBase implements IElectricGrid {
         if (Game.isNotHost(getWorld()))
             return;
 
-        double charge = chargeHandler.getCharge();
         double capacity = chargeHandler.getCapacity();
-        chargeHandler.addCharge(capacity - charge);
+        try {
+            chargeHandler.setCharge(capacity);
+        } catch (Error err) {
+            chargeHandler.addCharge(capacity - chargeHandler.getCharge());
+            Game.logErrorAPI("Railcraft", err, IElectricGrid.class);
+        }
         chargeHandler.tick();
     }
 
@@ -56,4 +60,5 @@ public class TileAdminFeeder extends TileMachineBase implements IElectricGrid {
         super.writeToNBT(data);
         chargeHandler.writeToNBT(data);
     }
+
 }
