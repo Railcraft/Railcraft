@@ -6,7 +6,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.aesthetics.lamp;
+package mods.railcraft.common.blocks.aesthetics.lantern;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import mods.railcraft.common.blocks.BlockFactory;
@@ -30,7 +30,7 @@ public class BlockFactoryLantern extends BlockFactory {
     protected void doBlockInit() {
         int renderId = Railcraft.getProxy().getRenderId();
         BlockLantern.stone = new BlockLantern(renderId, new LanternProxyStone());
-        BlockLantern.stone.setBlockName("railcraft.stonelamp");
+        BlockLantern.stone.setBlockName("railcraft.lantern.stone");
         GameRegistry.registerBlock(BlockLantern.stone, ItemLantern.class, BlockLantern.stone.getUnlocalizedName());
 
         for (EnumLanternStone lamp : EnumLanternStone.VALUES) {
@@ -40,7 +40,7 @@ public class BlockFactoryLantern extends BlockFactory {
         }
 
         BlockLantern.metal = new BlockLantern(renderId, new LanternProxyMetal());
-        BlockLantern.metal.setBlockName("railcraft.metallamp");
+        BlockLantern.metal.setBlockName("railcraft.lantern.metal");
         GameRegistry.registerBlock(BlockLantern.metal, ItemLantern.class, BlockLantern.metal.getUnlocalizedName());
 
         for (EnumLanternMetal lamp : EnumLanternMetal.VALUES) {

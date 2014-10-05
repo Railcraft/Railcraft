@@ -6,7 +6,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.aesthetics.lamp;
+package mods.railcraft.common.blocks.aesthetics.lantern;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,33 +79,40 @@ public enum EnumLanternStone implements LanternInfo {
         return ABYSSAL;
     }
 
+    @Override
     public IIcon getTexture(int side) {
         return InvTools.getBlockFromStack(source).getIcon(ForgeDirection.UP.ordinal(), source.getItemDamage());
     }
 
+    @Override
     public Block getBlock() {
         return BlockLantern.getBlockStone();
     }
 
+    @Override
     public ItemStack getSource() {
         if (source == null) return null;
         return source.copy();
     }
 
+    @Override
     public ItemStack getItem() {
         return getItem(1);
     }
 
+    @Override
     public ItemStack getItem(int qty) {
         Block block = getBlock();
         if (block == null) return null;
         return new ItemStack(block, qty, ordinal());
     }
 
+    @Override
     public String getTag() {
-        return "railcraft.stonelamp." + name().replace("_", ".").toLowerCase(Locale.ENGLISH);
+        return "railcraft.lantern.stone." + name().replace("_", ".").toLowerCase(Locale.ENGLISH);
     }
 
+    @Override
     public boolean isEnabled() {
         return ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES) && RailcraftConfig.isSubBlockEnabled(getTag()) && getBlock() != null;
     }

@@ -1,6 +1,4 @@
-package mods.railcraft.common.blocks.aesthetics.lamp;
-
-import mods.railcraft.common.blocks.aesthetics.lamp.EnumLanternMetal;
+package mods.railcraft.common.blocks.aesthetics.lantern;
 
 public class LanternProxyMetal implements LanternProxy {
 

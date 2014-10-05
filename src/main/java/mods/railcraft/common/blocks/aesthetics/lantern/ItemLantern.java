@@ -6,7 +6,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.aesthetics.lamp;
+package mods.railcraft.common.blocks.aesthetics.lantern;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;

@@ -9,7 +9,7 @@
 package mods.railcraft.client.render;
 
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
-import mods.railcraft.common.blocks.aesthetics.lamp.BlockLantern;
+import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostBase;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.MiscTools;

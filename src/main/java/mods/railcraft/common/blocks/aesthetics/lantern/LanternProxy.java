@@ -1,4 +1,4 @@
-package mods.railcraft.common.blocks.aesthetics.lamp;
+package mods.railcraft.common.blocks.aesthetics.lantern;
 
 import mods.railcraft.common.blocks.aesthetics.wall.WallInfo;
 

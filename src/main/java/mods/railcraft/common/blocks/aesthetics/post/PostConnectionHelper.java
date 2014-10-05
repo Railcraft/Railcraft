@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
-import mods.railcraft.common.blocks.aesthetics.lamp.BlockLantern;
+import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.signals.ISignalTile;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;

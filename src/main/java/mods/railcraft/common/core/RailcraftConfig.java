@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.core;
 
-import mods.railcraft.common.blocks.aesthetics.lamp.EnumLanternStone;
-import mods.railcraft.common.blocks.aesthetics.lamp.EnumLanternMetal;
+import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternStone;
+import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternMetal;
 import mods.railcraft.common.util.collections.BlockItemListParser;
 import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.collections.ItemKey;

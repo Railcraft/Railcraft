@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.core;
 
-import mods.railcraft.common.blocks.aesthetics.lamp.BlockLantern;
+import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
