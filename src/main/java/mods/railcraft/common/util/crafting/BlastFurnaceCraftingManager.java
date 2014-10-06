@@ -19,6 +19,7 @@ import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
+import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraftforge.oredict.OreDictionary;
@@ -44,6 +45,7 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
                 }
 
             };
+            fuel.add(ThaumcraftPlugin.getItem("itemResource", 0));
             fuel.add(RailcraftToolItems.getCoalCoke());
             fuel.add(EnumCube.COKE_BLOCK.getItem());
             fuel.add(new ItemStack(Items.coal, 1, 1));
