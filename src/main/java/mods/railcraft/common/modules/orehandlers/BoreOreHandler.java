@@ -25,7 +25,14 @@ public class BoreOreHandler {
         ItemStack ore = event.Ore;
         if (ore == null)
             return;
-        if (ore.getItem() instanceof ItemBlock) {
+        if (ore.getItem() instanceof ItemBlock && (
+                oreClass.startsWith("ore") 
+                || oreClass.equals("stone")
+                || oreClass.equals("cobblestone") 
+                || oreClass.equals("logWood")
+                || oreClass.equals("treeSapling")
+                || oreClass.equals("treeLeaves")
+                )) {
             Game.log(Level.INFO, "Automation Module: Ore Detected, adding to blocks Tunnel Bore can mine: {0}, id={1} meta={2}", oreClass, ore, ore.getItemDamage());
             EntityTunnelBore.addMineableBlock(InvTools.getBlockFromStack(ore), ore.getItemDamage());
         }
