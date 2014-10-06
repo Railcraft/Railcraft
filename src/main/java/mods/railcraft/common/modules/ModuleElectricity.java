@@ -60,6 +60,9 @@ public class ModuleElectricity extends RailcraftModule {
                     'P', RailcraftItem.plate.getRecipeObject(EnumPlate.TIN),
                     'C', "ingotCopper");
 
+        epsilon = EnumMachineEpsilon.ADMIN_FEEDER;
+        epsilon.register();
+
         EnumMachineDelta delta = EnumMachineDelta.WIRE;
         if (delta.register())
             RailcraftCraftingManager.rollingMachine.getRecipeList().add(new ShapedOreRecipe(delta.getItem(8),

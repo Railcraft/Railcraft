@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine;
 
+import mods.railcraft.common.blocks.machine.epsilon.TileAdminFeeder;
 import mods.railcraft.common.blocks.machine.epsilon.TileElectricFeeder;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mods.railcraft.common.blocks.machine.alpha.*;
@@ -78,6 +79,7 @@ public class MachineTileRegistery {
         
         // Epsilon
         GameRegistry.registerTileEntity(TileElectricFeeder.class, "RCElectricFeederTile");
+        GameRegistry.registerTileEntity(TileAdminFeeder.class, "RCAdminFeederTile");
 
     }
 
