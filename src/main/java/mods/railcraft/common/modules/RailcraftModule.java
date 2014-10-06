@@ -47,7 +47,7 @@ public abstract class RailcraftModule {
         }
     }
 
-    public Set<Module> getDependancies() {
+    public Set<Module> getDependencies() {
         return EnumSet.noneOf(Module.class);
     }
 
