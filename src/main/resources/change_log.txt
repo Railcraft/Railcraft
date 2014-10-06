@@ -1,3 +1,16 @@
+Next:
+	NEW: Added Admin Feeder Unit. (contribution by Yopu)
+	NEW: Added Metal Lanterns. (contributions by WoodStone)
+	NEW: Added Copper, Tin, Lead, and Steel Stairs and Slabs.
+	NEW: Thaumcraft Alumentum can be used as a Blast Furnace fuel.
+	CHANGE: MJ API replaced with RF API. Testing Needed.  (contributions by adudney)
+	CHANGE: Increase Lapotron Loader Upgrade added storage to 5M and decrease the max to six upgrades.
+
+9.3.3.0:
+	FIX: Fix issue with world migration from older MC versions that was blocking upgrading.
+	FIX: Platforms will no longer drop Posts.
+	FIX: Grass will no longer grow on Quarries. (contribution by WoodStone)
+
 9.3.2.0:
 	CHANGE: Renamed Stone Lamps to Stone Lanterns.
 	CHANGE: Posts now connect to Wire Support Frames.
