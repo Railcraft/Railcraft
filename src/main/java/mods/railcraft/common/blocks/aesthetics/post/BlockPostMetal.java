@@ -22,7 +22,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.ItemRegistry;
@@ -111,7 +110,10 @@ public class BlockPostMetal extends BlockPostBase {
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-        list.add(EnumPost.METAL.getItem());
+        if (isPlatform)
+            list.add(EnumPost.METAL_PLATFORM.getItem());
+        else
+            list.add(EnumPost.METAL.getItem());
         return list;
     }
 

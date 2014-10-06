@@ -43,14 +43,8 @@ Regarding new features/behavior changes, please submit a Suggestion Issue to the
 
 The Railcraft Project follows standard Forge conventions for setting up and building a project, with a couple additional details (details to come).
 
-You will need to create a gradle.properties file in the project root with the following properties:
+You can create a gradle.properties file in the project root with the following properties:
 ```
-mcversion=1.7.10
-forgeversion=10.13.1.1217
-version_major = 9
-version_series = 3
-version_revision = 2
-version_build = 0
 mcUsername=Steve
 mcPassword=ILoveNotch
 ```
