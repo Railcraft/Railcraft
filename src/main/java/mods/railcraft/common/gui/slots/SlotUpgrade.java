@@ -28,26 +28,21 @@ public class SlotUpgrade extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return canPlaceItem(stack);
-    }
-
-    public static boolean canPlaceItem(ItemStack stack) {
         ItemStack storage = IC2Plugin.getItem("energyStorageUpgrade");
         ItemStack overclocker = IC2Plugin.getItem("overclockerUpgrade");
         ItemStack transformer = IC2Plugin.getItem("transformerUpgrade");
         Item lapotron = ModuleIC2.lapotronUpgrade;
 
-        if (stack != null) {
-            if (storage != null && stack.isItemEqual(storage)) {
+        if (stack != null)
+            if (storage != null && stack.isItemEqual(storage))
                 return true;
-            } else if (overclocker != null && stack.isItemEqual(overclocker)) {
+            else if (overclocker != null && stack.isItemEqual(overclocker))
                 return true;
-            } else if (transformer != null && stack.isItemEqual(transformer)) {
+            else if (transformer != null && stack.isItemEqual(transformer))
                 return true;
-            } else if (lapotron != null && stack.getItem() == lapotron) {
+            else if (lapotron != null && stack.getItem() == lapotron)
                 return true;
-            }
-        }
         return false;
     }
+
 }

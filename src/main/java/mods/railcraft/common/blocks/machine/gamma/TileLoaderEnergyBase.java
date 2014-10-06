@@ -31,7 +31,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     private static final int TIER = 2;
     private static final int CAPACITY = 100000;
     private static final int MAX_OVERCLOCKS = 10;
-    private static final int MAX_LAPOTRON = 9;
+    private static final int MAX_LAPOTRON = 6;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     protected int energy;
     public int transferRate;
@@ -220,7 +220,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     public int getCapacity() {
         int capacity = CAPACITY;
         capacity += storageUpgrades * 10000;
-        capacity += lapotronUpgrades * 1000000;
+        capacity += lapotronUpgrades * 5000000;
         return capacity;
     }
 
