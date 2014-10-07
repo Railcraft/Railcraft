@@ -30,6 +30,7 @@ public enum EnumSignal {
     BOX_CAPACITOR(Module.SIGNALS, 3, true, "box.capacitor", TileBoxCapacitor.class),
     BOX_RECEIVER(Module.SIGNALS, 3, true, "box.receiver", TileBoxReceiver.class),
     BOX_CONTROLLER(Module.SIGNALS, 3, true, "box.controller", TileBoxController.class),
+    BOX_ANALOG_CONTROLLER(Module.SIGNALS, 3, true, "box.analog", TileBoxAnalogController.class),
     DISTANT_SIGNAL(Module.SIGNALS, 8, false, "distant", TileSignalDistantSignal.class),
     DUAL_HEAD_DISTANT_SIGNAL(Module.SIGNALS, 8, false, "distant.dual", TileSignalDualHeadDistantSignal.class),
     BOX_BLOCK_RELAY(Module.SIGNALS, 3, true, "box.block.relay", TileBoxBlockRelay.class),;
@@ -52,6 +53,7 @@ public enum EnumSignal {
         creativeList.add(DUAL_HEAD_DISTANT_SIGNAL);
         creativeList.add(BOX_BLOCK_RELAY);
         creativeList.add(BOX_CONTROLLER);
+        creativeList.add(BOX_ANALOG_CONTROLLER);
         creativeList.add(BOX_RECEIVER);
         creativeList.add(BOX_CAPACITOR);
         creativeList.add(BOX_SEQUENCER);
