@@ -21,7 +21,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 public class ModuleTracksElectric extends RailcraftModule {
 
     @Override
-    public Set<ModuleManager.Module> getDependancies() {
+    public Set<ModuleManager.Module> getDependencies() {
         return EnumSet.of(ModuleManager.Module.LOCOMOTIVES, ModuleManager.Module.ELECTRICITY);
     }
 

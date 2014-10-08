@@ -34,7 +34,7 @@ import net.minecraft.item.ItemStack;
 public class ModuleRouting extends RailcraftModule {
 
     @Override
-    public Set<Module> getDependancies() {
+    public Set<Module> getDependencies() {
         return EnumSet.of(Module.SIGNALS);
     }
 
