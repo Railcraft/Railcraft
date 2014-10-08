@@ -6,6 +6,9 @@ import mods.railcraft.common.blocks.signals.TileBoxAnalogController;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.PacketDispatcher;
+import mods.railcraft.common.util.network.PacketGuiReturn;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
@@ -84,6 +87,17 @@ public class GuiBoxAnalogController extends GuiBasic {
 		else if(type == 4)
 			signalHigh[id] = Math.min(signalHigh[id] + 1, PowerPlugin.FULL_POWER);
 	}
+	
+	@Override
+    public void onGuiClosed() {
+        if (Game.isNotHost(tile.getWorld())) {
+            tile.aspectMode = aspectMode;
+            tile.signalLow = signalLow;
+            tile.signalHigh = signalHigh;
+            PacketGuiReturn pkt = new PacketGuiReturn(tile);
+            PacketDispatcher.sendToServer(pkt);
+        }
+    }
 	
 	public static void drawAlignedString(FontRenderer fr, String s, int x, int y, int width)
 	{

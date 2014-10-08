@@ -98,7 +98,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
         {
         	SignalAspect current = SignalAspect.values()[i];
         	if(aspectMode[i] && strongestSignal >= signalLow[i] && strongestSignal <= signalHigh[i])
-        		aspect = SignalAspect.mostRestrictive(aspect, current);
+        		aspect = (aspect == SignalAspect.OFF) ? current : SignalAspect.mostRestrictive(aspect, current);
         }
         return aspect;
     }
@@ -110,10 +110,13 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
         
         for(int i = 0; i < N_OF_ASPECTS; i++)
         {
-        	data.setBoolean("mode" + i, aspectMode[i]);
-        	data.setInteger("low" + i, signalLow[i]);
-        	data.setInteger("high" + i, signalHigh[i]);
+        	String n = SignalAspect.values()[i].toString();
+        	data.setBoolean("mode" + n, aspectMode[i]);
+        	data.setInteger("low" + n, signalLow[i]);
+        	data.setInteger("high" + n, signalHigh[i]);
         }
+        
+        controller.writeToNBT(data);
     }
 
     @Override
@@ -123,9 +126,10 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
         
         for(int i = 0; i < N_OF_ASPECTS; i++)
         {
-        	aspectMode[i] = data.getBoolean("mode" + i);
-        	signalLow[i] = data.getInteger("low" + i);
-        	signalHigh[i] = data.getInteger("high" + i);
+        	String n = SignalAspect.values()[i].toString();
+        	aspectMode[i] = data.getBoolean("mode" + n);
+        	signalLow[i] = data.getInteger("low" + n);
+        	signalHigh[i] = data.getInteger("high" + n);
         }
 
         controller.readFromNBT(data);
