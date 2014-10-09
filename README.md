@@ -31,6 +31,8 @@ Post only confirmed bugs [here](https://github.com/CovertJaguar/Railcraft/issues
 
 You must have read and performed the proper support procedure outlined [here](http://railcraft.info/wiki/info:support) before posting.
 
+More information about issue Labels can be found [here](https://github.com/CovertJaguar/Railcraft/wiki/Issue-Labels).
+
 ## Contributing
 
 The Official Railcraft Project welcomes contributions from anyone, provided they have signed the Contributor Licensing Agreement (CLA) found [here](https://www.clahub.com/agreements/CovertJaguar/Railcraft).
