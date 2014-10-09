@@ -58,6 +58,7 @@ public enum EnumGui {
     LOCO_STEAM(true),
     LOCO_ELECTRIC(true),
     BOX_CONTROLLER(false),
+    BOX_ANALOG_CONTROLLER(false),
     BOX_RECEIVER(true),
     BOX_CAPACITOR(false),
     BOX_RELAY(true),
