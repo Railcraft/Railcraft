@@ -35,6 +35,13 @@ public abstract class BaseBackpack implements IBackpackDefinition {
         items.add(stack);
     }
 
+    @Override
+    public void addValidItems(List<ItemStack> validItems) {
+        for (ItemStack stack : validItems) {
+            addValidItem(stack);
+        }
+    }
+
     public void addValidItem(RailcraftItem item) {
         if (item == null) return;
         items.add(item.getWildcard());

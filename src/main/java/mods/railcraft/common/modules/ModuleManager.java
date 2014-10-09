@@ -147,7 +147,7 @@ public class ModuleManager {
                 Module m = it.next();
                 if (m.instance == null)
                     continue;
-                Set<Module> deps = m.instance.getDependancies();
+                Set<Module> deps = m.instance.getDependencies();
                 if (!toLoad.containsAll(deps)) {
                     it.remove();
                     changed = true;
