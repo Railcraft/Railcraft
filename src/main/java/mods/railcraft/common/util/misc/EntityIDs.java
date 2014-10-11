@@ -29,6 +29,7 @@ public class EntityIDs {
     public static final int CART_ANCHOR_PERSONAL = 13;
     public static final int CART_ANCHOR_ADMIN = 14;
     public static final int CART_TNT = 15;
+    public static final int CART_HOPPER = 16;
     public static final int CART_LOCO_STEAM_SOLID = 30;
     public static final int CART_LOCO_STEAM_MAGIC = 31;
     public static final int CART_LOCO_ELECTRIC = 32;
