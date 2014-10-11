@@ -200,6 +200,8 @@ public enum EnumCart {
             return EnumCart.CHEST;
         if (cart.getItem() == Items.tnt_minecart)
             return EnumCart.TNT;
+        if (cart.getItem() == Items.furnace_minecart)
+            return EnumCart.FURNACE;
         if (cart.getItem() instanceof ItemCart)
             return ((ItemCart) cart.getItem()).getCartType();
         return null;
