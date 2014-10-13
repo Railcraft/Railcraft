@@ -1,3 +1,22 @@
+9.3.3.1:
+	NEW: Added Admin Feeder Unit. (contribution by Yopu)
+	NEW: Added Analog Controller Box. (contribution by wooky)
+	NEW: Added Metal Lanterns. (contributions by WoodStone)
+	NEW: Added Copper, Tin, Lead, and Steel Stairs and Slabs.
+	NEW: Thaumcraft Alumentum can be used as a Blast Furnace fuel. (contribution by Yopu)
+	CHANGE: MJ API replaced with RF API. Testing Needed. Not final design.  (contributions by adudney)
+	CHANGE: Increase Lapotron Loader Upgrade added storage to 5M and decrease the max to six upgrades.
+	CHANGE: Improvements to the Metals Chest algorithm, now better spreads the computation over multiple ticks and will convert Nuggets, Ingots, and Blocks directly to their RC equivalents in addition to condensing them.
+	CHANGE: Make Anchor/Sentinel pairing more flexible (order of pairing no longer matters) and add more error messages.
+	FIX: Fix metal blocks and nuggets to actually return null when disabled. Closes Issue #338
+	FIX: Add deconstruction recipe support for Hopper Cart and Furnace Cart. (contribution by Yopu)
+	FIX: Fix Firestone repair recipe dupe bug. (contribution by Yopu)
+
+9.3.3.0:
+	FIX: Fix issue with world migration from older MC versions that was blocking upgrading.
+	FIX: Platforms will no longer drop Posts.
+	FIX: Grass will no longer grow on Quarries. (contribution by WoodStone)
+
 9.3.2.0:
 	CHANGE: Renamed Stone Lamps to Stone Lanterns.
 	CHANGE: Posts now connect to Wire Support Frames.
