@@ -38,6 +38,10 @@ public class WorldPlugin {
         return world.getBlock(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side));
     }
 
+    public static boolean blockExists(World world, int x, int y, int z) {
+        return world.blockExists(x, y, z);
+    }
+
     public static boolean blockExistsOnSide(World world, int x, int y, int z, ForgeDirection side) {
         return world.blockExists(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side));
     }

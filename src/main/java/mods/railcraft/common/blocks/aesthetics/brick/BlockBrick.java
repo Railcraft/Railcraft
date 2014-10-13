@@ -75,7 +75,7 @@ public class BlockBrick extends Block {
     public static void setupBlock() {
         if (infernal == null) {
             infernal = defineBrick("infernal");
-            ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlock()).block = infernal;
+            ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).block = infernal;
             CraftingPlugin.addShapedRecipe(new ItemStack(infernal, 2, 2),
                     "MB",
                     "BM",
@@ -94,7 +94,7 @@ public class BlockBrick extends Block {
 
         if (sandy == null) {
             sandy = defineBrick("sandy");
-            ((ReplacerCube) EnumCube.SANDY_BRICK.getBlock()).block = sandy;
+            ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).block = sandy;
             CraftingPlugin.addShapedRecipe(new ItemStack(sandy, 1, 2),
                     "BM",
                     "MB",

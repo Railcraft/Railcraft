@@ -36,7 +36,7 @@ public class ItemCube extends ItemBlock {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return "tile." + EnumCube.fromOrdinal(stack.getItemDamage()).getTag();
+        return EnumCube.fromOrdinal(stack.getItemDamage()).getTag();
     }
 
     @Override

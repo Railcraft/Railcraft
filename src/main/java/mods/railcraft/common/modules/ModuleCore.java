@@ -169,15 +169,18 @@ public class ModuleCore extends RailcraftModule {
         replaceVanillaCart(EnumCart.CHEST, Items.chest_minecart, "MinecartChest", 43);
         replaceVanillaCart(EnumCart.FURNACE, Items.furnace_minecart, "MinecartFurnace", 44);
         replaceVanillaCart(EnumCart.TNT, Items.tnt_minecart, "MinecartTNT", 45);
+        replaceVanillaCart(EnumCart.HOPPER, Items.hopper_minecart, "MinecartHopper", 46);
 
         CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), Items.chest_minecart);
         CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), Items.furnace_minecart);
         CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), Items.tnt_minecart);
+        CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), Items.hopper_minecart);
 
         LootPlugin.addLootRailway(EnumCart.BASIC.getCartItem(), 1, 1, "cart.basic");
         LootPlugin.addLootRailway(EnumCart.CHEST.getCartItem(), 1, 1, "cart.chest");
         LootPlugin.addLootRailway(EnumCart.TNT.getCartItem(), 1, 3, "cart.tnt");
         LootPlugin.addLootRailway(new ItemStack(Blocks.rail), 8, 32, "track.basic");
+        LootPlugin.addLootRailway(EnumCart.HOPPER.getCartItem(), 1, 1, "cart.hopper");
 
         Blocks.rail.setHarvestLevel("pickaxe", 0);
         Blocks.rail.setHarvestLevel("crowbar", 0);

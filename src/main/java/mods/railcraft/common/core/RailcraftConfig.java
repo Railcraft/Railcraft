@@ -345,6 +345,7 @@ public class RailcraftConfig {
         loadLootProperty("cart.tnt", 5);
         loadLootProperty("cart.tnt.wood", 5);
         loadLootProperty("cart.work", 8);
+        loadLootProperty("cart.hopper", 5);
         loadLootProperty("fuel.coke", 20);
         loadLootProperty("fuel.coal", 20);
         loadLootProperty("creosote.bottle", 20);

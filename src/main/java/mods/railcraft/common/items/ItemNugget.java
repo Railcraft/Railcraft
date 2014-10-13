@@ -11,6 +11,7 @@ package mods.railcraft.common.items;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -20,6 +21,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import mods.railcraft.common.plugins.forge.ItemRegistry;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.init.Items;
 
 /**
  *
@@ -46,8 +48,12 @@ public class ItemNugget extends ItemRailcraft {
             return null;
         if (item != null)
             return new ItemStack(item, qty, nugget.ordinal());
+        
+        String tag = "railcraft.nugget";
+        if (!RailcraftConfig.isItemEnabled(tag))
+            return null;
 
-        item = new ItemNugget();
+        item = new ItemNugget().setUnlocalizedName(tag);
         ItemRegistry.registerItem(item);
 
         for (EnumNugget n : EnumNugget.VALUES) {
@@ -74,7 +80,6 @@ public class ItemNugget extends ItemRailcraft {
     public ItemNugget() {
         setHasSubtypes(true);
         setMaxDamage(0);
-        setUnlocalizedName("railcraft.nugget");
     }
 
     @Override

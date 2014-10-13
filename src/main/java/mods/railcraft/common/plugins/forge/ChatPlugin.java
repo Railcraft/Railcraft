@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.plugins.forge;
 
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
@@ -24,6 +25,11 @@ public class ChatPlugin {
 
     public static void sendLocalizedChat(EntityPlayer player, String msg, Object... args) {
         player.addChatMessage(getMessage(String.format(LocalizationPlugin.translate(msg), args)));
+    }
+
+    public static void sendLocalizedChatFromClient(EntityPlayer player, String msg, Object... args) {
+        if (Game.isNotHost(player.worldObj))
+            player.addChatMessage(getMessage(String.format(LocalizationPlugin.translate(msg), args)));
     }
 
 }

@@ -32,7 +32,7 @@ import net.minecraft.world.World;
  */
 public class ItemFirestoneRefined extends ItemFirestoneBase {
 
-    private static int HEAT = 250;
+    private static final int HEAT = 250;
     public static Item item;
 
     public static void registerItem() {

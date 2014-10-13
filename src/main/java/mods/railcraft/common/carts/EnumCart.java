@@ -13,6 +13,7 @@ import java.lang.reflect.Constructor;
 import java.util.Locale;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartHopper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
@@ -48,7 +49,8 @@ public enum EnumCart {
     BORE(1, EntityTunnelBore.class, null),
     ENERGY_BATBOX(0, EntityCartEnergyBatBox.class, null),
     ENERGY_CESU(0, EntityCartEnergyCESU.class, null),
-    ENERGY_MFE(0, EntityCartEnergyMFE.class, null),;
+    ENERGY_MFE(0, EntityCartEnergyMFE.class, null),
+    HOPPER(0, EntityMinecartHopper.class, new ItemStack(Blocks.hopper));
     public static final EnumCart[] VALUES = values();
     private final Class<? extends EntityMinecart> type;
     private final byte id;
@@ -200,6 +202,10 @@ public enum EnumCart {
             return EnumCart.CHEST;
         if (cart.getItem() == Items.tnt_minecart)
             return EnumCart.TNT;
+        if (cart.getItem() == Items.furnace_minecart)
+            return EnumCart.FURNACE;
+        if (cart.getItem() == Items.hopper_minecart)
+            return EnumCart.HOPPER;
         if (cart.getItem() instanceof ItemCart)
             return ((ItemCart) cart.getItem()).getCartType();
         return null;

@@ -8,11 +8,8 @@
  */
 package mods.railcraft.common.items.firestone;
 
-import java.util.List;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.ItemRegistry;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
