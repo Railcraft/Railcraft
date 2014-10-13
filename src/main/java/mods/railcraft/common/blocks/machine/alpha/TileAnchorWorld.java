@@ -8,12 +8,11 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
+import com.google.common.collect.MapMaker;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -28,9 +27,9 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileSentinel;
 import mods.railcraft.common.carts.ItemCartAnchor;
 import mods.railcraft.common.core.Railcraft;
@@ -38,9 +37,9 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.ChunkManager;
@@ -56,7 +55,7 @@ import net.minecraft.inventory.ISidedInventory;
  */
 public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedInventory {
 
-    public static final Map<EntityPlayer, WorldCoordinate> pairingMap = Collections.synchronizedMap(new HashMap<EntityPlayer, WorldCoordinate>());
+    private static final Map<EntityPlayer, WorldCoordinate> sentinelPairingMap = new MapMaker().weakKeys().makeMap();
     private static final int SENTINEL_CHECK = 128;
     private static final byte MAX_CHUNKS = 25;
     private static final byte FUEL_CYCLE = 9;
@@ -102,17 +101,34 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
             if (crowbar.canWhack(player, current, xCoord, yCoord, zCoord)) {
-                WorldCoordinate sentinel = pairingMap.get(player);
-                if (sentinel != null) {
-                    if (worldObj.provider.dimensionId == sentinel.dimension) {
-                        setSentinel(player, sentinel.x, sentinel.y, sentinel.z);
-                        crowbar.onWhack(player, current, xCoord, yCoord, zCoord);
-                    }
-                    return true;
-                }
+                WorldCoordinate target = sentinelPairingMap.get(player);
+                if (target == null)
+                    setTarget(this, player);
+                else if (worldObj.provider.dimensionId != target.dimension)
+                    ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.dimension", getName());
+                else if (new WorldCoordinate(this).equals(target)){
+                    removeTarget(player);
+                    ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.cancel", getName());
+                }else
+                    setSentinel(player, target);
+                crowbar.onWhack(player, current, xCoord, yCoord, zCoord);
+                return true;
             }
         }
         return super.blockActivated(player, side);
+    }
+
+    public static WorldCoordinate getTarget(EntityPlayer player) {
+        return sentinelPairingMap.get(player);
+    }
+
+    public static void setTarget(RailcraftTileEntity tile, EntityPlayer player) {
+        sentinelPairingMap.put(player, new WorldCoordinate(tile));
+        ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.start", tile.getName());
+    }
+
+    public static void removeTarget(EntityPlayer player) {
+        sentinelPairingMap.remove(player);
     }
 
     @Override
@@ -130,8 +146,16 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         return Math.min(ticket.getMaxChunkListDepth(), MAX_CHUNKS);
     }
 
-    public void setSentinel(EntityPlayer player, int x, int y, int z) {
-        TileEntity tile = worldObj.getTileEntity(x, y, z);
+    public static TileEntity getTargetAt(EntityPlayer player, RailcraftTileEntity searcher, WorldCoordinate coord) {
+        if (!WorldPlugin.blockExists(searcher.getWorldObj(), coord.x, coord.y, coord.z)) {
+            ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.unloaded", searcher.getName());
+            return null;
+        }
+        return WorldPlugin.getBlockTile(searcher.getWorldObj(), coord.x, coord.y, coord.z);
+    }
+
+    public boolean setSentinel(EntityPlayer player, WorldCoordinate coord) {
+        TileEntity tile = getTargetAt(player, this, coord);
         if (tile instanceof TileSentinel) {
             int xChunk = xCoord >> 4;
             int zChunk = zCoord >> 4;
@@ -140,16 +164,14 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
             int zSentinelChunk = tile.zCoord >> 4;
 
             if (xChunk != xSentinelChunk && zChunk != zSentinelChunk) {
-                if (Game.isNotHost(worldObj))
-                    ChatPlugin.sendLocalizedChat(player, "gui.anchor.pair.fail.alignment", getName(), LocalizationPlugin.translate(EnumMachineBeta.SENTINEL.getTag()));
-                return;
+                ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.alignment", getName(), ((TileSentinel) tile).getName());
+                return false;
             }
 
             int max = getMaxSentinelChunks();
             if (Math.abs(xChunk - xSentinelChunk) >= max || Math.abs(zChunk - zSentinelChunk) >= max) {
-                if (Game.isNotHost(worldObj))
-                    ChatPlugin.sendLocalizedChat(player, "gui.anchor.pair.fail.distance", getName(), LocalizationPlugin.translate(EnumMachineBeta.SENTINEL.getTag()));
-                return;
+                ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.distance", getName(), ((TileSentinel) tile).getName());
+                return false;
             }
 
             xSentinel = tile.xCoord;
@@ -159,9 +181,13 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
             if (Game.isHost(worldObj)) {
                 requestTicket();
                 sendUpdateToClient();
-            } else
-                ChatPlugin.sendLocalizedChat(player, "gui.anchor.pair.success", getName());
+            }
+            removeTarget(player);
+            ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.success", getName());
+            return true;
         }
+        ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.invalid", getName());
+        return false;
     }
 
     public void clearSentinel() {
