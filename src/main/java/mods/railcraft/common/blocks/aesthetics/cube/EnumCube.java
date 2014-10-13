@@ -33,13 +33,13 @@ public enum EnumCube {
     ABYSSAL_STONE(Module.WORLD, "stone.abyssal", new SimpleCube(), 2f, 10f),
     QUARRIED_STONE(Module.WORLD, "stone.quarried", new SimpleCube(), 2f, 10f),
     CREOSOTE_BLOCK(Module.STRUCTURES, "creosote", new FlammableCube(5, 300), 3f, 15f),
-    COPPER_BLOCK(Module.FACTORY, "copper", new SimpleCube(), 3f, 10f), 
+    COPPER_BLOCK(Module.FACTORY, "copper", new SimpleCube(), 3f, 10f),
     TIN_BLOCK(Module.FACTORY, "tin", new SimpleCube(), 3f, 10f),
     LEAD_BLOCK(Module.FACTORY, "lead", new SimpleCube(), 2f, 20f),;
     public static final EnumCube[] VALUES = values();
     private final Module module;
     private final String tag;
-    private final SimpleCube block;
+    private final SimpleCube blockDef;
     private final float hardness;
     private final float resistance;
     private IIcon icon;
@@ -58,10 +58,10 @@ public enum EnumCube {
         creativeList.add(QUARRIED_STONE);
     }
 
-    private EnumCube(Module module, String tag, SimpleCube block, float hardness, float resistance) {
+    private EnumCube(Module module, String tag, SimpleCube blockDef, float hardness, float resistance) {
         this.module = module;
         this.tag = tag;
-        this.block = block;
+        this.blockDef = blockDef;
         this.hardness = hardness;
         this.resistance = resistance;
     }
@@ -75,11 +75,11 @@ public enum EnumCube {
     }
 
     public String getTag() {
-        return "railcraft.cube." + tag;
+        return "tile.railcraft.cube." + tag;
     }
 
-    public SimpleCube getBlock() {
-        return block;
+    public SimpleCube getBlockDef() {
+        return blockDef;
     }
 
     public float getHardness() {
@@ -105,7 +105,7 @@ public enum EnumCube {
     }
 
     public ItemStack getItem(int qty) {
-        if (BlockCube.getBlock() == null)
+        if (!isEnabled())
             return null;
         return new ItemStack(BlockCube.getBlock(), qty, ordinal());
     }

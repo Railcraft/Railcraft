@@ -128,49 +128,49 @@ public class BlockCube extends Block {
     }
 
     public static String getBlockNameFromMetadata(int meta) {
-        return "tile." + EnumCube.fromOrdinal(meta).getTag();
+        return EnumCube.fromOrdinal(meta).getTag();
     }
 
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
         int meta = world.getBlockMetadata(x, y, z);
-        EnumCube.fromOrdinal(meta).getBlock().onNeighborBlockChange(world, x, y, z, block);
+        EnumCube.fromOrdinal(meta).getBlockDef().onNeighborBlockChange(world, x, y, z, block);
     }
 
     @Override
     public void updateTick(World world, int x, int y, int z, Random rand) {
         int meta = world.getBlockMetadata(x, y, z);
-        EnumCube.fromOrdinal(meta).getBlock().updateTick(world, x, y, z, rand);
+        EnumCube.fromOrdinal(meta).getBlockDef().updateTick(world, x, y, z, rand);
     }
 
     @Override
     public void onPostBlockPlaced(World world, int i, int j, int k, int meta) {
-        EnumCube.fromOrdinal(meta).getBlock().onBlockPlaced(world, i, j, k);
+        EnumCube.fromOrdinal(meta).getBlockDef().onBlockPlaced(world, i, j, k);
     }
 
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random rand) {
         int meta = world.getBlockMetadata(i, j, k);
 
-        EnumCube.fromOrdinal(meta).getBlock().randomDisplayTick(world, i, j, k, rand);
+        EnumCube.fromOrdinal(meta).getBlockDef().randomDisplayTick(world, i, j, k, rand);
     }
 
     @Override
     public void onBlockAdded(World world, int i, int j, int k) {
         int meta = world.getBlockMetadata(i, j, k);
 
-        EnumCube.fromOrdinal(meta).getBlock().onBlockAdded(world, i, j, k);
+        EnumCube.fromOrdinal(meta).getBlockDef().onBlockAdded(world, i, j, k);
     }
 
     @Override
     public void breakBlock(World world, int i, int j, int k, Block block, int meta) {
-        EnumCube.fromOrdinal(meta).getBlock().onBlockRemoval(world, i, j, k);
+        EnumCube.fromOrdinal(meta).getBlockDef().onBlockRemoval(world, i, j, k);
     }
 
     @Override
     public boolean removedByPlayer(World world, EntityPlayer player, int i, int j, int k) {
         int meta = world.getBlockMetadata(i, j, k);
-        return EnumCube.fromOrdinal(meta).getBlock().removedByPlayer(world, player, i, j, k);
+        return EnumCube.fromOrdinal(meta).getBlockDef().removedByPlayer(world, player, i, j, k);
     }
 
     @Override
@@ -182,7 +182,7 @@ public class BlockCube extends Block {
     @Override
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int i, int j, int k) {
         int meta = world.getBlockMetadata(i, j, k);
-        return EnumCube.fromOrdinal(meta).getBlock().canCreatureSpawn(type, world, i, j, k);
+        return EnumCube.fromOrdinal(meta).getBlockDef().canCreatureSpawn(type, world, i, j, k);
     }
 
     @Override
@@ -202,19 +202,19 @@ public class BlockCube extends Block {
     @Override
     public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
         int metadata = world.getBlockMetadata(x, y, z);
-        return EnumCube.fromOrdinal(metadata).getBlock().getFireSpreadSpeed(world, x, y, z, face);
+        return EnumCube.fromOrdinal(metadata).getBlockDef().getFireSpreadSpeed(world, x, y, z, face);
     }
 
     @Override
     public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
         int metadata = world.getBlockMetadata(x, y, z);
-        return EnumCube.fromOrdinal(metadata).getBlock().getFlammability(world, x, y, z, face);
+        return EnumCube.fromOrdinal(metadata).getBlockDef().getFlammability(world, x, y, z, face);
     }
 
     @Override
     public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
         int metadata = world.getBlockMetadata(x, y, z);
-        return EnumCube.fromOrdinal(metadata).getBlock().isFlammable(world, x, y, z, face);
+        return EnumCube.fromOrdinal(metadata).getBlockDef().isFlammable(world, x, y, z, face);
     }
 
 }
