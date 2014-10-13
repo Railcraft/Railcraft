@@ -56,4 +56,13 @@ public abstract class ItemFirestoneBase extends ItemRailcraft {
         return entity;
     }
 
+    /**
+     * Called by CraftingManager to determine if an item is reparable.
+     * @return Always returns false for ItemFirestoneBase
+     */
+    @Override
+    public boolean isRepairable() {
+        return false;
+    }
+
 }
