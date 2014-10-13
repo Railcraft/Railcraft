@@ -41,6 +41,8 @@ Signing the CLA is simple, just follow the link, fill out your name and email, a
 
 Regarding new features/behavior changes, please submit a Suggestion Issue to the Tracker before you write a single line of code. Keeping everyone on the same page saves time and effort and reduces negative experiences all around when a change turns out to be controversial.
 
+Also, as a bonus. If submit a Pull Request that ends up being 'merged into dev' you are elligable to recieve beta access. To redeem, contact CovertJaguar on IRC.
+
 ## Building
 
 The Railcraft Project follows standard Forge conventions for setting up and building a project, with a couple additional details (details to come).
