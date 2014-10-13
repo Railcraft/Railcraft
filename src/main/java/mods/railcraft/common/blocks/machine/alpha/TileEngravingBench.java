@@ -27,8 +27,6 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.emblems.EmblemToolsServer;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.gui.widgets.IIndicatorController;
-import mods.railcraft.common.gui.widgets.IndicatorController;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
@@ -62,45 +60,16 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     public boolean paused, startCrafting, isCrafting, flippedAxis;
     public String currentEmblem = "";
     private final Set<IAction> actions = new HashSet<IAction>();
-    private final IIndicatorController energyIndicator = new EnergyIndicator();
-
-    private class EnergyIndicator extends IndicatorController {
-
-        @Override
-        protected void refreshToolTip() {
-            tip.text = String.format("%d RF", energyStorage.getEnergyStored());
-        }
-
-        @Override
-        public int getScaledLevel(int size) {
-            float e = Math.min(energyStorage.getEnergyStored(), MAX_ENERGY);
-            return (int) (e * size / MAX_ENERGY);
-        }
-
-    };
-
-    public IIndicatorController getEnergyIndicator() {
-        return energyIndicator;
-    }
 
     public TileEngravingBench() {
         super(2);
-        if (RailcraftConfig.machinesRequirePower()) {
+        if (RailcraftConfig.machinesRequirePower())
             energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE);
-            initEnergyStorage();
-        }
     }
 
     @Override
     public IEnumMachine getMachineType() {
         return EnumMachineAlpha.ENGRAVING_BENCH;
-    }
-
-    private void initEnergyStorage() {
-        if (energyStorage != null) {
-            energyStorage.setCapacity(MAX_ENERGY);
-            energyStorage.setMaxTransfer(MAX_RECEIVE);
-        }
     }
 
     @Override
@@ -135,10 +104,8 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
         progress = data.getInteger("progress");
         currentEmblem = data.getString("currentEmblem");
 
-        if (energyStorage != null) {
+        if (energyStorage != null)
             energyStorage.readFromNBT(data);
-            initEnergyStorage();
-        }
     }
 
     @Override
@@ -252,7 +219,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
             }
         } else if (energyStorage != null) {
             int energy = energyStorage.extractEnergy(ACTIVATION_POWER, true);
-            if (energy >= ACTIVATION_POWER){
+            if (energy >= ACTIVATION_POWER) {
                 progress++;
                 energyStorage.extractEnergy(ACTIVATION_POWER, false);
             }
@@ -334,29 +301,41 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
         return true;
     }
 
+    public EnergyStorage getEnergyStorage() {
+        return energyStorage;
+    }
+
     @Override
-    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate){
+    public boolean canConnectEnergy(ForgeDirection side) {
+        return energyStorage != null;
+    }
+
+    @Override
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+        if (energyStorage == null)
+            return 0;
         return energyStorage.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate){
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+        if (energyStorage == null)
+            return 0;
         return energyStorage.extractEnergy(maxExtract, simulate);
     }
 
     @Override
-    public int getEnergyStored(ForgeDirection from){
+    public int getEnergyStored(ForgeDirection from) {
+        if (energyStorage == null)
+            return 0;
         return energyStorage.getEnergyStored();
     }
 
     @Override
-	public int getMaxEnergyStored(ForgeDirection from){
+    public int getMaxEnergyStored(ForgeDirection from) {
+        if (energyStorage == null)
+            return 0;
         return energyStorage.getMaxEnergyStored();
-	}
-
-    @Override
-    public boolean canConnectEnergy(ForgeDirection from){
-        return true;
     }
 
 }

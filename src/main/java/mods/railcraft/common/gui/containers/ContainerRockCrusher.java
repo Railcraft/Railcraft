@@ -23,7 +23,7 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerRockCrusher extends RailcraftContainer {
 
-    private TileRockCrusher tile;
+    private final TileRockCrusher tile;
     private int lastProcessTime;
     private final RFEnergyIndicator energyIndicator;
 
@@ -31,7 +31,7 @@ public class ContainerRockCrusher extends RailcraftContainer {
         super(crusher);
         this.tile = crusher;
 
-        energyIndicator = new RFEnergyIndicator(TileRockCrusher.MAX_ENERGY);
+        energyIndicator = new RFEnergyIndicator(tile);
         addWidget(new IndicatorWidget(energyIndicator, 157, 23, 176, 53, 6, 48));
 
         for (int i = 0; i < 3; i++) {
@@ -61,12 +61,10 @@ public class ContainerRockCrusher extends RailcraftContainer {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         EnergyStorage storage = tile.getEnergyStorage();
-        for (int i = 0; i < crafters.size(); i++) {
-            ICrafting icrafting = (ICrafting) crafters.get(i);
-
+        for (Object crafter : crafters) {
+            ICrafting icrafting = (ICrafting) crafter;
             if (lastProcessTime != tile.getProcessTime())
                 icrafting.sendProgressBarUpdate(this, 0, tile.getProcessTime());
-
             if (storage != null)
                 icrafting.sendProgressBarUpdate(this, 1, storage.getEnergyStored());
         }

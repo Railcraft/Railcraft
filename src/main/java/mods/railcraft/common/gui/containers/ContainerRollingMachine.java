@@ -51,7 +51,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
 
         };
 
-        energyIndicator = new RFEnergyIndicator(TileRollingMachine.MAX_ENERGY);
+        energyIndicator = new RFEnergyIndicator(tile);
         addWidget(new IndicatorWidget(energyIndicator, 157, 19, 176, 12, 6, 48));
 
         addSlot(new SlotRollingMachine(craftResult, 0, 93, 27));
@@ -80,12 +80,10 @@ public class ContainerRollingMachine extends RailcraftContainer {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         EnergyStorage storage = tile.getEnergyStorage();
-        for (int i = 0; i < crafters.size(); i++) {
-            ICrafting icrafting = (ICrafting) crafters.get(i);
-
+        for (Object crafter : crafters) {
+            ICrafting icrafting = (ICrafting) crafter;
             if (lastProgress != tile.getProgress())
                 icrafting.sendProgressBarUpdate(this, 0, tile.getProgress());
-
             if (storage != null)
                 icrafting.sendProgressBarUpdate(this, 1, storage.getEnergyStored());
         }

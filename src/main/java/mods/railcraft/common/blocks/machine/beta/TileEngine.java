@@ -135,8 +135,11 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
                 TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, direction);
 
                 if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
-                    IEnergyHandler handler = (IEnergyHandler)tile;
-                    addEnergy(-handler.receiveEnergy(direction.getOpposite(), Math.min(energy, maxEnergyExtracted()+energy/2), false));
+                    IEnergyHandler handler = (IEnergyHandler) tile;
+                    int powerToTransfer = extractEnergy(0, maxEnergyExtracted(), true);
+                    if (powerToTransfer > 0) {
+                        handler.receiveEnergy(direction.getOpposite(), powerToTransfer, false);
+                    }
                 }
 
                 pistonStage = 2;
@@ -147,14 +150,13 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         } else if (powered) {
             TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, direction);
 
-            if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
-                if(energy > 0){
+            if (EngineTools.isPoweredTile(tile, direction.getOpposite()))
+                if (energy > 0) {
                     pistonStage = 1;
                     setActive(true);
-                }else{
-    	            setActive(false);
-                }
-            } else
+                } else
+                    setActive(false);
+            else
                 setActive(false);
 
         } else
@@ -164,7 +166,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     protected void overheat() {
-        addEnergy(-50);
+        subtractEnergy(50);
     }
 
     protected abstract void burn();
@@ -332,6 +334,42 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
             energy = 0;
     }
 
+    public void subtractEnergy(int subtraction) {
+        energy -= subtraction;
+
+        if (energy > maxEnergy())
+            energy = maxEnergy();
+        if (energy < 0)
+            energy = 0;
+    }
+
+    public int extractEnergy(int min, int max, boolean doExtract) {
+        if (energy < min)
+            return 0;
+
+        int actualMax;
+
+        int engineMax = maxEnergyExtracted();// + extraEnergy * 0.5;
+        if (max > engineMax)
+            actualMax = engineMax;
+        else
+            actualMax = max;
+
+        int extracted;
+
+        if (energy >= actualMax) {
+            extracted = actualMax;
+            if (doExtract)
+                energy -= actualMax; //extraEnergy -= Math.min(actualMax, extraEnergy);
+        } else {
+            extracted = energy;
+            if (doExtract)
+                energy = 0; //extraEnergy = 0;
+        }
+
+        return extracted;
+    }
+
     public float getProgress() {
         return pistonProgress;
     }
@@ -392,7 +430,8 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection from){
+    public boolean canConnectEnergy(ForgeDirection from) {
         return from == direction;
     }
+
 }

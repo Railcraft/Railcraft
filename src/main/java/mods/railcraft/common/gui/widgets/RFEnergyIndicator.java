@@ -8,6 +8,9 @@
  */
 package mods.railcraft.common.gui.widgets;
 
+import cofh.api.energy.IEnergyHandler;
+import net.minecraftforge.common.util.ForgeDirection;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -16,6 +19,10 @@ public class RFEnergyIndicator extends IndicatorController {
 
     private int energy;
     private final int maxEnergy;
+
+    public RFEnergyIndicator(IEnergyHandler energyHandler) {
+        this.maxEnergy = energyHandler.getMaxEnergyStored(ForgeDirection.UNKNOWN);
+    }
 
     public RFEnergyIndicator(int maxEnergy) {
         this.maxEnergy = maxEnergy;
@@ -37,7 +44,7 @@ public class RFEnergyIndicator extends IndicatorController {
     }
 
     public void updateEnergy(int energy) {
-        this.energy = (int)((this.energy * 9 + energy) / 10.0);
+        this.energy = (int) ((this.energy * 9 + energy) / 10.0);
     }
 
 }
