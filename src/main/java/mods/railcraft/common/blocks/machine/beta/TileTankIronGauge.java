@@ -8,16 +8,25 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.misc.Timer;
+import net.minecraftforge.fluids.Fluid;
+import java.util.Random;
 
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTankIronGauge extends TileTankBase {
+
+    private int lightValue = 0;
+    private final Timer timer = new Timer();
 
     @Override
     public IEnumMachine getMachineType() {
@@ -69,5 +78,25 @@ public class TileTankIronGauge extends TileTankBase {
 
     private IIcon getTextureFromMachine(int index) {
         return getMachineType().getTexture(index);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(Random rand) {
+        int oldLightValue = lightValue;
+        if (timer.hasTriggered(worldObj, 80) && isStructureValid())
+            updateLightValue();
+        if (oldLightValue != lightValue)
+            worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+    }
+
+    @Override
+    public int getLightValue() {
+        return lightValue;
+    }
+
+    private void updateLightValue() {
+        Fluid fluid = getTank().getFluidType();
+        lightValue = fluid != null ? fluid.getLuminosity() : 0;
     }
 }
