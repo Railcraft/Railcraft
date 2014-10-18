@@ -124,8 +124,8 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
                 }
             returnValue = true;
         }
-        if (t instanceof TileSignalBlockSignal) {
-            switch (t.getSignalAspect) {
+        if ((t instanceof TileSignalBlockSignal)|(t instanceof TileSignalDistantSignal)) {
+            switch (t.getSignalAspect()) {
                 SignalAspect.BLINK_RED: { 
                     ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.blink.red.name");
                 }
@@ -145,6 +145,55 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
                     ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.off.name");
                 }
             }
+            returnValue=true;
+        }
+        if ((t instanceof TileSignalBlockSignal)|(t instanceof TileSignalDistantSignal)) {
+            SignalAspect top=t.getTopAspect();
+            SignalAspect bot=t.getBottomAspect();
+            String topname="";
+            String bottomname="";
+            switch (top) {
+                SignalAspect.BLINK_RED: { 
+                    topname="railcraft.gui.aspect.blink.red.name";
+                }
+                SignalAspect.BLINK_YELLOW: { 
+                    topname="railcraft.gui.aspect.blink.yellow.name";
+                }
+                SignalAspect.RED: { 
+                    topname="railcraft.gui.aspect.red.name";
+                }
+                SignalAspect.YELLOW: { 
+                    topname="railcraft.gui.aspect.yellow.name";
+                }
+                SignalAspect.GREEN: { 
+                    topname="railcraft.gui.aspect.green.name";
+                }
+                default: { 
+                    topname="railcraft.gui.aspect.off.name";
+                }
+            }
+            switch (bottomname) {
+                SignalAspect.BLINK_RED: { 
+                    bottomname="railcraft.gui.aspect.blink.red.name";
+                }
+                SignalAspect.BLINK_YELLOW: { 
+                    bottomname="railcraft.gui.aspect.blink.yellow.name";
+                }
+                SignalAspect.RED: { 
+                    bottomname="railcraft.gui.aspect.red.name";
+                }
+                SignalAspect.YELLOW: { 
+                    bottomname="railcraft.gui.aspect.yellow.name";
+                }
+                SignalAspect.GREEN: { 
+                    bottomname="railcraft.gui.aspect.green.name";
+                }
+                default: { 
+                    bottomname="railcraft.gui.aspect.off.name";
+                }
+            }
+            ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect.dual",topname,bottomname);
+            returnValue=true;
         }
         return returnValue;
     }
