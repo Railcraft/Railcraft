@@ -9,6 +9,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IRefuelableCart;
+import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,7 +40,6 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     public static final byte STEAM_FLAG = 7;
     private static final byte TICKS_PER_BOILER_CYCLE = 2;
     private static final int FUEL_PER_REQUEST = 3;
-    private static final int INEFFICENCY_MULTIPLIER = 3;
     private static final int TANK_WATER = 0;
     private TankManager tankManager;
     protected StandardTank tankWater;
@@ -72,7 +72,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         invWaterInput.setStackSizeLimit(4);
 
         boiler = new SteamBoiler(tankWater, tankSteam);
-        boiler.setEfficiencyModifier(INEFFICENCY_MULTIPLIER);
+        boiler.setEfficiencyModifier(RailcraftConfig.steamLocomotiveEfficiencyMultiplier());
         boiler.setTicksPerCycle(TICKS_PER_BOILER_CYCLE);
     }
 

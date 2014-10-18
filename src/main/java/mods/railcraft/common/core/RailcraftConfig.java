@@ -108,6 +108,7 @@ public class RailcraftConfig {
     private static float biolerMultiplierFuel = 1;
     private static float biolerMultiplierBiofuel = 1;
     private static float fuelPerSteamMultiplier = Steam.FUEL_PER_BOILER_CYCLE;
+    private static float steamLocomotiveEfficiencyMultiplier = 3;
     private static boolean allowTankStacking;
     private static Configuration configMain;
     private static Configuration configBlock;
@@ -115,7 +116,7 @@ public class RailcraftConfig {
 
     public static void preInit() {
         Game.log(Level.INFO, "Railcraft Config: Doing preinit parsing");
-        
+
         Locale locale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
 
@@ -160,9 +161,9 @@ public class RailcraftConfig {
         Locale.setDefault(locale);
     }
 
-    public static void postInit() {        
+    public static void postInit() {
         Game.log(Level.INFO, "Railcraft Config: Doing post init configuration");
-        
+
         anchorFuelWorld.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelWorldString, "Adding World Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         anchorFuelPersonal.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelPersonalString, "Adding Parsonal Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         EntityTunnelBore.mineableBlocks.addAll(BlockItemListParser.<BlockKey>parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser.ParseType.BLOCK));
@@ -241,6 +242,8 @@ public class RailcraftConfig {
         boreDestroysBlocks = get(CAT_TWEAKS_CARTS + ".bore", "destroyBlocks", false, "change to '{t}=true' to cause the Bore to destroy the blocks it mines instead of dropping them");
         boreMinesAllBlocks = get(CAT_TWEAKS_CARTS + ".bore", "mineAllBlocks", true, "change to '{t}=false' to enable mining checks, use true setting with caution, especially on servers");
         boreMiningSpeedMultiplier = get(CAT_TWEAKS_CARTS + ".bore", "miningSpeed", 0.1f, 1.0f, 50.0f, "adjust the speed at which the Bore mines blocks, min=0.1, default=1.0, max=50.0");
+
+        steamLocomotiveEfficiencyMultiplier = get(CAT_TWEAKS_CARTS + ".locomotive.steam", "efficiencyMulitplier", 0.2F, 3.0F, 12.0F, "adjust the multiplier used when calculating fuel use, min=0.2, default=3.0, max=12.0");
 
         locomotiveDamageMobs = get(CAT_TWEAKS_CARTS + ".locomotive", "damageMobs", true, "change to '{t}=false' to disable Locomotive damage on mobs, they will still knockback mobs");
         locomotiveHorsepower = get(CAT_TWEAKS_CARTS + ".locomotive", "horsepower", 15, 15, 45,
@@ -425,9 +428,9 @@ public class RailcraftConfig {
         loadBlockProperty("machine.epsilon");
 
         loadBlockProperty("ore");
-        
+
         loadBlockProperty("frame");
-        
+
         loadBlockProperty("post");
         loadBlockProperty("post.metal");
         loadBlockProperty("post.metal.platform");
@@ -532,7 +535,7 @@ public class RailcraftConfig {
         loadItemProperty("tool.surveyor");
 
         loadItemProperty("tool.signal.tuner");
-        
+
         loadItemProperty("tool.electric.meter");
 
         loadItemProperty("tool.whistle.tuner");
@@ -812,6 +815,10 @@ public class RailcraftConfig {
 
     public static float fuelPerSteamMultiplier() {
         return fuelPerSteamMultiplier;
+    }
+
+    public static float steamLocomotiveEfficiencyMultiplier() {
+        return steamLocomotiveEfficiencyMultiplier;
     }
 
     public static int getSignalUpdateInterval() {
