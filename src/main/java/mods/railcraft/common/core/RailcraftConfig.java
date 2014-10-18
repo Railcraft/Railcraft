@@ -79,6 +79,7 @@ public class RailcraftConfig {
     private static boolean locomotiveDamageMobs;
     private static boolean printSignalDebug;
     private static boolean printLinkingDebug;
+    private static boolean printAnchorDebug;
     private static boolean deleteAnchors;
     private static boolean anchorCrafting;
     private static boolean anchorCraftingPersonal;
@@ -173,7 +174,8 @@ public class RailcraftConfig {
         deleteAnchors = get(CAT_ANCHORS, "delete.anchors", false, true, "change to '{t}=true' to delete every World Anchor or Anchor Cart in the world.\nValue resets to false after each session.\nTo disable Anchors completely, disable the ChunkLoading Module from 'modules.cfg'");
         anchorCrafting = get(CAT_ANCHORS, "craftable", true, "change to {t}=false to disable World Anchor crafting, they will still be available via Creative");
         anchorCraftingPersonal = get(CAT_ANCHORS, "personal.craftable", true, "change to {t}=false to disable Personal Anchor crafting, they will still be available via Creative");
-        printAnchors = get(CAT_ANCHORS, "print.locations", true, "change to {t}=true to print Anchor locations to the log on startup");
+        printAnchors = get(CAT_ANCHORS, "print.locations", false, "change to {t}=true to print Anchor locations to the log on startup");
+        printAnchorDebug = get(CAT_ANCHORS, "print.debug", false, "change to '{t}=true' to log debug info for Anchors");
 
         Property fuelProp = get(CAT_ANCHORS, "world.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a World Anchor or World Anchor Cart\n"
                 + "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n"
@@ -189,7 +191,7 @@ public class RailcraftConfig {
                 + "Example: personal.fuel= minecraft:ender_pearl=12, minecraft:coal#0=4");
         anchorFuelPersonalString = fuelProp.getString();
 
-        anchorsCanInteractWithPipes = get(CAT_ANCHORS, "interact.with.pipes", true, "change to {t}=false to prevent pipes, tubes, or various other things from interacting with Anchors");
+        anchorsCanInteractWithPipes = get(CAT_ANCHORS, "interact.with.pipes", true, "change to {t}=false to prevent pipes, tubes, or various other things from interacting with Anchors");        
     }
 
     private static void loadBlockTweaks() {
@@ -719,6 +721,9 @@ public class RailcraftConfig {
 
     public static boolean printLinkingDebug() {
         return printLinkingDebug;
+    }
+    public static boolean printAnchorDebug() {
+        return printAnchorDebug;
     }
 
     public static boolean anchorsCanInteractWithPipes() {

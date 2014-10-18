@@ -48,6 +48,7 @@ import mods.railcraft.common.util.misc.IAnchor;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
+import org.apache.logging.log4j.Level;
 
 /**
  *
@@ -106,10 +107,10 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                     setTarget(this, player);
                 else if (worldObj.provider.dimensionId != target.dimension)
                     ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.dimension", getName());
-                else if (new WorldCoordinate(this).equals(target)){
+                else if (new WorldCoordinate(this).equals(target)) {
                     removeTarget(player);
                     ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.cancel", getName());
-                }else
+                } else
                     setSentinel(player, target);
                 crowbar.onWhack(player, current, xCoord, yCoord, zCoord);
                 return true;
@@ -276,6 +277,12 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
         if (ticket == null)
             requestTicket();
+
+        if (RailcraftConfig.printAnchorDebug() && ticket != null)
+            if (clock % 64 == 0) {
+                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has a ticket and is ticking at <%d,%d,%d> in dim:%d - logged on tick %d", getName(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, worldObj.getWorldTime());
+                Game.log(Level.DEBUG, "{0} has a ticket and is ticking at <{1},{2},{3}> in dim:{4} - logged on tick {5}", getName(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, worldObj.getWorldTime());
+            }
     }
 
     @Override

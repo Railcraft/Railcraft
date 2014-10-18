@@ -33,6 +33,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.collections.ItemKey;
 import mods.railcraft.common.util.collections.ItemMap;
@@ -42,6 +43,8 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.ChunkManager;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.IAnchor;
+import mods.railcraft.common.util.misc.MiscTools;
+import org.apache.logging.log4j.Level;
 
 public class EntityCartAnchor extends CartTransferBase implements ICartContentsTextureProvider, IAnchor, IMinecart {
 
@@ -53,7 +56,7 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
     private long anchorFuel;
     private final IInventory invWrapper = new InventoryMapper(this);
     private int disabled = 0;
-//    private int update = MiscTools.getRand().nextInt();
+    private int clock = MiscTools.getRand().nextInt();
 
     public EntityCartAnchor(World world) {
         super(world);
@@ -119,10 +122,13 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
         if (ticket == null)
             requestTicket();
 
-//        update++;
-//        if (update % 64 == 0) {
-//            System.out.println("anchor Tick");
-//        }
+        if (RailcraftConfig.printAnchorDebug() && ticket != null) {
+            clock++;
+            if (clock % 64 == 0) {
+                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has a ticket and is ticking at <%d,%d,%d> in dim:%d - logged on tick %d", getCommandSenderName(), posX, posY, posZ, worldObj.provider.dimensionId, worldObj.getWorldTime());
+                Game.log(Level.DEBUG, "{0} has a ticket and is ticking at <{1},{2},{3}> in dim:{4} - logged on tick {5}", getCommandSenderName(), posX, posY, posZ, worldObj.provider.dimensionId, worldObj.getWorldTime());
+            }
+        }
     }
 
     private void stockFuel() {
