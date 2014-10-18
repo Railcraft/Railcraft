@@ -25,6 +25,7 @@ import mods.railcraft.common.plugins.forge.ItemRegistry;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlock.MultiBlockStateReturn;
+import mods.railcraft.common.signals.TileSignalBlockSignal;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.*;
@@ -122,6 +123,28 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
                         ChatPlugin.sendLocalizedChat(player, returnState.message, pats.toString());
                 }
             returnValue = true;
+        }
+        if (t instanceof TileSignalBlockSignal) {
+            switch (t.getSignalAspect) {
+                SignalAspect.BLINK_RED: { 
+                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.blink.red.name");
+                }
+                SignalAspect.BLINK_YELLOW: { 
+                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.blink.yellow.name");
+                }
+                SignalAspect.RED: { 
+                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.red.name");
+                }
+                SignalAspect.YELLOW: { 
+                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.yellow.name");
+                }
+                SignalAspect.GREEN: { 
+                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.green.name");
+                }
+                default: { 
+                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.off.name");
+                }
+            }
         }
         return returnValue;
     }
