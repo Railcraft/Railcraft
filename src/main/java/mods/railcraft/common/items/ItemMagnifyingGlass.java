@@ -21,11 +21,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.plugins.forge.ItemRegistry;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlock.MultiBlockStateReturn;
-import mods.railcraft.common.signals.TileSignalBlockSignal;
+import mods.railcraft.common.blocks.signals.IDualHeadSignal;
+import mods.railcraft.common.blocks.signals.TileSignalBase;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.*;
@@ -124,76 +126,15 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
                 }
             returnValue = true;
         }
-        if ((t instanceof TileSignalBlockSignal)|(t instanceof TileSignalDistantSignal)) {
-            switch (t.getSignalAspect()) {
-                SignalAspect.BLINK_RED: { 
-                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.blink.red.name");
-                }
-                SignalAspect.BLINK_YELLOW: { 
-                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.blink.yellow.name");
-                }
-                SignalAspect.RED: { 
-                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.red.name");
-                }
-                SignalAspect.YELLOW: { 
-                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.yellow.name");
-                }
-                SignalAspect.GREEN: { 
-                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.green.name");
-                }
-                default: { 
-                    ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect","railcraft.gui.aspect.off.name");
-                }
-            }
-            returnValue=true;
-        }
-        if ((t instanceof TileSignalBlockSignal)|(t instanceof TileSignalDistantSignal)) {
-            SignalAspect top=t.getTopAspect();
-            SignalAspect bot=t.getBottomAspect();
-            String topname="";
-            String bottomname="";
-            switch (top) {
-                SignalAspect.BLINK_RED: { 
-                    topname="railcraft.gui.aspect.blink.red.name";
-                }
-                SignalAspect.BLINK_YELLOW: { 
-                    topname="railcraft.gui.aspect.blink.yellow.name";
-                }
-                SignalAspect.RED: { 
-                    topname="railcraft.gui.aspect.red.name";
-                }
-                SignalAspect.YELLOW: { 
-                    topname="railcraft.gui.aspect.yellow.name";
-                }
-                SignalAspect.GREEN: { 
-                    topname="railcraft.gui.aspect.green.name";
-                }
-                default: { 
-                    topname="railcraft.gui.aspect.off.name";
-                }
-            }
-            switch (bottomname) {
-                SignalAspect.BLINK_RED: { 
-                    bottomname="railcraft.gui.aspect.blink.red.name";
-                }
-                SignalAspect.BLINK_YELLOW: { 
-                    bottomname="railcraft.gui.aspect.blink.yellow.name";
-                }
-                SignalAspect.RED: { 
-                    bottomname="railcraft.gui.aspect.red.name";
-                }
-                SignalAspect.YELLOW: { 
-                    bottomname="railcraft.gui.aspect.yellow.name";
-                }
-                SignalAspect.GREEN: { 
-                    bottomname="railcraft.gui.aspect.green.name";
-                }
-                default: { 
-                    bottomname="railcraft.gui.aspect.off.name";
-                }
-            }
-            ChatPlugin.sendLocalizedChat(player,"railcraft.gui.mag.glass.aspect.dual",topname,bottomname);
-            returnValue=true;
+        if (t instanceof IDualHeadSignal) {
+            IDualHeadSignal signal = (IDualHeadSignal) t;
+            SignalAspect top = signal.getTopAspect();
+            SignalAspect bottom = signal.getBottomAspect();
+            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.mag.glass.aspect.dual", top.getLocalizationTag(), bottom.getLocalizationTag());
+            returnValue = true;
+        } else if (t instanceof TileSignalBase) {
+            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.mag.glass.aspect", ((TileSignalBase) t).getSignalAspect().getLocalizationTag());
+            returnValue = true;
         }
         return returnValue;
     }
