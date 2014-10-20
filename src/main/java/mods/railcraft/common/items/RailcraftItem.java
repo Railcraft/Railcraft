@@ -28,7 +28,8 @@ public enum RailcraftItem {
     signalLamp(ItemSignalLamp.class, "part.signal.lamp", Blocks.redstone_lamp),
     rebar(ItemRebar.class, "part.rebar", Items.iron_ingot),
     plate(ItemPlate.class, "part.plate", Items.iron_ingot, "ingotSteel", "ingotTin"),
-    gear(ItemGear.class, "part.gear", Items.gold_ingot, Blocks.iron_block, "blockSteel", "ingotTin");
+    gear(ItemGear.class, "part.gear", Items.gold_ingot, Blocks.iron_block, "blockSteel", "ingotTin"),
+    circuit(ItemCircuit.class, "part.circuit", Items.comparator, Blocks.redstone_torch, Items.repeater);
     public static final RailcraftItem[] VALUES = values();
     private ItemRailcraft item;
     private final Class<? extends ItemRailcraft> itemClass;
@@ -144,5 +145,4 @@ public enum RailcraftItem {
 //            toProcess.removeAll(processed);
 //        } while (!processed.isEmpty());
 //    }
-
 }
