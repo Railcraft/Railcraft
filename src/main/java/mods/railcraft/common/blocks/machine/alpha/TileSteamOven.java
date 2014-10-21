@@ -160,12 +160,12 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
                 case 2:
                     if (getPatternPositionY() == 2) {
                         if (getPatternPositionX() == 2)
-                            return Texture.DOOR_TR.getIcon();
-                        return Texture.DOOR_TL.getIcon();
+                            return Texture.DOOR_TL.getIcon();
+                        return Texture.DOOR_TR.getIcon();
                     }
                     if (getPatternPositionX() == 2)
-                        return Texture.DOOR_BR.getIcon();
-                    return Texture.DOOR_BL.getIcon();
+                        return Texture.DOOR_BL.getIcon();
+                    return Texture.DOOR_BR.getIcon();
                 case 3:
                     if (getPatternPositionY() == 2) {
                         if (getPatternPositionX() == 1)
@@ -187,12 +187,12 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
                 case 5:
                     if (getPatternPositionY() == 2) {
                         if (getPatternPositionZ() == 2)
-                            return Texture.DOOR_TR.getIcon();
-                        return Texture.DOOR_TL.getIcon();
+                            return Texture.DOOR_TL.getIcon();
+                        return Texture.DOOR_TR.getIcon();
                     }
                     if (getPatternPositionZ() == 2)
-                        return Texture.DOOR_BR.getIcon();
-                    return Texture.DOOR_BL.getIcon();
+                        return Texture.DOOR_BL.getIcon();
+                    return Texture.DOOR_BR.getIcon();
             }
         if (side > 1)
             return Texture.SIDE.getIcon();

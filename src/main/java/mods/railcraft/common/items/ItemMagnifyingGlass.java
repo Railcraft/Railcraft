@@ -21,10 +21,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.plugins.forge.ItemRegistry;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlock.MultiBlockStateReturn;
+import mods.railcraft.common.blocks.signals.IDualHeadSignal;
+import mods.railcraft.common.blocks.signals.TileSignalBase;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.*;
@@ -121,6 +124,16 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
                     if (!pats.isEmpty())
                         ChatPlugin.sendLocalizedChat(player, returnState.message, pats.toString());
                 }
+            returnValue = true;
+        }
+        if (t instanceof IDualHeadSignal) {
+            IDualHeadSignal signal = (IDualHeadSignal) t;
+            SignalAspect top = signal.getTopAspect();
+            SignalAspect bottom = signal.getBottomAspect();
+            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.mag.glass.aspect.dual", top.getLocalizationTag(), bottom.getLocalizationTag());
+            returnValue = true;
+        } else if (t instanceof TileSignalBase) {
+            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.mag.glass.aspect", ((TileSignalBase) t).getSignalAspect().getLocalizationTag());
             returnValue = true;
         }
         return returnValue;

@@ -26,6 +26,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.items.ItemRailcraft;
+import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Blocks;
@@ -47,7 +48,7 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                         "BRB",
                         "   ",
                         'B', Blocks.stone_button,
-                        'R', ItemCircuit.getReceiverCircuit(),
+                        'R', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
                         'T', Blocks.redstone_torch);
 
                 ItemRegistry.registerItemStack(tag, new ItemStack(item));

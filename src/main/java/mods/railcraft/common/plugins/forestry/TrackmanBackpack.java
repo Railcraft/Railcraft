@@ -53,7 +53,6 @@ public class TrackmanBackpack extends BaseBackpack {
         addValidItem(ItemWhistleTuner.getItem());
         addValidItem(ItemMagnifyingGlass.getItem());
         addValidItem(ItemGoggles.getItem());
-        addValidItem(ItemCircuit.getCircuitItem());
         addValidItem(ItemSignalBlockSurveyor.getItem());
         addValidItem(ItemSignalTuner.getItem());
         addValidItem(RailcraftToolItems.getOveralls());
@@ -86,6 +85,7 @@ public class TrackmanBackpack extends BaseBackpack {
         addValidItem(RailcraftItem.railbed);
         addValidItem(RailcraftItem.tie);
         addValidItem(RailcraftItem.signalLamp);
+        addValidItem(RailcraftItem.circuit);
 
         addValidItem(RailcraftBlocks.getBlockMachineGamma());
         addValidItem(RailcraftBlocks.getBlockElevator());

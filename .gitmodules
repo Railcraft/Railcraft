@@ -10,3 +10,6 @@
 [submodule "api/redstoneflux"]
 	path = api/redstoneflux
 	url = git@github.com:CoFH/RedstoneFlux-API.git
+[submodule "api/thaumcraft/thaumcraft/api"]
+	path = api/thaumcraft/thaumcraft/api
+	url = git@github.com:Azanor/thaumcraft-api.git

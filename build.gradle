@@ -26,6 +26,7 @@ archivesBaseName = "Railcraft_" + project.mcversion
 ext.apiRailcraft = "./api/railcraft"
 ext.apiForestry = "./api/forestry"
 ext.apiRedstoneFlux = "./api/redstoneflux"
+ext.apiThaumcraft = "./api/thaumcraft"
 
 ext.dirLang = "./lang"
 
@@ -44,6 +45,7 @@ sourceSets {
 			srcDir project.apiRailcraft
 			srcDir project.apiForestry
 			srcDir project.apiRedstoneFlux + "/src/main/java"
+			srcDir project.apiThaumcraft
 			exclude '**/forestry/api/apiculture/**'
 			exclude '**/forestry/api/arboriculture/**'
 			exclude '**/forestry/api/circuits/**'
@@ -138,6 +140,9 @@ jar {
 	}
 	into ('forestry/api') {
 		from project.apiForestry + "/LICENSE.txt"
+	}
+        into ('thaumcraft/api') {
+		from project.apiThaumcraft + "/LICENSE"
 	}
 	into ('cofh/api') {
 		from project.apiRedstoneFlux + "/LICENSE - LGPLv3.txt"

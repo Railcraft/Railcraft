@@ -12,6 +12,8 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 /**
  *
@@ -29,7 +31,22 @@ public class ChatPlugin {
 
     public static void sendLocalizedChatFromClient(EntityPlayer player, String msg, Object... args) {
         if (Game.isNotHost(player.worldObj))
-            player.addChatMessage(getMessage(String.format(LocalizationPlugin.translate(msg), args)));
+            sendLocalizedChat(player, msg, args);
+    }
+
+    public static void sendLocalizedChatFromServer(EntityPlayer player, String msg, Object... args) {
+        if (Game.isHost(player.worldObj))
+            sendLocalizedChat(player, msg, args);
+    }
+
+    public static void sendLocalizedChatToAllFromServer(World world, String msg, Object... args) {
+        if (world instanceof WorldServer) {
+            WorldServer worldServer = (WorldServer) world;
+            for (Object obj : worldServer.playerEntities) {
+                if (obj instanceof EntityPlayer)
+                    sendLocalizedChat((EntityPlayer) obj, msg, args);
+            }
+        }
     }
 
 }

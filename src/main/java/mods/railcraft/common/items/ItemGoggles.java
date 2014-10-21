@@ -71,7 +71,7 @@ public class ItemGoggles extends ItemArmor {
                         "GCG",
                         "I I",
                         "LLL",
-                        'C', ItemCircuit.getReceiverCircuit(),
+                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
                         'I', "ingotSteel",
                         'L', Items.leather,
                         'G', new ItemStack(Blocks.glass_pane));

@@ -17,7 +17,6 @@ import mods.railcraft.common.blocks.signals.ItemSignalTuner;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItem;
-import mods.railcraft.common.items.RailcraftPartItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -43,7 +42,7 @@ public class ModuleSignals extends RailcraftModule {
                         "LCI",
                         " BI",
                         "   ",
-                        'C', ItemCircuit.getSignalCircuit(),
+                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.SIGNAL),
                         'I', Items.iron_ingot,
                         'L', RailcraftItem.signalLamp.getRecipeObject(),
                         'B', "dyeBlack");
@@ -58,8 +57,8 @@ public class ModuleSignals extends RailcraftModule {
                         "LCI",
                         " BI",
                         "LRI",
-                        'C', ItemCircuit.getSignalCircuit(),
-                        'R', ItemCircuit.getReceiverCircuit(),
+                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.SIGNAL),
+                        'R', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
                         'I', Items.iron_ingot,
                         'L', RailcraftItem.signalLamp.getRecipeObject(),
                         'B', "dyeBlack");
@@ -73,7 +72,7 @@ public class ModuleSignals extends RailcraftModule {
                         "LCI",
                         " BI",
                         "   ",
-                        'C', ItemCircuit.getReceiverCircuit(),
+                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
                         'I', Items.iron_ingot,
                         'L', RailcraftItem.signalLamp.getRecipeObject(),
                         'B', "dyeBlack");
@@ -87,7 +86,7 @@ public class ModuleSignals extends RailcraftModule {
                         "LRI",
                         " BI",
                         "LRI",
-                        'R', ItemCircuit.getReceiverCircuit(),
+                        'R', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
                         'I', Items.iron_ingot,
                         'L', RailcraftItem.signalLamp.getRecipeObject(),
                         'B', "dyeBlack");
@@ -127,7 +126,7 @@ public class ModuleSignals extends RailcraftModule {
                         'W', "dyeWhite",
                         'I', Items.iron_ingot,
                         'P', Blocks.piston,
-                        'C', ItemCircuit.getReceiverCircuit(),
+                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
                         'B', "dyeBlack",
                         'R', "dyeRed");
                 CraftingPlugin.addShapedRecipe(stack,
@@ -136,7 +135,7 @@ public class ModuleSignals extends RailcraftModule {
                         'W', "dyeWhite",
                         'I', Items.iron_ingot,
                         'P', Blocks.piston,
-                        'C', ItemCircuit.getReceiverCircuit(),
+                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
                         'B', "dyeBlack",
                         'R', "dyeRed");
             }
@@ -150,7 +149,7 @@ public class ModuleSignals extends RailcraftModule {
                         "IRI",
                         'I', Items.iron_ingot,
                         'R', Items.redstone,
-                        'C', ItemCircuit.getReceiverCircuit());
+                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER));
             }
 
             // Define Controller Box
@@ -162,7 +161,7 @@ public class ModuleSignals extends RailcraftModule {
                         "IRI",
                         'I', Items.iron_ingot,
                         'R', Items.redstone,
-                        'C', ItemCircuit.getControllerCircuit());
+                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.CONTROLLER));
             }
             
             // Define Analog Controller Box
@@ -198,7 +197,7 @@ public class ModuleSignals extends RailcraftModule {
                         "IRI",
                         'I', Items.iron_ingot,
                         'R', Items.redstone,
-                        'C', ItemCircuit.getSignalCircuit());
+                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.SIGNAL));
             }
 
             // Define Signal Sequencer Box
@@ -222,8 +221,8 @@ public class ModuleSignals extends RailcraftModule {
                         "IRI",
                         'I', Items.iron_ingot,
                         'R', Items.redstone,
-                        'L', ItemCircuit.getReceiverCircuit(),
-                        'C', ItemCircuit.getControllerCircuit());
+                        'L', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
+                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.CONTROLLER));
             }
         }
     }

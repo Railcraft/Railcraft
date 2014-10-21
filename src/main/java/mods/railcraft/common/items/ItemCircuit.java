@@ -26,28 +26,36 @@ import net.minecraft.init.Items;
  */
 public class ItemCircuit extends ItemRailcraft {
 
-    public static enum EnumCircuit {
+    public static enum EnumCircuit implements IItemMetaEnum {
 
         CONTROLLER, RECEIVER, SIGNAL;
         public static EnumCircuit[] VALUES = values();
         private IIcon icon;
-    };
-    private static Item item;
 
-    public static Item getCircuitItem() {
-        if (item != null)
-            return item;
-
-        String tag = "railcraft.part.circuit";
-        item = new ItemCircuit();
-        ItemRegistry.registerItem(item);
-
-        for (EnumCircuit circuit : EnumCircuit.VALUES) {
-            ItemStack stack = new ItemStack(item, 1, circuit.ordinal());
-            ItemRegistry.registerItemStack(item.getUnlocalizedName(stack), stack);
+        @Override
+        public Class<? extends ItemRailcraft> getItemClass() {
+            return ItemCircuit.class;
         }
 
-        CraftingPlugin.addShapedRecipe(new ItemStack(item, 1, EnumCircuit.CONTROLLER.ordinal()),
+    };
+
+    public ItemCircuit() {
+        super();
+        setHasSubtypes(true);
+        setMaxDamage(0);
+    }
+
+    @Override
+    public void initItem() {
+        for (EnumCircuit circuit : EnumCircuit.VALUES) {
+            ItemStack stack = new ItemStack(this, 1, circuit.ordinal());
+            ItemRegistry.registerItemStack(getUnlocalizedName(stack), stack);
+        }
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.CONTROLLER.ordinal()),
                 " #S",
                 "BGR",
                 "SRL",
@@ -57,7 +65,7 @@ public class ItemCircuit extends ItemRailcraft {
                 'S', new ItemStack(Blocks.wool, 1, 14),
                 'R', Items.redstone,
                 'B', Items.slime_ball);
-        CraftingPlugin.addShapedRecipe(new ItemStack(item, 1, EnumCircuit.RECEIVER.ordinal()),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.RECEIVER.ordinal()),
                 " #S",
                 "BGR",
                 "SRL",
@@ -67,7 +75,7 @@ public class ItemCircuit extends ItemRailcraft {
                 'S', new ItemStack(Blocks.wool, 1, 13),
                 'R', Items.redstone,
                 'B', Items.slime_ball);
-        CraftingPlugin.addShapedRecipe(new ItemStack(item, 1, EnumCircuit.SIGNAL.ordinal()),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.SIGNAL.ordinal()),
                 " #S",
                 "BGR",
                 "SRL",
@@ -77,39 +85,6 @@ public class ItemCircuit extends ItemRailcraft {
                 'S', new ItemStack(Blocks.wool, 1, 4),
                 'R', Items.redstone,
                 'B', Items.slime_ball);
-
-        return item;
-    }
-
-    public static ItemStack getControllerCircuit() {
-        return getControllerCircuit(1);
-    }
-
-    public static ItemStack getControllerCircuit(int qty) {
-        return new ItemStack(getCircuitItem(), qty, EnumCircuit.CONTROLLER.ordinal());
-    }
-
-    public static ItemStack getReceiverCircuit() {
-        return getReceiverCircuit(1);
-    }
-
-    public static ItemStack getReceiverCircuit(int qty) {
-        return new ItemStack(getCircuitItem(), qty, EnumCircuit.RECEIVER.ordinal());
-    }
-
-    public static ItemStack getSignalCircuit() {
-        return getSignalCircuit(1);
-    }
-
-    public static ItemStack getSignalCircuit(int qty) {
-        return new ItemStack(getCircuitItem(), qty, EnumCircuit.SIGNAL.ordinal());
-    }
-
-    public ItemCircuit() {
-        super();
-        setHasSubtypes(true);
-        setMaxDamage(0);
-        setUnlocalizedName("railcraft.part.circuit");
     }
 
     @Override
