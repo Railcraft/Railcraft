@@ -26,7 +26,6 @@ import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.gui.widgets.IIndicatorController;
 import mods.railcraft.common.gui.widgets.IndicatorController;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -132,7 +131,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
             pistonProgress += getPistonSpeed();
 
             if (pistonProgress > 0.5 && pistonStage == 1) {
-                TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, direction);
+                TileEntity tile = tileCache.getTileOnSide(direction);
 
                 if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
                     IEnergyHandler handler = (IEnergyHandler) tile;
@@ -148,7 +147,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
                 pistonStage = 0;
             }
         } else if (powered) {
-            TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, direction);
+            TileEntity tile = tileCache.getTileOnSide(direction);
 
             if (EngineTools.isPoweredTile(tile, direction.getOpposite()))
                 if (energy > 0) {
@@ -258,7 +257,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         for (int i = direction.ordinal() + 1; i <= direction.ordinal() + 6; ++i) {
             ForgeDirection dir = ForgeDirection.getOrientation(i % 6);
 
-            TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, dir);
+            TileEntity tile = tileCache.getTileOnSide(dir);
 
             if (EngineTools.isPoweredTile(tile, dir.getOpposite())) {
                 direction = dir;
