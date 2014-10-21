@@ -125,7 +125,7 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
         if (RailcraftConfig.printAnchorDebug() && ticket != null) {
             clock++;
             if (clock % 64 == 0) {
-                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has a ticket and is ticking at <%d,%d,%d> in dim:%d - logged on tick %d", getCommandSenderName(), posX, posY, posZ, worldObj.provider.dimensionId, worldObj.getWorldTime());
+                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has a ticket and is ticking at <%.0f,%.0f,%.0f> in dim:%d - logged on tick %d", getCommandSenderName(), posX, posY, posZ, worldObj.provider.dimensionId, worldObj.getWorldTime());
                 Game.log(Level.DEBUG, "{0} has a ticket and is ticking at <{1},{2},{3}> in dim:{4} - logged on tick {5}", getCommandSenderName(), posX, posY, posZ, worldObj.provider.dimensionId, worldObj.getWorldTime());
             }
         }
