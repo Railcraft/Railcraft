@@ -77,6 +77,15 @@ public class ContainerRollingMachine extends RailcraftContainer {
     }
 
     @Override
+    public void addCraftingToCrafters(ICrafting icrafting) {
+        super.addCraftingToCrafters(icrafting);
+        icrafting.sendProgressBarUpdate(this, 0, tile.getProgress());
+        EnergyStorage storage = tile.getEnergyStorage();
+        if (storage != null)
+            icrafting.sendProgressBarUpdate(this, 1, storage.getEnergyStored());
+    }
+
+    @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         EnergyStorage storage = tile.getEnergyStorage();
@@ -85,7 +94,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
             if (lastProgress != tile.getProgress())
                 icrafting.sendProgressBarUpdate(this, 0, tile.getProgress());
             if (storage != null)
-                icrafting.sendProgressBarUpdate(this, 1, storage.getEnergyStored());
+                icrafting.sendProgressBarUpdate(this, 2, storage.getEnergyStored());
         }
 
         ItemStack output = tile.getStackInSlot(0);
@@ -98,25 +107,16 @@ public class ContainerRollingMachine extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
-        icrafting.sendProgressBarUpdate(this, 0, tile.getProgress());
-        EnergyStorage storage = tile.getEnergyStorage();
-        if (storage != null)
-            icrafting.sendProgressBarUpdate(this, 2, storage.getEnergyStored());
-    }
-
-    @Override
     public void updateProgressBar(int id, int data) {
         switch (id) {
             case 0:
                 tile.setProgress(data);
                 break;
             case 1:
-                energyIndicator.updateEnergy(data);
+                energyIndicator.setEnergy(data);
                 break;
             case 2:
-                energyIndicator.setEnergy(data);
+                energyIndicator.updateEnergy(data);
                 break;
         }
     }

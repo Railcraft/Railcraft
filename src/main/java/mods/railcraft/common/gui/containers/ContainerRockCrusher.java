@@ -58,6 +58,15 @@ public class ContainerRockCrusher extends RailcraftContainer {
     }
 
     @Override
+    public void addCraftingToCrafters(ICrafting icrafting) {
+        super.addCraftingToCrafters(icrafting);
+        icrafting.sendProgressBarUpdate(this, 0, tile.getProcessTime());
+        EnergyStorage storage = tile.getEnergyStorage();
+        if (storage != null)
+            icrafting.sendProgressBarUpdate(this, 1, storage.getEnergyStored());
+    }
+
+    @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         EnergyStorage storage = tile.getEnergyStorage();
@@ -66,19 +75,10 @@ public class ContainerRockCrusher extends RailcraftContainer {
             if (lastProcessTime != tile.getProcessTime())
                 icrafting.sendProgressBarUpdate(this, 0, tile.getProcessTime());
             if (storage != null)
-                icrafting.sendProgressBarUpdate(this, 1, storage.getEnergyStored());
+                icrafting.sendProgressBarUpdate(this, 2, storage.getEnergyStored());
         }
 
         lastProcessTime = tile.getProcessTime();
-    }
-
-    @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
-        icrafting.sendProgressBarUpdate(this, 0, tile.getProcessTime());
-        EnergyStorage storage = tile.getEnergyStorage();
-        if (storage != null)
-            icrafting.sendProgressBarUpdate(this, 2, storage.getEnergyStored());
     }
 
     @Override

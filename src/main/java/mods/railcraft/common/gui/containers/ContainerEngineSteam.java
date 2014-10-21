@@ -18,19 +18,22 @@ import net.minecraft.inventory.Slot;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
+import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 
 public class ContainerEngineSteam extends RailcraftContainer {
 
-    private TileEngineSteam tile;
-    private double lastEnergy;
+    private final TileEngineSteam tile;
+    private int lastEnergy;
     private float lastOutput;
+    private final RFEnergyIndicator energyIndicator;
 
     public ContainerEngineSteam(InventoryPlayer inventoryplayer, TileEngineSteam tile) {
         this.tile = tile;
 
         addWidget(new FluidGaugeWidget(tile.getTankManager().get(0), 71, 23, 176, 0, 16, 47));
 
-        addWidget(new IndicatorWidget(tile.getEnergyIndicator(), 94, 25, 176, 47, 6, 43));
+        energyIndicator = new RFEnergyIndicator(tile.maxEnergy());
+        addWidget(new IndicatorWidget(energyIndicator, 94, 25, 176, 47, 6, 43));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
@@ -48,8 +51,8 @@ public class ContainerEngineSteam extends RailcraftContainer {
         super.addCraftingToCrafters(icrafting);
         tile.getTankManager().initGuiData(this, icrafting, 0);
 
-        icrafting.sendProgressBarUpdate(this, 12, (int) Math.round(tile.energy));
-        icrafting.sendProgressBarUpdate(this, 13, Math.round(tile.currentOutput * 100));
+        icrafting.sendProgressBarUpdate(this, 12, tile.energy);
+        icrafting.sendProgressBarUpdate(this, 14, Math.round(tile.currentOutput * 100));
     }
 
     @Override
@@ -61,10 +64,10 @@ public class ContainerEngineSteam extends RailcraftContainer {
             ICrafting var2 = (ICrafting) this.crafters.get(var1);
 
             if (this.lastEnergy != tile.energy)
-                var2.sendProgressBarUpdate(this, 12, (int) Math.round(tile.energy));
+                var2.sendProgressBarUpdate(this, 13, tile.energy);
 
             if (this.lastOutput != tile.currentOutput)
-                var2.sendProgressBarUpdate(this, 13, Math.round(tile.currentOutput * 100));
+                var2.sendProgressBarUpdate(this, 14, Math.round(tile.currentOutput * 100));
         }
 
         this.lastEnergy = tile.energy;
@@ -78,9 +81,12 @@ public class ContainerEngineSteam extends RailcraftContainer {
 
         switch (id) {
             case 12:
-                tile.energy = value;
+                energyIndicator.setEnergy(value);
                 break;
             case 13:
+                energyIndicator.updateEnergy(value);
+                break;
+            case 14:
                 tile.currentOutput = value / 100f;
                 break;
         }

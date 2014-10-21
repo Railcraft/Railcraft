@@ -45,26 +45,6 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     private boolean needsInit = true;
     public int energy;
     private EnergyStage energyStage = EnergyStage.BLUE;
-    private final IIndicatorController energyIndicator = new EnergyIndicator();
-
-    private class EnergyIndicator extends IndicatorController {
-
-        @Override
-        public void refreshToolTip() {
-            tip.text = String.format("%d RF", energy);
-        }
-
-        @Override
-        public int getScaledLevel(int size) {
-            int e = Math.min(energy, maxEnergy());
-            return e * size / maxEnergy();
-        }
-
-    }
-
-    public IIndicatorController getEnergyIndicator() {
-        return energyIndicator;
-    }
 
     public float getCurrentOutput() {
         return currentOutput;
