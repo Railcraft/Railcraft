@@ -173,7 +173,7 @@ public class ModuleSignals extends RailcraftModule {
             			"IQI",
             			'I', Items.iron_ingot,
             			'Q', Items.comparator,
-            			'C', ItemCircuit.getControllerCircuit());
+            			'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.CONTROLLER));
             }
 
             // Define Capacitor Box
