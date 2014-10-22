@@ -1,5 +1,15 @@
+9.3.3.2:
+	INFO: Updated Thaumcraft API. (thanks to jsteenbeeke for making this easier)
+	NEW: Hitting a Signal with a Magnifying Glass will tell you what aspect it is for those people who can't see the colors. (contributions by liach)
+	NEW: Added Admin Steam Producer, creative only, produces infinite Steam. (contributions by Yopu)
+	CONFIG: Added Anchor Debug config option, enabling it will spam you with information about ticking anchors.
+	CONFIG: Added a config multiplier for controlling how efficiently Steam Locomotives use fuel.
+	CHANGE: Admin Feeder Unit now requires a Redstone signal to emit power.
+	FIX: Resolving remaining issues with converting Engines to RF
+	FIX: Steam Oven textures should render correctly again. (contribution by Yopu)
+
 9.3.3.1:
-	NEW: Added Admin Feeder Unit. (contribution by Yopu)
+	NEW: Added Admin Feeder Unit, creative only, produces infinite Charge. (contribution by Yopu)
 	NEW: Added Analog Controller Box. (contribution by wooky)
 	NEW: Added Metal Lanterns. (contributions by WoodStone)
 	NEW: Added Copper, Tin, Lead, and Steel Stairs and Slabs.
