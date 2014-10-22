@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.modules;
 
+import mods.railcraft.common.items.ItemCrowbarReinforced;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -245,6 +246,32 @@ public class ModuleAutomation extends RailcraftModule {
                     'R', new ItemStack(Blocks.piston),
                     'D', new ItemStack(Items.diamond_shovel),
                     'S', "blockSteel",
+                    'M', new ItemStack(Items.minecart));
+
+        cart = EnumCart.TRACK_LAYER;
+        if (cart.setup())
+            CraftingPlugin.addShapedRecipe(cart.getCartItem(),
+                    "YLY",
+                    "ESE",
+                    "DMD",
+                    'Y', "dyeYellow",
+                    'L', new ItemStack(Blocks.redstone_lamp),
+                    'E', new ItemStack(Items.emerald),
+                    'S', "blockSteel",
+                    'D', new ItemStack(Blocks.dispenser),
+                    'M', new ItemStack(Items.minecart));
+
+        cart = EnumCart.TRACK_REMOVER;
+        if (cart.setup())
+            CraftingPlugin.addShapedRecipe(cart.getCartItem(),
+                    "YLY",
+                    "PSP",
+                    "CMC",
+                    'Y', "dyeYellow",
+                    'L', new ItemStack(Blocks.redstone_lamp),
+                    'P', new ItemStack(Blocks.sticky_piston),
+                    'S', "blockSteel",
+                    'C', ItemCrowbarReinforced.getItem(),
                     'M', new ItemStack(Items.minecart));
     }
 

@@ -395,6 +395,8 @@ public class RailcraftConfig {
         loadCartProperty("cart.undercutter");
         loadCartProperty("cart.loco.steam.solid");
         loadCartProperty("cart.loco.electric");
+        loadCartProperty("cart.track.layer");
+        loadCartProperty("cart.track.remover");
     }
 
     private static void loadBlocks() {

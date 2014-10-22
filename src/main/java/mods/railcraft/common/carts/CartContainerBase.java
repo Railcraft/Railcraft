@@ -9,13 +9,18 @@
 package mods.railcraft.common.carts;
 
 import java.util.List;
+
+import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 
 /**
@@ -25,6 +30,9 @@ import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class CartContainerBase extends EntityMinecartContainer implements IRailcraftCart {
+
+    protected ForgeDirection travelDirection = ForgeDirection.UNKNOWN;
+    private ForgeDirection[] travelDirectionHistory = new ForgeDirection[2];
 
     public CartContainerBase(World world) {
         super(world);
@@ -90,4 +98,40 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
         return -1;
     }
 
+    protected void updateTravelDirection() {
+        EnumTrackMeta trackMeta = getTrackMeta();
+        if (trackMeta != null) {
+            ForgeDirection forgeDirection = determineTravelDirection(trackMeta);
+            ForgeDirection previousForgeDirection = travelDirectionHistory[1];
+            if (previousForgeDirection != ForgeDirection.UNKNOWN && travelDirectionHistory[0] == previousForgeDirection)
+                travelDirection = forgeDirection;
+            travelDirectionHistory[0] = previousForgeDirection;
+            travelDirectionHistory[1] = forgeDirection;
+        }
+    }
+
+    private EnumTrackMeta getTrackMeta() {
+        int x = MathHelper.floor_double(posX);
+        int y = MathHelper.floor_double(posY);
+        int z = MathHelper.floor_double(posZ);
+        if (TrackTools.isRailBlockAt(worldObj, x, y, z)) {
+            int blockMetadata = worldObj.getBlockMetadata(x, y, z);
+            return EnumTrackMeta.fromMeta(blockMetadata);
+        }
+        return null;
+    }
+
+    private ForgeDirection determineTravelDirection(EnumTrackMeta trackMeta) {
+        if (trackMeta.isStraightTrack()) {
+            if (posX - prevPosX > 0)
+                return ForgeDirection.EAST;
+            if (posX - prevPosX < 0)
+                return ForgeDirection.WEST;
+            if (posZ - prevPosZ > 0)
+                return ForgeDirection.SOUTH;
+            if (posZ - prevPosZ < 0)
+                return ForgeDirection.NORTH;
+        }
+        return ForgeDirection.UNKNOWN;
+    }
 }

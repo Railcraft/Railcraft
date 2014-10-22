@@ -111,6 +111,8 @@ public class FactoryContainer {
                     return new ContainerAnchor(inv, (EntityCartAnchor) obj);
                 case CART_WORK:
                     return new ContainerWorkCart(inv, (EntityCartWork) obj);
+                case CART_TRACK_LAYER:
+                    return new ContainerTrackLayer(inv, (EntityCartTrackLayer) obj);
                 case CART_TRACK_RELAYER:
                     return new ContainerTrackRelayer(inv, (EntityCartTrackRelayer) obj);
                 case CART_UNDERCUTTER:
