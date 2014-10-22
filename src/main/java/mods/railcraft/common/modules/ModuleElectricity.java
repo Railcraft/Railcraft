@@ -60,7 +60,7 @@ public class ModuleElectricity extends RailcraftModule {
                     'P', RailcraftItem.plate.getRecipeObject(EnumPlate.TIN),
                     'C', "ingotCopper");
 
-        epsilon = EnumMachineEpsilon.ADMIN_FEEDER;
+        epsilon = EnumMachineEpsilon.ELECTRIC_FEEDER_ADMIN;
         epsilon.register();
 
         EnumMachineDelta delta = EnumMachineDelta.WIRE;

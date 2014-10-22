@@ -35,7 +35,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 public enum EnumMachineEpsilon implements IEnumMachine {
 
     ELECTRIC_FEEDER(Module.ELECTRICITY, "electric.feeder", TileElectricFeeder.class, 1, 1, 0),
-    ADMIN_FEEDER(Module.ELECTRICITY, "admin.feeder", TileAdminFeeder.class, 1, 2, 0, 1),
+    ELECTRIC_FEEDER_ADMIN(Module.ELECTRICITY, "electric.feeder.admin", TileElectricFeederAdmin.class, 1, 2, 0, 1),
     ADMIN_STEAM_PRODUCER(Module.STEAM, "admin.steam.producer", TileAdminSteamProducer.class, 1, 2, 0, 1);
     private final Module module;
     private final String tag;
@@ -48,7 +48,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
 
     static {
         creativeList.add(ELECTRIC_FEEDER);
-        creativeList.add(ADMIN_FEEDER);
+        creativeList.add(ELECTRIC_FEEDER_ADMIN);
         creativeList.add(ADMIN_STEAM_PRODUCER);
     }
 

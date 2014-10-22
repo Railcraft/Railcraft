@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 
-public class TileAdminFeeder extends TileMachineBase implements IElectricGrid {
+public class TileElectricFeederAdmin extends TileMachineBase implements IElectricGrid {
 
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 0.0);
     private boolean powered;
@@ -59,7 +59,7 @@ public class TileAdminFeeder extends TileMachineBase implements IElectricGrid {
 
     @Override
     public IEnumMachine getMachineType() {
-        return EnumMachineEpsilon.ADMIN_FEEDER;
+        return EnumMachineEpsilon.ELECTRIC_FEEDER_ADMIN;
     }
 
     @Override
