@@ -23,7 +23,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -43,7 +42,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     private boolean isActive;
     private boolean needsInit = true;
     public int energy;
-    public int outputDebug, genDebug, cycleTick;
+//    public int outputDebug, genDebug, cycleTick;
     private EnergyStage energyStage = EnergyStage.BLUE;
 
     public float getCurrentOutput() {
@@ -118,17 +117,17 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
                 if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
                     IEnergyHandler handler = (IEnergyHandler) tile;
                     int powerToTransfer = extractEnergy();
-                    outputDebug += powerToTransfer;
+//                    outputDebug += powerToTransfer;
                     if (powerToTransfer > 0)
                         handler.receiveEnergy(direction.getOpposite(), powerToTransfer, false);
                 }
             } else if (pistonProgress >= 1) {
                 pistonProgress = 0;
                 pistonStage = 0;
-                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "Ticks=%d, Gen=%d, Out=%d", clock - cycleTick, genDebug, outputDebug);
-                outputDebug = 0;
-                genDebug = 0;
-                cycleTick = clock;
+//                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "Ticks=%d, Gen=%d, Out=%d", clock - cycleTick, genDebug, outputDebug);
+//                outputDebug = 0;
+//                genDebug = 0;
+//                cycleTick = clock;
             }
         } else if (powered) {
             TileEntity tile = tileCache.getTileOnSide(direction);
@@ -312,7 +311,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
     public void addEnergy(int addition) {
         energy += addition;
-        genDebug += addition;
+//        genDebug += addition;
 
         if (energy > maxEnergy())
             energy = maxEnergy();
