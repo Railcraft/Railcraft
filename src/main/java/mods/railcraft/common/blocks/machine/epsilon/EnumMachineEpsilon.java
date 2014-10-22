@@ -34,7 +34,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 public enum EnumMachineEpsilon implements IEnumMachine {
 
     ELECTRIC_FEEDER(Module.ELECTRICITY, "electric.feeder", TileElectricFeeder.class, 1, 1, 0),
-    ADMIN_FEEDER(Module.ELECTRICITY, "admin.feeder", TileAdminFeeder.class, 1, 1, 0);
+    ADMIN_FEEDER(Module.ELECTRICITY, "admin.feeder", TileAdminFeeder.class, 1, 2, 0, 1);
     private final Module module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
