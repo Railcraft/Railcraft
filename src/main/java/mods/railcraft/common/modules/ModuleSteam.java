@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.modules;
 
+import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
@@ -158,6 +159,8 @@ public class ModuleSteam extends RailcraftModule {
 
         EnumMachineAlpha.STEAM_TRAP_MANUAL.register();
         EnumMachineAlpha.STEAM_TRAP_AUTO.register();
+
+        EnumMachineEpsilon.ADMIN_STEAM_PRODUCER.register();
     }
 
     @Override

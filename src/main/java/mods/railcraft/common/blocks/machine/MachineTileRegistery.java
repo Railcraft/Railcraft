@@ -80,6 +80,7 @@ public class MachineTileRegistery {
         // Epsilon
         GameRegistry.registerTileEntity(TileElectricFeeder.class, "RCElectricFeederTile");
         GameRegistry.registerTileEntity(TileAdminFeeder.class, "RCAdminFeederTile");
+        GameRegistry.registerTileEntity(TileAdminSteamProducer.class, "RCAdminSteamProducerTile");
 
     }
 
