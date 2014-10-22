@@ -101,21 +101,19 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
                 FluidStack steam = steamTank.getFluid();
                 if (steam != null && steam.amount >= steamTank.getCapacity() / 2 - Steam.STEAM_PER_UNIT_WATER) {
                     steam = tankManager.drain(0, steamUsedPerTick() - 1, true);
-                    if (steam != null) {
+                    if (steam != null)
                         steamUsed += steam.amount;
-                    }
                 }
             }
             FluidStack steam = tankManager.drain(0, 1, true);
-            if (steam != null) {
+            if (steam != null)
                 steamUsed += steam.amount;
-            }
 
             if (isPowered()) {
                 if (steamUsed >= steamUsedPerTick()) {
                     steamUsed -= steamUsedPerTick();
                     output = getMaxOutputRF();
-                    addEnergy(getMaxOutputRF());
+                    addEnergy(output);
                 }
             } else {
                 steamUsed = 0;
@@ -134,6 +132,11 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
 
     protected void ventSteam() {
         getTankManager().drain(TANK_STEAM, 5, true);
+    }
+
+    @Override
+    public final int maxEnergyExtracted() {
+        return getMaxOutputRF() * 8;
     }
 
     public abstract int getMaxOutputRF();
@@ -166,9 +169,8 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
 
     @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-        if (!isPowered()) {
+        if (!isPowered())
             return 0;
-        }
         return tankManager.fill(0, resource, doFill);
     }
 
@@ -181,8 +183,6 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
     public boolean canFill(ForgeDirection from, Fluid fluid) {
         return Fluids.STEAM.is(fluid);
     }
-    
-    
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection dir) {

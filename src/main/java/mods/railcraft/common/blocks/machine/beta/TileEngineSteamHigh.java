@@ -47,9 +47,4 @@ public class TileEngineSteamHigh extends TileEngineSteam
     public int maxEnergyReceived() {
         return 12000;
     }
-
-    @Override
-    public int maxEnergyExtracted() {
-        return 1600;
-    }
 }

@@ -172,11 +172,6 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     @Override
-    public int maxEnergyExtracted() {
-        return 400;
-    }
-
-    @Override
     public boolean needsFuel() {
         ItemStack fuel = inv.getStackInSlot(SLOT_FUEL);
         return fuel == null || fuel.stackSize < 8;

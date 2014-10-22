@@ -23,8 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.gui.widgets.IIndicatorController;
-import mods.railcraft.common.gui.widgets.IndicatorController;
+import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -44,6 +43,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     private boolean isActive;
     private boolean needsInit = true;
     public int energy;
+    public int outputDebug, genDebug, cycleTick;
     private EnergyStage energyStage = EnergyStage.BLUE;
 
     public float getCurrentOutput() {
@@ -111,20 +111,24 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
             pistonProgress += getPistonSpeed();
 
             if (pistonProgress > 0.5 && pistonStage == 1) {
+                pistonStage = 2;
+
                 TileEntity tile = tileCache.getTileOnSide(direction);
 
                 if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
                     IEnergyHandler handler = (IEnergyHandler) tile;
-                    int powerToTransfer = extractEnergy(0, maxEnergyExtracted(), true);
-                    if (powerToTransfer > 0) {
+                    int powerToTransfer = extractEnergy();
+                    outputDebug += powerToTransfer;
+                    if (powerToTransfer > 0)
                         handler.receiveEnergy(direction.getOpposite(), powerToTransfer, false);
-                    }
                 }
-
-                pistonStage = 2;
             } else if (pistonProgress >= 1) {
                 pistonProgress = 0;
                 pistonStage = 0;
+                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "Ticks=%d, Gen=%d, Out=%d", clock - cycleTick, genDebug, outputDebug);
+                outputDebug = 0;
+                genDebug = 0;
+                cycleTick = clock;
             }
         } else if (powered) {
             TileEntity tile = tileCache.getTileOnSide(direction);
@@ -198,6 +202,8 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
     @Override
     public boolean rotateBlock(ForgeDirection axis) {
+        if (getEnergyStage() == EnergyStage.OVERHEAT)
+            return false;
         return switchOrientation();
     }
 
@@ -234,7 +240,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     public boolean switchOrientation() {
-        for (int i = direction.ordinal() + 1; i <= direction.ordinal() + 6; ++i) {
+        for (int i = direction.ordinal() + 1; i < direction.ordinal() + 6; ++i) {
             ForgeDirection dir = ForgeDirection.getOrientation(i % 6);
 
             TileEntity tile = tileCache.getTileOnSide(dir);
@@ -261,7 +267,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     public double getEnergyLevel() {
-        return energy / maxEnergy();
+        return (double) energy / (double) maxEnergy();
     }
 
     protected EnergyStage computeEnergyStage() {
@@ -306,6 +312,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
     public void addEnergy(int addition) {
         energy += addition;
+        genDebug += addition;
 
         if (energy > maxEnergy())
             energy = maxEnergy();
@@ -322,33 +329,43 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
             energy = 0;
     }
 
-    public int extractEnergy(int min, int max, boolean doExtract) {
-        if (energy < min)
-            return 0;
-
-        int actualMax;
-
-        int engineMax = maxEnergyExtracted();// + extraEnergy * 0.5;
-        if (max > engineMax)
-            actualMax = engineMax;
-        else
-            actualMax = max;
-
-        int extracted;
-
-        if (energy >= actualMax) {
-            extracted = actualMax;
-            if (doExtract)
-                energy -= actualMax; //extraEnergy -= Math.min(actualMax, extraEnergy);
-        } else {
-            extracted = energy;
-            if (doExtract)
-                energy = 0; //extraEnergy = 0;
+    public int extractEnergy() {
+        int amount = maxEnergyExtracted();
+        if (energy >= amount) {
+            energy -= amount;
+            return amount;
         }
-
-        return extracted;
+        int returnValue = energy;
+        energy = 0;
+        return returnValue;
     }
 
+//    public int extractEnergy(int min, int max, boolean doExtract) {
+//        if (energy < min)
+//            return 0;
+//
+//        int actualMax;
+//
+//        int engineMax = maxEnergyExtracted();// + extraEnergy * 0.5;
+//        if (max > engineMax)
+//            actualMax = engineMax;
+//        else
+//            actualMax = max;
+//
+//        int extracted;
+//
+//        if (energy >= actualMax) {
+//            extracted = actualMax;
+//            if (doExtract)
+//                energy -= actualMax; //extraEnergy -= Math.min(actualMax, extraEnergy);
+//        } else {
+//            extracted = energy;
+//            if (doExtract)
+//                energy = 0; //extraEnergy = 0;
+//        }
+//
+//        return extracted;
+//    }
     public float getProgress() {
         return pistonProgress;
     }
