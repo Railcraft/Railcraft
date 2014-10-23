@@ -1,4 +1,4 @@
-package mods.railcraft.common.blocks.machine.beta;
+package mods.railcraft.common.blocks.machine.epsilon;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -99,7 +99,7 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
 
     @Override
     public IIcon getIcon(int side) {
-        return getMachineType().getTexture(powered ? 0 : 1);
+        return getMachineType().getTexture(powered ? 0 : 6);
     }
 
     @Override

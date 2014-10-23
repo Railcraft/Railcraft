@@ -13,7 +13,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
-import mods.railcraft.common.blocks.machine.beta.TileAdminSteamProducer;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -35,8 +34,8 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 public enum EnumMachineEpsilon implements IEnumMachine {
 
     ELECTRIC_FEEDER(Module.ELECTRICITY, "electric.feeder", TileElectricFeeder.class, 1, 1, 0),
-    ELECTRIC_FEEDER_ADMIN(Module.ELECTRICITY, "electric.feeder.admin", TileElectricFeederAdmin.class, 1, 2, 0, 1),
-    ADMIN_STEAM_PRODUCER(Module.STEAM, "admin.steam.producer", TileAdminSteamProducer.class, 1, 2, 0, 1);
+    ELECTRIC_FEEDER_ADMIN(Module.ELECTRICITY, "electric.feeder.admin", TileElectricFeederAdmin.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
+    ADMIN_STEAM_PRODUCER(Module.STEAM, "admin.steam.producer", TileAdminSteamProducer.class, 2, 1, 0, 0, 0, 0, 0, 0, 1);
     private final Module module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;

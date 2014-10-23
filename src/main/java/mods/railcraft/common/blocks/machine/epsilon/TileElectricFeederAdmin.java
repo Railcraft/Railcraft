@@ -64,7 +64,7 @@ public class TileElectricFeederAdmin extends TileMachineBase implements IElectri
 
     @Override
     public IIcon getIcon(int side) {
-        return getMachineType().getTexture(0);
+        return getMachineType().getTexture(powered ? 0 : 6);
     }
 
     @Override
