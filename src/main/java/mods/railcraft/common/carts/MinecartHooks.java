@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,6 @@ import mods.railcraft.api.tracks.RailTools;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackSpeed;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -41,8 +39,10 @@ import mods.railcraft.common.util.misc.Vec2D;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
+import net.minecraft.world.World;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 public final class MinecartHooks implements IMinecartCollisionHandler {
 
@@ -73,19 +73,30 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         return instance;
     }
 
-//    @SubscribeEvent
-//    public void onItemUse(PlayerUseItemEvent.Start event) {
-//        Item item = event.item.getItem();
-//        if (vanillaEntityReplacements.containsKey(item)) {
-//            event.setCanceled(true);
-//            if (Game.isHost(event.entityPlayer.worldObj)) {
-//                MovingObjectPosition pos = MiscTools.rayTracePlayerLook(event.entityPlayer);
-//                EntityMinecart placedCart = CartUtils.placeCart(vanillaEntityReplacements.get(item), Railcraft.proxy.getPlayerUsername(event.entityPlayer), event.item, event.entityPlayer.worldObj, pos.blockX, pos.blockY, pos.blockZ);
-//                if (placedCart != null)
-//                    event.item.stackSize--;
-//            }
-//        }
-//    }
+    @SubscribeEvent
+    public void onItemUse(PlayerInteractEvent event) {
+        EntityPlayer player = event.entityPlayer;
+        World world = player.worldObj;
+        if (Game.isNotHost(world))
+            return;
+
+        ItemStack itemStack = player.getHeldItem();
+        if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && itemStack != null) {
+            Item item = itemStack.getItem();
+            if (item != null && vanillaEntityReplacements.containsKey(item)) {
+                MovingObjectPosition pos = MiscTools.rayTracePlayerLook(player);
+                EntityMinecart placedCart = CartUtils.placeCart(
+                        vanillaEntityReplacements.get(item),
+                        player.getGameProfile(), itemStack, world,
+                        pos.blockX, pos.blockY, pos.blockZ);
+                if (placedCart != null) {
+                    event.setCanceled(true);
+                    if (!player.capabilities.isCreativeMode)
+                        itemStack.stackSize--;
+                }
+            }
+        }
+    }
 
     @Override
     public void onEntityCollision(EntityMinecart cart, Entity other) {
