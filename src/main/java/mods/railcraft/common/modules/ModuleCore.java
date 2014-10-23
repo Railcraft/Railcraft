@@ -262,9 +262,11 @@ public class ModuleCore extends RailcraftModule {
     private void replaceVanillaCart(EnumCart cartType, Item original, String entityTag, int entityId) {
         cartType.registerEntity();
 
+        Class<? extends EntityMinecart> minecartClass = (Class<? extends EntityMinecart>) EntityList.stringToClassMapping.remove(entityTag);
+
+        MinecartHooks.classReplacements.put(minecartClass, cartType);
         MinecartHooks.vanillaEntityReplacements.put(original, cartType);
 
-        EntityList.stringToClassMapping.remove(entityTag);
         EntityList.IDtoClassMapping.remove(entityId);
         EntityList.addMapping(cartType.getCartClass(), entityTag, entityId);
 
