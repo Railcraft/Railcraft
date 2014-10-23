@@ -1,3 +1,8 @@
+Next:
+	NEW: Added Track Layer and Track Remover. (contribution by Yopu)
+	FIX: Fixed weird textures on Admin blocks.
+	FIX: Remove debug statement spam from Engines.
+
 9.3.3.2:
 	INFO: Updated Thaumcraft API. (thanks to jsteenbeeke for making this easier)
 	NEW: Hitting a Signal with a Magnifying Glass will tell you what aspect it is, for those people who can't see the colors. (contributions by liach)
