@@ -166,7 +166,7 @@ public class RailcraftConfig {
         Game.log(Level.INFO, "Railcraft Config: Doing post init configuration");
 
         anchorFuelWorld.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelWorldString, "Adding World Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
-        anchorFuelPersonal.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelPersonalString, "Adding Parsonal Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
+        anchorFuelPersonal.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelPersonalString, "Adding Personal Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         EntityTunnelBore.mineableBlocks.addAll(BlockItemListParser.<BlockKey>parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser.ParseType.BLOCK));
     }
 
