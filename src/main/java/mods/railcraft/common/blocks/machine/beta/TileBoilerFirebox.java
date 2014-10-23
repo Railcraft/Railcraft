@@ -208,7 +208,8 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
         TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return mBlock.inventory.getStackInSlot(i);
-        return null;
+        else
+            return inventory.getStackInSlot(i);
     }
 
     @Override
