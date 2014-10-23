@@ -96,7 +96,7 @@ public final class ItemRegistry {
      */
     public static void registerItem(Item item) {
         if (ModuleManager.getStage() != ModuleManager.Stage.PRE_INIT && ModuleManager.getStage() != ModuleManager.Stage.INIT_FIRST)
-            throw new RuntimeException("Items must be initialized in PreInit or InitFirst you idiot!");
+            throw new RuntimeException("Items must be initialized in PreInit or InitFirst, CovertJaguar you idiot!");
         String tag = item.getUnlocalizedName();
         tag = MiscTools.cleanTag(tag);
         TagList.addTag(tag);

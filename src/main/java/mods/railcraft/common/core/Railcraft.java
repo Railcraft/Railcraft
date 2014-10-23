@@ -228,10 +228,10 @@ public final class Railcraft {
     public void missingMapping(FMLMissingMappingsEvent event) {
         for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
             if (mapping.type == GameRegistry.Type.BLOCK) {
-                if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.blockCreosote != null)
-                    mapping.remap(RailcraftFluids.blockCreosote);
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam") && RailcraftFluids.blockSteam != null)
-                    mapping.remap(RailcraftFluids.blockSteam);
+                if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
+                    mapping.remap(RailcraftFluids.CREOSOTE.getBlock());
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam") && RailcraftFluids.STEAM.getBlock() != null)
+                    mapping.remap(RailcraftFluids.STEAM.getBlock());
                 else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge") && BlockFirestoneRecharge.getBlock() != null)
                     mapping.remap(BlockFirestoneRecharge.getBlock());
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && BlockRCAnvil.getBlock() != null)
@@ -241,10 +241,10 @@ public final class Railcraft {
             } else if (mapping.type == GameRegistry.Type.ITEM) {
                 if (mapping.name.equals("Railcraft:tool.mag.glass") && ItemMagnifyingGlass.item != null)
                     mapping.remap(ItemMagnifyingGlass.item);
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.blockCreosote != null)
-                    mapping.remap(Item.getItemFromBlock(RailcraftFluids.blockCreosote));
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam") && RailcraftFluids.blockSteam != null)
-                    mapping.remap(Item.getItemFromBlock(RailcraftFluids.blockSteam));
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
+                    mapping.remap(Item.getItemFromBlock(RailcraftFluids.CREOSOTE.getBlock()));
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam") && RailcraftFluids.STEAM.getBlock() != null)
+                    mapping.remap(Item.getItemFromBlock(RailcraftFluids.STEAM.getBlock()));
                 else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge") && BlockFirestoneRecharge.getBlock() != null)
                     mapping.remap(Item.getItemFromBlock(BlockFirestoneRecharge.getBlock()));
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && BlockRCAnvil.getBlock() != null)

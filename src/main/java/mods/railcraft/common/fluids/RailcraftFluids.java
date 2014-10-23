@@ -13,6 +13,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -20,116 +21,141 @@ import net.minecraft.block.material.MaterialLiquid;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import org.apache.logging.log4j.Level;
 
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class RailcraftFluids {
+public enum RailcraftFluids {
 
-    public static final RailcraftFluids INSTANCE = new RailcraftFluids();
-    private static Fluid railcraftCreosote;
-    private static Fluid railcraftSteam;
-    public static Block blockCreosote;
-    public static Block blockSteam;
+    CREOSOTE("fluid.creosote", Fluids.CREOSOTE, 800, 1500) {
+
+                @Override
+                void defineContainers() {
+                    FluidContainers.getCreosoteOilBucket();
+                    FluidContainers.getCreosoteOilBottle();
+                    FluidContainers.getCreosoteOilCan();
+                    FluidContainers.getCreosoteOilCell();
+                    FluidContainers.getCreosoteOilWax();
+                    FluidContainers.getCreosoteOilRefactory();
+                }
+
+                @Override
+                public Block makeBlock() {
+                    return new BlockRailcraftFluid(standardFluid.get(), Material.water).setFlammable(true).setFlammability(10);
+                }
+
+            },
+    STEAM("fluid.steam", Fluids.STEAM, -1000, 500) {
+
+                @Override
+                void defineContainers() {
+                    FluidContainers.getSteamBottle();
+                }
+
+                @Override
+                Block makeBlock() {
+                    return new BlockRailcraftFluidFinite(standardFluid.get(), new MaterialLiquid(MapColor.airColor)).setNoFlow();
+                }
+
+            };
+
+    public static final RailcraftFluids[] VALUES = values();
+    public final String tag;
+    public final Fluids standardFluid;
+    public final int density, viscosity;
+    protected Fluid railcraftFluid;
+    protected Block fluidBlock;
+
+    private RailcraftFluids(String tag, Fluids standardFluid, int density, int viscosity) {
+        this.tag = tag;
+        this.standardFluid = standardFluid;
+        this.density = density;
+        this.viscosity = viscosity;
+    }
+
+    void initFluid() {
+        if (railcraftFluid == null && RailcraftConfig.isFluidEnabled(standardFluid.getTag())) {
+            railcraftFluid = new Fluid(standardFluid.getTag()).setDensity(density).setViscosity(viscosity);
+            FluidRegistry.registerFluid(railcraftFluid);
+            initBlock();
+        }
+        if (standardFluid.get() != null)
+            defineContainers();
+    }
+
+    void defineContainers() {
+    }
+
+    abstract Block makeBlock();
+
+    void initBlock() {
+        if (fluidBlock != null)
+            return;
+
+        Fluid fluid = standardFluid.get();
+        if (fluid == null)
+            return;
+
+        fluidBlock = fluid.getBlock();
+
+        if (RailcraftConfig.isBlockEnabled(tag))
+            if (fluidBlock == null) {
+                fluidBlock = makeBlock();
+                fluidBlock.setBlockName("railcraft." + tag);
+                GameRegistry.registerBlock(fluidBlock, fluidBlock.getUnlocalizedName());
+                fluid.setBlock(fluidBlock);
+            } else {
+                GameRegistry.UniqueIdentifier blockID = GameRegistry.findUniqueIdentifierFor(fluidBlock);
+                Game.log(Level.WARN, "Pre-existing {0} fluid block detected, deferring to {1}:{2}, "
+                        + "this may cause issues if the server/client have different mod load orders, "
+                        + "recommended that you disable all but one instance of {0} fluid blocks via your configs.", fluid.getName(), blockID.modId, blockID.name);
+            }
+    }
+
+    public Block getBlock() {
+        return fluidBlock;
+    }
 
     public static class MissingFluidException extends RuntimeException {
 
-        public MissingFluidException(String msg) {
-            super(msg);
+        public MissingFluidException(String tag) {
+            super("Fluid '" + tag + "' was not found. Please check your configs.");
         }
 
-    }
-
-    private RailcraftFluids() {
     }
 
     public static void preInit() {
-        initCreosote();
-        initSteam();
+        for (RailcraftFluids fluidType : VALUES) {
+            fluidType.initFluid();
+        }
     }
 
     public static void postInit() {
-        initCreosoteBlock();
-        initSteamBlock();
-
-        if (Fluids.CREOSOTE.get() == null)
-            throw new MissingFluidException("Fluid 'creosote' was not found. Please check your configs.");
-
-        if (Fluids.STEAM.get() == null)
-            throw new MissingFluidException("Fluid 'steam' was not found. Please check your configs.");
-    }
-
-    public static void initCreosote() {
-        if (railcraftCreosote == null && RailcraftConfig.isFluidEnabled("creosote")) {
-            railcraftCreosote = new Fluid("creosote").setDensity(800).setViscosity(1500);
-            FluidRegistry.registerFluid(railcraftCreosote);
-
-            initCreosoteBlock();
+        for (RailcraftFluids fluidType : VALUES) {
+            fluidType.initBlock();
+            if (fluidType.standardFluid.get() == null)
+                throw new MissingFluidException(fluidType.standardFluid.getTag());
         }
     }
 
-    public static void initCreosoteBlock() {
-        if (blockCreosote != null)
-            return;
+    public static class TextureHook {
 
-        Fluid fluidCreosote = Fluids.CREOSOTE.get();
-        if (fluidCreosote == null)
-            return;
-
-        if (fluidCreosote.getBlock() == null) {
-            if (RailcraftConfig.isBlockEnabled("fluid.creosote")) {
-                blockCreosote = new BlockRailcraftFluid(fluidCreosote, Material.water).setFlammable(true).setFlammability(10);
-                blockCreosote.setBlockName("railcraft.fluid.creosote");
-                GameRegistry.registerBlock(blockCreosote, blockCreosote.getUnlocalizedName());
-                fluidCreosote.setBlock(blockCreosote);
-            }
-        } else
-            blockCreosote = fluidCreosote.getBlock();
-        FluidContainers.getCreosoteOilBucket();
-        FluidContainers.getCreosoteOilBottle();
-        FluidContainers.getCreosoteOilCan();
-        FluidContainers.getCreosoteOilCell();
-        FluidContainers.getCreosoteOilWax();
-        FluidContainers.getCreosoteOilRefactory();
-    }
-
-    private static void initSteam() {
-        if (railcraftSteam == null && RailcraftConfig.isFluidEnabled("steam")) {
-            railcraftSteam = new Fluid("steam").setDensity(-1000).setViscosity(500);
-            FluidRegistry.registerFluid(railcraftSteam);
-
-            initSteamBlock();
+        @SubscribeEvent
+        @SideOnly(Side.CLIENT)
+        public void textureHook(TextureStitchEvent.Post event) {
+            if (event.map.getTextureType() == 0)
+                for (RailcraftFluids fluidType : VALUES) {
+                    if (fluidType.railcraftFluid != null)
+                        fluidType.railcraftFluid.setIcons(fluidType.fluidBlock.getBlockTextureFromSide(1), fluidType.fluidBlock.getBlockTextureFromSide(2));
+                }
         }
+
     }
 
-    private static void initSteamBlock() {
-        if (blockSteam != null)
-            return;
-
-        Fluid fluidSteam = Fluids.STEAM.get();
-        if (fluidSteam == null)
-            return;
-
-        if (fluidSteam.getBlock() == null) {
-            if (RailcraftConfig.isBlockEnabled("fluid.steam")) {
-                blockSteam = new BlockRailcraftFluidFinite(fluidSteam, new MaterialLiquid(MapColor.airColor)).setNoFlow();
-                blockSteam.setBlockName("railcraft.fluid.steam");
-                GameRegistry.registerBlock(blockSteam, blockSteam.getUnlocalizedName());
-                fluidSteam.setBlock(blockSteam);
-            }
-        } else
-            blockSteam = fluidSteam.getBlock();
-        FluidContainers.getSteamBottle();
-    }
-
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void textureHook(TextureStitchEvent.Post event) {
-        if (event.map.getTextureType() == 0) {
-            railcraftCreosote.setIcons(blockCreosote.getBlockTextureFromSide(1), blockCreosote.getBlockTextureFromSide(2));
-            railcraftSteam.setIcons(blockSteam.getBlockTextureFromSide(1), blockSteam.getBlockTextureFromSide(2));
-        }
+    public static Object getTextureHook() {
+        return new TextureHook();
     }
 
 }
