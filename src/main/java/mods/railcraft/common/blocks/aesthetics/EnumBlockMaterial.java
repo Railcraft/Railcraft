@@ -68,7 +68,11 @@ public enum EnumBlockMaterial implements IDerivedBlock {
     ABYSSAL_COBBLE,
     NETHER_COBBLE,
     CREOSOTE,
-    OBSIDIAN;
+    OBSIDIAN,
+    COPPER,
+    TIN,
+    LEAD,
+    STEEL;
     public static final EnumBlockMaterial[] VALUES = values();
     public static final Map<String, EnumBlockMaterial> NAMES = new HashMap<String, EnumBlockMaterial>();
     public static final List<EnumBlockMaterial> creativeList = new ArrayList<EnumBlockMaterial>();
@@ -76,11 +80,12 @@ public enum EnumBlockMaterial implements IDerivedBlock {
     private SoundType sound;
     private Block source;
     private int sourceMeta = 0;
+    private String oreTag = null;
     private String toolClass = "pickaxe";
     private int toolLevel = 0;
 
     public static void initialize() {
-        if(!needsInit)
+        if (!needsInit)
             return;
         needsInit = false;
         INFERNAL_BRICK.source = BlockBrick.infernal;
@@ -157,6 +162,19 @@ public enum EnumBlockMaterial implements IDerivedBlock {
 
         OBSIDIAN.source = Blocks.obsidian;
 
+        COPPER.source = BlockCube.getBlock();
+        COPPER.sourceMeta = EnumCube.COPPER_BLOCK.ordinal();
+        COPPER.oreTag = "blockCopper";
+        TIN.source = BlockCube.getBlock();
+        TIN.sourceMeta = EnumCube.TIN_BLOCK.ordinal();
+        TIN.oreTag = "blockTin";
+        LEAD.source = BlockCube.getBlock();
+        LEAD.sourceMeta = EnumCube.LEAD_BLOCK.ordinal();
+        LEAD.oreTag = "blockLead";
+        STEEL.source = BlockCube.getBlock();
+        STEEL.sourceMeta = EnumCube.STEEL_BLOCK.ordinal();
+        STEEL.oreTag = "blockSteel";
+
         for (EnumBlockMaterial mat : VALUES) {
             NAMES.put(mat.name(), mat);
             switch (mat) {
@@ -165,6 +183,12 @@ public enum EnumBlockMaterial implements IDerivedBlock {
                     break;
                 case CREOSOTE:
                     mat.sound = Block.soundTypeWood;
+                    break;
+                case COPPER:
+                case TIN:
+                case LEAD:
+                case STEEL:
+                    mat.sound = Block.soundTypeMetal;
                     break;
                 default:
                     mat.sound = mat.source.stepSound;
@@ -176,6 +200,10 @@ public enum EnumBlockMaterial implements IDerivedBlock {
         creativeList.add(SNOW);
         creativeList.add(ICE);
         creativeList.add(IRON);
+        creativeList.add(STEEL);
+        creativeList.add(COPPER);
+        creativeList.add(TIN);
+        creativeList.add(LEAD);
         creativeList.add(GOLD);
         creativeList.add(DIAMOND);
         creativeList.add(CONCRETE);
@@ -241,11 +269,21 @@ public enum EnumBlockMaterial implements IDerivedBlock {
         return sourceMeta;
     }
 
+    public String getOreTag() {
+        return oreTag;
+    }
+
     public SoundType getSound() {
         return sound;
     }
 
     public ItemStack getSourceItem() {
+        if (source == null) return null;
+        return new ItemStack(source, 1, sourceMeta);
+    }
+
+    public Object getCraftingEquivelent() {
+        if (oreTag != null) return oreTag;
         if (source == null) return null;
         return new ItemStack(source, 1, sourceMeta);
     }
@@ -258,6 +296,14 @@ public enum EnumBlockMaterial implements IDerivedBlock {
         switch (this) {
             case CONCRETE:
                 return EnumCube.CONCRETE_BLOCK.getHardness();
+            case COPPER:
+                return EnumCube.COPPER_BLOCK.getHardness();
+            case TIN:
+                return EnumCube.TIN_BLOCK.getHardness();
+            case LEAD:
+                return EnumCube.LEAD_BLOCK.getHardness();
+            case STEEL:
+                return EnumCube.STEEL_BLOCK.getHardness();
             default:
                 Block block = getSourceBlock();
                 if (block == null)
@@ -270,6 +316,14 @@ public enum EnumBlockMaterial implements IDerivedBlock {
         switch (this) {
             case CONCRETE:
                 return EnumCube.CONCRETE_BLOCK.getResistance() * 3f / 5f;
+            case COPPER:
+                return EnumCube.COPPER_BLOCK.getResistance() * 3f / 5f;
+            case TIN:
+                return EnumCube.TIN_BLOCK.getResistance() * 3f / 5f;
+            case LEAD:
+                return EnumCube.LEAD_BLOCK.getResistance() * 3f / 5f;
+            case STEEL:
+                return EnumCube.STEEL_BLOCK.getResistance() * 3f / 5f;
             default:
                 Block block = getSourceBlock();
                 if (block == null)

@@ -8,6 +8,7 @@
  */
 package mods.railcraft.client.core;
 
+import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.Minecraft;
@@ -156,7 +157,8 @@ public class ClientProxy extends CommonProxy {
         registerBlockRenderer(new RenderBlockOre());
         registerBlockRenderer(new RenderBlockFrame());
         registerBlockRenderer(new RenderBlockStrengthGlass());
-        registerBlockRenderer(new RenderBlockLamp());
+        registerBlockRenderer(new RenderBlockLamp(BlockLantern.getBlockStone()));
+        registerBlockRenderer(new RenderBlockLamp(BlockLantern.getBlockMetal()));
         registerBlockRenderer(new RenderWall(BlockRailcraftWall.getBlockAlpha()));
         registerBlockRenderer(new RenderWall(BlockRailcraftWall.getBlockBeta()));
         registerBlockRenderer(new RenderStair());

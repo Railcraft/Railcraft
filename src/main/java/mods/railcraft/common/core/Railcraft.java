@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Level;
 import mods.railcraft.common.plugins.forge.ItemRegistry;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
@@ -50,7 +51,7 @@ import net.minecraftforge.fluids.FluidRegistry;
      version = Railcraft.VERSION,
      certificateFingerprint = "a0c255ac501b2749537d5824bb0f0588bf0320fa",
      acceptedMinecraftVersions = "[1.7.10,1.8)",
-     dependencies = "required-after:Forge@[10.13.1.1217,);"
+     dependencies = "required-after:Forge@[10.13.0.1199,);"
      + "after:BuildCraft|Core[5.0,);"
      + "after:BuildCraft|Energy;"
      + "after:BuildCraft|Builders;"
@@ -133,7 +134,8 @@ public final class Railcraft {
     public void fingerprintError(FMLFingerprintViolationEvent event) {
         if (Game.isObfuscated()) {
             Game.logErrorFingerprint(MOD_ID);
-            FMLCommonHandler.instance().exitJava(1, false);
+//            FMLCommonHandler.instance().exitJava(1, false);
+            throw new RuntimeException("Invalid Fingerprint");
         }
     }
 
@@ -238,6 +240,8 @@ public final class Railcraft {
                     mapping.remap(BlockRCAnvil.getBlock());
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
+                else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
+                    mapping.remap(BlockLantern.getBlockStone());
             } else if (mapping.type == GameRegistry.Type.ITEM) {
                 if (mapping.name.equals("Railcraft:tool.mag.glass") && ItemMagnifyingGlass.item != null)
                     mapping.remap(ItemMagnifyingGlass.item);
@@ -251,6 +255,8 @@ public final class Railcraft {
                     mapping.remap(Item.getItemFromBlock(BlockRCAnvil.getBlock()));
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
+                else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
+                    mapping.remap(Item.getItemFromBlock(BlockLantern.getBlockStone()));
             }
         }
     }

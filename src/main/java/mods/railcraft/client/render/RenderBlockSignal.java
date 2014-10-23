@@ -30,6 +30,7 @@ public class RenderBlockSignal extends BlockRenderer {
         addCombinedRenderer(EnumSignal.SWITCH_ROUTING.ordinal(), new RenderSwitch(EnumSignal.SWITCH_ROUTING));
         addCombinedRenderer(EnumSignal.BOX_RECEIVER.ordinal(), RenderSignalBox.INSTANCE);
         addCombinedRenderer(EnumSignal.BOX_CONTROLLER.ordinal(), RenderSignalBox.INSTANCE);
+        addCombinedRenderer(EnumSignal.BOX_ANALOG_CONTROLLER.ordinal(), RenderSignalBox.INSTANCE);
         addCombinedRenderer(EnumSignal.BOX_CAPACITOR.ordinal(), RenderSignalBox.INSTANCE);
         addCombinedRenderer(EnumSignal.BOX_BLOCK_RELAY.ordinal(), RenderSignalBox.INSTANCE);
         addCombinedRenderer(EnumSignal.BOX_SEQUENCER.ordinal(), RenderSignalBox.INSTANCE);

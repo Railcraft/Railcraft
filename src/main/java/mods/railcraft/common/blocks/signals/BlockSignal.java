@@ -55,6 +55,7 @@ public class BlockSignal extends BlockContainer implements IPostConnection {
         setCreativeTab(CreativeTabs.tabTransport);
 
         GameRegistry.registerTileEntity(TileBoxController.class, "RCTileStructureControllerBox");
+        GameRegistry.registerTileEntity(TileBoxAnalogController.class, "RCTileStructureAnalogControllerBox");
         GameRegistry.registerTileEntity(TileBoxReceiver.class, "RCTileStructureReceiverBox");
         GameRegistry.registerTileEntity(TileBoxCapacitor.class, "RCTileStructureCapacitorBox");
         GameRegistry.registerTileEntity(TileBoxBlockRelay.class, "RCTileStructureSignalBox");
@@ -100,6 +101,7 @@ public class BlockSignal extends BlockContainer implements IPostConnection {
         EnumSignal.BOX_BLOCK_RELAY.setIcon(iconRegister.registerIcon("railcraft:signal.box.block.relay"));
         EnumSignal.BOX_CAPACITOR.setIcon(iconRegister.registerIcon("railcraft:signal.box.capacitor"));
         EnumSignal.BOX_CONTROLLER.setIcon(iconRegister.registerIcon("railcraft:signal.box.controller"));
+        EnumSignal.BOX_ANALOG_CONTROLLER.setIcon(iconRegister.registerIcon("railcraft:signal.box.analog"));
         EnumSignal.BOX_RECEIVER.setIcon(iconRegister.registerIcon("railcraft:signal.box.receiver"));
         EnumSignal.BOX_SEQUENCER.setIcon(iconRegister.registerIcon("railcraft:signal.box.sequencer"));
         EnumSignal.BOX_INTERLOCK.setIcon(iconRegister.registerIcon("railcraft:signal.box.interlock"));

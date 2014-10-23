@@ -163,6 +163,18 @@ public class ModuleSignals extends RailcraftModule {
                         'R', Items.redstone,
                         'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.CONTROLLER));
             }
+            
+            // Define Analog Controller Box
+            structure = EnumSignal.BOX_ANALOG_CONTROLLER;
+            if (RailcraftConfig.isSubBlockEnabled(structure.getTag())) {
+            	ItemStack stack = structure.getItem();
+            	CraftingPlugin.addShapedRecipe(stack,
+            			"ICI",
+            			"IQI",
+            			'I', Items.iron_ingot,
+            			'Q', Items.comparator,
+            			'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.CONTROLLER));
+            }
 
             // Define Capacitor Box
             structure = EnumSignal.BOX_CAPACITOR;

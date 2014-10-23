@@ -94,28 +94,26 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
 
     @Override
     public void burn() {
-        float output = 0;
+        int output = 0;
 
         if (getEnergyStage() != EnergyStage.OVERHEAT) {
             if (isPowered()) {
                 FluidStack steam = steamTank.getFluid();
                 if (steam != null && steam.amount >= steamTank.getCapacity() / 2 - Steam.STEAM_PER_UNIT_WATER) {
                     steam = tankManager.drain(0, steamUsedPerTick() - 1, true);
-                    if (steam != null) {
+                    if (steam != null)
                         steamUsed += steam.amount;
-                    }
                 }
             }
             FluidStack steam = tankManager.drain(0, 1, true);
-            if (steam != null) {
+            if (steam != null)
                 steamUsed += steam.amount;
-            }
 
             if (isPowered()) {
                 if (steamUsed >= steamUsedPerTick()) {
                     steamUsed -= steamUsedPerTick();
-                    output = getMaxOutputMJ();
-                    addEnergy(getMaxOutputMJ());
+                    output = getMaxOutputRF();
+                    addEnergy(output);
                 }
             } else {
                 steamUsed = 0;
@@ -136,7 +134,12 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
         getTankManager().drain(TANK_STEAM, 5, true);
     }
 
-    public abstract float getMaxOutputMJ();
+    @Override
+    public final int maxEnergyExtracted() {
+        return getMaxOutputRF() * 8;
+    }
+
+    public abstract int getMaxOutputRF();
 
     public abstract int steamUsedPerTick();
 
@@ -166,9 +169,8 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
 
     @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-        if (!isPowered()) {
+        if (!isPowered())
             return 0;
-        }
         return tankManager.fill(0, resource, doFill);
     }
 
@@ -181,8 +183,6 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
     public boolean canFill(ForgeDirection from, Fluid fluid) {
         return Fluids.STEAM.is(fluid);
     }
-    
-    
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection dir) {

@@ -9,6 +9,7 @@
 package mods.railcraft.client.gui;
 
 import org.apache.logging.log4j.Level;
+
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import net.minecraft.client.gui.GuiScreen;
@@ -23,6 +24,7 @@ import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.machine.gamma.*;
 import mods.railcraft.common.blocks.signals.IAspectActionManager;
 import mods.railcraft.common.blocks.signals.IRouter;
+import mods.railcraft.common.blocks.signals.TileBoxAnalogController;
 import mods.railcraft.common.blocks.signals.TileBoxCapacitor;
 import mods.railcraft.common.blocks.signals.TileBoxController;
 import mods.railcraft.common.blocks.tracks.*;
@@ -122,6 +124,8 @@ public class FactoryGui {
                     return new GuiAspectAction(inv.player, (IAspectActionManager) obj, LocalizationPlugin.translate("railcraft.gui.box.aspect.action"));
                 case BOX_CONTROLLER:
                     return new GuiBoxController((TileBoxController) obj);
+                case BOX_ANALOG_CONTROLLER:
+                	return new GuiBoxAnalogController((TileBoxAnalogController) obj);
                 case BOX_CAPACITOR:
                     return new GuiBoxCapacitor((TileBoxCapacitor) obj);
                 case TRACK_LAUNCHER:

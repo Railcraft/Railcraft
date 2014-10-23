@@ -6,7 +6,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.aesthetics.lamp;
+package mods.railcraft.common.blocks.aesthetics.lantern;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
@@ -17,9 +17,9 @@ import net.minecraft.util.IIcon;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemStoneLantern extends ItemBlock {
+public class ItemLantern extends ItemBlock {
 
-    public ItemStoneLantern(Block block) {
+    public ItemLantern(Block block) {
         super(block);
         setMaxDamage(0);
         setHasSubtypes(true);
@@ -27,7 +27,8 @@ public class ItemStoneLantern extends ItemBlock {
 
     @Override
     public IIcon getIconFromDamage(int meta) {
-        return EnumStoneLantern.fromOrdinal(meta).getTexture(0);
+        BlockLantern block = (BlockLantern) field_150939_a;
+        return block.proxy.fromOrdinal(meta).getTexture(0);
     }
 
     @Override
@@ -37,7 +38,8 @@ public class ItemStoneLantern extends ItemBlock {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return "tile." + EnumStoneLantern.fromOrdinal(stack.getItemDamage()).getTag();
+        BlockLantern block = (BlockLantern) field_150939_a;
+        return "tile." + block.proxy.fromOrdinal(stack.getItemDamage()).getTag();
     }
 
 }

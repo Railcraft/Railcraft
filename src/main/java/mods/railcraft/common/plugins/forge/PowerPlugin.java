@@ -35,6 +35,13 @@ public class PowerPlugin {
         z = MiscTools.getZOnSide(z, from);
         return world.getIndirectPowerOutput(x, y, z, from.ordinal());
     }
+    
+    public static int getBlockPowerLevel(World world, int x, int y, int z, ForgeDirection from) {
+    	x = MiscTools.getXOnSide(x, from);
+    	y = MiscTools.getYOnSide(y, from);
+    	z = MiscTools.getZOnSide(z, from);
+    	return world.getIndirectPowerLevelTo(x, y, z, from.ordinal());
+    }
 
     public static boolean isBlockBeingPoweredByRepeater(World world, int x, int y, int z, ForgeDirection from) {
         Block block = WorldPlugin.getBlockOnSide(world, x, y, z, from);

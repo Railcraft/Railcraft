@@ -8,8 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
+import cofh.api.energy.IEnergyHandler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -20,13 +19,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class EngineTools {
 
     public static boolean isPoweredTile(TileEntity tile, ForgeDirection side) {
-        if (tile instanceof IPowerReceptor) {
-            IPowerReceptor receptor = (IPowerReceptor) tile;
-            PowerReceiver provider = receptor.getPowerReceiver(side);
-
-            return provider instanceof PowerReceiver;
+        if(tile instanceof IEnergyHandler){
+            IEnergyHandler handler = (IEnergyHandler)tile;
+            return handler.canConnectEnergy(side);
         }
-
         return false;
     }
 

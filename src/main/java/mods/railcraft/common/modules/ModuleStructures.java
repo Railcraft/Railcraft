@@ -26,7 +26,7 @@ import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.lamp.BlockFactoryLantern;
+import mods.railcraft.common.blocks.aesthetics.lantern.BlockFactoryLantern;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockFactorySlab;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockFactoryStairs;
 import mods.railcraft.common.blocks.aesthetics.wall.BlockRailcraftWall;

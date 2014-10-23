@@ -6,7 +6,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.aesthetics.lamp;
+package mods.railcraft.common.blocks.aesthetics.lantern;
 
 import net.minecraft.block.*;
 import cpw.mods.fml.relauncher.Side;
@@ -26,23 +26,30 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
-public class BlockStoneLantern extends Block {
+public class BlockLantern extends Block {
 
     public static boolean useCandleIcon = false;
     private static final float SELECT = 2 * 0.0625f;
-    static BlockStoneLantern block;
+    static BlockLantern stone;
+    static BlockLantern metal;
 
-    public static BlockStoneLantern getBlock() {
-        return block;
+    public static BlockLantern getBlockStone() {
+        return stone;
+    }
+
+    public static BlockLantern getBlockMetal() {
+        return metal;
     }
 
     private final int renderId;
     public IIcon candleIcon;
+    public final LanternProxy proxy;
 
-    protected BlockStoneLantern(int renderId) {
+    public BlockLantern(int renderId, LanternProxy proxy) {
         super(Material.redstoneLight);
         this.renderId = renderId;
         this.setStepSound(Block.soundTypeStone);
+        this.proxy = proxy;
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setHardness(5);
         setResistance(15);
@@ -61,9 +68,9 @@ public class BlockStoneLantern extends Block {
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        for (EnumStoneLantern lamp : EnumStoneLantern.creativeList) {
-            if (lamp.isEnabled())
-                list.add(lamp.getItem());
+        for (LanternInfo lantern : proxy.values()) {
+            if (lantern.isEnabled())
+                list.add(lantern.getItem());
         }
     }
 
@@ -117,20 +124,23 @@ public class BlockStoneLantern extends Block {
     public IIcon getIcon(int side, int meta) {
         if (useCandleIcon)
             return candleIcon;
-        return EnumStoneLantern.fromOrdinal(meta).getTexture(side);
+        //BlockLantern block = this;
+        return this.proxy.fromOrdinal(meta).getTexture(side);
     }
+
 
     @SideOnly(Side.CLIENT)
     @Override
     public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
-        return ParticleHelper.addHitEffects(worldObj, block, target, effectRenderer, null);
+        return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, null);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
-        return ParticleHelper.addDestroyEffects(worldObj, block, x, y, z, meta, effectRenderer, null);
+        return ParticleHelper.addDestroyEffects(worldObj, this, x, y, z, meta, effectRenderer, null);
     }
+
 
     @SideOnly(Side.CLIENT)
     @Override

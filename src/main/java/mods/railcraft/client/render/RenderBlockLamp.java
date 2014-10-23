@@ -9,7 +9,7 @@
 package mods.railcraft.client.render;
 
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
-import mods.railcraft.common.blocks.aesthetics.lamp.BlockStoneLantern;
+import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostBase;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -47,9 +47,12 @@ public class RenderBlockLamp extends BlockRenderer {
     private static final int PILLAR_THICKNESS = BASE_HEIGHT;
     private static final int CORNER_THICKNESS = 2;
     private final RenderInfo info = new RenderInfo();
+    private final BlockLantern lantern;
 
-    public RenderBlockLamp() {
-        super(BlockStoneLantern.getBlock());
+    public RenderBlockLamp(BlockLantern block) {
+
+        super(block);
+        lantern = block;
     }
 
     @Override
@@ -58,9 +61,9 @@ public class RenderBlockLamp extends BlockRenderer {
             renderCenteredCube(x, y, z, block, renderblocks, PILLAR_BORDER, PILLAR_HEIGHT, PILLAR_THICKNESS);
 
         renderCenteredCube(x, y, z, block, renderblocks, BASE_BORDER, BASE_HEIGHT, BASE_THICKNESS);
-        BlockStoneLantern.useCandleIcon = true;
+        BlockLantern.useCandleIcon = true;
         renderCenteredCube(x, y, z, block, renderblocks, CANDLE_BORDER, CANDLE_HEIGHT, CANDLE_THICKNESS);
-        BlockStoneLantern.useCandleIcon = false;
+        BlockLantern.useCandleIcon = false;
         renderCenteredCube(x, y, z, block, renderblocks, CAPBASE_BORDER, CAPBASE_HEIGHT, CAPBASE_THICKNESS);
         renderCenteredCube(x, y, z, block, renderblocks, CAPTOP_BORDER, CAPTOP_HEIGHT, CAPTOP_THICKNESS);
 
@@ -146,7 +149,7 @@ public class RenderBlockLamp extends BlockRenderer {
 
     @Override
     public void renderItem(RenderBlocks renderblocks, ItemStack item, ItemRenderType renderType) {
-        info.override = BlockStoneLantern.getBlock().candleIcon;
+        info.override = lantern.candleIcon;
         renderCenteredCubeItem(info, renderblocks, CANDLE_BORDER, CANDLE_HEIGHT, CANDLE_THICKNESS);
         info.override = item.getIconIndex();
         renderCenteredCubeItem(info, renderblocks, PILLAR_BORDER, PILLAR_HEIGHT, PILLAR_THICKNESS);

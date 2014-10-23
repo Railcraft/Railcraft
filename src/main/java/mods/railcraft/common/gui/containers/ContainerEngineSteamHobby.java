@@ -19,15 +19,17 @@ import mods.railcraft.common.gui.slots.SlotFuel;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotWater;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
+import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 
 public class ContainerEngineSteamHobby extends RailcraftContainer {
 
-    private TileEngineSteamHobby tile;
+    private final TileEngineSteamHobby tile;
     private double lastBurnTime;
     private double lastItemBurnTime;
-    private double lastEnergy;
     private float lastOutput;
     private double lastHeat;
+    private int lastEnergy;
+    private final RFEnergyIndicator energyIndicator;
 
     public ContainerEngineSteamHobby(InventoryPlayer inventoryplayer, TileEngineSteamHobby tile) {
         super(tile);
@@ -37,7 +39,8 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
         addWidget(new FluidGaugeWidget(tile.getTankManager().get(1), 107, 23, 176, 0, 16, 47));
 
         addWidget(new IndicatorWidget(tile.boiler.heatIndicator, 40, 25, 176, 61, 6, 43));
-        addWidget(new IndicatorWidget(tile.getEnergyIndicator(), 94, 25, 182, 61, 6, 43));
+        energyIndicator = new RFEnergyIndicator(tile.maxEnergy());
+        addWidget(new IndicatorWidget(energyIndicator, 94, 25, 182, 61, 6, 43));
 
         addSlot(new SlotFuel(tile, 0, 62, 39));
         addSlot(new SlotWater(tile, 1, 143, 21));
@@ -62,9 +65,9 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
 
         icrafting.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
         icrafting.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
-        icrafting.sendProgressBarUpdate(this, 12, (int) Math.round(tile.energy));
-        icrafting.sendProgressBarUpdate(this, 13, (int) Math.round(tile.currentOutput * 100));
-        icrafting.sendProgressBarUpdate(this, 14, (int) Math.round(tile.boiler.getHeat()));
+        icrafting.sendProgressBarUpdate(this, 12, (int) Math.round(tile.currentOutput * 100));
+        icrafting.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));
+        icrafting.sendProgressBarUpdate(this, 14, tile.energy);
     }
 
     @Override
@@ -82,21 +85,21 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
             if (this.lastItemBurnTime != tile.boiler.currentItemBurnTime)
                 var2.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
 
-            if (this.lastEnergy != tile.energy)
-                var2.sendProgressBarUpdate(this, 12, (int) Math.round(tile.energy));
-
             if (this.lastOutput != tile.currentOutput)
-                var2.sendProgressBarUpdate(this, 13, (int) Math.round(tile.currentOutput * 100));
+                var2.sendProgressBarUpdate(this, 12, (int) Math.round(tile.currentOutput * 100));
 
             if (this.lastHeat != tile.boiler.getHeat())
-                var2.sendProgressBarUpdate(this, 14, (int) Math.round(tile.boiler.getHeat()));
+                var2.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));            
+            
+            if (this.lastEnergy != tile.energy)
+                var2.sendProgressBarUpdate(this, 15, tile.energy);
         }
 
         this.lastBurnTime = tile.boiler.burnTime;
         this.lastItemBurnTime = tile.boiler.currentItemBurnTime;
-        this.lastEnergy = tile.energy;
         this.lastOutput = tile.currentOutput;
         this.lastHeat = tile.boiler.getHeat();
+        this.lastEnergy = tile.energy;
     }
 
     @Override
@@ -112,13 +115,16 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
                 tile.boiler.currentItemBurnTime = value;
                 break;
             case 12:
-                tile.energy = value;
-                break;
-            case 13:
                 tile.currentOutput = value / 100f;
                 break;
-            case 14:
+            case 13:
                 tile.boiler.setHeat(value);
+                break;
+            case 14:
+                energyIndicator.setEnergy(value);
+                break;
+            case 15:
+                energyIndicator.updateEnergy(value);
                 break;
         }
     }

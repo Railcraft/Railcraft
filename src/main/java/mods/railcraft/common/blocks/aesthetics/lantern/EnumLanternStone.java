@@ -6,7 +6,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.aesthetics.lamp;
+package mods.railcraft.common.blocks.aesthetics.lantern;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumStoneLantern {
+public enum EnumLanternStone implements LanternInfo {
 
     ABYSSAL,
     BLEACHEDBONE,
@@ -40,9 +40,9 @@ public enum EnumStoneLantern {
     SANDY,
     SANDSTONE,
     STONE;
-    public static final EnumStoneLantern[] VALUES = values();
-    public static final Map<String, EnumStoneLantern> NAMES = new HashMap<String, EnumStoneLantern>();
-    public static final List<EnumStoneLantern> creativeList = new ArrayList<EnumStoneLantern>();
+    public static final EnumLanternStone[] VALUES = values();
+    public static final Map<String, EnumLanternStone> NAMES = new HashMap<String, EnumLanternStone>();
+    public static final List<EnumLanternStone> creativeList = new ArrayList<EnumLanternStone>();
     private ItemStack source;
 
     public static void initialize() {
@@ -57,7 +57,7 @@ public enum EnumStoneLantern {
         SANDSTONE.source = new ItemStack(Blocks.stone_slab, 1, 1);
         STONE.source = new ItemStack(Blocks.stone_slab, 1, 0);
 
-        for (EnumStoneLantern lamp : VALUES) {
+        for (EnumLanternStone lamp : VALUES) {
             NAMES.put(lamp.name(), lamp);
 
             if (lamp.isEnabled() && lamp.source != null)
@@ -66,46 +66,53 @@ public enum EnumStoneLantern {
         }
     }
 
-    public static EnumStoneLantern fromOrdinal(int id) {
+    public static EnumLanternStone fromOrdinal(int id) {
         if (id < 0 || id >= VALUES.length)
             return VALUES[0];
         return VALUES[id];
     }
 
-    public static EnumStoneLantern fromName(String name) {
-        EnumStoneLantern lamp = NAMES.get(name);
+    public static EnumLanternStone fromName(String name) {
+        EnumLanternStone lamp = NAMES.get(name);
         if (lamp != null)
             return lamp;
         return ABYSSAL;
     }
 
+    @Override
     public IIcon getTexture(int side) {
         return InvTools.getBlockFromStack(source).getIcon(ForgeDirection.UP.ordinal(), source.getItemDamage());
     }
 
+    @Override
     public Block getBlock() {
-        return BlockStoneLantern.getBlock();
+        return BlockLantern.getBlockStone();
     }
 
+    @Override
     public ItemStack getSource() {
         if (source == null) return null;
         return source.copy();
     }
 
+    @Override
     public ItemStack getItem() {
         return getItem(1);
     }
 
+    @Override
     public ItemStack getItem(int qty) {
         Block block = getBlock();
         if (block == null) return null;
         return new ItemStack(block, qty, ordinal());
     }
 
+    @Override
     public String getTag() {
-        return "railcraft.stonelamp." + name().replace("_", ".").toLowerCase(Locale.ENGLISH);
+        return "railcraft.lantern.stone." + name().replace("_", ".").toLowerCase(Locale.ENGLISH);
     }
 
+    @Override
     public boolean isEnabled() {
         return ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES) && RailcraftConfig.isSubBlockEnabled(getTag()) && getBlock() != null;
     }

@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
-import mods.railcraft.common.blocks.aesthetics.lamp.BlockStoneLantern;
+import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.signals.ISignalTile;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -102,7 +102,7 @@ public class PostConnectionHelper {
             return meta == side.ordinal() ? ConnectStyle.SINGLE_THICK : ConnectStyle.NONE;
         }
 
-        if (otherBlock instanceof BlockStoneLantern)
+        if (otherBlock instanceof BlockLantern)
             return ConnectStyle.SINGLE_THICK;
 
         TileEntity otherTile = world.getTileEntity(x2, y2, z2);

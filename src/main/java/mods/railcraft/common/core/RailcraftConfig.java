@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.core;
 
+import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternStone;
+import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternMetal;
 import mods.railcraft.common.util.collections.BlockItemListParser;
 import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.collections.ItemKey;
@@ -15,7 +17,6 @@ import java.io.File;
 import java.util.*;
 import org.apache.logging.log4j.Level;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.aesthetics.lamp.EnumStoneLantern;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
@@ -440,7 +441,7 @@ public class RailcraftConfig {
         loadBlockProperty("signal");
         loadBlockProperty("slab");
         loadBlockProperty("stair");
-        loadBlockProperty("stonelamp");
+        loadBlockProperty("lamp");
         loadBlockProperty("track");
 
         loadBlockProperty("wall.alpha");
@@ -477,7 +478,11 @@ public class RailcraftConfig {
             loadBlockFeature(BlockRailcraftSlab.getTag(mat));
         }
 
-        for (EnumStoneLantern type : EnumStoneLantern.VALUES) {
+        for (EnumLanternStone type : EnumLanternStone.VALUES) {
+            loadBlockFeature(type.getTag());
+        }
+
+        for (EnumLanternMetal type : EnumLanternMetal.VALUES) {
             loadBlockFeature(type.getTag());
         }
 

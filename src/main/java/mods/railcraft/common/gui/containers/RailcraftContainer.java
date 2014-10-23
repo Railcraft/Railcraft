@@ -33,7 +33,7 @@ import net.minecraft.inventory.ICrafting;
 public abstract class RailcraftContainer extends Container {
 
     private final IInventory callback;
-    private List<Widget> widgets = new ArrayList<Widget>();
+    private final List<Widget> widgets = new ArrayList<Widget>();
 
     public RailcraftContainer(IInventory inv) {
         this.callback = inv;

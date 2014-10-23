@@ -8,26 +8,22 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import buildcraft.api.power.IPowerEmitter;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.tools.IToolWrench;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import cofh.api.energy.IEnergyConnection;
+import cofh.api.energy.IEnergyHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.gui.widgets.IIndicatorController;
-import mods.railcraft.common.gui.widgets.IndicatorController;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -36,7 +32,7 @@ import net.minecraft.entity.EntityLivingBase;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileEngine extends TileMachineBase implements IPowerReceptor, IPipeConnection, IPowerEmitter {
+public abstract class TileEngine extends TileMachineBase implements IEnergyConnection, IPipeConnection {
 
     private ForgeDirection direction = ForgeDirection.UP;
     private float pistonProgress = 0;
@@ -45,36 +41,15 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
     private boolean powered;
     private boolean isActive;
     private boolean needsInit = true;
-    public double energy;
-    public double extraEnergy;
+    public int energy;
+//    public int outputDebug, genDebug, cycleTick;
     private EnergyStage energyStage = EnergyStage.BLUE;
-    private final PowerHandler provider = new PowerHandler(this, PowerHandler.Type.ENGINE);
-    private final IIndicatorController energyIndicator = new EnergyIndicator();
-
-    private class EnergyIndicator extends IndicatorController {
-
-        @Override
-        public void refreshToolTip() {
-            tip.text = String.format("%.0f MJ", energy);
-        }
-
-        @Override
-        public int getScaledLevel(int size) {
-            double e = Math.min(energy, maxEnergy());
-            return (int) (e * size / maxEnergy());
-        }
-
-    };
-
-    public IIndicatorController getEnergyIndicator() {
-        return energyIndicator;
-    }
 
     public float getCurrentOutput() {
         return currentOutput;
     }
 
-    public double getEnergy() {
+    public int getEnergy() {
         return energy;
     }
 
@@ -92,12 +67,6 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
     }
 
     public TileEngine() {
-        initEnergyProvider();
-    }
-
-    private void initEnergyProvider() {
-        provider.configure(2, maxEnergyReceived(), 1, maxEnergy());
-        provider.configurePowerPerdition(1, 100);
     }
 
     protected void playSoundIn() {
@@ -135,8 +104,6 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
             if (energy > 1)
                 energy--;
 
-        provider.update();
-
         if (getEnergyStage() == EnergyStage.OVERHEAT)
             overheat();
         else if (pistonStage != 0) {
@@ -145,36 +112,33 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
             if (pistonProgress > 0.5 && pistonStage == 1) {
                 pistonStage = 2;
 
-                TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, direction);
+                TileEntity tile = tileCache.getTileOnSide(direction);
 
                 if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
-                    IPowerReceptor receptor = (IPowerReceptor) tile;
-
-                    PowerReceiver recProv = receptor.getPowerReceiver(direction.getOpposite());
-
-                    double extracted = extractEnergy(recProv.getMinEnergyReceived(), recProv.getMaxEnergyReceived(), true);
-
-                    if (extracted > 0)
-                        recProv.receiveEnergy(PowerHandler.Type.ENGINE, extracted, direction.getOpposite());
+                    IEnergyHandler handler = (IEnergyHandler) tile;
+                    int powerToTransfer = extractEnergy();
+//                    outputDebug += powerToTransfer;
+                    if (powerToTransfer > 0)
+                        handler.receiveEnergy(direction.getOpposite(), powerToTransfer, false);
                 }
             } else if (pistonProgress >= 1) {
                 pistonProgress = 0;
                 pistonStage = 0;
+//                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "Ticks=%d, Gen=%d, Out=%d", clock - cycleTick, genDebug, outputDebug);
+//                outputDebug = 0;
+//                genDebug = 0;
+//                cycleTick = clock;
             }
         } else if (powered) {
-            TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, direction);
+            TileEntity tile = tileCache.getTileOnSide(direction);
 
-            if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
-                IPowerReceptor receptor = (IPowerReceptor) tile;
-
-                PowerReceiver recProv = receptor.getPowerReceiver(direction.getOpposite());
-
-                if (extractEnergy(recProv.getMinEnergyReceived(), recProv.getMaxEnergyReceived(), false) > 0) {
+            if (EngineTools.isPoweredTile(tile, direction.getOpposite()))
+                if (energy > 0) {
                     pistonStage = 1;
                     setActive(true);
                 } else
                     setActive(false);
-            } else
+            else
                 setActive(false);
 
         } else
@@ -184,7 +148,7 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
     }
 
     protected void overheat() {
-        subtractEnergy(5);
+        subtractEnergy(50);
     }
 
     protected abstract void burn();
@@ -237,6 +201,8 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
 
     @Override
     public boolean rotateBlock(ForgeDirection axis) {
+        if (getEnergyStage() == EnergyStage.OVERHEAT)
+            return false;
         return switchOrientation();
     }
 
@@ -273,10 +239,10 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
     }
 
     public boolean switchOrientation() {
-        for (int i = direction.ordinal() + 1; i <= direction.ordinal() + 6; ++i) {
+        for (int i = direction.ordinal() + 1; i < direction.ordinal() + 6; ++i) {
             ForgeDirection dir = ForgeDirection.getOrientation(i % 6);
 
-            TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, dir);
+            TileEntity tile = tileCache.getTileOnSide(dir);
 
             if (EngineTools.isPoweredTile(tile, dir.getOpposite())) {
                 direction = dir;
@@ -299,22 +265,8 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
         return direction.getOpposite() == side;
     }
 
-    @Override
-    public PowerReceiver getPowerReceiver(ForgeDirection side) {
-        return provider.getPowerReceiver();
-    }
-
-    @Override
-    public void doWork(PowerHandler workProvider) {
-        if (Game.isNotHost(worldObj))
-            return;
-        double e = provider.useEnergy(1, maxEnergyReceived(), true) * 0.95;
-        extraEnergy += e;
-        addEnergy(e);
-    }
-
     public double getEnergyLevel() {
-        return energy / maxEnergy();
+        return (double) energy / (double) maxEnergy();
     }
 
     protected EnergyStage computeEnergyStage() {
@@ -357,50 +309,62 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
         }
     }
 
-    public void addEnergy(double addition) {
+    public void addEnergy(int addition) {
         energy += addition;
+//        genDebug += addition;
 
         if (energy > maxEnergy())
             energy = maxEnergy();
-    }
-
-    public void subtractEnergy(double subtraction) {
-        energy -= subtraction;
         if (energy < 0)
             energy = 0;
     }
 
-    public double extractEnergy(double min, double max, boolean doExtract) {
-        if (energy < min)
-            return 0;
+    public void subtractEnergy(int subtraction) {
+        energy -= subtraction;
 
-        double actualMax;
-
-        double combinedMax = maxEnergyExtracted() + extraEnergy * 0.5;
-        if (max > combinedMax)
-            actualMax = combinedMax;
-        else
-            actualMax = max;
-
-        double extracted;
-
-        if (energy >= actualMax) {
-            extracted = actualMax;
-            if (doExtract) {
-                energy -= actualMax;
-                extraEnergy -= Math.min(actualMax, extraEnergy);
-            }
-        } else {
-            extracted = energy;
-            if (doExtract) {
-                energy = 0;
-                extraEnergy = 0;
-            }
-        }
-
-        return extracted;
+        if (energy > maxEnergy())
+            energy = maxEnergy();
+        if (energy < 0)
+            energy = 0;
     }
 
+    public int extractEnergy() {
+        int amount = maxEnergyExtracted();
+        if (energy >= amount) {
+            energy -= amount;
+            return amount;
+        }
+        int returnValue = energy;
+        energy = 0;
+        return returnValue;
+    }
+
+//    public int extractEnergy(int min, int max, boolean doExtract) {
+//        if (energy < min)
+//            return 0;
+//
+//        int actualMax;
+//
+//        int engineMax = maxEnergyExtracted();// + extraEnergy * 0.5;
+//        if (max > engineMax)
+//            actualMax = engineMax;
+//        else
+//            actualMax = max;
+//
+//        int extracted;
+//
+//        if (energy >= actualMax) {
+//            extracted = actualMax;
+//            if (doExtract)
+//                energy -= actualMax; //extraEnergy -= Math.min(actualMax, extraEnergy);
+//        } else {
+//            extracted = energy;
+//            if (doExtract)
+//                energy = 0; //extraEnergy = 0;
+//        }
+//
+//        return extracted;
+//    }
     public float getProgress() {
         return pistonProgress;
     }
@@ -417,7 +381,7 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
 
         data.setByte("direction", (byte) direction.ordinal());
         data.setBoolean("powered", powered);
-        data.setFloat("energy", (float) energy);
+        data.setInteger("energyRF", energy);
         data.setFloat("currentOutput", currentOutput);
         data.setByte("energyStage", (byte) energyStage.ordinal());
     }
@@ -428,7 +392,7 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
 
         direction = ForgeDirection.getOrientation(data.getByte("direction"));
         powered = data.getBoolean("powered");
-        energy = data.getFloat("energy");
+        energy = data.getInteger("energyRF");
         currentOutput = data.getFloat("currentOutput");
         energyStage = EnergyStage.fromOrdinal(data.getByte("energyStage"));
     }
@@ -461,8 +425,8 @@ public abstract class TileEngine extends TileMachineBase implements IPowerRecept
     }
 
     @Override
-    public boolean canEmitPowerFrom(ForgeDirection side) {
-        return side == direction;
+    public boolean canConnectEnergy(ForgeDirection from) {
+        return from == direction;
     }
 
 }

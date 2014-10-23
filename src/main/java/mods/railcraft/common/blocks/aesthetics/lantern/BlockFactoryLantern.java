@@ -6,12 +6,10 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.aesthetics.lamp;
+package mods.railcraft.common.blocks.aesthetics.lantern;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import mods.railcraft.common.blocks.BlockFactory;
-
-
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -25,17 +23,27 @@ import mods.railcraft.common.plugins.forge.ItemRegistry;
 public class BlockFactoryLantern extends BlockFactory {
 
     public BlockFactoryLantern() {
-        super("stonelamp");
+        super("lamp");
     }
 
     @Override
     protected void doBlockInit() {
         int renderId = Railcraft.getProxy().getRenderId();
-        BlockStoneLantern.block = new BlockStoneLantern(renderId);
-        BlockStoneLantern.block.setBlockName("railcraft.stonelamp");
-        GameRegistry.registerBlock(BlockStoneLantern.block, ItemStoneLantern.class, BlockStoneLantern.block.getUnlocalizedName());
+        BlockLantern.stone = new BlockLantern(renderId, new LanternProxyStone());
+        BlockLantern.stone.setBlockName("railcraft.lantern.stone");
+        GameRegistry.registerBlock(BlockLantern.stone, ItemLantern.class, BlockLantern.stone.getUnlocalizedName());
 
-        for (EnumStoneLantern lamp : EnumStoneLantern.VALUES) {
+        for (EnumLanternStone lamp : EnumLanternStone.VALUES) {
+            ItemRegistry.registerItemStack(lamp.getTag(), lamp.getItem());
+
+            ForestryPlugin.addBackpackItem("builder", lamp.getItem());
+        }
+
+        BlockLantern.metal = new BlockLantern(renderId, new LanternProxyMetal());
+        BlockLantern.metal.setBlockName("railcraft.lantern.metal");
+        GameRegistry.registerBlock(BlockLantern.metal, ItemLantern.class, BlockLantern.metal.getUnlocalizedName());
+
+        for (EnumLanternMetal lamp : EnumLanternMetal.VALUES) {
             ItemRegistry.registerItemStack(lamp.getTag(), lamp.getItem());
 
             ForestryPlugin.addBackpackItem("builder", lamp.getItem());
@@ -44,7 +52,8 @@ public class BlockFactoryLantern extends BlockFactory {
 
     @Override
     protected void doRecipeInit(ModuleManager.Module module) {
-        EnumStoneLantern.initialize();
+        EnumLanternStone.initialize();
+        EnumLanternMetal.initialize();
     }
 
 }
