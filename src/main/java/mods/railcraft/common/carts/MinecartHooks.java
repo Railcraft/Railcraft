@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.carts;
 
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 public final class MinecartHooks implements IMinecartCollisionHandler {
 
     public static Map<Item, EnumCart> vanillaEntityReplacements = new HashMap<Item, EnumCart>();
+    public static Map<Class<? extends EntityMinecart>, EnumCart> classReplacements = new HashMap<Class<? extends EntityMinecart>, EnumCart>();
     protected static float DRAG_FACTOR_GROUND = 0.5f;
     protected static float DRAG_FACTOR_AIR = 0.99999f;
     protected static float OPTIMAL_DISTANCE = 1.28f;
@@ -246,6 +248,19 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     public void onMinecartUpdate(MinecartUpdateEvent event) {
         EntityMinecart cart = event.minecart;
         NBTTagCompound data = cart.getEntityData();
+
+        if (classReplacements.containsKey(cart.getClass())) {
+            cart.setDead();
+            if (Game.isHost(cart.worldObj)) {
+                EnumCart enumCart = classReplacements.get(cart.getClass());
+                GameProfile cartOwner = CartTools.getCartOwner(cart);
+                int x = MathHelper.floor_double(cart.posX);
+                int y = MathHelper.floor_double(cart.posY);
+                int z = MathHelper.floor_double(cart.posZ);
+                CartUtils.placeCart(enumCart, cartOwner, enumCart.getCartItem(), cart.worldObj, x, y, z);
+            }
+            return;
+        }
 
         int x = (int) event.x;
         int y = (int) event.y;
