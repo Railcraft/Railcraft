@@ -50,7 +50,9 @@ public enum EnumCart {
     ENERGY_BATBOX(0, EntityCartEnergyBatBox.class, null),
     ENERGY_CESU(0, EntityCartEnergyCESU.class, null),
     ENERGY_MFE(0, EntityCartEnergyMFE.class, null),
-    HOPPER(0, EntityMinecartHopper.class, new ItemStack(Blocks.hopper));
+    HOPPER(0, EntityMinecartHopper.class, new ItemStack(Blocks.hopper)),
+    TRACK_LAYER(1, EntityCartTrackLayer.class, null),
+    TRACK_REMOVER(1, EntityCartTrackRemover.class, null);
     public static final EnumCart[] VALUES = values();
     private final Class<? extends EntityMinecart> type;
     private final byte id;

@@ -10,6 +10,10 @@ package mods.railcraft.common.carts;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import mods.railcraft.api.tracks.RailTools;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -162,4 +166,29 @@ public abstract class CartMaintanceBase extends CartContainerBase implements ISi
         patternInv.readFromNBT("patternInv", data);
     }
 
+    protected void placeNewTrack(int x, int y, int z, int slotStock, int meta) {
+        ItemStack trackStock = getStackInSlot(slotStock);
+        if (trackStock != null)
+            if (RailTools.placeRailAt(trackStock, worldObj, x, y, z)) {
+                worldObj.setBlockMetadataWithNotify(x, y, z, meta, 0x02);
+                Block block = worldObj.getBlock(x, y, z);
+                block.onNeighborBlockChange(worldObj, x, y, z, block);
+                worldObj.markBlockForUpdate(x, y, z);
+                decrStackSize(slotStock, 1);
+                blink();
+            }
+    }
+
+    protected int removeOldTrack(int x, int y, int z, Block block) {
+        List<ItemStack> drops = block.getDrops(worldObj, x, y, z, 0, 0);
+
+        for (ItemStack stack : drops) {
+            CartTools.offerOrDropItem(this, stack);
+        }
+        int meta = worldObj.getBlockMetadata(x, y, z);
+        if (((BlockRailBase) block).isPowered())
+            meta = meta & 7;
+        worldObj.setBlockToAir(x, y, z);
+        return meta;
+    }
 }

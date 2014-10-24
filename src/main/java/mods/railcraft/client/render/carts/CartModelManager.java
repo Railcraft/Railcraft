@@ -46,6 +46,14 @@ public class CartModelManager {
         maint = new ModelMaintance();
         maint.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_track_relayer.png");
         modelsContents.put(EntityCartTrackRelayer.class, maint);
+
+        maint = new ModelMaintance();
+        maint.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_track_layer.png");
+        modelsContents.put(EntityCartTrackLayer.class, maint);
+
+        maint = new ModelMaintance();
+        maint.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_track_remover.png");
+        modelsContents.put(EntityCartTrackRemover.class, maint);
     }
 
     public static ModelBase getCoreModel(Class eClass) {

@@ -146,6 +146,8 @@ public class FactoryGui {
                     return new GuiCartTNTFuse((CartExplosiveBase) obj);
                 case CART_WORK:
                     return new GuiCartWork(inv, (EntityCartWork) obj);
+                case CART_TRACK_LAYER:
+                    return new GuiCartTrackLayer(inv, (EntityCartTrackLayer) obj);
                 case CART_TRACK_RELAYER:
                     return new GuiCartTrackRelayer(inv, (EntityCartTrackRelayer) obj);
                 case CART_UNDERCUTTER:
