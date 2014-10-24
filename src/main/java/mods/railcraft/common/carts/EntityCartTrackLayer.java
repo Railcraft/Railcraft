@@ -50,7 +50,7 @@ public class EntityCartTrackLayer extends CartMaintanceBase {
         int offsetX = x + travelDirection.offsetX;
         int offsetZ = z + travelDirection.offsetZ;
 
-        if (worldObj.isAirBlock(offsetX, y, offsetZ)) {
+        if (worldObj.isAirBlock(offsetX, y, offsetZ) && !worldObj.isAirBlock(x, y - 1, z)) {
             placeNewTrack(offsetX, y, offsetZ, SLOT_STOCK, trackMeta);
             return true;
         }
