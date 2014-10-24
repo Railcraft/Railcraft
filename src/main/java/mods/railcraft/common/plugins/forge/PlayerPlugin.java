@@ -24,10 +24,10 @@ import net.minecraftforge.common.util.FakePlayerFactory;
  */
 public class PlayerPlugin {
 
-    private static final GameProfile railcraftProfile = new GameProfile(UUID.nameUUIDFromBytes("[Railcraft]".getBytes()), "[Railcraft]");
+    public static final GameProfile RAILCRAFT_USER_PROFILE = new GameProfile(UUID.nameUUIDFromBytes("[Railcraft]".getBytes()), "[Railcraft]");
 
     public static EntityPlayer getFakePlayer(final WorldServer world, final double x, final double y, final double z) {
-        EntityPlayer player = FakePlayerFactory.get(world, railcraftProfile);
+        EntityPlayer player = FakePlayerFactory.get(world, RAILCRAFT_USER_PROFILE);
         player.setPosition(x, y, z);
         return player;
     }

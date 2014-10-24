@@ -10,24 +10,62 @@ package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IMinecart;
+import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.item.EntityMinecart;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CartUtils {
+
+    public static Map<Item, EnumCart> vanillaCartItemMap = new HashMap<Item, EnumCart>();
+    public static Map<Class<? extends EntityMinecart>, EnumCart> classReplacements = new HashMap<Class<? extends EntityMinecart>, EnumCart>();
+
+    /**
+     * Spawns a new cart entity using the provided item.
+     *
+     * The backing item must implement <code>IMinecartItem</code> and/or extend
+     * <code>ItemMinecart</code>.
+     *
+     * Generally Forge requires all cart items to extend ItemMinecart.
+     *
+     * @param owner The player name that should used as the owner
+     * @param cart  An ItemStack containing a cart item, will not be changed by
+     *              the function
+     * @param world The World object
+     * @param x     x-Coord
+     * @param y     y-Coord
+     * @param z     z-Coord
+     * @return the cart placed or null if failed
+     * @see IMinecartItem, ItemMinecart
+     */
+    public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, int x, int y, int z) {
+        if (cart == null)
+            return null;
+        cart = cart.copy();
+
+        EnumCart vanillaType = vanillaCartItemMap.get(cart.getItem());
+        if (vanillaType != null)
+            return placeCart(vanillaType, owner, cart, world, x, y, z);
+
+        return CartTools.placeCart(owner, cart, world, x, y, z);
+    }
 
     public static EntityMinecart placeCart(EnumCart cartType, GameProfile owner, ItemStack cartStack, World world, int i, int j, int k) {
         Block block = world.getBlock(i, j, k);
@@ -47,7 +85,7 @@ public class CartUtils {
      * Will return true if the cart matches the provided filter item.
      *
      * @param stack the Filter
-     * @param cart the Cart
+     * @param cart  the Cart
      * @return true if the item matches the cart
      * @see IMinecart
      */

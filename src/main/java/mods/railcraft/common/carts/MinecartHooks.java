@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.util.HashMap;
 import java.util.List;
@@ -47,8 +46,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 public final class MinecartHooks implements IMinecartCollisionHandler {
 
-    public static Map<Item, EnumCart> vanillaEntityReplacements = new HashMap<Item, EnumCart>();
-    public static Map<Class<? extends EntityMinecart>, EnumCart> classReplacements = new HashMap<Class<? extends EntityMinecart>, EnumCart>();
     protected static float DRAG_FACTOR_GROUND = 0.5f;
     protected static float DRAG_FACTOR_AIR = 0.99999f;
     protected static float OPTIMAL_DISTANCE = 1.28f;
@@ -85,10 +82,10 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         ItemStack itemStack = player.getHeldItem();
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && itemStack != null) {
             Item item = itemStack.getItem();
-            if (item != null && vanillaEntityReplacements.containsKey(item)) {
+            if (item != null && CartUtils.vanillaCartItemMap.containsKey(item)) {
                 MovingObjectPosition pos = MiscTools.rayTracePlayerLook(player);
                 EntityMinecart placedCart = CartUtils.placeCart(
-                        vanillaEntityReplacements.get(item),
+                        CartUtils.vanillaCartItemMap.get(item),
                         player.getGameProfile(), itemStack, world,
                         pos.blockX, pos.blockY, pos.blockZ);
                 if (placedCart != null) {
@@ -249,19 +246,19 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         EntityMinecart cart = event.minecart;
         NBTTagCompound data = cart.getEntityData();
 
-        if (classReplacements.containsKey(cart.getClass())) {
-            cart.setDead();
-            if (Game.isHost(cart.worldObj)) {
-                EnumCart enumCart = classReplacements.get(cart.getClass());
-                GameProfile cartOwner = CartTools.getCartOwner(cart);
-                int x = MathHelper.floor_double(cart.posX);
-                int y = MathHelper.floor_double(cart.posY);
-                int z = MathHelper.floor_double(cart.posZ);
-                CartUtils.placeCart(enumCart, cartOwner, enumCart.getCartItem(), cart.worldObj, x, y, z);
-            }
-            return;
-        }
-
+// Code Added by Yopu to replace vanilla carts, deemed incomplete and unnecesary, pursuing other solutions
+//        if (classReplacements.containsKey(cart.getClass())) {
+//            cart.setDead();
+//            if (Game.isHost(cart.worldObj)) {
+//                EnumCart enumCart = classReplacements.get(cart.getClass());
+//                GameProfile cartOwner = CartTools.getCartOwner(cart);
+//                int x = MathHelper.floor_double(cart.posX);
+//                int y = MathHelper.floor_double(cart.posY);
+//                int z = MathHelper.floor_double(cart.posZ);
+//                CartUtils.placeCart(enumCart, cartOwner, enumCart.getCartItem(), cart.worldObj, x, y, z);
+//            }
+//            return;
+//        }
         int x = (int) event.x;
         int y = (int) event.y;
         int z = (int) event.z;

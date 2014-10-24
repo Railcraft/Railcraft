@@ -264,8 +264,8 @@ public class ModuleCore extends RailcraftModule {
 
         Class<? extends EntityMinecart> minecartClass = (Class<? extends EntityMinecart>) EntityList.stringToClassMapping.remove(entityTag);
 
-        MinecartHooks.classReplacements.put(minecartClass, cartType);
-        MinecartHooks.vanillaEntityReplacements.put(original, cartType);
+        CartUtils.classReplacements.put(minecartClass, cartType);
+        CartUtils.vanillaCartItemMap.put(original, cartType);
 
         EntityList.IDtoClassMapping.remove(entityId);
         EntityList.addMapping(cartType.getCartClass(), entityTag, entityId);
@@ -306,7 +306,6 @@ public class ModuleCore extends RailcraftModule {
                 ItemRegistry.registerItemStack(machine.getTag(), machine.getItem());
         }
 
-//        CreeperPlugin.postSetup();
 //----------------------------------------------
 // Boiler Test Setup
 // ---------------------------------------------

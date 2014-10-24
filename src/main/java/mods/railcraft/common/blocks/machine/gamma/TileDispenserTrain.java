@@ -20,6 +20,7 @@ import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.carts.ItemCartAnchor;
 import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -123,7 +124,7 @@ public class TileDispenserTrain extends TileDispenserCart {
                 && CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0, direction) == null) {
             ItemStack cartItem = InvTools.removeOneItem(invStock, filter);
             if (cartItem != null) {
-                EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) worldObj, x, y, z);
+                EntityMinecart cartPlaced = CartUtils.placeCart(getOwner(), cartItem, (WorldServer) worldObj, x, y, z);
                 if (cartPlaced != null) {
                     CartTools.getLinkageManager(worldObj).createLink(cartPlaced, lastCart);
                     lastCart = cartPlaced;
