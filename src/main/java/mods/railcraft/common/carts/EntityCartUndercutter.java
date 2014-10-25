@@ -32,7 +32,7 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class EntityCartUndercutter extends CartMaintancePatternBase {
+public class EntityCartUndercutter extends CartMaintenancePatternBase {
 
     public static final Set<Block> EXCLUDED_BLOCKS = new HashSet<Block>();
     private static final int SLOT_EXIST_UNDER_A = 0;

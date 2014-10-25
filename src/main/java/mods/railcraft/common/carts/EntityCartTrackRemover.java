@@ -11,7 +11,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
-public class EntityCartTrackRemover extends CartMaintanceBase {
+public class EntityCartTrackRemover extends CartMaintenanceBase {
 
     private final Set<WorldCoordinate> tracksBehind = new HashSet<WorldCoordinate>();
     private final Set<WorldCoordinate> tracksRemoved = new HashSet<WorldCoordinate>();
@@ -40,8 +40,7 @@ public class EntityCartTrackRemover extends CartMaintanceBase {
         for (WorldCoordinate track : tracksBehind) {
             if (track.isEqual(worldObj.provider.dimensionId, trackX, trackY, trackZ))
                 continue;
-            if (TrackTools.isRailBlockAt(worldObj, track.x, track.y, track.z))
-                removeTrack(track);
+            removeTrack(track);
         }
         tracksBehind.removeAll(tracksRemoved);
         tracksRemoved.clear();
@@ -55,6 +54,8 @@ public class EntityCartTrackRemover extends CartMaintanceBase {
 
     private void removeTrack(WorldCoordinate track) {
         if (WorldPlugin.getDistanceSq(track, posX, posY, posZ) >= 9)
+            tracksRemoved.add(track);
+        else if (!TrackTools.isRailBlockAt(worldObj, track.x, track.y, track.z))
             tracksRemoved.add(track);
         else if (!CartTools.isMinecartAt(worldObj, track.x, track.y, track.z, -0.2f)) {
             Block block = WorldPlugin.getBlock(worldObj, track.x, track.y, track.z);

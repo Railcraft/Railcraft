@@ -27,7 +27,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class EntityCartTrackRelayer extends CartMaintancePatternBase {
+public class EntityCartTrackRelayer extends CartMaintenancePatternBase {
 
     private static final int SLOT_STOCK = 0;
     private static final int SLOT_EXIST = 0;

@@ -23,14 +23,14 @@ import mods.railcraft.common.util.misc.Game;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartMaintanceBase extends CartContainerBase {
+public abstract class CartMaintenanceBase extends CartContainerBase {
 
     protected static final double DRAG_FACTOR = 0.9;
     protected static final float MAX_SPEED = 0.1f;
     private static final int BLINK_DURATION = 3;
     private static final int DATA_ID_BLINK = 25;
 
-    public CartMaintanceBase(World world) {
+    public CartMaintenanceBase(World world) {
         super(world);
     }
 

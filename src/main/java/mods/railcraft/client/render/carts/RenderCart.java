@@ -43,7 +43,7 @@ public class RenderCart extends Render implements IRenderer {
 
         renderersContent.put(EntityCartTank.class, new CartContentRendererTank());
         renderersContent.put(CartExplosiveBase.class, new CartContentRendererTNT());
-        renderersContent.put(CartMaintanceBase.class, new CartContentRendererMaintance());
+        renderersContent.put(CartMaintenanceBase.class, new CartContentRendererMaintance());
     }
 
     public void renderCart(EntityMinecart cart, double x, double y, double z, float yaw, float time) {

@@ -23,11 +23,11 @@ import net.minecraft.inventory.ISidedInventory;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartMaintancePatternBase extends CartMaintanceBase implements ISidedInventory {
+public abstract class CartMaintenancePatternBase extends CartMaintenanceBase implements ISidedInventory {
 
     protected final StandaloneInventory patternInv = new StandaloneInventory(6, this);
 
-    public CartMaintancePatternBase(World world) {
+    public CartMaintenancePatternBase(World world) {
         super(world);
     }
 

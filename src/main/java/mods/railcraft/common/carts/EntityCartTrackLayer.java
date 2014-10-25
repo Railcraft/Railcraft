@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class EntityCartTrackLayer extends CartMaintancePatternBase {
+public class EntityCartTrackLayer extends CartMaintenancePatternBase {
 
     public static final int SLOT_STOCK = 0;
     public static final int SLOT_REPLACE = 0;

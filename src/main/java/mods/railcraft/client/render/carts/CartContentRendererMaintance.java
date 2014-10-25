@@ -10,7 +10,7 @@ package mods.railcraft.client.render.carts;
 
 import mods.railcraft.client.render.models.carts.ModelMaintanceLampOff;
 import mods.railcraft.client.render.models.carts.ModelMaintanceLampOn;
-import mods.railcraft.common.carts.CartMaintanceBase;
+import mods.railcraft.common.carts.CartMaintenanceBase;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -34,7 +34,7 @@ public class CartContentRendererMaintance extends CartContentRenderer {
         int blockOffset = cart.getDisplayTileOffset();
         GL11.glPushMatrix();
         GL11.glTranslatef(-0.5F, blockOffset / 16.0F - 0.5F, -0.5F);
-        CartMaintanceBase maint = (CartMaintanceBase) cart;
+        CartMaintenanceBase maint = (CartMaintenanceBase) cart;
         if (maint.isBlinking()) {
             renderer.bindTex(LAMP_ON_TEX);
             LAMP_ON.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
