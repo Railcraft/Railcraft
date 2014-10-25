@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import mods.railcraft.common.blocks.machine.IComparatorOverride;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.IMachineProxy;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -22,7 +23,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class MachineProxyBeta implements IMachineProxy {
+public class MachineProxyBeta implements IMachineProxy, IComparatorOverride {
 
     @Override
     public String getTag(int meta) {

@@ -355,7 +355,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     
     @Override
     public boolean hasComparatorInputOverride() {
-        if (proxy instanceof MachineProxyBeta)
+        if (proxy instanceof IComparatorOverride)
         	return true;
         return false;
     }
@@ -366,8 +366,8 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     @Override
     public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
         TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof IComparatorOverride)
-            return ((IComparatorOverride) tile).getComparatorInputOverride(world, x, y, z, side);
+        if (tile instanceof IComparatorValueProvider)
+            return ((IComparatorValueProvider) tile).getComparatorInputOverride(world, x, y, z, side);
         return 0;
     }
 

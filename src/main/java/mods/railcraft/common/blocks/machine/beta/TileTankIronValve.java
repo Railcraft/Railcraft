@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import mods.railcraft.common.blocks.machine.IComparatorOverride;
+import mods.railcraft.common.blocks.machine.IComparatorValueProvider;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.TankManager;
@@ -30,7 +30,7 @@ import net.minecraftforge.fluids.IFluidHandler;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronValve extends TileTankBase implements IFluidHandler, IComparatorOverride {
+public class TileTankIronValve extends TileTankBase implements IFluidHandler, IComparatorValueProvider {
 
     private final static ITileFilter FLUID_OUTPUT_FILTER = new ITileFilter() {
         @Override
