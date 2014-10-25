@@ -256,7 +256,7 @@ public class ModuleAutomation extends RailcraftModule {
                     "DMD",
                     'Y', "dyeYellow",
                     'L', new ItemStack(Blocks.redstone_lamp),
-                    'E', new ItemStack(Items.emerald),
+                    'E', new ItemStack(Blocks.anvil),
                     'S', "blockSteel",
                     'D', new ItemStack(Blocks.dispenser),
                     'M', new ItemStack(Items.minecart));
