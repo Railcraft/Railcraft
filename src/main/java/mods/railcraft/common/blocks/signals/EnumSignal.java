@@ -10,6 +10,7 @@ package mods.railcraft.common.blocks.signals;
 
 import java.util.ArrayList;
 import java.util.List;
+import mods.railcraft.client.render.IIconProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -17,7 +18,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 
-public enum EnumSignal {
+public enum EnumSignal implements IIconProvider {
 
     // Name (texture, hardness, light, needsSupport, connectToPost, tile)
     BOX_INTERLOCK(Module.SIGNALS, 3, true, "box.interlock", TileBoxInterlock.class),

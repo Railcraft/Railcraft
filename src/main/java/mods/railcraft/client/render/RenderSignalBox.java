@@ -17,8 +17,6 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.signals.BlockSignal;
-import mods.railcraft.common.blocks.signals.EnumSignal;
-import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.signals.TileBoxBase;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -28,18 +26,18 @@ import static net.minecraftforge.common.util.ForgeDirection.*;
 
 public class RenderSignalBox implements ICombinedRenderer {
 
-    public static final RenderSignalBox INSTANCE = new RenderSignalBox();
-    private RenderInfo info = new RenderInfo();
+    private static final RenderInfo info = new RenderInfo();
+    private final IIconProvider iconProvider;
 
-    public RenderSignalBox() {
+    public RenderSignalBox(IIconProvider iconProvider) {
         info.texture = new IIcon[6];
         info.template = RailcraftBlocks.getBlockSignal();
+        this.iconProvider = iconProvider;
     }
 
     @Override
     public void renderBlock(RenderBlocks renderblocks, IBlockAccess iBlockAccess, int x, int y, int z, Block block) {
         TileBoxBase tile = (TileBoxBase) iBlockAccess.getTileEntity(x, y, z);
-        EnumSignal structure = tile.getSignalType();
         float pix = RenderTools.PIXEL;
 
         if (renderblocks.hasOverrideBlockTexture())
@@ -48,7 +46,7 @@ public class RenderSignalBox implements ICombinedRenderer {
             info.override = null;
 
         info.texture[0] = BlockSignal.texturesBox[2];
-        info.texture[1] = structure.getIcon();
+        info.texture[1] = iconProvider.getIcon();
         info.texture[2] = BlockSignal.texturesBox[0];
         info.texture[3] = BlockSignal.texturesBox[0];
         info.texture[4] = BlockSignal.texturesBox[0];
@@ -101,7 +99,7 @@ public class RenderSignalBox implements ICombinedRenderer {
             info.renderSide[5] = side == 5 && !side5;
             if (!renderblocks.hasOverrideBlockTexture())
                 info.brightness = aspect.getTextureBrightness();
-            RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, info.brightness < 0 ? true : false, false);
+            RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, (info.brightness < 0), false);
         }
         info.brightness = -1;
         info.setRenderAllSides();
@@ -153,13 +151,7 @@ public class RenderSignalBox implements ICombinedRenderer {
     }
 
     @Override
-    public void renderItem(RenderBlocks renderblocks, ItemStack item, ItemRenderType renderType) {
-        EnumSignal structure;
-        if (item.getItem() instanceof ItemSignal)
-            structure = EnumSignal.fromId(item.getItemDamage());
-        else
-            return;
-        
+    public void renderItem(RenderBlocks renderblocks, ItemStack item, ItemRenderType renderType) { 
         GL11.glColor4f(1, 1, 1, 1);
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -170,7 +162,7 @@ public class RenderSignalBox implements ICombinedRenderer {
         float pix = RenderTools.PIXEL;
         info.setBlockBounds(2 * pix, 0, 2 * pix, 14 * pix, 15 * pix, 14 * pix);
         info.texture[0] = BlockSignal.texturesBox[2];
-        info.texture[1] = structure.getIcon();
+        info.texture[1] = iconProvider.getIcon();
         info.texture[2] = BlockSignal.texturesBox[0];
         info.texture[3] = BlockSignal.texturesBox[0];
         info.texture[4] = BlockSignal.texturesBox[0];
