@@ -1,13 +1,20 @@
 package mods.railcraft.common.carts;
 
+import java.util.HashSet;
+import java.util.Set;
+import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.core.WorldCoordinate;
+import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class EntityCartTrackRemover extends CartMaintanceBase {
+
+    private final Set<WorldCoordinate> tracksBehind = new HashSet<WorldCoordinate>();
+    private final Set<WorldCoordinate> tracksRemoved = new HashSet<WorldCoordinate>();
 
     public EntityCartTrackRemover(World world) {
         super(world);
@@ -25,44 +32,36 @@ public class EntityCartTrackRemover extends CartMaintanceBase {
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    protected void func_145821_a(int trackX, int trackY, int trackZ, double maxSpeed, double slopeAdjustment, Block trackBlock, int trackMeta) {
+        super.func_145821_a(trackX, trackY, trackZ, maxSpeed, slopeAdjustment, trackBlock, trackMeta);
         if (Game.isNotHost(worldObj))
             return;
 
-        updateTravelDirection();
-        if (travelDirection != ForgeDirection.UNKNOWN && isHalfWay()) {
-            ForgeDirection opposite = travelDirection.getOpposite();
-            int x = MathHelper.floor_double(this.posX) + opposite.offsetX;
-            int y = MathHelper.floor_double(this.posY);
-            int z = MathHelper.floor_double(this.posZ) + opposite.offsetZ;
-            if (TrackTools.isRailBlockAt(worldObj, x, y, z)) {
-                Block block = worldObj.getBlock(x, y, z);
-                removeOldTrack(x, y, z, block);
-                blink();
-            }
+        for (WorldCoordinate track : tracksBehind) {
+            if (track.isEqual(worldObj.provider.dimensionId, trackX, trackY, trackZ))
+                continue;
+            if (TrackTools.isRailBlockAt(worldObj, track.x, track.y, track.z))
+                removeTrack(track);
+        }
+        tracksBehind.removeAll(tracksRemoved);
+        tracksRemoved.clear();
+
+        addTravelledTrack(trackX, trackY, trackZ);
+    }
+
+    private void addTravelledTrack(int trackX, int trackY, int trackZ) {
+        tracksBehind.add(new WorldCoordinate(worldObj.provider.dimensionId, trackX, trackY, trackZ));
+    }
+
+    private void removeTrack(WorldCoordinate track) {
+        if (WorldPlugin.getDistanceSq(track, posX, posY, posZ) >= 9)
+            tracksRemoved.add(track);
+        else if (!CartTools.isMinecartAt(worldObj, track.x, track.y, track.z, -0.2f)) {
+            Block block = WorldPlugin.getBlock(worldObj, track.x, track.y, track.z);
+            removeOldTrack(track.x, track.y, track.z, block);
+            blink();
+            tracksRemoved.add(track);
         }
     }
 
-    private boolean isHalfWay() {
-        double x = Math.abs(this.posX % 1);
-        double z = Math.abs(this.posZ % 1);
-        switch (travelDirection) {
-            case NORTH:
-                return z <= 0.5D;
-            case SOUTH:
-                return z >= 0.5D;
-            case WEST:
-                return x <= 0.5D;
-            case EAST:
-                return x >= 0.5D;
-            default:
-                return false;
-        }
-    }
-
-    @Override
-    public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
-        return new int[0];
-    }
 }

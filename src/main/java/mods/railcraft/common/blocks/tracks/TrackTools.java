@@ -37,6 +37,12 @@ public class TrackTools {
         return isRailBlock(WorldPlugin.getBlock(world, x, y, z));
     }
 
+    public static boolean isStraightTrackAt(IBlockAccess world, int x, int y, int z) {
+        if (isRailBlockAt(world, x, y, z))
+            return EnumTrackMeta.fromMeta(WorldPlugin.getBlockMetadata(world, x, y, z)).isStraightTrack();
+        return false;
+    }
+
     public static boolean isRailBlock(Block block) {
         return block instanceof BlockRailBase;
     }
@@ -83,12 +89,12 @@ public class TrackTools {
      * with no gaps or wanderings.
      *
      * @param world The World object
-     * @param x1 x-Coord of Rail #1
-     * @param y1 y-Coord of Rail #1
-     * @param z1 z-Coord of Rail #1
-     * @param x2 x-Coord of Rail #2
-     * @param y2 y-Coord of Rail #2
-     * @param z2 z-Coord of Rail #2
+     * @param x1    x-Coord of Rail #1
+     * @param y1    y-Coord of Rail #1
+     * @param z1    z-Coord of Rail #1
+     * @param x2    x-Coord of Rail #2
+     * @param y2    y-Coord of Rail #2
+     * @param z2    z-Coord of Rail #2
      * @return true if they are connected
      */
     public static boolean areTracksConnectedAlongAxis(World world, int x1, int y1, int z1, int x2, int y2, int z2) {

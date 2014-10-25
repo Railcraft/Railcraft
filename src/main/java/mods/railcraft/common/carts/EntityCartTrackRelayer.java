@@ -9,18 +9,14 @@
 package mods.railcraft.common.carts;
 
 import java.util.EnumSet;
-import java.util.List;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.ITrackTile;
-import mods.railcraft.api.tracks.RailTools;
 import mods.railcraft.common.blocks.tracks.TrackSuspended;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
@@ -31,7 +27,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class EntityCartTrackRelayer extends CartMaintanceBase {
+public class EntityCartTrackRelayer extends CartMaintancePatternBase {
 
     private static final int SLOT_STOCK = 0;
     private static final int SLOT_EXIST = 0;

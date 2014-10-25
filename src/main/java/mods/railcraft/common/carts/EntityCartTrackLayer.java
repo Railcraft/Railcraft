@@ -1,6 +1,5 @@
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -9,11 +8,10 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class EntityCartTrackLayer extends CartMaintanceBase {
+public class EntityCartTrackLayer extends CartMaintancePatternBase {
 
     public static final int SLOT_STOCK = 0;
     public static final int SLOT_REPLACE = 0;
@@ -41,7 +39,7 @@ public class EntityCartTrackLayer extends CartMaintanceBase {
             return;
 
         stockItems(SLOT_REPLACE, SLOT_STOCK);
-        updateTravelDirection();
+        updateTravelDirection(trackX, trackY, trackZ, trackMeta);
         if (travelDirection != ForgeDirection.UNKNOWN)
             placeTrack(trackX, trackY, trackZ, trackMeta);
     }
