@@ -1,8 +1,9 @@
-Next:
+9.3.3.3:
 	NEW: Added Track Layer and Track Remover. (contribution by Yopu)
 	FIX: Fixed weird textures on Admin blocks.
 	FIX: Remove debug statement spam from Engines.
 	FIX: Supported vanilla cart entities are now properly replaced with Railcraft's implementation on use. (many thanks to Yopu!)
+	FIX: Fixed crash when disabling the Locomotive Module.
 
 9.3.3.2:
 	INFO: Updated Thaumcraft API. (thanks to jsteenbeeke for making this easier)
