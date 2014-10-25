@@ -77,4 +77,8 @@ public enum EnumTrackMeta {
     public boolean isNorthSouthTrack() {
         return this == NORTH_SOUTH || this == NORTH_SLOPE || this == SOUTH_SLOPE;
     }
+
+    public boolean isSlopeTrack() {
+        return ordinal() > 1 && ordinal() < 6;
+    }
 }
