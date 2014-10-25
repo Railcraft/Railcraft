@@ -45,6 +45,8 @@ public class RenderSignal implements ICombinedRenderer {
             return;
         float pix = RenderTools.PIXEL;
         int facing = tile.getFacing().ordinal();
+        if (facing >= info.texture.length)
+            facing = 0;
 
         // Main
         float min = 3 * pix;
@@ -66,7 +68,7 @@ public class RenderSignal implements ICombinedRenderer {
         info.texture[facing] = BlockSignal.texturesLampTop[aspect.getTextureIndex()];
         info.setRenderSingleSide(facing);
         info.brightness = aspect.getTextureBrightness();
-        RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, info.brightness < 0 ? true : false, false);
+        RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, (info.brightness < 0), false);
         info.brightness = -1;
         info.setRenderAllSides();
         info.texture[facing] = BlockSignal.texturesSignalSingle[2];

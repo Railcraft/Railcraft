@@ -1,3 +1,6 @@
+Next:
+	FIX: Add a sanity check to the signal renderer.
+
 9.3.3.3:
 	NEW: Added Track Layer and Track Remover. (contribution by Yopu)
 	FIX: Fixed weird textures on Admin blocks.
