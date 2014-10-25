@@ -62,6 +62,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.firestone.TileFirestoneRecharge;
+import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
@@ -112,6 +113,18 @@ public class ClientProxy extends CommonProxy {
 //        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:electric", "locomotive.model.electric.default", new ModelLocomotiveElectric()));
         LocomotiveRenderType.STEAM_MAGIC.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));
         LocomotiveRenderType.ELECTRIC.registerRenderer(new LocomotiveRendererElectric());
+
+        ItemStack stack = LocomotiveRenderType.STEAM_SOLID.getItemWithRenderer("railcraft:default");
+        if (stack != null)
+            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.STEAM_SOLID, (EntityLocomotive) EnumCart.LOCO_STEAM_SOLID.makeCart(stack, null, 0, 0, 0)));
+
+        stack = LocomotiveRenderType.STEAM_MAGIC.getItemWithRenderer("railcraft:default");
+        if (stack != null)
+            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.STEAM_MAGIC, (EntityLocomotive) EnumCart.LOCO_STEAM_MAGIC.makeCart(stack, null, 0, 0, 0)));
+
+        stack = LocomotiveRenderType.ELECTRIC.getItemWithRenderer("railcraft:default");
+        if (stack != null)
+            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.ELECTRIC, (EntityLocomotive) EnumCart.LOCO_ELECTRIC.makeCart(stack, null, 0, 0, 0)));
 
         RenderLiquidLoader liquidLoaderRenderer = new RenderLiquidLoader();
         ClientRegistry.bindTileEntitySpecialRenderer(TileLiquidLoader.class, liquidLoaderRenderer);
@@ -167,13 +180,9 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, new RenderTunnelBore());
         RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, new RenderCart());
 
-        ItemStack stack = EnumCart.TANK.getCartItem();
+        stack = EnumCart.TANK.getCartItem();
         if (stack != null)
             MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderTankCartItem());
-
-        stack = LocomotiveRenderType.STEAM_SOLID.getItemWithRenderer("railcraft:default");
-        if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.STEAM_SOLID, (EntityLocomotive) EnumCart.LOCO_STEAM_SOLID.makeCart(stack, null, 0, 0, 0)));
 
         Minecraft.getMinecraft().entityRenderer.debugViewDirection = 0;
         FMLCommonHandler.instance().bus().register(new DebugViewTicker());
