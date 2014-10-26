@@ -1,5 +1,7 @@
 package mods.railcraft.common.carts;
 
+import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -44,15 +46,19 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
             placeTrack(trackX, trackY, trackZ, trackMeta);
     }
 
-    private boolean placeTrack(int x, int y, int z, int trackMeta) {
+    private void placeTrack(int x, int y, int z, int trackMeta) {
         int offsetX = x + travelDirection.offsetX;
         int offsetZ = z + travelDirection.offsetZ;
 
-        if (worldObj.isAirBlock(offsetX, y, offsetZ) && !worldObj.isAirBlock(x, y - 1, z)) {
+        if (isValidNewTrackPosition(offsetX, y, offsetZ, trackMeta))
             placeNewTrack(offsetX, y, offsetZ, SLOT_STOCK, trackMeta);
-            return true;
-        }
-        return false;
+    }
+
+    private boolean isValidNewTrackPosition(int x, int y, int z, int meta) {
+        return !EnumTrackMeta.fromMeta(meta).isSlopeTrack() &&
+                worldObj.isAirBlock(x, y, z) &&
+                !worldObj.isAirBlock(x, y - 1, z) &&
+                !TrackTools.isRailBlockAt(worldObj, x, y - 1, z);
     }
 
     @Override
