@@ -26,8 +26,7 @@ import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.delta.MachineProxyDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.epsilon.MachineProxyEpsilon;
-import mods.railcraft.common.blocks.signals.BlockSignal;
-import mods.railcraft.common.blocks.signals.ItemSignal;
+import mods.railcraft.common.blocks.signals.*;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
@@ -235,10 +234,8 @@ public class RailcraftBlocks {
     public static void registerBlockSignal() {
         if (blockSignal == null && RailcraftConfig.isBlockEnabled("signal")) {
             int renderId = Railcraft.getProxy().getRenderId();
-            blockSignal = new BlockSignal(renderId);
+            blockSignal = new BlockSignalRailcraft(renderId);
             GameRegistry.registerBlock(blockSignal, ItemSignal.class, blockSignal.getUnlocalizedName());
-            blockSignal.setHarvestLevel("pickaxe", 2);
-            blockSignal.setHarvestLevel("crowbar", 0);
         }
     }
 

@@ -18,7 +18,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.item.ItemStack;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import mods.railcraft.common.blocks.signals.BlockSignal;
+import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.signals.IDualHeadSignal;
 import net.minecraft.util.IIcon;
@@ -42,13 +42,13 @@ public class RenderSignalDual implements ICombinedRenderer {
         float f = 3.0F * pix;
         float f1 = 13.0F * pix;
         info.setBlockBounds(f, 0, f, f1, 1, f1);
-        info.texture[0] = BlockSignal.texturesSignalDual[0];
-        info.texture[1] = BlockSignal.texturesSignalDual[0];
-        info.texture[2] = BlockSignal.texturesSignalDual[1];
-        info.texture[3] = BlockSignal.texturesSignalDual[1];
-        info.texture[4] = BlockSignal.texturesSignalDual[1];
-        info.texture[5] = BlockSignal.texturesSignalDual[1];
-        info.texture[facing] = BlockSignal.texturesSignalDual[2];
+        info.texture[0] = BlockSignalRailcraft.texturesSignalDual[0];
+        info.texture[1] = BlockSignalRailcraft.texturesSignalDual[0];
+        info.texture[2] = BlockSignalRailcraft.texturesSignalDual[1];
+        info.texture[3] = BlockSignalRailcraft.texturesSignalDual[1];
+        info.texture[4] = BlockSignalRailcraft.texturesSignalDual[1];
+        info.texture[5] = BlockSignalRailcraft.texturesSignalDual[1];
+        info.texture[facing] = BlockSignalRailcraft.texturesSignalDual[2];
         RenderFakeBlock.renderBlock(info, world, x, y, z, true, false);
 
         // Render Aspect
@@ -57,14 +57,14 @@ public class RenderSignalDual implements ICombinedRenderer {
         SignalAspect aspect = tile.getTopAspect();
         if (!aspect.isLit())
             aspect = SignalAspect.OFF;
-        info.texture[facing] = BlockSignal.texturesLampTop[aspect.getTextureIndex()];
+        info.texture[facing] = BlockSignalRailcraft.texturesLampTop[aspect.getTextureIndex()];
         info.brightness = aspect.getTextureBrightness();
         RenderFakeBlock.renderBlock(info, world, x, y, z, info.brightness < 0 ? true : false, false);
 
         aspect = tile.getBottomAspect();
         if (!aspect.isLit())
             aspect = SignalAspect.OFF;
-        info.texture[facing] = BlockSignal.texturesLampBottom[aspect.getTextureIndex()];
+        info.texture[facing] = BlockSignalRailcraft.texturesLampBottom[aspect.getTextureIndex()];
         info.brightness = aspect.getTextureBrightness();
         RenderFakeBlock.renderBlock(info, world, x, y, z, info.brightness < 0 ? true : false, false);
 
@@ -72,7 +72,7 @@ public class RenderSignalDual implements ICombinedRenderer {
         info.setRenderAllSides();
 
         // Render Hood
-        info.texture[facing] = BlockSignal.texturesSignalDual[2];
+        info.texture[facing] = BlockSignalRailcraft.texturesSignalDual[2];
         if (facing == 2 || facing == 3) {
             float temp = 13.0F * pix;
             if (facing == 2)
@@ -120,12 +120,12 @@ public class RenderSignalDual implements ICombinedRenderer {
         float f5 = east ? 1.0F : f1;
         float f6 = north ? 0.0F : f;
         float f7 = south ? 1.0F : f1;
-        info.texture[0] = BlockSignal.texturesSignalDual[3];
-        info.texture[1] = BlockSignal.texturesSignalDual[3];
-        info.texture[2] = BlockSignal.texturesSignalDual[4];
-        info.texture[3] = BlockSignal.texturesSignalDual[4];
-        info.texture[4] = BlockSignal.texturesSignalDual[4];
-        info.texture[5] = BlockSignal.texturesSignalDual[4];
+        info.texture[0] = BlockSignalRailcraft.texturesSignalDual[3];
+        info.texture[1] = BlockSignalRailcraft.texturesSignalDual[3];
+        info.texture[2] = BlockSignalRailcraft.texturesSignalDual[4];
+        info.texture[3] = BlockSignalRailcraft.texturesSignalDual[4];
+        info.texture[4] = BlockSignalRailcraft.texturesSignalDual[4];
+        info.texture[5] = BlockSignalRailcraft.texturesSignalDual[4];
         if (east_west) {
             info.setBlockBounds(f4, f2, f, f5, f3, f1);
             RenderFakeBlock.renderBlock(info, world, x, y, z, true, false);
@@ -158,18 +158,18 @@ public class RenderSignalDual implements ICombinedRenderer {
         GL11.glEnable(GL11.GL_BLEND);
 
         info.setBlockBounds(f, 0.0F, f, f1, 1.0F, f1);
-        info.texture[0] = BlockSignal.texturesSignalDual[0];
-        info.texture[1] = BlockSignal.texturesSignalDual[0];
-        info.texture[2] = BlockSignal.texturesSignalDual[1];
-        info.texture[3] = BlockSignal.texturesSignalDual[2];
-        info.texture[4] = BlockSignal.texturesSignalDual[1];
-        info.texture[5] = BlockSignal.texturesSignalDual[1];
+        info.texture[0] = BlockSignalRailcraft.texturesSignalDual[0];
+        info.texture[1] = BlockSignalRailcraft.texturesSignalDual[0];
+        info.texture[2] = BlockSignalRailcraft.texturesSignalDual[1];
+        info.texture[3] = BlockSignalRailcraft.texturesSignalDual[2];
+        info.texture[4] = BlockSignalRailcraft.texturesSignalDual[1];
+        info.texture[5] = BlockSignalRailcraft.texturesSignalDual[1];
         RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
-        info.texture[3] = BlockSignal.texturesLampTop[signalType == EnumSignal.DUAL_HEAD_BLOCK_SIGNAL ? 0 : 2];
+        info.texture[3] = BlockSignalRailcraft.texturesLampTop[signalType == EnumSignal.DUAL_HEAD_BLOCK_SIGNAL ? 0 : 2];
         RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1, 3);
-        info.texture[3] = BlockSignal.texturesLampBottom[signalType == EnumSignal.DUAL_HEAD_BLOCK_SIGNAL ? 2 : 0];
+        info.texture[3] = BlockSignalRailcraft.texturesLampBottom[signalType == EnumSignal.DUAL_HEAD_BLOCK_SIGNAL ? 2 : 0];
         RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1, 3);
-        info.texture[3] = BlockSignal.texturesSignalDual[2];
+        info.texture[3] = BlockSignalRailcraft.texturesSignalDual[2];
         float temp = 13.0F * pix;
         for (int ii = 0; ii < 2; ii++) {
             info.setBlockBounds(6.0F * pix, 7.0F * pix + ii * 6.0F * pix, temp, 10.0F * pix, 8.0F * pix + ii * 6.0F * pix, temp + 2.0F * pix);

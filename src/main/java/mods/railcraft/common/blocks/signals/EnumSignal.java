@@ -18,7 +18,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 
-public enum EnumSignal implements IIconProvider {
+public enum EnumSignal implements IIconProvider, ISignalTileDefinition {
 
     // Name (texture, hardness, light, needsSupport, connectToPost, tile)
     BOX_INTERLOCK(Module.SIGNALS, 3, true, "box.interlock", TileBoxInterlock.class),
@@ -27,7 +27,7 @@ public enum EnumSignal implements IIconProvider {
     BLOCK_SIGNAL(Module.SIGNALS, 8, false, "block.signal", TileSignalBlockSignal.class),
     SWITCH_LEVER(Module.SIGNALS, 8, true, "switch.lever", TileSwitchLever.class),
     SWITCH_ROUTING(Module.ROUTING, 8, true, "switch.routing", TileSwitchRouting.class),
-    BOX_SEQUENCER(Module.SIGNALS, 3, false, "box.sequencer", TileBoxSequencer.class),
+    BOX_SEQUENCER(Module.SIGNALS, 3, true, "box.sequencer", TileBoxSequencer.class),
     BOX_CAPACITOR(Module.SIGNALS, 3, true, "box.capacitor", TileBoxCapacitor.class),
     BOX_RECEIVER(Module.SIGNALS, 3, true, "box.receiver", TileBoxReceiver.class),
     BOX_CONTROLLER(Module.SIGNALS, 3, true, "box.controller", TileBoxController.class),
@@ -75,6 +75,7 @@ public enum EnumSignal implements IIconProvider {
         return new ItemStack(RailcraftBlocks.getBlockSignal(), qty, ordinal());
     }
 
+    @Override
     public String getTag() {
         return "tile.railcraft.signal." + tag;
     }
@@ -98,6 +99,7 @@ public enum EnumSignal implements IIconProvider {
         return null;
     }
 
+    @Override
     public float getHardness() {
         return hardness;
     }
@@ -106,6 +108,7 @@ public enum EnumSignal implements IIconProvider {
         this.icon = icon;
     }
 
+    @Override
     public IIcon getIcon() {
         return icon;
     }
@@ -121,6 +124,7 @@ public enum EnumSignal implements IIconProvider {
         return creativeList;
     }
 
+    @Override
     public boolean needsSupport() {
         return needsSupport;
     }
@@ -128,5 +132,10 @@ public enum EnumSignal implements IIconProvider {
     public boolean isEnabled() {
         if (module == null) return false;
         return ModuleManager.isModuleLoaded(getModule()) && RailcraftBlocks.getBlockSignal() != null && RailcraftConfig.isSubBlockEnabled(getTag());
+    }
+
+    @Override
+    public int getMeta() {
+        return ordinal();
     }
 }
