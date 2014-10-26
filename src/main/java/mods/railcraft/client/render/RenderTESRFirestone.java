@@ -59,6 +59,11 @@ public class RenderTESRFirestone extends TileEntitySpecialRenderer {
 
         RenderItem.renderInFrame = true;
         RenderManager.instance.renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+        if (!RenderManager.instance.options.fancyGraphics) {
+            GL11.glRotatef(180, 0, 1, 0);
+            RenderManager.instance.renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+            GL11.glRotatef(-180, 0, 1, 0);
+        }
         RenderItem.renderInFrame = false;
 
         GL11.glPopAttrib();
