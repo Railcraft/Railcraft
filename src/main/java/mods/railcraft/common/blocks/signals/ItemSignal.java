@@ -26,7 +26,7 @@ public class ItemSignal extends ItemBlockRailcraftMultiType {
         setUnlocalizedName("railcraft.signal");
     }
 
-    public EnumSignal getStructureType(ItemStack stack) {
+    public ISignalTileDefinition getStructureType(ItemStack stack) {
         return EnumSignal.fromId(stack.getItemDamage());
     }
 

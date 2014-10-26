@@ -62,7 +62,6 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.firestone.TileFirestoneRecharge;
-import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;

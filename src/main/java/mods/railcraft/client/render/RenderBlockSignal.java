@@ -28,12 +28,11 @@ public class RenderBlockSignal extends BlockRenderer {
         addCombinedRenderer(EnumSignal.SWITCH_MOTOR.ordinal(), new RenderSwitch(EnumSignal.SWITCH_MOTOR));
         addCombinedRenderer(EnumSignal.SWITCH_LEVER.ordinal(), new RenderSwitch(EnumSignal.SWITCH_LEVER));
         addCombinedRenderer(EnumSignal.SWITCH_ROUTING.ordinal(), new RenderSwitch(EnumSignal.SWITCH_ROUTING));
-        addCombinedRenderer(EnumSignal.BOX_RECEIVER.ordinal(), RenderSignalBox.INSTANCE);
-        addCombinedRenderer(EnumSignal.BOX_CONTROLLER.ordinal(), RenderSignalBox.INSTANCE);
-        addCombinedRenderer(EnumSignal.BOX_ANALOG_CONTROLLER.ordinal(), RenderSignalBox.INSTANCE);
-        addCombinedRenderer(EnumSignal.BOX_CAPACITOR.ordinal(), RenderSignalBox.INSTANCE);
-        addCombinedRenderer(EnumSignal.BOX_BLOCK_RELAY.ordinal(), RenderSignalBox.INSTANCE);
-        addCombinedRenderer(EnumSignal.BOX_SEQUENCER.ordinal(), RenderSignalBox.INSTANCE);
-        addCombinedRenderer(EnumSignal.BOX_INTERLOCK.ordinal(), RenderSignalBox.INSTANCE);
+        addCombinedRenderer(EnumSignal.BOX_RECEIVER.ordinal(), new RenderSignalBox(EnumSignal.BOX_RECEIVER));
+        addCombinedRenderer(EnumSignal.BOX_CONTROLLER.ordinal(), new RenderSignalBox(EnumSignal.BOX_CONTROLLER));
+        addCombinedRenderer(EnumSignal.BOX_CAPACITOR.ordinal(), new RenderSignalBox(EnumSignal.BOX_CAPACITOR));
+        addCombinedRenderer(EnumSignal.BOX_BLOCK_RELAY.ordinal(), new RenderSignalBox(EnumSignal.BOX_BLOCK_RELAY));
+        addCombinedRenderer(EnumSignal.BOX_SEQUENCER.ordinal(), new RenderSignalBox(EnumSignal.BOX_SEQUENCER));
+        addCombinedRenderer(EnumSignal.BOX_INTERLOCK.ordinal(), new RenderSignalBox(EnumSignal.BOX_INTERLOCK));
     }
 }

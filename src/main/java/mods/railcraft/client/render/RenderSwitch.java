@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.api.tracks.ITrackSwitch.ArrowDirection;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
-import mods.railcraft.common.blocks.signals.BlockSignal;
+import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.signals.TileSwitchBase;
 import mods.railcraft.common.util.misc.Game;
@@ -109,8 +109,8 @@ public class RenderSwitch implements ICombinedRenderer {
     }
 
     private void setTextureCore() {
-        info.texture[0] = BlockSignal.texturesSwitch[0];
-        info.texture[1] = BlockSignal.texturesSwitch[0];
+        info.texture[0] = BlockSignalRailcraft.texturesSwitch[0];
+        info.texture[1] = BlockSignalRailcraft.texturesSwitch[0];
         IIcon icon = type.getIcon();
         info.texture[2] = icon;
         info.texture[3] = icon;
@@ -119,28 +119,28 @@ public class RenderSwitch implements ICombinedRenderer {
     }
 
     private void setTextureExtension() {
-        info.texture[0] = BlockSignal.texturesSwitch[0];
-        info.texture[1] = BlockSignal.texturesSwitch[0];
-        info.texture[2] = BlockSignal.texturesSwitch[1];
-        info.texture[3] = BlockSignal.texturesSwitch[1];
-        info.texture[4] = BlockSignal.texturesSwitch[1];
-        info.texture[5] = BlockSignal.texturesSwitch[1];
+        info.texture[0] = BlockSignalRailcraft.texturesSwitch[0];
+        info.texture[1] = BlockSignalRailcraft.texturesSwitch[0];
+        info.texture[2] = BlockSignalRailcraft.texturesSwitch[1];
+        info.texture[3] = BlockSignalRailcraft.texturesSwitch[1];
+        info.texture[4] = BlockSignalRailcraft.texturesSwitch[1];
+        info.texture[5] = BlockSignalRailcraft.texturesSwitch[1];
     }
 
     private void setTextureWhite() {
         for (int i = 0; i < 6; i++) {
-            info.texture[i] = BlockSignal.texturesSwitchTarget[0];
+            info.texture[i] = BlockSignalRailcraft.texturesSwitchTarget[0];
         }
     }
 
     private void setTextureRed() {
         for (int i = 0; i < 6; i++) {
-            info.texture[i] = BlockSignal.texturesSwitchTarget[1];
+            info.texture[i] = BlockSignalRailcraft.texturesSwitchTarget[1];
         }
     }
 
     private void renderLever(double x, double y, double z, int facing, boolean thrown) {
-        IIcon icon = BlockSignal.texturesSwitchLever;
+        IIcon icon = BlockSignalRailcraft.texturesSwitchLever;
         float pix = RenderTools.PIXEL;
         Tessellator tess = Tessellator.instance;
         Vec3[] vertices = new Vec3[8];

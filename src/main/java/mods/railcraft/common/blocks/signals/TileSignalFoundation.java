@@ -22,7 +22,7 @@ import mods.railcraft.common.util.misc.AdjacentTileCache;
 
 public abstract class TileSignalFoundation extends RailcraftTileEntity {
 
-    public abstract EnumSignal getSignalType();
+    public abstract ISignalTileDefinition getSignalType();
 
     protected AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
@@ -95,7 +95,7 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
 
     @Override
     public short getId() {
-        return (short) getSignalType().ordinal();
+        return (short) getSignalType().getMeta();
     }
 
     @Override

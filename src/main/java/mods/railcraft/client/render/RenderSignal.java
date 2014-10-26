@@ -19,7 +19,7 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.PostConnectionHelper;
-import mods.railcraft.common.blocks.signals.BlockSignal;
+import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.TileSignalBase;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -45,31 +45,33 @@ public class RenderSignal implements ICombinedRenderer {
             return;
         float pix = RenderTools.PIXEL;
         int facing = tile.getFacing().ordinal();
+        if (facing >= info.texture.length)
+            facing = 0;
 
         // Main
         float min = 3 * pix;
         float max = 13 * pix;
         info.setBlockBounds(min, 6 * pix, min, max, 1, max);
-        info.texture[0] = BlockSignal.texturesSignalSingle[0];
-        info.texture[1] = BlockSignal.texturesSignalSingle[0];
-        info.texture[2] = BlockSignal.texturesSignalSingle[1];
-        info.texture[3] = BlockSignal.texturesSignalSingle[1];
-        info.texture[4] = BlockSignal.texturesSignalSingle[1];
-        info.texture[5] = BlockSignal.texturesSignalSingle[1];
-        info.texture[facing] = BlockSignal.texturesSignalSingle[2];
+        info.texture[0] = BlockSignalRailcraft.texturesSignalSingle[0];
+        info.texture[1] = BlockSignalRailcraft.texturesSignalSingle[0];
+        info.texture[2] = BlockSignalRailcraft.texturesSignalSingle[1];
+        info.texture[3] = BlockSignalRailcraft.texturesSignalSingle[1];
+        info.texture[4] = BlockSignalRailcraft.texturesSignalSingle[1];
+        info.texture[5] = BlockSignalRailcraft.texturesSignalSingle[1];
+        info.texture[facing] = BlockSignalRailcraft.texturesSignalSingle[2];
         RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, true, false);
 
         // Aspect
         SignalAspect aspect = tile.getSignalAspect();
         if (!aspect.isLit())
             aspect = SignalAspect.OFF;
-        info.texture[facing] = BlockSignal.texturesLampTop[aspect.getTextureIndex()];
+        info.texture[facing] = BlockSignalRailcraft.texturesLampTop[aspect.getTextureIndex()];
         info.setRenderSingleSide(facing);
         info.brightness = aspect.getTextureBrightness();
-        RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, info.brightness < 0 ? true : false, false);
+        RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, (info.brightness < 0), false);
         info.brightness = -1;
         info.setRenderAllSides();
-        info.texture[facing] = BlockSignal.texturesSignalSingle[2];
+        info.texture[facing] = BlockSignalRailcraft.texturesSignalSingle[2];
 
         // Hood
         if (facing == 2 || facing == 3) {
@@ -95,12 +97,12 @@ public class RenderSignal implements ICombinedRenderer {
         }
 
         // Pillar
-        info.texture[0] = BlockSignal.texturesSignalSingle[3];
-        info.texture[1] = BlockSignal.texturesSignalSingle[3];
-        info.texture[2] = BlockSignal.texturesSignalSingle[4];
-        info.texture[3] = BlockSignal.texturesSignalSingle[4];
-        info.texture[4] = BlockSignal.texturesSignalSingle[4];
-        info.texture[5] = BlockSignal.texturesSignalSingle[4];
+        info.texture[0] = BlockSignalRailcraft.texturesSignalSingle[3];
+        info.texture[1] = BlockSignalRailcraft.texturesSignalSingle[3];
+        info.texture[2] = BlockSignalRailcraft.texturesSignalSingle[4];
+        info.texture[3] = BlockSignalRailcraft.texturesSignalSingle[4];
+        info.texture[4] = BlockSignalRailcraft.texturesSignalSingle[4];
+        info.texture[5] = BlockSignalRailcraft.texturesSignalSingle[4];
         min = 6 * pix;
         max = 10 * pix;
         Block below = WorldPlugin.getBlock(iBlockAccess, x, y - 1, z);
@@ -164,27 +166,27 @@ public class RenderSignal implements ICombinedRenderer {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        info.texture[0] = BlockSignal.texturesSignalSingle[3];
-        info.texture[1] = BlockSignal.texturesSignalSingle[3];
-        info.texture[2] = BlockSignal.texturesSignalSingle[4];
-        info.texture[3] = BlockSignal.texturesSignalSingle[4];
-        info.texture[4] = BlockSignal.texturesSignalSingle[4];
-        info.texture[5] = BlockSignal.texturesSignalSingle[4];
+        info.texture[0] = BlockSignalRailcraft.texturesSignalSingle[3];
+        info.texture[1] = BlockSignalRailcraft.texturesSignalSingle[3];
+        info.texture[2] = BlockSignalRailcraft.texturesSignalSingle[4];
+        info.texture[3] = BlockSignalRailcraft.texturesSignalSingle[4];
+        info.texture[4] = BlockSignalRailcraft.texturesSignalSingle[4];
+        info.texture[5] = BlockSignalRailcraft.texturesSignalSingle[4];
         info.setBlockBounds(min, 0, min, max, 15 * pix, max);
         RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
-        info.texture[0] = BlockSignal.texturesSignalSingle[0];
-        info.texture[1] = BlockSignal.texturesSignalSingle[0];
-        info.texture[2] = BlockSignal.texturesSignalSingle[1];
-        info.texture[3] = BlockSignal.texturesSignalSingle[2];
-        info.texture[4] = BlockSignal.texturesSignalSingle[1];
-        info.texture[5] = BlockSignal.texturesSignalSingle[1];
+        info.texture[0] = BlockSignalRailcraft.texturesSignalSingle[0];
+        info.texture[1] = BlockSignalRailcraft.texturesSignalSingle[0];
+        info.texture[2] = BlockSignalRailcraft.texturesSignalSingle[1];
+        info.texture[3] = BlockSignalRailcraft.texturesSignalSingle[2];
+        info.texture[4] = BlockSignalRailcraft.texturesSignalSingle[1];
+        info.texture[5] = BlockSignalRailcraft.texturesSignalSingle[1];
         min = 3 * pix;
         max = 13 * pix;
         info.setBlockBounds(min, 6 * pix, min, max, 1, max);
         RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
-        info.texture[3] = BlockSignal.texturesLampTop[defaultAspect.getTextureIndex()];
+        info.texture[3] = BlockSignalRailcraft.texturesLampTop[defaultAspect.getTextureIndex()];
         RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1, 3);
-        info.texture[3] = BlockSignal.texturesSignalSingle[2];
+        info.texture[3] = BlockSignalRailcraft.texturesSignalSingle[2];
         float size = 13 * pix;
         info.setBlockBounds(6 * pix, 13 * pix, size, 10 * pix, 14 * pix, size + 2 * pix);
         RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
