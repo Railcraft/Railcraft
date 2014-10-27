@@ -8,10 +8,12 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.BlockFluidBase;
 
 public class EntityCartTrackLayer extends CartMaintenancePatternBase {
 
@@ -43,22 +45,39 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
         stockItems(SLOT_REPLACE, SLOT_STOCK);
         updateTravelDirection(trackX, trackY, trackZ, trackMeta);
         if (travelDirection != ForgeDirection.UNKNOWN)
-            placeTrack(trackX, trackY, trackZ, trackMeta);
+            placeTrack(trackX, trackY, trackZ);
     }
 
-    private void placeTrack(int x, int y, int z, int trackMeta) {
+    private void placeTrack(int x, int y, int z) {
         int offsetX = x + travelDirection.offsetX;
         int offsetZ = z + travelDirection.offsetZ;
 
-        if (isValidNewTrackPosition(offsetX, y, offsetZ, trackMeta))
-            placeNewTrack(offsetX, y, offsetZ, SLOT_STOCK, trackMeta);
+        EnumTrackMeta trackMeta = EnumTrackMeta.NORTH_SOUTH;
+        if (travelDirection == ForgeDirection.EAST || travelDirection == ForgeDirection.WEST)
+            trackMeta = EnumTrackMeta.EAST_WEST;
+        if (!worldObj.isAirBlock(offsetX, y, offsetZ) && worldObj.isAirBlock(offsetX, y + 1, offsetZ) && trackMeta.isStraightTrack())
+            y++;
+        if (worldObj.isAirBlock(offsetX, y, offsetZ) && worldObj.isAirBlock(offsetX, y - 1, offsetZ)) {
+            y--;
+            if (travelDirection == ForgeDirection.NORTH)
+                trackMeta = EnumTrackMeta.SOUTH_SLOPE;
+            if (travelDirection == ForgeDirection.SOUTH)
+                trackMeta = EnumTrackMeta.NORTH_SLOPE;
+            if (travelDirection == ForgeDirection.WEST)
+                trackMeta = EnumTrackMeta.EAST_SLOPE;
+            if (travelDirection == ForgeDirection.EAST)
+                trackMeta = EnumTrackMeta.WEST_SLOPE;
+        }
+
+        if (isValidNewTrackPosition(offsetX, y, offsetZ))
+            placeNewTrack(offsetX, y, offsetZ, SLOT_STOCK, trackMeta.ordinal());
     }
 
-    private boolean isValidNewTrackPosition(int x, int y, int z, int meta) {
-        return !EnumTrackMeta.fromMeta(meta).isSlopeTrack() &&
-                worldObj.isAirBlock(x, y, z) &&
+    private boolean isValidNewTrackPosition(int x, int y, int z) {
+        return worldObj.isAirBlock(x, y, z) &&
                 !worldObj.isAirBlock(x, y - 1, z) &&
-                !TrackTools.isRailBlockAt(worldObj, x, y - 1, z);
+                !TrackTools.isRailBlockAt(worldObj, x, y - 1, z) &&
+                !(worldObj.getBlock(x, y - 1, z) instanceof BlockLiquid);
     }
 
     @Override
