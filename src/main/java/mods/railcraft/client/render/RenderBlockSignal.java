@@ -34,5 +34,6 @@ public class RenderBlockSignal extends BlockRenderer {
         addCombinedRenderer(EnumSignal.BOX_BLOCK_RELAY.ordinal(), new RenderSignalBox(EnumSignal.BOX_BLOCK_RELAY));
         addCombinedRenderer(EnumSignal.BOX_SEQUENCER.ordinal(), new RenderSignalBox(EnumSignal.BOX_SEQUENCER));
         addCombinedRenderer(EnumSignal.BOX_INTERLOCK.ordinal(), new RenderSignalBox(EnumSignal.BOX_INTERLOCK));
+        addCombinedRenderer(EnumSignal.BOX_ANALOG_CONTROLLER.ordinal(), new RenderSignalBox(EnumSignal.BOX_ANALOG_CONTROLLER));
     }
 }
