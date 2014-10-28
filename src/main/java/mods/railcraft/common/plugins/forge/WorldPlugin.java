@@ -42,6 +42,10 @@ public class WorldPlugin {
         return world.blockExists(x, y, z);
     }
 
+    public static boolean blockIsAir(World world, int x, int y, int z) {
+        return world.isAirBlock(x, y, z);
+    }
+
     public static boolean blockExistsOnSide(World world, int x, int y, int z, ForgeDirection side) {
         return world.blockExists(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side));
     }
@@ -80,6 +84,10 @@ public class WorldPlugin {
 
     public static boolean setBlock(World world, int x, int y, int z, Block block, int meta, int update) {
         return world.setBlock(x, y, z, block, meta, update);
+    }
+    
+    public static boolean setBlockToAir(World world, int x, int y, int z) {
+        return world.setBlockToAir(x, y, z);
     }
 
     public static void notifyBlocksOfNeighborChange(World world, int x, int y, int z, Block block) {

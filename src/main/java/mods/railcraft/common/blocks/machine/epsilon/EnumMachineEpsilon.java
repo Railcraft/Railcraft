@@ -35,7 +35,8 @@ public enum EnumMachineEpsilon implements IEnumMachine {
 
     ELECTRIC_FEEDER(Module.ELECTRICITY, "electric.feeder", TileElectricFeeder.class, 1, 1, 0),
     ELECTRIC_FEEDER_ADMIN(Module.ELECTRICITY, "electric.feeder.admin", TileElectricFeederAdmin.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
-    ADMIN_STEAM_PRODUCER(Module.STEAM, "admin.steam.producer", TileAdminSteamProducer.class, 2, 1, 0, 0, 0, 0, 0, 0, 1);
+    ADMIN_STEAM_PRODUCER(Module.STEAM, "admin.steam.producer", TileAdminSteamProducer.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
+    FORCE_TRACK_EMITTER(Module.ELECTRICITY, "force.track.emitter", TileForceTrackEmitter.class, 2, 1, 0, 0, 0, 0, 0, 0, 1);
     private final Module module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;

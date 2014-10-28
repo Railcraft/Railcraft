@@ -77,6 +77,13 @@ public class TrackTools {
         return null;
     }
 
+    public static boolean isTrackSpecAt(World world, int x, int y, int z, TrackSpec trackSpec) {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof TileTrack)
+            return ((TileTrack) tile).getTrackInstance().getTrackSpec() == trackSpec;
+        return false;
+    }
+
     public static boolean isHighSpeedTrackAt(World world, int x, int y, int z) {
         ITrackInstance track = getTrackInstanceAt(world, x, y, z);
         if (track instanceof TrackBaseRailcraft)

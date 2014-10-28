@@ -34,6 +34,7 @@ public class ModuleTracksElectric extends RailcraftModule {
             MiscTools.registerTrack(EnumTrack.ELECTRIC_JUNCTION);
             MiscTools.registerTrack(EnumTrack.ELECTRIC_SWITCH);
             MiscTools.registerTrack(EnumTrack.ELECTRIC_WYE);
+            MiscTools.registerTrack(EnumTrack.FORCE);
         }
     }
 
