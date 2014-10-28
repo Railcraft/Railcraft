@@ -40,6 +40,7 @@ public class BlockSignalRailcraft extends BlockSignalBase {
         GameRegistry.registerTileEntity(TileBoxBlockRelay.class, "RCTileStructureSignalBox");
         GameRegistry.registerTileEntity(TileBoxSequencer.class, "RCTileStructureSequencerBox");
         GameRegistry.registerTileEntity(TileBoxInterlock.class, "RCTileStructureInterlockBox");
+        GameRegistry.registerTileEntity(TileBoxAnalogController.class, "RCTileStructureAnalogBox");
         GameRegistry.registerTileEntity(TileSwitchMotor.class, "RCTileStructureSwitchMotor");
         GameRegistry.registerTileEntity(TileSwitchLever.class, "RCTileStructureSwitchLever");
         GameRegistry.registerTileEntity(TileSwitchRouting.class, "RCTileStructureSwitchRouting");
