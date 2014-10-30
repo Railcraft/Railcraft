@@ -102,17 +102,19 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
             if (crowbar.canWhack(player, current, xCoord, yCoord, zCoord)) {
-                WorldCoordinate target = sentinelPairingMap.get(player);
-                if (target == null)
-                    setTarget(this, player);
-                else if (worldObj.provider.dimensionId != target.dimension)
-                    ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.dimension", getName());
-                else if (new WorldCoordinate(this).equals(target)) {
-                    removeTarget(player);
-                    ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.cancel", getName());
-                } else
-                    setSentinel(player, target);
-                crowbar.onWhack(player, current, xCoord, yCoord, zCoord);
+                if (Game.isHost(worldObj)) {
+                    WorldCoordinate target = sentinelPairingMap.get(player);
+                    if (target == null)
+                        setTarget(this, player);
+                    else if (worldObj.provider.dimensionId != target.dimension)
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getName());
+                    else if (new WorldCoordinate(this).equals(target)) {
+                        removeTarget(player);
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getName());
+                    } else
+                        setSentinel(player, target);
+                    crowbar.onWhack(player, current, xCoord, yCoord, zCoord);
+                }
                 return true;
             }
         }
@@ -149,7 +151,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     public static TileEntity getTargetAt(EntityPlayer player, RailcraftTileEntity searcher, WorldCoordinate coord) {
         if (!WorldPlugin.blockExists(searcher.getWorldObj(), coord.x, coord.y, coord.z)) {
-            ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.unloaded", searcher.getName());
+            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.unloaded", searcher.getName());
             return null;
         }
         return WorldPlugin.getBlockTile(searcher.getWorldObj(), coord.x, coord.y, coord.z);
@@ -157,6 +159,8 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     public boolean setSentinel(EntityPlayer player, WorldCoordinate coord) {
         TileEntity tile = getTargetAt(player, this, coord);
+        if (tile == null)
+            return false;
         if (tile instanceof TileSentinel) {
             int xChunk = xCoord >> 4;
             int zChunk = zCoord >> 4;
@@ -165,13 +169,13 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
             int zSentinelChunk = tile.zCoord >> 4;
 
             if (xChunk != xSentinelChunk && zChunk != zSentinelChunk) {
-                ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.alignment", getName(), ((TileSentinel) tile).getName());
+                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.alignment", getName(), ((TileSentinel) tile).getName());
                 return false;
             }
 
             int max = getMaxSentinelChunks();
             if (Math.abs(xChunk - xSentinelChunk) >= max || Math.abs(zChunk - zSentinelChunk) >= max) {
-                ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.distance", getName(), ((TileSentinel) tile).getName());
+                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.distance", getName(), ((TileSentinel) tile).getName());
                 return false;
             }
 
@@ -179,15 +183,13 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
             ySentinel = tile.yCoord;
             zSentinel = tile.zCoord;
 
-            if (Game.isHost(worldObj)) {
-                requestTicket();
-                sendUpdateToClient();
-            }
+            requestTicket();
+            sendUpdateToClient();
             removeTarget(player);
-            ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.success", getName());
+            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.success", getName());
             return true;
         }
-        ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.invalid", getName());
+        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.invalid", getName());
         return false;
     }
 
@@ -280,8 +282,9 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
         if (RailcraftConfig.printAnchorDebug() && ticket != null)
             if (clock % 64 == 0) {
-                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has a ticket and is ticking at <%d,%d,%d> in dim:%d - logged on tick %d", getName(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, worldObj.getWorldTime());
-                Game.log(Level.DEBUG, "{0} has a ticket and is ticking at <{1},{2},{3}> in dim:{4} - logged on tick {5}", getName(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, worldObj.getWorldTime());
+                int numChunks = chunks == null ? 0 : chunks.size();
+                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has loaded %d chunks and is ticking at <%d,%d,%d> in dim:%d - logged on tick %d", getName(), numChunks, xCoord, yCoord, zCoord, worldObj.provider.dimensionId, worldObj.getWorldTime());
+                Game.log(Level.DEBUG, "{0} has loaded {1} chunks and is ticking at <{2},{3},{4}> in dim:{5} - logged on tick {6}", getName(), numChunks, xCoord, yCoord, zCoord, worldObj.provider.dimensionId, worldObj.getWorldTime());
             }
     }
 

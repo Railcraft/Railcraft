@@ -2,7 +2,6 @@ package mods.railcraft.common.plugins.buildcraft.triggers;
 
 import buildcraft.api.gates.ITriggerParameter;
 import net.minecraft.tileentity.TileEntity;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
