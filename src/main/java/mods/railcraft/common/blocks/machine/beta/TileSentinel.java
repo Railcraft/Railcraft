@@ -18,7 +18,6 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -47,16 +46,16 @@ public class TileSentinel extends TileMachineBase {
                 if (target == null)
                     TileAnchorWorld.setTarget(this, player);
                 else if (worldObj.provider.dimensionId != target.dimension)
-                    ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.dimension", getName());
+                    ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getName());
                 else if (new WorldCoordinate(this).equals(target)) {
                     TileAnchorWorld.removeTarget(player);
-                    ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.cancel", getName());
+                    ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getName());
                 } else {
                     TileEntity tile = TileAnchorWorld.getTargetAt(player, this, target);
                     if (tile instanceof TileAnchorWorld)
                         ((TileAnchorWorld) tile).setSentinel(player, new WorldCoordinate(this));
-                    else
-                        ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.fail.invalid", getName());
+                    else if (tile != null)
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.invalid", getName());
                 }
                 crowbar.onWhack(player, current, xCoord, yCoord, zCoord);
                 return true;

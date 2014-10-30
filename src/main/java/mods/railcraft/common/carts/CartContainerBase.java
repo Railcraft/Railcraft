@@ -30,6 +30,7 @@ import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 public abstract class CartContainerBase extends EntityMinecartContainer implements IRailcraftCart {
 
     protected ForgeDirection travelDirection = ForgeDirection.UNKNOWN;
+    protected ForgeDirection verticalTravelDirection = ForgeDirection.UNKNOWN;
     private final ForgeDirection[] travelDirectionHistory = new ForgeDirection[2];
 
     public CartContainerBase(World world) {
@@ -101,8 +102,10 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
         if (trackMeta != null) {
             ForgeDirection forgeDirection = determineTravelDirection(trackMeta);
             ForgeDirection previousForgeDirection = travelDirectionHistory[1];
-            if (previousForgeDirection != ForgeDirection.UNKNOWN && travelDirectionHistory[0] == previousForgeDirection)
+            if (previousForgeDirection != ForgeDirection.UNKNOWN && travelDirectionHistory[0] == previousForgeDirection) {
                 travelDirection = forgeDirection;
+                verticalTravelDirection = determineVerticalTravelDirection(trackMeta);
+            }
             travelDirectionHistory[0] = previousForgeDirection;
             travelDirectionHistory[1] = forgeDirection;
         }
@@ -118,8 +121,36 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
                 return ForgeDirection.SOUTH;
             if (posZ - prevPosZ < 0)
                 return ForgeDirection.NORTH;
+        } else {
+            switch (trackMeta) {
+                case EAST_SOUTH_CORNER:
+                    if (prevPosZ > posZ)
+                        return ForgeDirection.EAST;
+                    else
+                        return ForgeDirection.SOUTH;
+                case WEST_SOUTH_CORNER:
+                    if (prevPosZ > posZ)
+                        return ForgeDirection.WEST;
+                    else
+                        return ForgeDirection.SOUTH;
+                case WEST_NORTH_CORNER:
+                    if (prevPosZ > posZ)
+                        return ForgeDirection.NORTH;
+                    else
+                        return ForgeDirection.WEST;
+                case EAST_NORTH_CORNER:
+                    if (prevPosZ > posZ)
+                       return ForgeDirection.NORTH;
+                    else
+                        return ForgeDirection.EAST;
+            }
         }
         return ForgeDirection.UNKNOWN;
     }
 
+    private ForgeDirection determineVerticalTravelDirection(EnumTrackMeta trackMeta) {
+        if (trackMeta.isSlopeTrack())
+            return prevPosY < posY ? ForgeDirection.UP : ForgeDirection.DOWN;
+        return ForgeDirection.UNKNOWN;
+    }
 }

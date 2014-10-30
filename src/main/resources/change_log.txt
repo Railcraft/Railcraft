@@ -1,7 +1,7 @@
 9.3.3.4:
 	INTERNAL: Make it easier for addons to create new Signal Boxes.
 	FIX: Add a sanity check to the signal renderer.
-	FIX: Fix Firestone render glitch when not using facny rendering. (contribution by viliml)
+	FIX: Fix Firestone render glitch when not using fancy rendering. (contribution by viliml)
 
 9.3.3.3:
 	NEW: Added Track Layer and Track Remover. (contribution by Yopu)

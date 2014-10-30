@@ -40,6 +40,7 @@ public class BlockSignalRailcraft extends BlockSignalBase {
         GameRegistry.registerTileEntity(TileBoxBlockRelay.class, "RCTileStructureSignalBox");
         GameRegistry.registerTileEntity(TileBoxSequencer.class, "RCTileStructureSequencerBox");
         GameRegistry.registerTileEntity(TileBoxInterlock.class, "RCTileStructureInterlockBox");
+        GameRegistry.registerTileEntity(TileBoxAnalogController.class, "RCTileStructureAnalogBox");
         GameRegistry.registerTileEntity(TileSwitchMotor.class, "RCTileStructureSwitchMotor");
         GameRegistry.registerTileEntity(TileSwitchLever.class, "RCTileStructureSwitchLever");
         GameRegistry.registerTileEntity(TileSwitchRouting.class, "RCTileStructureSwitchRouting");
@@ -77,6 +78,7 @@ public class BlockSignalRailcraft extends BlockSignalBase {
         EnumSignal.BOX_RECEIVER.setIcon(iconRegister.registerIcon("railcraft:signal.box.receiver"));
         EnumSignal.BOX_SEQUENCER.setIcon(iconRegister.registerIcon("railcraft:signal.box.sequencer"));
         EnumSignal.BOX_INTERLOCK.setIcon(iconRegister.registerIcon("railcraft:signal.box.interlock"));
+        EnumSignal.BOX_ANALOG_CONTROLLER.setIcon(iconRegister.registerIcon("railcraft:signal.box.analog"));
 
         EnumSignal.SWITCH_MOTOR.setIcon(iconRegister.registerIcon("railcraft:signal.switch.motor"));
         EnumSignal.SWITCH_LEVER.setIcon(iconRegister.registerIcon("railcraft:signal.switch.lever"));
