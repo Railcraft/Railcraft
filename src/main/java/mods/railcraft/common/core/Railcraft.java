@@ -20,6 +20,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import java.io.File;
 import org.apache.logging.log4j.Level;
 import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.api.crafting.IRockCrusherRecipe;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -125,6 +127,15 @@ public final class Railcraft {
                 }
                 FuelManager.addBoilerFuel(fluid, fuel);
                 Game.log(Level.INFO, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getStringValue()));
+            } else if (mess.key.equals("rock-crusher")) {
+               NBTTagCompound nbt = mess.getNBTValue();
+			ItemStack input = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("input"));
+			IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(input, nbt.getBoolean("matchMeta"), nbt.getBoolean("matchNBT"));
+			for (int i = 0; i < 9; i++)
+				if (nbt.hasKey("output" + i)) {
+				     NBTTagCompound outputNBT = nbt.getCompoundTag("output" + i);
+					recipe.addOutput(ItemStack.loadItemStackFromNBT(outputNBT), outputNBT.getFloat("chance"));
+				}
             }
         }
     }
