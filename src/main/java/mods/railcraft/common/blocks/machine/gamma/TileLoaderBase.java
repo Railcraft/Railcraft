@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import buildcraft.api.gates.IAction;
+import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
@@ -53,7 +53,7 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
     }
 
     @Override
-    public void actionActivated(IAction action) {
+    public void actionActivated(IActionExternal action) {
         if (action == Actions.SEND_CART)
             sendCartGateAction = true;
         if (action == Actions.PAUSE)

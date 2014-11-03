@@ -8,10 +8,10 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import buildcraft.api.gates.IAction;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
+import buildcraft.api.statements.IActionExternal;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -62,7 +62,7 @@ public class TileEngravingBench extends TileMachineItem implements IPowerRecepto
     public int guiEnergy;
     public boolean paused, startCrafting, isCrafting, flippedAxis;
     public String currentEmblem = "";
-    private final Set<IAction> actions = new HashSet<IAction>();
+    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
     private final IIndicatorController energyIndicator = new EnergyIndicator();
 
     private class EnergyIndicator extends IndicatorController {
@@ -288,7 +288,7 @@ public class TileEngravingBench extends TileMachineItem implements IPowerRecepto
 
     private void processActions() {
         paused = false;
-        for (IAction action : actions) {
+        for (IActionExternal action : actions) {
             if (action == Actions.PAUSE)
                 paused = true;
         }
@@ -296,7 +296,7 @@ public class TileEngravingBench extends TileMachineItem implements IPowerRecepto
     }
 
     @Override
-    public void actionActivated(IAction action) {
+    public void actionActivated(IActionExternal action) {
         actions.add(action);
     }
 

@@ -8,10 +8,11 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import buildcraft.api.gates.IAction;
+
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
+import buildcraft.api.statements.IActionExternal;
 import java.util.*;
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
@@ -94,7 +95,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
     private PowerHandler powerHandler;
     private boolean isWorking = false;
     private boolean paused = false;
-    private final Set<IAction> actions = new HashSet<IAction>();
+    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
 
     static {
         char[][][] map1 = {
@@ -393,7 +394,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
 //    }
     private void processActions() {
         paused = false;
-        for (IAction action : actions) {
+        for (IActionExternal action : actions) {
             if (action == Actions.PAUSE)
                 paused = true;
         }
@@ -401,7 +402,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IPowerRe
     }
 
     @Override
-    public void actionActivated(IAction action) {
+    public void actionActivated(IActionExternal action) {
         TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
         if (mBlock != null)
             mBlock.actions.add(action);
