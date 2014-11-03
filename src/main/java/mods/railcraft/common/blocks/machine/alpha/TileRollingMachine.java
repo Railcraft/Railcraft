@@ -8,9 +8,8 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import buildcraft.api.gates.IAction;
+import buildcraft.api.statements.IActionExternal;
 import java.util.*;
-
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
@@ -58,7 +57,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     private ItemStack currentReceipe;
     private int progress;
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(this, tileCache, null, InventorySorter.SIZE_DECENDING);
-    private final Set<IAction> actions = new HashSet<IAction>();
+    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
 
     private static class RollingContainer extends Container {
 
@@ -253,7 +252,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
 
     private void processActions() {
         paused = false;
-        for (IAction action : actions) {
+        for (IActionExternal action : actions) {
             if (action == Actions.PAUSE)
                 paused = true;
         }
@@ -261,7 +260,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     }
 
     @Override
-    public void actionActivated(IAction action) {
+    public void actionActivated(IActionExternal action) {
         actions.add(action);
     }
 

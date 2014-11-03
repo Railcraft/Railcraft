@@ -1,6 +1,6 @@
 package mods.railcraft.common.plugins.buildcraft.triggers;
 
-import buildcraft.api.gates.ITriggerParameter;
+import buildcraft.api.statements.IStatementParameter;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -10,5 +10,5 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public abstract class Trigger {
 
-    public abstract boolean isTriggerActive(ForgeDirection side, TileEntity tile, ITriggerParameter parameter);
+    public abstract boolean isTriggerActive(ForgeDirection side, TileEntity tile, IStatementParameter[] parameter);
 }

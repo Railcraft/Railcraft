@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import buildcraft.api.gates.IAction;
+import buildcraft.api.statements.IActionExternal;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -50,6 +50,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
 import static net.minecraftforge.common.util.ForgeDirection.DOWN;
 import static net.minecraftforge.common.util.ForgeDirection.UP;
 
@@ -106,7 +107,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     private final StandardTank tank;
     private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 9);
     private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9, false);
-    private final Set<IAction> actions = new HashSet<IAction>();
+    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
 
     static {
         char[][][] map = {
@@ -451,7 +452,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
 
     private void processActions() {
         paused = false;
-        for (IAction action : actions) {
+        for (IActionExternal action : actions) {
             if (action == Actions.PAUSE)
                 paused = true;
         }
@@ -459,7 +460,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public void actionActivated(IAction action) {
+    public void actionActivated(IActionExternal action) {
         TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
         if (mBlock != null)
             mBlock.actions.add(action);

@@ -1,6 +1,6 @@
 package mods.railcraft.common.plugins.buildcraft.triggers;
 
-import buildcraft.api.gates.ITriggerParameter;
+import buildcraft.api.statements.IStatementParameter;
 import mods.railcraft.api.signals.SignalAspect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -18,7 +18,7 @@ public class TriggerAspect extends Trigger {
     }
 
     @Override
-    public boolean isTriggerActive(ForgeDirection side, TileEntity tile, ITriggerParameter parameter) {
+    public boolean isTriggerActive(ForgeDirection side, TileEntity tile, IStatementParameter[] parameter) {
         if (tile instanceof IAspectProvider) {
             return ((IAspectProvider) tile).getTriggerAspect() == aspect;
         }

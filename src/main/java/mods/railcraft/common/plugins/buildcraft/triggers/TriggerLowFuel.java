@@ -1,6 +1,6 @@
 package mods.railcraft.common.plugins.buildcraft.triggers;
 
-import buildcraft.api.gates.ITriggerParameter;
+import buildcraft.api.statements.IStatementParameter;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class TriggerLowFuel extends Trigger {
 
     @Override
-    public boolean isTriggerActive(ForgeDirection side, TileEntity tile, ITriggerParameter parameter) {
+    public boolean isTriggerActive(ForgeDirection side, TileEntity tile, IStatementParameter[] parameter) {
         if (tile instanceof INeedsFuel) {
             return ((INeedsFuel) tile).needsFuel();
         }

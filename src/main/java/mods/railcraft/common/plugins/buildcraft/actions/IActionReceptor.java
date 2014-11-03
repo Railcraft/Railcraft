@@ -6,15 +6,16 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.plugins.buildcraft.triggers;
+package mods.railcraft.common.plugins.buildcraft.actions;
 
-import mods.railcraft.common.plugins.buildcraft.actions.IActionReceptor;
+import buildcraft.api.statements.IActionExternal;
 
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface IHasWork extends IActionReceptor
-{
-    boolean hasWork();
+public interface IActionReceptor {
+
+    void actionActivated(IActionExternal action);
+
 }

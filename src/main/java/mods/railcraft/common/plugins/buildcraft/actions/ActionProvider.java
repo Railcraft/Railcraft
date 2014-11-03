@@ -1,11 +1,14 @@
 package mods.railcraft.common.plugins.buildcraft.actions;
 
-import buildcraft.api.gates.IAction;
-import buildcraft.api.gates.IActionProvider;
+import buildcraft.api.statements.IActionExternal;
+import buildcraft.api.statements.IActionInternal;
+import buildcraft.api.statements.IActionProvider;
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.tiles.IHasWork;
+import java.util.Collection;
 import java.util.LinkedList;
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
 import mods.railcraft.common.plugins.buildcraft.triggers.*;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  *
@@ -18,14 +21,18 @@ public class ActionProvider implements IActionProvider {
     }
 
     @Override
-    public LinkedList<IAction> getNeighborActions(Block block, TileEntity tile) {
-        LinkedList<IAction> actions = new LinkedList<IAction>();
-        if (tile instanceof IHasWork) {
+    public Collection<IActionInternal> getInternalActions(IStatementContainer isc) {
+        return null;
+    }
+
+    @Override
+    public Collection<IActionExternal> getExternalActions(ForgeDirection side, net.minecraft.tileentity.TileEntity tile) {
+        Collection<IActionExternal> actions = new LinkedList<IActionExternal>();
+        if (tile instanceof IHasWork)
             actions.add(Actions.PAUSE);
-        }
-        if (tile instanceof IHasCart) {
+        if (tile instanceof IHasCart)
             actions.add(Actions.SEND_CART);
-        }
         return actions;
     }
+
 }
