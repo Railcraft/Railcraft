@@ -1,6 +1,6 @@
 package mods.railcraft.common.plugins.buildcraft;
 
-import buildcraft.api.gates.ActionManager;
+import buildcraft.api.statements.StatementManager;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
@@ -16,10 +16,10 @@ public class BuildcraftPlugin {
 
     public static void init() {
         try {
-            ActionManager.registerTriggerProvider(new TriggerProvider());
-            ActionManager.registerActionProvider(new ActionProvider());
+            StatementManager.registerTriggerProvider(new TriggerProvider());
+            StatementManager.registerActionProvider(new ActionProvider());
         } catch (Throwable error) {
-            Game.logErrorAPI("Buildcraft", error, ActionManager.class);
+            Game.logErrorAPI("Buildcraft", error, StatementManager.class);
         }
     }
 
@@ -27,4 +27,5 @@ public class BuildcraftPlugin {
         if (block == null) return;
         FMLInterModComms.sendMessage("BuildCraft|Transport", "add-facade", String.format("%s@%d", GameData.blockRegistry.getNameForObject(block), meta));
     }
+
 }

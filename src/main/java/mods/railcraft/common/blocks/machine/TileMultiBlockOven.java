@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine;
 
-import buildcraft.api.gates.IAction;
+import buildcraft.api.statements.IActionExternal;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.io.DataInputStream;
@@ -31,7 +31,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     protected boolean cooking;
     private boolean wasBurning;
     protected boolean paused = false;
-    private final Set<IAction> actions = new HashSet<IAction>();
+    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
 
     public TileMultiBlockOven(String name, int invNum, List<? extends MultiBlockPattern> patterns) {
         super(name, invNum, patterns);
@@ -169,7 +169,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
 
     private void processActions() {
         paused = false;
-        for (IAction action : actions) {
+        for (IActionExternal action : actions) {
             if (action == Actions.PAUSE) {
                 paused = true;
             }
@@ -183,7 +183,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     @Override
-    public void actionActivated(IAction action) {
+    public void actionActivated(IActionExternal action) {
         TileMultiBlockOven mBlock = (TileMultiBlockOven) getMasterBlock();
         if (mBlock != null) {
             mBlock.actions.add(action);

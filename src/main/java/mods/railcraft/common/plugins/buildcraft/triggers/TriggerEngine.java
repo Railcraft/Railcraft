@@ -1,6 +1,6 @@
 package mods.railcraft.common.plugins.buildcraft.triggers;
 
-import buildcraft.api.gates.ITriggerParameter;
+import buildcraft.api.statements.IStatementParameter;
 import java.util.EnumSet;
 import net.minecraft.tileentity.TileEntity;
 import mods.railcraft.common.blocks.machine.beta.TileEngine;
@@ -20,7 +20,7 @@ public class TriggerEngine extends Trigger {
     }
 
     @Override
-    public boolean isTriggerActive(ForgeDirection side, TileEntity tile, ITriggerParameter parameter) {
+    public boolean isTriggerActive(ForgeDirection side, TileEntity tile, IStatementParameter[] parameter) {
         if (tile instanceof TileEngine) {
             EnergyStage engineStage = ((TileEngine) tile).getEnergyStage();
             return stages.contains(engineStage);

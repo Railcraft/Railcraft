@@ -8,12 +8,11 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import buildcraft.api.gates.IAction;
+import buildcraft.api.statements.IActionExternal;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
-
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,7 +58,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     private int progress;
     public boolean paused, startCrafting, isCrafting, flippedAxis;
     public String currentEmblem = "";
-    private final Set<IAction> actions = new HashSet<IAction>();
+    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
 
     public TileEngravingBench() {
         super(2);
@@ -244,7 +243,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
 
     private void processActions() {
         paused = false;
-        for (IAction action : actions) {
+        for (IActionExternal action : actions) {
             if (action == Actions.PAUSE)
                 paused = true;
         }
@@ -252,7 +251,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     }
 
     @Override
-    public void actionActivated(IAction action) {
+    public void actionActivated(IActionExternal action) {
         actions.add(action);
     }
 

@@ -78,7 +78,7 @@ configurations{
 
 dependencies {
 	api 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
-	api 'com.mod-buildcraft:buildcraft:6.0.17+:dev'
+	api 'com.mod-buildcraft:buildcraft:6.1.5+:dev'
 }
 
 processResources
