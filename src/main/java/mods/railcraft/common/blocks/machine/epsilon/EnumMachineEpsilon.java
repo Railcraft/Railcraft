@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.machine.epsilon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import net.minecraft.block.Block;
@@ -36,7 +37,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     ELECTRIC_FEEDER(Module.ELECTRICITY, "electric.feeder", TileElectricFeeder.class, 1, 1, 0),
     ELECTRIC_FEEDER_ADMIN(Module.ELECTRICITY, "electric.feeder.admin", TileElectricFeederAdmin.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
     ADMIN_STEAM_PRODUCER(Module.STEAM, "admin.steam.producer", TileAdminSteamProducer.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
-    FORCE_TRACK_EMITTER(Module.ELECTRICITY, "force.track.emitter", TileForceTrackEmitter.class, 2, 1, 0, 0, 0, 0, 0, 0, 1);
+    FORCE_TRACK_EMITTER(Module.ELECTRICITY, "force.track.emitter", TileForceTrackEmitter.class);
     private final Module module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
@@ -91,6 +92,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     public static void registerIcons(IIconRegister iconRegister) {
         for (EnumMachineEpsilon machine : VALUES) {
             if (machine.isDepreciated()) continue;
+            if (machine.textureInfo.length == 0) continue;
             machine.texture = new IIcon[machine.textureInfo.length - 2];
             int columns = machine.textureInfo[0];
             int rows = machine.textureInfo[1];
@@ -99,6 +101,12 @@ public enum EnumMachineEpsilon implements IEnumMachine {
                 machine.texture[i] = icons[machine.textureInfo[i + 2]];
             }
         }
+
+        IIcon emitterSide = iconRegister.registerIcon("railcraft:" + FORCE_TRACK_EMITTER.tag + ".side");
+        IIcon emitterFacing = iconRegister.registerIcon("railcraft:" + FORCE_TRACK_EMITTER.tag + ".facing");
+        FORCE_TRACK_EMITTER.texture = new IIcon[7];
+        Arrays.fill(FORCE_TRACK_EMITTER.texture, emitterSide);
+        FORCE_TRACK_EMITTER.texture[6] = emitterFacing;
     }
 
     public static EnumMachineEpsilon fromId(int id) {
