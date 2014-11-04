@@ -63,6 +63,9 @@ public class ModuleElectricity extends RailcraftModule {
         epsilon = EnumMachineEpsilon.ELECTRIC_FEEDER_ADMIN;
         epsilon.register();
 
+        epsilon = EnumMachineEpsilon.FLUX_FEEDER;
+        epsilon.register();
+
         EnumMachineDelta delta = EnumMachineDelta.WIRE;
         if (delta.register())
             RailcraftCraftingManager.rollingMachine.getRecipeList().add(new ShapedOreRecipe(delta.getItem(8),
