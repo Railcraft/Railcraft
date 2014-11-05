@@ -9,6 +9,7 @@
 package mods.railcraft.common.items;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -98,6 +99,8 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
         if (Game.isNotHost(world))
             return false;
         IElectricGrid gridObject = GridTools.getGridObjectAt(world, x, y, z);
+        if (gridObject instanceof TileMultiBlock)
+            gridObject = (IElectricGrid) ((TileMultiBlock) gridObject).getMasterBlock();
         boolean returnValue = false;
         if (gridObject != null) {
             IElectricGrid.ChargeHandler handler = gridObject.getChargeHandler();

@@ -1,12 +1,11 @@
 package mods.railcraft.common.blocks.machine.epsilon;
 
-import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
-import net.minecraft.item.ItemStack;
+import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -14,7 +13,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileFluxFeeder extends TileMultiBlockInventory implements IElectricGrid, IEnergyHandler {
+public class TileFluxFeeder extends TileMultiBlock implements IElectricGrid, IEnergyHandler {
 
     public static void placeFluxCharger() {
 
@@ -52,12 +51,7 @@ public class TileFluxFeeder extends TileMultiBlockInventory implements IElectric
     }
 
     public TileFluxFeeder() {
-        super("railcraft.gui.flux.charger", 1, patterns);
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return stack.getItem() instanceof IEnergyContainerItem;
+        super(patterns);
     }
 
     @Override
@@ -117,5 +111,19 @@ public class TileFluxFeeder extends TileMultiBlockInventory implements IElectric
     @Override
     public boolean canConnectEnergy(ForgeDirection from) {
         return true;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        if (isMaster())
+            chargeHandler.readFromNBT(data);
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        if (isStructureValid() && isMaster())
+            chargeHandler.writeToNBT(data);
     }
 }
