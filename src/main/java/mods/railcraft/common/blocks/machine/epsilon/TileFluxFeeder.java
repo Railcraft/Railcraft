@@ -5,6 +5,7 @@ import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -52,6 +53,14 @@ public class TileFluxFeeder extends TileMultiBlock implements IElectricGrid, IEn
 
     public TileFluxFeeder() {
         super(patterns);
+    }
+
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        if (Game.isNotHost(getWorld()))
+            return;
+        chargeHandler.tick();
     }
 
     @Override
