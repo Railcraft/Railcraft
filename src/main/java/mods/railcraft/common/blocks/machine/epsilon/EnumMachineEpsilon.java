@@ -36,7 +36,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     ELECTRIC_FEEDER(Module.ELECTRICITY, "electric.feeder", TileElectricFeeder.class, 1, 1, 0),
     ELECTRIC_FEEDER_ADMIN(Module.ELECTRICITY, "electric.feeder.admin", TileElectricFeederAdmin.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
     ADMIN_STEAM_PRODUCER(Module.STEAM, "admin.steam.producer", TileAdminSteamProducer.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
-    FLUX_FEEDER(Module.ELECTRICITY, "flux.feeder", TileFluxFeeder.class, 1, 1, 0);
+    FLUX_TRANSFORMER(Module.ELECTRICITY, "flux.transformer", TileFluxTransformer.class, 1, 1, 0);
     private final Module module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
@@ -50,7 +50,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
         creativeList.add(ELECTRIC_FEEDER);
         creativeList.add(ELECTRIC_FEEDER_ADMIN);
         creativeList.add(ADMIN_STEAM_PRODUCER);
-        creativeList.add(FLUX_FEEDER);
+        creativeList.add(FLUX_TRANSFORMER);
     }
 
     private EnumMachineEpsilon(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {

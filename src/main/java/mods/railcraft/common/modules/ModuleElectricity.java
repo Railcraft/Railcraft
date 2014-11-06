@@ -63,7 +63,7 @@ public class ModuleElectricity extends RailcraftModule {
         epsilon = EnumMachineEpsilon.ELECTRIC_FEEDER_ADMIN;
         epsilon.register();
 
-        epsilon = EnumMachineEpsilon.FLUX_FEEDER;
+        epsilon = EnumMachineEpsilon.FLUX_TRANSFORMER;
         epsilon.register();
 
         EnumMachineDelta delta = EnumMachineDelta.WIRE;
