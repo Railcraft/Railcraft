@@ -40,7 +40,7 @@ import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.enchantment.RailcraftEnchantments;
+import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.CrowbarHandler;
 import mods.railcraft.common.items.ItemCrowbar;

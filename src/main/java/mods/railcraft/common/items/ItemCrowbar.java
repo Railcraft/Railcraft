@@ -29,7 +29,7 @@ import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.enchantment.RailcraftEnchantments;
+import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
