@@ -23,7 +23,6 @@ import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.plugins.forge.ItemRegistry;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
@@ -182,7 +181,7 @@ public class BlockRailcraftWall extends BlockWall {
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        for (WallInfo wall : proxy.values()) {
+        for (WallInfo wall : proxy.getCreativeList()) {
             if (wall.isEnabled())
                 list.add(wall.getItem());
         }

@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.blocks.aesthetics.wall;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
@@ -21,6 +23,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import scala.actors.threadpool.Arrays;
 
 /**
  *
@@ -45,6 +48,7 @@ public enum EnumWallAlpha implements WallInfo {
     OBSIDIAN,
     FROST_BOUND_BRICK;
     public static final EnumWallAlpha[] VALUES = values();
+    private static final List<EnumWallAlpha> creativeList = new ArrayList<EnumWallAlpha>();
     private Block source;
     private int sourceMeta = 0;
 
@@ -81,23 +85,25 @@ public enum EnumWallAlpha implements WallInfo {
         OBSIDIAN.source = Blocks.obsidian;
 
 //        QUARTZ.source = Block.blockNetherQuartz;
-
         for (EnumWallAlpha wall : VALUES) {
-            if (wall.isEnabled() && wall.source != null) {
-                if (wall == NETHER_BRICK) {
+            if (wall.isEnabled() && wall.source != null)
+                if (wall == NETHER_BRICK)
                     CraftingPlugin.addShapedRecipe(wall.getItem(5), "S S", "SSS", 'S', wall.getSourceItem());
-                } else {
+                else
                     CraftingPlugin.addShapedRecipe(wall.getItem(6), "SSS", "SSS", 'S', wall.getSourceItem());
-                }
-            }
         }
+
+        creativeList.addAll(Arrays.asList(VALUES));
     }
 
     public static WallInfo fromMeta(int id) {
-        if (id < 0 || id >= VALUES.length) {
+        if (id < 0 || id >= VALUES.length)
             return VALUES[0];
-        }
         return VALUES[id];
+    }
+
+    public static List<EnumWallAlpha> getCreativeList() {
+        return creativeList;
     }
 
     @Override
@@ -150,9 +156,8 @@ public enum EnumWallAlpha implements WallInfo {
                 return EnumCube.CONCRETE_BLOCK.getHardness();
             default:
                 Block block = getSource();
-                if (block == null) {
+                if (block == null)
                     return Blocks.brick_block.getBlockHardness(world, x, y, z);
-                }
                 return block.getBlockHardness(world, x, y, z);
         }
     }
@@ -164,10 +169,10 @@ public enum EnumWallAlpha implements WallInfo {
                 return EnumCube.CONCRETE_BLOCK.getResistance() * 3f / 5f;
             default:
                 Block block = getSource();
-                if (block == null) {
+                if (block == null)
                     return Blocks.brick_block.getExplosionResistance(entity);
-                }
                 return block.getExplosionResistance(entity);
         }
     }
+
 }

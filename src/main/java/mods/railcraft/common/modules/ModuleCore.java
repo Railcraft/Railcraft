@@ -40,6 +40,7 @@ import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.CrowbarHandler;
 import mods.railcraft.common.items.ItemCrowbar;
@@ -111,6 +112,8 @@ public class ModuleCore extends RailcraftModule {
         NetworkRegistry.INSTANCE.registerGuiHandler(Railcraft.getMod(), new GuiHandler());
 
         LootPlugin.init();
+
+        RailcraftEnchantments.registerEnchantment();
 
         ItemCrowbar.registerItem();
         ItemCrowbarReinforced.registerItem();

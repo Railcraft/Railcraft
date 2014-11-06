@@ -8,13 +8,15 @@
  */
 package mods.railcraft.common.blocks.aesthetics.wall;
 
+import java.util.List;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface WallProxy {
 
-    public WallInfo[] values();
+    List<? extends WallInfo> getCreativeList();
 
     WallInfo fromMeta(int meta);
 }
