@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.blocks.aesthetics.wall;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import net.minecraft.block.Block;
@@ -19,6 +21,8 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import scala.actors.threadpool.Arrays;
+
 
 /**
  *
@@ -36,6 +40,7 @@ public enum EnumWallBeta implements WallInfo {
     BLOODSTAINED_BRICK,
     BLEACHEDBONE_BRICK,;
     public static final EnumWallBeta[] VALUES = values();
+    private static final List<EnumWallBeta> creativeList = new ArrayList<EnumWallBeta>();
     private Block source;
     private int sourceMeta = 0;
 
@@ -44,28 +49,32 @@ public enum EnumWallBeta implements WallInfo {
         QUARTZ.source = Blocks.quartz_block;
         QUARTZ_CHISELED.sourceMeta = 1;
         QUARTZ_CHISELED.source = Blocks.quartz_block;
-        
+
         IRON.source = Blocks.iron_block;
         GOLD.source = Blocks.gold_block;
         DIAMOND.source = Blocks.diamond_block;
-        
+
         ABYSSAL_BRICK.source = BlockBrick.abyssal;
         QUARRIED_BRICK.source = BlockBrick.quarried;
         BLOODSTAINED_BRICK.source = BlockBrick.bloodstained;
         BLEACHEDBONE_BRICK.source = BlockBrick.bleachedbone;
 
         for (EnumWallBeta wall : VALUES) {
-            if (wall.isEnabled() && wall.source != null) {
+            if (wall.isEnabled() && wall.source != null)
                 CraftingPlugin.addShapedRecipe(wall.getItem(6), "SSS", "SSS", 'S', wall.getSourceItem());
-            }
         }
+
+        creativeList.addAll(Arrays.asList(VALUES));
     }
 
     public static WallInfo fromMeta(int id) {
-        if (id < 0 || id >= VALUES.length) {
+        if (id < 0 || id >= VALUES.length)
             return VALUES[0];
-        }
         return VALUES[id];
+    }
+
+    public static List<EnumWallBeta> getCreativeList() {
+        return creativeList;
     }
 
     @Override
@@ -114,18 +123,17 @@ public enum EnumWallBeta implements WallInfo {
     @Override
     public float getBlockHardness(World world, int x, int y, int z) {
         Block block = getSource();
-        if (block == null) {
+        if (block == null)
             return Blocks.brick_block.getBlockHardness(world, x, y, z);
-        }
         return block.getBlockHardness(world, x, y, z);
     }
 
     @Override
     public float getExplosionResistance(Entity entity) {
         Block block = getSource();
-        if (block == null) {
+        if (block == null)
             return Blocks.brick_block.getExplosionResistance(entity);
-        }
         return block.getExplosionResistance(entity);
     }
+
 }

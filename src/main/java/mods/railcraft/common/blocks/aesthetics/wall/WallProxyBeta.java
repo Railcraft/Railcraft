@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.blocks.aesthetics.wall;
 
+import java.util.List;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
@@ -15,12 +17,13 @@ package mods.railcraft.common.blocks.aesthetics.wall;
 public class WallProxyBeta implements WallProxy {
 
     @Override
-    public WallInfo[] values() {
-        return EnumWallBeta.VALUES;
+    public List<? extends WallInfo> getCreativeList() {
+        return EnumWallBeta.getCreativeList();
     }
 
     @Override
     public WallInfo fromMeta(int meta) {
         return EnumWallBeta.fromMeta(meta);
     }
+
 }
