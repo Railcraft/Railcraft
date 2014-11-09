@@ -8,7 +8,9 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -74,10 +76,7 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
     }
 
     private boolean isValidNewTrackPosition(int x, int y, int z) {
-        return worldObj.isAirBlock(x, y, z) &&
-                !worldObj.isAirBlock(x, y - 1, z) &&
-                !TrackTools.isRailBlockAt(worldObj, x, y - 1, z) &&
-                !(worldObj.getBlock(x, y - 1, z) instanceof BlockLiquid);
+        return worldObj.isAirBlock(x, y, z) && World.doesBlockHaveSolidTopSurface(worldObj, x, y - 1, z);
     }
 
     @Override
