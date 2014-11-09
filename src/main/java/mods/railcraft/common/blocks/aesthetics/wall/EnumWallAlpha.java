@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.aesthetics.wall;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
@@ -23,7 +24,6 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import scala.actors.threadpool.Arrays;
 
 /**
  *
