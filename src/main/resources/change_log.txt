@@ -1,4 +1,5 @@
 9.3.3.5:
+	INFO: Updated BC API to Buildcraft 6.1.5
 	NEW: Added Flux Transformer (contributions by Yopu)
 	NEW: Added three new Crowbar exclusive enchantments: Wrecking (bonus damage), Implosion (Creeper bonus damage), Destruction (wide area deconstruction of blocks). (contributions by WoodStone)
 	NEW: Track Layer can now navigate slopes (contribution by Yopu)
