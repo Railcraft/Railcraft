@@ -1,3 +1,6 @@
+9.3.3.6:
+	FIX: Fix incorrect import for Arrays in the wall classes.
+
 9.3.3.5:
 	INFO: Updated BC API to Buildcraft 6.1.5
 	NEW: Added Flux Transformer (contributions by Yopu)
