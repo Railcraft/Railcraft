@@ -163,7 +163,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
     }
 
     public IIcon getIcon(int side) {
-        return null;
+        return getMachineType().getTexture(side);
     }
 
     public int getLightValue() {

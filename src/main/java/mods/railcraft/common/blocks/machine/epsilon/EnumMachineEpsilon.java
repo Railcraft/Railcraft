@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.machine.epsilon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import net.minecraft.block.Block;
@@ -36,7 +37,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     ELECTRIC_FEEDER(Module.ELECTRICITY, "electric.feeder", TileElectricFeeder.class, 1, 1, 0),
     ELECTRIC_FEEDER_ADMIN(Module.ELECTRICITY, "electric.feeder.admin", TileElectricFeederAdmin.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
     ADMIN_STEAM_PRODUCER(Module.STEAM, "admin.steam.producer", TileAdminSteamProducer.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
-    FLUX_TRANSFORMER(Module.ELECTRICITY, "flux.transformer", TileFluxTransformer.class, 1, 1, 0);
+    FLUX_TRANSFORMER(Module.ELECTRICITY, "flux.transformer", TileFluxTransformer.class);
     private final Module module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
@@ -92,6 +93,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     public static void registerIcons(IIconRegister iconRegister) {
         for (EnumMachineEpsilon machine : VALUES) {
             if (machine.isDepreciated()) continue;
+            if (machine.textureInfo.length == 0) continue;
             machine.texture = new IIcon[machine.textureInfo.length - 2];
             int columns = machine.textureInfo[0];
             int rows = machine.textureInfo[1];
@@ -100,6 +102,13 @@ public enum EnumMachineEpsilon implements IEnumMachine {
                 machine.texture[i] = icons[machine.textureInfo[i + 2]];
             }
         }
+        
+        IIcon transformerSide = iconRegister.registerIcon("railcraft:" + FLUX_TRANSFORMER.tag + ".side");
+        IIcon transformerCap = iconRegister.registerIcon("railcraft:" + FLUX_TRANSFORMER.tag + ".cap");
+        FLUX_TRANSFORMER.texture = new IIcon[6];
+        Arrays.fill(FLUX_TRANSFORMER.texture, transformerSide);
+        FLUX_TRANSFORMER.texture[0] = transformerCap;
+        FLUX_TRANSFORMER.texture[1] = transformerCap;
     }
 
     public static EnumMachineEpsilon fromId(int id) {
