@@ -40,30 +40,24 @@ public class GuiTrackPriming extends GuiBasic {
 
     @Override
     protected void drawExtras(int x, int y, float f) {
-        GuiTools.drawCenteredString(fontRendererObj, String.format(LocalizationPlugin.translate("railcraft.gui.track.priming.fuse"), fuse), 25);
+        GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.track.priming.fuse", fuse), 25);
     }
 
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         short f = fuse;
-        if (guibutton.id == 0) {
+        if (guibutton.id == 0)
             f += -10;
-        }
-        if (guibutton.id == 1) {
+        if (guibutton.id == 1)
             f += -1;
-        }
-        if (guibutton.id == 2) {
+        if (guibutton.id == 2)
             f += 1;
-        }
-        if (guibutton.id == 3) {
+        if (guibutton.id == 3)
             f += 10;
-        }
-        if (f < TrackPriming.MIN_FUSE) {
+        if (f < TrackPriming.MIN_FUSE)
             f = TrackPriming.MIN_FUSE;
-        }
-        if (f > TrackPriming.MAX_FUSE) {
+        if (f > TrackPriming.MAX_FUSE)
             f = TrackPriming.MAX_FUSE;
-        }
         fuse = f;
     }
 
@@ -75,4 +69,5 @@ public class GuiTrackPriming extends GuiBasic {
             PacketDispatcher.sendToServer(pkt);
         }
     }
+
 }

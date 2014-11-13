@@ -16,25 +16,20 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketGuiReturn;
 
-public class GuiTrackLauncher extends GuiBasic
-{
+public class GuiTrackLauncher extends GuiBasic {
 
     protected int force = 25;
     TrackLauncher track;
 
-    public GuiTrackLauncher(TrackLauncher t)
-    {
-        super(LocalizationPlugin.translate(t.getTrackType().getTag()));
+    public GuiTrackLauncher(TrackLauncher t) {
+        super(LocalizationPlugin.translate(t.getTrackSpec().getTrackTag()));
         track = t;
-        if(track != null)
-        {
+        if (track != null)
             force = track.getLaunchForce();
-        }
     }
 
     @Override
-    public void initGui()
-    {
+    public void initGui() {
         buttonList.clear();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
@@ -45,52 +40,36 @@ public class GuiTrackLauncher extends GuiBasic
     }
 
     @Override
-    protected void actionPerformed(GuiButton guibutton)
-    {
+    protected void actionPerformed(GuiButton guibutton) {
         int f = force;
-        if(guibutton.id == 0)
-        {
+        if (guibutton.id == 0)
             f += -10;
-        }
-        if(guibutton.id == 1)
-        {
+        if (guibutton.id == 1)
             f += -1;
-        }
-        if(guibutton.id == 2)
-        {
+        if (guibutton.id == 2)
             f += 1;
-        }
-        if(guibutton.id == 3)
-        {
+        if (guibutton.id == 3)
             f += 10;
-        }
-        if(f < TrackLauncher.MIN_LAUNCH_FORCE)
-        {
+        if (f < TrackLauncher.MIN_LAUNCH_FORCE)
             f = TrackLauncher.MIN_LAUNCH_FORCE;
-        }
-        if(f > RailcraftConfig.getLaunchRailMaxForce())
-        {
+        if (f > RailcraftConfig.getLaunchRailMaxForce())
             f = RailcraftConfig.getLaunchRailMaxForce();
-        }
         force = f;
     }
 
     @Override
-    public void drawExtras(int x, int y, float f)
-    {
-        if(track != null)
-        {
-            fontRendererObj.drawString("Force = " + force, 61, 25, 0x404040);
-        }
+    public void drawExtras(int x, int y, float f) {
+        if (track != null)
+            fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.track.launcher.force", force), 61, 25, 0x404040);
     }
 
     @Override
-    public void onGuiClosed()
-    {
+    public void onGuiClosed() {
         track.setLaunchForce(force);
-        if(Game.isNotHost(track.getWorld())) {
-            PacketGuiReturn pkt = new PacketGuiReturn((IGuiReturnHandler)track.tileEntity);
+        if (Game.isNotHost(track.getWorld())) {
+            PacketGuiReturn pkt = new PacketGuiReturn((IGuiReturnHandler) track.tileEntity);
             pkt.sendPacket();
         }
     }
+
 }
