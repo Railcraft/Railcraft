@@ -112,7 +112,7 @@ public class BlockOre extends Block {
     }
 
     private static void registerPoorOreRecipe(Metal metal) {
-        CraftingPlugin.addFurnaceRecipe(metal.getPoorOre(), metal.getNugget(), 0.1F);
+        CraftingPlugin.addFurnaceRecipe(metal.getPoorOre(), metal.getNugget(2), 0.1F);
     }
 
     private static void registerOre(String name, EnumOre ore) {
