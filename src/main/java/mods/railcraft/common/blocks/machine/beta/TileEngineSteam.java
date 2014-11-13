@@ -38,7 +38,7 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
     private final static int TANK_CAPACITY = 8 * FluidHelper.BUCKET_VOLUME;
     public final static int TANK_STEAM = 0;
     private final FilteredTank steamTank;
-    private TankManager tankManager = new TankManager();
+    private final TankManager tankManager = new TankManager();
     private int steamUsed;
 
     public TileEngineSteam() {
@@ -181,11 +181,15 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
 
     @Override
     public boolean canFill(ForgeDirection from, Fluid fluid) {
+        if (getOrientation() == from)
+            return false;
         return Fluids.STEAM.is(fluid);
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection dir) {
+    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+        if (getOrientation() == from)
+            return null;
         return tankManager.getTankInfo();
     }
 
