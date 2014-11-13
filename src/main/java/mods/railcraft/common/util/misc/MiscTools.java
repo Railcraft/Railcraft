@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.util.misc;
 
-import com.mojang.authlib.GameProfile;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
