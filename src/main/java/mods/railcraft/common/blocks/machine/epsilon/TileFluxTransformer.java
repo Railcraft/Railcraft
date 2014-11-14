@@ -8,7 +8,6 @@ import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,9 +27,10 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
         }
     }
 
-    public static final int EU_RF_RATIO = 4;
+    public static final double EU_RF_RATIO = 4;
+    public static final double EFFICIENCY = 0.6F;
     private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
-    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 0.5);
+    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 0.25);
 
     static {
         char[][][] map = {
@@ -90,15 +90,13 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
         if (!isStructureValid())
             return 0;
-        int receiveAmount;
         double chargeDifference = chargeHandler.getCapacity() - chargeHandler.getCharge();
-        if (chargeDifference > maxReceive / EU_RF_RATIO)
-            receiveAmount = maxReceive / EU_RF_RATIO;
-        else
-            receiveAmount = MathHelper.floor_double(chargeDifference);
-        if (!simulate)
-            chargeHandler.addCharge(receiveAmount);
-        return receiveAmount;
+        if (chargeDifference > 0.0) {
+            if (!simulate)
+                chargeHandler.addCharge((maxReceive / EU_RF_RATIO) * EFFICIENCY);
+            return maxReceive;
+        }
+        return 0;
     }
 
     @Override

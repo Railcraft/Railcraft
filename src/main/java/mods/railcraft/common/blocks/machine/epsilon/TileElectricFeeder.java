@@ -97,7 +97,8 @@ public class TileElectricFeeder extends TileMachineBase implements IElectricGrid
 
     @Override
     public double getDemandedEnergy() {
-        return getChargeHandler().getCapacity() - getChargeHandler().getCharge();
+        double chargeDifference = chargeHandler.getCapacity() - chargeHandler.getCharge();
+        return chargeDifference > 0.0 ? chargeDifference : 0.0;
     }
 
     @Override
