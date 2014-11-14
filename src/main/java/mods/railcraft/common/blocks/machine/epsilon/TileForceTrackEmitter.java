@@ -69,7 +69,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     private void extend() {
-        if (clock % TICKS_PER_ACTION == 8) {
+        if (clock % TICKS_PER_ACTION == 0) {
             int x = xCoord + (numTracks + 1) * facing.offsetX;
             int y = yCoord + 1;
             int z = zCoord + (numTracks + 1) * facing.offsetZ;
@@ -85,7 +85,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     private void retract() {
-        if (clock % TICKS_PER_ACTION == 8) {
+        if (clock % TICKS_PER_ACTION == 0) {
             int x = xCoord + (numTracks + 1) * facing.offsetX;
             int y = yCoord + 1;
             int z = zCoord + (numTracks + 1) * facing.offsetZ;
@@ -113,6 +113,8 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
 
     @Override
     public IIcon getIcon(int side) {
+        if (side == facing.ordinal())
+            return getMachineType().getTexture(powered ? 7 : 8);
         return getMachineType().getTexture(powered ? 0 : 6);
     }
 
@@ -135,21 +137,21 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        chargeHandler.readFromNBT(data);
-        powered = data.getBoolean("powered");
-        facing = ForgeDirection.getOrientation(data.getByte("facing"));
-        numTracks = data.getInteger("numTracks");
-    }
-
-    @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         chargeHandler.writeToNBT(data);
         data.setBoolean("powered", powered);
         data.setByte("facing", (byte) facing.ordinal());
         data.setInteger("numTracks", numTracks);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        chargeHandler.readFromNBT(data);
+        powered = data.getBoolean("powered");
+        facing = ForgeDirection.getOrientation(data.getByte("facing"));
+        numTracks = data.getInteger("numTracks");
     }
 
     @Override

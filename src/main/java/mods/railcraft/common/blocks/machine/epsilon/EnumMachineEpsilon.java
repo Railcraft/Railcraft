@@ -105,10 +105,11 @@ public enum EnumMachineEpsilon implements IEnumMachine {
         }
 
         IIcon emitterSide = iconRegister.registerIcon("railcraft:" + FORCE_TRACK_EMITTER.tag + ".side");
-        IIcon emitterFacing = iconRegister.registerIcon("railcraft:" + FORCE_TRACK_EMITTER.tag + ".facing");
-        FORCE_TRACK_EMITTER.texture = new IIcon[7];
+        FORCE_TRACK_EMITTER.texture = new IIcon[9];
         Arrays.fill(FORCE_TRACK_EMITTER.texture, emitterSide);
-        FORCE_TRACK_EMITTER.texture[6] = emitterFacing;
+        FORCE_TRACK_EMITTER.texture[6] = iconRegister.registerIcon("railcraft:" + FORCE_TRACK_EMITTER.tag + ".side.unpowered");
+        FORCE_TRACK_EMITTER.texture[7] = iconRegister.registerIcon("railcraft:" + FORCE_TRACK_EMITTER.tag + ".facing");
+        FORCE_TRACK_EMITTER.texture[8] = iconRegister.registerIcon("railcraft:" + FORCE_TRACK_EMITTER.tag + ".facing.unpowered");
 
         IIcon transformerSide = iconRegister.registerIcon("railcraft:" + FLUX_TRANSFORMER.tag + ".side");
         IIcon transformerCap = iconRegister.registerIcon("railcraft:" + FLUX_TRANSFORMER.tag + ".cap");
