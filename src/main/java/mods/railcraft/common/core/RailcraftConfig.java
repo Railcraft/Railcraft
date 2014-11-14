@@ -48,6 +48,7 @@ public class RailcraftConfig {
 //    private static final String COMMENT_PREFIX = "\n\n   # ";
     private static final String CAT_ANCHORS = "anchors";
     private static final String CAT_AURAS = "auras";
+    private static final String CAT_ENCHANTMENTS = "enchantments";
     private static final String CAT_LOOT = "loot";
     private static final String CAT_WORLD_GEN = "worldgen";
     private static final String CAT_FLUIDS = "fluids";
@@ -106,6 +107,9 @@ public class RailcraftConfig {
     private static int locomotiveHorsepower;
     private static int creosoteTorchOutput;
     private static int villagerID;
+    private static int wreckingID;
+    private static int implosionID;
+    private static int destructionID;
     private static float boreMiningSpeedMultiplier = 1;
     private static float biolerMultiplierFuel = 1;
     private static float biolerMultiplierBiofuel = 1;
@@ -150,6 +154,7 @@ public class RailcraftConfig {
         loadLoot();
         loadWorldGen();
         loadFluids();
+        loadEnchantment();
 
         if (configMain.hasChanged())
             configMain.save();
@@ -169,6 +174,13 @@ public class RailcraftConfig {
         anchorFuelWorld.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelWorldString, "Adding World Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         anchorFuelPersonal.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelPersonalString, "Adding Personal Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         EntityTunnelBore.mineableBlocks.addAll(BlockItemListParser.<BlockKey>parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser.ParseType.BLOCK));
+    }
+
+    private static void loadEnchantment() {
+        configMain.addCustomCategoryComment(CAT_ENCHANTMENTS, "Enchantment ids are defined here.\n");
+        wreckingID = get(CAT_ENCHANTMENTS, "ench_wrecking", 190);
+        implosionID = get(CAT_ENCHANTMENTS, "ench_implosion", 191);
+        destructionID = get(CAT_ENCHANTMENTS, "ench_destruction", 192);
     }
 
     private static void loadAnchorSettings() {
@@ -841,6 +853,18 @@ public class RailcraftConfig {
         return villagerID;
     }
 
+    public static int wreckingID() {
+        return wreckingID;
+    }
+
+    public static int implosionID() {
+        return implosionID;
+    }
+
+    public static int destructionID() {
+        return destructionID;
+    }
+
     public static boolean isItemEnabled(String tag) {
         tag = MiscTools.cleanTag(tag);
         Boolean b = enabledItems.get(tag);
@@ -947,6 +971,11 @@ public class RailcraftConfig {
 
     private static int get(String tag, int defaultValue, String comment) {
         return get(Configuration.CATEGORY_GENERAL, tag, defaultValue, comment);
+    }
+
+    private static int get(String cat, String tag, int defaultValue) {
+        Property prop = configMain.get(cat, tag, defaultValue);
+        return parseInteger(prop, defaultValue);
     }
 
     private static int get(String cat, String tag, int defaultValue, String comment) {

@@ -78,7 +78,7 @@ configurations{
 
 dependencies {
 	api 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
-	api 'com.mod-buildcraft:buildcraft:6.1.5+:dev'
+	api 'com.mod-buildcraft:buildcraft:6.1.7+:dev'
 }
 
 processResources
@@ -126,7 +126,16 @@ jar {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
 				exclude '**/buildcraft/api/blueprints/**'
+				exclude '**/buildcraft/api/boards/**'
+				exclude '**/buildcraft/api/events/**'
+				exclude '**/buildcraft/api/facades/**'
 				exclude '**/buildcraft/api/filler/**'
+				exclude '**/buildcraft/api/fuels/**'
+				exclude '**/buildcraft/api/gates/**'
+				exclude '**/buildcraft/api/power/**'
+				exclude '**/buildcraft/api/recipes/**'
+				exclude '**/buildcraft/api/robots/**'
+				exclude '**/buildcraft/api/transport/**'
 				exclude '**/ic2/api/crops/**'
 				exclude '**/ic2/api/network/**'
 				exclude '**/ic2/api/event/**'

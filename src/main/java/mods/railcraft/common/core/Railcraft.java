@@ -20,6 +20,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import java.io.File;
 import org.apache.logging.log4j.Level;
 import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.api.crafting.IRockCrusherRecipe;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
@@ -44,6 +46,8 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -126,6 +130,16 @@ public final class Railcraft {
                 }
                 FuelManager.addBoilerFuel(fluid, fuel);
                 Game.log(Level.INFO, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getStringValue()));
+            } else if (mess.key.equals("rock-crusher")) {
+                NBTTagCompound nbt = mess.getNBTValue();
+                ItemStack input = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("input"));
+                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(input, nbt.getBoolean("matchMeta"), nbt.getBoolean("matchNBT"));
+                for (int i = 0; i < 9; i++) {
+                    if (nbt.hasKey("output" + i)) {
+                        NBTTagCompound outputNBT = nbt.getCompoundTag("output" + i);
+                        recipe.addOutput(ItemStack.loadItemStackFromNBT(outputNBT), outputNBT.getFloat("chance"));
+                    }
+                }
             }
         }
     }
@@ -242,7 +256,7 @@ public final class Railcraft {
                     mapping.ignore();
                 else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
                     mapping.remap(BlockLantern.getBlockStone());
-            } else if (mapping.type == GameRegistry.Type.ITEM) {
+            } else if (mapping.type == GameRegistry.Type.ITEM)
                 if (mapping.name.equals("Railcraft:tool.mag.glass") && ItemMagnifyingGlass.item != null)
                     mapping.remap(ItemMagnifyingGlass.item);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
@@ -257,7 +271,6 @@ public final class Railcraft {
                     mapping.ignore();
                 else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
                     mapping.remap(Item.getItemFromBlock(BlockLantern.getBlockStone()));
-            }
         }
     }
 

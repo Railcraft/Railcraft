@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -23,7 +26,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -137,6 +143,26 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
     }
 
     @Override
+    public boolean onBlockDestroyed(ItemStack stack, World world, Block block, int x, int y, int z, EntityLivingBase entity) {
+        if (!world.isRemote) {
+            if (entity instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) entity;
+                if (!player.isSneaking()) {
+                    if (TrackTools.isRailBlock(block)) {
+                        int level = EnchantmentHelper.getEnchantmentLevel(RailcraftEnchantments.destruction.effectId, stack) * 2 + 1;
+                        removeTracks(world, level, x, y, z);
+                    }
+                }
+            }
+        }
+        if ((double)block.getBlockHardness(world, x, y, z) != 0.0D)
+        {
+            stack.damageItem(1, entity);
+        }
+        return true;
+    }
+
+    @Override
     public EnumAction getItemUseAction(ItemStack stack) {
         return EnumAction.block;
     }
@@ -206,4 +232,52 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
         info.add(LocalizationPlugin.translate("item.railcraft.tool.crowbar.tip"));
     }
 
+    private void removeTrackAndDrop(int x, int y, int z, World world) {
+        Block block = world.getBlock(x, y, z);
+        List<ItemStack> drops = block.getDrops(world, x, y, z, 0, 0);
+        for (ItemStack stack : drops) {
+            if (stack != null && stack.stackSize > 0) {
+                EntityItem entityitem = new EntityItem(world, x, y + 1, z, stack);
+                entityitem.delayBeforeCanPickup = 10;
+                world.spawnEntityInWorld(entityitem);
+            }
+        }
+        world.setBlockToAir(x, y, z);
+    }
+
+    private void removeTracks(World world, int level, int x, int y, int z) {
+        if (level > 0 ) {
+            removeTrackAndDrop(x, y, z, world);
+            checkBlocks(world, level, x, y, z);
+        }
+    }
+
+    private void checkBlock(World world, int level, int x, int y, int z) {
+        Block block = world.getBlock(x, y, z);
+        if (TrackTools.isRailBlock(block) || block instanceof BlockTrackElevator) {
+            removeTracks(world, level - 1, x, y, z);
+        }
+    }
+
+    private void checkBlocks(World world, int level, int x, int y, int z) {
+        //NORTH
+        checkBlock(world, level, x, y, z - 1);
+        checkBlock(world, level, x, y + 1, z - 1);
+        checkBlock(world, level, x, y - 1, z - 1);
+        //SOUTH
+        checkBlock(world, level, x, y, z + 1);
+        checkBlock(world, level, x, y + 1, z + 1);
+        checkBlock(world, level, x, y - 1, z + 1);
+        //EAST
+        checkBlock(world, level, x + 1, y, z);
+        checkBlock(world, level, x + 1, y + 1, z);
+        checkBlock(world, level, x + 1, y - 1, z);
+        //WEST
+        checkBlock(world, level, x - 1, y, z);
+        checkBlock(world, level, x - 1, y + 1, z);
+        checkBlock(world, level, x - 1, y - 1, z);
+        //UP_DOWN
+        checkBlock(world, level, x, y + 1, z);
+        checkBlock(world, level, x, y - 1, z);
+    }
 }

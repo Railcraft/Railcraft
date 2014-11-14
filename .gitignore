@@ -19,3 +19,4 @@ run/
 private/
 *.ipr
 *.iws
+out/

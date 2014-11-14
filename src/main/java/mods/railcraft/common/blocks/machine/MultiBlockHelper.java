@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.machine.alpha.*;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxLiquid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileTankBase;
+import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -67,6 +68,11 @@ public class MultiBlockHelper implements StructureHelper {
     @Override
     public void placeSteelTank(World world, int x, int y, int z, int patternIndex, FluidStack fluid) {
         TileTankBase.placeSteelTank(world, x, y, z, patternIndex, fluid);
+    }
+
+    @Override
+    public void placeFluxTransformer(World world, int x, int y, int z) {
+        TileFluxTransformer.placeFluxTransformer(world, x, y, z);
     }
 
 }

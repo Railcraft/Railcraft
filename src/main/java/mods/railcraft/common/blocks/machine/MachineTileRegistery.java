@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.machine.alpha.*;
 import mods.railcraft.common.blocks.machine.beta.*;
 import mods.railcraft.common.blocks.machine.delta.TileCage;
 import mods.railcraft.common.blocks.machine.delta.TileWire;
+import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
 import mods.railcraft.common.blocks.machine.gamma.*;
 
 /**
@@ -82,6 +83,7 @@ public class MachineTileRegistery {
         GameRegistry.registerTileEntity(TileElectricFeeder.class, "RCElectricFeederTile");
         GameRegistry.registerTileEntity(TileElectricFeederAdmin.class, "RCElectricFeederAdminTile");
         GameRegistry.registerTileEntity(TileAdminSteamProducer.class, "RCAdminSteamProducerTile");
+        GameRegistry.registerTileEntity(TileFluxTransformer.class, "RCFluxTransformerTile");
 
     }
 

@@ -37,7 +37,8 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     ELECTRIC_FEEDER(Module.ELECTRICITY, "electric.feeder", TileElectricFeeder.class, 1, 1, 0),
     ELECTRIC_FEEDER_ADMIN(Module.ELECTRICITY, "electric.feeder.admin", TileElectricFeederAdmin.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
     ADMIN_STEAM_PRODUCER(Module.STEAM, "admin.steam.producer", TileAdminSteamProducer.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
-    FORCE_TRACK_EMITTER(Module.ELECTRICITY, "force.track.emitter", TileForceTrackEmitter.class);
+    FORCE_TRACK_EMITTER(Module.ELECTRICITY, "force.track.emitter", TileForceTrackEmitter.class),
+    FLUX_TRANSFORMER(Module.ELECTRICITY, "flux.transformer", TileFluxTransformer.class);
     private final Module module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
@@ -51,6 +52,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
         creativeList.add(ELECTRIC_FEEDER);
         creativeList.add(ELECTRIC_FEEDER_ADMIN);
         creativeList.add(ADMIN_STEAM_PRODUCER);
+        creativeList.add(FLUX_TRANSFORMER);
     }
 
     private EnumMachineEpsilon(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
@@ -107,6 +109,13 @@ public enum EnumMachineEpsilon implements IEnumMachine {
         FORCE_TRACK_EMITTER.texture = new IIcon[7];
         Arrays.fill(FORCE_TRACK_EMITTER.texture, emitterSide);
         FORCE_TRACK_EMITTER.texture[6] = emitterFacing;
+
+        IIcon transformerSide = iconRegister.registerIcon("railcraft:" + FLUX_TRANSFORMER.tag + ".side");
+        IIcon transformerCap = iconRegister.registerIcon("railcraft:" + FLUX_TRANSFORMER.tag + ".cap");
+        FLUX_TRANSFORMER.texture = new IIcon[6];
+        Arrays.fill(FLUX_TRANSFORMER.texture, transformerSide);
+        FLUX_TRANSFORMER.texture[0] = transformerCap;
+        FLUX_TRANSFORMER.texture[1] = transformerCap;
     }
 
     public static EnumMachineEpsilon fromId(int id) {

@@ -49,6 +49,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     private static final byte TICKS_PER_BOILER_CYCLE = 20;
     private static final byte TANK_WATER = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
+    private static final int[] NO_SLOTS = new int[0];
     public final SteamBoiler boiler;
     private StandaloneInventory inv = new StandaloneInventory(3, (IInventory) this);
 
@@ -199,7 +200,9 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getAccessibleSlotsFromSide(int side) {
+        if(getOrientation().ordinal() == side)
+            return NO_SLOTS;
         return SLOTS;
     }
 

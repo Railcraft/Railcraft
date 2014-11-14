@@ -9,12 +9,9 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import buildcraft.api.tools.IToolWrench;
-import buildcraft.api.transport.IPipeConnection;
-import buildcraft.api.transport.IPipeTile.PipeType;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +29,7 @@ import net.minecraft.entity.EntityLivingBase;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileEngine extends TileMachineBase implements IEnergyConnection, IPipeConnection {
+public abstract class TileEngine extends TileMachineBase implements IEnergyConnection {
 
     private ForgeDirection direction = ForgeDirection.UP;
     private float pistonProgress = 0;
@@ -413,15 +410,6 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         direction = ForgeDirection.getOrientation(data.readByte());
         energyStage = EnergyStage.fromOrdinal(data.readByte());
         isActive = data.readBoolean();
-    }
-
-    @Override
-    public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
-        if (type == PipeType.POWER)
-            return ConnectOverride.DEFAULT;
-        if (with == direction)
-            return ConnectOverride.DISCONNECT;
-        return ConnectOverride.DEFAULT;
     }
 
     @Override
