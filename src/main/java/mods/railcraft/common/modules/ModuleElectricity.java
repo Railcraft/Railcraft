@@ -75,6 +75,16 @@ public class ModuleElectricity extends RailcraftModule {
                     'D', new ItemStack(Blocks.diamond_block),
                     'C', "ingotCopper");
 
+        epsilon = EnumMachineEpsilon.FLUX_TRANSFORMER;
+        if (epsilon.register())
+            CraftingPlugin.addShapedRecipe(epsilon.getItem(),
+                    "PCP",
+                    "CDC",
+                    "PCP",
+                    'P', RailcraftItem.plate.getRecipeObject(EnumPlate.COPPER),
+                    'D', new ItemStack(Blocks.diamond_block),
+                    'C', "ingotCopper");
+
         EnumMachineDelta delta = EnumMachineDelta.WIRE;
         if (delta.register())
             RailcraftCraftingManager.rollingMachine.getRecipeList().add(new ShapedOreRecipe(delta.getItem(8),

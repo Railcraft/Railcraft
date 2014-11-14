@@ -26,7 +26,7 @@ public class ItemPlate extends ItemRailcraft {
 
     public enum EnumPlate implements IItemMetaEnum {
 
-        IRON, STEEL, TIN;
+        IRON, STEEL, TIN, COPPER;
         public static final EnumPlate[] VALUES = values();
         private IIcon icon;
 
@@ -80,21 +80,28 @@ public class ItemPlate extends ItemRailcraft {
             'I', Items.iron_ingot});
 
         // Steel Plate
-        IRecipe recipe = new ShapedOreRecipe(new ItemStack(this, 4, 1), new Object[]{
-            "II",
-            "II",
-            'I', "ingotSteel"});
+        IRecipe recipe = new ShapedOreRecipe(RailcraftItem.plate.getStack(4, EnumPlate.STEEL),
+                "II",
+                "II",
+                'I', "ingotSteel");
         RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
 
         // Tin Plate
-        recipe = new ShapedOreRecipe(new ItemStack(this, 4, 2), new Object[]{
-            "IT",
-            "TI",
-            'I', Items.iron_ingot,
-            'T', "ingotTin"});
+        recipe = new ShapedOreRecipe(RailcraftItem.plate.getStack(4, EnumPlate.TIN),
+                "IT",
+                "TI",
+                'I', Items.iron_ingot,
+                'T', "ingotTin");
         RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
 
-        RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(this, 1, EnumPlate.IRON.ordinal()), true, false, 1280, ItemIngot.getIngot(ItemIngot.EnumIngot.STEEL));
+        // Copper Plate
+        recipe = new ShapedOreRecipe(RailcraftItem.plate.getStack(4, EnumPlate.COPPER),
+                "II",
+                "II",
+                'I', "ingotCopper");
+        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+
+        RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItem.plate.getStack(EnumPlate.IRON), true, false, 1280, ItemIngot.getIngot(ItemIngot.EnumIngot.STEEL));
     }
 
     @Override
@@ -109,6 +116,8 @@ public class ItemPlate extends ItemRailcraft {
                 return "item.railcraft.part.plate.steel";
             case TIN:
                 return "item.railcraft.part.plate.tin";
+            case COPPER:
+                return "item.railcraft.part.plate.copper";
             default:
                 return "";
         }
