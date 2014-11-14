@@ -77,13 +77,13 @@ public class ModuleElectricity extends RailcraftModule {
 
         epsilon = EnumMachineEpsilon.FLUX_TRANSFORMER;
         if (epsilon.register())
-            CraftingPlugin.addShapedRecipe(epsilon.getItem(),
-                    "PCP",
-                    "CDC",
-                    "PCP",
+            CraftingPlugin.addShapedRecipe(epsilon.getItem(2),
+                    "PGP",
+                    "GRG",
+                    "PGP",
                     'P', RailcraftItem.plate.getRecipeObject(EnumPlate.COPPER),
-                    'D', new ItemStack(Blocks.diamond_block),
-                    'C', "ingotCopper");
+                    'G', Items.gold_ingot,
+                    'R',  new ItemStack(Blocks.redstone_block));
 
         EnumMachineDelta delta = EnumMachineDelta.WIRE;
         if (delta.register())
