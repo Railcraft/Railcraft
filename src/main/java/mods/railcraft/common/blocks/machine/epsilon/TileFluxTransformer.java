@@ -30,7 +30,7 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
 
     public static final int EU_RF_RATIO = 4;
     private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
-    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 1);
+    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 0.5);
 
     static {
         char[][][] map = {
