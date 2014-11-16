@@ -29,8 +29,8 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderSignal implements ICombinedRenderer {
 
-    private SignalAspect defaultAspect;
-    private RenderInfo info = new RenderInfo();
+    private final SignalAspect defaultAspect;
+    private final RenderInfo info = new RenderInfo();
 
     public RenderSignal(SignalAspect defaultAspect) {
         this.defaultAspect = defaultAspect;

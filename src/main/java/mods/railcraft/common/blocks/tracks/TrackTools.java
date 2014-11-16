@@ -79,9 +79,11 @@ public class TrackTools {
 
     public static boolean isTrackSpecAt(World world, int x, int y, int z, TrackSpec trackSpec) {
         TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof TileTrack)
-            return ((TileTrack) tile).getTrackInstance().getTrackSpec() == trackSpec;
-        return false;
+        return isTrackSpec(tile, trackSpec);
+    }
+
+    public static boolean isTrackSpec(TileEntity tile, TrackSpec trackSpec) {
+        return (tile instanceof TileTrack) && ((TileTrack) tile).getTrackInstance().getTrackSpec() == trackSpec;
     }
 
     public static boolean isHighSpeedTrackAt(World world, int x, int y, int z) {
