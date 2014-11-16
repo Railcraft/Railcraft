@@ -18,13 +18,10 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.util.misc.AdjacentTileCache;
 
 public abstract class TileSignalFoundation extends RailcraftTileEntity {
 
     public abstract ISignalTileDefinition getSignalType();
-
-    protected AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
     public boolean blockActivated(int side, EntityPlayer player) {
         return false;
@@ -42,22 +39,6 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
     }
 
     public void onBlockRemoval() {
-    }
-
-    public void onNeighborBlockChange(Block block) {
-        tileCache.onNeighborChange();
-    }
-
-    @Override
-    public void invalidate() {
-        tileCache.purge();
-        super.invalidate();
-    }
-
-    @Override
-    public void validate() {
-        tileCache.purge();
-        super.validate();
     }
 
     public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {

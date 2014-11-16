@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import org.apache.logging.log4j.Level;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,13 +27,11 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.misc.Game;
 
 public abstract class TileMachineBase extends RailcraftTileEntity {
 
     private boolean checkedBlock = false;
-    protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
     public abstract IEnumMachine getMachineType();
 
@@ -140,22 +137,6 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
                 updateContainingBlockInfo();
             }
         }
-    }
-
-    @Override
-    public void invalidate() {
-        tileCache.purge();
-        super.invalidate();
-    }
-
-    @Override
-    public void validate() {
-        tileCache.purge();
-        super.validate();
-    }
-
-    public void onNeighborBlockChange(Block id) {
-        tileCache.onNeighborChange();
     }
 
     public boolean openGui(EntityPlayer player) {

@@ -21,10 +21,12 @@ import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.PacketTileEntity;
 import mods.railcraft.common.util.network.RailcraftPacket;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 
 public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable {
@@ -32,6 +34,11 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     private GameProfile owner = new GameProfile(null, "[Railcraft]");
     protected int clock = MiscTools.getRand().nextInt();
     private boolean sendClientUpdate = false;
+    protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
+
+    public AdjacentTileCache getTileCache() {
+        return tileCache;
+    }
 
     @Override
     public void updateEntity() {
@@ -82,6 +89,22 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     public void onBlockPlacedBy(EntityLivingBase entityliving) {
         if (entityliving instanceof EntityPlayer)
             owner = ((EntityPlayer) entityliving).getGameProfile();
+    }
+
+    public void onNeighborBlockChange(Block id) {
+        tileCache.onNeighborChange();
+    }
+
+    @Override
+    public void invalidate() {
+        tileCache.purge();
+        super.invalidate();
+    }
+
+    @Override
+    public void validate() {
+        tileCache.purge();
+        super.validate();
     }
 
     public final int getDimension() {
