@@ -46,12 +46,14 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
             TileEntity tile = tileCache.getTileOnSide(side);
             if (tile instanceof IFluidHandler) {
                 IFluidHandler fluidHandler = (IFluidHandler) tile;
-                if (fluidHandler.canFill(side, Fluids.STEAM.get())) {
+                if (fluidHandler.canFill(side.getOpposite(), Fluids.STEAM.get())) {
                     FluidStack fluidStack = Fluids.STEAM.get(FluidHelper.BUCKET_VOLUME);
-                    fluidHandler.fill(side, fluidStack, true);
+                    fluidHandler.fill(side.getOpposite(), fluidStack, true);
                 }
             }
         }
+        
+        
     }
 
     @Override
