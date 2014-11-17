@@ -325,18 +325,14 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     private boolean tankAcceptsFluid(IFluidTank tank, FluidStack fluidStack) {
         if (fluidStack == null)
             return false;
-        if (tank.fill(fluidStack, false) > 0)
-            return true;
-        return false;
+        return tank.fill(fluidStack, false) > 0;
     }
 
     private boolean tankCanDrainFluid(IFluidTank tank, FluidStack fluidStack) {
         if (fluidStack == null)
             return false;
         FluidStack drained = tank.drain(1, false);
-        if (drained != null && drained.amount > 0)
-            return true;
-        return false;
+        return drained != null && drained.amount > 0;
     }
 
 }

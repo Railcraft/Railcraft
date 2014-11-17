@@ -227,27 +227,37 @@ public abstract class InvTools {
 
     public static void dropInventory(IInventory inv, World world, int x, int y, int z) {
         if (Game.isNotHost(world)) return;
-        for (int slot = 0; slot < inv.getSizeInventory(); slot++) {
-            ItemStack stack = inv.getStackInSlot(slot);
-            if (stack != null) {
-                float xOffset = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
-                float yOffset = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
-                float zOffset = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
-                while (stack.stackSize > 0) {
-                    int numToDrop = MiscTools.getRand().nextInt(21) + 10;
-                    if (numToDrop > stack.stackSize)
-                        numToDrop = stack.stackSize;
-                    ItemStack newStack = stack.copy();
-                    newStack.stackSize = numToDrop;
-                    stack.stackSize -= numToDrop;
-                    EntityItem entityItem = new EntityItem(world, (float) x + xOffset, (float) y + yOffset, (float) z + zOffset, newStack);
-                    float variance = 0.05F;
-                    entityItem.motionX = (float) MiscTools.getRand().nextGaussian() * variance;
-                    entityItem.motionY = (float) MiscTools.getRand().nextGaussian() * variance + 0.2F;
-                    entityItem.motionZ = (float) MiscTools.getRand().nextGaussian() * variance;
-                    world.spawnEntityInWorld(entityItem);
-                }
-                inv.setInventorySlotContents(slot, null);
+        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+            spewItem(slot.getStackInSlot(), world, x, y, z);
+            slot.setStackInSlot(null);
+        }
+    }
+
+    public static void dropItems(Collection<ItemStack> items, World world, int x, int y, int z) {
+        if (Game.isNotHost(world)) return;
+        for (ItemStack stack : items) {
+            spewItem(stack, world, x, y, z);
+        }
+    }
+
+    private static void spewItem(ItemStack stack, World world, int x, int y, int z) {
+        if (stack != null) {
+            float xOffset = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
+            float yOffset = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
+            float zOffset = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
+            while (stack.stackSize > 0) {
+                int numToDrop = MiscTools.getRand().nextInt(21) + 10;
+                if (numToDrop > stack.stackSize)
+                    numToDrop = stack.stackSize;
+                ItemStack newStack = stack.copy();
+                newStack.stackSize = numToDrop;
+                stack.stackSize -= numToDrop;
+                EntityItem entityItem = new EntityItem(world, (float) x + xOffset, (float) y + yOffset, (float) z + zOffset, newStack);
+                float variance = 0.05F;
+                entityItem.motionX = (float) MiscTools.getRand().nextGaussian() * variance;
+                entityItem.motionY = (float) MiscTools.getRand().nextGaussian() * variance + 0.2F;
+                entityItem.motionZ = (float) MiscTools.getRand().nextGaussian() * variance;
+                world.spawnEntityInWorld(entityItem);
             }
         }
     }
