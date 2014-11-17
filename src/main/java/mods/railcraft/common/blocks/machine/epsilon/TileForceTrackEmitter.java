@@ -16,9 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
-import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.*;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -36,11 +34,32 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
 
     private static final double BASE_DRAW = 30;
     private static final double CHARGE_PER_TRACK = 1;
-    private static final int TICKS_PER_ACTION = 8;
+    private static final int TICKS_PER_ACTION = 4;
+    private static final int TICKS_PER_REFRESH = 64;
+    public static final int MAX_TRACKS = 64;
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 0.0);
     private boolean powered;
     private ForgeDirection facing = ForgeDirection.NORTH;
     private int numTracks;
+    private State state = State.RETRACTED;
+
+    private static enum State {
+
+        EXTENDED, RETRACTED, EXTENDING, RETRACTING;
+
+        private void doAction(TileForceTrackEmitter emitter) {
+            switch (this) {
+                case EXTENDING:
+                    emitter.extend();
+                    break;
+                case RETRACTING:
+                    emitter.retract();
+                    break;
+
+            }
+        }
+
+    }
 
     @Override
     public void onNeighborBlockChange(Block block) {
@@ -60,16 +79,29 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
             return;
 
         if (powered) {
-            extend();
+            switch (state) {
+                case RETRACTED:
+                case RETRACTING:
+                    state = State.EXTENDING;
+                    break;
+                case EXTENDED:
+                    if (clock % TICKS_PER_REFRESH == 0)
+                        state = State.EXTENDING;
+                    break;
+            }
             chargeHandler.removeCharge(BASE_DRAW + CHARGE_PER_TRACK * numTracks);
-        } else
-            retract();
+        } else if (state == State.EXTENDED || state == State.EXTENDING)
+            state = State.RETRACTING;
+
+        state.doAction(this);
 
         chargeHandler.tick();
     }
 
     private void extend() {
-        if (clock % TICKS_PER_ACTION == 0) {
+        if (numTracks >= MAX_TRACKS)
+            state = State.EXTENDED;
+        else if (clock % TICKS_PER_ACTION == 0) {
             int x = xCoord + (numTracks + 1) * facing.offsetX;
             int y = yCoord + 1;
             int z = zCoord + (numTracks + 1) * facing.offsetZ;
@@ -78,19 +110,24 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
                 if (facing == ForgeDirection.NORTH || facing == ForgeDirection.SOUTH)
                     meta = EnumTrackMeta.NORTH_SOUTH;
                 else meta = EnumTrackMeta.EAST_WEST;
-                TrackTools.placeTrack(EnumTrack.FORCE.getTrackSpec(), worldObj, x, y, z, meta.ordinal());
+                TileTrack track = TrackTools.placeTrack(EnumTrack.FORCE.getTrackSpec(), worldObj, x, y, z, meta.ordinal());
+                ((TrackForce) track.getTrackInstance()).setEmitter(this);
                 numTracks++;
-            }
+            } else
+                state = State.EXTENDED;
         }
     }
 
     private void retract() {
-        if (clock % TICKS_PER_ACTION == 0) {
-            int x = xCoord + (numTracks + 1) * facing.offsetX;
+        if (numTracks <= 0)
+            state = State.RETRACTED;
+        else if (clock % TICKS_PER_ACTION == 0) {
+            int x = xCoord + numTracks * facing.offsetX;
             int y = yCoord + 1;
-            int z = zCoord + (numTracks + 1) * facing.offsetZ;
-            if (WorldPlugin.blockExists(worldObj, x, y, z) && TrackTools.isTrackSpecAt(worldObj, x, y, z, EnumTrack.FORCE.getTrackSpec())) {
-                WorldPlugin.setBlockToAir(worldObj, x, y, z);
+            int z = zCoord + numTracks * facing.offsetZ;
+            if (WorldPlugin.blockExists(worldObj, x, y, z)) {
+                if (TrackTools.isTrackSpecAt(worldObj, x, y, z, EnumTrack.FORCE.getTrackSpec()))
+                    WorldPlugin.setBlockToAir(worldObj, x, y, z);
                 numTracks--;
             }
         }
@@ -126,13 +163,19 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
 
     @Override
     public boolean rotateBlock(ForgeDirection axis) {
+        if(Game.isNotHost(worldObj))
+            return false;
+        if (state != State.RETRACTED)
+            return false;
         if (axis == ForgeDirection.UP || axis == ForgeDirection.DOWN)
             return false;
         if (facing == axis)
             facing = axis.getOpposite();
         else
             facing = axis;
+        numTracks = 0;
         markBlockForUpdate();
+        notifyBlocksOfNeighborChange();
         return true;
     }
 
@@ -143,6 +186,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         data.setBoolean("powered", powered);
         data.setByte("facing", (byte) facing.ordinal());
         data.setInteger("numTracks", numTracks);
+        data.setString("state", state.name());
     }
 
     @Override
@@ -152,6 +196,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         powered = data.getBoolean("powered");
         facing = ForgeDirection.getOrientation(data.getByte("facing"));
         numTracks = data.getInteger("numTracks");
+        state = State.valueOf(data.getString("state"));
     }
 
     @Override
@@ -180,6 +225,10 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
 
         if (update)
             markBlockForUpdate();
+    }
+
+    public ForgeDirection getFacing() {
+        return facing;
     }
 
 }
