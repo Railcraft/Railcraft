@@ -18,7 +18,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -30,12 +29,8 @@ import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
-import mods.railcraft.common.plugins.forge.LootPlugin;
+import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockChest;
@@ -144,21 +139,16 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
 
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World world, Block block, int x, int y, int z, EntityLivingBase entity) {
-        if (!world.isRemote) {
+        if (!world.isRemote)
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) entity;
                 if (!player.isSneaking()) {
-                    if (TrackTools.isRailBlock(block)) {
-                        int level = EnchantmentHelper.getEnchantmentLevel(RailcraftEnchantments.destruction.effectId, stack) * 2 + 1;
-                        removeTracks(world, level, x, y, z);
-                    }
+                    int level = EnchantmentHelper.getEnchantmentLevel(RailcraftEnchantments.destruction.effectId, stack) * 2 + 1;
+                    removeExtraBlocks(world, level, x, y, z);
                 }
             }
-        }
-        if ((double)block.getBlockHardness(world, x, y, z) != 0.0D)
-        {
+        if ((double) block.getBlockHardness(world, x, y, z) != 0.0D)
             stack.damageItem(1, entity);
-        }
         return true;
     }
 
@@ -232,31 +222,28 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
         info.add(LocalizationPlugin.translate("item.railcraft.tool.crowbar.tip"));
     }
 
-    private void removeTrackAndDrop(int x, int y, int z, World world) {
-        Block block = world.getBlock(x, y, z);
+    private void removeAndDrop(World world, int x, int y, int z, Block block) {
         List<ItemStack> drops = block.getDrops(world, x, y, z, 0, 0);
-        for (ItemStack stack : drops) {
-            if (stack != null && stack.stackSize > 0) {
-                EntityItem entityitem = new EntityItem(world, x, y + 1, z, stack);
-                entityitem.delayBeforeCanPickup = 10;
-                world.spawnEntityInWorld(entityitem);
-            }
-        }
+        InvTools.dropItems(drops, world, x, y, z);
         world.setBlockToAir(x, y, z);
     }
 
-    private void removeTracks(World world, int level, int x, int y, int z) {
-        if (level > 0 ) {
-            removeTrackAndDrop(x, y, z, world);
+    private void removeExtraBlocks(World world, int level, int x, int y, int z) {
+        Block block = WorldPlugin.getBlock(world, x, y, z);
+        removeExtraBlocks(world, level, x, y, z, block);
+    }
+
+    private void removeExtraBlocks(World world, int level, int x, int y, int z, Block block) {
+        if (level > 0) {
+            removeAndDrop(world, x, y, z, block);
             checkBlocks(world, level, x, y, z);
         }
     }
 
     private void checkBlock(World world, int level, int x, int y, int z) {
-        Block block = world.getBlock(x, y, z);
-        if (TrackTools.isRailBlock(block) || block instanceof BlockTrackElevator) {
-            removeTracks(world, level - 1, x, y, z);
-        }
+        Block block = WorldPlugin.getBlock(world, x, y, z);
+        if (TrackTools.isRailBlock(block) || block instanceof BlockTrackElevator || block.isToolEffective("crowbar", WorldPlugin.getBlockMetadata(world, x, y, z)))
+            removeExtraBlocks(world, level - 1, x, y, z, block);
     }
 
     private void checkBlocks(World world, int level, int x, int y, int z) {
@@ -280,4 +267,5 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
         checkBlock(world, level, x, y + 1, z);
         checkBlock(world, level, x, y - 1, z);
     }
+
 }
