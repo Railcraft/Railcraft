@@ -32,6 +32,10 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
     private final ResourceLocation[] textures;
     private final int[] color = new int[3];
     protected final IIcon[] itemIcons = new IIcon[3];
+    private float emblemSize = 0.15F;
+    private float emblemOffsetX = 0.47F;
+    private float emblemOffsetY = -0.17F;
+    private float emblemOffsetZ = -0.515F;
 
     public LocomotiveRendererDefault(String rendererTag, String modelTag, ModelBase model) {
         this(rendererTag, modelTag, model, new ResourceLocation[]{
@@ -47,6 +51,13 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
         this.textures = textures;
         color[2] = 0xFFFFFF;
         setRenderItemIn3D(false);
+    }
+
+    public void setEmblemPosition(float size, float offsetX, float offsetY, float offsetZ) {
+        this.emblemSize = size;
+        this.emblemOffsetX = offsetX;
+        this.emblemOffsetY = offsetY;
+        this.emblemOffsetZ = offsetZ;
     }
 
     @Override
@@ -96,25 +107,20 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
             renderer.bindTex(emblemTexture);
             Tessellator tess = Tessellator.instance;
 
-            float size = 0.15F;
-            float offsetX = 0.47F;
-            float offsetY = -0.17F;
-            float offsetZ = -0.515F;
 //            float size = 0.22F;
 //            float offsetX = -0.25F;
 //            float offsetY = -0.25F;
 //            float offsetZ = -0.46F;
-
             tess.startDrawingQuads();
-            tess.addVertexWithUV(offsetX - size, offsetY - size, offsetZ, 0, 0);
-            tess.addVertexWithUV(offsetX - size, offsetY + size, offsetZ, 0, 1);
-            tess.addVertexWithUV(offsetX + size, offsetY + size, offsetZ, 1, 1);
-            tess.addVertexWithUV(offsetX + size, offsetY + -size, offsetZ, 1, 0);
+            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, emblemOffsetZ, 0, 0);
+            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY + emblemSize, emblemOffsetZ, 0, 1);
+            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + emblemSize, emblemOffsetZ, 1, 1);
+            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + -emblemSize, emblemOffsetZ, 1, 0);
 
-            tess.addVertexWithUV(offsetX + size, offsetY + -size, -offsetZ, 0, 0);
-            tess.addVertexWithUV(offsetX + size, offsetY + size, -offsetZ, 0, 1);
-            tess.addVertexWithUV(offsetX - size, offsetY + size, -offsetZ, 1, 1);
-            tess.addVertexWithUV(offsetX - size, offsetY - size, -offsetZ, 1, 0);
+            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + -emblemSize, -emblemOffsetZ, 0, 0);
+            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + emblemSize, -emblemOffsetZ, 0, 1);
+            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY + emblemSize, -emblemOffsetZ, 1, 1);
+            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, -emblemOffsetZ, 1, 0);
             tess.draw();
         }
         GL11.glPopMatrix();
