@@ -26,6 +26,8 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
     @Override
     public void onNeighborBlockChange(Block block) {
         super.onNeighborBlockChange(block);
+        if (Game.isNotHost(getWorld()))
+            return;
         boolean p = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
         if (powered != p) {
             powered = p;
@@ -52,8 +54,7 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
                 }
             }
         }
-        
-        
+
     }
 
     @Override

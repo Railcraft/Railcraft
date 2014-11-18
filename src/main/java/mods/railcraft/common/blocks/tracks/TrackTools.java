@@ -38,8 +38,9 @@ public class TrackTools {
     }
 
     public static boolean isStraightTrackAt(IBlockAccess world, int x, int y, int z) {
-        if (isRailBlockAt(world, x, y, z))
-            return EnumTrackMeta.fromMeta(WorldPlugin.getBlockMetadata(world, x, y, z)).isStraightTrack();
+        Block block = WorldPlugin.getBlock(world, x, y, z);
+        if (isRailBlock(block))
+            return getTrackMetaEnum(world, block, null, x, y, z).isStraightTrack();
         return false;
     }
 
@@ -62,31 +63,55 @@ public class TrackTools {
         return false;
     }
 
-    public static int getTrackMeta(World world, EntityMinecart cart, int x, int y, int z) {
+    public static int getTrackMeta(IBlockAccess world, EntityMinecart cart, int x, int y, int z) {
         return getTrackMeta(world, world.getBlock(x, y, z), cart, x, y, z);
     }
 
-    public static int getTrackMeta(World world, Block block, EntityMinecart cart, int x, int y, int z) {
+    public static int getTrackMeta(IBlockAccess world, Block block, EntityMinecart cart, int x, int y, int z) {
         return ((BlockRailBase) block).getBasicRailMetadata(world, cart, x, y, z);
     }
 
-    public static ITrackInstance getTrackInstanceAt(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public static EnumTrackMeta getTrackMetaEnum(IBlockAccess world, EntityMinecart cart, int x, int y, int z) {
+        return EnumTrackMeta.fromMeta(getTrackMeta(world, cart, x, y, z));
+    }
+
+    public static EnumTrackMeta getTrackMetaEnum(IBlockAccess world, Block block, EntityMinecart cart, int x, int y, int z) {
+        return EnumTrackMeta.fromMeta(getTrackMeta(world, block, cart, x, y, z));
+    }
+
+    public static ITrackInstance getTrackInstanceAt(IBlockAccess world, int x, int y, int z) {
+        if (WorldPlugin.getBlock(world, x, y, z) != RailcraftBlocks.getBlockTrack())
+            return null;
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack)
             return ((TileTrack) tile).getTrackInstance();
         return null;
     }
 
-    public static boolean isTrackSpecAt(World world, int x, int y, int z, TrackSpec trackSpec) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public static boolean isTrackAt(IBlockAccess world, int x, int y, int z, EnumTrack track, Block block) {
+        return isTrackSpecAt(world, x, y, z, track.getTrackSpec(), block);
+    }
+
+    public static boolean isTrackAt(IBlockAccess world, int x, int y, int z, EnumTrack track) {
+        return isTrackSpecAt(world, x, y, z, track.getTrackSpec());
+    }
+
+    public static boolean isTrackSpecAt(IBlockAccess world, int x, int y, int z, TrackSpec trackSpec, Block block) {
+        if (block != RailcraftBlocks.getBlockTrack())
+            return false;
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         return isTrackSpec(tile, trackSpec);
+    }
+
+    public static boolean isTrackSpecAt(IBlockAccess world, int x, int y, int z, TrackSpec trackSpec) {
+        return isTrackSpecAt(world, x, y, z, trackSpec, WorldPlugin.getBlock(world, x, y, z));
     }
 
     public static boolean isTrackSpec(TileEntity tile, TrackSpec trackSpec) {
         return (tile instanceof TileTrack) && ((TileTrack) tile).getTrackInstance().getTrackSpec() == trackSpec;
     }
 
-    public static boolean isHighSpeedTrackAt(World world, int x, int y, int z) {
+    public static boolean isHighSpeedTrackAt(IBlockAccess world, int x, int y, int z) {
         ITrackInstance track = getTrackInstanceAt(world, x, y, z);
         if (track instanceof TrackBaseRailcraft)
             return ((TrackBaseRailcraft) track).speedController instanceof SpeedControllerHighSpeed;
@@ -106,7 +131,7 @@ public class TrackTools {
      * @param z2    z-Coord of Rail #2
      * @return true if they are connected
      */
-    public static boolean areTracksConnectedAlongAxis(World world, int x1, int y1, int z1, int x2, int y2, int z2) {
+    public static boolean areTracksConnectedAlongAxis(IBlockAccess world, int x1, int y1, int z1, int x2, int y2, int z2) {
         if (y1 < 0 || y2 < 0)
             return false;
         if (x1 != x2 && z1 != z2)

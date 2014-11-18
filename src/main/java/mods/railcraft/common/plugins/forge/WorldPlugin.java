@@ -48,6 +48,10 @@ public class WorldPlugin {
         return world.blockExists(x, y, z);
     }
 
+    public static boolean blockIsAir(World world, int x, int y, int z, Block block) {
+        return block.isAir(world, x, y, z);
+    }
+
     public static boolean blockIsAir(World world, int x, int y, int z) {
         return world.isAirBlock(x, y, z);
     }
