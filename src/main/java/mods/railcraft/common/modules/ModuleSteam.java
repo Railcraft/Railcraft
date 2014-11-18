@@ -13,11 +13,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.alpha.DamageSourceSteam;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.items.ItemGear;
 import mods.railcraft.common.items.ItemGear.EnumGear;
 import mods.railcraft.common.items.ItemIngot;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
@@ -26,7 +24,6 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  *
@@ -36,9 +33,6 @@ public class ModuleSteam extends RailcraftModule {
 
     @Override
     public void initFirst() {
-
-        MinecraftForge.EVENT_BUS.register(DamageSourceSteam.INSTANCE);
-
 //        LiquidItems.getSteamBottle(1);
         EnumMachineBeta beta = EnumMachineBeta.ENGINE_STEAM_HOBBY;
         if (RailcraftConfig.isSubBlockEnabled(beta.getTag())) {

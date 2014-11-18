@@ -45,6 +45,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -535,7 +536,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
             if (entity != this.riddenByEntity && (cartVelocityIsGreaterThan(0.2f) || getEntityData().getBoolean("HighSpeed")) && MiscTools.isKillabledEntity(entity)) {
                 EntityLivingBase living = (EntityLivingBase) entity;
                 if (RailcraftConfig.locomotiveDamageMobs())
-                    living.attackEntityFrom(DamageSourceTrain.INSTANCE, getDamageToRoadKill(living));
+                    living.attackEntityFrom(RailcraftDamageSource.TRAIN, getDamageToRoadKill(living));
                 if (living.getHealth() > 0) {
                     float yaw = (rotationYaw - 90) * (float) Math.PI / 180.0F;
                     living.addVelocity(-MathHelper.sin(yaw) * KNOCKBACK * 0.5F, 0.2D, MathHelper.cos(yaw) * KNOCKBACK * 0.5F);

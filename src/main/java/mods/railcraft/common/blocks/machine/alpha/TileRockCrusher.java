@@ -32,6 +32,7 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -78,8 +79,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
     private final static int PROCESS_TIME = 100;
     private final static int CRUSHING_POWER_COST_PER_TICK = 160;
-    private final static int SUCKING_POWER_COST = 5120;
-    private final static int KILLING_POWER_COST = 10240;
+    private final static int SUCKING_POWER_COST = 5000;
+    private final static int KILLING_POWER_COST = 10000;
     private final static int MAX_RECEIVE = 5000;
     private final static int MAX_ENERGY = CRUSHING_POWER_COST_PER_TICK * PROCESS_TIME;
     public static final int SLOT_INPUT = 0;
@@ -218,15 +219,15 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
                 EntityItem item = TileEntityHopper.func_145897_a(worldObj, xCoord, yCoord + 1, zCoord);
                 if (item != null && useMasterEnergy(SUCKING_POWER_COST, false)) {
                     ItemStack stack = item.getEntityItem().copy();
-                    InventoryManipulator.get(invInput).addStack(stack);
+                    if (InventoryManipulator.get(invInput).addStack(stack) != null)
+                        useMasterEnergy(SUCKING_POWER_COST, true);
                     item.setDead();
-                    useMasterEnergy(SUCKING_POWER_COST, true);
                 }
 
                 EntityLivingBase entity = MiscTools.getEntityAt(worldObj, EntityLivingBase.class, xCoord, yCoord + 1, zCoord);
                 if (entity != null && useMasterEnergy(KILLING_POWER_COST, false))
-                    if (entity.attackEntityFrom(DamageSourceCrusher.INSTANCE, 10))
-                        useMasterEnergy(SUCKING_POWER_COST, true);
+                    if (entity.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
+                        useMasterEnergy(KILLING_POWER_COST, true);
             }
 
             if (isMaster()) {
@@ -422,9 +423,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
     @Override
     public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-        if (getEnergyStorage() == null)
-            return 0;
-        return getEnergyStorage().extractEnergy(maxExtract, simulate);
+        return 0;
     }
 
     @Override

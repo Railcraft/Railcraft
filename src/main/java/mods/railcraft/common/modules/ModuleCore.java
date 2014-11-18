@@ -70,6 +70,7 @@ import mods.railcraft.common.plugins.forge.ItemRegistry;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.crafting.*;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.entity.EntityList;
@@ -95,6 +96,7 @@ public class ModuleCore extends RailcraftModule {
         RailcraftFluids.preInit();
         MinecraftForge.EVENT_BUS.register(RailcraftFluids.getTextureHook());
         MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(RailcraftDamageSource.EVENT_HANDLER);
 
         Helpers.structures = new MultiBlockHelper();
 

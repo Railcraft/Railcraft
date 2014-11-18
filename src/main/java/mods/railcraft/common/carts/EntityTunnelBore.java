@@ -43,6 +43,7 @@ import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.collections.BlockSet;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 
@@ -410,7 +411,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                 for (Object e : entities) {
                     if (e instanceof EntityLivingBase) {
                         EntityLivingBase ent = (EntityLivingBase) e;
-                        ent.attackEntityFrom(DamageSourceBore.INSTANCE, 2);
+                        ent.attackEntityFrom(RailcraftDamageSource.BORE, 2);
                     }
                 }
             }

@@ -22,6 +22,7 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -72,7 +73,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
         triggerCheck();
         if (isJetting())
             for (EntityLivingBase entity : getEntitiesInSteamArea()) {
-                entity.attackEntityFrom(DamageSourceSteam.INSTANCE, DAMAGE);
+                entity.attackEntityFrom(RailcraftDamageSource.STEAM, DAMAGE);
             }
     }
 
