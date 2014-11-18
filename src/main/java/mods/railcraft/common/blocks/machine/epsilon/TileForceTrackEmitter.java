@@ -177,7 +177,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         return numTracks;
     }
 
-    public double getDraw(int tracks) {
+    public static double getDraw(int tracks) {
         return BASE_DRAW + CHARGE_PER_TRACK * tracks;
     }
 
