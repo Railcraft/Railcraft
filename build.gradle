@@ -135,7 +135,6 @@ jar {
 				exclude '**/buildcraft/api/power/**'
 				exclude '**/buildcraft/api/recipes/**'
 				exclude '**/buildcraft/api/robots/**'
-				exclude '**/buildcraft/api/transport/**'
 				exclude '**/ic2/api/crops/**'
 				exclude '**/ic2/api/network/**'
 				exclude '**/ic2/api/event/**'

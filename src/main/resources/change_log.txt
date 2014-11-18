@@ -1,3 +1,6 @@
+9.4.0.0:
+	FIX: Fix Emblems for Electric Locomotives (Issue #365)
+
 9.3.3.7:
 	INFO: 9.4 test release.
 	INFO: Updated BC API to Buildcraft 6.1.7-6.1.8
@@ -20,7 +23,7 @@
 	NEW: Added three new Crowbar exclusive enchantments: Wrecking (bonus damage), Implosion (Creeper bonus damage), Destruction (wide area deconstruction of blocks). (contributions by WoodStone)
 	NEW: Track Layer can now navigate slopes (contribution by Yopu)
 	FIX: Possible fix for Locking Tracks getting out of sync for some users.
-	FIX: Possible fix for cope optimizer issue with walls.
+	FIX: Possible fix for code optimizer issue with walls.
 	FIX: Fixed Anchor/Sentinel pairing displaying the wrong messages due to client/server differences.
 
 9.3.3.4:
