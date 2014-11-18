@@ -28,7 +28,7 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
     }
 
     public static final double EU_RF_RATIO = 4;
-    public static final double EFFICIENCY = 0.6F;
+    public static final double EFFICIENCY = 0.8F;
     private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 0.25);
 

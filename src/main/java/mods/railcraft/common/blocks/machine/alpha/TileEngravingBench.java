@@ -318,9 +318,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
 
     @Override
     public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-        if (energyStorage == null)
-            return 0;
-        return energyStorage.extractEnergy(maxExtract, simulate);
+        return 0;
     }
 
     @Override

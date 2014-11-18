@@ -20,6 +20,8 @@ import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotWater;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
+import mods.railcraft.common.util.network.PacketBuilder;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class ContainerEngineSteamHobby extends RailcraftContainer {
 
@@ -58,16 +60,16 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
-        tile.getTankManager().initGuiData(this, icrafting, 0);
-        tile.getTankManager().initGuiData(this, icrafting, 1);
+    public void addCraftingToCrafters(ICrafting crafter) {
+        super.addCraftingToCrafters(crafter);
+        tile.getTankManager().initGuiData(this, crafter, 0);
+        tile.getTankManager().initGuiData(this, crafter, 1);
 
-        icrafting.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
-        icrafting.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
-        icrafting.sendProgressBarUpdate(this, 12, (int) Math.round(tile.currentOutput * 100));
-        icrafting.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));
-        icrafting.sendProgressBarUpdate(this, 14, tile.energy);
+        crafter.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
+        crafter.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+        crafter.sendProgressBarUpdate(this, 12, (int) Math.round(tile.currentOutput * 100));
+        crafter.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));
+        PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) crafter, windowId, 14, tile.energy);
     }
 
     @Override
@@ -77,22 +79,22 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
         tile.getTankManager().updateGuiData(this, crafters, 1);
 
         for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = (ICrafting) this.crafters.get(var1);
+            ICrafting crafter = (ICrafting) this.crafters.get(var1);
 
             if (this.lastBurnTime != tile.boiler.burnTime)
-                var2.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
+                crafter.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
 
             if (this.lastItemBurnTime != tile.boiler.currentItemBurnTime)
-                var2.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+                crafter.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
 
             if (this.lastOutput != tile.currentOutput)
-                var2.sendProgressBarUpdate(this, 12, (int) Math.round(tile.currentOutput * 100));
+                crafter.sendProgressBarUpdate(this, 12, (int) Math.round(tile.currentOutput * 100));
 
             if (this.lastHeat != tile.boiler.getHeat())
-                var2.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));            
-            
+                crafter.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));
+
             if (this.lastEnergy != tile.energy)
-                var2.sendProgressBarUpdate(this, 15, tile.energy);
+                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) crafter, windowId, 15, tile.energy);
         }
 
         this.lastBurnTime = tile.boiler.burnTime;
