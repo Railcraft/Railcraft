@@ -55,9 +55,7 @@ public class LocomotivePaintingRecipe implements IRecipe {
         if (!isLocomotive(cart))
             return false;
         ItemStack dyeSecondary = craftingGrid.getStackInRowAndColumn(1, 2);
-        if (!isDye(dyeSecondary))
-            return false;
-        return true;
+        return isDye(dyeSecondary);
     }
 
     @Override

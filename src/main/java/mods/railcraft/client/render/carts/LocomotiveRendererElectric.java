@@ -37,6 +37,7 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
         super("railcraft:default", "locomotive.model.electric.default", new ModelLocomotiveElectric());
         LAMP_TEX_ON = new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".lamp.on.png");
         LAMP_TEX_OFF = new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".lamp.off.png");
+        setEmblemPosition(0.2F, -0.03F, -0.41F, -0.505F);
     }
 
     @Override
