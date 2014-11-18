@@ -56,14 +56,14 @@ import net.minecraftforge.fluids.FluidRegistry;
      certificateFingerprint = "a0c255ac501b2749537d5824bb0f0588bf0320fa",
      acceptedMinecraftVersions = "[1.7.10,1.8)",
      dependencies = "required-after:Forge@[10.13.0.1199,);"
-     + "after:BuildCraft|Core[5.0,);"
+     + "after:BuildCraft|Core[6.1.7,);"
      + "after:BuildCraft|Energy;"
      + "after:BuildCraft|Builders;"
      + "after:BuildCraft|Factory;"
      + "after:BuildCraftAPI|statements[1.0,);"
      + "after:Forestry[3,);"
      + "after:Thaumcraft;"
-     + "after:IC2@[2.0.140,)")
+     + "after:IC2@[2.2,)")
 public final class Railcraft {
 
     public static final String MOD_ID = "Railcraft";
