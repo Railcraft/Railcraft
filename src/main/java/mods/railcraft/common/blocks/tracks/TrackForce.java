@@ -86,7 +86,7 @@ public class TrackForce extends TrackUnsupported {
         if (WorldPlugin.getBlock(getWorld(), x, y, z) != emitterBlock)
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(getWorld(), x, y, z);
-        if (tile instanceof TileForceTrackEmitter && isValidEmitterTile(emitter, facing)) {
+        if (tile instanceof TileForceTrackEmitter && isValidEmitterTile((TileForceTrackEmitter) tile, facing)) {
             setEmitter(emitter);
             return true;
         }
@@ -94,7 +94,7 @@ public class TrackForce extends TrackUnsupported {
     }
 
     private boolean isValidEmitterTile(TileForceTrackEmitter tile, ForgeDirection... facing) {
-        if (tile.isInvalid())
+        if (tile == null || tile.isInvalid())
             return false;
         if (getY() - 1 != tile.yCoord)
             return false;

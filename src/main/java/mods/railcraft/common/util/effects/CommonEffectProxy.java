@@ -22,6 +22,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketEffect;
 import mods.railcraft.common.util.network.PacketEffect.Effect;
 import mods.railcraft.common.util.sounds.SoundHelper;
+import net.minecraft.util.MathHelper;
 
 /**
  *
@@ -49,8 +50,44 @@ public class CommonEffectProxy implements IEffectManager {
         } catch (IOException ex) {
         }
 
-
         SoundHelper.playSoundAtEntity(entity, "mob.endermen.portal", 0.25F, 1.0F);
+    }
+
+    @Override
+    public void forceTrackSpawnEffect(World world, double x, double y, double z) {
+        if (Game.isNotHost(world))
+            return;
+
+        try {
+            PacketEffect pkt = new PacketEffect(Effect.FORCE_SPAWN);
+            DataOutputStream data = pkt.getOutputStream();
+            data.writeDouble(x);
+            data.writeDouble(y);
+            data.writeDouble(z);
+            pkt.sendPacket(world, x, y, z);
+        } catch (IOException ex) {
+        }
+
+        SoundHelper.playSound(world, MathHelper.floor_double(x), MathHelper.floor_double(y), MathHelper.floor_double(z), "mob.endermen.portal", 0.25F, 1.0F);
+    }
+
+    @Override
+    public void fireSparkEffect(World world, double startX, double startY, double startZ, double endX, double endY, double endZ) {
+        if (Game.isNotHost(world))
+            return;
+
+        try {
+            PacketEffect pkt = new PacketEffect(Effect.FIRESPARK);
+            DataOutputStream data = pkt.getOutputStream();
+            data.writeDouble(startX);
+            data.writeDouble(startY);
+            data.writeDouble(startZ);
+            data.writeDouble(endX);
+            data.writeDouble(endY);
+            data.writeDouble(endZ);
+            pkt.sendPacket(world, startX, startY, startZ);
+        } catch (IOException ex) {
+        }
     }
 
     @Override
@@ -74,25 +111,6 @@ public class CommonEffectProxy implements IEffectManager {
 
     @Override
     public void trailEffect(int startX, int startY, int startZ, TileEntity dest, long colorSeed) {
-    }
-
-    @Override
-    public void fireSparkEffect(World world, double startX, double startY, double startZ, double endX, double endY, double endZ) {
-        if (Game.isNotHost(world))
-            return;
-
-        try {
-            PacketEffect pkt = new PacketEffect(Effect.FIRESPARK);
-            DataOutputStream data = pkt.getOutputStream();
-            data.writeDouble(startX);
-            data.writeDouble(startY);
-            data.writeDouble(startZ);
-            data.writeDouble(endX);
-            data.writeDouble(endY);
-            data.writeDouble(endZ);
-            pkt.sendPacket(world, startX, startY, startZ);
-        } catch (IOException ex) {
-        }
     }
 
     @Override

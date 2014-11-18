@@ -21,7 +21,8 @@ public class PacketEffect extends RailcraftPacket {
     public enum Effect {
 
         TELEPORT,
-        FIRESPARK
+        FIRESPARK,
+        FORCE_SPAWN
     };
     private Effect effect;
     private ByteArrayOutputStream bytes;

@@ -20,6 +20,7 @@ import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.tracks.*;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
@@ -94,7 +95,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
                         state = State.EXTENDING;
                     break;
             }
-        else if (state == State.EXTENDED || state == State.EXTENDING)
+        else if (state == State.EXTENDED || state == State.EXTENDING || state == State.HALTED)
             state = State.RETRACTING;
 
         state.doAction(this);
@@ -127,6 +128,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
 
     private boolean placeTrack(int x, int y, int z, Block block, EnumTrackMeta meta) {
         if (WorldPlugin.blockIsAir(worldObj, x, y, z, block)) {
+            EffectManager.instance.forceTrackSpawnEffect(worldObj, x + 0.5F, y, z + 0.5F);
             TileTrack track = TrackTools.placeTrack(EnumTrack.FORCE.getTrackSpec(), worldObj, x, y, z, meta.ordinal());
             ((TrackForce) track.getTrackInstance()).setEmitter(this);
             numTracks++;
@@ -167,8 +169,10 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
             int y = yCoord + 1;
             int z = zCoord + numTracks * facing.offsetZ;
             if (WorldPlugin.blockExists(worldObj, x, y, z)) {
-                if (TrackTools.isTrackAt(worldObj, x, y, z, EnumTrack.FORCE))
+                if (TrackTools.isTrackAt(worldObj, x, y, z, EnumTrack.FORCE)) {
+                    EffectManager.instance.forceTrackSpawnEffect(worldObj, x + 0.5F, y, z + 0.5F);
                     WorldPlugin.setBlockToAir(worldObj, x, y, z);
+                }
                 numTracks--;
             }
         }

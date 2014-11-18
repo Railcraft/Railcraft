@@ -22,7 +22,7 @@ import net.minecraft.client.renderer.Tessellator;
 @SideOnly(Side.CLIENT)
 public class EntityFireSparkFX extends EntityFX {
 
-    private float lavaParticleScale;
+    private final float lavaParticleScale;
     private final double endX, endY, endZ;
     private final double maxDist;
 
