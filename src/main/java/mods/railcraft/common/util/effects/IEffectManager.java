@@ -43,6 +43,6 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     void fireSparkEffect(World world, double startX, double startY, double startZ, double endX, double endY, double endZ);
 
-    void forceTrackSpawnEffect(World world, double x, double y, double z);
+    void forceTrackSpawnEffect(World world, int x, int y, int z);
 
 }

@@ -85,7 +85,7 @@ public enum EnumTrack {
     private final int numIcons;
     private final int itemIconIndex;
     private TrackSpec trackSpec;
-    private boolean depreciated;
+    private boolean depreciated, hidden;
     private final Class<? extends TrackBaseRailcraft> trackInstance;
     private static final List<EnumTrack> creativeList = new ArrayList<EnumTrack>(50);
     public static final EnumTrack[] VALUES = values();
@@ -148,6 +148,8 @@ public enum EnumTrack {
         BOARDING_TRAIN.depreciated = true;
         HOLDING.depreciated = true;
         HOLDING_TRAIN.depreciated = true;
+        
+        FORCE.hidden = true;
     }
 
     private EnumTrack(Module module, int numIcons, int itemIconIndex, String tag, int recipeOutput, Class<? extends TrackBaseRailcraft> trackInstance) {
@@ -178,6 +180,10 @@ public enum EnumTrack {
 
     public boolean isDepreciated() {
         return depreciated;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 
     public ItemStack getItem() {

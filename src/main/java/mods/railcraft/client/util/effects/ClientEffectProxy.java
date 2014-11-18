@@ -78,13 +78,16 @@ public class ClientEffectProxy extends CommonEffectProxy {
         if (!shouldSpawnParticle(true))
             return;
 
-        double x = data.readDouble();
-        double y = data.readDouble();
-        double z = data.readDouble();
+        int x = data.readInt();
+        int y = data.readInt();
+        int z = data.readInt();
         double vx = rand.nextGaussian() * 0.1;
         double vy = rand.nextDouble() * 0.01;
         double vz = rand.nextGaussian() * 0.1;
-        spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x, y, z, vx, vy, vz));
+        spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x + 0.1, y, z + 0.1, vx, vy, vz));
+        spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x + 0.9, y, z + 0.1, vx, vy, vz));
+        spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x + 0.1, y, z + 0.9, vx, vy, vz));
+        spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x + 0.9, y, z + 0.9, vx, vy, vz));
     }
 
     @Override

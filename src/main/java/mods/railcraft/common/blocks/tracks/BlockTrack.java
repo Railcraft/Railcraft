@@ -82,11 +82,9 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
         Set<TrackSpec> railcraftSpecs = new HashSet<TrackSpec>();
         for (EnumTrack track : EnumTrack.getCreativeList()) {
-            TrackSpec spec = specs.get((short) track.ordinal());
-            if (spec == null)
-                continue;
+            TrackSpec spec = track.getTrackSpec();
             railcraftSpecs.add(spec);
-            if (track.isEnabled())
+            if (track.isEnabled() && !track.isHidden())
                 list.add(spec.getItem());
         }
 

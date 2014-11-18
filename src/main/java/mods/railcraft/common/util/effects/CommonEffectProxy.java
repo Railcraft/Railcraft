@@ -54,21 +54,21 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public void forceTrackSpawnEffect(World world, double x, double y, double z) {
+    public void forceTrackSpawnEffect(World world, int x, int y, int z) {
         if (Game.isNotHost(world))
             return;
 
         try {
             PacketEffect pkt = new PacketEffect(Effect.FORCE_SPAWN);
             DataOutputStream data = pkt.getOutputStream();
-            data.writeDouble(x);
-            data.writeDouble(y);
-            data.writeDouble(z);
+            data.writeInt(x);
+            data.writeInt(y);
+            data.writeInt(z);
             pkt.sendPacket(world, x, y, z);
         } catch (IOException ex) {
         }
 
-        SoundHelper.playSound(world, MathHelper.floor_double(x), MathHelper.floor_double(y), MathHelper.floor_double(z), "mob.endermen.portal", 0.25F, 1.0F);
+        SoundHelper.playSound(world, x, y, z, "mob.endermen.portal", 0.25F, 1.0F);
     }
 
     @Override

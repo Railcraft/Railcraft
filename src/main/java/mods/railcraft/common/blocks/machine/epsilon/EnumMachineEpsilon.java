@@ -51,8 +51,9 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     static {
         creativeList.add(ELECTRIC_FEEDER);
         creativeList.add(ELECTRIC_FEEDER_ADMIN);
-        creativeList.add(ADMIN_STEAM_PRODUCER);
         creativeList.add(FLUX_TRANSFORMER);
+        creativeList.add(FORCE_TRACK_EMITTER);
+        creativeList.add(ADMIN_STEAM_PRODUCER);
     }
 
     private EnumMachineEpsilon(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {

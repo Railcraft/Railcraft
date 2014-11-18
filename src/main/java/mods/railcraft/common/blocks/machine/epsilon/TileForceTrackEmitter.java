@@ -12,6 +12,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import mods.railcraft.api.electricity.IElectricGrid;
+import mods.railcraft.api.tracks.ITrackInstance;
+import mods.railcraft.api.tracks.ITrackLockdown;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -34,7 +36,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public class TileForceTrackEmitter extends TileMachineBase implements IElectricGrid {
 
-    private static final double BASE_DRAW = 20;
+    private static final double BASE_DRAW = 22;
     private static final double CHARGE_PER_TRACK = 2;
     private static final int TICKS_PER_ACTION = 4;
     private static final int TICKS_PER_REFRESH = 64;
@@ -57,7 +59,9 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
                 case RETRACTING:
                     emitter.retract();
                     break;
-
+                case EXTENDED:
+                    emitter.extended();
+                    break;
             }
         }
 
@@ -103,6 +107,20 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         chargeHandler.tick();
     }
 
+    private void spawnParticles(int x, int y, int z) {
+        EffectManager.instance.forceTrackSpawnEffect(worldObj, x, y, z);
+    }
+
+    private void extended() {
+        TileEntity tile = tileCache.getTileOnSide(ForgeDirection.UP);
+        if (tile instanceof TileTrack) {
+            TileTrack trackTile = (TileTrack) tile;
+            ITrackInstance track = trackTile.getTrackInstance();
+            if (track instanceof ITrackLockdown)
+                ((ITrackLockdown) track).releaseCart();
+        }
+    }
+
     private void extend() {
         if (!hasPowerToExtend())
             state = State.HALTED;
@@ -119,16 +137,16 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
                     meta = EnumTrackMeta.NORTH_SOUTH;
                 else
                     meta = EnumTrackMeta.EAST_WEST;
-                if (!placeTrack(x, y, z, block, meta))
-                    tryClaimTrack(x, y, z, block, meta);
+                if (!placeTrack(x, y, z, block, meta) && !claimTrack(x, y, z, block, meta))
+                    state = State.EXTENDED;
             } else
-                state = State.EXTENDED;
+                state = State.HALTED;
         }
     }
 
     private boolean placeTrack(int x, int y, int z, Block block, EnumTrackMeta meta) {
         if (WorldPlugin.blockIsAir(worldObj, x, y, z, block)) {
-            EffectManager.instance.forceTrackSpawnEffect(worldObj, x + 0.5F, y, z + 0.5F);
+            spawnParticles(x, y, z);
             TileTrack track = TrackTools.placeTrack(EnumTrack.FORCE.getTrackSpec(), worldObj, x, y, z, meta.ordinal());
             ((TrackForce) track.getTrackInstance()).setEmitter(this);
             numTracks++;
@@ -137,20 +155,22 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         return false;
     }
 
-    private void tryClaimTrack(int x, int y, int z, Block block, EnumTrackMeta meta) {
+    private boolean claimTrack(int x, int y, int z, Block block, EnumTrackMeta meta) {
         if (block != RailcraftBlocks.getBlockTrack())
-            return;
+            return false;
         if (TrackTools.getTrackMetaEnum(worldObj, block, null, x, y, z) != meta)
-            return;
+            return false;
         TileEntity tile = WorldPlugin.getBlockTile(worldObj, x, y, z);
         if (!TrackTools.isTrackSpec(tile, EnumTrack.FORCE.getTrackSpec()))
-            return;
+            return false;
         TrackForce track = (TrackForce) ((TileTrack) tile).getTrackInstance();
         TileForceTrackEmitter emitter = track.getEmitter();
         if (emitter == null || emitter == this) {
             track.setEmitter(this);
             numTracks++;
+            return true;
         }
+        return false;
     }
 
     private double getDraw(int tracks) {
@@ -170,7 +190,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
             int z = zCoord + numTracks * facing.offsetZ;
             if (WorldPlugin.blockExists(worldObj, x, y, z)) {
                 if (TrackTools.isTrackAt(worldObj, x, y, z, EnumTrack.FORCE)) {
-                    EffectManager.instance.forceTrackSpawnEffect(worldObj, x + 0.5F, y, z + 0.5F);
+                    spawnParticles(x, y, z);
                     WorldPlugin.setBlockToAir(worldObj, x, y, z);
                 }
                 numTracks--;

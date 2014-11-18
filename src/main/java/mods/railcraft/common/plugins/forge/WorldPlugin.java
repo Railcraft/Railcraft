@@ -9,8 +9,11 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.WorldCoordinate;
+
 import static mods.railcraft.common.util.misc.MiscTools.*;
+
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -72,8 +75,8 @@ public class WorldPlugin {
         int sx = getXOnSide(x, side);
         int sy = getYOnSide(y, side);
         int sz = getZOnSide(z, side);
-        if (world.blockExists(sx, sy, sz))
-            return world.getTileEntity(sx, sy, sz);
+        if (blockExists(world, sx, sy, sz) && getBlock(world, sx, sy, sz) != Blocks.air)
+            return getBlockTile(world, sx, sy, sz);
         return null;
     }
 
