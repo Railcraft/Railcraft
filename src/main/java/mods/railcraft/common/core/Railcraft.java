@@ -60,9 +60,8 @@ import net.minecraftforge.fluids.FluidRegistry;
      + "after:BuildCraft|Energy;"
      + "after:BuildCraft|Builders;"
      + "after:BuildCraft|Factory;"
-     + "after:BuildCraftAPI|gates[2.0,);"
-     + "after:BuildCraftAPI|power[1.1,);"
-     + "after:Forestry;"
+     + "after:BuildCraftAPI|statements[1.0,);"
+     + "after:Forestry[3,);"
      + "after:Thaumcraft;"
      + "after:IC2@[2.0.140,)")
 public final class Railcraft {
