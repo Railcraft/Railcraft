@@ -173,11 +173,15 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         return false;
     }
 
-    private double getDraw(int tracks) {
+    public int getNumberOfTracks() {
+        return numTracks;
+    }
+
+    public double getDraw(int tracks) {
         return BASE_DRAW + CHARGE_PER_TRACK * tracks;
     }
 
-    private boolean hasPowerToExtend() {
+    public boolean hasPowerToExtend() {
         return chargeHandler.getCharge() >= getDraw(numTracks + 1);
     }
 
