@@ -1,3 +1,16 @@
+9.3.3.7:
+	INFO: 9.4 test release.
+	INFO: Updated BC API to Buildcraft 6.1.7-6.1.8
+	NEW: Added Force Track Emitter, uses Charge to project energy tracks.
+	NEW: Added Copper Plates.
+	CHANGE: Information reported by the Electric Meter has been improved.
+	CHANGE: Poor Ore now produces two Nuggets.
+	API: Electricity package was updated to allow usage tracking of charge.
+	API: Add Rock Crusher Recipe InterModComm message. (genymedes01)
+	FIX: Fix Track Layer behaviour with grass blocks. (Yopu)
+	FIX: Fixed some issues with Item/Entities falling on Rock Crushers.
+	FIX: Fixed Rock Crusher death messages, added several new death messages to other damage types.
+
 9.3.3.6:
 	FIX: Fix incorrect import for Arrays in the wall classes.
 

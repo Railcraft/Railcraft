@@ -119,7 +119,7 @@ public class ModuleIC2 extends RailcraftModule {
         ItemStack cesu = IC2Plugin.getItem("cesuUnit");
         if (cesu != null) {
             EnumCart cart = EnumCart.ENERGY_CESU;
-            cart.setContents(batbox);
+            cart.setContents(cesu);
             ItemStack stack = cart.getCartItem();
             if (stack != null) {
                 CraftingPlugin.addShapedRecipe(stack, new Object[]{
@@ -135,7 +135,7 @@ public class ModuleIC2 extends RailcraftModule {
         ItemStack mfe = IC2Plugin.getItem("mfeUnit");
         if (mfe != null) {
             EnumCart cart = EnumCart.ENERGY_MFE;
-            cart.setContents(batbox);
+            cart.setContents(mfe);
             ItemStack stack = cart.getCartItem();
             if (stack != null) {
                 CraftingPlugin.addShapedRecipe(stack, new Object[]{
