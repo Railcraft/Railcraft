@@ -61,6 +61,7 @@ import net.minecraftforge.fluids.FluidRegistry;
      + "after:BuildCraft|Builders;"
      + "after:BuildCraft|Factory;"
      + "after:BuildCraftAPI|statements[1.0,);"
+     + "after:BuildCraftAPI|transport[1.0,);"
      + "after:Forestry[3,);"
      + "after:Thaumcraft;"
      + "after:IC2@[2.2,)")

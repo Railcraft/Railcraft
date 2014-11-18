@@ -59,8 +59,8 @@ public class ItemPlate extends ItemRailcraft {
 
     @Override
     public void getSubItems(Item id, CreativeTabs tab, List list) {
-        for (int i = 0; i < 3; i++) {
-            list.add(new ItemStack(this, 1, i));
+        for (EnumPlate plate : EnumPlate.VALUES) {
+            list.add(new ItemStack(this, 1, plate.ordinal()));
         }
     }
 

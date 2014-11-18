@@ -144,12 +144,11 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
                 EntityPlayer player = (EntityPlayer) entity;
                 if (!player.isSneaking()) {
                     int level = EnchantmentHelper.getEnchantmentLevel(RailcraftEnchantments.destruction.effectId, stack) * 2 + 1;
-                    removeExtraBlocks(world, level, x, y, z);
+                    if (level > 0)
+                        checkBlocks(world, level, x, y, z);
                 }
             }
-        if ((double) block.getBlockHardness(world, x, y, z) != 0.0D)
-            stack.damageItem(1, entity);
-        return true;
+        return super.onBlockDestroyed(stack, world, block, x, y, z, entity);
     }
 
     @Override
@@ -226,11 +225,6 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
         List<ItemStack> drops = block.getDrops(world, x, y, z, 0, 0);
         InvTools.dropItems(drops, world, x, y, z);
         world.setBlockToAir(x, y, z);
-    }
-
-    private void removeExtraBlocks(World world, int level, int x, int y, int z) {
-        Block block = WorldPlugin.getBlock(world, x, y, z);
-        removeExtraBlocks(world, level, x, y, z, block);
     }
 
     private void removeExtraBlocks(World world, int level, int x, int y, int z, Block block) {
