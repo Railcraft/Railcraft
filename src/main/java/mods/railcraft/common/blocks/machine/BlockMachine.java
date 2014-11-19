@@ -253,8 +253,9 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
             if (tile instanceof TileMachineBase)
                 ((TileMachineBase) tile).onNeighborBlockChange(block);
         } catch (StackOverflowError error) {
-            Game.logThrowable(Level.ERROR, "Error in BlockMachine.onNeighborBlockChange()", 10, error);
-            throw error;
+            Game.logThrowable(Level.ERROR, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()", 10, error);
+            if (Game.IS_DEBUG)
+                throw error;
         }
     }
 
