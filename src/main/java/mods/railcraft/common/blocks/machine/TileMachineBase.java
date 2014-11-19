@@ -69,6 +69,9 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
     public void onBlockAdded() {
     }
 
+    /**
+     * Called before the block is removed.
+     */
     public void onBlockRemoval() {
         if (this instanceof IInventory)
             InvTools.dropInventory((IInventory) this, worldObj, xCoord, yCoord, zCoord);

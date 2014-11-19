@@ -70,12 +70,34 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     @Override
     public void onNeighborBlockChange(Block block) {
         super.onNeighborBlockChange(block);
+        checkRedstone();
+    }
+
+    @Override
+    public void onBlockPlacedBy(EntityLivingBase entityliving) {
+        super.onBlockPlacedBy(entityliving);
+        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
+        checkRedstone();
+    }
+
+    private void checkRedstone() {
         if (Game.isNotHost(getWorld()))
             return;
         boolean p = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
         if (powered != p) {
             powered = p;
             sendUpdateToClient();
+        }
+    }
+
+    @Override
+    public void onBlockRemoval() {
+        super.onBlockRemoval();
+        while (numTracks > 0) {
+            int x = xCoord + numTracks * facing.offsetX;
+            int y = yCoord + 1;
+            int z = zCoord + numTracks * facing.offsetZ;
+            removeTrack(x, y, z);
         }
     }
 
@@ -192,14 +214,16 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
             int x = xCoord + numTracks * facing.offsetX;
             int y = yCoord + 1;
             int z = zCoord + numTracks * facing.offsetZ;
-            if (WorldPlugin.blockExists(worldObj, x, y, z)) {
-                if (TrackTools.isTrackAt(worldObj, x, y, z, EnumTrack.FORCE)) {
-                    spawnParticles(x, y, z);
-                    WorldPlugin.setBlockToAir(worldObj, x, y, z);
-                }
-                numTracks--;
-            }
+            removeTrack(x, y, z);
         }
+    }
+
+    private void removeTrack(int x, int y, int z) {
+        if (WorldPlugin.blockExists(worldObj, x, y, z) && TrackTools.isTrackAt(worldObj, x, y, z, EnumTrack.FORCE)) {
+            spawnParticles(x, y, z);
+            WorldPlugin.setBlockToAir(worldObj, x, y, z);
+        }
+        numTracks--;
     }
 
     @Override
@@ -222,12 +246,6 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         if (side == facing.ordinal())
             return getMachineType().getTexture(powered ? 7 : 8);
         return getMachineType().getTexture(powered ? 0 : 6);
-    }
-
-    @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving) {
-        super.onBlockPlacedBy(entityliving);
-        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
     }
 
     @Override
