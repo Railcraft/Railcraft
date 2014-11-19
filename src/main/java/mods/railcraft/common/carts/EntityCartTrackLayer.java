@@ -7,10 +7,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -57,9 +54,9 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
         EnumTrackMeta trackMeta = EnumTrackMeta.NORTH_SOUTH;
         if (travelDirection == ForgeDirection.EAST || travelDirection == ForgeDirection.WEST)
             trackMeta = EnumTrackMeta.EAST_WEST;
-        if (!worldObj.isAirBlock(offsetX, y, offsetZ) && worldObj.isAirBlock(offsetX, y + 1, offsetZ) && trackMeta.isStraightTrack())
+        if (!isValidReplacementBlock(offsetX, y, offsetZ) && isValidReplacementBlock(offsetX, y + 1, offsetZ) && trackMeta.isStraightTrack())
             y++;
-        if (worldObj.isAirBlock(offsetX, y, offsetZ) && worldObj.isAirBlock(offsetX, y - 1, offsetZ)) {
+        if (isValidReplacementBlock(offsetX, y, offsetZ) && isValidReplacementBlock(offsetX, y - 1, offsetZ)) {
             y--;
             if (travelDirection == ForgeDirection.NORTH)
                 trackMeta = EnumTrackMeta.SOUTH_SLOPE;
@@ -76,7 +73,12 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
     }
 
     private boolean isValidNewTrackPosition(int x, int y, int z) {
-        return worldObj.isAirBlock(x, y, z) && World.doesBlockHaveSolidTopSurface(worldObj, x, y - 1, z);
+        return isValidReplacementBlock(x, y, z) && World.doesBlockHaveSolidTopSurface(worldObj, x, y - 1, z);
+    }
+
+    private boolean isValidReplacementBlock(int x, int y, int z) {
+        Block block = worldObj.getBlock(x, y, z);
+        return (worldObj.isAirBlock(x, y, z) || EntityTunnelBore.replaceableBlocks.contains(block));
     }
 
     @Override
