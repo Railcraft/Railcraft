@@ -46,7 +46,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     protected static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     public static final int TANK_WATER = 0;
     public static final int TANK_STEAM = 1;
-    public final static int TRANSFER_RATE = 80;
+    public final static int TRANSFER_RATE = FluidHelper.BUCKET_VOLUME;
     public final static int TICKS_LOW = 16;
     public final static int TICKS_HIGH = 8;
     public final static int STEAM_LOW = 16;

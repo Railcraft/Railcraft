@@ -42,9 +42,9 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler {
 
     };
     private final static ForgeDirection[] FLUID_OUTPUTS = {ForgeDirection.DOWN};
-    private static final int FLOW_RATE = 250;
+    private static final int FLOW_RATE = FluidHelper.BUCKET_VOLUME;
     private static final byte FILL_INCREMENT = 1;
-    private StandardTank fillTank = new StandardTank(20);
+    private final StandardTank fillTank = new StandardTank(20);
 
     public TileTankIronValve() {
         tankManager.add(fillTank);
@@ -155,7 +155,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler {
         if (tMan == null)
             return 0;
         resource = resource.copy();
-        resource.amount = Math.min(resource.amount, FLOW_RATE);
+//        resource.amount = Math.min(resource.amount, FLOW_RATE);
         int filled = tMan.fill(0, resource, doFill);
         if (filled > 0 && doFill)
             setFilling(resource.copy());
@@ -168,7 +168,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler {
             return null;
         TankManager tMan = getTankManager();
         if (tMan != null) {
-            maxDrain = Math.min(maxDrain, FLOW_RATE);
+//            maxDrain = Math.min(maxDrain, FLOW_RATE);
             return tMan.drain(0, maxDrain, doDrain);
         }
         return null;
