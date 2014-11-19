@@ -9,6 +9,7 @@ import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -21,6 +22,18 @@ public class TileElectricFeederAdmin extends TileMachineBase implements IElectri
     @Override
     public void onNeighborBlockChange(Block block) {
         super.onNeighborBlockChange(block);
+        checkRedstone();
+    }
+
+    @Override
+    public void onBlockPlacedBy(EntityLivingBase entityliving) {
+        super.onBlockPlacedBy(entityliving);
+        checkRedstone();
+    }
+
+    private void checkRedstone() {
+        if (Game.isNotHost(getWorld()))
+            return;
         boolean p = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
         if (powered != p) {
             powered = p;

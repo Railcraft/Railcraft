@@ -9,7 +9,9 @@ import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -26,6 +28,16 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
     @Override
     public void onNeighborBlockChange(Block block) {
         super.onNeighborBlockChange(block);
+        checkRedstone();
+    }
+
+    @Override
+    public void onBlockPlacedBy(EntityLivingBase entityliving) {
+        super.onBlockPlacedBy(entityliving);
+        checkRedstone();
+    }
+
+    private void checkRedstone() {
         if (Game.isNotHost(getWorld()))
             return;
         boolean p = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
