@@ -30,7 +30,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemTrack extends ItemBlock implements ITrackItem {
 
@@ -81,13 +80,6 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
     @Override
     public int getMetadata(int i) {
         return 0;
-    }
-
-    @Override
-    public int getDamage(ItemStack stack) {
-        if (super.getDamage(stack) == OreDictionary.WILDCARD_VALUE)
-            return OreDictionary.WILDCARD_VALUE;
-        return Math.abs(getTrackSpec(stack).getTrackTag().hashCode() % (Short.MAX_VALUE - 1));
     }
 
     @Override
