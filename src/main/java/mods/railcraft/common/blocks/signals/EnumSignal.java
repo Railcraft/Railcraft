@@ -53,9 +53,9 @@ public enum EnumSignal implements IIconProvider, ISignalTileDefinition {
         creativeList.add(DUAL_HEAD_BLOCK_SIGNAL);
         creativeList.add(DUAL_HEAD_DISTANT_SIGNAL);
         creativeList.add(BOX_BLOCK_RELAY);
+        creativeList.add(BOX_RECEIVER);
         creativeList.add(BOX_CONTROLLER);
         creativeList.add(BOX_ANALOG_CONTROLLER);
-        creativeList.add(BOX_RECEIVER);
         creativeList.add(BOX_CAPACITOR);
         creativeList.add(BOX_SEQUENCER);
         creativeList.add(BOX_INTERLOCK);
