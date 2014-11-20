@@ -176,8 +176,12 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         super.updateEntity();
 
         if (Game.isHost(worldObj)) {
-            if (isStructureValid())
+            if (isStructureValid()) {
+                if (isMaster())
+                    addToNet();
                 chargeHandler.tick();
+            } else
+                dropFromNet();
 
             double chargeNeeded = chargeHandler.getCapacity() - chargeHandler.getCharge();
             if (chargeNeeded > 0) {
@@ -190,8 +194,6 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
             }
 
             if (isMaster()) {
-                addToNet();
-
                 boolean addedEnergy = false;
                 if (energy < BC_OUTPUT * 2) {
                     FluidStack steam = tankManager.drain(TANK_STEAM, STEAM_USAGE, false);
