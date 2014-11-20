@@ -143,7 +143,8 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         Blocks.brown_mushroom,
         Blocks.red_mushroom,
         Blocks.yellow_flower,
-        Blocks.red_flower,};
+        Blocks.red_flower,
+        Blocks.double_plant};
 
     static {
         for (Block block : mineable) {
