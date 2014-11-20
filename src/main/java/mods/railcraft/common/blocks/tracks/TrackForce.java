@@ -13,6 +13,7 @@ import mods.railcraft.common.blocks.machine.epsilon.TileForceTrackEmitter;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -106,6 +107,16 @@ public class TrackForce extends TrackUnsupported {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public float getHardness() {
+        return -1;
+    }
+
+    @Override
+    public float getExplosionResistance(double srcX, double srcY, double srcZ, Entity exploder) {
+        return 6000000.0F;
     }
 
 }
