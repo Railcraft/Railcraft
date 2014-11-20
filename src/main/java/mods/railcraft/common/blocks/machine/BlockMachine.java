@@ -30,12 +30,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 
 public class BlockMachine extends BlockContainer implements IPostConnection {
@@ -78,6 +80,11 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
         return proxy;
     }
 
+    public IEnumMachine getMachineType(World world, int x, int y, int z) {
+        int meta = WorldPlugin.getBlockMetadata(world, x, y, z);
+        return proxy.getMachine(meta);
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
@@ -95,7 +102,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
 
     @Override
     public IIcon getIcon(int side, int meta) {
-        return proxy.getTexture(meta, side);
+        return proxy.getMachine(meta).getTexture(side);
     }
 
     @Override
@@ -281,8 +288,8 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     }
 
     @Override
-    public TileEntity createTileEntity(World world, int metadata) {
-        return proxy.getTileEntity(metadata);
+    public TileEntity createTileEntity(World world, int meta) {
+        return proxy.getMachine(meta).getTileEntity();
     }
 
     @Override
@@ -359,6 +366,16 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).connectsToPost(side);
         return ConnectStyle.NONE;
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+        return BoundingBoxManager.getCollisionBox(world, x, y, z, getMachineType(world, x, y, z));
+    }
+
+    @Override
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+        return BoundingBoxManager.getSelectionBox(world, x, y, z, getMachineType(world, x, y, z));
     }
 
 }

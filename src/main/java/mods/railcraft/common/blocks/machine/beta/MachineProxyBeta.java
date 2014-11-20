@@ -9,13 +9,8 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.IMachineProxy;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
 /**
@@ -25,23 +20,8 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 public class MachineProxyBeta implements IMachineProxy {
 
     @Override
-    public String getTag(int meta) {
-        return EnumMachineBeta.fromId(meta).getTag();
-    }
-
-    @Override
-    public IIcon getTexture(int meta, int side) {
-        return EnumMachineBeta.fromId(meta).getTexture(side);
-    }
-
-    @Override
-    public Class getTileClass(int meta) {
-        return EnumMachineBeta.fromId(meta).getTileClass();
-    }
-
-    @Override
-    public TileEntity getTileEntity(int meta) {
-        return EnumMachineBeta.fromId(meta).getTileEntity();
+    public IEnumMachine getMachine(int meta) {
+        return EnumMachineBeta.fromId(meta);
     }
 
     @Override
@@ -50,12 +30,8 @@ public class MachineProxyBeta implements IMachineProxy {
     }
 
     @Override
-    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        return EnumMachineBeta.fromId(stack.getItemDamage()).getToolTip(stack, player, adv);
-    }
-
-    @Override
     public void registerIcons(IIconRegister iconRegister) {
         EnumMachineBeta.registerIcons(iconRegister);
     }
+
 }

@@ -13,21 +13,23 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.common.blocks.frame.BlockFrame;
+import mods.railcraft.common.blocks.machine.BoundingBoxManager;
+import mods.railcraft.common.blocks.machine.BoundingBoxManager.ReducedBoundingBox;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import static java.awt.SystemTray.isSupported;
 
 /**
  *
@@ -154,6 +156,26 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
         if (getAddon() == AddonType.FRAME)
             return IPostConnection.ConnectStyle.TWO_THIN;
         return IPostConnection.ConnectStyle.NONE;
+    }
+
+    public static class WireBoundingBox extends ReducedBoundingBox {
+
+        public WireBoundingBox() {
+            super(4);
+        }
+
+        @Override
+        public AxisAlignedBB getBox(World world, int x, int y, int z) {
+            TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+            if (tile instanceof TileWire) {
+                TileWire wire = (TileWire) tile;
+                AddonType type = wire.getAddon();
+                if (type == AddonType.NONE)
+                    return super.getBox(world, x, y, z);
+            }
+            return BoundingBoxManager.DEFAULT.getBox(world, x, y, z);
+        }
+
     }
 
 }

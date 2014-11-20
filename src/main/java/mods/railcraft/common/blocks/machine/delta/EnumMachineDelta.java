@@ -18,6 +18,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.BoundingBoxManager;
+import mods.railcraft.common.blocks.machine.BoundingBoxManager.BoundingBox;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -47,6 +49,8 @@ public enum EnumMachineDelta implements IEnumMachine {
     static {
         creativeList.add(WIRE);
 //        creativeList.add(SAWMILL);
+
+        BoundingBoxManager.registerBoundingBox(WIRE, new TileWire.WireBoundingBox());
     }
 
     private EnumMachineDelta(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {

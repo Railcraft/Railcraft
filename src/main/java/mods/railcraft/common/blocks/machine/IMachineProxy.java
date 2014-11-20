@@ -9,12 +9,7 @@
 package mods.railcraft.common.blocks.machine;
 
 import java.util.List;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 
 /**
  *
@@ -22,17 +17,9 @@ import net.minecraft.util.IIcon;
  */
 public interface IMachineProxy {
 
-    String getTag(int meta);
-
-    IIcon getTexture(int meta, int side);
-
-    TileEntity getTileEntity(int meta);
+    IEnumMachine getMachine(int meta);
 
     List<? extends IEnumMachine> getCreativeList();
-
-    Class getTileClass(int meta);
-
-    ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv);
 
     void registerIcons(IIconRegister iconRegister);
 

@@ -33,7 +33,7 @@ public class ItemMachine extends ItemBlockRailcraftMultiType {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return machineBlock.getMachineProxy().getTag(stack.getItemDamage());
+        return machineBlock.getMachineProxy().getMachine(stack.getItemDamage()).getTag();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ItemMachine extends ItemBlockRailcraftMultiType {
 
     @Override
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        return machineBlock.getMachineProxy().getToolTip(stack, player, adv);
+        return machineBlock.getMachineProxy().getMachine(stack.getItemDamage()).getToolTip(stack, player, adv);
     }
 
 }

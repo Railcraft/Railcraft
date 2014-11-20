@@ -8,16 +8,18 @@
  */
 package mods.railcraft.common.blocks.machine;
 
+import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IEnumMachine
-{
+public interface IEnumMachine {
 
     String getTag();
 
@@ -31,9 +33,14 @@ public interface IEnumMachine
 
     Class getTileClass();
 
+    TileEntity getTileEntity();
+
+    ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv);
+
     int ordinal();
 
     Block getBlock();
 
     boolean isDepreciated();
+
 }
