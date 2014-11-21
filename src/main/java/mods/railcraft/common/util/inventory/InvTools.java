@@ -194,6 +194,16 @@ public abstract class InvTools {
         return nbt;
     }
 
+    public static void addNBTTag(ItemStack stack, String key, String value) {
+        NBTTagCompound nbt = getItemData(stack);
+        nbt.setString(key, value);
+    }
+
+    public static void addNBTTag(ItemStack stack, String key, int value) {
+        NBTTagCompound nbt = getItemData(stack);
+        nbt.setInteger(key, value);
+    }
+
     public static ItemStack depleteItem(ItemStack stack) {
         if (stack.stackSize == 1)
             return stack.getItem().getContainerItem(stack);

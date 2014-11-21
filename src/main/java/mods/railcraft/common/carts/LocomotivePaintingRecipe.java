@@ -26,6 +26,7 @@ public class LocomotivePaintingRecipe implements IRecipe {
 
     public LocomotivePaintingRecipe(ItemStack locomotive) {
         this.locomotive = locomotive;
+        InvTools.addNBTTag(locomotive, "gregfix", "get the hell off my lawn!");
     }
 
     private boolean isDye(ItemStack stack) {
