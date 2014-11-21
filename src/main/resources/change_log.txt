@@ -1,3 +1,12 @@
+9.4.0.1:
+	CHANGE: Loosen up fluid transfer rates for Tanks and Boilers, we want to support mods other than Buildcraft better.
+	FIX: Track Layer now ignores plants. (Yopu)
+	FIX: Possible fix for IC2 EnergyNet issues (Issue #404)
+	FIX: Various minor fixes to Force Tracks. Make unbreakable and remove from creative.
+	FIX: Tweak track item creation, should eliminate stacking issues.
+	FIX: Locomotives shouldn't forget Emblems when broken.
+	FIX: Add a hack to keep Gregtech from removing my Locomotive Painting and Emblem recipes.
+
 9.4.0.0:
 	FIX: Fix Emblems for Electric Locomotives (Issue #365)
 
