@@ -216,6 +216,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         ItemLocomotive.setItemColorData(item, getPrimaryColor(), getSecondaryColor());
         ItemLocomotive.setItemWhistleData(item, whistlePitch);
         ItemLocomotive.setModel(item, getModel());
+        ItemLocomotive.setEmblem(item, getEmblem());
         if (hasCustomInventoryName())
             item.setStackDisplayName(getCommandSenderName());
         return item;
