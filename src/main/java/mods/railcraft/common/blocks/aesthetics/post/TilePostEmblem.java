@@ -13,6 +13,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -25,6 +28,19 @@ public class TilePostEmblem extends RailcraftTileEntity {
     private ForgeDirection facing = ForgeDirection.NORTH;
     private String emblem = "";
     private EnumColor color = null;
+
+    @Override
+    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(entityliving, stack);
+        setFacing(MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving));
+        NBTTagCompound nbt = stack.getTagCompound();
+        if (nbt != null) {
+            if (nbt.hasKey("color"))
+                setColor(EnumColor.fromId(nbt.getByte("color")));
+            if (nbt.hasKey("emblem"))
+                setEmblem(nbt.getString("emblem"));
+        }
+    }
 
     public void setFacing(ForgeDirection f) {
         switch (f) {

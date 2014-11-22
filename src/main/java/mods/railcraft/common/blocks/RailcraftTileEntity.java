@@ -28,6 +28,7 @@ import mods.railcraft.common.util.network.PacketTileEntity;
 import mods.railcraft.common.util.network.RailcraftPacket;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 
 public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable {
 
@@ -86,7 +87,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
             PacketBuilder.instance().sendTileEntityPacket(this);
     }
 
-    public void onBlockPlacedBy(EntityLivingBase entityliving) {
+    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         if (entityliving instanceof EntityPlayer)
             owner = ((EntityPlayer) entityliving).getGameProfile();
     }

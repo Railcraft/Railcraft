@@ -250,7 +250,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
         TileEntity tile = world.getTileEntity(i, j, k);
         if (tile instanceof TileMachineBase)
-            ((TileMachineBase) tile).onBlockPlacedBy(entityliving);
+            ((TileMachineBase) tile).onBlockPlacedBy(entityliving, stack);
     }
 
     @Override

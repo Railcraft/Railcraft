@@ -78,8 +78,8 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving) {
-        super.onBlockPlacedBy(entityliving);
+    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, xCoord, yCoord, zCoord);
         if (direction == ForgeDirection.UNKNOWN)
             direction = MiscTools.getSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);

@@ -204,8 +204,8 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving) {
-        super.onBlockPlacedBy(entityliving);
+    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(entityliving, stack);
         switchOrientation();
         checkPower();
     }

@@ -364,7 +364,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
         TileEntity tile = world.getTileEntity(i, j, k);
         if (tile instanceof TileTrack) {
-            ((TileTrack) tile).onBlockPlacedBy(entityliving);
+            ((TileTrack) tile).onBlockPlacedBy(entityliving, stack);
             ((TileTrack) tile).getTrackInstance().onBlockPlacedBy(entityliving);
         }
     }

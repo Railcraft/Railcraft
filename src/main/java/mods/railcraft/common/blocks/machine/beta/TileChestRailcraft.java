@@ -22,6 +22,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 
 import static net.minecraftforge.common.util.ForgeDirection.DOWN;
@@ -49,8 +50,8 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving) {
-        super.onBlockPlacedBy(entityliving);
+    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(entityliving, stack);
         facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
     }
 

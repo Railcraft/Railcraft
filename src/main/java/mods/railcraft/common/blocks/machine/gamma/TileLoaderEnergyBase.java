@@ -71,8 +71,8 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving) {
-        super.onBlockPlacedBy(entityliving);
+    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, xCoord, yCoord, zCoord);
         if (direction == ForgeDirection.UNKNOWN)
             direction = MiscTools.getSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);

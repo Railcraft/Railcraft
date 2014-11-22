@@ -286,9 +286,9 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase player) {
-        super.onBlockPlacedBy(player);
-        ForgeDirection facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, player);
+    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(entityliving, stack);
+        ForgeDirection facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
         if (facing == ForgeDirection.EAST || facing == ForgeDirection.WEST)
             flippedAxis = true;
     }

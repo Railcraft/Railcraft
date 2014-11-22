@@ -10,6 +10,7 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -26,8 +27,8 @@ public class TileElectricFeederAdmin extends TileMachineBase implements IElectri
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving) {
-        super.onBlockPlacedBy(entityliving);
+    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(entityliving, stack);
         checkRedstone();
     }
 

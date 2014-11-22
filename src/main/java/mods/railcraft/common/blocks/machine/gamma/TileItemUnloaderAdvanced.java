@@ -17,6 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 
 public class TileItemUnloaderAdvanced extends TileItemUnloader {
 
@@ -65,8 +66,8 @@ public class TileItemUnloaderAdvanced extends TileItemUnloader {
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving) {
-        super.onBlockPlacedBy(entityliving);
+    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, xCoord, yCoord, zCoord);
         if (direction == ForgeDirection.UNKNOWN)
             direction = MiscTools.getSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);

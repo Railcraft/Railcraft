@@ -89,7 +89,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
         TileEntity tile = world.getTileEntity(i, j, k);
         if (tile instanceof TileSignalFoundation)
-            ((TileSignalFoundation) tile).onBlockPlacedBy(entityliving);
+            ((TileSignalFoundation) tile).onBlockPlacedBy(entityliving, stack);
     }
 
     @Override

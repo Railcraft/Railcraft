@@ -242,14 +242,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
             TileEntity tile = world.getTileEntity(x, y, z);
             if (tile instanceof TilePostEmblem) {
                 TilePostEmblem post = (TilePostEmblem) tile;
-                post.setFacing(MiscTools.getHorizontalSideClosestToPlayer(world, x, y, z, entity));
-                NBTTagCompound nbt = stack.getTagCompound();
-                if (nbt != null) {
-                    if (nbt.hasKey("color"))
-                        post.setColor(EnumColor.fromId(nbt.getByte("color")));
-                    if (nbt.hasKey("emblem"))
-                        post.setEmblem(nbt.getString("emblem"));
-                }
+                post.onBlockPlacedBy(entity, stack);
             }
         }
     }

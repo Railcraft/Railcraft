@@ -311,9 +311,9 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase player) {
-        super.onBlockPlacedBy(player);
-        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, player);
+    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(entityliving, stack);
+        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
     }
 
     @Override
