@@ -35,6 +35,7 @@ public enum EnumBlockMaterial implements IDerivedBlock {
     CONCRETE,
     SNOW,
     ICE,
+    PACKED_ICE,
     IRON,
     GOLD,
     DIAMOND,
@@ -155,6 +156,7 @@ public enum EnumBlockMaterial implements IDerivedBlock {
         SNOW.source = Blocks.snow;
         SNOW.toolClass = "shovel";
         ICE.source = Blocks.ice;
+        PACKED_ICE.source=Blocks.packed_ice;
 
         IRON.source = Blocks.iron_block;
         GOLD.source = Blocks.gold_block;
@@ -199,6 +201,7 @@ public enum EnumBlockMaterial implements IDerivedBlock {
 
         creativeList.add(SNOW);
         creativeList.add(ICE);
+        creativeList.add(PACKED_ICE);
         creativeList.add(IRON);
         creativeList.add(STEEL);
         creativeList.add(COPPER);
