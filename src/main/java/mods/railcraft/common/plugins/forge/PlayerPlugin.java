@@ -84,7 +84,7 @@ public class PlayerPlugin {
     }
 
     public static boolean isSamePlayer(GameProfile a, GameProfile b) {
-        if (a.getId() != null || b.getId() != null)
+        if (a.getId() != null && b.getId() != null)
             return a.getId().equals(b.getId());
         return a.getName() != null && a.getName().equals(b.getName());
     }
