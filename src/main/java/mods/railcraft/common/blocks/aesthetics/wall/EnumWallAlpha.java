@@ -36,6 +36,7 @@ public enum EnumWallAlpha implements WallInfo {
     CONCRETE,
     SNOW,
     ICE,
+    PACKED_ICE,
     STONE_BRICK,
     STONE_BRICK_MOSSY,
     STONE_BRICK_CRACKED,
@@ -61,6 +62,7 @@ public enum EnumWallAlpha implements WallInfo {
 
         SNOW.source = Blocks.snow;
         ICE.source = Blocks.ice;
+        PACKED_ICE.source = Blocks.packed_ice;
 
         STONE_BRICK.source = Blocks.stonebrick;
         STONE_BRICK.sourceMeta = 0;
