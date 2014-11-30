@@ -201,6 +201,7 @@ public enum EnumBlockMaterial implements IDerivedBlock {
 
         creativeList.add(SNOW);
         creativeList.add(ICE);
+        creativeList.add(PACKED_ICE);
         creativeList.add(IRON);
         creativeList.add(STEEL);
         creativeList.add(COPPER);
