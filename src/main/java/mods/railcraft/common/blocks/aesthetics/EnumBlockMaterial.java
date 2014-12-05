@@ -209,6 +209,7 @@ public enum EnumBlockMaterial implements IDerivedBlock {
         creativeList.add(LEAD);
         creativeList.add(GOLD);
         creativeList.add(DIAMOND);
+        creativeList.add(OBSIDIAN);
         creativeList.add(CONCRETE);
         creativeList.add(CREOSOTE);
         creativeList.add(ABYSSAL_BRICK);
