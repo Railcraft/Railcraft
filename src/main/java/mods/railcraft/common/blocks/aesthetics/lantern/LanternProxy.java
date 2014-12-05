@@ -1,10 +1,10 @@
 package mods.railcraft.common.blocks.aesthetics.lantern;
 
-import mods.railcraft.common.blocks.aesthetics.wall.WallInfo;
+import java.util.List;
 
 public interface LanternProxy {
 
-    public LanternInfo[] values();
+    List<? extends LanternInfo> getCreativeList();
 
     LanternInfo fromOrdinal(int id);
 

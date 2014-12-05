@@ -1,10 +1,12 @@
 package mods.railcraft.common.blocks.aesthetics.lantern;
 
+import java.util.List;
+
 public class LanternProxyStone implements LanternProxy {
 
     @Override
-    public LanternInfo[] values() {
-        return EnumLanternStone.VALUES;
+    public List<? extends LanternInfo> getCreativeList() {
+        return EnumLanternStone.creativeList;
     }
 
     @Override

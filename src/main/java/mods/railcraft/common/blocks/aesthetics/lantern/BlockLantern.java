@@ -68,7 +68,7 @@ public class BlockLantern extends Block {
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        for (LanternInfo lantern : proxy.values()) {
+        for (LanternInfo lantern : proxy.getCreativeList()) {
             if (lantern.isEnabled())
                 list.add(lantern.getItem());
         }
@@ -128,7 +128,6 @@ public class BlockLantern extends Block {
         return this.proxy.fromOrdinal(meta).getTexture(side);
     }
 
-
     @SideOnly(Side.CLIENT)
     @Override
     public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
@@ -140,7 +139,6 @@ public class BlockLantern extends Block {
     public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
         return ParticleHelper.addDestroyEffects(worldObj, this, x, y, z, meta, effectRenderer, null);
     }
-
 
     @SideOnly(Side.CLIENT)
     @Override
