@@ -49,7 +49,7 @@ public class DetectorItem extends DetectorFilter {
 
     public enum FilterMode {
 
-        AT_LEAST, AT_MOST, EXACTLY;
+        AT_LEAST, AT_MOST, EXACTLY, LESS_THAN, GREATER_THAN;
 
         @Override
         public String toString() {
@@ -68,37 +68,31 @@ public class DetectorItem extends DetectorFilter {
     public int testCarts(List<EntityMinecart> carts) {
         for (EntityMinecart cart : carts) {
             IInventory cartInv = null;
-            if (cart instanceof IInventory) {
+            if (cart instanceof IInventory)
                 cartInv = (IInventory) cart;
-            }
-            if (cartInv != null && cartInv.getSizeInventory() > 0) {
+            if (cartInv != null && cartInv.getSizeInventory() > 0)
                 switch (primaryMode) {
                     case ANYTHING:
                         return FULL_POWER;
                     case EMPTY:
-                        if (InvTools.isInventoryEmpty(cartInv)) {
+                        if (InvTools.isInventoryEmpty(cartInv))
                             return FULL_POWER;
-                        }
                         continue;
                     case FULL:
-                        if (InvTools.isInventoryFull(cartInv)) {
+                        if (InvTools.isInventoryFull(cartInv))
                             return FULL_POWER;
-                        }
                         continue;
                     case FILTERED:
-                        if (matchesFilter(cartInv)) {
+                        if (matchesFilter(cartInv))
                             return FULL_POWER;
-                        }
                         continue;
                     case NOT_EMPTY:
-                        if (!InvTools.isInventoryEmpty(cartInv)) {
+                        if (!InvTools.isInventoryEmpty(cartInv))
                             return FULL_POWER;
-                        }
                         continue;
                     case ANALOG:
                         return Container.calcRedstoneFromInventory(cartInv);
                 }
-            }
         }
         return NO_POWER;
     }
@@ -106,27 +100,31 @@ public class DetectorItem extends DetectorFilter {
     private boolean matchesFilter(IInventory cartInv) {
         for (int i = 0; i < getFilters().getSizeInventory(); i++) {
             ItemStack filter = getFilters().getStackInSlot(i);
-            if (filter == null) {
+            if (filter == null)
                 continue;
-            }
             int amountFilter = InvTools.countItems(getFilters(), filter);
             int amountCart = InvTools.countItems(cartInv, filter);
 
             switch (filterMode) {
                 case EXACTLY:
-                    if (amountCart != amountFilter) {
+                    if (amountCart != amountFilter)
                         return false;
-                    }
                     break;
                 case AT_LEAST:
-                    if (amountCart < amountFilter) {
+                    if (amountCart < amountFilter)
                         return false;
-                    }
                     break;
                 case AT_MOST:
-                    if (amountCart > amountFilter) {
+                    if (amountCart > amountFilter)
                         return false;
-                    }
+                    break;
+                case GREATER_THAN:
+                    if (amountCart <= amountFilter)
+                        return false;
+                    break;
+                case LESS_THAN:
+                    if (amountCart >= amountFilter)
+                        return false;
                     break;
             }
         }

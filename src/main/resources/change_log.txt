@@ -1,4 +1,7 @@
 9.4.0.1:
+	NEW: Added Less Than/Greater Than modes to the Item Detector.
+
+9.4.0.1:
 	CHANGE: Loosen up fluid transfer rates for Tanks and Boilers, we want to support mods other than Buildcraft better.
 	FIX: Track Layer now ignores plants. (Yopu)
 	FIX: Possible fix for IC2 EnergyNet issues (Issue #404)
