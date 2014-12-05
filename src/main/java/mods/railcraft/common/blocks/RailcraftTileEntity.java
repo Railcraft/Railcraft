@@ -126,6 +126,8 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     public abstract String getName();
 
     public static boolean isUseableByPlayerHelper(TileEntity tile, EntityPlayer player) {
+        if(tile.isInvalid())
+            return false;
         if (tile.getWorldObj().getTileEntity(tile.xCoord, tile.yCoord, tile.zCoord) != tile)
             return false;
         return player.getDistanceSq(tile.xCoord, tile.yCoord, tile.zCoord) <= 64;
