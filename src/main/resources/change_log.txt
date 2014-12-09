@@ -1,5 +1,6 @@
-9.4.0.1:
+NEXT:
 	NEW: Added Less Than/Greater Than modes to the Item Detector.
+	CONFIG: Add config option to explicitly disable the generation of new Tracking Aura blocks.
 
 9.4.0.1:
 	CHANGE: Loosen up fluid transfer rates for Tanks and Boilers, we want to support mods other than Buildcraft better.
