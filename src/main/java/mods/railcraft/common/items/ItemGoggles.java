@@ -79,7 +79,7 @@ public class ItemGoggles extends ItemArmor {
                 ItemRegistry.registerItemStack(tag, new ItemStack(item));
 
                 BlockHidden.registerBlock();
-                if (BlockHidden.getBlock() != null)
+                if (BlockHidden.getBlock() != null && RailcraftConfig.isTrackingAuraEnabled())
                     FMLCommonHandler.instance().bus().register(new TrailTicker());
 
                 LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, tag);
@@ -115,6 +115,9 @@ public class ItemGoggles extends ItemArmor {
             if (aura >= Aura.AURAS.length)
                 aura = 0;
             data.setByte("aura", aura);
+
+            if (getCurrentAura(goggles) == Aura.TRACKING && !RailcraftConfig.isTrackingAuraEnabled())
+                incrementAura(goggles);
         }
     }
 

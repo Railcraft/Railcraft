@@ -61,6 +61,7 @@ public class RailcraftConfig {
     private static final String CAT_TWEAKS_CARTS = CAT_TWEAKS + ".carts";
     private static final String CAT_TWEAKS_TRACKS = CAT_TWEAKS + ".tracks";
     private static final String CAT_TWEAKS_BLOCKS = CAT_TWEAKS + ".blocks";
+    private static final String CAT_TWEAKS_ITEMS = CAT_TWEAKS + ".items";
     private static final String CAT_TWEAKS_ROUTING = CAT_TWEAKS + ".routing";
     private static final Map<String, Boolean> enabledItems = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> enabledBlocks = new HashMap<String, Boolean>();
@@ -97,6 +98,7 @@ public class RailcraftConfig {
     private static boolean doUpdateCheck;
     private static boolean routingOpsOnly;
     private static boolean machinesRequirePower;
+    private static boolean trackingAuraEnabled;
     private static int minecartTankCapacity = 32;
     private static int minecartTankFillRate = 32;
     private static int launchRailMaxForce;
@@ -143,6 +145,7 @@ public class RailcraftConfig {
 
         loadAnchorSettings();
         loadBlockTweaks();
+        loadItemTweaks();
         loadTrackTweaks();
         loadRoutingTweaks();
         loadCartTweaks();
@@ -223,6 +226,10 @@ public class RailcraftConfig {
         biolerMultiplierBiofuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "biofuelMultiplier", 0.0F, 1.0F, 10F, "adjust the heat value of BioFuel in a Boiler");
 
         fuelPerSteamMultiplier = get(CAT_TWEAKS + ".steam", "fuelPerSteamMultiplier", 0.2F, 1.0F, 6.0F, "adjust the amount of fuel used to create Steam, min=0.2, default=1.0, max=6.0");
+    }
+    
+    private static void loadItemTweaks(){
+        trackingAuraEnabled =get(CAT_TWEAKS_ITEMS + ".goggles", "trackingAura", true, "Change to '{t}=false' to disable the Tracking Aura");
     }
 
     private static void loadTrackTweaks() {
@@ -823,6 +830,10 @@ public class RailcraftConfig {
 
     public static boolean allowTankStacking() {
         return allowTankStacking;
+    }
+    
+    public static boolean isTrackingAuraEnabled(){
+        return trackingAuraEnabled;
     }
 
     public static boolean machinesRequirePower() {

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.Game;
@@ -45,7 +46,7 @@ public class TileHidden extends RailcraftTileEntity {
             return;
 
         if (clock % 64 == 0) {
-            if (BlockHidden.getBlock() == null) {
+            if (BlockHidden.getBlock() == null || !RailcraftConfig.isTrackingAuraEnabled()) {
                 worldObj.setBlockToAir(xCoord, yCoord, zCoord);
                 return;
             }
