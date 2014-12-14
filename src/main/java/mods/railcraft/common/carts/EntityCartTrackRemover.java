@@ -5,6 +5,7 @@ import java.util.Set;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
+import mods.railcraft.common.blocks.tracks.TrackForce;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -56,6 +57,8 @@ public class EntityCartTrackRemover extends CartMaintenanceBase {
         if (WorldPlugin.getDistanceSq(track, posX, posY, posZ) >= 9)
             tracksRemoved.add(track);
         else if (!TrackTools.isRailBlockAt(worldObj, track.x, track.y, track.z))
+            tracksRemoved.add(track);
+        else if ((TrackTools.getTrackInstanceAt(worldObj, track.x, track.y, track.z) instanceof TrackForce))
             tracksRemoved.add(track);
         else if (!CartTools.isMinecartAt(worldObj, track.x, track.y, track.z, -0.2f)) {
             Block block = WorldPlugin.getBlock(worldObj, track.x, track.y, track.z);
