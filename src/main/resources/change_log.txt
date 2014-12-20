@@ -1,3 +1,6 @@
+Next:
+	FIX: Fix Type Conditional, it should work better now (and probably so do a lot of other things related to item registration).
+
 9.4.0.2:
 	NEW: Add Packed Ice Stairs and Slabs.
 	NEW: Added Less Than/Greater Than modes to the Item Detector.

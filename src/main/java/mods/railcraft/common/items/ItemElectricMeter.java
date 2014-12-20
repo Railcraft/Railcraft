@@ -20,7 +20,7 @@ import mods.railcraft.api.electricity.GridTools;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.electricity.IElectricMinecart;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
@@ -39,7 +39,7 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
             String tag = "railcraft.tool.electric.meter";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemElectricMeter().setUnlocalizedName(tag);
-                ItemRegistry.registerItem(item);
+                RailcraftRegistry.register(item);
 
                 CraftingPlugin.addShapedRecipe(new ItemStack(item),
                         "T T",
@@ -49,8 +49,6 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
                         'G', Blocks.glass_pane,
                         'C', "ingotCopper",
                         'T', "ingotTin");
-
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
 
                 LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, tag);
             }

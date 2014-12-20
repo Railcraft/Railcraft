@@ -16,7 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Items;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -44,7 +44,7 @@ public class ItemGear extends ItemRailcraft {
     public void initItem() {
         for (EnumGear gear : EnumGear.values()) {
             ItemStack stack = new ItemStack(this, 1, gear.ordinal());
-            ItemRegistry.registerItemStack(stack);
+            RailcraftRegistry.register(stack);
         }
 
         OreDictionary.registerOre("gearIron", RailcraftItem.gear.getStack(1, EnumGear.IRON));

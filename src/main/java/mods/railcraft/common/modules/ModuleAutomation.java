@@ -13,7 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.detector.BlockDetector;
@@ -183,40 +183,37 @@ public class ModuleAutomation extends RailcraftModule {
             String tag = "tool.bore.head.diamond";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 Item item = new ItemBoreHeadDiamond();
-                ItemRegistry.registerItem(item);
+                RailcraftRegistry.register(item);
                 CraftingPlugin.addShapedRecipe(new ItemStack(item),
                         "III",
                         "IDI",
                         "III",
                         'I', "ingotSteel",
                         'D', Blocks.diamond_block);
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
             }
 
             tag = "tool.bore.head.steel";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 Item item = new ItemBoreHeadSteel();
-                ItemRegistry.registerItem(item);
+                RailcraftRegistry.register(item);
                 CraftingPlugin.addShapedRecipe(new ItemStack(item),
                         "III",
                         "IDI",
                         "III",
                         'I', "ingotSteel",
                         'D', "blockSteel");
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
             }
 
             tag = "tool.bore.head.iron";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 Item item = new ItemBoreHeadIron();
-                ItemRegistry.registerItem(item);
+                RailcraftRegistry.register(item);
                 CraftingPlugin.addShapedRecipe(new ItemStack(item),
                         "III",
                         "IDI",
                         "III",
                         'I', "ingotSteel",
                         'D', Blocks.iron_block);
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
             }
         }
 

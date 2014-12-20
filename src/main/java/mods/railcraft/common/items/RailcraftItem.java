@@ -9,7 +9,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -55,7 +55,7 @@ public enum RailcraftItem {
                 throw new RuntimeException("Invalid Item Constructor");
             }
             item.setUnlocalizedName("railcraft." + tag);
-            ItemRegistry.registerItem(item);
+            RailcraftRegistry.register(item);
             item.initItem();
             item.defineRecipes();
         }

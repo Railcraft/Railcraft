@@ -22,7 +22,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin.NBTList;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -67,11 +67,9 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemRoutingTable();
                 item.setUnlocalizedName(tag);
-                ItemRegistry.registerItem(item);
+                RailcraftRegistry.register(item);
 
                 CraftingPlugin.addShapelessRecipe(new ItemStack(item), Items.writable_book, "dyeBlue");
-
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
             }
         }
     }

@@ -14,7 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IEditableItem;
@@ -51,11 +51,9 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
                 item = new ItemTicketGold();
                 item.setUnlocalizedName(tag);
                 item.setRarity(1);
-                ItemRegistry.registerItem(item);
+                RailcraftRegistry.register(item);
 
                 CraftingPlugin.addShapelessRecipe(new ItemStack(item), Items.paper, Items.gold_nugget);
-
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
             }
         }
     }

@@ -18,7 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.oredict.OreDictionary;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Items;
@@ -54,11 +54,11 @@ public class ItemNugget extends ItemRailcraft {
             return null;
 
         item = new ItemNugget().setUnlocalizedName(tag);
-        ItemRegistry.registerItem(item);
+        RailcraftRegistry.register(item);
 
         for (EnumNugget n : EnumNugget.VALUES) {
             ItemStack stack = new ItemStack(item, 1, n.ordinal());
-            ItemRegistry.registerItemStack(item.getUnlocalizedName(stack), stack);
+            RailcraftRegistry.register(stack);
             ForestryPlugin.addBackpackItem("miner", stack);
             Metal m = Metal.get(n);
             OreDictionary.registerOre(m.getNuggetTag(), m.getNugget());

@@ -14,7 +14,9 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.ModuleManager;
 import net.minecraft.item.ItemStack;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 
 /**
  * This class contains a registry of all currently active Railcraft items. Which
@@ -27,9 +29,9 @@ import net.minecraft.item.Item;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class ItemRegistry {
+public final class RailcraftRegistry {
 
-    private ItemRegistry() {
+    private RailcraftRegistry() {
     }
 
     /**
@@ -55,52 +57,88 @@ public final class ItemRegistry {
     }
 
     /**
-     * Registers a new item with the Registry.
+     * Registers a new item with the GameRegistry.
      *
      * This should generally only be called by Railcraft itself while the mod is
      * initializing during the pre-init and init stages.
      *
-     * @param tag The tag name
-     * @param item The item
+     * @param tag   The tag name
+     * @param stack The item
      */
-    public static void registerItemStack(String tag, ItemStack item) {
+    public static void register(String tag, ItemStack stack) {
+        if (stack == null)
+            throw new RuntimeException("Don't register null items!");
         tag = MiscTools.cleanTag(tag);
         TagList.addTag(tag);
 //        System.out.println(tag);
-        GameRegistry.registerCustomItemStack(tag, item);
+        Item existingItem = GameRegistry.findItem(Railcraft.getModId(), tag);
+        Block existingBlock = GameRegistry.findBlock(Railcraft.getModId(), tag);
+        if (existingItem == null && existingBlock == null)
+            GameRegistry.registerCustomItemStack(tag, stack);
+        else
+            throw new RuntimeException("ItemStack registrations must be unique!");
     }
 
     /**
-     * Registers a new item with the Registry.
+     * Registers a new item with the GameRegistry.
+     *
+     * This should generally only be called by Railcraft itself while the mod is
+     * initializing during the pre-init and init stages.
+     *
+     * @param stack The item
+     */
+    public static void register(ItemStack stack) {
+        if (stack == null)
+            throw new RuntimeException("Don't register null items!");
+        register(stack.getUnlocalizedName(), stack);
+
+    }
+
+    /**
+     * Registers a new item with the GameRegistry.
      *
      * This should generally only be called by Railcraft itself while the mod is
      * initializing during the pre-init and init stages.
      *
      * @param item The item
      */
-    public static void registerItemStack(ItemStack item) {
-        String tag = item.getUnlocalizedName();
-        tag = MiscTools.cleanTag(tag);
-        TagList.addTag(tag);
-//        System.out.println(tag);
-        GameRegistry.registerCustomItemStack(tag, item);
-    }
-
-    /**
-     * Registers a new item with the Registry.
-     *
-     * This should generally only be called by Railcraft itself while the mod is
-     * initializing during the pre-init and init stages.
-     *
-     * @param item The item
-     */
-    public static void registerItem(Item item) {
+    public static void register(Item item) {
         if (ModuleManager.getStage() != ModuleManager.Stage.PRE_INIT && ModuleManager.getStage() != ModuleManager.Stage.INIT_FIRST)
-            throw new RuntimeException("Items must be initialized in PreInit or InitFirst, CovertJaguar you idiot!");
+            throw new RuntimeException("Items must be initialized in PreInit or InitFirst!");
         String tag = item.getUnlocalizedName();
         tag = MiscTools.cleanTag(tag);
         TagList.addTag(tag);
         GameRegistry.registerItem(item, tag);
+    }
+
+    /**
+     * Registers a new block with the GameRegistry.
+     *
+     * This should generally only be called by Railcraft itself while the mod is
+     * initializing during the pre-init and init stages.
+     *
+     * @param block The block
+     */
+    public static void register(Block block) {
+        register(block, ItemBlock.class);
+    }
+
+    /**
+     * Registers a new block with the GameRegistry.
+     *
+     * This should generally only be called by Railcraft itself while the mod is
+     * initializing during the pre-init and init stages.
+     *
+     * @param block     The block
+     * @param itemclass
+     */
+    public static void register(Block block, Class<? extends ItemBlock> itemclass) {
+        if (ModuleManager.getStage() != ModuleManager.Stage.PRE_INIT && ModuleManager.getStage() != ModuleManager.Stage.INIT_FIRST)
+            throw new RuntimeException("Blocks must be initialized in PreInit or InitFirst!");
+        String tag = block.getUnlocalizedName();
+        tag = MiscTools.cleanTag(tag);
+        TagList.addTag(tag);
+        GameRegistry.registerBlock(block, itemclass, tag);
     }
 
 }

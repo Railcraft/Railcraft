@@ -20,7 +20,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.init.Items;
@@ -49,7 +49,7 @@ public class ItemRail extends ItemRailcraft {
     public void initItem() {
         for (int meta = 0; meta < 5; meta++) {
             ItemStack stack = new ItemStack(this, 1, meta);
-            ItemRegistry.registerItemStack(stack);
+            RailcraftRegistry.register(stack);
             LootPlugin.addLootWorkshop(stack, 6, 18, "rail.part");
         }
     }

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -53,7 +53,7 @@ public class RailcraftBlocks {
         if (blockTrack == null && RailcraftConfig.isBlockEnabled("track")) {
             int renderId = Railcraft.getProxy().getRenderId();
             blockTrack = new BlockTrack(renderId).setBlockName("railcraft.track");
-            GameRegistry.registerBlock(blockTrack, ItemTrack.class, blockTrack.getUnlocalizedName());
+            RailcraftRegistry.register(blockTrack, ItemTrack.class);
             blockTrack.setHarvestLevel("crowbar", 0);
             blockTrack.setHarvestLevel("pickaxe", 0);
         }
@@ -67,7 +67,7 @@ public class RailcraftBlocks {
         if (blockRailElevator == null && RailcraftConfig.isBlockEnabled("elevator")) {
             int renderId = Railcraft.getProxy().getRenderId();
             blockRailElevator = new BlockTrackElevator(renderId).setBlockName("railcraft.track.elevator");
-            GameRegistry.registerBlock(blockRailElevator, ItemBlockRailcraft.class, blockRailElevator.getUnlocalizedName());
+            RailcraftRegistry.register(blockRailElevator, ItemBlockRailcraft.class);
             blockRailElevator.setHarvestLevel("crowbar", 0);
             blockRailElevator.setHarvestLevel("pickaxe", 0);
             ItemStack stackElevator = new ItemStack(blockRailElevator, 8);
@@ -78,8 +78,6 @@ public class RailcraftBlocks {
                     'I', RailcraftConfig.useOldRecipes() ? Items.gold_ingot : RailcraftItem.rail.getRecipeObject(EnumRail.ADVANCED),
                     'S', RailcraftConfig.useOldRecipes() ? Items.iron_ingot : RailcraftItem.rail.getRecipeObject(EnumRail.STANDARD),
                     'R', Items.redstone);
-
-            ItemRegistry.registerItemStack("track.elevator", stackElevator);
         }
     }
 
@@ -92,7 +90,7 @@ public class RailcraftBlocks {
             int[] lightOpacity = new int[16];
             Arrays.fill(lightOpacity, 255);
             blockMachineAlpha = new BlockMachine(0, new MachineProxyAlpha(), true, lightOpacity).setBlockName("railcraft.machine.alpha");
-            GameRegistry.registerBlock(blockMachineAlpha, ItemMachine.class, blockMachineAlpha.getUnlocalizedName());
+            RailcraftRegistry.register(blockMachineAlpha, ItemMachine.class);
 
             for (EnumMachineAlpha type : EnumMachineAlpha.values()) {
                 switch (type) {
@@ -139,7 +137,7 @@ public class RailcraftBlocks {
             lightOpacity[EnumMachineBeta.VOID_CHEST.ordinal()] = 0;
             lightOpacity[EnumMachineBeta.METALS_CHEST.ordinal()] = 0;
             blockMachineBeta = new BlockMachine(renderId, new MachineProxyBeta(), false, lightOpacity).setBlockName("railcraft.machine.beta");
-            GameRegistry.registerBlock(blockMachineBeta, ItemMachine.class, blockMachineBeta.getUnlocalizedName());
+            RailcraftRegistry.register(blockMachineBeta, ItemMachine.class);
 
             for (EnumMachineBeta type : EnumMachineBeta.values()) {
                 switch (type) {
@@ -169,7 +167,7 @@ public class RailcraftBlocks {
             lightOpacity[EnumMachineGamma.LIQUID_UNLOADER.ordinal()] = 0;
             blockMachineGamma = new BlockMachine(0, new MachineProxyGamma(), false, lightOpacity).setBlockName("railcraft.machine.gamma");
             blockMachineGamma.setCreativeTab(CreativeTabs.tabTransport);
-            GameRegistry.registerBlock(blockMachineGamma, ItemMachine.class, blockMachineGamma.getUnlocalizedName());
+            RailcraftRegistry.register(blockMachineGamma, ItemMachine.class);
 
             for (EnumMachineGamma type : EnumMachineGamma.values()) {
                 switch (type) {
@@ -194,7 +192,7 @@ public class RailcraftBlocks {
             lightOpacity[EnumMachineDelta.CAGE.ordinal()] = 0;
             blockMachineDelta = new BlockMachine(renderId, new MachineProxyDelta(), false, lightOpacity).setBlockName("railcraft.machine.delta");
             blockMachineDelta.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-            GameRegistry.registerBlock(blockMachineDelta, ItemMachine.class, blockMachineDelta.getUnlocalizedName());
+            RailcraftRegistry.register(blockMachineDelta, ItemMachine.class);
 
             for (EnumMachineDelta type : EnumMachineDelta.values()) {
                 switch (type) {
@@ -215,7 +213,7 @@ public class RailcraftBlocks {
             int[] lightOpacity = new int[16];
             Arrays.fill(lightOpacity, 255);
             blockMachineEpsilon = new BlockMachine(0, new MachineProxyEpsilon(), true, lightOpacity).setBlockName("railcraft.machine.epsilon");
-            GameRegistry.registerBlock(blockMachineEpsilon, ItemMachine.class, blockMachineEpsilon.getUnlocalizedName());
+            RailcraftRegistry.register(blockMachineEpsilon, ItemMachine.class);
 
             for (EnumMachineEpsilon type : EnumMachineEpsilon.values()) {
                 switch (type) {
@@ -235,7 +233,7 @@ public class RailcraftBlocks {
         if (blockSignal == null && RailcraftConfig.isBlockEnabled("signal")) {
             int renderId = Railcraft.getProxy().getRenderId();
             blockSignal = new BlockSignalRailcraft(renderId);
-            GameRegistry.registerBlock(blockSignal, ItemSignal.class, blockSignal.getUnlocalizedName());
+            RailcraftRegistry.register(blockSignal, ItemSignal.class);
         }
     }
 

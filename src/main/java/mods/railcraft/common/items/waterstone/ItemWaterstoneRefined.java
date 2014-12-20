@@ -15,7 +15,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemRailcraft;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
@@ -43,9 +43,7 @@ public class ItemWaterstoneRefined extends ItemRailcraft {
             String tag = "railcraft.waterstone.refined";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemWaterstoneRefined().setUnlocalizedName(tag);
-                ItemRegistry.registerItem(item);
-
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
+                RailcraftRegistry.register(item);
             }
         }
     }

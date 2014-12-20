@@ -11,7 +11,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -28,7 +28,7 @@ public class ItemCrowbarReinforced extends ItemCrowbar {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
             item = new ItemCrowbarReinforced();
             item.setUnlocalizedName(ITEM_TAG);
-            ItemRegistry.registerItem(item);
+            RailcraftRegistry.register(item);
             HarvestPlugin.setToolClass(item, "crowbar", 0);
 
             CraftingPlugin.addShapedRecipe(new ItemStack(item),
@@ -39,7 +39,6 @@ public class ItemCrowbarReinforced extends ItemCrowbar {
                     'R', "dyeRed");
 
 //                LootPlugin.addLootTool(new ItemStack(item), 1, 1, ITEM_TAG);
-            ItemRegistry.registerItemStack(ITEM_TAG, new ItemStack(item));
         }
     }
 

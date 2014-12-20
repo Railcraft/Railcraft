@@ -11,7 +11,7 @@ package mods.railcraft.common.items.firestone;
 import java.util.List;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,9 +33,7 @@ public class ItemFirestoneCracked extends ItemFirestoneRefined {
 
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemFirestoneCracked().setUnlocalizedName(tag);
-                ItemRegistry.registerItem(item);
-
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
+                RailcraftRegistry.register(item);
             }
         }
     }

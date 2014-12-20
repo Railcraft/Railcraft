@@ -18,7 +18,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.init.Items;
 
@@ -46,7 +46,7 @@ public class ItemPlate extends ItemRailcraft {
     public void initItem() {
         for (EnumPlate p : EnumPlate.VALUES) {
             ItemStack stack = new ItemStack(this, 1, p.ordinal());
-            ItemRegistry.registerItemStack(stack);
+            RailcraftRegistry.register(stack);
         }
     }
 

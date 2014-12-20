@@ -18,7 +18,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.oredict.OreDictionary;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import net.minecraft.init.Items;
 
@@ -57,12 +57,12 @@ public class ItemIngot extends ItemRailcraft {
             return new ItemStack(Items.iron_ingot, qty);
 
         item = new ItemIngot();
-        ItemRegistry.registerItem(item);
+        RailcraftRegistry.register(item);
 
         for (EnumIngot i : EnumIngot.VALUES) {
             ItemStack stack = new ItemStack(item, 1, i.ordinal());
             ForestryPlugin.addBackpackItem("miner", stack);
-            ItemRegistry.registerItemStack(tag + "." + i.name().toLowerCase(Locale.ENGLISH), stack);
+            RailcraftRegistry.register(stack);
             Metal m = Metal.get(i);
             OreDictionary.registerOre(m.getIngotTag(), m.getIngot());
         }

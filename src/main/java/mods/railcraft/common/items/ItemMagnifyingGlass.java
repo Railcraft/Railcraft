@@ -22,7 +22,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlock.MultiBlockStateReturn;
@@ -48,7 +48,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             String tag = "tool.magnifying.glass";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemMagnifyingGlass();
-                ItemRegistry.registerItem(item);
+                RailcraftRegistry.register(item);
 
                 CraftingPlugin.addShapedRecipe(new ItemStack(item), new Object[]{
                     " G",
@@ -56,8 +56,6 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
                     'S', new ItemStack(Items.stick),
                     'G', new ItemStack(Blocks.glass_pane)
                 });
-
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
 
                 LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, tag);
             }

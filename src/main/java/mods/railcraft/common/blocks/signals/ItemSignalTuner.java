@@ -17,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalController;
@@ -41,7 +41,7 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
             String tag = "railcraft.tool.signal.tuner";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemSignalTuner().setUnlocalizedName(tag);
-                ItemRegistry.registerItem(item);
+                RailcraftRegistry.register(item);
 
                 CraftingPlugin.addShapedRecipe(new ItemStack(item),
                         " T ",
@@ -50,8 +50,6 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                         'B', Blocks.stone_button,
                         'R', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
                         'T', Blocks.redstone_torch);
-
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
 
                 LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, "tool.signal.tuner");
             }

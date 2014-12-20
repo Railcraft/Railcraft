@@ -18,7 +18,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.oredict.OreDictionary;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.init.Items;
 
@@ -51,11 +51,11 @@ public class ItemDust extends ItemRailcraft {
         }
 
         item = new ItemDust();
-        ItemRegistry.registerItem(item);
+        RailcraftRegistry.register(item);
 
         for (EnumDust d : EnumDust.values()) {
             ItemStack stack = new ItemStack(item, 1, d.ordinal());
-            ItemRegistry.registerItemStack(item.getUnlocalizedName(stack), stack);
+            RailcraftRegistry.register(stack);
             ForestryPlugin.addBackpackItem("miner", stack);
         }
 

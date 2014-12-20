@@ -18,7 +18,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -58,7 +58,7 @@ public abstract class MiscTools {
                 rail.initialize();
                 ItemStack stack = rail.getTrackSpec().getItem();
 
-                ItemRegistry.registerItemStack(rail.getTag(), stack);
+                RailcraftRegistry.register(stack);
             }
     }
 

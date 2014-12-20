@@ -15,7 +15,7 @@ import java.util.List;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -47,9 +47,7 @@ public class ItemTicket extends ItemRailcraft {
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemTicket();
                 item.setUnlocalizedName(tag);
-                ItemRegistry.registerItem(item);
-
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
+                RailcraftRegistry.register(item);
             }
         }
     }

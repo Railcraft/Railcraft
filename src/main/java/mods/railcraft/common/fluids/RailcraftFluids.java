@@ -13,6 +13,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -104,7 +105,7 @@ public enum RailcraftFluids {
             if (fluidBlock == null) {
                 fluidBlock = makeBlock();
                 fluidBlock.setBlockName("railcraft." + tag);
-                GameRegistry.registerBlock(fluidBlock, fluidBlock.getUnlocalizedName());
+                RailcraftRegistry.register(fluidBlock);
                 fluid.setBlock(fluidBlock);
             } else {
                 GameRegistry.UniqueIdentifier blockID = GameRegistry.findUniqueIdentifierFor(fluidBlock);

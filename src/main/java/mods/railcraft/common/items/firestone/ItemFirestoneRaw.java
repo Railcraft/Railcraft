@@ -9,7 +9,7 @@
 package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -27,9 +27,7 @@ public class ItemFirestoneRaw extends ItemFirestoneBase {
 
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemFirestoneRaw().setUnlocalizedName(tag);
-                ItemRegistry.registerItem(item);
-
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
+                RailcraftRegistry.register(item);
             }
         }
     }

@@ -15,7 +15,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -49,7 +49,7 @@ public class ItemCircuit extends ItemRailcraft {
     public void initItem() {
         for (EnumCircuit circuit : EnumCircuit.VALUES) {
             ItemStack stack = new ItemStack(this, 1, circuit.ordinal());
-            ItemRegistry.registerItemStack(getUnlocalizedName(stack), stack);
+            RailcraftRegistry.register(stack);
         }
     }
 

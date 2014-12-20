@@ -14,6 +14,7 @@ import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.IIcon;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -47,7 +48,7 @@ public class BlockFirestoneRecharge extends BlockContainer {
             String tag = "railcraft.firestone.recharge";
             if (RailcraftConfig.isBlockEnabled(tag)) {
                 block = new BlockFirestoneRecharge().setBlockName(tag);
-                GameRegistry.registerBlock(block, block.getUnlocalizedName());
+                RailcraftRegistry.register(block);
             }
         }
     }

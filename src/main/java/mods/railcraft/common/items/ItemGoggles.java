@@ -18,7 +18,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -65,7 +65,7 @@ public class ItemGoggles extends ItemArmor {
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemGoggles();
                 item.setUnlocalizedName(tag);
-                ItemRegistry.registerItem(item);
+                RailcraftRegistry.register(item);
 
                 CraftingPlugin.addShapedRecipe(new ItemStack(item), true,
                         "GCG",
@@ -75,8 +75,6 @@ public class ItemGoggles extends ItemArmor {
                         'I', "ingotSteel",
                         'L', Items.leather,
                         'G', new ItemStack(Blocks.glass_pane));
-
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
 
                 BlockHidden.registerBlock();
                 if (BlockHidden.getBlock() != null && RailcraftConfig.isTrackingAuraEnabled())

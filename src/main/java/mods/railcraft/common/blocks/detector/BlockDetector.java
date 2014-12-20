@@ -29,7 +29,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -45,16 +45,14 @@ public class BlockDetector extends BlockContainer {
     public static void registerBlock() {
         if (block == null && RailcraftConfig.isBlockEnabled("detector")) {
             block = new BlockDetector();
-            GameRegistry.registerBlock(block, ItemDetector.class, block.getUnlocalizedName());
+            RailcraftRegistry.register(block, ItemDetector.class);
 
             HarvestPlugin.setHarvestLevel(block, "pickaxe", 2);
             HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
 
             for (EnumDetector d : EnumDetector.VALUES) {
                 ItemStack stack = new ItemStack(block, 1, d.ordinal());
-                String tag = d.getTag();
-
-                ItemRegistry.registerItemStack(tag, stack);
+                RailcraftRegistry.register(stack);
             }
         }
     }

@@ -24,7 +24,7 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.item.Item;
 
@@ -58,7 +58,7 @@ public class BlockPostMetal extends BlockPostBase {
     private static BlockPostMetal make(String tag, boolean isPlatform) {
         BlockPostMetal block = new BlockPostMetal(Railcraft.getProxy().getRenderId(), isPlatform);
         block.setBlockName("railcraft." + tag);
-        GameRegistry.registerBlock(block, ItemPostMetal.class, block.getUnlocalizedName());
+        RailcraftRegistry.register(block, ItemPostMetal.class);
 
         HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
         HarvestPlugin.setHarvestLevel(block, "pickaxe", 2);
@@ -67,7 +67,7 @@ public class BlockPostMetal extends BlockPostBase {
 
         for (EnumColor color : EnumColor.values()) {
             ItemStack stack = block.getItem(1, color.ordinal());
-            ItemRegistry.registerItemStack(tag + "." + color.getBasicTag(), stack);
+            RailcraftRegistry.register(stack);
         }
 
         return block;

@@ -17,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.items.ItemRailcraft;
@@ -36,7 +36,7 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
             String tag = "railcraft.tool.surveyor";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemSignalBlockSurveyor().setUnlocalizedName(tag);
-                ItemRegistry.registerItem(item);
+                RailcraftRegistry.register(item);
 
                 CraftingPlugin.addShapedRecipe(new ItemStack(item),
                         " C ",
@@ -46,8 +46,6 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
                         'C', Items.compass,
                         'B', Blocks.stone_button,
                         'R', Items.redstone);
-
-                ItemRegistry.registerItemStack(tag, new ItemStack(item));
 
                 LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, "tool.surveyor");
             }

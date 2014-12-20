@@ -21,11 +21,10 @@ import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import static mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs.*;
 
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 
 import net.minecraft.item.ItemStack;
 
@@ -44,11 +43,11 @@ public class BlockFactoryStairs extends BlockFactory {
         int renderId = Railcraft.getProxy().getRenderId();
         BlockRailcraftStairs.block = new BlockRailcraftStairs(renderId);
         BlockRailcraftStairs.block.setBlockName("railcraft.stair");
-        GameRegistry.registerBlock(BlockRailcraftStairs.block, ItemStair.class, BlockRailcraftStairs.block.getUnlocalizedName());
+        RailcraftRegistry.register(BlockRailcraftStairs.block, ItemStair.class);
         GameRegistry.registerTileEntity(TileStair.class, "RCStairTile");
 
         for (EnumBlockMaterial mat : EnumBlockMaterial.VALUES) {
-            ItemRegistry.registerItemStack(getTag(mat), getItem(mat));
+            RailcraftRegistry.register(getItem(mat));
 
             switch (mat) {
                 case SNOW:

@@ -23,7 +23,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Blocks;
@@ -224,7 +224,7 @@ public class ForestryPlugin {
 
     private static Item registerBackpack(BaseBackpack backpack, EnumBackpackType type, String tag) {
         Item item = BackpackManager.backpackInterface.addBackpack(backpack, type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
-        ItemRegistry.registerItem(item);
+        RailcraftRegistry.register(item);
         return item;
     }
 

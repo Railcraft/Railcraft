@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -43,7 +43,7 @@ public class ItemRailbed extends ItemRailcraft {
     @Override
     public void initItem() {
         for (EnumRailbed railbed : EnumRailbed.VALUES) {
-            ItemRegistry.registerItemStack(new ItemStack(this, 1, railbed.ordinal()));
+            RailcraftRegistry.register(new ItemStack(this, 1, railbed.ordinal()));
         }
     }
 

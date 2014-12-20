@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.EntityIDs;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -169,10 +169,9 @@ public enum EnumCart {
             ItemCart item = defineItem();
             item.setUnlocalizedName(tag);
             item.setRarity(rarity);
-            ItemRegistry.registerItem(item);
+            RailcraftRegistry.register(item);
             ItemStack stack = new ItemStack(item);
             setCartItem(stack);
-            ItemRegistry.registerItemStack(tag, stack);
             return true;
         }
         return false;

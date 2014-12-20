@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.ore;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
@@ -37,6 +36,7 @@ import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -65,7 +65,7 @@ public class BlockOre extends Block {
         if (instance == null && RailcraftConfig.isBlockEnabled("ore")) {
             int renderId = Railcraft.getProxy().getRenderId();
             instance = new BlockOre(renderId);
-            GameRegistry.registerBlock(instance, ItemOre.class, instance.getUnlocalizedName());
+            RailcraftRegistry.register(instance, ItemOre.class);
 
             EntityTunnelBore.addMineableBlock(instance);
 

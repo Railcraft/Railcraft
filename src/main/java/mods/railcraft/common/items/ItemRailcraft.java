@@ -17,7 +17,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -86,7 +86,6 @@ public class ItemRailcraft extends Item {
     }
 
     public void initItem() {
-        ItemRegistry.registerItemStack(getUnlocalizedName(), new ItemStack(this));
     }
 
 }

@@ -9,7 +9,7 @@
 package mods.railcraft.common.plugins.craftguide;
 
 import net.minecraft.item.ItemStack;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Items;
 import uristqwerty.CraftGuide.api.BasicRecipeFilter;
 import uristqwerty.CraftGuide.api.CraftGuideRecipe;
@@ -21,7 +21,7 @@ import uristqwerty.CraftGuide.api.CraftGuideRecipe;
 public class RecipeFilter implements BasicRecipeFilter
 {
 
-    ItemStack stackTankCart = ItemRegistry.getItem("cart.tank", 1);
+    ItemStack stackTankCart = RailcraftRegistry.getItem("cart.tank", 1);
     ItemStack stackCart = new ItemStack(Items.minecart);
 
     @Override

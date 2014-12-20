@@ -13,7 +13,7 @@ import java.util.Locale;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -78,7 +78,7 @@ public class ItemTie extends ItemRailcraft {
     @Override
     public void initItem() {
         for (EnumTie tie : EnumTie.VALUES) {
-            ItemRegistry.registerItemStack(new ItemStack(this, 1, tie.ordinal()));
+            RailcraftRegistry.register(new ItemStack(this, 1, tie.ordinal()));
         }
         LootPlugin.addLootRailway(RailcraftItem.tie.getStack(1, EnumTie.WOOD), 4, 16, "tie.wood");
         LootPlugin.addLootWorkshop(RailcraftItem.tie.getStack(1, EnumTie.STONE), 4, 16, "tie.stone");

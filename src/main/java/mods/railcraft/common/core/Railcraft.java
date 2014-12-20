@@ -18,8 +18,11 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import java.io.File;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.logging.log4j.Level;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
@@ -30,6 +33,7 @@ import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.signals.EnumSignal;
@@ -43,6 +47,7 @@ import mods.railcraft.common.util.inventory.filters.StackFilter;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.BlinkTick;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -180,47 +185,6 @@ public final class Railcraft {
         ModuleManager.init();
 
         FMLCommonHandler.instance().bus().register(new BlinkTick());
-
-        // Finish initializing ItemRegistry
-        for (EnumMachineAlpha type : EnumMachineAlpha.values()) {
-            if (type.isAvaliable())
-                ItemRegistry.registerItemStack(type.getTag(), type.getItem());
-        }
-
-        for (EnumMachineBeta type : EnumMachineBeta.values()) {
-            if (type.isAvaliable())
-                ItemRegistry.registerItemStack(type.getTag(), type.getItem());
-        }
-
-        for (EnumMachineGamma type : EnumMachineGamma.values()) {
-            if (type.isAvaliable())
-                ItemRegistry.registerItemStack(type.getTag(), type.getItem());
-        }
-
-        for (EnumMachineDelta type : EnumMachineDelta.values()) {
-            if (type.isAvaliable())
-                ItemRegistry.registerItemStack(type.getTag(), type.getItem());
-        }
-
-        for (EnumMachineEpsilon type : EnumMachineEpsilon.values()) {
-            if (type.isAvaliable())
-                ItemRegistry.registerItemStack(type.getTag(), type.getItem());
-        }
-
-        for (EnumSignal type : EnumSignal.values()) {
-            if (type.isEnabled())
-                ItemRegistry.registerItemStack(type.getTag(), type.getItem());
-        }
-
-        for (EnumCube type : EnumCube.values()) {
-            if (type.isEnabled())
-                ItemRegistry.registerItemStack(type.getTag(), type.getItem());
-        }
-
-        for (EnumPost type : EnumPost.values()) {
-            if (type.isEnabled())
-                ItemRegistry.registerItemStack(type.getTag(), type.getItem());
-        }
     }
 
     @Mod.EventHandler
@@ -244,34 +208,52 @@ public final class Railcraft {
     public void missingMapping(FMLMissingMappingsEvent event) {
         for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
             if (mapping.type == GameRegistry.Type.BLOCK) {
-                if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
-                    mapping.remap(RailcraftFluids.CREOSOTE.getBlock());
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam") && RailcraftFluids.STEAM.getBlock() != null)
-                    mapping.remap(RailcraftFluids.STEAM.getBlock());
-                else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge") && BlockFirestoneRecharge.getBlock() != null)
-                    mapping.remap(BlockFirestoneRecharge.getBlock());
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && BlockRCAnvil.getBlock() != null)
-                    mapping.remap(BlockRCAnvil.getBlock());
-                else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
-                    mapping.ignore();
-                else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
-                    mapping.remap(BlockLantern.getBlockStone());
-            } else if (mapping.type == GameRegistry.Type.ITEM)
-                if (mapping.name.equals("Railcraft:tool.mag.glass") && ItemMagnifyingGlass.item != null)
-                    mapping.remap(ItemMagnifyingGlass.item);
+                Block block = GameRegistry.findBlock(getModId(), MiscTools.cleanTag(mapping.name));
+                if (block != null)
+                    remap(block, mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
-                    mapping.remap(Item.getItemFromBlock(RailcraftFluids.CREOSOTE.getBlock()));
+                    remap(RailcraftFluids.CREOSOTE.getBlock(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam") && RailcraftFluids.STEAM.getBlock() != null)
-                    mapping.remap(Item.getItemFromBlock(RailcraftFluids.STEAM.getBlock()));
+                    remap(RailcraftFluids.STEAM.getBlock(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge") && BlockFirestoneRecharge.getBlock() != null)
-                    mapping.remap(Item.getItemFromBlock(BlockFirestoneRecharge.getBlock()));
+                    remap(BlockFirestoneRecharge.getBlock(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && BlockRCAnvil.getBlock() != null)
-                    mapping.remap(Item.getItemFromBlock(BlockRCAnvil.getBlock()));
+                    remap(BlockRCAnvil.getBlock(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
                 else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
-                    mapping.remap(Item.getItemFromBlock(BlockLantern.getBlockStone()));
+                    remap(BlockLantern.getBlockStone(), mapping);
+            } else if (mapping.type == GameRegistry.Type.ITEM) {
+                Block block = GameRegistry.findBlock(getModId(), MiscTools.cleanTag(mapping.name));
+                if (block != null)
+                    remap(Item.getItemFromBlock(block), mapping);
+                else if (mapping.name.equals("Railcraft:tool.mag.glass") && ItemMagnifyingGlass.item != null)
+                    remap(ItemMagnifyingGlass.item, mapping);
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
+                    remap(Item.getItemFromBlock(RailcraftFluids.CREOSOTE.getBlock()), mapping);
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam") && RailcraftFluids.STEAM.getBlock() != null)
+                    remap(Item.getItemFromBlock(RailcraftFluids.STEAM.getBlock()), mapping);
+                else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge") && BlockFirestoneRecharge.getBlock() != null)
+                    remap(Item.getItemFromBlock(BlockFirestoneRecharge.getBlock()), mapping);
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && BlockRCAnvil.getBlock() != null)
+                    remap(Item.getItemFromBlock(BlockRCAnvil.getBlock()), mapping);
+                else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
+                    mapping.ignore();
+                else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
+                    remap(Item.getItemFromBlock(BlockLantern.getBlockStone()), mapping);
+            }
         }
+    }
+
+    private void remap(Block block, FMLMissingMappingsEvent.MissingMapping mapping) {
+        mapping.remap(block);
+        Game.log(Level.WARN, "Remapping block " + mapping.name + " to " + getModId() + ":" + MiscTools.cleanTag(block.getUnlocalizedName()));
+
+    }
+
+    private void remap(Item item, FMLMissingMappingsEvent.MissingMapping mapping) {
+        mapping.remap(item);
+        Game.log(Level.WARN, "Remapping item " + mapping.name + " to " + getModId() + ":" + MiscTools.cleanTag(item.getUnlocalizedName()));
     }
 
 }

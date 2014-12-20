@@ -8,12 +8,11 @@
  */
 package mods.railcraft.common.blocks.aesthetics.lantern;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 
 
 /**
@@ -31,20 +30,20 @@ public class BlockFactoryLantern extends BlockFactory {
         int renderId = Railcraft.getProxy().getRenderId();
         BlockLantern.stone = new BlockLantern(renderId, new LanternProxyStone());
         BlockLantern.stone.setBlockName("railcraft.lantern.stone");
-        GameRegistry.registerBlock(BlockLantern.stone, ItemLantern.class, BlockLantern.stone.getUnlocalizedName());
+        RailcraftRegistry.register(BlockLantern.stone, ItemLantern.class);
 
         for (EnumLanternStone lamp : EnumLanternStone.VALUES) {
-            ItemRegistry.registerItemStack(lamp.getTag(), lamp.getItem());
+            RailcraftRegistry.register(lamp.getItem());
 
             ForestryPlugin.addBackpackItem("builder", lamp.getItem());
         }
 
         BlockLantern.metal = new BlockLantern(renderId, new LanternProxyMetal());
         BlockLantern.metal.setBlockName("railcraft.lantern.metal");
-        GameRegistry.registerBlock(BlockLantern.metal, ItemLantern.class, BlockLantern.metal.getUnlocalizedName());
+        RailcraftRegistry.register(BlockLantern.metal, ItemLantern.class);
 
         for (EnumLanternMetal lamp : EnumLanternMetal.VALUES) {
-            ItemRegistry.registerItemStack(lamp.getTag(), lamp.getItem());
+            RailcraftRegistry.register(lamp.getItem());
 
             ForestryPlugin.addBackpackItem("builder", lamp.getItem());
         }

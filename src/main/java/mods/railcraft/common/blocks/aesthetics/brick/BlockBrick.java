@@ -27,7 +27,7 @@ import mods.railcraft.common.items.ItemRailcraft;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
@@ -124,7 +124,7 @@ public class BlockBrick extends Block {
         if (bleachedbone == null) {
             bleachedbone = defineBrick("bleachedbone");
             Item bleachedClay = new ItemRailcraft().setUnlocalizedName("railcraft.part.bleached.clay");
-            ItemRegistry.registerItem(bleachedClay);
+            RailcraftRegistry.register(bleachedClay);
             CraftingPlugin.addShapelessRecipe(new ItemStack(bleachedClay), new ItemStack(Items.clay_ball), new ItemStack(Items.dye, 1, 15), new ItemStack(Items.dye, 1, 15), new ItemStack(Items.dye, 1, 15));
             CraftingPlugin.addFurnaceRecipe(new ItemStack(bleachedClay), new ItemStack(bleachedbone, 1, 2), 0.3F);
         }
@@ -151,7 +151,7 @@ public class BlockBrick extends Block {
         if (RailcraftConfig.isBlockEnabled("brick." + theme)) {
             BlockBrick block = makeBrick(theme);
             block.setBlockName("railcraft.brick." + theme);
-            GameRegistry.registerBlock(block, ItemBrick.class, block.getUnlocalizedName());
+            RailcraftRegistry.register(block, ItemBrick.class);
 
             for (BrickVariant variant : BrickVariant.VALUES) {
                 block.initVarient(variant);

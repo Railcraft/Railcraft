@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.aesthetics.glass;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.*;
@@ -17,6 +16,7 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -49,7 +49,7 @@ public class BlockStrengthGlass extends BlockGlass {
         if (instance == null)
             if (RailcraftConfig.isBlockEnabled("glass")) {
                 instance = new BlockStrengthGlass(Railcraft.proxy.getRenderId());
-                GameRegistry.registerBlock(instance, ItemStrengthGlass.class, instance.getUnlocalizedName());
+                RailcraftRegistry.register(instance, ItemStrengthGlass.class);
 
                 ForestryPlugin.addBackpackItem("builder", instance);
 

@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.aesthetics.wall;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.*;
 import java.util.List;
@@ -20,7 +19,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import mods.railcraft.client.sounds.RailcraftSound;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -49,7 +48,7 @@ public class BlockRailcraftWall extends BlockWall {
             int renderId = Railcraft.getProxy().getRenderId();
             alpha = new BlockRailcraftWall(renderId, true, new WallProxyApha());
             alpha.setBlockName("railcraft.wall.alpha");
-            GameRegistry.registerBlock(alpha, ItemWall.class, alpha.getUnlocalizedName());
+            RailcraftRegistry.register(alpha, ItemWall.class);
 
             for (EnumWallAlpha wall : EnumWallAlpha.VALUES) {
                 switch (wall) {
@@ -63,7 +62,7 @@ public class BlockRailcraftWall extends BlockWall {
                         HarvestPlugin.setHarvestLevel(alpha, wall.ordinal(), "pickaxe", 2);
                 }
 
-                ItemRegistry.registerItemStack(wall.getTag(), wall.getItem());
+                RailcraftRegistry.register(wall.getItem());
 
                 if (wall != EnumWallAlpha.SNOW || wall != EnumWallAlpha.ICE)
                     ForestryPlugin.addBackpackItem("builder", wall.getItem());
@@ -74,7 +73,7 @@ public class BlockRailcraftWall extends BlockWall {
             int renderId = Railcraft.getProxy().getRenderId();
             beta = new BlockRailcraftWall(renderId, false, new WallProxyBeta());
             beta.setBlockName("railcraft.wall.beta");
-            GameRegistry.registerBlock(beta, ItemWall.class, beta.getUnlocalizedName());
+            RailcraftRegistry.register(beta, ItemWall.class);
 
             for (EnumWallBeta wall : EnumWallBeta.VALUES) {
                 switch (wall) {
@@ -82,7 +81,7 @@ public class BlockRailcraftWall extends BlockWall {
                         HarvestPlugin.setHarvestLevel(beta, wall.ordinal(), "pickaxe", 2);
                 }
 
-                ItemRegistry.registerItemStack(wall.getTag(), wall.getItem());
+                RailcraftRegistry.register(wall.getItem());
 
                 ForestryPlugin.addBackpackItem("builder", wall.getItem());
             }

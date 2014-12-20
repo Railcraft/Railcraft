@@ -15,6 +15,7 @@ import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.IIcon;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -43,7 +44,7 @@ public class BlockHidden extends BlockContainer {
     public static void registerBlock() {
         if (block == null && RailcraftConfig.isBlockEnabled("residual.heat")) {
             block = new BlockHidden();
-            GameRegistry.registerBlock(block, block.getUnlocalizedName());
+            RailcraftRegistry.register(block);
         }
     }
 

@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.aesthetics.cube;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
@@ -27,6 +26,7 @@ import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -48,7 +48,7 @@ public class BlockCube extends Block {
         if (instance == null)
             if (RailcraftConfig.isBlockEnabled("cube")) {
                 instance = new BlockCube();
-                GameRegistry.registerBlock(instance, ItemCube.class, instance.getUnlocalizedName());
+                RailcraftRegistry.register(instance, ItemCube.class);
 
                 EntityTunnelBore.addMineableBlock(instance);
 

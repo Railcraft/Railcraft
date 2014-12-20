@@ -12,16 +12,14 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 
 import static mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial.*;
 import static mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab.getItem;
-import static mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab.getTag;
 
 /**
  *
@@ -38,11 +36,11 @@ public class BlockFactorySlab extends BlockFactory {
         int renderId = Railcraft.getProxy().getRenderId();
         BlockRailcraftSlab.block = new BlockRailcraftSlab(renderId);
         BlockRailcraftSlab.block.setBlockName("railcraft.slab");
-        GameRegistry.registerBlock(BlockRailcraftSlab.block, ItemSlab.class, BlockRailcraftSlab.block.getUnlocalizedName());
+        RailcraftRegistry.register(BlockRailcraftSlab.block, ItemSlab.class);
         GameRegistry.registerTileEntity(TileSlab.class, "RCSlabTile");
 
         for (EnumBlockMaterial mat : EnumBlockMaterial.VALUES) {
-            ItemRegistry.registerItemStack(getTag(mat), getItem(mat));
+            RailcraftRegistry.register(getItem(mat));
 
             switch (mat) {
                 case SNOW:

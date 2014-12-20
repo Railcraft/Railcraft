@@ -10,7 +10,7 @@ package mods.railcraft.common.items;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -26,10 +26,6 @@ public class RailcraftPartItems {
     public static Item itemTurbineBlade;
     public static Item itemTurbineDisk;
     public static Item itemTurbineRotor;
-
-    public static void registerItem(String tag, ItemStack stack) {
-        ItemRegistry.registerItemStack(tag, stack);
-    }
 
     public static ItemStack getTurbineBlade() {
         return getTurbineBlade(1);
@@ -48,10 +44,8 @@ public class RailcraftPartItems {
             return ItemIngot.getIngot(ItemIngot.EnumIngot.STEEL, qty);
 
         item = new ItemRailcraft().setUnlocalizedName(tag);
-        ItemRegistry.registerItem(item);
+        RailcraftRegistry.register(item);
         ItemStack stack = new ItemStack(item);
-
-        registerItem(tag, stack);
 
         CraftingPlugin.addShapedRecipe(stack, new Object[]{
             "I",
@@ -83,10 +77,8 @@ public class RailcraftPartItems {
             return null;
 
         item = new ItemRailcraft().setUnlocalizedName(tag);
-        ItemRegistry.registerItem(item);
+        RailcraftRegistry.register(item);
         ItemStack stack = new ItemStack(item);
-
-        registerItem(tag, stack);
 
         ItemStack blade = getTurbineBlade();
         if (blade != null)
@@ -121,10 +113,8 @@ public class RailcraftPartItems {
 
         item = new ItemRailcraft().setUnlocalizedName(tag);
         item.setMaxDamage(30000).setMaxStackSize(1);
-        ItemRegistry.registerItem(item);
+        RailcraftRegistry.register(item);
         ItemStack stack = new ItemStack(item);
-
-        registerItem(tag, stack);
 
         ItemStack disk = getTurbineDisk();
         if (disk != null)

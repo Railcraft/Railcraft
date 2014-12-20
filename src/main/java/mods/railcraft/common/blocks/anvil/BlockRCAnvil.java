@@ -8,13 +8,13 @@
  */
 package mods.railcraft.common.blocks.anvil;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAnvil;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -41,7 +41,7 @@ public class BlockRCAnvil extends BlockAnvil {
             String tag = "railcraft.anvil";
             if (RailcraftConfig.isBlockEnabled(tag)) {
                 block = new BlockRCAnvil().setBlockName(tag);
-                GameRegistry.registerBlock(block, ItemAnvilBlock.class, block.getUnlocalizedName());
+                RailcraftRegistry.register(block, ItemAnvilBlock.class);
 
                 ForestryPlugin.addBackpackItem("builder", block);
 

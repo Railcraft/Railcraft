@@ -30,13 +30,17 @@ import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.sounds.SoundLimiterTicker;
+import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MachineTileRegistery;
 import mods.railcraft.common.blocks.machine.MultiBlockHelper;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
+import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
+import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -49,7 +53,6 @@ import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemMagnifyingGlass;
 import mods.railcraft.common.items.ItemNugget;
 import mods.railcraft.common.items.ItemCrowbarReinforced;
-import mods.railcraft.common.items.RailcraftPartItems;
 import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.fluids.BucketHandler;
 import mods.railcraft.common.fluids.Fluids;
@@ -66,7 +69,7 @@ import mods.railcraft.common.items.*;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.crafting.*;
 import mods.railcraft.common.util.misc.Game;
@@ -288,6 +291,29 @@ public class ModuleCore extends RailcraftModule {
             FurnaceRecipes.smelting().func_151394_a(new ItemStack(Items.coal, 1, 0), FluidContainers.getCreosoteOilBottle(2), 0.0F);
             FurnaceRecipes.smelting().func_151394_a(new ItemStack(Items.coal, 1, 1), FluidContainers.getCreosoteOilBottle(1), 0.0F);
         }
+
+        // Finish initializing ItemRegistry
+        for (EnumSignal type : EnumSignal.values()) {
+            if (type.isEnabled())
+                RailcraftRegistry.register(type.getItem());
+        }
+
+        for (EnumCube type : EnumCube.values()) {
+            if (type.isEnabled())
+                RailcraftRegistry.register(type.getItem());
+        }
+
+        Set<IEnumMachine> machines = new HashSet<IEnumMachine>();
+        machines.addAll(EnumSet.allOf(EnumMachineAlpha.class));
+        machines.addAll(EnumSet.allOf(EnumMachineBeta.class));
+        machines.addAll(EnumSet.allOf(EnumMachineGamma.class));
+        machines.addAll(EnumSet.allOf(EnumMachineDelta.class));
+        machines.addAll(EnumSet.allOf(EnumMachineEpsilon.class));
+
+        for (IEnumMachine machine : machines) {
+            if (machine.isAvaliable())
+                RailcraftRegistry.register(machine.getItem());
+        }
     }
 
     @Override
@@ -299,17 +325,6 @@ public class ModuleCore extends RailcraftModule {
         addLiquidFuels();
 
         FluidHelper.nerfWaterBottle();
-
-        Set<IEnumMachine> machines = new HashSet<IEnumMachine>();
-        machines.addAll(EnumSet.allOf(EnumMachineAlpha.class));
-        machines.addAll(EnumSet.allOf(EnumMachineBeta.class));
-        machines.addAll(EnumSet.allOf(EnumMachineGamma.class));
-        machines.addAll(EnumSet.allOf(EnumMachineDelta.class));
-
-        for (IEnumMachine machine : machines) {
-            if (machine.isAvaliable())
-                ItemRegistry.registerItemStack(machine.getTag(), machine.getItem());
-        }
 
 //----------------------------------------------
 // Boiler Test Setup

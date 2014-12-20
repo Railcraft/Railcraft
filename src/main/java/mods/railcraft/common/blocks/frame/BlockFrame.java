@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.frame;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mods.railcraft.api.core.IPostConnection;
@@ -22,10 +21,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -54,7 +50,7 @@ public class BlockFrame extends Block implements IPostConnection {
         if (instance == null)
             if (RailcraftConfig.isBlockEnabled("frame")) {
                 instance = new BlockFrame(Railcraft.proxy.getRenderId());
-                GameRegistry.registerBlock(instance, ItemBlockRailcraft.class, instance.getUnlocalizedName());
+                RailcraftRegistry.register(instance, ItemBlockRailcraft.class);
 
                 HarvestPlugin.setHarvestLevel(instance, "crowbar", 0);
                 HarvestPlugin.setHarvestLevel(instance, "pickaxe", 1);

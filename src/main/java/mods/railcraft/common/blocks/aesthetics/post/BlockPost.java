@@ -26,15 +26,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 
 public class BlockPost extends BlockPostBase implements IPostConnection {
@@ -55,7 +54,12 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
 
             GameRegistry.registerTileEntity(TilePostEmblem.class, "RCPostEmblemTile");
 
-            GameRegistry.registerBlock(block, ItemPost.class, block.getUnlocalizedName());
+            RailcraftRegistry.register(block, ItemPost.class);
+
+            for (EnumPost post : EnumPost.VALUES) {
+                ItemStack stack = post.getItem();
+                RailcraftRegistry.register(stack);
+            }
 
             HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
             HarvestPlugin.setHarvestLevel(block, EnumPost.WOOD.ordinal(), "axe", 0);

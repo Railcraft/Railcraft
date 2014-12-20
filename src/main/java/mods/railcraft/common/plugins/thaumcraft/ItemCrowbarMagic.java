@@ -10,7 +10,7 @@ package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.common.items.*;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -34,9 +34,8 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
     public static void registerItem() {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
             item = new ItemCrowbarMagic();
-            ItemRegistry.registerItem(item);
+            RailcraftRegistry.register(item);
             item.setHarvestLevel("crowbar", 0);
-            ItemRegistry.registerItemStack(ITEM_TAG, new ItemStack(item));
         }
     }
 

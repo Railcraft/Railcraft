@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Level;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import mods.railcraft.common.plugins.forge.ItemRegistry;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.EnumDetector;
@@ -53,9 +53,9 @@ public class ModuleIC2 extends RailcraftModule {
         if (RailcraftConfig.isItemEnabled("ic2.upgrade.lapotron")) {
             lapotronUpgrade = new ItemRailcraft().setUnlocalizedName("railcraft.upgrade.lapotron").setMaxStackSize(9);
 
-            ItemRegistry.registerItem(lapotronUpgrade);
+            RailcraftRegistry.register(lapotronUpgrade);
 
-            ItemRegistry.registerItemStack("ic2.upgrade.lapotron", new ItemStack(lapotronUpgrade));
+            RailcraftRegistry.register("ic2.upgrade.lapotron", new ItemStack(lapotronUpgrade));
         }
 
         EnumCart.ENERGY_BATBOX.setup();
