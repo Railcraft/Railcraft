@@ -148,7 +148,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
 
     private void printAnchor(String type, int x, int y, int z) {
         if (RailcraftConfig.printAnchorLocations()) {
-            Game.log(Level.INFO, "{0} found at [{1},{2},{3}]", type, x, y, z);
+            Game.log(Level.INFO, "{0} found at [{1}-{2}-{3}]", type, x, y, z);
         }
     }
 
