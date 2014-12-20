@@ -1,5 +1,8 @@
-NEXT:
+9.4.0.2:
 	NEW: Added Less Than/Greater Than modes to the Item Detector.
+	NEW: Add a new Routing Table conditional, "Type=<modid:itemname>", for matching against Minecart item names.
+	NEW: Add new Routing Table conditionals, "Ridden=<true/false>" and "Riding=<username>", for checking if someone is riding a train.
+	NEW: Modify the Routing Table "Name=" conditional to accept "null" to indicate that the Minecart does not have a custom name.
 	CONFIG: Add config option to explicitly disable the generation of new Tracking Aura blocks.
 
 9.4.0.1:

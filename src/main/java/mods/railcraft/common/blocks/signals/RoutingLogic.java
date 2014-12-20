@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.blocks.signals;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 import java.util.*;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IPaintedCart;
@@ -19,6 +21,8 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
 /**
@@ -102,8 +106,14 @@ public class RoutingLogic {
                 return new OwnerCondition(line);
             if (line.startsWith("Name="))
                 return new NameCondition(line);
+            if (line.startsWith("Type="))
+                return new TypeCondition(line);
             if (line.startsWith("NeedsRefuel="))
                 return new RefuelCondition(line);
+            if (line.startsWith("Ridden="))
+                return new RiddenCondition(line);
+            if (line.startsWith("Riding="))
+                return new RidingCondition(line);
             if (line.startsWith("Redstone="))
                 return new RedstoneCondition(line);
         } catch (RoutingLogicException ex) {
@@ -126,7 +136,7 @@ public class RoutingLogic {
 
     public class RoutingLogicException extends Exception {
 
-        private ToolTip tips = new ToolTip();
+        private final ToolTip tips = new ToolTip();
 
         public RoutingLogicException(String errorTag, String line) {
             tips.add(EnumChatFormatting.RED + LocalizationPlugin.translate(errorTag));
@@ -224,7 +234,7 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            return owner.equals(CartTools.getCartOwner(cart));
+            return owner.equals(CartTools.getCartOwner(cart).getName());
         }
 
     }
@@ -239,7 +249,33 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            return name.equals(cart.func_95999_t());
+            String customName = cart.func_95999_t();
+            if (customName == null)
+                return "null".equals(name);
+            return name.equals(customName);
+        }
+
+    }
+
+    private class TypeCondition extends Condition {
+
+        private final String type;
+
+        public TypeCondition(String name) {
+            this.type = name.replace("Type=", "");
+        }
+
+        @Override
+        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+            ItemStack stack = cart.getCartItem();
+            if (stack == null || stack.getItem() == null)
+                return false;
+            UniqueIdentifier itemName = GameRegistry.findUniqueIdentifierFor(stack.getItem());
+            if (itemName != null) {
+                String nameString = itemName.modId + ":" + itemName.name;
+                return nameString.equalsIgnoreCase(type);
+            }
+            return false;
         }
 
     }
@@ -257,6 +293,44 @@ public class RoutingLogic {
             if (cart instanceof IRefuelableCart) {
                 IRefuelableCart rCart = (IRefuelableCart) cart;
                 return needsRefuel == rCart.needsRefuel();
+            }
+            return false;
+        }
+
+    }
+
+    private class RiddenCondition extends Condition {
+
+        private final boolean ridden;
+
+        public RiddenCondition(String line) {
+            this.ridden = Boolean.parseBoolean(line.replace("Ridden=", ""));
+        }
+
+        @Override
+        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+            for (EntityMinecart c : LinkageManager.instance().getCartsInTrain(cart)) {
+                if (c.riddenByEntity != null && c.riddenByEntity instanceof EntityPlayer)
+                    return ridden;
+            }
+            return !ridden;
+        }
+
+    }
+
+    private class RidingCondition extends Condition {
+
+        private final String username;
+
+        public RidingCondition(String line) {
+            this.username = line.replace("Riding=", "");
+        }
+
+        @Override
+        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+            for (EntityMinecart c : LinkageManager.instance().getCartsInTrain(cart)) {
+                if (c.riddenByEntity != null && c.riddenByEntity instanceof EntityPlayer)
+                    return c.riddenByEntity.getCommandSenderName().equals(username);
             }
             return false;
         }
