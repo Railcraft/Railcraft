@@ -1,4 +1,5 @@
 9.4.0.2:
+	NEW: Add Packed Ice Stairs and Slabs.
 	NEW: Added Less Than/Greater Than modes to the Item Detector.
 	NEW: Add a new Routing Table conditional, "Type=<modid:itemname>", for matching against Minecart item names.
 	NEW: Add new Routing Table conditionals, "Ridden=<true/false>" and "Riding=<username>", for checking if someone is riding a train.
