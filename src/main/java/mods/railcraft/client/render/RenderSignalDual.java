@@ -38,6 +38,8 @@ public class RenderSignalDual implements ICombinedRenderer {
     public void renderBlock(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block) {
         IDualHeadSignal tile = (IDualHeadSignal) world.getTileEntity(x, y, z);
         int facing = tile.getFacing().ordinal();
+        if (facing >= info.texture.length)
+            facing = 0;
         float pix = RenderTools.PIXEL;
         float f = 3.0F * pix;
         float f1 = 13.0F * pix;
