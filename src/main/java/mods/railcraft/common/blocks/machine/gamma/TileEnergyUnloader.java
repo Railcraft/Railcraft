@@ -206,7 +206,7 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
             try {
                 emitterDelegate = new TileIC2EmitterDelegate(this);
             } catch (Throwable error) {
-                Game.logErrorAPI("IndustrialCraft", error, null);
+                Game.logErrorAPI("IndustrialCraft", error);
             }
         return emitterDelegate;
     }

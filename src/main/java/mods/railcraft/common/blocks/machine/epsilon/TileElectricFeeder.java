@@ -122,7 +122,7 @@ public class TileElectricFeeder extends TileMachineBase implements IElectricGrid
             try {
                 sinkDelegate = new TileIC2SinkDelegate(this);
             } catch (Throwable error) {
-                Game.logErrorAPI("IndustrialCraft", error, null);
+                Game.logErrorAPI("IndustrialCraft", error);
             }
         return sinkDelegate;
     }
