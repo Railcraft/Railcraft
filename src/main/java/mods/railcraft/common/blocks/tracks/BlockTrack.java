@@ -79,33 +79,34 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        Map<Short, TrackSpec> specs = TrackRegistry.getTrackSpecIDs();
-
-        Set<TrackSpec> railcraftSpecs = new HashSet<TrackSpec>();
-        for (EnumTrack track : EnumTrack.VALUES) {
-            TrackSpec spec = track.getTrackSpec();
-            railcraftSpecs.add(spec);
-        }
-
         for (EnumTrack track : EnumTrack.getCreativeList()) {
             if (track.isEnabled())
                 list.add(track.getItem());
         }
 
-        Set<TrackSpec> otherSpecs = new HashSet<TrackSpec>(specs.values());
-        otherSpecs.removeAll(railcraftSpecs);
-        otherSpecs.remove(TrackRegistry.getTrackSpec("Railcraft:default"));
-        for (TrackSpec spec : otherSpecs) {
-            list.add(spec.getItem());
+        try {
+            Collection<TrackSpec> railcraftSpecs = EnumTrack.getRailcraftTrackSpecs();
+            Map<Short, TrackSpec> registeredSpecs = TrackRegistry.getTrackSpecIDs();
+            Set<TrackSpec> otherSpecs = new HashSet<TrackSpec>(registeredSpecs.values());
+            otherSpecs.removeAll(railcraftSpecs);
+            for (TrackSpec spec : otherSpecs) {
+                list.add(spec.getItem());
+            }
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, TrackRegistry.class, TrackSpec.class);
         }
     }
 
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof TileTrack) {
-            ITrackInstance track = ((TileTrack) tile).getTrackInstance();
-            return track.getTrackSpec().getItem();
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+        try {
+            if (tile instanceof TileTrack) {
+                ITrackInstance track = ((TileTrack) tile).getTrackInstance();
+                return track.getTrackSpec().getItem();
+            }
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, TrackRegistry.class, TrackSpec.class);
         }
         return null;
     }
@@ -131,25 +132,33 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        TileEntity tile = world.getTileEntity(i, j, k);
-        if (tile instanceof TileTrack) {
-            ITrackInstance track = ((TileTrack) tile).getTrackInstance();
-            if (track instanceof ITrackCustomShape)
-                return ((ITrackCustomShape) track).getCollisionBoundingBoxFromPool();
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+        try {
+            if (tile instanceof TileTrack) {
+                ITrackInstance track = ((TileTrack) tile).getTrackInstance();
+                if (track instanceof ITrackCustomShape)
+                    return ((ITrackCustomShape) track).getCollisionBoundingBoxFromPool();
+            }
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class);
         }
         return null;
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-        TileEntity tile = world.getTileEntity(i, j, k);
-        if (tile instanceof TileTrack) {
-            ITrackInstance track = ((TileTrack) tile).getTrackInstance();
-            if (track instanceof ITrackCustomShape)
-                return ((ITrackCustomShape) track).getSelectedBoundingBoxFromPool();
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+        try {
+            if (tile instanceof TileTrack) {
+                ITrackInstance track = ((TileTrack) tile).getTrackInstance();
+                if (track instanceof ITrackCustomShape)
+                    return ((ITrackCustomShape) track).getSelectedBoundingBoxFromPool();
+            }
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class);
         }
-        return AxisAlignedBB.getBoundingBox((double) i + minX, (double) j + minY, (double) k + minZ, (double) i + maxX, (double) j + maxY, (double) k + maxZ);
+        return AxisAlignedBB.getBoundingBox((double) x + minX, (double) y + minY, (double) z + minZ, (double) x + maxX, (double) y + maxY, (double) z + maxZ);
     }
 
     @Override
@@ -158,19 +167,23 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public MovingObjectPosition collisionRayTrace(World world, int i, int j, int k, Vec3 vec3d, Vec3 vec3d1) {
-        TileEntity tile = world.getTileEntity(i, j, k);
-        if (tile instanceof TileTrack) {
-            ITrackInstance track = ((TileTrack) tile).getTrackInstance();
-            if (track instanceof ITrackCustomShape)
-                return ((ITrackCustomShape) track).collisionRayTrace(vec3d, vec3d1);
+    public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 vec3d, Vec3 vec3d1) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+        try {
+            if (tile instanceof TileTrack) {
+                ITrackInstance track = ((TileTrack) tile).getTrackInstance();
+                if (track instanceof ITrackCustomShape)
+                    return ((ITrackCustomShape) track).collisionRayTrace(vec3d, vec3d1);
+            }
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class);
         }
-        return super.collisionRayTrace(world, i, j, k, vec3d, vec3d1);
+        return super.collisionRayTrace(world, x, y, z, vec3d, vec3d1);
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess iblockaccess, int i, int j, int k) {
-        int l = iblockaccess.getBlockMetadata(i, j, k);
+    public void setBlockBoundsBasedOnState(IBlockAccess iblockaccess, int x, int y, int z) {
+        int l = iblockaccess.getBlockMetadata(x, y, z);
         if (l >= 2 && l <= 5)
             setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.625F, 1.0F);
         else
@@ -179,11 +192,15 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     @Override
     public boolean getBlocksMovement(IBlockAccess world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof TileTrack) {
-            ITrackInstance track = ((TileTrack) tile).getTrackInstance();
-            if (track instanceof ITrackBlocksMovement)
-                return !((ITrackBlocksMovement) track).blocksMovement();
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+        try {
+            if (tile instanceof TileTrack) {
+                ITrackInstance track = ((TileTrack) tile).getTrackInstance();
+                if (track instanceof ITrackBlocksMovement)
+                    return !((ITrackBlocksMovement) track).blocksMovement();
+            }
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class, ITrackBlocksMovement.class);
         }
         return super.getBlocksMovement(world, x, y, z);
     }
@@ -196,7 +213,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
         if (!MiscTools.isKillabledEntity(entity))
             return;
 
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (!(tile instanceof TileTrack))
             return;
 
@@ -217,8 +234,8 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, int i, int j, int k) {
-        return !TrackTools.isRailBlockAt(world, i, j + 1, k);
+    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+        return !TrackTools.isRailBlockAt(world, x, y + 1, z);
     }
 
     @Override
@@ -233,7 +250,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     @Override
     public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack) {
             ITrackInstance track = ((TileTrack) tile).getTrackInstance();
             return track instanceof ITrackEmitter;
@@ -243,7 +260,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     @Override
     public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int side) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack) {
             ITrackInstance track = ((TileTrack) tile).getTrackInstance();
             return track instanceof ITrackEmitter ? ((ITrackEmitter) track).getPowerOutput() : PowerPlugin.NO_POWER;
@@ -252,47 +269,47 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public void onMinecartPass(World world, EntityMinecart cart, int i, int j, int k) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public void onMinecartPass(World world, EntityMinecart cart, int x, int y, int z) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack)
             ((TileTrack) tile).getTrackInstance().onMinecartPass(cart);
     }
 
     @Override
-    public int getBasicRailMetadata(IBlockAccess world, EntityMinecart cart, int i, int j, int k) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public int getBasicRailMetadata(IBlockAccess world, EntityMinecart cart, int x, int y, int z) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack)
             return ((TileTrack) tile).getTrackInstance().getBasicRailMetadata(cart);
-        return world.getBlockMetadata(i, j, k);
+        return world.getBlockMetadata(x, y, z);
     }
 
     @Override
-    public float getRailMaxSpeed(World world, EntityMinecart cart, int i, int j, int k) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public float getRailMaxSpeed(World world, EntityMinecart cart, int x, int y, int z) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack)
             return ((TileTrack) tile).getTrackInstance().getRailMaxSpeed(cart);
         return 0.4f;
     }
 
     @Override
-    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int side, float u1, float u2, float u3) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float u1, float u2, float u3) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack)
             return ((TileTrack) tile).getTrackInstance().blockActivated(player);
         return false;
     }
 
     @Override
-    public boolean isFlexibleRail(IBlockAccess world, int i, int j, int k) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public boolean isFlexibleRail(IBlockAccess world, int x, int y, int z) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack)
             return ((TileTrack) tile).getTrackInstance().isFlexibleRail();
         return false;
     }
 
     @Override
-    public boolean canMakeSlopes(IBlockAccess world, int i, int j, int k) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public boolean canMakeSlopes(IBlockAccess world, int x, int y, int z) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack)
             return ((TileTrack) tile).getTrackInstance().canMakeSlopes();
         return true;
@@ -304,8 +321,8 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public IIcon getIcon(IBlockAccess world, int i, int j, int k, int side) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack)
             return ((TileTrack) tile).getTrackInstance().getIcon();
         return null;
@@ -313,8 +330,12 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
-        for (ITextureLoader iconLoader : TrackRegistry.getIconLoaders()) {
-            iconLoader.registerIcons(iconRegister);
+        try {
+            for (ITextureLoader iconLoader : TrackRegistry.getIconLoaders()) {
+                iconLoader.registerIcons(iconRegister);
+            }
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, TrackRegistry.class);
         }
     }
 
@@ -331,14 +352,18 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(World world, int i, int j, int k, int md, int fortune) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int md, int fortune) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        if (tile instanceof TileTrack)
-            items.add(((TileTrack) tile).getTrackInstance().getTrackSpec().getItem());
-        else {
-            Game.log(Level.WARN, "Rail Tile was invalid when harvesting rail");
-            items.add(new ItemStack(Blocks.rail));
+        try {
+            if (tile instanceof TileTrack)
+                items.add(((TileTrack) tile).getTrackInstance().getTrackSpec().getItem());
+            else {
+                Game.log(Level.WARN, "Rail Tile was invalid when harvesting rail");
+                items.add(new ItemStack(Blocks.rail));
+            }
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class, TrackSpec.class);
         }
         return items;
     }
@@ -361,8 +386,8 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     // Determine direction here
     @Override
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack) {
             ((TileTrack) tile).onBlockPlacedBy(entityliving, stack);
             ((TileTrack) tile).getTrackInstance().onBlockPlacedBy(entityliving);
@@ -370,17 +395,22 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public void onPostBlockPlaced(World world, int i, int j, int k, int meta) {
+    public void onPostBlockPlaced(World world, int x, int y, int z, int meta) {
 //        if(Game.isNotHost(world)) {
 //            return;
 //        }
-        TileEntity tile = world.getTileEntity(i, j, k);
-        if (tile instanceof TileTrack)
-            ((TileTrack) tile).getTrackInstance().onBlockPlaced();
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+        try {
+            if (tile instanceof TileTrack)
+                ((TileTrack) tile).getTrackInstance().onBlockPlaced();
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class
+            );
+        }
     }
 
     @Override
-    public void harvestBlock(World world, EntityPlayer entityplayer, int i, int j, int k, int l) {
+    public void harvestBlock(World world, EntityPlayer entityplayer, int x, int y, int z, int l) {
     }
 
     @Override
@@ -393,20 +423,20 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public void breakBlock(World world, int i, int j, int k, Block block, int meta) {
-        super.breakBlock(world, i, j, k, block, meta);
+    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+        super.breakBlock(world, x, y, z, block, meta);
 
         try {
-            TileEntity tile = world.getTileEntity(i, j, k);
+            TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
             if (tile instanceof TileTrack)
                 ((TileTrack) tile).getTrackInstance().onBlockRemoved();
 
-        } catch (Throwable error) {
-            Game.logErrorAPI("Railcraft", error, ITrackInstance.class
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class
             );
         }
 
-        world.removeTileEntity(i, j, k);
+        world.removeTileEntity(x, y, z);
     }
 
     @Override
@@ -429,13 +459,12 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     @Override
     public float getBlockHardness(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack)
             try {
                 return ((TileTrack) tile).getTrackInstance().getHardness();
-
-            } catch (Throwable error) {
-                Game.logErrorAPI("Railcraft", error, ITrackInstance.class
+            } catch (Error error) {
+                Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class
                 );
             }
         return super.getBlockHardness(world, x, y, z);
@@ -443,9 +472,14 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     @Override
     public float getExplosionResistance(Entity exploder, World world, int x, int y, int z, double srcX, double srcY, double srcZ) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         if (tile instanceof TileTrack)
-            return ((TileTrack) tile).getTrackInstance().getExplosionResistance(srcX, srcY, srcZ, exploder) * 3f / 5f;
+            try {
+                return ((TileTrack) tile).getTrackInstance().getExplosionResistance(srcX, srcY, srcZ, exploder) * 3f / 5f;
+            } catch (Error error) {
+                Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class
+                );
+            }
         return getExplosionResistance(exploder);
     }
 
@@ -460,12 +494,16 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int i, int j, int k, ForgeDirection side) {
-        TileEntity tile = world.getTileEntity(i, j, k);
-        if (tile instanceof TileTrack) {
-            ITrackInstance track = ((TileTrack) tile).getTrackInstance();
-            if (track instanceof IPostConnection)
-                return ((IPostConnection) track).connectsToPost(world, i, j, k, side);
+    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+        try {
+            if (tile instanceof TileTrack) {
+                ITrackInstance track = ((TileTrack) tile).getTrackInstance();
+                if (track instanceof IPostConnection)
+                    return ((IPostConnection) track).connectsToPost(world, x, y, z, side);
+            }
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, IPostConnection.class, ITrackInstance.class);
         }
         return ConnectStyle.NONE;
     }
