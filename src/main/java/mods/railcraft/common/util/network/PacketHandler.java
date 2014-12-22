@@ -115,7 +115,7 @@ public class PacketHandler {
             if (pkt != null)
                 pkt.readData(data);
         } catch (IOException e) {
-            Game.logThrowable("Exception in PacketHandler.onPacketData: {0}", e);
+            Game.logThrowable("Exception in PacketHandler.onPacketData: {0}", e, data);
         }
     }
 
