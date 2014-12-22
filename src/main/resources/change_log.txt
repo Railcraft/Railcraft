@@ -1,5 +1,6 @@
 Next:
 	FIX: Fix Type Conditional, it should work better now (and probably so do a lot of other things related to item registration).
+	FIX: Don't send non-breakable-space (nbsp) characters to the Font Renderer as it seems that Minecraft can't correctly render them. Fixes issues with number formatting in certain locales.
 
 9.4.0.2:
 	NEW: Add Packed Ice Stairs and Slabs.

@@ -253,6 +253,8 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
 
             for (ToolTipLine tip : toolTips) {
                 String line = tip.text;
+                
+                line = line.replace('\u00A0', ' ');
 
                 if (tip.format == null)
                     line = "\u00a77" + line;
