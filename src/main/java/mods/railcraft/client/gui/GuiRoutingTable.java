@@ -183,24 +183,10 @@ public class GuiRoutingTable extends GuiScreen {
         }
     }
 
-    private void cleanEmptyLines() {
-        Iterator<List<String>> pageIt = bookPages.iterator();
-        while (pageIt.hasNext()) {
-            List<String> page = pageIt.next();
-            Iterator<String> lineIt = page.iterator();
-            while (lineIt.hasNext()) {
-                String line = lineIt.next();
-                if (line.equals(""))
-                    lineIt.remove();
-            }
-            if (page.isEmpty())
-                pageIt.remove();
-        }
-    }
-
     /**
      * Fired when a control is clicked. This is the equivalent of
      * ActionListener.actionPerformed(ActionEvent e).
+     * @param button
      */
     @Override
     protected void actionPerformed(GuiButton button) {
@@ -286,10 +272,13 @@ public class GuiRoutingTable extends GuiScreen {
         }
         switch (key) {
             case Keyboard.KEY_BACK: {
-                String text = getLine(currLine);
-                if (text.length() > 0 && currChar > 0)
-                    setLine(currPage, currLine, text.substring(0, currChar - 1) + text.substring(currChar--));
-                else if (currLine > 0) {
+                String currentLine = getLine(currLine);
+                if (currentLine.length() > 0 && currChar > 0)
+                    setLine(currPage, currLine, currentLine.substring(0, currChar - 1) + currentLine.substring(currChar--));
+                else if (currLine > 0 && currChar == 0 && getLine(currLine - 1).length() == 0) {
+                    List<String> page = getPage(currPage);
+                    page.remove(--currLine);
+                } else if (currLine > 0 && currChar == 0 && currentLine.length() == 0) {
                     List<String> page = getPage(currPage);
                     page.remove(currLine--);
                     currChar = getLine(currLine).length();
