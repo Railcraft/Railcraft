@@ -78,7 +78,7 @@ public enum RailcraftFluids {
 
     void initFluid() {
         if (railcraftFluid == null && RailcraftConfig.isFluidEnabled(standardFluid.getTag())) {
-            railcraftFluid = new Fluid(standardFluid.getTag()).setDensity(density).setViscosity(viscosity);
+            railcraftFluid = new Fluid(standardFluid.getTag()).setDensity(density).setViscosity(viscosity).setGaseous(density < 0);
             FluidRegistry.registerFluid(railcraftFluid);
             initBlock();
         }

@@ -21,8 +21,7 @@ import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 
 public class ContainerLiquidUnloader extends RailcraftContainer {
 
-    private TileLiquidUnloader tile;
-    private Slot input;
+    private final TileLiquidUnloader tile;
 
     public ContainerLiquidUnloader(InventoryPlayer inventoryplayer, TileLiquidUnloader tile) {
         super(tile);
@@ -33,7 +32,7 @@ public class ContainerLiquidUnloader extends RailcraftContainer {
         addSlot(new SlotMinecartFilter(tile.getCartFilters(), 0, 44, 39));
         addSlot(new SlotMinecartFilter(tile.getCartFilters(), 1, 62, 39));
         addSlot(new SlotLiquidFilter(tile.getLiquidFilter(), 0, 89, 39));
-        addSlot(input = new SlotLiquidContainerEmpty(tile, 0, 134, 21));
+        addSlot(new SlotLiquidContainerEmpty(tile, 0, 134, 21));
         addSlot(new SlotOutput(tile, 1, 134, 56));
 
         for (int i = 0; i < 3; i++) {

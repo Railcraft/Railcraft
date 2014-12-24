@@ -38,10 +38,9 @@ import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankToolkit;
-import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
@@ -55,13 +54,10 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
 
     private static final int RESET_WAIT = 200;
     private static final int TRANSFER_RATE = 20;
-    private static final int CAPACITY = FluidHelper.BUCKET_VOLUME * 32;
     private static final float MAX_PIPE_LENGTH = 16 * 0.0625f;
     private static final float PIPE_INCREMENT = 0.01f;
     private int waitForReset = 0;
     private float pipeLenght = 0;
-    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private final StandardTank tank = new StandardTank(CAPACITY, this);
     private final MultiButtonController<ButtonState> stateController = new MultiButtonController<ButtonState>(ButtonState.FORCE_FULL.ordinal(), ButtonState.values());
 
     public enum ButtonState implements IMultiButtonState {
@@ -97,7 +93,7 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
 
     public TileLiquidLoader() {
         super();
-        tankManager.add(tank);
+        tankManager.add(loaderTank);
     }
 
     @Override
@@ -128,32 +124,24 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
 
     private void extendPipe() {
         float y = pipeLenght + PIPE_INCREMENT;
-        if (pipeIsExtended()) {
+        if (pipeIsExtended())
             y = MAX_PIPE_LENGTH;
-        }
         setPipeLength(y);
     }
 
     private void retractPipe() {
         float y = pipeLenght - PIPE_INCREMENT;
-        if (pipeIsRetracted()) {
+        if (pipeIsRetracted())
             y = 0;
-        }
         setPipeLength(y);
     }
 
     private boolean pipeIsExtended() {
-        if (pipeLenght >= MAX_PIPE_LENGTH) {
-            return true;
-        }
-        return false;
+        return pipeLenght >= MAX_PIPE_LENGTH;
     }
 
     private boolean pipeIsRetracted() {
-        if (pipeLenght <= 0) {
-            return true;
-        }
-        return false;
+        return pipeLenght <= 0;
     }
 
     @Override
@@ -163,18 +151,16 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
 
     @Override
     public IIcon getIcon(int side) {
-        if (side > 1) {
+        if (side > 1)
             return getMachineType().getTexture(6);
-        }
         return getMachineType().getTexture(side);
     }
 
     @Override
     public void updateEntity() {
         super.updateEntity();
-        if (Game.isNotHost(getWorld())) {
+        if (Game.isNotHost(getWorld()))
             return;
-        }
 
         ItemStack topSlot = getStackInSlot(SLOT_INPUT);
         if (topSlot != null && !FluidHelper.isContainer(topSlot)) {
@@ -188,21 +174,19 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
             dropItem(bottomSlot);
         }
 
-        if (clock % FluidHelper.BUCKET_FILL_TIME == 0) {
+        if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
             FluidHelper.drainContainers(this, this, SLOT_INPUT, SLOT_OUTPUT);
-        }
 
         for (ForgeDirection side : ForgeDirection.values()) {
-            if (side == ForgeDirection.UNKNOWN) {
+            if (side == ForgeDirection.UNKNOWN)
                 continue;
-            }
             TileEntity tile = tileCache.getTileOnSide(side);
             if (tile instanceof IFluidHandler) {
                 IFluidHandler nearbyTank = (IFluidHandler) tile;
                 if (PipeManager.canExtractFluids(this, worldObj, MiscTools.getXOnSide(xCoord, side), MiscTools.getYOnSide(yCoord, side), MiscTools.getZOnSide(zCoord, side))) {
                     side = side.getOpposite();
                     FluidStack drained = nearbyTank.drain(side, TRANSFER_RATE, false);
-                    int used = tank.fill(drained, true);
+                    int used = loaderTank.fill(drained, true);
                     nearbyTank.drain(side, used, true);
                 }
             }
@@ -216,33 +200,29 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
             needsPipe = true;
         }
 
-
         if (cart != currentCart) {
-            if (currentCart instanceof ILiquidTransfer) {
+            if (currentCart instanceof ILiquidTransfer)
                 ((EntityCartTank) currentCart).setFilling(false);
-            }
             setPowered(false);
             currentCart = cart;
             cartWasSent();
             waitForReset = 0;
         }
-        
-        if(waitForReset > 0)
+
+        if (waitForReset > 0)
             waitForReset--;
 
         if (waitForReset > 0) {
-            if (pipeIsRetracted()) {
+            if (pipeIsRetracted())
                 sendCart(cart);
-            } else {
+            else
                 retractPipe();
-            }
             return;
         }
 
         if (cart == null) {
-            if (!pipeIsRetracted()) {
+            if (!pipeIsRetracted())
                 retractPipe();
-            }
             return;
         }
 
@@ -258,12 +238,11 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
 
         ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
         ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
-        if (minecartSlot1 != null || minecartSlot2 != null) {
+        if (minecartSlot1 != null || minecartSlot2 != null)
             if (!CartUtils.doesCartMatchFilter(minecartSlot1, cart) && !CartUtils.doesCartMatchFilter(minecartSlot2, cart)) {
                 sendCart(cart);
                 return;
             }
-        }
 
         if (cart instanceof EntityLocomotiveSteam) {
             EntityLocomotiveSteam loco = (EntityLocomotiveSteam) cart;
@@ -279,11 +258,10 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
         TankToolkit tankCart = new TankToolkit((IFluidHandler) cart);
         boolean cartNeedsFilling = cartNeedsFilling(tankCart);
 
-        if (cartNeedsFilling && needsPipe) {
+        if (cartNeedsFilling && needsPipe)
             extendPipe();
-        } else {
+        else
             retractPipe();
-        }
 
         flow = 0;
         if (cartNeedsFilling && (!needsPipe || pipeIsExtended())) {
@@ -295,64 +273,53 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
         }
 
         if (flow > 0) {
-            if (cart instanceof ILiquidTransfer) {
+            if (cart instanceof ILiquidTransfer)
                 ((ILiquidTransfer) cart).setFilling(true);
-            }
             setPowered(false);
-        } else {
-            if (cart instanceof ILiquidTransfer) {
-                ((ILiquidTransfer) cart).setFilling(false);
-            }
-        }
+        } else if (cart instanceof ILiquidTransfer)
+            ((ILiquidTransfer) cart).setFilling(false);
 
-        if (tankCart.isTankFull(tank.getFluidType())) {
+        if (tankCart.isTankFull(loaderTank.getFluidType()))
             waitForReset = RESET_WAIT;
-        }
 
         if (stateController.getButtonState() != ButtonState.MANUAL
-                && pipeIsRetracted() && flow <= 0 && shouldCartLeave(cart, tankCart)) {
+                && pipeIsRetracted() && flow <= 0 && shouldCartLeave(cart, tankCart))
             sendCart(cart);
-        }
     }
 
     private void sendCart(EntityMinecart cart) {
-        if (cart == null) {
+        if (cart == null)
             return;
-        }
-        if (stateController.getButtonState() == ButtonState.MANUAL) {
+        if (stateController.getButtonState() == ButtonState.MANUAL)
             return;
-        }
-        if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY)) {
+        if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY))
             setPowered(true);
-        }
     }
 
     private boolean cartNeedsFilling(TankToolkit tankCart) {
-        FluidStack loaderLiquid = tank.getFluid();
+        FluidStack loaderLiquid = loaderTank.getFluid();
         return loaderLiquid != null && loaderLiquid.amount > 0 && tankCart.canPutFluid(ForgeDirection.UP, loaderLiquid);
     }
 
     private boolean shouldCartLeave(EntityMinecart cart, TankToolkit tankCart) {
         boolean leave = false;
-        if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY)) {
-            if (tank.getFluid() != null && tank.getFluid().amount > 0 && !tankCart.canPutFluid(ForgeDirection.UP, tank.getFluid())) {
+        Fluid fluidHandled = getFluidHandled();
+        if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY))
+            if (!loaderTank.isEmpty() && !tankCart.canPutFluid(ForgeDirection.UP, loaderTank.getFluid()))
                 leave = true;
-            } else if (stateController.getButtonState() != ButtonState.FORCE_FULL && !tankCart.isTankEmpty(tank.getFluidType())) {
+            else if (stateController.getButtonState() != ButtonState.FORCE_FULL && !tankCart.isTankEmpty(fluidHandled))
                 leave = true;
-            } else if (stateController.getButtonState() == ButtonState.IMMEDIATE && tankCart.isTankEmpty(tank.getFluidType())) {
+            else if (stateController.getButtonState() == ButtonState.IMMEDIATE && tankCart.isTankEmpty(fluidHandled))
                 leave = true;
-            } else if (tankCart.isTankFull(tank.getFluidType())) {
+            else if (tankCart.isTankFull(fluidHandled))
                 leave = true;
-            }
-        }
         return leave;
     }
 
     @Override
     protected void setPowered(boolean p) {
-        if (stateController.getButtonState() == ButtonState.MANUAL) {
+        if (stateController.getButtonState() == ButtonState.MANUAL)
             p = false;
-        }
         if (p) {
             resetPipe();
             if (worldObj != null) {
@@ -360,9 +327,8 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
                 if (tile instanceof TileTrack) {
                     TileTrack trackTile = (TileTrack) tile;
                     ITrackInstance track = trackTile.getTrackInstance();
-                    if (track instanceof ITrackLockdown) {
+                    if (track instanceof ITrackLockdown)
                         ((ITrackLockdown) track).releaseCart();
-                    }
                 }
             }
         }
@@ -388,6 +354,14 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
     }
 
     @Override
+    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+        Fluid fluidFilter = getFilterFluid();
+        if (resource == null || (fluidFilter != null && !Fluids.areEqual(fluidFilter, resource)))
+            return 0;
+        return super.fill(from, resource, doFill);
+    }
+
+    @Override
     public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
         return null;
     }
@@ -399,7 +373,8 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
 
     @Override
     public boolean canFill(ForgeDirection from, Fluid fluid) {
-        return true;
+        Fluid fluidFilter = getFilterFluid();
+        return fluidFilter == null || fluid.equals(fluidFilter);
     }
 
     @Override
@@ -428,11 +403,10 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
         // Legacy code
         boolean waitIfEmpty = data.getBoolean("WaitIfEmpty");
         boolean waitTillFull = data.getBoolean("WaitTillFull");
-        if (waitTillFull) {
+        if (waitTillFull)
             stateController.setCurrentState(ButtonState.FORCE_FULL);
-        } else if (waitIfEmpty) {
+        else if (waitIfEmpty)
             stateController.setCurrentState(ButtonState.HOLD_EMPTY);
-        }
     }
 
     @Override

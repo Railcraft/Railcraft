@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.IFluidHandler;
  */
 public class TankToolkit implements IFluidHandler {
 
-    private IFluidHandler tankContainer;
+    private final IFluidHandler tankContainer;
 
     public TankToolkit(IFluidHandler c) {
         tankContainer = c;
@@ -39,6 +39,8 @@ public class TankToolkit implements IFluidHandler {
     }
 
     public boolean isTankEmpty(Fluid fluid) {
+        if (fluid == null)
+            return areTanksEmpty();
         return getFluidQty(fluid) <= 0;
     }
 

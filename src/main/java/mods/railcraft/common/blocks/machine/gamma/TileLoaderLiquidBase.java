@@ -17,10 +17,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.PhantomInventory;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -30,16 +34,40 @@ public abstract class TileLoaderLiquidBase extends TileLoaderBase implements IIn
     protected static final int SLOT_INPUT = 0;
     protected static final int SLOT_OUTPUT = 1;
     protected static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
+    protected static final int CAPACITY = FluidHelper.BUCKET_VOLUME * 32;
+    protected final PhantomInventory invFilter = new PhantomInventory(1);
+    protected final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
     protected final TankManager tankManager = new TankManager();
+    protected final StandardTank loaderTank = new StandardTank(CAPACITY, this);
     protected int flow = 0;
 
     protected TileLoaderLiquidBase() {
         super();
         setInventorySize(2);
+        tankManager.add(loaderTank);
     }
 
     public TankManager getTankManager() {
         return tankManager;
+    }
+
+    public PhantomInventory getLiquidFilter() {
+        return invFilter;
+    }
+
+    public Fluid getFilterFluid() {
+        if (invFilter.getStackInSlot(0) != null) {
+            FluidStack fluidStack = FluidHelper.getFluidStackInContainer(invFilter.getStackInSlot(0));
+            return fluidStack != null ? fluidStack.getFluid() : null;
+        }
+        return null;
+    }
+
+    public Fluid getFluidHandled() {
+        Fluid fluid = getFilterFluid();
+        if (fluid != null)
+            return fluid;
+        return loaderTank.getFluidType();
     }
 
     @Override
@@ -50,9 +78,8 @@ public abstract class TileLoaderLiquidBase extends TileLoaderBase implements IIn
     @Override
     public void updateEntity() {
         super.updateEntity();
-        if (Game.isHost(getWorld()) && clock % FluidHelper.NETWORK_UPDATE_INTERVAL == 0) {
+        if (Game.isHost(getWorld()) && clock % FluidHelper.NETWORK_UPDATE_INTERVAL == 0)
             sendUpdateToClient();
-        }
     }
 
     @Override
@@ -73,7 +100,7 @@ public abstract class TileLoaderLiquidBase extends TileLoaderBase implements IIn
     @Override
     public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
         return tankManager.drain(from, resource, doDrain);
-    }   
+    }
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection dir) {
@@ -99,10 +126,15 @@ public abstract class TileLoaderLiquidBase extends TileLoaderBase implements IIn
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        if (data.getTag("tanks") instanceof NBTTagCompound) {
+        if (data.getTag("tanks") instanceof NBTTagCompound)
             data.setTag("tanks", new NBTTagList());
-        }
         tankManager.readTanksFromNBT(data);
+
+        if (data.hasKey("filter")) {
+            NBTTagCompound filter = data.getCompoundTag("filter");
+            getLiquidFilter().readFromNBT("Items", filter);
+        } else
+            getLiquidFilter().readFromNBT("invFilter", data);
     }
 
     @Override
@@ -110,6 +142,7 @@ public abstract class TileLoaderLiquidBase extends TileLoaderBase implements IIn
         super.writeToNBT(data);
 
         tankManager.writeTanksToNBT(data);
+        getLiquidFilter().writeToNBT("invFilter", data);
     }
 
     @Override

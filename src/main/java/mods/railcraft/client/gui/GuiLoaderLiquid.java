@@ -24,7 +24,7 @@ public class GuiLoaderLiquid extends TileGui {
     private GuiMultiButton button;
 
     public GuiLoaderLiquid(InventoryPlayer inv, TileLiquidLoader tile) {
-        super(tile, new ContainerLiquidLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_liquid_loader.png");
+        super(tile, new ContainerLiquidLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_fluid_loader.png");
         this.tile = tile;
     }
 

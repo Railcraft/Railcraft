@@ -30,12 +30,9 @@ import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.TankToolkit;
-import mods.railcraft.common.fluids.tanks.StandardTank;
-import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraftforge.fluids.Fluid;
@@ -47,18 +44,15 @@ import static mods.railcraft.common.blocks.machine.gamma.TileLoaderLiquidBase.SL
 
 public class TileLiquidUnloader extends TileLoaderLiquidBase implements IGuiReturnHandler {
 
-    private static final int CAPACITY = FluidHelper.BUCKET_VOLUME * 32;
     private static final int TRANSFER_RATE = 80;
-    private final StandardTank tank = new StandardTank(CAPACITY, this);
-    private final PhantomInventory invFilter = new PhantomInventory(1);
-    private MultiButtonController<ButtonState> stateController = new MultiButtonController<ButtonState>(ButtonState.EMPTY_COMPLETELY.ordinal(), ButtonState.values());
+    private final MultiButtonController<ButtonState> stateController = new MultiButtonController<ButtonState>(ButtonState.EMPTY_COMPLETELY.ordinal(), ButtonState.values());
 
     public enum ButtonState implements IMultiButtonState {
 
         EMPTY_COMPLETELY("railcraft.gui.liquid.unloader.empty"),
         IMMEDIATE("railcraft.gui.liquid.unloader.immediate"),
         MANUAL("railcraft.gui.liquid.unloader.manual");
-        private String label;
+        private final String label;
         private final ToolTip tip;
 
         private ButtonState(String label) {
@@ -83,18 +77,10 @@ public class TileLiquidUnloader extends TileLoaderLiquidBase implements IGuiRetu
 
     }
 
-    public TileLiquidUnloader() {
-        super();
-        tankManager.add(tank);
-    }
 
     @Override
     public IEnumMachine getMachineType() {
         return EnumMachineGamma.LIQUID_UNLOADER;
-    }
-
-    public PhantomInventory getLiquidFilter() {
-        return invFilter;
     }
 
     public MultiButtonController<ButtonState> getStateController() {
@@ -106,14 +92,6 @@ public class TileLiquidUnloader extends TileLoaderLiquidBase implements IGuiRetu
         if (side > 1)
             return getMachineType().getTexture(6);
         return getMachineType().getTexture(side);
-    }
-
-    public Fluid getFilterFluid() {
-        if (invFilter.getStackInSlot(0) != null) {
-            FluidStack fluidStack = FluidHelper.getFluidStackInContainer(invFilter.getStackInSlot(0));
-            return fluidStack != null ? fluidStack.getFluid() : null;
-        }
-        return null;
     }
 
     @Override
@@ -140,7 +118,7 @@ public class TileLiquidUnloader extends TileLoaderLiquidBase implements IGuiRetu
         }
 
         if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
-            FluidHelper.fillContainers(tankManager, this, SLOT_INPUT, SLOT_OUTPUT, tank.getFluidType());
+            FluidHelper.fillContainers(tankManager, this, SLOT_INPUT, SLOT_OUTPUT, loaderTank.getFluidType());
 
         tankManager.outputLiquid(tileCache, TankManager.TANK_FILTER, ForgeDirection.VALID_DIRECTIONS, 0, TRANSFER_RATE);
 
@@ -203,9 +181,7 @@ public class TileLiquidUnloader extends TileLoaderLiquidBase implements IGuiRetu
             return true;
         if (getFilterFluid() != null && tankCart.isTankEmpty(getFilterFluid()))
             return true;
-        if (tankCart.areTanksEmpty())
-            return true;
-        return false;
+        return tankCart.areTanksEmpty();
     }
 
     @Override
@@ -233,22 +209,13 @@ public class TileLiquidUnloader extends TileLoaderLiquidBase implements IGuiRetu
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-
         stateController.writeToNBT(data, "state");
-        getLiquidFilter().writeToNBT("invFilter", data);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-
         stateController.readFromNBT(data, "state");
-
-        if (data.hasKey("filter")) {
-            NBTTagCompound filter = data.getCompoundTag("filter");
-            getLiquidFilter().readFromNBT("Items", filter);
-        } else
-            getLiquidFilter().readFromNBT("invFilter", data);
     }
 
     @Override
