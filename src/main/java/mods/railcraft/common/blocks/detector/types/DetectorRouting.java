@@ -25,8 +25,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
 
 /**
@@ -36,7 +38,7 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
 public class DetectorRouting extends DetectorSecured implements IRouter, IRoutingTile {
 
     private RoutingLogic logic;
-    private StandaloneInventory inv = new StandaloneInventory(1, null, new StandaloneInventory.Callback() {
+    private final StandaloneInventory inv = new StandaloneInventory(1, null, new StandaloneInventory.Callback() {
         @Override
         public void markDirty() {
             logic = null;
@@ -64,6 +66,18 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
 
     @Override
     public boolean blockActivated(EntityPlayer player) {
+        ItemStack current = player.inventory.getCurrentItem();
+        if (current != null && current.getItem() instanceof ItemRoutingTable)
+            if (inv.getStackInSlot(0) == null) {
+                ItemStack copy = current.copy();
+                copy.stackSize = 1;
+                inv.setInventorySlotContents(0, copy);
+                if (!player.capabilities.isCreativeMode) {
+                    player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
+                    player.inventory.markDirty();
+                }
+                return true;
+            }
         openGui(EnumGui.DETECTOR_ROUTING, player);
         return true;
     }

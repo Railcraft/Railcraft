@@ -24,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -47,8 +48,21 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
 
     @Override
     public boolean blockActivated(int side, EntityPlayer player) {
-        if (Game.isHost(worldObj))
+        if (Game.isHost(worldObj)) {
+            ItemStack current = player.inventory.getCurrentItem();
+            if (current != null && current.getItem() instanceof ItemRoutingTable)
+                if (inv.getStackInSlot(0) == null) {
+                    ItemStack copy = current.copy();
+                    copy.stackSize = 1;
+                    inv.setInventorySlotContents(0, copy);
+                    if (!player.capabilities.isCreativeMode) {
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
+                        player.inventory.markDirty();
+                    }
+                    return true;
+                }
             GuiHandler.openGui(EnumGui.ROUTING, player, worldObj, xCoord, yCoord, zCoord);
+        }
         return true;
     }
 
