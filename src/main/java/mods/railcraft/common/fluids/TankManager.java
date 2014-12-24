@@ -32,7 +32,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.fluids.IFluidTank;
 
 /**
  *
@@ -322,17 +321,23 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
         }
     }
 
-    private boolean tankAcceptsFluid(IFluidTank tank, FluidStack fluidStack) {
+    private boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
         if (fluidStack == null)
             return false;
         return tank.fill(fluidStack, false) > 0;
     }
 
-    private boolean tankCanDrainFluid(IFluidTank tank, FluidStack fluidStack) {
-        if (fluidStack == null)
-            return false;
+    private boolean tankCanDrain(StandardTank tank) {
         FluidStack drained = tank.drain(1, false);
         return drained != null && drained.amount > 0;
+    }
+
+    private boolean tankCanDrainFluid(StandardTank tank, FluidStack fluidStack) {
+        if (fluidStack == null)
+            return false;
+        if (!Fluids.areEqual(tank.getFluidType(), fluidStack))
+            return false;
+        return tankCanDrain(tank);
     }
 
 }

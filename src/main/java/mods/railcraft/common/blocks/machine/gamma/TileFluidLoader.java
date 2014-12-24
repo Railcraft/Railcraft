@@ -185,9 +185,16 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
                 IFluidHandler nearbyTank = (IFluidHandler) tile;
                 if (PipeManager.canExtractFluids(this, worldObj, MiscTools.getXOnSide(xCoord, side), MiscTools.getYOnSide(yCoord, side), MiscTools.getZOnSide(zCoord, side))) {
                     side = side.getOpposite();
-                    FluidStack drained = nearbyTank.drain(side, TRANSFER_RATE, false);
-                    int used = loaderTank.fill(drained, true);
-                    nearbyTank.drain(side, used, true);
+                    Fluid filterFluid = getFilterFluid();
+                    if (filterFluid != null) {
+                        FluidStack drained = nearbyTank.drain(side, new FluidStack(filterFluid, TRANSFER_RATE), false);
+                        int used = loaderTank.fill(drained, true);
+                        nearbyTank.drain(side, new FluidStack(filterFluid, used), true);
+                    } else {
+                        FluidStack drained = nearbyTank.drain(side, TRANSFER_RATE, false);
+                        int used = loaderTank.fill(drained, true);
+                        nearbyTank.drain(side, used, true);
+                    }
                 }
             }
         }
