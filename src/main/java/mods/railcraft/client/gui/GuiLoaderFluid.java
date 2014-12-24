@@ -10,21 +10,21 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import net.minecraft.entity.player.InventoryPlayer;
-import mods.railcraft.common.blocks.machine.gamma.TileLiquidUnloader;
+import mods.railcraft.common.blocks.machine.gamma.TileFluidLoader;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.containers.ContainerLiquidUnloader;
+import mods.railcraft.common.gui.containers.ContainerFluidLoader;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketBuilder;
 
-public class GuiUnloaderLiquid extends TileGui {
+public class GuiLoaderFluid extends TileGui {
 
     private final String FILTER_LABEL = LocalizationPlugin.translate("railcraft.gui.filters");
-    private final TileLiquidUnloader tile;
+    private final TileFluidLoader tile;
     private GuiMultiButton button;
 
-    public GuiUnloaderLiquid(InventoryPlayer inv, TileLiquidUnloader tile) {
-        super(tile, new ContainerLiquidUnloader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_fluid_loader.png");
+    public GuiLoaderFluid(InventoryPlayer inv, TileFluidLoader tile) {
+        super(tile, new ContainerFluidLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_fluid_loader.png");
         this.tile = tile;
     }
 
@@ -37,7 +37,8 @@ public class GuiUnloaderLiquid extends TileGui {
         buttonList.clear();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        buttonList.add(button = new GuiMultiButton(0, w + 40, h + 60, 80, tile.getStateController().copy()));
+        button = new GuiMultiButton(0, w + 40, h + 60, 80, tile.getStateController().copy());
+        buttonList.add(button);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class GuiUnloaderLiquid extends TileGui {
         int sWidth = fontRendererObj.getStringWidth(tile.getName());
         int sPos = xSize / 2 - sWidth / 2;
         fontRendererObj.drawString(tile.getName(), sPos, 6, 0x404040);
-        fontRendererObj.drawString(FILTER_LABEL, 60, 25, 0x404040);
+        fontRendererObj.drawString(FILTER_LABEL, 62, 25, 0x404040);
     }
 
     @Override

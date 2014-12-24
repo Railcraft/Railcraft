@@ -50,7 +50,7 @@ public class MachineTileRegistery {
         GameRegistry.registerTileEntity(TileEngineSteamLow.class, "RCEngineSteamLow");
         GameRegistry.registerTileEntity(TileEngineSteamHigh.class, "RCEngineSteamHigh");
         GameRegistry.registerTileEntity(TileBoilerFireboxSolid.class, "RCBoilerFireboxSoildTile");
-        GameRegistry.registerTileEntity(TileBoilerFireboxLiquid.class, "RCBoilerFireboxLiquidTile");
+        GameRegistry.registerTileEntity(TileBoilerFireboxFluid.class, "RCBoilerFireboxLiquidTile");
         GameRegistry.registerTileEntity(TileBoilerTankLow.class, "RCBoilerTankLowTile");
         GameRegistry.registerTileEntity(TileBoilerTankHigh.class, "RCBoilerTankHighTile");
         GameRegistry.registerTileEntity(TileTankIronWall.class, "RCIronTankWallTile");
@@ -72,8 +72,8 @@ public class MachineTileRegistery {
         GameRegistry.registerTileEntity(TileItemLoaderAdvanced.class, "RCLoaderAdvancedTile");
         GameRegistry.registerTileEntity(TileItemUnloader.class, "RCUnloaderTile");
         GameRegistry.registerTileEntity(TileItemUnloaderAdvanced.class, "RCUnloaderAdvancedTile");
-        GameRegistry.registerTileEntity(TileLiquidLoader.class, "RCLoaderTileLiquid");
-        GameRegistry.registerTileEntity(TileLiquidUnloader.class, "RCUnloaderTileLiquid");
+        GameRegistry.registerTileEntity(TileFluidLoader.class, "RCLoaderTileLiquid");
+        GameRegistry.registerTileEntity(TileFluidUnloader.class, "RCUnloaderTileLiquid");
 
         // Delta
         GameRegistry.registerTileEntity(TileCage.class, "RCCageTile");

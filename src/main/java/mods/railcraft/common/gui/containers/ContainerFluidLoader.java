@@ -12,18 +12,18 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import mods.railcraft.common.blocks.machine.gamma.TileLiquidLoader;
-import mods.railcraft.common.gui.slots.SlotLiquidContainerFilled;
-import mods.railcraft.common.gui.slots.SlotLiquidFilter;
+import mods.railcraft.common.blocks.machine.gamma.TileFluidLoader;
+import mods.railcraft.common.gui.slots.SlotFluidContainerFilled;
+import mods.railcraft.common.gui.slots.SlotFluidFilter;
 import mods.railcraft.common.gui.slots.SlotMinecartFilter;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 
-public class ContainerLiquidLoader extends RailcraftContainer {
+public class ContainerFluidLoader extends RailcraftContainer {
 
-    private final TileLiquidLoader tile;
+    private final TileFluidLoader tile;
 
-    public ContainerLiquidLoader(InventoryPlayer inventoryplayer, TileLiquidLoader tile) {
+    public ContainerFluidLoader(InventoryPlayer inventoryplayer, TileFluidLoader tile) {
         super(tile);
         this.tile = tile;
 
@@ -31,8 +31,8 @@ public class ContainerLiquidLoader extends RailcraftContainer {
 
         addSlot(new SlotMinecartFilter(tile.getCartFilters(), 0, 44, 39));
         addSlot(new SlotMinecartFilter(tile.getCartFilters(), 1, 62, 39));
-        addSlot(new SlotLiquidFilter(tile.getLiquidFilter(), 0, 89, 39));
-        addSlot(new SlotLiquidContainerFilled(tile, 0, 134, 21));
+        addSlot(new SlotFluidFilter(tile.getFluidFilter(), 0, 89, 39));
+        addSlot(new SlotFluidContainerFilled(tile, 0, 134, 21));
         addSlot(new SlotOutput(tile, 1, 134, 56));
 
         for (int i = 0; i < 3; i++) {

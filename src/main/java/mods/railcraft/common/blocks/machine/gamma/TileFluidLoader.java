@@ -50,7 +50,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
-public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturnHandler {
+public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHandler {
 
     private static final int RESET_WAIT = 200;
     private static final int TRANSFER_RATE = 20;
@@ -91,14 +91,14 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
 
     }
 
-    public TileLiquidLoader() {
+    public TileFluidLoader() {
         super();
         tankManager.add(loaderTank);
     }
 
     @Override
     public IEnumMachine getMachineType() {
-        return EnumMachineGamma.LIQUID_LOADER;
+        return EnumMachineGamma.FLUID_LOADER;
     }
 
     public MultiButtonController<ButtonState> getStateController() {
@@ -425,7 +425,7 @@ public class TileLiquidLoader extends TileLoaderLiquidBase implements IGuiReturn
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOADER_LIQUID, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.LOADER_FLUID, player, worldObj, xCoord, yCoord, zCoord);
         return true;
     }
 

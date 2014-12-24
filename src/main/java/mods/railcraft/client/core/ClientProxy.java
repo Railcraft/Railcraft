@@ -51,8 +51,8 @@ import mods.railcraft.common.blocks.machine.beta.TileTankSteelGauge;
 import mods.railcraft.common.blocks.machine.beta.TileTankSteelValve;
 import mods.railcraft.common.blocks.machine.beta.TileTankSteelWall;
 import mods.railcraft.common.blocks.machine.delta.TileCage;
-import mods.railcraft.common.blocks.machine.gamma.TileLiquidLoader;
-import mods.railcraft.common.blocks.machine.gamma.TileLiquidUnloader;
+import mods.railcraft.common.blocks.machine.gamma.TileFluidLoader;
+import mods.railcraft.common.blocks.machine.gamma.TileFluidUnloader;
 import mods.railcraft.common.blocks.tracks.TileTrackTESR;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityTunnelBore;
@@ -125,9 +125,9 @@ public class ClientProxy extends CommonProxy {
         if (stack != null)
             MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.ELECTRIC, (EntityLocomotive) EnumCart.LOCO_ELECTRIC.makeCart(stack, null, 0, 0, 0)));
 
-        RenderLiquidLoader liquidLoaderRenderer = new RenderLiquidLoader();
-        ClientRegistry.bindTileEntitySpecialRenderer(TileLiquidLoader.class, liquidLoaderRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(TileLiquidUnloader.class, liquidLoaderRenderer);
+        RenderFluidLoader fluidLoaderRenderer = new RenderFluidLoader();
+        ClientRegistry.bindTileEntitySpecialRenderer(TileFluidLoader.class, fluidLoaderRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(TileFluidUnloader.class, fluidLoaderRenderer);
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileTankIronGauge.class, new RenderIronTank());
         ClientRegistry.bindTileEntitySpecialRenderer(TileTankIronWall.class, new RenderIronTank());

@@ -39,7 +39,7 @@ public enum EnumMachineBeta implements IEnumMachine {
     BOILER_TANK_LOW_PRESSURE(Module.STEAM, "boiler.tank.pressure.low", TileBoilerTankLow.class, 2, 1, 0, 0, 1, 1, 1, 1),
     BOILER_TANK_HIGH_PRESSURE(Module.STEAM, "boiler.tank.pressure.high", TileBoilerTankHigh.class, 2, 1, 0, 0, 1, 1, 1, 1),
     BOILER_FIREBOX_SOLID(Module.STEAM, "boiler.firebox.solid", TileBoilerFireboxSolid.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
-    BOILER_FIREBOX_LIQUID(Module.STEAM, "boiler.firebox.liquid", TileBoilerFireboxLiquid.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
+    BOILER_FIREBOX_FLUID(Module.STEAM, "boiler.firebox.liquid", TileBoilerFireboxFluid.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
     ENGINE_STEAM_HOBBY(Module.STEAM, "engine.steam.hobby", TileEngineSteamHobby.class, 1, 1, 0),
     ENGINE_STEAM_LOW(Module.STEAM, "engine.steam.low", TileEngineSteamLow.class, 1, 1, 0),
     ENGINE_STEAM_HIGH(Module.STEAM, "engine.steam.high", TileEngineSteamHigh.class, 1, 1, 0),
@@ -66,7 +66,7 @@ public enum EnumMachineBeta implements IEnumMachine {
         creativeList.add(TANK_STEEL_GAUGE);
         creativeList.add(TANK_STEEL_VALVE);
         creativeList.add(BOILER_FIREBOX_SOLID);
-        creativeList.add(BOILER_FIREBOX_LIQUID);
+        creativeList.add(BOILER_FIREBOX_FLUID);
         creativeList.add(BOILER_TANK_LOW_PRESSURE);
         creativeList.add(BOILER_TANK_HIGH_PRESSURE);
         creativeList.add(ENGINE_STEAM_HOBBY);

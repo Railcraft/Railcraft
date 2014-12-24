@@ -17,7 +17,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.alpha.*;
-import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxLiquid;
+import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
@@ -52,10 +52,10 @@ public class FactoryGui {
             switch (gui) {
                 case LOADER_ITEM:
                     return new GuiLoaderItem(inv, (TileLoaderItemBase) obj);
-                case LOADER_LIQUID:
-                    return new GuiLoaderLiquid(inv, (TileLiquidLoader) obj);
-                case UNLOADER_LIQUID:
-                    return new GuiUnloaderLiquid(inv, (TileLiquidUnloader) obj);
+                case LOADER_FLUID:
+                    return new GuiLoaderFluid(inv, (TileFluidLoader) obj);
+                case UNLOADER_FLUID:
+                    return new GuiUnloaderFluid(inv, (TileFluidUnloader) obj);
                 case LOADER_ENERGY:
                     return new GuiLoaderEnergy(inv, (TileEnergyLoader) obj);
                 case UNLOADER_ENERGY:
@@ -107,7 +107,7 @@ public class FactoryGui {
                 case BOILER_SOLID:
                     return new GuiBoilerSolid(inv, (TileBoilerFireboxSolid) obj);
                 case BOILER_LIQUID:
-                    return new GuiBoilerLiquid(inv, (TileBoilerFireboxLiquid) obj);
+                    return new GuiBoilerFluid(inv, (TileBoilerFireboxFluid) obj);
                 case TURBINE:
                     return new GuiTurbine(inv, (TileSteamTurbine) obj);
                 case ANVIL:

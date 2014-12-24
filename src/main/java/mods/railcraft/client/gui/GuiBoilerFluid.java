@@ -10,17 +10,17 @@ package mods.railcraft.client.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.StatCollector;
-import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxLiquid;
+import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.containers.ContainerBoilerLiquid;
+import mods.railcraft.common.gui.containers.ContainerBoilerFluid;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 
-public class GuiBoilerLiquid extends TileGui {
+public class GuiBoilerFluid extends TileGui {
 
-    private final TileBoilerFireboxLiquid tile;
+    private final TileBoilerFireboxFluid tile;
 
-    public GuiBoilerLiquid(InventoryPlayer inv, TileBoilerFireboxLiquid tile) {
-        super(tile, new ContainerBoilerLiquid(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_boiler_liquid.png");
+    public GuiBoilerFluid(InventoryPlayer inv, TileBoilerFireboxFluid tile) {
+        super(tile, new ContainerBoilerFluid(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_boiler_liquid.png");
         this.tile = tile;
     }
 

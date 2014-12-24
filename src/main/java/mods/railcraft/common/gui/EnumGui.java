@@ -15,9 +15,9 @@ package mods.railcraft.common.gui;
 public enum EnumGui {
 
     LOADER_ITEM(true),
-    LOADER_LIQUID(true),
+    LOADER_FLUID(true),
     LOADER_ENERGY(true),
-    UNLOADER_LIQUID(true),
+    UNLOADER_FLUID(true),
     UNLOADER_ENERGY(true),
     DETECTOR_CART(true),
     DETECTOR_ITEM(true),

@@ -13,8 +13,8 @@ import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import org.lwjgl.opengl.GL11;
-import mods.railcraft.common.blocks.machine.gamma.TileLiquidLoader;
-import mods.railcraft.common.blocks.machine.gamma.TileLoaderLiquidBase;
+import mods.railcraft.common.blocks.machine.gamma.TileFluidLoader;
+import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.FluidStack;
@@ -24,13 +24,13 @@ import net.minecraftforge.fluids.IFluidTank;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderLiquidLoader extends TileEntitySpecialRenderer {
+public class RenderFluidLoader extends TileEntitySpecialRenderer {
 
     private static final float PIPE_OFFSET = 5 * RenderTools.PIXEL;
     private static final RenderInfo backDrop = new RenderInfo();
     private static final RenderInfo pipe = new RenderInfo();
 
-    public RenderLiquidLoader() {
+    public RenderFluidLoader() {
         backDrop.minX = 0.011f;
         backDrop.minY = 0.01f;
         backDrop.minZ = 0.011f;
@@ -53,7 +53,7 @@ public class RenderLiquidLoader extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f) {
-        TileLoaderLiquidBase base = (TileLoaderLiquidBase) tile;
+        TileLoaderFluidBase base = (TileLoaderFluidBase) tile;
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -93,8 +93,8 @@ public class RenderLiquidLoader extends TileEntitySpecialRenderer {
         GL11.glPopAttrib();
         GL11.glPopMatrix();
 
-        if (tile.getClass() == TileLiquidLoader.class) {
-            TileLiquidLoader loader = (TileLiquidLoader) tile;
+        if (tile.getClass() == TileFluidLoader.class) {
+            TileFluidLoader loader = (TileFluidLoader) tile;
 
             pipe.minY = RenderTools.PIXEL - loader.getPipeLenght();
 

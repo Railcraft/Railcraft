@@ -29,7 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-public abstract class TileLoaderLiquidBase extends TileLoaderBase implements IInventory, IFluidHandler, ISidedInventory {
+public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInventory, IFluidHandler, ISidedInventory {
 
     protected static final int SLOT_INPUT = 0;
     protected static final int SLOT_OUTPUT = 1;
@@ -41,7 +41,7 @@ public abstract class TileLoaderLiquidBase extends TileLoaderBase implements IIn
     protected final StandardTank loaderTank = new StandardTank(CAPACITY, this);
     protected int flow = 0;
 
-    protected TileLoaderLiquidBase() {
+    protected TileLoaderFluidBase() {
         super();
         setInventorySize(2);
         tankManager.add(loaderTank);
@@ -51,7 +51,7 @@ public abstract class TileLoaderLiquidBase extends TileLoaderBase implements IIn
         return tankManager;
     }
 
-    public PhantomInventory getLiquidFilter() {
+    public PhantomInventory getFluidFilter() {
         return invFilter;
     }
 
@@ -132,9 +132,9 @@ public abstract class TileLoaderLiquidBase extends TileLoaderBase implements IIn
 
         if (data.hasKey("filter")) {
             NBTTagCompound filter = data.getCompoundTag("filter");
-            getLiquidFilter().readFromNBT("Items", filter);
+            getFluidFilter().readFromNBT("Items", filter);
         } else
-            getLiquidFilter().readFromNBT("invFilter", data);
+            getFluidFilter().readFromNBT("invFilter", data);
     }
 
     @Override
@@ -142,7 +142,7 @@ public abstract class TileLoaderLiquidBase extends TileLoaderBase implements IIn
         super.writeToNBT(data);
 
         tankManager.writeTanksToNBT(data);
-        getLiquidFilter().writeToNBT("invFilter", data);
+        getFluidFilter().writeToNBT("invFilter", data);
     }
 
     @Override

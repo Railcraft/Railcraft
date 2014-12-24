@@ -37,8 +37,8 @@ public enum EnumMachineGamma implements IEnumMachine {
     ITEM_UNLOADER(Module.TRANSPORT, "unloader.item", 0, TileItemUnloader.class),
     ITEM_LOADER_ADVANCED(Module.TRANSPORT, "loader.item.advanced", 0, TileItemLoaderAdvanced.class),
     ITEM_UNLOADER_ADVANCED(Module.TRANSPORT, "unloader.item.advanced", 0, TileItemUnloaderAdvanced.class),
-    LIQUID_LOADER(Module.TRANSPORT, "loader.liquid", 2, TileLiquidLoader.class),
-    LIQUID_UNLOADER(Module.TRANSPORT, "unloader.liquid", 2, TileLiquidUnloader.class),
+    FLUID_LOADER(Module.TRANSPORT, "loader.liquid", 2, TileFluidLoader.class),
+    FLUID_UNLOADER(Module.TRANSPORT, "unloader.liquid", 2, TileFluidUnloader.class),
     ENERGY_LOADER(Module.IC2, "loader.energy", 0, TileEnergyLoader.class),
     ENERGY_UNLOADER(Module.IC2, "unloader.energy", 0, TileEnergyUnloader.class),
     DISPENSER_CART(Module.AUTOMATION, "dispenser.cart", 0, TileDispenserCart.class),
@@ -58,8 +58,8 @@ public enum EnumMachineGamma implements IEnumMachine {
         creativeList.add(ITEM_UNLOADER);
         creativeList.add(ITEM_LOADER_ADVANCED);
         creativeList.add(ITEM_UNLOADER_ADVANCED);
-        creativeList.add(LIQUID_LOADER);
-        creativeList.add(LIQUID_UNLOADER);
+        creativeList.add(FLUID_LOADER);
+        creativeList.add(FLUID_UNLOADER);
         creativeList.add(ENERGY_LOADER);
         creativeList.add(ENERGY_UNLOADER);
         creativeList.add(DISPENSER_CART);
@@ -106,11 +106,11 @@ public enum EnumMachineGamma implements IEnumMachine {
 
             switch (machine) {
                 case ITEM_LOADER:
-                case LIQUID_LOADER:
+                case FLUID_LOADER:
                     machine.texture[0] = face;
                     break;
                 case ITEM_UNLOADER:
-                case LIQUID_UNLOADER:
+                case FLUID_UNLOADER:
                     machine.texture[1] = face;
                     break;
                 default:
@@ -149,6 +149,7 @@ public enum EnumMachineGamma implements IEnumMachine {
         return tile;
     }
 
+    @Override
     public TileMachineBase getTileEntity() {
         try {
             return tile.newInstance();
@@ -196,6 +197,7 @@ public enum EnumMachineGamma implements IEnumMachine {
         return false;
     }
 
+    @Override
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
         if (tip != null)
             return tip;

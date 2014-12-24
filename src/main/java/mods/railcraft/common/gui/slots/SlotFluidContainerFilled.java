@@ -13,10 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.inventory.Slot;
 import mods.railcraft.common.fluids.FluidHelper;
 
-public class SlotLiquidContainerEmpty extends Slot
+public class SlotFluidContainerFilled extends Slot
 {
 
-    public SlotLiquidContainerEmpty(IInventory iinventory, int slotIndex, int posX, int posY)
+    public SlotFluidContainerFilled(IInventory iinventory, int slotIndex, int posX, int posY)
     {
         super(iinventory, slotIndex, posX, posY);
     }
@@ -32,7 +32,7 @@ public class SlotLiquidContainerEmpty extends Slot
         if(itemstack == null) {
             return false;
         }
-        if(FluidHelper.isEmptyContainer(itemstack)) {
+        if(FluidHelper.getFluidStackInContainer(itemstack) != null) {
             return true;
         }
         return false;

@@ -10,31 +10,23 @@ package mods.railcraft.common.gui.slots;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.fluids.FluidHelper;
 
-public class SlotLiquidContainerFilled extends Slot
-{
+public class SlotFluidFilter extends SlotRailcraft {
 
-    public SlotLiquidContainerFilled(IInventory iinventory, int slotIndex, int posX, int posY)
-    {
+    public SlotFluidFilter(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
+        setPhantom();
+        setStackLimit(1);
     }
 
     @Override
-    public boolean isItemValid(ItemStack itemstack)
-    {
+    public boolean isItemValid(ItemStack itemstack) {
         return canPlaceItem(itemstack);
     }
 
-    public static boolean canPlaceItem(ItemStack itemstack)
-    {
-        if(itemstack == null) {
-            return false;
-        }
-        if(FluidHelper.getFluidStackInContainer(itemstack) != null) {
-            return true;
-        }
-        return false;
+    public static boolean canPlaceItem(ItemStack itemstack) {
+        return FluidHelper.isFilledContainer(itemstack);
     }
+
 }

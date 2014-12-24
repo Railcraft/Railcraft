@@ -111,7 +111,7 @@ public class ModuleTransport extends RailcraftModule {
                         'L', stack);
         }
 
-        EnumMachineGamma liquidLoader = EnumMachineGamma.LIQUID_LOADER;
+        EnumMachineGamma liquidLoader = EnumMachineGamma.FLUID_LOADER;
 
         if (liquidLoader.register()) {
             ItemStack detector = EnumDetector.TANK.getItem();
@@ -126,7 +126,7 @@ public class ModuleTransport extends RailcraftModule {
                     'L', Blocks.hopper);
         }
 
-        EnumMachineGamma liquidUnloader = EnumMachineGamma.LIQUID_UNLOADER;
+        EnumMachineGamma liquidUnloader = EnumMachineGamma.FLUID_UNLOADER;
         if (liquidUnloader.register()) {
             ItemStack detector = EnumDetector.TANK.getItem();
             if (detector == null)

@@ -59,7 +59,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
 
     static {
         fireboxBlocks.add(EnumMachineBeta.BOILER_FIREBOX_SOLID.ordinal());
-        fireboxBlocks.add(EnumMachineBeta.BOILER_FIREBOX_LIQUID.ordinal());
+        fireboxBlocks.add(EnumMachineBeta.BOILER_FIREBOX_FLUID.ordinal());
 
         boilerBlocks.addAll(fireboxBlocks);
         boilerBlocks.add(EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal());

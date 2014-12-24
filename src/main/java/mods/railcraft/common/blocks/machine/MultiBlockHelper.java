@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.machine;
 import mods.railcraft.api.helpers.StructureHelper;
 import java.util.List;
 import mods.railcraft.common.blocks.machine.alpha.*;
-import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxLiquid;
+import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
@@ -32,7 +32,7 @@ public class MultiBlockHelper implements StructureHelper {
 
     @Override
     public void placeFluidBoiler(World world, int x, int y, int z, int width, int height, boolean highPressure, int water, FluidStack fuel) {
-        TileBoilerFireboxLiquid.placeFluidBoiler(world, x, y, z, width, height, highPressure, water, fuel);
+        TileBoilerFireboxFluid.placeFluidBoiler(world, x, y, z, width, height, highPressure, water, fuel);
     }
 
     @Override

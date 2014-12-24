@@ -163,8 +163,8 @@ public class RailcraftBlocks {
 
             int[] lightOpacity = new int[16];
             Arrays.fill(lightOpacity, 255);
-            lightOpacity[EnumMachineGamma.LIQUID_LOADER.ordinal()] = 0;
-            lightOpacity[EnumMachineGamma.LIQUID_UNLOADER.ordinal()] = 0;
+            lightOpacity[EnumMachineGamma.FLUID_LOADER.ordinal()] = 0;
+            lightOpacity[EnumMachineGamma.FLUID_UNLOADER.ordinal()] = 0;
             blockMachineGamma = new BlockMachine(0, new MachineProxyGamma(), false, lightOpacity).setBlockName("railcraft.machine.gamma");
             blockMachineGamma.setCreativeTab(CreativeTabs.tabTransport);
             RailcraftRegistry.register(blockMachineGamma, ItemMachine.class);

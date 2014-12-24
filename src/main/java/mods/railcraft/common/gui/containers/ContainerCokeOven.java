@@ -15,7 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import mods.railcraft.common.blocks.machine.alpha.TileCokeOven;
-import mods.railcraft.common.gui.slots.SlotLiquidContainerEmpty;
+import mods.railcraft.common.gui.slots.SlotFluidContainerEmpty;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.fluids.TankManager;
@@ -40,7 +40,7 @@ public class ContainerCokeOven extends RailcraftContainer {
         addSlot(new SlotCokeOven(tile, 0, 16, 43));
         addSlot(new SlotOutput(tile, 1, 62, 43));
         addSlot(new SlotOutput(tile, 2, 149, 57));
-        addSlot(new SlotLiquidContainerEmpty(tile, 3, 149, 22));
+        addSlot(new SlotFluidContainerEmpty(tile, 3, 149, 22));
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
                 addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));

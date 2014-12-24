@@ -34,17 +34,17 @@ import net.minecraftforge.fluids.FluidStack;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileBoilerFireboxLiquid extends TileBoilerFirebox {
+public class TileBoilerFireboxFluid extends TileBoilerFirebox {
 
     public static void placeFluidBoiler(World world, int x, int y, int z, int width, int height, boolean highPressure, int water, FluidStack fuel) {
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
                 Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
-                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_LIQUID.ordinal());
+                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_FLUID.ordinal());
                 blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.ordinal() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal());
                 TileEntity tile = pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineBeta(), blockMapping);
-                if (tile instanceof TileBoilerFireboxLiquid) {
-                    TileBoilerFireboxLiquid master = (TileBoilerFireboxLiquid) tile;
+                if (tile instanceof TileBoilerFireboxFluid) {
+                    TileBoilerFireboxFluid master = (TileBoilerFireboxFluid) tile;
                     master.tankWater.setFluid(Fluids.WATER.get(water));
                     master.tankFuel.setFluid(fuel);
                 }
@@ -57,7 +57,7 @@ public class TileBoilerFireboxLiquid extends TileBoilerFirebox {
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     protected final BoilerFuelTank tankFuel = new BoilerFuelTank(FluidHelper.BUCKET_VOLUME * 16, this);
 
-    public TileBoilerFireboxLiquid() {
+    public TileBoilerFireboxFluid() {
         super(2);
         tankManager.add(tankFuel);
         boiler.setFuelProvider(new FluidFuelProvider(tankFuel));
@@ -65,7 +65,7 @@ public class TileBoilerFireboxLiquid extends TileBoilerFirebox {
 
     @Override
     public IEnumMachine getMachineType() {
-        return EnumMachineBeta.BOILER_FIREBOX_LIQUID;
+        return EnumMachineBeta.BOILER_FIREBOX_FLUID;
     }
 
     @Override

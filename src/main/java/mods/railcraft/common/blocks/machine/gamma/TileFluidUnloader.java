@@ -39,10 +39,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import static mods.railcraft.common.blocks.machine.gamma.TileLoaderBase.STOP_VELOCITY;
-import static mods.railcraft.common.blocks.machine.gamma.TileLoaderLiquidBase.SLOT_INPUT;
-
-public class TileLiquidUnloader extends TileLoaderLiquidBase implements IGuiReturnHandler {
+public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturnHandler {
 
     private static final int TRANSFER_RATE = 80;
     private final MultiButtonController<ButtonState> stateController = new MultiButtonController<ButtonState>(ButtonState.EMPTY_COMPLETELY.ordinal(), ButtonState.values());
@@ -77,10 +74,9 @@ public class TileLiquidUnloader extends TileLoaderLiquidBase implements IGuiRetu
 
     }
 
-
     @Override
     public IEnumMachine getMachineType() {
-        return EnumMachineGamma.LIQUID_UNLOADER;
+        return EnumMachineGamma.FLUID_UNLOADER;
     }
 
     public MultiButtonController<ButtonState> getStateController() {
@@ -246,7 +242,7 @@ public class TileLiquidUnloader extends TileLoaderLiquidBase implements IGuiRetu
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.UNLOADER_LIQUID, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.UNLOADER_FLUID, player, worldObj, xCoord, yCoord, zCoord);
         return true;
     }
 

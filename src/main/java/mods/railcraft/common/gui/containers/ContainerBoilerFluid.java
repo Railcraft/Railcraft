@@ -13,22 +13,22 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxLiquid;
+import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
-import mods.railcraft.common.gui.slots.SlotLiquidContainerFilled;
+import mods.railcraft.common.gui.slots.SlotFluidContainerFilled;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.fluids.TankManager;
 
-public class ContainerBoilerLiquid extends RailcraftContainer {
+public class ContainerBoilerFluid extends RailcraftContainer {
 
-    private TileBoilerFireboxLiquid tile;
+    private final TileBoilerFireboxFluid tile;
     private double lastBurnTime;
     private double lastItemBurnTime;
     private double lastHeat;
     private boolean wasBurning;
 
-    public ContainerBoilerLiquid(InventoryPlayer inventoryplayer, TileBoilerFireboxLiquid tile) {
+    public ContainerBoilerFluid(InventoryPlayer inventoryplayer, TileBoilerFireboxFluid tile) {
         super(tile);
         this.tile = tile;
 
@@ -38,7 +38,7 @@ public class ContainerBoilerLiquid extends RailcraftContainer {
 
         addWidget(new IndicatorWidget(tile.boiler.heatIndicator, 40, 25, 176, 61, 6, 43));
 
-        addSlot(new SlotLiquidContainerFilled(tile, 0, 143, 21));
+        addSlot(new SlotFluidContainerFilled(tile, 0, 143, 21));
         addSlot(new SlotOutput(tile, 1, 143, 56));
 
         for (int i = 0; i < 3; i++) {

@@ -103,7 +103,7 @@ public class ModuleSteam extends RailcraftModule {
             }
         }
 
-        beta = EnumMachineBeta.BOILER_FIREBOX_LIQUID;
+        beta = EnumMachineBeta.BOILER_FIREBOX_FLUID;
         if (RailcraftConfig.isSubBlockEnabled(beta.getTag())) {
             RailcraftBlocks.registerBlockMachineBeta();
             Block block = RailcraftBlocks.getBlockMachineBeta();

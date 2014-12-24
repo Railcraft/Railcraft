@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.detector.types.DetectorTank;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import mods.railcraft.common.gui.slots.SlotLiquidFilter;
+import mods.railcraft.common.gui.slots.SlotFluidFilter;
 
 public class ContainerDetectorTank extends RailcraftContainer {
 
@@ -25,7 +25,7 @@ public class ContainerDetectorTank extends RailcraftContainer {
         super(((DetectorTank) tile.getDetector()).getFilters());
         this.tile = tile;
         this.detector = (DetectorTank) tile.getDetector();
-        addSlot(new SlotLiquidFilter(detector.getFilters(), 0, 26, 24));
+        addSlot(new SlotFluidFilter(detector.getFilters(), 0, 26, 24));
 //        addSlot(new Slot(tile, 0, 60, 24));
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
