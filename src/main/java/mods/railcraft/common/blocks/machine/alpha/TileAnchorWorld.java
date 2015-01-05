@@ -355,7 +355,12 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     public void setTicket(Ticket ticket) {
         boolean changed = false;
         if (this.ticket != ticket) {
-            ForgeChunkManager.releaseTicket(this.ticket);
+            if (this.ticket != null) {
+                for (ChunkCoordIntPair chunk : ticket.getChunkList()) {
+                    ForgeChunkManager.unforceChunk(this.ticket, chunk);
+                }
+                ForgeChunkManager.releaseTicket(this.ticket);
+            }
             changed = true;
         }
         this.ticket = ticket;
