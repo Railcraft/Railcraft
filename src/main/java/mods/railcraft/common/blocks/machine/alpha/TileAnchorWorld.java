@@ -66,6 +66,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     private int xSentinel = -1;
     private int ySentinel = -1;
     private int zSentinel = -1;
+    private int prevX, prevY, prevZ;
     protected Ticket ticket;
     private Set<ChunkCoordIntPair> chunks;
     private long fuel;
@@ -246,6 +247,13 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
             releaseTicket();
             worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.obsidian);
             return;
+        }
+
+        if (xCoord != prevX || yCoord != prevY || zCoord != prevZ) {
+            releaseTicket();
+            prevX = xCoord;
+            prevY = yCoord;
+            prevZ = zCoord;
         }
 
         if (ticket != null)
@@ -433,6 +441,10 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         data.setInteger("xSentinel", xSentinel);
         data.setInteger("ySentinel", ySentinel);
         data.setInteger("zSentinel", zSentinel);
+
+        data.setInteger("prevX", prevX);
+        data.setInteger("prevY", prevY);
+        data.setInteger("prevZ", prevZ);
     }
 
     @Override
@@ -447,6 +459,10 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         xSentinel = data.getInteger("xSentinel");
         ySentinel = data.getInteger("ySentinel");
         zSentinel = data.getInteger("zSentinel");
+
+        prevX = data.getInteger("prevX");
+        prevY = data.getInteger("prevY");
+        prevZ = data.getInteger("prevZ");
     }
 
     @Override
