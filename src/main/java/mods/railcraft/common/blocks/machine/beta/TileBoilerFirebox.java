@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
+import mods.railcraft.common.util.steam.ISteamUser;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.io.DataInputStream;
@@ -248,9 +249,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
     }
 
     protected boolean handleClick(EntityPlayer player, int side) {
-        if (FluidHelper.handleRightClick(this, ForgeDirection.getOrientation(side), player, true, false))
-            return true;
-        return false;
+        return FluidHelper.handleRightClick(this, ForgeDirection.getOrientation(side), player, true, false);
     }
 
     @Override

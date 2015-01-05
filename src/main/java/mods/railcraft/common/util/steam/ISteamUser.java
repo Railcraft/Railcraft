@@ -6,7 +6,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.machine.beta;
+package mods.railcraft.common.util.steam;
 
 import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.tileentity.TileEntity;

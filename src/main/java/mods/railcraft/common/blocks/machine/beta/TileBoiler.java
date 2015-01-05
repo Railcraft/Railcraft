@@ -293,6 +293,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
 
     @Override
     public boolean canDrain(ForgeDirection from, Fluid fluid) {
+        if(fluid == null) return true;
         return Fluids.STEAM.is(fluid);
     }
 

@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
+import mods.railcraft.common.util.steam.ISteamUser;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
