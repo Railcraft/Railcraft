@@ -101,6 +101,13 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
     }
 
     @Override
+    public boolean canFill(ForgeDirection from, Fluid fluid) {
+        if (fluid == null) return false;
+        if (FuelManager.getBoilerFuelValue(fluid) > 0) return true;
+        return super.canFill(from, fluid);
+    }
+
+    @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
         if (Fluids.WATER.is(resource))
             return fill(TANK_WATER, resource, doFill);
