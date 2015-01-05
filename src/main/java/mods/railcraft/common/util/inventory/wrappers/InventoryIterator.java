@@ -57,7 +57,7 @@ public class InventoryIterator implements Iterable<IInvSlot> {
 
     private class InvSlot implements IInvSlot {
 
-        private int slot;
+        private final int slot;
 
         public InvSlot(int slot) {
             this.slot = slot;
@@ -94,6 +94,12 @@ public class InventoryIterator implements Iterable<IInvSlot> {
         @Override
         public int getIndex() {
             return slot;
+        }
+
+        @Override
+        public String toString() {
+            ItemStack stack = getStackInSlot();
+            return "SlotNum = " + slot + " Stack = " + stack == null ? "null" : getStackInSlot().toString();
         }
 
     }

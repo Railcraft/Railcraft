@@ -49,7 +49,7 @@ public class SidedInventoryIterator implements Iterable<IInvSlot> {
 
     private class InvSlot implements IInvSlot {
 
-        private int slot;
+        private final int slot;
 
         public InvSlot(int slot) {
             this.slot = slot;
@@ -79,10 +79,16 @@ public class SidedInventoryIterator implements Iterable<IInvSlot> {
         public ItemStack decreaseStackInSlot() {
             return inv.decrStackSize(slot, 1);
         }
-        
+
         @Override
-        public int getIndex(){
+        public int getIndex() {
             return slot;
+        }
+
+        @Override
+        public String toString() {
+            ItemStack stack = getStackInSlot();
+            return "SlotNum = " + slot + " Stack = " + stack == null ? "null" : getStackInSlot().toString();
         }
 
     }

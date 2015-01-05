@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import mods.railcraft.common.util.misc.Game;
 
 public abstract class RailcraftPacket {
 
@@ -43,7 +44,7 @@ public abstract class RailcraftPacket {
             data.writeByte(getID());
             writeData(data);
         } catch (IOException e) {
-            e.printStackTrace();
+            Game.logThrowable("Error constructing packet: {0}", e, getClass());
         }
         return new FMLProxyPacket(Unpooled.wrappedBuffer(bytes.toByteArray()), CHANNEL_NAME);
     }
