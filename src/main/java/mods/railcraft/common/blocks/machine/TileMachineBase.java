@@ -27,6 +27,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 
 public abstract class TileMachineBase extends RailcraftTileEntity {
@@ -74,7 +75,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
      */
     public void onBlockRemoval() {
         if (this instanceof IInventory)
-            InvTools.dropInventory((IInventory) this, worldObj, xCoord, yCoord, zCoord);
+            InvTools.dropInventory(new InventoryMapper((IInventory)this), worldObj, xCoord, yCoord, zCoord);
     }
 
     public boolean blockActivated(EntityPlayer player, int side) {
