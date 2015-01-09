@@ -19,7 +19,9 @@ import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiReturnHandler {
 
@@ -111,6 +113,11 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
     public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
         if (track instanceof IGuiReturnHandler)
             ((IGuiReturnHandler) track).readGuiData(data, sender);
+    }
+
+    @Override
+    public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
+        return oldBlock != newBlock;
     }
 
 }
