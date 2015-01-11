@@ -20,7 +20,7 @@ public class EntitySteamFX extends EntityShrinkingParticleFX {
     }
 
     public EntitySteamFX(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
-        super(world, x, y, z, 0.0D, 0.0D, 0.0D, scale);
+        super(world, x, y, z, velX, velY, velZ, scale);
         this.particleRed = this.particleGreen = this.particleBlue = (float) (Math.random() * 0.4) + 0.4f;
         this.particleMaxAge = (int) (8.0D / (Math.random() * 0.8D + 0.2D));
         this.particleMaxAge = (int) ((float) this.particleMaxAge * scale);

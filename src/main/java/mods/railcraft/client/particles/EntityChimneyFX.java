@@ -19,8 +19,8 @@ public class EntityChimneyFX extends EntitySimpleParticleFX {
         this(par1World, x, y, z, 0, 0, 0, 3f);
     }
 
-    public EntityChimneyFX(World par1World, double x, double y, double z, double vx, double vy, double vz, float scale) {
-        super(par1World, x, y, z, 0.0D, 0.0D, 0.0D, scale);
+    public EntityChimneyFX(World par1World, double x, double y, double z, double velX, double velY, double velZ, float scale) {
+        super(par1World, x, y, z, velX, velY, velZ, scale);
         this.particleRed = this.particleGreen = this.particleBlue = (float) (Math.random() * 0.3);
         this.particleMaxAge = (int) (24.0D / (Math.random() * 0.5D + 0.2D));
         this.particleMaxAge = (int) (this.particleMaxAge * scale);

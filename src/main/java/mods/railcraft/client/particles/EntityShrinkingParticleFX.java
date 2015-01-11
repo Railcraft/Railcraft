@@ -20,7 +20,7 @@ public class EntityShrinkingParticleFX extends EntitySimpleParticleFX {
     private final float originalScale;
 
     public EntityShrinkingParticleFX(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
-        super(world, x, y, z, 0.0D, 0.0D, 0.0D, scale);
+        super(world, x, y, z, velX, velY, velZ, scale);
         this.originalScale = this.particleScale;
     }
 

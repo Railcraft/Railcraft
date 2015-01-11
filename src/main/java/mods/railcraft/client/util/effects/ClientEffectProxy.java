@@ -81,9 +81,12 @@ public class ClientEffectProxy extends CommonEffectProxy {
         int x = data.readInt();
         int y = data.readInt();
         int z = data.readInt();
-        double vx = rand.nextGaussian() * 0.1;
-        double vy = rand.nextDouble() * 0.01;
-        double vz = rand.nextGaussian() * 0.1;
+//        double vx = rand.nextGaussian() * 0.1;
+//        double vy = rand.nextDouble() * 0.01;
+//        double vz = rand.nextGaussian() * 0.1;
+        double vx = 0.0;
+        double vy = 0.0;
+        double vz = 0.0;
         spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x + 0.1, y, z + 0.1, vx, vy, vz));
         spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x + 0.9, y, z + 0.1, vx, vy, vz));
         spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x + 0.1, y, z + 0.9, vx, vy, vz));

@@ -20,7 +20,7 @@ public class EntityForceSpawnFX extends EntityShrinkingParticleFX {
     }
 
     public EntityForceSpawnFX(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
-        super(world, x, y, z, 0.0D, 0.0D, 0.0D, scale);
+        super(world, x, y, z, velX, velY, velZ, scale);
         this.particleRed = 0.33F;
         this.particleGreen = 0.74F;
         this.particleBlue = 0.86F;

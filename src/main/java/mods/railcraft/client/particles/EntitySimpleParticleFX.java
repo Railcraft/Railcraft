@@ -23,14 +23,14 @@ public class EntitySimpleParticleFX extends EntityFX {
         this(par1World, x, y, z, 0, 0, 0, 3f);
     }
 
-    public EntitySimpleParticleFX(World par1World, double x, double y, double z, double vx, double vy, double vz, float scale) {
+    public EntitySimpleParticleFX(World par1World, double x, double y, double z, double velX, double velY, double velZ, float scale) {
         super(par1World, x, y, z, 0.0D, 0.0D, 0.0D);
         this.motionX *= 0.1;
         this.motionY *= 0.1;
         this.motionZ *= 0.1;
-        this.motionX += vx;
-        this.motionY += vy;
-        this.motionZ += vz;
+        this.motionX += velX;
+        this.motionY += velY;
+        this.motionZ += velZ;
         this.particleScale *= 0.75F;
         this.particleScale *= scale;
         this.particleMaxAge = (int) (24.0D / (Math.random() * 0.5D + 0.2D));
