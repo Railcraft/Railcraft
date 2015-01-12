@@ -10,34 +10,62 @@ import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiBoxAnalogController extends GuiBasic {
 
 	private final TileBoxAnalogController tile;
 	private final static int N_OF_ASPECTS = TileBoxAnalogController.N_OF_ASPECTS;
-	private boolean enableAspect[][];
-	private final static ResourceLocation loc = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_analog.png");
+	private String regex[];
+	private GuiTextField textbox[];
 	
 	public GuiBoxAnalogController(TileBoxAnalogController t)
 	{
-		super(t.getName(), loc, 240, 140);
+		super(t.getName());
 		tile = t;
-		enableAspect = t.enableAspect;
+		regex = t.regex;
+		textbox = new GuiTextField[N_OF_ASPECTS];
 	}
+	
+	@Override 
+	public void mouseClicked(int i, int j, int k) {
+		super.mouseClicked(i, j, k);
+		for(int n = 0; n < N_OF_ASPECTS; n++)
+			textbox[n].mouseClicked(i, j, k);
+	}
+	
+	@Override
+	public void keyTyped(char c, int i) {
+		super.keyTyped(c, i);
+		//Disallow any PRINTABLE characters that are not digits, commas, or dashes
+		if(c < ' ' || (c >= '0' && c <= '9') || c == '-' || c == ',' || c > '~')
+			for(int j = 0; j < N_OF_ASPECTS; j++)
+				textbox[j].textboxKeyTyped(c, i);
+	};
 	
 	@Override
     public void initGui() {
         if (tile == null)
             return;
-        buttonList.clear();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
         
-        for(int i = 0; i < N_OF_ASPECTS; i++)
-        	for(int j = 0; j < 16; j++)
-        	    buttonList.add(new GuiToggleButton(16*i + j, w + 65 + 15*j, h + 18 + i*21, 15, String.valueOf(j), enableAspect[i][j]));
+        for(int i = 0; i < N_OF_ASPECTS; i++) {
+        	textbox[i] = new GuiTextField(fontRendererObj, w + 65, h + 18 + i*21, 103, 12);
+        	textbox[i].setTextColor(-1);
+            textbox[i].setDisabledTextColour(-1);
+            textbox[i].setEnableBackgroundDrawing(false);
+        	textbox[i].setMaxStringLength(37);
+        }
 
+	}
+	
+	@Override
+	public void drawScreen(int x, int y, float f) {
+		super.drawScreen(x, y, f);
+		for(int i = 0; i < N_OF_ASPECTS; i++)
+			textbox[i].drawTextBox();
 	}
 	
 	@Override
@@ -50,22 +78,9 @@ public class GuiBoxAnalogController extends GuiBasic {
 	}
 	
 	@Override
-	protected void actionPerformed(GuiButton button) {
-		if(tile == null)
-			return;
-
-		int aspect = button.id / 16;
-		int strength = button.id % 16;
-		
-		//Simply toggle the button and its corresponding boolean value
-		((GuiToggleButton)button).toggle();
-		enableAspect[aspect][strength] ^= true;
-	}
-	
-	@Override
     public void onGuiClosed() {
         if (Game.isNotHost(tile.getWorld())) {
-            tile.enableAspect = enableAspect;
+            //tile.enableAspect = enableAspect;
             PacketGuiReturn pkt = new PacketGuiReturn(tile);
             PacketDispatcher.sendToServer(pkt);
         }

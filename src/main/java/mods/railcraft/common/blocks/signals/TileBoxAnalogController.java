@@ -25,6 +25,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     private int strongestSignal;
 
     public boolean enableAspect[][] = new boolean[N_OF_ASPECTS][16];
+    public String regex[] = new String[N_OF_ASPECTS];
 
     @Override
     public EnumSignal getSignalType() {
@@ -98,6 +99,10 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
                 aspect = (aspect == SignalAspect.OFF) ? current : SignalAspect.mostRestrictive(aspect, current);
         }
         return aspect;
+    }
+    
+    private void parseRegex(String regex, int aspect) {
+    	
     }
 
     @Override
