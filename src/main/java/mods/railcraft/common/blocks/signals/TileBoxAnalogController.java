@@ -25,7 +25,6 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     private int strongestSignal;
 
     public boolean enableAspect[][] = new boolean[N_OF_ASPECTS][16];
-    public String regex[] = new String[N_OF_ASPECTS];
 
     @Override
     public EnumSignal getSignalType() {
@@ -101,10 +100,6 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
         return aspect;
     }
     
-    private void parseRegex(String regex, int aspect) {
-    	
-    }
-
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
@@ -112,8 +107,10 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
 
         for (int i = 0; i < N_OF_ASPECTS; i++) {
             String n = SignalAspect.values()[i].toString();
-            for(int j = 0; j < 16; j++)
-            	data.setBoolean("enable_" + n + "_" + String.valueOf(j), enableAspect[i][j]);
+            int s = 0;
+            for(boolean b : enableAspect[i])
+            	s = (s << 1) | (b ? 1 : 0);
+            data.setShort("aspect_" + n, (short) s);
         }
 
         controller.writeToNBT(data);
@@ -126,8 +123,11 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
 
         for (int i = 0; i < N_OF_ASPECTS; i++) {
         	String n = SignalAspect.values()[i].toString();
-            for(int j = 0; j < 16; j++)
-            	enableAspect[i][j] = data.getBoolean("enable_" + n + "_" + String.valueOf(j));
+            short s = data.getShort("aspect_" + n);
+            for(int j = 0; j < 16; j++) {
+            	enableAspect[i][j] = (s & 0x8000) == 0x8000;
+            	s <<= 1;
+            }
         }
 
         controller.readFromNBT(data);
@@ -161,16 +161,16 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
 
     @Override
     public void writeGuiData(DataOutputStream data) throws IOException {
-        for(int i = 0; i < N_OF_ASPECTS; i++)
-    		for(int j = 0; j < 16; j++)
-    			data.writeBoolean(enableAspect[i][j]);
+        for(boolean c[] : enableAspect)
+        	for(boolean b : c)
+        		data.writeBoolean(b);
     }
 
     @Override
     public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
-        for (int i = 0; i < N_OF_ASPECTS; i++)
-            for(int j = 0; j < 16; j++)
-        		enableAspect[i][j] = data.readBoolean();
+        for(int i = 0; i < N_OF_ASPECTS; i++)
+    		for(int j = 0; j < 16; j++)
+    			enableAspect[i][j] = data.readBoolean();
     }
 
     @Override
