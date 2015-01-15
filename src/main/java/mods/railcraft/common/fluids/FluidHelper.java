@@ -171,7 +171,7 @@ public final class FluidHelper {
 
     public static boolean isContainer(ItemStack stack) {
         if (stack != null && stack.getItem() instanceof IFluidContainerItem)
-            return true;
+            return ((IFluidContainerItem)stack.getItem()).getCapacity(stack) > 0;
         return FluidContainerRegistry.isContainer(stack);
     }
 
