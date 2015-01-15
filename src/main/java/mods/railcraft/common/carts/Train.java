@@ -145,6 +145,7 @@ public class Train implements Iterable<EntityMinecart> {
     }
 
     private void addCart(EntityMinecart cart) {
+        LinkageManager.instance().resetTrain(cart);
         carts.add(cart.getPersistentID());
         cart.getEntityData().setLong(LinkageManager.TRAIN_HIGH, uuid.getMostSignificantBits());
         cart.getEntityData().setLong(LinkageManager.TRAIN_LOW, uuid.getLeastSignificantBits());
