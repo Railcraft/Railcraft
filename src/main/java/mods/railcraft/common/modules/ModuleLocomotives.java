@@ -81,8 +81,11 @@ public class ModuleLocomotives extends RailcraftModule {
         }
 
         cart = EnumCart.LOCO_ELECTRIC;
-        if (cart.setup())
+        if (cart.setup()){
             paintLocomotive(cart.getCartItem());
+            RailcraftItem.gear.registerItem();
+            RailcraftItem.plate.registerItem();
+        }
     }
 
     @Override

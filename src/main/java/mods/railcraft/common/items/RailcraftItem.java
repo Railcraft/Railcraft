@@ -42,7 +42,7 @@ public enum RailcraftItem {
         this.altRecipeObjects = altRecipeObjects;
     }
 
-    private void registerItem() {
+    public void registerItem() {
         if (item != null)
             return;
 
