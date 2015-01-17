@@ -293,7 +293,7 @@ public class LinkageManager implements ILinkageManager {
         return new UUID(high, low);
     }
 
-    private void resetTrain(EntityMinecart cart) {
+    public void resetTrain(EntityMinecart cart) {
         Train train = trains.remove(getTrainUUID(cart));
         if (train != null)
             train.releaseTrain();
