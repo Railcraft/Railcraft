@@ -5,28 +5,27 @@ import java.util.regex.Pattern;
 
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.signals.TileBoxAnalogController;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiBoxAnalogController extends GuiBasic {
 
 	private final TileBoxAnalogController tile;
 	private final static int N_OF_ASPECTS = TileBoxAnalogController.N_OF_ASPECTS;
 	private final static Pattern patternRange = Pattern.compile("(\\d+)-(\\d+)|(\\d+)");
-	private final static ResourceLocation texture = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_analog.png");
+	//When doing Pattern.matcher, these are the groups:           ^ 1    ^ 2    ^ 3
 	
 	private boolean enableAspect[][];
 	private GuiTextField textbox[];
 	
-	public GuiBoxAnalogController(TileBoxAnalogController t)
-	{
-		super(t.getName(), texture, 200, 100);
+	public GuiBoxAnalogController(TileBoxAnalogController t) {
+		super(t.getName());
 		tile = t;
 		enableAspect = t.enableAspect;
 		textbox = new GuiTextField[N_OF_ASPECTS];
@@ -104,9 +103,7 @@ public class GuiBoxAnalogController extends GuiBasic {
         int h = (height - ySize) / 2;
         
         for(int i = 0; i < N_OF_ASPECTS; i++) {
-        	textbox[i] = new GuiTextField(fontRendererObj, w + 65, h + 23 + i*15, 103, 12);
-        	//textbox[i].setTextColor(0xFFFFFF);
-            textbox[i].setEnableBackgroundDrawing(false);
+        	textbox[i] = new GuiTextField(fontRendererObj, w + 72, h + getYPosFromIndex(i), 95, 10);
         	textbox[i].setMaxStringLength(37);
         	textbox[i].setText(rangeToString(enableAspect[i]));
         }
@@ -116,6 +113,7 @@ public class GuiBoxAnalogController extends GuiBasic {
 	@Override
 	public void drawScreen(int x, int y, float f) {
 		super.drawScreen(x, y, f);
+		GL11.glDisable(GL11.GL_LIGHTING);
 		for(GuiTextField t : textbox)
 			t.drawTextBox();
 	}
@@ -124,8 +122,7 @@ public class GuiBoxAnalogController extends GuiBasic {
 	protected void drawExtras(int x, int y, float f) {
 		for(int i = 0; i < N_OF_ASPECTS; i++)
 		{
-			int yPos = 23 + i*15;
-			drawAlignedString(fontRendererObj, LocalizationPlugin.translate(SignalAspect.values()[i].getLocalizationTag()), 0, yPos, 64);
+			drawAlignedString(fontRendererObj, LocalizationPlugin.translate(SignalAspect.values()[i].getLocalizationTag()), 10, getYPosFromIndex(i) + 1, 50);
 		}
 	}
 	
@@ -148,8 +145,11 @@ public class GuiBoxAnalogController extends GuiBasic {
         }
     }
 	
-	public static void drawAlignedString(FontRenderer fr, String s, int x, int y, int width)
-	{
+	private static void drawAlignedString(FontRenderer fr, String s, int x, int y, int width) {
 		fr.drawString(s, x + (width - fr.getStringWidth(s))/2, y, 0x404040);
+	}
+	
+	private static int getYPosFromIndex(int i) {
+		return 17 + i*14;
 	}
 }
