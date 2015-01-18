@@ -407,8 +407,6 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         uuid = readUUID("uuid", data);
         
         justLoaded = true; // This signals updateEntity() to dereference the cart UUID's we read in here
-        
-        System.out.println("Read from NBT");
     }
 
     @Override
