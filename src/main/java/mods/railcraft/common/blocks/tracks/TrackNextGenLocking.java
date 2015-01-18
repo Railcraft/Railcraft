@@ -164,7 +164,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         	}        	
         	        	
             if (currentCart != null && currentCart.isDead) {
-                releaseCart();
+                releaseCurrentCart();
                 updateClient = true;
             }
             boolean oldLocked = locked; // simple check to determine if "locked" has changed
@@ -173,9 +173,9 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
             	updateClient = true;
             
             if(locked) {
-            	lockCart();
+            	lockCurrentCart();
             } else {
-            	releaseCart();
+            	releaseCurrentCart();
             }        
             
             // Store our last found cart in prevCart
@@ -222,7 +222,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         return uuid;
     }   
 
-    protected void lockCart() {
+    private void lockCurrentCart() {
         if (currentCart != null) {
         	Train currentTrain = LinkageManager.instance().getTrain(currentCart);
             currentTrain.addLockingTrack(getUUID());            
@@ -243,14 +243,19 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
     	currentCart = cart;       
     }
 
-    @Override
-    public void releaseCart() {
+    
+    private void releaseCurrentCart() {
     	if (currentCart != null) {
             Train train = LinkageManager.instance().getTrain(currentCart);
             train.removeLockingTrack(getUUID());
             MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Release(currentCart, getX(), getY(), getZ()));
-            profileInstance.onRelease(currentCart);  
+            profileInstance.onRelease(currentCart);            
         }
+    }
+    
+    @Override
+    public void releaseCart() {
+    	trainLeaving = true;
     }
 
     @Override
