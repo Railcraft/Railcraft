@@ -24,9 +24,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     private boolean prevBlinkState;
     private int strongestSignal;
 
-    public boolean aspectMode[] = new boolean[N_OF_ASPECTS];
-    public int signalLow[] = new int[N_OF_ASPECTS];
-    public int signalHigh[] = new int[N_OF_ASPECTS];
+    public boolean enableAspect[][] = new boolean[N_OF_ASPECTS][16];
 
     @Override
     public EnumSignal getSignalType() {
@@ -96,12 +94,12 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
         SignalAspect aspect = SignalAspect.OFF;
         for (int i = 0; i < N_OF_ASPECTS; i++) {
             SignalAspect current = SignalAspect.values()[i];
-            if (aspectMode[i] && strongestSignal >= signalLow[i] && strongestSignal <= signalHigh[i])
+            if(enableAspect[i][strongestSignal])
                 aspect = (aspect == SignalAspect.OFF) ? current : SignalAspect.mostRestrictive(aspect, current);
         }
         return aspect;
     }
-
+    
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
@@ -109,9 +107,10 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
 
         for (int i = 0; i < N_OF_ASPECTS; i++) {
             String n = SignalAspect.values()[i].toString();
-            data.setBoolean("mode" + n, aspectMode[i]);
-            data.setInteger("low" + n, signalLow[i]);
-            data.setInteger("high" + n, signalHigh[i]);
+            int s = 0;
+            for(boolean b : enableAspect[i])
+            	s = (s << 1) | (b ? 1 : 0);
+            data.setShort("aspect_" + n, (short) s);
         }
 
         controller.writeToNBT(data);
@@ -123,10 +122,12 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
         strongestSignal = data.getInteger("strongestSignal");
 
         for (int i = 0; i < N_OF_ASPECTS; i++) {
-            String n = SignalAspect.values()[i].toString();
-            aspectMode[i] = data.getBoolean("mode" + n);
-            signalLow[i] = data.getInteger("low" + n);
-            signalHigh[i] = data.getInteger("high" + n);
+        	String n = SignalAspect.values()[i].toString();
+            short s = data.getShort("aspect_" + n);
+            for(int j = 0; j < 16; j++) {
+            	enableAspect[i][j] = (s & 0x8000) == 0x8000;
+            	s <<= 1;
+            }
         }
 
         controller.readFromNBT(data);
@@ -160,20 +161,16 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
 
     @Override
     public void writeGuiData(DataOutputStream data) throws IOException {
-        for (int i = 0; i < N_OF_ASPECTS; i++) {
-            data.writeBoolean(aspectMode[i]);
-            data.writeByte(signalLow[i]);
-            data.writeByte(signalHigh[i]);
-        }
+        for(boolean c[] : enableAspect)
+        	for(boolean b : c)
+        		data.writeBoolean(b);
     }
 
     @Override
     public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
-        for (int i = 0; i < N_OF_ASPECTS; i++) {
-            aspectMode[i] = data.readBoolean();
-            signalLow[i] = data.readByte();
-            signalHigh[i] = data.readByte();
-        }
+        for(int i = 0; i < N_OF_ASPECTS; i++)
+    		for(int j = 0; j < 16; j++)
+    			enableAspect[i][j] = data.readBoolean();
     }
 
     @Override
