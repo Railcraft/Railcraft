@@ -13,10 +13,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import mods.railcraft.api.electricity.GridTools;
+import mods.railcraft.api.electricity.IElectricDistributor;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.electricity.IElectricMinecart;
 import mods.railcraft.common.core.Railcraft;
@@ -112,6 +114,12 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
                     ChatPlugin.sendLocalizedChat(player, "railcraft.gui.electric.meter.charge", ch.getCharge(), ch.getDraw(), ch.getLosses());
                     returnValue = true;
                 }
+            } else {
+            	TileEntity te = world.getTileEntity(x, y, z);
+            	if(te != null && te instanceof IElectricDistributor) {
+            		IElectricDistributor.ChargeHandler ch = ((IElectricDistributor)te).getChargeHandler();
+            		ChatPlugin.sendLocalizedChat(player, "railcraft.gui.electric.meter.catenary", ch.getStatus(), ch.getDraw(), ch.getLosses());
+            	}
             }
         } catch (Throwable er) {
             Game.logErrorAPI(Railcraft.MOD_ID, er, IElectricGrid.class);

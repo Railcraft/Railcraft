@@ -119,6 +119,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
         if (Game.isNotHost(worldObj))
             return;
         chargeHandler.tickOnTrack(trackX, trackY, trackZ);
+        chargeHandler.tickOnCatenary(trackX, trackY, trackZ, 2);
     }
 
     @Override
