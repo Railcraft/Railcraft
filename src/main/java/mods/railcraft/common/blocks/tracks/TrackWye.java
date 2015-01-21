@@ -61,7 +61,7 @@ public class TrackWye extends TrackSwitchBase {
                     } else {
                         meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
                     }
-                }            
+                }
             }
         }
         return meta;

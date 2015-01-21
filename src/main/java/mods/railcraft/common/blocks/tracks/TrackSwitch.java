@@ -78,7 +78,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
         }
         return meta;
     }
-    
+
     @Override
     protected List<EntityMinecart> getCartsAtLockEntrance() {
         int x = tileEntity.xCoord;
