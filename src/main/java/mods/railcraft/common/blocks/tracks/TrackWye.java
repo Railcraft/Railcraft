@@ -33,36 +33,36 @@ public class TrackWye extends TrackSwitchBase {
     @Override
     public int getBasicRailMetadata(EntityMinecart cart) {
         int meta = tileEntity.getBlockMetadata();
-        if(cart != null) {
-	        if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
-	            if (isMirrored()) {
-	                if (isSwitched() || springingCarts.contains(cart)) {
-	                    meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
-	                } else {
-	                    meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
-	                }
-	            } else {
-	                if (isSwitched() || springingCarts.contains(cart)) {
-	                    meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
-	                } else {
-	                    meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
-	                }
-	            }
-	        } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
-	            if (isMirrored()) {
-	                if (isSwitched() || springingCarts.contains(cart)) {
-	                    meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
-	                } else {
-	                    meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
-	                }
-	            } else {
-	                if (isSwitched() || springingCarts.contains(cart)) {
-	                    meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
-	                } else {
-	                    meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
-	                }
-	            }            
-	        }
+        if (cart != null) {
+            if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
+                if (isMirrored()) {
+                    if (isSwitched() || springingCarts.contains(cart)) {
+                        meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
+                    } else {
+                        meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
+                    }
+                } else {
+                    if (isSwitched() || springingCarts.contains(cart)) {
+                        meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
+                    } else {
+                        meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
+                    }
+                }
+            } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
+                if (isMirrored()) {
+                    if (isSwitched() || springingCarts.contains(cart)) {
+                        meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
+                    } else {
+                        meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
+                    }
+                } else {
+                    if (isSwitched() || springingCarts.contains(cart)) {
+                        meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
+                    } else {
+                        meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
+                    }
+                }            
+            }
         }
         return meta;
     }

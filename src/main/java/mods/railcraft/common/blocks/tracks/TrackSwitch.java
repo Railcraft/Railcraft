@@ -103,7 +103,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
 
     @Override
     protected List<EntityMinecart> getCartsAtSpringEntrance() {
-    	int x = tileEntity.xCoord;
+        int x = tileEntity.xCoord;
         int y = tileEntity.yCoord;
         int z = tileEntity.zCoord;
         int meta = tileEntity.getBlockMetadata();
