@@ -8,12 +8,14 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import java.util.List;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.epsilon.TileForceTrackEmitter;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -24,6 +26,11 @@ public class TrackForce extends TrackUnsupported {
     @Override
     public EnumTrack getTrackType() {
         return EnumTrack.FORCE;
+    }
+
+    @Override
+    public List<ItemStack> getDrops(int fortune) {
+        return null;
     }
 
     @Override

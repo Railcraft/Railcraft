@@ -33,12 +33,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.ITextureLoader;
 import mods.railcraft.api.electricity.IElectricGrid;
-import mods.railcraft.api.tracks.ITrackBlocksMovement;
-import mods.railcraft.api.tracks.ITrackCustomShape;
-import mods.railcraft.api.tracks.ITrackEmitter;
-import mods.railcraft.api.tracks.ITrackInstance;
-import mods.railcraft.api.tracks.TrackRegistry;
-import mods.railcraft.api.tracks.TrackSpec;
+import mods.railcraft.api.tracks.*;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.Railcraft;
@@ -356,14 +351,16 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
         TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         try {
-            if (tile instanceof TileTrack)
-                items.add(((TileTrack) tile).getTrackInstance().getTrackSpec().getItem());
-            else {
+            if (tile instanceof TileTrack) {
+                List<ItemStack> drops = ((TileTrack) tile).getTrackInstance().getDrops(fortune);
+                if (drops != null)
+                    items.addAll(drops);
+            } else {
                 Game.log(Level.WARN, "Rail Tile was invalid when harvesting rail");
                 items.add(new ItemStack(Blocks.rail));
             }
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class, TrackSpec.class);
+            Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class, TrackInstanceBase.class);
         }
         return items;
     }
