@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.carts;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.entity.item.EntityMinecartFurnace;
@@ -64,26 +65,28 @@ public class EntityCartFurnace extends EntityMinecartFurnace {
         return DRAG_FACTOR;
     }
 
-//    @Override
-//    public boolean interactFirst(EntityPlayer player) {
-//        if (fuel <= 0) {
-//            ItemStack stack = player.inventory.getCurrentItem();
-//            if (stack != null) {
-//                int burnTime = FuelPlugin.getBurnTime(stack);
-//
-//                if (burnTime > 0) {
-//                    if (!player.capabilities.isCreativeMode)
-//                        player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(stack));
-//                    fuel += burnTime;
-//
-//                    pushX = posX - player.posX;
-//                    pushZ = posZ - player.posZ;
-//                }
-//            }
-//        }
-//
-//        return true;
-//    }
+    @Override
+    public boolean interactFirst(EntityPlayer player) {
+        Integer fuel = ReflectionHelper.getPrivateValue(EntityMinecartFurnace.class, this, 0);
+        if (fuel <= 0) {
+            ItemStack stack = player.inventory.getCurrentItem();
+            if (stack != null) {
+                int burnTime = FuelPlugin.getBurnTime(stack);
+
+                if (burnTime > 0) {
+                    if (!player.capabilities.isCreativeMode)
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(stack));
+                    fuel += burnTime;
+                    ReflectionHelper.setPrivateValue(EntityMinecartFurnace.class, this, fuel, 0);
+
+                    pushX = posX - player.posX;
+                    pushZ = posZ - player.posZ;
+                }
+            }
+        }
+
+        return true;
+    }
 
     private static final double DRAG_FACTOR = 0.99;
     private static final double PUSH_FACTOR = 0.1D;
