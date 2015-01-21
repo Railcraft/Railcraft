@@ -20,7 +20,7 @@ import net.minecraft.inventory.SlotCrafting;
 import mods.railcraft.common.carts.EntityCartWork;
 import mods.railcraft.common.gui.slots.SlotUnshiftable;
 
-public class ContainerWorkCart extends RailcraftContainer {
+public final class ContainerWorkCart extends RailcraftContainer {
 
     /**
      * The crafting matrix inventory (3x3).

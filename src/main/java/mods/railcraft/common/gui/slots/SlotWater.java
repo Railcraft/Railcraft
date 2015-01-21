@@ -11,11 +11,10 @@ package mods.railcraft.common.gui.slots;
 import mods.railcraft.common.fluids.Fluids;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.fluids.FluidHelper;
 import net.minecraftforge.fluids.FluidStack;
 
-public class SlotWater extends Slot {
+public class SlotWater extends SlotRailcraft {
 
     public SlotWater(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
@@ -27,10 +26,7 @@ public class SlotWater extends Slot {
             return false;
         }
         FluidStack fluidStack = FluidHelper.getFluidStackInContainer(itemstack);
-        if (fluidStack != null && Fluids.WATER.is(fluidStack)) {
-            return true;
-        }
-        return false;
+        return fluidStack != null && Fluids.WATER.is(fluidStack);
     }
 
 }

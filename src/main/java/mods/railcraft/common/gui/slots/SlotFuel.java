@@ -10,10 +10,9 @@ package mods.railcraft.common.gui.slots;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.util.inventory.filters.StackFilter;
 
-public class SlotFuel extends Slot
+public class SlotFuel extends SlotRailcraft
 {
 
     public SlotFuel(IInventory iinventory, int slotIndex, int posX, int posY) {

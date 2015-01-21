@@ -19,7 +19,7 @@ public class GuiLocomotiveSteamSolid extends GuiLocomotive {
     private final EntityPlayer player;
 
     public GuiLocomotiveSteamSolid(InventoryPlayer inv, EntityLocomotiveSteamSolid loco) {
-        super(inv, loco, new ContainerLocomotiveSteamSolid(inv, loco), "steam", "gui_locomotive_steam.png", 205, true);
+        super(inv, loco, ContainerLocomotiveSteamSolid.make(inv, loco), "steam", "gui_locomotive_steam.png", 205, true);
         this.loco = loco;
         this.player = inv.player;
     }

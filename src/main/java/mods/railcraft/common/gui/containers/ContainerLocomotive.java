@@ -23,19 +23,25 @@ import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public class ContainerLocomotive extends RailcraftContainer {
+public abstract class ContainerLocomotive extends RailcraftContainer {
 
     private final EntityLocomotive loco;
     protected final InventoryPlayer playerInv;
     private LocoSpeed lastSpeed;
     private LocoMode lastMode;
     private int lastLockState;
+    private final int guiHeight;
     public String ownerName;
 
-    public ContainerLocomotive(InventoryPlayer playerInv, EntityLocomotive loco, int guiHeight) {
+    protected ContainerLocomotive(InventoryPlayer playerInv, EntityLocomotive loco, int guiHeight) {
         super(loco);
         this.loco = loco;
         this.playerInv = playerInv;
+        this.guiHeight = guiHeight;
+    }
+
+    public final void init() {
+        defineSlotsAndWidgets();
 
         SlotRailcraft slotTicket = new SlotStackFilter(ItemTicket.FILTER, loco, loco.getSizeInventory() - 2, 116, guiHeight - 111);
         slotTicket.setToolTips(ToolTip.buildToolTip("gui.locomotive.tip.slot.ticket"));
@@ -51,6 +57,10 @@ public class ContainerLocomotive extends RailcraftContainer {
         for (int j = 0; j < 9; j++) {
             addSlot(new Slot(playerInv, j, 8 + j * 18, guiHeight - 24));
         }
+    }
+
+    public void defineSlotsAndWidgets() {
+
     }
 
     @Override

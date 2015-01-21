@@ -21,15 +21,24 @@ public class ContainerLocomotiveElectric extends ContainerLocomotive {
 
     private final EntityLocomotiveElectric loco;
     private final IElectricMinecart.ChargeHandler chargeHandler;
-    private double lastCharge;
     private final ChargeIndicator chargeIndicator;
+    private double lastCharge;
 
-    public ContainerLocomotiveElectric(InventoryPlayer playerInv, EntityLocomotiveElectric loco) {
+    private ContainerLocomotiveElectric(InventoryPlayer playerInv, EntityLocomotiveElectric loco) {
         super(playerInv, loco, 161);
         this.loco = loco;
         this.chargeHandler = loco.getChargeHandler();
+        this.chargeIndicator = new ChargeIndicator(EntityLocomotiveElectric.MAX_CHARGE);
+    }
 
-        chargeIndicator = new ChargeIndicator(EntityLocomotiveElectric.MAX_CHARGE);
+    public static ContainerLocomotiveElectric make(InventoryPlayer playerInv, EntityLocomotiveElectric loco) {
+        ContainerLocomotiveElectric con = new ContainerLocomotiveElectric(playerInv, loco);
+        con.init();
+        return con;
+    }
+
+    @Override
+    public void defineSlotsAndWidgets() {
         addWidget(new IndicatorWidget(chargeIndicator, 57, 20, 176, 0, 62, 8, false));
     }
 

@@ -118,9 +118,9 @@ public class FactoryContainer {
                 case CART_UNDERCUTTER:
                     return new ContainerUndercutter(inv, (EntityCartUndercutter) obj);
                 case LOCO_STEAM:
-                    return new ContainerLocomotiveSteamSolid(inv, (EntityLocomotiveSteamSolid) obj);
+                    return ContainerLocomotiveSteamSolid.make(inv, (EntityLocomotiveSteamSolid) obj);
                 case LOCO_ELECTRIC:
-                    return new ContainerLocomotiveElectric(inv, (EntityLocomotiveElectric) obj);
+                    return ContainerLocomotiveElectric.make(inv, (EntityLocomotiveElectric) obj);
                 case SWITCH_MOTOR:
                     return new ContainerAspectAction(inv.player, (IAspectActionManager) obj);
                 case BOX_RECEIVER:

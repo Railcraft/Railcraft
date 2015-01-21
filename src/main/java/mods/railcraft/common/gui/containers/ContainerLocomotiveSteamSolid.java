@@ -25,10 +25,19 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
     private double lastItemBurnTime;
     private double lastHeat;
 
-    public ContainerLocomotiveSteamSolid(InventoryPlayer playerInv, EntityLocomotiveSteamSolid loco) {
+    private ContainerLocomotiveSteamSolid(InventoryPlayer playerInv, EntityLocomotiveSteamSolid loco) {
         super(playerInv, loco, 205);
         this.loco = loco;
+    }
 
+    public static ContainerLocomotiveSteamSolid make(InventoryPlayer playerInv, EntityLocomotiveSteamSolid loco) {
+        ContainerLocomotiveSteamSolid con = new ContainerLocomotiveSteamSolid(playerInv, loco);
+        con.init();
+        return con;
+    }
+
+    @Override
+    public void defineSlotsAndWidgets() {
         addWidget(new FluidGaugeWidget(loco.getTankManager().get(0), 116, 23, 176, 0, 16, 47));
         addWidget(new FluidGaugeWidget(loco.getTankManager().get(1), 17, 23, 176, 0, 16, 47));
 

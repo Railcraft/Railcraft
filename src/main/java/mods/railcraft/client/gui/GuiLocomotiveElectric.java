@@ -19,7 +19,7 @@ public class GuiLocomotiveElectric extends GuiLocomotive {
     private final EntityPlayer player;
 
     public GuiLocomotiveElectric(InventoryPlayer inv, EntityLocomotiveElectric loco) {
-        super(inv, loco, new ContainerLocomotiveElectric(inv, loco), "electric", "gui_locomotive_electric.png", 161, false);
+        super(inv, loco, ContainerLocomotiveElectric.make(inv, loco), "electric", "gui_locomotive_electric.png", 161, false);
         this.loco = loco;
         this.player = inv.player;
     }
