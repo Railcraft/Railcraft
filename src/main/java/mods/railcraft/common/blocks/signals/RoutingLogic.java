@@ -30,6 +30,8 @@ import net.minecraft.util.EnumChatFormatting;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class RoutingLogic {
+    
+    public static final String REGEX_SYMBOL = "\\?";
 
     private Deque<Condition> conditions;
     private RoutingLogicException error;
@@ -98,23 +100,23 @@ public class RoutingLogic {
 
     private Condition parseLine(String line, Deque<Condition> stack) throws RoutingLogicException {
         try {
-            if (line.startsWith("Dest="))
+            if (line.startsWith("Dest"))
                 return new DestCondition(line);
-            if (line.startsWith("Color="))
+            if (line.startsWith("Color"))
                 return new ColorCondition(line);
-            if (line.startsWith("Owner="))
+            if (line.startsWith("Owner"))
                 return new OwnerCondition(line);
-            if (line.startsWith("Name="))
+            if (line.startsWith("Name"))
                 return new NameCondition(line);
-            if (line.startsWith("Type="))
+            if (line.startsWith("Type"))
                 return new TypeCondition(line);
-            if (line.startsWith("NeedsRefuel="))
+            if (line.startsWith("NeedsRefuel"))
                 return new RefuelCondition(line);
-            if (line.startsWith("Ridden="))
+            if (line.startsWith("Ridden"))
                 return new RiddenCondition(line);
-            if (line.startsWith("Riding="))
+            if (line.startsWith("Riding"))
                 return new RidingCondition(line);
-            if (line.startsWith("Redstone="))
+            if (line.startsWith("Redstone"))
                 return new RedstoneCondition(line);
         } catch (RoutingLogicException ex) {
             throw ex;
@@ -152,6 +154,28 @@ public class RoutingLogic {
 
     private abstract class Condition {
 
+        public abstract boolean matches(IRoutingTile tile, EntityMinecart cart);
+
+    }
+
+    private abstract class ParsedCondition extends Condition {
+
+        public final String keyword, line, value;
+        public final boolean isRegex;
+
+        private ParsedCondition(String keyword, boolean supportsRegex, String line) throws RoutingLogicException {
+            this.keyword = keyword;
+            this.line = line;
+            String keywordMatch = keyword + REGEX_SYMBOL + "?=";
+            if(!line.matches(keywordMatch + ".*"))
+                throw new RoutingLogicException("railcraft.gui.routing.logic.unrecognized.keyword", line);
+            this.isRegex = line.matches(keyword + REGEX_SYMBOL + "=.*");
+            if (!supportsRegex && isRegex)
+                throw new RoutingLogicException("railcraft.gui.routing.logic.regex.unsupported", line);
+            this.value = line.replaceFirst(keywordMatch, "");
+        }
+
+        @Override
         public abstract boolean matches(IRoutingTile tile, EntityMinecart cart);
 
     }
@@ -203,66 +227,62 @@ public class RoutingLogic {
 
     }
 
-    private class DestCondition extends Condition {
+    private class DestCondition extends ParsedCondition {
 
-        private final String dest;
-
-        public DestCondition(String dest) {
-            this.dest = dest.replace("Dest=", "");
+        public DestCondition(String line) throws RoutingLogicException {
+            super("Dest", true, line);
         }
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
             if (cart instanceof IRoutableCart) {
                 String cartDest = ((IRoutableCart) cart).getDestination();
-                if (dest.equals("null"))
+                if (value.equals("null"))
                     return cartDest == null || cartDest.equals("");
-                return cartDest.startsWith(dest);
+                if (isRegex)
+                    return cartDest.matches(value);
+                return cartDest.startsWith(value);
             }
             return false;
         }
 
     }
 
-    private class OwnerCondition extends Condition {
+    private class OwnerCondition extends ParsedCondition {
 
-        private final String owner;
-
-        public OwnerCondition(String owner) {
-            this.owner = owner.replace("Owner=", "");
+        public OwnerCondition(String line) throws RoutingLogicException {
+            super("Owner", false, line);
         }
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            return owner.equals(CartTools.getCartOwner(cart).getName());
+            return value.equals(CartTools.getCartOwner(cart).getName());
         }
 
     }
 
-    private class NameCondition extends Condition {
+    private class NameCondition extends ParsedCondition {
 
-        private final String name;
-
-        public NameCondition(String name) {
-            this.name = name.replace("Name=", "");
+        public NameCondition(String line) throws RoutingLogicException {
+            super("Name", true, line);
         }
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
             String customName = cart.func_95999_t();
             if (customName == null)
-                return "null".equals(name);
-            return name.equals(customName);
+                return "null".equals(value);
+            if (isRegex)
+                return customName.matches(value);
+            return value.equals(customName);
         }
 
     }
 
-    private class TypeCondition extends Condition {
+    private class TypeCondition extends ParsedCondition {
 
-        private final String type;
-
-        public TypeCondition(String name) {
-            this.type = name.replace("Type=", "");
+        public TypeCondition(String line) throws RoutingLogicException {
+            super("Type", false, line);
         }
 
         @Override
@@ -273,19 +293,20 @@ public class RoutingLogic {
             UniqueIdentifier itemName = GameRegistry.findUniqueIdentifierFor(stack.getItem());
             if (itemName != null) {
                 String nameString = itemName.modId + ":" + itemName.name;
-                return nameString.equalsIgnoreCase(type);
+                return nameString.equalsIgnoreCase(value);
             }
             return false;
         }
 
     }
 
-    private class RefuelCondition extends Condition {
+    private class RefuelCondition extends ParsedCondition {
 
         private final boolean needsRefuel;
 
-        public RefuelCondition(String line) {
-            this.needsRefuel = Boolean.parseBoolean(line.replace("NeedsRefuel=", ""));
+        public RefuelCondition(String line) throws RoutingLogicException {
+            super("NeedsRefuel", false, line);
+            this.needsRefuel = Boolean.parseBoolean(value);
         }
 
         @Override
@@ -299,12 +320,13 @@ public class RoutingLogic {
 
     }
 
-    private class RiddenCondition extends Condition {
+    private class RiddenCondition extends ParsedCondition {
 
         private final boolean ridden;
 
-        public RiddenCondition(String line) {
-            this.ridden = Boolean.parseBoolean(line.replace("Ridden=", ""));
+        public RiddenCondition(String line) throws RoutingLogicException {
+            super("Ridden", false, line);
+            this.ridden = Boolean.parseBoolean(value);
         }
 
         @Override
@@ -318,31 +340,30 @@ public class RoutingLogic {
 
     }
 
-    private class RidingCondition extends Condition {
+    private class RidingCondition extends ParsedCondition {
 
-        private final String username;
-
-        public RidingCondition(String line) {
-            this.username = line.replace("Riding=", "");
+        public RidingCondition(String line) throws RoutingLogicException {
+            super("Riding", false, line);
         }
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
             for (EntityMinecart c : LinkageManager.instance().getCartsInTrain(cart)) {
                 if (c.riddenByEntity != null && c.riddenByEntity instanceof EntityPlayer)
-                    return c.riddenByEntity.getCommandSenderName().equals(username);
+                    return c.riddenByEntity.getCommandSenderName().equals(value);
             }
             return false;
         }
 
     }
 
-    private class RedstoneCondition extends Condition {
+    private class RedstoneCondition extends ParsedCondition {
 
         private final boolean powered;
 
-        public RedstoneCondition(String line) {
-            this.powered = Boolean.parseBoolean(line.replace("Redstone=", ""));
+        public RedstoneCondition(String line) throws RoutingLogicException {
+            super("Redstone", false, line);
+            this.powered = Boolean.parseBoolean(value);
         }
 
         @Override
@@ -352,13 +373,13 @@ public class RoutingLogic {
 
     }
 
-    private class ColorCondition extends Condition {
+    private class ColorCondition extends ParsedCondition {
 
         private final EnumColor primary, secondary;
 
-        public ColorCondition(String color) throws RoutingLogicException {
-            String params = color.replace("Color=", "");
-            String[] colors = params.split(",");
+        public ColorCondition(String line) throws RoutingLogicException {
+            super("Color", false, line);
+            String[] colors = value.split(",");
             if (colors[0].equals("Any"))
                 primary = null;
             else {
