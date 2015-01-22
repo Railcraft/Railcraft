@@ -12,8 +12,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
-import mods.railcraft.api.carts.CartTools;
+import java.util.UUID;
 import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,7 +46,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
     @Override
     public int getBasicRailMetadata(EntityMinecart cart) {
         int meta = tileEntity.getBlockMetadata();
-        if (cart != null && (isSwitched() || springingCarts.contains(cart))) {
+        if (cart != null && (isSwitched() || springingCarts.contains(cart.getPersistentID()))) {
             if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
                 if (isMirrored()) {
                     if (reversed) {
@@ -80,7 +81,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
     }
 
     @Override
-    protected List<EntityMinecart> getCartsAtLockEntrance() {
+    protected List<UUID> getCartsAtLockEntrance() {
         int x = tileEntity.xCoord;
         int y = tileEntity.yCoord;
         int z = tileEntity.zCoord;
@@ -98,11 +99,11 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
                 x--;
             }
         }
-        return CartTools.getMinecartsAt(getWorld(), x, y, z, 0.3f);
+        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);
     }
 
     @Override
-    protected List<EntityMinecart> getCartsAtSpringEntrance() {
+    protected List<UUID> getCartsAtSpringEntrance() {
         int x = tileEntity.xCoord;
         int y = tileEntity.yCoord;
         int z = tileEntity.zCoord;
@@ -120,7 +121,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
                 z++;
             }
         }
-        return CartTools.getMinecartsAt(getWorld(), x, y, z, 0.3f); 
+        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);
     }
 
     @Override

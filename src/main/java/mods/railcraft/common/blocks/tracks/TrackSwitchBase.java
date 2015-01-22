@@ -15,14 +15,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
 import net.minecraft.nbt.NBTTagCompound;
-import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.tracks.ITrackSwitch;
-import mods.railcraft.common.carts.LinkageManager;
+import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityMinecart;
 
 /**
  *
@@ -35,13 +33,8 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     protected boolean switched;
     private byte sprung;
     private byte locked;
-    protected Set<EntityMinecart> lockingCarts = new HashSet<EntityMinecart>();
-    protected Set<EntityMinecart> springingCarts = new HashSet<EntityMinecart>();
-    
-    // temporary variables for loading from NBT
-    private boolean justLoaded = true;
-    private Set<UUID> lockingCartUUIDs = null;
-    private Set<UUID> springingCartUUIDs = null;
+    protected Set<UUID> lockingCarts = new HashSet<UUID>();
+    protected Set<UUID> springingCarts = new HashSet<UUID>();
 
     @Override
     public boolean canMakeSlopes() {
@@ -143,55 +136,26 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         }
         super.onNeighborBlockChange(block);
     }
-    
-    /**
-     * A utility method for writing out UUID's to NBT 
-     */
-    private void writeUUIDToNBT(String key, UUID uuid, NBTTagCompound data) {
-        data.setLong(key+"High", uuid.getMostSignificantBits());
-        data.setLong(key+"Low", uuid.getLeastSignificantBits());
-    }
-        
-    /**
-     * A utility method for reading in UUID's from NBT
-     */
-    private UUID readUUIDFromNBT(String key, NBTTagCompound data) {
-         if (data.hasKey(key + "High"))
-             return new UUID(data.getLong(key + "High"), data.getLong(key + "Low"));
-         return null;
-    }
-    
-    private void writeCartsToNBT(String key, Set<EntityMinecart> carts, NBTTagCompound data) {
+
+    private void writeCartsToNBT(String key, Set<UUID> carts, NBTTagCompound data) {
         data.setByte(key+ "Size", (byte)carts.size());
         int i = 0;
-        for(EntityMinecart cart : carts)
-            writeUUIDToNBT(key + i++, cart.getPersistentID(), data);
+        for(UUID uuid : carts)
+            MiscTools.writeUUID(data, key + i++, uuid);
     }
-    
+
     private Set<UUID> readCartsFromNBT(String key, NBTTagCompound data) {
         Set<UUID> cartUUIDs = new HashSet<UUID>();
         String sizeKey = key + "Size"; 
         if(data.hasKey(sizeKey)) {
             byte size = data.getByte(sizeKey);
             for(int i=0; i<size; i++) {
-                UUID id = readUUIDFromNBT(key + i, data);
+                UUID id = MiscTools.readUUID(data, key + i);
                 if(id != null) 
                     cartUUIDs.add(id);
             }
         }
         return cartUUIDs;
-    }
-    
-    private Set<EntityMinecart> lookupCartsFromUUIDs(Set<UUID> cartUUIDs) {
-        Set<EntityMinecart> carts = new HashSet<EntityMinecart>();
-        if(cartUUIDs != null) {
-            for(UUID cartUUID : cartUUIDs) {
-                EntityMinecart cart = LinkageManager.instance().getCartFromUUID(cartUUID);
-                if(cart != null)
-                    carts.add(cart);
-            }
-        }
-        return carts;
     }
 
     @Override
@@ -211,11 +175,9 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         mirrored = data.getBoolean("Direction");
         switched = data.getBoolean("Switched");
         sprung = data.getByte("sprung");
-        locked = data.getByte("locked");        
-        springingCartUUIDs = readCartsFromNBT("springingCarts", data);
-        lockingCartUUIDs = readCartsFromNBT("lockingCarts", data);
-        
-        justLoaded = true;
+        locked = data.getByte("locked");
+        springingCarts = readCartsFromNBT("springingCarts", data);
+        lockingCarts = readCartsFromNBT("lockingCarts", data);
     }
 
     @Override
@@ -248,49 +210,40 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     public boolean isSprung() {
         return sprung > 0;
     }
-    
-    
-    
+
     @Override
     public void updateEntity() {
         if (Game.isNotHost(getWorld()))
             return;
 
-        // Finish loading cart sets from NBT
-        if(justLoaded) {
-            springingCarts = lookupCartsFromUUIDs(springingCartUUIDs);
-            lockingCarts = lookupCartsFromUUIDs(lockingCartUUIDs);
-            justLoaded = false;
-        }
-        
         boolean wasLocked = locked == 0;
         boolean springState = sprung == 0;
 
         // Adding carts we just found to lockingCarts
-        List<EntityMinecart> lockcarts = getCartsAtLockEntrance();
-        for (EntityMinecart cart : lockcarts) {
+        List<UUID> lockcarts = getCartsAtLockEntrance();
+        for (UUID cartUUID : lockcarts) {
             // Carts could follow a loop track through the switch and back to
             // the other entrance so we remove it from the other list
-            if (springingCarts.contains(cart))
-                springingCarts.remove(cart);
-            lockingCarts.add(cart);
+            if (springingCarts.contains(cartUUID))
+                springingCarts.remove(cartUUID);
+            lockingCarts.add(cartUUID);
         }
 
         // Same as last section except reversed
-        List<EntityMinecart> springcarts = getCartsAtSpringEntrance();
-        for (EntityMinecart cart : springcarts) {
-            if (lockingCarts.contains(cart))
-                lockingCarts.remove(cart);
-            springingCarts.add(cart);
+        List<UUID> springcarts = getCartsAtSpringEntrance();
+        for (UUID cartUUID : springcarts) {
+            if (lockingCarts.contains(cartUUID))
+                lockingCarts.remove(cartUUID);
+            springingCarts.add(cartUUID);
         }
 
         // We only set sprung/locked when a cart enters our track, this is
         // mainly for visual purposes as the subclass's getBasicRailMetadata()
         // determines which direction the carts actually take.
-        List<EntityMinecart> cartsOnTrack = CartTools.getMinecartsAt(
+        List<UUID> cartsOnTrack = CartUtils.getMinecartUUIDsAt(
                 getWorld(), tileEntity.xCoord, tileEntity.yCoord,
                 tileEntity.zCoord, 0.3f);
-        for (EntityMinecart cartOnTrack : cartsOnTrack) {
+        for (UUID cartOnTrack : cartsOnTrack) {
             if (springingCarts.contains(cartOnTrack)) {
                 sprung = SPRING_DURATION;
                 locked = 0;
@@ -316,8 +269,8 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
             sendUpdateToClient();
     }
 
-    protected abstract List<EntityMinecart> getCartsAtLockEntrance();
+    protected abstract List<UUID> getCartsAtLockEntrance();
 
-    protected abstract List<EntityMinecart> getCartsAtSpringEntrance();
+    protected abstract List<UUID> getCartsAtSpringEntrance();
 
 }

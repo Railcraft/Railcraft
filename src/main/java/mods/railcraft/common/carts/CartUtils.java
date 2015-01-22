@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.item.EntityMinecart;
@@ -117,6 +117,7 @@ public class CartUtils {
         return Math.abs(cart.motionX) < vel && Math.abs(cart.motionZ) < vel;
     }
 
+    @SuppressWarnings("rawtypes")
     public static List<EntityMinecart> getMinecartsIn(World world, AxisAlignedBB searchBox) {
         List entities = world.getEntitiesWithinAABB(EntityMinecart.class, searchBox);
         List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
@@ -124,6 +125,19 @@ public class CartUtils {
             EntityMinecart cart = (EntityMinecart) o;
             if (!cart.isDead)
                 carts.add((EntityMinecart) o);
+        }
+        return carts;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static List<UUID> getMinecartUUIDsAt(World world, int i, int j, int k, float sensitivity) {
+        sensitivity = Math.min(sensitivity, 0.49f);
+        List entities = world.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(i + sensitivity, j + sensitivity, k + sensitivity, i + 1 - sensitivity, j + 1 - sensitivity, k + 1 - sensitivity));
+        List<UUID> carts = new ArrayList<UUID>();
+        for (Object o : entities) {
+            EntityMinecart cart = (EntityMinecart) o;
+            if (!cart.isDead)
+                carts.add(((EntityMinecart) o).getPersistentID());
         }
         return carts;
     }
