@@ -22,7 +22,7 @@ import mods.railcraft.common.modules.ModuleManager.Module;
  */
 public enum EnumCube {
 
-    COKE_BLOCK(Module.FACTORY, "coke", new FlammableCube(5, 300), 2f, 10f),
+    COKE_BLOCK(Module.FACTORY, "coke", new FlammableCube(5, 10), 2f, 10f),
     CONCRETE_BLOCK(Module.STRUCTURES, "concrete", new SimpleCube(), 3f, 15f),
     STEEL_BLOCK(Module.FACTORY, "steel", new SimpleCube(), 5f, 15f),
     @Deprecated
