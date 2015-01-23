@@ -118,7 +118,7 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
             	TileEntity te = world.getTileEntity(x, y, z);
             	if(te != null && te instanceof IElectricDistributor) {
             		IElectricDistributor.ChargeHandler ch = ((IElectricDistributor)te).getChargeHandler();
-            		ChatPlugin.sendLocalizedChat(player, "railcraft.gui.electric.meter.catenary", ch.getStatus(), ch.getDraw(), ch.getLosses());
+            		ChatPlugin.sendLocalizedChat(player, "railcraft.gui.electric.meter.catenary", ch.getNumberOfSources(), ch.getDraw(), ch.getLosses());
             	}
             }
         } catch (Throwable er) {

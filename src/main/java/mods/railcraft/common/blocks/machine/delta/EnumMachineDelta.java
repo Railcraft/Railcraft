@@ -53,6 +53,7 @@ public enum EnumMachineDelta implements IEnumMachine {
         creativeList.add(CATENARY);	//temp
 
         BoundingBoxManager.registerBoundingBox(WIRE, new TileWire.WireBoundingBox());
+        BoundingBoxManager.registerBoundingBox(CATENARY, new TileCatenary.CatenaryBoundingBox());
     }
 
     private EnumMachineDelta(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
