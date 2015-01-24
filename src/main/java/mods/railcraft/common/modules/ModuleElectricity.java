@@ -11,10 +11,12 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.machine.delta.BlockCatenary;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.items.ItemElectricMeter;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
+import mods.railcraft.common.items.ItemSpool;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.items.RailcraftPartItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -86,7 +88,7 @@ public class ModuleElectricity extends RailcraftModule {
                     'R',  new ItemStack(Blocks.redstone_block));
 
         EnumMachineDelta delta = EnumMachineDelta.WIRE;
-        if (delta.register())
+        if (delta.register()) {
             RailcraftCraftingManager.rollingMachine.getRecipeList().add(new ShapedOreRecipe(delta.getItem(8),
                     "LPL",
                     "PCP",
@@ -94,6 +96,9 @@ public class ModuleElectricity extends RailcraftModule {
                     'C', "blockCopper",
                     'P', Items.paper,
                     'L', "ingotLead"));
+            BlockCatenary.registerBlock();
+            ItemSpool.register();
+        }
     }
 
 }
