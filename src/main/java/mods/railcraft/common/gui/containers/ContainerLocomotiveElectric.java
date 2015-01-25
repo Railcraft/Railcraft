@@ -14,8 +14,11 @@ import mods.railcraft.api.electricity.IElectricMinecart;
 import mods.railcraft.common.carts.EntityLocomotiveElectric;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.Slot;
+import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import mods.railcraft.common.gui.widgets.ChargeIndicator;
+import mods.railcraft.common.items.ItemPantograph;
 
 public class ContainerLocomotiveElectric extends ContainerLocomotive {
 
@@ -31,6 +34,8 @@ public class ContainerLocomotiveElectric extends ContainerLocomotive {
 
         chargeIndicator = new ChargeIndicator(EntityLocomotiveElectric.MAX_CHARGE);
         addWidget(new IndicatorWidget(chargeIndicator, 57, 20, 176, 0, 62, 8, false));
+        
+        addSlot(new SlotStackFilter(ItemPantograph.FILTER, loco, 0, 152, 50));
     }
 
     @Override

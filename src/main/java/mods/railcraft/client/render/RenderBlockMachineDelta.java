@@ -64,7 +64,7 @@ public class RenderBlockMachineDelta extends BlockRenderer {
 
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                 TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, dir);
-                if (tile instanceof TileWire || tile instanceof TileCatenary)
+                if (tile instanceof TileWire)
                     wireCons.add(dir);
             }
 
@@ -76,7 +76,8 @@ public class RenderBlockMachineDelta extends BlockRenderer {
 
             for (ForgeDirection dir : search) {
                 TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, dir);
-                if (tile instanceof IElectricGrid && ((IElectricGrid) tile).getChargeHandler().getType() == ConnectType.BLOCK)
+                if ((tile instanceof IElectricGrid && ((IElectricGrid) tile).getChargeHandler().getType() == ConnectType.BLOCK) ||
+                		tile instanceof TileCatenary)
                     plugCons.add(dir);
             }
 
@@ -339,7 +340,7 @@ public class RenderBlockMachineDelta extends BlockRenderer {
 
             for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                 TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, dir);
-                if (tile instanceof TileWire || tile instanceof TileCatenary)
+                if (tile instanceof TileCatenary)
                     wireCons.add(dir);
             }
 
@@ -351,7 +352,7 @@ public class RenderBlockMachineDelta extends BlockRenderer {
 
             for (ForgeDirection dir : search) {
                 TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, dir);
-                if (tile instanceof IElectricGrid && ((IElectricGrid) tile).getChargeHandler().getType() == ConnectType.BLOCK)
+                if (tile instanceof IElectricGrid)
                     plugCons.add(dir);
             }
 
@@ -405,9 +406,8 @@ public class RenderBlockMachineDelta extends BlockRenderer {
             float pix = RenderTools.PIXEL;
 
             float center = 8 * pix;
-            float length = 4 * pix;
-            float width = 2 * pix;
-            float thickness = 4 * pix;
+            float length = 3 * pix;
+            float thickness = 2 * pix;
             float[][] plugA = new float[3][2];
             float[][] plugB = new float[3][2];
 
@@ -418,12 +418,12 @@ public class RenderBlockMachineDelta extends BlockRenderer {
             plugA[1][0] = 0.001F;
             plugA[1][1] = thickness;
             // Z START - END
-            plugA[2][0] = center - width;
-            plugA[2][1] = center + width;
+            plugA[2][0] = 0.001F;
+            plugA[2][1] = 0.999F;
 
             // X START - END
-            plugB[0][0] = center - width;
-            plugB[0][1] = center + width;
+            plugB[0][0] = 0.001F;
+            plugB[0][1] = 0.999F;
             // Y START - END
             plugB[1][0] = 0.001F;
             plugB[1][1] = thickness;
@@ -451,13 +451,13 @@ public class RenderBlockMachineDelta extends BlockRenderer {
             float max = 0.999F;
             float min = 0.001F;
 
-            info.setBlockBounds(6 * pix, min, 6 * pix, 10 * pix, max, 10 * pix);
+            info.setBlockBounds(7 * pix, min, 7 * pix, 9 * pix, max, 9 * pix);
             RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
 
-            info.setBlockBounds(6 * pix - 0.0001f, 6 * pix - 0.0001f, min, 10 * pix + 0.0001f, 10 * pix + 0.0001f, max);
+            info.setBlockBounds(7 * pix - 0.0001f, 7 * pix - 0.0001f, min, 9 * pix + 0.0001f, 9 * pix + 0.0001f, max);
             RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
 
-            info.setBlockBounds(min, 6 * pix - 0.0002f, 6 * pix - 0.0002f, max, 10 * pix + 0.0002f, 10 * pix + 0.0002f);
+            info.setBlockBounds(min, 7 * pix - 0.0002f, 7 * pix - 0.0002f, max, 9 * pix + 0.0002f, 9 * pix + 0.0002f);
             RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
 
         }

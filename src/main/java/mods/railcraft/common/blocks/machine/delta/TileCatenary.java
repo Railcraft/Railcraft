@@ -1,20 +1,18 @@
 package mods.railcraft.common.blocks.machine.delta;
 
+import mods.railcraft.api.core.IPostConnection.ConnectStyle;
+import mods.railcraft.api.electricity.IElectricDistributor;
+import mods.railcraft.common.blocks.aesthetics.post.BlockPostBase;
+import mods.railcraft.common.blocks.machine.BoundingBoxManager.BoundingBox;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import mods.railcraft.api.electricity.IElectricDistributor;
-import mods.railcraft.api.electricity.IElectricGrid;
-import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler.ConnectType;
-import mods.railcraft.common.blocks.machine.BoundingBoxManager;
-import mods.railcraft.common.blocks.machine.BoundingBoxManager.BoundingBox;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.blocks.machine.BoundingBoxManager.ReducedBoundingBox;
-import mods.railcraft.common.blocks.machine.delta.TileWire.AddonType;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.Game;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileCatenary extends TileMachineBase implements IElectricDistributor {
 
@@ -33,6 +31,15 @@ public class TileCatenary extends TileMachineBase implements IElectricDistributo
 	@Override
 	public IEnumMachine getMachineType() {
 		return EnumMachineDelta.CATENARY;
+	}
+	
+	@Override
+	public boolean isSideSolid(ForgeDirection side) {
+		/*
+		 * I want to be able to connect to the bottom of metal posts.
+		 * Unfortunately, this means I have to make the top side totally solid, but please don't do anything silly, like put tracks on top
+		 */
+		return side == ForgeDirection.UP;
 	}
 	
 	@Override
@@ -55,6 +62,11 @@ public class TileCatenary extends TileMachineBase implements IElectricDistributo
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
+    }    
+    
+    @Override
+    public ConnectStyle connectsToPost(ForgeDirection side) {
+    	return (side == ForgeDirection.DOWN) ? ConnectStyle.TWO_THIN : ConnectStyle.NONE;
     }
     
     public static class CatenaryBoundingBox extends BoundingBox {
@@ -65,5 +77,6 @@ public class TileCatenary extends TileMachineBase implements IElectricDistributo
         }
 
     }
+
 
 }
