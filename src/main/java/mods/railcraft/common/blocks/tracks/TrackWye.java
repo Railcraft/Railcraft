@@ -35,16 +35,15 @@ public class TrackWye extends TrackSwitchBase {
     public int getBasicRailMetadata(EntityMinecart cart) {
         int meta = tileEntity.getBlockMetadata();
         if (cart != null) {
-            boolean containsCart = springingCarts.contains(cart.getPersistentID());
             if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
                 if (isMirrored()) {
-                    if (isSwitched() || containsCart) {
+                    if (isSwitched(cart)) {
                         meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
                     }
                 } else {
-                    if (isSwitched() || containsCart) {
+                    if (isSwitched(cart)) {
                         meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
@@ -52,13 +51,13 @@ public class TrackWye extends TrackSwitchBase {
                 }
             } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
                 if (isMirrored()) {
-                    if (isSwitched() || containsCart) {
+                    if (isSwitched(cart)) {
                         meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
                     }
                 } else {
-                    if (isSwitched() || containsCart) {
+                    if (isSwitched(cart)) {
                         meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
@@ -86,6 +85,28 @@ public class TrackWye extends TrackSwitchBase {
                 z++;
             } else {
                 z--;
+            }
+        }
+        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);
+    }
+
+    @Override
+    protected List<UUID> getCartsAtDecisionEntrance() {
+        int x = tileEntity.xCoord;
+        int y = tileEntity.yCoord;
+        int z = tileEntity.zCoord;
+        int meta = tileEntity.getBlockMetadata();
+        if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
+            if (isMirrored()) {
+                z--;
+            } else {
+                z++;
+            }
+        } else if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
+            if (isMirrored()) {
+                x--;
+            } else {
+                x++;
             }
         }
         return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);

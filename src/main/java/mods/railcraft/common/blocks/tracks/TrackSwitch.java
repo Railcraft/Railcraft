@@ -46,7 +46,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
     @Override
     public int getBasicRailMetadata(EntityMinecart cart) {
         int meta = tileEntity.getBlockMetadata();
-        if (cart != null && (isSwitched() || springingCarts.contains(cart.getPersistentID()))) {
+        if (cart != null && isSwitched(cart)) {
             if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
                 if (isMirrored()) {
                     if (reversed) {
@@ -97,6 +97,28 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
                 x++;
             } else {
                 x--;
+            }
+        }
+        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);
+    }
+
+    @Override
+    protected List<UUID> getCartsAtDecisionEntrance() {
+        int x = tileEntity.xCoord;
+        int y = tileEntity.yCoord;
+        int z = tileEntity.zCoord;
+        int meta = tileEntity.getBlockMetadata();
+        if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
+            if (isReversed() != isMirrored()) {
+                z--;
+            } else {
+                z++;
+            }
+        } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
+            if (!isReversed() != isMirrored()) {
+                x--;
+            } else {
+                x++;
             }
         }
         return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);
