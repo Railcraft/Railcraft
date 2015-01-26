@@ -16,7 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileCatenary extends TileMachineBase implements IElectricDistributor {
 
-	private final ChargeHandler chargeHandler = new ChargeHandler(this, 0.05);
+	private final ChargeHandler chargeHandler = new ChargeHandler(this, 0.25);
 	
 	@Override
 	public ChargeHandler getChargeHandler() {
