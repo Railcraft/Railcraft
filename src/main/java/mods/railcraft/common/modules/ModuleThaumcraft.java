@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.modules;
 
+import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarVoid;
 import org.apache.logging.log4j.Level;
 import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarMagic;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
@@ -32,6 +33,7 @@ public class ModuleThaumcraft extends RailcraftModule {
     @Override
     public void initFirst() {
         ItemCrowbarMagic.registerItem();
+        ItemCrowbarVoid.registerItem();
     }
 
     @Override
@@ -44,6 +46,7 @@ public class ModuleThaumcraft extends RailcraftModule {
         ThaumcraftPlugin.setupReseach();
 
         ItemCrowbarMagic.registerResearch();
+        ItemCrowbarVoid.registerResearch();
     }
 
 }

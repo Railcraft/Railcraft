@@ -557,6 +557,7 @@ public class RailcraftConfig {
         loadItemProperty("tool.crowbar");
         loadItemProperty("tool.crowbar.reinforced");
         loadItemProperty("tool.crowbar.magic");
+        loadItemProperty("tool.crowbar.void");
 
         loadItemProperty("tool.magnifying.glass");
 
