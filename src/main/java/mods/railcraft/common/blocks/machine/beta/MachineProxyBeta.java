@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import java.util.List;
+import mods.railcraft.common.blocks.machine.IComparatorOverride;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.IMachineProxy;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -17,7 +18,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class MachineProxyBeta implements IMachineProxy {
+public class MachineProxyBeta implements IMachineProxy, IComparatorOverride {
 
     @Override
     public IEnumMachine getMachine(int meta) {

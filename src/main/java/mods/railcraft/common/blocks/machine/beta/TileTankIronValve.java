@@ -10,7 +10,9 @@ package mods.railcraft.common.blocks.machine.beta;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import mods.railcraft.common.blocks.machine.IComparatorValueProvider;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.TankManager;
@@ -28,7 +30,7 @@ import net.minecraftforge.fluids.IFluidHandler;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronValve extends TileTankBase implements IFluidHandler {
+public class TileTankIronValve extends TileTankBase implements IFluidHandler, IComparatorValueProvider {
 
     private final static ITileFilter FLUID_OUTPUT_FILTER = new ITileFilter() {
         @Override
@@ -201,5 +203,14 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler {
             return tMan.getTankInfo();
         return FakeTank.INFO;
     }
+
+	@Override
+	public int getComparatorInputOverride(World world, int x, int y, int z,
+			int side) {
+		FluidTankInfo[] tankinfo = getTankInfo(ForgeDirection.getOrientation(side));
+		if (tankinfo != null && tankinfo.length == 1 && tankinfo[0] != null && tankinfo[0].fluid != null)
+		    return Math.round(tankinfo[0].fluid.amount*15/tankinfo[0].capacity);
+		return 0;
+	}
 
 }

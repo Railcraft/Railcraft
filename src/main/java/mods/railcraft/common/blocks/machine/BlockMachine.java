@@ -28,6 +28,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import mods.railcraft.common.blocks.machine.beta.MachineProxyBeta;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -358,6 +359,24 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).getHardness();
         return super.getBlockHardness(world, x, y, z);
+    }
+    
+    @Override
+    public boolean hasComparatorInputOverride() {
+        if (proxy instanceof IComparatorOverride)
+        	return true;
+        return false;
+    }
+
+    /**
+     * Value is provided by the tile entity
+     */
+    @Override
+    public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IComparatorValueProvider)
+            return ((IComparatorValueProvider) tile).getComparatorInputOverride(world, x, y, z, side);
+        return 0;
     }
 
     @Override
