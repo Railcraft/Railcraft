@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.blocks.machine.IComparatorValueProvider;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
@@ -47,6 +48,8 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
     private static final int FLOW_RATE = FluidHelper.BUCKET_VOLUME;
     private static final byte FILL_INCREMENT = 1;
     private final StandardTank fillTank = new StandardTank(20);
+
+    private boolean previousStructureValidity;
 
     public TileTankIronValve() {
         tankManager.add(fillTank);
@@ -131,7 +134,20 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
             if (tMan != null)
                 tMan.outputLiquid(tileCache, FLUID_OUTPUT_FILTER, FLUID_OUTPUTS, 0, FLOW_RATE);
         }
+
+        TileMultiBlock masterBlock = getMasterBlock();
+        if (masterBlock != null && masterBlock instanceof TileTankBase) {
+            TileTankBase masterTileTankBase = (TileTankBase) masterBlock;
+            if (masterTileTankBase.comparatorValueChanged())
+                notifyBlocksOfNeighborChange();
+        }
+
+        if (previousStructureValidity != isStructureValid())
+            notifyBlocksOfNeighborChange();
+        previousStructureValidity = isStructureValid();
     }
+
+
 
     @Override
     public IIcon getIcon(int side) {
@@ -204,13 +220,12 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
         return FakeTank.INFO;
     }
 
-	@Override
-	public int getComparatorInputOverride(World world, int x, int y, int z,
-			int side) {
-		FluidTankInfo[] tankinfo = getTankInfo(ForgeDirection.getOrientation(side));
-		if (tankinfo != null && tankinfo.length == 1 && tankinfo[0] != null && tankinfo[0].fluid != null)
-		    return Math.round(tankinfo[0].fluid.amount*15/tankinfo[0].capacity);
-		return 0;
-	}
+    @Override
+    public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
+        TileMultiBlock masterBlock = getMasterBlock();
+        if (masterBlock != null && masterBlock instanceof TileTankBase)
+            return ((TileTankBase) masterBlock).getComparatorValue();
+        return 0;
+    }
 
 }

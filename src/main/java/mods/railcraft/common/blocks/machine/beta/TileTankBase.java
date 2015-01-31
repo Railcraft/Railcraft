@@ -89,6 +89,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     private final StandaloneInventory inv;
     private EnumColor color = EnumColor.WHITE;
 
+    private int previousComparatorValue = 0;
+
     protected TileTankBase() {
         super(patterns);
         inv = new StandaloneInventory(2, "gui.tank.iron", this);
@@ -311,6 +313,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
                 if (clock % FluidHelper.NETWORK_UPDATE_INTERVAL == 0)
                     sendUpdateToClient();
+
+                previousComparatorValue = getComparatorValue();
             }
     }
 
@@ -363,6 +367,14 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     @Override
     public boolean shouldRenderInPass(int pass) {
         return isMaster ? pass == 0 : pass == 1;
+    }
+
+    public int getComparatorValue() {
+        return tank.getFluidAmount() * 15 / tank.getCapacity();
+    }
+
+    public boolean comparatorValueChanged() {
+        return previousComparatorValue != getComparatorValue();
     }
 
     private static List<MultiBlockPattern> buildPatterns() {
