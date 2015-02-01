@@ -46,7 +46,7 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
 
             ResearchItemRC voidCrowbar = new ResearchItemRC(RESEARCH_TAG, ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 0, 1, 3, new ItemStack(item));
             voidCrowbar.setPages(new ResearchPage[]{ThaumcraftPlugin.getCrowbarResearchPage(), new ResearchPage(recipe)})
-                    .setParents(ItemCrowbarMagic.RESEARCH_TAG).setParentsHidden("VOID")
+                    .setParents(ItemCrowbarMagic.RESEARCH_TAG).setParentsHidden("VOIDMETAL")
                     .registerResearchItem();
 
         } catch (Throwable error) {
