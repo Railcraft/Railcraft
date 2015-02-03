@@ -1,21 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
 package mods.railcraft.common.plugins.thaumcraft;
 
-import mods.railcraft.common.items.*;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.ItemCrowbar;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.IRepairable;
+import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -23,19 +17,15 @@ import thaumcraft.api.crafting.IArcaneRecipe;
 import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 
-/**
- *
- * @author CovertJaguar <http://www.railcraft.info>
- */
-public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
+public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpingGear {
 
-    private static final String ITEM_TAG = "railcraft.tool.crowbar.magic";
-    public static final String RESEARCH_TAG = "RC_Crowbar";
-    private static Item item;
+    public static final String ITEM_TAG = "railcraft.tool.crowbar.void";
+    public static final String RESEARCH_TAG = "RC_Void_Crowbar";
+    public static Item item;
 
     public static void registerItem() {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
-            item = new ItemCrowbarMagic();
+            item = new ItemCrowbarVoid();
             RailcraftRegistry.register(item);
             HarvestPlugin.setToolClass(item, "crowbar", 0);
         }
@@ -44,19 +34,19 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
     public static void registerResearch() {
         try {
             IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe(RESEARCH_TAG, new ItemStack(item),
-                    new AspectList().add(Aspect.ORDER, 8),
+                    new AspectList().add(Aspect.ENTROPY, 50),
                     " RI",
                     "RIR",
                     "IR ",
-                    'I', ThaumcraftPlugin.getItem("itemResource", 2),
+                    'I', ThaumcraftPlugin.getItem("itemResource", 16),
                     'R', "dyeRed");
 
             AspectList aspects = new AspectList();
-            aspects.add(Aspect.TOOL, 1).add(Aspect.MECHANISM, 2).add(Aspect.TRAVEL, 1);
+            aspects.add(Aspect.TOOL, 2).add(Aspect.MECHANISM, 4).add(Aspect.TRAVEL, 2);
 
-            ResearchItem thaumiumCrowbar = new ResearchItemRC(RESEARCH_TAG, ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 0, 0, 3, new ItemStack(item));
-            thaumiumCrowbar.setPages(new ResearchPage[]{ThaumcraftPlugin.getCrowbarResearchPage(), new ResearchPage(recipe)})
-                    .setParentsHidden("THAUMIUM")
+            ResearchItemRC voidCrowbar = new ResearchItemRC(RESEARCH_TAG, ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 0, 1, 3, new ItemStack(item));
+            voidCrowbar.setPages(new ResearchPage[]{ThaumcraftPlugin.getCrowbarResearchPage(), new ResearchPage(recipe)})
+                    .setParents(ItemCrowbarMagic.RESEARCH_TAG).setParentsHidden("VOIDMETAL")
                     .registerResearchItem();
 
         } catch (Throwable error) {
@@ -70,9 +60,13 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
         return new ItemStack(item);
     }
 
-    public ItemCrowbarMagic() {
-        super(ThaumcraftPlugin.getThaumiumToolMaterial());
+    public ItemCrowbarVoid() {
+        super(ThaumcraftPlugin.getVoidmetalToolMaterial());
         setUnlocalizedName(ITEM_TAG);
     }
 
+    @Override
+    public int getWarp(ItemStack itemstack, EntityPlayer player) {
+        return 1;
+    }
 }
