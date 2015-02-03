@@ -1,6 +1,7 @@
 package mods.railcraft.common.items.enchantment;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import java.lang.ref.WeakReference;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,7 +13,7 @@ public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
     private final int baseEnchantability, levelEnchantability, thresholdEnchantability;
     private final Class<? extends EntityLivingBase> targetType;
     private final float damageBonusPerLevel;
-    private Entity target;
+    private WeakReference<Entity> target;
 
     public EnchantmentDamageRailcraft(String tag, int id, int weight, int baseEnchantability, int levelEnchantability, int thresholdEnchantability, Class<? extends EntityLivingBase> targetType, float damageBonusPerLevel) {
         super(tag, id, weight);
@@ -41,7 +42,7 @@ public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
     @Override
     public float func_152376_a(int lvl, EnumCreatureAttribute creatureType) {
         float modifier = 0.0f;
-        if (targetType == null || targetType.isInstance(target))
+        if (targetType == null || targetType.isInstance(target.get()))
             modifier = lvl * damageBonusPerLevel;
         target = null;
         return modifier;
@@ -49,7 +50,7 @@ public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
 
     @SubscribeEvent
     public void attackEvent(AttackEntityEvent event) {
-        target = event.target;
+        target = new WeakReference<Entity>(event.target);
     }
 
     @Override
