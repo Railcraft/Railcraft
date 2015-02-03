@@ -56,7 +56,7 @@ public class FilteredTank extends StandardTank {
             EnumRarity rarity = filter.getRarity();
             if (rarity == null)
                 rarity = EnumRarity.common;
-            ToolTipLine name = new ToolTipLine(filter.getLocalizedName(), rarity.rarityColor);
+            ToolTipLine name = new ToolTipLine(filter.getLocalizedName(getFluid()), rarity.rarityColor);
             name.setSpacing(2);
             toolTip.add(name);
             if (getFluid() != null)

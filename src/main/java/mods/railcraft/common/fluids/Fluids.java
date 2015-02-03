@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.FluidStack;
  */
 public enum Fluids {
 
-    WATER, LAVA, FUEL, BIOFUEL, CREOSOTE, STEAM, BIOETHANOL, COAL, PYROTHEUM;
+    WATER, LAVA, FUEL, BIOFUEL, CREOSOTE, STEAM, BIOETHANOL, COAL, PYROTHEUM, FRESHWATER;
     private final String tag;
 
     private Fluids() {
