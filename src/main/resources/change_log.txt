@@ -1,5 +1,7 @@
 9.5.0.0:
 	INFO: Update BC API to 6.3.1+
+	INFO: Update Forestry API to 3.4+
+	INFO: Update Thaumcraft and Redstone Flux APIs.
 	NEW: Add Regular Expression support to Dest and Name Routing Conditionals. Uses '?=' as keyword. Example: "Dest?=*.Hill"
 	NEW: Add comparator support to Iron/Steel Tanks. (contribution by daniel and Yopu)
 	NEW: Add Thaumcraft Void Metal Crowbar (contribution by Yopu)

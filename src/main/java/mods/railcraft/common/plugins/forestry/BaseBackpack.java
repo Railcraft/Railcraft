@@ -59,6 +59,11 @@ public abstract class BaseBackpack implements IBackpackDefinition {
 
     @Override
     public boolean isValidItem(EntityPlayer player, ItemStack pickup) {
+        return isValidItem(pickup);
+    }
+
+    @Override
+    public boolean isValidItem(ItemStack pickup) {
         for (ItemStack stack : items) {
             if (InvTools.isItemEqualIgnoreNBT(stack, pickup))
                 return true;
