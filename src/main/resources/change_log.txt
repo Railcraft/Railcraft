@@ -1,6 +1,19 @@
-Next:
+9.5.0.0:
+	INFO: Update BC API to 6.3.1+
+	NEW: Add Regular Expression support to Dest and Name Routing Conditionals. Uses '?=' as keyword. Example: "Dest?=*.Hill"
+	NEW: Add comparator support to Iron/Steel Tanks. (contribution by daniel and Yopu)
+	NEW: Add Thaumcraft Void Metal Crowbar (contribution by Yopu)
+	CHANGE: Rewrite Analog Controller Box to be more flexible. It now allows ranges. (contribution by wooky)
+	FIX: Rewrite Locking and Switch Logic to be more dependable (contribution by ssotangkur)
 	FIX: Fix Type Conditional, it should work better now (and probably so do a lot of other things related to item registration).
 	FIX: Don't send non-breakable-space (nbsp) characters to the Font Renderer as it seems that Minecraft can't correctly render them. Fixes issues with number formatting in certain locales.
+	FIX: Fix Tank Cart Item Rendering so its not randomly transparent.
+	FIX: Tweak Fluid Loader logic and add Fluid Filter slot. Fixes #442 Closes #421
+	FIX: Track Tiles should override shouldRefresh() to prevent metadata changes from wiping the TileEntity.
+	FIX: Fix particle velocity values.
+	FIX: Ensure that Gears and Plates are initialized in pre-init when Factory is disabled and Locomotives are enabled.
+	FIX: Fix the broken code that allowed the Furnace Cart to accept any type of Fuel.
+	FIX: Fix Locomotive shift-clicking.
 
 9.4.0.2:
 	NEW: Add Packed Ice Stairs and Slabs.
