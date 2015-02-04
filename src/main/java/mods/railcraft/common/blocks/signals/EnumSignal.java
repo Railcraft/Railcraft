@@ -17,10 +17,11 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
+import net.minecraft.block.Block;
 
 public enum EnumSignal implements IIconProvider, ISignalTileDefinition {
 
-    // Name (texture, hardness, light, needsSupport, connectToPost, tile)
+    // Name (module, hardness, needsSupport, tag, tile)
     BOX_INTERLOCK(Module.SIGNALS, 3, true, "box.interlock", TileBoxInterlock.class),
     DUAL_HEAD_BLOCK_SIGNAL(Module.SIGNALS, 8, false, "block.signal.dual", TileSignalDualHeadBlockSignal.class),
     SWITCH_MOTOR(Module.SIGNALS, 8, true, "switch.motor", TileSwitchMotor.class),
@@ -86,14 +87,14 @@ public enum EnumSignal implements IIconProvider, ISignalTileDefinition {
         return module;
     }
 
+    @Override
     public Class<? extends TileSignalFoundation> getTileClass() {
         return tile;
     }
 
     public TileSignalFoundation getBlockEntity() {
-        if (tile == null) {
+        if (tile == null)
             return null;
-        }
         try {
             return tile.newInstance();
         } catch (Exception ex) {
@@ -116,9 +117,8 @@ public enum EnumSignal implements IIconProvider, ISignalTileDefinition {
     }
 
     public static EnumSignal fromId(int id) {
-        if (id < 0 || id >= VALUES.length) {
+        if (id < 0 || id >= VALUES.length)
             return SWITCH_LEVER;
-        }
         return VALUES[id];
     }
 
@@ -131,13 +131,20 @@ public enum EnumSignal implements IIconProvider, ISignalTileDefinition {
         return needsSupport;
     }
 
+    @Override
     public boolean isEnabled() {
         if (module == null) return false;
-        return ModuleManager.isModuleLoaded(getModule()) && RailcraftBlocks.getBlockSignal() != null && RailcraftConfig.isSubBlockEnabled(getTag());
+        return ModuleManager.isModuleLoaded(getModule()) && getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
+    }
+
+    @Override
+    public Block getBlock() {
+        return RailcraftBlocks.getBlockSignal();
     }
 
     @Override
     public int getMeta() {
         return ordinal();
     }
+
 }

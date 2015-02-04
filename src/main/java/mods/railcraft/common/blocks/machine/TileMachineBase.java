@@ -137,6 +137,8 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
             int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
             if (getBlockType() != null && getClass() != ((BlockMachine) getBlockType()).getMachineProxy().getMachine(meta).getTileClass()) {
                 worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, getId(), 3);
+                validate();
+                worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
                 Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), meta, getId(), xCoord, yCoord, zCoord);
                 updateContainingBlockInfo();
             }

@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.blocks.signals;
 
+import net.minecraft.block.Block;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -18,8 +20,14 @@ public interface ISignalTileDefinition {
 
     float getHardness();
 
-    int getMeta();
-    
     boolean needsSupport();
+
+    boolean isEnabled();
+
+    Block getBlock();
+
+    int getMeta();
+
+    Class<? extends TileSignalFoundation> getTileClass();
 
 }

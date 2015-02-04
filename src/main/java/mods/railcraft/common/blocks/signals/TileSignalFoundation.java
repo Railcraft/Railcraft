@@ -18,10 +18,54 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.util.misc.Game;
+import org.apache.logging.log4j.Level;
 
 public abstract class TileSignalFoundation extends RailcraftTileEntity {
 
+    private boolean checkedBlock = false;
+
     public abstract ISignalTileDefinition getSignalType();
+
+    @Override
+    public boolean canUpdate() {
+        return true;
+    }
+
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+
+        if (Game.isNotHost(worldObj))
+            return;
+
+        // Check and fix invalid block ids and metadata
+        if (!checkedBlock) {
+            checkedBlock = true;
+
+            if (!getSignalType().isEnabled()) {
+                worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+                return;
+            }
+
+            if (getBlockType() != getSignalType().getBlock()) {
+                Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), getBlockType(), getSignalType().getBlock(), xCoord, yCoord, zCoord);
+                worldObj.setBlock(xCoord, yCoord, zCoord, getSignalType().getBlock(), getId(), 3);
+                validate();
+                worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
+                updateContainingBlockInfo();
+            }
+
+            int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+            if (getBlockType() != null && getClass() != ((BlockSignalBase) getBlockType()).getSignalType(meta).getTileClass()) {
+                worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, getSignalType().getMeta(), 3);
+                validate();
+                worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
+                Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), meta, getSignalType().getMeta(), xCoord, yCoord, zCoord);
+                updateContainingBlockInfo();
+            }
+        }
+    }
 
     public boolean blockActivated(int side, EntityPlayer player) {
         return false;

@@ -16,6 +16,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftPacket.PacketType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -115,7 +116,7 @@ public class PacketHandler {
             if (pkt != null)
                 pkt.readData(data);
         } catch (IOException e) {
-            Game.logThrowable("Exception in PacketHandler.onPacketData: {0}", e, data);
+            Game.logThrowable("Exception in PacketHandler.onPacketData: {0}", e, Arrays.toString(bData));
         }
     }
 

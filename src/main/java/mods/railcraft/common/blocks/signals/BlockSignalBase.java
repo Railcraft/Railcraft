@@ -41,6 +41,8 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
         setHarvestLevel("crowbar", 0);
     }
 
+    public abstract ISignalTileDefinition getSignalType(int meta);
+
     @Override
     public abstract IIcon getIcon(int side, int meta);
 

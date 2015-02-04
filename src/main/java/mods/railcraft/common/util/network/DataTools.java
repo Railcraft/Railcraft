@@ -11,11 +11,13 @@ package mods.railcraft.common.util.network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.BitSet;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
+import scala.actors.threadpool.Arrays;
 
 /**
  *
@@ -72,6 +74,22 @@ public class DataTools {
             byte[] nbtData = new byte[lenght];
             dataStream.read(nbtData);
             return CompressedStreamTools.func_152457_a(nbtData, new NBTSizeTracker(2097152L));
+        }
+    }
+
+    public static void byteArray2BitSet(BitSet bits, byte[] bytes) {
+        bits.clear();
+        for (int i = 0; i < bytes.length * 8; i++) {
+            if ((bytes[bytes.length - i / 8 - 1] & (1 << (i % 8))) > 0)
+                bits.set(i);
+        }
+    }
+
+    public static void bitSet2ByteArray(BitSet bits, byte[] bytes) {
+        Arrays.fill(bytes, (byte) 0);
+        for (int i = 0; i < bits.length(); i++) {
+            if (bits.get(i))
+                bytes[bytes.length - i / 8 - 1] |= 1 << (i % 8);
         }
     }
 

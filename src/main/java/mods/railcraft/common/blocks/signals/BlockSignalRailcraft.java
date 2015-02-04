@@ -51,6 +51,11 @@ public class BlockSignalRailcraft extends BlockSignalBase {
     }
 
     @Override
+    public ISignalTileDefinition getSignalType(int meta) {
+        return EnumSignal.fromId(meta);
+    }
+
+    @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
         for (EnumSignal type : EnumSignal.getCreativeList()) {
             if (type.isEnabled())

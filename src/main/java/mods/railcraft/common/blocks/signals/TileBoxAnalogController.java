@@ -3,6 +3,9 @@ package mods.railcraft.common.blocks.signals;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.BitSet;
+import java.util.EnumMap;
+import java.util.Map;
 
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.SignalAspect;
@@ -11,6 +14,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.DataTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,11 +24,16 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class TileBoxAnalogController extends TileBoxBase implements IControllerTile, IGuiReturnHandler {
 
     private final SimpleSignalController controller = new SimpleSignalController(getName(), this);
-    public static final int N_OF_ASPECTS = SignalAspect.values().length - 1;
     private boolean prevBlinkState;
     private int strongestSignal;
 
-    public boolean enableAspect[][] = new boolean[N_OF_ASPECTS][16];
+    public EnumMap<SignalAspect, BitSet> aspects = new EnumMap<SignalAspect, BitSet>(SignalAspect.class);
+
+    public TileBoxAnalogController() {
+        for (SignalAspect aspect : SignalAspect.VALUES) {
+            aspects.put(aspect, new BitSet());
+        }
+    }
 
     @Override
     public EnumSignal getSignalType() {
@@ -92,25 +101,24 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
 
     private SignalAspect determineAspect() {
         SignalAspect aspect = SignalAspect.OFF;
-        for (int i = 0; i < N_OF_ASPECTS; i++) {
-            SignalAspect current = SignalAspect.values()[i];
-            if(enableAspect[i][strongestSignal])
+        for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
+            SignalAspect current = entry.getKey();
+            if (entry.getValue().get(strongestSignal))
                 aspect = (aspect == SignalAspect.OFF) ? current : SignalAspect.mostRestrictive(aspect, current);
         }
         return aspect;
     }
-    
+
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("strongestSignal", strongestSignal);
 
-        for (int i = 0; i < N_OF_ASPECTS; i++) {
-            String n = SignalAspect.values()[i].toString();
-            int s = 0;
-            for(boolean b : enableAspect[i])
-            	s = (s << 1) | (b ? 1 : 0);
-            data.setShort("aspect_" + n, (short) s);
+        for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
+            String n = entry.getKey().name();
+            byte[] bytes = new byte[2];
+            DataTools.bitSet2ByteArray(entry.getValue(), bytes);
+            data.setByteArray("aspect_" + n, bytes);
         }
 
         controller.writeToNBT(data);
@@ -121,23 +129,16 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
         super.readFromNBT(data);
         strongestSignal = data.getInteger("strongestSignal");
 
-        for (int i = 0; i < N_OF_ASPECTS; i++) {
-        	String n = SignalAspect.values()[i].toString();
-            short s = data.getShort("aspect_" + n);
-            for(int j = 0; j < 16; j++) {
-            	enableAspect[i][j] = (s & 0x8000) == 0x8000;
-            	s <<= 1;
+        try {
+            for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
+                String n = entry.getKey().name();
+                byte[] bytes = data.getByteArray("aspect_" + n);
+                DataTools.byteArray2BitSet(entry.getValue(), bytes);
             }
+        } catch (Exception ex) {
         }
 
         controller.readFromNBT(data);
-
-        if (data.hasKey("ReceiverX")) {
-            int x = data.getInteger("ReceiverX");
-            int y = data.getInteger("ReceiverY");
-            int z = data.getInteger("ReceiverZ");
-            controller.registerLegacyReceiver(x, y, z);
-        }
     }
 
     @Override
@@ -161,16 +162,20 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
 
     @Override
     public void writeGuiData(DataOutputStream data) throws IOException {
-        for(boolean c[] : enableAspect)
-        	for(boolean b : c)
-        		data.writeBoolean(b);
+        for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
+            byte[] bytes = new byte[2];
+            DataTools.bitSet2ByteArray(entry.getValue(), bytes);
+            data.write(bytes);
+        }
     }
 
     @Override
     public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
-        for(int i = 0; i < N_OF_ASPECTS; i++)
-    		for(int j = 0; j < 16; j++)
-    			enableAspect[i][j] = data.readBoolean();
+        for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
+            byte[] bytes = new byte[2];
+            data.read(bytes);
+            DataTools.byteArray2BitSet(entry.getValue(), bytes);
+        }
     }
 
     @Override

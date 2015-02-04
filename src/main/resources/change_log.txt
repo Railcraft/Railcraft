@@ -16,6 +16,7 @@
 	FIX: Ensure that Gears and Plates are initialized in pre-init when Factory is disabled and Locomotives are enabled.
 	FIX: Fix the broken code that allowed the Furnace Cart to accept any type of Fuel.
 	FIX: Fix Locomotive shift-clicking.
+	FIX: Fixed corruption issues with the Analog Controller Box, the two Distant Signal variants and the Signal Relay Box caused by reordering the metadata mappings when the Analog Controller Box was added.
 
 9.4.0.2:
 	NEW: Add Packed Ice Stairs and Slabs.
