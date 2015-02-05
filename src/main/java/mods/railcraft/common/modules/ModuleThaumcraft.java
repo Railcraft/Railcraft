@@ -43,7 +43,7 @@ public class ModuleThaumcraft extends RailcraftModule {
     @Override
     public void postInit() {
         ThaumcraftPlugin.registerAspects();
-        ThaumcraftPlugin.setupReseach();
+        ThaumcraftPlugin.setupResearch();
 
         ItemCrowbarMagic.registerResearch();
         ItemCrowbarVoid.registerResearch();

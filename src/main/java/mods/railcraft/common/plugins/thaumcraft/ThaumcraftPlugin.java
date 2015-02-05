@@ -79,7 +79,7 @@ public class ThaumcraftPlugin {
         return null;
     }
 
-    public static void setupReseach() {
+    public static void setupResearch() {
         ResearchCategories.registerCategory(RESEARCH_CATEGORY, new ResourceLocation("railcraft", "textures/items/tool.crowbar.magic.png"), new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png"));
     }
 
