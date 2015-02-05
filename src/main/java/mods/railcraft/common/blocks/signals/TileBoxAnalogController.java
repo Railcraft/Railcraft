@@ -139,6 +139,17 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
         }
 
         controller.readFromNBT(data);
+
+        // Legacy Support Code - remove in the future
+        for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
+            String n = entry.getKey().toString();
+            boolean on = data.getBoolean("mode" + n);
+            if (on) {
+                int low = data.getInteger("low" + n);
+                int high = data.getInteger("high" + n);
+                entry.getValue().set(low, high);
+            }
+        }
     }
 
     @Override
