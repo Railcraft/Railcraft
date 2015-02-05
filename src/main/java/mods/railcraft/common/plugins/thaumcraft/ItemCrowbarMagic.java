@@ -55,7 +55,7 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
             aspects.add(Aspect.TOOL, 1).add(Aspect.MECHANISM, 2).add(Aspect.TRAVEL, 1);
 
             ResearchItem thaumiumCrowbar = new ResearchItemRC(RESEARCH_TAG, ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 0, 0, 3, new ItemStack(item));
-            thaumiumCrowbar.setPages(new ResearchPage[]{ThaumcraftPlugin.getCrowbarResearchPage(), new ResearchPage(recipe)})
+            thaumiumCrowbar.setPages(new ResearchPage[]{ThaumcraftPlugin.getResearchPage(RESEARCH_TAG), new ResearchPage(recipe)})
                     .setParentsHidden("THAUMIUM")
                     .registerResearchItem();
 

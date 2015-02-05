@@ -74,7 +74,7 @@ public class ApothecariesBackpack extends BaseBackpack {
             aspects.add(Aspect.VOID, 3).add(Aspect.CLOTH, 3).add(Aspect.TRAVEL, 2);
 
             ResearchItem backpack = new ResearchItemRC("RC_ApothecariesBackpack", ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 2, 0, 6, new ItemStack(ForestryPlugin.apothecariesBackpackT1));
-            backpack.setPages(new ResearchPage[]{ThaumcraftPlugin.createResearchPage("RC_ApothecariesBackpack", 1), new ResearchPage(recipe)}).setParentsHidden(new String[]{"ENCHFABRIC"}).registerResearchItem();
+            backpack.setPages(new ResearchPage[]{ThaumcraftPlugin.getResearchPage("RC_ApothecariesBackpack"), new ResearchPage(recipe)}).setParentsHidden(new String[]{"ENCHFABRIC"}).registerResearchItem();
 
         } catch (Throwable error) {
             Game.logErrorAPI("Thaumcraft", error, ResearchItem.class);

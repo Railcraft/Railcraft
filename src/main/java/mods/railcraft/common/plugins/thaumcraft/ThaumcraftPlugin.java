@@ -55,7 +55,7 @@ public class ThaumcraftPlugin {
     public static final String RESEARCH_CATEGORY = "RAILCRAFT";
     private static final Map<String, Item> itemCache = new HashMap<String, Item>();
     private static final Map<String, Boolean> itemCacheFlag = new HashMap<String, Boolean>();
-    private static ResearchPage crowbarResearchPage;
+    private static Map<String, ResearchPage> researchPages = new HashMap<String, ResearchPage>();
     private static Boolean modLoaded = null;
 
     public static ItemStack getItem(String tag, int meta) {
@@ -83,14 +83,17 @@ public class ThaumcraftPlugin {
         ResearchCategories.registerCategory(RESEARCH_CATEGORY, new ResourceLocation("railcraft", "textures/items/tool.crowbar.magic.png"), new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png"));
     }
 
-    public static ResearchPage createResearchPage(String key, int pageNum) {
+    private static ResearchPage createResearchPage(String key, int pageNum) {
         return new ResearchPage(LocalizationPlugin.translate(String.format("thaumcraft.research.%s.page.%d", key, pageNum)).replace("\n", "<BR>").replace("---", "<LINE>").replace("{img}", "<IMG>").replace("{/img}", "</IMG>"));
     }
 
-    public static ResearchPage getCrowbarResearchPage() {
-        if (crowbarResearchPage == null)
-            crowbarResearchPage = createResearchPage("RC_Crowbar", 1);
-        return crowbarResearchPage;
+    public static ResearchPage getResearchPage(String researchTag) {
+        ResearchPage page = researchPages.get(researchTag);
+        if (page == null){
+            page = createResearchPage(researchTag, 1);
+            researchPages.put(researchTag, page);
+        }
+        return page;
     }
 
     public static void registerAspects() {

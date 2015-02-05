@@ -20,7 +20,7 @@ import thaumcraft.api.research.ResearchPage;
 public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpingGear {
 
     public static final String ITEM_TAG = "railcraft.tool.crowbar.void";
-    public static final String RESEARCH_TAG = "RC_Void_Crowbar";
+    public static final String RESEARCH_TAG = "RC_Crowbar_Void";
     public static Item item;
 
     public static void registerItem() {
@@ -45,7 +45,7 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
             aspects.add(Aspect.TOOL, 2).add(Aspect.MECHANISM, 4).add(Aspect.TRAVEL, 2);
 
             ResearchItemRC voidCrowbar = new ResearchItemRC(RESEARCH_TAG, ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 0, 1, 3, new ItemStack(item));
-            voidCrowbar.setPages(new ResearchPage[]{ThaumcraftPlugin.getCrowbarResearchPage(), new ResearchPage(recipe)})
+            voidCrowbar.setPages(new ResearchPage[]{ThaumcraftPlugin.getResearchPage(RESEARCH_TAG), new ResearchPage(recipe)})
                     .setParents(ItemCrowbarMagic.RESEARCH_TAG).setParentsHidden("VOIDMETAL")
                     .registerResearchItem();
 
@@ -69,4 +69,5 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
     public int getWarp(ItemStack itemstack, EntityPlayer player) {
         return 1;
     }
+
 }
