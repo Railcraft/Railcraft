@@ -370,7 +370,9 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     public int getComparatorValue() {
-        return tank.getFluidAmount() * 15 / tank.getCapacity();
+        double fullness = (double) tank.getFluidAmount() / (double) tank.getCapacity();
+        int power = (int) Math.ceil(fullness * 15.0);
+        return power;
     }
 
     public boolean comparatorValueChanged() {
@@ -474,7 +476,6 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
                 pats.add(buildPattern(map, xOffset, yOffset, zOffset, entityCheck));
             }
         }
-
 
         // 7x7
         if (client || RailcraftConfig.getMaxTankSize() >= 7) {
