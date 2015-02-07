@@ -8,12 +8,10 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import java.util.List;
-import java.util.UUID;
-import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import mods.railcraft.api.carts.CartTools;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TrackWye extends TrackSwitchBase {
@@ -37,13 +35,13 @@ public class TrackWye extends TrackSwitchBase {
         if (cart != null) {
             if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
                 if (isMirrored()) {
-                    if (isSwitched(cart)) {
+                    if (isSwitched()) {
                         meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
                     }
                 } else {
-                    if (isSwitched(cart)) {
+                    if (isSwitched()) {
                         meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
@@ -51,13 +49,13 @@ public class TrackWye extends TrackSwitchBase {
                 }
             } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
                 if (isMirrored()) {
-                    if (isSwitched(cart)) {
+                    if (isSwitched()) {
                         meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
                     }
                 } else {
-                    if (isSwitched(cart)) {
+                    if (isSwitched()) {
                         meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
@@ -69,7 +67,7 @@ public class TrackWye extends TrackSwitchBase {
     }
 
     @Override
-    protected List<UUID> getCartsAtLockEntrance() {
+    protected boolean shouldLockSwitch() {
         int x = tileEntity.xCoord;
         int y = tileEntity.yCoord;
         int z = tileEntity.zCoord;
@@ -87,33 +85,11 @@ public class TrackWye extends TrackSwitchBase {
                 z--;
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);
+        return CartTools.isMinecartOnRailAt(getWorld(), x, y, z, 0.3f);
     }
 
     @Override
-    protected List<UUID> getCartsAtDecisionEntrance() {
-        int x = tileEntity.xCoord;
-        int y = tileEntity.yCoord;
-        int z = tileEntity.zCoord;
-        int meta = tileEntity.getBlockMetadata();
-        if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
-            if (isMirrored()) {
-                z--;
-            } else {
-                z++;
-            }
-        } else if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
-            if (isMirrored()) {
-                x--;
-            } else {
-                x++;
-            }
-        }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);
-    }
-
-    @Override
-    protected List<UUID> getCartsAtSpringEntrance() {
+    protected boolean shouldSpringSwitch() {
         int x = tileEntity.xCoord;
         int y = tileEntity.yCoord;
         int z = tileEntity.zCoord;
@@ -131,7 +107,7 @@ public class TrackWye extends TrackSwitchBase {
                 z++;
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);
+        return CartTools.isMinecartOnRailAt(getWorld(), x, y, z, 0.3f);
     }
 
     @Override

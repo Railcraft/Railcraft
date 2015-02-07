@@ -11,15 +11,13 @@ package mods.railcraft.common.blocks.tracks;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
-import mods.railcraft.api.tracks.ITrackReversable;
-import mods.railcraft.common.carts.CartUtils;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
@@ -46,7 +44,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
     @Override
     public int getBasicRailMetadata(EntityMinecart cart) {
         int meta = tileEntity.getBlockMetadata();
-        if (cart != null && isSwitched(cart)) {
+        if (cart != null && isSwitched()) {
             if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
                 if (isMirrored()) {
                     if (reversed) {
@@ -81,7 +79,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
     }
 
     @Override
-    protected List<UUID> getCartsAtLockEntrance() {
+    protected boolean shouldLockSwitch() {
         int x = tileEntity.xCoord;
         int y = tileEntity.yCoord;
         int z = tileEntity.zCoord;
@@ -99,33 +97,11 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
                 x--;
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);
+        return CartTools.isMinecartOnRailAt(getWorld(), x, y, z, 0.3f);
     }
 
     @Override
-    protected List<UUID> getCartsAtDecisionEntrance() {
-        int x = tileEntity.xCoord;
-        int y = tileEntity.yCoord;
-        int z = tileEntity.zCoord;
-        int meta = tileEntity.getBlockMetadata();
-        if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
-            if (isReversed() != isMirrored()) {
-                z--;
-            } else {
-                z++;
-            }
-        } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
-            if (!isReversed() != isMirrored()) {
-                x--;
-            } else {
-                x++;
-            }
-        }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);
-    }
-
-    @Override
-    protected List<UUID> getCartsAtSpringEntrance() {
+    protected boolean shouldSpringSwitch() {
         int x = tileEntity.xCoord;
         int y = tileEntity.yCoord;
         int z = tileEntity.zCoord;
@@ -143,7 +119,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
                 z++;
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.3f);
+        return CartTools.isMinecartOnRailAt(getWorld(), x, y, z, 0.3f);
     }
 
     @Override
