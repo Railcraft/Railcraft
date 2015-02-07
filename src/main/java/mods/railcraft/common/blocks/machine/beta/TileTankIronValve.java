@@ -48,6 +48,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
     private static final int FLOW_RATE = FluidHelper.BUCKET_VOLUME;
     private static final byte FILL_INCREMENT = 1;
     private final StandardTank fillTank = new StandardTank(20);
+    private int previousComparatorValue = 0;
 
     private boolean previousStructureValidity;
 
@@ -136,18 +137,19 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
         }
 
         TileMultiBlock masterBlock = getMasterBlock();
-        if (masterBlock != null && masterBlock instanceof TileTankBase) {
+        if (masterBlock instanceof TileTankBase) {
             TileTankBase masterTileTankBase = (TileTankBase) masterBlock;
-            if (masterTileTankBase.comparatorValueChanged())
+            int compValue = masterTileTankBase.getComparatorValue();
+            if (previousComparatorValue != compValue) {
+                previousComparatorValue = compValue;
                 notifyBlocksOfNeighborChange();
+            }
         }
 
         if (previousStructureValidity != isStructureValid())
             notifyBlocksOfNeighborChange();
         previousStructureValidity = isStructureValid();
     }
-
-
 
     @Override
     public IIcon getIcon(int side) {
@@ -185,10 +187,9 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
         if (getPatternPositionY() - getPattern().getMasterOffsetY() != 1)
             return null;
         TankManager tMan = getTankManager();
-        if (tMan != null) {
-//            maxDrain = Math.min(maxDrain, FLOW_RATE);
+        if (tMan != null)
+            //            maxDrain = Math.min(maxDrain, FLOW_RATE);
             return tMan.drain(0, maxDrain, doDrain);
-        }
         return null;
     }
 

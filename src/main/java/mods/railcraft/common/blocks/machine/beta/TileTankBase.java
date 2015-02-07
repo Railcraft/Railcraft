@@ -42,6 +42,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Timer;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.world.World;
@@ -83,13 +84,15 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     private final static MetalTank IRON_TANK = new IronTank();
     protected final static int SLOT_INPUT = 0;
     protected final static int SLOT_OUTPUT = 1;
+    protected final static int NETWORK_UPDATE_INTERVAL = 64;
     protected final StandardTank tank = new StandardTank(64 * FluidHelper.BUCKET_VOLUME, this);
     protected final TankManager tankManager = new TankManager();
     private final static List<MultiBlockPattern> patterns = buildPatterns();
     private final StandaloneInventory inv;
+    private final Timer networkTimer = new Timer();
     private EnumColor color = EnumColor.WHITE;
-
-    private int previousComparatorValue = 0;
+    private FluidStack previousFluidStack;
+    private int previousFluidColor;
 
     protected TileTankBase() {
         super(patterns);
@@ -259,9 +262,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
                 if (block != getBlockType())
                     return false;
                 int meta = worldObj.getBlockMetadata(x, y, z);
-                if (!getTankType().isTankBlock(meta))
-                    return false;
-                return true;
+                return getTankType().isTankBlock(meta);
             }
             case 'B': // Block
             {
@@ -269,9 +270,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
                 if (block != getBlockType())
                     return false;
                 int meta = worldObj.getBlockMetadata(x, y, z);
-                if (!getTankType().isWallBlock(meta))
-                    return false;
-                return true;
+                return getTankType().isWallBlock(meta);
             }
             case 'M': // Master
             case 'T': // Top Block
@@ -287,15 +286,11 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
                     worldObj.removeTileEntity(x, y, z);
                     return true;
                 }
-                if (((TileMultiBlock) tile).isStructureValid())
-                    return false;
-                return true;
+                return !((TileMultiBlock) tile).isStructureValid();
             }
             case 'A': // Air
             {
-                if (!worldObj.isAirBlock(x, y, z))
-                    return false;
-                return true;
+                return worldObj.isAirBlock(x, y, z);
             }
         }
         return true;
@@ -311,11 +306,22 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
                 if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
                     FluidHelper.processContainers(tankManager.get(0), inv, SLOT_INPUT, SLOT_OUTPUT);
 
-                if (clock % FluidHelper.NETWORK_UPDATE_INTERVAL == 0)
+                FluidStack fluidStack = tankManager.get(0).getFluid();
+                int fluidColor = tankManager.get(0).getColor();
+                if ((fluidColor != previousFluidColor || !isFluidEqual(fluidStack, previousFluidStack)) && networkTimer.hasTriggered(worldObj, NETWORK_UPDATE_INTERVAL)) {
+                    previousFluidStack = fluidStack == null ? null : fluidStack.copy();
+                    previousFluidColor = fluidColor;
                     sendUpdateToClient();
-
-                previousComparatorValue = getComparatorValue();
+                }
             }
+    }
+
+    private boolean isFluidEqual(FluidStack L1, FluidStack L2) {
+        if (L1 == L2)
+            return true;
+        if (L1 == null || L2 == null)
+            return true;
+        return L1.isFluidEqual(L2);
     }
 
     @Override
@@ -373,10 +379,6 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         double fullness = (double) tank.getFluidAmount() / (double) tank.getCapacity();
         int power = (int) Math.ceil(fullness * 15.0);
         return power;
-    }
-
-    public boolean comparatorValueChanged() {
-        return previousComparatorValue != getComparatorValue();
     }
 
     private static List<MultiBlockPattern> buildPatterns() {
