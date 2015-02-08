@@ -56,7 +56,7 @@ public class FuelPlugin {
             if (InvTools.isItemEqual(fuel, coke))
                 return COKE_HEAT;
             if (InvTools.isItemEqual(fuel, cokeBlock))
-                return COKE_HEAT * 9;
+                return COKE_HEAT * 10;
             if (fuel.getItem() instanceof ItemRailcraft)
                 return ((ItemRailcraft) fuel.getItem()).getHeatValue(fuel);
             return 0;
