@@ -22,7 +22,7 @@ import mods.railcraft.common.modules.ModuleManager.Module;
  */
 public enum EnumCube {
 
-    COKE_BLOCK(Module.FACTORY, "coke", new SimpleCube(), 2f, 10f),
+    COKE_BLOCK(Module.FACTORY, "coke", new FlammableCube(5, 10), 2f, 10f),
     CONCRETE_BLOCK(Module.STRUCTURES, "concrete", new SimpleCube(), 3f, 15f),
     STEEL_BLOCK(Module.FACTORY, "steel", new SimpleCube(), 5f, 15f),
     @Deprecated
@@ -32,7 +32,7 @@ public enum EnumCube {
     SANDY_BRICK(Module.STRUCTURES, "brick.sandy", new ReplacerCube(), 2f, 10f),
     ABYSSAL_STONE(Module.WORLD, "stone.abyssal", new SimpleCube(), 2f, 10f),
     QUARRIED_STONE(Module.WORLD, "stone.quarried", new SimpleCube(), 2f, 10f),
-    CREOSOTE_BLOCK(Module.STRUCTURES, "creosote", new FlammableCube(5, 300), 3f, 15f),
+    CREOSOTE_BLOCK(Module.STRUCTURES, "creosote", new FlammableCube(5, 300), 3f, 10f),
     COPPER_BLOCK(Module.FACTORY, "copper", new SimpleCube(), 3f, 10f),
     TIN_BLOCK(Module.FACTORY, "tin", new SimpleCube(), 3f, 10f),
     LEAD_BLOCK(Module.FACTORY, "lead", new SimpleCube(), 2f, 20f),;
