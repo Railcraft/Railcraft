@@ -41,7 +41,7 @@ minecraft {
 
 sourceSets {
 	main {
-		output.resourcesDir = 'build/classes/main'
+		output.resourcesDir = output.classesDir
 		java {
 			srcDir project.apiRailcraft
 			srcDir project.apiForestry
@@ -62,13 +62,6 @@ sourceSets {
 		resources {
 			srcDir project.dirLang
 		}
-	}
-}
-
-apply plugin: 'idea'
-idea {
-	module {
-		outputDir = file('build/classes/main')
 	}
 }
 
