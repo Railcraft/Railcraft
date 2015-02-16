@@ -9,6 +9,7 @@
 package mods.railcraft.client.gui;
 
 import net.minecraft.client.gui.GuiButton;
+import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.common.blocks.signals.TileBoxCapacitor;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -19,6 +20,7 @@ public class GuiBoxCapacitor extends GuiBasic {
 
     private final TileBoxCapacitor tile;
     private short ticksToPower;
+    private GuiMultiButton stateMode;
 
     public GuiBoxCapacitor(TileBoxCapacitor tile) {
         super(tile.getName());
@@ -35,10 +37,11 @@ public class GuiBoxCapacitor extends GuiBasic {
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
 
-        buttonList.add(new GuiButton(0, w + 13, h + 50, 30, 20, "-10"));
-        buttonList.add(new GuiButton(1, w + 53, h + 50, 30, 20, "-1"));
-        buttonList.add(new GuiButton(2, w + 93, h + 50, 30, 20, "+1"));
-        buttonList.add(new GuiButton(3, w + 133, h + 50, 30, 20, "+10"));
+        buttonList.add(new GuiButton(0, w + 13, h + 38, 30, 20, "-10"));
+        buttonList.add(new GuiButton(1, w + 53, h + 38, 30, 20, "-1"));
+        buttonList.add(new GuiButton(2, w + 93, h + 38, 30, 20, "+1"));
+        buttonList.add(new GuiButton(3, w + 133, h + 38, 30, 20, "+10"));
+        buttonList.add(stateMode = new GuiMultiButton(4, w + 53, h + 65, 70, tile.getStateModeController().copy()));
     }
 
     @Override
@@ -71,6 +74,7 @@ public class GuiBoxCapacitor extends GuiBasic {
     public void onGuiClosed() {
         if (Game.isNotHost(tile.getWorld())) {
             tile.ticksToPower = ticksToPower;
+            tile.getStateModeController().setCurrentState(stateMode.getController().getCurrentState());
             PacketGuiReturn pkt = new PacketGuiReturn(tile);
             PacketDispatcher.sendToServer(pkt);
         }
