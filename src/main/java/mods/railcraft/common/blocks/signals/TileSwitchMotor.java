@@ -12,11 +12,13 @@ import mods.railcraft.api.signals.SimpleSignalReceiver;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalController;
+import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Game;
@@ -56,7 +58,6 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
         boolean active = isSwitchAspect();
         if (switchAspect != active) {
             switchAspect = active;
-            switchTrack(switchAspect || isPowered());
         }
     }
 
@@ -70,7 +71,6 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power) {
             setPowered(power);
-            switchTrack(switchAspect || isPowered());
         }
     }
 
@@ -164,6 +164,11 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     @Override
     public SimpleSignalReceiver getReceiver() {
         return receiver;
+    }
+
+    @Override
+    public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
+        return switchAspect || isPowered();
     }
 
 }
