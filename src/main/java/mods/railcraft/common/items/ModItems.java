@@ -49,7 +49,7 @@ public enum ModItems {
         else if (mod == Mod.FORESTRY)
             stack = ForestryPlugin.getItem(itemTag);
         if(stack == null)
-           Game.log(Level.INFO, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);
+           Game.log(Level.DEBUG, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);
     }
 
     private static enum Mod {

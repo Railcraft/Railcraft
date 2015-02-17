@@ -45,7 +45,7 @@ public class CraftGuidePlugin {
                 register = api.getMethod("registerAPIObject", Object.class);
             }
             register.invoke(null, obj);
-            Game.log(Level.INFO, "Successfully registered CraftGuide plugin: {0}", obj.getClass().getSimpleName());
+            Game.log(Level.DEBUG, "Successfully registered CraftGuide plugin: {0}", obj.getClass().getSimpleName());
         } catch (Exception e) {
             Game.log(Level.WARN, "Could not register CraftGuide plugin: {0}", obj.getClass().getSimpleName());
         }

@@ -86,7 +86,7 @@ public class BlockItemListParser {
                 if (segment.equals(""))
                     continue;
                 set.add((T) type.makeKey(segment));
-                Game.log(Level.INFO, logMessage, segment);
+                Game.log(Level.DEBUG, logMessage, segment);
             }
             return set;
         } catch (IllegalArgumentException ex) {
@@ -104,7 +104,7 @@ public class BlockItemListParser {
                     continue;
                 String[] entry = segment.split("=");
                 map.put((T) type.makeKey(entry[0]), (V) valueType.parseValue(entry[1]));
-                Game.log(Level.INFO, logMessage, segment);
+                Game.log(Level.DEBUG, logMessage, segment);
             }
             return map;
         } catch (IllegalArgumentException ex) {

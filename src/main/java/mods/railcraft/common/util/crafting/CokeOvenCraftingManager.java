@@ -82,7 +82,7 @@ public class CokeOvenCraftingManager implements ICokeOvenCraftingManager {
         if (input == null) return;
         recipes.add(new CokeOvenRecipe(input, matchDamage, matchNBT, output, fluidOutput, cookTime));
 
-        Game.log(Level.INFO, "Adding Coke Oven recipe: {0}, {1}, {2}", input.getItem().getClass().getName(), input, input.getItemDamage());
+//        Game.log(Level.DEBUG, "Adding Coke Oven recipe: {0}, {1}, {2}", input.getItem().getClass().getName(), input, input.getItemDamage());
     }
 
     @Override

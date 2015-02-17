@@ -107,7 +107,7 @@ public final class Railcraft {
                     continue;
                 }
                 BallastRegistry.registerBallast(Block.getBlockFromName(blockName), metadata);
-                Game.log(Level.INFO, String.format("Mod %s registered %s as a valid ballast", mess.getSender(), mess.getStringValue()));
+                Game.log(Level.DEBUG, String.format("Mod %s registered %s as a valid ballast", mess.getSender(), mess.getStringValue()));
             } else if (mess.key.equals("boiler-fuel-liquid")) {
                 String[] tokens = Iterables.toArray(splitter.split(mess.getStringValue()), String.class);
                 if (tokens.length != 2) {
@@ -121,7 +121,7 @@ public final class Railcraft {
                     continue;
                 }
                 FuelManager.addBoilerFuel(fluid, fuel);
-                Game.log(Level.INFO, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getStringValue()));
+                Game.log(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getStringValue()));
             } else if (mess.key.equals("rock-crusher")) {
                 NBTTagCompound nbt = mess.getNBTValue();
                 ItemStack input = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("input"));

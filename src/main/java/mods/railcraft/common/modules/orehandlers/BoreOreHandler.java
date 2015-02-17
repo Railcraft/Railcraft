@@ -33,7 +33,7 @@ public class BoreOreHandler {
                 || oreClass.equals("treeSapling")
                 || oreClass.equals("treeLeaves")
                 )) {
-            Game.log(Level.INFO, "Automation Module: Ore Detected, adding to blocks Tunnel Bore can mine: {0}, id={1} meta={2}", oreClass, ore, ore.getItemDamage());
+            Game.log(Level.DEBUG, "Automation Module: Ore Detected, adding to blocks Tunnel Bore can mine: {0}, id={1} meta={2}", oreClass, ore, ore.getItemDamage());
             EntityTunnelBore.addMineableBlock(InvTools.getBlockFromStack(ore), ore.getItemDamage());
         }
     }

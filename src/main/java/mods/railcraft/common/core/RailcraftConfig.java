@@ -123,7 +123,7 @@ public class RailcraftConfig {
     private static Configuration configItems;
 
     public static void preInit() {
-        Game.log(Level.INFO, "Railcraft Config: Doing preinit parsing");
+        Game.log(Level.TRACE, "Railcraft Config: Doing preinit parsing");
 
         Locale locale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
@@ -172,7 +172,7 @@ public class RailcraftConfig {
     }
 
     public static void postInit() {
-        Game.log(Level.INFO, "Railcraft Config: Doing post init configuration");
+        Game.log(Level.TRACE, "Railcraft Config: Doing post init configuration");
 
         anchorFuelWorld.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelWorldString, "Adding World Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         anchorFuelPersonal.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelPersonalString, "Adding Personal Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
