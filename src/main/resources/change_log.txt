@@ -1,3 +1,9 @@
+9.5.0.1:
+	NEW: Capacitor Boxes now have a switch to determine if they should trigger on a rising or falling signal. (contribution by wshadow)
+	NEW: Improvements to the Switch code that should make them more reliable and predicable. (contribution by ssotangkur)
+	CHANGE: Coke Block now 10x Coal Coke fuel value and is flammable. (contributions by daniel and Kamran)
+	FIX: Reduce logging levels so that more log messages get sent to the log file instead of the console.
+
 9.5.0.0:
 	FIX: Revert Switch Track changes until remaining issues can be resolved.
 	FIX: Tank Comparator issues.
