@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.blocks.signals;
 
+import mods.railcraft.api.tracks.ITrackSwitch;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class TileSwitchLever extends TileSwitchBase {
@@ -20,7 +22,11 @@ public class TileSwitchLever extends TileSwitchBase {
     @Override
     public boolean blockActivated(int side, EntityPlayer player) {
         setPowered(!isPowered());
-        switchTrack(isPowered());
         return true;
+    }
+
+    @Override
+    public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
+        return isPowered();
     }
 }

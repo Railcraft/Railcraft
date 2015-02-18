@@ -11,26 +11,29 @@ package mods.railcraft.common.blocks.signals;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import mods.railcraft.api.tracks.ISwitchDevice;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.common.blocks.tracks.TileTrack;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public abstract class TileSwitchBase extends TileSignalFoundation {
+public abstract class TileSwitchBase extends TileSignalFoundation implements ISwitchDevice {
 
     private byte facing = (byte) ForgeDirection.NORTH.ordinal();
     private boolean powered;
     private ITrackSwitch switchTrack;
     private boolean lastSwitchState;
+    private boolean justLoaded = true;
 
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
@@ -50,24 +53,41 @@ public abstract class TileSwitchBase extends TileSignalFoundation {
     @Override
     public boolean blockActivated(int side, EntityPlayer player) {
         powered = !powered;
-        switchTrack(powered);
+        sendUpdateToClient();
         return true;
     }
 
     @Override
     public void onBlockPlaced() {
         findTrack();
+        if(switchTrack != null)
+            switchTrack.registerSwitch(this);
+        sendUpdateToClient();
+    }
+
+    @Override
+    public void onBlockRemoval() {
+        super.onBlockRemoval();
+        if(switchTrack != null)
+            switchTrack.registerSwitch(null); // unregister this switch
+    }
+
+    @Override
+    public void onNeighborBlockChange(Block id) {
+        super.onNeighborBlockChange(id);
+        findTrack();
+        if(switchTrack != null)
+            switchTrack.registerSwitch(this);
     }
 
     public ITrackSwitch getSwitchTrack() {
         if (switchTrack != null && switchTrack.getTile().isInvalid())
             switchTrack = null;
-        if (switchTrack == null)
-            findTrack();
         return switchTrack;
     }
 
     private void findTrack() {
+        switchTrack = null; // reset switchTrack in case it was removed
         for (byte side = 2; side < 6; side++) {
             TileEntity tile = tileCache.getTileOnSide(ForgeDirection.getOrientation(side));
             if (tile instanceof TileTrack) {
@@ -89,18 +109,6 @@ public abstract class TileSwitchBase extends TileSignalFoundation {
         }
     }
 
-    protected void switchTrack(boolean switched) {
-        for (byte side = 2; side < 6; side++) {
-            TileEntity tile = tileCache.getTileOnSide(ForgeDirection.getOrientation(side));
-            if (tile instanceof TileTrack) {
-                ITrackInstance track = ((TileTrack) tile).getTrackInstance();
-                if (track instanceof ITrackSwitch)
-                    ((ITrackSwitch) track).setSwitched(switched);
-            } else if (tile instanceof ITrackSwitch)
-                ((ITrackSwitch) tile).setSwitched(switched);
-        }
-    }
-
     @Override
     public boolean canUpdate() {
         return true;
@@ -109,6 +117,13 @@ public abstract class TileSwitchBase extends TileSignalFoundation {
     @Override
     public void updateEntity() {
         super.updateEntity();
+        
+        if(justLoaded) {
+            findTrack();
+            if(switchTrack != null)
+                switchTrack.registerSwitch(this);
+            justLoaded = false;
+        }
         ITrackSwitch track = getSwitchTrack();
 
         if (track == null)
@@ -177,6 +192,7 @@ public abstract class TileSwitchBase extends TileSignalFoundation {
 
     protected void setPowered(boolean p) {
         powered = p;
+        sendUpdateToClient();
     }
 
     protected boolean isBeingPoweredByRedstone() {
