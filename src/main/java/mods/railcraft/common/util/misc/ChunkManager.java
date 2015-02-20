@@ -11,10 +11,14 @@ package mods.railcraft.common.util.misc;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
@@ -31,7 +35,6 @@ import mods.railcraft.common.core.RailcraftConfig;
 import org.apache.logging.log4j.Level;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, ForgeChunkManager.PlayerOrderedLoadingCallback {
@@ -67,16 +70,16 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
     /**
      * Returns a Set of ChunkCoordIntPair containing the chunks between the
      * start and end chunks.
-     *
+     * <p/>
      * One of the pairs of start/end coords need to be equal.
-     *
+     * <p/>
      * Coordinates are in chunk coordinates, not world coordinates.
      *
      * @param xChunkA Start Chunk x-Coord
      * @param zChunkA Start Chunk z-Coord
      * @param xChunkB End Chunk x-Coord
      * @param zChunkB End Chunk z-Coord
-     * @param max Max number of chunks to return
+     * @param max     Max number of chunks to return
      * @return A set of chunks.
      */
     public Set<ChunkCoordIntPair> getChunksBetween(int xChunkA, int zChunkA, int xChunkB, int zChunkB, int max) {
@@ -156,6 +159,8 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
     public void ticketsLoaded(List<Ticket> tickets, World world) {
 //        System.out.println("Callback 2");
         for (Ticket ticket : tickets) {
+            if (ticket.isPlayerTicket())
+                continue;
             Entity entity = ticket.getEntity();
             if (entity == null) {
                 int x = ticket.getModData().getInteger("xCoord");
@@ -185,7 +190,8 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
     @Override
     public List<Ticket> ticketsLoaded(List<Ticket> tickets, World world, int maxTicketCount) {
 //        System.out.println("Callback 1");
-        Set<Ticket> tileTickets = new HashSet<Ticket>();
+        Set<Ticket> adminTickets = new HashSet<Ticket>();
+        Set<Ticket> worldTickets = new HashSet<Ticket>();
         Set<Ticket> cartTickets = new HashSet<Ticket>();
         for (Ticket ticket : tickets) {
             Entity entity = ticket.getEntity();
@@ -193,12 +199,15 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                 int x = ticket.getModData().getInteger("xCoord");
                 int y = ticket.getModData().getInteger("yCoord");
                 int z = ticket.getModData().getInteger("zCoord");
+                String type = ticket.getModData().getString("type");
 
                 if (y >= 0) {
-                    TileEntity tile = world.getTileEntity(x, y, z);
-                    if (tile instanceof TileAnchorWorld) {
-                        tileTickets.add(ticket);
-                    }
+                    if (type.equals(EnumMachineAlpha.ADMIN_ANCHOR.getTag()))
+                        adminTickets.add(ticket);
+                    else if (type.equals(EnumMachineAlpha.WORLD_ANCHOR.getTag()))
+                        worldTickets.add(ticket);
+                    else if(type.isEmpty())
+                        worldTickets.add(ticket);
                 }
             } else {
                 if (entity instanceof EntityCartAnchor) {
@@ -210,32 +219,27 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
 
         List<Ticket> claimedTickets = new LinkedList<Ticket>();
         claimedTickets.addAll(cartTickets);
-        claimedTickets.addAll(tileTickets);
+        claimedTickets.addAll(adminTickets);
+        claimedTickets.addAll(worldTickets);
         return claimedTickets;
     }
 
     @Override
     public ListMultimap<String, Ticket> playerTicketsLoaded(ListMultimap<String, Ticket> tickets, World world) {
-        for (Ticket ticket : tickets.values()) {
-            Entity entity = ticket.getEntity();
-            if (entity == null) {
-                int x = ticket.getModData().getInteger("xCoord");
-                int y = ticket.getModData().getInteger("yCoord");
-                int z = ticket.getModData().getInteger("zCoord");
+        if (RailcraftConfig.printAnchorLocations())
+            for (Ticket ticket : tickets.values()) {
+                Entity entity = ticket.getEntity();
+                if (entity == null) {
+                    int x = ticket.getModData().getInteger("xCoord");
+                    int y = ticket.getModData().getInteger("yCoord");
+                    int z = ticket.getModData().getInteger("zCoord");
+                    String type = ticket.getModData().getString("type");
 
-                if (y >= 0) {
-                    TileEntity tile = world.getTileEntity(x, y, z);
-                    if (tile instanceof TileAnchorPersonal) {
-                        printAnchor(((TileAnchorPersonal) tile).getName(), x, y, z);
+                    if (y >= 0) {
+                        printAnchor(LocalizationPlugin.translate(type + ".name"), x, y, z);
                     }
                 }
-            } else {
-//                if (entity instanceof EntityCartAnchor) {
-////                    System.out.println("Claim Cart Ticket");
-//                    cartTickets.add(ticket);
-//                }
             }
-        }
         return LinkedListMultimap.create();
     }
 }
