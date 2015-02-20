@@ -11,8 +11,10 @@ package mods.railcraft.common.blocks.aesthetics.brick;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.List;
 import java.util.Locale;
+
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import net.minecraft.block.Block;
@@ -40,23 +42,6 @@ import static mods.railcraft.common.blocks.aesthetics.brick.BlockBrick.BrickVari
 
 public class BlockBrick extends Block {
 
-    public enum BrickVariant {
-
-        BRICK, FITTED, BLOCK, ORNATE, ETCHED, COBBLE;
-        public static final BrickVariant[] VALUES = values();
-
-        @Override
-        public String toString() {
-            return name().toLowerCase(Locale.ENGLISH);
-        }
-
-        public static BrickVariant fromOrdinal(int ordinal) {
-            if (ordinal < 0 || ordinal >= VALUES.length)
-                return BRICK;
-            return VALUES[ordinal];
-        }
-
-    }
     public static BlockBrick infernal;
     public static BlockBrick abyssal;
     public static BlockBrick sandy;
@@ -65,8 +50,18 @@ public class BlockBrick extends Block {
     public static BlockBrick quarried;
     public static BlockBrick bleachedbone;
     public static BlockBrick nether;
-    private IIcon[] icons;
     private final String theme;
+    private IIcon[] icons;
+
+    public BlockBrick(String theme) {
+        super(Material.rock);
+        this.theme = theme;
+        setResistance(15);
+        setHardness(5);
+        setStepSound(Block.soundTypeStone);
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setHarvestLevel("pickaxe", 0);
+    }
 
     public static BlockBrick getBlock() {
         return infernal;
@@ -75,17 +70,19 @@ public class BlockBrick extends Block {
     public static void setupBlock() {
         if (infernal == null) {
             infernal = defineBrick("infernal");
-            ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).block = infernal;
-            CraftingPlugin.addShapedRecipe(new ItemStack(infernal, 2, 2),
-                    "MB",
-                    "BM",
-                    'B', new ItemStack(Blocks.nether_brick),
-                    'M', new ItemStack(Blocks.soul_sand));
+            if (infernal != null) {
+                ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).block = infernal;
+                CraftingPlugin.addShapedRecipe(new ItemStack(infernal, 2, 2),
+                        "MB",
+                        "BM",
+                        'B', new ItemStack(Blocks.nether_brick),
+                        'M', new ItemStack(Blocks.soul_sand));
+            }
         }
 
         if (abyssal == null) {
             abyssal = defineBrick("abyssal");
-            if (EnumCube.ABYSSAL_STONE.isEnabled()) {
+            if (abyssal != null && EnumCube.ABYSSAL_STONE.isEnabled()) {
                 CraftingPlugin.addFurnaceRecipe(EnumCube.ABYSSAL_STONE.getItem(), new ItemStack(abyssal, 1, 2), 0.2F);
                 IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(EnumCube.ABYSSAL_STONE.getItem(), true, false);
                 recipe.addOutput(BlockBrick.abyssal.getItemStack(COBBLE, 1), 1.0F);
@@ -94,27 +91,31 @@ public class BlockBrick extends Block {
 
         if (sandy == null) {
             sandy = defineBrick("sandy");
-            ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).block = sandy;
-            CraftingPlugin.addShapedRecipe(new ItemStack(sandy, 1, 2),
-                    "BM",
-                    "MB",
-                    'B', new ItemStack(Items.brick),
-                    'M', new ItemStack(Blocks.sand));
+            if (sandy != null) {
+                ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).block = sandy;
+                CraftingPlugin.addShapedRecipe(new ItemStack(sandy, 1, 2),
+                        "BM",
+                        "MB",
+                        'B', new ItemStack(Items.brick),
+                        'M', new ItemStack(Blocks.sand));
+            }
         }
 
         if (frostbound == null) {
             frostbound = defineBrick("frostbound");
-            CraftingPlugin.addShapedRecipe(new ItemStack(frostbound, 8, 2),
-                    "III",
-                    "ILI",
-                    "III",
-                    'I', new ItemStack(Blocks.ice),
-                    'L', new ItemStack(Items.dye, 1, 4));
+            if (frostbound != null) {
+                CraftingPlugin.addShapedRecipe(new ItemStack(frostbound, 8, 2),
+                        "III",
+                        "ILI",
+                        "III",
+                        'I', new ItemStack(Blocks.ice),
+                        'L', new ItemStack(Items.dye, 1, 4));
+            }
         }
 
         if (quarried == null) {
             quarried = defineBrick("quarried");
-            if (EnumCube.QUARRIED_STONE.isEnabled()) {
+            if (quarried != null && EnumCube.QUARRIED_STONE.isEnabled()) {
                 CraftingPlugin.addFurnaceRecipe(EnumCube.QUARRIED_STONE.getItem(), new ItemStack(quarried, 1, 2), 0.2F);
                 IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(EnumCube.QUARRIED_STONE.getItem(), true, false);
                 recipe.addOutput(BlockBrick.quarried.getItemStack(COBBLE, 1), 1.0F);
@@ -123,21 +124,26 @@ public class BlockBrick extends Block {
 
         if (bleachedbone == null) {
             bleachedbone = defineBrick("bleachedbone");
-            Item bleachedClay = new ItemRailcraft().setUnlocalizedName("railcraft.part.bleached.clay");
-            RailcraftRegistry.register(bleachedClay);
-            CraftingPlugin.addShapelessRecipe(new ItemStack(bleachedClay), new ItemStack(Items.clay_ball), new ItemStack(Items.dye, 1, 15), new ItemStack(Items.dye, 1, 15), new ItemStack(Items.dye, 1, 15));
-            CraftingPlugin.addFurnaceRecipe(new ItemStack(bleachedClay), new ItemStack(bleachedbone, 1, 2), 0.3F);
+            if (bleachedbone != null) {
+                Item bleachedClay = new ItemRailcraft().setUnlocalizedName("railcraft.part.bleached.clay");
+                RailcraftRegistry.register(bleachedClay);
+                CraftingPlugin.addShapelessRecipe(new ItemStack(bleachedClay), new ItemStack(Items.clay_ball), new ItemStack(Items.dye, 1, 15), new ItemStack(Items.dye, 1, 15), new ItemStack(Items.dye, 1, 15));
+                CraftingPlugin.addFurnaceRecipe(new ItemStack(bleachedClay), new ItemStack(bleachedbone, 1, 2), 0.3F);
+            }
         }
 
         if (bloodstained == null) {
             bloodstained = defineBrick("bloodstained");
-            CraftingPlugin.addShapelessRecipe(new ItemStack(bloodstained, 1, 2), new ItemStack(Blocks.sandstone, 1, 2), new ItemStack(Items.rotten_flesh));
-            CraftingPlugin.addShapelessRecipe(new ItemStack(bloodstained, 1, 2), new ItemStack(Blocks.sandstone, 1, 2), new ItemStack(Items.beef));
+            if (bloodstained != null) {
+                CraftingPlugin.addShapelessRecipe(new ItemStack(bloodstained, 1, 2), new ItemStack(Blocks.sandstone, 1, 2), new ItemStack(Items.rotten_flesh));
+                CraftingPlugin.addShapelessRecipe(new ItemStack(bloodstained, 1, 2), new ItemStack(Blocks.sandstone, 1, 2), new ItemStack(Items.beef));
+            }
         }
 
         if (nether == null) {
             nether = defineBrick("nether");
-            CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.nether_brick), nether.getItemStack(BLOCK, 1), 0);
+            if (nether != null)
+                CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.nether_brick), nether.getItemStack(BLOCK, 1), 0);
         }
     }
 
@@ -174,37 +180,6 @@ public class BlockBrick extends Block {
             return block;
         }
         return null;
-    }
-
-    private static class BlockNetherBrick extends BlockBrick {
-
-        public BlockNetherBrick() {
-            super("nether");
-        }
-
-        @Override
-        protected void initVarient(BrickVariant variant) {
-            if (variant != BRICK)
-                super.initVarient(variant);
-        }
-
-        @Override
-        public ItemStack getItemStack(BrickVariant v, int qty) {
-            if (v == BRICK)
-                return new ItemStack(Blocks.nether_brick, qty);
-            return super.getItemStack(v, qty);
-        }
-
-    }
-
-    public BlockBrick(String theme) {
-        super(Material.rock);
-        this.theme = theme;
-        setResistance(15);
-        setHardness(5);
-        setStepSound(Block.soundTypeStone);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setHarvestLevel("pickaxe", 0);
     }
 
     protected void initVarient(BrickVariant variant) {
@@ -244,6 +219,45 @@ public class BlockBrick extends Block {
     @Override
     public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
         return false;
+    }
+
+    public enum BrickVariant {
+
+        BRICK, FITTED, BLOCK, ORNATE, ETCHED, COBBLE;
+        public static final BrickVariant[] VALUES = values();
+
+        public static BrickVariant fromOrdinal(int ordinal) {
+            if (ordinal < 0 || ordinal >= VALUES.length)
+                return BRICK;
+            return VALUES[ordinal];
+        }
+
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
+
+    }
+
+    private static class BlockNetherBrick extends BlockBrick {
+
+        public BlockNetherBrick() {
+            super("nether");
+        }
+
+        @Override
+        protected void initVarient(BrickVariant variant) {
+            if (variant != BRICK)
+                super.initVarient(variant);
+        }
+
+        @Override
+        public ItemStack getItemStack(BrickVariant v, int qty) {
+            if (v == BRICK)
+                return new ItemStack(Blocks.nether_brick, qty);
+            return super.getItemStack(v, qty);
+        }
+
     }
 
 }
