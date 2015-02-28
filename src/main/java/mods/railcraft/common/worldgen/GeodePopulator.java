@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Random;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -59,7 +60,8 @@ public class GeodePopulator {
         int x = chunkX * 16 + 8;
         int z = chunkZ * 16 + 8;
         if (canGen(world, rand, x, z)) {
-            int y = 16 + rand.nextInt(16);
+            int maxy = getWaterDepth(world, x, z);
+            int y = 13 + rand.nextInt(maxy - 22);
             geode.generate(world, rand, x, y, z);
         }
     }
@@ -73,6 +75,22 @@ public class GeodePopulator {
             return false;
         }
         return rand.nextDouble() <= 0.3 && isWaterDeep(world, x, z, MIN_DEPTH);
+    }
+
+    private int getWaterDepth(World world, int x, int z) {
+        Chunk chunk = world.getChunkFromBlockCoords(x, z);
+
+        int trimmedX = x & 15;
+        int trimmedZ = z & 15;
+
+        int y = 0;
+        for (;; y++) {
+            Block block = WorldPlugin.getBlock(world, trimmedX, y, trimmedZ);
+            if(block == Blocks.water) {
+                break;
+            }
+        }
+        return y;
     }
 
     private boolean isWaterDeep(World world, int x, int z, int minDepth) {
