@@ -26,6 +26,7 @@ public class StandardTank extends FluidTank {
     public static final int DEFAULT_COLOR = 0xFFFFFF;
     public int colorCache = DEFAULT_COLOR;
     private int tankIndex;
+    private boolean hidden;
 
     public StandardTank(int capacity) {
         super(capacity);
@@ -116,4 +117,12 @@ public class StandardTank extends FluidTank {
         }
 
     };
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
 }

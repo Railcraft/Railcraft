@@ -9,17 +9,6 @@
 package mods.railcraft.common.fluids;
 
 import com.google.common.collect.ForwardingList;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin.NBTList;
@@ -27,14 +16,25 @@ import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TankManager extends ForwardingList<StandardTank> implements IFluidHandler, List<StandardTank> {
@@ -56,6 +56,13 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 
     public TankManager(StandardTank... tanks) {
         addAll(Arrays.asList(tanks));
+    }
+
+    public static IFluidHandler getTankFromTile(TileEntity tile) {
+        IFluidHandler tank = null;
+        if (tile instanceof IFluidHandler)
+            tank = (IFluidHandler) tile;
+        return tank;
     }
 
     @Override
@@ -261,11 +268,12 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection direction) {
-        FluidTankInfo[] info = new FluidTankInfo[size()];
-        for (int i = 0; i < size(); i++) {
-            info[i] = get(i).getInfo();
+        List<FluidTankInfo> info = new ArrayList<FluidTankInfo>(size());
+        for (StandardTank tank : this) {
+            if (!tank.isHidden())
+                info.add(tank.getInfo());
         }
-        return info;
+        return info.toArray(new FluidTankInfo[info.size()]);
     }
 
     public FluidTankInfo[] getTankInfo() {
@@ -303,13 +311,6 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
             if (nearbyTank != null)
                 outputLiquid(nearbyTank, ForgeDirection.getOrientation(side), tankIndex, amount);
         }
-    }
-
-    public static IFluidHandler getTankFromTile(TileEntity tile) {
-        IFluidHandler tank = null;
-        if (tile instanceof IFluidHandler)
-            tank = (IFluidHandler) tile;
-        return tank;
     }
 
     private void outputLiquid(IFluidHandler tank, ForgeDirection side, int tankIndex, int amount) {
