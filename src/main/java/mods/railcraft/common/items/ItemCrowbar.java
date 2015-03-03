@@ -220,7 +220,8 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
     }
 
     private void removeAndDrop(World world, int x, int y, int z, Block block) {
-        List<ItemStack> drops = block.getDrops(world, x, y, z, 0, 0);
+    	int meta = WorldPlugin.getBlockMetadata(world, x, y, z);
+        List<ItemStack> drops = block.getDrops(world, x, y, z, meta, 0);
         InvTools.dropItems(drops, world, x, y, z);
         world.setBlockToAir(x, y, z);
     }
