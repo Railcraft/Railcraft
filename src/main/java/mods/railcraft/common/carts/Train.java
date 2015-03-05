@@ -8,21 +8,14 @@
  */
 package mods.railcraft.common.carts;
 
-import java.util.*;
 import net.minecraft.entity.item.EntityMinecart;
 
+import java.util.*;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class Train implements Iterable<EntityMinecart> {
-
-    public enum TrainState {
-
-        STOPPED,
-        IDLE,
-        NORMAL
-    }
 
     private final UUID uuid;
     private final Set<UUID> carts = new HashSet<UUID>();
@@ -35,6 +28,13 @@ public class Train implements Iterable<EntityMinecart> {
         uuid = UUID.randomUUID();
 
         addCartsToTrain(cart);
+    }
+
+    public static Train getTrain(EntityMinecart cart) {
+        if (cart == null)
+            return null;
+        LinkageManager lm = LinkageManager.instance();
+        return lm.getTrain(cart);
     }
 
     @Override
@@ -127,6 +127,17 @@ public class Train implements Iterable<EntityMinecart> {
             addCartsToTrain(linkB);
     }
 
+    public boolean isValid() {
+        LinkageManager lm = LinkageManager.instance();
+        for (UUID id : carts) {
+            EntityMinecart cart = lm.getCartFromUUID(id);
+            if (cart == null || lm.getTrainUUID(cart) != uuid) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     protected void releaseTrain() {
         LinkageManager lm = LinkageManager.instance();
         for (UUID id : carts) {
@@ -214,11 +225,11 @@ public class Train implements Iterable<EntityMinecart> {
         this.trainState = state;
     }
 
-    public static Train getTrain(EntityMinecart cart) {
-        if (cart == null)
-            return null;
-        LinkageManager lm = LinkageManager.instance();
-        return lm.getTrain(cart);
+    public enum TrainState {
+
+        STOPPED,
+        IDLE,
+        NORMAL
     }
 
 }
