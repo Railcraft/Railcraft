@@ -20,3 +20,4 @@ private/
 *.ipr
 *.iws
 out/
+bin/
