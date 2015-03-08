@@ -8,28 +8,23 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 import mods.railcraft.api.tracks.ISwitchDevice;
 import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.carts.LinkageManager;
+import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -89,7 +84,8 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         if (lockingCarts.contains(cart.getPersistentID()))
             return false; // Carts at the locking entrance always are on locked tracks
 
-        boolean sameTrain = LinkageManager.instance().getTrain(currentCart) == LinkageManager.instance().getTrain(cart);
+        boolean sameTrain = Train.areInSameTrain(LinkageManager.instance().getCartFromUUID(currentCart), cart);
+
 
         boolean shouldSwitch = (switchDevice != null) ? switchDevice.shouldSwitch(this, cart) : false;
 
