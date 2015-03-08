@@ -14,32 +14,21 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import java.io.*;
-import mods.railcraft.api.carts.IPaintedCart;
-import mods.railcraft.api.carts.IRoutableCart;
-import java.util.ArrayList;
-import java.util.List;
-import mods.railcraft.api.carts.CartTools;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import mods.railcraft.api.carts.ILinkableCart;
-import mods.railcraft.api.carts.IMinecart;
+import mods.railcraft.api.carts.*;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.blocks.signals.ISecure;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.gui.buttons.*;
+import mods.railcraft.common.gui.buttons.ButtonTextureSet;
+import mods.railcraft.common.gui.buttons.IButtonTextureSet;
+import mods.railcraft.common.gui.buttons.IMultiButtonState;
+import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemOveralls;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.ItemWhistleTuner;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -48,58 +37,30 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.sounds.SoundHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class EntityLocomotive extends CartContainerBase implements IDirectionalCart, IGuiReturnHandler, ILinkableCart, IMinecart, ISecure<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
 
-    public enum LocoMode {
-
-        RUNNING, IDLE, SHUTDOWN;
-        public static final LocoMode[] VALUES = values();
-    }
-
-    public enum LocoSpeed {
-
-        MAX, SLOW, SLOWER, SLOWEST, REVERSE;
-        public static final LocoSpeed[] VALUES = values();
-    }
-
-    public enum LocoLockButtonState implements IMultiButtonState {
-
-        UNLOCKED(new ButtonTextureSet(224, 0, 16, 16)),
-        LOCKED(new ButtonTextureSet(240, 0, 16, 16)),
-        PRIVATE(new ButtonTextureSet(240, 48, 16, 16));
-        public static final LocoLockButtonState[] VALUES = values();
-        private final IButtonTextureSet texture;
-
-        private LocoLockButtonState(IButtonTextureSet texture) {
-            this.texture = texture;
-        }
-
-        @Override
-        public String getLabel() {
-            return "";
-        }
-
-        @Override
-        public IButtonTextureSet getTextureSet() {
-            return texture;
-        }
-
-        @Override
-        public ToolTip getToolTip() {
-            return null;
-        }
-
-    }
     private static final byte HAS_FUEL_DATA_ID = 16;
     private static final byte PRIMARY_COLOR_DATA_ID = 25;
     private static final byte SECONDARY_COLOR_DATA_ID = 26;
@@ -114,24 +75,22 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     private static final int WHISTLE_INTERVAL = 256;
     private static final int WHISTLE_DELAY = 160;
     private static final int WHISTLE_CHANCE = 4;
+    private final MultiButtonController<LocoLockButtonState> lockController = new MultiButtonController(0, LocoLockButtonState.VALUES);
+    public LocoMode clientMode = LocoMode.SHUTDOWN;
+    public LocoSpeed clientSpeed = LocoSpeed.MAX;
+    public boolean clientCanLock;
+    protected float renderYaw;
     private String model = "";
     private int fuel;
     private int update = MiscTools.getRand().nextInt();
     private int whistleDelay;
     private int tempIdle;
     private float whistlePitch = getNewWhistlePitch();
-    protected float renderYaw;
-    public LocoMode clientMode = LocoMode.SHUTDOWN;
-    public LocoSpeed clientSpeed = LocoSpeed.MAX;
-    public boolean clientCanLock;
-    private final MultiButtonController<LocoLockButtonState> lockController = new MultiButtonController(0, LocoLockButtonState.VALUES);
-
     public EntityLocomotive(World world) {
         super(world);
         setPrimaryColor(EnumColor.LIGHT_GRAY.ordinal());
         setSecondaryColor(EnumColor.GRAY.ordinal());
     }
-
     public EntityLocomotive(World world, double x, double y, double z) {
         this(world);
         setPosition(x, y + (double) yOffset, z);
@@ -261,12 +220,12 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         return PlayerPlugin.isOwnerOrOp(getOwner(), user);
     }
 
-    public void setSecurityState(LocoLockButtonState state) {
-        lockController.setCurrentState(state);
-    }
-
     public LocoLockButtonState getSecurityState() {
         return lockController.getButtonState();
+    }
+
+    public void setSecurityState(LocoLockButtonState state) {
+        lockController.setCurrentState(state);
     }
 
     public String getEmblem() {
@@ -544,19 +503,28 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
                 }
                 return;
             }
-            if (entity instanceof EntityLocomotive) {
-                LinkageManager lm = LinkageManager.instance();
+            if (collidedWithOtherLocomotive(entity)) {
                 EntityLocomotive otherLoco = (EntityLocomotive) entity;
-                if (!lm.areInSameTrain(this, otherLoco) && cartVelocityIsGreaterThan(0.2f) && otherLoco.cartVelocityIsGreaterThan(0.2f)
-                        && (Math.abs(motionX - entity.motionX) > 0.3f || Math.abs(motionZ - entity.motionZ) > 0.3f)) {
-                    explode();
-                    if (!otherLoco.isDead)
-                        otherLoco.explode();
-                    return;
-                }
+                explode();
+                if (!otherLoco.isDead)
+                    otherLoco.explode();
+                return;
             }
         }
         super.applyEntityCollision(entity);
+    }
+
+    private boolean collidedWithOtherLocomotive(Entity entity) {
+        if (!(entity instanceof EntityLocomotive))
+            return false;
+        EntityLocomotive otherLoco = (EntityLocomotive) entity;
+        if (getUniqueID() == entity.getUniqueID())
+            return false;
+        LinkageManager lm = LinkageManager.instance();
+        if (lm.areInSameTrain(this, otherLoco))
+            return false;
+        return cartVelocityIsGreaterThan(0.2f) && otherLoco.cartVelocityIsGreaterThan(0.2f)
+                && (Math.abs(motionX - entity.motionX) > 0.3f || Math.abs(motionZ - entity.motionZ) > 0.3f);
     }
 
     @Override
@@ -743,13 +711,13 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         return dataWatcher.getWatchableObjectByte(PRIMARY_COLOR_DATA_ID);
     }
 
+    public final void setPrimaryColor(int color) {
+        dataWatcher.updateObject(PRIMARY_COLOR_DATA_ID, (byte) color);
+    }
+
     @Override
     public final byte getSecondaryColor() {
         return dataWatcher.getWatchableObjectByte(SECONDARY_COLOR_DATA_ID);
-    }
-
-    public final void setPrimaryColor(int color) {
-        dataWatcher.updateObject(PRIMARY_COLOR_DATA_ID, (byte) color);
     }
 
     public final void setSecondaryColor(int color) {
@@ -767,6 +735,47 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     @Override
     public World getWorld() {
         return worldObj;
+    }
+
+    public enum LocoMode {
+
+        RUNNING, IDLE, SHUTDOWN;
+        public static final LocoMode[] VALUES = values();
+    }
+
+    public enum LocoSpeed {
+
+        MAX, SLOW, SLOWER, SLOWEST, REVERSE;
+        public static final LocoSpeed[] VALUES = values();
+    }
+
+    public enum LocoLockButtonState implements IMultiButtonState {
+
+        UNLOCKED(new ButtonTextureSet(224, 0, 16, 16)),
+        LOCKED(new ButtonTextureSet(240, 0, 16, 16)),
+        PRIVATE(new ButtonTextureSet(240, 48, 16, 16));
+        public static final LocoLockButtonState[] VALUES = values();
+        private final IButtonTextureSet texture;
+
+        private LocoLockButtonState(IButtonTextureSet texture) {
+            this.texture = texture;
+        }
+
+        @Override
+        public String getLabel() {
+            return "";
+        }
+
+        @Override
+        public IButtonTextureSet getTextureSet() {
+            return texture;
+        }
+
+        @Override
+        public ToolTip getToolTip() {
+            return null;
+        }
+
     }
 
 }
