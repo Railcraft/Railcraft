@@ -96,7 +96,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
 
     public static double START_BOOST = 0.04;
     public static double BOOST_FACTOR = 0.06;
-    
+
     private LockingProfileType profile = LockingProfileType.LOCKDOWN;
     private LockingProfile profileInstance = profile.create(this);
     private EntityMinecart currentCart, prevCart;
@@ -106,12 +106,12 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
     private boolean redstone = false;
     private boolean locked = false;
     private int trainDelay = 0;
-    
+
     // Temporary variables to hold loaded data while we restore from NBT
     private UUID prevCartUUID;
     private UUID currentCartUUID;
     private boolean justLoaded = true;
-    
+
 
     @Override
     public EnumTrack getTrackType() {
@@ -149,21 +149,21 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
      */
     @Override
     public void updateEntity() {
-    	
+
         if (Game.isHost(getWorld())) {
         	boolean updateClient = false; // flag determines whether we send an update to the client, only update when visible changes occur
-        	        	
+
         	// At the time we read from NBT, LinkageManager has not been initialized so we cannot
         	// lookup the carts by UUID in readFromNBT(). We must wait until updateEntity(), which
-        	// occurs after LinkageManager gets initialized. The justLoaded flag lets us lookup 
+        	// occurs after LinkageManager gets initialized. The justLoaded flag lets us lookup
         	// the carts only after restoring from NBT.
-        	if(justLoaded) { 
+        	if(justLoaded) {
            		prevCart = LinkageManager.instance().getCartFromUUID(prevCartUUID);
            		currentCart = LinkageManager.instance().getCartFromUUID(currentCartUUID);
             	justLoaded = false;
             	updateClient = true;
-        	}        	
-        	        	
+        	}
+
             if (currentCart != null && currentCart.isDead) {
                 releaseCurrentCart();
                 updateClient = true;
@@ -172,16 +172,16 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
             calculateLocked();
             if(oldLocked != locked)
             	updateClient = true;
-            
+
             if(locked) {
             	lockCurrentCart();
             } else {
             	releaseCurrentCart();
-            }        
-            
+            }
+
             // Store our last found cart in prevCart
             if(currentCart != null)
-            	prevCart = currentCart;            
+            	prevCart = currentCart;
             currentCart = null; // reset currentCart so we know if onMinecartPass() actually found one
 
             if(updateClient)
@@ -213,7 +213,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
 
     @Override
     public void onBlockRemoved() {
-        super.onBlockRemoved();   
+        super.onBlockRemoved();
         releaseCart(); // Release any carts still holding on
     }
 
@@ -221,16 +221,15 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         if (uuid == null)
             uuid = UUID.randomUUID();
         return uuid;
-    }   
+    }
 
     private void lockCurrentCart() {
         if (currentCart != null) {
             Train train = Train.getTrain(currentCart);
-            if(currentTrain != train){
+            if (currentTrain != train && currentTrain != null)
                 currentTrain.removeLockingTrack(getUUID());
-                currentTrain = train;
-            }
-            currentTrain.addLockingTrack(getUUID());            
+            currentTrain = train;
+            currentTrain.addLockingTrack(getUUID());
             MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Lock(currentCart, getX(), getY(), getZ()));
             profileInstance.onLock(currentCart);
             currentCart.motionX = 0.0D;
@@ -239,25 +238,25 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
             if (meta == 0 || meta == 4 || meta == 5)
             	currentCart.posZ = tileEntity.zCoord + 0.5D;
             else
-            	currentCart.posX = tileEntity.xCoord + 0.5D; 
+            	currentCart.posX = tileEntity.xCoord + 0.5D;
         }
     }
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-    	currentCart = cart;       
+    	currentCart = cart;
     }
 
-    
+
     private void releaseCurrentCart() {
         if(currentTrain != null)
             currentTrain.removeLockingTrack(getUUID());
     	if (currentCart != null) {
             MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Release(currentCart, getX(), getY(), getZ()));
-            profileInstance.onRelease(currentCart);            
+            profileInstance.onRelease(currentCart);
         }
     }
-    
+
     @Override
     public void releaseCart() {
     	trainLeaving = true;
@@ -267,8 +266,8 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
     public boolean isCartLockedDown(EntityMinecart cart) {
         return locked && prevCart == cart;
     }
-    
-    
+
+
     /**
      * Determines if the current train is the same train or cart (depending on track type)
      * as the train or cart in previous ticks. The <code>trainDelay</code> is needed because there are
@@ -276,7 +275,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
      * the train is still passing over us.
      * @return whether the current cart or train (depending on LockType) is the same as previous cart or trains
      */
-    private boolean isSameTrainOrCart() {    	
+    private boolean isSameTrainOrCart() {
     	if(profile.lockType == LockType.TRAIN) {
     		Train currentTrain = Train.getTrain(currentCart);
     		if(currentTrain != null) {
@@ -290,14 +289,14 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
     		if(trainDelay > 0)
         		trainDelay--;
     		else
-    			prevCart = null;    		
+    			prevCart = null;
         	return trainDelay > 0;
     	} else {
-    		return currentCart != null && 
+    		return currentCart != null &&
         			(profile.lockType == LockType.CART && currentCart == prevCart);
     	}
     }
-    
+
     /**
      * The heart of the logic for this class is done here. If you understand what's going
      * on here, the rest will make much more sense to you. Basically, we're trying to determine
@@ -307,33 +306,33 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
      * create a truth table with 2 boolean inputs to calculate "locked", we find that we can't quite
      * express the correct value for "locked". When we analyze the situation, we notice that when
      * a train is passing over the track, we need both the redstone to be off and the last cart to be
-     * off the track in order to lock the track. However after the train has already left the track, 
+     * off the track in order to lock the track. However after the train has already left the track,
      * then we want the track to be "locked" when the redstone is off, regardless of whether a
      * new or old cart starts moving onto the track. In the end, what we're really after is
      * having 2 truth tables and a way to decide which of the 2 tables to use. To do this, we
      * use the boolean <code>trainLeaving</code> to indicate which table to use. As the name
      * implies, <code>trainLeaving</code> indicates whether the train or cart is in the process
-     * of leaving the track.   
+     * of leaving the track.
      */
-    private void calculateLocked() {    	
+    private void calculateLocked() {
 		boolean isSameCart = isSameTrainOrCart();
 		if(trainLeaving) {
-			if(!isSameCart && !redstone) { 
-				// When the train is in the process of leaving, we know that the "trainLeaving" state ends 
-				// when both the carts and redstone signal are false 
+			if(!isSameCart && !redstone) {
+				// When the train is in the process of leaving, we know that the "trainLeaving" state ends
+				// when both the carts and redstone signal are false
 				trainLeaving = false;
 			}
 			locked = !(isSameCart || redstone);
-		} else {			
+		} else {
 			if(isSameCart && redstone) { // When we get both signals we know a train is leaving, so we set the state as so
 				trainLeaving = true;
 			}
-			locked = !redstone;    		
+			locked = !redstone;
 		}
     }
 
     @Override
-    public boolean isPowered() {    	
+    public boolean isPowered() {
     	return redstone; // Why call this "redstone" instead of "powered"? Powered gives the impression that
     	// the track will accelerate or unlock a cart and for this track we cannot assume that
     	// having a redstone signal applied is equivalent to being powered. Based on the usage
@@ -348,7 +347,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
     }
 
     /**
-     * A utility method for writing out UUID's to NBT 
+     * A utility method for writing out UUID's to NBT
      */
     private void setUUID(UUID id, String key, NBTTagCompound data) {
     	if(id == null) {
@@ -359,7 +358,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
     		data.setLong(key+"Low", id.getLeastSignificantBits());
     	}
     }
-    
+
     /**
      * A utility method for reading in UUID's from NBT
      */
@@ -368,7 +367,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
              return new UUID(data.getLong(key + "High"), data.getLong(key + "Low"));
     	 return null;
     }
-    
+
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
@@ -382,12 +381,12 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         	setUUID(prevCart.getPersistentID(), "prevCart", data);
         if(currentCart != null)
         	setUUID(currentCart.getPersistentID(), "currentCart", data);
-        
+
         setUUID(getUUID(), "uuid", data);
     }
-    
-    
-    
+
+
+
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
@@ -396,21 +395,21 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         profileInstance = profile.create(this);
         profileInstance.readFromNBT(data);
         redstone = data.getBoolean("powered");
-        
+
         if(data.hasKey("locked"))
         	locked = data.getBoolean("locked");
-                
+
         if(data.hasKey("trainLeaving"))
         	trainLeaving = data.getBoolean("trainLeaving");
-                
-        if(data.hasKey("trainDelay"))
-        	trainDelay = data.getInteger("trainDelay");        
 
-        prevCartUUID = readUUID("prevCart", data);  
+        if(data.hasKey("trainDelay"))
+        	trainDelay = data.getInteger("trainDelay");
+
+        prevCartUUID = readUUID("prevCart", data);
         currentCartUUID = readUUID("currentCart", data);
-        
+
         uuid = readUUID("uuid", data);
-        
+
         justLoaded = true; // This signals updateEntity() to dereference the cart UUID's we read in here
     }
 
@@ -421,7 +420,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         data.writeByte(profile.ordinal());
         data.writeBoolean(redstone);
         data.writeBoolean(locked);
-               
+
         profileInstance.writePacketData(data);
     }
 
@@ -435,7 +434,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
             profileInstance = p.create(this);
         }
         redstone = data.readBoolean();
-        locked = data.readBoolean();        
+        locked = data.readBoolean();
         profileInstance.readPacketData(data);
 
         markBlockNeedsUpdate();
