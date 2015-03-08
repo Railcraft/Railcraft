@@ -1,3 +1,7 @@
+9.5.0.3:
+	FIX: Fix broken Train code.
+	FIX: Attempt to make Train objects survive linking and cart deaths (unlinking still needs work).
+
 9.5.0.2:
 	FIX: Anchor Cart should no longer request Chunkloader Tickets if the entity is dead.
 	FIX: Crowbar should no longer attempt to link dead carts.
