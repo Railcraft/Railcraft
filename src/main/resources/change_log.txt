@@ -1,3 +1,12 @@
+9.5.0.2:
+	FIX: Anchor Cart should no longer request Chunkloader Tickets if the entity is dead.
+	FIX: Crowbar should no longer attempt to link dead carts.
+	FIX: Train Detector should no longer count dead carts as part of a Train. Issue #536
+	FIX: Crowbar Destruction Enchantment can no longer perform alchemy. Issue #519 (contribution by WoodStone)
+	FIX: Hide the Tank Valves Animation Tank from TankInfo calls. Issue #381
+	FIX: Properly Handle Invalid Regex Syntax in Routing Tables. Issue #518
+	FIX: Don't try to define Brick recipes if disabled. Issue #513
+
 9.5.0.1:
 	NEW: Capacitor Boxes now have a switch to determine if they should trigger on a rising or falling signal. (contribution by wshadow)
 	NEW: Improvements to the Switch code that should make them more reliable and predicable. (contribution by ssotangkur)
