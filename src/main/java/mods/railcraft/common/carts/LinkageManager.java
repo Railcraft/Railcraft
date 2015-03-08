@@ -17,7 +17,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
 import org.apache.logging.log4j.Level;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Map;
 import java.util.UUID;
 
