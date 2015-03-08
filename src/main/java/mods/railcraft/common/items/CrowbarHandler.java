@@ -73,9 +73,9 @@ public class CrowbarHandler {
                                 lm.breakLink(cart, last);
                                 used = true;
                                 ChatPlugin.sendLocalizedChat(thePlayer, "railcraft.gui.link.broken");
-                                LinkageManager.printDebug("Reason For Broken Link: User removed link.");
+                                LinkageManager.printDebug("Reason For Broken LinkType: User removed link.");
                             } else {
-                                used = lm.createLink((EntityMinecart) entity, (EntityMinecart) last);
+                                used = lm.createLink((EntityMinecart) last, (EntityMinecart) entity);
                                 if (used)
                                     ChatPlugin.sendLocalizedChat(thePlayer, "railcraft.gui.link.created");
                             }

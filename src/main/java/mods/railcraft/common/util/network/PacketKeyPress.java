@@ -57,17 +57,17 @@ public class PacketKeyPress extends RailcraftPacket {
 //        if(!(player instanceof EntityPlayer)){
 //            return;
 //        }
-        EntityPlayer entiyPlayer = (EntityPlayer) player;
-        if (entiyPlayer == null)
+        EntityPlayer entityPlayer = (EntityPlayer) player;
+        if (entityPlayer == null)
             return;
-        if (!(entiyPlayer.ridingEntity instanceof EntityMinecart))
+        if (!(entityPlayer.ridingEntity instanceof EntityMinecart))
             return;
-        Train train = LinkageManager.instance().getTrain((EntityMinecart) entiyPlayer.ridingEntity);
+        Train train = Train.getTrain((EntityMinecart) entityPlayer.ridingEntity);
         if (binding == LOCOMOTIVE_INCREASE_SPEED) {
             for (EntityMinecart cart : train) {
                 if (cart instanceof EntityLocomotive) {
                     EntityLocomotive loco = (EntityLocomotive) cart;
-                    if (loco.canControl(entiyPlayer.getGameProfile()))
+                    if (loco.canControl(entityPlayer.getGameProfile()))
                         loco.increaseSpeed();
                 }
             }
@@ -75,7 +75,7 @@ public class PacketKeyPress extends RailcraftPacket {
             for (EntityMinecart cart : train) {
                 if (cart instanceof EntityLocomotive) {
                     EntityLocomotive loco = (EntityLocomotive) cart;
-                    if (loco.canControl(entiyPlayer.getGameProfile()))
+                    if (loco.canControl(entityPlayer.getGameProfile()))
                         loco.decreaseSpeed();
                 }
             }
@@ -83,7 +83,7 @@ public class PacketKeyPress extends RailcraftPacket {
             for (EntityMinecart cart : train) {
                 if (cart instanceof EntityLocomotive) {
                     EntityLocomotive loco = (EntityLocomotive) cart;
-                    if (loco.canControl(entiyPlayer.getGameProfile())) {
+                    if (loco.canControl(entityPlayer.getGameProfile())) {
                         LocoMode mode = loco.getMode();
                         if (mode == LocoMode.RUNNING)
                             loco.setMode(LocoMode.IDLE);

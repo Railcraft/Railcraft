@@ -17,7 +17,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
 import org.apache.logging.log4j.Level;
 
-import java.util.HashMap;
+import javax.swing.text.html.parser.Entity;
 import java.util.Map;
 import java.util.UUID;
 
@@ -45,10 +45,7 @@ public class LinkageManager implements ILinkageManager {
     public static final String LINK_A_LOW = "rcLinkALow";
     public static final String LINK_B_HIGH = "rcLinkBHigh";
     public static final String LINK_B_LOW = "rcLinkBLow";
-    public static final String TRAIN_HIGH = "rcTrainHigh";
-    public static final String TRAIN_LOW = "rcTrainLow";
     private final Map<UUID, EntityMinecart> carts = new MapMaker().weakValues().makeMap();
-    private final Map<UUID, Train> trains = new HashMap<UUID, Train>();
 
     private LinkageManager() {
     }
@@ -100,8 +97,8 @@ public class LinkageManager implements ILinkageManager {
     /**
      * Returns a minecart from a persistent UUID.
      *
-     * @param id
-     * @return
+     * @param id Cart's persistent UUID
+     * @return EntityMinecart
      */
     @Override
     public EntityMinecart getCartFromUUID(UUID id) {
@@ -117,8 +114,8 @@ public class LinkageManager implements ILinkageManager {
      * Returns the square of the max distance two carts can be and still be
      * linkable.
      *
-     * @param cart1
-     * @param cart2
+     * @param cart1 First Cart
+     * @param cart2 Second Cart
      * @return The square of the linkage distance
      */
     private float getLinkageDistanceSq(EntityMinecart cart1, EntityMinecart cart2) {
@@ -138,8 +135,8 @@ public class LinkageManager implements ILinkageManager {
      * Returns true if there is nothing preventing the two carts from being
      * linked.
      *
-     * @param cart1
-     * @param cart2
+     * @param cart1 First Cart
+     * @param cart2 Second Cart
      * @return True if can be linked
      */
     private boolean canLinkCarts(EntityMinecart cart1, EntityMinecart cart2) {
@@ -167,25 +164,27 @@ public class LinkageManager implements ILinkageManager {
         if (cart1.getDistanceSqToEntity(cart2) > getLinkageDistanceSq(cart1, cart2))
             return false;
 
-        if (!hasFreeLink(cart1) || !hasFreeLink(cart2))
-            return false;
+        return hasFreeLink(cart1) && hasFreeLink(cart2);
 
-        return true;
     }
 
     /**
      * Creates a link between two carts, but only if there is nothing preventing
      * such a link.
      *
-     * @param cart1
-     * @param cart2
+     * @param cart1 First Cart
+     * @param cart2 Second Cart
      * @return True if the link succeeded.
      */
     @Override
     public boolean createLink(EntityMinecart cart1, EntityMinecart cart2) {
         if (canLinkCarts(cart1, cart2)) {
+            Train train = Train.getLongestTrain(cart1, cart2);
+
             setLink(cart1, cart2);
             setLink(cart2, cart1);
+
+            train.addLink(cart1, cart2);
 
             if (cart1 instanceof ILinkableCart)
                 ((ILinkableCart) cart1).onLinkCreated(cart2);
@@ -200,39 +199,47 @@ public class LinkageManager implements ILinkageManager {
     }
 
     private boolean hasFreeLink(EntityMinecart cart) {
-        return getLinkedCartA(cart) == null || (hasLinkB(cart) && getLinkedCartB(cart) == null);
+        return getLinkedCartA(cart) == null || (hasLink(cart, LinkType.LINK_B) && getLinkedCartB(cart) == null);
     }
 
-    private boolean hasLinkB(EntityMinecart cart) {
-        if (cart instanceof ILinkableCart)
+    private boolean hasLink(EntityMinecart cart, LinkType linkType) {
+        if (linkType == LinkType.LINK_B && cart instanceof ILinkableCart)
             return ((ILinkableCart) cart).hasTwoLinks();
         return true;
     }
 
     private void setLink(EntityMinecart cart1, EntityMinecart cart2) {
         if (getLinkedCartA(cart1) == null)
-            setLinkA(cart1, cart2);
-        else if (hasLinkB(cart1) && getLinkedCartB(cart1) == null)
-            setLinkB(cart1, cart2);
+            setLink(cart1, cart2, LinkType.LINK_A);
+        else if (hasLink(cart1, LinkType.LINK_B) && getLinkedCartB(cart1) == null)
+            setLink(cart1, cart2, LinkType.LINK_B);
     }
 
-    public UUID getLinkA(EntityMinecart cart) {
-        long high = cart.getEntityData().getLong(LINK_A_HIGH);
-        long low = cart.getEntityData().getLong(LINK_A_LOW);
+    public UUID getLink(EntityMinecart cart, LinkType linkType) {
+        long high = cart.getEntityData().getLong(linkType.tagHigh);
+        long low = cart.getEntityData().getLong(linkType.tagLow);
         return new UUID(high, low);
     }
 
-    private void setLinkA(EntityMinecart cart1, EntityMinecart cart2) {
-        resetTrain(cart1);
-        resetTrain(cart2);
+    public UUID getLinkA(EntityMinecart cart) {
+        return getLink(cart, LinkType.LINK_A);
+    }
+
+    public UUID getLinkB(EntityMinecart cart) {
+        return getLink(cart, LinkType.LINK_B);
+    }
+
+    private void setLink(EntityMinecart cart1, EntityMinecart cart2, LinkType linkType) {
+        if (!hasLink(cart1, linkType))
+            return;
         UUID id = getLinkageId(cart2);
-        cart1.getEntityData().setLong(LINK_A_HIGH, id.getMostSignificantBits());
-        cart1.getEntityData().setLong(LINK_A_LOW, id.getLeastSignificantBits());
+        cart1.getEntityData().setLong(linkType.tagHigh, id.getMostSignificantBits());
+        cart1.getEntityData().setLong(linkType.tagLow, id.getLeastSignificantBits());
     }
 
     /**
-     * Returns the cart linked to Link A or null if nothing is currently
-     * occupying Link A.
+     * Returns the cart linked to LinkType A or null if nothing is currently
+     * occupying LinkType A.
      *
      * @param cart The cart for which to get the link
      * @return The linked cart or null
@@ -242,25 +249,9 @@ public class LinkageManager implements ILinkageManager {
         return getCartFromUUID(getLinkA(cart));
     }
 
-    public UUID getLinkB(EntityMinecart cart) {
-        long high = cart.getEntityData().getLong(LINK_B_HIGH);
-        long low = cart.getEntityData().getLong(LINK_B_LOW);
-        return new UUID(high, low);
-    }
-
-    private void setLinkB(EntityMinecart cart1, EntityMinecart cart2) {
-        if (!hasLinkB(cart1))
-            return;
-        resetTrain(cart1);
-        resetTrain(cart2);
-        UUID id = getLinkageId(cart2);
-        cart1.getEntityData().setLong(LINK_B_HIGH, id.getMostSignificantBits());
-        cart1.getEntityData().setLong(LINK_B_LOW, id.getLeastSignificantBits());
-    }
-
     /**
-     * Returns the cart linked to Link B or null if nothing is currently
-     * occupying Link B.
+     * Returns the cart linked to LinkType B or null if nothing is currently
+     * occupying LinkType B.
      *
      * @param cart The cart for which to get the link
      * @return The linked cart or null
@@ -270,22 +261,12 @@ public class LinkageManager implements ILinkageManager {
         return getCartFromUUID(getLinkB(cart));
     }
 
+    @Deprecated
     public Train getTrain(EntityMinecart cart) {
-        if (cart == null)
-            return null;
-        Train train = trains.get(getTrainUUID(cart));
-        if (train != null && (!train.containsCart(cart) || !train.isValid())) {
-            train.releaseTrain();
-            trains.remove(train.getUUID());
-            train = null;
-        }
-        if (train == null) {
-            train = new Train(cart);
-            trains.put(train.getUUID(), train);
-        }
-        return train;
+        return Train.getTrain(cart);
     }
 
+    @Deprecated
     public Train getTrain(UUID cartUUID) {
         if (cartUUID == null)
             return null;
@@ -295,32 +276,27 @@ public class LinkageManager implements ILinkageManager {
         return getTrain(cart);
     }
 
+    @Deprecated
     public UUID getTrainUUID(EntityMinecart cart) {
-        long high = cart.getEntityData().getLong(TRAIN_HIGH);
-        long low = cart.getEntityData().getLong(TRAIN_LOW);
-        return new UUID(high, low);
+        return Train.getTrainUUID(cart);
     }
 
+    @Deprecated
     public void resetTrain(EntityMinecart cart) {
-        Train train = trains.remove(getTrainUUID(cart));
-        if (train != null)
-            train.releaseTrain();
+        Train.resetTrain(cart);
     }
 
+    @Deprecated
     public boolean areInSameTrain(EntityMinecart cart1, EntityMinecart cart2) {
-        if (cart1 == null || cart2 == null)
-            return false;
-        if (cart1 == cart2)
-            return true;
-
-        return getTrain(cart1) == getTrain(cart2);
+        return Train.areInSameTrain(cart1, cart2);
     }
+
 
     /**
      * Returns true if the two carts are linked directly to each other.
      *
-     * @param cart1
-     * @param cart2
+     * @param cart1 First Cart
+     * @param cart2 Second Cart
      * @return True if linked
      */
     @Override
@@ -352,68 +328,74 @@ public class LinkageManager implements ILinkageManager {
     /**
      * Breaks a link between two carts, if any link exists.
      *
-     * @param cart1
-     * @param cart2
+     * @param cart1 First Cart
+     * @param cart2 Second Cart
      */
     @Override
     public void breakLink(EntityMinecart cart1, EntityMinecart cart2) {
+        if (!areLinked(cart1, cart2))
+            return;
+
         UUID link = getLinkageId(cart2);
         if (link.equals(getLinkA(cart1)))
             breakLinkA(cart1);
 
         if (link.equals(getLinkB(cart1)))
             breakLinkB(cart1);
+
+//        int numCarts1 = numLinkedCarts(null, cart1);
+//        int numCarts2 = numLinkedCarts(null, cart2);
+//        if (numCarts1 >= numCarts2)
+//            Train.getTrain(cart1).removeAllLinkedCarts(cart2);
+//        else
+//            Train.getTrain(cart2).removeAllLinkedCarts(cart1);
     }
 
     /**
      * Breaks all links the passed cart has.
      *
-     * @param cart
+     * @param cart Cart
      */
     @Override
     public void breakLinks(EntityMinecart cart) {
-        breakLinkA(cart);
-        breakLinkB(cart);
+        breakLink(cart, LinkType.LINK_A);
+        breakLink(cart, LinkType.LINK_B);
     }
 
     /**
      * Break only link A.
      *
-     * @param cart
+     * @param cart Cart
      */
     @Override
     public void breakLinkA(EntityMinecart cart) {
-        resetTrain(cart);
-        UUID link = getLinkA(cart);
-        cart.getEntityData().setLong(LINK_A_HIGH, 0);
-        cart.getEntityData().setLong(LINK_A_LOW, 0);
-        EntityMinecart other = getCartFromUUID(link);
-        if (other != null)
-            breakLink(other, cart);
-        if (cart instanceof ILinkableCart)
-            ((ILinkableCart) cart).onLinkBroken(other);
-
-        printDebug("Carts {0}({1}) and {2}({3}) unlinked (A).", getLinkageId(cart), cart, link, other != null ? other : "null");
+        breakLink(cart, LinkType.LINK_A);
     }
 
     /**
      * Break only link B.
      *
-     * @param cart
+     * @param cart Cart
      */
     @Override
     public void breakLinkB(EntityMinecart cart) {
-        resetTrain(cart);
-        UUID link = getLinkB(cart);
-        cart.getEntityData().setLong(LINK_B_HIGH, 0);
-        cart.getEntityData().setLong(LINK_B_LOW, 0);
+        breakLink(cart, LinkType.LINK_B);
+    }
+
+    private EntityMinecart breakLink(EntityMinecart cart, LinkType linkType) {
+        Train.resetTrain(cart);
+        UUID link = getLink(cart, linkType);
+        cart.getEntityData().setLong(linkType.tagHigh, 0);
+        cart.getEntityData().setLong(linkType.tagLow, 0);
         EntityMinecart other = getCartFromUUID(link);
-        if (other != null)
+        if (other != null) {
             breakLink(other, cart);
+        }
         if (cart instanceof ILinkableCart)
             ((ILinkableCart) cart).onLinkBroken(other);
 
-        printDebug("Carts {0}({1}) and {2}({3}) unlinked (B).", getLinkageId(cart), cart, link, other != null ? other : "null");
+        printDebug("Carts {0}({1}) and {2}({3}) unlinked ({4}).", getLinkageId(cart), cart, link, other != null ? other : "null", linkType.name());
+        return other;
     }
 
     /**
@@ -424,13 +406,35 @@ public class LinkageManager implements ILinkageManager {
      */
     @Override
     public int countCartsInTrain(EntityMinecart cart) {
-        Train train = getTrain(cart);
-        return train.size();
+        return Train.getTrain(cart).size();
+    }
+
+    private int numLinkedCarts(EntityMinecart prev, EntityMinecart next) {
+        int count = 1;
+        EntityMinecart linkA = getLinkedCartA(next);
+        EntityMinecart linkB = getLinkedCartB(next);
+
+        if (linkA != null && linkA != prev)
+            count += numLinkedCarts(next, linkA);
+        if (linkB != null && linkB != prev)
+            count += numLinkedCarts(next, linkB);
+        return count;
     }
 
     @Override
     public Iterable<EntityMinecart> getCartsInTrain(EntityMinecart cart) {
-        return getTrain(cart);
+        return Train.getTrain(cart);
     }
 
+    private static enum LinkType {
+        LINK_A(LINK_A_HIGH, LINK_A_LOW),
+        LINK_B(LINK_B_HIGH, LINK_B_LOW);
+
+        public final String tagHigh, tagLow;
+
+        private LinkType(String tagHigh, String tagLow) {
+            this.tagHigh = tagHigh;
+            this.tagLow = tagLow;
+        }
+    }
 }
