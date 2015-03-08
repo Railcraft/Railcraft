@@ -100,6 +100,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
     private LockingProfileType profile = LockingProfileType.LOCKDOWN;
     private LockingProfile profileInstance = profile.create(this);
     private EntityMinecart currentCart, prevCart;
+    private Train currentTrain;
     private UUID uuid;
     private boolean trainLeaving = false;
     private boolean redstone = false;
@@ -224,7 +225,11 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
 
     private void lockCurrentCart() {
         if (currentCart != null) {
-        	Train currentTrain = LinkageManager.instance().getTrain(currentCart);
+            Train train = Train.getTrain(currentCart);
+            if(currentTrain != train){
+                currentTrain.removeLockingTrack(getUUID());
+                currentTrain = train;
+            }
             currentTrain.addLockingTrack(getUUID());            
             MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Lock(currentCart, getX(), getY(), getZ()));
             profileInstance.onLock(currentCart);
@@ -245,9 +250,9 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
 
     
     private void releaseCurrentCart() {
+        if(currentTrain != null)
+            currentTrain.removeLockingTrack(getUUID());
     	if (currentCart != null) {
-            Train train = LinkageManager.instance().getTrain(currentCart);
-            train.removeLockingTrack(getUUID());
             MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Release(currentCart, getX(), getY(), getZ()));
             profileInstance.onRelease(currentCart);            
         }
@@ -273,9 +278,9 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
      */
     private boolean isSameTrainOrCart() {    	
     	if(profile.lockType == LockType.TRAIN) {
-    		Train currentTrain = LinkageManager.instance().getTrain(currentCart);
+    		Train currentTrain = Train.getTrain(currentCart);
     		if(currentTrain != null) {
-    			Train prevTrain = LinkageManager.instance().getTrain(prevCart);
+    			Train prevTrain = Train.getTrain(prevCart);
     			if(currentTrain == prevTrain) {
     				trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY; // reset trainDelay
     			} else {
