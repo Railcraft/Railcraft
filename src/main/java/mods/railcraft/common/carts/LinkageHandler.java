@@ -97,7 +97,7 @@ public class LinkageHandler {
             count++;
             if (count > 200) {
                 LinkageManager.instance().breakLink(cart1, cart2);
-                LinkageManager.printDebug("Reason For Broken LinkType: Carts in different dimensions.");
+                LinkageManager.printDebug("Reason For Broken Link: Carts in different dimensions.");
             }
             cart1.getEntityData().setShort(timer, count);
             return;
@@ -107,7 +107,7 @@ public class LinkageHandler {
         double dist = cart1.getDistanceToEntity(cart2);
         if (dist > MAX_DISTANCE) {
             LinkageManager.instance().breakLink(cart1, cart2);
-            LinkageManager.printDebug("Reason For Broken LinkType: Max distance exceeded.");
+            LinkageManager.printDebug("Reason For Broken Link: Max distance exceeded.");
             return;
         }
 

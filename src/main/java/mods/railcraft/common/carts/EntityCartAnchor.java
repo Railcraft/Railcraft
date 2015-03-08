@@ -55,6 +55,7 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
     private Set<ChunkCoordIntPair> chunks;
     private long anchorFuel;
     private final IInventory invWrapper = new InventoryMapper(this);
+    private boolean teleported = false;
     private int disabled = 0;
     private int clock = MiscTools.getRand().nextInt();
 
@@ -174,7 +175,7 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
     }
 
     protected boolean meetsTicketRequirements() {
-        return !isDead && disabled <= 0 && (hasFuel() || !needsFuel());
+        return !isDead && !teleported && disabled <= 0 && (hasFuel() || !needsFuel());
     }
 
     protected void releaseTicket() {
@@ -248,6 +249,12 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
     public void setDead() {
         releaseTicket();
         super.setDead();
+    }
+
+    public void travelToDimension(int dim){
+        teleported = true;
+        releaseTicket();
+        super.travelToDimension(dim);
     }
 
     @Override
