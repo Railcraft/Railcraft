@@ -350,6 +350,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         chunkTicket.getModData().setInteger("xCoord", xCoord);
         chunkTicket.getModData().setInteger("yCoord", yCoord);
         chunkTicket.getModData().setInteger("zCoord", zCoord);
+        chunkTicket.getModData().setString("type", getMachineType().getTag());
     }
 
     public void setTicket(Ticket ticket) {

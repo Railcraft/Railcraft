@@ -8,9 +8,7 @@
  */
 package mods.railcraft.common.carts;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import com.google.common.collect.MapMaker;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.ILinkageManager;
@@ -18,21 +16,24 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
 import org.apache.logging.log4j.Level;
-import com.google.common.collect.MapMaker;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * The LinkageManager contains all the functions needed to link and interacted
  * with linked carts.
- *
+ * <p/>
  * One concept if import is that of the Linkage Id. Every cart is given a unique
  * identifier by the LinkageManager the first time it encounters the cart.
- *
+ * <p/>
  * This identifier is stored in the entity's NBT data between world loads so
  * that links are persistent rather than transitory.
- *
+ * <p/>
  * Links are also stored in NBT data as an Integer value that contains the
  * Linkage Id of the cart it is linked to.
- *
+ * <p/>
  * Generally you can ignore most of this and use the functions that don't
  * require or return Linkage Ids.
  *
@@ -40,14 +41,14 @@ import com.google.common.collect.MapMaker;
  */
 public class LinkageManager implements ILinkageManager {
 
-    private final Map<UUID, EntityMinecart> carts = new MapMaker().weakValues().makeMap();
-    private final Map<UUID, Train> trains = new HashMap<UUID, Train>();
     public static final String LINK_A_HIGH = "rcLinkAHigh";
     public static final String LINK_A_LOW = "rcLinkALow";
     public static final String LINK_B_HIGH = "rcLinkBHigh";
     public static final String LINK_B_LOW = "rcLinkBLow";
     public static final String TRAIN_HIGH = "rcTrainHigh";
     public static final String TRAIN_LOW = "rcTrainLow";
+    private final Map<UUID, EntityMinecart> carts = new MapMaker().weakValues().makeMap();
+    private final Map<UUID, Train> trains = new HashMap<UUID, Train>();
 
     private LinkageManager() {
     }
@@ -72,7 +73,7 @@ public class LinkageManager implements ILinkageManager {
 
     /**
      * Removes a id:cart pairing from the linkage registry.
-     *
+     * <p/>
      * You should not need to call this function ever, it is needed only by the
      * LinkageHandler (internal RailcraftProxy code) in order to clean up dead
      * links left by dead carts.
@@ -273,7 +274,7 @@ public class LinkageManager implements ILinkageManager {
         if (cart == null)
             return null;
         Train train = trains.get(getTrainUUID(cart));
-        if (train != null && !train.containsCart(cart)) {
+        if (train != null && (!train.containsCart(cart) || !train.isValid())) {
             train.releaseTrain();
             trains.remove(train.getUUID());
             train = null;
@@ -289,7 +290,7 @@ public class LinkageManager implements ILinkageManager {
         if (cartUUID == null)
             return null;
         EntityMinecart cart = getCartFromUUID(cartUUID);
-        if(cart == null)
+        if (cart == null)
             return null;
         return getTrain(cart);
     }

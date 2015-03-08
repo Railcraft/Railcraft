@@ -174,7 +174,7 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
     }
 
     protected boolean meetsTicketRequirements() {
-        return disabled <= 0 && (hasFuel() || !needsFuel());
+        return !isDead && disabled <= 0 && (hasFuel() || !needsFuel());
     }
 
     protected void releaseTicket() {

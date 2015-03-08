@@ -53,6 +53,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
     private boolean previousStructureValidity;
 
     public TileTankIronValve() {
+        fillTank.setHidden(true);
         tankManager.add(fillTank);
     }
 

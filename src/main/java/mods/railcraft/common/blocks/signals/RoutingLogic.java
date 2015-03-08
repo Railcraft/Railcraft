@@ -10,7 +10,6 @@ package mods.railcraft.common.blocks.signals;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
-import java.util.*;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IPaintedCart;
 import mods.railcraft.api.carts.IRefuelableCart;
@@ -25,20 +24,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class RoutingLogic {
-    
+
     public static final String REGEX_SYMBOL = "\\?";
 
     private Deque<Condition> conditions;
     private RoutingLogicException error;
-
-    public static RoutingLogic buildLogic(LinkedList<String> data) {
-        return new RoutingLogic(data);
-    }
 
     private RoutingLogic(LinkedList<String> data) {
         try {
@@ -49,6 +50,10 @@ public class RoutingLogic {
         } catch (RoutingLogicException ex) {
             error = ex;
         }
+    }
+
+    public static RoutingLogic buildLogic(LinkedList<String> data) {
+        return new RoutingLogic(data);
     }
 
     public RoutingLogicException getError() {
@@ -167,12 +172,18 @@ public class RoutingLogic {
             this.keyword = keyword;
             this.line = line;
             String keywordMatch = keyword + REGEX_SYMBOL + "?=";
-            if(!line.matches(keywordMatch + ".*"))
+            if (!line.matches(keywordMatch + ".*"))
                 throw new RoutingLogicException("railcraft.gui.routing.logic.unrecognized.keyword", line);
             this.isRegex = line.matches(keyword + REGEX_SYMBOL + "=.*");
             if (!supportsRegex && isRegex)
                 throw new RoutingLogicException("railcraft.gui.routing.logic.regex.unsupported", line);
             this.value = line.replaceFirst(keywordMatch, "");
+            if (isRegex)
+                try {
+                    Pattern.compile(value);
+                } catch (PatternSyntaxException ex) {
+                    throw new RoutingLogicException("railcraft.gui.routing.logic.regex.invalid", line);
+                }
         }
 
         @Override
