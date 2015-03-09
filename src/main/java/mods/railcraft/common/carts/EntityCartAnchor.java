@@ -193,6 +193,7 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
                 chunkTicket.setChunkListDepth(MAX_CHUNKS);
                 chunkTicket.bindEntity(this);
                 setChunkTicket(chunkTicket);
+                forceChunkLoading(chunkCoordX, chunkCoordZ);
                 return true;
             }
         }
