@@ -37,23 +37,21 @@ public class RCSoundHandler {
     public void onPlaySound(PlaySoundEvent17 event) {
         String soundName = event.name;
         if (soundName != null && event.sound instanceof PositionedSoundRecord && soundName.contains("railcraft")) {
-            World world = Railcraft.getProxy().getClientWorld();            
+            World world = Railcraft.getProxy().getClientWorld();
             if (world != null) {
-            	SoundType sound = null;
                 float x = event.sound.getXPosF();
                 float y = event.sound.getYPosF();
                 float z = event.sound.getZPosF();
                 int ix = MathHelper.floor_float(x);
                 int iy = MathHelper.floor_float(y);
                 int iz = MathHelper.floor_float(z);
-                if (soundName.contains("place") && getBlockSound(world, ix, iy, iz) == null) {
-                	event.manager.addDelayedSound(event.sound, 3); //Play sound later if client is lagging.
-                } else if (soundName.contains("step")) {
-                	sound = getBlockSound(world, ix, iy - 1, iz); //Check for block below where step happens.
-                		if (sound == null) {
-                			sound = getBlockSound(world, ix, iy, iz);} //Check if step was on a half-block.
-                } else {
-                    sound = getBlockSound(world, ix, iy, iz);
+                SoundType sound = getBlockSound(world, ix, iy, iz);
+                if (sound == null) {
+	                if (soundName.contains("place")) {
+	                	event.manager.addDelayedSound(event.sound, 3); //Play sound later to adjust for the block not being there yet.
+	                } else if (soundName.contains("step")) {
+	                	sound = getBlockSound(world, ix, iy - 1, iz);
+	                }
                 }
                 if (sound != null) {
                     String newName = sound.getStepResourcePath();
