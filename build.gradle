@@ -41,7 +41,6 @@ minecraft {
 
 sourceSets {
 	main {
-		output.resourcesDir = output.classesDir
 		java {
 			srcDir project.apiRailcraft
 			srcDir project.apiForestry
