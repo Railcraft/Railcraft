@@ -1,3 +1,14 @@
+9.5.0.5:
+	NEW: Add Debug in-game command that will dump data to the logs.
+	FIX: Fix cart unlinking.
+	FIX: SMP block sounds should work now (contribution by PaperTriangle)
+	FIX: Newly spawned Anchor Carts should attempt to force load chunks immediately instead of waiting for an entityEnteredChunk event.
+	FIX: Fixed localization issues with Track GUIs.
+	FIX: Disabling the Factory Module should no longer prevent you from cooking Abyssal and Quarried Stone.
+
+9.5.0.4:
+	FIX: Try to fix teleporting Anchor Cart chunkloading ticket spam. (might be Mystcraft issue)
+
 9.5.0.3:
 	FIX: Fix broken Train code.
 	FIX: Attempt to make Train objects survive linking and cart deaths (unlinking still needs work).
