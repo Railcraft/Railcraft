@@ -8,104 +8,29 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.TreeSet;
 import mods.railcraft.api.signals.*;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
+
 import static net.minecraftforge.common.util.ForgeDirection.*;
 
 public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IReceiverTile, IAspectProvider {
-
     private static final ForgeDirection[] SIDES = {NORTH, WEST, SOUTH, EAST};
-    private boolean prevBlinkState;
     private final SimpleSignalController controller = new SimpleSignalController(getName(), this);
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getName(), this);
+    private boolean prevBlinkState;
     private Interlock interlock = new Interlock(this);
     private SignalAspect overrideAspect = SignalAspect.RED;
-
-    private static class TileComparator implements Comparator<TileBoxInterlock> {
-
-        public static TileComparator INSTANCE = new TileComparator();
-
-        @Override
-        public int compare(TileBoxInterlock o1, TileBoxInterlock o2) {
-            if (o1.xCoord != o2.xCoord)
-                return o1.xCoord - o2.xCoord;
-            if (o1.zCoord != o2.zCoord)
-                return o1.zCoord - o2.zCoord;
-            if (o1.yCoord != o2.yCoord)
-                return o1.yCoord - o2.yCoord;
-            return 0;
-        }
-
-    }
-
-    private class Interlock {
-
-        private static final int DELAY = 20 * 10;
-        private TreeSet<TileBoxInterlock> interlocks = new TreeSet<TileBoxInterlock>(TileComparator.INSTANCE);
-        private TreeSet<TileBoxInterlock> lockRequests = new TreeSet<TileBoxInterlock>(TileComparator.INSTANCE);
-        private TileBoxInterlock active;
-        private int delay;
-
-        public Interlock(TileBoxInterlock tile) {
-            interlocks.add(tile);
-        }
-
-        public void merge(Interlock interlock) {
-            interlocks.addAll(interlock.interlocks);
-            for (TileBoxInterlock box : interlocks) {
-                box.interlock = this;
-            }
-        }
-
-        public void tick(TileBoxInterlock host) {
-            Iterator<TileBoxInterlock> it = interlocks.iterator();
-            while (it.hasNext()) {
-                TileBoxInterlock box = it.next();
-                if (box.isInvalid()) {
-                    it.remove();
-                    continue;
-                }
-            }
-            if (delay < DELAY) {
-                delay++;
-                return;
-            }
-            if (active != null && active.isInvalid())
-                active = null;
-            if (active == null && !lockRequests.isEmpty() && interlocks.first() == host) {
-                active = lockRequests.last();
-                lockRequests.clear();
-            }
-        }
-
-        public void requestLock(TileBoxInterlock host, boolean request) {
-            if (request)
-                lockRequests.add(host);
-            else if (active == host)
-                active = null;
-        }
-
-        public SignalAspect getAspect(TileBoxInterlock host, SignalAspect requestedAspect) {
-            if (host == active) {
-                SignalAspect overrideAspect = SignalAspect.GREEN;
-                for (TileBoxInterlock box : interlocks) {
-                    overrideAspect = SignalAspect.mostRestrictive(overrideAspect, box.overrideAspect);
-                }
-                return SignalAspect.mostRestrictive(overrideAspect, requestedAspect);
-            }
-            return SignalAspect.RED;
-        }
-
-    }
 
     public TileBoxInterlock() {
     }
@@ -226,8 +151,8 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
         TileEntity tile = tileCache.getTileOnSide(side);
         if (tile instanceof TileBoxInterlock)
             return true;
-        if(tile instanceof TileBoxBase)
-            return ((TileBoxBase)tile).canTransferAspect();
+        if (tile instanceof TileBoxBase)
+            return ((TileBoxBase) tile).canTransferAspect();
         return false;
     }
 
@@ -256,4 +181,89 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
         return getBoxSignalAspect(null);
     }
 
+    @Override
+    public List<String> getDebugOutput() {
+        List<String> debug = super.getDebugOutput();
+        debug.add("Interlock Obj: " + interlock);
+        debug.add("Interlock Pool: " + interlock.interlocks);
+        debug.add("Lock Requests: " + interlock.lockRequests);
+        debug.add("Active: " + interlock.active);
+        debug.add("Delay: " + interlock.delay);
+        debug.add("In Aspect: " + receiver.getAspect().name());
+        debug.add("Out Aspect: " + controller.getAspect().name());
+        debug.add("Override Aspect: " + overrideAspect.name());
+        return debug;
+    }
+
+    private static class TileComparator implements Comparator<TileBoxInterlock> {
+        public static TileComparator INSTANCE = new TileComparator();
+
+        @Override
+        public int compare(TileBoxInterlock o1, TileBoxInterlock o2) {
+            if (o1.xCoord != o2.xCoord)
+                return o1.xCoord - o2.xCoord;
+            if (o1.zCoord != o2.zCoord)
+                return o1.zCoord - o2.zCoord;
+            if (o1.yCoord != o2.yCoord)
+                return o1.yCoord - o2.yCoord;
+            return 0;
+        }
+    }
+
+    private class Interlock {
+        private static final int DELAY = 20 * 10;
+        private TreeSet<TileBoxInterlock> interlocks = new TreeSet<TileBoxInterlock>(TileComparator.INSTANCE);
+        private TreeSet<TileBoxInterlock> lockRequests = new TreeSet<TileBoxInterlock>(TileComparator.INSTANCE);
+        private TileBoxInterlock active;
+        private int delay;
+
+        public Interlock(TileBoxInterlock tile) {
+            interlocks.add(tile);
+        }
+
+        public void merge(Interlock interlock) {
+            interlocks.addAll(interlock.interlocks);
+            for (TileBoxInterlock box : interlocks) {
+                box.interlock = this;
+            }
+        }
+
+        public void tick(TileBoxInterlock host) {
+            Iterator<TileBoxInterlock> it = interlocks.iterator();
+            while (it.hasNext()) {
+                TileBoxInterlock box = it.next();
+                if (box.isInvalid()) {
+                    it.remove();
+                }
+            }
+            if (delay < DELAY) {
+                delay++;
+                return;
+            }
+            if (active != null && active.isInvalid())
+                active = null;
+            if (active == null && !lockRequests.isEmpty() && interlocks.first() == host) {
+                active = lockRequests.last();
+                lockRequests.clear();
+            }
+        }
+
+        public void requestLock(TileBoxInterlock host, boolean request) {
+            if (request)
+                lockRequests.add(host);
+            else if (active == host)
+                active = null;
+        }
+
+        public SignalAspect getAspect(TileBoxInterlock host, SignalAspect requestedAspect) {
+            if (host == active) {
+                SignalAspect overrideAspect = SignalAspect.GREEN;
+                for (TileBoxInterlock box : interlocks) {
+                    overrideAspect = SignalAspect.mostRestrictive(overrideAspect, box.overrideAspect);
+                }
+                return SignalAspect.mostRestrictive(overrideAspect, requestedAspect);
+            }
+            return SignalAspect.RED;
+        }
+    }
 }

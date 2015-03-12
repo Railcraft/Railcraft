@@ -15,6 +15,9 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import mods.railcraft.common.commands.CommandDebug;
+import mods.railcraft.common.commands.RootCommand;
 import org.apache.logging.log4j.Level;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -85,9 +88,12 @@ import net.minecraftforge.oredict.RecipeSorter;
 
 public class ModuleCore extends RailcraftModule {
 
+
     @Override
     public void preInit() {
         LinkageManager.reset();
+
+        Railcraft.rootCommand.addChildCommand(new CommandDebug());
 
         RailcraftCraftingManager.cokeOven = new CokeOvenCraftingManager();
         RailcraftCraftingManager.blastFurnace = new BlastFurnaceCraftingManager();

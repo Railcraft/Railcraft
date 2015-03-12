@@ -10,9 +10,13 @@ package mods.railcraft.common.blocks;
 
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -31,11 +35,18 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
 public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable {
-
-    private GameProfile owner = new GameProfile(null, "[Railcraft]");
-    protected int clock = MiscTools.getRand().nextInt();
-    private boolean sendClientUpdate = false;
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
+    protected int clock = MiscTools.getRand().nextInt();
+    private GameProfile owner = new GameProfile(null, "[Railcraft]");
+    private boolean sendClientUpdate = false;
+
+    public static boolean isUseableByPlayerHelper(TileEntity tile, EntityPlayer player) {
+        if (tile.isInvalid())
+            return false;
+        if (tile.getWorldObj().getTileEntity(tile.xCoord, tile.yCoord, tile.zCoord) != tile)
+            return false;
+        return player.getDistanceSq(tile.xCoord, tile.yCoord, tile.zCoord) <= 64;
+    }
 
     public AdjacentTileCache getTileCache() {
         return tileCache;
@@ -125,12 +136,14 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     public abstract String getName();
 
-    public static boolean isUseableByPlayerHelper(TileEntity tile, EntityPlayer player) {
-        if(tile.isInvalid())
-            return false;
-        if (tile.getWorldObj().getTileEntity(tile.xCoord, tile.yCoord, tile.zCoord) != tile)
-            return false;
-        return player.getDistanceSq(tile.xCoord, tile.yCoord, tile.zCoord) <= 64;
+    public List<String> getDebugOutput() {
+        List<String> debug = new ArrayList<String>();
+        debug.add("Railcraft Tile Entity Data Dump");
+        debug.add("Object: " + this);
+        debug.add(String.format("Coordinates: d=%d, %d,%d,%d", worldObj.provider.dimensionId, xCoord, yCoord, zCoord));
+        debug.add("Owner: " + (owner == null ? "null" : owner.getName()));
+        debug.addAll(tileCache.getDebugOutput());
+        return debug;
     }
 
     @Override
@@ -166,5 +179,4 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     public abstract short getId();
-
 }
