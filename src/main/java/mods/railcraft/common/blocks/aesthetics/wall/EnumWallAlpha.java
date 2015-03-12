@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
+import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -53,9 +54,9 @@ public enum EnumWallAlpha implements WallInfo {
     private int sourceMeta = 0;
 
     public static void initialize() {
-        INFERNAL_BRICK.source = BlockBrick.infernal;
-        SANDY_BRICK.source = BlockBrick.sandy;
-        FROST_BOUND_BRICK.source = BlockBrick.frostbound;
+        INFERNAL_BRICK.source = EnumBrick.INFERNAL.getBlock();
+        SANDY_BRICK.source = EnumBrick.SANDY.getBlock();
+        FROST_BOUND_BRICK.source = EnumBrick.FROSTBOUND.getBlock();
         CONCRETE.source = BlockCube.getBlock();
         CONCRETE.sourceMeta = EnumCube.CONCRETE_BLOCK.ordinal();
 

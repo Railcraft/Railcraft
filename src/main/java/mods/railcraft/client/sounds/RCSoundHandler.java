@@ -46,6 +46,13 @@ public class RCSoundHandler {
                 int iy = MathHelper.floor_float(y);
                 int iz = MathHelper.floor_float(z);
                 SoundType sound = getBlockSound(world, ix, iy, iz);
+                if (sound == null) {
+	                if (soundName.contains("place")) {
+	                	event.manager.addDelayedSound(event.sound, 3); //Play sound later to adjust for the block not being there yet.
+	                } else if (soundName.contains("step")) {
+	                	sound = getBlockSound(world, ix, iy - 1, iz);
+	                }
+                }
                 if (sound != null) {
                     String newName = sound.getStepResourcePath();
                     if (soundName.contains("dig"))
@@ -53,25 +60,6 @@ public class RCSoundHandler {
                     else if (soundName.contains("place"))
                         newName = sound.func_150496_b();
                     event.result = new PositionedSoundRecord(new ResourceLocation(newName), event.sound.getVolume(), event.sound.getPitch() * sound.getPitch(), x, y, z);
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onPlaySoundAtEntity(PlaySoundAtEntityEvent event) {
-        String soundName = event.name;
-        Entity entity = event.entity;
-        if (soundName != null && soundName.equals("step.railcraft")) {
-            World world = entity.worldObj;
-            if (world != null) {
-                int ix = MathHelper.floor_double(entity.posX);
-                int iy = MathHelper.floor_double(entity.posY - 0.2 - (double) entity.yOffset);
-                int iz = MathHelper.floor_double(entity.posZ);
-                SoundType sound = getBlockSound(world, ix, iy, iz);
-                if (sound != null) {
-                    world.playSoundAtEntity(entity, sound.getStepResourcePath(), event.volume, event.pitch * sound.getPitch());
-                    event.setCanceled(true);
                 }
             }
         }

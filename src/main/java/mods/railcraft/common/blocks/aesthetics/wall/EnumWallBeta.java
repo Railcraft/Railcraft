@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
+import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -54,10 +55,10 @@ public enum EnumWallBeta implements WallInfo {
         GOLD.source = Blocks.gold_block;
         DIAMOND.source = Blocks.diamond_block;
 
-        ABYSSAL_BRICK.source = BlockBrick.abyssal;
-        QUARRIED_BRICK.source = BlockBrick.quarried;
-        BLOODSTAINED_BRICK.source = BlockBrick.bloodstained;
-        BLEACHEDBONE_BRICK.source = BlockBrick.bleachedbone;
+        ABYSSAL_BRICK.source = EnumBrick.ABYSSAL.getBlock();
+        QUARRIED_BRICK.source = EnumBrick.QUARRIED.getBlock();
+        BLOODSTAINED_BRICK.source = EnumBrick.BLOODSTAINED.getBlock();
+        BLEACHEDBONE_BRICK.source = EnumBrick.BLEACHEDBONE.getBlock();
 
         for (EnumWallBeta wall : VALUES) {
             if (wall.isEnabled() && wall.source != null)

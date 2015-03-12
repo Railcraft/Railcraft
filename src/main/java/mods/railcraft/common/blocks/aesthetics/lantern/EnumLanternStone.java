@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
+import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -46,14 +48,14 @@ public enum EnumLanternStone implements LanternInfo {
     private ItemStack source;
 
     public static void initialize() {
-        ABYSSAL.source = BlockBrick.abyssal.getItemStack(BlockBrick.BrickVariant.BLOCK, 1);
-        BLEACHEDBONE.source = BlockBrick.bleachedbone.getItemStack(BlockBrick.BrickVariant.BLOCK, 1);
-        BLOODSTAINED.source = BlockBrick.bloodstained.getItemStack(BlockBrick.BrickVariant.BLOCK, 1);
-        FROSTBOUND.source = BlockBrick.frostbound.getItemStack(BlockBrick.BrickVariant.BLOCK, 1);
-        INFERNAL.source = BlockBrick.infernal.getItemStack(BlockBrick.BrickVariant.BLOCK, 1);
-        NETHER.source = BlockBrick.nether.getItemStack(BlockBrick.BrickVariant.BLOCK, 1);
-        QUARRIED.source = BlockBrick.quarried.getItemStack(BlockBrick.BrickVariant.BLOCK, 1);
-        SANDY.source = BlockBrick.sandy.getItemStack(BlockBrick.BrickVariant.BLOCK, 1);
+        ABYSSAL.source = EnumBrick.ABYSSAL.get(BrickVariant.BLOCK, 1);
+        BLEACHEDBONE.source = EnumBrick.BLEACHEDBONE.get(BrickVariant.BLOCK, 1);
+        BLOODSTAINED.source = EnumBrick.BLOODSTAINED.get(BrickVariant.BLOCK, 1);
+        FROSTBOUND.source = EnumBrick.FROSTBOUND.get(BrickVariant.BLOCK, 1);
+        INFERNAL.source = EnumBrick.INFERNAL.get(BrickVariant.BLOCK, 1);
+        NETHER.source = EnumBrick.NETHER.get(BrickVariant.BLOCK, 1);
+        QUARRIED.source = EnumBrick.QUARRIED.get(BrickVariant.BLOCK, 1);
+        SANDY.source = EnumBrick.SANDY.get(BrickVariant.BLOCK, 1);
         SANDSTONE.source = new ItemStack(Blocks.stone_slab, 1, 1);
         STONE.source = new ItemStack(Blocks.stone_slab, 1, 0);
 

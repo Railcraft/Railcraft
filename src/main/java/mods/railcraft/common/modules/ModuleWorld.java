@@ -57,7 +57,6 @@ public class ModuleWorld extends RailcraftModule {
 
     @Override
     public void initFirst() {
-        BlockCube.registerBlock();
         BlockOre.registerBlock();
         BlockWorldLogic.registerBlock();
 

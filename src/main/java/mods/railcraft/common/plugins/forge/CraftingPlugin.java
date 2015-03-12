@@ -63,6 +63,11 @@ public class CraftingPlugin {
             GameRegistry.addRecipe(result, input);
     }
 
+    /**
+     *
+     * @param result
+     * @param input
+     */
     public static void addShapelessRecipe(ItemStack result, Object... input) {
         if (result == null || result.stackSize <= 0) {
             Game.logTrace(Level.WARN, "Tried to define invalid shapeless recipe, the result was null or zero. Skipping");

@@ -8,19 +8,16 @@
  */
 package mods.railcraft.common.util.misc;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.*;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class AdjacentTileCache {
-
     private static final int DELAY_MIN = 20;
     private static final int DELAY_MAX = 2400;
     private static final int DELAY_STEP = 2;
@@ -29,14 +26,6 @@ public final class AdjacentTileCache {
     private final int[] delay = new int[6];
     private final TileEntity source;
     private final Set<ICacheListener> listeners = new LinkedHashSet<ICacheListener>();
-
-    public static interface ICacheListener {
-
-        void changed();
-
-        void purge();
-
-    }
 
     public AdjacentTileCache(TileEntity tile) {
         this.source = tile;
@@ -114,4 +103,15 @@ public final class AdjacentTileCache {
             delay[side] = DELAY_MAX;
     }
 
+    public List<String> getDebugOutput() {
+        List<String> debug = new ArrayList<String>();
+        debug.add("Neighbor Cache: " + Arrays.toString(cache));
+        return debug;
+    }
+
+    public static interface ICacheListener {
+        void changed();
+
+        void purge();
+    }
 }
