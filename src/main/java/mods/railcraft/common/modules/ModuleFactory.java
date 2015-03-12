@@ -10,6 +10,9 @@ package mods.railcraft.common.modules;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
+import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -353,23 +356,23 @@ public class ModuleFactory extends RailcraftModule {
     @Override
     public void initSecond() {
         if (ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES)) {
-            if (EnumMachineAlpha.BLAST_FURNACE.isAvaliable() && BlockBrick.infernal != null) {
+            if (EnumMachineAlpha.BLAST_FURNACE.isAvaliable() && EnumBrick.INFERNAL.getBlock() != null) {
 
                 ItemStack stack = EnumMachineAlpha.BLAST_FURNACE.getItem(4);
                 CraftingPlugin.addShapedRecipe(stack,
                         " B ",
                         "BPB",
                         " B ",
-                        'B', BlockBrick.infernal.getItemStack(BlockBrick.BrickVariant.BRICK, 1),
+                        'B', EnumBrick.INFERNAL.get(BrickVariant.BRICK, 1),
                         'P', Items.magma_cream);
             }
-            if (EnumMachineAlpha.COKE_OVEN.isAvaliable() && BlockBrick.sandy != null) {
+            if (EnumMachineAlpha.COKE_OVEN.isAvaliable() && EnumBrick.SANDY.getBlock() != null) {
                 ItemStack stack = EnumMachineAlpha.COKE_OVEN.getItem();
                 CraftingPlugin.addShapedRecipe(stack,
                         " B ",
                         " S ",
                         " B ",
-                        'B', BlockBrick.sandy.getItemStack(BlockBrick.BrickVariant.BRICK, 1),
+                        'B', EnumBrick.SANDY.get(BrickVariant.BRICK, 1),
                         'S', new ItemStack(Blocks.sand));
             }
         }

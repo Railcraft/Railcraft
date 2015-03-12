@@ -8,13 +8,8 @@
  */
 package mods.railcraft.common.modules;
 
-import mods.railcraft.common.items.ItemCrowbarReinforced;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
+import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.EnumDetector;
@@ -26,15 +21,20 @@ import mods.railcraft.common.carts.ItemBoreHeadDiamond;
 import mods.railcraft.common.carts.ItemBoreHeadIron;
 import mods.railcraft.common.carts.ItemBoreHeadSteel;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.ItemCrowbarReinforced;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.modules.orehandlers.BoreOreHandler;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 public class ModuleAutomation extends RailcraftModule {
-
     @Override
     public void preInit() {
         MinecraftForge.EVENT_BUS.register(new BoreOreHandler());
@@ -48,84 +48,84 @@ public class ModuleAutomation extends RailcraftModule {
         Block blockDetector = BlockDetector.getBlock();
 
         if (blockDetector != null) {
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.ITEM.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', "plankWood",
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.ANY.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', Blocks.stone,
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.EMPTY.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', new ItemStack(Blocks.stonebrick, 1, 0),
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.MOB.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', new ItemStack(Blocks.stonebrick, 1, 1),
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.MOB.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', Blocks.mossy_cobblestone,
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.POWERED.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', Blocks.cobblestone,
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.PLAYER.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', new ItemStack(Blocks.stone_slab, 1, 0),
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.EXPLOSIVE.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', "slabWood",
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.ANIMAL.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', new ItemStack(Blocks.log, 1, 0),
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.AGE.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', new ItemStack(Blocks.log, 1, 1),
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.ADVANCED.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', "ingotSteel",
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.TANK.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', Items.brick,
-                'P', Blocks.stone_pressure_plate,});
-            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.SHEEP.ordinal()), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', Blocks.wool,
-                'P', Blocks.stone_pressure_plate,});
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.ITEM.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', "plankWood",
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.ANY.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', Blocks.stone,
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.EMPTY.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', new ItemStack(Blocks.stonebrick, 1, 0),
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.MOB.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', new ItemStack(Blocks.stonebrick, 1, 1),
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.MOB.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', Blocks.mossy_cobblestone,
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.POWERED.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', Blocks.cobblestone,
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.PLAYER.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', new ItemStack(Blocks.stone_slab, 1, 0),
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.EXPLOSIVE.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', "slabWood",
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.ANIMAL.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', new ItemStack(Blocks.log, 1, 0),
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.AGE.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', new ItemStack(Blocks.log, 1, 1),
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.ADVANCED.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', "ingotSteel",
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.TANK.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', Items.brick,
+                    'P', Blocks.stone_pressure_plate);
+            CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.SHEEP.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', Blocks.wool,
+                    'P', Blocks.stone_pressure_plate);
             CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.VILLAGER.ordinal()),
                     "XXX",
                     "XPX",
@@ -144,13 +144,13 @@ public class ModuleAutomation extends RailcraftModule {
         EnumMachineAlpha alpha = EnumMachineAlpha.FEED_STATION;
         if (alpha.register()) {
             ItemStack stack = alpha.getItem();
-            CraftingPlugin.addShapedRecipe(stack, new Object[]{
-                "PCP",
-                "CSC",
-                "PCP",
-                'P', "plankWood",
-                'S', ModuleManager.isModuleLoaded(ModuleManager.Module.FACTORY) ? RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL) : new ItemStack(Blocks.iron_block),
-                'C', new ItemStack(Items.golden_carrot)});
+            CraftingPlugin.addShapedRecipe(stack,
+                    "PCP",
+                    "CSC",
+                    "PCP",
+                    'P', "plankWood",
+                    'S', ModuleManager.isModuleLoaded(ModuleManager.Module.FACTORY) ? RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL) : new ItemStack(Blocks.iron_block),
+                    'C', new ItemStack(Items.golden_carrot));
 
             MinecraftForge.EVENT_BUS.register(new TamingInteractHandler());
         }
@@ -277,13 +277,12 @@ public class ModuleAutomation extends RailcraftModule {
         Block blockDetector = BlockDetector.getBlock();
 
         if (blockDetector != null)
-            if (BlockBrick.infernal != null)
+            if (EnumBrick.INFERNAL.getBlock() != null)
                 CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.LOCOMOTIVE.ordinal()),
                         "XXX",
                         "XPX",
                         "XXX",
-                        'X', new ItemStack(BlockBrick.infernal, 1, 0),
+                        'X', EnumBrick.INFERNAL.get(BrickVariant.BRICK, 1),
                         'P', Blocks.stone_pressure_plate);
     }
-
 }

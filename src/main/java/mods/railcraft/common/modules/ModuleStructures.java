@@ -8,14 +8,13 @@
  */
 package mods.railcraft.common.modules;
 
+import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import net.minecraft.block.Block;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-
-
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
@@ -46,12 +45,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ModuleStructures extends RailcraftModule {
-
     @Override
     public void preInit() {
         addBlockFactory(new BlockFactoryStairs());
         addBlockFactory(new BlockFactorySlab());
         addBlockFactory(new BlockFactoryLantern());
+        for (EnumBrick brick : EnumBrick.VALUES) {
+            addBlockFactory(brick.makeFactory());
+        }
     }
 
     @Override
@@ -62,7 +63,6 @@ public class ModuleStructures extends RailcraftModule {
         BlockPostMetal.registerPlatform();
         BlockRailcraftWall.registerBlocks();
         BlockStrengthGlass.registerBlock();
-        BlockBrick.setupBlock();
 
         EnumCube cubeType = EnumCube.CONCRETE_BLOCK;
         if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
@@ -299,5 +299,4 @@ public class ModuleStructures extends RailcraftModule {
             ForestryPlugin.addCarpenterRecipe("creosote.block", 40, Fluids.CREOSOTE.get(750), null, stack, "L", 'L', "logWood");
         }
     }
-
 }

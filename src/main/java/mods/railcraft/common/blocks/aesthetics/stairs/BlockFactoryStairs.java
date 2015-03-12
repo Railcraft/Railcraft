@@ -20,6 +20,8 @@ import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 
 import static mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs.*;
 
+import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
+import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -70,20 +72,20 @@ public class BlockFactoryStairs extends BlockFactory {
             }
         }
 
-        addRockCrusherRecipe(BlockBrick.abyssal, ABYSSAL_BLOCK, ABYSSAL_BRICK, ABYSSAL_COBBLE, ABYSSAL_FITTED);
-        addRockCrusherRecipe(BlockBrick.bleachedbone, BLEACHEDBONE_BLOCK, BLEACHEDBONE_BRICK, BLEACHEDBONE_COBBLE, BLEACHEDBONE_FITTED);
-        addRockCrusherRecipe(BlockBrick.bloodstained, BLOODSTAINED_BLOCK, BLOODSTAINED_BRICK, BLOODSTAINED_COBBLE, BLOODSTAINED_FITTED);
-        addRockCrusherRecipe(BlockBrick.frostbound, FROSTBOUND_BLOCK, FROSTBOUND_BRICK, FROSTBOUND_COBBLE, FROSTBOUND_FITTED);
-        addRockCrusherRecipe(BlockBrick.infernal, INFERNAL_BLOCK, INFERNAL_BRICK, INFERNAL_COBBLE, INFERNAL_FITTED);
-        addRockCrusherRecipe(BlockBrick.nether, NETHER_BLOCK, NETHER_COBBLE, NETHER_FITTED);
-        addRockCrusherRecipe(BlockBrick.quarried, QUARRIED_BLOCK, QUARRIED_BRICK, QUARRIED_COBBLE, QUARRIED_FITTED);
-        addRockCrusherRecipe(BlockBrick.sandy, SANDY_BLOCK, SANDY_BRICK, SANDY_COBBLE, SANDY_FITTED);
+        addRockCrusherRecipe(EnumBrick.ABYSSAL, ABYSSAL_BLOCK, ABYSSAL_BRICK, ABYSSAL_COBBLE, ABYSSAL_FITTED);
+        addRockCrusherRecipe(EnumBrick.BLEACHEDBONE, BLEACHEDBONE_BLOCK, BLEACHEDBONE_BRICK, BLEACHEDBONE_COBBLE, BLEACHEDBONE_FITTED);
+        addRockCrusherRecipe(EnumBrick.BLOODSTAINED, BLOODSTAINED_BLOCK, BLOODSTAINED_BRICK, BLOODSTAINED_COBBLE, BLOODSTAINED_FITTED);
+        addRockCrusherRecipe(EnumBrick.FROSTBOUND, FROSTBOUND_BLOCK, FROSTBOUND_BRICK, FROSTBOUND_COBBLE, FROSTBOUND_FITTED);
+        addRockCrusherRecipe(EnumBrick.INFERNAL, INFERNAL_BLOCK, INFERNAL_BRICK, INFERNAL_COBBLE, INFERNAL_FITTED);
+        addRockCrusherRecipe(EnumBrick.NETHER, NETHER_BLOCK, NETHER_COBBLE, NETHER_FITTED);
+        addRockCrusherRecipe(EnumBrick.QUARRIED, QUARRIED_BLOCK, QUARRIED_BRICK, QUARRIED_COBBLE, QUARRIED_FITTED);
+        addRockCrusherRecipe(EnumBrick.SANDY, SANDY_BLOCK, SANDY_BRICK, SANDY_COBBLE, SANDY_FITTED);
     }
 
-    private void addRockCrusherRecipe(BlockBrick brick, EnumBlockMaterial... types) {
-        if (brick == null)
+    private void addRockCrusherRecipe(EnumBrick brick, EnumBlockMaterial... types) {
+        if (brick.getBlock() == null)
             return;
-        ItemStack output = brick.getItemStack(BlockBrick.BrickVariant.COBBLE, 1);
+        ItemStack output = brick.get(BrickVariant.COBBLE, 1);
         for (EnumBlockMaterial mat : types) {
             if (!BlockRailcraftStairs.isEnabled(mat))
                 continue;

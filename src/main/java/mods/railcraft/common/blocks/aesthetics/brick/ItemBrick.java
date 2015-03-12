@@ -23,7 +23,7 @@ public class ItemBrick extends ItemBlock {
 
     @Override
     public IIcon getIconFromDamage(int meta) {
-        return BlockBrick.getBlock().getIcon(0, meta);
+        return EnumBrick.INFERNAL.getBlock().getIcon(0, meta);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class ItemBrick extends ItemBlock {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return getUnlocalizedName() + "." + BlockBrick.BrickVariant.fromOrdinal(stack.getItemDamage());
+        return getUnlocalizedName() + "." + BrickVariant.fromOrdinal(stack.getItemDamage());
     }
 
 }
