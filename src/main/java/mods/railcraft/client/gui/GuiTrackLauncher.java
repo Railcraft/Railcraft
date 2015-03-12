@@ -8,21 +8,21 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.client.gui.GuiButton;
+import mods.railcraft.common.blocks.tracks.TileTrack;
 import mods.railcraft.common.blocks.tracks.TrackLauncher;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketGuiReturn;
+import net.minecraft.client.gui.GuiButton;
 
 public class GuiTrackLauncher extends GuiBasic {
-
     protected int force = 25;
     TrackLauncher track;
 
     public GuiTrackLauncher(TrackLauncher t) {
-        super(LocalizationPlugin.translate(t.getTrackSpec().getTrackTag()));
+        super(((TileTrack) t.getTile()).getName());
         track = t;
         if (track != null)
             force = track.getLaunchForce();
@@ -71,5 +71,4 @@ public class GuiTrackLauncher extends GuiBasic {
             pkt.sendPacket();
         }
     }
-
 }
