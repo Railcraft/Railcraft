@@ -8,23 +8,22 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.client.gui.GuiButton;
+import mods.railcraft.common.blocks.tracks.TileTrack;
 import mods.railcraft.common.blocks.tracks.TrackEmbarking;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketGuiReturn;
+import net.minecraft.client.gui.GuiButton;
 
-public class GuiTrackEmbarking extends GuiBasic
-{
-
+public class GuiTrackEmbarking extends GuiBasic {
     protected byte radius = 2;
     TrackEmbarking track;
 
     public GuiTrackEmbarking(TrackEmbarking t) {
-        super(LocalizationPlugin.translate(t.getTrackType().getTag()));
+        super(((TileTrack) t.getTile()).getName());
         track = t;
-        if(track != null) {
+        if (track != null) {
             radius = track.getArea();
         }
     }
@@ -40,29 +39,29 @@ public class GuiTrackEmbarking extends GuiBasic
 
     @Override
     protected void drawExtras(int x, int y, float f) {
-        if(track != null) {
+        if (track != null) {
             GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.track.embarking.radius") + " = " + radius, 25);
         }
     }
 
     @Override
     protected void actionPerformed(GuiButton guibutton) {
-        if(guibutton.id == 0) {
+        if (guibutton.id == 0) {
             radius--;
         }
-        if(guibutton.id == 1) {
+        if (guibutton.id == 1) {
             radius++;
         }
 
-        radius = (byte)Math.max(TrackEmbarking.MIN_AREA, radius);
-        radius = (byte)Math.min(TrackEmbarking.MAX_AREA, radius);
+        radius = (byte) Math.max(TrackEmbarking.MIN_AREA, radius);
+        radius = (byte) Math.min(TrackEmbarking.MAX_AREA, radius);
     }
 
     @Override
     public void onGuiClosed() {
         track.setArea(radius);
-        if(Game.isNotHost(track.getWorld())) {
-            PacketGuiReturn pkt = new PacketGuiReturn((IGuiReturnHandler)track.tileEntity);
+        if (Game.isNotHost(track.getWorld())) {
+            PacketGuiReturn pkt = new PacketGuiReturn((IGuiReturnHandler) track.tileEntity);
             pkt.sendPacket();
         }
     }

@@ -8,21 +8,21 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.client.gui.GuiButton;
+import mods.railcraft.common.blocks.tracks.TileTrack;
 import mods.railcraft.common.blocks.tracks.TrackPriming;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
+import net.minecraft.client.gui.GuiButton;
 
 public class GuiTrackPriming extends GuiBasic {
-
     protected short fuse = 80;
     TrackPriming track;
 
     public GuiTrackPriming(TrackPriming t) {
-        super(LocalizationPlugin.translate(t.getTrackSpec().getTrackTag()));
+        super(((TileTrack) t.getTile()).getName());
         track = t;
         fuse = track.getFuse();
     }
@@ -69,5 +69,4 @@ public class GuiTrackPriming extends GuiBasic {
             PacketDispatcher.sendToServer(pkt);
         }
     }
-
 }

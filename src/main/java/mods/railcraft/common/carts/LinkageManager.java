@@ -332,8 +332,8 @@ public class LinkageManager implements ILinkageManager {
      */
     @Override
     public void breakLink(EntityMinecart cart1, EntityMinecart cart2) {
-        if (!areLinked(cart1, cart2))
-            return;
+//        if (!areLinked(cart1, cart2))
+//            return;
 
         UUID link = getLinkageId(cart2);
         if (link.equals(getLinkA(cart1)))

@@ -49,7 +49,7 @@ public class TileChestMetals extends TileChestRailcraft {
                         for (Metal metal : Metal.VALUES) {
                             if (metal.getIngot() != null && im.canRemoveItems(metal.nuggetFilter, 9) && im.canAddStack(metal.getIngot())) {
                                 im.removeItems(metal.nuggetFilter, 9);
-                                InvTools.moveItemStack(metal.getIngot(), inv);
+                                im.addStack(metal.getIngot());
                                 return true;
                             }
                         }
@@ -65,7 +65,7 @@ public class TileChestMetals extends TileChestRailcraft {
                         for (Metal metal : Metal.VALUES) {
                             if (metal.getBlock() != null && im.canRemoveItems(metal.ingotFilter, 9) && im.canAddStack(metal.getBlock())) {
                                 im.removeItems(metal.ingotFilter, 9);
-                                InvTools.moveItemStack(metal.getBlock(), inv);
+                                im.addStack(metal.getBlock());
                                 return true;
                             }
                         }
@@ -82,7 +82,7 @@ public class TileChestMetals extends TileChestRailcraft {
                             IStackFilter filter = nuggetFilters.get(metal);
                             if (metal.getNugget() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getNugget())) {
                                 im.removeItems(filter, 1);
-                                InvTools.moveItemStack(metal.getNugget(), inv);
+                                im.addStack(metal.getNugget());
                                 return true;
                             }
                         }
@@ -99,7 +99,7 @@ public class TileChestMetals extends TileChestRailcraft {
                             IStackFilter filter = ingotFilters.get(metal);
                             if (metal.getIngot() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getIngot())) {
                                 im.removeItems(filter, 1);
-                                InvTools.moveItemStack(metal.getIngot(), inv);
+                                im.addStack(metal.getIngot());
                                 return true;
                             }
                         }
@@ -116,7 +116,7 @@ public class TileChestMetals extends TileChestRailcraft {
                             IStackFilter filter = blockFilters.get(metal);
                             if (metal.getBlock() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getBlock())) {
                                 im.removeItems(filter, 1);
-                                InvTools.moveItemStack(metal.getBlock(), inv);
+                                im.addStack(metal.getBlock());
                                 return true;
                             }
                         }
