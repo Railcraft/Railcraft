@@ -1,3 +1,6 @@
+9.5.0.6:
+	FIX: Fix Brick texture loading.
+
 9.5.0.5:
 	NEW: Add Debug in-game command that will dump data to the logs.
 	FIX: Fix cart unlinking.
