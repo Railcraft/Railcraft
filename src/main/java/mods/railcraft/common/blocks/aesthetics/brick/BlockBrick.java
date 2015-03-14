@@ -44,7 +44,7 @@ public class BlockBrick extends Block {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-        icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:brick." + theme, BrickVariant.VALUES.length);
+        icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:brick." + theme.themeTag(), BrickVariant.VALUES.length);
     }
 
     @Override
