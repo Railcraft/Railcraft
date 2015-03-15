@@ -5,9 +5,12 @@ import mods.railcraft.common.items.ItemCrowbar;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import thaumcraft.api.IRepairable;
 import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.ThaumcraftApi;
@@ -63,6 +66,15 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
     public ItemCrowbarVoid() {
         super(ThaumcraftPlugin.getVoidmetalToolMaterial());
         setUnlocalizedName(ITEM_TAG);
+    }
+
+    @Override
+    public void onUpdate(ItemStack stack, World world, Entity entity, int p_77663_4_, boolean p_77663_5_) {
+        super.onUpdate(stack, world, entity, p_77663_4_, p_77663_5_);
+
+        if (stack.isItemDamaged() && entity != null && entity.ticksExisted % 20 == 0 && entity instanceof EntityLivingBase) {
+            stack.damageItem(-1, (EntityLivingBase) entity);
+        }
     }
 
     @Override
