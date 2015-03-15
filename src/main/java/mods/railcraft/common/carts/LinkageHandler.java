@@ -10,7 +10,9 @@ package mods.railcraft.common.carts;
 
 import com.google.common.collect.MapMaker;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 import java.util.Map;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
@@ -25,14 +27,13 @@ import mods.railcraft.common.util.misc.Vec2D;
 import net.minecraft.util.Vec3;
 
 public class LinkageHandler {
-
     public static final String LINK_A_TIMER = "linkA_timer";
     public static final String LINK_B_TIMER = "linkB_timer";
     public static final double LINK_DRAG = 0.95;
     public static final float MAX_DISTANCE = 8f;
     private static final float STIFFNESS = 0.7f;
     private static final float HS_STIFFNESS = 0.7f;
-//    private static final float TRANSFER = 0.15f;
+    //    private static final float TRANSFER = 0.15f;
     private static final float DAMPING = 0.4f;
     private static final float HS_DAMPING = 0.3f;
     private static final float FORCE_LIMITER = 6f;
@@ -190,71 +191,6 @@ public class LinkageHandler {
         }
     }
 
-    private float getTrainMaxSpeed(EntityMinecart cart) {
-        LinkageManager lm = LinkageManager.instance();
-        EntityMinecart linkA = lm.getLinkedCartA(cart);
-        EntityMinecart linkB = lm.getLinkedCartB(cart);
-
-        float speed = cart.getMaxCartSpeedOnRail();
-
-        float min1 = speed;
-        min1 = Math.min(min1, getTrainMaxSpeedRecursive(linkA, cart));
-
-        float min2 = speed;
-        min2 = Math.min(min2, getTrainMaxSpeedRecursive(linkB, cart));
-
-
-        return Math.min(min1, min2);
-    }
-
-    private float getTrainMaxSpeedRecursive(EntityMinecart cart, EntityMinecart prev) {
-        if (cart == null)
-            return Float.MAX_VALUE;
-        LinkageManager lm = LinkageManager.instance();
-        EntityMinecart linkA = lm.getLinkedCartA(cart);
-        EntityMinecart linkB = lm.getLinkedCartB(cart);
-
-        float speed = cart.getMaxCartSpeedOnRail();
-
-        float min1 = speed;
-        if (linkA != prev)
-            min1 = Math.min(min1, getTrainMaxSpeedRecursive(linkA, cart));
-
-        float min2 = speed;
-        if (linkB != prev)
-            min2 = Math.min(min2, getTrainMaxSpeedRecursive(linkB, cart));
-
-        return Math.min(min1, min2);
-    }
-
-    private void setTrainMaxSpeed(EntityMinecart cart, float trainSpeed) {
-        LinkageManager lm = LinkageManager.instance();
-        EntityMinecart linkA = lm.getLinkedCartA(cart);
-        EntityMinecart linkB = lm.getLinkedCartB(cart);
-
-        setTrainMaxSpeedRecursive(linkA, cart, trainSpeed);
-
-        setTrainMaxSpeedRecursive(linkB, cart, trainSpeed);
-
-        cart.setCurrentCartSpeedCapOnRail(trainSpeed);
-    }
-
-    private void setTrainMaxSpeedRecursive(EntityMinecart cart, EntityMinecart prev, float trainSpeed) {
-        if (cart == null)
-            return;
-        LinkageManager lm = LinkageManager.instance();
-        EntityMinecart linkA = lm.getLinkedCartA(cart);
-        EntityMinecart linkB = lm.getLinkedCartB(cart);
-
-        if (linkA != prev)
-            setTrainMaxSpeedRecursive(linkA, cart, trainSpeed);
-
-        if (linkB != prev)
-            setTrainMaxSpeedRecursive(linkB, cart, trainSpeed);
-
-        cart.setCurrentCartSpeedCapOnRail(trainSpeed);
-    }
-
     private double limitForce(double force) {
         return Math.copySign(Math.min(Math.abs(force), FORCE_LIMITER), force);
     }
@@ -302,10 +238,11 @@ public class LinkageHandler {
         }
 
         if (link_A == null && link_B != null || link_A != null && link_B == null) {
-            float trainSpeed = getTrainMaxSpeed(cart);
-            setTrainMaxSpeed(cart, trainSpeed);
+            Train train = Train.getTrain(cart);
+            float trainSpeed = train.getMaxSpeed();
+            train.setMaxSpeed(trainSpeed);
         } else if (link_A == null && link_B == null)
-            setTrainMaxSpeed(cart, 1.2f);
+            Train.getTrain(cart).setMaxSpeed(1.2f);
     }
 
     /**
@@ -410,5 +347,4 @@ public class LinkageHandler {
         int elevator = cart.getEntityData().getByte("elevator");
         return elevator > 0;
     }
-
 }

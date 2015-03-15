@@ -17,7 +17,6 @@ import java.util.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class Train implements Iterable<EntityMinecart> {
-
     public static final String TRAIN_HIGH = "rcTrainHigh";
     public static final String TRAIN_LOW = "rcTrainLow";
     private static final Map<UUID, Train> trains = new HashMap<UUID, Train>();
@@ -146,7 +145,6 @@ public class Train implements Iterable<EntityMinecart> {
             public void remove() {
                 throw new UnsupportedOperationException("Removing not supported.");
             }
-
         };
     }
 
@@ -191,10 +189,8 @@ public class Train implements Iterable<EntityMinecart> {
                     public void remove() {
                         throw new UnsupportedOperationException("Removing not supported.");
                     }
-
                 };
             }
-
         };
     }
 
@@ -205,10 +201,10 @@ public class Train implements Iterable<EntityMinecart> {
         EntityMinecart linkA = lm.getLinkedCartA(next);
         EntityMinecart linkB = lm.getLinkedCartB(next);
 
-        if (linkA != null && linkA != prev)
+        if (linkA != null && linkA != prev && !containsCart(linkA))
             buildTrain(next, linkA);
 
-        if (linkB != null && linkB != prev)
+        if (linkB != null && linkB != prev && !containsCart(linkB))
             buildTrain(next, linkB);
     }
 
@@ -219,8 +215,8 @@ public class Train implements Iterable<EntityMinecart> {
         EntityMinecart linkA = lm.getLinkedCartA(cart);
         EntityMinecart linkB = lm.getLinkedCartB(cart);
 
-        if (linkA != null) dropCarts(linkA);
-        if (linkB != null) dropCarts(linkB);
+        if (linkA != null && containsCart(linkA)) dropCarts(linkA);
+        if (linkB != null && containsCart(linkB)) dropCarts(linkB);
     }
 
     public void validate() {
@@ -296,7 +292,6 @@ public class Train implements Iterable<EntityMinecart> {
         addTrainTag(cartNew, this);
     }
 
-
     private boolean _removeCart(EntityMinecart cart) {
         boolean removed = _removeCart(cart.getPersistentID());
         if (removed && uuid.equals(getTrainUUID(cart))) {
@@ -366,6 +361,20 @@ public class Train implements Iterable<EntityMinecart> {
         return count;
     }
 
+    public float getMaxSpeed() {
+        float speed = 1.2F;
+        for (EntityMinecart c : this) {
+            speed = Math.min(speed, c.getMaxCartSpeedOnRail());
+        }
+        return speed;
+    }
+
+    public void setMaxSpeed(float trainSpeed) {
+        for (EntityMinecart c : this) {
+            c.setCurrentCartSpeedCapOnRail(trainSpeed);
+        }
+    }
+
     public boolean isTrainLockedDown() {
         return !lockingTracks.isEmpty();
     }
@@ -396,5 +405,4 @@ public class Train implements Iterable<EntityMinecart> {
         IDLE,
         NORMAL
     }
-
 }

@@ -163,6 +163,9 @@ public class LinkageManager implements ILinkageManager {
         if (cart1.getDistanceSqToEntity(cart2) > getLinkageDistanceSq(cart1, cart2))
             return false;
 
+        if(Train.areInSameTrain(cart1, cart2))
+            return false;
+
         return hasFreeLink(cart1) && hasFreeLink(cart2);
 
     }
