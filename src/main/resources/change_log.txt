@@ -1,3 +1,7 @@
+9.5.0.7:
+	FIX: Fix stackover flow on circular Train.
+	FIX: Fix Switches locking up when not in the same chunk as the actuator. (contribution by ssotangkur)
+
 9.5.0.6:
 	FIX: Fix Brick texture loading.
 
