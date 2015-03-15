@@ -8,32 +8,28 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import mods.railcraft.api.tracks.ISwitchDevice;
-import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackSwitch;
-import mods.railcraft.common.blocks.tracks.TileTrack;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
-import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public abstract class TileSwitchBase extends TileSignalFoundation implements ISwitchDevice {
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
+public abstract class TileSwitchBase extends TileSignalFoundation implements ISwitchDevice {
     private byte facing = (byte) ForgeDirection.NORTH.ordinal();
     private boolean powered;
     private ITrackSwitch switchTrack;
     private boolean lastSwitchState;
-    private boolean justLoaded = true;
 
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
@@ -57,56 +53,17 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
         return true;
     }
 
-    @Override
-    public void onBlockPlaced() {
-        findTrack();
-        if(switchTrack != null)
-            switchTrack.registerSwitch(this);
-        sendUpdateToClient();
-    }
-
-    @Override
-    public void onBlockRemoval() {
-        super.onBlockRemoval();
-        if(switchTrack != null)
-            switchTrack.registerSwitch(null); // unregister this switch
-    }
-
-    @Override
-    public void onNeighborBlockChange(Block id) {
-        super.onNeighborBlockChange(id);
-        findTrack();
-        if(switchTrack != null)
-            switchTrack.registerSwitch(this);
-    }
-
     public ITrackSwitch getSwitchTrack() {
         if (switchTrack != null && switchTrack.getTile().isInvalid())
             switchTrack = null;
         return switchTrack;
     }
 
-    private void findTrack() {
-        switchTrack = null; // reset switchTrack in case it was removed
-        for (byte side = 2; side < 6; side++) {
-            TileEntity tile = tileCache.getTileOnSide(ForgeDirection.getOrientation(side));
-            if (tile instanceof TileTrack) {
-                ITrackInstance track = ((TileTrack) tile).getTrackInstance();
-                if (track instanceof ITrackSwitch) {
-                    if (facing != side) {
-                        facing = side;
-                        sendUpdateToClient();
-                    }
-                    switchTrack = (ITrackSwitch) track;
-                }
-            } else if (tile instanceof ITrackSwitch) {
-                if (facing != side) {
-                    facing = side;
-                    sendUpdateToClient();
-                }
-                switchTrack = (ITrackSwitch) tile;
-            }
-        }
+    @Override
+    // Overriding methods should call this via "super" to ensure that the switchTrack field is set
+    public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
+        this.switchTrack = switchTrack;
+        return false;
     }
 
     @Override
@@ -117,13 +74,6 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     @Override
     public void updateEntity() {
         super.updateEntity();
-        
-        if(justLoaded) {
-            findTrack();
-            if(switchTrack != null)
-                switchTrack.registerSwitch(this);
-            justLoaded = false;
-        }
         ITrackSwitch track = getSwitchTrack();
 
         if (track == null)
@@ -198,12 +148,4 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     protected boolean isBeingPoweredByRedstone() {
         return PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord) || PowerPlugin.isRedstonePowered(worldObj, xCoord, yCoord, zCoord);
     }
-
-    public boolean isSwitched() {
-        ITrackSwitch track = getSwitchTrack();
-        if (track == null)
-            return false;
-        return track.isSwitched();
-    }
-
 }

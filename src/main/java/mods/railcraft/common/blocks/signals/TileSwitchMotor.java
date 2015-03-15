@@ -168,6 +168,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
 
     @Override
     public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
+        super.shouldSwitch(switchTrack, cart);
         return switchAspect || isPowered();
     }
 

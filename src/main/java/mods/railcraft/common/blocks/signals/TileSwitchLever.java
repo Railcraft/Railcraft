@@ -27,6 +27,7 @@ public class TileSwitchLever extends TileSwitchBase {
 
     @Override
     public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
+        super.shouldSwitch(switchTrack, cart);
         return isPowered();
     }
 }

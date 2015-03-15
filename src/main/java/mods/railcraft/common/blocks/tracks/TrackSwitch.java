@@ -8,16 +8,21 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import mods.railcraft.api.tracks.ISwitchDevice;
+import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.carts.CartUtils;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-import mods.railcraft.api.tracks.ITrackReversable;
-import mods.railcraft.common.carts.CartUtils;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 
 public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
 
@@ -215,6 +220,26 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
             return ArrowDirection.NORTH_SOUTH;
         }
         return ArrowDirection.EAST_WEST;
+    }
+
+    @Override
+    public ForgeDirection getActuatorLocation(){
+        ForgeDirection dir = ForgeDirection.NORTH;
+        int meta = tileEntity.getBlockMetadata();
+        if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
+            if (isMirrored()) {
+                dir = ForgeDirection.EAST;
+            } else {
+                dir = ForgeDirection.WEST;
+            }
+        } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
+            if (isMirrored()) {
+                dir = ForgeDirection.SOUTH;
+            } else {
+                dir = ForgeDirection.NORTH;
+            }
+        }
+        return dir;
     }
 
 }

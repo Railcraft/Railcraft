@@ -19,7 +19,9 @@ import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -30,7 +32,6 @@ import java.util.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITrackSwitch {
-
     private static final int SPRING_DURATION = 30;
     protected boolean mirrored;
     protected boolean shouldSwitch;
@@ -71,7 +72,6 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     @Deprecated
     @Override
     public void setSwitched(boolean switched) {
-
     }
 
     private boolean isSwitchedInternal(EntityMinecart cart) {
@@ -85,7 +85,6 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
             return false; // Carts at the locking entrance always are on locked tracks
 
         boolean sameTrain = Train.areInSameTrain(LinkageManager.instance().getCartFromUUID(currentCart), cart);
-
 
         boolean shouldSwitch = (switchDevice != null) ? switchDevice.shouldSwitch(this, cart) : false;
 
@@ -122,7 +121,6 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
      * @return
      */
     protected boolean isSwitched(EntityMinecart cart) {
-
         if (Game.isNotHost(getWorld())) {
             if (cart == null)
                 return isSwitched();
@@ -354,6 +352,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         EntityMinecart bestCart = getBestCartForVisualState(cartsOnTrack);
 
         // We must ask the switch every tick so we can update shouldSwitch properly
+        switchDevice = getSwitchDevice();
         if (switchDevice == null) {
             shouldSwitch = false;
         } else {
@@ -392,6 +391,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
             allCarts.addAll(lockingCarts);
             allCarts.addAll(springingCarts);
             allCarts.addAll(decidingCarts);
+
             for (UUID testCartUUID : allCarts) {
                 if (closestCart == null) {
                     closestCart = LinkageManager.instance().getCartFromUUID(testCartUUID);
@@ -415,8 +415,15 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
 
     protected abstract List<UUID> getCartsAtDecisionEntrance();
 
-    public void registerSwitch(ISwitchDevice switchDevice) {
-        this.switchDevice = switchDevice;
+    public abstract ForgeDirection getActuatorLocation();
+
+    @Override
+    public ISwitchDevice getSwitchDevice() {
+        TileEntity entity = ((RailcraftTileEntity) this.tileEntity).getTileCache().getTileOnSide(getActuatorLocation());
+        if (entity instanceof ISwitchDevice) {
+            return (ISwitchDevice) entity;
+        }
+        return null;
     }
 
     @Deprecated

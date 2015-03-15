@@ -17,6 +17,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -24,10 +25,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRoutingTile {
-
-    private RoutingLogic logic;
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
     private final MultiButtonController<RoutingButtonState> routingController = new MultiButtonController<RoutingButtonState>(0, RoutingButtonState.values());
+    private RoutingLogic logic;
 
     @Override
     public MultiButtonController<RoutingButtonState> getRoutingController() {
@@ -68,6 +68,14 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     @Override
     public void onNeighborBlockChange(Block block) {
         super.onNeighborBlockChange(block);
+        boolean power = isBeingPoweredByRedstone();
+        if (isPowered() != power)
+            setPowered(power);
+    }
+
+    @Override
+    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(entityliving, stack);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power)
             setPowered(power);
@@ -116,11 +124,11 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
 
     @Override
     public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
+        super.shouldSwitch(switchTrack, cart);
         RoutingLogic logic = getLogic();
-        if(logic != null && logic.isValid())
+        if (logic != null && logic.isValid())
             return logic.matches(this, cart);
         else
-            return false; 
+            return false;
     }
-
 }
