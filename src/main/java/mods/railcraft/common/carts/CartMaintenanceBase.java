@@ -8,19 +8,18 @@
  */
 package mods.railcraft.common.carts;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.tracks.RailTools;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.common.util.misc.Game;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class CartMaintenanceBase extends CartContainerBase {
@@ -93,7 +92,7 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
         return dataWatcher.getWatchableObjectByte(DATA_ID_BLINK) > 0;
     }
 
-    protected void placeNewTrack(int x, int y, int z, int slotStock, int meta) {
+    protected boolean placeNewTrack(int x, int y, int z, int slotStock, int meta) {
         ItemStack trackStock = getStackInSlot(slotStock);
         if (trackStock != null)
             if (RailTools.placeRailAt(trackStock, worldObj, x, y, z)) {
@@ -103,7 +102,9 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
                 worldObj.markBlockForUpdate(x, y, z);
                 decrStackSize(slotStock, 1);
                 blink();
+                return true;
             }
+        return false;
     }
 
     protected int removeOldTrack(int x, int y, int z, Block block) {
