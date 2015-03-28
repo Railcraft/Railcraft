@@ -1,18 +1,18 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
-import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.BlockFluidBase;
 
 public class EntityCartTrackLayer extends CartMaintenancePatternBase {
 
@@ -48,15 +48,15 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
     }
 
     private void placeTrack(int x, int y, int z) {
-        int offsetX = x + travelDirection.offsetX;
-        int offsetZ = z + travelDirection.offsetZ;
+        x = x + travelDirection.offsetX;
+        z = z + travelDirection.offsetZ;
 
         EnumTrackMeta trackMeta = EnumTrackMeta.NORTH_SOUTH;
         if (travelDirection == ForgeDirection.EAST || travelDirection == ForgeDirection.WEST)
             trackMeta = EnumTrackMeta.EAST_WEST;
-        if (!isValidReplacementBlock(offsetX, y, offsetZ) && isValidReplacementBlock(offsetX, y + 1, offsetZ) && trackMeta.isStraightTrack())
+        if (!isValidReplacementBlock(x, y, z) && isValidReplacementBlock(x, y + 1, z) && trackMeta.isStraightTrack())
             y++;
-        if (isValidReplacementBlock(offsetX, y, offsetZ) && isValidReplacementBlock(offsetX, y - 1, offsetZ)) {
+        if (isValidReplacementBlock(x, y, z) && isValidReplacementBlock(x, y - 1, z)) {
             y--;
             if (travelDirection == ForgeDirection.NORTH)
                 trackMeta = EnumTrackMeta.SOUTH_SLOPE;
@@ -68,8 +68,13 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
                 trackMeta = EnumTrackMeta.WEST_SLOPE;
         }
 
-        if (isValidNewTrackPosition(offsetX, y, offsetZ))
-            placeNewTrack(offsetX, y, offsetZ, SLOT_STOCK, trackMeta.ordinal());
+        if (isValidNewTrackPosition(x, y, z)) {
+            Block block = worldObj.getBlock(x, y, z);
+            int metadata = worldObj.getBlockMetadata(x, y, z);
+            if (placeNewTrack(x, y, z, SLOT_STOCK, trackMeta.ordinal())) {
+                block.dropBlockAsItem(worldObj, x, y, z, metadata, 0);
+            }
+        }
     }
 
     private boolean isValidNewTrackPosition(int x, int y, int z) {
@@ -78,7 +83,11 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
 
     private boolean isValidReplacementBlock(int x, int y, int z) {
         Block block = worldObj.getBlock(x, y, z);
-        return (worldObj.isAirBlock(x, y, z) || EntityTunnelBore.replaceableBlocks.contains(block));
+        return (worldObj.isAirBlock(x, y, z) ||
+                block instanceof IPlantable ||
+                block instanceof IShearable ||
+                EntityTunnelBore.replaceableBlocks.contains(block)) ||
+                block.isReplaceable(worldObj, x, y, z);
     }
 
     @Override
