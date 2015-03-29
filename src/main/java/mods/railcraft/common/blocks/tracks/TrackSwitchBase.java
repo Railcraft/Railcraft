@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.tracks.ISwitchDevice;
+import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.carts.CartUtils;
@@ -20,7 +21,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.io.DataInputStream;
@@ -42,7 +42,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     private byte locked;
     private UUID currentCart = null;
     private ISwitchDevice switchDevice = null;
-    private Map<Integer, Boolean> switchResultsCache = new HashMap<Integer, Boolean>();
+    private boolean clientSwitched;
 
     @Override
     public boolean canMakeSlopes() {
@@ -65,18 +65,25 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     @Override
-    public boolean isSwitched() {
-        return !isLocked() && (shouldSwitch || isSprung());
+    public boolean isVisuallySwitched() {
+        if (Game.isHost(getWorld()))
+            return !isLocked() && (shouldSwitch || isSprung());
+        return clientSwitched;
     }
 
-    @Deprecated
-    @Override
-    public void setSwitched(boolean switched) {
-    }
-
-    private boolean isSwitchedInternal(EntityMinecart cart) {
-        if (cart == null)
-            return isSwitched();
+    /**
+     * This is a method provided to the subclasses to determine more accurately for
+     * the passed in cart whether the switch is sprung or not. It caches the server
+     * responses for the clients to use.
+     * Note: This method should not modify any variables except the cache, we leave
+     * that to updateEntity().
+     *
+     * @param cart
+     * @return
+     */
+    protected boolean shouldSwitchForCart(EntityMinecart cart) {
+        if (cart == null || Game.isNotHost(getWorld()))
+            return isVisuallySwitched();
 
         if (springingCarts.contains(cart.getPersistentID()))
             return true; // Carts at the spring entrance always are on switched tracks
@@ -89,12 +96,12 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         boolean shouldSwitch = (switchDevice != null) ? switchDevice.shouldSwitch(this, cart) : false;
 
         if (isSprung()) {
-            if (!shouldSwitch && !sameTrain) {
-                // detected new train, we can safely treat this as not switched
-                return false;
+            if (shouldSwitch || sameTrain) {
+                // we're either same train or switched so return true
+                return true;
             }
-            // here we're either same train or switched so return true
-            return true;
+            // detected new train, we can safely treat this as not switched
+            return false;
         }
 
         if (isLocked()) {
@@ -110,35 +117,24 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         return shouldSwitch;
     }
 
-    /**
-     * This is a method provided to the subclasses to determine more accurately for
-     * the passed in cart whether the switch is sprung or not. It caches the server
-     * responses for the clients to use.
-     * Note: This method should not modify any variables except the cache, we leave
-     * that to updateEntity().
-     *
-     * @param cart
-     * @return
-     */
-    protected boolean isSwitched(EntityMinecart cart) {
-        if (Game.isNotHost(getWorld())) {
-            if (cart == null)
-                return isSwitched();
-            Boolean switched = switchResultsCache.get(cart.getEntityId());
-            if (switched == null)
-                return isSwitched();
-            else
-                return switched.booleanValue();
-        } else {
-            boolean ans = isSwitchedInternal(cart);
-            if (cart != null)
-                switchResultsCache.put(cart.getEntityId(), ans);
-            return ans;
-        }
+    private void springTrack(UUID cartOnTrack) {
+        sprung = SPRING_DURATION;
+        locked = 0;
+        currentCart = cartOnTrack;
+    }
+
+    private void lockTrack(UUID cartOnTrack) {
+        locked = SPRING_DURATION;
+        sprung = 0;
+        currentCart = cartOnTrack;
     }
 
     public boolean isLocked() {
         return locked > 0;
+    }
+
+    public boolean isSprung() {
+        return sprung > 0;
     }
 
     @Override
@@ -255,45 +251,30 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         currentCart = MiscTools.readUUID(data, "currentCart");
     }
 
-    private void writeMapData(DataOutputStream data, Map<Integer, Boolean> map) throws IOException {
-        data.writeByte(map.size());
-        for (Map.Entry<Integer, Boolean> entry : map.entrySet()) {
-            data.writeInt(entry.getKey());
-            data.writeBoolean(entry.getValue());
-        }
-    }
-
-    private void readMapData(DataInputStream data, Map<Integer, Boolean> map) throws IOException {
-        map.clear();
-        int size = data.readByte();
-        for (int i = 0; i < size; i++) {
-            map.put(data.readInt(), data.readBoolean());
-        }
-    }
-
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(mirrored);
-        data.writeBoolean(shouldSwitch);
-        data.writeByte(locked);
-        data.writeByte(sprung);
-        writeMapData(data, switchResultsCache);
+        data.writeBoolean(isVisuallySwitched());
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        mirrored = data.readBoolean();
-        shouldSwitch = data.readBoolean();
-        locked = data.readByte();
-        sprung = data.readByte();
-        readMapData(data, switchResultsCache);
-        markBlockNeedsUpdate();
-    }
+        boolean changed = false;
+        boolean m = data.readBoolean();
+        if (m != mirrored) {
+            mirrored = m;
+            changed = true;
+        }
+        boolean cs = data.readBoolean();
+        if (cs != clientSwitched) {
+            clientSwitched = cs;
+            changed = true;
+        }
 
-    public boolean isSprung() {
-        return sprung > 0;
+        if (changed)
+            markBlockNeedsUpdate();
     }
 
     private void updateSet(Set<UUID> setToUpdate, List<UUID> potentialUpdates, Set<UUID> reject1, Set<UUID> reject2) {
@@ -304,24 +285,17 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         }
     }
 
-    private void springTrack(UUID cartOnTrack) {
-        sprung = SPRING_DURATION;
-        locked = 0;
-        currentCart = cartOnTrack;
-    }
-
-    private void lockTrack(UUID cartOnTrack) {
-        locked = SPRING_DURATION;
-        sprung = 0;
-        currentCart = cartOnTrack;
-    }
-
     @Override
     public void updateEntity() {
-        if (Game.isNotHost(getWorld()))
+        if (Game.isNotHost(getWorld())) {
+            switchDevice = getSwitchDevice();
+            if (switchDevice != null) {
+                switchDevice.setRenderState(getRedSignDirection(), getWhiteSignDirection());
+            }
             return;
+        }
 
-        boolean wasSwitched = isSwitched();
+        boolean wasSwitched = isVisuallySwitched();
 
         if (locked > 0)
             locked--;
@@ -333,7 +307,6 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
             springingCarts.clear(); // these carts forever
             decidingCarts.clear();
             currentCart = null;
-            switchResultsCache.clear();
         }
 
         // updating carts we just found in appropriate sets
@@ -361,15 +334,19 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
 
         // Only allow cartsOnTrack to actually spring or lock the track
         if (bestCart != null && cartsOnTrack.contains(bestCart.getPersistentID())) {
-            if (isSwitched(bestCart)) {
+            if (shouldSwitchForCart(bestCart)) {
                 springTrack(bestCart.getPersistentID());
             } else {
                 lockTrack(bestCart.getPersistentID());
             }
         }
 
-        if (isSwitched() != wasSwitched)
+        if (isVisuallySwitched() != wasSwitched) {
+            if (switchDevice != null) {
+                switchDevice.onSwitch(isVisuallySwitched());
+            }
             sendUpdateToClient();
+        }
     }
 
     private double crudeDistance(EntityMinecart cart) {
@@ -417,18 +394,15 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
 
     public abstract ForgeDirection getActuatorLocation();
 
-    @Override
+    public abstract ArrowDirection getRedSignDirection();
+
+    public abstract ArrowDirection getWhiteSignDirection();
+
     public ISwitchDevice getSwitchDevice() {
         TileEntity entity = ((RailcraftTileEntity) this.tileEntity).getTileCache().getTileOnSide(getActuatorLocation());
         if (entity instanceof ISwitchDevice) {
             return (ISwitchDevice) entity;
         }
-        return null;
-    }
-
-    @Deprecated
-    @Override
-    public AxisAlignedBB getRoutingSearchBox() {
         return null;
     }
 }

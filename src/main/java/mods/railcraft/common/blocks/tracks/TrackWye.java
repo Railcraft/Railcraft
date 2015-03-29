@@ -8,11 +8,9 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.tracks.ISwitchDevice;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -27,7 +25,7 @@ public class TrackWye extends TrackSwitchBase {
 
     @Override
     public IIcon getIcon() {
-        if (isSwitched()) {
+        if (isVisuallySwitched()) {
             return getIcon(1);
         }
         return getIcon(0);
@@ -39,13 +37,13 @@ public class TrackWye extends TrackSwitchBase {
         if (cart != null) {
             if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
                 if (isMirrored()) {
-                    if (isSwitched(cart)) {
+                    if (shouldSwitchForCart(cart)) {
                         meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
                     }
                 } else {
-                    if (isSwitched(cart)) {
+                    if (shouldSwitchForCart(cart)) {
                         meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
@@ -53,13 +51,13 @@ public class TrackWye extends TrackSwitchBase {
                 }
             } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
                 if (isMirrored()) {
-                    if (isSwitched(cart)) {
+                    if (shouldSwitchForCart(cart)) {
                         meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
                     }
                 } else {
-                    if (isSwitched(cart)) {
+                    if (shouldSwitchForCart(cart)) {
                         meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
                     } else {
                         meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
@@ -139,7 +137,7 @@ public class TrackWye extends TrackSwitchBase {
     @Override
     public ArrowDirection getRedSignDirection() {
         if (EnumTrackMeta.EAST_WEST.isEqual(tileEntity.getBlockMetadata())) {
-            if (isSwitched()) {
+            if (isVisuallySwitched()) {
                 if (isMirrored()) {
                     return ArrowDirection.WEST;
                 }
@@ -150,7 +148,7 @@ public class TrackWye extends TrackSwitchBase {
             }
             return ArrowDirection.WEST;
         }
-        if (isSwitched()) {
+        if (isVisuallySwitched()) {
             if (isMirrored()) {
                 return ArrowDirection.NORTH;
             }

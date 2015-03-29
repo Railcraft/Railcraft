@@ -8,22 +8,21 @@
  */
 package mods.railcraft.client.render;
 
-import net.minecraft.block.Block;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.item.ItemStack;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import org.lwjgl.opengl.GL11;
+import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackSwitch;
-import mods.railcraft.api.tracks.ITrackSwitch.ArrowDirection;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.signals.TileSwitchBase;
-import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import org.lwjgl.opengl.GL11;
 
 public class RenderSwitch implements ICombinedRenderer {
 
@@ -39,13 +38,10 @@ public class RenderSwitch implements ICombinedRenderer {
 
     @Override
     public void renderBlock(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block) {
-//        BlockSignal structure = (BlockSignal)block;
         TileSwitchBase tile = (TileSwitchBase) world.getTileEntity(x, y, z);
-        ITrackSwitch track = null;
         boolean powered = false;
         int facing = 0;
         if (tile != null) {
-            track = tile.getSwitchTrack();
             facing = tile.getFacing();
             powered = tile.isPowered();
         }
@@ -87,7 +83,7 @@ public class RenderSwitch implements ICombinedRenderer {
 
         // Targets
 
-        if (track == null) {
+        if (tile == null) {
             setTextureWhite();
             renderTargetNorthSouth(renderblocks, world, x, y, z);
             setTextureRed();
@@ -97,11 +93,11 @@ public class RenderSwitch implements ICombinedRenderer {
 
 
         setTextureWhite();
-        ArrowDirection whiteArrow = track.getWhiteSignDirection();
+        ArrowDirection whiteArrow = tile.getWhiteArrowRenderState();
         renderTarget(whiteArrow, renderblocks, world, x, y, z);
 
         setTextureRed();
-        ArrowDirection redArrow = track.getRedSignDirection();
+        ArrowDirection redArrow = tile.getRedArrowRenderState();
         renderTarget(redArrow, renderblocks, world, x, y, z);
 
         if (type == EnumSignal.SWITCH_LEVER)

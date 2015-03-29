@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.signals;
 import mods.railcraft.api.tracks.ISwitchDevice;
 import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,8 +27,17 @@ import java.io.IOException;
 public abstract class TileSwitchBase extends TileSignalFoundation implements ISwitchDevice {
     private byte facing = (byte) ForgeDirection.NORTH.ordinal();
     private boolean powered;
-    private ITrackSwitch switchTrack;
     private boolean lastSwitchState;
+    private ArrowDirection redArrowRenderState = ArrowDirection.EAST_WEST;
+    private ArrowDirection whiteArrowRenderState = ArrowDirection.NORTH_SOUTH;
+
+    public ArrowDirection getRedArrowRenderState() {
+        return redArrowRenderState;
+    }
+
+    public ArrowDirection getWhiteArrowRenderState() {
+        return whiteArrowRenderState;
+    }
 
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
@@ -53,18 +61,8 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
         return true;
     }
 
-    public ITrackSwitch getSwitchTrack() {
-        if (switchTrack != null && switchTrack.getTile().isInvalid())
-            switchTrack = null;
-        return switchTrack;
-    }
-
     @Override
-    // Overriding methods should call this via "super" to ensure that the switchTrack field is set
-    public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
-        this.switchTrack = switchTrack;
-        return false;
-    }
+    public abstract boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart);
 
     @Override
     public boolean canUpdate() {
@@ -72,22 +70,29 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
-        ITrackSwitch track = getSwitchTrack();
-
-        if (track == null)
-            return;
-        boolean isSwitched = track.isSwitched();
+    public void onSwitch(boolean isSwitched) {
         if (lastSwitchState != isSwitched) {
             lastSwitchState = isSwitched;
             if (isSwitched)
                 SoundHelper.playSound(worldObj, getX(), getY(), getZ(), "tile.piston.in", 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
             else
                 SoundHelper.playSound(worldObj, getX(), getY(), getZ(), "tile.piston.out", 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
-            if (Game.isNotHost(worldObj))
-                markBlockForUpdate();
         }
+    }
+
+    @Override
+    public void setRenderState(ArrowDirection redArrow, ArrowDirection whiteArrow) {
+        boolean changed = false;
+        if (this.redArrowRenderState != redArrow) {
+            this.redArrowRenderState = redArrow;
+            changed = true;
+        }
+        if (this.whiteArrowRenderState != whiteArrow) {
+            this.whiteArrowRenderState = whiteArrow;
+            changed = true;
+        }
+        if (changed)
+            markBlockForUpdate();
     }
 
     @Override

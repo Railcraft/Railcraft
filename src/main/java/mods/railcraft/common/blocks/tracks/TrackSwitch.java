@@ -8,13 +8,11 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.tracks.ISwitchDevice;
+import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackReversable;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -25,7 +23,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
-
     private boolean reversed;
 
     @Override
@@ -39,7 +36,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
         if (reversed) {
             index += 2;
         }
-        if (isSwitched()) {
+        if (isVisuallySwitched()) {
             index += 1;
         }
         return getIcon(index);
@@ -48,7 +45,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
     @Override
     public int getBasicRailMetadata(EntityMinecart cart) {
         int meta = tileEntity.getBlockMetadata();
-        if (cart != null && isSwitched(cart)) {
+        if (cart != null && shouldSwitchForCart(cart)) {
             if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
                 if (isMirrored()) {
                     if (reversed) {
@@ -173,19 +170,19 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
     }
 
     @Override
-    public void setReversed(boolean reversed) {
-        this.reversed = reversed;
-    }
-
-    @Override
     public boolean isReversed() {
         return reversed;
     }
 
     @Override
+    public void setReversed(boolean reversed) {
+        this.reversed = reversed;
+    }
+
+    @Override
     public ArrowDirection getRedSignDirection() {
         if (tileEntity.getBlockMetadata() == 1) {
-            if (isSwitched()) {
+            if (isVisuallySwitched()) {
                 if (isMirrored()) {
                     return ArrowDirection.NORTH;
                 }
@@ -196,7 +193,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
             }
             return ArrowDirection.EAST;
         }
-        if (isSwitched()) {
+        if (isVisuallySwitched()) {
             if (isMirrored()) {
                 return ArrowDirection.EAST;
             }
@@ -211,19 +208,19 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
     @Override
     public ArrowDirection getWhiteSignDirection() {
         if (tileEntity.getBlockMetadata() == 1) {
-            if (isSwitched()) {
+            if (isVisuallySwitched()) {
                 return ArrowDirection.EAST_WEST;
             }
             return ArrowDirection.NORTH_SOUTH;
         }
-        if (isSwitched()) {
+        if (isVisuallySwitched()) {
             return ArrowDirection.NORTH_SOUTH;
         }
         return ArrowDirection.EAST_WEST;
     }
 
     @Override
-    public ForgeDirection getActuatorLocation(){
+    public ForgeDirection getActuatorLocation() {
         ForgeDirection dir = ForgeDirection.NORTH;
         int meta = tileEntity.getBlockMetadata();
         if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
@@ -241,5 +238,4 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
         }
         return dir;
     }
-
 }
