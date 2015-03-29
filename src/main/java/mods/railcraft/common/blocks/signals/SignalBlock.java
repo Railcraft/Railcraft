@@ -123,15 +123,9 @@ public abstract class SignalBlock extends AbstractPair {
         if (otherTrack == null)
             return SignalAspect.YELLOW;
 
-        int y1, y2;
-        TrackTools.TrackScan scan = trackScans.get(otherTrack);
-        if (scan != null) {
-            y1 = scan.minY;
-            y2 = scan.maxY + 1;
-        } else {
-            y1 = Math.min(myTrack.y, otherTrack.y);
-            y2 = Math.max(myTrack.y, otherTrack.y) + 1;
-        }
+        TrackTools.TrackScan scan = getOrCreateTrackScan(otherTrack);
+        int y1 = scan.minY;
+        int y2 = scan.maxY + 1;
 
         int x1 = Math.min(myTrack.x, otherTrack.x);
         int z1 = Math.min(myTrack.z, otherTrack.z);
@@ -166,6 +160,16 @@ public abstract class SignalBlock extends AbstractPair {
                 newAspect = SignalAspect.YELLOW;
         }
         return newAspect;
+    }
+
+    public TrackTools.TrackScan getOrCreateTrackScan(WorldCoordinate otherTrack) {
+        TrackTools.TrackScan scan = trackScans.get(otherTrack);
+        if (scan == null) {
+            WorldCoordinate myTrack = getTrackLocation();
+            scan = TrackTools.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
+            trackScans.put(otherTrack, scan);
+        }
+        return scan;
     }
 
     protected WorldCoordinate getOtherTrackLocation(WorldCoordinate otherCoord) {
