@@ -9,8 +9,6 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.core.items.ITrackItem;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -23,14 +21,14 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TrackTools {
-
     public static final int TRAIN_LOCKDOWN_DELAY = 200;
 
     public static boolean isRailBlockAt(IBlockAccess world, int x, int y, int z) {
@@ -118,6 +116,13 @@ public class TrackTools {
         return false;
     }
 
+    public static TileTrack placeTrack(TrackSpec track, World world, int x, int y, int z, int meta) {
+        WorldPlugin.setBlock(world, x, y, z, RailcraftBlocks.getBlockTrack(), meta);
+        TileTrack tile = TrackFactory.makeTrackTile(track.createInstanceFromSpec());
+        world.setTileEntity(x, y, z, tile);
+        return tile;
+    }
+
     /**
      * Verifies that two rails are connected to each other along a straight line
      * with no gaps or wanderings.
@@ -132,10 +137,31 @@ public class TrackTools {
      * @return true if they are connected
      */
     public static boolean areTracksConnectedAlongAxis(IBlockAccess world, int x1, int y1, int z1, int x2, int y2, int z2) {
+        return scanStraightTrackSection(world, x1, y1, z1, x2, y2, z2).areConnected;
+    }
+
+    /**
+     * Verifies that two rails are connected to each other along a straight line
+     * with no gaps or wanderings.
+     * <p/>
+     * Also records the min and max y values along the way.
+     *
+     * @param world The World object
+     * @param x1    x-Coord of Rail #1
+     * @param y1    y-Coord of Rail #1
+     * @param z1    z-Coord of Rail #1
+     * @param x2    x-Coord of Rail #2
+     * @param y2    y-Coord of Rail #2
+     * @param z2    z-Coord of Rail #2
+     * @return TrackScan object with results
+     */
+    public static TrackScan scanStraightTrackSection(IBlockAccess world, int x1, int y1, int z1, int x2, int y2, int z2) {
+        int minY = Math.min(y1, y2);
+        int maxY = Math.max(y1, y2);
         if (y1 < 0 || y2 < 0)
-            return false;
+            return new TrackScan(false, minY, maxY);
         if (x1 != x2 && z1 != z2)
-            return false;
+            return new TrackScan(false, minY, maxY);
         if (x1 != x2) {
             int min;
             int max;
@@ -152,12 +178,16 @@ public class TrackTools {
             for (int xx = min; xx <= max; xx++) {
 //                if (world.blockExists(xx, yy, z1))
                 if (isRailBlockAt(world, xx, yy, z1)) {
-                } else if (isRailBlockAt(world, xx, yy - 1, z1))
+                } else if (isRailBlockAt(world, xx, yy - 1, z1)) {
                     yy--;
-                else if (isRailBlockAt(world, xx, yy + 1, z1))
+                    if (yy < minY)
+                        minY = yy;
+                } else if (isRailBlockAt(world, xx, yy + 1, z1)) {
                     yy++;
-                else
-                    return false;
+                    if (yy > maxY)
+                        maxY = yy;
+                } else
+                    return new TrackScan(false, minY, maxY);
             }
         } else if (z1 != z2) {
             int min;
@@ -175,22 +205,29 @@ public class TrackTools {
             for (int zz = min; zz <= max; zz++) {
 //                if (world.blockExists(x1, yy, zz))
                 if (isRailBlockAt(world, x1, yy, zz)) {
-                } else if (isRailBlockAt(world, x1, yy - 1, zz))
+                } else if (isRailBlockAt(world, x1, yy - 1, zz)) {
                     yy--;
-                else if (isRailBlockAt(world, x1, yy + 1, zz))
+                    if (yy < minY)
+                        minY = yy;
+                } else if (isRailBlockAt(world, x1, yy + 1, zz)) {
                     yy++;
-                else
-                    return false;
+                    if (yy > maxY)
+                        maxY = yy;
+                } else
+                    return new TrackScan(false, minY, maxY);
             }
         }
-        return true;
+        return new TrackScan(true, minY, maxY);
     }
 
-    public static TileTrack placeTrack(TrackSpec track, World world, int x, int y, int z, int meta) {
-        WorldPlugin.setBlock(world, x, y, z, RailcraftBlocks.getBlockTrack(), meta);
-        TileTrack tile = TrackFactory.makeTrackTile(track.createInstanceFromSpec());
-        world.setTileEntity(x, y, z, tile);
-        return tile;
-    }
+    public static class TrackScan {
+        public final boolean areConnected;
+        public final int minY, maxY;
 
+        public TrackScan(boolean areConnected, int minY, int maxY) {
+            this.areConnected = areConnected;
+            this.minY = minY;
+            this.maxY = maxY;
+        }
+    }
 }

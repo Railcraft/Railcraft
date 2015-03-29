@@ -8,15 +8,6 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.apache.logging.log4j.Level;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.AbstractPair;
@@ -25,15 +16,20 @@ import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
+
+import java.util.*;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class SignalBlock extends AbstractPair {
-
     Map<WorldCoordinate, WorldCoordinate> trackCache = new HashMap<WorldCoordinate, WorldCoordinate>();
+    Map<WorldCoordinate, TrackTools.TrackScan> trackScans = new HashMap<WorldCoordinate, TrackTools.TrackScan>();
     Set<WorldCoordinate> waitingForRetest = new HashSet<WorldCoordinate>();
     private WorldCoordinate trackLocation;
     private int update = rand.nextInt();
@@ -79,24 +75,26 @@ public abstract class SignalBlock extends AbstractPair {
         return isValid;
     }
 
-//    @Override
+    //    @Override
 //    public void startPairing() {
-//        clearSignalBlockPairing("Signal Block pairing cleared in preperation to start a new pairing.  [{0}, {1}, {2}]", tile.xCoord, tile.yCoord, tile.zCoord);
+//        clearSignalBlockPairing("Signal Block pairing cleared in preparation to start a new pairing.  [{0}, {1}, {2}]", tile.xCoord, tile.yCoord, tile.zCoord);
 //        super.startPairing();
 //    }
     public boolean createSignalBlock(SignalBlock other) {
         locateTrack();
         other.locateTrack();
-        WorldCoordinate tA = getTrackLocation();
-        WorldCoordinate tB = other.getTrackLocation();
-        if (tA == null || tB == null)
+        WorldCoordinate myTrack = getTrackLocation();
+        WorldCoordinate otherTrack = other.getTrackLocation();
+        if (myTrack == null || otherTrack == null)
             return false;
-        if (!TrackTools.areTracksConnectedAlongAxis(tile.getWorldObj(), tA.x, tA.y, tA.z, tB.x, tB.y, tB.z))
+        TrackTools.TrackScan scan = TrackTools.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
+        if (!scan.areConnected)
             return false;
         addPairing(other.getCoords());
         other.addPairing(getCoords());
         endPairing();
         other.endPairing();
+        trackScans.put(otherTrack, scan);
         return true;
     }
 
@@ -124,11 +122,20 @@ public abstract class SignalBlock extends AbstractPair {
         WorldCoordinate otherTrack = getOtherTrackLocation(otherCoord);
         if (otherTrack == null)
             return SignalAspect.YELLOW;
+
+        int y1, y2;
+        TrackTools.TrackScan scan = trackScans.get(otherTrack);
+        if (scan != null) {
+            y1 = scan.minY;
+            y2 = scan.maxY + 1;
+        } else {
+            y1 = Math.min(myTrack.y, otherTrack.y);
+            y2 = Math.max(myTrack.y, otherTrack.y) + 1;
+        }
+
         int x1 = Math.min(myTrack.x, otherTrack.x);
-        int y1 = Math.min(myTrack.y, otherTrack.y);
         int z1 = Math.min(myTrack.z, otherTrack.z);
         int x2 = Math.max(myTrack.x, otherTrack.x) + 1;
-        int y2 = Math.max(myTrack.y, otherTrack.y) + 1;
         int z2 = Math.max(myTrack.z, otherTrack.z) + 1;
 
         boolean zAxis = Math.abs(myTrack.x - otherTrack.x) < Math.abs(myTrack.z - otherTrack.z);
@@ -176,11 +183,13 @@ public abstract class SignalBlock extends AbstractPair {
             return true;
         if (getSignalAt(other) == null)
             return true;
-        WorldCoordinate tA = getTrackLocation();
-        WorldCoordinate tB = getOtherTrackLocation(other);
-        if (tA == null || tB == null)
+        WorldCoordinate myTrack = getTrackLocation();
+        WorldCoordinate otherTrack = getOtherTrackLocation(other);
+        if (myTrack == null || otherTrack == null)
             return false;
-        if (!TrackTools.areTracksConnectedAlongAxis(tile.getWorldObj(), tA.x, tA.y, tA.z, tB.x, tB.y, tB.z))
+        TrackTools.TrackScan scan = TrackTools.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
+        trackScans.put(otherTrack, scan);
+        if (!scan.areConnected)
             return false;
         return true;
     }
@@ -225,11 +234,6 @@ public abstract class SignalBlock extends AbstractPair {
         if (trackLocation == null)
             locateTrack();
         return trackLocation;
-    }
-
-    public static enum Status {
-
-        VALID, INVALID, UNKNOWN
     }
 
     private Status getTrackStatus() {
@@ -291,4 +295,8 @@ public abstract class SignalBlock extends AbstractPair {
         return Status.INVALID;
     }
 
+    public static enum Status {
+
+        VALID, INVALID, UNKNOWN
+    }
 }
