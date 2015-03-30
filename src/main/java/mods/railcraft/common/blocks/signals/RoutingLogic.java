@@ -75,7 +75,7 @@ public class RoutingLogic {
     }
 
     private boolean canRouteCart(EntityMinecart cart) {
-        Train train = LinkageManager.instance().getTrain(cart);
+        Train train = Train.getTrain(cart);
         if (train == null)
             return false;
         if (train.size() == 1)
@@ -342,8 +342,8 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            for (EntityMinecart c : LinkageManager.instance().getCartsInTrain(cart)) {
-                if (c.riddenByEntity != null && c.riddenByEntity instanceof EntityPlayer)
+            for (EntityMinecart c : Train.getTrain(cart)) {
+                if (c != null && c.riddenByEntity instanceof EntityPlayer)
                     return ridden;
             }
             return !ridden;
@@ -359,8 +359,8 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            for (EntityMinecart c : LinkageManager.instance().getCartsInTrain(cart)) {
-                if (c.riddenByEntity != null && c.riddenByEntity instanceof EntityPlayer)
+            for (EntityMinecart c : Train.getTrain(cart)) {
+                if (c != null && c.riddenByEntity instanceof EntityPlayer)
                     return c.riddenByEntity.getCommandSenderName().equals(value);
             }
             return false;
