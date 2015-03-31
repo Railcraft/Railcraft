@@ -112,7 +112,7 @@ public class WorldGenGeode extends WorldGenerator {
         if (existing.isReplaceableOreGen(world, x, y, z, Blocks.dirt))
             return true;
         if (existing.isReplaceableOreGen(world, x, y, z, Blocks.gravel))
-            return true;
+            return !(WorldPlugin.getBlock(world, x, y + 1, z) == Blocks.water);
         if (existing.isReplaceableOreGen(world, x, y, z, Blocks.sand))
             return true;
         if (ores.contains(existing))
