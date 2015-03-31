@@ -8,13 +8,6 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SimpleSignalController;
@@ -24,14 +17,23 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.EnumSet;
 
 public class TileBoxController extends TileBoxBase implements IControllerTile, IGuiReturnHandler {
-
-    private boolean powered;
+    private static final EnumSet<ForgeDirection> powerSides = EnumSet.of(ForgeDirection.DOWN, ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH);
+    private final SimpleSignalController controller = new SimpleSignalController(getName(), this);
     public SignalAspect defaultAspect = SignalAspect.GREEN;
     public SignalAspect poweredAspect = SignalAspect.RED;
+    private boolean powered;
     private boolean prevBlinkState;
-    private final SimpleSignalController controller = new SimpleSignalController(getName(), this);
 
     @Override
     public EnumSignal getSignalType() {
@@ -83,15 +85,13 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     private boolean isBeingPowered() {
-        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-            if (side == ForgeDirection.UP)
-                continue;
+        for (ForgeDirection side : powerSides) {
             if (tileCache.getTileOnSide(side) instanceof TileBoxBase)
                 continue;
             if (PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord, side))
                 return true;
-            if (PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord - 1, zCoord, side))
-                return true;
+//            if (PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord - 1, zCoord, side))
+//                return true;
         }
         return false;
     }
@@ -194,5 +194,4 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     public SimpleSignalController getController() {
         return controller;
     }
-
 }
