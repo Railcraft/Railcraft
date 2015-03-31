@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.plugins.thaumcraft;
 
-import mods.railcraft.common.items.*;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.ItemCrowbar;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
@@ -24,14 +24,17 @@ import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
-
-    private static final String ITEM_TAG = "railcraft.tool.crowbar.magic";
     public static final String RESEARCH_TAG = "RC_Crowbar";
+    private static final String ITEM_TAG = "railcraft.tool.crowbar.magic";
     private static Item item;
+
+    public ItemCrowbarMagic() {
+        super(ThaumcraftPlugin.getThaumiumToolMaterial());
+        setUnlocalizedName(ITEM_TAG);
+    }
 
     public static void registerItem() {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
@@ -42,6 +45,8 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
     }
 
     public static void registerResearch() {
+        if (item == null)
+            return;
         try {
             IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe(RESEARCH_TAG, new ItemStack(item),
                     new AspectList().add(Aspect.ORDER, 8),
@@ -58,7 +63,6 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
             thaumiumCrowbar.setPages(new ResearchPage[]{ThaumcraftPlugin.getResearchPage(RESEARCH_TAG), new ResearchPage(recipe)})
                     .setParentsHidden("THAUMIUM")
                     .registerResearchItem();
-
         } catch (Throwable error) {
             Game.logErrorAPI("Thaumcraft", error, ResearchItem.class);
         }
@@ -69,10 +73,4 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
             return null;
         return new ItemStack(item);
     }
-
-    public ItemCrowbarMagic() {
-        super(ThaumcraftPlugin.getThaumiumToolMaterial());
-        setUnlocalizedName(ITEM_TAG);
-    }
-
 }

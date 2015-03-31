@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) CovertJaguar, 2014 http://railcraft.info
+ *
+ * This code is the property of CovertJaguar
+ * or licensed for use by CovertJaguar
+ * and may only be used with explicit written
+ * permission unless otherwise specified on the
+ * license page at http://railcraft.info/wiki/info:license.
+ */
 package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.common.core.RailcraftConfig;
@@ -21,10 +30,14 @@ import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 
 public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpingGear {
-
     public static final String ITEM_TAG = "railcraft.tool.crowbar.void";
     public static final String RESEARCH_TAG = "RC_Crowbar_Void";
     public static Item item;
+
+    public ItemCrowbarVoid() {
+        super(ThaumcraftPlugin.getVoidmetalToolMaterial());
+        setUnlocalizedName(ITEM_TAG);
+    }
 
     public static void registerItem() {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
@@ -35,6 +48,8 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
     }
 
     public static void registerResearch() {
+        if (item == null)
+            return;
         try {
             IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe(RESEARCH_TAG, new ItemStack(item),
                     new AspectList().add(Aspect.ENTROPY, 50),
@@ -51,7 +66,6 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
             voidCrowbar.setPages(new ResearchPage[]{ThaumcraftPlugin.getResearchPage(RESEARCH_TAG), new ResearchPage(recipe)})
                     .setParents(ItemCrowbarMagic.RESEARCH_TAG).setParentsHidden("VOIDMETAL")
                     .registerResearchItem();
-
         } catch (Throwable error) {
             Game.logErrorAPI("Thaumcraft", error, ResearchItem.class);
         }
@@ -61,11 +75,6 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
         if (item == null)
             return null;
         return new ItemStack(item);
-    }
-
-    public ItemCrowbarVoid() {
-        super(ThaumcraftPlugin.getVoidmetalToolMaterial());
-        setUnlocalizedName(ITEM_TAG);
     }
 
     @Override
@@ -81,5 +90,4 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
     public int getWarp(ItemStack itemstack, EntityPlayer player) {
         return 1;
     }
-
 }
