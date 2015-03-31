@@ -9,38 +9,40 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import buildcraft.api.tools.IToolWrench;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyHandler;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileEngine extends TileMachineBase implements IEnergyConnection {
-
+    public float currentOutput = 0;
+    public int energy;
     private ForgeDirection direction = ForgeDirection.UP;
     private float pistonProgress = 0;
-    public float currentOutput = 0;
     private int pistonStage;
     private boolean powered;
     private boolean isActive;
     private boolean needsInit = true;
-    public int energy;
-//    public int outputDebug, genDebug, cycleTick;
+    //    public int outputDebug, genDebug, cycleTick;
     private EnergyStage energyStage = EnergyStage.BLUE;
+
+    public TileEngine() {
+    }
 
     public float getCurrentOutput() {
         return currentOutput;
@@ -48,22 +50,6 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
     public int getEnergy() {
         return energy;
-    }
-
-    public enum EnergyStage {
-
-        BLUE, GREEN, YELLOW, ORANGE, RED, OVERHEAT;
-        public static final EnergyStage[] VALUES = values();
-
-        public static EnergyStage fromOrdinal(int ordinal) {
-            if (ordinal < 0 || ordinal >= VALUES.length)
-                return BLUE;
-            return VALUES[ordinal];
-        }
-
-    }
-
-    public TileEngine() {
     }
 
     protected void playSoundIn() {
@@ -112,7 +98,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
                 TileEntity tile = tileCache.getTileOnSide(direction);
 
                 if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
-                    IEnergyHandler handler = (IEnergyHandler) tile;
+                    IEnergyReceiver handler = (IEnergyReceiver) tile;
                     int powerToTransfer = extractEnergy();
 //                    outputDebug += powerToTransfer;
                     if (powerToTransfer > 0)
@@ -137,7 +123,6 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
                     setActive(false);
             else
                 setActive(false);
-
         } else
             setActive(false);
 
@@ -150,15 +135,15 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
     protected abstract void burn();
 
+    public boolean isActive() {
+        return isActive;
+    }
+
     private void setActive(boolean isActive) {
         if (this.isActive != isActive) {
             this.isActive = isActive;
             sendUpdateToClient();
         }
-    }
-
-    public boolean isActive() {
-        return isActive;
     }
 
     public double getPistonSpeed() {
@@ -336,7 +321,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         return returnValue;
     }
 
-//    public int extractEnergy(int min, int max, boolean doExtract) {
+    //    public int extractEnergy(int min, int max, boolean doExtract) {
 //        if (energy < min)
 //            return 0;
 //
@@ -417,4 +402,16 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         return from == direction;
     }
 
+    public enum EnergyStage {
+
+        BLUE, GREEN, YELLOW, ORANGE, RED, OVERHEAT;
+        public static final EnergyStage[] VALUES = values();
+
+        public static EnergyStage fromOrdinal(int ordinal) {
+            if (ordinal < 0 || ordinal >= VALUES.length)
+                return BLUE;
+            return VALUES[ordinal];
+        }
+
+    }
 }
