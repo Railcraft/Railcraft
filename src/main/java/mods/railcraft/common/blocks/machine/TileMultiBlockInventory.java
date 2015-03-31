@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine;
 
 import java.util.List;
+
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -19,11 +20,9 @@ import mods.railcraft.common.util.inventory.StandaloneInventory;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileMultiBlockInventory extends TileMultiBlock implements IInventory {
-
     protected final StandaloneInventory inv;
     private final String guiTag;
 
@@ -58,6 +57,11 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
         TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
         if (mBlock != null)
             mBlock.inv.setInventorySlotContents(i, itemstack);
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+        return isStructureValid();
     }
 
     @Override
@@ -114,5 +118,4 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
     public boolean isUseableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUseableByPlayerHelper(this, player);
     }
-
 }

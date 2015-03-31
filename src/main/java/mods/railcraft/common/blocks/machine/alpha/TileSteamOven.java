@@ -9,52 +9,103 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.statements.IActionExternal;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.*;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
-import mods.railcraft.common.util.steam.ISteamUser;
-import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
+import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
+import mods.railcraft.common.util.steam.ISteamUser;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.*;
+
 import static net.minecraftforge.common.util.ForgeDirection.DOWN;
 import static net.minecraftforge.common.util.ForgeDirection.UP;
 
 public class TileSteamOven extends TileMultiBlockInventory implements IFluidHandler, ISidedInventory, ISteamUser, IHasWork {
+    public static final int SLOT_INPUT = 0;
+    public static final int SLOT_OUTPUT = 9;
+    private static final ForgeDirection[] UP_DOWN_AXES = new ForgeDirection[]{UP, DOWN};
+    private static final int STEAM_PER_BATCH = 8000;
+    private static final int TOTAL_COOK_TIME = 256;
+    private static final int COOK_STEP = 16;
+    private static final int ITEMS_SMELTED = 9;
+    private static final int[] SLOTS = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
+    private static final int TANK_CAPACITY = 8 * FluidHelper.BUCKET_VOLUME;
+    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private final TankManager tankManager = new TankManager();
+    private final StandardTank tank;
+    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 9);
+    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9, false);
+    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
+    static {
+        char[][][] map = {
+                {
+                        {'*', 'O', 'O', '*'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'*', 'O', 'O', '*'},},
+                {
+                        {'*', 'O', 'O', '*'},
+                        {'O', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'O'},
+                        {'*', 'O', 'O', '*'}
+                },
+                {
+                        {'*', 'O', 'O', '*'},
+                        {'O', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'O'},
+                        {'*', 'O', 'O', '*'}
+                },
+                {
+                        {'*', 'O', 'O', '*'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'*', 'O', 'O', '*'},},};
+        patterns.add(new MultiBlockPattern(map));
+    }
+    public int cookTime;
+    public boolean finishedCycle = false;
+    private ForgeDirection facing = ForgeDirection.NORTH;
+    private boolean paused = false;
+    public TileSteamOven() {
+        super("railcraft.gui.steam.oven", 18, patterns);
+        tank = new FilteredTank(TANK_CAPACITY, Fluids.STEAM.get(), this);
+        tankManager.add(tank);
+    }
 
     public static void placeSteamOven(World world, int x, int y, int z, List<ItemStack> input, List<ItemStack> output) {
         for (MultiBlockPattern pattern : TileSteamOven.patterns) {
@@ -72,74 +123,6 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
             }
             return;
         }
-    }
-
-    enum Texture {
-
-        DOOR_TL(6), DOOR_TR(7), DOOR_BL(8), DOOR_BR(9), SIDE(2), CAP(0);
-        private final int index;
-
-        private Texture(int index) {
-            this.index = index;
-        }
-
-        public IIcon getIcon() {
-            return EnumMachineAlpha.STEAM_OVEN.getTexture(index);
-        }
-
-    }
-
-    private static final ForgeDirection[] UP_DOWN_AXES = new ForgeDirection[]{UP, DOWN};
-    private static final int STEAM_PER_BATCH = 8000;
-    private static final int TOTAL_COOK_TIME = 256;
-    private static final int COOK_STEP = 16;
-    private static final int ITEMS_SMELTED = 9;
-    public static final int SLOT_INPUT = 0;
-    public static final int SLOT_OUTPUT = 9;
-    private static final int[] SLOTS = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
-    private static final int TANK_CAPACITY = 8 * FluidHelper.BUCKET_VOLUME;
-    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
-    private ForgeDirection facing = ForgeDirection.NORTH;
-    public int cookTime;
-    public boolean finishedCycle = false;
-    private boolean paused = false;
-    private final TankManager tankManager = new TankManager();
-    private final StandardTank tank;
-    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 9);
-    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9, false);
-    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
-
-    static {
-        char[][][] map = {
-            {
-                {'*', 'O', 'O', '*'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'*', 'O', 'O', '*'},},
-            {
-                {'*', 'O', 'O', '*'},
-                {'O', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'O'},
-                {'*', 'O', 'O', '*'}
-            },
-            {
-                {'*', 'O', 'O', '*'},
-                {'O', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'O'},
-                {'*', 'O', 'O', '*'}
-            },
-            {
-                {'*', 'O', 'O', '*'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'*', 'O', 'O', '*'},},};
-        patterns.add(new MultiBlockPattern(map));
-    }
-
-    public TileSteamOven() {
-        super("railcraft.gui.steam.oven", 18, patterns);
-        tank = new FilteredTank(TANK_CAPACITY, Fluids.STEAM.get(), this);
-        tankManager.add(tank);
     }
 
     @Override
@@ -435,6 +418,8 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        if (!super.isItemValidForSlot(slot, stack))
+            return false;
         if (stack == null)
             return false;
         if (slot >= SLOT_OUTPUT)
@@ -466,4 +451,18 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
             mBlock.actions.add(action);
     }
 
+    enum Texture {
+
+        DOOR_TL(6), DOOR_TR(7), DOOR_BL(8), DOOR_BR(9), SIDE(2), CAP(0);
+        private final int index;
+
+        private Texture(int index) {
+            this.index = index;
+        }
+
+        public IIcon getIcon() {
+            return EnumMachineAlpha.STEAM_OVEN.getTexture(index);
+        }
+
+    }
 }

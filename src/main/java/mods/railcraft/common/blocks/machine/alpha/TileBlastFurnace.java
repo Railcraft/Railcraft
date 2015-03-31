@@ -8,21 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.block.material.Material;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
@@ -34,15 +19,126 @@ import mods.railcraft.common.blocks.machine.TileMultiBlockOven;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
-import mods.railcraft.common.util.inventory.*;
+import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventorySorter;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
+    public static final IStackFilter INPUT_FILTER = new IStackFilter() {
+        @Override
+        public boolean matches(ItemStack stack) {
+            return RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
+        }
+    };
+    public static final IStackFilter FUEL_FILTER = new IStackFilter() {
+        @Override
+        public boolean matches(ItemStack stack) {
+            return stack != null && InvTools.isItemEqual(stack, RailcraftCraftingManager.blastFurnace.getFuels());
+        }
+    };
+    public static final int SLOT_INPUT = 0;
+    public static final int SLOT_FUEL = 1;
+    public static final int SLOT_OUTPUT = 2;
+    private static final int FUEL_PER_TICK = 5;
+    private static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
+    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private final IInventory invFuel = new InventoryMapper(this, SLOT_FUEL, 1);
+    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
+    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(this, tileCache, new ITileFilter() {
+        @Override
+        public boolean matches(TileEntity tile) {
+            if (tile instanceof TileBlastFurnace)
+                return false;
+            if (tile instanceof IInventory)
+                return ((IInventory) tile).getSizeInventory() >= 27;
+            return false;
+        }
+    }, InventorySorter.SIZE_DECENDING);
+    static {
+        char[][][] map = {
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'W', 'B', 'O'},
+                        {'O', 'W', 'B', 'W', 'O'},
+                        {'O', 'B', 'W', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'A', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'A', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                }
+        };
+        patterns.add(new MultiBlockPattern(map, 2, 1, 2));
+    }
+    /**
+     * The number of ticks that the furnace will keep burning
+     */
+    public int burnTime = 0;
+    /**
+     * The number of ticks that a fresh copy of the currently-burning item would
+     * keep the furnace burning for
+     */
+    public int currentItemBurnTime = 0;
+    public boolean clientBurning = false;
+    private int finishedAt;
+
+    public TileBlastFurnace() {
+        super("railcraft.gui.blast.furnace", 3, patterns);
+    }
 
     public static void placeBlastFurnace(World world, int x, int y, int z, ItemStack input, ItemStack output, ItemStack fuel) {
         for (MultiBlockPattern pattern : TileBlastFurnace.patterns) {
@@ -57,104 +153,6 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
             }
             return;
         }
-    }
-
-    public static final IStackFilter INPUT_FILTER = new IStackFilter() {
-        @Override
-        public boolean matches(ItemStack stack) {
-            return RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
-        }
-
-    };
-    public static final IStackFilter FUEL_FILTER = new IStackFilter() {
-        @Override
-        public boolean matches(ItemStack stack) {
-            return stack != null && InvTools.isItemEqual(stack, RailcraftCraftingManager.blastFurnace.getFuels());
-        }
-
-    };
-    private static final int FUEL_PER_TICK = 5;
-    public static final int SLOT_INPUT = 0;
-    public static final int SLOT_FUEL = 1;
-    public static final int SLOT_OUTPUT = 2;
-    private static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
-    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
-    /**
-     * The number of ticks that the furnace will keep burning
-     */
-    public int burnTime = 0;
-    /**
-     * The number of ticks that a fresh copy of the currently-burning item would
-     * keep the furnace burning for
-     */
-    public int currentItemBurnTime = 0;
-    public boolean clientBurning = false;
-    private int finishedAt;
-    private final IInventory invFuel = new InventoryMapper(this, SLOT_FUEL, 1);
-    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
-    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(this, tileCache, new ITileFilter() {
-        @Override
-        public boolean matches(TileEntity tile) {
-            if (tile instanceof TileBlastFurnace)
-                return false;
-            if (tile instanceof IInventory)
-                return ((IInventory) tile).getSizeInventory() >= 27;
-            return false;
-        }
-
-    }, InventorySorter.SIZE_DECENDING);
-
-    static {
-        char[][][] map = {
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'W', 'B', 'O'},
-                {'O', 'W', 'B', 'W', 'O'},
-                {'O', 'B', 'W', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'A', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'A', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            }
-        };
-        patterns.add(new MultiBlockPattern(map, 2, 1, 2));
-    }
-
-    public TileBlastFurnace() {
-        super("railcraft.gui.blast.furnace", 3, patterns);
     }
 
     @Override
@@ -231,7 +229,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
             worldObj.setBlock(xLava, yLava, zLava, Blocks.flowing_lava, 1, 3);
     }
 
-//    private void destroyLava() {
+    //    private void destroyLava() {
 //        int xLava = xCoord + 1;
 //        int yLava = yCoord + 2;
 //        int zLava = zCoord + 1;
@@ -375,6 +373,8 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        if (!super.isItemValidForSlot(slot, stack))
+            return false;
         switch (slot) {
             case SLOT_OUTPUT:
                 return false;
@@ -400,5 +400,4 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     public boolean canExtractItem(int slot, ItemStack stack, int side) {
         return slot == SLOT_OUTPUT;
     }
-
 }

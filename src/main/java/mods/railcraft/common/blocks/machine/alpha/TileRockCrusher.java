@@ -11,12 +11,10 @@ package mods.railcraft.common.blocks.machine.alpha;
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
-import java.util.*;
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import net.minecraft.inventory.IInventory;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
@@ -38,6 +36,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,11 +46,98 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.*;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyHandler, IHasWork, ISidedInventory {
+    public static final int SLOT_INPUT = 0;
+    public static final int SLOT_OUTPUT = 9;
+    private final static int PROCESS_TIME = 100;
+    private final static int CRUSHING_POWER_COST_PER_TICK = 160;
+    private final static int SUCKING_POWER_COST = 5000;
+    private final static int KILLING_POWER_COST = 10000;
+    private final static int MAX_RECEIVE = 5000;
+    private final static int MAX_ENERGY = CRUSHING_POWER_COST_PER_TICK * PROCESS_TIME;
+    private final static int[] SLOTS_INPUT = InvTools.buildSlotArray(SLOT_INPUT, 9);
+    private final static int[] SLOTS_OUTPUT = InvTools.buildSlotArray(SLOT_OUTPUT, 9);
+    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private final IInventory invInput = new InventoryMapper(this, 0, 9);
+    private final IInventory invOutput = new InventoryMapper(this, 9, 9, false);
+    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
+    static {
+        char[][][] map1 = {
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'D', 'B', 'O'},
+                        {'O', 'B', 'D', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'a', 'd', 'f', 'O'},
+                        {'O', 'c', 'e', 'h', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                }
+        };
+        patterns.add(new MultiBlockPattern(map1));
+
+        char[][][] map2 = {
+                {
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'O'},
+                        {'O', 'D', 'D', 'O'},
+                        {'O', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'a', 'f', 'O'},
+                        {'O', 'b', 'g', 'O'},
+                        {'O', 'c', 'h', 'O'},
+                        {'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'}
+                }
+        };
+        patterns.add(new MultiBlockPattern(map2));
+    }
+    private int processTime;
+    private EnergyStorage energyStorage;
+    private boolean isWorking = false;
+    private boolean paused = false;
+
+    public TileRockCrusher() {
+        super(EnumMachineAlpha.ROCK_CRUSHER.getTag() + ".name", 18, patterns);
+
+        if (RailcraftConfig.machinesRequirePower())
+            energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE);
+    }
 
     public static void placeRockCrusher(World world, int x, int y, int z, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
         MultiBlockPattern pattern = TileRockCrusher.patterns.get(patternIndex);
@@ -75,94 +161,6 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
                     master.inv.setInventorySlotContents(TileRockCrusher.SLOT_OUTPUT + slot, output.get(slot));
             }
         }
-    }
-
-    private final static int PROCESS_TIME = 100;
-    private final static int CRUSHING_POWER_COST_PER_TICK = 160;
-    private final static int SUCKING_POWER_COST = 5000;
-    private final static int KILLING_POWER_COST = 10000;
-    private final static int MAX_RECEIVE = 5000;
-    private final static int MAX_ENERGY = CRUSHING_POWER_COST_PER_TICK * PROCESS_TIME;
-    public static final int SLOT_INPUT = 0;
-    public static final int SLOT_OUTPUT = 9;
-    private final static int[] SLOTS_INPUT = InvTools.buildSlotArray(SLOT_INPUT, 9);
-    private final static int[] SLOTS_OUTPUT = InvTools.buildSlotArray(SLOT_OUTPUT, 9);
-    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
-    private int processTime;
-    private final IInventory invInput = new InventoryMapper(this, 0, 9);
-    private final IInventory invOutput = new InventoryMapper(this, 9, 9, false);
-    private EnergyStorage energyStorage;
-    private boolean isWorking = false;
-    private boolean paused = false;
-    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
-
-    static {
-        char[][][] map1 = {
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'D', 'B', 'O'},
-                {'O', 'B', 'D', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'a', 'd', 'f', 'O'},
-                {'O', 'c', 'e', 'h', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            }
-        };
-        patterns.add(new MultiBlockPattern(map1));
-
-        char[][][] map2 = {
-            {
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'O'},
-                {'O', 'D', 'D', 'O'},
-                {'O', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O'},
-                {'O', 'a', 'f', 'O'},
-                {'O', 'b', 'g', 'O'},
-                {'O', 'c', 'h', 'O'},
-                {'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'}
-            }
-        };
-        patterns.add(new MultiBlockPattern(map2));
-    }
-
-    public TileRockCrusher() {
-        super(EnumMachineAlpha.ROCK_CRUSHER.getTag() + ".name", 18, patterns);
-
-        if (RailcraftConfig.machinesRequirePower())
-            energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE);
     }
 
     @Override
@@ -273,7 +271,6 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
                             processTime = 0;
                         }
-
                     } else {
                         isWorking = true;
                         if (energyStorage != null) {
@@ -361,7 +358,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
         return false;
     }
 
-//    public void setPaused(boolean p) {
+    //    public void setPaused(boolean p) {
 //        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
 //        if (mBlock != null) {
 //            mBlock.paused = p;
@@ -402,6 +399,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        if (!super.isItemValidForSlot(slot, stack))
+            return false;
         if (slot < 9)
             return RailcraftCraftingManager.rockCrusher.getRecipe(stack) != null;
         return false;
@@ -444,5 +443,4 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
     public boolean canConnectEnergy(ForgeDirection from) {
         return RailcraftConfig.machinesRequirePower();
     }
-
 }

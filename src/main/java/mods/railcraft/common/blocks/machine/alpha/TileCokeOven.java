@@ -8,16 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -25,25 +15,95 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockOven;
+import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.fluids.tanks.FakeTank;
+import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.StandardTank;
-import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, ISidedInventory {
+    public static final int SLOT_INPUT = 0;
+    public static final int SLOT_OUTPUT = 1;
+    public static final int SLOT_LIQUID_OUTPUT = 2;
+    public static final int SLOT_LIQUID_INPUT = 3;
+    private static final int COOK_STEP_LENGTH = 50;
+    private static final int[] SLOTS = InvTools.buildSlotArray(0, 4);
+    private static final int TANK_CAPACITY = 64 * FluidHelper.BUCKET_VOLUME;
+    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private final TankManager tankManager = new TankManager();
+    private final StandardTank tank;
+    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 2, false);
+    static {
+        char[][][] map = {
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'W', 'B', 'O'},
+                        {'O', 'W', 'A', 'W', 'O'},
+                        {'O', 'B', 'W', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },};
+        patterns.add(new MultiBlockPattern(map, 2, 1, 2));
+    }
+    public int cookTimeTotal = 3600;
+    private int finishedAt;
+
+    public TileCokeOven() {
+        super("railcraft.gui.coke.oven", 4, patterns);
+        tank = new StandardTank(TANK_CAPACITY, this);
+        tankManager.add(tank);
+    }
 
     public static void placeCokeOven(World world, int x, int y, int z, int creosote, ItemStack input, ItemStack output) {
         for (MultiBlockPattern pattern : TileCokeOven.patterns) {
@@ -59,67 +119,6 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
             }
             return;
         }
-    }
-
-    private static final int COOK_STEP_LENGTH = 50;
-    public static final int SLOT_INPUT = 0;
-    public static final int SLOT_OUTPUT = 1;
-    public static final int SLOT_LIQUID_OUTPUT = 2;
-    public static final int SLOT_LIQUID_INPUT = 3;
-    private static final int[] SLOTS = InvTools.buildSlotArray(0, 4);
-    private static final int TANK_CAPACITY = 64 * FluidHelper.BUCKET_VOLUME;
-    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
-    private int finishedAt;
-    public int cookTimeTotal = 3600;
-    private final TankManager tankManager = new TankManager();
-    private final StandardTank tank;
-    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 2, false);
-
-    static {
-        char[][][] map = {
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'W', 'B', 'O'},
-                {'O', 'W', 'A', 'W', 'O'},
-                {'O', 'B', 'W', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },};
-        patterns.add(new MultiBlockPattern(map, 2, 1, 2));
-    }
-
-    public TileCokeOven() {
-        super("railcraft.gui.coke.oven", 4, patterns);
-        tank = new StandardTank(TANK_CAPACITY, this);
-        tankManager.add(tank);
     }
 
     @Override
@@ -206,7 +205,6 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
                                     tank.fill(recipe.getFluidOutput(), true);
                                     sendUpdateToClient();
                                 }
-
                             } else {
                                 cookTime = 0;
                                 setCooking(false);
@@ -304,6 +302,8 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        if (!super.isItemValidForSlot(slot, stack))
+            return false;
         switch (slot) {
             case SLOT_INPUT:
                 return RailcraftCraftingManager.cokeOven.getRecipe(stack) != null;
@@ -328,5 +328,4 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     public boolean canExtractItem(int slot, ItemStack stack, int side) {
         return slot == SLOT_OUTPUT || slot == SLOT_LIQUID_OUTPUT;
     }
-
 }

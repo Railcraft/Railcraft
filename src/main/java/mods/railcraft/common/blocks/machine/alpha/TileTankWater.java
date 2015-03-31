@@ -8,61 +8,47 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.inventory.Slot;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileTank;
+import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotWaterOrEmpty;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTankWater extends TileTank implements ISidedInventory {
-
-    public static void placeWaterTank(World world, int x, int y, int z, int water) {
-        for (MultiBlockPattern pattern : TileTankWater.patterns) {
-            Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
-            blockMapping.put('B', EnumMachineAlpha.TANK_WATER.ordinal());
-            TileEntity tile = pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
-            if (tile instanceof TileTankWater) {
-                TileTankWater master = (TileTankWater) tile;
-                master.tank.setFluid(Fluids.WATER.get(water));
-            }
-            return;
-        }
-    }
-
     private final static int OUTPUT_RATE = 40;
     private final static int TANK_CAPACITY = FluidHelper.BUCKET_VOLUME * 400;
     private final static int REFILL_INTERVAL = 8;
@@ -84,57 +70,70 @@ public class TileTankWater extends TileTank implements ISidedInventory {
                 return true;
             return false;
         }
-
     };
     private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
-    private IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
     private final FilteredTank tank;
 
     static {
         char[][][] map = {
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'A', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },};
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'A', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },};
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
+
+    private IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+    private IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
 
     public TileTankWater() {
         super("gui.tank.water", 2, patterns);
         tank = new FilteredTank(TANK_CAPACITY, Fluids.WATER.get(), this);
         tankManager.add(tank);
+    }
+
+    public static void placeWaterTank(World world, int x, int y, int z, int water) {
+        for (MultiBlockPattern pattern : TileTankWater.patterns) {
+            Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
+            blockMapping.put('B', EnumMachineAlpha.TANK_WATER.ordinal());
+            TileEntity tile = pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
+            if (tile instanceof TileTankWater) {
+                TileTankWater master = (TileTankWater) tile;
+                master.tank.setFluid(Fluids.WATER.get(water));
+            }
+            return;
+        }
     }
 
     @Override
@@ -269,11 +268,12 @@ public class TileTankWater extends TileTank implements ISidedInventory {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        if (!super.isItemValidForSlot(slot, stack))
+            return false;
         switch (slot) {
             case SLOT_INPUT:
                 return FluidHelper.isEmptyContainer(stack) || FluidHelper.containsFluid(stack, Fluids.WATER.get());
         }
         return false;
     }
-
 }

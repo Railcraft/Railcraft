@@ -12,10 +12,12 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
+
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -34,46 +36,26 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.IInventory;
 
 public abstract class TileMultiBlock extends TileMachineBase {
-
-    public enum MultiBlockState {
-
-        VALID, INVALID, UNKNOWN
-    };
-
-    public enum MultiBlockStateReturn {
-
-        VALID(MultiBlockState.VALID, "railcraft.multiblock.state.valid"),
-        ENTITY_IN_WAY(MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.entity"),
-        PATTERN_DOES_NOT_MATCH(MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.pattern"),
-        NOT_LOADED(MultiBlockState.UNKNOWN, "railcraft.multiblock.state.unknown.unloaded");
-        public final MultiBlockState type;
-        public final String message;
-
-        private MultiBlockStateReturn(MultiBlockState type, String msg) {
-            this.type = type;
-            this.message = msg;
-        }
-
-    }
     private static final int UNKNOWN_STATE_RECHECK = 256;
+
+    ;
     private static final int NETWORK_RECHECK = 64;
+    private final Timer netTimer = new Timer();
+    private final List<? extends MultiBlockPattern> patterns;
+    private final List<TileEntity> components = new LinkedList<TileEntity>();
+    private final List<TileEntity> componentsImmutable = Collections.unmodifiableList(components);
+    public ListMultimap<MultiBlockStateReturn, Integer> patternStates = ArrayListMultimap.create();
     protected boolean isMaster;
     private byte patternX;
     private byte patternY;
     private byte patternZ;
     private boolean tested;
     private boolean requestPacket;
-    private final Timer netTimer = new Timer();
     private MultiBlockState state;
-    public ListMultimap<MultiBlockStateReturn, Integer> patternStates = ArrayListMultimap.create();
     private TileMultiBlock masterBlock;
     private MultiBlockPattern currentPattern;
-    private final List<? extends MultiBlockPattern> patterns;
     private UUID uuid;
     private UUID uuidMaster;
-    private final List<TileEntity> components = new LinkedList<TileEntity>();
-    private final List<TileEntity> componentsImmutable = Collections.unmodifiableList(components);
-
     public TileMultiBlock(List<? extends MultiBlockPattern> patterns) {
         this.patterns = patterns;
         currentPattern = patterns.get(0);
@@ -138,15 +120,15 @@ public abstract class TileMultiBlock extends TileMachineBase {
         patternZ = z;
     }
 
+    public final MultiBlockPattern getPattern() {
+        return currentPattern;
+    }
+
     public final void setPattern(MultiBlockPattern pattern) {
         if (currentPattern != pattern)
             onPatternChanged();
         this.currentPattern = pattern;
         onPatternLock(pattern);
-    }
-
-    public final MultiBlockPattern getPattern() {
-        return currentPattern;
     }
 
     public final byte getPatternIndex() {
@@ -486,7 +468,6 @@ public abstract class TileMultiBlock extends TileMachineBase {
         if (needsRenderUpdate)
             markBlockForUpdate();
 
-//
 //        System.out.printf("marker=%c, pattern=%d, x=%d, y=%d, z=%d%n", currentPattern.getPatternMarkerChecked(patternX, patternY, patternZ), patternIndex, patternX, patternY, patternZ);
 //        if(masterBlock != null)
 //        System.out.printf("tested=%b, invalid=%b, isMaster=%b%n" ,masterBlock.tested, masterBlock.isInvalid(), masterBlock.isMaster());
@@ -524,4 +505,24 @@ public abstract class TileMultiBlock extends TileMachineBase {
         return (isStructureValid() && getPatternPositionY() < 2) ? false : super.canCreatureSpawn(type);
     }
 
+    public enum MultiBlockState {
+
+        VALID, INVALID, UNKNOWN
+    }
+
+    public enum MultiBlockStateReturn {
+
+        VALID(MultiBlockState.VALID, "railcraft.multiblock.state.valid"),
+        ENTITY_IN_WAY(MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.entity"),
+        PATTERN_DOES_NOT_MATCH(MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.pattern"),
+        NOT_LOADED(MultiBlockState.UNKNOWN, "railcraft.multiblock.state.unknown.unloaded");
+        public final MultiBlockState type;
+        public final String message;
+
+        private MultiBlockStateReturn(MultiBlockState type, String msg) {
+            this.type = type;
+            this.message = msg;
+        }
+
+    }
 }
