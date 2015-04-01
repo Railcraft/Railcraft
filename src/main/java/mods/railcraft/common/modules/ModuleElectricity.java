@@ -72,7 +72,7 @@ public class ModuleElectricity extends RailcraftModule {
                     "CDC",
                     "PCP",
                     'P', RailcraftItem.plate.getRecipeObject(EnumPlate.TIN),
-                    'D', new ItemStack(Blocks.diamond_block),
+                    'D', "blockDiamond",
                     'C', "ingotCopper");
 
         epsilon = EnumMachineEpsilon.FLUX_TRANSFORMER;
@@ -82,8 +82,8 @@ public class ModuleElectricity extends RailcraftModule {
                     "GRG",
                     "PGP",
                     'P', RailcraftItem.plate.getRecipeObject(EnumPlate.COPPER),
-                    'G', Items.gold_ingot,
-                    'R',  new ItemStack(Blocks.redstone_block));
+                    'G', "ingotGold",
+                    'R', "blockRedstone");
 
         EnumMachineDelta delta = EnumMachineDelta.WIRE;
         if (delta.register())

@@ -71,7 +71,7 @@ public class ModuleFactory extends RailcraftModule {
                     "MBM",
                     "BMB",
                     "MBM",
-                    'B', new ItemStack(Items.brick),
+                    'B', "ingotBrick",
                     'M', new ItemStack(Blocks.sand));
 
             if (RailcraftToolItems.getCoalCoke() != null)
@@ -140,7 +140,7 @@ public class ModuleFactory extends RailcraftModule {
                     "PDP",
                     "DSD",
                     "PDP",
-                    'D', new ItemStack(Items.diamond),
+                    'D', "gemDiamond",
                     'P', new ItemStack(Blocks.piston),
                     'S', "blockSteel");
 
@@ -284,7 +284,7 @@ public class ModuleFactory extends RailcraftModule {
                     "IPI",
                     "PCP",
                     "IPI",
-                    'I', Items.iron_ingot,
+                    'I', "ingotIron",
                     'P', Blocks.piston,
                     'C', Blocks.crafting_table);
         } else
@@ -389,7 +389,7 @@ public class ModuleFactory extends RailcraftModule {
                         "S",
                         'C', container,
                         'W', Blocks.wool,
-                        'S', Items.stick);
+                        'S', "stickWood");
             }
             ForestryPlugin.addCarpenterRecipe("torches", 10, Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), null, new ItemStack(Blocks.torch, RailcraftConfig.creosoteTorchOutput()),
                     "#",

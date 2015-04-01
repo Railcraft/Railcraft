@@ -60,7 +60,7 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
                     " RI",
                     "RIR",
                     "IR ",
-                    'I', Items.iron_ingot,
+                    'I', "ingotIron",
                     'R', "dyeRed");
 
             LootPlugin.addLootTool(new ItemStack(item), 1, 1, ITEM_TAG);

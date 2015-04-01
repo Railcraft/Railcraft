@@ -118,7 +118,7 @@ public class ModuleAutomation extends RailcraftModule {
                     "XXX",
                     "XPX",
                     "XXX",
-                    'X', Items.brick,
+                    'X', "ingotBrick",
                     'P', Blocks.stone_pressure_plate);
             CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.SHEEP.ordinal()),
                     "XXX",
@@ -149,7 +149,7 @@ public class ModuleAutomation extends RailcraftModule {
                     "CSC",
                     "PCP",
                     'P', "plankWood",
-                    'S', ModuleManager.isModuleLoaded(ModuleManager.Module.FACTORY) ? RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL) : new ItemStack(Blocks.iron_block),
+                    'S', ModuleManager.isModuleLoaded(ModuleManager.Module.FACTORY) ? RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL) : "blockIron",
                     'C', new ItemStack(Items.golden_carrot));
 
             MinecraftForge.EVENT_BUS.register(new TamingInteractHandler());
@@ -163,9 +163,9 @@ public class ModuleAutomation extends RailcraftModule {
                     "EDE",
                     "SGS",
                     'D', new ItemStack(Blocks.dispenser),
-                    'G', new ItemStack(Blocks.glass_pane),
-                    'E', Items.emerald,
-                    'S', ModuleManager.isModuleLoaded(ModuleManager.Module.FACTORY) ? RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL) : new ItemStack(Blocks.iron_block));
+                    'G', "paneGlass",
+                    'E', "gemEmerald",
+                    'S', ModuleManager.isModuleLoaded(ModuleManager.Module.FACTORY) ? RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL) : "blockIron");
         }
 
         // Define Bore
@@ -189,7 +189,7 @@ public class ModuleAutomation extends RailcraftModule {
                         "IDI",
                         "III",
                         'I', "ingotSteel",
-                        'D', Blocks.diamond_block);
+                        'D', "blockDiamond");
             }
 
             tag = "tool.bore.head.steel";
@@ -213,7 +213,7 @@ public class ModuleAutomation extends RailcraftModule {
                         "IDI",
                         "III",
                         'I', "ingotSteel",
-                        'D', Blocks.iron_block);
+                        'D', "blockIron");
             }
         }
 

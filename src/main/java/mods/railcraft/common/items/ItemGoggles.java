@@ -74,7 +74,7 @@ public class ItemGoggles extends ItemArmor {
                         'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
                         'I', "ingotSteel",
                         'L', Items.leather,
-                        'G', new ItemStack(Blocks.glass_pane));
+                        'G', "paneGlassColorless");
 
                 BlockHidden.registerBlock();
                 if (BlockHidden.getBlock() != null && RailcraftConfig.isTrackingAuraEnabled())

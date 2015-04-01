@@ -86,7 +86,7 @@ public class ModuleStructures extends RailcraftModule {
                             " S ",
                             "SIS",
                             " S ",
-                            'I', Items.iron_ingot,
+                            'I', "ingotIron",
                             'S', Blocks.stone);
                 }
             }
@@ -113,7 +113,7 @@ public class ModuleStructures extends RailcraftModule {
                     "RCR",
                     'N', new ItemStack(Blocks.netherrack),
                     'C', new ItemStack(Items.cauldron),
-                    'R', new ItemStack(Items.redstone));
+                    'R', "dustRedstone");
         }
 
 //        cubeType = EnumCube.BANDED_PLANKS;
@@ -172,12 +172,12 @@ public class ModuleStructures extends RailcraftModule {
                     "III",
                     " I ",
                     "III",
-                    'I', Items.iron_ingot);
+                    'I', "ingotIron");
             RailcraftCraftingManager.rollingMachine.addRecipe(stack,
                     "I I",
                     "III",
                     "I I",
-                    'I', Items.iron_ingot);
+                    'I', "ingotIron");
 
             CraftingPlugin.addShapedRecipe(EnumPost.METAL_PLATFORM.getItem(4),
                     " T ",
@@ -282,7 +282,7 @@ public class ModuleStructures extends RailcraftModule {
                             "GFG",
                             "GSG",
                             "GWG",
-                            'G', new ItemStack(Blocks.glass),
+                            'G', "blockGlassColorless",
                             'F', frame,
                             'S', "dustSaltpeter",
                             'W', container);

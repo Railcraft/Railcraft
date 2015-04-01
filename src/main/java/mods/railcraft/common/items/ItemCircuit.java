@@ -59,32 +59,32 @@ public class ItemCircuit extends ItemRailcraft {
                 " #S",
                 "BGR",
                 "SRL",
-                'L', new ItemStack(Items.dye, 1, 4),
+                'L', "gemLapis",
                 '#', Items.repeater,
-                'G', Items.gold_ingot,
+                'G', "ingotGold",
                 'S', new ItemStack(Blocks.wool, 1, 14),
-                'R', Items.redstone,
-                'B', Items.slime_ball);
+                'R', "dustRedstone",
+                'B', "slimeball");
         CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.RECEIVER.ordinal()),
                 " #S",
                 "BGR",
                 "SRL",
-                'L', new ItemStack(Items.dye, 1, 4),
+                'L', "gemLapis",
                 '#', Items.repeater,
-                'G', Items.gold_ingot,
+                'G', "ingotGold",
                 'S', new ItemStack(Blocks.wool, 1, 13),
-                'R', Items.redstone,
-                'B', Items.slime_ball);
+                'R', "dustRedstone",
+                'B', "slimeball");
         CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.SIGNAL.ordinal()),
                 " #S",
                 "BGR",
                 "SRL",
-                'L', new ItemStack(Items.dye, 1, 4),
+                'L', "gemLapis",
                 '#', Items.repeater,
-                'G', Items.gold_ingot,
+                'G', "ingotGold",
                 'S', new ItemStack(Blocks.wool, 1, 4),
-                'R', Items.redstone,
-                'B', Items.slime_ball);
+                'R', "dustRedstone",
+                'B', "slimeball");
     }
 
     @Override

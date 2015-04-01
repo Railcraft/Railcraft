@@ -42,10 +42,10 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
                         " C ",
                         "BGB",
                         " R ",
-                        'G', Blocks.glass_pane,
+                        'G', "paneGlassColorless",
                         'C', Items.compass,
                         'B', Blocks.stone_button,
-                        'R', Items.redstone);
+                        'R', "dustRedstone");
 
                 LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, "tool.surveyor");
             }

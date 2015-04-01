@@ -53,8 +53,8 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
                 CraftingPlugin.addShapedRecipe(new ItemStack(item), new Object[]{
                     " G",
                     "S ",
-                    'S', new ItemStack(Items.stick),
-                    'G', new ItemStack(Blocks.glass_pane)
+                    'S', "stickWood",
+                    'G', "paneGlassColorless"
                 });
 
                 LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, tag);

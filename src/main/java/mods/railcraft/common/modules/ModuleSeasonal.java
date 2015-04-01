@@ -52,7 +52,7 @@ public class ModuleSeasonal extends RailcraftModule {
                             "WEW",
                             "WWW",
                             'G', new ItemStack(Items.gunpowder),
-                            'E', new ItemStack(Items.emerald),
+                            'E', "gemEmerald",
                             'W', "slabWood"
                         });
             }

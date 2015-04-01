@@ -46,8 +46,8 @@ public class ModuleChunkLoading extends RailcraftModule {
                             "gog",
                             "dpd",
                             "gog",
-                            'd', Items.diamond,
-                            'g', Items.gold_ingot,
+                            'd', "gemDiamond",
+                            'g', "ingotGold",
                             'p', Items.ender_pearl,
                             'o', new ItemStack(Blocks.obsidian));
                 }
@@ -66,8 +66,8 @@ public class ModuleChunkLoading extends RailcraftModule {
                             "gog",
                             "dpd",
                             "gog",
-                            'd', Items.emerald,
-                            'g', Items.gold_ingot,
+                            'd', "gemEmerald",
+                            'g', "ingotGold",
                             'p', Items.ender_pearl,
                             'o', new ItemStack(Blocks.obsidian));
                 }
@@ -92,7 +92,7 @@ public class ModuleChunkLoading extends RailcraftModule {
                             " p ",
                             " o ",
                             "ogo",
-                            'g', Items.gold_ingot,
+                            'g', "ingotGold",
                             'p', Items.ender_pearl,
                             'o', new ItemStack(Blocks.obsidian));
                 }

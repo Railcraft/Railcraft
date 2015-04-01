@@ -118,7 +118,7 @@ public class RailcraftToolItems {
                         " I ",
                         " S ",
                         'I', "ingotSteel",
-                        'S', new ItemStack(Items.stick));
+                        'S', "stickWood");
 
                 LootPlugin.addLootWarrior(new ItemStack(item), 1, 1, tag);
             }
@@ -145,7 +145,7 @@ public class RailcraftToolItems {
                     " S ",
                     " S ",
                     'I', "ingotSteel",
-                    'S', new ItemStack(Items.stick)
+                    'S', "stickWood"
                 });
                 CraftingManager.getInstance().getRecipeList().add(recipe);
 
@@ -175,7 +175,7 @@ public class RailcraftToolItems {
                     " S ",
                     " S ",
                     'I', "ingotSteel",
-                    'S', new ItemStack(Items.stick)
+                    'S', "stickWood"
                 });
                 CraftingManager.getInstance().getRecipeList().add(recipe);
 
@@ -205,7 +205,7 @@ public class RailcraftToolItems {
                         "IS ",
                         " S ",
                         'I', "ingotSteel",
-                        'S', new ItemStack(Items.stick));
+                        'S', "stickWood");
 
                 LootPlugin.addLootTool(new ItemStack(item), 1, 1, tag);
             }
@@ -232,7 +232,7 @@ public class RailcraftToolItems {
                     " S ",
                     " S ",
                     'I', "ingotSteel",
-                    'S', new ItemStack(Items.stick)
+                    'S', "stickWood"
                 });
                 CraftingManager.getInstance().getRecipeList().add(recipe);
             }

@@ -86,14 +86,14 @@ public class ItemGear extends ItemRailcraft {
                 " G ",
                 "GBG",
                 " G ",
-                'G', Items.gold_nugget,
+                'G', "nuggetGold",
                 'B', bushing);
 
         CraftingPlugin.addShapedRecipe(gear.getStack(EnumGear.IRON),
                 " I ",
                 "IBI",
                 " I ",
-                'I', Items.iron_ingot,
+                'I', "ingotIron",
                 'B', bushing);
 
         CraftingPlugin.addShapedRecipe(gear.getStack(EnumGear.STEEL),
