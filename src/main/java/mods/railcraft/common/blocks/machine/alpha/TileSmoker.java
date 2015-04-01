@@ -30,6 +30,7 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileSmoker extends TileMachineBase {
+    private static final int SNOW_MELT_INTERVAL = 20;
     private static final Random rand = MiscTools.getRand();
     private boolean powered;
 
@@ -46,15 +47,21 @@ public class TileSmoker extends TileMachineBase {
     @Override
     public void updateEntity() {
         super.updateEntity();
-        if (Game.isHost(worldObj) || powered) return;
-        Block blockAbove = WorldPlugin.getBlock(worldObj, xCoord, yCoord + 1, zCoord);
-        if (blockAbove == Blocks.snow_layer)
-            WorldPlugin.setBlockToAir(worldObj, xCoord, yCoord + 1, zCoord);
-        if (!blockAbove.isAir(worldObj, xCoord, yCoord + 1, zCoord)) return;
-        double px = xCoord + rand.nextFloat();
-        double py = yCoord + rand.nextFloat() * 0.5F + 1;
-        double pz = zCoord + rand.nextFloat();
-        EffectManager.instance.chimneyEffect(worldObj, px, py, pz);
+        if (!powered) {
+            if (Game.isHost(worldObj)) {
+                if (clock % SNOW_MELT_INTERVAL == 0) {
+                    Block blockAbove = WorldPlugin.getBlock(worldObj, xCoord, yCoord + 1, zCoord);
+                    if (blockAbove == Blocks.snow_layer)
+                        WorldPlugin.setBlockToAir(worldObj, xCoord, yCoord + 1, zCoord);
+                }
+            } else {
+                if (!WorldPlugin.blockIsAir(worldObj, xCoord, yCoord + 1, zCoord)) return;
+                double px = xCoord + rand.nextFloat();
+                double py = yCoord + rand.nextFloat() * 0.5F + 1;
+                double pz = zCoord + rand.nextFloat();
+                EffectManager.instance.chimneyEffect(worldObj, px, py, pz);
+            }
+        }
     }
 
     @Override
