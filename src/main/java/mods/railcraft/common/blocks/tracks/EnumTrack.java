@@ -259,7 +259,7 @@ public enum EnumTrack {
                         "IsI",
                         'I', railAdvanced,
                         's', woodRailbed,
-                        'r', Items.redstone,
+                        'r', "dustRedstone",
                         'b', Blocks.stone_pressure_plate);
                 break;
 //            case BOARDING_TRAIN:
@@ -290,7 +290,7 @@ public enum EnumTrack {
                         'I', railStandard,
                         'G', railAdvanced,
                         's', woodRailbed,
-                        'r', Items.redstone);
+                        'r', "dustRedstone");
                 break;
 //            case HOLDING:
 //                CraftingPlugin.addShapedOreRecipe(output,
@@ -299,7 +299,7 @@ public enum EnumTrack {
 //                        "IrI",
 //                        'I', railAdvanced,
 //                        's', woodRailbed,
-//                        'r', Items.redstone,
+//                        'r', "dustRedstone",
 //                        'b', Blocks.stone_pressure_plate);
 //                break;
 //            case HOLDING_TRAIN:
@@ -319,7 +319,7 @@ public enum EnumTrack {
 //                        "IsI",
 //                        'I', railAdvanced,
 //                        's', woodRailbed,
-//                        'r', Items.redstone,
+//                        'r', "dustRedstone",
 //                        'b', Blocks.stone_pressure_plate);
 //                break;
 //            case LOCKDOWN_TRAIN:
@@ -347,7 +347,7 @@ public enum EnumTrack {
                         "IrI",
                         'I', railSpeed,
                         's', stoneRailbed,
-                        'r', Items.redstone);
+                        'r', "dustRedstone");
                 break;
             case SPEED_TRANSITION:
                 CraftingPlugin.addShapedRecipe(output,
@@ -356,14 +356,14 @@ public enum EnumTrack {
                         "IsI",
                         'I', railSpeed,
                         's', stoneRailbed,
-                        'r', Items.redstone);
+                        'r', "dustRedstone");
                 CraftingPlugin.addShapedRecipe(output,
                         "IsI",
                         "IrI",
                         "IrI",
                         'I', railSpeed,
                         's', stoneRailbed,
-                        'r', Items.redstone);
+                        'r', "dustRedstone");
                 break;
             case SPEED_SWITCH:
                 CraftingPlugin.addShapedRecipe(output,
@@ -417,7 +417,7 @@ public enum EnumTrack {
                         'G', Items.gold_ingot,
                         'I', railWood,
                         '#', woodRailbed,
-                        'r', Items.redstone);
+                        'r', "dustRedstone");
                 break;
             case SLOW_SWITCH:
                 CraftingPlugin.addShapedRecipe(output,
@@ -514,7 +514,7 @@ public enum EnumTrack {
                         "IrI",
                         'I', railAdvanced,
                         '#', woodRailbed,
-                        'r', Items.redstone,
+                        'r', "dustRedstone",
                         'p', Blocks.stone_pressure_plate);
                 break;
             case EMBARKING:
@@ -550,7 +550,7 @@ public enum EnumTrack {
                         "IbI",
                         'I', railStandard,
                         '#', woodRailbed,
-                        'b', Blocks.iron_block);
+                        'b', "blockIron");
                 break;
             case DETECTOR_DIRECTION:
                 CraftingPlugin.addShapedRecipe(output,
@@ -559,7 +559,7 @@ public enum EnumTrack {
                         "IsI",
                         'I', railStandard,
                         '#', woodRailbed,
-                        'r', Items.redstone,
+                        'r', "dustRedstone",
                         's', Blocks.stone_pressure_plate);
                 break;
             case GATED:
@@ -625,7 +625,7 @@ public enum EnumTrack {
                         "ItI",
                         'I', railStandard,
                         '#', woodRailbed,
-                        'r', Items.redstone,
+                        'r', "dustRedstone",
                         't', ItemTicket.getTicket());
                 CraftingPlugin.addShapedRecipe(output,
                         "IrI",
@@ -633,7 +633,7 @@ public enum EnumTrack {
                         "ItI",
                         'I', railStandard,
                         '#', woodRailbed,
-                        'r', Items.redstone,
+                        'r', "dustRedstone",
                         't', ItemTicketGold.getTicket());
                 break;
             case REINFORCED:
@@ -650,7 +650,7 @@ public enum EnumTrack {
                         "I#I",
                         "IrI",
                         'I', railReinforced,
-                        'r', new ItemStack(Items.redstone),
+                        'r', "dustRedstone",
                         '#', reinforcedRailbed);
                 break;
             case REINFORCED_JUNCTION:

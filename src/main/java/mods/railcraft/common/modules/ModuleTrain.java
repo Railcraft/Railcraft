@@ -60,7 +60,7 @@ public class ModuleTrain extends RailcraftModule {
                     "rcr",
                     'd', EnumMachineGamma.DISPENSER_CART.getItem(),
                     'c', crowbar,
-                    'r', Items.redstone);
+                    'r', "dustRedstone");
         }
     }
 

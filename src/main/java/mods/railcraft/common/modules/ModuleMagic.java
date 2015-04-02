@@ -59,14 +59,14 @@ public class ModuleMagic extends RailcraftModule {
                         "LRL",
                         "RFR",
                         "LRL",
-                        'R', new ItemStack(Blocks.redstone_block),
+                        'R', "blockRedstone",
                         'L', stack,
                         'F', ItemFirestoneCut.item);
                 CraftingPlugin.addShapedRecipe(ItemFirestoneRefined.getItemEmpty(),
                         "LOL",
                         "RFR",
                         "LRL",
-                        'R', new ItemStack(Blocks.redstone_block),
+                        'R', "blockRedstone",
                         'L', stack,
                         'O', ItemFirestoneRaw.item,
                         'F', new ItemStack(ItemFirestoneCracked.item, 1, OreDictionary.WILDCARD_VALUE));

@@ -75,9 +75,9 @@ public class RailcraftBlocks {
                     "IRI",
                     "ISI",
                     "IRI",
-                    'I', RailcraftConfig.useOldRecipes() ? Items.gold_ingot : RailcraftItem.rail.getRecipeObject(EnumRail.ADVANCED),
-                    'S', RailcraftConfig.useOldRecipes() ? Items.iron_ingot : RailcraftItem.rail.getRecipeObject(EnumRail.STANDARD),
-                    'R', Items.redstone);
+                    'I', RailcraftConfig.useOldRecipes() ? "ingotGold" : RailcraftItem.rail.getRecipeObject(EnumRail.ADVANCED),
+                    'S', RailcraftConfig.useOldRecipes() ? "ingotIron" : RailcraftItem.rail.getRecipeObject(EnumRail.STANDARD),
+                    'R', "dustRedstone");
         }
     }
 

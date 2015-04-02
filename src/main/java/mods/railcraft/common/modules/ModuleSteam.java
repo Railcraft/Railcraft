@@ -45,8 +45,8 @@ public class ModuleSteam extends RailcraftModule {
                         " C ",
                         "GPG",
                         'P', new ItemStack(Blocks.piston),
-                        'N', new ItemStack(Items.gold_nugget),
-                        'C', new ItemStack(Blocks.glass),
+                        'N', "nuggetGold",
+                        'C', "blockGlassColorless",
                         'G', RailcraftItem.gear.getRecipeObject(EnumGear.GOLD_PLATE));
             }
         }
@@ -63,7 +63,7 @@ public class ModuleSteam extends RailcraftModule {
                         "GPG",
                         'P', new ItemStack(Blocks.piston),
                         'I', RailcraftItem.plate.getRecipeObject(EnumPlate.IRON),
-                        'C', new ItemStack(Blocks.glass),
+                        'C', "blockGlassColorless",
                         'G', "gearIron");
 
                 RailcraftCraftingManager.blastFurnace.addRecipe(stack, true, false, 15360, ItemIngot.getIngot(ItemIngot.EnumIngot.STEEL, 12));
@@ -82,7 +82,7 @@ public class ModuleSteam extends RailcraftModule {
                         "GPG",
                         'P', new ItemStack(Blocks.piston),
                         'I', RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL),
-                        'C', new ItemStack(Blocks.glass),
+                        'C', "blockGlassColorless",
                         'G', RailcraftItem.gear.getRecipeObject(EnumGear.STEEL));
             }
         }
@@ -97,7 +97,7 @@ public class ModuleSteam extends RailcraftModule {
                         "BBB",
                         "BCB",
                         "BFB",
-                        'B', new ItemStack(Items.brick),
+                        'B', "ingotBrick",
                         'C', new ItemStack(Items.fire_charge),
                         'F', new ItemStack(Blocks.furnace));
             }
@@ -180,13 +180,13 @@ public class ModuleSteam extends RailcraftModule {
                     " D ",
                     'G', new ItemStack(Blocks.iron_bars),
                     'T', getTankItem(),
-                    'R', Items.redstone,
+                    'R', "dustRedstone",
                     'D', new ItemStack(Blocks.dispenser));
             if (EnumMachineAlpha.STEAM_TRAP_MANUAL.isAvaliable()) {
                 CraftingPlugin.addShapedRecipe(stack,
                         "RTR",
                         'T', EnumMachineAlpha.STEAM_TRAP_MANUAL.getItem(),
-                        'R', Items.redstone);
+                        'R', "dustRedstone");
                 CraftingPlugin.addShapelessRecipe(EnumMachineAlpha.STEAM_TRAP_MANUAL.getItem(), stack);
             }
         }

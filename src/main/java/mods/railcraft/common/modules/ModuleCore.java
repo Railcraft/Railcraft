@@ -242,14 +242,14 @@ public class ModuleCore extends RailcraftModule {
                     "IrI",
                     'I', RailcraftItem.rail.getRecipeObject(EnumRail.ADVANCED),
                     '#', woodRailbed,
-                    'r', Items.redstone);
+                    'r', "dustRedstone");
             CraftingPlugin.addShapedRecipe(stackRailDetector,
                     "IsI",
                     "I#I",
                     "IrI",
                     'I', RailcraftItem.rail.getRecipeObject(EnumRail.STANDARD),
                     '#', Blocks.stone_pressure_plate,
-                    'r', Items.redstone,
+                    'r', "dustRedstone",
                     's', woodRailbed);
             CraftingPlugin.addShapedRecipe(stackRailActivator,
                     "ItI",

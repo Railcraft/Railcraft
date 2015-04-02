@@ -53,7 +53,7 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
                 item.setRarity(1);
                 RailcraftRegistry.register(item);
 
-                CraftingPlugin.addShapelessRecipe(new ItemStack(item), Items.paper, Items.gold_nugget);
+                CraftingPlugin.addShapelessRecipe(new ItemStack(item), Items.paper, "nuggetGold");
             }
         }
     }

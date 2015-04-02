@@ -46,7 +46,7 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
                         "BGB",
                         " C ",
                         'B', Blocks.stone_button,
-                        'G', Blocks.glass_pane,
+                        'G', "paneGlassColorless",
                         'C', "ingotCopper",
                         'T', "ingotTin");
 

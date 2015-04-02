@@ -103,7 +103,7 @@ public class ItemRail extends ItemRailcraft {
                 'G', new ItemStack(Items.gold_ingot));
 
         // Wooden
-        CraftingPlugin.addShapelessRecipe(item.getStack(6, EnumRail.WOOD), Items.iron_ingot, RailcraftItem.tie.getRecipeObject(EnumTie.WOOD));
+        CraftingPlugin.addShapelessRecipe(item.getStack(6, EnumRail.WOOD), "ingotIron", RailcraftItem.tie.getRecipeObject(EnumTie.WOOD));
 
         // Speed
         recipe = new ShapedOreRecipe(item.getStack(8, EnumRail.SPEED),

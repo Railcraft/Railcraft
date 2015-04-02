@@ -74,7 +74,7 @@ public enum EnumBrick {
                     "ILI",
                     "III",
                     'I', new ItemStack(Blocks.ice),
-                    'L', new ItemStack(Items.dye, 1, 4));
+                    'L', "gemLapis");
         }
     },
     INFERNAL {
@@ -105,7 +105,7 @@ public enum EnumBrick {
             CraftingPlugin.addShapedRecipe(new ItemStack(getBlock(), 1, 2),
                     "BM",
                     "MB",
-                    'B', new ItemStack(Items.brick),
+                    'B', "ingotBrick",
                     'M', new ItemStack(Blocks.sand));
         }
     },
