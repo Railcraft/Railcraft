@@ -197,7 +197,7 @@ public class ModuleSignals extends RailcraftModule {
                         "IRI",
                         'I', "ingotIron",
                         'R', "dustRedstone",
-                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.SIGNAL));
+                        'C', EnumSignal.BLOCK_SIGNAL.getItem();
             }
 
             // Define Signal Sequencer Box
