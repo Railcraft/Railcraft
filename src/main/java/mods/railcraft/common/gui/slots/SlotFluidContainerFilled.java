@@ -8,10 +8,10 @@
  */
 package mods.railcraft.common.gui.slots;
 
+import mods.railcraft.common.fluids.FluidItemHelper;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.inventory.Slot;
-import mods.railcraft.common.fluids.FluidHelper;
+import net.minecraft.item.ItemStack;
 
 public class SlotFluidContainerFilled extends Slot
 {
@@ -32,7 +32,7 @@ public class SlotFluidContainerFilled extends Slot
         if(itemstack == null) {
             return false;
         }
-        if(FluidHelper.getFluidStackInContainer(itemstack) != null) {
+        if(FluidItemHelper.getFluidStackInContainer(itemstack) != null) {
             return true;
         }
         return false;

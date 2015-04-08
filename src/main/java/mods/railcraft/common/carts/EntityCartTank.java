@@ -17,6 +17,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import mods.railcraft.common.fluids.FluidItemHelper;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -171,13 +173,13 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         update++;
 
         ItemStack topSlot = invLiquids.getStackInSlot(SLOT_INPUT);
-        if (topSlot != null && !FluidHelper.isContainer(topSlot)) {
+        if (topSlot != null && !FluidItemHelper.isContainer(topSlot)) {
             invLiquids.setInventorySlotContents(SLOT_INPUT, null);
             entityDropItem(topSlot, 1);
         }
 
         ItemStack bottomSlot = invLiquids.getStackInSlot(SLOT_OUTPUT);
-        if (bottomSlot != null && !FluidHelper.isContainer(bottomSlot)) {
+        if (bottomSlot != null && !FluidItemHelper.isContainer(bottomSlot)) {
             invLiquids.setInventorySlotContents(SLOT_OUTPUT, null);
             entityDropItem(bottomSlot, 1);
         }
@@ -280,7 +282,7 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
     }
 
     /**
-     * @return Array of {@link LiquidTank}s contained in this ITankContainer
+     * @return Array of {@link StandardTank}s contained in this ITankContainer
      */
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection side) {
@@ -305,7 +307,7 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         ItemStack filter = getFilterItem();
         if (filter == null)
             return null;
-        return FluidHelper.getFluidInContianer(filter);
+        return FluidItemHelper.getFluidInContainer(filter);
     }
 
     public ItemStack getFilterItem() {
@@ -344,7 +346,7 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return slot == SLOT_INPUT && FluidHelper.isContainer(stack);
+        return slot == SLOT_INPUT && FluidItemHelper.isContainer(stack);
     }
 
     @Override

@@ -10,6 +10,7 @@ package mods.railcraft.common.plugins.forge;
 
 import cpw.mods.fml.common.IFuelHandler;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -101,7 +102,7 @@ public class FuelPlugin {
             if (item == Items.blaze_rod)
                 return 1000;
 
-            FluidStack liquid = FluidHelper.getFluidStackInContainer(stack);
+            FluidStack liquid = FluidItemHelper.getFluidStackInContainer(stack);
             if (liquid != null && Fluids.LAVA.get() == liquid.getFluid())
                 return liquid.amount;
 

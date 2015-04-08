@@ -8,17 +8,12 @@
  */
 package mods.railcraft.common.carts;
 
-import java.util.Map.Entry;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.thaumcraft.EssentiaTank;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -27,11 +22,18 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.EssentiaFuelProvider;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraftforge.fluids.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
+
+import java.util.Map.Entry;
 
 /**
  *
@@ -168,7 +170,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
             case SLOT_FUEL_C:
                 return FuelPlugin.getBurnTime(stack) > 0;
             case SLOT_LIQUID_INPUT:
-                return FluidHelper.containsFluidStack(stack, Fluids.WATER.get(1));
+                return FluidItemHelper.containsFluid(stack, Fluids.WATER.get(1));
             case SLOT_TICKET:
                 return ItemTicket.FILTER.matches(stack);
             default:

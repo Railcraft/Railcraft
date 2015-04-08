@@ -8,18 +8,11 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
@@ -29,21 +22,25 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.steam.Steam;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler {
-
-    private static final Set<Integer> boilerBlocks = new HashSet<Integer>();
-    private static final Set<Integer> fireboxBlocks = new HashSet<Integer>();
-    protected static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     public static final int TANK_WATER = 0;
     public static final int TANK_STEAM = 1;
     public final static int TRANSFER_RATE = FluidHelper.BUCKET_VOLUME;
@@ -53,6 +50,9 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     public final static int STEAM_HIGH = 32;
     public final static float HEAT_LOW = Steam.MAX_HEAT_LOW;
     public final static float HEAT_HIGH = Steam.MAX_HEAT_HIGH;
+    protected static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private static final Set<Integer> boilerBlocks = new HashSet<Integer>();
+    private static final Set<Integer> fireboxBlocks = new HashSet<Integer>();
     protected final TankManager tankManager = new TankManager();
     protected final FilteredTank tankWater;
     protected final FilteredTank tankSteam;
@@ -82,6 +82,16 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
         patterns.add(buildMap(2, 2, 1, 'L', TICKS_LOW, HEAT_LOW, STEAM_LOW));
 
         patterns.add(buildMap(1, 1, 1, 'L', TICKS_LOW, HEAT_LOW, STEAM_LOW));
+    }
+
+    protected TileBoiler() {
+        super(patterns);
+
+        tankWater = new FilteredTank(4 * FluidHelper.BUCKET_VOLUME, Fluids.WATER.get(), this);
+        tankManager.add(tankWater);
+
+        tankSteam = new FilteredTank(16 * FluidHelper.BUCKET_VOLUME, Fluids.STEAM.get(), this);
+        tankManager.add(tankSteam);
     }
 
     private static MultiBlockPattern buildMap(int width, int tankHeight, int offset, char tank, int ticks, float heat, int capacity) {
@@ -118,33 +128,6 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
         return new BoilerPattern(map, width * width * tankHeight, ticks, heat, capacity, offset, offset);
     }
 
-    public static class BoilerPattern extends MultiBlockPattern {
-
-        public final int numTanks;
-        public final int ticksPerCycle;
-        public final float maxHeat;
-        public final int steamCapacity;
-
-        public BoilerPattern(char[][][] pattern, int tanks, int ticks, float heat, int capacity, int xOffset, int yOffset) {
-            super(pattern, xOffset, 1, yOffset);
-            numTanks = tanks;
-            ticksPerCycle = ticks;
-            this.maxHeat = heat;
-            this.steamCapacity = capacity;
-        }
-
-    }
-
-    protected TileBoiler() {
-        super(patterns);
-
-        tankWater = new FilteredTank(4 * FluidHelper.BUCKET_VOLUME, Fluids.WATER.get(), this);
-        tankManager.add(tankWater);
-
-        tankSteam = new FilteredTank(16 * FluidHelper.BUCKET_VOLUME, Fluids.STEAM.get(), this);
-        tankManager.add(tankSteam);
-    }
-
     @Override
     public boolean blockActivated(EntityPlayer player, int side) {
         ItemStack current = player.getCurrentEquippedItem();
@@ -154,7 +137,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
                 if (mBlock != null)
                     if (mBlock.handleClick(player, side))
                         return true;
-            } else if (FluidHelper.isContainer(current))
+            } else if (FluidItemHelper.isContainer(current))
                 return true;
         return super.blockActivated(player, side);
     }
@@ -293,7 +276,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
 
     @Override
     public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        if(fluid == null) return true;
+        if (fluid == null) return true;
         return Fluids.STEAM.is(fluid);
     }
 
@@ -316,4 +299,18 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
         return FakeTank.INFO;
     }
 
+    public static class BoilerPattern extends MultiBlockPattern {
+        public final int numTanks;
+        public final int ticksPerCycle;
+        public final float maxHeat;
+        public final int steamCapacity;
+
+        public BoilerPattern(char[][][] pattern, int tanks, int ticks, float heat, int capacity, int xOffset, int yOffset) {
+            super(pattern, xOffset, 1, yOffset);
+            numTanks = tanks;
+            ticksPerCycle = ticks;
+            this.maxHeat = heat;
+            this.steamCapacity = capacity;
+        }
+    }
 }

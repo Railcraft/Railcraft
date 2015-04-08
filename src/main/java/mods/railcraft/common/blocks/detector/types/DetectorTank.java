@@ -8,22 +8,17 @@
  */
 package mods.railcraft.common.blocks.detector.types;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 import mods.railcraft.common.blocks.detector.DetectorFilter;
 import mods.railcraft.common.blocks.detector.EnumDetector;
+import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.TankToolkit;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.TankToolkit;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -33,53 +28,19 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class DetectorTank extends DetectorFilter {
-
-    public enum ButtonState implements IMultiButtonState {
-
-        VOID("L = *"),
-        EMPTY("L = 0%"),
-        NOT_EMPTY("L > 0%"),
-        FULL("L = 100%"),
-        QUARTER("L >= 25%"),
-        HALF("L >= 50%"),
-        MOST("L >= 75%"),
-        LESS_THAN_QUARTER("L < 25%"),
-        LESS_THAN_HALF("L < 50%"),
-        LESS_THAN_MOST("L < 75%"),
-        LESS_THAN_FULL("L < 100%"),
-        ANALOG("L = ~");
-        private final String label;
-        private ToolTip tip;
-
-        private ButtonState(String label) {
-            this.label = label;
-            this.tip = ToolTip.buildToolTip("gui.detector.tank.tip." + name().toLowerCase(Locale.ENGLISH).replace("_", "."));
-        }
-
-        @Override
-        public String getLabel() {
-            return label;
-        }
-
-        @Override
-        public IButtonTextureSet getTextureSet() {
-            return StandardButtonTextureSets.LARGE_BUTTON;
-        }
-
-        @Override
-        public ToolTip getToolTip() {
-            return tip;
-        }
-
-    }
     private final MultiButtonController<ButtonState> buttonController = new MultiButtonController(ButtonState.ANALOG.ordinal(), ButtonState.values());
 
     public DetectorTank() {
@@ -93,7 +54,7 @@ public class DetectorTank extends DetectorFilter {
     public Fluid getFilterLiquid() {
         ItemStack filter = getFilters().getStackInSlot(0);
         if (filter != null)
-            return FluidHelper.getFluidInContianer(filter);
+            return FluidItemHelper.getFluidInContainer(filter);
         return null;
     }
 
@@ -214,4 +175,42 @@ public class DetectorTank extends DetectorFilter {
         return EnumDetector.TANK;
     }
 
+    public enum ButtonState implements IMultiButtonState {
+
+        VOID("L = *"),
+        EMPTY("L = 0%"),
+        NOT_EMPTY("L > 0%"),
+        FULL("L = 100%"),
+        QUARTER("L >= 25%"),
+        HALF("L >= 50%"),
+        MOST("L >= 75%"),
+        LESS_THAN_QUARTER("L < 25%"),
+        LESS_THAN_HALF("L < 50%"),
+        LESS_THAN_MOST("L < 75%"),
+        LESS_THAN_FULL("L < 100%"),
+        ANALOG("L = ~");
+        private final String label;
+        private ToolTip tip;
+
+        private ButtonState(String label) {
+            this.label = label;
+            this.tip = ToolTip.buildToolTip("gui.detector.tank.tip." + name().toLowerCase(Locale.ENGLISH).replace("_", "."));
+        }
+
+        @Override
+        public String getLabel() {
+            return label;
+        }
+
+        @Override
+        public IButtonTextureSet getTextureSet() {
+            return StandardButtonTextureSets.LARGE_BUTTON;
+        }
+
+        @Override
+        public ToolTip getToolTip() {
+            return tip;
+        }
+
+    }
 }

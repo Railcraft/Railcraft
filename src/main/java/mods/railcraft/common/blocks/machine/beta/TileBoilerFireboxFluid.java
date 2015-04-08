@@ -8,33 +8,42 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import java.util.HashMap;
-import java.util.Map;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.tanks.BoilerFuelTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.fluids.tanks.BoilerFuelTank;
 import mods.railcraft.common.util.steam.FluidFuelProvider;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileBoilerFireboxFluid extends TileBoilerFirebox {
+    private static final int TANK_FUEL = 2;
+    private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
+    protected final BoilerFuelTank tankFuel = new BoilerFuelTank(FluidHelper.BUCKET_VOLUME * 16, this);
+    public TileBoilerFireboxFluid() {
+        super(2);
+        tankManager.add(tankFuel);
+        boiler.setFuelProvider(new FluidFuelProvider(tankFuel));
+    }
 
     public static void placeFluidBoiler(World world, int x, int y, int z, int width, int height, boolean highPressure, int water, FluidStack fuel) {
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
@@ -51,16 +60,6 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
                 return;
             }
         }
-    }
-
-    private static final int TANK_FUEL = 2;
-    private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
-    protected final BoilerFuelTank tankFuel = new BoilerFuelTank(FluidHelper.BUCKET_VOLUME * 16, this);
-
-    public TileBoilerFireboxFluid() {
-        super(2);
-        tankManager.add(tankFuel);
-        boiler.setFuelProvider(new FluidFuelProvider(tankFuel));
     }
 
     @Override
@@ -140,7 +139,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
             return false;
         switch (slot) {
             case SLOT_LIQUID_INPUT:
-                Fluid fluid = FluidHelper.getFluidInContianer(stack);
+                Fluid fluid = FluidItemHelper.getFluidInContainer(stack);
                 if (fluid == null)
                     return false;
                 if (Fluids.WATER.is(fluid) || FuelManager.getBoilerFuelValue(fluid) > 0)
@@ -148,5 +147,4 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
         }
         return false;
     }
-
 }

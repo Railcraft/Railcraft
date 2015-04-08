@@ -10,7 +10,7 @@ package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.carts.EntityCartTank;
 import mods.railcraft.common.carts.EnumCart;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidItemHelper;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -32,7 +32,7 @@ public class TankCartFilterRecipe implements IRecipe {
                 continue;
             if (EnumCart.getCartType(stack) == EnumCart.TANK)
                 hasTankCart = true;
-            else if (FluidHelper.isContainer(stack))
+            else if (FluidItemHelper.isContainer(stack))
                 hasContainer = true;
             else
                 return false;
@@ -50,7 +50,7 @@ public class TankCartFilterRecipe implements IRecipe {
                 continue;
             if (EnumCart.getCartType(stack) == EnumCart.TANK)
                 cart = stack.copy();
-            else if (FluidHelper.isContainer(stack))
+            else if (FluidItemHelper.isContainer(stack))
                 container = stack.copy();
             else
                 return null;

@@ -11,6 +11,7 @@ package mods.railcraft.common.util.crafting;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import mods.railcraft.common.carts.EntityCartTank;
+import mods.railcraft.common.fluids.FluidItemHelper;
 import net.minecraft.item.ItemStack;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.ItemCart;
@@ -45,7 +46,7 @@ public class CraftingHandler {
                 if (EntityCartTank.getFilterFromCartItem(result) != null)
                     for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
                         ItemStack stack = craftMatrix.getStackInSlot(i);
-                        if (stack != null && FluidHelper.isContainer(stack)) {
+                        if (stack != null && FluidItemHelper.isContainer(stack)) {
                             if (!player.inventory.addItemStackToInventory(stack))
                                 player.dropPlayerItemWithRandomChoice(stack, false);
                             craftMatrix.setInventorySlotContents(i, null);

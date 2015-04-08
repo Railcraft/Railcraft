@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockOven;
 import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
@@ -147,7 +148,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     public boolean blockActivated(EntityPlayer player, int side) {
         if (isStructureValid() && FluidHelper.handleRightClick(this, ForgeDirection.getOrientation(side), player, false, true))
             return true;
-        else if (FluidHelper.isContainer(player.inventory.getCurrentItem()))
+        else if (FluidItemHelper.isContainer(player.inventory.getCurrentItem()))
             return true;
         return super.blockActivated(player, side);
     }
@@ -222,13 +223,13 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
                 }
 
                 ItemStack topSlot = getStackInSlot(SLOT_LIQUID_INPUT);
-                if (topSlot != null && !FluidHelper.isContainer(topSlot)) {
+                if (topSlot != null && !FluidItemHelper.isContainer(topSlot)) {
                     setInventorySlotContents(SLOT_LIQUID_INPUT, null);
                     dropItem(topSlot);
                 }
 
                 ItemStack bottomSlot = getStackInSlot(SLOT_LIQUID_OUTPUT);
-                if (bottomSlot != null && !FluidHelper.isContainer(bottomSlot)) {
+                if (bottomSlot != null && !FluidItemHelper.isContainer(bottomSlot)) {
                     setInventorySlotContents(SLOT_LIQUID_OUTPUT, null);
                     dropItem(bottomSlot);
                 }
@@ -308,7 +309,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
             case SLOT_INPUT:
                 return RailcraftCraftingManager.cokeOven.getRecipe(stack) != null;
             case SLOT_LIQUID_INPUT:
-                return FluidHelper.isEmptyContainer(stack);
+                return FluidItemHelper.isRoomInContainer(stack);
             default:
                 return false;
         }

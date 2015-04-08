@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileTank;
 import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
@@ -156,7 +157,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
         if (Game.isHost(worldObj)) {
             if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), ForgeDirection.getOrientation(side), player, true, true))
                 return true;
-        } else if (FluidHelper.isContainer(player.inventory.getCurrentItem()))
+        } else if (FluidItemHelper.isContainer(player.inventory.getCurrentItem()))
             return true;
         return super.blockActivated(player, side);
     }
@@ -272,7 +273,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
             return false;
         switch (slot) {
             case SLOT_INPUT:
-                return FluidHelper.isEmptyContainer(stack) || FluidHelper.containsFluid(stack, Fluids.WATER.get());
+                return FluidItemHelper.isRoomInContainer(stack, Fluids.WATER.get()) || FluidItemHelper.containsFluid(stack, Fluids.WATER.get());
         }
         return false;
     }

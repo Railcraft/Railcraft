@@ -10,8 +10,6 @@ package mods.railcraft.common.fluids;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import java.util.HashSet;
-import java.util.Set;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -21,8 +19,10 @@ import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-public class BucketHandler {
+import java.util.HashSet;
+import java.util.Set;
 
+public class BucketHandler {
     public static BucketHandler INSTANCE = new BucketHandler();
     public final Set<Fluid> allowedFluids = new HashSet<Fluid>();
 
@@ -51,10 +51,9 @@ public class BucketHandler {
         if (!allowedFluids.contains(fluidStack.getFluid()))
             return null;
 
-        ItemStack filled = FluidHelper.fillContainer(fluidStack, stack);
-        if (filled != null)
+        FluidItemHelper.FillReturn filled = FluidItemHelper.fillContainer(stack, fluidStack);
+        if (filled.amount > 0)
             FluidHelper.drainBlock(block, world, pos.blockX, pos.blockY, pos.blockZ, true);
-        return filled;
+        return filled.container;
     }
-
 }

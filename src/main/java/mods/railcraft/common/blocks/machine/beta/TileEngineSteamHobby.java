@@ -9,42 +9,41 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.buildcraft.triggers.INeedsFuel;
 import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
+import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
-import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.fluids.tanks.FilteredTank;
-import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import mods.railcraft.common.util.steam.Steam;
 import mods.railcraft.common.util.steam.SteamBoiler;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileEngineSteamHobby extends TileEngineSteam implements IInventory, ISidedInventory, INeedsFuel, ITemperature {
-
     public static final byte SLOT_FUEL = 0;
     public static final byte SLOT_LIQUID_INPUT = 1;
     public static final byte SLOT_LIQUID_OUTPUT = 2;
     private static final int OUTPUT_RF = 20;
-    private static final int STEAM_USED = Steam.STEAM_PER_10RF * (OUTPUT_RF/10);
+    private static final int STEAM_USED = Steam.STEAM_PER_10RF * (OUTPUT_RF / 10);
     private static final float FUEL_PER_CONVERSION_MULTIPLIER = 1.25F;
     private static final byte TICKS_PER_BOILER_CYCLE = 20;
     private static final byte TANK_WATER = 1;
@@ -67,7 +66,6 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
                 if (getEnergyStage() == EnergyStage.OVERHEAT || !isPowered()) return 0;
                 return super.getMoreFuel();
             }
-
         });
     }
 
@@ -89,7 +87,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
             if (Game.isHost(worldObj)) {
                 if (FluidHelper.handleRightClick(this, ForgeDirection.getOrientation(side), player, true, false))
                     return true;
-            } else if (FluidHelper.isContainer(current))
+            } else if (FluidItemHelper.isContainer(current))
                 return true;
         return super.blockActivated(player, side);
     }
@@ -201,7 +199,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        if(getOrientation().ordinal() == side)
+        if (getOrientation().ordinal() == side)
             return NO_SLOTS;
         return SLOTS;
     }
@@ -255,5 +253,4 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
         if (Game.isHost(worldObj))
             worldObj.createExplosion(null, xCoord, yCoord, zCoord, 2, true);
     }
-
 }

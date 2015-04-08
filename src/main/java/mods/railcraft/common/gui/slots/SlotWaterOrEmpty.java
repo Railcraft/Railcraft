@@ -8,12 +8,11 @@
  */
 package mods.railcraft.common.gui.slots;
 
+import mods.railcraft.common.fluids.FluidItemHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import mods.railcraft.common.fluids.FluidHelper;
 
 public class SlotWaterOrEmpty extends SlotWater {
-
     public SlotWaterOrEmpty(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
     }
@@ -23,10 +22,9 @@ public class SlotWaterOrEmpty extends SlotWater {
         if (itemstack == null) {
             return false;
         }
-        if (FluidHelper.isEmptyContainer(itemstack)) {
+        if (FluidItemHelper.isEmptyContainer(itemstack)) {
             return true;
         }
         return super.isItemValid(itemstack);
     }
-
 }

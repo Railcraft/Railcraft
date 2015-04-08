@@ -8,15 +8,15 @@
  */
 package mods.railcraft.common.fluids;
 
-import java.util.Locale;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Locale;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum Fluids {
@@ -26,6 +26,12 @@ public enum Fluids {
 
     private Fluids() {
         tag = name().toLowerCase(Locale.ENGLISH);
+    }
+
+    public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
+        if (fluidStack != null && fluid == fluidStack.getFluid())
+            return true;
+        return fluid == null && fluidStack == null;
     }
 
     public String getTag() {
@@ -65,13 +71,7 @@ public enum Fluids {
     }
 
     public boolean isContained(ItemStack containerStack) {
-        return containerStack != null && FluidHelper.containsFluid(containerStack, get());
-    }
-
-    public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
-        if (fluidStack != null && fluid == fluidStack.getFluid())
-            return true;
-        return fluid == null && fluidStack == null;
+        return containerStack != null && FluidItemHelper.containsFluid(containerStack, get());
     }
 
 }
