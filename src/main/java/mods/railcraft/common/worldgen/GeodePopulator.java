@@ -61,6 +61,7 @@ public class GeodePopulator {
         int z = chunkZ * 16 + 8;
         if (canGen(world, rand, x, z)) {
             int maxy = getWaterDepth(world, x, z);
+            if (maxy == 255) return;
             int y = 13 + rand.nextInt(maxy - 22);
             geode.generate(world, rand, x, y, z);
         }
@@ -84,7 +85,7 @@ public class GeodePopulator {
         int trimmedZ = z & 15;
 
         int y = 0;
-        for (;; y++) {
+        for (; y < 256 ; y++) {
             Block block = WorldPlugin.getBlock(world, trimmedX, y, trimmedZ);
             if(block == Blocks.water) {
                 break;
