@@ -25,43 +25,37 @@ import net.minecraftforge.fluids.FluidRegistry;
 import org.apache.logging.log4j.Level;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public enum RailcraftFluids {
 
     CREOSOTE("fluid.creosote", Fluids.CREOSOTE, 800, 1500) {
+        @Override
+        void defineContainers() {
+            FluidContainers.getCreosoteOilBucket();
+            FluidContainers.getCreosoteOilBottle();
+            FluidContainers.getCreosoteOilCan();
+            FluidContainers.getCreosoteOilCell();
+            FluidContainers.getCreosoteOilWax();
+            FluidContainers.getCreosoteOilRefactory();
+        }
 
-                @Override
-                void defineContainers() {
-                    FluidContainers.getCreosoteOilBucket();
-                    FluidContainers.getCreosoteOilBottle();
-                    FluidContainers.getCreosoteOilCan();
-                    FluidContainers.getCreosoteOilCell();
-                    FluidContainers.getCreosoteOilWax();
-                    FluidContainers.getCreosoteOilRefactory();
-                }
-
-                @Override
-                public Block makeBlock() {
-                    return new BlockRailcraftFluid(standardFluid.get(), Material.water).setFlammable(true).setFlammability(10);
-                }
-
-            },
+        @Override
+        public Block makeBlock() {
+            return new BlockRailcraftFluid(standardFluid.get(), Material.water).setFlammable(true).setFlammability(10);
+        }
+    },
     STEAM("fluid.steam", Fluids.STEAM, -1000, 500) {
+        @Override
+        void defineContainers() {
+            FluidContainers.getSteamBottle();
+        }
 
-                @Override
-                void defineContainers() {
-                    FluidContainers.getSteamBottle();
-                }
-
-                @Override
-                Block makeBlock() {
-                    return new BlockRailcraftFluidFinite(standardFluid.get(), new MaterialLiquid(MapColor.airColor)).setNoFlow();
-                }
-
-            };
-
+        @Override
+        Block makeBlock() {
+            return new BlockRailcraftFluidFinite(standardFluid.get(), new MaterialLiquid(MapColor.airColor)).setNoFlow();
+        }
+    };
     public static final RailcraftFluids[] VALUES = values();
     public final String tag;
     public final Fluids standardFluid;
@@ -76,10 +70,34 @@ public enum RailcraftFluids {
         this.viscosity = viscosity;
     }
 
+    public static void preInit() {
+        for (RailcraftFluids fluidType : VALUES) {
+            fluidType.initFluid();
+        }
+    }
+
+    public static void postInit() {
+        for (RailcraftFluids fluidType : VALUES) {
+            fluidType.initBlock();
+            if (fluidType.standardFluid.get() == null)
+                throw new MissingFluidException(fluidType.standardFluid.getTag());
+        }
+    }
+
+    public static Object getTextureHook() {
+        return new TextureHook();
+    }
+
     void initFluid() {
         if (railcraftFluid == null && RailcraftConfig.isFluidEnabled(standardFluid.getTag())) {
             railcraftFluid = new Fluid(standardFluid.getTag()).setDensity(density).setViscosity(viscosity).setGaseous(density < 0);
-            FluidRegistry.registerFluid(railcraftFluid);
+            if (!FluidRegistry.isFluidRegistered(standardFluid.getTag()))
+                FluidRegistry.registerFluid(railcraftFluid);
+            else {
+                Game.log(Level.WARN, "Pre-existing {0} fluid detected, deferring, "
+                        + "this may cause issues if the server/client have different mod load orders, "
+                        + "recommended that you disable all but one instance of the fluid via your configs.", standardFluid.getTag());
+            }
             initBlock();
         }
         if (standardFluid.get() != null)
@@ -120,29 +138,12 @@ public enum RailcraftFluids {
     }
 
     public static class MissingFluidException extends RuntimeException {
-
         public MissingFluidException(String tag) {
             super("Fluid '" + tag + "' was not found. Please check your configs.");
-        }
-
-    }
-
-    public static void preInit() {
-        for (RailcraftFluids fluidType : VALUES) {
-            fluidType.initFluid();
-        }
-    }
-
-    public static void postInit() {
-        for (RailcraftFluids fluidType : VALUES) {
-            fluidType.initBlock();
-            if (fluidType.standardFluid.get() == null)
-                throw new MissingFluidException(fluidType.standardFluid.getTag());
         }
     }
 
     public static class TextureHook {
-
         @SubscribeEvent
         @SideOnly(Side.CLIENT)
         public void textureHook(TextureStitchEvent.Post event) {
@@ -152,11 +153,6 @@ public enum RailcraftFluids {
                         fluidType.railcraftFluid.setIcons(fluidType.fluidBlock.getBlockTextureFromSide(1), fluidType.fluidBlock.getBlockTextureFromSide(2));
                 }
         }
-
-    }
-
-    public static Object getTextureHook() {
-        return new TextureHook();
     }
 
 }
