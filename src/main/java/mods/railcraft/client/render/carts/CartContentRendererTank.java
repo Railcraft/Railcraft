@@ -8,6 +8,7 @@
  */
 package mods.railcraft.client.render.carts;
 
+import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
@@ -60,12 +61,10 @@ public class CartContentRendererTank extends CartContentRenderer {
         int y = (int) (Math.floor(cart.posY));
         int z = (int) (Math.floor(cart.posZ));
 
-        IFluidTank tank = cartTank.getTankManager().get(0);
-        FluidStack fluidStack = tank.getFluid();
-        if (fluidStack != null && fluidStack.amount > 0) {
-            Fluid fluid = fluidStack.getFluid();
-            int[] displayLists = FluidRenderer.getLiquidDisplayLists(fluidStack);
-            if (fluid != null && displayLists != null) {
+        StandardTank tank = cartTank.getTankManager().get(0);
+        if (tank.renderData.fluid != null && tank.renderData.amount > 0) {
+            int[] displayLists = FluidRenderer.getLiquidDisplayLists(tank.renderData.fluid);
+            if (displayLists != null) {
                 GL11.glPushMatrix();
 
                 GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -74,14 +73,14 @@ public class CartContentRendererTank extends CartContentRenderer {
                 GL11.glTranslatef(0, 0.0625f, 0);
 
                 float cap = tank.getCapacity();
-                float level = (float) Math.min(fluidStack.amount, cap) / cap;
+                float level = (float) Math.min(tank.renderData.amount, cap) / cap;
 
-                renderer.bindTex(FluidRenderer.getFluidSheet(fluidStack));
-                FluidRenderer.setColorForFluidStack(fluidStack);
+                renderer.bindTex(FluidRenderer.getFluidSheet(tank.renderData.fluid));
+                FluidRenderer.setColorForTank(tank);
                 GL11.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
 
                 if (cartTank.isFilling()) {
-                    ResourceLocation texSheet = FluidRenderer.setupFlowingLiquidTexture(fluidStack, fillBlock.texture);
+                    ResourceLocation texSheet = FluidRenderer.setupFlowingLiquidTexture(tank.renderData.fluid, fillBlock.texture);
                     if (texSheet != null) {
                         renderer.bindTex(texSheet);
                         RenderFakeBlock.renderBlockForEntity(fillBlock, cart.worldObj, x, y, z, false, true);

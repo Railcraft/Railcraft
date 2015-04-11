@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.fluids.tanks;
 
-import java.util.Locale;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
 import net.minecraft.item.EnumRarity;
@@ -17,14 +16,20 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
+import java.util.Locale;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class StandardTank extends FluidTank {
-
     public static final int DEFAULT_COLOR = 0xFFFFFF;
-    public int colorCache = DEFAULT_COLOR;
+    public final TankRenderData renderData = new TankRenderData();
+    protected final ToolTip toolTip = new ToolTip() {
+        @Override
+        public void refresh() {
+            refreshTooltip();
+        }
+    };
     private int tankIndex;
     private boolean hidden;
 
@@ -37,18 +42,12 @@ public class StandardTank extends FluidTank {
         this.tile = tile;
     }
 
-    public void setTankIndex(int index) {
-        this.tankIndex = index;
-    }
-
     public int getTankIndex() {
         return tankIndex;
     }
 
-    @Override
-    public void setFluid(FluidStack fluid) {
-        super.setFluid(fluid);
-        colorCache = StandardTank.DEFAULT_COLOR;
+    public void setTankIndex(int index) {
+        this.tankIndex = index;
     }
 
     public int getColor() {
@@ -97,26 +96,17 @@ public class StandardTank extends FluidTank {
     protected void refreshTooltip() {
         toolTip.clear();
         int amount = 0;
-        if (getFluid() != null && getFluid().amount > 0 && getFluid().getFluid() != null) {
-            Fluid fluidType = getFluidType();
-            EnumRarity rarity = fluidType.getRarity();
+        if (renderData.fluid != null && renderData.amount > 0) {
+            EnumRarity rarity = renderData.fluid.getRarity();
             if (rarity == null)
                 rarity = EnumRarity.common;
-            ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(fluid), rarity.rarityColor);
+            ToolTipLine fluidName = new ToolTipLine(renderData.fluid.getLocalizedName(new FluidStack(renderData.fluid, renderData.amount)), rarity.rarityColor);
             fluidName.setSpacing(2);
             toolTip.add(fluidName);
-            amount = getFluid().amount;
+            amount = renderData.amount;
         }
         toolTip.add(new ToolTipLine(String.format(Locale.ENGLISH, "%,d / %,d", amount, getCapacity())));
     }
-
-    protected final ToolTip toolTip = new ToolTip() {
-        @Override
-        public void refresh() {
-            refreshTooltip();
-        }
-
-    };
 
     public boolean isHidden() {
         return hidden;
@@ -124,5 +114,17 @@ public class StandardTank extends FluidTank {
 
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
+    }
+
+    public static class TankRenderData {
+        public Fluid fluid = null;
+        public int amount = 0;
+        public int color = DEFAULT_COLOR;
+
+        public void reset() {
+            fluid = null;
+            amount = 0;
+            color = DEFAULT_COLOR;
+        }
     }
 }

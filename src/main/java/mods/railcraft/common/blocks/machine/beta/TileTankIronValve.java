@@ -75,10 +75,6 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
         }
     }
 
-    public boolean isFilling() {
-        return !fillTank.isEmpty();
-    }
-
     public StandardTank getFillTank() {
         return fillTank;
     }

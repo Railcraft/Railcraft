@@ -10,6 +10,7 @@ package mods.railcraft.client.render;
 
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
+import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import org.lwjgl.opengl.GL11;
@@ -67,21 +68,20 @@ public class RenderFluidLoader extends TileEntitySpecialRenderer {
         GL11.glTranslatef((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
         GL11.glScalef(1f, 0.6f, 1f);
 
-        IFluidTank tank = base.getTankManager().get(0);
+        StandardTank tank = base.getTankManager().get(0);
 
-        FluidStack fluidStack = tank.getFluid();
-        if (fluidStack != null && fluidStack.amount > 0) {
-            int[] displayLists = FluidRenderer.getLiquidDisplayLists(fluidStack);
+        if (tank.renderData.fluid != null && tank.renderData.amount > 0) {
+            int[] displayLists = FluidRenderer.getLiquidDisplayLists(tank.renderData.fluid);
             if (displayLists != null) {
                 GL11.glPushMatrix();
 
-                if (FluidRenderer.getFluidTexture(fluidStack, false) != null) {
+                if (FluidRenderer.getFluidTexture(tank.renderData.fluid, false) != null) {
 
                     float cap = tank.getCapacity();
-                    float level = (float) Math.min(fluidStack.amount, cap) / cap;
+                    float level = (float) Math.min(tank.renderData.amount, cap) / cap;
 
-                    bindTexture(FluidRenderer.getFluidSheet(fluidStack));
-                    FluidRenderer.setColorForFluidStack(fluidStack);
+                    bindTexture(FluidRenderer.getFluidSheet(tank.renderData.fluid));
+                    FluidRenderer.setColorForTank(tank);
                     GL11.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
                 }
 

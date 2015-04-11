@@ -118,6 +118,8 @@ public final class FluidHelper {
     }
 
     public static boolean fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill) {
+        if (fluidToFill == null)
+            return false;
         ItemStack input = inv.getStackInSlot(inputSlot);
         ItemStack output = inv.getStackInSlot(outputSlot);
         FluidItemHelper.FillReturn fill = FluidItemHelper.fillContainer(input, new FluidStack(fluidToFill, PROCESS_VOLUME));

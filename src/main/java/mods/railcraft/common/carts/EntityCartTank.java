@@ -12,6 +12,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -43,12 +44,39 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.DataTools;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.*;
 
 public class EntityCartTank extends CartContainerBase implements IFluidHandler, ILiquidTransfer, IEntityAdditionalSpawnData, ISidedInventory, IMinecart {
+    private static final byte FLUID_ID_DATA_ID = 25;
+    private static final byte FLUID_QTY_DATA_ID = 26;
+    private static final byte FLUID_COLOR_DATA_ID = 27;
+    private static final byte FILLING_DATA_ID = 28;
+    private static final int SLOT_INPUT = 0;
+    private static final int SLOT_OUTPUT = 1;
+    private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
+    private final TankManager tankManager = new TankManager();
+    private final StandardTank tank = new StandardTank(RailcraftConfig.getTankCartCapacity());
+    private final PhantomInventory invFilter = new PhantomInventory(1, this);
+    private final IInventory invLiquids = new InventoryMapper(this, false);
+    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1, false);
+    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1, false);
+    private int update = MiscTools.getRand().nextInt();
+
+    public EntityCartTank(World world) {
+        super(world);
+        tankManager.add(tank);
+    }
+
+    public EntityCartTank(World world, double d, double d1, double d2) {
+        this(world);
+        setPosition(d, d1 + (double) yOffset, d2);
+        motionX = 0.0D;
+        motionY = 0.0D;
+        motionZ = 0.0D;
+        prevPosX = d;
+        prevPosY = d1;
+        prevPosZ = d2;
+    }
 
     public static ItemStack getFilterFromCartItem(ItemStack cart) {
         ItemStack filter = null;
@@ -75,41 +103,12 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         return cart;
     }
 
-    private static final byte FLUID_ID_DATA_ID = 25;
-    private static final byte FLUID_QTY_DATA_ID = 26;
-    private static final byte FILLING_DATA_ID = 27;
-    private static final int SLOT_INPUT = 0;
-    private static final int SLOT_OUTPUT = 1;
-    private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
-    private int update = MiscTools.getRand().nextInt();
-    private final TankManager tankManager = new TankManager();
-    private final StandardTank tank = new StandardTank(RailcraftConfig.getTankCartCapacity());
-    private final PhantomInventory invFilter = new PhantomInventory(1, this);
-    private final IInventory invLiquids = new InventoryMapper(this, false);
-    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1, false);
-    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1, false);
-
-    public EntityCartTank(World world) {
-        super(world);
-        tankManager.add(tank);
-    }
-
-    public EntityCartTank(World world, double d, double d1, double d2) {
-        this(world);
-        setPosition(d, d1 + (double) yOffset, d2);
-        motionX = 0.0D;
-        motionY = 0.0D;
-        motionZ = 0.0D;
-        prevPosX = d;
-        prevPosY = d1;
-        prevPosZ = d2;
-    }
-
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.addObject(FLUID_ID_DATA_ID, new Integer(0));
+        dataWatcher.addObject(FLUID_ID_DATA_ID, new Integer(-1));
         dataWatcher.addObject(FLUID_QTY_DATA_ID, new Integer(0));
+        dataWatcher.addObject(FLUID_COLOR_DATA_ID, new Integer(StandardTank.DEFAULT_COLOR));
         dataWatcher.addObject(FILLING_DATA_ID, Byte.valueOf((byte) 0));
     }
 
@@ -120,20 +119,28 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         setFilter(filter);
     }
 
+    private int getFluidQty() {
+        return dataWatcher.getWatchableObjectInt(FLUID_QTY_DATA_ID);
+    }
+
     private void setFluidQty(int qty) {
         dataWatcher.updateObject(FLUID_QTY_DATA_ID, qty);
     }
 
-    private int getFluidQty() {
-        return dataWatcher.getWatchableObjectInt(FLUID_QTY_DATA_ID);
+    private int getFluidId() {
+        return dataWatcher.getWatchableObjectInt(FLUID_ID_DATA_ID);
     }
 
     private void setFluidId(int fluidId) {
         dataWatcher.updateObject(FLUID_ID_DATA_ID, fluidId);
     }
 
-    private int getFluidId() {
-        return dataWatcher.getWatchableObjectInt(FLUID_ID_DATA_ID);
+    private int getFluidColor() {
+        return dataWatcher.getWatchableObjectInt(FLUID_COLOR_DATA_ID);
+    }
+
+    private void setFluidColor(int color) {
+        dataWatcher.updateObject(FLUID_COLOR_DATA_ID, color);
     }
 
     public TankManager getTankManager() {
@@ -151,23 +158,33 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         super.onUpdate();
 
         if (Game.isNotHost(worldObj)) {
-            if (getFluidId() != 0) {
-                FluidStack fluidStack = new FluidStack(getFluidId(), getFluidQty());
-                tank.setFluid(fluidStack);
-            } else
-                tank.setFluid(null);
+            if (getFluidId() != -1) {
+                tank.renderData.fluid = FluidRegistry.getFluid(getFluidId());
+                tank.renderData.amount = getFluidQty();
+                tank.renderData.color = getFluidColor();
+            } else {
+                tank.renderData.fluid = null;
+                tank.renderData.amount = 0;
+                tank.renderData.color = StandardTank.DEFAULT_COLOR;
+            }
             return;
         }
 
         FluidStack fluidStack = tank.getFluid();
         if (fluidStack != null) {
-            if (fluidStack.fluidID != getFluidId())
-                setFluidId(fluidStack.fluidID);
+            if (fluidStack.getFluidID() != getFluidId())
+                setFluidId(fluidStack.getFluidID());
             if (fluidStack.amount != getFluidQty())
                 setFluidQty(fluidStack.amount);
-        } else if (getFluidId() != 0) {
-            setFluidId(0);
-            setFluidQty(0);
+            if (tank.getColor() != getFluidColor())
+                setFluidQty(tank.getColor());
+        } else {
+            if (getFluidId() != -1)
+                setFluidId(-1);
+            if (getFluidQty() != 0)
+                setFluidQty(0);
+            if (getFluidColor() != StandardTank.DEFAULT_COLOR)
+                setFluidColor(StandardTank.DEFAULT_COLOR);
         }
 
         update++;
@@ -290,13 +307,13 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
     }
 
     @Override
-    public void setFilling(boolean fill) {
-        dataWatcher.updateObject(FILLING_DATA_ID, Byte.valueOf(fill ? 1 : (byte) 0));
+    public boolean isFilling() {
+        return dataWatcher.getWatchableObjectByte(FILLING_DATA_ID) != 0;
     }
 
     @Override
-    public boolean isFilling() {
-        return dataWatcher.getWatchableObjectByte(FILLING_DATA_ID) != 0;
+    public void setFilling(boolean fill) {
+        dataWatcher.updateObject(FILLING_DATA_ID, Byte.valueOf(fill ? 1 : (byte) 0));
     }
 
     public boolean hasFilter() {
@@ -314,12 +331,12 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         return getFilter().getStackInSlot(0);
     }
 
-    public void setFilter(ItemStack filter) {
-        getFilter().setInventorySlotContents(0, filter);
-    }
-
     public PhantomInventory getFilter() {
         return invFilter;
+    }
+
+    public void setFilter(ItemStack filter) {
+        getFilter().setInventorySlotContents(0, filter);
     }
 
     public IInventory getInvLiquids() {
@@ -431,5 +448,4 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
     public double getDrag() {
         return CartConstants.STANDARD_DRAG;
     }
-
 }

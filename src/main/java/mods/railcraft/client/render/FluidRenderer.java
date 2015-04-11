@@ -37,10 +37,7 @@ public class FluidRenderer {
         liquidBlock.texture = new IIcon[1];
     }
 
-    public static IIcon getFluidTexture(FluidStack fluidStack, boolean flowing) {
-        if (fluidStack == null)
-            return RenderTools.getMissingIcon();
-        Fluid fluid = fluidStack.getFluid();
+    public static IIcon getFluidTexture(Fluid fluid, boolean flowing) {
         if (fluid == null)
             return RenderTools.getMissingIcon();
         IIcon icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
@@ -48,15 +45,11 @@ public class FluidRenderer {
         return icon;
     }
 
-    public static ResourceLocation getFluidSheet(FluidStack liquid) {
+    public static ResourceLocation getFluidSheet(Fluid fluid) {
         return BLOCK_TEXTURE;
     }
 
-    public static ResourceLocation setupFlowingLiquidTexture(FluidStack liquid, IIcon[] texArray) {
-        if (liquid == null || liquid.amount <= 0)
-            return null;
-
-        Fluid fluid = liquid.getFluid();
+    public static ResourceLocation setupFlowingLiquidTexture(Fluid fluid, IIcon[] texArray) {
         if (fluid == null)
             return null;
         IIcon top = RenderTools.getSafeIcon(fluid.getStillIcon());
@@ -67,32 +60,21 @@ public class FluidRenderer {
         texArray[3] = side;
         texArray[4] = side;
         texArray[5] = side;
-        return getFluidSheet(liquid);
-    }
-
-    public static void setColorForFluidStack(FluidStack fluidstack) {
-        if (fluidstack == null)
-            return;
-
-        int color = fluidstack.getFluid().getColor(fluidstack);
-        RenderTools.setColor(color);
+        return getFluidSheet(fluid);
     }
 
     public static void setColorForTank(StandardTank tank) {
         if (tank == null)
             return;
 
-        RenderTools.setColor(tank.colorCache);
+        RenderTools.setColor(tank.renderData.color);
     }
 
-    public static int[] getLiquidDisplayLists(FluidStack fluidStack) {
-        return getLiquidDisplayLists(fluidStack, false);
+    public static int[] getLiquidDisplayLists(Fluid fluid) {
+        return getLiquidDisplayLists(fluid, false);
     }
 
-    public static int[] getLiquidDisplayLists(FluidStack fluidStack, boolean flowing) {
-        if (fluidStack == null)
-            return null;
-        Fluid fluid = fluidStack.getFluid();
+    public static int[] getLiquidDisplayLists(Fluid fluid, boolean flowing) {
         if (fluid == null)
             return null;
         Map<Fluid, int[]> cache = flowing ? flowingRenderCache : stillRenderCache;
@@ -106,10 +88,10 @@ public class FluidRenderer {
 
         if (fluid.getBlock() != null) {
             liquidBlock.template = fluid.getBlock();
-            liquidBlock.texture[0] = getFluidTexture(fluidStack, flowing);
+            liquidBlock.texture[0] = getFluidTexture(fluid, flowing);
         } else {
             liquidBlock.template = Blocks.water;
-            liquidBlock.texture[0] = getFluidTexture(fluidStack, flowing);
+            liquidBlock.texture[0] = getFluidTexture(fluid, flowing);
         }
 
         GL11.glDisable(GL11.GL_LIGHTING);

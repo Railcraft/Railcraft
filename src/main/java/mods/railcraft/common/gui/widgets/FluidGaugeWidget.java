@@ -38,23 +38,22 @@ public class FluidGaugeWidget extends Widget {
     public void draw(GuiContainerRailcraft gui, int guiX, int guiY, int mouseX, int mouseY) {
         if (tank == null)
             return;
-        FluidStack fluidStack = tank.getFluid();
-        if (fluidStack == null || fluidStack.amount <= 0 || fluidStack.getFluid() == null)
+        if (tank.renderData.fluid == null || tank.renderData.amount <= 0)
             return;
 
-        IIcon liquidIcon = FluidRenderer.getFluidTexture(fluidStack, false);
+        IIcon fluidIcon = FluidRenderer.getFluidTexture(tank.renderData.fluid, false);
 
-        if (liquidIcon == null)
+        if (fluidIcon == null)
             return;
 
-        float scale = Math.min(fluidStack.amount, tank.getCapacity()) / (float) tank.getCapacity();
+        float scale = Math.min(tank.renderData.amount, tank.getCapacity()) / (float) tank.getCapacity();
 
-        gui.bindTexture(FluidRenderer.getFluidSheet(fluidStack));
+        gui.bindTexture(FluidRenderer.getFluidSheet(tank.renderData.fluid));
         FluidRenderer.setColorForTank(tank);
 
         for (int col = 0; col < w / 16; col++) {
             for (int row = 0; row <= h / 16; row++) {
-                gui.drawTexturedModelRectFromIcon(guiX + x + col * 16, guiY + y + row * 16 - 1, liquidIcon, 16, 16);
+                gui.drawTexturedModelRectFromIcon(guiX + x + col * 16, guiY + y + row * 16 - 1, fluidIcon, 16, 16);
             }
         }
 
