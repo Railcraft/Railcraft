@@ -11,6 +11,10 @@ package mods.railcraft.common.blocks.machine.gamma;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import mods.railcraft.api.carts.IEnergyTransfer;
+import mods.railcraft.common.carts.CartUtils;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,7 +29,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISidedInventory {
-
     private static final int SLOT_CHARGE = 0;
     private static final int SLOT_BATTERY = 1;
     private static final int TIER = 2;
@@ -33,15 +36,15 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     private static final int MAX_OVERCLOCKS = 10;
     private static final int MAX_LAPOTRON = 6;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
-    protected int energy;
     public int transferRate;
     public short storageUpgrades;
     public short lapotronUpgrades;
+    protected int energy;
     protected short transformerUpgrades;
     protected short overclockerUpgrades;
     protected ForgeDirection direction = ForgeDirection.NORTH;
+    protected boolean transferredEnergy;
     private boolean addedToIC2EnergyNet;
-    protected boolean transferedEnergy;
 
     public TileLoaderEnergyBase() {
         super();
@@ -114,8 +117,30 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     }
 
     @Override
-    public boolean hasWork() {
-        return transferedEnergy && super.hasWork();
+    public boolean isManualMode() {
+        return false;
+    }
+
+    @Override
+    public boolean canHandleCart(EntityMinecart cart) {
+        if (isSendCartGateAction())
+            return false;
+        if (!(cart instanceof IEnergyTransfer))
+            return false;
+        IEnergyTransfer energyCart = (IEnergyTransfer) cart;
+        if (energyCart.getTier() > getTier())
+            return false;
+//        ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
+//        ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
+//        if (minecartSlot1 != null || minecartSlot2 != null)
+//            if (!CartUtils.doesCartMatchFilter(minecartSlot1, cart) && !CartUtils.doesCartMatchFilter(minecartSlot2, cart))
+//                return false;
+        return true;
+    }
+
+    @Override
+    public boolean isProcessing() {
+        return transferredEnergy;
     }
 
     public abstract TileEntity getIC2Delegate();
@@ -235,5 +260,4 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     public int getEnergyBarScaled(int scale) {
         return ((int) getEnergy() * scale) / getCapacity();
     }
-
 }

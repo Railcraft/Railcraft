@@ -11,6 +11,11 @@ package mods.railcraft.common.blocks.machine.gamma;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.common.carts.CartUtils;
+import mods.railcraft.common.fluids.FluidItemHelper;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -57,7 +62,7 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
 
     public Fluid getFilterFluid() {
         if (invFilter.getStackInSlot(0) != null) {
-            FluidStack fluidStack = FluidHelper.getFluidStackInContainer(invFilter.getStackInSlot(0));
+            FluidStack fluidStack = FluidItemHelper.getFluidStackInContainer(invFilter.getStackInSlot(0));
             return fluidStack != null ? fluidStack.getFluid() : null;
         }
         return null;
@@ -71,8 +76,40 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
     }
 
     @Override
-    public boolean hasWork() {
-        return flow > 0 && super.hasWork();
+    public boolean isProcessing() {
+        return flow > 0;
+    }
+
+    protected void sendCart(EntityMinecart cart) {
+        if (cart == null)
+            return;
+        if (isManualMode())
+            return;
+        if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY)) {
+            flow = 0;
+            setPowered(true);
+        }
+    }
+
+    @Override
+    protected void setPowered(boolean p) {
+        if (isManualMode())
+            p = false;
+        super.setPowered(p);
+    }
+
+    @Override
+    public boolean canHandleCart(EntityMinecart cart) {
+        if (isSendCartGateAction())
+            return false;
+        if (!(cart instanceof IFluidHandler))
+            return false;
+        ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
+        ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
+        if (minecartSlot1 != null || minecartSlot2 != null)
+            if (!CartUtils.doesCartMatchFilter(minecartSlot1, cart) && !CartUtils.doesCartMatchFilter(minecartSlot2, cart))
+                return false;
+        return true;
     }
 
     @Override

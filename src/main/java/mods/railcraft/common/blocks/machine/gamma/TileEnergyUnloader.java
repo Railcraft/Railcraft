@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.machine.gamma;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,7 +29,6 @@ import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitterDelegate, IGuiReturnHandler {
-
     private static final int[] OUTPUT_LEVELS = {512, 2048};
     private boolean waitTillEmpty = true;
     private TileEntity emitterDelegate;
@@ -60,7 +60,7 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
         if (Game.isNotHost(getWorld()))
             return;
 
-        transferedEnergy = false;
+        transferredEnergy = false;
         transferRate = 0;
 
         EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.1f, direction);
@@ -74,28 +74,15 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
         if (cart == null)
             return;
 
-        if (!(cart instanceof IEnergyTransfer)) {
-            if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY))
-                setPowered(true);
-            return;
-        }
-
-        if (isSendCartGateAction()) {
-            if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY))
-                setPowered(true);
-            return;
-        }
-
-        IEnergyTransfer energyCart = (IEnergyTransfer) cart;
-
-        if (!energyCart.canExtractEnergy() || energyCart.getTier() > getTier()) {
-            if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY))
-                setPowered(true);
+        if (!canHandleCart(cart)) {
+            sendCart(cart);
             return;
         }
 
         if (isPaused())
             return;
+
+        IEnergyTransfer energyCart = (IEnergyTransfer) cart;
 
         if (energy < getCapacity() && energyCart.getEnergy() > 0) {
             double usage = (energyCart.getTransferLimit() * Math.pow(1.5, overclockerUpgrades));
@@ -118,14 +105,31 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
 
             transferRate = (int) injection;
             energy += injection;
-            transferedEnergy = extract > 0;
+            transferredEnergy = extract > 0;
         }
 
-        if (!transferedEnergy && !isPowered() && CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY))
-            if (!waitTillEmpty)
-                setPowered(true);
-            else if (energyCart.getEnergy() == 0)
-                setPowered(true);
+        if (!transferredEnergy && !isPowered() && shouldSendCart(cart))
+            sendCart(cart);
+    }
+
+    @Override
+    public boolean canHandleCart(EntityMinecart cart) {
+        if (!super.canHandleCart(cart))
+            return false;
+        IEnergyTransfer energyCart = (IEnergyTransfer) cart;
+        return energyCart.canExtractEnergy();
+    }
+
+    @Override
+    protected boolean shouldSendCart(EntityMinecart cart) {
+        if (!(cart instanceof IEnergyTransfer))
+            return true;
+        IEnergyTransfer energyCart = (IEnergyTransfer) cart;
+        if (!waitTillEmpty)
+            return true;
+        else if (energyCart.getEnergy() == 0)
+            return true;
+        return false;
     }
 
     @Override
@@ -210,5 +214,4 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
             }
         return emitterDelegate;
     }
-
 }

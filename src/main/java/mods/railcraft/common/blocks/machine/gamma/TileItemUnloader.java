@@ -8,35 +8,35 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.inventory.Slot;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.util.inventory.*;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class TileItemUnloader extends TileLoaderItemBase {
-
     private static final EnumRedstoneMode[] REDSTONE_MODES = new EnumRedstoneMode[]{EnumRedstoneMode.IMMEDIATE, EnumRedstoneMode.COMPLETE, EnumRedstoneMode.MANUAL};
     private final IInventory invBuffer;
     private final Map<ItemStack, Short> transferedItems = new ItemStackMap<Short>();
     private final Set<ItemStack> checkedItems = new ItemStackSet();
+    private final LinkedList<IInventory> chests = new LinkedList<IInventory>();
     private AdjacentInventoryCache invCache = new AdjacentInventoryCache(this, tileCache, new ITileFilter() {
         @Override
         public boolean matches(TileEntity tile) {
@@ -45,7 +45,6 @@ public class TileItemUnloader extends TileLoaderItemBase {
             }
             return true;
         }
-
     }, InventorySorter.SIZE_DECENDING);
 
     public TileItemUnloader() {
@@ -95,19 +94,6 @@ public class TileItemUnloader extends TileLoaderItemBase {
             return;
         }
 
-        IInventory cartInv = null;
-        if (cart instanceof IInventory) {
-            cartInv = (IInventory) cart;
-        }
-
-        if (cartInv == null || cartInv.getSizeInventory() <= 0 || InvTools.isInventoryEmpty(cartInv)) {
-            if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY) || cart.isPoweredCart()) {
-                setPowered(true);
-            }
-            return;
-        }
-
-
         if (cart != currentCart) {
             setPowered(false);
             currentCart = cart;
@@ -115,31 +101,21 @@ public class TileItemUnloader extends TileLoaderItemBase {
             cartWasSent();
         }
 
-        if (isSendCartGateAction()) {
-            if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY)) {
-                setPowered(true);
-            }
+        if (!canHandleCart(cart)) {
+            sendCart(cart);
             return;
-        }
-
-        ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
-        ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
-        if (minecartSlot1 != null || minecartSlot2 != null) {
-            if (!CartUtils.doesCartMatchFilter(minecartSlot1, cart) && !CartUtils.doesCartMatchFilter(minecartSlot2, cart)) {
-                if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY)) {
-                    setPowered(true);
-                }
-                return;
-            }
         }
 
         if (isPaused())
             return;
 
-        LinkedList<IInventory> chests = new LinkedList<IInventory>(invCache.getAdjecentInventories());
-        chests.addLast(invBuffer);
+        chests.clear();
+        chests.addAll(invCache.getAdjecentInventories());
+        chests.addFirst(invBuffer);
 
         checkedItems.clear();
+
+        IInventory cartInv = (IInventory) cart;
 
         switch (getMode()) {
             case TRANSFER: {
@@ -244,24 +220,41 @@ public class TileItemUnloader extends TileLoaderItemBase {
         }
 
         EnumRedstoneMode state = getRedstoneModeController().getButtonState();
-        if (state != EnumRedstoneMode.MANUAL && !isPowered() && (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY) || cart.isPoweredCart())) {
-            if (!movedItemCart && state != EnumRedstoneMode.COMPLETE) {
-                setPowered(true);
-            } else if (getMode() == EnumTransferMode.TRANSFER && isTranferComplete(getItemFilters().getContents())) {
-                setPowered(true);
-            } else if (getMode() == EnumTransferMode.STOCK && isStockComplete(chests, getItemFilters().getContents())) {
-                setPowered(true);
-            } else if (getMode() == EnumTransferMode.EXCESS && isExcessComplete(cartInv, getItemFilters().getContents())) {
-                setPowered(true);
-            } else if (getMode() == EnumTransferMode.ALL && isAllComplete(chests, getItemFilters().getContents())) {
-                setPowered(true);
-            } else if (!movedItemCart && InvTools.isAccessibleInventoryEmpty(cartInv, getOrientation().getOpposite())) {
-                setPowered(true);
-            }
+        if (state != EnumRedstoneMode.MANUAL && !isPowered() && shouldSendCart(cart)) {
+            sendCart(cart);
         }
     }
 
-    private boolean isTranferComplete(ItemStack[] filters) {
+    @Override
+    public boolean canHandleCart(EntityMinecart cart) {
+        if (!super.canHandleCart(cart))
+            return false;
+        return !InvTools.isInventoryEmpty((IInventory) cart);
+    }
+
+    @Override
+    protected boolean shouldSendCart(EntityMinecart cart) {
+        if (!(cart instanceof IInventory))
+            return true;
+        IInventory cartInv = (IInventory) cart;
+        EnumRedstoneMode state = getRedstoneModeController().getButtonState();
+        if (!movedItemCart && state != EnumRedstoneMode.COMPLETE) {
+            return true;
+        } else if (getMode() == EnumTransferMode.TRANSFER && isTransferComplete(getItemFilters().getContents())) {
+            return true;
+        } else if (getMode() == EnumTransferMode.STOCK && isStockComplete(chests, getItemFilters().getContents())) {
+            return true;
+        } else if (getMode() == EnumTransferMode.EXCESS && isExcessComplete(cartInv, getItemFilters().getContents())) {
+            return true;
+        } else if (getMode() == EnumTransferMode.ALL && isAllComplete(chests, getItemFilters().getContents())) {
+            return true;
+        } else if (!movedItemCart && InvTools.isAccessibleInventoryEmpty(cartInv, getOrientation().getOpposite())) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isTransferComplete(ItemStack[] filters) {
         checkedItems.clear();
         boolean hasFilter = false;
         for (ItemStack filter : filters) {
@@ -362,5 +355,4 @@ public class TileItemUnloader extends TileLoaderItemBase {
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         return false;
     }
-
 }

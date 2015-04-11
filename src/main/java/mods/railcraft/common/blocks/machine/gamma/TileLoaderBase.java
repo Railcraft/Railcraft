@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import buildcraft.api.statements.IActionExternal;
+import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
@@ -25,15 +26,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileLoaderBase extends TileMachineItem implements IHasCart, IHasWork {
-
     public static final float STOP_VELOCITY = 0.02f;
     public static final int PAUSE_DELAY = 4;
-    protected EntityMinecart currentCart;
     private final PhantomInventory invCarts = new PhantomInventory(2, this);
+    protected EntityMinecart currentCart;
     private boolean powered;
     private boolean sendCartGateAction = false;
     private int pause = 0;
@@ -43,9 +42,40 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
         return currentCart != null;
     }
 
+    public abstract boolean canHandleCart(EntityMinecart cart);
+
     @Override
     public boolean hasWork() {
-        return hasMinecart();
+        return currentCart != null && canHandleCart(currentCart) && (isProcessing() || !shouldSendCart(currentCart));
+    }
+
+    public abstract boolean isManualMode();
+
+    public abstract boolean isProcessing();
+
+    protected abstract boolean shouldSendCart(EntityMinecart cart);
+
+    protected void sendCart(EntityMinecart cart) {
+        if (cart == null)
+            return;
+        if (isManualMode())
+            return;
+        if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY) || cart.isPoweredCart()) {
+            setPowered(true);
+        }
+    }
+
+    public final boolean isPowered() {
+        return powered;
+    }
+
+    protected void setPowered(boolean p) {
+        if (isManualMode())
+            p = false;
+        if (powered != p) {
+            powered = p;
+            notifyBlocksOfNeighborChange();
+        }
     }
 
     public final PhantomInventory getCartFilters() {
@@ -100,17 +130,6 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
         return TrackTools.isRailBlock(block) || block == Blocks.redstone_wire || block == Blocks.powered_repeater || block == Blocks.unpowered_repeater;
     }
 
-    public final boolean isPowered() {
-        return powered;
-    }
-
-    protected void setPowered(boolean p) {
-        if (powered != p) {
-            powered = p;
-            notifyBlocksOfNeighborChange();
-        }
-    }
-
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
@@ -126,5 +145,4 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
 
         getCartFilters().readFromNBT("invCarts", data);
     }
-
 }

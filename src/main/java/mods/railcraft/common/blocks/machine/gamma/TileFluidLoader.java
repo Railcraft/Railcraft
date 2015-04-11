@@ -8,18 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import buildcraft.api.transport.PipeManager;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILiquidTransfer;
 import mods.railcraft.api.tracks.ITrackInstance;
@@ -30,6 +18,10 @@ import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.carts.EntityCartTank;
 import mods.railcraft.common.carts.EntityLocomotiveSteam;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.TankToolkit;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
@@ -38,17 +30,25 @@ import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.TankToolkit;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHandler {
 
@@ -56,40 +56,9 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     private static final int TRANSFER_RATE = 20;
     private static final float MAX_PIPE_LENGTH = 16 * 0.0625f;
     private static final float PIPE_INCREMENT = 0.01f;
+    private final MultiButtonController<ButtonState> stateController = new MultiButtonController<ButtonState>(ButtonState.FORCE_FULL.ordinal(), ButtonState.values());
     private int waitForReset = 0;
     private float pipeLenght = 0;
-    private final MultiButtonController<ButtonState> stateController = new MultiButtonController<ButtonState>(ButtonState.FORCE_FULL.ordinal(), ButtonState.values());
-
-    public enum ButtonState implements IMultiButtonState {
-
-        HOLD_EMPTY("railcraft.gui.liquid.loader.empty"),
-        FORCE_FULL("railcraft.gui.liquid.loader.fill"),
-        IMMEDIATE("railcraft.gui.liquid.loader.immediate"),
-        MANUAL("railcraft.gui.liquid.loader.manual");
-        private final String label;
-        private final ToolTip tip;
-
-        private ButtonState(String label) {
-            this.label = label;
-            this.tip = ToolTip.buildToolTip(label + ".tip");
-        }
-
-        @Override
-        public String getLabel() {
-            return LocalizationPlugin.translate(label);
-        }
-
-        @Override
-        public IButtonTextureSet getTextureSet() {
-            return StandardButtonTextureSets.SMALL_BUTTON;
-        }
-
-        @Override
-        public ToolTip getToolTip() {
-            return tip;
-        }
-
-    }
 
     public TileFluidLoader() {
         super();
@@ -163,13 +132,13 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
             return;
 
         ItemStack topSlot = getStackInSlot(SLOT_INPUT);
-        if (topSlot != null && !FluidHelper.isContainer(topSlot)) {
+        if (topSlot != null && !FluidItemHelper.isContainer(topSlot)) {
             setInventorySlotContents(SLOT_INPUT, null);
             dropItem(topSlot);
         }
 
         ItemStack bottomSlot = getStackInSlot(SLOT_OUTPUT);
-        if (bottomSlot != null && !FluidHelper.isContainer(bottomSlot)) {
+        if (bottomSlot != null && !FluidItemHelper.isContainer(bottomSlot)) {
             setInventorySlotContents(SLOT_OUTPUT, null);
             dropItem(bottomSlot);
         }
@@ -183,18 +152,16 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
             TileEntity tile = tileCache.getTileOnSide(side);
             if (tile instanceof IFluidHandler) {
                 IFluidHandler nearbyTank = (IFluidHandler) tile;
-                if (PipeManager.canExtractFluids(this, worldObj, MiscTools.getXOnSide(xCoord, side), MiscTools.getYOnSide(yCoord, side), MiscTools.getZOnSide(zCoord, side))) {
-                    side = side.getOpposite();
-                    Fluid filterFluid = getFilterFluid();
-                    if (filterFluid != null) {
-                        FluidStack drained = nearbyTank.drain(side, new FluidStack(filterFluid, TRANSFER_RATE), false);
-                        int used = loaderTank.fill(drained, true);
-                        nearbyTank.drain(side, new FluidStack(filterFluid, used), true);
-                    } else {
-                        FluidStack drained = nearbyTank.drain(side, TRANSFER_RATE, false);
-                        int used = loaderTank.fill(drained, true);
-                        nearbyTank.drain(side, used, true);
-                    }
+                side = side.getOpposite();
+                Fluid filterFluid = getFilterFluid();
+                if (filterFluid != null) {
+                    FluidStack drained = nearbyTank.drain(side, new FluidStack(filterFluid, TRANSFER_RATE), false);
+                    int used = loaderTank.fill(drained, true);
+                    nearbyTank.drain(side, new FluidStack(filterFluid, used), true);
+                } else {
+                    FluidStack drained = nearbyTank.drain(side, TRANSFER_RATE, false);
+                    int used = loaderTank.fill(drained, true);
+                    nearbyTank.drain(side, used, true);
                 }
             }
         }
@@ -233,23 +200,10 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
             return;
         }
 
-        if (isSendCartGateAction()) {
+        if (!canHandleCart(cart)) {
             sendCart(cart);
             return;
         }
-
-        if (!(cart instanceof IFluidHandler)) {
-            sendCart(cart);
-            return;
-        }
-
-        ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
-        ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
-        if (minecartSlot1 != null || minecartSlot2 != null)
-            if (!CartUtils.doesCartMatchFilter(minecartSlot1, cart) && !CartUtils.doesCartMatchFilter(minecartSlot2, cart)) {
-                sendCart(cart);
-                return;
-            }
 
         if (cart instanceof EntityLocomotiveSteam) {
             EntityLocomotiveSteam loco = (EntityLocomotiveSteam) cart;
@@ -290,17 +244,8 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
             waitForReset = RESET_WAIT;
 
         if (stateController.getButtonState() != ButtonState.MANUAL
-                && pipeIsRetracted() && flow <= 0 && shouldCartLeave(cart, tankCart))
+                && pipeIsRetracted() && flow <= 0 && shouldSendCart(cart))
             sendCart(cart);
-    }
-
-    private void sendCart(EntityMinecart cart) {
-        if (cart == null)
-            return;
-        if (stateController.getButtonState() == ButtonState.MANUAL)
-            return;
-        if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY))
-            setPowered(true);
     }
 
     private boolean cartNeedsFilling(TankToolkit tankCart) {
@@ -308,24 +253,26 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
         return loaderLiquid != null && loaderLiquid.amount > 0 && tankCart.canPutFluid(ForgeDirection.UP, loaderLiquid);
     }
 
-    private boolean shouldCartLeave(EntityMinecart cart, TankToolkit tankCart) {
-        boolean leave = false;
+    @Override
+    protected boolean shouldSendCart(EntityMinecart cart) {
+        if (!(cart instanceof IFluidHandler))
+            return true;
+        TankToolkit tankCart = new TankToolkit((IFluidHandler) cart);
         Fluid fluidHandled = getFluidHandled();
-        if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY))
-            if (!loaderTank.isEmpty() && !tankCart.canPutFluid(ForgeDirection.UP, loaderTank.getFluid()))
-                leave = true;
-            else if (stateController.getButtonState() != ButtonState.FORCE_FULL && !tankCart.isTankEmpty(fluidHandled))
-                leave = true;
-            else if (stateController.getButtonState() == ButtonState.IMMEDIATE && tankCart.isTankEmpty(fluidHandled))
-                leave = true;
-            else if (tankCart.isTankFull(fluidHandled))
-                leave = true;
-        return leave;
+        if (!loaderTank.isEmpty() && !tankCart.canPutFluid(ForgeDirection.UP, loaderTank.getFluid()))
+            return true;
+        else if (stateController.getButtonState() != ButtonState.FORCE_FULL && !tankCart.isTankEmpty(fluidHandled))
+            return true;
+        else if (stateController.getButtonState() == ButtonState.IMMEDIATE && tankCart.isTankEmpty(fluidHandled))
+            return true;
+        else if (tankCart.isTankFull(fluidHandled))
+            return true;
+        return false;
     }
 
     @Override
     protected void setPowered(boolean p) {
-        if (stateController.getButtonState() == ButtonState.MANUAL)
+        if (isManualMode())
             p = false;
         if (p) {
             resetPipe();
@@ -440,7 +387,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         switch (slot) {
             case SLOT_INPUT:
-                return FluidHelper.isFilledContainer(stack);
+                return FluidItemHelper.isFilledContainer(stack);
         }
         return false;
     }
@@ -453,6 +400,42 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     @Override
     public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
         stateController.setCurrentState(data.readByte());
+    }
+
+    @Override
+    public boolean isManualMode() {
+        return stateController.getButtonState() == ButtonState.MANUAL;
+    }
+
+    public enum ButtonState implements IMultiButtonState {
+
+        HOLD_EMPTY("railcraft.gui.liquid.loader.empty"),
+        FORCE_FULL("railcraft.gui.liquid.loader.fill"),
+        IMMEDIATE("railcraft.gui.liquid.loader.immediate"),
+        MANUAL("railcraft.gui.liquid.loader.manual");
+        private final String label;
+        private final ToolTip tip;
+
+        private ButtonState(String label) {
+            this.label = label;
+            this.tip = ToolTip.buildToolTip(label + ".tip");
+        }
+
+        @Override
+        public String getLabel() {
+            return LocalizationPlugin.translate(label);
+        }
+
+        @Override
+        public IButtonTextureSet getTextureSet() {
+            return StandardButtonTextureSets.SMALL_BUTTON;
+        }
+
+        @Override
+        public ToolTip getToolTip() {
+            return tip;
+        }
+
     }
 
 }

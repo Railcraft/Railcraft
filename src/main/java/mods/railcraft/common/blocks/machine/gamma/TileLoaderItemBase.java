@@ -8,102 +8,40 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
-import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
+import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiReturnHandler, ISidedInventory {
-
     protected static final int[] SLOTS = InvTools.buildSlotArray(0, 9);
     private final PhantomInventory invFilters = new PhantomInventory(9, this);
-    protected boolean movedItemCart = false;
     private final MultiButtonController<EnumTransferMode> transferModeController = new MultiButtonController(EnumTransferMode.ALL.ordinal(), EnumTransferMode.values());
-
-    public enum EnumTransferMode implements IMultiButtonState {
-
-        TRANSFER("railcraft.gui.item.loader.transfer"),
-        STOCK("railcraft.gui.item.loader.stock"),
-        EXCESS("railcraft.gui.item.loader.excess"),
-        ALL("railcraft.gui.item.loader.all");
-        private final String label;
-        private final ToolTip tip;
-
-        private EnumTransferMode(String label) {
-            this.label = label;
-            this.tip = ToolTip.buildToolTip(label + ".tip");
-        }
-
-        @Override
-        public String getLabel() {
-            return LocalizationPlugin.translate(label);
-        }
-
-        @Override
-        public IButtonTextureSet getTextureSet() {
-            return StandardButtonTextureSets.SMALL_BUTTON;
-        }
-
-        @Override
-        public ToolTip getToolTip() {
-            return tip;
-        }
-
-    }
+    private final MultiButtonController<EnumRedstoneMode> redstoneModeController = new MultiButtonController(0, getValidRedstoneModes());
+    protected boolean movedItemCart = false;
 
     public MultiButtonController<EnumTransferMode> getTransferModeController() {
         return transferModeController;
-    }
-
-    private final MultiButtonController<EnumRedstoneMode> redstoneModeController = new MultiButtonController(0, getValidRedstoneModes());
-
-    public enum EnumRedstoneMode implements IMultiButtonState {
-
-        IMMEDIATE("railcraft.gui.item.loader.immediate"),
-        COMPLETE("railcraft.gui.item.loader.complete"),
-        MANUAL("railcraft.gui.item.loader.manual"),
-        PARTIAL("railcraft.gui.item.loader.partial");
-        private final String label;
-        private final ToolTip tip;
-
-        private EnumRedstoneMode(String label) {
-            this.label = label;
-            this.tip = ToolTip.buildToolTip(label + ".tip");
-        }
-
-        @Override
-        public String getLabel() {
-            return LocalizationPlugin.translate(label);
-        }
-
-        @Override
-        public StandardButtonTextureSets getTextureSet() {
-            return StandardButtonTextureSets.SMALL_BUTTON;
-        }
-
-        @Override
-        public ToolTip getToolTip() {
-            return tip;
-        }
-
     }
 
     public EnumRedstoneMode[] getValidRedstoneModes() {
@@ -139,13 +77,31 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         super.setPowered(p);
     }
 
-    public final boolean mustCompleteOperation() {
-        return redstoneModeController.getButtonState() == EnumRedstoneMode.COMPLETE;
+    @Override
+    public boolean canHandleCart(EntityMinecart cart) {
+        if (isSendCartGateAction())
+            return false;
+        if (!(cart instanceof IInventory))
+            return false;
+        IInventory cartInv = (IInventory) cart;
+        if (cartInv.getSizeInventory() <= 0)
+            return false;
+        ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
+        ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
+        if (minecartSlot1 != null || minecartSlot2 != null)
+            if (!CartUtils.doesCartMatchFilter(minecartSlot1, cart) && !CartUtils.doesCartMatchFilter(minecartSlot2, cart))
+                return false;
+        return true;
     }
 
     @Override
-    public boolean hasWork() {
-        return movedItemCart && super.hasWork();
+    public boolean isProcessing() {
+        return movedItemCart;
+    }
+
+    @Override
+    public boolean isManualMode() {
+        return redstoneModeController.getButtonState() == EnumRedstoneMode.MANUAL;
     }
 
     public final EnumTransferMode getMode() {
@@ -203,4 +159,65 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         }
     }
 
+    public enum EnumTransferMode implements IMultiButtonState {
+
+        TRANSFER("railcraft.gui.item.loader.transfer"),
+        STOCK("railcraft.gui.item.loader.stock"),
+        EXCESS("railcraft.gui.item.loader.excess"),
+        ALL("railcraft.gui.item.loader.all");
+        private final String label;
+        private final ToolTip tip;
+
+        private EnumTransferMode(String label) {
+            this.label = label;
+            this.tip = ToolTip.buildToolTip(label + ".tip");
+        }
+
+        @Override
+        public String getLabel() {
+            return LocalizationPlugin.translate(label);
+        }
+
+        @Override
+        public IButtonTextureSet getTextureSet() {
+            return StandardButtonTextureSets.SMALL_BUTTON;
+        }
+
+        @Override
+        public ToolTip getToolTip() {
+            return tip;
+        }
+
+    }
+
+    public enum EnumRedstoneMode implements IMultiButtonState {
+
+        IMMEDIATE("railcraft.gui.item.loader.immediate"),
+        COMPLETE("railcraft.gui.item.loader.complete"),
+        MANUAL("railcraft.gui.item.loader.manual"),
+        PARTIAL("railcraft.gui.item.loader.partial");
+        private final String label;
+        private final ToolTip tip;
+
+        private EnumRedstoneMode(String label) {
+            this.label = label;
+            this.tip = ToolTip.buildToolTip(label + ".tip");
+        }
+
+        @Override
+        public String getLabel() {
+            return LocalizationPlugin.translate(label);
+        }
+
+        @Override
+        public StandardButtonTextureSets getTextureSet() {
+            return StandardButtonTextureSets.SMALL_BUTTON;
+        }
+
+        @Override
+        public ToolTip getToolTip() {
+            return tip;
+        }
+
+    }
 }
