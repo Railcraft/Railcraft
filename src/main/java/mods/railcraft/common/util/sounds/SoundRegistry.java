@@ -41,10 +41,10 @@ public class SoundRegistry {
         if (block != null) {
             registerCustomStepSound(block, EnumPost.WOOD.ordinal(), Block.soundTypeWood);
             registerCustomStepSound(block, EnumPost.STONE.ordinal(), Block.soundTypeStone);
-            registerCustomStepSound(block, EnumPost.METAL.ordinal(), Block.soundTypeMetal);
+            registerCustomStepSound(block, EnumPost.METAL_UNPAINTED.ordinal(), Block.soundTypeMetal);
             registerCustomStepSound(block, EnumPost.WOOD_PLATFORM.ordinal(), Block.soundTypeWood);
             registerCustomStepSound(block, EnumPost.STONE_PLATFORM.ordinal(), Block.soundTypeStone);
-            registerCustomStepSound(block, EnumPost.METAL_PLATFORM.ordinal(), Block.soundTypeMetal);
+            registerCustomStepSound(block, EnumPost.METAL_UNPAINTED_PLATFORM.ordinal(), Block.soundTypeMetal);
         }
 
         block = BlockCube.getBlock();

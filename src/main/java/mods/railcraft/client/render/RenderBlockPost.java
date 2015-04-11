@@ -25,21 +25,18 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
-
-import static net.minecraftforge.client.IItemRenderer.ItemRenderType.*;
-
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
-import static net.minecraftforge.common.util.ForgeDirection.WEST;
-
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class RenderBlockPost extends BlockRenderer {
-
     private static final float PIX = RenderTools.PIXEL;
+
+    protected RenderBlockPost(Block block) {
+        super(block);
+    }
 
     public static BlockRenderer make() {
         BlockRenderer renderer = new RenderBlockPost(BlockPost.block);
@@ -47,18 +44,13 @@ public class RenderBlockPost extends BlockRenderer {
         renderer.addCombinedRenderer(EnumPost.WOOD_PLATFORM.ordinal(), new RenderPost());
         renderer.addCombinedRenderer(EnumPost.STONE.ordinal(), new RenderPostStone());
         renderer.addCombinedRenderer(EnumPost.STONE_PLATFORM.ordinal(), new RenderPostStone());
-        renderer.addCombinedRenderer(EnumPost.METAL.ordinal(), new RenderPost());
-        renderer.addCombinedRenderer(EnumPost.METAL_PLATFORM.ordinal(), new RenderPost());
+        renderer.addCombinedRenderer(EnumPost.METAL_UNPAINTED.ordinal(), new RenderPost());
+        renderer.addCombinedRenderer(EnumPost.METAL_UNPAINTED_PLATFORM.ordinal(), new RenderPost());
         renderer.addCombinedRenderer(EnumPost.EMBLEM.ordinal(), new RenderPostSign());
         return renderer;
     }
 
-    protected RenderBlockPost(Block block) {
-        super(block);
-    }
-
     protected static class RenderPost implements ICombinedRenderer {
-
         @Override
         public void renderBlock(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block) {
             BlockPostBase blockPost = (BlockPostBase) block;
@@ -180,7 +172,7 @@ public class RenderBlockPost extends BlockRenderer {
         }
 
         public void renderPlatform(RenderBlocks renderblocks, int x, int y, int z, Block block) {
-            block.setBlockBounds(0.0F, (16 - getPlatformThinkness()) * RenderTools.PIXEL, 0.0F, 1.0F, 1.0F, 1.0F);
+            block.setBlockBounds(0.0F, (16 - getPlatformThickness()) * RenderTools.PIXEL, 0.0F, 1.0F, 1.0F, 1.0F);
             RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
         }
 
@@ -200,7 +192,7 @@ public class RenderBlockPost extends BlockRenderer {
             RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
         }
 
-        public float getPlatformThinkness() {
+        public float getPlatformThickness() {
             return 2;
         }
 
@@ -228,7 +220,7 @@ public class RenderBlockPost extends BlockRenderer {
                 if (section == 3)
                     block.setBlockBounds(0.5F - f4, 0.5F - f4 * 3.0F, -f4 * 2.0F, 0.5F + f4, 0.5F - f4, 1.0F + f4 * 2.0F);
                 if (section == 4)
-                    block.setBlockBounds(0.0F, (16 - getPlatformThinkness()) * RenderTools.PIXEL, 0.0F, 1.0F, 1.0F, 1.0F);
+                    block.setBlockBounds(0.0F, (16 - getPlatformThickness()) * RenderTools.PIXEL, 0.0F, 1.0F, 1.0F, 1.0F);
                 renderblocks.setRenderBoundsFromBlock(block);
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                 Tessellator tess = Tessellator.instance;
@@ -260,13 +252,11 @@ public class RenderBlockPost extends BlockRenderer {
             }
             block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         }
-
     }
 
     protected static class RenderPostStone extends RenderPost {
-
         @Override
-        public float getPlatformThinkness() {
+        public float getPlatformThickness() {
             return 4;
         }
 
@@ -340,7 +330,7 @@ public class RenderBlockPost extends BlockRenderer {
                 if (section == 2)
                     block.setBlockBounds(0.5F - pix2, 0.5F - pix3, -pix * 2.0F, 0.5F + pix2, 1.0F - pix, 1.0F + pix2);
                 if (section == 3)
-                    block.setBlockBounds(0.0F, (16 - getPlatformThinkness()) * pix, 0.0F, 1.0F, 1.0F, 1.0F);
+                    block.setBlockBounds(0.0F, (16 - getPlatformThickness()) * pix, 0.0F, 1.0F, 1.0F, 1.0F);
                 renderblocks.setRenderBoundsFromBlock(block);
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                 Tessellator tess = Tessellator.instance;
@@ -372,11 +362,9 @@ public class RenderBlockPost extends BlockRenderer {
             }
             block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         }
-
     }
 
     protected static class RenderPostSign extends RenderPost {
-
         @Override
         public void renderBlock(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block) {
             super.renderBlock(renderblocks, world, x, y, z, block);
@@ -488,11 +476,9 @@ public class RenderBlockPost extends BlockRenderer {
             GL11.glPopAttrib();
             GL11.glPopMatrix();
         }
-
     }
 
     public static class EmblemPostTESR extends TileEntitySpecialRenderer {
-
         public EmblemPostTESR() {
         }
 
@@ -540,6 +526,5 @@ public class RenderBlockPost extends BlockRenderer {
             GL11.glPopAttrib();
             GL11.glPopMatrix();
         }
-
     }
 }

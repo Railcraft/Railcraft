@@ -64,11 +64,11 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
             HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
             HarvestPlugin.setHarvestLevel(block, EnumPost.WOOD.ordinal(), "axe", 0);
             HarvestPlugin.setHarvestLevel(block, EnumPost.STONE.ordinal(), "pickaxe", 1);
-            HarvestPlugin.setHarvestLevel(block, EnumPost.METAL.ordinal(), "pickaxe", 2);
+            HarvestPlugin.setHarvestLevel(block, EnumPost.METAL_UNPAINTED.ordinal(), "pickaxe", 2);
             HarvestPlugin.setHarvestLevel(block, EnumPost.EMBLEM.ordinal(), "pickaxe", 2);
             HarvestPlugin.setHarvestLevel(block, EnumPost.WOOD_PLATFORM.ordinal(), "axe", 0);
             HarvestPlugin.setHarvestLevel(block, EnumPost.STONE_PLATFORM.ordinal(), "pickaxe", 1);
-            HarvestPlugin.setHarvestLevel(block, EnumPost.METAL_PLATFORM.ordinal(), "pickaxe", 2);
+            HarvestPlugin.setHarvestLevel(block, EnumPost.METAL_UNPAINTED_PLATFORM.ordinal(), "pickaxe", 2);
 
             ForestryPlugin.addBackpackItem("builder", block);
         }
@@ -79,7 +79,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         switch (EnumPost.fromId(meta)) {
             case WOOD_PLATFORM:
             case STONE_PLATFORM:
-            case METAL_PLATFORM:
+            case METAL_UNPAINTED_PLATFORM:
                 return true;
         }
         return false;
@@ -103,8 +103,8 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         EnumPost.WOOD_PLATFORM.setTexture(woodIcon);
         EnumPost.STONE.setTexture(stoneIcon);
         EnumPost.STONE_PLATFORM.setTexture(stoneIcon);
-        EnumPost.METAL.setTexture(metalIcon);
-        EnumPost.METAL_PLATFORM.setTexture(metalIcon);
+        EnumPost.METAL_UNPAINTED.setTexture(metalIcon);
+        EnumPost.METAL_UNPAINTED_PLATFORM.setTexture(metalIcon);
         EnumPost.EMBLEM.setTexture(metalIcon);
     }
 
@@ -211,7 +211,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     @Override
     public boolean recolourBlock(World world, int x, int y, int z, ForgeDirection side, int colour) {
         int meta = world.getBlockMetadata(x, y, z);
-        if (meta == EnumPost.METAL.ordinal())
+        if (meta == EnumPost.METAL_UNPAINTED.ordinal())
             if (BlockPostMetal.post != null) {
                 world.setBlock(x, y, z, BlockPostMetal.post, 15 - colour, 3);
                 return true;

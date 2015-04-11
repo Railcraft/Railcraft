@@ -15,27 +15,25 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ForestryPlugin {
-
     public static Boolean modLoaded = null;
     public static Item trackmanBackpackT1;
     public static Item trackmanBackpackT2;
@@ -76,6 +74,8 @@ public class ForestryPlugin {
     }
 
     private static void sendBackpackMessage(String message) {
+        if (message.contains("null"))
+            throw new IllegalArgumentException("Attempting to register broken item with Forestry Backpack!");
 //        Game.logDebug(Level.FINEST, "Sending IMC to Forestry add-backpack-items: {0}", message);
         FMLInterModComms.sendMessage("Forestry", "add-backpack-items", message);
     }
@@ -113,12 +113,12 @@ public class ForestryPlugin {
                     ItemStack output = new ItemStack(trackmanBackpackT2);
                     addBackpackTooltip(output);
                     RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
-                        "WXW",
-                        "WTW",
-                        "WWW",
-                        'X', Items.diamond,
-                        'W', silk,
-                        'T', trackmanBackpackT1});
+                            "WXW",
+                            "WTW",
+                            "WWW",
+                            'X', Items.diamond,
+                            'W', silk,
+                            'T', trackmanBackpackT1});
                 }
             }
 
@@ -150,12 +150,12 @@ public class ForestryPlugin {
                     ItemStack output = new ItemStack(icemanBackpackT2);
                     addBackpackTooltip(output);
                     RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
-                        "WXW",
-                        "WTW",
-                        "WWW",
-                        'X', Items.diamond,
-                        'W', silk,
-                        'T', icemanBackpackT1});
+                            "WXW",
+                            "WTW",
+                            "WWW",
+                            'X', Items.diamond,
+                            'W', silk,
+                            'T', icemanBackpackT1});
                 }
             }
 
@@ -209,12 +209,12 @@ public class ForestryPlugin {
                     ItemStack output = new ItemStack(apothecariesBackpackT2);
                     addBackpackTooltip(output);
                     RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
-                        "WXW",
-                        "WTW",
-                        "WWW",
-                        'X', Items.diamond,
-                        'W', silk,
-                        'T', apothecariesBackpackT1});
+                            "WXW",
+                            "WTW",
+                            "WWW",
+                            'X', Items.diamond,
+                            'W', silk,
+                            'T', apothecariesBackpackT1});
                 }
             }
         } catch (Throwable error) {
@@ -258,5 +258,4 @@ public class ForestryPlugin {
             Game.logErrorAPI("Forestry", error, RecipeManagers.class);
         }
     }
-
 }

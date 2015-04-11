@@ -20,11 +20,11 @@ public enum EnumPost {
 
     WOOD,
     STONE,
-    METAL,
+    METAL_UNPAINTED,
     EMBLEM,
     WOOD_PLATFORM,
     STONE_PLATFORM,
-    METAL_PLATFORM;
+    METAL_UNPAINTED_PLATFORM;
     public static final EnumPost[] VALUES = values();
     private IIcon texture;
 

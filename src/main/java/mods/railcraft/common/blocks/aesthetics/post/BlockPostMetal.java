@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import java.util.ArrayList;
 import java.util.List;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
@@ -111,9 +110,9 @@ public class BlockPostMetal extends BlockPostBase {
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         if (isPlatform)
-            list.add(EnumPost.METAL_PLATFORM.getItem());
+            list.add(EnumPost.METAL_UNPAINTED_PLATFORM.getItem());
         else
-            list.add(EnumPost.METAL.getItem());
+            list.add(EnumPost.METAL_UNPAINTED.getItem());
         return list;
     }
 
