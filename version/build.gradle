@@ -4,6 +4,7 @@ if(!rootProject.hasProperty('official')) {
 }
 rootProject.ext.mcversion = mcversion
 rootProject.ext.forgeversion = forgeversion
+rootProject.ext.forgebranch = forgebranch
 
 task echoVersion << {
 	printNextVersion()

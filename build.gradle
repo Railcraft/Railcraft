@@ -33,7 +33,7 @@ ext.dirLang = "./lang"
 ext.dirDest = './build/dist'
 
 minecraft {
-	version = project.mcversion + "-" + project.forgeversion
+	version = project.mcversion + "-" + project.forgeversion + "-" + project.forgebranch
 	runDir = "run"
 
 	replace '@VERSION@', project.version
