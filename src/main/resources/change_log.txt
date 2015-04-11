@@ -1,3 +1,17 @@
+9.5.0.9 (unstable):
+	NEW: IFluidContainerItems should be completely supported now.
+	CHANGE: Loaders "Has Work" Buildcraft trigger should better reflect the actual loader status. Issue #535
+	CHANGE: Signal Block Relay Boxes now require two Signal Circuits in the recipe instead of just one.
+	CHANGE: Signal Block Relay Boxes no longer function as a Controller. If you need that functionality, put a Controller Box next to it. May break some setups.
+	FIX: Geodes should only spawn under the ocean floor now, instead of half submerged. Issue #526 (contribution by liach)
+	FIX: Melt snow on top of Smokers. Issue #530
+	FIX: The Controller Box shouldn't respond to redstone signals that don't update it. Issue #539
+	FIX: Tanks should now properly sync with the client again. Issue #545
+	FIX: Don't register research if Thaumcraft crowbars aren't defined. Issue #546
+	FIX: Invalid Multi-blocks should reject items. Issue #557
+	FIX: Fixed NPE when breaking a cart on a Routing Detector. Issue #562
+	FIX: Engines should output to IEnergyReceivers in addition to IEnergyHandlers. Issue #564
+
 9.5.0.8:
 	FIX: Fix rendering issues with Switch Actuator devices.
 	FIX: Signal Blocks should no longer ignore hills and valleys within the block.
