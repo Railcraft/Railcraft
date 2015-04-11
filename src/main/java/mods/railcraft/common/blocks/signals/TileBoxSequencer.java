@@ -62,7 +62,7 @@ public class TileBoxSequencer extends TileBoxBase {
             return;
         if (neighbor instanceof TileBoxCapacitor)
             return;
-        boolean p = neighbor.isEmitingRedstone(side);
+        boolean p = neighbor.isEmittingRedstone(side);
         if (!neighborState && p) {
             neighborState = p;
             incrementSequencer(true, new HashSet<TileEntity>(), 0);
@@ -138,7 +138,7 @@ public class TileBoxSequencer extends TileBoxBase {
     }
 
     @Override
-    public boolean isEmitingRedstone(ForgeDirection side) {
+    public boolean isEmittingRedstone(ForgeDirection side) {
         return sideOutput == side;
     }
 

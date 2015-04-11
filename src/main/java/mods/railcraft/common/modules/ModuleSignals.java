@@ -193,6 +193,7 @@ public class ModuleSignals extends RailcraftModule {
             if (RailcraftConfig.isSubBlockEnabled(structure.getTag())) {
                 ItemStack stack = structure.getItem();
                 CraftingPlugin.addShapedRecipe(stack,
+                        " C",
                         "ICI",
                         "IRI",
                         'I', "ingotIron",

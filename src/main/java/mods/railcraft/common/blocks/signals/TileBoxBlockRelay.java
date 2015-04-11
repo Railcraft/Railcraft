@@ -28,7 +28,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
 
-public class TileBoxBlockRelay extends TileBoxActionManager implements IControllerTile, ISignalBlockTile, IAspectActionManager, IGuiReturnHandler, IAspectProvider {
+public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBlockTile, IAspectActionManager, IGuiReturnHandler, IAspectProvider {
 
     private boolean prevBlinkState;
     private final SimpleSignalController controller = new SimpleSignalController(getName(), this);
@@ -96,16 +96,16 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements IControll
         TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, MiscTools.getOppositeSide(side));
         if (tile instanceof TileBoxBase)
             return NO_POWER;
-        return isEmitingRedstone(ForgeDirection.getOrientation(side)) ? FULL_POWER : NO_POWER;
+        return isEmittingRedstone(ForgeDirection.getOrientation(side)) ? FULL_POWER : NO_POWER;
     }
 
     @Override
-    public boolean isEmitingRedstone(ForgeDirection side) {
+    public boolean isEmittingRedstone(ForgeDirection side) {
         return doesActionOnAspect(getBoxSignalAspect(side));
     }
 
     @Override
-    public boolean canEmitingRedstone(ForgeDirection side) {
+    public boolean canEmitRedstone(ForgeDirection side) {
         return true;
     }
 
@@ -144,10 +144,10 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements IControll
         updateNeighbors();
     }
 
-    @Override
-    public SimpleSignalController getController() {
-        return controller;
-    }
+//    @Override
+//    public SimpleSignalController getController() {
+//        return controller;
+//    }
 
     @Override
     public SignalBlock getSignalBlock() {

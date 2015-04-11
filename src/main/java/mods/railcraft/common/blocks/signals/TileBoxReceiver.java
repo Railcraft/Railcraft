@@ -129,12 +129,12 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     }
 
     @Override
-    public boolean isEmitingRedstone(ForgeDirection side) {
+    public boolean isEmittingRedstone(ForgeDirection side) {
         return doesActionOnAspect(receiver.getAspect());
     }
 
     @Override
-    public boolean canEmitingRedstone(ForgeDirection side) {
+    public boolean canEmitRedstone(ForgeDirection side) {
         return true;
     }
 

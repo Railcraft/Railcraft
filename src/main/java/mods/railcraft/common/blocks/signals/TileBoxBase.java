@@ -65,11 +65,11 @@ public abstract class TileBoxBase extends TileSignalFoundation {
         }
     }
 
-    public boolean isEmitingRedstone(ForgeDirection side) {
+    public boolean isEmittingRedstone(ForgeDirection side) {
         return false;
     }
 
-    public boolean canEmitingRedstone(ForgeDirection side) {
+    public boolean canEmitRedstone(ForgeDirection side) {
         return false;
     }
 

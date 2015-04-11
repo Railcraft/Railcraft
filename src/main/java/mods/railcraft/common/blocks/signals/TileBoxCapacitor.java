@@ -106,7 +106,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
                     TileEntity tile = tileCache.getTileOnSide(forgeSide);
                     if (tile instanceof TileBoxBase) {
                         TileBoxBase box = (TileBoxBase) tile;
-                        if (box.isEmitingRedstone(forgeSide.getOpposite())) {
+                        if (box.isEmittingRedstone(forgeSide.getOpposite())) {
                             hasInput = true;
                             tmpaspect = SignalAspect.mostRestrictive(tmpaspect, box.getBoxSignalAspect(forgeSide.getOpposite()));
                         }
@@ -142,7 +142,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
 
     @Override
     public void onNeighborStateChange(TileBoxBase neighbor, ForgeDirection side) {
-        if (neighbor.isEmitingRedstone(side)) {
+        if (neighbor.isEmittingRedstone(side)) {
             ticksPowered = ticksToPower;
             if (stateModeController.getButtonState().equals(EnumStateMode.IMMEDIATE))
                 aspect = neighbor.getBoxSignalAspect(side);
