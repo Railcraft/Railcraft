@@ -86,10 +86,10 @@ public class RollingMachineCraftingManager implements IRollingMachineCraftingMan
     }
 
     @Override
-    public void addShapelessRecipe(ItemStack output, Object... compenents) {
+    public void addShapelessRecipe(ItemStack output, Object... components) {
         List<ItemStack> ingredients = new ArrayList<ItemStack>();
-        for(int j = 0; j < compenents.length; j++) {
-            Object obj = compenents[j];
+        for(int j = 0; j < components.length; j++) {
+            Object obj = components[j];
             if(obj instanceof ItemStack) {
                 ingredients.add(((ItemStack)obj).copy());
                 continue;

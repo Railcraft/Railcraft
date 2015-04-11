@@ -168,16 +168,20 @@ public class ModuleStructures extends RailcraftModule {
                     'I', EnumPost.STONE.getItem());
 
             ItemStack stack = EnumPost.METAL.getItem(16);
-            RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+
+            IRecipe recipe = new ShapedOreRecipe(stack,
                     "III",
                     " I ",
                     "III",
                     'I', "ingotIron");
-            RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+            RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+
+            recipe = new ShapedOreRecipe(stack,
                     "I I",
                     "III",
                     "I I",
                     'I', "ingotIron");
+            RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
 
             CraftingPlugin.addShapedRecipe(EnumPost.METAL_PLATFORM.getItem(4),
                     " T ",
@@ -186,12 +190,13 @@ public class ModuleStructures extends RailcraftModule {
                     'I', EnumPost.METAL.getItem());
 
             stack = EnumPost.METAL.getItem(32);
-            IRecipe recipe = new ShapedOreRecipe(stack,
+            recipe = new ShapedOreRecipe(stack,
                     "III",
                     " I ",
                     "III",
                     'I', "ingotSteel");
             RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+
             recipe = new ShapedOreRecipe(stack,
                     "I I",
                     "III",
