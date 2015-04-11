@@ -84,7 +84,6 @@ public class GeodePopulator {
         int trimmedZ = z & 15;
 
         int y = 0;
-        for (;; y++) {
             Block block = WorldPlugin.getBlock(world, trimmedX, y, trimmedZ);
             if(block == Blocks.water) {
                 break;
