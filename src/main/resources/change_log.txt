@@ -1,4 +1,7 @@
-9.5.0.9 (unstable):
+9.5.0.10 (unstable):
+	FIX: Fix Geode Generator. Issue #576
+
+9.5.0.9 (broken):
 	NEW: IFluidContainerItems should be completely supported now.
 	CHANGE: Loaders "Has Work" Buildcraft trigger should better reflect the actual loader status. Issue #535
 	CHANGE: Signal Block Relay Boxes now require two Signal Circuits in the recipe instead of just one.
