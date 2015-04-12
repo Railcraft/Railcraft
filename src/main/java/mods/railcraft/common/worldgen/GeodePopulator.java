@@ -9,8 +9,10 @@
 package mods.railcraft.common.worldgen;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 import java.util.Locale;
 import java.util.Random;
+
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -28,24 +30,23 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class GeodePopulator {
-
     public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RAILCRAFT_GEODE", new Class[0], new Object[0]);
-    public static final int MIN_DEPTH = 15;
+    public static final int MIN_DEPTH = 16;
+    public static final int MIN_FLOOR = 24;
     private static GeodePopulator instance;
     private final WorldGenerator geode = new WorldGenGeode(BlockCube.getBlock(), EnumCube.ABYSSAL_STONE.ordinal());
+
+    private GeodePopulator() {
+    }
 
     public static GeodePopulator instance() {
         if (instance == null) {
             instance = new GeodePopulator();
         }
         return instance;
-    }
-
-    private GeodePopulator() {
     }
 
     @SubscribeEvent
@@ -60,9 +61,11 @@ public class GeodePopulator {
         int x = chunkX * 16 + 8;
         int z = chunkZ * 16 + 8;
         if (canGen(world, rand, x, z)) {
-            int maxy = getWaterDepth(world, x, z);
-            int y = 13 + rand.nextInt(maxy - 22);
-            geode.generate(world, rand, x, y, z);
+            OceanFloor floor = scanOceanFloor(world, x, z);
+            if (floor.depth >= MIN_DEPTH && floor.floorY >= MIN_FLOOR) {
+                int y = 12 + rand.nextInt(floor.floorY - 12);
+                geode.generate(world, rand, x, y, z);
+            }
         }
     }
 
@@ -74,26 +77,10 @@ public class GeodePopulator {
         if (biome.biomeName == null || biome.biomeName.toLowerCase(Locale.ENGLISH).contains("river")) {
             return false;
         }
-        return rand.nextDouble() <= 0.3 && isWaterDeep(world, x, z, MIN_DEPTH);
+        return rand.nextDouble() <= 0.3;
     }
 
-    private int getWaterDepth(World world, int x, int z) {
-        Chunk chunk = world.getChunkFromBlockCoords(x, z);
-
-        int trimmedX = x & 15;
-        int trimmedZ = z & 15;
-
-        int y = 0;
-        for (;; y++) {
-            Block block = WorldPlugin.getBlock(world, trimmedX, y, trimmedZ);
-            if(block == Blocks.water) {
-                break;
-            }
-        }
-        return y;
-    }
-
-    private boolean isWaterDeep(World world, int x, int z, int minDepth) {
+    private OceanFloor scanOceanFloor(World world, int x, int z) {
         Chunk chunk = world.getChunkFromBlockCoords(x, z);
         int y = chunk.getTopFilledSegment() + 15;
 
@@ -109,12 +96,18 @@ public class GeodePopulator {
             if (block.getMaterial() == Material.water) {
                 depth++;
             }
-            if (depth >= minDepth) {
-                return true;
-            }
         }
 
-        return false;
+        return new OceanFloor(y, depth);
     }
 
+    private class OceanFloor {
+        public final int floorY;
+        public final int depth;
+
+        public OceanFloor(int floorY, int depth){
+            this.floorY = floorY;
+            this.depth = depth;
+        }
+    }
 }
