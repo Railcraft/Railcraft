@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -112,8 +113,10 @@ public class WorldGenGeode extends WorldGenerator {
         if (existing.isReplaceableOreGen(world, x, y, z, Blocks.dirt))
             return true;
         if (existing.isReplaceableOreGen(world, x, y, z, Blocks.gravel))
-            return !(WorldPlugin.getBlock(world, x, y + 1, z) == Blocks.water);
+            return true;
         if (existing.isReplaceableOreGen(world, x, y, z, Blocks.sand))
+            return true;
+        if (existing.getMaterial() == Material.water)
             return true;
         if (ores.contains(existing))
             return true;

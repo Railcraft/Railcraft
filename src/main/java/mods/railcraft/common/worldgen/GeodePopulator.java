@@ -90,12 +90,12 @@ public class GeodePopulator {
         int depth = 0;
         for (; y > 0; --y) {
             Block block = chunk.getBlock(trimmedX, y, trimmedZ);
-            if (block == null || block == Blocks.air) {
+            if (block == null || block == Blocks.air)
                 continue;
-            }
-            if (block.getMaterial() == Material.water) {
+            else if (block.getMaterial() == Material.water)
                 depth++;
-            }
+            else
+                break;
         }
 
         return new OceanFloor(y, depth);
@@ -105,7 +105,7 @@ public class GeodePopulator {
         public final int floorY;
         public final int depth;
 
-        public OceanFloor(int floorY, int depth){
+        public OceanFloor(int floorY, int depth) {
             this.floorY = floorY;
             this.depth = depth;
         }
