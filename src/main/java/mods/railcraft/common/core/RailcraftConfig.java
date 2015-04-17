@@ -8,16 +8,10 @@
  */
 package mods.railcraft.common.core;
 
-import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternStone;
-import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternMetal;
-import mods.railcraft.common.util.collections.BlockItemListParser;
-import mods.railcraft.common.util.collections.BlockKey;
-import mods.railcraft.common.util.collections.ItemKey;
-import java.io.File;
-import java.util.*;
-import org.apache.logging.log4j.Level;
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternMetal;
+import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternStone;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.wall.EnumWallAlpha;
@@ -31,21 +25,31 @@ import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EntityTunnelBore;
+import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
-import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.util.collections.BlockItemListParser;
+import mods.railcraft.common.util.collections.BlockKey;
+import mods.railcraft.common.util.collections.ItemKey;
 import mods.railcraft.common.util.collections.ItemMap;
-import mods.railcraft.common.util.misc.*;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.steam.Steam;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import org.apache.logging.log4j.Level;
+
+import java.io.File;
+import java.util.*;
 
 public class RailcraftConfig {
-
+    public static final ItemMap<Float> anchorFuelWorld = new ItemMap<Float>();
+    public static final ItemMap<Float> anchorFuelPersonal = new ItemMap<Float>();
+    public static final ItemMap<Float> anchorFuelPassive = new ItemMap<Float>();
     private static final String COMMENT_PREFIX = "\n";
     private static final String COMMENT_SUFFIX = "\n";
-//    private static final String COMMENT_PREFIX = "\n\n   # ";
+    //    private static final String COMMENT_PREFIX = "\n\n   # ";
     private static final String CAT_ANCHORS = "anchors";
     private static final String CAT_AURAS = "auras";
     private static final String CAT_ENCHANTMENTS = "enchantments";
@@ -71,10 +75,9 @@ public class RailcraftConfig {
     private static final Map<String, Boolean> fluids = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> recipes = new HashMap<String, Boolean>();
     private static final Map<String, Integer> lootChances = new HashMap<String, Integer>();
-    public static final ItemMap<Float> anchorFuelWorld = new ItemMap<Float>();
-    public static final ItemMap<Float> anchorFuelPersonal = new ItemMap<Float>();
     private static String anchorFuelWorldString;
     private static String anchorFuelPersonalString;
+    private static String anchorFuelPassiveString;
     private static String boreMineableBlocksString;
     private static float maxHighSpeed = 1.1f;
     private static boolean boreDestroysBlocks;
@@ -86,6 +89,7 @@ public class RailcraftConfig {
     private static boolean deleteAnchors;
     private static boolean anchorCrafting;
     private static boolean anchorCraftingPersonal;
+    private static boolean anchorCraftingPassive;
     private static boolean anchorsCanInteractWithPipes;
     private static boolean printAnchors;
     private static boolean minecartsBreakOnDrop;
@@ -176,6 +180,7 @@ public class RailcraftConfig {
 
         anchorFuelWorld.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelWorldString, "Adding World Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         anchorFuelPersonal.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelPersonalString, "Adding Personal Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
+        anchorFuelPassive.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelPassiveString, "Adding Passive Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
         EntityTunnelBore.mineableBlocks.addAll(BlockItemListParser.<BlockKey>parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser.ParseType.BLOCK));
     }
 
@@ -190,6 +195,7 @@ public class RailcraftConfig {
         deleteAnchors = get(CAT_ANCHORS, "delete.anchors", false, true, "change to '{t}=true' to delete every World Anchor or Anchor Cart in the world.\nValue resets to false after each session.\nTo disable Anchors completely, disable the ChunkLoading Module from 'modules.cfg'");
         anchorCrafting = get(CAT_ANCHORS, "craftable", true, "change to {t}=false to disable World Anchor crafting, they will still be available via Creative");
         anchorCraftingPersonal = get(CAT_ANCHORS, "personal.craftable", true, "change to {t}=false to disable Personal Anchor crafting, they will still be available via Creative");
+        anchorCraftingPassive = get(CAT_ANCHORS, "passive.craftable", true, "change to {t}=false to disable Passive Anchor crafting, they will still be available via Creative");
         printAnchors = get(CAT_ANCHORS, "print.locations", false, "change to {t}=true to print Anchor locations to the log on startup");
         printAnchorDebug = get(CAT_ANCHORS, "print.debug", false, "change to '{t}=true' to log debug info for Anchors");
 
@@ -202,12 +208,19 @@ public class RailcraftConfig {
 
         fuelProp = get(CAT_ANCHORS, "personal.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a Personal Anchor or Personal Anchor Cart\n"
                 + "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n"
-                + "if the list is empty, World Anchors will not require fuel, default = 12\n"
+                + "if the list is empty, Personal Anchors will not require fuel, default = 12\n"
                 + "Entry Format: <modid>:<itemname>#<metadata>=<value>\n"
                 + "Example: personal.fuel= minecraft:ender_pearl=12, minecraft:coal#0=4");
         anchorFuelPersonalString = fuelProp.getString();
 
-        anchorsCanInteractWithPipes = get(CAT_ANCHORS, "interact.with.pipes", true, "change to {t}=false to prevent pipes, tubes, or various other things from interacting with Anchors");        
+        fuelProp = get(CAT_ANCHORS, "passive.fuel", "minecraft:ender_pearl=12", "the number of hours that an item will power a Passive Anchor\n"
+                + "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n"
+                + "if the list is empty, Passive Anchors will not require fuel, default = 12\n"
+                + "Entry Format: <modid>:<itemname>#<metadata>=<value>\n"
+                + "Example: personal.fuel= minecraft:ender_pearl=12, minecraft:coal#0=4");
+        anchorFuelPassiveString = fuelProp.getString();
+
+        anchorsCanInteractWithPipes = get(CAT_ANCHORS, "interact.with.pipes", true, "change to {t}=false to prevent pipes, tubes, or various other things from interacting with Anchors");
     }
 
     private static void loadBlockTweaks() {
@@ -227,9 +240,9 @@ public class RailcraftConfig {
 
         fuelPerSteamMultiplier = get(CAT_TWEAKS + ".steam", "fuelPerSteamMultiplier", 0.2F, 1.0F, 6.0F, "adjust the amount of fuel used to create Steam, min=0.2, default=1.0, max=6.0");
     }
-    
-    private static void loadItemTweaks(){
-        trackingAuraEnabled =get(CAT_TWEAKS_ITEMS + ".goggles", "trackingAura", true, "Change to '{t}=false' to disable the Tracking Aura");
+
+    private static void loadItemTweaks() {
+        trackingAuraEnabled = get(CAT_TWEAKS_ITEMS + ".goggles", "trackingAura", true, "Change to '{t}=false' to disable the Tracking Aura");
     }
 
     private static void loadTrackTweaks() {
@@ -246,9 +259,9 @@ public class RailcraftConfig {
         registerCollisionHandler = get(CAT_TWEAKS_CARTS + ".general", "register.collision.handler", true, "change to '{t}=false' to use a minecart collision handler from a different mod or vanilla behavior");
         cartsAreSolid = get(CAT_TWEAKS_CARTS + ".general", "solid.carts", true,
                 "change to '{t}=false' to return minecarts to vanilla player vs cart collision behavior\n"
-                + "in vanilla minecarts are ghost like can be walked through\n"
-                + "but making carts solid also makes them hard to push by hand\n"
-                + "this setting is ignored if aren't using the Railcraft Collision Handler");
+                        + "in vanilla minecarts are ghost like can be walked through\n"
+                        + "but making carts solid also makes them hard to push by hand\n"
+                        + "this setting is ignored if aren't using the Railcraft Collision Handler");
 
         minecartStackSize = get(CAT_TWEAKS_CARTS + ".general", "maxStackSize", 1, 3, 64, "change the value to your desired minecart stack size, vanilla=1, default=3, max=64");
 
@@ -270,8 +283,8 @@ public class RailcraftConfig {
         locomotiveDamageMobs = get(CAT_TWEAKS_CARTS + ".locomotive", "damageMobs", true, "change to '{t}=false' to disable Locomotive damage on mobs, they will still knockback mobs");
         locomotiveHorsepower = get(CAT_TWEAKS_CARTS + ".locomotive", "horsepower", 15, 15, 45,
                 "controls how much power locomotives have and how many carts they can pull\n"
-                + "be warned, longer trains have a greater chance for glitches\n"
-                + "as such it HIGHLY recommended you do not change this");
+                        + "be warned, longer trains have a greater chance for glitches\n"
+                        + "as such it HIGHLY recommended you do not change this");
 
         boolean minecartTankCustomize = get(CAT_TWEAKS_CARTS + ".tank", "useCustomValues", false, "change to '{t}=true' to adjust the Tank Cart's capacity and fill rate");
 
@@ -281,10 +294,9 @@ public class RailcraftConfig {
 
         int fillrate = get(CAT_TWEAKS_CARTS + ".tank", "fillrate", 4, 32, 64,
                 "change the value to your desired Tank Cart fill rate in milli-buckets per tick, min=4, default=32, max=64\n"
-                + "there are 1000 milli-buckets in a bucket, ignored if 'tweaks.minecarts.tank.useCustomValues=false'");
+                        + "there are 1000 milli-buckets in a bucket, ignored if 'tweaks.minecarts.tank.useCustomValues=false'");
         if (minecartTankCustomize)
             minecartTankFillRate = fillrate;
-
     }
 
     private static void loadRecipeOption() {
@@ -322,8 +334,8 @@ public class RailcraftConfig {
     private static void loadWorldGen() {
         configMain.addCustomCategoryComment(CAT_WORLD_GEN + ".generate",
                 "You can control which Ores/Features generate in the world here.\n"
-                + "If wish to disable world gen entirely it is recommended\n"
-                + "that you disable the World Module in 'modules.cfg' instead.");
+                        + "If wish to disable world gen entirely it is recommended\n"
+                        + "that you disable the World Module in 'modules.cfg' instead.");
 
         worldGen.put("sulfur", get(configMain, CAT_WORLD_GEN + ".generate", "sulfur", true));
         worldGen.put("saltpeter", get(configMain, CAT_WORLD_GEN + ".generate", "saltpeter", true));
@@ -345,8 +357,8 @@ public class RailcraftConfig {
     private static void loadFluids() {
         configMain.addCustomCategoryComment(CAT_FLUIDS,
                 "You can control whether Railcraft defines specific Fluids here.\n"
-                + "However, be aware that if you disable a Fluid that is not defined by another mod,"
-                + "you may suffer errors and unexpected behaivor.");
+                        + "However, be aware that if you disable a Fluid that is not defined by another mod,"
+                        + "you may suffer errors and unexpected behaivor.");
 
         fluids.put("steam", get(configMain, CAT_FLUIDS, "steam", true));
         fluids.put("creosote", get(configMain, CAT_FLUIDS, "creosote", true));
@@ -422,8 +434,8 @@ public class RailcraftConfig {
     private static void loadBlocks() {
         configBlock.addCustomCategoryComment(CAT_BLOCKS,
                 "Here you can disable entire blocks.\n"
-                + "Changing these will have adverse effects on existing worlds.\n"
-                + "For the list of which sub-blocks are on each ID see the sub-block section below.");
+                        + "Changing these will have adverse effects on existing worlds.\n"
+                        + "For the list of which sub-blocks are on each ID see the sub-block section below.");
 
         loadBlockProperty("anvil");
 
@@ -749,6 +761,7 @@ public class RailcraftConfig {
     public static boolean printLinkingDebug() {
         return printLinkingDebug;
     }
+
     public static boolean printAnchorDebug() {
         return printAnchorDebug;
     }
@@ -767,6 +780,10 @@ public class RailcraftConfig {
 
     public static boolean canCraftPersonalAnchors() {
         return anchorCraftingPersonal;
+    }
+
+    public static boolean canCraftPassiveAnchors() {
+        return anchorCraftingPassive;
     }
 
     public static boolean printAnchorLocations() {
@@ -832,8 +849,8 @@ public class RailcraftConfig {
     public static boolean allowTankStacking() {
         return allowTankStacking;
     }
-    
-    public static boolean isTrackingAuraEnabled(){
+
+    public static boolean isTrackingAuraEnabled() {
         return trackingAuraEnabled;
     }
 
@@ -1068,5 +1085,4 @@ public class RailcraftConfig {
         Property prop = configMain.get(CAT_CARTS, tag, true);
         carts.put(tag, prop.getBoolean(true));
     }
-
 }

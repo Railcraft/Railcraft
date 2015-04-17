@@ -37,12 +37,12 @@ public class MachineTileRegistery {
         GameRegistry.registerTileEntity(TileCokeOven.class, "RCCokeOvenTile");
         GameRegistry.registerTileEntity(TileRockCrusher.class, "RCRockCrusherTile");
         GameRegistry.registerTileEntity(TileRollingMachine.class, "RCRollingMachineTile");
-        GameRegistry.registerTileEntity(TileEngravingBench.class, "RCEngravingBenchTile");
         GameRegistry.registerTileEntity(TileTankWater.class, "RCWaterTankTile");
         GameRegistry.registerTileEntity(TileSteamOven.class, "RCSteamOvenTile");
         GameRegistry.registerTileEntity(TileSmoker.class, "RCSmokerTile");
         GameRegistry.registerTileEntity(TileSteamTrapManual.class, "RCSteamTrapManualTile");
         GameRegistry.registerTileEntity(TileSteamTrapAuto.class, "RCSteamTrapAutoTile");
+        GameRegistry.registerTileEntity(TileAnchorPassive.class, "RCPassiveAnchorTile");
 
         // Beta
         GameRegistry.registerTileEntity(TileSentinel.class, "RCAnchorSentinelTile");
@@ -85,6 +85,7 @@ public class MachineTileRegistery {
         GameRegistry.registerTileEntity(TileAdminSteamProducer.class, "RCAdminSteamProducerTile");
         GameRegistry.registerTileEntity(TileFluxTransformer.class, "RCFluxTransformerTile");
         GameRegistry.registerTileEntity(TileForceTrackEmitter.class, "RCForceTrackEmitterTile");
+        GameRegistry.registerTileEntity(TileEngravingBench.class, "RCEngravingBenchTile");
 
     }
 

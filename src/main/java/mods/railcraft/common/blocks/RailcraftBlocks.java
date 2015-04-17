@@ -85,7 +85,7 @@ public class RailcraftBlocks {
         return blockRailElevator;
     }
 
-    public static void registerBlockMachineAlpha() {
+    public static Block registerBlockMachineAlpha() {
         if (blockMachineAlpha == null && RailcraftConfig.isBlockEnabled("machine.alpha")) {
             int[] lightOpacity = new int[16];
             Arrays.fill(lightOpacity, 255);
@@ -110,13 +110,14 @@ public class RailcraftBlocks {
                 }
             }
         }
+        return blockMachineAlpha;
     }
 
     public static Block getBlockMachineAlpha() {
         return blockMachineAlpha;
     }
 
-    public static void registerBlockMachineBeta() {
+    public static Block registerBlockMachineBeta() {
         if (blockMachineBeta == null && RailcraftConfig.isBlockEnabled("machine.beta")) {
 
             int renderId = Railcraft.getProxy().getRenderId();
@@ -151,14 +152,14 @@ public class RailcraftBlocks {
                 }
             }
         }
-
+        return blockMachineBeta;
     }
 
     public static Block getBlockMachineBeta() {
         return blockMachineBeta;
     }
 
-    public static void registerBlockMachineGamma() {
+    public static Block registerBlockMachineGamma() {
         if (blockMachineGamma == null && RailcraftConfig.isBlockEnabled("machine.gamma")) {
 
             int[] lightOpacity = new int[16];
@@ -177,13 +178,14 @@ public class RailcraftBlocks {
                 }
             }
         }
+        return blockMachineGamma;
     }
 
     public static Block getBlockMachineGamma() {
         return blockMachineGamma;
     }
 
-    public static void registerBlockMachineDelta() {
+    public static Block registerBlockMachineDelta() {
         if (blockMachineDelta == null && RailcraftConfig.isBlockEnabled("machine.delta")) {
             int renderId = Railcraft.getProxy().getRenderId();
             int[] lightOpacity = new int[16];
@@ -202,13 +204,14 @@ public class RailcraftBlocks {
                 }
             }
         }
+        return blockMachineDelta;
     }
 
     public static Block getBlockMachineDelta() {
         return blockMachineDelta;
     }
 
-    public static void registerBlockMachineEpsilon() {
+    public static Block registerBlockMachineEpsilon() {
         if (blockMachineEpsilon == null && RailcraftConfig.isBlockEnabled("machine.epsilon")) {
             int[] lightOpacity = new int[16];
             Arrays.fill(lightOpacity, 255);
@@ -223,6 +226,7 @@ public class RailcraftBlocks {
                 }
             }
         }
+        return blockMachineEpsilon;
     }
 
     public static Block getBlockMachineEpsilon() {

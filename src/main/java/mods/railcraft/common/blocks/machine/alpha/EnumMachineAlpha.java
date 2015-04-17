@@ -48,7 +48,7 @@ public enum EnumMachineAlpha implements IEnumMachine {
     STEAM_TRAP_AUTO(Module.EXTRAS, "steam.trap.auto", TileSteamTrapAuto.class, 4, 1, 0, 2, 1, 1, 1, 1, 0, 1, 2, 3),
     FEED_STATION(Module.AUTOMATION, "feed.station", TileFeedStation.class, 2, 1, 0, 0, 1, 1, 1, 1),
     BLAST_FURNACE(Module.FACTORY, "blast.furnace", TileBlastFurnace.class, 3, 1, 0, 0, 0, 0, 1, 0, 1, 2),
-    ENGRAVING_BENCH(Module.EMBLEM, "engraving.bench", TileEngravingBench.class, 4, 1, 0, 1, 3, 3, 3, 3, 2),
+    PASSIVE_ANCHOR(Module.CHUNK_LOADING, "anchor.passive",TileAnchorPassive.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
     TANK_WATER(Module.TRANSPORT, "tank.water", TileTankWater.class, 2, 1, 0, 0, 1, 1, 1, 1),
     ROCK_CRUSHER(Module.FACTORY, "rock.crusher", TileRockCrusher.class, 4, 3, 3, 11, 3, 3, 7, 3, 7, 0, 1, 2, 4, 6, 8, 9, 10);
     private final Module module;
@@ -66,12 +66,12 @@ public enum EnumMachineAlpha implements IEnumMachine {
         creativeList.add(STEAM_OVEN);
         creativeList.add(TANK_WATER);
         creativeList.add(ROLLING_MACHINE);
-        creativeList.add(ENGRAVING_BENCH);
         creativeList.add(ROCK_CRUSHER);
         creativeList.add(FEED_STATION);
         creativeList.add(TRADE_STATION);
         creativeList.add(WORLD_ANCHOR);
         creativeList.add(PERSONAL_ANCHOR);
+        creativeList.add(PASSIVE_ANCHOR);
         creativeList.add(ADMIN_ANCHOR);
         creativeList.add(TURBINE);
         creativeList.add(SMOKER);

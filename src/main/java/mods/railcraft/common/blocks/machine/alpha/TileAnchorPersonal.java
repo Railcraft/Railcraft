@@ -49,7 +49,6 @@ public class TileAnchorPersonal extends TileAnchorWorld {
 
     @Override
     public void updateEntity() {
-        super.updateEntity();
         if (ticket != null) {
             if (PlayerPlugin.isPlayerConnected(getOwner()))
                 ticksSincePlayerLogged = 0;

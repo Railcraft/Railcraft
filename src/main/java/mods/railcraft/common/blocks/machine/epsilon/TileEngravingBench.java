@@ -6,7 +6,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.machine.alpha;
+package mods.railcraft.common.blocks.machine.epsilon;
 
 import buildcraft.api.statements.IActionExternal;
 import java.io.DataInputStream;
@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.*;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -68,7 +69,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
 
     @Override
     public IEnumMachine getMachineType() {
-        return EnumMachineAlpha.ENGRAVING_BENCH;
+        return EnumMachineEpsilon.ENGRAVING_BENCH;
     }
 
     @Override
