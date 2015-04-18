@@ -61,17 +61,33 @@ public abstract class SignalBlock extends AbstractPair {
     }
 
     @Override
-    public boolean isValidPair(TileEntity tile) {
+    @Deprecated
+    public boolean isValidPair(TileEntity otherTile) {
         boolean isValid = false;
-        if (tile instanceof ISignalBlockTile) {
-            SignalBlock block = ((ISignalBlockTile) tile).getSignalBlock();
+        if (otherTile instanceof ISignalBlockTile) {
+            SignalBlock block = ((ISignalBlockTile) otherTile).getSignalBlock();
             isValid = block.isPairedWith(getCoords());
         }
         if (!isValid)
-            if (tile != null)
-                printDebug("Signal Block dropped because pair was no longer paired or was not a valid Signal [{0}, {1}, {2}]", tile.xCoord, tile.yCoord, tile.zCoord);
+            if (otherTile != null)
+                printDebug("Signal Block dropped because pair was no longer paired or was not a valid Signal. source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, otherTile.xCoord, otherTile.yCoord, otherTile.zCoord, otherTile.getClass());
             else
-                printDebug("Signal Block dropped because pair was no longer paired or was not a valid Signal [null]");
+                printDebug("Signal Block dropped because pair was no longer paired or was not a valid Signal. source:[{0}, {1}, {2}] target:[tile was null]", tile.xCoord, tile.yCoord, tile.zCoord);
+        return isValid;
+    }
+
+    @Override
+    public boolean isValidPair(WorldCoordinate otherCoord, TileEntity otherTile) {
+        boolean isValid = false;
+        if (otherTile instanceof ISignalBlockTile) {
+            SignalBlock block = ((ISignalBlockTile) otherTile).getSignalBlock();
+            isValid = block.isPairedWith(getCoords());
+        }
+        if (!isValid)
+            if (otherTile != null)
+                printDebug("Signal Block dropped because pair was no longer paired or was not a valid Signal. source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, otherTile.xCoord, otherTile.yCoord, otherTile.zCoord, otherTile.getClass());
+            else
+                printDebug("Signal Block dropped because pair was no longer paired or was not a valid Signal. source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.xCoord, tile.yCoord, tile.zCoord, otherCoord.x, otherCoord.y, otherCoord.z);
         return isValid;
     }
 
@@ -182,20 +198,22 @@ public abstract class SignalBlock extends AbstractPair {
         return trackCache.get(otherCoord);
     }
 
-    private boolean isSignalBlockValid(WorldCoordinate other) {
+    private TrackValidationStatus isSignalBlockValid(WorldCoordinate other) {
         if (other == null)
-            return true;
+            return new TrackValidationStatus(true, "UNVERIFIABLE_COORD_NULL");
         if (getSignalAt(other) == null)
-            return true;
+            return new TrackValidationStatus(true, "UNVERIFIABLE_TILE_NULL");
         WorldCoordinate myTrack = getTrackLocation();
         WorldCoordinate otherTrack = getOtherTrackLocation(other);
-        if (myTrack == null || otherTrack == null)
-            return false;
+        if (myTrack == null)
+            return new TrackValidationStatus(false, "INVALID_MY_TRACK_NULL");
+        if (otherTrack == null)
+            return new TrackValidationStatus(false, "INVALID_OTHER_TRACK_NULL");
         TrackTools.TrackScan scan = TrackTools.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
         trackScans.put(otherTrack, scan);
-        if (!scan.areConnected)
-            return false;
-        return true;
+        if (scan.result != TrackTools.TrackScan.Result.VALID)
+            return new TrackValidationStatus(false, "INVALID_SCAN_FAIL: " + scan.result.name());
+        return new TrackValidationStatus(true, "VALID");
     }
 
     @Override
@@ -212,12 +230,13 @@ public abstract class SignalBlock extends AbstractPair {
                     break;
                 case VALID:
                     for (WorldCoordinate otherCoord : waitingForRetest) {
-                        if (!isSignalBlockValid(otherCoord))
-                            clearSignalBlockPairing(otherCoord, "Signal Block dropped because track between Signals was invalid. [{0}, {1}, {2}]", tile.xCoord, tile.yCoord, tile.zCoord);
+                        TrackValidationStatus status = isSignalBlockValid(otherCoord);
+                        if (!status.isValid)
+                            clearSignalBlockPairing(otherCoord, "Signal Block dropped because track between Signals was invalid. source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] reason:{6}", tile.xCoord, tile.yCoord, tile.zCoord, otherCoord.x, otherCoord.y, otherCoord.z, status.message);
                     }
                     waitingForRetest.clear();
                     for (WorldCoordinate otherCoord : pairings) {
-                        if (!isSignalBlockValid(otherCoord))
+                        if (!isSignalBlockValid(otherCoord).isValid)
                             waitingForRetest.add(otherCoord);
                     }
                     break;
@@ -302,5 +321,15 @@ public abstract class SignalBlock extends AbstractPair {
     public static enum Status {
 
         VALID, INVALID, UNKNOWN
+    }
+
+    private static class TrackValidationStatus {
+        public final boolean isValid;
+        public final String message;
+
+        public TrackValidationStatus(boolean isValid, String message) {
+            this.isValid = isValid;
+            this.message = message;
+        }
     }
 }

@@ -32,6 +32,8 @@ public class TrackTools {
     public static final int TRAIN_LOCKDOWN_DELAY = 200;
 
     public static boolean isRailBlockAt(IBlockAccess world, int x, int y, int z) {
+        if (y < 0 || y > world.getHeight())
+            return false;
         return isRailBlock(WorldPlugin.getBlock(world, x, y, z));
     }
 
@@ -137,7 +139,7 @@ public class TrackTools {
      * @return true if they are connected
      */
     public static boolean areTracksConnectedAlongAxis(IBlockAccess world, int x1, int y1, int z1, int x2, int y2, int z2) {
-        return scanStraightTrackSection(world, x1, y1, z1, x2, y2, z2).areConnected;
+        return scanStraightTrackSection(world, x1, y1, z1, x2, y2, z2).result == TrackScan.Result.VALID;
     }
 
     /**
@@ -158,10 +160,8 @@ public class TrackTools {
     public static TrackScan scanStraightTrackSection(IBlockAccess world, int x1, int y1, int z1, int x2, int y2, int z2) {
         int minY = Math.min(y1, y2);
         int maxY = Math.max(y1, y2);
-        if (y1 < 0 || y2 < 0)
-            return new TrackScan(false, minY, maxY);
         if (x1 != x2 && z1 != z2)
-            return new TrackScan(false, minY, maxY);
+            return new TrackScan(TrackScan.Result.NOT_ALIGNED, minY, maxY);
         if (x1 != x2) {
             int min;
             int max;
@@ -187,7 +187,7 @@ public class TrackTools {
                     if (yy > maxY)
                         maxY = yy;
                 } else
-                    return new TrackScan(false, minY, maxY);
+                    return new TrackScan(TrackScan.Result.PATH_NOT_FOUND, minY, maxY);
             }
         } else if (z1 != z2) {
             int min;
@@ -214,20 +214,28 @@ public class TrackTools {
                     if (yy > maxY)
                         maxY = yy;
                 } else
-                    return new TrackScan(false, minY, maxY);
+                    return new TrackScan(TrackScan.Result.PATH_NOT_FOUND, minY, maxY);
             }
         }
-        return new TrackScan(true, minY, maxY);
+        return new TrackScan(TrackScan.Result.VALID, minY, maxY);
     }
 
     public static class TrackScan {
+        public final Result result;
         public final boolean areConnected;
         public final int minY, maxY;
 
-        public TrackScan(boolean areConnected, int minY, int maxY) {
-            this.areConnected = areConnected;
+        public TrackScan(Result result, int minY, int maxY) {
+            this.result = result;
+            this.areConnected = result == Result.VALID;
             this.minY = minY;
             this.maxY = maxY;
+        }
+
+        public enum Result {
+            VALID,
+            NOT_ALIGNED,
+            PATH_NOT_FOUND;
         }
     }
 }
