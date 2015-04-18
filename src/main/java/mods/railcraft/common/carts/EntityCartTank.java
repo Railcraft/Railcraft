@@ -172,8 +172,9 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
 
         FluidStack fluidStack = tank.getFluid();
         if (fluidStack != null) {
-            if (fluidStack.getFluidID() != getFluidId())
-                setFluidId(fluidStack.getFluidID());
+            int fluidId = FluidHelper.getFluidId(fluidStack);
+            if (fluidId != getFluidId())
+                setFluidId(fluidId);
             if (fluidStack.amount != getFluidQty())
                 setFluidQty(fluidStack.amount);
             if (tank.getColor() != getFluidColor())

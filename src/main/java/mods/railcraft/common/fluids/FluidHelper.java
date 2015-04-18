@@ -300,4 +300,12 @@ public final class FluidHelper {
             return FluidRegistry.LAVA;
         return null;
     }
+
+    public static int getFluidId(FluidStack stack) {
+        if (stack == null)
+            return -1;
+        if (stack.getFluid() == null)
+            return -1;
+        return FluidRegistry.getFluidID(stack.getFluid().getName());
+    }
 }

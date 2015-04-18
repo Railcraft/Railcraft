@@ -106,7 +106,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
         StandardTank tank = tanks.get(tankIndex);
         FluidStack fluidStack = tank.getFluid();
         if (fluidStack != null) {
-            data.writeShort(fluidStack.getFluidID());
+            data.writeShort(FluidHelper.getFluidId(fluidStack));
             data.writeInt(fluidStack.amount);
             data.writeInt(fluidStack.getFluid().getColor(fluidStack));
         } else
@@ -167,14 +167,14 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
                 int fluidId = -1;
                 int fluidAmount = 0;
                 if (fluidStack != null) {
-                    fluidId = fluidStack.getFluidID();
+                    fluidId = FluidHelper.getFluidId(fluidStack);
                     fluidAmount = fluidStack.amount;
                 }
                 crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidId);
                 PacketBuilder.instance().sendGuiIntegerPacket(player, container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
             } else if (fluidStack != null && tank.renderData.fluid != null) {
                 if (fluidStack.getFluid() != tank.renderData.fluid)
-                    crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidStack.getFluidID());
+                    crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, FluidHelper.getFluidId(fluidStack));
                 if (fluidStack.amount != tank.renderData.amount)
                     PacketBuilder.instance().sendGuiIntegerPacket(player, container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
                 if (color != pColor)
