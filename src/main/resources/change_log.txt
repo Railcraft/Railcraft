@@ -1,5 +1,6 @@
-Next:
+9.5.0.11:
 	NEW: Add Passive Anchor, does not force load chunks on game load, only when visited. Recipe uses Cyan Dye for now, but will eventually use Prismarine.
+	CHANGE: Improve Signal Block debug print statements to help with debugging some possible issues.
 	FIX: Personal Anchors should only tick their update (and fuel use) function once per tick...oops.
 
 9.5.0.10 (unstable):
