@@ -59,8 +59,8 @@ public class FilteredTank extends StandardTank {
             ToolTipLine name = new ToolTipLine(filter.getLocalizedName(getFluid()), rarity.rarityColor);
             name.setSpacing(2);
             toolTip.add(name);
-            if (getFluid() != null)
-                amount = getFluid().amount;
+            if (renderData.fluid != null && renderData.amount > 0)
+                amount = renderData.amount;
         }
         toolTip.add(new ToolTipLine(String.format("%,d", amount) + " / " + String.format("%,d", getCapacity())));
     }
