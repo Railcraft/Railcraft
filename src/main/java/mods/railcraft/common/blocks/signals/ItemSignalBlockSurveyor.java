@@ -28,8 +28,15 @@ import net.minecraft.init.Items;
 
 @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
 public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, IActivationBlockingItem {
-
     private static Item item;
+
+    private ItemSignalBlockSurveyor() {
+        setMaxDamage(0);
+        setHasSubtypes(true);
+        setMaxStackSize(1);
+
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
 
     public static void registerItem() {
         if (item == null) {
@@ -58,17 +65,14 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
         return new ItemStack(item);
     }
 
-    private ItemSignalBlockSurveyor() {
-        setMaxDamage(0);
-        setHasSubtypes(true);
-        setMaxStackSize(1);
-
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-    }
-
     @Override
     public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
 //        System.out.println("click");
+        if (Game.isHost(world) && item.hasTagCompound() && player.isSneaking()) {
+            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.surveyor.abandon");
+            item.setTagCompound(null);
+            return false;
+        }
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile != null)
             if (tile instanceof ISignalBlockTile) {
@@ -134,5 +138,4 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
     public boolean canBeStoredInToolbox(ItemStack itemstack) {
         return true;
     }
-
 }

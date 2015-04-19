@@ -33,8 +33,16 @@ import net.minecraft.init.Blocks;
 
 @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
 public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivationBlockingItem {
-
     private static Item item;
+
+    private ItemSignalTuner() {
+        super();
+        setMaxDamage(0);
+        setHasSubtypes(true);
+        setMaxStackSize(1);
+
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
 
     public static void registerItem() {
         if (item == null) {
@@ -62,17 +70,13 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
         return new ItemStack(item);
     }
 
-    private ItemSignalTuner() {
-        super();
-        setMaxDamage(0);
-        setHasSubtypes(true);
-        setMaxStackSize(1);
-
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-    }
-
     @Override
     public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int i, int j, int k, int side, float par8, float par9, float par10) {
+        if (Game.isHost(world) && item.hasTagCompound() && player.isSneaking()) {
+            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.tuner.abandon.player");
+            item.setTagCompound(null);
+            return false;
+        }
         TileEntity tile = world.getTileEntity(i, j, k);
         if (tile != null) {
             WorldCoordinate cPos = null;
@@ -140,5 +144,4 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
     public boolean canBeStoredInToolbox(ItemStack itemstack) {
         return true;
     }
-
 }
