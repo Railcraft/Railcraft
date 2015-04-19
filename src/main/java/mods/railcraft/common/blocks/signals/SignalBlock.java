@@ -211,9 +211,11 @@ public abstract class SignalBlock extends AbstractPair {
             return new TrackValidationStatus(false, "INVALID_OTHER_TRACK_NULL");
         TrackTools.TrackScan scan = TrackTools.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
         trackScans.put(otherTrack, scan);
-        if (scan.result != TrackTools.TrackScan.Result.VALID)
-            return new TrackValidationStatus(false, "INVALID_SCAN_FAIL: " + scan.result.name());
-        return new TrackValidationStatus(true, "VALID");
+        if (scan.result == TrackTools.TrackScan.Result.VALID)
+            return new TrackValidationStatus(true, "VALID");
+        if (scan.result == TrackTools.TrackScan.Result.UNKNOWN)
+            return new TrackValidationStatus(true, "UNVERIFIABLE_UNLOADED_CHUNK");
+        return new TrackValidationStatus(false, "INVALID_SCAN_FAIL: " + scan.result.name());
     }
 
     @Override

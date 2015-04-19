@@ -32,8 +32,6 @@ public class TrackTools {
     public static final int TRAIN_LOCKDOWN_DELAY = 200;
 
     public static boolean isRailBlockAt(IBlockAccess world, int x, int y, int z) {
-        if (y < 0 || y > world.getHeight())
-            return false;
         return isRailBlock(WorldPlugin.getBlock(world, x, y, z));
     }
 
@@ -138,7 +136,7 @@ public class TrackTools {
      * @param z2    z-Coord of Rail #2
      * @return true if they are connected
      */
-    public static boolean areTracksConnectedAlongAxis(IBlockAccess world, int x1, int y1, int z1, int x2, int y2, int z2) {
+    public static boolean areTracksConnectedAlongAxis(World world, int x1, int y1, int z1, int x2, int y2, int z2) {
         return scanStraightTrackSection(world, x1, y1, z1, x2, y2, z2).result == TrackScan.Result.VALID;
     }
 
@@ -157,7 +155,7 @@ public class TrackTools {
      * @param z2    z-Coord of Rail #2
      * @return TrackScan object with results
      */
-    public static TrackScan scanStraightTrackSection(IBlockAccess world, int x1, int y1, int z1, int x2, int y2, int z2) {
+    public static TrackScan scanStraightTrackSection(World world, int x1, int y1, int z1, int x2, int y2, int z2) {
         int minY = Math.min(y1, y2);
         int maxY = Math.max(y1, y2);
         if (x1 != x2 && z1 != z2)
@@ -186,6 +184,8 @@ public class TrackTools {
                     yy++;
                     if (yy > maxY)
                         maxY = yy;
+                } else if (!WorldPlugin.blockExists(world, xx, yy, z1)) {
+                    return new TrackScan(TrackScan.Result.UNKNOWN, minY, maxY);
                 } else
                     return new TrackScan(TrackScan.Result.PATH_NOT_FOUND, minY, maxY);
             }
@@ -213,6 +213,8 @@ public class TrackTools {
                     yy++;
                     if (yy > maxY)
                         maxY = yy;
+                } else if (!WorldPlugin.blockExists(world, x1, yy, zz)) {
+                    return new TrackScan(TrackScan.Result.UNKNOWN, minY, maxY);
                 } else
                     return new TrackScan(TrackScan.Result.PATH_NOT_FOUND, minY, maxY);
             }
@@ -234,6 +236,7 @@ public class TrackTools {
 
         public enum Result {
             VALID,
+            UNKNOWN,
             NOT_ALIGNED,
             PATH_NOT_FOUND;
         }
