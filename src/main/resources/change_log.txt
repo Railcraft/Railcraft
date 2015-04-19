@@ -1,3 +1,18 @@
+Next:
+	NEW: You can now reset the Signal Tuner and Signal Block Surveyor by sneak-clicking.
+
+9.5.0.15 (unstable):
+	INFO: Special debugging build for iceman11a.
+	
+9.5.0.14 (unstable):
+	INFO: Special debugging build for iceman11a.
+	
+9.5.0.13 (unstable):
+	INFO: Special debugging build for iceman11a without Locking Track rewrite.
+
+9.5.0.12:
+	FIX: Attempt to make it compatible with old versions of Forge too.
+
 9.5.0.11:
 	NEW: Add Passive Anchor, does not force load chunks on game load, only when visited. Recipe uses Cyan Dye for now, but will eventually use Prismarine.
 	CHANGE: Improve Signal Block debug print statements to help with debugging some possible issues.
