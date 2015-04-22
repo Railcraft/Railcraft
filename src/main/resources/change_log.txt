@@ -1,4 +1,4 @@
-Next:
+9.6.0.0:
 	NEW: You can now reset the Signal Tuner and Signal Block Surveyor by sneak-clicking.
 
 9.5.0.15 (unstable):
