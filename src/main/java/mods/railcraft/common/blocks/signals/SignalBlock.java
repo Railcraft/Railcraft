@@ -12,6 +12,7 @@ import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -52,12 +53,34 @@ public abstract class SignalBlock extends AbstractPair {
             Game.log(Level.DEBUG, msg, args);
     }
 
+    private void printDebugPair(String msg, TileEntity ot) {
+        if (RailcraftConfig.printSignalDebug())
+            Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, ot.xCoord, ot.yCoord, ot.zCoord, ot.getClass());
+    }
+
+    private void printDebugPair(String msg, WorldCoordinate coord) {
+        if (RailcraftConfig.printSignalDebug())
+            Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.xCoord, tile.yCoord, tile.zCoord, coord.x, coord.y, coord.z);
+    }
+
     public void clearSignalBlockPairing(WorldCoordinate other, String reason, Object... args) {
         printDebug(reason, args);
         if (other == null)
             clearPairings();
         else
             clearPairing(other);
+    }
+
+    @Override
+    protected void addPairing(WorldCoordinate other) {
+        if (pairings.contains(other))
+            pairings.remove(other);
+        pairings.add(other);
+        while (pairings.size() > getMaxPairings()) {
+            WorldCoordinate pair = pairings.remove();
+            printDebugPair("Signal Block dropped because too many pairs.", pair);
+        }
+        SignalTools.packetBuilder.sendPairPacketUpdate(this);
     }
 
     @Override
@@ -70,7 +93,7 @@ public abstract class SignalBlock extends AbstractPair {
         }
         if (!isValid)
             if (otherTile != null)
-                printDebug("Signal Block dropped because pair was no longer paired or was not a valid Signal. source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, otherTile.xCoord, otherTile.yCoord, otherTile.zCoord, otherTile.getClass());
+                printDebugPair("Signal Block dropped because pair was no longer paired or was not a valid Signal.", otherTile);
             else
                 printDebug("Signal Block dropped because pair was no longer paired or was not a valid Signal. source:[{0}, {1}, {2}] target:[tile was null]", tile.xCoord, tile.yCoord, tile.zCoord);
         return isValid;
@@ -78,17 +101,17 @@ public abstract class SignalBlock extends AbstractPair {
 
     @Override
     public boolean isValidPair(WorldCoordinate otherCoord, TileEntity otherTile) {
-        boolean isValid = false;
         if (otherTile instanceof ISignalBlockTile) {
             SignalBlock block = ((ISignalBlockTile) otherTile).getSignalBlock();
-            isValid = block.isPairedWith(getCoords());
+            if (block.isPairedWith(getCoords())) {
+                return true;
+            } else if (!invalidPairings.contains(otherCoord)) {
+                printDebugPair("Signal Block dropped because pair was no longer symmetrically paired.", otherCoord);
+            }
+        } else if (!invalidPairings.contains(otherCoord)) {
+            printDebugPair("Signal Block dropped because pair was not a valid Signal.", otherTile);
         }
-        if (!isValid)
-            if (otherTile != null)
-                printDebug("Signal Block dropped because pair was no longer paired or was not a valid Signal. source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, otherTile.xCoord, otherTile.yCoord, otherTile.zCoord, otherTile.getClass());
-            else
-                printDebug("Signal Block dropped because pair was no longer paired or was not a valid Signal. source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.xCoord, tile.yCoord, tile.zCoord, otherCoord.x, otherCoord.y, otherCoord.z);
-        return isValid;
+        return false;
     }
 
     //    @Override
@@ -97,20 +120,30 @@ public abstract class SignalBlock extends AbstractPair {
 //        super.startPairing();
 //    }
     public boolean createSignalBlock(SignalBlock other) {
+        if (other == this) {
+            printDebugPair("Signal Block creation was aborted, cannot pair with self.", other.tile);
+            return false;
+        }
+        printDebugPair("Signal Block creation being attempted.", other.tile);
         locateTrack();
         other.locateTrack();
         WorldCoordinate myTrack = getTrackLocation();
         WorldCoordinate otherTrack = other.getTrackLocation();
-        if (myTrack == null || otherTrack == null)
+        if (myTrack == null || otherTrack == null) {
+            printDebugPair("Signal Block creation failed, could not find Track.", other.tile);
             return false;
+        }
         TrackTools.TrackScan scan = TrackTools.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
-        if (!scan.areConnected)
+        if (!scan.areConnected) {
+            printDebugPair("Signal Block creation failed, could not find Path.", other.tile);
             return false;
+        }
         addPairing(other.getCoords());
         other.addPairing(getCoords());
         endPairing();
         other.endPairing();
         trackScans.put(otherTrack, scan);
+        printDebugPair("Signal Block created successfully.", other.tile);
         return true;
     }
 

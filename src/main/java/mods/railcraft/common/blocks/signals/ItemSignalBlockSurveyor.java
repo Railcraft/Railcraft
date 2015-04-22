@@ -102,7 +102,7 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
                         if (tile != null && tile instanceof ISignalBlockTile) {
                             ISignalBlockTile otherTile = (ISignalBlockTile) tile;
                             SignalBlock otherSignal = otherTile.getSignalBlock();
-                            if (otherSignal != signalBlock && signalBlock.createSignalBlock(otherSignal)) {
+                            if (signalBlock.createSignalBlock(otherSignal)) {
                                 ChatPlugin.sendLocalizedChat(player, "railcraft.gui.surveyor.success");
                                 item.setTagCompound(null);
                             } else
