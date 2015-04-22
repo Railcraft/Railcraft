@@ -61,7 +61,7 @@ public enum RailcraftFluids {
     public final Fluids standardFluid;
     public final int density, viscosity;
     protected Fluid railcraftFluid;
-    protected Block fluidBlock;
+    protected Block railcraftBlock;
 
     private RailcraftFluids(String tag, Fluids standardFluid, int density, int viscosity) {
         this.tag = tag;
@@ -70,17 +70,15 @@ public enum RailcraftFluids {
         this.viscosity = viscosity;
     }
 
-    public static void preInit() {
+    public static void preInitFluids() {
         for (RailcraftFluids fluidType : VALUES) {
-            fluidType.initFluid();
+            fluidType.init();
         }
     }
 
-    public static void postInit() {
+    public static void postInitFluids() {
         for (RailcraftFluids fluidType : VALUES) {
-            fluidType.initBlock();
-            if (fluidType.standardFluid.get() == null)
-                throw new MissingFluidException(fluidType.standardFluid.getTag());
+            fluidType.postInit();
         }
     }
 
@@ -88,20 +86,31 @@ public enum RailcraftFluids {
         return new TextureHook();
     }
 
-    void initFluid() {
-        if (railcraftFluid == null && RailcraftConfig.isFluidEnabled(standardFluid.getTag())) {
-            railcraftFluid = new Fluid(standardFluid.getTag()).setDensity(density).setViscosity(viscosity).setGaseous(density < 0);
-            if (!FluidRegistry.isFluidRegistered(standardFluid.getTag()))
-                FluidRegistry.registerFluid(railcraftFluid);
-            else {
-                Game.log(Level.WARN, "Pre-existing {0} fluid detected, deferring, "
-                        + "this may cause issues if the server/client have different mod load orders, "
-                        + "recommended that you disable all but one instance of the fluid via your configs.", standardFluid.getTag());
-            }
-            initBlock();
-        }
+    private void init() {
+        initFluid();
+        initBlock();
+        checkStandardFluidBlock();
         if (standardFluid.get() != null)
             defineContainers();
+    }
+
+    private void postInit() {
+        checkStandardFluidBlock();
+        if (standardFluid.get() == null)
+            throw new MissingFluidException(standardFluid.getTag());
+    }
+
+    private void initFluid() {
+        if (railcraftFluid == null && RailcraftConfig.isFluidEnabled(standardFluid.getTag())) {
+            railcraftFluid = new Fluid(standardFluid.getTag()).setDensity(density).setViscosity(viscosity).setGaseous(density < 0);
+//            if (!FluidRegistry.isFluidRegistered(standardFluid.getTag()))
+            FluidRegistry.registerFluid(railcraftFluid);
+//            else {
+//                Game.log(Level.WARN, "Pre-existing {0} fluid detected, deferring, "
+//                        + "this may cause issues if the server/client have different mod load orders, "
+//                        + "recommended that you disable all but one instance of the fluid via your configs.", standardFluid.getTag());
+//            }
+        }
     }
 
     void defineContainers() {
@@ -109,32 +118,34 @@ public enum RailcraftFluids {
 
     abstract Block makeBlock();
 
-    void initBlock() {
-        if (fluidBlock != null)
-            return;
+    private void initBlock() {
+        if (railcraftBlock == null && RailcraftConfig.isBlockEnabled(tag)) {
+            railcraftBlock = makeBlock();
+            railcraftBlock.setBlockName("railcraft." + tag);
+            RailcraftRegistry.register(railcraftBlock);
+            railcraftFluid.setBlock(railcraftBlock);
+        }
+    }
 
+    private void checkStandardFluidBlock() {
+        if (railcraftBlock == null)
+            return;
         Fluid fluid = standardFluid.get();
         if (fluid == null)
             return;
-
-        fluidBlock = fluid.getBlock();
-
-        if (RailcraftConfig.isBlockEnabled(tag))
-            if (fluidBlock == null) {
-                fluidBlock = makeBlock();
-                fluidBlock.setBlockName("railcraft." + tag);
-                RailcraftRegistry.register(fluidBlock);
-                fluid.setBlock(fluidBlock);
-            } else {
-                GameRegistry.UniqueIdentifier blockID = GameRegistry.findUniqueIdentifierFor(fluidBlock);
-                Game.log(Level.WARN, "Pre-existing {0} fluid block detected, deferring to {1}:{2}, "
-                        + "this may cause issues if the server/client have different mod load orders, "
-                        + "recommended that you disable all but one instance of {0} fluid blocks via your configs.", fluid.getName(), blockID.modId, blockID.name);
-            }
+        Block fluidBlock = fluid.getBlock();
+        if (fluidBlock == null)
+            fluid.setBlock(railcraftBlock);
+//        } else {
+//            GameRegistry.UniqueIdentifier blockID = GameRegistry.findUniqueIdentifierFor(fluidBlock);
+//            Game.log(Level.WARN, "Pre-existing {0} fluid block detected, deferring to {1}:{2}, "
+//                    + "this may cause issues if the server/client have different mod load orders, "
+//                    + "recommended that you disable all but one instance of {0} fluid blocks via your configs.", fluid.getName(), blockID.modId, blockID.name);
+//        }
     }
 
     public Block getBlock() {
-        return fluidBlock;
+        return railcraftBlock;
     }
 
     public static class MissingFluidException extends RuntimeException {
@@ -149,8 +160,10 @@ public enum RailcraftFluids {
         public void textureHook(TextureStitchEvent.Post event) {
             if (event.map.getTextureType() == 0)
                 for (RailcraftFluids fluidType : VALUES) {
-                    if (fluidType.railcraftFluid != null)
-                        fluidType.railcraftFluid.setIcons(fluidType.fluidBlock.getBlockTextureFromSide(1), fluidType.fluidBlock.getBlockTextureFromSide(2));
+                    if (fluidType.railcraftFluid != null) {
+                        Block block = fluidType.railcraftBlock != null ? fluidType.railcraftBlock : fluidType.standardFluid.get().getBlock();
+                        fluidType.railcraftFluid.setIcons(block.getBlockTextureFromSide(1), block.getBlockTextureFromSide(2));
+                    }
                 }
         }
     }

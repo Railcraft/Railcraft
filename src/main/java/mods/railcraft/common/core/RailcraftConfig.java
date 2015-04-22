@@ -358,7 +358,7 @@ public class RailcraftConfig {
         configMain.addCustomCategoryComment(CAT_FLUIDS,
                 "You can control whether Railcraft defines specific Fluids here.\n"
                         + "However, be aware that if you disable a Fluid that is not defined by another mod,"
-                        + "you may suffer errors and unexpected behaivor.");
+                        + "you may suffer errors and unexpected behavior.");
 
         fluids.put("steam", get(configMain, CAT_FLUIDS, "steam", true));
         fluids.put("creosote", get(configMain, CAT_FLUIDS, "creosote", true));
