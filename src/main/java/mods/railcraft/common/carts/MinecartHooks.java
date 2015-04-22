@@ -8,24 +8,8 @@
  */
 package mods.railcraft.common.carts;
 
+import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.MathHelper;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.IMinecartCollisionHandler;
-import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
-import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
-import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.RailTools;
@@ -37,19 +21,34 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.Vec2D;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IMinecartCollisionHandler;
+import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
+import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
-public final class MinecartHooks implements IMinecartCollisionHandler {
+import java.util.List;
+import java.util.Random;
 
+public final class MinecartHooks implements IMinecartCollisionHandler {
     protected static float DRAG_FACTOR_GROUND = 0.5f;
     protected static float DRAG_FACTOR_AIR = 0.99999f;
     protected static float OPTIMAL_DISTANCE = 1.28f;
-//    protected static float OPTIMAL_DISTANCE_PLAYER = 1.8f;
+    //    protected static float OPTIMAL_DISTANCE_PLAYER = 1.8f;
     protected static float COEF_SPRING = 0.2f;
     protected static float COEF_SPRING_PLAYER = 0.5f;
     protected static float COEF_RESTITUTION = 0.2f;
@@ -59,8 +58,8 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     protected static float CART_WIDTH = 0.98f;
     protected static float COLLISION_EXPANSION = 0.2f;
     protected static int MAX_INTERACT_DIST_SQ = 5 * 5;
-    private final Random rand;
     private static MinecartHooks instance;
+    private final Random rand;
 
     private MinecartHooks() {
         rand = new Random();
@@ -83,16 +82,13 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && itemStack != null) {
             Item item = itemStack.getItem();
             if (item != null && CartUtils.vanillaCartItemMap.containsKey(item)) {
-                MovingObjectPosition pos = MiscTools.rayTracePlayerLook(player);
+                event.useItem = Event.Result.DENY;
                 EntityMinecart placedCart = CartUtils.placeCart(
                         CartUtils.vanillaCartItemMap.get(item),
                         player.getGameProfile(), itemStack, world,
-                        pos.blockX, pos.blockY, pos.blockZ);
-                if (placedCart != null) {
-                    event.setCanceled(true);
-                    if (!player.capabilities.isCreativeMode)
-                        itemStack.stackSize--;
-                }
+                        event.x, event.y, event.z);
+                if (placedCart != null && !player.capabilities.isCreativeMode)
+                    itemStack.stackSize--;
             }
         }
     }
@@ -402,5 +398,4 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
             return;
         }
     }
-
 }
