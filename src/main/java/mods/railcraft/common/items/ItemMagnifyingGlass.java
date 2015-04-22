@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentTranslation
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
@@ -132,7 +131,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             ChatPlugin.sendLocalizedChat(player, "railcraft.gui.mag.glass.aspect.dual", top.getLocalizationTag(), bottom.getLocalizationTag());
             returnValue = true;
         } else if (t instanceof TileSignalBase) {
-            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.mag.glass.aspect", new ChatComponentTranslation(((TileSignalBase) t).getSignalAspect().getLocalizationTag()));
+            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.mag.glass.aspect", ((TileSignalBase) t).getSignalAspect().getLocalizationTag());
             returnValue = true;
         }
         return returnValue;
