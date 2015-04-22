@@ -31,12 +31,12 @@ public class ChatPlugin {
     }
 
     public static void sendLocalizedChat(EntityPlayer player, String msg, Object... args) {
-        player.addChatMessage(getLocalizedMessage(msg, args));
+        player.addChatMessage(getMessage(String.format(LocalizationPlugin.translate(msg), args)));
     }
 
     public static void sendLocalizedChatFromClient(EntityPlayer player, String msg, Object... args) {
         if (Game.isNotHost(player.worldObj))
-            player.addChatMessage(getMessage(String.format(LocalizationPlugin.translate(msg), args)));
+            sendLocalizedChat(player, msg, args);
     }
 
     public static void sendLocalizedChatFromServer(EntityPlayer player, String msg, Object... args) {
