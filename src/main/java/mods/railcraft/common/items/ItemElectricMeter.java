@@ -95,7 +95,7 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
                 }
             } catch (Throwable er) {
                 Game.logErrorAPI(Railcraft.MOD_ID, er, IElectricMinecart.class);
-                ChatPlugin.sendLocalizedChat(player, "chat.railcraft.api.error");
+                ChatPlugin.sendLocalizedChatFromServer(player, "chat.railcraft.api.error");
             }
     }
 
@@ -115,7 +115,7 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
             }
         } catch (Throwable er) {
             Game.logErrorAPI(Railcraft.MOD_ID, er, IElectricGrid.class);
-            ChatPlugin.sendLocalizedChat(player, "chat.railcraft.api.error");
+            ChatPlugin.sendLocalizedChatFromServer(player, "chat.railcraft.api.error");
         }
         return returnValue;
     }
