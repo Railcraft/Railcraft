@@ -23,7 +23,7 @@ import mods.railcraft.common.util.misc.Game;
 
 public class TileSignalDualHeadBlockSignal extends TileSignalBlockSignal implements IReceiverTile, IDualHeadSignal {
 
-    private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getName(), this);
+    private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
 
     @Override
     public EnumSignal getSignalType() {

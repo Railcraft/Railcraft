@@ -73,7 +73,7 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
     @Override
     public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int i, int j, int k, int side, float par8, float par9, float par10) {
         if (Game.isHost(world) && item.hasTagCompound() && player.isSneaking()) {
-            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.tuner.abandon.player");
+            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.abandon.player");
             item.setTagCompound(null);
             return false;
         }
@@ -98,15 +98,15 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                             if (receiver.getTile() != controller.getTile()) {
                                 controller.registerReceiver(receiver);
                                 controller.endPairing();
-                                ChatPlugin.sendLocalizedChat(player, "railcraft.gui.tuner.success", controller.getName(), receiver.getName());
+                                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.success", controller.getName(), receiver.getName());
                                 item.setTagCompound(null);
                                 return true;
                             }
                         } else if (world.blockExists(cPos.x, cPos.y, cPos.z)) {
-                            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.tuner.abandon.gone");
+                            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.abandon.gone");
                             item.setTagCompound(null);
                         } else {
-                            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.tuner.abandon.chunk");
+                            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.abandon.chunk");
                             item.setTagCompound(null);
                         }
                     }

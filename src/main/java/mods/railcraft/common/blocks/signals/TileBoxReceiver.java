@@ -31,7 +31,7 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
 public class TileBoxReceiver extends TileBoxActionManager implements IAspectActionManager, IGuiReturnHandler, IReceiverTile, IAspectProvider {
 
     private boolean prevBlinkState;
-    private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getName(), this);
+    private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
 
     @Override
     public EnumSignal getSignalType() {

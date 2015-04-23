@@ -23,7 +23,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileBoxAnalogController extends TileBoxBase implements IControllerTile, IGuiReturnHandler {
 
-    private final SimpleSignalController controller = new SimpleSignalController(getName(), this);
+    private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private boolean prevBlinkState;
     private int strongestSignal;
 

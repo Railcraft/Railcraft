@@ -36,7 +36,7 @@ public abstract class SignalBlock extends AbstractPair {
     private int update = rand.nextInt();
 
     public SignalBlock(RailcraftTileEntity tile, int numPairs) {
-        super(tile.getName(), tile, numPairs);
+        super(tile.getLocalizationTag(), tile, numPairs);
     }
 
     public SignalBlock getSignalAt(WorldCoordinate coord) {

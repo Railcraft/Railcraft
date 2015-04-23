@@ -24,7 +24,7 @@ import mods.railcraft.common.util.misc.Game;
 public class TileSignalDualHeadDistantSignal extends TileSignalBase implements IReceiverTile, IDualHeadSignal {
 
     private static final float SIZE = 0.15f;
-    private final DualSignalReceiver receiver = new DualSignalReceiver(getName(), this);
+    private final DualSignalReceiver receiver = new DualSignalReceiver(getLocalizationTag(), this);
 
     @Override
     public EnumSignal getSignalType() {

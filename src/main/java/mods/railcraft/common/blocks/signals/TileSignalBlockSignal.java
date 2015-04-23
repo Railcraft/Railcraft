@@ -19,7 +19,7 @@ import mods.railcraft.common.util.misc.Game;
 
 public class TileSignalBlockSignal extends TileSignalBase implements IControllerTile, ISignalTile, ISignalBlockTile {
 
-    private final SimpleSignalController controller = new SimpleSignalController(getName(), this);
+    private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SignalBlock signalBlock = new SignalBlockSimple(this);
 
     @Override

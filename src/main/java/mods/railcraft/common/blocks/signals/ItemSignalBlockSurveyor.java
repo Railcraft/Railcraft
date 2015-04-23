@@ -69,7 +69,7 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
     public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
 //        System.out.println("click");
         if (Game.isHost(world) && item.hasTagCompound() && player.isSneaking()) {
-            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.surveyor.abandon");
+            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.abandon");
             item.setTagCompound(null);
             return false;
         }
@@ -91,9 +91,9 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
                     }
                     WorldCoordinate track = signalBlock.getTrackLocation();
                     if (track == null)
-                        ChatPlugin.sendLocalizedChat(player, "railcraft.gui.surveyor.track", signalTile.getName());
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.track", signalTile.getLocalizationTag());
                     else if (pos == null) {
-                        ChatPlugin.sendLocalizedChat(player, "railcraft.gui.surveyor.begin");
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.begin");
                         setSignalData(item, tile);
                         signalBlock.startPairing();
                     } else if (x != pos.x || y != pos.y || z != pos.z) {
@@ -103,25 +103,25 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
                             ISignalBlockTile otherTile = (ISignalBlockTile) tile;
                             SignalBlock otherSignal = otherTile.getSignalBlock();
                             if (signalBlock.createSignalBlock(otherSignal)) {
-                                ChatPlugin.sendLocalizedChat(player, "railcraft.gui.surveyor.success");
+                                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.success");
                                 item.setTagCompound(null);
                             } else
-                                ChatPlugin.sendLocalizedChat(player, "railcraft.gui.surveyor.invalid");
+                                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.invalid");
                         } else if (world.blockExists(pos.x, pos.y, pos.z)) {
-                            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.surveyor.lost");
+                            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.lost");
                             signalBlock.endPairing();
                             item.setTagCompound(null);
                         } else
-                            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.surveyor.unloaded");
+                            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.unloaded");
                     } else {
-                        ChatPlugin.sendLocalizedChat(player, "railcraft.gui.surveyor.abandon");
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.abandon");
                         signalBlock.endPairing();
                         item.setTagCompound(null);
                     }
                 }
                 return true;
             } else if (Game.isHost(world))
-                ChatPlugin.sendLocalizedChat(player, "railcraft.gui.surveyor.wrong");
+                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.wrong");
         return false;
     }
 

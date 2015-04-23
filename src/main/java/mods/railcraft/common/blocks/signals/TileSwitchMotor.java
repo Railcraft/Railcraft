@@ -27,7 +27,7 @@ import net.minecraft.block.Block;
 
 public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionManager, IGuiReturnHandler, IReceiverTile {
 
-    private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getName(), this);
+    private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
     private boolean[] switchOnAspects = new boolean[SignalAspect.values().length];
     private boolean switchAspect;
 

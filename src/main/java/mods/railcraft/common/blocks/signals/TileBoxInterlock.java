@@ -26,8 +26,8 @@ import static net.minecraftforge.common.util.ForgeDirection.*;
 
 public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IReceiverTile, IAspectProvider {
     private static final ForgeDirection[] SIDES = {NORTH, WEST, SOUTH, EAST};
-    private final SimpleSignalController controller = new SimpleSignalController(getName(), this);
-    private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getName(), this);
+    private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
+    private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
     private boolean prevBlinkState;
     private Interlock interlock = new Interlock(this);
     private SignalAspect overrideAspect = SignalAspect.RED;

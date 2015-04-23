@@ -8,13 +8,13 @@
  */
 package mods.railcraft.common.blocks.signals;
 
+import mods.railcraft.api.core.IOwnable;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ISignalBlockTile {
+public interface ISignalBlockTile extends IOwnable {
 
     public SignalBlock getSignalBlock();
-
-    public String getName();
 }

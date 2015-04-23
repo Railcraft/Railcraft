@@ -20,7 +20,7 @@ import mods.railcraft.api.signals.SimpleSignalReceiver;
 import mods.railcraft.common.util.misc.Game;
 
 public class TileSignalDistantSignal extends TileSignalBase implements IReceiverTile {
-    private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getName(), this);
+    private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
 
     @Override
     public EnumSignal getSignalType() {
