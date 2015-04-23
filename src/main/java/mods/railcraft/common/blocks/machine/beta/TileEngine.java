@@ -97,7 +97,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
                 TileEntity tile = tileCache.getTileOnSide(direction);
 
-                if (EngineTools.isPoweredTile(tile, direction.getOpposite())) {
+                if (canTileReceivePower(tile, direction.getOpposite())) {
                     IEnergyReceiver handler = (IEnergyReceiver) tile;
                     int powerToTransfer = extractEnergy();
 //                    outputDebug += powerToTransfer;
@@ -115,7 +115,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         } else if (powered) {
             TileEntity tile = tileCache.getTileOnSide(direction);
 
-            if (EngineTools.isPoweredTile(tile, direction.getOpposite()))
+            if (canTileReceivePower(tile, direction.getOpposite()))
                 if (energy > 0) {
                     pistonStage = 1;
                     setActive(true);
@@ -127,6 +127,14 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
             setActive(false);
 
         burn();
+    }
+
+    private boolean canTileReceivePower(TileEntity tile, ForgeDirection side) {
+        if (tile instanceof IEnergyReceiver) {
+            IEnergyReceiver handler = (IEnergyReceiver) tile;
+            return handler.canConnectEnergy(side);
+        }
+        return false;
     }
 
     protected void overheat() {
@@ -226,7 +234,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
             TileEntity tile = tileCache.getTileOnSide(dir);
 
-            if (EngineTools.isPoweredTile(tile, dir.getOpposite())) {
+            if (canTileReceivePower(tile, dir.getOpposite())) {
                 direction = dir;
                 notifyBlocksOfNeighborChange();
                 sendUpdateToClient();
