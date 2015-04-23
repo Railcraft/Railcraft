@@ -8,23 +8,22 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import net.minecraft.nbt.NBTTagCompound;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackTile;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiReturnHandler {
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
+public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiReturnHandler {
     public ITrackInstance track;
 
     public TileTrack() {
@@ -36,8 +35,8 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
     }
 
     @Override
-    public String getName() {
-        return LocalizationPlugin.translate("tile." + track.getTrackSpec().getTrackTag().replace(':', '.') + ".name");
+    public String getLocalizationTag() {
+        return "tile." + track.getTrackSpec().getTrackTag().replace(':', '.') + ".name";
     }
 
     @Override
@@ -119,5 +118,4 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
     public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
         return oldBlock != newBlock;
     }
-
 }

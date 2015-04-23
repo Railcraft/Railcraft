@@ -8,31 +8,34 @@
  */
 package mods.railcraft.common.blocks.detector;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.List;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandler {
-
     public static final float SENSITIVITY = 0.2f;
     public ForgeDirection direction = ForgeDirection.UP;
     public int powerState = 0;
     public Detector detector = Detector.DUMMY;
     private boolean tested;
+
+    public Detector getDetector() {
+        return detector;
+    }
 
     public void setDetector(EnumDetector type) {
         this.detector = type.buildHandler();
@@ -43,13 +46,9 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
         }
     }
 
-    public Detector getDetector() {
-        return detector;
-    }
-
     @Override
-    public String getName() {
-        return LocalizationPlugin.translate(getDetector().getType().getTag() + ".name");
+    public String getLocalizationTag() {
+        return getDetector().getType().getTag() + ".name";
     }
 
     public List<EntityMinecart> getCarts() {
@@ -138,7 +137,6 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
                 WorldPlugin.notifyBlocksOfNeighborChangeOnSide(worldObj, xCoord, yCoord, zCoord, BlockDetector.getBlock(), direction);
             }
         }
-
     }
 
     @Override
@@ -155,5 +153,4 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
         detector.readGuiData(data, sender);
     }
-
 }

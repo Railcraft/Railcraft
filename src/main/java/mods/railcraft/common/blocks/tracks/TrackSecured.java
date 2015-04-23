@@ -9,19 +9,19 @@
 package mods.railcraft.common.blocks.tracks;
 
 import com.mojang.authlib.GameProfile;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import net.minecraft.nbt.NBTTagCompound;
 import mods.railcraft.common.blocks.signals.ISecure;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public abstract class TrackSecured extends TrackBaseRailcraft implements IGuiReturnHandler, ISecure<LockButtonState> {
-
     private final MultiButtonController<LockButtonState> lockController = new MultiButtonController<LockButtonState>(0, LockButtonState.VALUES);
 
     @Override
@@ -85,8 +85,12 @@ public abstract class TrackSecured extends TrackBaseRailcraft implements IGuiRet
     }
 
     @Override
+    public String getLocalizationTag() {
+        return ((TileTrack) getTile()).getLocalizationTag();
+    }
+
+    @Override
     public GameProfile getOwner() {
         return ((TileTrack) getTile()).getOwner();
     }
-
 }

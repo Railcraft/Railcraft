@@ -8,10 +8,6 @@
  */
 package mods.railcraft.common.blocks.hidden;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -22,12 +18,15 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TileHidden extends RailcraftTileEntity {
-
     private static final int DURATION_MIINUTES = 15;
     private static final long DURATION_MILLISECONDS = TimeUnit.MILLISECONDS.convert(DURATION_MIINUTES, TimeUnit.MINUTES);
     public WorldCoordinate lastMarker;
@@ -125,8 +124,12 @@ public class TileHidden extends RailcraftTileEntity {
     }
 
     @Override
+    public String getLocalizationTag() {
+        return "";
+    }
+
+    @Override
     public short getId() {
         return 111;
     }
-
 }

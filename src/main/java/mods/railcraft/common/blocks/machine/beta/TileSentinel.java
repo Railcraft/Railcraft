@@ -46,16 +46,16 @@ public class TileSentinel extends TileMachineBase {
                 if (target == null)
                     TileAnchorWorld.setTarget(this, player);
                 else if (worldObj.provider.dimensionId != target.dimension)
-                    ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getName());
+                    ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getLocalizationTag());
                 else if (new WorldCoordinate(this).equals(target)) {
                     TileAnchorWorld.removeTarget(player);
-                    ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getName());
+                    ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getLocalizationTag());
                 } else {
                     TileEntity tile = TileAnchorWorld.getTargetAt(player, this, target);
                     if (tile instanceof TileAnchorWorld)
                         ((TileAnchorWorld) tile).setSentinel(player, new WorldCoordinate(this));
                     else if (tile != null)
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.invalid", getName());
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.invalid", getLocalizationTag());
                 }
                 crowbar.onWhack(player, current, xCoord, yCoord, zCoord);
                 return true;

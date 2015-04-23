@@ -8,10 +8,6 @@
  */
 package mods.railcraft.common.items.firestone;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.*;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -23,18 +19,24 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TileFirestoneRecharge extends RailcraftTileEntity {
-
     public static final int[] REBUILD_DELAY = new int[8];
+    private final Deque<WorldCoordinate> queue = new LinkedList<WorldCoordinate>();
+    private final Set<WorldCoordinate> visitedBlocks = new HashSet<WorldCoordinate>();
     public int charge = 0;
     public long rotationYaw, preRotationYaw;
     public float yOffset = -2, preYOffset = -2;
-    private final Deque<WorldCoordinate> queue = new LinkedList<WorldCoordinate>();
-    private final Set<WorldCoordinate> visitedBlocks = new HashSet<WorldCoordinate>();
     private Deque<WorldCoordinate> lavaFound = new LinkedList<WorldCoordinate>();
     private int rebuildDelay;
     private String itemName;
@@ -158,12 +160,12 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
         }
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
     public String getItemName() {
         return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     @Override
@@ -195,13 +197,12 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
     }
 
     @Override
-    public String getName() {
-        return "";
+    public String getLocalizationTag() {
+        return "tile.railcraft.firestone.recharge.name";
     }
 
     @Override
     public short getId() {
         return 222;
     }
-
 }

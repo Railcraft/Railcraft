@@ -8,20 +8,19 @@
  */
 package mods.railcraft.common.blocks.aesthetics.slab;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileSlab extends RailcraftTileEntity {
-
     private EnumBlockMaterial top = null;
     private EnumBlockMaterial bottom = null;
 
@@ -40,20 +39,6 @@ public class TileSlab extends RailcraftTileEntity {
         return EnumBlockMaterial.SANDY_BRICK.getIcon(side);
     }
 
-    public void setTopSlab(EnumBlockMaterial slab) {
-        if (top != slab) {
-            this.top = slab;
-            sendUpdateToClient();
-        }
-    }
-
-    public void setBottomSlab(EnumBlockMaterial slab) {
-        if (bottom != slab) {
-            this.bottom = slab;
-            sendUpdateToClient();
-        }
-    }
-
     public EnumBlockMaterial getTopSlab() {
         return top;
     }
@@ -70,8 +55,22 @@ public class TileSlab extends RailcraftTileEntity {
         return top != null && bottom == null;
     }
 
+    public void setTopSlab(EnumBlockMaterial slab) {
+        if (top != slab) {
+            this.top = slab;
+            sendUpdateToClient();
+        }
+    }
+
     public boolean isBottomSlab() {
         return top == null && bottom != null;
+    }
+
+    public void setBottomSlab(EnumBlockMaterial slab) {
+        if (bottom != slab) {
+            this.bottom = slab;
+            sendUpdateToClient();
+        }
     }
 
     public EnumBlockMaterial getUpmostSlab() {
@@ -94,8 +93,8 @@ public class TileSlab extends RailcraftTileEntity {
     }
 
     @Override
-    public String getName() {
-        return "";
+    public String getLocalizationTag() {
+        return "tile." + BlockRailcraftSlab.getTag(getUpmostSlab());
     }
 
     @Override

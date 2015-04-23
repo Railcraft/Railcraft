@@ -108,10 +108,10 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                     if (target == null)
                         setTarget(this, player);
                     else if (worldObj.provider.dimensionId != target.dimension)
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getName());
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getLocalizationTag());
                     else if (new WorldCoordinate(this).equals(target)) {
                         removeTarget(player);
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getName());
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getLocalizationTag());
                     } else
                         setSentinel(player, target);
                     crowbar.onWhack(player, current, xCoord, yCoord, zCoord);
@@ -128,7 +128,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     public static void setTarget(RailcraftTileEntity tile, EntityPlayer player) {
         sentinelPairingMap.put(player, new WorldCoordinate(tile));
-        ChatPlugin.sendLocalizedChatFromClient(player, "railcraft.gui.anchor.pair.start", tile.getName());
+        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.start", tile.getLocalizationTag());
     }
 
     public static void removeTarget(EntityPlayer player) {
@@ -152,7 +152,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     public static TileEntity getTargetAt(EntityPlayer player, RailcraftTileEntity searcher, WorldCoordinate coord) {
         if (!WorldPlugin.blockExists(searcher.getWorldObj(), coord.x, coord.y, coord.z)) {
-            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.unloaded", searcher.getName());
+            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.unloaded", searcher.getLocalizationTag());
             return null;
         }
         return WorldPlugin.getBlockTile(searcher.getWorldObj(), coord.x, coord.y, coord.z);
@@ -170,13 +170,13 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
             int zSentinelChunk = tile.zCoord >> 4;
 
             if (xChunk != xSentinelChunk && zChunk != zSentinelChunk) {
-                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.alignment", getName(), ((TileSentinel) tile).getName());
+                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.alignment", getLocalizationTag(), ((TileSentinel) tile).getLocalizationTag());
                 return false;
             }
 
             int max = getMaxSentinelChunks();
             if (Math.abs(xChunk - xSentinelChunk) >= max || Math.abs(zChunk - zSentinelChunk) >= max) {
-                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.distance", getName(), ((TileSentinel) tile).getName());
+                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.distance", getLocalizationTag(), ((TileSentinel) tile).getLocalizationTag());
                 return false;
             }
 
@@ -187,10 +187,10 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
             requestTicket();
             sendUpdateToClient();
             removeTarget(player);
-            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.success", getName());
+            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.success", getLocalizationTag());
             return true;
         }
-        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.invalid", getName());
+        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.invalid", getLocalizationTag());
         return false;
     }
 

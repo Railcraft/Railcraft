@@ -8,22 +8,21 @@
  */
 package mods.railcraft.common.blocks.aesthetics.stairs;
 
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.IIcon;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileStair extends RailcraftTileEntity {
-
     private EnumBlockMaterial stair = EnumBlockMaterial.SANDY_BRICK;
 
     @Override
@@ -35,17 +34,17 @@ public class TileStair extends RailcraftTileEntity {
         return stair.getIcon(side);
     }
 
-    public void setStair(EnumBlockMaterial stair) {
-        this.stair = stair;
-    }
-
     public EnumBlockMaterial getStair() {
         return stair;
     }
 
+    public void setStair(EnumBlockMaterial stair) {
+        this.stair = stair;
+    }
+
     @Override
-    public String getName() {
-        return "";
+    public String getLocalizationTag() {
+        return "tile." + BlockRailcraftStairs.getTag(stair);
     }
 
     @Override

@@ -9,9 +9,6 @@
 package mods.railcraft.common.blocks.detector;
 
 import com.mojang.authlib.GameProfile;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import mods.railcraft.common.blocks.signals.ISecure;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
@@ -20,12 +17,14 @@ import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class DetectorSecured extends Detector implements IGuiReturnHandler, ISecure<LockButtonState> {
-
     private final MultiButtonController<LockButtonState> lockController = new MultiButtonController(0, LockButtonState.VALUES);
 
     public DetectorSecured() {
@@ -97,8 +96,12 @@ public abstract class DetectorSecured extends Detector implements IGuiReturnHand
     }
 
     @Override
+    public String getLocalizationTag() {
+        return tile.getLocalizationTag();
+    }
+
+    @Override
     public GameProfile getOwner() {
         return tile.getOwner();
     }
-
 }

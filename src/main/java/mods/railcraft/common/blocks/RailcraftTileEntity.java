@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -134,7 +135,11 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return PlayerPlugin.isSamePlayer(owner, player);
     }
 
-    public abstract String getName();
+    public String getName() {
+        return LocalizationPlugin.translate(getLocalizationTag());
+    }
+
+    public abstract String getLocalizationTag();
 
     public List<String> getDebugOutput() {
         List<String> debug = new ArrayList<String>();

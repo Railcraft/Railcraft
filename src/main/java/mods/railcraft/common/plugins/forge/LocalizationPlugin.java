@@ -9,14 +9,15 @@
 package mods.railcraft.common.plugins.forge;
 
 import java.util.IllegalFormatException;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.util.StatCollector;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class LocalizationPlugin {
-
     public static final String ENGLISH = "en_US";
 
     public static String translate(String tag) {
@@ -37,4 +38,13 @@ public class LocalizationPlugin {
         return StatCollector.canTranslate(tag);
     }
 
+    public static String getEntityLocalizationTag(Entity entity) {
+        String s = EntityList.getEntityString(entity);
+
+        if (s == null) {
+            s = "generic";
+        }
+
+        return "entity." + s + ".name";
+    }
 }

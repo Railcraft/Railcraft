@@ -10,10 +10,14 @@ package mods.railcraft.common.blocks.machine;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.ArrayList;
-import java.util.Random;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
-import org.apache.logging.log4j.Level;
+import mods.railcraft.api.core.items.ITrackItem;
+import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.items.IActivationBlockingItem;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,24 +25,19 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
-import mods.railcraft.api.core.items.ITrackItem;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.items.IActivationBlockingItem;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.Game;
+import org.apache.logging.log4j.Level;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class TileMachineBase extends RailcraftTileEntity {
-
     private boolean checkedBlock = false;
 
     public abstract IEnumMachine getMachineType();
 
     @Override
-    public String getName() {
-        return LocalizationPlugin.translate(getMachineType().getTag() + ".name");
+    public String getLocalizationTag() {
+        return getMachineType().getTag() + ".name";
     }
 
     @Override
@@ -75,7 +74,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
      */
     public void onBlockRemoval() {
         if (this instanceof IInventory)
-            InvTools.dropInventory(new InventoryMapper((IInventory)this), worldObj, xCoord, yCoord, zCoord);
+            InvTools.dropInventory(new InventoryMapper((IInventory) this), worldObj, xCoord, yCoord, zCoord);
     }
 
     public boolean blockActivated(EntityPlayer player, int side) {
@@ -190,5 +189,4 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
             return ConnectStyle.TWO_THIN;
         return ConnectStyle.NONE;
     }
-
 }

@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.plugins.forge;
 
+import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
@@ -17,31 +18,38 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ChatPlugin {
-
     public static IChatComponent getMessage(String msg) {
         return new ChatComponentText(msg);
     }
 
-    public static IChatComponent getLocalizedMessage(String msg, Object... args) {
+    public static IChatComponent chatComp(String msg, Object... args) {
         return new ChatComponentTranslation(msg, args);
     }
 
     public static void sendLocalizedChat(EntityPlayer player, String msg, Object... args) {
-        player.addChatMessage(getMessage(String.format(LocalizationPlugin.translate(msg), args)));
+        player.addChatMessage(chatComp(msg, args));
     }
 
     public static void sendLocalizedChatFromClient(EntityPlayer player, String msg, Object... args) {
         if (Game.isNotHost(player.worldObj))
-            sendLocalizedChat(player, msg, args);
+            player.addChatMessage(getMessage(String.format(LocalizationPlugin.translate(msg), args)));
     }
 
     public static void sendLocalizedChatFromServer(EntityPlayer player, String msg, Object... args) {
-        if (Game.isHost(player.worldObj))
-            player.addChatMessage(getLocalizedMessage(msg, args));
+        if (Game.isHost(player.worldObj)) {
+            for (int i = 0; i < args.length; i++) {
+                if (args[i] instanceof String) {
+                    args[i] = chatComp((String) args[i]);
+                } else if (args[i] instanceof GameProfile) {
+                    String username = ((GameProfile) args[i]).getName();
+                    args[i] = username != null ? username : "[unknown]";
+                }
+            }
+            player.addChatMessage(chatComp(msg, args));
+        }
     }
 
     public static void sendLocalizedChatToAllFromServer(World world, String msg, Object... args) {
@@ -53,5 +61,4 @@ public class ChatPlugin {
             }
         }
     }
-
 }

@@ -8,21 +8,19 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import net.minecraft.util.AxisAlignedBB;
+import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.util.misc.Game;
 import org.apache.logging.log4j.Level;
 
 public abstract class TileSignalFoundation extends RailcraftTileEntity {
-
     private boolean checkedBlock = false;
 
     public abstract ISignalTileDefinition getSignalType();
@@ -124,8 +122,7 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
     }
 
     @Override
-    public String getName() {
-        return LocalizationPlugin.translate(getSignalType().getTag() + ".name");
+    public String getLocalizationTag() {
+        return getSignalType().getTag() + ".name";
     }
-
 }

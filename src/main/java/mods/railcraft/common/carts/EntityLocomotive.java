@@ -60,7 +60,6 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class EntityLocomotive extends CartContainerBase implements IDirectionalCart, IGuiReturnHandler, ILinkableCart, IMinecart, ISecure<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
-
     private static final byte HAS_FUEL_DATA_ID = 16;
     private static final byte PRIMARY_COLOR_DATA_ID = 25;
     private static final byte SECONDARY_COLOR_DATA_ID = 26;
@@ -86,11 +85,13 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     private int whistleDelay;
     private int tempIdle;
     private float whistlePitch = getNewWhistlePitch();
+
     public EntityLocomotive(World world) {
         super(world);
         setPrimaryColor(EnumColor.LIGHT_GRAY.ordinal());
         setSecondaryColor(EnumColor.GRAY.ordinal());
     }
+
     public EntityLocomotive(World world, double x, double y, double z) {
         this(world);
         setPosition(x, y + (double) yOffset, z);
@@ -143,7 +144,12 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
 
     @Override
     public String getName() {
-        return LocalizationPlugin.translate(getCartType().getTag());
+        return LocalizationPlugin.translate(getLocalizationTag());
+    }
+
+    @Override
+    public String getLocalizationTag() {
+        return getCartType().getTag();
     }
 
     @Override
@@ -777,5 +783,4 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         }
 
     }
-
 }

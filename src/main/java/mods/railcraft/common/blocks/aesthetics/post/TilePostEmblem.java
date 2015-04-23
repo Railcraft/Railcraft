@@ -8,9 +8,6 @@
  */
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -19,12 +16,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TilePostEmblem extends RailcraftTileEntity {
-
     private ForgeDirection facing = ForgeDirection.NORTH;
     private String emblem = "";
     private EnumColor color = null;
@@ -42,6 +41,10 @@ public class TilePostEmblem extends RailcraftTileEntity {
         }
     }
 
+    public ForgeDirection getFacing() {
+        return facing;
+    }
+
     public void setFacing(ForgeDirection f) {
         switch (f) {
             case UP:
@@ -55,8 +58,8 @@ public class TilePostEmblem extends RailcraftTileEntity {
         }
     }
 
-    public ForgeDirection getFacing() {
-        return facing;
+    public String getEmblem() {
+        return emblem;
     }
 
     public void setEmblem(String identifier) {
@@ -66,8 +69,8 @@ public class TilePostEmblem extends RailcraftTileEntity {
         }
     }
 
-    public String getEmblem() {
-        return emblem;
+    public EnumColor getColor() {
+        return color;
     }
 
     public void setColor(EnumColor color) {
@@ -75,10 +78,6 @@ public class TilePostEmblem extends RailcraftTileEntity {
             this.color = color;
             sendUpdateToClient();
         }
-    }
-
-    public EnumColor getColor() {
-        return color;
     }
 
     @Override
@@ -146,13 +145,12 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     @Override
-    public String getName() {
-        return "Emblem Post";
+    public String getLocalizationTag() {
+        return "tile.railcraft.post.emblem.name";
     }
 
     @Override
     public short getId() {
         return (short) EnumPost.EMBLEM.ordinal();
     }
-
 }

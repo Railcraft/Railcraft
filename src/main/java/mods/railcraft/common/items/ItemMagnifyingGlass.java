@@ -9,8 +9,16 @@
 package mods.railcraft.common.items;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import java.util.EnumSet;
-import java.util.List;
+import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.core.IOwnable;
+import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.blocks.machine.TileMultiBlock.MultiBlockStateReturn;
+import mods.railcraft.common.blocks.signals.IDualHeadSignal;
+import mods.railcraft.common.blocks.signals.TileSignalBase;
+import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,54 +28,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
-import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.blocks.machine.TileMultiBlock.MultiBlockStateReturn;
-import mods.railcraft.common.blocks.signals.IDualHeadSignal;
-import mods.railcraft.common.blocks.signals.TileSignalBase;
-import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.*;
-import mods.railcraft.common.util.misc.Game;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+
+import java.util.EnumSet;
+import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlockingItem {
-
     public static Item item;
-
-    public static void register() {
-        if (item == null) {
-            String tag = "tool.magnifying.glass";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemMagnifyingGlass();
-                RailcraftRegistry.register(item);
-
-                CraftingPlugin.addShapedRecipe(new ItemStack(item), new Object[]{
-                    " G",
-                    "S ",
-                    'S', "stickWood",
-                    'G', "paneGlassColorless"
-                });
-
-                LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, tag);
-            }
-//            CreeperPlugin.fixCreepers();
-        }
-    }
-
-    public static ItemStack getItem() {
-        if (item == null)
-            return null;
-        return new ItemStack(item);
-    }
 
     public ItemMagnifyingGlass() {
         setMaxDamage(0);
@@ -78,6 +47,31 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         MinecraftForge.EVENT_BUS.register(this);
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    public static void register() {
+        if (item == null) {
+            String tag = "tool.magnifying.glass";
+            if (RailcraftConfig.isItemEnabled(tag)) {
+                item = new ItemMagnifyingGlass();
+                RailcraftRegistry.register(item);
+
+                CraftingPlugin.addShapedRecipe(new ItemStack(item),
+                        " G",
+                        "S ",
+                        'S', "stickWood",
+                        'G', "paneGlassColorless"
+                );
+
+                LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, tag);
+            }
+        }
+    }
+
+    public static ItemStack getItem() {
+        if (item == null)
+            return null;
+        return new ItemStack(item);
     }
 
     @SubscribeEvent
@@ -96,7 +90,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass)
             if (entity instanceof EntityMinecart) {
                 EntityMinecart cart = (EntityMinecart) entity;
-                ChatPlugin.sendLocalizedChat(thePlayer, "railcraft.gui.mag.glass.placedby", Railcraft.getProxy().getItemDisplayName(cart.getCartItem()), PlayerPlugin.getUsername(thePlayer.worldObj, CartTools.getCartOwner(cart)));
+                ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.mag.glass.placedby", LocalizationPlugin.getEntityLocalizationTag(cart), CartTools.getCartOwner(cart));
                 event.setCanceled(true);
             }
     }
@@ -107,20 +101,20 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             return false;
         TileEntity t = world.getTileEntity(x, y, z);
         boolean returnValue = false;
-        if (t instanceof RailcraftTileEntity) {
-            RailcraftTileEntity tile = (RailcraftTileEntity) t;
-            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.mag.glass.placedby", tile.getName(), PlayerPlugin.getUsername(world, tile.getOwner()));
+        if (t instanceof IOwnable) {
+            IOwnable ownable = (IOwnable) t;
+            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.mag.glass.placedby", ownable.getLocalizationTag(), ownable.getOwner());
             returnValue = true;
         }
         if (t instanceof TileMultiBlock) {
             TileMultiBlock tile = (TileMultiBlock) t;
             if (tile.isStructureValid())
-                ChatPlugin.sendLocalizedChat(player, "railcraft.multiblock.state.valid");
+                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.valid");
             else
                 for (MultiBlockStateReturn returnState : EnumSet.complementOf(EnumSet.of(MultiBlockStateReturn.VALID))) {
                     List<Integer> pats = tile.patternStates.get(returnState);
                     if (!pats.isEmpty())
-                        ChatPlugin.sendLocalizedChat(player, returnState.message, pats.toString());
+                        ChatPlugin.sendLocalizedChatFromServer(player, returnState.message, pats.toString());
                 }
             returnValue = true;
         }
@@ -128,13 +122,12 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
             IDualHeadSignal signal = (IDualHeadSignal) t;
             SignalAspect top = signal.getTopAspect();
             SignalAspect bottom = signal.getBottomAspect();
-            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.mag.glass.aspect.dual", top.getLocalizationTag(), bottom.getLocalizationTag());
+            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.mag.glass.aspect.dual", top.getLocalizationTag(), bottom.getLocalizationTag());
             returnValue = true;
         } else if (t instanceof TileSignalBase) {
-            ChatPlugin.sendLocalizedChat(player, "railcraft.gui.mag.glass.aspect", ((TileSignalBase) t).getSignalAspect().getLocalizationTag());
+            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.mag.glass.aspect", ((TileSignalBase) t).getSignalAspect().getLocalizationTag());
             returnValue = true;
         }
         return returnValue;
     }
-
 }
