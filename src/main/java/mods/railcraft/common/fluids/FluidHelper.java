@@ -127,8 +127,10 @@ public final class FluidHelper {
             FluidStack drain = fluidHandler.drain(ForgeDirection.UNKNOWN, fill.amount, false);
             if (drain != null && drain.amount > 0) {
                 fill = FluidItemHelper.fillContainer(input, drain);
-                fluidHandler.drain(ForgeDirection.UNKNOWN, fill.amount, true);
-                storeContainer(inv, inputSlot, outputSlot, fill.container);
+                if (fill.container != null && fill.amount > 0) {
+                    fluidHandler.drain(ForgeDirection.UNKNOWN, fill.amount, true);
+                    storeContainer(inv, inputSlot, outputSlot, fill.container);
+                }
                 return true;
             }
         }
