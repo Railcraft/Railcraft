@@ -236,16 +236,24 @@ public abstract class SignalBlock extends AbstractPair {
             return new TrackValidationStatus(true, "UNVERIFIABLE_COORD_NULL");
         SignalBlock otherSignalBlock = getSignalAt(other);
         if (otherSignalBlock == null)
-            return new TrackValidationStatus(true, "UNVERIFIABLE_TILE_NULL");
+            return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_SIGNAL_NULL");
         WorldCoordinate myTrack = getTrackLocation();
         if (myTrack == null)
             return new TrackValidationStatus(false, "INVALID_MY_TRACK_NULL");
-        Status status = otherSignalBlock.getTrackStatus();
-        if(status == Status.UNKNOWN)
-            return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_TRACK_UNKNOWN");
-        WorldCoordinate otherTrack = getOtherTrackLocation(other);
+        Status otherTrackStatus = otherSignalBlock.getTrackStatus();
+        if (otherTrackStatus == Status.INVALID)
+            return new TrackValidationStatus(false, "INVALID_OTHER_TRACK_INVALID");
+        WorldCoordinate otherTrack = trackCache.get(other);
+        if (otherTrackStatus == Status.UNKNOWN) {
+            if (otherTrack == null)
+                return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_TRACK_UNKNOWN");
+        } else {
+            otherTrack = otherSignalBlock.getTrackLocation();
+            if (otherTrack != null)
+                trackCache.put(other, otherTrack);
+        }
         if (otherTrack == null)
-            return new TrackValidationStatus(false, "INVALID_OTHER_TRACK_NULL");
+            return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_TRACK_NULL");
         TrackTools.TrackScan scan = TrackTools.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
         trackScans.put(otherTrack, scan);
         if (scan.result == TrackTools.TrackScan.Result.VALID)
