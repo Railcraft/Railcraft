@@ -10,11 +10,9 @@ package mods.railcraft.common.plugins.forestry;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
-import forestry.api.recipes.RecipeManagers;
-import forestry.api.storage.BackpackManager;
-import forestry.api.storage.EnumBackpackType;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -34,6 +32,7 @@ import net.minecraftforge.fluids.FluidStack;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ForestryPlugin {
+    private static final ForestryPlugin INSTANCE = new ForestryPluginInner();
     public static Boolean modLoaded = null;
     public static Item trackmanBackpackT1;
     public static Item trackmanBackpackT2;
@@ -41,6 +40,16 @@ public class ForestryPlugin {
     public static Item icemanBackpackT2;
     public static Item apothecariesBackpackT1;
     public static Item apothecariesBackpackT2;
+
+    public static ForestryPlugin instance() {
+        return INSTANCE;
+    }
+
+    public static boolean isForestryInstalled() {
+        if (modLoaded == null)
+            modLoaded = Loader.isModLoaded("Forestry");
+        return modLoaded;
+    }
 
     public static ItemStack getItem(String tag) {
         if (!isForestryInstalled())
@@ -80,182 +89,195 @@ public class ForestryPlugin {
         FMLInterModComms.sendMessage("Forestry", "add-backpack-items", message);
     }
 
-    public static void registerBackpacks() {
-        try {
-            if (BackpackManager.backpackInterface == null)
-                return;
+    public void registerBackpacks() {
+    }
 
-            String tag = "railcraft.backpack.trackman.t1";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                trackmanBackpackT1 = registerBackpack(TrackmanBackpack.getInstance(), EnumBackpackType.T1, tag);
+    public void setupBackpackContents() {
+    }
 
-                ItemStack output = new ItemStack(trackmanBackpackT1);
-                addBackpackTooltip(output);
-                CraftingPlugin.addShapedRecipe(output,
-                        "X#X",
-                        "VYV",
-                        "X#X",
-                        '#', Blocks.wool,
-                        'V', new ItemStack(Blocks.rail),
-                        'X', Items.string,
-                        'Y', new ItemStack(Blocks.chest));
-            }
+    public void addCarpenterRecipe(String recipeTag, int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
+    }
 
-            tag = "railcraft.backpack.trackman.t2";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                trackmanBackpackT2 = registerBackpack(TrackmanBackpack.getInstance(), EnumBackpackType.T2, tag);
+    private static class ForestryPluginInner extends ForestryPlugin {
+        @Override
+        @Optional.Method(modid = "Forestry")
+        public void registerBackpacks() {
+            try {
+                if (forestry.api.storage.BackpackManager.backpackInterface == null)
+                    return;
 
-                ItemStack silk = getItem("craftingMaterial");
+                String tag = "railcraft.backpack.trackman.t1";
+                if (RailcraftConfig.isItemEnabled(tag)) {
+                    trackmanBackpackT1 = registerBackpack(TrackmanBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T1, tag);
 
-                if (silk != null) {
-                    silk.setItemDamage(3);
-
-                    ItemStack output = new ItemStack(trackmanBackpackT2);
+                    ItemStack output = new ItemStack(trackmanBackpackT1);
                     addBackpackTooltip(output);
-                    RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
-                            "WXW",
-                            "WTW",
-                            "WWW",
-                            'X', Items.diamond,
-                            'W', silk,
-                            'T', trackmanBackpackT1});
+                    CraftingPlugin.addShapedRecipe(output,
+                            "X#X",
+                            "VYV",
+                            "X#X",
+                            '#', Blocks.wool,
+                            'V', new ItemStack(Blocks.rail),
+                            'X', Items.string,
+                            'Y', new ItemStack(Blocks.chest));
                 }
-            }
 
-            tag = "railcraft.backpack.iceman.t1";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                icemanBackpackT1 = registerBackpack(IcemanBackpack.getInstance(), EnumBackpackType.T1, tag);
+                tag = "railcraft.backpack.trackman.t2";
+                if (RailcraftConfig.isItemEnabled(tag)) {
+                    trackmanBackpackT2 = registerBackpack(TrackmanBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T2, tag);
 
-                ItemStack output = new ItemStack(icemanBackpackT1);
-                addBackpackTooltip(output);
-                CraftingPlugin.addShapedRecipe(output,
-                        "X#X",
-                        "VYV",
-                        "X#X",
-                        '#', Blocks.wool,
-                        'V', new ItemStack(Blocks.snow),
-                        'X', Items.string,
-                        'Y', new ItemStack(Blocks.chest));
-            }
+                    ItemStack silk = getItem("craftingMaterial");
 
-            tag = "railcraft.backpack.iceman.t2";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                icemanBackpackT2 = registerBackpack(IcemanBackpack.getInstance(), EnumBackpackType.T2, tag);
+                    if (silk != null) {
+                        silk.setItemDamage(3);
 
-                ItemStack silk = getItem("craftingMaterial");
+                        ItemStack output = new ItemStack(trackmanBackpackT2);
+                        addBackpackTooltip(output);
+                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
+                                "WXW",
+                                "WTW",
+                                "WWW",
+                                'X', Items.diamond,
+                                'W', silk,
+                                'T', trackmanBackpackT1});
+                    }
+                }
 
-                if (silk != null) {
-                    silk.setItemDamage(3);
+                tag = "railcraft.backpack.iceman.t1";
+                if (RailcraftConfig.isItemEnabled(tag)) {
+                    icemanBackpackT1 = registerBackpack(IcemanBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T1, tag);
 
-                    ItemStack output = new ItemStack(icemanBackpackT2);
+                    ItemStack output = new ItemStack(icemanBackpackT1);
                     addBackpackTooltip(output);
-                    RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
-                            "WXW",
-                            "WTW",
-                            "WWW",
-                            'X', Items.diamond,
-                            'W', silk,
-                            'T', icemanBackpackT1});
+                    CraftingPlugin.addShapedRecipe(output,
+                            "X#X",
+                            "VYV",
+                            "X#X",
+                            '#', Blocks.wool,
+                            'V', new ItemStack(Blocks.snow),
+                            'X', Items.string,
+                            'Y', new ItemStack(Blocks.chest));
                 }
-            }
 
-            if (icemanBackpackT1 != null || icemanBackpackT2 != null)
-                FMLCommonHandler.instance().bus().register(new IceManTickHandler());
+                tag = "railcraft.backpack.iceman.t2";
+                if (RailcraftConfig.isItemEnabled(tag)) {
+                    icemanBackpackT2 = registerBackpack(IcemanBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T2, tag);
 
-            tag = "railcraft.backpack.apothecary.t1";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                apothecariesBackpackT1 = registerBackpack(ApothecariesBackpack.getInstance(), EnumBackpackType.T1, tag);
+                    ItemStack silk = getItem("craftingMaterial");
 
-                ItemStack output = new ItemStack(apothecariesBackpackT1);
-                addBackpackTooltip(output);
+                    if (silk != null) {
+                        silk.setItemDamage(3);
+
+                        ItemStack output = new ItemStack(icemanBackpackT2);
+                        addBackpackTooltip(output);
+                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
+                                "WXW",
+                                "WTW",
+                                "WWW",
+                                'X', Items.diamond,
+                                'W', silk,
+                                'T', icemanBackpackT1});
+                    }
+                }
+
+                if (icemanBackpackT1 != null || icemanBackpackT2 != null)
+                    FMLCommonHandler.instance().bus().register(new IceManTickHandler());
+
+                tag = "railcraft.backpack.apothecary.t1";
+                if (RailcraftConfig.isItemEnabled(tag)) {
+                    apothecariesBackpackT1 = registerBackpack(ApothecariesBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T1, tag);
+
+                    ItemStack output = new ItemStack(apothecariesBackpackT1);
+                    addBackpackTooltip(output);
 //                if (!ThaumcraftPlugin.isModInstalled()) {
-                CraftingPlugin.addShapedRecipe(output,
-                        "X#X",
-                        "VYV",
-                        "X#X",
-                        '#', Blocks.wool,
-                        'V', new ItemStack(Items.potionitem, 1, 8197),
-                        'X', Items.string,
-                        'Y', new ItemStack(Blocks.chest));
-                CraftingPlugin.addShapedRecipe(output,
-                        "X#X",
-                        "VYV",
-                        "X#X",
-                        '#', Blocks.wool,
-                        'V', new ItemStack(Items.potionitem, 1, 8261),
-                        'X', Items.string,
-                        'Y', new ItemStack(Blocks.chest));
-                CraftingPlugin.addShapedRecipe(output,
-                        "X#X",
-                        "VYV",
-                        "X#X",
-                        '#', Blocks.wool,
-                        'V', new ItemStack(Items.potionitem, 1, 8229),
-                        'X', Items.string,
-                        'Y', new ItemStack(Blocks.chest));
+                    CraftingPlugin.addShapedRecipe(output,
+                            "X#X",
+                            "VYV",
+                            "X#X",
+                            '#', Blocks.wool,
+                            'V', new ItemStack(Items.potionitem, 1, 8197),
+                            'X', Items.string,
+                            'Y', new ItemStack(Blocks.chest));
+                    CraftingPlugin.addShapedRecipe(output,
+                            "X#X",
+                            "VYV",
+                            "X#X",
+                            '#', Blocks.wool,
+                            'V', new ItemStack(Items.potionitem, 1, 8261),
+                            'X', Items.string,
+                            'Y', new ItemStack(Blocks.chest));
+                    CraftingPlugin.addShapedRecipe(output,
+                            "X#X",
+                            "VYV",
+                            "X#X",
+                            '#', Blocks.wool,
+                            'V', new ItemStack(Items.potionitem, 1, 8229),
+                            'X', Items.string,
+                            'Y', new ItemStack(Blocks.chest));
 //                } else
 //                    ApothecariesBackpack.registerThaumcraftResearch();
-            }
-
-            tag = "railcraft.backpack.apothecary.t2";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                apothecariesBackpackT2 = registerBackpack(ApothecariesBackpack.getInstance(), EnumBackpackType.T2, tag);
-
-                ItemStack silk = getItem("craftingMaterial");
-
-                if (silk != null) {
-                    silk.setItemDamage(3);
-
-                    ItemStack output = new ItemStack(apothecariesBackpackT2);
-                    addBackpackTooltip(output);
-                    RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
-                            "WXW",
-                            "WTW",
-                            "WWW",
-                            'X', Items.diamond,
-                            'W', silk,
-                            'T', apothecariesBackpackT1});
                 }
+
+                tag = "railcraft.backpack.apothecary.t2";
+                if (RailcraftConfig.isItemEnabled(tag)) {
+                    apothecariesBackpackT2 = registerBackpack(ApothecariesBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T2, tag);
+
+                    ItemStack silk = getItem("craftingMaterial");
+
+                    if (silk != null) {
+                        silk.setItemDamage(3);
+
+                        ItemStack output = new ItemStack(apothecariesBackpackT2);
+                        addBackpackTooltip(output);
+                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
+                                "WXW",
+                                "WTW",
+                                "WWW",
+                                'X', Items.diamond,
+                                'W', silk,
+                                'T', apothecariesBackpackT1});
+                    }
+                }
+            } catch (Throwable error) {
+                Game.logErrorAPI("Forestry", error, forestry.api.storage.BackpackManager.class);
             }
-        } catch (Throwable error) {
-            Game.logErrorAPI("Forestry", error, BackpackManager.class);
         }
-    }
 
-    private static Item registerBackpack(BaseBackpack backpack, EnumBackpackType type, String tag) {
-        Item item = BackpackManager.backpackInterface.addBackpack(backpack, type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
-        RailcraftRegistry.register(item);
-        return item;
-    }
-
-    private static void addBackpackTooltip(ItemStack stack) {
-        InvTools.addItemToolTip(stack, "\u00a77\u00a7o" + LocalizationPlugin.translate("item.railcraft.backpack.tip"));
-    }
-
-    public static void setupBackpackContents() {
-        try {
-            if (BackpackManager.backpackInterface == null)
-                return;
-            TrackmanBackpack.getInstance().setup();
-            IcemanBackpack.getInstance().setup();
-            ApothecariesBackpack.getInstance().setup();
-        } catch (Throwable error) {
-            Game.logErrorAPI("Forestry", error, BackpackManager.class);
+        @Optional.Method(modid = "Forestry")
+        private Item registerBackpack(BaseBackpack backpack, forestry.api.storage.EnumBackpackType type, String tag) {
+            Item item = forestry.api.storage.BackpackManager.backpackInterface.addBackpack(backpack, type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
+            RailcraftRegistry.register(item);
+            return item;
         }
-    }
 
-    public static boolean isForestryInstalled() {
-        if (modLoaded == null)
-            modLoaded = Loader.isModLoaded("Forestry");
-        return modLoaded;
-    }
+        @Optional.Method(modid = "Forestry")
+        private void addBackpackTooltip(ItemStack stack) {
+            InvTools.addItemToolTip(stack, "\u00a77\u00a7o" + LocalizationPlugin.translate("item.railcraft.backpack.tip"));
+        }
 
-    public static void addCarpenterRecipe(String recipeTag, int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
-        try {
-            if (RecipeManagers.carpenterManager != null && RailcraftConfig.getRecipeConfig("forestry.carpenter." + recipeTag))
-                RecipeManagers.carpenterManager.addRecipe(packagingTime, liquid, null, product, materials);
-        } catch (Throwable error) {
-            Game.logErrorAPI("Forestry", error, RecipeManagers.class);
+        @Override
+        @Optional.Method(modid = "Forestry")
+        public void setupBackpackContents() {
+            try {
+                if (forestry.api.storage.BackpackManager.backpackInterface == null)
+                    return;
+                TrackmanBackpack.getInstance().setup();
+                IcemanBackpack.getInstance().setup();
+                ApothecariesBackpack.getInstance().setup();
+            } catch (Throwable error) {
+                Game.logErrorAPI("Forestry", error, forestry.api.storage.BackpackManager.class);
+            }
+        }
+
+        @Override
+        @Optional.Method(modid = "Forestry")
+        public void addCarpenterRecipe(String recipeTag, int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
+            try {
+                if (forestry.api.recipes.RecipeManagers.carpenterManager != null && RailcraftConfig.getRecipeConfig("forestry.carpenter." + recipeTag))
+                    forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(packagingTime, liquid, null, product, materials);
+            } catch (Throwable error) {
+                Game.logErrorAPI("Forestry", error, forestry.api.recipes.RecipeManagers.class);
+            }
         }
     }
 }

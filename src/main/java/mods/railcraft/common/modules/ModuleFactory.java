@@ -46,9 +46,15 @@ import net.minecraft.init.Items;
 import net.minecraftforge.fluids.FluidStack;
 
 public class ModuleFactory extends RailcraftModule {
-
     private static final int COKE_COOK_TIME = 1800;
     private static final int COKE_COOK_CREOSOTE = 500;
+
+    private static void registerAltSteelFurnaceRecipe() {
+        List<ItemStack> iron = OreDictionary.getOres("nuggetIron");
+        for (ItemStack nugget : iron) {
+            CraftingPlugin.addFurnaceRecipe(nugget, ItemNugget.getNugget(ItemNugget.EnumNugget.STEEL), 0);
+        }
+    }
 
     @Override
     public void initFirst() {
@@ -349,7 +355,6 @@ public class ModuleFactory extends RailcraftModule {
                     CraftingPlugin.addShapelessRecipe(RailcraftToolItems.getCoalCoke(9), stack);
                 }
             }
-
         }
     }
 
@@ -391,7 +396,7 @@ public class ModuleFactory extends RailcraftModule {
                         'W', Blocks.wool,
                         'S', "stickWood");
             }
-            ForestryPlugin.addCarpenterRecipe("torches", 10, Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), null, new ItemStack(Blocks.torch, RailcraftConfig.creosoteTorchOutput()),
+            ForestryPlugin.instance().addCarpenterRecipe("torches", 10, Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), null, new ItemStack(Blocks.torch, RailcraftConfig.creosoteTorchOutput()),
                     "#",
                     "|",
                     '#', Blocks.wool,
@@ -479,16 +484,9 @@ public class ModuleFactory extends RailcraftModule {
                 IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.dirt));
         }
 
-        ForestryPlugin.addCarpenterRecipe("ties", 40, Fluids.CREOSOTE.get(750), null, RailcraftItem.tie.getStack(1, EnumTie.WOOD),
+        ForestryPlugin.instance().addCarpenterRecipe("ties", 40, Fluids.CREOSOTE.get(750), null, RailcraftItem.tie.getStack(1, EnumTie.WOOD),
                 "###",
                 '#', "slabWood");
-    }
-
-    private static void registerAltSteelFurnaceRecipe() {
-        List<ItemStack> iron = OreDictionary.getOres("nuggetIron");
-        for (ItemStack nugget : iron) {
-            CraftingPlugin.addFurnaceRecipe(nugget, ItemNugget.getNugget(ItemNugget.EnumNugget.STEEL), 0);
-        }
     }
 
     @Override
@@ -506,5 +504,4 @@ public class ModuleFactory extends RailcraftModule {
                 'I', m.getIngotTag());
         CraftingPlugin.addShapelessRecipe(m.getIngot(9), m.getBlockTag());
     }
-
 }

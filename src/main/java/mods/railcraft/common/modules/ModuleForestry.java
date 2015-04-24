@@ -8,27 +8,28 @@
  */
 package mods.railcraft.common.modules;
 
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ModuleForestry extends RailcraftModule {
-
     @Override
     public boolean canModuleLoad() {
         return ForestryPlugin.isForestryInstalled();
     }
 
     @Override
+    @Optional.Method(modid = "Forestry")
     public void initFirst() {
-        ForestryPlugin.registerBackpacks();
+        ForestryPlugin.instance().registerBackpacks();
     }
 
     @Override
+    @Optional.Method(modid = "Forestry")
     public void postInit() {
-        ForestryPlugin.setupBackpackContents();
+        ForestryPlugin.instance().setupBackpackContents();
     }
-
 }

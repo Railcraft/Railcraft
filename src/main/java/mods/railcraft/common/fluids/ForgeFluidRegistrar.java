@@ -12,16 +12,13 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ForgeFluidRegistrar implements IFluidRegistrar {
-
+public class ForgeFluidRegistrar extends FluidRegistrar {
     public static ForgeFluidRegistrar INSTANCE = new ForgeFluidRegistrar();
 
     @Override
     public void registerContainer(FluidContainerData container) {
         FluidContainerRegistry.registerFluidContainer(container);
     }
-
 }

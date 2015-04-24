@@ -46,17 +46,6 @@ sourceSets {
 			srcDir project.apiForestry
 			srcDir project.apiRedstoneFlux + "/src/main/java"
 			srcDir project.apiThaumcraft
-			exclude '**/forestry/api/apiculture/**'
-			exclude '**/forestry/api/arboriculture/**'
-			exclude '**/forestry/api/circuits/**'
-			exclude '**/forestry/api/core/**'
-			exclude '**/forestry/api/farming/**'
-			exclude '**/forestry/api/food/**'
-			exclude '**/forestry/api/fuels/**'
-			exclude '**/forestry/api/genetics/**'
-			exclude '**/forestry/api/lepidopterology/**'
-			exclude '**/forestry/api/mail/**'
-			exclude '**/forestry/api/world/**'
 		}
 		resources {
 			srcDir project.dirLang
@@ -125,6 +114,7 @@ jar {
 		configurations.api.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
+				exclude '**/forestry/api/**'
 				exclude '**/buildcraft/api/blueprints/**'
 				exclude '**/buildcraft/api/boards/**'
 				exclude '**/buildcraft/api/events/**'
@@ -231,6 +221,7 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 		configurations.api.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
+				exclude '**/forestry/api/**'
 				exclude '**/buildcraft/api/blueprints/**'
 				exclude '**/buildcraft/api/filler/**'
 				exclude '**/ic2/api/crops/**'

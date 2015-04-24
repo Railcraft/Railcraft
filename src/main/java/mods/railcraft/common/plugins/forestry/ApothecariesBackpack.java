@@ -39,8 +39,8 @@ public class ApothecariesBackpack extends BaseBackpack {
     }
 
     public void setup() {
-        addValidItem(Items.potionitem);
-        addValidItem(Items.glass_bottle);
+        addItem(Items.potionitem);
+        addItem(Items.glass_bottle);
     }
 
     @Override

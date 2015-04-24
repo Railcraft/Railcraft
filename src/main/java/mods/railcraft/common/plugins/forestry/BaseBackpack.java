@@ -8,56 +8,62 @@
  */
 package mods.railcraft.common.plugins.forestry;
 
+import cpw.mods.fml.common.Optional;
 import forestry.api.storage.IBackpackDefinition;
-import java.util.ArrayList;
-import java.util.List;
 import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = "Forestry")
 public abstract class BaseBackpack implements IBackpackDefinition {
-
     protected List<ItemStack> items = new ArrayList<ItemStack>(50);
 
     @Override
     public void addValidItem(ItemStack stack) {
-        if (stack == null) return;
-        items.add(stack);
+        addItem(stack);
     }
 
     @Override
     public void addValidItems(List<ItemStack> validItems) {
         for (ItemStack stack : validItems) {
-            addValidItem(stack);
+            addItem(stack);
         }
     }
 
-    public void addValidItem(RailcraftItem item) {
+    public void addItem(ItemStack stack) {
+        if (stack == null) return;
+        items.add(stack);
+    }
+
+    public void addItem(RailcraftItem item) {
         if (item == null) return;
         items.add(item.getWildcard());
     }
 
-    public void addValidItem(Item item) {
+    public void addItem(Item item) {
         if (item == null) return;
         items.add(new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE));
     }
 
-    public void addValidItem(Block block) {
+    public void addItem(Block block) {
         if (block == null) return;
         items.add(new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
     }
 
-    @Override
+    @Deprecated
+    @Optional.Method(modid = "Forestry")
     public boolean isValidItem(EntityPlayer player, ItemStack pickup) {
         return isValidItem(pickup);
     }
@@ -71,7 +77,8 @@ public abstract class BaseBackpack implements IBackpackDefinition {
         return false;
     }
 
-    @Override
+    @Deprecated
+    @Optional.Method(modid = "Forestry")
     public String getName() {
         return "Update Forestry!";
     }
@@ -90,5 +97,4 @@ public abstract class BaseBackpack implements IBackpackDefinition {
 
         return name;
     }
-
 }

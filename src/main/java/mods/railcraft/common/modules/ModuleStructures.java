@@ -299,7 +299,7 @@ public class ModuleStructures extends RailcraftModule {
             for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME))) {
                 CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
             }
-            ForestryPlugin.addCarpenterRecipe("creosote.block", 40, Fluids.CREOSOTE.get(750), null, stack, "L", 'L', "logWood");
+            ForestryPlugin.instance().addCarpenterRecipe("creosote.block", 40, Fluids.CREOSOTE.get(750), null, stack, "L", 'L', "logWood");
         }
     }
 }

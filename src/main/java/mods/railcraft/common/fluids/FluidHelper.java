@@ -36,7 +36,7 @@ public final class FluidHelper {
     public static final int NETWORK_UPDATE_INTERVAL = 128;
     public static final int BUCKET_VOLUME = 1000;
     public static final int PROCESS_VOLUME = BUCKET_VOLUME * 5;
-    private static final List<IFluidRegistrar> adapters = new ArrayList<IFluidRegistrar>();
+    private static final List<FluidRegistrar> adapters = new ArrayList<FluidRegistrar>();
 
     static {
         adapters.add(ForestryFluidRegistrar.INSTANCE);
@@ -230,7 +230,7 @@ public final class FluidHelper {
     }
 
     public static void registerContainer(FluidContainerData container) {
-        for (IFluidRegistrar adapter : adapters) {
+        for (FluidRegistrar adapter : adapters) {
             adapter.registerContainer(container);
         }
     }

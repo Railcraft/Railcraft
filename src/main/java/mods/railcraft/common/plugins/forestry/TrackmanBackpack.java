@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.plugins.forestry;
 
+import cpw.mods.fml.common.Optional;
+import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.api.core.items.IMinecartItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -19,13 +21,11 @@ import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.signals.ItemSignalBlockSurveyor;
 import mods.railcraft.common.blocks.signals.ItemSignalTuner;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.ItemCrowbar;
 import mods.railcraft.common.items.ItemCrowbarReinforced;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemMagnifyingGlass;
 import mods.railcraft.common.items.ItemWhistleTuner;
-import mods.railcraft.common.items.RailcraftPartItems;
 import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.fluids.FluidContainers;
 import mods.railcraft.common.items.*;
@@ -34,7 +34,8 @@ import mods.railcraft.common.items.*;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackmanBackpack extends BaseBackpack {
+@Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = "Forestry")
+public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinition {
 
     private static TrackmanBackpack instance;
 
@@ -48,49 +49,49 @@ public class TrackmanBackpack extends BaseBackpack {
     }
 
     public void setup() {
-        addValidItem(ItemCrowbar.getItem());
-        addValidItem(ItemCrowbarReinforced.getItem());
-        addValidItem(ItemWhistleTuner.getItem());
-        addValidItem(ItemMagnifyingGlass.getItem());
-        addValidItem(ItemGoggles.getItem());
-        addValidItem(ItemSignalBlockSurveyor.getItem());
-        addValidItem(ItemSignalTuner.getItem());
-        addValidItem(RailcraftToolItems.getOveralls());
+        addItem(ItemCrowbar.getItem());
+        addItem(ItemCrowbarReinforced.getItem());
+        addItem(ItemWhistleTuner.getItem());
+        addItem(ItemMagnifyingGlass.getItem());
+        addItem(ItemGoggles.getItem());
+        addItem(ItemSignalBlockSurveyor.getItem());
+        addItem(ItemSignalTuner.getItem());
+        addItem(RailcraftToolItems.getOveralls());
 
         for (Object id : Block.blockRegistry.getKeys()) {
             Block block = (Block) Block.blockRegistry.getObject(id);
             if (block == null) continue;
             if (TrackTools.isRailBlock(block))
-                addValidItem(block);
+                addItem(block);
         }
 
         for (Object id : Item.itemRegistry.getKeys()) {
             Item item = (Item) Item.itemRegistry.getObject(id);
             if (item instanceof ItemMinecart || item instanceof IMinecartItem)
-                addValidItem(item);
+                addItem(item);
         }
 
-        addValidItem(FluidContainers.getCreosoteOilBottle());
-        addValidItem(FluidContainers.getCreosoteOilBucket());
-        addValidItem(FluidContainers.getCreosoteOilCell());
-        addValidItem(FluidContainers.getCreosoteOilCan());
-        addValidItem(FluidContainers.getCreosoteOilRefactory());
-        addValidItem(FluidContainers.getCreosoteOilWax());
+        addItem(FluidContainers.getCreosoteOilBottle());
+        addItem(FluidContainers.getCreosoteOilBucket());
+        addItem(FluidContainers.getCreosoteOilCell());
+        addItem(FluidContainers.getCreosoteOilCan());
+        addItem(FluidContainers.getCreosoteOilRefactory());
+        addItem(FluidContainers.getCreosoteOilWax());
 
-        addValidItem(EnumMachineAlpha.WORLD_ANCHOR.getItem());
-        addValidItem(EnumMachineAlpha.PERSONAL_ANCHOR.getItem());
-        addValidItem(EnumMachineBeta.SENTINEL.getItem());
+        addItem(EnumMachineAlpha.WORLD_ANCHOR.getItem());
+        addItem(EnumMachineAlpha.PERSONAL_ANCHOR.getItem());
+        addItem(EnumMachineBeta.SENTINEL.getItem());
 
-        addValidItem(RailcraftItem.rail);
-        addValidItem(RailcraftItem.railbed);
-        addValidItem(RailcraftItem.tie);
-        addValidItem(RailcraftItem.signalLamp);
-        addValidItem(RailcraftItem.circuit);
+        addItem(RailcraftItem.rail);
+        addItem(RailcraftItem.railbed);
+        addItem(RailcraftItem.tie);
+        addItem(RailcraftItem.signalLamp);
+        addItem(RailcraftItem.circuit);
 
-        addValidItem(RailcraftBlocks.getBlockMachineGamma());
-        addValidItem(RailcraftBlocks.getBlockElevator());
-        addValidItem(RailcraftBlocks.getBlockSignal());
-        addValidItem(BlockDetector.getBlock());
+        addItem(RailcraftBlocks.getBlockMachineGamma());
+        addItem(RailcraftBlocks.getBlockElevator());
+        addItem(RailcraftBlocks.getBlockSignal());
+        addItem(BlockDetector.getBlock());
     }
 
     @Override

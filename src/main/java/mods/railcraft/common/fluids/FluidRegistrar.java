@@ -11,10 +11,9 @@ package mods.railcraft.common.fluids;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-interface IFluidRegistrar
-{
-    public void registerContainer(FluidContainerData container);
+public class FluidRegistrar {
+    public void registerContainer(FluidContainerData container) {
+    }
 }

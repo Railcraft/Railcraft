@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.fluids;
 
+import cpw.mods.fml.common.Optional;
 import mods.railcraft.common.items.ModItems;
-import forestry.api.recipes.RecipeManagers;
 import net.minecraft.item.ItemStack;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
@@ -17,16 +17,16 @@ import net.minecraft.init.Items;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ForestryFluidRegistrar implements IFluidRegistrar {
+public class ForestryFluidRegistrar extends FluidRegistrar {
     public static ForestryFluidRegistrar INSTANCE = new ForestryFluidRegistrar();
 
     private ForestryFluidRegistrar() {
     }
 
     @Override
+    @Optional.Method(modid = "Forestry")
     public void registerContainer(FluidContainerData container) {
         ItemStack recycle;
         int chance;
@@ -48,11 +48,10 @@ public class ForestryFluidRegistrar implements IFluidRegistrar {
         } else
             return;
 
-        if (RecipeManagers.squeezerManager != null && container.emptyContainer.getItem() != Items.bucket)
+        if (forestry.api.recipes.RecipeManagers.squeezerManager != null && container.emptyContainer.getItem() != Items.bucket)
             if (recycle != null)
-                RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{container.filledContainer}, container.fluid, recycle, chance);
+                forestry.api.recipes.RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{container.filledContainer}, container.fluid, recycle, chance);
             else
-                RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{container.filledContainer}, container.fluid);
+                forestry.api.recipes.RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{container.filledContainer}, container.fluid);
     }
-
 }

@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.plugins.forestry;
 
+import cpw.mods.fml.common.Optional;
+import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
@@ -23,7 +25,8 @@ import net.minecraft.init.Items;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class IcemanBackpack extends BaseBackpack {
+@Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = "Forestry")
+public class IcemanBackpack extends BaseBackpack implements IBackpackDefinition {
 
     private static IcemanBackpack instance;
     private static final ItemStack SNOWBALL = new ItemStack(Items.snowball);
@@ -41,16 +44,16 @@ public class IcemanBackpack extends BaseBackpack {
     }
 
     public void setup() {
-        addValidItem(Blocks.snow);
-        addValidItem(Blocks.snow_layer);
-        addValidItem(Blocks.ice);
-        addValidItem(EnumWallAlpha.SNOW.getItem());
-        addValidItem(EnumWallAlpha.ICE.getItem());
-        addValidItem(BlockRailcraftStairs.getItem(EnumBlockMaterial.SNOW));
-        addValidItem(BlockRailcraftStairs.getItem(EnumBlockMaterial.ICE));
-        addValidItem(BlockRailcraftSlab.getItem(EnumBlockMaterial.SNOW));
-        addValidItem(BlockRailcraftSlab.getItem(EnumBlockMaterial.ICE));
-        addValidItem(Items.snowball);
+        addItem(Blocks.snow);
+        addItem(Blocks.snow_layer);
+        addItem(Blocks.ice);
+        addItem(EnumWallAlpha.SNOW.getItem());
+        addItem(EnumWallAlpha.ICE.getItem());
+        addItem(BlockRailcraftStairs.getItem(EnumBlockMaterial.SNOW));
+        addItem(BlockRailcraftStairs.getItem(EnumBlockMaterial.ICE));
+        addItem(BlockRailcraftSlab.getItem(EnumBlockMaterial.SNOW));
+        addItem(BlockRailcraftSlab.getItem(EnumBlockMaterial.ICE));
+        addItem(Items.snowball);
     }
 
     public void compactInventory(ItemStack backpack) {
