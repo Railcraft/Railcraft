@@ -22,7 +22,7 @@ import net.minecraft.item.ItemBlock;
  * This class contains a registry of all currently active Railcraft items. Which
  * items are registered depends on the user's settings in "railcraft.cfg", so
  * the available items may vary from one installation to the next.
- *
+ * <p/>
  * Initialization of the registry will occur during the pre-init and init
  * stages. It is strongly recommended you wait until the post-init stage to
  * reference the registry.
@@ -30,21 +30,20 @@ import net.minecraft.item.ItemBlock;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class RailcraftRegistry {
-
     private RailcraftRegistry() {
     }
 
     /**
      * This function will return an ItemStack containing the item that
      * corresponds to the provided tag.
-     *
+     * <p/>
      * Generally item tags will correspond to the tags used in "railcraft.cfg",
      * but there will be some exceptions.
-     *
+     * <p/>
      * This function can and will return null for just about every item if the
      * item is disabled via the configuration files. You must test the return
      * value for safety.
-     *
+     * <p/>
      * For list of available tags see the printItemTags() function.
      *
      * @param tag The item tag
@@ -58,7 +57,7 @@ public final class RailcraftRegistry {
 
     /**
      * Registers a new item with the GameRegistry.
-     *
+     * <p/>
      * This should generally only be called by Railcraft itself while the mod is
      * initializing during the pre-init and init stages.
      *
@@ -81,7 +80,7 @@ public final class RailcraftRegistry {
 
     /**
      * Registers a new item with the GameRegistry.
-     *
+     * <p/>
      * This should generally only be called by Railcraft itself while the mod is
      * initializing during the pre-init and init stages.
      *
@@ -91,12 +90,11 @@ public final class RailcraftRegistry {
         if (stack == null)
             throw new RuntimeException("Don't register null items!");
         register(stack.getUnlocalizedName(), stack);
-
     }
 
     /**
      * Registers a new item with the GameRegistry.
-     *
+     * <p/>
      * This should generally only be called by Railcraft itself while the mod is
      * initializing during the pre-init and init stages.
      *
@@ -105,6 +103,16 @@ public final class RailcraftRegistry {
     public static void register(Item item) {
         if (ModuleManager.getStage() != ModuleManager.Stage.PRE_INIT && ModuleManager.getStage() != ModuleManager.Stage.INIT_FIRST)
             throw new RuntimeException("Items must be initialized in PreInit or InitFirst!");
+        _register(item);
+    }
+
+    public static void registerInit(Item item) {
+        if (ModuleManager.getStage() != ModuleManager.Stage.INIT_SECOND)
+            throw new RuntimeException("This item must be initialized in InitSecond!");
+        _register(item);
+    }
+
+    private static void _register(Item item) {
         String tag = item.getUnlocalizedName();
         tag = MiscTools.cleanTag(tag);
         TagList.addTag(tag);
@@ -113,7 +121,7 @@ public final class RailcraftRegistry {
 
     /**
      * Registers a new block with the GameRegistry.
-     *
+     * <p/>
      * This should generally only be called by Railcraft itself while the mod is
      * initializing during the pre-init and init stages.
      *
@@ -125,7 +133,7 @@ public final class RailcraftRegistry {
 
     /**
      * Registers a new block with the GameRegistry.
-     *
+     * <p/>
      * This should generally only be called by Railcraft itself while the mod is
      * initializing during the pre-init and init stages.
      *
@@ -140,5 +148,4 @@ public final class RailcraftRegistry {
         TagList.addTag(tag);
         GameRegistry.registerBlock(block, itemclass, tag);
     }
-
 }

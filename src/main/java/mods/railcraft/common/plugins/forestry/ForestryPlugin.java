@@ -252,7 +252,7 @@ public class ForestryPlugin {
         @Optional.Method(modid = "Forestry")
         private Item registerBackpack(BaseBackpack backpack, forestry.api.storage.EnumBackpackType type, String tag) {
             Item item = forestry.api.storage.BackpackManager.backpackInterface.addBackpack(backpack, type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
-            RailcraftRegistry.register(item);
+            RailcraftRegistry.registerInit(item);
             return item;
         }
 

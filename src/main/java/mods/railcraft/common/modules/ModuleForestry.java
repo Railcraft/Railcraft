@@ -23,7 +23,7 @@ public class ModuleForestry extends RailcraftModule {
 
     @Override
     @Optional.Method(modid = "Forestry")
-    public void initFirst() {
+    public void initSecond() {
         ForestryPlugin.instance().registerBackpacks();
     }
 
