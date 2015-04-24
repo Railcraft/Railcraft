@@ -114,7 +114,6 @@ jar {
 		configurations.api.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
-				exclude '**/forestry/api/**'
 				exclude '**/buildcraft/api/blueprints/**'
 				exclude '**/buildcraft/api/boards/**'
 				exclude '**/buildcraft/api/events/**'
@@ -175,6 +174,7 @@ task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 
 	from (zipTree(jar.getArchivePath())) {
 		include '**'
+		exclude '**/forestry/api/**'
 		exclude '**/uristqwerty/**'
 	}
 
@@ -209,19 +209,16 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 		include '**'
 	}
 
-	from(sourceSets.main.allSource) {
-		include '**/api/**'
-	}
-
 	from(sourceSets.main.output) {
 		include '**'
+		exclude '**/forestry/api/**'
+		exclude '**/uristqwerty/**'
 	}
 
 	from {
 		configurations.api.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
-				exclude '**/forestry/api/**'
 				exclude '**/buildcraft/api/blueprints/**'
 				exclude '**/buildcraft/api/filler/**'
 				exclude '**/ic2/api/crops/**'

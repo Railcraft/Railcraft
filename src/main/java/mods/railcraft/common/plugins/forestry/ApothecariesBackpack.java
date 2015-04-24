@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.plugins.forestry;
 
+import cpw.mods.fml.common.Optional;
+import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.common.plugins.thaumcraft.ResearchItemRC;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -25,7 +27,8 @@ import thaumcraft.api.research.ResearchPage;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ApothecariesBackpack extends BaseBackpack {
+@Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = "Forestry")
+public class ApothecariesBackpack extends BaseBackpack implements IBackpackDefinition {
 
     private static ApothecariesBackpack instance;
 

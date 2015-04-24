@@ -32,17 +32,23 @@ import net.minecraftforge.fluids.FluidStack;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ForestryPlugin {
-    private static final ForestryPlugin INSTANCE = new ForestryPluginInner();
-    public static Boolean modLoaded = null;
     public static Item trackmanBackpackT1;
     public static Item trackmanBackpackT2;
     public static Item icemanBackpackT1;
     public static Item icemanBackpackT2;
     public static Item apothecariesBackpackT1;
     public static Item apothecariesBackpackT2;
+    public static Boolean modLoaded = null;
+    private static ForestryPlugin instance;
 
     public static ForestryPlugin instance() {
-        return INSTANCE;
+        if (instance == null) {
+            if (isForestryInstalled())
+                instance = new ForestryPluginInstalled();
+            else
+                instance = new ForestryPlugin();
+        }
+        return instance;
     }
 
     public static boolean isForestryInstalled() {
@@ -98,7 +104,7 @@ public class ForestryPlugin {
     public void addCarpenterRecipe(String recipeTag, int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
     }
 
-    private static class ForestryPluginInner extends ForestryPlugin {
+    private static class ForestryPluginInstalled extends ForestryPlugin {
         @Override
         @Optional.Method(modid = "Forestry")
         public void registerBackpacks() {
