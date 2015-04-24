@@ -1,5 +1,11 @@
+9.6.0.0:
+	INFO: Repackage for release.
+
+9.5.0.17 (unstable):
+	FIX: Make sure the API is actually not included in the JAR, derp.
+
 9.5.0.16 (unstable):
-	NEW: Removed Forestry API from the JAR.
+	NEW: Removed Forestry API from the JAR. (experimental)
 	NEW: You can now reset the Signal Tuner and Signal Block Surveyor by sneak-clicking.
 	FIX: Various chat messages that didn't before should now properly localize.
 
