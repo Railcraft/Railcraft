@@ -1,3 +1,6 @@
+9.6.0.1:
+	FIX: Fix the edge case where a Signal is loaded but the nearest Track is not causing the Signal connection to break.
+
 9.6.0.0:
 	INFO: Repackage for release.
 

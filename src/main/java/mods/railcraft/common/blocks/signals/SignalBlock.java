@@ -234,12 +234,16 @@ public abstract class SignalBlock extends AbstractPair {
     private TrackValidationStatus isSignalBlockValid(WorldCoordinate other) {
         if (other == null)
             return new TrackValidationStatus(true, "UNVERIFIABLE_COORD_NULL");
-        if (getSignalAt(other) == null)
+        SignalBlock otherSignalBlock = getSignalAt(other);
+        if (otherSignalBlock == null)
             return new TrackValidationStatus(true, "UNVERIFIABLE_TILE_NULL");
         WorldCoordinate myTrack = getTrackLocation();
-        WorldCoordinate otherTrack = getOtherTrackLocation(other);
         if (myTrack == null)
             return new TrackValidationStatus(false, "INVALID_MY_TRACK_NULL");
+        Status status = otherSignalBlock.getTrackStatus();
+        if(status == Status.UNKNOWN)
+            return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_TRACK_UNKNOWN");
+        WorldCoordinate otherTrack = getOtherTrackLocation(other);
         if (otherTrack == null)
             return new TrackValidationStatus(false, "INVALID_OTHER_TRACK_NULL");
         TrackTools.TrackScan scan = TrackTools.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
