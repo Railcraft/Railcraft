@@ -55,12 +55,18 @@ public abstract class SignalBlock extends AbstractPair {
 
     private void printDebugPair(String msg, TileEntity ot) {
         if (RailcraftConfig.printSignalDebug())
-            Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, ot.xCoord, ot.yCoord, ot.zCoord, ot.getClass());
+            if (ot == null)
+                Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
+            else
+                Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, ot.xCoord, ot.yCoord, ot.zCoord, ot.getClass());
     }
 
     private void printDebugPair(String msg, WorldCoordinate coord) {
         if (RailcraftConfig.printSignalDebug())
-            Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.xCoord, tile.yCoord, tile.zCoord, coord.x, coord.y, coord.z);
+            if (coord == null)
+                Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
+            else
+                Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.xCoord, tile.yCoord, tile.zCoord, coord.x, coord.y, coord.z);
     }
 
     public void clearSignalBlockPairing(WorldCoordinate other, String reason, Object... args) {
@@ -109,7 +115,10 @@ public abstract class SignalBlock extends AbstractPair {
                 printDebugPair("Signal Block dropped because pair was no longer symmetrically paired.", otherCoord);
             }
         } else if (!invalidPairings.contains(otherCoord)) {
-            printDebugPair("Signal Block dropped because pair was not a valid Signal.", otherTile);
+            if (otherTile != null)
+                printDebugPair("Signal Block dropped because pair was not a valid Signal.", otherTile);
+            else
+                printDebugPair("Signal Block dropped because pair was not a valid Signal.", otherCoord);
         }
         return false;
     }
