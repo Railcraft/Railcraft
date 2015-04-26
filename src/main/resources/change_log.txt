@@ -1,3 +1,6 @@
+9.6.1.0:
+	FIX: Dupe bug with Fluid Container code.
+
 9.6.0.1:
 	FIX: Fix the edge case where a Signal is loaded but the nearest Track is not causing the Signal connection to break.
 
