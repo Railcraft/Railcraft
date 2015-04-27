@@ -9,23 +9,21 @@
 package mods.railcraft.client.core;
 
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
+import mods.railcraft.common.blocks.signals.TileBoxController;
+import mods.railcraft.common.blocks.signals.TileSignalFoundation;
 import org.apache.logging.log4j.Level;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
-
 import mods.railcraft.client.render.*;
 import mods.railcraft.client.render.carts.LocomotiveRendererDefault;
 import mods.railcraft.client.render.carts.LocomotiveRendererElectric;
@@ -68,7 +66,6 @@ import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.item.Item;
 
 public class ClientProxy extends CommonProxy {
-
     @Override
     public World getClientWorld() {
         return FMLClientHandler.instance().getClient().theWorld;
@@ -154,6 +151,9 @@ public class ClientProxy extends CommonProxy {
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileSteamTurbine.class, new RenderTurbineGauge());
 
+        RenderTESRSignals controllerRenderer = new RenderTESRSignals();
+        ClientRegistry.bindTileEntitySpecialRenderer(TileSignalFoundation.class, controllerRenderer);
+
         if (RailcraftBlocks.getBlockTrack() != null)
             RenderingRegistry.registerBlockHandler(new RenderTrack());
 
@@ -200,5 +200,4 @@ public class ClientProxy extends CommonProxy {
             MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(renderer.getBlock()), renderer.getItemRenderer());
         }
     }
-
 }

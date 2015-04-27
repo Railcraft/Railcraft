@@ -79,8 +79,7 @@ public abstract class SignalBlock extends AbstractPair {
 
     @Override
     protected void addPairing(WorldCoordinate other) {
-        if (pairings.contains(other))
-            pairings.remove(other);
+        pairings.remove(other);
         pairings.add(other);
         while (pairings.size() > getMaxPairings()) {
             WorldCoordinate pair = pairings.remove();
@@ -121,6 +120,13 @@ public abstract class SignalBlock extends AbstractPair {
                 printDebugPair("Signal Block dropped because pair was not a valid Signal.", otherCoord);
         }
         return false;
+    }
+
+    @Override
+    public void cleanPairings() {
+        if (!invalidPairings.isEmpty())
+            printDebug("Signal Block pairs cleaned: source:[{0}, {1}, {2}] targets: {3}", tile.xCoord, tile.yCoord, tile.zCoord, invalidPairings);
+        super.cleanPairings();
     }
 
     //    @Override
@@ -291,7 +297,7 @@ public abstract class SignalBlock extends AbstractPair {
                             clearSignalBlockPairing(otherCoord, "Signal Block dropped because track between Signals was invalid. source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] reason:{6}", tile.xCoord, tile.yCoord, tile.zCoord, otherCoord.x, otherCoord.y, otherCoord.z, status.message);
                     }
                     waitingForRetest.clear();
-                    for (WorldCoordinate otherCoord : pairings) {
+                    for (WorldCoordinate otherCoord : getPairs()) {
                         if (!isSignalBlockValid(otherCoord).isValid)
                             waitingForRetest.add(otherCoord);
                     }

@@ -9,53 +9,34 @@
 package mods.railcraft.common.items;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import java.util.List;
 import mods.railcraft.common.blocks.hidden.BlockHidden;
 import mods.railcraft.common.blocks.hidden.TrailTicker;
+import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.plugins.forge.*;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+
+import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemGoggles extends ItemArmor {
-
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "goggles.png";
     private static ItemGoggles item;
 
-    public static enum Aura {
-
-        NONE("railcraft.gui.goggles.aura.none"),
-        ANCHOR("railcraft.gui.goggles.aura.anchor"),
-        TUNING("railcraft.gui.goggles.aura.tuning"),
-        TRACKING("railcraft.gui.goggles.aura.tracking");
-        public static final Aura[] AURAS = values();
-        private final String name;
-
-        private Aura(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return LocalizationPlugin.translate(name);
-        }
-
+    public ItemGoggles() {
+        super(ItemMaterials.GOGGLES, 0, 0);
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
     public static void registerItem() {
@@ -137,11 +118,6 @@ public class ItemGoggles extends ItemArmor {
         return helm != null && helm.getItem() instanceof ItemGoggles;
     }
 
-    public ItemGoggles() {
-        super(ItemMaterials.GOGGLES, 0, 0);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-    }
-
     @Override
     public void registerIcons(IIconRegister iconRegister) {
         itemIcon = iconRegister.registerIcon("railcraft:" + MiscTools.cleanTag(getUnlocalizedName()));
@@ -178,4 +154,24 @@ public class ItemGoggles extends ItemArmor {
         list.add(tip);
     }
 
+    public static enum Aura {
+
+        NONE("railcraft.gui.goggles.aura.none"),
+        ANCHOR("railcraft.gui.goggles.aura.anchor"),
+        TUNING("railcraft.gui.goggles.aura.tuning"),
+        TRACKING("railcraft.gui.goggles.aura.tracking"),
+        SURVEYING("railcraft.gui.goggles.aura.surveying");
+        public static final Aura[] AURAS = values();
+        private final String name;
+
+        private Aura(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return LocalizationPlugin.translate(name);
+        }
+
+    }
 }

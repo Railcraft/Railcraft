@@ -9,9 +9,12 @@
 package mods.railcraft.client.util.effects;
 
 import cpw.mods.fml.client.FMLClientHandler;
+
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Set;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.client.particle.EntityFX;
@@ -35,13 +38,12 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketEffect.Effect;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ClientEffectProxy extends CommonEffectProxy {
-
     public static final short TELEPORT_PARTICLES = 64;
     public static final short TRACKING_DISTANCE = 32 * 32;
+    private final int[] coords = new int[6];
 
     public ClientEffectProxy() {
         SignalTools.effectManager = this;
@@ -112,6 +114,15 @@ public class ClientEffectProxy extends CommonEffectProxy {
     }
 
     @Override
+    public boolean isSurveyingAuraActive() {
+        if (ItemGoggles.areEnabled()) {
+            ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().thePlayer);
+            return ItemGoggles.getCurrentAura(goggles) == Aura.SURVEYING;
+        }
+        return AuraKeyHandler.isSurveyingAuraEnabled();
+    }
+
+    @Override
     public boolean isTrackingAuraActive() {
         if (ItemGoggles.areEnabled()) {
             ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().thePlayer);
@@ -119,6 +130,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         }
         return false;
     }
+
 
     @Override
     public void tuningEffect(TileEntity start, TileEntity dest) {
@@ -128,7 +140,16 @@ public class ClientEffectProxy extends CommonEffectProxy {
             double px = start.xCoord + 0.5 + rand.nextGaussian() * 0.1;
             double py = start.yCoord + 0.5 + rand.nextGaussian() * 0.1;
             double pz = start.zCoord + 0.5 + rand.nextGaussian() * 0.1;
-            EntityFX particle = new EntityTuningFX(start.getWorldObj(), px, py, pz, EffectManager.getEffectSource(dest));
+
+            coords[0] = start.xCoord;
+            coords[1] = start.yCoord;
+            coords[2] = start.zCoord;
+            coords[3] = dest.xCoord;
+            coords[4] = dest.yCoord;
+            coords[5] = dest.zCoord;
+            int color = Arrays.hashCode(coords);
+
+            EntityFX particle = new EntityTuningFX(start.getWorldObj(), px, py, pz, EffectManager.getEffectSource(dest), color);
             spawnParticle(particle);
         }
     }
@@ -261,5 +282,4 @@ public class ClientEffectProxy extends CommonEffectProxy {
         Minecraft mc = FMLClientHandler.instance().getClient();
         mc.effectRenderer.addEffect(particle);
     }
-
 }

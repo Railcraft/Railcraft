@@ -125,4 +125,9 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
     public String getLocalizationTag() {
         return getSignalType().getTag() + ".name";
     }
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return INFINITE_EXTENT_AABB;
+    }
 }

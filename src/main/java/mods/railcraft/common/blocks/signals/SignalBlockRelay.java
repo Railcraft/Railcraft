@@ -28,8 +28,8 @@ public class SignalBlockRelay extends SignalBlock {
 
     @Override
     protected void updateSignalAspect() {
-        aspects.keySet().retainAll(pairings);
-        for (WorldCoordinate otherCoord : pairings) {
+        aspects.keySet().retainAll(getPairs());
+        for (WorldCoordinate otherCoord : getPairs()) {
             aspects.put(otherCoord, determineAspect(otherCoord));
         }
     }
@@ -43,7 +43,7 @@ public class SignalBlockRelay extends SignalBlock {
             return SignalAspect.BLINK_RED;
         }
         SignalAspect aspect = SignalAspect.GREEN;
-        for (WorldCoordinate otherCoord : pairings) {
+        for (WorldCoordinate otherCoord : getPairs()) {
             aspect = SignalAspect.mostRestrictive(aspect, aspects.get(otherCoord));
         }
         return aspect;

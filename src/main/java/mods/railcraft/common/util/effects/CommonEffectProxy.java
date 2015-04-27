@@ -13,6 +13,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
+
+import mods.railcraft.common.items.ItemGoggles;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.entity.Entity;
 import net.minecraft.client.particle.EntityFX;
@@ -25,11 +29,9 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.util.MathHelper;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CommonEffectProxy implements IEffectManager {
-
     protected static final Random rand = new Random();
 
     @Override
@@ -106,6 +108,11 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
+    public boolean isSurveyingAuraActive() {
+        return false;
+    }
+
+    @Override
     public void tuningEffect(TileEntity start, TileEntity dest) {
     }
 
@@ -135,5 +142,4 @@ public class CommonEffectProxy implements IEffectManager {
     @Override
     public void chimneyEffect(World world, double x, double y, double z) {
     }
-
 }

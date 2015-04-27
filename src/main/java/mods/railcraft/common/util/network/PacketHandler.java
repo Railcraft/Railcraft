@@ -13,10 +13,12 @@ import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
+
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftPacket.PacketType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,9 +26,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 
 public class PacketHandler {
-
-    private static final PacketType[] packetTypes = PacketType.values();
     public static final PacketHandler INSTANCE = new PacketHandler();
+    private static final PacketType[] packetTypes = PacketType.values();
     final FMLEventChannel channel;
 
     private PacketHandler() {
@@ -95,10 +96,12 @@ public class PacketHandler {
                     break;
                 case CONTROLLER_UPDATE:
                 case RECEIVER_UPDATE:
+                case SIGNAL_UPDATE:
                     pkt = new PacketPairUpdate(type);
                     break;
                 case CONTROLLER_REQUEST:
                 case RECEIVER_REQUEST:
+                case SIGNAL_REQUEST:
                     pkt = new PacketPairRequest(player, type);
                     break;
                 case ITEM_NBT:
@@ -119,5 +122,4 @@ public class PacketHandler {
             Game.logThrowable("Exception in PacketHandler.onPacketData: {0}", e, Arrays.toString(bData));
         }
     }
-
 }

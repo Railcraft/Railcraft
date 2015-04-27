@@ -32,6 +32,7 @@ public abstract class RailcraftPacket {
         EFFECT,
         CONTROLLER_REQUEST, CONTROLLER_UPDATE,
         RECEIVER_REQUEST, RECEIVER_UPDATE,
+        SIGNAL_REQUEST, SIGNAL_UPDATE,
         ITEM_NBT,
         KEY_PRESS,
         GOLDEN_TICKET_GUI,

@@ -11,6 +11,7 @@ package mods.railcraft.common.util.effects;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Set;
+
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -18,16 +19,16 @@ import mods.railcraft.api.signals.IPairEffectRenderer;
 import net.minecraft.tileentity.TileEntity;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IEffectManager extends IPairEffectRenderer {
-
     void chunkLoaderEffect(World world, Object source, Set<ChunkCoordIntPair> chunks);
 
     boolean isAnchorAuraActive();
 
     boolean isTrackingAuraActive();
+
+    boolean isSurveyingAuraActive();
 
     void handleEffectPacket(DataInputStream data) throws IOException;
 
@@ -44,5 +45,4 @@ public interface IEffectManager extends IPairEffectRenderer {
     void fireSparkEffect(World world, double startX, double startY, double startZ, double endX, double endY, double endZ);
 
     void forceTrackSpawnEffect(World world, int x, int y, int z);
-
 }

@@ -55,7 +55,8 @@ public class CartContentRendererTank extends CartContentRenderer {
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glTranslatef(0.0F, 0.3125F, 0.0F);
         GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-        GL11.glDisable(2896 /*GL_LIGHTING*/);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         int x = (int) (Math.floor(cart.posX));
         int y = (int) (Math.floor(cart.posY));

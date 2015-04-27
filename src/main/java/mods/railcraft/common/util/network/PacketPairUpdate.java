@@ -10,10 +10,14 @@ package mods.railcraft.common.util.network;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Collection;
+
+import mods.railcraft.common.blocks.signals.ISignalBlockTile;
+import mods.railcraft.common.blocks.signals.SignalBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import mods.railcraft.api.core.WorldCoordinate;
@@ -25,7 +29,6 @@ import mods.railcraft.api.signals.SignalReceiver;
 import mods.railcraft.common.util.misc.Game;
 
 public class PacketPairUpdate extends RailcraftPacket {
-
     private AbstractPair pairing;
     private PacketType packetType;
 
@@ -66,9 +69,13 @@ public class PacketPairUpdate extends RailcraftPacket {
         if (packetType == PacketType.CONTROLLER_UPDATE) {
             if (tile instanceof IControllerTile)
                 pairing = ((IControllerTile) tile).getController();
-        } else if (packetType == PacketType.RECEIVER_UPDATE)
+        } else if (packetType == PacketType.RECEIVER_UPDATE) {
             if (tile instanceof IReceiverTile)
                 pairing = ((IReceiverTile) tile).getReceiver();
+        } else if (packetType == PacketType.SIGNAL_UPDATE) {
+            if (tile instanceof ISignalBlockTile)
+                pairing = ((ISignalBlockTile) tile).getSignalBlock();
+        }
         if (pairing != null) {
             try {
                 pairing.clearPairings();
@@ -88,7 +95,8 @@ public class PacketPairUpdate extends RailcraftPacket {
             return PacketType.CONTROLLER_UPDATE.ordinal();
         if (pairing instanceof SignalReceiver)
             return PacketType.RECEIVER_UPDATE.ordinal();
+        if (pairing instanceof SignalBlock)
+            return PacketType.SIGNAL_UPDATE.ordinal();
         return -1;
     }
-
 }

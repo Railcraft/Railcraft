@@ -11,6 +11,9 @@ package mods.railcraft.common.util.network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import mods.railcraft.common.blocks.signals.ISignalBlockTile;
+import mods.railcraft.common.blocks.signals.SignalBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -22,7 +25,6 @@ import mods.railcraft.api.signals.SignalReceiver;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 public class PacketPairRequest extends RailcraftPacket {
-
     private AbstractPair pairing;
     private EntityPlayerMP player;
     private PacketType packetType;
@@ -67,6 +69,10 @@ public class PacketPairRequest extends RailcraftPacket {
                 if (tile instanceof IReceiverTile)
                     pairing = ((IReceiverTile) tile).getReceiver();
                 break;
+            case SIGNAL_REQUEST:
+                if (tile instanceof ISignalBlockTile)
+                    pairing = ((ISignalBlockTile) tile).getSignalBlock();
+                break;
         }
         if (pairing != null && player != null) {
             PacketPairUpdate pkt = new PacketPairUpdate(pairing);
@@ -80,7 +86,8 @@ public class PacketPairRequest extends RailcraftPacket {
             return PacketType.CONTROLLER_REQUEST.ordinal();
         if (pairing instanceof SignalReceiver)
             return PacketType.RECEIVER_REQUEST.ordinal();
+        if (pairing instanceof SignalBlock)
+            return PacketType.SIGNAL_REQUEST.ordinal();
         return -1;
     }
-
 }
