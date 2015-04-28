@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 
+import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.client.particle.EntityFX;
@@ -43,7 +44,8 @@ import mods.railcraft.common.util.network.PacketEffect.Effect;
 public class ClientEffectProxy extends CommonEffectProxy {
     public static final short TELEPORT_PARTICLES = 64;
     public static final short TRACKING_DISTANCE = 32 * 32;
-    private final int[] coords = new int[6];
+    private final WorldCoordinate[] coords = new WorldCoordinate[2];
+    private final boolean apiUpdated = Comparable.class.isAssignableFrom(WorldCoordinate.class);
 
     public ClientEffectProxy() {
         SignalTools.effectManager = this;
@@ -131,7 +133,6 @@ public class ClientEffectProxy extends CommonEffectProxy {
         return false;
     }
 
-
     @Override
     public void tuningEffect(TileEntity start, TileEntity dest) {
         if (!shouldSpawnParticle(false))
@@ -141,12 +142,10 @@ public class ClientEffectProxy extends CommonEffectProxy {
             double py = start.yCoord + 0.5 + rand.nextGaussian() * 0.1;
             double pz = start.zCoord + 0.5 + rand.nextGaussian() * 0.1;
 
-            coords[0] = start.xCoord;
-            coords[1] = start.yCoord;
-            coords[2] = start.zCoord;
-            coords[3] = dest.xCoord;
-            coords[4] = dest.yCoord;
-            coords[5] = dest.zCoord;
+            coords[0] = new WorldCoordinate(start);
+            coords[1] = new WorldCoordinate(dest);
+            if (apiUpdated)
+                Arrays.sort(coords);
             int color = Arrays.hashCode(coords);
 
             EntityFX particle = new EntityTuningFX(start.getWorldObj(), px, py, pz, EffectManager.getEffectSource(dest), color);
