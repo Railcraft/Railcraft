@@ -9,6 +9,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
@@ -26,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.logging.log4j.Level;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -42,6 +44,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
     private final IInventory invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
     private final IInventory invFuel = new InventoryMapper(this, SLOT_BURN, 4);
     private final IInventory invTicket = new InventoryMapper(this, SLOT_TICKET, 2, false);
+    private boolean outOfWater = true;
 
     public EntityLocomotiveSteamSolid(World world) {
         super(world);
@@ -76,6 +79,16 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
     @Override
     public void onUpdate() {
+        if (Game.isHost(worldObj)) {
+            if (RailcraftConfig.printSignalDebug()) {
+                if (outOfWater && !tankWater.isEmpty())
+                    outOfWater = false;
+                else if (!outOfWater && tankWater.isEmpty()) {
+                    outOfWater = true;
+                    Game.log(Level.DEBUG, "Solid Steam Locomotive ran out of water! [{0}, {1}, {2}] [locked:{3}] [idle:{4}] [mode:{5}]", posX, posY, posZ, Train.getTrain(this).isTrainLockedDown(), isIdle(), getMode().name());
+                }
+            }
+        }
         super.onUpdate();
 
         if (Game.isHost(worldObj)) {

@@ -18,6 +18,8 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -67,6 +69,28 @@ public abstract class SignalBlock extends AbstractPair {
                 Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
             else
                 Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.xCoord, tile.yCoord, tile.zCoord, coord.x, coord.y, coord.z);
+    }
+
+    @Override
+    protected void saveNBT(NBTTagCompound data) {
+        super.saveNBT(data);
+        if (RailcraftConfig.printSignalDebug()) {
+            Deque<WorldCoordinate> test = new LinkedList<WorldCoordinate>();
+            NBTTagList list = data.getTagList("pairings", 10);
+            for (byte entry = 0; entry < list.tagCount(); entry++) {
+                NBTTagCompound tag = list.getCompoundTagAt(entry);
+                int[] c = tag.getIntArray("coords");
+                test.add(new WorldCoordinate(c[0], c[1], c[2], c[3]));
+            }
+            boolean isConsistent = test.containsAll(getPairs());
+            printDebug("Signal Block saved NBT. [{0}, {1}, {2}] [verified: {3}] [data: {4}]", tile.xCoord, tile.yCoord, tile.zCoord, isConsistent, test);
+        }
+    }
+
+    @Override
+    protected void loadNBT(NBTTagCompound data) {
+        super.loadNBT(data);
+        printDebug("Signal Block loaded NBT. [{0}, {1}, {2}] data: {3}", tile.xCoord, tile.yCoord, tile.zCoord, pairings);
     }
 
     public void clearSignalBlockPairing(WorldCoordinate other, String reason, Object... args) {

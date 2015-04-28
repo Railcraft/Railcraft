@@ -97,8 +97,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         if (Game.isHost(worldObj)) {
             update++;
 
-            FluidStack water = tankWater.getFluid();
-            if (water == null || water.amount <= 0)
+            if (tankWater.isEmpty())
                 setMode(LocoMode.SHUTDOWN);
 
             setSteaming(tankSteam.getFluidAmount() > 0);
