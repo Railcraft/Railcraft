@@ -11,11 +11,14 @@ package mods.railcraft.common.blocks.signals;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.nbt.NBTTagCompound;
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SimpleSignalController;
 import mods.railcraft.common.util.misc.Game;
+import org.apache.logging.log4j.Level;
 
 public class TileSignalBlockSignal extends TileSignalBase implements IControllerTile, ISignalTile, ISignalBlockTile {
 
@@ -45,6 +48,9 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
         }
         if (prevAspect != controller.getAspect()) {
             sendUpdateToClient();
+        }
+        if(RailcraftConfig.printSignalDebug() && prevAspect != SignalAspect.BLINK_RED && controller.getAspect() == SignalAspect.BLINK_RED){
+            Game.log(Level.DEBUG, "Signal Tile changed aspect to BLINK_RED: source:[{0}, {1}, {2}]", xCoord, yCoord, zCoord);
         }
     }
 

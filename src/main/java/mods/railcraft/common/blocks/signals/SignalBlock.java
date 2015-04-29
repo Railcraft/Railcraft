@@ -39,6 +39,7 @@ public abstract class SignalBlock extends AbstractPair {
     private WorldCoordinate trackLocation;
     private int update = rand.nextInt();
     private UUID uuid = UUID.randomUUID();
+    private boolean changedAspect = false;
 
     public SignalBlock(RailcraftTileEntity tile, int numPairs) {
         super(tile.getLocalizationTag(), tile, numPairs);
@@ -87,7 +88,7 @@ public abstract class SignalBlock extends AbstractPair {
                 test.add(new WorldCoordinate(c[0], c[1], c[2], c[3]));
             }
             boolean isConsistent = test.containsAll(getPairs());
-            printDebug("Signal Block saved NBT. [{0}, {1}, {2}] [verified: {3}] [data: {4}]", tile.xCoord, tile.yCoord, tile.zCoord, isConsistent, test);
+            printDebug("Signal Block saved NBT. [{0}, {1}, {2}] [verified: {3}] [changedAspect: {4}] [data: {5}]", tile.xCoord, tile.yCoord, tile.zCoord, isConsistent, changedAspect, test);
             savedData.put(uuid, new LinkedList<WorldCoordinate>(pairings));
         }
     }
@@ -323,8 +324,14 @@ public abstract class SignalBlock extends AbstractPair {
     public void tickServer() {
         super.tickServer();
         update++;
-        if (update % Signals.getSignalUpdateInterval() == 0)
+        if (update % Signals.getSignalUpdateInterval() == 0) {
+            SignalAspect prev = getSignalAspect();
+            if (prev != SignalAspect.BLINK_RED)
+                changedAspect = true;
             updateSignalAspect();
+            if (getSignalAspect() == SignalAspect.BLINK_RED && prev != SignalAspect.BLINK_RED)
+                printDebug("Signal Block changed aspect to BLINK_RED: source:[{0}, {1}, {2}] pairs: {3}", tile.xCoord, tile.yCoord, tile.zCoord, pairings);
+        }
         if (update % Signals.VALIDATION_CHECK_INTERVAL == 0) {
             Status trackStatus = getTrackStatus();
             switch (trackStatus) {
