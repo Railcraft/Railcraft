@@ -136,7 +136,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
         super(EnumMachineAlpha.ROCK_CRUSHER.getTag() + ".name", 18, patterns);
 
         if (RailcraftConfig.machinesRequirePower())
-            energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE);
+            energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE, KILLING_POWER_COST);
     }
 
     public static void placeRockCrusher(World world, int x, int y, int z, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
