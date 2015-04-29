@@ -1,3 +1,6 @@
+Next:
+	FIX: Rock Crusher can now crush Entities again.
+
 9.6.1.2:
 	NEW: Redesign Tuning Aura and add Surveying Aura for the Goggles. Should be more visible now.
 
