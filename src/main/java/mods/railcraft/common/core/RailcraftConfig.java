@@ -266,7 +266,7 @@ public class RailcraftConfig {
         minecartStackSize = get(CAT_TWEAKS_CARTS + ".general", "maxStackSize", 1, 3, 64, "change the value to your desired minecart stack size, vanilla=1, default=3, max=64");
 
         minecartsBreakOnDrop = get(CAT_TWEAKS_CARTS + ".general", "breakOnDrop", false, "change to '{t}=true' to restore vanilla behavior");
-        minecartsCollideWithItems = get(CAT_TWEAKS_CARTS + ".general", "collideWithItems", false, "change to '{t}=true' to restore minecart collisions with dropped items, ignored if 'register.handler.collision=false'");
+        minecartsCollideWithItems = get(CAT_TWEAKS_CARTS + ".general", "collideWithItems", false, "change to '{t}=true' to restore minecart collisions with dropped items, ignored if 'register.collision.handler=false'");
 
         printLinkingDebug = get(CAT_TWEAKS_CARTS + ".general", "printLinkingDebug", false, "change to '{t}=true' to log debug info for Cart Linking");
 
