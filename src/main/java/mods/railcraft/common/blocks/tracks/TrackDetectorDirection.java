@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.tracks;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -21,7 +22,7 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 
 public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrackReversable, ITrackEmitter {
-
+    private static final int POWER_DELAY = 10;
     private boolean reversed = false;
     private byte delay = 0;
 
@@ -84,7 +85,7 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
 
     private void setTrackPowering() {
         boolean notify = delay == 0;
-        delay = 3;
+        delay = POWER_DELAY;
         if (notify) {
             notifyNeighbors();
         }
