@@ -361,6 +361,10 @@ public class Train implements Iterable<EntityMinecart> {
         return count;
     }
 
+    public void refreshMaxSpeed() {
+        setMaxSpeed(getMaxSpeed());
+    }
+
     public float getMaxSpeed() {
         float speed = 1.2F;
         for (EntityMinecart c : this) {

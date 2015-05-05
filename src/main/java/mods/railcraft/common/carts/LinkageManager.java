@@ -39,7 +39,6 @@ import java.util.UUID;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class LinkageManager implements ILinkageManager {
-
     public static final String LINK_A_HIGH = "rcLinkAHigh";
     public static final String LINK_A_LOW = "rcLinkALow";
     public static final String LINK_B_HIGH = "rcLinkBHigh";
@@ -163,11 +162,10 @@ public class LinkageManager implements ILinkageManager {
         if (cart1.getDistanceSqToEntity(cart2) > getLinkageDistanceSq(cart1, cart2))
             return false;
 
-        if(Train.areInSameTrain(cart1, cart2))
+        if (Train.areInSameTrain(cart1, cart2))
             return false;
 
         return hasFreeLink(cart1) && hasFreeLink(cart2);
-
     }
 
     /**
@@ -293,7 +291,6 @@ public class LinkageManager implements ILinkageManager {
         return Train.areInSameTrain(cart1, cart2);
     }
 
-
     /**
      * Returns true if the two carts are linked directly to each other.
      *
@@ -303,6 +300,19 @@ public class LinkageManager implements ILinkageManager {
      */
     @Override
     public boolean areLinked(EntityMinecart cart1, EntityMinecart cart2) {
+        return areLinked(cart1, cart2, true);
+    }
+
+    /**
+     * Returns true if the two carts are linked directly to each other.
+     *
+     * @param cart1  First Cart
+     * @param cart2  Second Cart
+     * @param strict true if both carts should have linking data pointing to the other cart,
+     *               false if its ok if only one cart has the data (this is technically an invalid state, but its been known to happen)
+     * @return True if linked
+     */
+    public boolean areLinked(EntityMinecart cart1, EntityMinecart cart2, boolean strict) {
         if (cart1 == null || cart2 == null)
             return false;
         if (cart1 == cart2)
@@ -324,7 +334,10 @@ public class LinkageManager implements ILinkageManager {
         if (id1.equals(getLinkA(cart2)) || id1.equals(getLinkB(cart2)))
             cart2Linked = true; //            System.out.println("cart2 linked");
 
-        return cart1Linked && cart2Linked;
+        if (strict)
+            return cart1Linked && cart2Linked;
+        else
+            return cart1Linked || cart2Linked;
     }
 
     /**
@@ -431,7 +444,6 @@ public class LinkageManager implements ILinkageManager {
     private static enum LinkType {
         LINK_A(LINK_A_HIGH, LINK_A_LOW),
         LINK_B(LINK_B_HIGH, LINK_B_LOW);
-
         public final String tagHigh, tagLow;
 
         private LinkType(String tagHigh, String tagLow) {

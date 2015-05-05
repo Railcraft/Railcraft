@@ -32,7 +32,6 @@ import java.util.Map;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CrowbarHandler {
-
     public static final float SMACK_VELOCITY = 0.07f;
     private static final Map<EntityPlayer, EntityMinecart> linkMap = new MapMaker().weakKeys().weakValues().makeMap();
     private static CrowbarHandler instance;
@@ -68,14 +67,14 @@ public class CrowbarHandler {
                     if (!linkable || (linkable && ((ILinkableCart) cart).isLinkable())) {
                         EntityMinecart last = linkMap.remove(thePlayer);
                         if (last != null && !last.isDead) {
-                            ILinkageManager lm = LinkageManager.instance();
-                            if (lm.areLinked(cart, last)) {
+                            LinkageManager lm = LinkageManager.instance();
+                            if (lm.areLinked(cart, last, false)) {
                                 lm.breakLink(cart, last);
                                 used = true;
                                 ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.broken");
                                 LinkageManager.printDebug("Reason For Broken Link: User removed link.");
                             } else {
-                                used = lm.createLink((EntityMinecart) last, (EntityMinecart) entity);
+                                used = lm.createLink(last, (EntityMinecart) entity);
                                 if (used)
                                     ChatPlugin.sendLocalizedChatFromServer(thePlayer, "railcraft.gui.link.created");
                             }
@@ -114,5 +113,4 @@ public class CrowbarHandler {
         if (used)
             event.setCanceled(true);
     }
-
 }
