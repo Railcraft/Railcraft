@@ -76,7 +76,7 @@ public class ItemIngot extends ItemRailcraft {
         setHasSubtypes(true);
         setMaxDamage(0);
         setUnlocalizedName("railcraft.ingot");
-        setSmeltingExperiance(1);
+        setSmeltingExperience(1);
 
     }
 

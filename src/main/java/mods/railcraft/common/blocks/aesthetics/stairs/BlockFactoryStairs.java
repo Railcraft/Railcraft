@@ -12,14 +12,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.BlockFactory;
-
-import static mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial.*;
-
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
-
-import static mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs.*;
-
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.core.Railcraft;
@@ -27,15 +20,15 @@ import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-
 import net.minecraft.item.ItemStack;
 
+import static mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial.*;
+import static mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs.getItem;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class BlockFactoryStairs extends BlockFactory {
-
     public BlockFactoryStairs() {
         super("stair");
     }
@@ -65,7 +58,7 @@ public class BlockFactoryStairs extends BlockFactory {
     protected void doRecipeInit(ModuleManager.Module module) {
         EnumBlockMaterial.initialize();
         for (EnumBlockMaterial mat : EnumBlockMaterial.VALUES) {
-            if (BlockRailcraftStairs.isEnabled(mat) && mat.getSourceBlock() != null) {
+            if (BlockRailcraftStairs.isEnabled(mat) && mat.getSourceItem() != null) {
                 CraftingPlugin.addShapedRecipe(BlockRailcraftStairs.getItem(mat, 4), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
                 IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(BlockRailcraftStairs.getItem(mat), true, false);
                 recipe.addOutput(mat.getSourceItem(), 1.0f);
@@ -93,5 +86,4 @@ public class BlockFactoryStairs extends BlockFactory {
             recipe.addOutput(output, 1.0F);
         }
     }
-
 }

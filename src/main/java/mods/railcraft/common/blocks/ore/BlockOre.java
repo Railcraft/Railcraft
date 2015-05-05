@@ -10,52 +10,63 @@ package mods.railcraft.common.blocks.ore;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.client.particles.ParticleHelperCallback;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.oredict.OreDictionary;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockOre extends Block {
-
+    private static final ParticleHelperCallback callback = new ParticleCallback();
     public static int renderPass;
+    private static BlockOre instance;
     private final int renderType;
     private final Random rand = new Random();
-    private static BlockOre instance;
+
+    public BlockOre(int renderId) {
+        super(Material.rock);
+        renderType = renderId;
+        setBlockName("railcraft.ore");
+        setResistance(5);
+        setHardness(3);
+        setStepSound(Block.soundTypeStone);
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
 
     public static BlockOre getBlock() {
         return instance;
@@ -84,12 +95,10 @@ public class BlockOre extends Block {
                         break;
                     default:
                         HarvestPlugin.setHarvestLevel(instance, ore.ordinal(), "pickaxe", 2);
-
                 }
             }
 
-            ItemDust.getDust(ItemDust.EnumDust.SULFUR);
-            ItemDust.getDust(ItemDust.EnumDust.SALTPETER);
+            RailcraftItem.dust.registerItem();
 
             registerOre("oreSulfur", EnumOre.SULFUR);
             registerOre("oreSaltpeter", EnumOre.SALTPETER);
@@ -120,17 +129,6 @@ public class BlockOre extends Block {
             OreDictionary.registerOre(name, ore.getItem());
     }
 
-    public BlockOre(int renderId) {
-        super(Material.rock);
-        renderType = renderId;
-        setBlockName("railcraft.ore");
-        setResistance(5);
-        setHardness(3);
-        setStepSound(Block.soundTypeStone);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-
-    }
-
     @Override
     public int getRenderType() {
         return renderType;
@@ -145,7 +143,7 @@ public class BlockOre extends Block {
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
         int meta = world.getBlockMetadata(x, y, z);
         return EnumOre.fromMeta(meta).getItem();
     }
@@ -172,12 +170,12 @@ public class BlockOre extends Block {
         switch (EnumOre.fromMeta(meta)) {
             case SULFUR: {
                 int qty = 2 + rand.nextInt(4) + rand.nextInt(fortune + 1);
-                drops.add(ItemDust.getDust(ItemDust.EnumDust.SULFUR, qty));
+                drops.add(RailcraftItem.dust.getStack(qty, ItemDust.EnumDust.SULFUR));
                 return drops;
             }
             case SALTPETER: {
                 int qty = 1 + rand.nextInt(2) + rand.nextInt(fortune + 1);
-                drops.add(ItemDust.getDust(ItemDust.EnumDust.SALTPETER, qty));
+                drops.add(RailcraftItem.dust.getStack(qty, ItemDust.EnumDust.SALTPETER));
                 return drops;
             }
             case DARK_DIAMOND: {
@@ -252,29 +250,6 @@ public class BlockOre extends Block {
         setBlockBounds(0, 0, 0, 1, 1, 1);
     }
 
-    private static class ParticleCallback implements ParticleHelperCallback {
-
-        @Override
-        @SideOnly(Side.CLIENT)
-        public void addHitEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
-            setTexture(fx, world, x, y, z, meta);
-        }
-
-        @Override
-        @SideOnly(Side.CLIENT)
-        public void addDestroyEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
-            setTexture(fx, world, x, y, z, meta);
-        }
-
-        @SideOnly(Side.CLIENT)
-        private void setTexture(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
-            renderPass = 0;
-            fx.setParticleIcon(instance.getIcon(0, meta));
-        }
-
-    }
-    private static final ParticleHelperCallback callback = new ParticleCallback();
-
     @SideOnly(Side.CLIENT)
     @Override
     public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
@@ -295,4 +270,23 @@ public class BlockOre extends Block {
         return super.getLightValue(world, x, y, z);
     }
 
+    private static class ParticleCallback implements ParticleHelperCallback {
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void addHitEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+            setTexture(fx, world, x, y, z, meta);
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void addDestroyEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+            setTexture(fx, world, x, y, z, meta);
+        }
+
+        @SideOnly(Side.CLIENT)
+        private void setTexture(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+            renderPass = 0;
+            fx.setParticleIcon(instance.getIcon(0, meta));
+        }
+    }
 }

@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public enum RailcraftItem {
@@ -29,12 +28,13 @@ public enum RailcraftItem {
     rebar(ItemRebar.class, "part.rebar", Items.iron_ingot),
     plate(ItemPlate.class, "part.plate", Items.iron_ingot, "ingotSteel", "ingotTin"),
     gear(ItemGear.class, "part.gear", Items.gold_ingot, Blocks.iron_block, "blockSteel", "ingotTin"),
-    circuit(ItemCircuit.class, "part.circuit", Items.comparator, Blocks.redstone_torch, Items.repeater);
+    circuit(ItemCircuit.class, "part.circuit", Items.comparator, Blocks.redstone_torch, Items.repeater),
+    dust(ItemDust.class, "dust", "dustObsidian", "dustSulfur", "dustSaltpeter", "dustCharcoal");
     public static final RailcraftItem[] VALUES = values();
-    private ItemRailcraft item;
     private final Class<? extends ItemRailcraft> itemClass;
     private final String tag;
     private final Object[] altRecipeObjects;
+    private ItemRailcraft item;
 
     private RailcraftItem(Class<? extends ItemRailcraft> itemClass, String tag, Object... altRecipeObjects) {
         this.itemClass = itemClass;

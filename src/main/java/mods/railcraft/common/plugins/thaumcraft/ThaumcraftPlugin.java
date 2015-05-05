@@ -9,11 +9,6 @@
 package mods.railcraft.common.plugins.thaumcraft;
 
 import cpw.mods.fml.common.Loader;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
@@ -24,16 +19,19 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.carts.EnumCart;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.items.*;
+import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.ItemGear.EnumGear;
+import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemTie.EnumTie;
+import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneCut;
 import mods.railcraft.common.items.firestone.ItemFirestoneRaw;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -49,6 +47,9 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchPage;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -127,10 +128,10 @@ public class ThaumcraftPlugin {
             addItemAspect(EnumOre.SALTPETER.getItem(), new AspectList().add(Aspect.EARTH, 1).add(Aspect.AIR, 3));
             addItemAspect(EnumOre.FIRESTONE.getItem(), new AspectList().add(Aspect.EARTH, 1).add(Aspect.FIRE, 6).add(Aspect.ENTROPY, 1));
 
-            addItemAspect(ItemDust.getDust(ItemDust.EnumDust.SULFUR), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.FIRE, 3));
-            addItemAspect(ItemDust.getDust(ItemDust.EnumDust.SALTPETER), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.AIR, 3));
-            addItemAspect(ItemDust.getDust(ItemDust.EnumDust.CHARCOAL), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.FIRE, 2));
-            addItemAspect(ItemDust.getDust(ItemDust.EnumDust.OBSIDIAN), copyAspects(Blocks.obsidian).remove(Aspect.EARTH, 2).add(Aspect.ENTROPY, 1));
+            addItemAspect(RailcraftItem.dust.getStack(ItemDust.EnumDust.SULFUR), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.FIRE, 3));
+            addItemAspect(RailcraftItem.dust.getStack(ItemDust.EnumDust.SALTPETER), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.AIR, 3));
+            addItemAspect(RailcraftItem.dust.getStack(ItemDust.EnumDust.CHARCOAL), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.FIRE, 2));
+            addItemAspect(RailcraftItem.dust.getStack(ItemDust.EnumDust.OBSIDIAN), copyAspects(Blocks.obsidian).remove(Aspect.EARTH, 2).add(Aspect.ENTROPY, 1));
 
             addItemAspect(RailcraftItem.rebar.getStack(), new AspectList().add(Aspect.METAL, 1));
             addItemAspect(RailcraftItem.rail.getStack(1, EnumRail.STANDARD), new AspectList().add(Aspect.METAL, 1));

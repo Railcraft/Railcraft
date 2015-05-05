@@ -10,20 +10,20 @@ package mods.railcraft.common.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.List;
+
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class ItemRailcraft extends Item {
-
-    private float smeltingExperiance = -1;
+    private float smeltingExperience = -1;
     private int rarity = 0;
 
     public ItemRailcraft() {
@@ -51,14 +51,14 @@ public class ItemRailcraft extends Item {
         return 0;
     }
 
-    public ItemRailcraft setSmeltingExperiance(float smeltingExperiance) {
-        this.smeltingExperiance = smeltingExperiance;
+    public ItemRailcraft setSmeltingExperience(float smeltingExperience) {
+        this.smeltingExperience = smeltingExperience;
         return this;
     }
 
     @Override
     public float getSmeltingExperience(ItemStack item) {
-        return smeltingExperiance;
+        return smeltingExperience;
     }
 
     @Override
@@ -75,11 +75,22 @@ public class ItemRailcraft extends Item {
     }
 
     public Object getRecipeObject(IItemMetaEnum meta) {
-        if (meta != null && meta.getItemClass() != getClass())
-            throw new RuntimeException("Incorrect Item Meta object used.");
+        assertMeta(meta);
+        String oreTag = getOreTag(meta);
+        if (oreTag != null)
+            return oreTag;
         if (meta != null && getHasSubtypes())
             return new ItemStack(this, 1, meta.ordinal());
         return this;
+    }
+
+    public String getOreTag(IItemMetaEnum meta) {
+        return null;
+    }
+
+    protected void assertMeta(IItemMetaEnum meta) {
+        if (meta != null && meta.getItemClass() != getClass())
+            throw new RuntimeException("Incorrect Item Meta object used.");
     }
 
     public void defineRecipes() {
@@ -87,5 +98,4 @@ public class ItemRailcraft extends Item {
 
     public void initItem() {
     }
-
 }
