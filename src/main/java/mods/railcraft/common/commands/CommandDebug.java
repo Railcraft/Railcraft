@@ -51,7 +51,7 @@ public class CommandDebug extends SubCommand {
             if (tile instanceof RailcraftTileEntity) {
                 List<String> debug = ((RailcraftTileEntity) tile).getDebugOutput();
                 for (String s : debug) {
-                    Game.log(Level.DEBUG, s);
+                    Game.log(Level.INFO, s);
                 }
             } else {
                 CommandHelpers.throwWrongUsage(sender, this);

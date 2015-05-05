@@ -21,7 +21,6 @@ import mods.railcraft.common.util.misc.Game;
 import org.apache.logging.log4j.Level;
 
 public class TileSignalBlockSignal extends TileSignalBase implements IControllerTile, ISignalTile, ISignalBlockTile {
-
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SignalBlock signalBlock = new SignalBlockSimple(this);
 
@@ -49,8 +48,8 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
         if (prevAspect != controller.getAspect()) {
             sendUpdateToClient();
         }
-        if(RailcraftConfig.printSignalDebug() && prevAspect != SignalAspect.BLINK_RED && controller.getAspect() == SignalAspect.BLINK_RED){
-            Game.log(Level.DEBUG, "Signal Tile changed aspect to BLINK_RED: source:[{0}, {1}, {2}]", xCoord, yCoord, zCoord);
+        if (RailcraftConfig.printSignalDebug() && prevAspect != SignalAspect.BLINK_RED && controller.getAspect() == SignalAspect.BLINK_RED) {
+            Game.log(Level.INFO, "Signal Tile changed aspect to BLINK_RED: source:[{0}, {1}, {2}]", xCoord, yCoord, zCoord);
         }
     }
 
@@ -61,17 +60,25 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
 
     @Override
     public void writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
+        try {
+            super.writeToNBT(data);
 
-        signalBlock.writeToNBT(data);
-        controller.writeToNBT(data);
+            signalBlock.writeToNBT(data);
+            controller.writeToNBT(data);
+        } catch (Throwable er) {
+            Game.logThrowable(Level.INFO, "Signal Tile crashed on write.", 4, er);
+        }
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        signalBlock.readFromNBT(data);
-        controller.readFromNBT(data);
+        try {
+            super.readFromNBT(data);
+            signalBlock.readFromNBT(data);
+            controller.readFromNBT(data);
+        } catch (Throwable er) {
+            Game.logThrowable(Level.INFO, "Signal Tile crashed on read.", 4, er);
+        }
     }
 
     @Override

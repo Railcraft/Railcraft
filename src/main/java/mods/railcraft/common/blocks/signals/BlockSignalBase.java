@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.signals;
 
+import mods.railcraft.common.core.RailcraftConfig;
 import org.apache.logging.log4j.Level;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -28,7 +29,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.IIcon;
 
 public abstract class BlockSignalBase extends BlockContainer implements IPostConnection {
-
     private final int renderType;
 
     public BlockSignalBase(int renderType) {
@@ -80,16 +80,22 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public void onPostBlockPlaced(World world, int i, int j, int k, int meta) {
-        super.onPostBlockPlaced(world, i, j, k, meta);
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public void onPostBlockPlaced(World world, int x, int y, int z, int meta) {
+        super.onPostBlockPlaced(world, x, y, z, meta);
+        if (RailcraftConfig.printSignalDebug()) {
+            Game.logTrace(Level.INFO, 10, "Signal Block onPostBlockPlaced. [{0}, {1}, {2}]", x, y, y);
+        }
+        TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileSignalFoundation)
             ((TileSignalFoundation) tile).onBlockPlaced();
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
+        if (RailcraftConfig.printSignalDebug()) {
+            Game.logTrace(Level.INFO, 10, "Signal Block onBlockPlacedBy. [{0}, {1}, {2}]", x, y, z);
+        }
+        TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileSignalFoundation)
             ((TileSignalFoundation) tile).onBlockPlacedBy(entityliving, stack);
     }
@@ -112,11 +118,14 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public void breakBlock(World world, int i, int j, int k, Block block, int meta) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+        if (RailcraftConfig.printSignalDebug()) {
+            Game.logTrace(Level.INFO, 10, "Signal Block breakBlock. [{0}, {1}, {2}]", x, y, z);
+        }
+        TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileSignalFoundation)
             ((TileSignalFoundation) tile).onBlockRemoval();
-        super.breakBlock(world, i, j, k, block, meta);
+        super.breakBlock(world, x, y, z, block, meta);
     }
 
     @Override
@@ -171,7 +180,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
         return false;
     }
 
-//    @Override
+    //    @Override
 //    public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side) {
 //        int md = world.getBlockMetadata(x, y, z);
 //        EnumSignal type = EnumSignal.fromId(md);
@@ -253,5 +262,4 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
             return ConnectStyle.TWO_THIN;
         return ConnectStyle.NONE;
     }
-
 }

@@ -18,6 +18,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -32,6 +33,7 @@ import java.util.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class SignalBlock extends AbstractPair {
+    private static final Level DEBUG_LEVEL = Level.INFO;
     private static final Map<UUID, Deque<WorldCoordinate>> savedData = new HashMap<UUID, Deque<WorldCoordinate>>();
     Map<WorldCoordinate, WorldCoordinate> trackCache = new HashMap<WorldCoordinate, WorldCoordinate>();
     Map<WorldCoordinate, TrackTools.TrackScan> trackScans = new HashMap<WorldCoordinate, TrackTools.TrackScan>();
@@ -56,23 +58,23 @@ public abstract class SignalBlock extends AbstractPair {
 
     private void printDebug(String msg, Object... args) {
         if (RailcraftConfig.printSignalDebug())
-            Game.log(Level.DEBUG, msg, args);
+            Game.log(DEBUG_LEVEL, msg, args);
     }
 
     private void printDebugPair(String msg, TileEntity ot) {
         if (RailcraftConfig.printSignalDebug())
             if (ot == null)
-                Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
+                Game.log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
             else
-                Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, ot.xCoord, ot.yCoord, ot.zCoord, ot.getClass());
+                Game.log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, ot.xCoord, ot.yCoord, ot.zCoord, ot.getClass());
     }
 
     private void printDebugPair(String msg, WorldCoordinate coord) {
         if (RailcraftConfig.printSignalDebug())
             if (coord == null)
-                Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
+                Game.log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
             else
-                Game.log(Level.DEBUG, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.xCoord, tile.yCoord, tile.zCoord, coord.x, coord.y, coord.z);
+                Game.log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.xCoord, tile.yCoord, tile.zCoord, coord.x, coord.y, coord.z);
     }
 
     @Override
@@ -111,6 +113,29 @@ public abstract class SignalBlock extends AbstractPair {
         }
     }
 
+    @Override
+    public void clearPairing(WorldCoordinate other) {
+        printDebugPair("Signal Block pair cleared. ", other);
+        if (RailcraftConfig.printSignalDebug()) {
+            Game.logTrace(DEBUG_LEVEL, 10, "Signal Block code Path");
+            int x = other.x;
+            int y = other.y;
+            int z = other.z;
+
+            Block block = tile.getWorldObj().getBlock(x, y, z);
+            if (block != null)
+                Game.log(DEBUG_LEVEL, "Signal Block target block [{0}, {1}, {2}] = {3}, {4}", x, y, z, block.getClass(), block.getUnlocalizedName());
+            else
+                Game.log(DEBUG_LEVEL, "Signal Block target block [{0}, {1}, {2}] = null", x, y, z);
+            TileEntity t = tile.getWorldObj().getTileEntity(x, y, z);
+            if (t != null)
+                Game.log(DEBUG_LEVEL, "Signal Block target tile [{0}, {1}, {2}] = {3}", t.xCoord, t.yCoord, t.zCoord, t.getClass());
+            else
+                Game.log(DEBUG_LEVEL, "Signal Block target tile [{0}, {1}, {2}] = null", x, y, z);
+        }
+        super.clearPairing(other);
+    }
+
     public void clearSignalBlockPairing(WorldCoordinate other, String reason, Object... args) {
         printDebug(reason, args);
         if (other == null)
@@ -133,33 +158,14 @@ public abstract class SignalBlock extends AbstractPair {
     @Override
     @Deprecated
     public boolean isValidPair(TileEntity otherTile) {
-        boolean isValid = false;
-        if (otherTile instanceof ISignalBlockTile) {
-            SignalBlock block = ((ISignalBlockTile) otherTile).getSignalBlock();
-            isValid = block.isPairedWith(getCoords());
-        }
-        if (!isValid)
-            if (otherTile != null)
-                printDebugPair("Signal Block dropped because pair was no longer paired or was not a valid Signal.", otherTile);
-            else
-                printDebug("Signal Block dropped because pair was no longer paired or was not a valid Signal. source:[{0}, {1}, {2}] target:[tile was null]", tile.xCoord, tile.yCoord, tile.zCoord);
-        return isValid;
+        return isValidPair(null, otherTile);
     }
 
     @Override
     public boolean isValidPair(WorldCoordinate otherCoord, TileEntity otherTile) {
         if (otherTile instanceof ISignalBlockTile) {
-            SignalBlock block = ((ISignalBlockTile) otherTile).getSignalBlock();
-            if (block.isPairedWith(getCoords())) {
-                return true;
-            } else if (!invalidPairings.contains(otherCoord)) {
-                printDebugPair("Signal Block dropped because pair was no longer symmetrically paired.", otherCoord);
-            }
-        } else if (!invalidPairings.contains(otherCoord)) {
-            if (otherTile != null)
-                printDebugPair("Signal Block dropped because pair was not a valid Signal.", otherTile);
-            else
-                printDebugPair("Signal Block dropped because pair was not a valid Signal.", otherCoord);
+            SignalBlock signalBlock = ((ISignalBlockTile) otherTile).getSignalBlock();
+            return signalBlock.isPairedWith(getCoords());
         }
         return false;
     }

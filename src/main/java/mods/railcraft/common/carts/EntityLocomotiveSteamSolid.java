@@ -85,7 +85,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
                     outOfWater = false;
                 else if (!outOfWater && tankWater.isEmpty()) {
                     outOfWater = true;
-                    Game.log(Level.DEBUG, "Solid Steam Locomotive ran out of water! [{0}, {1}, {2}] [locked:{3}] [idle:{4}] [mode:{5}]", posX, posY, posZ, Train.getTrain(this).isTrainLockedDown(), isIdle(), getMode().name());
+                    Game.log(Level.INFO, "Solid Steam Locomotive ran out of water! [{0}, {1}, {2}] [locked:{3}] [idle:{4}] [mode:{5}]", posX, posY, posZ, Train.getTrain(this).isTrainLockedDown(), isIdle(), getMode().name());
                 }
             }
         }
