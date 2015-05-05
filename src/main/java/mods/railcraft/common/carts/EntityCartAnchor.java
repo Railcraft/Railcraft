@@ -11,6 +11,7 @@ package mods.railcraft.common.carts;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,14 +48,13 @@ import mods.railcraft.common.util.misc.MiscTools;
 import org.apache.logging.log4j.Level;
 
 public class EntityCartAnchor extends CartTransferBase implements ICartContentsTextureProvider, IAnchor, IMinecart {
-
     public static final byte TICKET_FLAG = 6;
-    private static final byte ANCHOR_RADIUS = 1;
-    private static final byte MAX_CHUNKS = 12;
+    private static final byte ANCHOR_RADIUS = 2;
+    private static final byte MAX_CHUNKS = 25;
+    private final IInventory invWrapper = new InventoryMapper(this);
     protected Ticket ticket;
     private Set<ChunkCoordIntPair> chunks;
     private long anchorFuel;
-    private final IInventory invWrapper = new InventoryMapper(this);
     private boolean teleported = false;
     private int disabled = 0;
     private int clock = MiscTools.getRand().nextInt();
@@ -78,10 +78,6 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
 
     private boolean hasFuel() {
         return anchorFuel > 0;
-    }
-
-    public void setAnchorFuel(long fuel) {
-        anchorFuel = fuel;
     }
 
     @Override
@@ -213,11 +209,18 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
 
         setupChunks(xChunk, zChunk);
 
+        Set<ChunkCoordIntPair> innerChunks = ChunkManager.getInstance().getChunksAround(xChunk, zChunk, 1);
+
 //        System.out.println("Chunks Loaded = " + Arrays.toString(chunks.toArray()));
         for (ChunkCoordIntPair chunk : chunks) {
             ForgeChunkManager.forceChunk(ticket, chunk);
             ForgeChunkManager.reorderChunk(ticket, chunk);
         }
+        for (ChunkCoordIntPair chunk : innerChunks) {
+            ForgeChunkManager.forceChunk(ticket, chunk);
+            ForgeChunkManager.reorderChunk(ticket, chunk);
+        }
+
 
         ChunkCoordIntPair myChunk = new ChunkCoordIntPair(xChunk, zChunk);
         ForgeChunkManager.forceChunk(ticket, myChunk);
@@ -252,7 +255,7 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
         super.setDead();
     }
 
-    public void travelToDimension(int dim){
+    public void travelToDimension(int dim) {
         teleported = true;
         releaseTicket();
         super.travelToDimension(dim);
@@ -325,6 +328,10 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
         return anchorFuel;
     }
 
+    public void setAnchorFuel(long fuel) {
+        anchorFuel = fuel;
+    }
+
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!RailcraftConfig.anchorsCanInteractWithPipes())
@@ -344,5 +351,4 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
             releaseTicket();
         }
     }
-
 }
