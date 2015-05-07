@@ -72,8 +72,11 @@ public class Game {
 
     public static void logTrace(Level level, int lines, String msg, Object... args) {
         log(level, msg, args);
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        for (int i = 2; i < stackTrace.length && i < 2 + lines; i++) {
+        logTrace(level, lines, 2, Thread.currentThread().getStackTrace());
+    }
+
+    public static void logTrace(Level level, int lines, int skipLines, StackTraceElement[] stackTrace) {
+        for (int i = skipLines; i < stackTrace.length && i < skipLines + lines; i++) {
             log(level, stackTrace[i].toString());
         }
     }
@@ -87,13 +90,9 @@ public class Game {
     }
 
     public static void logThrowable(Level level, String msg, int lines, Throwable error, Object... args) {
-        StackTraceElement[] oldtrace = error.getStackTrace();
-        if (lines < oldtrace.length) {
-            StackTraceElement[] newtrace = new StackTraceElement[lines];
-            System.arraycopy(oldtrace, 0, newtrace, 0, newtrace.length);
-            error.setStackTrace(newtrace);
-        }
-        LogManager.getLogger(Railcraft.MOD_ID).log(level, new MessageFormatMessage(msg, args), error);
+        log(level, msg, args);
+        log(level, error.getMessage());
+        logTrace(level, lines, 0, error.getStackTrace());
     }
 
     public static void logDebug(String msg, Object... args) {
