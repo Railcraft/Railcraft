@@ -10,26 +10,26 @@ package mods.railcraft.common.blocks.signals;
 
 import cpw.mods.fml.common.Optional;
 import ic2.api.item.IBoxable;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalController;
 import mods.railcraft.api.signals.SignalReceiver;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.IActivationBlockingItem;
+import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.ItemRailcraft;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 
 @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
 public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivationBlockingItem {
@@ -73,21 +73,20 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
     @Override
     public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int i, int j, int k, int side, float par8, float par9, float par10) {
         if (Game.isHost(world) && item.hasTagCompound() && player.isSneaking()) {
+            WorldCoordinate cPos = getControllerData(item);
+            if (cPos != null) {
+                TileEntity tile = DimensionManager.getWorld(cPos.dimension).getTileEntity(cPos.x, cPos.y, cPos.z);
+                if (tile instanceof IControllerTile) {
+                    ((IControllerTile) tile).getController().endPairing();
+                }
+            }
             ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.abandon.player");
             item.setTagCompound(null);
             return false;
         }
         TileEntity tile = world.getTileEntity(i, j, k);
         if (tile != null) {
-            WorldCoordinate cPos = null;
-            NBTTagCompound data = item.getTagCompound();
-            if (data != null) {
-                int cDim = data.getInteger("controllerDim");
-                int cx = data.getInteger("controllerX");
-                int cy = data.getInteger("controllerY");
-                int cz = data.getInteger("controllerZ");
-                cPos = new WorldCoordinate(cDim, cx, cy, cz);
-            }
+            WorldCoordinate cPos = getControllerData(item);
             if (tile instanceof IReceiverTile && cPos != null) {
                 if (Game.isHost(world)) {
                     SignalReceiver receiver = ((IReceiverTile) tile).getReceiver();
@@ -129,6 +128,19 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
             return true;
         }
         return false;
+    }
+
+    private WorldCoordinate getControllerData(ItemStack item) {
+        WorldCoordinate cPos = null;
+        NBTTagCompound data = item.getTagCompound();
+        if (data != null) {
+            int cDim = data.getInteger("controllerDim");
+            int cx = data.getInteger("controllerX");
+            int cy = data.getInteger("controllerY");
+            int cz = data.getInteger("controllerZ");
+            cPos = new WorldCoordinate(cDim, cx, cy, cz);
+        }
+        return cPos;
     }
 
     private void setControllerData(ItemStack item, TileEntity tile) {
