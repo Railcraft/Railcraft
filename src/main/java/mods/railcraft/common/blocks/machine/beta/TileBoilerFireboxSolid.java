@@ -131,7 +131,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
             TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
 
             if (mBlock != null)
-                InvTools.moveOneItem(invCache.getAdjecentInventories(), mBlock.invFuel, StackFilter.FUEL);
+                InvTools.moveOneItem(invCache.getAdjacentInventories(), mBlock.invFuel, StackFilter.FUEL);
         }
     }
 

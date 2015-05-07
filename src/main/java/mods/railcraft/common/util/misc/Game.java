@@ -25,6 +25,18 @@ import org.apache.logging.log4j.message.MessageFormatMessage;
 public class Game {
     public static final boolean IS_OBFUSCATED = !World.class.getSimpleName().equals("World");
     public static final boolean IS_DEBUG = !Railcraft.VERSION.endsWith("0");
+    public static final boolean IS_BUKKIT;
+
+    static {
+        boolean foundBukkit = false;
+        try {
+            foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
+        } catch (ClassNotFoundException er) {
+        }
+        IS_BUKKIT = foundBukkit;
+        if (IS_BUKKIT)
+            log(Level.INFO, "Bukkit detected, disabling Tile Entity caching because Bukkit doesn't seem to invalid Tile Entities properly!");
+    }
 
     public static boolean isHost(final World world) {
         return !world.isRemote;

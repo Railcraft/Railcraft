@@ -249,7 +249,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         TileBlastFurnace mBlock = (TileBlastFurnace) getMasterBlock();
 
         if (mBlock != null)
-            InvTools.moveOneItem(invCache.getAdjecentInventories(), mBlock.invFuel, FUEL_FILTER);
+            InvTools.moveOneItem(invCache.getAdjacentInventories(), mBlock.invFuel, FUEL_FILTER);
 
         if (isMaster()) {
             boolean wasBurning = isBurning();

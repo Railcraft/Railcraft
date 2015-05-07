@@ -79,6 +79,8 @@ public final class AdjacentTileCache {
     }
 
     public TileEntity getTileOnSide(ForgeDirection side) {
+        if (Game.IS_BUKKIT)
+            return searchSide(side);
         int s = side.ordinal();
         if (cache[s] != null)
             if (cache[s].isInvalid() || !MiscTools.areCoordinatesOnSide(source.xCoord, source.yCoord, source.zCoord, side, cache[s].xCoord, cache[s].yCoord, cache[s].zCoord))

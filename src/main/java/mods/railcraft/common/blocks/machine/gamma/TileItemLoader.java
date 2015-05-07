@@ -22,7 +22,6 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.*;
@@ -100,7 +99,7 @@ public class TileItemLoader extends TileLoaderItemBase {
             return;
 
         chests.clear();
-        chests.addAll(invCache.getAdjecentInventories());
+        chests.addAll(invCache.getAdjacentInventories());
         chests.addFirst(invBuffer);
 
         checkedItems.clear();

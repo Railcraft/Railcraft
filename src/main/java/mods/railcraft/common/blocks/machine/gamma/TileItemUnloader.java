@@ -110,7 +110,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
             return;
 
         chests.clear();
-        chests.addAll(invCache.getAdjecentInventories());
+        chests.addAll(invCache.getAdjacentInventories());
         chests.addFirst(invBuffer);
 
         checkedItems.clear();
@@ -332,7 +332,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
 
     private void clearInv() {
         if (!InvTools.isInventoryEmpty(invBuffer)) {
-            InvTools.moveOneItem(invBuffer, invCache.getAdjecentInventories());
+            InvTools.moveOneItem(invBuffer, invCache.getAdjacentInventories());
         }
     }
 

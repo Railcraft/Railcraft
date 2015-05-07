@@ -10,6 +10,7 @@ package mods.railcraft.common.util.inventory;
 
 import java.util.*;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
@@ -49,9 +50,9 @@ public final class AdjacentInventoryCache {
         this.sorter = sorter;
     }
 
-    public Collection<IInventory> getAdjecentInventories() {
+    public Collection<IInventory> getAdjacentInventories() {
         cache.refresh();
-        if (changed) {
+        if (changed || Game.IS_BUKKIT) {
             changed = false;
             invs.clear();
             for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
