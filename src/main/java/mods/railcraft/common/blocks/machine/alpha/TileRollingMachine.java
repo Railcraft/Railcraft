@@ -226,7 +226,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     }
 
     private void findMoreStuff() {
-        Collection<IInventory> chests = cache.getAdjecentInventories();
+        Collection<IInventory> chests = cache.getAdjacentInventories();
         for (IInvSlot slot : InventoryIterator.getIterable(craftMatrix)) {
             ItemStack stack = slot.getStackInSlot();
             if (stack != null && stack.isStackable() && stack.stackSize == 1) {
