@@ -56,6 +56,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     protected final TankManager tankManager = new TankManager();
     protected final FilteredTank tankWater;
     protected final FilteredTank tankSteam;
+    private boolean explode = false;
 
     static {
         fireboxBlocks.add(EnumMachineBeta.BOILER_FIREBOX_SOLID.ordinal());
@@ -143,8 +144,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     }
 
     public void explode() {
-        if (Game.isHost(worldObj))
-            worldObj.createExplosion(null, xCoord, yCoord, zCoord, 5f + 0.1f * getNumTanks(), true);
+        explode = true;
     }
 
     public int getNumTanks() {
@@ -178,6 +178,11 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     public void updateEntity() {
         super.updateEntity();
         if (Game.isHost(worldObj)) {
+            if (explode) {
+                worldObj.createExplosion(null, xCoord, yCoord, zCoord, 5f + 0.1f * getNumTanks(), true);
+                explode = false;
+                return;
+            }
             TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
             if (mBlock != null) {
                 StandardTank tank = mBlock.tankManager.get(TANK_STEAM);

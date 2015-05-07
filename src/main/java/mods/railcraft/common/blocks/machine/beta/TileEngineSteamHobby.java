@@ -51,6 +51,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     private static final int[] NO_SLOTS = new int[0];
     public final SteamBoiler boiler;
     private StandaloneInventory inv = new StandaloneInventory(3, (IInventory) this);
+    private boolean explode = false;
 
     public TileEngineSteamHobby() {
         FilteredTank tankWater = new FilteredTank(4 * FluidHelper.BUCKET_VOLUME, Fluids.WATER.get(), this);
@@ -100,6 +101,17 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     @Override
     public int steamUsedPerTick() {
         return STEAM_USED;
+    }
+
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        if (Game.isHost(worldObj)) {
+            if (explode) {
+                worldObj.createExplosion(null, xCoord, yCoord, zCoord, 2, true);
+                explode = false;
+            }
+        }
     }
 
     @Override
@@ -250,7 +262,6 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     public void explode() {
-        if (Game.isHost(worldObj))
-            worldObj.createExplosion(null, xCoord, yCoord, zCoord, 2, true);
+        explode = true;
     }
 }
