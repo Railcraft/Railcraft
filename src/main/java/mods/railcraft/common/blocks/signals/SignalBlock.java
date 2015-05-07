@@ -35,7 +35,7 @@ import java.util.*;
  */
 public abstract class SignalBlock extends AbstractPair {
     private static final Level DEBUG_LEVEL = Level.INFO;
-    private static final Map<UUID, Deque<WorldCoordinate>> savedData = new HashMap<UUID, Deque<WorldCoordinate>>();
+    //    private static final Map<UUID, Deque<WorldCoordinate>> savedData = new HashMap<UUID, Deque<WorldCoordinate>>();
     Map<WorldCoordinate, WorldCoordinate> trackCache = new HashMap<WorldCoordinate, WorldCoordinate>();
     Map<WorldCoordinate, TrackTools.TrackScan> trackScans = new HashMap<WorldCoordinate, TrackTools.TrackScan>();
     Set<WorldCoordinate> waitingForRetest = new HashSet<WorldCoordinate>();
@@ -85,23 +85,26 @@ public abstract class SignalBlock extends AbstractPair {
         NBTTagList tagList = new NBTTagList();
         for (Map.Entry<WorldCoordinate, WorldCoordinate> cache : trackCache.entrySet()) {
             NBTTagCompound entry = new NBTTagCompound();
-            cache.getKey().writeToNBT(entry, "key");
-            cache.getValue().writeToNBT(entry, "value");
-            tagList.appendTag(entry);
+            if (cache.getKey() != null && cache.getValue() != null) {
+                cache.getKey().writeToNBT(entry, "key");
+                cache.getValue().writeToNBT(entry, "value");
+                tagList.appendTag(entry);
+            }
         }
         data.setTag("trackCache", tagList);
-        if (RailcraftConfig.printSignalDebug()) {
-            Deque<WorldCoordinate> test = new LinkedList<WorldCoordinate>();
-            NBTTagList list = data.getTagList("pairings", 10);
-            for (byte entry = 0; entry < list.tagCount(); entry++) {
-                NBTTagCompound tag = list.getCompoundTagAt(entry);
-                int[] c = tag.getIntArray("coords");
-                test.add(new WorldCoordinate(c[0], c[1], c[2], c[3]));
-            }
-            boolean isConsistent = test.containsAll(getPairs());
-            printDebug("Signal Block saved NBT. [{0}, {1}, {2}] [verified: {3}] [changedAspect: {4}] [data: {5}]", tile.xCoord, tile.yCoord, tile.zCoord, isConsistent, changedAspect, test);
-            savedData.put(uuid, new LinkedList<WorldCoordinate>(pairings));
-        }
+//        if (RailcraftConfig.printSignalDebug()) {
+//            Deque<WorldCoordinate> test = new LinkedList<WorldCoordinate>();
+//            NBTTagList list = data.getTagList("pairings", 10);
+//            for (byte entry = 0; entry < list.tagCount(); entry++) {
+//                NBTTagCompound tag = list.getCompoundTagAt(entry);
+//                int[] c = tag.getIntArray("coords");
+//                test.add(new WorldCoordinate(c[0], c[1], c[2], c[3]));
+//            }
+//            boolean isConsistent = test.containsAll(getPairs());
+//            printDebug("Signal Block saved NBT. [{0}, {1}, {2}] [verified: {3}] [changedAspect: {4}] [data: {5}]", tile.xCoord, tile.yCoord, tile.zCoord, isConsistent, changedAspect, test);
+        printDebug("Signal Block saved NBT. [{0}, {1}, {2}] [changedAspect: {3}] [data: {4}]", tile.xCoord, tile.yCoord, tile.zCoord, changedAspect, pairings);
+//            savedData.put(uuid, new LinkedList<WorldCoordinate>(pairings));
+//        }
     }
 
     @Override
@@ -116,18 +119,18 @@ public abstract class SignalBlock extends AbstractPair {
                 trackCache.put(key, value);
             }
         }
-        if (RailcraftConfig.printSignalDebug()) {
-            String isConsistent = "unknown";
-            Deque<WorldCoordinate> lastSave = savedData.get(uuid);
-            if (lastSave != null) {
-                if (pairings.containsAll(lastSave))
-                    isConsistent = "true";
-                else
-                    isConsistent = "false";
-            }
+//        if (RailcraftConfig.printSignalDebug()) {
+//            String isConsistent = "unknown";
+//            Deque<WorldCoordinate> lastSave = savedData.get(uuid);
+//            if (lastSave != null) {
+//                if (pairings.containsAll(lastSave))
+//                    isConsistent = "true";
+//                else
+//                    isConsistent = "false";
+//            }
 
-            printDebug("Signal Block loaded NBT. [{0}, {1}, {2}] [verified: {3}] data: {4}", tile.xCoord, tile.yCoord, tile.zCoord, isConsistent, pairings);
-        }
+        printDebug("Signal Block loaded NBT. [{0}, {1}, {2}] [data: {3}]", tile.xCoord, tile.yCoord, tile.zCoord, pairings);
+//        }
     }
 
     @Override
