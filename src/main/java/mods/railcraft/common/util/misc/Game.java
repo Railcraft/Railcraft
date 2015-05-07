@@ -16,14 +16,13 @@ import net.minecraft.world.World;
 import mods.railcraft.common.core.Railcraft;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFormatMessage;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class Game {
-
     public static final boolean IS_OBFUSCATED = !World.class.getSimpleName().equals("World");
     public static final boolean IS_DEBUG = !Railcraft.VERSION.endsWith("0");
 
@@ -48,7 +47,11 @@ public class Game {
     }
 
     public static void log(Level level, String msg, Object... args) {
-        LogManager.getLogger(Railcraft.MOD_ID).log(level, new MessageFormatMessage(msg, args));
+        log(level, new MessageFormatMessage(msg, args));
+    }
+
+    public static void log(Level level, Message msg) {
+        LogManager.getLogger(Railcraft.MOD_ID).log(level, msg);
     }
 
     public static void logTrace(Level level, String msg, Object... args) {
@@ -104,5 +107,4 @@ public class Game {
     public static void logErrorFingerprint(String mod) {
         log(Level.FATAL, "{0} failed validation, terminating. Please re-download {0} from an official source.");
     }
-
 }

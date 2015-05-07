@@ -10,21 +10,21 @@ package mods.railcraft.common.blocks.signals;
 
 import cpw.mods.fml.common.Optional;
 import ic2.api.item.IBoxable;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.items.ItemRailcraft;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 
 @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
 public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, IActivationBlockingItem {
@@ -69,6 +69,13 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
     public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
 //        System.out.println("click");
         if (Game.isHost(world) && item.hasTagCompound() && player.isSneaking()) {
+            WorldCoordinate pos = getSignalData(item);
+            if (pos != null) {
+                TileEntity tile = DimensionManager.getWorld(pos.dimension).getTileEntity(pos.x, pos.y, pos.z);
+                if (tile instanceof ISignalBlockTile) {
+                    ((ISignalBlockTile) tile).getSignalBlock().endPairing();
+                }
+            }
             ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.abandon");
             item.setTagCompound(null);
             return false;
@@ -80,15 +87,7 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
                 if (Game.isHost(world)) {
                     ISignalBlockTile signalTile = (ISignalBlockTile) tile;
                     SignalBlock signalBlock = signalTile.getSignalBlock();
-                    WorldCoordinate pos = null;
-                    NBTTagCompound data = item.getTagCompound();
-                    if (data != null) {
-                        int sDim = data.getInteger("signalDim");
-                        int sx = data.getInteger("signalX");
-                        int sy = data.getInteger("signalY");
-                        int sz = data.getInteger("signalZ");
-                        pos = new WorldCoordinate(sDim, sx, sy, sz);
-                    }
+                    WorldCoordinate pos = getSignalData(item);
                     WorldCoordinate track = signalBlock.getTrackLocation();
                     if (track == null)
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.track", signalTile.getLocalizationTag());
@@ -123,6 +122,19 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
             } else if (Game.isHost(world))
                 ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.wrong");
         return false;
+    }
+
+    private WorldCoordinate getSignalData(ItemStack item) {
+        WorldCoordinate pos = null;
+        NBTTagCompound data = item.getTagCompound();
+        if (data != null) {
+            int sDim = data.getInteger("signalDim");
+            int sx = data.getInteger("signalX");
+            int sy = data.getInteger("signalY");
+            int sz = data.getInteger("signalZ");
+            pos = new WorldCoordinate(sDim, sx, sy, sz);
+        }
+        return pos;
     }
 
     private void setSignalData(ItemStack item, TileEntity tile) {

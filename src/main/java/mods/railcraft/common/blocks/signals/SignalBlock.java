@@ -16,6 +16,7 @@ import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
@@ -81,6 +82,14 @@ public abstract class SignalBlock extends AbstractPair {
     protected void saveNBT(NBTTagCompound data) {
         super.saveNBT(data);
         MiscTools.writeUUID(data, "uuid", uuid);
+        NBTTagList tagList = new NBTTagList();
+        for (Map.Entry<WorldCoordinate, WorldCoordinate> cache : trackCache.entrySet()) {
+            NBTTagCompound entry = new NBTTagCompound();
+            cache.getKey().writeToNBT(entry, "key");
+            cache.getValue().writeToNBT(entry, "value");
+            tagList.appendTag(entry);
+        }
+        data.setTag("trackCache", tagList);
         if (RailcraftConfig.printSignalDebug()) {
             Deque<WorldCoordinate> test = new LinkedList<WorldCoordinate>();
             NBTTagList list = data.getTagList("pairings", 10);
@@ -99,6 +108,14 @@ public abstract class SignalBlock extends AbstractPair {
     protected void loadNBT(NBTTagCompound data) {
         super.loadNBT(data);
         uuid = MiscTools.readUUID(data, "uuid");
+        if (data.hasKey("trackCache")) {
+            List<NBTTagCompound> tagList = NBTPlugin.getNBTList(data, "trackCache", NBTPlugin.EnumNBTType.COMPOUND);
+            for (NBTTagCompound nbt : tagList) {
+                WorldCoordinate key = WorldCoordinate.readFromNBT(nbt, "key");
+                WorldCoordinate value = WorldCoordinate.readFromNBT(nbt, "value");
+                trackCache.put(key, value);
+            }
+        }
         if (RailcraftConfig.printSignalDebug()) {
             String isConsistent = "unknown";
             Deque<WorldCoordinate> lastSave = savedData.get(uuid);
