@@ -39,8 +39,6 @@ import java.util.UUID;
  */
 public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLockdown, ITrackPowered {
     public static double START_BOOST = 0.04;
-
-    ;
     public static double BOOST_FACTOR = 0.06;
     private LockingProfileType profile = LockingProfileType.LOCKDOWN;
     private LockingProfile profileInstance = profile.create(this);
@@ -109,6 +107,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
 
             if (currentCart != null && currentCart.isDead) {
                 releaseCurrentCart();
+                currentCart = null;
                 updateClient = true;
             }
             boolean oldLocked = locked; // simple check to determine if "locked" has changed
@@ -218,10 +217,12 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
      */
     private boolean isSameTrainOrCart() {
         if (profile.lockType == LockType.TRAIN) {
-            if (Train.areInSameTrain(currentCart, prevCart))
-                trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY; // reset trainDelay
-            else
-                trainDelay = 0; // We've encountered a new train, force the delay to 0 so we return false
+            if (currentCart != null) {
+                if (Train.areInSameTrain(currentCart, prevCart))
+                    trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY; // reset trainDelay
+                else
+                    trainDelay = 0; // We've encountered a new train, force the delay to 0 so we return false
+            }
 
             if (trainDelay > 0)
                 trainDelay--;
