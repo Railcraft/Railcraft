@@ -74,6 +74,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
         detector.writeToNBT(data);
         data.setByte("direction", (byte) direction.ordinal());
         data.setByte("powerState", (byte) powerState);
+        data.setByte("powerDelay", (byte) powerDelay);
     }
 
     @Override
@@ -84,6 +85,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
 
         direction = ForgeDirection.getOrientation(safe.getByte("direction"));
         powerState = data.getByte("powerState");
+        powerDelay = data.getByte("powerDelay");
 
         if (data.hasKey("type"))
             setDetector(EnumDetector.fromOrdinal(data.getByte("type")));
