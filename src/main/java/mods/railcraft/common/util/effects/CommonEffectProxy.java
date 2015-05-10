@@ -93,22 +93,12 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public boolean isAnchorAuraActive() {
-        return false;
-    }
-
-    @Override
     public boolean isTuningAuraActive() {
         return false;
     }
 
     @Override
-    public boolean isTrackingAuraActive() {
-        return false;
-    }
-
-    @Override
-    public boolean isSurveyingAuraActive() {
+    public boolean isGoggleAuraActive(ItemGoggles.GoggleAura aura) {
         return false;
     }
 

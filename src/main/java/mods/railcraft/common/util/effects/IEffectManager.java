@@ -12,6 +12,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Set;
 
+import mods.railcraft.common.items.ItemGoggles;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -24,11 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 public interface IEffectManager extends IPairEffectRenderer {
     void chunkLoaderEffect(World world, Object source, Set<ChunkCoordIntPair> chunks);
 
-    boolean isAnchorAuraActive();
-
-    boolean isTrackingAuraActive();
-
-    boolean isSurveyingAuraActive();
+    boolean isGoggleAuraActive(ItemGoggles.GoggleAura aura);
 
     void handleEffectPacket(DataInputStream data) throws IOException;
 
