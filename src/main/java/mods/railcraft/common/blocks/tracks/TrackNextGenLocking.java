@@ -218,15 +218,11 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
      */
     private boolean isSameTrainOrCart() {
         if (profile.lockType == LockType.TRAIN) {
-            Train currentTrain = Train.getTrain(currentCart);
-            if (currentTrain != null) {
-                Train prevTrain = Train.getTrain(prevCart);
-                if (currentTrain == prevTrain) {
-                    trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY; // reset trainDelay
-                } else {
-                    trainDelay = 0; // We've encountered a new train, force the delay to 0 so we return false
-                }
-            }
+            if (Train.areInSameTrain(currentCart, prevCart))
+                trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY; // reset trainDelay
+            else
+                trainDelay = 0; // We've encountered a new train, force the delay to 0 so we return false
+
             if (trainDelay > 0)
                 trainDelay--;
             else
