@@ -1,4 +1,4 @@
-Next:
+9.6.1.14:
 	NEW: Sneak-clicking with a Surveyor or Tuner will now clear the current pairing operation.
 	NEW: Add Signalling Goggle Aura, a combination of the Tuning and Surveying Aura.
 	FIX: Rock Crusher can now crush Entities again.
