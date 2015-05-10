@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.Set;
 
 import mods.railcraft.api.core.WorldCoordinate;
+import mods.railcraft.client.render.RenderTESRSignals;
+import mods.railcraft.common.util.effects.IEffectManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.client.particle.EntityFX;
@@ -30,7 +32,7 @@ import mods.railcraft.client.particles.EntityTuningFX;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.particles.*;
 import mods.railcraft.common.items.ItemGoggles;
-import mods.railcraft.common.items.ItemGoggles.Aura;
+import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 import mods.railcraft.common.util.effects.CommonEffectProxy;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
@@ -44,8 +46,6 @@ import mods.railcraft.common.util.network.PacketEffect.Effect;
 public class ClientEffectProxy extends CommonEffectProxy {
     public static final short TELEPORT_PARTICLES = 64;
     public static final short TRACKING_DISTANCE = 32 * 32;
-    private final WorldCoordinate[] coords = new WorldCoordinate[2];
-    private final boolean apiUpdated = Comparable.class.isAssignableFrom(WorldCoordinate.class);
 
     public ClientEffectProxy() {
         SignalTools.effectManager = this;
@@ -98,39 +98,17 @@ public class ClientEffectProxy extends CommonEffectProxy {
     }
 
     @Override
-    public boolean isAnchorAuraActive() {
-        if (ItemGoggles.areEnabled()) {
-            ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().thePlayer);
-            return ItemGoggles.getCurrentAura(goggles) == Aura.ANCHOR;
-        }
-        return AuraKeyHandler.isAnchorAuraEnabled();
-    }
-
-    @Override
     public boolean isTuningAuraActive() {
-        if (ItemGoggles.areEnabled()) {
-            ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().thePlayer);
-            return ItemGoggles.getCurrentAura(goggles) == Aura.TUNING;
-        }
-        return AuraKeyHandler.isTuningAuraEnabled();
+        return isGoggleAuraActive(GoggleAura.TUNING) || isGoggleAuraActive(GoggleAura.SIGNALLING);
     }
 
     @Override
-    public boolean isSurveyingAuraActive() {
+    public boolean isGoggleAuraActive(GoggleAura aura) {
         if (ItemGoggles.areEnabled()) {
             ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().thePlayer);
-            return ItemGoggles.getCurrentAura(goggles) == Aura.SURVEYING;
+            return ItemGoggles.getCurrentAura(goggles) == aura;
         }
-        return AuraKeyHandler.isSurveyingAuraEnabled();
-    }
-
-    @Override
-    public boolean isTrackingAuraActive() {
-        if (ItemGoggles.areEnabled()) {
-            ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().thePlayer);
-            return ItemGoggles.getCurrentAura(goggles) == Aura.TRACKING;
-        }
-        return false;
+        return AuraKeyHandler.isAuraEnabled(aura);
     }
 
     @Override
@@ -142,11 +120,11 @@ public class ClientEffectProxy extends CommonEffectProxy {
             double py = start.yCoord + 0.5 + rand.nextGaussian() * 0.1;
             double pz = start.zCoord + 0.5 + rand.nextGaussian() * 0.1;
 
-            coords[0] = new WorldCoordinate(start);
-            coords[1] = new WorldCoordinate(dest);
-            if (apiUpdated)
-                Arrays.sort(coords);
-            int color = Arrays.hashCode(coords);
+            RenderTESRSignals.ColorProfile colorProfile = RenderTESRSignals.ColorProfile.RAINBOW;
+            if (isGoggleAuraActive(GoggleAura.SIGNALLING))
+                colorProfile = RenderTESRSignals.ColorProfile.ASPECT;
+
+            int color = colorProfile.getColor(start, new WorldCoordinate(start), new WorldCoordinate(dest));
 
             EntityFX particle = new EntityTuningFX(start.getWorldObj(), px, py, pz, EffectManager.getEffectSource(dest), color);
             spawnParticle(particle);
@@ -210,7 +188,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
 
     @Override
     public void chunkLoaderEffect(World world, Object source, Set<ChunkCoordIntPair> chunks) {
-        if (!isAnchorAuraActive())
+        if (!isGoggleAuraActive(GoggleAura.ANCHOR))
             return;
         IEffectSource es = EffectManager.getEffectSource(source);
         if (FMLClientHandler.instance().getClient().thePlayer.getDistanceSq(es.getX(), es.getY(), es.getZ()) > 25600)

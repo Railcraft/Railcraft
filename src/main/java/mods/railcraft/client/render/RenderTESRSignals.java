@@ -11,19 +11,13 @@ package mods.railcraft.client.render;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.IControllerTile;
-import mods.railcraft.api.signals.SignalTools;
-import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
-import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
-import mods.railcraft.common.blocks.machine.gamma.TileFluidLoader;
-import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
+import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.signals.ISignalBlockTile;
-import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.effects.EffectManager;
-import net.minecraft.client.renderer.texture.TextureMap;
+import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
@@ -32,23 +26,25 @@ import java.util.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class RenderTESRSignals extends TileEntitySpecialRenderer {
-    private final WorldCoordinate[] coords = new WorldCoordinate[2];
-    private final boolean apiUpdated = Comparable.class.isAssignableFrom(WorldCoordinate.class);
-//    private final Set<WorldCoordinate> drawnAlready = Collections.newSetFromMap(new WeakHashMap<WorldCoordinate, Boolean>());
-
     @Override
     public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f) {
-        if (tile instanceof IControllerTile && EffectManager.instance.isTuningAuraActive())
-            renderPairs(tile, x, y, z, f, ((IControllerTile) tile).getController(), false);
-        else if (tile instanceof ISignalBlockTile && EffectManager.instance.isSurveyingAuraActive())
-            renderPairs(tile, x, y, z, f, ((ISignalBlockTile) tile).getSignalBlock(), false);
+        if (tile instanceof IControllerTile) {
+            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TUNING))
+                renderPairs(tile, x, y, z, f, ((IControllerTile) tile).getController(), ColorProfile.RAINBOW);
+            else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING))
+                renderPairs(tile, x, y, z, f, ((IControllerTile) tile).getController(), ColorProfile.ASPECT);
+        }
+        if (tile instanceof ISignalBlockTile) {
+            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING))
+                renderPairs(tile, x, y, z, f, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.RAINBOW);
+            else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING))
+                renderPairs(tile, x, y, z, f, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.BLUE);
+        }
     }
 
-    private void renderPairs(TileEntity tile, double x, double y, double z, float f, AbstractPair pair, boolean trackDrawn) {
+    private void renderPairs(TileEntity tile, double x, double y, double z, float f, AbstractPair pair, ColorProfile colorProfile) {
         if (pair.getPairs().isEmpty())
             return;
-//        if (trackDrawn && drawnAlready.remove(pair.getCoords()))
-//            return;
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -62,11 +58,7 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
 
         GL11.glBegin(GL11.GL_LINES);
         for (WorldCoordinate target : pair.getPairs()) {
-            coords[0] = pair.getCoords();
-            coords[1] = target;
-            if (apiUpdated)
-                Arrays.sort(coords);
-            int color = Arrays.hashCode(coords);
+            int color = colorProfile.getColor(tile, pair.getCoords(), target);
             float c1 = (float) (color >> 16 & 255) / 255.0F;
             float c2 = (float) (color >> 8 & 255) / 255.0F;
             float c3 = (float) (color & 255) / 255.0F;
@@ -77,9 +69,6 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
             float ty = (float) y + target.y - tile.yCoord;
             float tz = (float) z + target.z - tile.zCoord;
             GL11.glVertex3f(tx + 0.5f, ty + 0.5f, tz + 0.5f);
-
-//            if (trackDrawn)
-//                drawnAlready.add(target);
         }
         GL11.glEnd();
 
@@ -87,12 +76,45 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
         GL11.glPopMatrix();
     }
 
-    private class Pair {
-        public final WorldCoordinate a, b;
+    public static enum ColorProfile {
+        RAINBOW {
+            private final WorldCoordinate[] coords = new WorldCoordinate[2];
+            private final boolean apiUpdated = Comparable.class.isAssignableFrom(WorldCoordinate.class);
 
-        public Pair(WorldCoordinate a, WorldCoordinate b) {
-            this.a = a;
-            this.b = b;
-        }
+            @Override
+            public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
+                coords[0] = source;
+                coords[1] = target;
+                if (apiUpdated)
+                    Arrays.sort(coords);
+                return Arrays.hashCode(coords);
+            }
+        },
+        BLUE {
+            @Override
+            public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
+                return EnumColor.BLUE.getHexColor();
+            }
+        },
+        ASPECT {
+            @Override
+            public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
+                if (tile instanceof IControllerTile) {
+                    SignalAspect aspect = ((IControllerTile) tile).getController().getAspectFor(target);
+                    switch (aspect) {
+                        case GREEN:
+                            return EnumColor.LIME.getHexColor();
+                        case YELLOW:
+                        case BLINK_YELLOW:
+                            return EnumColor.YELLOW.getHexColor();
+                        default:
+                            return EnumColor.RED.getHexColor();
+                    }
+                }
+                return BLUE.getColor(tile, source, target);
+            }
+        };
+
+        public abstract int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target);
     }
 }

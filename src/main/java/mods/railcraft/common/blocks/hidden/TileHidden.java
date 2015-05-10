@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.hidden;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.Game;
@@ -37,7 +38,7 @@ public class TileHidden extends RailcraftTileEntity {
     public void updateEntity() {
         super.updateEntity();
         if (Game.isNotHost(worldObj)) {
-            if (lastMarker != null && EffectManager.instance.isTrackingAuraActive())
+            if (lastMarker != null && EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TRACKING))
                 EffectManager.instance.trailEffect(lastMarker.x, lastMarker.y, lastMarker.z, this, colorSeed);
             return;
         }
