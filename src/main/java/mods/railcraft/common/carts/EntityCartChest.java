@@ -8,10 +8,12 @@
  */
 package mods.railcraft.common.carts;
 
+import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -21,7 +23,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCartChest extends CartTransferBase {
+public class EntityCartChest extends CartContainerBase implements IItemCart {
     public EntityCartChest(World world) {
         super(world);
     }
@@ -95,6 +97,21 @@ public class EntityCartChest extends CartTransferBase {
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!RailcraftConfig.chestAllowLiquids())
             return getStackInSlot(slot) == null || !FluidItemHelper.isContainer(stack);
+        return true;
+    }
+
+    @Override
+    public boolean canPassItemRequests() {
+        return true;
+    }
+
+    @Override
+    public boolean canAcceptPushedItem(EntityMinecart requester, ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
         return true;
     }
 }

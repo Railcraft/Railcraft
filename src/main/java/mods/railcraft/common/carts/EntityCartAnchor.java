@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import mods.railcraft.api.carts.IItemCart;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,7 +48,7 @@ import mods.railcraft.common.util.misc.IAnchor;
 import mods.railcraft.common.util.misc.MiscTools;
 import org.apache.logging.log4j.Level;
 
-public class EntityCartAnchor extends CartTransferBase implements ICartContentsTextureProvider, IAnchor, IMinecart {
+public class EntityCartAnchor extends CartContainerBase implements ICartContentsTextureProvider, IAnchor, IMinecart {
     public static final byte TICKET_FLAG = 6;
     private static final byte ANCHOR_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
@@ -61,12 +62,10 @@ public class EntityCartAnchor extends CartTransferBase implements ICartContentsT
 
     public EntityCartAnchor(World world) {
         super(world);
-        passThrough = true;
     }
 
     public EntityCartAnchor(World world, double x, double y, double z) {
         super(world, x, y, z);
-        passThrough = true;
     }
 
     @Override

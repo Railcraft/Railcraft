@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,7 +47,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraftforge.fluids.*;
 
-public class EntityCartTank extends CartContainerBase implements IFluidHandler, ILiquidTransfer, IEntityAdditionalSpawnData, ISidedInventory, IMinecart {
+public class EntityCartTank extends CartContainerBase implements IFluidHandler, ILiquidTransfer, IEntityAdditionalSpawnData, ISidedInventory, IMinecart, IFluidCart {
     private static final byte FLUID_ID_DATA_ID = 25;
     private static final byte FLUID_QTY_DATA_ID = 26;
     private static final byte FLUID_COLOR_DATA_ID = 27;
@@ -443,6 +444,25 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
             acquired.amount += ((ILiquidTransfer) linkedCart).requestLiquid(this, newRequest);
 
         return acquired.amount;
+    }
+
+    @Override
+    public boolean canPassFluidRequests(Fluid fluid) {
+        if (hasFilter())
+            return getFilterFluid() == fluid;
+        if (!tank.isEmpty() && tank.getFluidType() != fluid)
+            return false;
+        return true;
+    }
+
+    @Override
+    public boolean canAcceptPushedFluid(EntityMinecart requester, Fluid fluid) {
+        return canPassFluidRequests(fluid);
+    }
+
+    @Override
+    public boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid) {
+        return canPassFluidRequests(fluid);
     }
 
     @Override

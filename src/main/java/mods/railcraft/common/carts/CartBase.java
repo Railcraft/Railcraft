@@ -10,6 +10,8 @@ package mods.railcraft.common.carts;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import mods.railcraft.api.carts.IItemCart;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,13 +21,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 
 /**
- *
  * It also contains some generic code that most carts will find useful.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartBase extends EntityMinecart implements IRailcraftCart {
-
+public abstract class CartBase extends EntityMinecart implements IRailcraftCart, IItemCart {
     public CartBase(World world) {
         super(world);
         renderDistanceWeight = CartConstants.RENDER_DIST_MULTIPLIER;
@@ -83,4 +83,18 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart 
         return -1;
     }
 
+    @Override
+    public boolean canPassItemRequests() {
+        return false;
+    }
+
+    @Override
+    public boolean canAcceptPushedItem(EntityMinecart requester, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
+        return false;
+    }
 }

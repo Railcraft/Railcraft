@@ -10,8 +10,10 @@ package mods.railcraft.common.carts;
 
 import java.util.List;
 
+import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,16 +24,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 
 /**
- *
  * It also contains some generic code that most carts will find useful.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartContainerBase extends EntityMinecartContainer implements IRailcraftCart {
-
+public abstract class CartContainerBase extends EntityMinecartContainer implements IRailcraftCart, IItemCart {
+    private final ForgeDirection[] travelDirectionHistory = new ForgeDirection[2];
     protected ForgeDirection travelDirection = ForgeDirection.UNKNOWN;
     protected ForgeDirection verticalTravelDirection = ForgeDirection.UNKNOWN;
-    private final ForgeDirection[] travelDirectionHistory = new ForgeDirection[2];
 
     public CartContainerBase(World world) {
         super(world);
@@ -140,7 +140,7 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
                         return ForgeDirection.WEST;
                 case EAST_NORTH_CORNER:
                     if (prevPosZ > posZ)
-                       return ForgeDirection.NORTH;
+                        return ForgeDirection.NORTH;
                     else
                         return ForgeDirection.EAST;
             }
@@ -152,5 +152,20 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
         if (trackMeta.isSlopeTrack())
             return prevPosY < posY ? ForgeDirection.UP : ForgeDirection.DOWN;
         return ForgeDirection.UNKNOWN;
+    }
+
+    @Override
+    public boolean canPassItemRequests() {
+        return false;
+    }
+
+    @Override
+    public boolean canAcceptPushedItem(EntityMinecart requester, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
+        return false;
     }
 }
