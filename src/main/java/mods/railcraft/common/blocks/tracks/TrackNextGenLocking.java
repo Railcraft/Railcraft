@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.events.CartLockdownEvent;
 import mods.railcraft.api.tracks.ITrackLockdown;
@@ -32,6 +33,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -222,6 +224,14 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
                     trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY; // reset trainDelay
                 else
                     trainDelay = 0; // We've encountered a new train, force the delay to 0 so we return false
+            } else if (trainLeaving) {
+                List<EntityMinecart> carts = CartTools.getMinecartsAt(getWorld(), getX(), getY(), getZ(), 0.0f);
+                for (EntityMinecart cart : carts) {
+                    if (Train.areInSameTrain(cart, prevCart)) {
+                        trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY;
+                        break;
+                    }
+                }
             }
 
             if (trainDelay > 0)
