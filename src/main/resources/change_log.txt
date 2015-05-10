@@ -1,5 +1,6 @@
 Next:
 	NEW: Sneak-clicking with a Surveyor or Tuner will now clear the current pairing operation.
+	NEW: Add Signalling Goggle Aura, a combination of the Tuning and Surveying Aura.
 	FIX: Rock Crusher can now crush Entities again.
 	FIX: Disabled Tile Entity caching on Bukkit. Bukkit doesn't seem to invalidate Tile Entities correctly. This is likely the cause of most issues with Multi-blocks on Cauldron. Sadly, caching is a significant performance booster when it works.
 	FIX: Stop Detector and Directional Detector Track turning off in between carts in a train by adding a delay before shutting off.
