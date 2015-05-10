@@ -20,6 +20,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
+import scala.tools.nsc.interpreter.Power;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -28,10 +29,12 @@ import java.util.List;
 
 public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandler {
     public static final float SENSITIVITY = 0.2f;
+    private static final int POWER_DELAY = 10;
     public ForgeDirection direction = ForgeDirection.UP;
     public int powerState = 0;
     public Detector detector = Detector.DUMMY;
     private boolean tested;
+    private int powerDelay = 0;
 
     public Detector getDetector() {
         return detector;
@@ -128,10 +131,14 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
                     worldObj.setBlock(xCoord, yCoord, yCoord, block, 0, 3);
             }
         }
-        if ((detector.updateInterval() == 0 || clock % detector.updateInterval() == 0)) {
+        if (powerDelay > 0)
+            powerDelay--;
+        else if (detector.updateInterval() == 0 || clock % detector.updateInterval() == 0) {
             int newPowerState = detector.shouldTest() ? detector.testCarts(getCarts()) : PowerPlugin.NO_POWER;
             if (newPowerState != powerState) {
                 powerState = newPowerState;
+                if (powerState > PowerPlugin.NO_POWER)
+                    powerDelay = POWER_DELAY;
                 sendUpdateToClient();
                 worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, BlockDetector.getBlock());
                 WorldPlugin.notifyBlocksOfNeighborChangeOnSide(worldObj, xCoord, yCoord, zCoord, BlockDetector.getBlock(), direction);
