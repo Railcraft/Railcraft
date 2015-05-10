@@ -26,16 +26,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CartContentRendererTank extends CartContentRenderer {
-
-    private final RenderInfo fillBlock = new RenderInfo(0.4f, 0.0f, 0.4f, 0.6f, 0.999f, 0.6f);
-    private final RenderInfo bucketSign = new RenderInfo();
     private static final float FILTER_SCALE_X = 1.38f;
     private static final float FILTER_SCALE_Y = 0.5f;
     private static final float FILTER_SCALE_Z = 0.5f;
+    private final RenderInfo fillBlock = new RenderInfo(0.4f, 0.0f, 0.4f, 0.6f, 0.999f, 0.6f);
+    private final RenderInfo bucketSign = new RenderInfo();
 
     public CartContentRendererTank() {
         bucketSign.template = Blocks.glass;
@@ -70,11 +68,12 @@ public class CartContentRendererTank extends CartContentRenderer {
 
                 GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
                 GL11.glEnable(GL11.GL_BLEND);
+                GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
                 GL11.glTranslatef(0, 0.0625f, 0);
 
                 float cap = tank.getCapacity();
-                float level = (float) Math.min(tank.renderData.amount, cap) / cap;
+                float level = Math.min(tank.renderData.amount, cap) / cap;
 
                 renderer.bindTex(FluidRenderer.getFluidSheet(tank.renderData.fluid));
                 FluidRenderer.setColorForTank(tank);
@@ -106,9 +105,9 @@ public class CartContentRendererTank extends CartContentRenderer {
             int meta = bucket.getItemDamage();
             for (int pass = 0; pass < bucket.getItem().getRenderPasses(meta); ++pass) {
                 IIcon texture = bucket.getItem().getIconFromDamageForRenderPass(meta, pass);
-                if(texture == null)
+                if (texture == null)
                     continue;
-                
+
                 int color = bucket.getItem().getColorFromItemStack(bucket, pass);
 
                 float c1 = (float) (color >> 16 & 255) / 255.0F;

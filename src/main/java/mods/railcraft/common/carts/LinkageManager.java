@@ -17,6 +17,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
 import org.apache.logging.log4j.Level;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -246,7 +247,7 @@ public class LinkageManager implements ILinkageManager {
      */
     @Override
     public EntityMinecart getLinkedCartA(EntityMinecart cart) {
-        return getCartFromUUID(getLinkA(cart));
+        return getLinkedCart(cart, LinkType.LINK_A);
     }
 
     /**
@@ -258,7 +259,11 @@ public class LinkageManager implements ILinkageManager {
      */
     @Override
     public EntityMinecart getLinkedCartB(EntityMinecart cart) {
-        return getCartFromUUID(getLinkB(cart));
+        return getLinkedCart(cart, LinkType.LINK_B);
+    }
+
+    public EntityMinecart getLinkedCart(EntityMinecart cart, LinkType type) {
+        return getCartFromUUID(getLink(cart, type));
     }
 
     @Deprecated
@@ -441,7 +446,65 @@ public class LinkageManager implements ILinkageManager {
         return Train.getTrain(cart);
     }
 
-    private static enum LinkType {
+    public Iterable<EntityMinecart> getLinkedCarts(final EntityMinecart cart, final LinkType type) {
+        return new Iterable<EntityMinecart>() {
+            @Override
+            public Iterator<EntityMinecart> iterator() {
+                return new Iterator<EntityMinecart>() {
+                    private final LinkageManager lm = LinkageManager.instance();
+                    private EntityMinecart last = null;
+                    private EntityMinecart current = cart;
+
+                    @Override
+                    public boolean hasNext() {
+                        if (last == null) {
+                            EntityMinecart next = lm.getLinkedCart(current, type);
+                            return next != null;
+                        }
+                        EntityMinecart next = lm.getLinkedCartA(current);
+                        if (next != null && next != last)
+                            return true;
+                        next = lm.getLinkedCartB(current);
+                        if (next != null && next != last)
+                            return true;
+                        return false;
+                    }
+
+                    @Override
+                    public EntityMinecart next() {
+                        if (last == null) {
+                            EntityMinecart next = lm.getLinkedCart(current, type);
+                            if (next == null)
+                                return null;
+                            last = current;
+                            current = next;
+                            return current;
+                        }
+                        EntityMinecart next = lm.getLinkedCartA(current);
+                        if (next != null && next != last) {
+                            last = current;
+                            current = next;
+                            return current;
+                        }
+                        next = lm.getLinkedCartB(current);
+                        if (next != null && next != last) {
+                            last = current;
+                            current = next;
+                            return current;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void remove() {
+                        throw new UnsupportedOperationException("Removing not supported.");
+                    }
+                };
+            }
+        };
+    }
+
+    public static enum LinkType {
         LINK_A(LINK_A_HIGH, LINK_A_LOW),
         LINK_B(LINK_B_HIGH, LINK_B_LOW);
         public final String tagHigh, tagLow;

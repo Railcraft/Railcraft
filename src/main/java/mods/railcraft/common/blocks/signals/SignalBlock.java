@@ -308,7 +308,8 @@ public abstract class SignalBlock extends AbstractPair {
         SignalBlock other = getSignalAt(otherCoord);
         if (other != null) {
             WorldCoordinate track = other.getTrackLocation();
-            trackCache.put(otherCoord, track);
+            if (track != null)
+                trackCache.put(otherCoord, track);
             return track;
         }
         return trackCache.get(otherCoord);

@@ -8,42 +8,38 @@
  */
 package mods.railcraft.common.blocks.detector.types;
 
+import mods.railcraft.common.blocks.detector.Detector;
+import mods.railcraft.common.blocks.detector.EnumDetector;
+import mods.railcraft.common.carts.Train;
+import mods.railcraft.common.gui.EnumGui;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
-import mods.railcraft.api.carts.ILinkageManager;
-import mods.railcraft.common.blocks.detector.Detector;
-import mods.railcraft.common.blocks.detector.EnumDetector;
-import mods.railcraft.common.carts.LinkageManager;
-import mods.railcraft.common.gui.EnumGui;
 
-import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-
-import net.minecraft.nbt.NBTTagCompound;
+import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
+import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class DetectorTrain extends Detector {
+    private short trainSize = 5;
 
     @Override
     public EnumDetector getType() {
         return EnumDetector.TRAIN;
     }
 
-    private short trainSize = 5;
-
     @Override
     public int testCarts(List<EntityMinecart> carts) {
-        ILinkageManager lm = LinkageManager.instance();
         for (EntityMinecart cart : carts) {
-            int count = lm.countCartsInTrain(cart);
-            int size = getTrainSize();
-            if (count >= size) {
+            int count = Train.getTrain(cart).size();
+            if (count >= getTrainSize()) {
                 return FULL_POWER;
             }
         }
@@ -102,5 +98,4 @@ public class DetectorTrain extends Detector {
     public void setTrainSize(short trainSize) {
         this.trainSize = trainSize;
     }
-
 }

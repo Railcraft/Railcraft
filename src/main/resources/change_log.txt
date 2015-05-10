@@ -1,5 +1,13 @@
 Next:
+	NEW: Sneak-clicking with a Surveyor or Tuner will now clear the current pairing operation.
 	FIX: Rock Crusher can now crush Entities again.
+	FIX: Disabled Tile Entity caching on Bukkit. Bukkit doesn't seem to invalidate Tile Entities correctly. This is likely the cause of most issues with Multi-blocks on Cauldron. Sadly, caching is a significant performance booster when it works.
+	FIX: Stop Detector and Directional Detector Track turning off in between carts in a train by adding a delay before shutting off.
+	FIX: Make Receiver Boxes occasionally update their neighbors to prevent situations where the Receiver says one thing and attached blocks another. Could happen when the Receiver was in a different chunk from the adjecent block.
+	FIX: Have Block Signals save the last known position of track end positions to NBT. Should prevent Signals from returning Yellow if the chunk on the opposite end isn't loaded. May cause traffic jams and collision if your trains don't have Anchor Carts.
+	FIX: Increase the area that Anchor Carts keep chunkloaded from 3x3 chunks to 5x5 chunks in order to help reduce chunkloading derived issues for moving Trains.
+	FIX: Boilers and Hobbist Engines should defer water triggered explosions until their own update tick. Should prevent other mods from crashing when their block randomly disappears mid-update.
+	FIX: Disabling any blocks or items used in Rock Crusher recipes should no longer crash. Issue #602
 
 9.6.1.2:
 	NEW: Redesign Tuning Aura and add Surveying Aura for the Goggles. Should be more visible now.

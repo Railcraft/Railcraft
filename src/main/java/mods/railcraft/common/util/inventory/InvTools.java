@@ -9,12 +9,9 @@
 package mods.railcraft.common.util.inventory;
 
 import buildcraft.api.transport.PipeManager;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+
+import java.util.*;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
@@ -46,7 +43,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 
 public abstract class InvTools {
-
     private static final String TAG_SLOT = "Slot";
 
     public static ItemStack makeStack(Item item, int qty, int meta) {
@@ -97,7 +93,6 @@ public abstract class InvTools {
                     return false;
                 return exclude == null || !exclude.isAssignableFrom(tile.getClass());
             }
-
         });
     }
 
@@ -313,6 +308,15 @@ public abstract class InvTools {
         return stack != null;
     }
 
+    public static boolean isEmptySlot(IInventory inv) {
+        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+            ItemStack stack = slot.getStackInSlot();
+            if (stack == null)
+                return true;
+        }
+        return false;
+    }
+
     /**
      * Counts the number of items.
      *
@@ -397,7 +401,7 @@ public abstract class InvTools {
      *
      * @param inv The <code>IInventory</code> to generate the manifest for
      * @return A <code>Map</code> that lists how many of each item is in * * *
-     *         the <code>IInventory</code>
+     * the <code>IInventory</code>
      * @see ItemStackMap
      */
     public static Map<ItemStack, Integer> getManifest(IInventory inv) {
@@ -504,7 +508,7 @@ public abstract class InvTools {
 
     /**
      * Attempts to move a single item from one inventory to another.
-     *
+     * <p/>
      * Will not move any items in the filter.
      *
      * @param source
@@ -560,11 +564,11 @@ public abstract class InvTools {
 
     /**
      * A more robust item comparison function.
-     *
+     * <p/>
      * Compares stackSize as well.
-     *
+     * <p/>
      * Two null stacks will return true, unlike the other functions.
-     *
+     * <p/>
      * This function is primarily intended to be used to track changes to an
      * ItemStack.
      *
@@ -588,11 +592,11 @@ public abstract class InvTools {
 
     /**
      * A more robust item comparison function.
-     *
+     * <p/>
      * Compares stackSize as well.
-     *
+     * <p/>
      * Two null stacks will return true, unlike the other functions.
-     *
+     * <p/>
      * This function is primarily intended to be used to track changes to an
      * ItemStack.
      *
@@ -701,11 +705,29 @@ public abstract class InvTools {
      * @param stack The ItemStack to put in the inventory.
      * @param dest  The destination IInventory.
      * @return Null if itemStack was completely moved, a new itemStack with
-     *         remaining stackSize if part or none of the stack was moved.
+     * remaining stackSize if part or none of the stack was moved.
      */
     public static ItemStack moveItemStack(ItemStack stack, IInventory dest) {
         InventoryManipulator im = InventoryManipulator.get(dest);
         return im.addStack(stack);
+    }
+
+    /**
+     * Places an ItemStack in a collection destination IInventories. Will attempt to move as
+     * much of the stack as possible, returning any remainder.
+     *
+     * @param stack The ItemStack to put in the inventory.
+     * @param dest  The destination IInventories.
+     * @return Null if itemStack was completely moved, a new itemStack with
+     * remaining stackSize if part or none of the stack was moved.
+     */
+    public static ItemStack moveItemStack(ItemStack stack, Collection<IInventory> dest) {
+        for (IInventory inv : dest) {
+            stack = moveItemStack(stack, inv);
+            if (stack == null)
+                return null;
+        }
+        return stack;
     }
 
     /**
@@ -819,7 +841,7 @@ public abstract class InvTools {
      * @param amount
      * @param filter
      * @return true if there are enough items that can be removed, false
-     *         otherwise.
+     * otherwise.
      */
     public static boolean removeItemsAbsolute(IInventory inv, int amount, ItemStack... filter) {
         return removeItemsAbsolute(inv, amount, new ArrayStackFilter(filter));
@@ -834,7 +856,7 @@ public abstract class InvTools {
      * @param amount
      * @param filter
      * @return true if there are enough items that can be removed, false
-     *         otherwise.
+     * otherwise.
      */
     public static boolean removeItemsAbsolute(IInventory inv, int amount, IStackFilter filter) {
         InventoryManipulator im = InventoryManipulator.get(inv);
@@ -843,6 +865,41 @@ public abstract class InvTools {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Returns a single item from the inventory that matches the
+     * filter, but does not remove it.
+     *
+     * @param inv    The inventory
+     * @param filter IStackFilter to match against
+     * @return An ItemStack
+     */
+    public static ItemStack findMatchingItem(IInventory inv, IStackFilter filter) {
+        InventoryManipulator im = InventoryManipulator.get(inv);
+        return im.tryRemoveItem(filter);
+    }
+
+    /**
+     * Returns all items from the inventory that match the
+     * filter, but does not remove them.
+     * The resulting set will be populated with a single instance of each item type.
+     *
+     * @param inv    The inventory
+     * @param filter EnumItemType to match against
+     * @return A Set of ItemStacks
+     */
+    public static Set<ItemStack> findMatchingItems(IInventory inv, IStackFilter filter) {
+        Set<ItemStack> items = new ItemStackSet();
+        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+            ItemStack stack = slot.getStackInSlot();
+            if (stack != null && stack.stackSize > 0 && filter.matches(stack)) {
+                stack = stack.copy();
+                stack.stackSize = 1;
+                items.add(stack);
+            }
+        }
+        return items;
     }
 
     public static void writeInvToNBT(IInventory inv, String tag, NBTTagCompound data) {
@@ -896,5 +953,4 @@ public abstract class InvTools {
             return ((ItemBlock) stack.getItem()).field_150939_a;
         return null;
     }
-
 }
