@@ -9,9 +9,11 @@
 package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.api.signals.SimpleSignalReceiver;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -26,12 +28,13 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+
 import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
 
 public class TileBoxReceiver extends TileBoxActionManager implements IAspectActionManager, IGuiReturnHandler, IReceiverTile, IAspectProvider {
-
-    private boolean prevBlinkState;
+    private static final int FORCED_UPDATE = 512;
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
+    private boolean prevBlinkState;
 
     @Override
     public EnumSignal getSignalType() {
@@ -64,7 +67,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
             receiver.setAspect(SignalAspect.BLINK_YELLOW);
         else if (!receiver.isPaired())
             receiver.setAspect(SignalAspect.BLINK_RED);
-        if (prevAspect != receiver.getAspect()) {
+        if (prevAspect != receiver.getAspect() || clock % FORCED_UPDATE == 0) {
             updateNeighbors();
             sendUpdateToClient();
         }
@@ -163,5 +166,4 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     public SignalAspect getTriggerAspect() {
         return getBoxSignalAspect(null);
     }
-
 }
