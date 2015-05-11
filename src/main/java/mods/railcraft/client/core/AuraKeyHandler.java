@@ -12,6 +12,7 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.Minecraft;
@@ -20,33 +21,32 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.Map;
+
+import mods.railcraft.common.items.ItemGoggles.GoggleAura;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class AuraKeyHandler {
     public static final AuraKeyHandler INSTANCE = new AuraKeyHandler();
-    private static boolean anchorAuraEnabled = false;
-    private static boolean tuningAuraEnabled = false;
-    private static boolean surveyingAuraEnabled = false;
-    private final KeyBinding anchorAura = new KeyBinding("railcraft.keybind.aura.anchor", Keyboard.KEY_F9, Railcraft.MOD_ID);
-    private final KeyBinding tuningAura = new KeyBinding("railcraft.keybind.aura.tuning", Keyboard.KEY_P, Railcraft.MOD_ID);
-    private final KeyBinding surveyingAura = new KeyBinding("railcraft.keybind.aura.surveying", Keyboard.KEY_O, Railcraft.MOD_ID);
+    private static EnumSet<GoggleAura> activeAuras = EnumSet.noneOf(ItemGoggles.GoggleAura.class);
+    private static EnumMap<GoggleAura, KeyBinding> keyBindings = new EnumMap<ItemGoggles.GoggleAura, KeyBinding>(ItemGoggles.GoggleAura.class);
 
     private AuraKeyHandler() {
-        ClientRegistry.registerKeyBinding(anchorAura);
-        ClientRegistry.registerKeyBinding(tuningAura);
+        keyBindings.put(GoggleAura.ANCHOR, new KeyBinding("railcraft.keybind.aura.anchor", Keyboard.KEY_F9, Railcraft.MOD_ID));
+        keyBindings.put(GoggleAura.TUNING, new KeyBinding("railcraft.keybind.aura.tuning", Keyboard.KEY_P, Railcraft.MOD_ID));
+        keyBindings.put(GoggleAura.SURVEYING, new KeyBinding("railcraft.keybind.aura.surveying", Keyboard.KEY_O, Railcraft.MOD_ID));
+        keyBindings.put(GoggleAura.SIGNALLING, new KeyBinding("railcraft.keybind.aura.signalling", Keyboard.KEY_I, Railcraft.MOD_ID));
+
+        for (KeyBinding binding : keyBindings.values())
+            ClientRegistry.registerKeyBinding(binding);
     }
 
-    public static boolean isAnchorAuraEnabled() {
-        return anchorAuraEnabled;
-    }
-
-    public static boolean isTuningAuraEnabled() {
-        return tuningAuraEnabled;
-    }
-
-    public static boolean isSurveyingAuraEnabled() {
-        return surveyingAuraEnabled;
+    public static boolean isAuraEnabled(GoggleAura aura) {
+        return activeAuras.contains(aura);
     }
 
     @SubscribeEvent
@@ -54,34 +54,16 @@ public class AuraKeyHandler {
         if (Minecraft.getMinecraft().currentScreen instanceof GuiChat)
             return;
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        if (anchorAura.isPressed()) {
-            anchorAuraEnabled = !anchorAuraEnabled;
-            if (anchorAuraEnabled) {
-                String aura = LocalizationPlugin.translate("railcraft.gui.goggles.aura.anchor");
-                ChatPlugin.sendLocalizedChat(player, "railcraft.gui.aura.enable", "\u00A75" + aura + "\u00A77");
-            } else {
-                String aura = LocalizationPlugin.translate("railcraft.gui.goggles.aura.anchor");
-                ChatPlugin.sendLocalizedChat(player, "railcraft.gui.aura.disable", "\u00A75" + aura + "\u00A77");
-            }
-        }
-        if (tuningAura.isPressed()) {
-            tuningAuraEnabled = !tuningAuraEnabled;
-            if (tuningAuraEnabled) {
-                String aura = LocalizationPlugin.translate("railcraft.gui.goggles.aura.tuning");
-                ChatPlugin.sendLocalizedChat(player, "railcraft.gui.aura.enable", "\u00A75" + aura + "\u00A77");
-            } else {
-                String aura = LocalizationPlugin.translate("railcraft.gui.goggles.aura.tuning");
-                ChatPlugin.sendLocalizedChat(player, "railcraft.gui.aura.disable", "\u00A75" + aura + "\u00A77");
-            }
-        }
-        if (surveyingAura.isPressed()) {
-            surveyingAuraEnabled = !surveyingAuraEnabled;
-            if (surveyingAuraEnabled) {
-                String aura = LocalizationPlugin.translate("railcraft.gui.goggles.aura.surveying");
-                ChatPlugin.sendLocalizedChat(player, "railcraft.gui.aura.enable", "\u00A75" + aura + "\u00A77");
-            } else {
-                String aura = LocalizationPlugin.translate("railcraft.gui.goggles.aura.surveying");
-                ChatPlugin.sendLocalizedChat(player, "railcraft.gui.aura.disable", "\u00A75" + aura + "\u00A77");
+        for (Map.Entry<GoggleAura, KeyBinding> keyBinding : keyBindings.entrySet()) {
+            if (keyBinding.getValue().isPressed()) {
+                GoggleAura aura = keyBinding.getKey();
+                if (isAuraEnabled(aura)) {
+                    activeAuras.remove(aura);
+                    ChatPlugin.sendLocalizedChat(player, "railcraft.gui.aura.disable", "\u00A75" + aura + "\u00A77");
+                } else {
+                    activeAuras.add(aura);
+                    ChatPlugin.sendLocalizedChat(player, "railcraft.gui.aura.enable", "\u00A75" + aura + "\u00A77");
+                }
             }
         }
     }

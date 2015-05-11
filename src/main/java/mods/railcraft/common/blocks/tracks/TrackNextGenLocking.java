@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.events.CartLockdownEvent;
 import mods.railcraft.api.tracks.ITrackLockdown;
@@ -32,6 +33,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -39,7 +41,6 @@ import java.util.UUID;
  */
 public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLockdown, ITrackPowered {
     public static double START_BOOST = 0.04;
-    ;
     public static double BOOST_FACTOR = 0.06;
     private LockingProfileType profile = LockingProfileType.LOCKDOWN;
     private LockingProfile profileInstance = profile.create(this);
@@ -108,6 +109,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
 
             if (currentCart != null && currentCart.isDead) {
                 releaseCurrentCart();
+                currentCart = null;
                 updateClient = true;
             }
             boolean oldLocked = locked; // simple check to determine if "locked" has changed
@@ -217,15 +219,21 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
      */
     private boolean isSameTrainOrCart() {
         if (profile.lockType == LockType.TRAIN) {
-            Train currentTrain = Train.getTrain(currentCart);
-            if (currentTrain != null) {
-                Train prevTrain = Train.getTrain(prevCart);
-                if (currentTrain == prevTrain) {
+            if (currentCart != null) {
+                if (Train.areInSameTrain(currentCart, prevCart))
                     trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY; // reset trainDelay
-                } else {
+                else
                     trainDelay = 0; // We've encountered a new train, force the delay to 0 so we return false
+            } else if (trainLeaving) {
+                List<EntityMinecart> carts = CartTools.getMinecartsAt(getWorld(), getX(), getY(), getZ(), 0.0f);
+                for (EntityMinecart cart : carts) {
+                    if (Train.areInSameTrain(cart, prevCart)) {
+                        trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY;
+                        break;
+                    }
                 }
             }
+
             if (trainDelay > 0)
                 trainDelay--;
             else

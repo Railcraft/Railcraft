@@ -59,7 +59,8 @@ public class Game {
     }
 
     public static void log(Level level, String msg, Object... args) {
-        log(level, new MessageFormatMessage(msg, args));
+        if (msg != null)
+            log(level, new MessageFormatMessage(msg, args));
     }
 
     public static void log(Level level, Message msg) {
@@ -91,7 +92,8 @@ public class Game {
 
     public static void logThrowable(Level level, String msg, int lines, Throwable error, Object... args) {
         log(level, msg, args);
-        log(level, error.getMessage());
+        if (error.getMessage() != null)
+            log(level, error.getMessage());
         logTrace(level, lines, 0, error.getStackTrace());
     }
 

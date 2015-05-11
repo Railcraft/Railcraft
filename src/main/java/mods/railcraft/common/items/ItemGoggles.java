@@ -72,12 +72,12 @@ public class ItemGoggles extends ItemArmor {
         return new ItemStack(item);
     }
 
-    public static Aura getCurrentAura(ItemStack goggles) {
-        Aura aura = Aura.NONE;
+    public static GoggleAura getCurrentAura(ItemStack goggles) {
+        GoggleAura aura = GoggleAura.NONE;
         if (goggles != null && goggles.getItem() instanceof ItemGoggles) {
             NBTTagCompound data = goggles.getTagCompound();
             if (data != null)
-                aura = Aura.AURAS[data.getByte("aura")];
+                aura = GoggleAura.VALUES[data.getByte("aura")];
         }
         return aura;
     }
@@ -91,11 +91,11 @@ public class ItemGoggles extends ItemArmor {
             }
             byte aura = data.getByte("aura");
             aura++;
-            if (aura >= Aura.AURAS.length)
+            if (aura >= GoggleAura.VALUES.length)
                 aura = 0;
             data.setByte("aura", aura);
 
-            if (getCurrentAura(goggles) == Aura.TRACKING && !RailcraftConfig.isTrackingAuraEnabled())
+            if (getCurrentAura(goggles) == GoggleAura.TRACKING && !RailcraftConfig.isTrackingAuraEnabled())
                 incrementAura(goggles);
         }
     }
@@ -127,7 +127,7 @@ public class ItemGoggles extends ItemArmor {
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         incrementAura(stack);
         if (Game.isNotHost(world)) {
-            Aura aura = getCurrentAura(stack);
+            GoggleAura aura = getCurrentAura(stack);
             ChatPlugin.sendLocalizedChat(player, "railcraft.gui.goggles.mode", "\u00A75" + aura);
         }
         return stack.copy();
@@ -146,7 +146,7 @@ public class ItemGoggles extends ItemArmor {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean adv) {
         NBTTagCompound data = stack.getTagCompound();
-        Aura aura = getCurrentAura(stack);
+        GoggleAura aura = getCurrentAura(stack);
         String mode = LocalizationPlugin.translate("railcraft.gui.goggles.mode");
         String tip = LocalizationPlugin.translate("railcraft.gui.goggles.tip");
 
@@ -154,23 +154,24 @@ public class ItemGoggles extends ItemArmor {
         list.add(tip);
     }
 
-    public static enum Aura {
+    public static enum GoggleAura {
 
         NONE("railcraft.gui.goggles.aura.none"),
         ANCHOR("railcraft.gui.goggles.aura.anchor"),
-        TUNING("railcraft.gui.goggles.aura.tuning"),
         TRACKING("railcraft.gui.goggles.aura.tracking"),
-        SURVEYING("railcraft.gui.goggles.aura.surveying");
-        public static final Aura[] AURAS = values();
-        private final String name;
+        TUNING("railcraft.gui.goggles.aura.tuning"),
+        SURVEYING("railcraft.gui.goggles.aura.surveying"),
+        SIGNALLING("railcraft.gui.goggles.aura.signalling");
+        public static final GoggleAura[] VALUES = values();
+        private final String locTag;
 
-        private Aura(String name) {
-            this.name = name;
+        private GoggleAura(String locTag) {
+            this.locTag = locTag;
         }
 
         @Override
         public String toString() {
-            return LocalizationPlugin.translate(name);
+            return LocalizationPlugin.translate(locTag);
         }
 
     }
