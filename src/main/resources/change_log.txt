@@ -1,3 +1,9 @@
+9.6.1.15:
+	NEW: Steam Locomotives can now pull fuel and water from attached carts.
+	NEW: Rewrote the entire system for moving items and fluids around within Trains. It should be more compatible and less buggy than the previous system.
+	INFO: The way the system works is that push and pull requests can only pass through carts that allow them to be passed. For example Chest Carts can pass item requests, but not fluid request. And Tank Carts can pass fluid requests but not item requests.
+	INFO: Because of the way the system works, you can either attach a Chest Cart to your Steam Locomotive to supply fuel or a Tank Cart to supply water, but not both. Choices are good.
+
 9.6.1.14:
 	NEW: Sneak-clicking with a Surveyor or Tuner will now clear the current pairing operation.
 	NEW: Add Signalling Goggle Aura, a combination of the Tuning and Surveying Aura.
