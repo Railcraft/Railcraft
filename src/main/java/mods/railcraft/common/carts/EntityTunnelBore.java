@@ -8,20 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import java.util.*;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.block.Block;
-import net.minecraft.util.DamageSource;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.carts.IItemTransfer;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.bore.IBoreHead;
@@ -35,20 +21,34 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.util.inventory.filters.StackFilter;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.collections.BlockSet;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.*;
 
 public class EntityTunnelBore extends CartContainerBase implements IInventory, ILinkableCart {
-
     public static final float SPEED = 0.03F;
     public static final float LENGTH = 6f;
     public static final int MAX_FILL_DEPTH = 10;
@@ -58,100 +58,99 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     public static final int BALLAST_DELAY = 10;
     public static final int FUEL_CONSUMPTION = 12;
     public static final float HARDNESS_MULTIPLER = 8;
+    public static final BlockSet mineableBlocks = new BlockSet();
+    public static final Set<Block> replaceableBlocks = new HashSet<Block>();
     protected static final int WATCHER_ID_FUEL = 16;
     protected static final int WATCHER_ID_MOVING = 25;
     protected static final int WATCHER_ID_BORE_HEAD = 26;
     protected static final int WATCHER_ID_FACING = 5;
-//    protected static final int WATCHER_ID_BURN_TIME = 22;
-    protected boolean degreeCalc = false;
-    protected int delay = 0;
-    private boolean active;
-    private int clock = MiscTools.getRand().nextInt();
-    private int burnTime;
-    private int fuel;
-    private boolean hasInit;
-    protected boolean placeRail = false;
-    protected boolean placeBallast = false;
-    protected boolean boreLayer = false;
-    protected final IInventory invFuel = new InventoryMapper(this, 1, 6);
-    protected final IInventory invBallast = new InventoryMapper(this, 7, 9);
-    protected final IInventory invRails = new InventoryMapper(this, 16, 9);
-    protected int boreRotationAngle = 0;
-    public static final BlockSet mineableBlocks = new BlockSet();
     private static final Block[] mineable = {
-        Blocks.clay,
-        Blocks.snow_layer,
-        Blocks.cactus,
-        Blocks.carrots,
-        Blocks.cobblestone,
-        Blocks.mossy_cobblestone,
-        Blocks.cocoa,
-        Blocks.wheat,
-        Blocks.deadbush,
-        Blocks.dirt,
-        Blocks.fire,
-        Blocks.glowstone,
-        Blocks.grass,
-        Blocks.gravel,
-        Blocks.ice,
-        Blocks.leaves,
-        Blocks.melon_block,
-        Blocks.melon_stem,
-        Blocks.brown_mushroom,
-        Blocks.brown_mushroom_block,
-        Blocks.red_mushroom,
-        Blocks.red_mushroom_block,
-        Blocks.mycelium,
-        Blocks.nether_wart,
-        Blocks.netherrack,
-        Blocks.obsidian,
-        Blocks.coal_ore,
-        Blocks.diamond_ore,
-        Blocks.emerald_ore,
-        Blocks.gold_ore,
-        Blocks.iron_ore,
-        Blocks.lapis_ore,
-        Blocks.redstone_ore,
-        Blocks.lit_redstone_ore,
-        Blocks.red_flower,
-        Blocks.yellow_flower,
-        Blocks.potatoes,
-        Blocks.pumpkin,
-        Blocks.pumpkin_stem,
-        Blocks.reeds,
-        Blocks.sand,
-        Blocks.sandstone,
-        Blocks.sapling,
-        Blocks.soul_sand,
-        Blocks.snow,
-        Blocks.stone,
-        Blocks.tallgrass,
-        Blocks.farmland,
-        Blocks.torch,
-        Blocks.vine,
-        Blocks.waterlily,
-        Blocks.web,
-        Blocks.end_stone,
-        Blocks.log,
-        Blocks.log2,};
-    public static final Set<Block> replaceableBlocks = new HashSet<Block>();
+            Blocks.clay,
+            Blocks.snow_layer,
+            Blocks.cactus,
+            Blocks.carrots,
+            Blocks.cobblestone,
+            Blocks.mossy_cobblestone,
+            Blocks.cocoa,
+            Blocks.wheat,
+            Blocks.deadbush,
+            Blocks.dirt,
+            Blocks.fire,
+            Blocks.glowstone,
+            Blocks.grass,
+            Blocks.gravel,
+            Blocks.ice,
+            Blocks.leaves,
+            Blocks.melon_block,
+            Blocks.melon_stem,
+            Blocks.brown_mushroom,
+            Blocks.brown_mushroom_block,
+            Blocks.red_mushroom,
+            Blocks.red_mushroom_block,
+            Blocks.mycelium,
+            Blocks.nether_wart,
+            Blocks.netherrack,
+            Blocks.obsidian,
+            Blocks.coal_ore,
+            Blocks.diamond_ore,
+            Blocks.emerald_ore,
+            Blocks.gold_ore,
+            Blocks.iron_ore,
+            Blocks.lapis_ore,
+            Blocks.redstone_ore,
+            Blocks.lit_redstone_ore,
+            Blocks.red_flower,
+            Blocks.yellow_flower,
+            Blocks.potatoes,
+            Blocks.pumpkin,
+            Blocks.pumpkin_stem,
+            Blocks.reeds,
+            Blocks.sand,
+            Blocks.sandstone,
+            Blocks.sapling,
+            Blocks.soul_sand,
+            Blocks.snow,
+            Blocks.stone,
+            Blocks.tallgrass,
+            Blocks.farmland,
+            Blocks.torch,
+            Blocks.vine,
+            Blocks.waterlily,
+            Blocks.web,
+            Blocks.end_stone,
+            Blocks.log,
+            Blocks.log2,};
     private static final Block[] replaceable = {
-        Blocks.torch,
-        Blocks.tallgrass,
-        Blocks.deadbush,
-        Blocks.vine,
-        Blocks.brown_mushroom,
-        Blocks.red_mushroom,
-        Blocks.yellow_flower,
-        Blocks.red_flower,
-        Blocks.double_plant};
-
+            Blocks.torch,
+            Blocks.tallgrass,
+            Blocks.deadbush,
+            Blocks.vine,
+            Blocks.brown_mushroom,
+            Blocks.red_mushroom,
+            Blocks.yellow_flower,
+            Blocks.red_flower,
+            Blocks.double_plant};
     static {
         for (Block block : mineable) {
             addMineableBlock(block);
         }
         replaceableBlocks.addAll(Arrays.asList(replaceable));
     }
+    protected final IInventory invFuel = new InventoryMapper(this, 1, 6);
+    protected final IInventory invBallast = new InventoryMapper(this, 7, 9);
+    protected final IInventory invRails = new InventoryMapper(this, 16, 9);
+    //    protected static final int WATCHER_ID_BURN_TIME = 22;
+    protected boolean degreeCalc = false;
+    protected int delay = 0;
+    protected boolean placeRail = false;
+    protected boolean placeBallast = false;
+    protected boolean boreLayer = false;
+    protected int boreRotationAngle = 0;
+    private boolean active;
+    private int clock = MiscTools.getRand().nextInt();
+    private int burnTime;
+    private int fuel;
+    private boolean hasInit;
 
     public EntityTunnelBore(World world, double i, double j, double k) {
         this(world, i, j, k, ForgeDirection.SOUTH);
@@ -182,6 +181,43 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     public static void addMineableBlock(Block block, int meta) {
         mineableBlocks.add(new BlockKey(block, meta));
+    }
+
+    public static boolean canHeadHarvestBlock(ItemStack head, Block block, int meta) {
+        if (head == null)
+            return false;
+
+        if (head.getItem() instanceof IBoreHead) {
+            IBoreHead boreHead = (IBoreHead) head.getItem();
+
+            boolean mappingExists = false;
+
+            int blockHarvestLevel = HarvestPlugin.getBlockHarvestLevel(block, meta, "pickaxe");
+            if (blockHarvestLevel > -1) {
+                if (boreHead.getHarvestLevel() >= blockHarvestLevel)
+                    return true;
+                mappingExists = true;
+            }
+
+            blockHarvestLevel = HarvestPlugin.getBlockHarvestLevel(block, meta, "axe");
+            if (blockHarvestLevel > -1) {
+                if (boreHead.getHarvestLevel() >= blockHarvestLevel)
+                    return true;
+                mappingExists = true;
+            }
+
+            blockHarvestLevel = HarvestPlugin.getBlockHarvestLevel(block, meta, "shovel");
+            if (blockHarvestLevel > -1) {
+                if (boreHead.getHarvestLevel() >= blockHarvestLevel)
+                    return true;
+                mappingExists = true;
+            }
+
+            if (mappingExists)
+                return false;
+        }
+
+        return true;
     }
 
     private boolean isMinableBlock(Block block, int meta) {
@@ -543,23 +579,10 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     }
 
     protected void stockBallast() {
-        EntityMinecart link = LinkageManager.instance().getLinkedCartA(this);
-        if (link instanceof IItemTransfer) {
-            IItemTransfer tranfer = (IItemTransfer) link;
-
-            for (int slot = 0; slot < invBallast.getSizeInventory(); slot++) {
-                ItemStack stack = invBallast.getStackInSlot(slot);
-                if (stack != null && !BallastRegistry.isItemBallast(stack)) {
-                    stack = tranfer.offerItem(this, stack);
-                    invBallast.setInventorySlotContents(slot, stack);
-                    return;
-                }
-                if (stack == null) {
-                    stack = tranfer.requestItem(this, StackFilter.BALLAST);
-                    InvTools.moveItemStack(stack, invBallast);
-                    return;
-                }
-            }
+        if (InvTools.isEmptySlot(invBallast)) {
+            ItemStack stack = TrainTransferHelper.pullStack(this, StackFilter.BALLAST);
+            if (stack != null)
+                InvTools.moveItemStack(stack, invBallast);
         }
     }
 
@@ -582,23 +605,10 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     }
 
     protected void stockTracks() {
-        EntityMinecart link = LinkageManager.instance().getLinkedCartA(this);
-        if (link instanceof IItemTransfer) {
-            IItemTransfer tranfer = (IItemTransfer) link;
-
-            for (int slot = 0; slot < invRails.getSizeInventory(); slot++) {
-                ItemStack stack = invRails.getStackInSlot(slot);
-                if (stack != null && !StackFilter.TRACK.matches(stack)) {
-                    stack = tranfer.offerItem(this, stack);
-                    invRails.setInventorySlotContents(slot, stack);
-                    return;
-                }
-                if (stack == null) {
-                    stack = tranfer.requestItem(this, StackFilter.TRACK);
-                    InvTools.moveItemStack(stack, invRails);
-                    return;
-                }
-            }
+        if (InvTools.isEmptySlot(invRails)) {
+            ItemStack stack = TrainTransferHelper.pullStack(this, StackFilter.TRACK);
+            if (stack != null)
+                InvTools.moveItemStack(stack, invRails);
         }
     }
 
@@ -740,43 +750,6 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return isMinableBlock(block, meta) && canHeadHarvestBlock(head, block, meta);
     }
 
-    public static boolean canHeadHarvestBlock(ItemStack head, Block block, int meta) {
-        if (head == null)
-            return false;
-
-        if (head.getItem() instanceof IBoreHead) {
-            IBoreHead boreHead = (IBoreHead) head.getItem();
-
-            boolean mappingExists = false;
-
-            int blockHarvestLevel = HarvestPlugin.getBlockHarvestLevel(block, meta, "pickaxe");
-            if (blockHarvestLevel > -1) {
-                if (boreHead.getHarvestLevel() >= blockHarvestLevel)
-                    return true;
-                mappingExists = true;
-            }
-
-            blockHarvestLevel = HarvestPlugin.getBlockHarvestLevel(block, meta, "axe");
-            if (blockHarvestLevel > -1) {
-                if (boreHead.getHarvestLevel() >= blockHarvestLevel)
-                    return true;
-                mappingExists = true;
-            }
-
-            blockHarvestLevel = HarvestPlugin.getBlockHarvestLevel(block, meta, "shovel");
-            if (blockHarvestLevel > -1) {
-                if (boreHead.getHarvestLevel() >= blockHarvestLevel)
-                    return true;
-                mappingExists = true;
-            }
-
-            if (mappingExists)
-                return false;
-        }
-
-        return true;
-    }
-
     protected float getLayerHardness(int i, int j, int k, EnumTrackMeta dir) {
         float hardness = 0;
         int ii = i;
@@ -884,17 +857,16 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         setActive(data.getBoolean("active"));
         setBurnTime(data.getInteger("burnTime"));
         setFuel(data.getInteger("fuel"));
-
-    }
-
-    protected void setDelay(int i) {
-        delay = i;
-//        dataWatcher.updateObject(WATCHER_ID_DELAY, Integer.valueOf(i));
     }
 
     protected int getDelay() {
         return delay;
 //        return dataWatcher.getWatchableObjectInt(WATCHER_ID_DELAY);
+    }
+
+    protected void setDelay(int i) {
+        delay = i;
+//        dataWatcher.updateObject(WATCHER_ID_DELAY, Integer.valueOf(i));
     }
 
     protected boolean isActive() {
@@ -932,6 +904,11 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 //        return dataWatcher.getWatchableObjectInt(WATCHER_ID_FUEL);
     }
 
+    public void setFuel(int i) {
+        fuel = i;
+//        dataWatcher.updateObject(WATCHER_ID_FUEL, Integer.valueOf(i));
+    }
+
     public boolean outOfFuel() {
         return getFuel() <= FUEL_CONSUMPTION;
     }
@@ -941,25 +918,10 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     }
 
     protected void stockFuel() {
-        EntityMinecart link = LinkageManager.instance().getLinkedCartA(this);
-        if (link instanceof IItemTransfer) {
-            IItemTransfer tranfer = (IItemTransfer) link;
-
-            for (int slot = 0; slot < invFuel.getSizeInventory(); slot++) {
-                ItemStack stack = invFuel.getStackInSlot(slot);
-                if (stack != null && !StackFilter.FUEL.matches(stack)) {
-                    stack = tranfer.offerItem(this, stack);
-                    invFuel.setInventorySlotContents(slot, stack);
-                    return;
-                }
-                if (stack == null) {
-                    stack = tranfer.requestItem(this, StackFilter.FUEL);
-                    if (stack != null) {
-                        InvTools.moveItemStack(stack, invFuel);
-                        return;
-                    }
-                }
-            }
+        if (InvTools.isEmptySlot(invFuel)) {
+            ItemStack stack = TrainTransferHelper.pullStack(this, StackFilter.FUEL);
+            if (stack != null)
+                InvTools.moveItemStack(stack, invFuel);
         }
     }
 
@@ -990,11 +952,6 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             return 0;
 
         return getFuel() * i / burn;
-    }
-
-    public void setFuel(int i) {
-        fuel = i;
-//        dataWatcher.updateObject(WATCHER_ID_FUEL, Integer.valueOf(i));
     }
 
     protected void spendFuel() {
@@ -1114,5 +1071,4 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     public IInventory getInventoryRails() {
         return invRails;
     }
-
 }
