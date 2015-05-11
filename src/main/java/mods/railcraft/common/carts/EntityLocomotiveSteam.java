@@ -8,8 +8,10 @@
  */
 package mods.railcraft.common.carts;
 
+import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.IRefuelableCart;
 import mods.railcraft.common.core.RailcraftConfig;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,11 +31,9 @@ import mods.railcraft.common.util.steam.SteamBoiler;
 import net.minecraftforge.fluids.*;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class EntityLocomotiveSteam extends EntityLocomotive implements IFluidHandler, IRefuelableCart {
-
+public abstract class EntityLocomotiveSteam extends EntityLocomotive implements IFluidHandler, IRefuelableCart, IFluidCart {
     public static final int SLOT_LIQUID_INPUT = 0;
     public static final int SLOT_LIQUID_OUTPUT = 1;
     public static final byte SMOKE_FLAG = 6;
@@ -41,13 +41,13 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     private static final byte TICKS_PER_BOILER_CYCLE = 2;
     private static final int FUEL_PER_REQUEST = 3;
     private static final int TANK_WATER = 0;
-    private TankManager tankManager;
+    public SteamBoiler boiler;
     protected StandardTank tankWater;
     protected StandardTank tankSteam;
     protected InventoryMapper invWaterInput;
     protected IInventory invWaterOutput = new InventoryMapper(this, SLOT_LIQUID_OUTPUT, 1);
+    private TankManager tankManager;
     private int update = rand.nextInt();
-    public SteamBoiler boiler;
 
     public EntityLocomotiveSteam(World world) {
         super(world);
@@ -124,22 +124,22 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         }
     }
 
+    public boolean isSmoking() {
+        return getFlag(SMOKE_FLAG);
+    }
+
     private void setSmoking(boolean smoke) {
         if (getFlag(SMOKE_FLAG) != smoke)
             setFlag(SMOKE_FLAG, smoke);
     }
 
-    public boolean isSmoking() {
-        return getFlag(SMOKE_FLAG);
+    public boolean isSteaming() {
+        return getFlag(STEAM_FLAG);
     }
 
     private void setSteaming(boolean steam) {
         if (getFlag(STEAM_FLAG) != steam)
             setFlag(STEAM_FLAG, steam);
-    }
-
-    public boolean isSteaming() {
-        return getFlag(STEAM_FLAG);
     }
 
     private void ventSteam() {
@@ -211,4 +211,23 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         return tankManager.getTankInfo();
     }
 
+    @Override
+    public boolean canPassFluidRequests(Fluid fluid) {
+        return Fluids.WATER.is(fluid);
+    }
+
+    @Override
+    public boolean canAcceptPushedFluid(EntityMinecart requester, Fluid fluid) {
+        return Fluids.WATER.is(fluid);
+    }
+
+    @Override
+    public boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid) {
+        return false;
+    }
+
+    @Override
+    public void setFilling(boolean filling) {
+    }
 }
+

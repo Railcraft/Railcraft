@@ -101,7 +101,10 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
                 if (stack != null)
                     InvTools.moveItemStack(stack, invStock);
             }
-            if ()
+            if (isSafeToFill() && tankWater.getFluidAmount() < tankWater.getCapacity() / 2) {
+                FluidStack pulled = TrainTransferHelper.pullFluid(this, Fluids.WATER.getB(1));
+                tankWater.fill(pulled, true);
+            }
         }
     }
 

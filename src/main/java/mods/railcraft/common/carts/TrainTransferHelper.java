@@ -31,9 +31,9 @@ public class TrainTransferHelper {
     private static final int NUM_SLOTS = 8;
     private static final int TANK_CAPACITY = 8 * FluidHelper.BUCKET_VOLUME;
 
-    // *****
+    // ***************************************************************************************************************************
     // Items
-    // *****
+    // ***************************************************************************************************************************
     public static ItemStack pushStack(EntityMinecart requester, ItemStack stack) {
         Iterable<EntityMinecart> carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_A);
         stack = _pushStack(requester, carts, stack);
@@ -104,9 +104,9 @@ public class TrainTransferHelper {
         return false;
     }
 
-    // ******
+    // ***************************************************************************************************************************
     // Fluids
-    // ******
+    // ***************************************************************************************************************************
     public static FluidStack pushFluid(EntityMinecart requester, FluidStack fluidStack) {
         Iterable<EntityMinecart> carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_A);
         fluidStack = _pushFluid(requester, carts, fluidStack);
@@ -117,37 +117,41 @@ public class TrainTransferHelper {
     }
 
     private static FluidStack _pushFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
+        if (fluidStack == null)
+            return null;
         for (EntityMinecart cart : carts) {
-            if (canAcceptPushedItem(requester, cart, fluidStack))
-                fluidStack = InvTools.moveItemStack(fluidStack, (IInventory) cart);
-            if (fluidStack == null || !canPassItemRequests(cart))
+            if (canAcceptPushedFluid(requester, cart, fluidStack.getFluid())) {
+                fluidStack.amount -= ((IFluidHandler) cart).fill(ForgeDirection.UP, fluidStack, true);
+            }
+            if (fluidStack.amount <= 0 || !canPassFluidRequests(cart, fluidStack.getFluid()))
                 break;
         }
+        if (fluidStack.amount <= 0)
+            return null;
         return fluidStack;
     }
 
-    public static ItemStack pullStack(EntityMinecart requester, IStackFilter filter) {
+    public static FluidStack pullFluid(EntityMinecart requester, FluidStack fluidStack) {
         Iterable<EntityMinecart> carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_A);
-        ItemStack stack = _pullStack(requester, carts, filter);
-        if (stack != null)
-            return stack;
+        FluidStack pulled = _pullFluid(requester, carts, fluidStack);
+        if (pulled != null)
+            return pulled;
         carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_B);
-        return _pullStack(requester, carts, filter);
+        return _pullFluid(requester, carts, fluidStack);
     }
 
-    private static ItemStack _pullStack(EntityMinecart requester, Iterable<EntityMinecart> carts, IStackFilter filter) {
+    private static FluidStack _pullFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
         for (EntityMinecart cart : carts) {
-            if (cart instanceof IInventory) {
-                Set<ItemStack> items = InvTools.findMatchingItems((IInventory) cart, filter);
-                for (ItemStack stack : items) {
-                    if (stack != null && canProvidePulledItem(requester, cart, stack)) {
-                        ItemStack removed = InvTools.removeOneItem((IInventory) cart, stack);
-                        if (removed != null)
-                            return removed;
-                    }
+            if (canProvidePulledFluid(requester, cart, fluidStack.getFluid())) {
+                IFluidHandler fluidHandler = (IFluidHandler) cart;
+                if (fluidHandler.canDrain(ForgeDirection.DOWN, fluidStack.getFluid())) {
+                    FluidStack drained = fluidHandler.drain(ForgeDirection.DOWN, fluidStack, true);
+                    if (drained != null)
+                        return drained;
                 }
             }
-            if (!canPassItemRequests(cart))
+
+            if (!canPassFluidRequests(cart, fluidStack.getFluid()))
                 break;
         }
         return null;
@@ -158,7 +162,7 @@ public class TrainTransferHelper {
             return false;
         if (cart instanceof IFluidCart)
             return ((IFluidCart) cart).canAcceptPushedFluid(requester, fluid);
-        return ;
+        return ((IFluidHandler) cart).canFill(ForgeDirection.UP, fluid);
     }
 
     private static boolean canProvidePulledFluid(EntityMinecart requester, EntityMinecart cart, Fluid fluid) {
@@ -166,7 +170,7 @@ public class TrainTransferHelper {
             return false;
         if (cart instanceof IFluidCart)
             return ((IFluidCart) cart).canProvidePulledFluid(requester, fluid);
-        return ;
+        return ((IFluidHandler) cart).canDrain(ForgeDirection.DOWN, fluid);
     }
 
     private static boolean canPassFluidRequests(EntityMinecart cart, Fluid fluid) {
