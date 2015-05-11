@@ -10,6 +10,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.IItemCart;
+import mods.railcraft.api.carts.ITrainTransferHelper;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -27,23 +28,31 @@ import java.util.Set;
 /**
  * Created by CovertJaguar on 5/9/2015.
  */
-public class TrainTransferHelper {
+public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTransferHelper {
+    public static final ITrainTransferHelper INSTANCE = new TrainTransferHelper();
     private static final int NUM_SLOTS = 8;
     private static final int TANK_CAPACITY = 8 * FluidHelper.BUCKET_VOLUME;
+
+    private TrainTransferHelper() {
+    }
 
     // ***************************************************************************************************************************
     // Items
     // ***************************************************************************************************************************
-    public static ItemStack pushStack(EntityMinecart requester, ItemStack stack) {
+    @Override
+    public ItemStack pushStack(EntityMinecart requester, ItemStack stack) {
         Iterable<EntityMinecart> carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_A);
         stack = _pushStack(requester, carts, stack);
         if (stack == null)
             return null;
-        carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_B);
-        return _pushStack(requester, carts, stack);
+        if (LinkageManager.instance().hasLink(requester, LinkageManager.LinkType.LINK_B)) {
+            carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_B);
+            stack = _pushStack(requester, carts, stack);
+        }
+        return stack;
     }
 
-    private static ItemStack _pushStack(EntityMinecart requester, Iterable<EntityMinecart> carts, ItemStack stack) {
+    private ItemStack _pushStack(EntityMinecart requester, Iterable<EntityMinecart> carts, ItemStack stack) {
         for (EntityMinecart cart : carts) {
             if (canAcceptPushedItem(requester, cart, stack))
                 stack = InvTools.moveItemStack(stack, (IInventory) cart);
@@ -53,7 +62,8 @@ public class TrainTransferHelper {
         return stack;
     }
 
-    public static ItemStack pullStack(EntityMinecart requester, IStackFilter filter) {
+    @Override
+    public ItemStack pullStack(EntityMinecart requester, IStackFilter filter) {
         Iterable<EntityMinecart> carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_A);
         ItemStack stack = _pullStack(requester, carts, filter);
         if (stack != null)
@@ -62,7 +72,7 @@ public class TrainTransferHelper {
         return _pullStack(requester, carts, filter);
     }
 
-    private static ItemStack _pullStack(EntityMinecart requester, Iterable<EntityMinecart> carts, IStackFilter filter) {
+    private ItemStack _pullStack(EntityMinecart requester, Iterable<EntityMinecart> carts, IStackFilter filter) {
         for (EntityMinecart cart : carts) {
             if (cart instanceof IInventory) {
                 Set<ItemStack> items = InvTools.findMatchingItems((IInventory) cart, filter);
@@ -80,7 +90,7 @@ public class TrainTransferHelper {
         return null;
     }
 
-    private static boolean canAcceptPushedItem(EntityMinecart requester, EntityMinecart cart, ItemStack stack) {
+    private boolean canAcceptPushedItem(EntityMinecart requester, EntityMinecart cart, ItemStack stack) {
         if (!(cart instanceof IInventory))
             return false;
         if (cart instanceof IItemCart)
@@ -88,7 +98,7 @@ public class TrainTransferHelper {
         return true;
     }
 
-    private static boolean canProvidePulledItem(EntityMinecart requester, EntityMinecart cart, ItemStack stack) {
+    private boolean canProvidePulledItem(EntityMinecart requester, EntityMinecart cart, ItemStack stack) {
         if (!(cart instanceof IInventory))
             return false;
         if (cart instanceof IItemCart)
@@ -96,7 +106,7 @@ public class TrainTransferHelper {
         return true;
     }
 
-    private static boolean canPassItemRequests(EntityMinecart cart) {
+    private boolean canPassItemRequests(EntityMinecart cart) {
         if (cart instanceof IItemCart)
             return ((IItemCart) cart).canPassItemRequests();
         if (cart instanceof IInventory)
@@ -107,16 +117,20 @@ public class TrainTransferHelper {
     // ***************************************************************************************************************************
     // Fluids
     // ***************************************************************************************************************************
-    public static FluidStack pushFluid(EntityMinecart requester, FluidStack fluidStack) {
+    @Override
+    public FluidStack pushFluid(EntityMinecart requester, FluidStack fluidStack) {
         Iterable<EntityMinecart> carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_A);
         fluidStack = _pushFluid(requester, carts, fluidStack);
         if (fluidStack == null)
             return null;
-        carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_B);
-        return _pushFluid(requester, carts, fluidStack);
+        if (LinkageManager.instance().hasLink(requester, LinkageManager.LinkType.LINK_B)) {
+            carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_B);
+            fluidStack = _pushFluid(requester, carts, fluidStack);
+        }
+        return fluidStack;
     }
 
-    private static FluidStack _pushFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
+    private FluidStack _pushFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
         if (fluidStack == null)
             return null;
         for (EntityMinecart cart : carts) {
@@ -131,7 +145,8 @@ public class TrainTransferHelper {
         return fluidStack;
     }
 
-    public static FluidStack pullFluid(EntityMinecart requester, FluidStack fluidStack) {
+    @Override
+    public FluidStack pullFluid(EntityMinecart requester, FluidStack fluidStack) {
         Iterable<EntityMinecart> carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_A);
         FluidStack pulled = _pullFluid(requester, carts, fluidStack);
         if (pulled != null)
@@ -140,7 +155,7 @@ public class TrainTransferHelper {
         return _pullFluid(requester, carts, fluidStack);
     }
 
-    private static FluidStack _pullFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
+    private FluidStack _pullFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
         for (EntityMinecart cart : carts) {
             if (canProvidePulledFluid(requester, cart, fluidStack.getFluid())) {
                 IFluidHandler fluidHandler = (IFluidHandler) cart;
@@ -157,7 +172,7 @@ public class TrainTransferHelper {
         return null;
     }
 
-    private static boolean canAcceptPushedFluid(EntityMinecart requester, EntityMinecart cart, Fluid fluid) {
+    private boolean canAcceptPushedFluid(EntityMinecart requester, EntityMinecart cart, Fluid fluid) {
         if (!(cart instanceof IFluidHandler))
             return false;
         if (cart instanceof IFluidCart)
@@ -165,7 +180,7 @@ public class TrainTransferHelper {
         return ((IFluidHandler) cart).canFill(ForgeDirection.UP, fluid);
     }
 
-    private static boolean canProvidePulledFluid(EntityMinecart requester, EntityMinecart cart, Fluid fluid) {
+    private boolean canProvidePulledFluid(EntityMinecart requester, EntityMinecart cart, Fluid fluid) {
         if (!(cart instanceof IFluidHandler))
             return false;
         if (cart instanceof IFluidCart)
@@ -173,7 +188,7 @@ public class TrainTransferHelper {
         return ((IFluidHandler) cart).canDrain(ForgeDirection.DOWN, fluid);
     }
 
-    private static boolean canPassFluidRequests(EntityMinecart cart, Fluid fluid) {
+    private boolean canPassFluidRequests(EntityMinecart cart, Fluid fluid) {
         if (cart instanceof IFluidCart)
             return ((IFluidCart) cart).canPassFluidRequests(fluid);
         if (cart instanceof IFluidHandler) {
@@ -183,7 +198,7 @@ public class TrainTransferHelper {
         return false;
     }
 
-    private static boolean hasMatchingTank(IFluidHandler handler, Fluid fluid) {
+    private boolean hasMatchingTank(IFluidHandler handler, Fluid fluid) {
         FluidTankInfo[] tankInfo = handler.getTankInfo(ForgeDirection.UP);
         for (FluidTankInfo info : tankInfo) {
             if (info.capacity >= TANK_CAPACITY) {

@@ -203,7 +203,7 @@ public class LinkageManager implements ILinkageManager {
         return getLinkedCartA(cart) == null || (hasLink(cart, LinkType.LINK_B) && getLinkedCartB(cart) == null);
     }
 
-    private boolean hasLink(EntityMinecart cart, LinkType linkType) {
+    public boolean hasLink(EntityMinecart cart, LinkType linkType) {
         if (linkType == LinkType.LINK_B && cart instanceof ILinkableCart)
             return ((ILinkableCart) cart).hasTwoLinks();
         return true;

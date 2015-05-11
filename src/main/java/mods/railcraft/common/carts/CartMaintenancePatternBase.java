@@ -8,23 +8,20 @@
  */
 package mods.railcraft.common.carts;
 
-import net.minecraft.entity.item.EntityMinecart;
+import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.filters.ArrayStackFilter;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.api.carts.IItemTransfer;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
-import net.minecraft.inventory.ISidedInventory;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class CartMaintenancePatternBase extends CartMaintenanceBase implements ISidedInventory {
-
     protected final StandaloneInventory patternInv = new StandaloneInventory(6, this);
 
     public CartMaintenancePatternBase(World world) {
@@ -65,28 +62,8 @@ public abstract class CartMaintenancePatternBase extends CartMaintenanceBase imp
 
         stackStock = getStackInSlot(slotStock);
 
-        EntityMinecart link_A = LinkageManager.instance().getLinkedCartA(this);
-        EntityMinecart link_B = LinkageManager.instance().getLinkedCartB(this);
-
-        if (stackStock == null || stackStock.stackSize < stackStock.getMaxStackSize()) {
-            ItemStack stack = null;
-            if (link_A instanceof IItemTransfer) {
-                stack = ((IItemTransfer) link_A).requestItem(this, stackReplace);
-                if (stack != null)
-                    if (stackStock == null)
-                        setInventorySlotContents(slotStock, stack);
-                    else
-                        stackStock.stackSize++;
-            }
-            if (stack == null && link_B instanceof IItemTransfer) {
-                stack = ((IItemTransfer) link_B).requestItem(this, stackReplace);
-                if (stack != null)
-                    if (stackStock == null)
-                        setInventorySlotContents(slotStock, stack);
-                    else
-                        stackStock.stackSize++;
-            }
-        }
+        if (stackStock == null)
+            setInventorySlotContents(slotStock, CartTools.transferHelper.pullStack(this, new ArrayStackFilter(stackReplace)));
     }
 
     @Override
@@ -100,5 +77,4 @@ public abstract class CartMaintenancePatternBase extends CartMaintenanceBase imp
         super.readEntityFromNBT(data);
         patternInv.readFromNBT("patternInv", data);
     }
-
 }

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.IItemTransfer;
+import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.bore.IBoreHead;
 import mods.railcraft.api.carts.bore.IMineable;
@@ -130,12 +130,14 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             Blocks.yellow_flower,
             Blocks.red_flower,
             Blocks.double_plant};
+
     static {
         for (Block block : mineable) {
             addMineableBlock(block);
         }
         replaceableBlocks.addAll(Arrays.asList(replaceable));
     }
+
     protected final IInventory invFuel = new InventoryMapper(this, 1, 6);
     protected final IInventory invBallast = new InventoryMapper(this, 7, 9);
     protected final IInventory invRails = new InventoryMapper(this, 16, 9);
@@ -580,7 +582,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     protected void stockBallast() {
         if (InvTools.isEmptySlot(invBallast)) {
-            ItemStack stack = TrainTransferHelper.pullStack(this, StackFilter.BALLAST);
+            ItemStack stack = CartTools.transferHelper.pullStack(this, StackFilter.BALLAST);
             if (stack != null)
                 InvTools.moveItemStack(stack, invBallast);
         }
@@ -606,7 +608,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     protected void stockTracks() {
         if (InvTools.isEmptySlot(invRails)) {
-            ItemStack stack = TrainTransferHelper.pullStack(this, StackFilter.TRACK);
+            ItemStack stack = CartTools.transferHelper.pullStack(this, StackFilter.TRACK);
             if (stack != null)
                 InvTools.moveItemStack(stack, invRails);
         }
@@ -708,24 +710,23 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             return false;
 
         ArrayList<ItemStack> items = block.getDrops(worldObj, x, y, z, meta, 0);
-        EntityMinecart link = LinkageManager.instance().getLinkedCartA(this);
 
-        for (ItemStack item : items) {
-            if (StackFilter.FUEL.matches(item))
-                item = InvTools.moveItemStack(item, invFuel);
+        for (ItemStack stack : items) {
+            if (StackFilter.FUEL.matches(stack))
+                stack = InvTools.moveItemStack(stack, invFuel);
 
-            if (item != null && item.stackSize > 0 && InvTools.isStackEqualToBlock(item, Blocks.gravel))
-                item = InvTools.moveItemStack(item, invBallast);
+            if (stack != null && stack.stackSize > 0 && InvTools.isStackEqualToBlock(stack, Blocks.gravel))
+                stack = InvTools.moveItemStack(stack, invBallast);
 
-            if (item != null && item.stackSize > 0 && link instanceof IItemTransfer)
-                item = ((IItemTransfer) link).offerItem(this, item);
+            if (stack != null && stack.stackSize > 0)
+                stack = CartTools.transferHelper.pushStack(this, stack);
 
-            if (item != null && item.stackSize > 0 && !RailcraftConfig.boreDestroysBlocks()) {
+            if (stack != null && stack.stackSize > 0 && !RailcraftConfig.boreDestroysBlocks()) {
                 float f = 0.7F;
                 double xr = (double) (worldObj.rand.nextFloat() - 0.5D) * f;
                 double yr = (double) (worldObj.rand.nextFloat() - 0.5D) * f;
                 double zr = (double) (worldObj.rand.nextFloat() - 0.5D) * f;
-                EntityItem entityitem = new EntityItem(worldObj, getXAhead(posX, -3.2) + xr, posY + 0.3 + yr, getZAhead(posZ, -3.2) + zr, item);
+                EntityItem entityitem = new EntityItem(worldObj, getXAhead(posX, -3.2) + xr, posY + 0.3 + yr, getZAhead(posZ, -3.2) + zr, stack);
                 worldObj.spawnEntityInWorld(entityitem);
             }
         }
@@ -919,7 +920,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     protected void stockFuel() {
         if (InvTools.isEmptySlot(invFuel)) {
-            ItemStack stack = TrainTransferHelper.pullStack(this, StackFilter.FUEL);
+            ItemStack stack = CartTools.transferHelper.pullStack(this, StackFilter.FUEL);
             if (stack != null)
                 InvTools.moveItemStack(stack, invFuel);
         }

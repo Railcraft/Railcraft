@@ -9,14 +9,15 @@
 package mods.railcraft.common.util.collections;
 
 import java.util.HashSet;
+
+import mods.railcraft.api.core.items.IStackFilter;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ItemSet extends HashSet<ItemKey> {
-
     public boolean add(Item item, int meta) {
         return add(new ItemKey(item, meta));
     }
@@ -31,4 +32,18 @@ public class ItemSet extends HashSet<ItemKey> {
         return contains(new ItemKey(item, meta));
     }
 
+    public boolean contains(ItemStack stack) {
+        if (stack == null)
+            return false;
+        return contains(stack.getItem(), stack.getItemDamage());
+    }
+
+    public IStackFilter getStackFilter() {
+        return new IStackFilter() {
+            @Override
+            public boolean matches(ItemStack stack) {
+                return contains(stack);
+            }
+        };
+    }
 }

@@ -11,11 +11,13 @@ package mods.railcraft.common.modules;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.commands.CommandDebug;
 import mods.railcraft.common.commands.RootCommand;
 import org.apache.logging.log4j.Level;
@@ -80,18 +82,43 @@ import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.entity.EntityList;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.oredict.RecipeSorter;
 
 public class ModuleCore extends RailcraftModule {
+    public static void addLiquidFuels() {
+        int bioheat = (int) (16000 * RailcraftConfig.boilerBiofuelMultiplier());
+        Fluid ethanol = Fluids.BIOETHANOL.get();
+        if (ethanol != null)
+            FuelManager.addBoilerFuel(ethanol, bioheat); // Biofuel
 
+        Fluid biofuel = Fluids.BIOFUEL.get();
+        if (biofuel != null)
+            FuelManager.addBoilerFuel(biofuel, bioheat); // Biofuel
+
+        Fluid fuel = Fluids.FUEL.get();
+        if (fuel != null)
+            FuelManager.addBoilerFuel(fuel, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())); // Fuel
+
+        Fluid coal = Fluids.COAL.get();
+        if (coal != null)
+            FuelManager.addBoilerFuel(coal, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())); // Liquefaction Coal
+
+        Fluid pyrotheum = Fluids.PYROTHEUM.get();
+        if (pyrotheum != null)
+            FuelManager.addBoilerFuel(pyrotheum, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())); // Blazing Pyrotheum
+
+        Fluid creosote = Fluids.CREOSOTE.get();
+        if (creosote != null)
+            FuelManager.addBoilerFuel(creosote, 4800); // Creosote
+    }
 
     @Override
     public void preInit() {
         LinkageManager.reset();
+        CartTools.transferHelper = TrainTransferHelper.INSTANCE;
 
         Railcraft.rootCommand.addChildCommand(new CommandDebug());
 
@@ -208,17 +235,17 @@ public class ModuleCore extends RailcraftModule {
         // Define Recipies
         if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
             IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.minecart), false, new Object[]{
-                "I I",
-                "III",
-                'I', "ingotBronze",});
+                    "I I",
+                    "III",
+                    'I', "ingotBronze",});
             CraftingManager.getInstance().getRecipeList().add(recipe);
         }
 
         if (RailcraftConfig.getRecipeConfig("railcraft.cart.steel")) {
             IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.minecart, 2), false, new Object[]{
-                "I I",
-                "III",
-                'I', "ingotSteel",});
+                    "I I",
+                    "III",
+                    'I', "ingotSteel",});
             CraftingManager.getInstance().getRecipeList().add(recipe);
         }
 
@@ -369,32 +396,4 @@ public class ModuleCore extends RailcraftModule {
 //        System.out.printf("Steam Produced=%s%n", tankSteam.getFluidAmount());
 //        System.exit(0);
     }
-
-    public static void addLiquidFuels() {
-        int bioheat = (int) (16000 * RailcraftConfig.boilerBiofuelMultiplier());
-        Fluid ethanol = Fluids.BIOETHANOL.get();
-        if (ethanol != null)
-            FuelManager.addBoilerFuel(ethanol, bioheat); // Biofuel
-
-        Fluid biofuel = Fluids.BIOFUEL.get();
-        if (biofuel != null)
-            FuelManager.addBoilerFuel(biofuel, bioheat); // Biofuel
-
-        Fluid fuel = Fluids.FUEL.get();
-        if (fuel != null)
-            FuelManager.addBoilerFuel(fuel, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())); // Fuel
-
-        Fluid coal = Fluids.COAL.get();
-        if (coal != null)
-            FuelManager.addBoilerFuel(coal, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())); // Liquefaction Coal
-
-        Fluid pyrotheum = Fluids.PYROTHEUM.get();
-        if (pyrotheum != null)
-            FuelManager.addBoilerFuel(pyrotheum, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())); // Blazing Pyrotheum
-
-        Fluid creosote = Fluids.CREOSOTE.get();
-        if (creosote != null)
-            FuelManager.addBoilerFuel(creosote, 4800); // Creosote
-    }
-
 }

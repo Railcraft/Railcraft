@@ -9,16 +9,16 @@
 package mods.railcraft.common.util.collections;
 
 import java.util.HashMap;
+
+import mods.railcraft.api.core.items.IStackFilter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 /**
- *
- * @author CovertJaguar <http://www.railcraft.info/>
  * @param <V>
+ * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ItemMap<V> extends HashMap<ItemKey, V> {
-
     public V put(Item item, int meta, V value) {
         return put(new ItemKey(item, meta), value);
     }
@@ -54,4 +54,12 @@ public class ItemMap<V> extends HashMap<ItemKey, V> {
         return containsKey(stack.getItem(), stack.getItemDamage());
     }
 
+    public IStackFilter getStackFilter() {
+        return new IStackFilter() {
+            @Override
+            public boolean matches(ItemStack stack) {
+                return containsKey(stack);
+            }
+        };
+    }
 }

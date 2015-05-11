@@ -8,9 +8,10 @@
  */
 package mods.railcraft.common.carts;
 
+import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IItemCart;
+import mods.railcraft.api.carts.ITrainTransferHelper;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
@@ -29,7 +30,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import org.apache.logging.log4j.Level;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -97,12 +97,12 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             InvTools.moveOneItem(invStock, invBurn);
             InvTools.moveOneItem(invBurn, invWaterOutput, FluidContainerRegistry.EMPTY_BUCKET);
             if (InvTools.isEmptySlot(invStock)) {
-                ItemStack stack = TrainTransferHelper.pullStack(this, StackFilter.FUEL);
+                ItemStack stack = CartTools.transferHelper.pullStack(this, StackFilter.FUEL);
                 if (stack != null)
                     InvTools.moveItemStack(stack, invStock);
             }
             if (isSafeToFill() && tankWater.getFluidAmount() < tankWater.getCapacity() / 2) {
-                FluidStack pulled = TrainTransferHelper.pullFluid(this, Fluids.WATER.getB(1));
+                FluidStack pulled = CartTools.transferHelper.pullFluid(this, Fluids.WATER.getB(1));
                 tankWater.fill(pulled, true);
             }
         }
