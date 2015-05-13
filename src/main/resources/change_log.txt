@@ -10,10 +10,10 @@
 	FIX: Rock Crusher can now crush Entities again.
 	FIX: Disabled Tile Entity caching on Bukkit. Bukkit doesn't seem to invalidate Tile Entities correctly. This is likely the cause of most issues with Multi-blocks on Cauldron. Sadly, caching is a significant performance booster when it works.
 	FIX: Detector and Directional Detector Track should wait a few ticks before turning off the redstone. Helps prevents pulsing while trains pass over, which often led to glitchy railway logic.
-	FIX: Make Receiver Boxes occasionally update their neighbors to prevent situations where the Receiver says one thing and attached blocks another. Could happen when the Receiver was in a different chunk from the adjecent block.
+	FIX: Make Receiver Boxes occasionally update their neighbors to prevent situations where the Receiver says one thing and attached blocks another. Could happen when the Receiver was in a different chunk from the adjacent block.
 	FIX: Have Block Signals save the last known position of track end positions to NBT. Should prevent Signals from returning Yellow if the chunk on the opposite end isn't loaded. May cause traffic jams and collision if your trains don't have Anchor Carts.
 	FIX: Increase the area that Anchor Carts keep chunkloaded from 3x3 chunks to 5x5 chunks in order to help reduce chunkloading derived issues for moving Trains.
-	FIX: Boilers and Hobbist Engines should defer water triggered explosions until their own update tick. Should prevent other mods from crashing when their block randomly disappears mid-update.
+	FIX: Boilers and Hobbyist Engines should defer water triggered explosions until their own update tick. Should prevent other mods from crashing when their block randomly disappears mid-update.
 	FIX: Disabling any blocks or items used in Rock Crusher recipes should no longer crash. Issue #602
 	FIX: Prevent Locking Tracks from reseting in the middle of a Train by searching for nearby carts that are 'almost' on the track.
 	FIX: Fix various issues with Signal and Controller/Receiver pairing that could result in dropped links and other random bugs.
