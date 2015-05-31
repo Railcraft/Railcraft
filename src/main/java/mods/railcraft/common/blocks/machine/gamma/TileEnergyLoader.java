@@ -205,7 +205,7 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
 
     @Override
     public int getSinkTier() {
-        return transformerUpgrades <= 0 ? INPUT_LEVELS[0] : INPUT_LEVELS[1];
+        return transformerUpgrades > 0 ? 4 : 3;
     }
 
     @Override
