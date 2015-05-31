@@ -8,6 +8,7 @@
  */
 package mods.railcraft.client.gui;
 
+import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.common.carts.EntityLocomotiveElectric;
 import net.minecraft.entity.player.InventoryPlayer;
 import mods.railcraft.common.gui.containers.ContainerLocomotiveElectric;
@@ -22,6 +23,11 @@ public class GuiLocomotiveElectric extends GuiLocomotive {
         super(inv, loco, ContainerLocomotiveElectric.make(inv, loco), "electric", "gui_locomotive_electric.png", 161, false);
         this.loco = loco;
         this.player = inv.player;
+    }
+    
+    @Override
+    protected GuiMultiButton getLockButton(int w, int h) {
+    	return new GuiMultiButton(8, w + 152, h + 10, 16, loco.getLockController());
     }
 
 }

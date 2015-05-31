@@ -15,6 +15,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import mods.railcraft.common.blocks.machine.alpha.*;
 import mods.railcraft.common.blocks.machine.beta.*;
 import mods.railcraft.common.blocks.machine.delta.TileCage;
+import mods.railcraft.common.blocks.machine.delta.TileCatenary;
 import mods.railcraft.common.blocks.machine.delta.TileWire;
 import mods.railcraft.common.blocks.machine.epsilon.*;
 import mods.railcraft.common.blocks.machine.gamma.*;
@@ -78,6 +79,7 @@ public class MachineTileRegistery {
         // Delta
         GameRegistry.registerTileEntity(TileCage.class, "RCCageTile");
         GameRegistry.registerTileEntity(TileWire.class, "RCWireTile");
+        GameRegistry.registerTileEntity(TileCatenary.class, "RCCatenaryTile");
         
         // Epsilon
         GameRegistry.registerTileEntity(TileElectricFeeder.class, "RCElectricFeederTile");

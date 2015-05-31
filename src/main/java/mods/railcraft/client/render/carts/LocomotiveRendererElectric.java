@@ -10,6 +10,7 @@ package mods.railcraft.client.render.carts;
 
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import mods.railcraft.api.carts.locomotive.IRenderer;
+import mods.railcraft.api.electricity.IPantographProvider;
 import mods.railcraft.client.render.TexturedQuadAdv;
 import mods.railcraft.client.render.models.ModelSimple;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveElectric;
@@ -17,9 +18,11 @@ import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -30,13 +33,16 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
 
     private static final ModelBase LAMP_OFF = new ModelLampOff();
     private static final ModelBase LAMP_ON = new ModelLampOn();
+    private static final ModelBase PANTOGRAPH = new ModelPantrograph();
     private final ResourceLocation LAMP_TEX_ON;
     private final ResourceLocation LAMP_TEX_OFF;
+    private final ResourceLocation PANTOGRAPH_TEX;
 
     public LocomotiveRendererElectric() {
         super("railcraft:default", "locomotive.model.electric.default", new ModelLocomotiveElectric());
         LAMP_TEX_ON = new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".lamp.on.png");
         LAMP_TEX_OFF = new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".lamp.off.png");
+        PANTOGRAPH_TEX = new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".pantograph.png");
         setEmblemPosition(0.2F, -0.03F, -0.41F, -0.505F);
     }
 
@@ -56,6 +62,11 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
         } else {
             renderer.bindTex(LAMP_TEX_OFF);
             LAMP_OFF.render(cart, -0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+        }
+        
+        if(cart instanceof IPantographProvider && ((IPantographProvider) cart).canAcceptPower()) {
+        	renderer.bindTex(PANTOGRAPH_TEX);
+        	PANTOGRAPH.render(cart, -0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         }
 
         GL11.glPopAttrib();
@@ -92,6 +103,27 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
             }
         }
 
+    }
+    
+    private static class ModelPantrograph extends ModelSimple {
+    	
+    	public ModelPantrograph() {
+    		super("pantograph");
+    		renderer.setTextureSize(64, 64);
+    		
+    		setTextureOffset("pantograph.stand1", 1, 1);
+    		setTextureOffset("pantograph.stand2", 1, 1);
+    		setTextureOffset("pantograph.collector", 10, 1);
+    		setTextureOffset("pantograph.horn1", 1, 35);
+    		setTextureOffset("pantograph.horn2", 1, 35);
+    		
+    		renderer.addBox("stand1", -3F, -38F, -5F, 3, 32, 1);
+    		renderer.addBox("stand2", -3F, -38F, 4F, 3, 32, 1);
+    		renderer.addBox("collector", -4F, -38F, -7.5F, 5, 1, 15);
+    		renderer.addBox("horn1", -4F, -38F, -8.5F, 5, 2, 1);
+    		renderer.addBox("horn2", -4F, -38F, 7.5F, 5, 2, 1);
+    	}
+    	
     }
 
 }

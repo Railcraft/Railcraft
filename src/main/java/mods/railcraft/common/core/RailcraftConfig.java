@@ -671,6 +671,8 @@ public class RailcraftConfig {
         changeItemProperty("cart.loco.steam", "cart.loco.steam.solid");
 
         loadItemProperty("emblem");
+        
+        loadItemProperty("pantograph");
     }
 
     private static void changeItemProperty(String oldTag, String newTag) {

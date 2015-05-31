@@ -9,12 +9,14 @@
 package mods.railcraft.client.render;
 
 import java.util.EnumSet;
+
 import mods.railcraft.api.electricity.GridTools;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler.ConnectType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
+import mods.railcraft.common.blocks.machine.delta.TileCatenary;
 import mods.railcraft.common.blocks.machine.delta.TileWire;
 import mods.railcraft.common.blocks.machine.delta.TileWire.AddonType;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -40,6 +42,7 @@ public class RenderBlockMachineDelta extends BlockRenderer {
 
         addCombinedRenderer(EnumMachineDelta.WIRE.ordinal(), new WireRenderer());
         addBlockRenderer(EnumMachineDelta.CAGE.ordinal(), new CageRenderer());
+        addCombinedRenderer(EnumMachineDelta.CATENARY.ordinal(), new CatenaryRenderer());
     }
 
     private class WireRenderer extends DefaultRenderer {
@@ -73,7 +76,8 @@ public class RenderBlockMachineDelta extends BlockRenderer {
 
             for (ForgeDirection dir : search) {
                 TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, dir);
-                if (tile instanceof IElectricGrid && ((IElectricGrid) tile).getChargeHandler().getType() == ConnectType.BLOCK)
+                if ((tile instanceof IElectricGrid && ((IElectricGrid) tile).getChargeHandler().getType() == ConnectType.BLOCK) ||
+                		tile instanceof TileCatenary)
                     plugCons.add(dir);
             }
 
@@ -317,6 +321,144 @@ public class RenderBlockMachineDelta extends BlockRenderer {
             for (int i = 0; i < 4; i++) {
                 tess.addVertexWithUV(vertices[3 - i][0], vertices[3 - i][1], vertices[3 - i][2], vertices[i][3], vertices[i][4]);
             }
+
+        }
+
+    }
+    
+    private class CatenaryRenderer extends DefaultRenderer {
+
+        private RenderFakeBlock.RenderInfo info = new RenderFakeBlock.RenderInfo();
+
+        public CatenaryRenderer() {
+            info.template = getBlock();
+        }
+
+        @Override
+        public void renderBlock(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block) {
+            EnumSet<ForgeDirection> wireCons = EnumSet.noneOf(ForgeDirection.class);
+
+            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, dir);
+                if (tile instanceof TileCatenary)
+                    wireCons.add(dir);
+            }
+
+            EnumSet<ForgeDirection> plugCons = EnumSet.noneOf(ForgeDirection.class);
+
+            EnumSet<ForgeDirection> search = EnumSet.allOf(ForgeDirection.class);
+            search.remove(ForgeDirection.UNKNOWN);
+            search.removeAll(wireCons);
+
+            for (ForgeDirection dir : search) {
+                TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, dir);
+                if (tile instanceof IElectricGrid)
+                    plugCons.add(dir);
+            }
+
+            wireCons.addAll(plugCons);
+
+            renderWire(renderblocks, world, x, y, z, block, wireCons);
+            renderPlug(renderblocks, world, x, y, z, block, plugCons);
+
+            block.setBlockBounds(0, 0, 0, 1, 1, 1);
+        }
+
+        private void renderWire(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block, EnumSet<ForgeDirection> wireCons) {
+            float pix = RenderTools.PIXEL;
+            float max = 0.999F;
+            float min = 0.001F;
+
+            if (wireCons.isEmpty()) {
+                block.setBlockBounds(7 * pix, 14 * pix, 7 * pix, 9 * pix, max, 9 * pix);
+                RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
+                block.setBlockBounds(0, 0, 0, 1, 1, 1);
+                return;
+            }
+
+            boolean down = wireCons.contains(ForgeDirection.DOWN);
+            if (down) {
+                block.setBlockBounds(7 * pix, min, 7 * pix, 9 * pix, max, 9 * pix);
+                RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
+            }
+
+            boolean north = wireCons.contains(ForgeDirection.NORTH);
+            boolean south = wireCons.contains(ForgeDirection.SOUTH);
+            if (north || south) {
+            	float tiny = 0.0001f;
+                block.setBlockBounds(7 * pix - tiny, 14 * pix - tiny, north ? min : 7 * pix - tiny, 9 * pix + tiny, max + tiny, south ? max : 9 * pix + tiny);
+                RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
+            }
+
+            boolean west = wireCons.contains(ForgeDirection.WEST);
+            boolean east = wireCons.contains(ForgeDirection.EAST);
+            if (west || east) {
+            	float tiny = 0.0002f;
+                block.setBlockBounds(west ? min : 7 * pix - tiny, 14 * pix - tiny, 7 * pix - tiny, east ? max : 9 * pix + tiny, max + 0.0002f, 9 * pix + tiny);
+                RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
+            }
+        }
+
+        private void renderPlug(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block, EnumSet<ForgeDirection> plugCons) {
+            if (plugCons.isEmpty())
+                return;
+
+            float pix = RenderTools.PIXEL;
+
+            float center = 8 * pix;
+            float length = 3 * pix;
+            float thickness = 2 * pix;
+            float[][] plugA = new float[3][2];
+            float[][] plugB = new float[3][2];
+
+            // X START - END
+            plugA[0][0] = center - length;
+            plugA[0][1] = center + length;
+            // Y START - END
+            plugA[1][0] = 0.001F;
+            plugA[1][1] = thickness;
+            // Z START - END
+            plugA[2][0] = 0.001F;
+            plugA[2][1] = 0.999F;
+
+            // X START - END
+            plugB[0][0] = 0.001F;
+            plugB[0][1] = 0.999F;
+            // Y START - END
+            plugB[1][0] = 0.001F;
+            plugB[1][1] = thickness;
+            // Z START - END
+            plugB[2][0] = center - length;
+            plugB[2][1] = center + length;
+
+            float[][] rotated;
+            for (ForgeDirection dir : plugCons) {
+                rotated = MatrixTransformations.deepClone(plugA);
+                MatrixTransformations.transform(rotated, dir);
+                block.setBlockBounds(rotated[0][0], rotated[1][0], rotated[2][0], rotated[0][1], rotated[1][1], rotated[2][1]);
+                RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
+
+                rotated = MatrixTransformations.deepClone(plugB);
+                MatrixTransformations.transform(rotated, dir);
+                block.setBlockBounds(rotated[0][0], rotated[1][0], rotated[2][0], rotated[0][1], rotated[1][1], rotated[2][1]);
+                RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
+            }
+        }
+
+        @Override
+        public void renderItem(RenderBlocks renderblocks, ItemStack item, IItemRenderer.ItemRenderType renderType) {
+            float pix = RenderTools.PIXEL;
+            float max = 0.999F;
+            float min = 0.001F;
+
+            info.setBlockBounds(7 * pix, min, 7 * pix, 9 * pix, max, 9 * pix);
+            RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
+
+            info.setBlockBounds(7 * pix - 0.0001f, 7 * pix - 0.0001f, min, 9 * pix + 0.0001f, 9 * pix + 0.0001f, max);
+            RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
+
+            info.setBlockBounds(min, 7 * pix - 0.0002f, 7 * pix - 0.0002f, max, 9 * pix + 0.0002f, 9 * pix + 0.0002f);
+            RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
 
         }
 

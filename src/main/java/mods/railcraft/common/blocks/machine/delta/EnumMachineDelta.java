@@ -36,7 +36,8 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 public enum EnumMachineDelta implements IEnumMachine {
 
     WIRE(Module.ELECTRICITY, "wire", TileWire.class, 1, 1, 0, 0, 0, 0, 0, 0),
-    CAGE(Module.TRANSPORT, "cage", TileCage.class, 4, 1, 0, 1, 2, 2, 2, 2, 3);
+    CAGE(Module.TRANSPORT, "cage", TileCage.class, 4, 1, 0, 1, 2, 2, 2, 2, 3),
+    CATENARY(Module.ELECTRICITY, "catenary", TileCatenary.class, 1, 1, 0, 0, 0, 0, 0, 0);
     private final Module module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
@@ -49,8 +50,10 @@ public enum EnumMachineDelta implements IEnumMachine {
     static {
         creativeList.add(WIRE);
 //        creativeList.add(SAWMILL);
+        creativeList.add(CATENARY);
 
         BoundingBoxManager.registerBoundingBox(WIRE, new TileWire.WireBoundingBox());
+        BoundingBoxManager.registerBoundingBox(CATENARY, new TileCatenary.CatenaryBoundingBox());
     }
 
     private EnumMachineDelta(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {

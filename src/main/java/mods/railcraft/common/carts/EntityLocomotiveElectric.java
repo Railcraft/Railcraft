@@ -10,8 +10,10 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.api.electricity.IElectricMinecart;
+import mods.railcraft.api.electricity.IPantographProvider;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.items.ItemPantograph;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -30,14 +32,16 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class EntityLocomotiveElectric extends EntityLocomotive implements ISidedInventory, IElectricMinecart {
+public class EntityLocomotiveElectric extends EntityLocomotive implements ISidedInventory, IElectricMinecart, IPantographProvider {
 
     private static final int CHARGE_USE_PER_TICK = 20;
     private static final int FUEL_PER_REQUEST = 1;
     private static final int CHARGE_USE_PER_REQUEST = CHARGE_USE_PER_TICK * FUEL_PER_REQUEST;
     public static final double MAX_CHARGE = 5000.0;
-    private static final int SLOT_TICKET = 0;
-    private static final int[] SLOTS = InvTools.buildSlotArray(0, 1);
+    private static final int SLOT_PANTOGRAPH = 0;
+    private static final int SLOT_TICKET = 1;
+    private static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
+    private final IInventory invPantograph = new InventoryMapper(this, SLOT_PANTOGRAPH, 1);
     private final IInventory invTicket = new InventoryMapper(this, SLOT_TICKET, 2, false);
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.Type.USER, MAX_CHARGE);
 
@@ -119,6 +123,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
         if (Game.isNotHost(worldObj))
             return;
         chargeHandler.tickOnTrack(trackX, trackY, trackZ);
+        chargeHandler.tickOnCatenary(trackX, trackY, trackZ);
     }
 
     @Override
@@ -128,7 +133,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
 
     @Override
     public int getSizeInventory() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -149,6 +154,8 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         switch (slot) {
+	        case SLOT_PANTOGRAPH:
+	            return ItemPantograph.FILTER.matches(stack);
             case SLOT_TICKET:
                 return ItemTicket.FILTER.matches(stack);
             default:
@@ -167,5 +174,33 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
         super.readEntityFromNBT(data);
         chargeHandler.readFromNBT(data);
     }
+
+	@Override
+	public boolean canAcceptPower() {
+		return invPantograph.getStackInSlot(0) != null;
+	}
+
+	@Override
+	public int getClearance() {
+		return 2;
+	}
+
+	@Override
+	public void hitBlock() {
+		damagePantograph(100);
+	}
+
+	@Override
+	public void drewPower() {
+		if(getMode() == LocoMode.RUNNING)
+			damagePantograph(1);
+	}
+	
+	private void damagePantograph(int damage) {
+		ItemStack is = invPantograph.getStackInSlot(0);
+		is.setItemDamage(is.getItemDamage() + damage);
+		if(is.getItemDamage() >= ItemPantograph.DURABILITY)
+			invPantograph.setInventorySlotContents(0, null);
+	}
 
 }
