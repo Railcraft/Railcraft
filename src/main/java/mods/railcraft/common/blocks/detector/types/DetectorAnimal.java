@@ -50,8 +50,8 @@ public class DetectorAnimal extends Detector implements IGuiReturnHandler {
                 if (chicken) {
                     return FULL_POWER;
                 }
-            } else if (cart.riddenByEntity instanceof EntityCow) {
-                if (cow) {
+            } else if (cart.riddenByEntity instanceof EntityMooshroom) {
+                if (mooshroom) {
                     return FULL_POWER;
                 }
             } else if (cart.riddenByEntity instanceof EntityPig) {
@@ -62,8 +62,8 @@ public class DetectorAnimal extends Detector implements IGuiReturnHandler {
                 if (sheep) {
                     return FULL_POWER;
                 }
-            } else if (cart.riddenByEntity instanceof EntityMooshroom) {
-                if (mooshroom) {
+            } else if (cart.riddenByEntity instanceof EntityCow) {
+                if (cow) {
                     return FULL_POWER;
                 }
             } else if (cart.riddenByEntity instanceof EntityWolf) {
