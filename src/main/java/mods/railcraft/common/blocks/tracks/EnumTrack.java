@@ -71,7 +71,7 @@ public enum EnumTrack {
     LOCKDOWN_TRAIN(Module.TRAIN, 2, 1, "lockdown.train", 8, TrackLockdownTrain.class),
     WHISTLE(Module.LOCOMOTIVES, 2, 1, "whistle", 8, TrackWhistle.class),
     LOCOMOTIVE(Module.LOCOMOTIVES, 6, 3, "locomotive", 8, TrackLocomotive.class),
-    LIMITER(Module.LOCOMOTIVES, 5, 4, "limiter", 8, TrackLimiter.class),
+    LIMITER(Module.LOCOMOTIVES, 6, 5, "limiter", 8, TrackLimiter.class),
     ROUTING(Module.ROUTING, 2, 1, "routing", 8, TrackRouting.class),
     LOCKING(Module.TRACKS, 16, 1, "locking", 8, TrackNextGenLocking.class),
     ELECTRIC(Module.TRACKS_ELECTRIC, 2, 0, "electric", 16, TrackElectric.class),

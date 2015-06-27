@@ -23,7 +23,7 @@ import mods.railcraft.common.carts.EntityLocomotive.LocoSpeed;
 
 public class TrackLimiter extends TrackBaseRailcraft implements ITrackPowered {
 
-    private static final int NUM_MODES = 4;
+    private static final int NUM_MODES = 5;
     private boolean powered = false;
     private byte mode = 0;
 
