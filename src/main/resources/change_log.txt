@@ -1,3 +1,6 @@
+9.7.0.0:
+	FIX: Fix minor issue with Energy Loaders.
+
 9.6.1.15:
 	NEW: Steam Locomotives can now pull fuel and water from attached carts.
 	NEW: Rewrote the entire system for moving items and fluids around within Trains. It should be more compatible and less buggy than the previous system.

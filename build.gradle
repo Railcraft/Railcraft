@@ -1,3 +1,9 @@
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+}
+
 evaluationDependsOn(':version')
 
 buildscript {
@@ -161,6 +167,10 @@ task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
 				alias: signingAlias,
 				keystore: signingKeystore,
 				storepass: signingStorepass)
+		} else if (project.hasProperty('signingAlias')) {
+			ant.signjar(jar: getArchivePath(),
+				alias: signingAlias,
+				storepass: signingStorepass)
 		} else {
 			println 'Signing disabled, gradle.properties is missing.'
 		}
@@ -197,6 +207,10 @@ task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
 			ant.signjar(jar: getArchivePath(),
 				alias: signingAlias,
 				keystore: signingKeystore,
+				storepass: signingStorepass)
+		} else if (project.hasProperty('signingAlias')) {
+			ant.signjar(jar: getArchivePath(),
+				alias: signingAlias,
 				storepass: signingStorepass)
 		} else {
 			println 'Signing disabled, gradle.properties is missing.'
