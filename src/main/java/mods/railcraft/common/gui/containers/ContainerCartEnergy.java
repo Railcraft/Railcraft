@@ -51,8 +51,8 @@ public class ContainerCartEnergy extends RailcraftContainer {
      * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
      */
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void sendUpdateToClient() {
+        super.sendUpdateToClient();
 
         for (int i = 0; i < crafters.size(); ++i) {
             ICrafting player = (ICrafting) crafters.get(i);

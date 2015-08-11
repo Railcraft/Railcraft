@@ -92,8 +92,8 @@ public class ContainerRouting extends RailcraftContainer {
     }
 
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void sendUpdateToClient() {
+        super.sendUpdateToClient();
 
         for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
             ICrafting var2 = (ICrafting) this.crafters.get(var1);

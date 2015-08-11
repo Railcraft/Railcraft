@@ -40,8 +40,8 @@ public class ContainerTurbine extends RailcraftContainer {
     }
 
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void sendUpdateToClient() {
+        super.sendUpdateToClient();
         for (int i = 0; i < crafters.size(); i++) {
             ICrafting icrafting = (ICrafting) crafters.get(i);
 

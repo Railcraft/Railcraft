@@ -62,8 +62,8 @@ public class ContainerAnchor extends RailcraftContainer {
      * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
      */
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void sendUpdateToClient() {
+        super.sendUpdateToClient();
         short mins = getMinutesRemaining(anchor.getAnchorFuel());
 
         for (int var1 = 0; var1 < this.crafters.size(); ++var1) {

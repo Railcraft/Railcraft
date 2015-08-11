@@ -54,8 +54,8 @@ public class ContainerSteamOven extends RailcraftContainer {
     }
 
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void sendUpdateToClient() {
+        super.sendUpdateToClient();
         TankManager tMan = tile.getTankManager();
         if (tMan != null) {
             tMan.updateGuiData(this, crafters, 0);

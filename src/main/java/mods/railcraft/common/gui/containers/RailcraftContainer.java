@@ -8,11 +8,14 @@
  */
 package mods.railcraft.common.gui.containers;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
 import mods.railcraft.common.gui.widgets.Widget;
 import net.minecraft.inventory.Container;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,7 +30,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ICrafting;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class RailcraftContainer extends Container {
@@ -65,13 +67,20 @@ public abstract class RailcraftContainer extends Container {
     }
 
     @Override
-    public void detectAndSendChanges() {
+    public final void detectAndSendChanges() {
         super.detectAndSendChanges();
-        for (Widget widget : widgets) {
-            for (ICrafting player : (List<ICrafting>) crafters) {
-                widget.updateWidget(player);
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+            sendUpdateToClient();
+            for (Widget widget : widgets) {
+                for (ICrafting player : (List<ICrafting>) crafters) {
+                    widget.updateWidget(player);
+                }
             }
         }
+    }
+
+
+    public void sendUpdateToClient() {
     }
 
     public void sendWidgetDataToClient(Widget widget, ICrafting player, byte[] data) {

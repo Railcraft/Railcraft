@@ -58,8 +58,8 @@ public class ContainerEngineSteam extends RailcraftContainer {
     }
 
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void sendUpdateToClient() {
+        super.sendUpdateToClient();
         tile.getTankManager().updateGuiData(this, crafters, 0);
 
         for (int var1 = 0; var1 < this.crafters.size(); ++var1) {

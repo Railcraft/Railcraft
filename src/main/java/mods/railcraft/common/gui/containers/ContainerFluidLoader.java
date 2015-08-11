@@ -47,8 +47,8 @@ public class ContainerFluidLoader extends RailcraftContainer {
     }
 
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void sendUpdateToClient() {
+        super.sendUpdateToClient();
         tile.getTankManager().updateGuiData(this, crafters, 0);
     }
 
