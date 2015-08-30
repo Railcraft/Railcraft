@@ -196,18 +196,21 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
     }
 
     private boolean safeToReplace(int x, int y, int z, ItemStack stock) {
-        if (!BallastRegistry.isItemBallast(stock))
-            return true;
-
-        if (worldObj.isAirBlock(x, y - 1, z))
+        if (BallastRegistry.isItemBallast(stock))
             return false;
 
-        Block block = worldObj.getBlock(x, y - 1, z);
+        if (worldObj.isAirBlock(x, y, z))
+            return false;
+
+        Block block = worldObj.getBlock(x, y, z);
 
         if (block.getMaterial().isLiquid())
             return false;
 
-        return !block.isReplaceable(worldObj, x, y - 1, z);
+        if (block.getBlockHardness(worldObj, x, y, z) < 0)
+            return false;
+
+        return !block.isReplaceable(worldObj, x, y, z);
     }
 
     @Override
