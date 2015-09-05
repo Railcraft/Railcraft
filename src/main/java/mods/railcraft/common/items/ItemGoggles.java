@@ -154,7 +154,7 @@ public class ItemGoggles extends ItemArmor {
         list.add(tip);
     }
 
-    public static enum GoggleAura {
+    public enum GoggleAura {
 
         NONE("railcraft.gui.goggles.aura.none"),
         ANCHOR("railcraft.gui.goggles.aura.anchor"),
@@ -165,7 +165,7 @@ public class ItemGoggles extends ItemArmor {
         public static final GoggleAura[] VALUES = values();
         private final String locTag;
 
-        private GoggleAura(String locTag) {
+        GoggleAura(String locTag) {
             this.locTag = locTag;
         }
 
