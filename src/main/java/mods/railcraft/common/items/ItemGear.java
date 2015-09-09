@@ -10,6 +10,8 @@ package mods.railcraft.common.items;
 
 import java.util.List;
 import java.util.Locale;
+
+import mods.railcraft.common.plugins.forge.LootPlugin;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -17,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraft.init.Items;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemGear extends ItemRailcraft {
@@ -48,6 +49,9 @@ public class ItemGear extends ItemRailcraft {
         }
 
         OreDictionary.registerOre("gearIron", RailcraftItem.gear.getStack(1, EnumGear.IRON));
+
+        ItemStack itemStack = new ItemStack(this, 1, EnumGear.BUSHING.ordinal());
+        LootPlugin.addLootRailway(itemStack, 1, 8, "gear.bushing");
     }
 
     @Override

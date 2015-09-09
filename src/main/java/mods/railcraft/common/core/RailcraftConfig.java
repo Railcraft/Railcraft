@@ -404,6 +404,7 @@ public class RailcraftConfig {
         loadLootProperty("armor.steel.legs", 5);
         loadLootProperty("armor.steel.boots", 5);
         loadLootProperty("armor.overalls", 10);
+        loadLootProperty("gear.bushing", 5);
     }
 
     private static void loadCarts() {

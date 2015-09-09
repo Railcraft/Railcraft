@@ -11,7 +11,6 @@ package mods.railcraft.client.util.textures;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import org.apache.logging.log4j.Level;
 import javax.imageio.ImageIO;
 import mods.railcraft.common.util.misc.Game;
@@ -87,30 +86,7 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
                 }
         }
 
-        Field mipmapLevel;
-        Field anisotropicFiltering;
-
-        try {
-            mipmapLevel = TextureMap.class.getDeclaredField("field_147636_j");
-            anisotropicFiltering = TextureMap.class.getDeclaredField("field_147637_k");
-        } catch (NoSuchFieldException e) {
-            try {
-                mipmapLevel = TextureMap.class.getDeclaredField("mipmapLevels");
-                anisotropicFiltering = TextureMap.class.getDeclaredField("anisotropicFiltering");
-            } catch (NoSuchFieldException f) {
-                throw new RuntimeException(f);
-            }
-        }
-
-        mipmapLevel.setAccessible(true);
-        anisotropicFiltering.setAccessible(true);
-        int mipmapLevels;
-
-        try {
-            mipmapLevels = mipmapLevel.getInt(Minecraft.getMinecraft().getTextureMapBlocks());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        int mipmapLevels = Minecraft.getMinecraft().gameSettings.mipmapLevels;
 
         int size = image.getHeight() / rows;
         int x = index % columns;

@@ -25,7 +25,6 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.BlockRailBase;
@@ -162,7 +161,7 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
         if (blockToReplace == null || !blockMatches(blockToReplace, oldMeta, exist))
             return;
 
-        if (safeToReplace(x, y, z, stock)) {
+        if (safeToReplace(x, y, z)) {
             Block stockBlock = InvTools.getBlockFromStack(stock);
             List<ItemStack> drops = blockToReplace.getDrops(worldObj, x, y, z, oldMeta, 0);
             ItemBlock item = (ItemBlock) stock.getItem();
@@ -195,19 +194,19 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
         return false;
     }
 
-    private boolean safeToReplace(int x, int y, int z, ItemStack stock) {
-        if (!BallastRegistry.isItemBallast(stock))
-            return true;
-
-        if (worldObj.isAirBlock(x, y - 1, z))
+    private boolean safeToReplace(int x, int y, int z) {
+        if (worldObj.isAirBlock(x, y, z))
             return false;
 
-        Block block = worldObj.getBlock(x, y - 1, z);
+        Block block = worldObj.getBlock(x, y, z);
 
         if (block.getMaterial().isLiquid())
             return false;
 
-        return !block.isReplaceable(worldObj, x, y - 1, z);
+        if (block.getBlockHardness(worldObj, x, y, z) < 0)
+            return false;
+
+        return !block.isReplaceable(worldObj, x, y, z);
     }
 
     @Override

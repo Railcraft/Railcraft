@@ -12,9 +12,7 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.KeyBinding;
@@ -32,10 +30,11 @@ import mods.railcraft.common.items.ItemGoggles.GoggleAura;
  */
 public class AuraKeyHandler {
     public static final AuraKeyHandler INSTANCE = new AuraKeyHandler();
-    private static EnumSet<GoggleAura> activeAuras = EnumSet.noneOf(ItemGoggles.GoggleAura.class);
-    private static EnumMap<GoggleAura, KeyBinding> keyBindings = new EnumMap<ItemGoggles.GoggleAura, KeyBinding>(ItemGoggles.GoggleAura.class);
+    private static EnumSet<GoggleAura> activeAuras = EnumSet.noneOf(GoggleAura.class);
+    private static EnumMap<GoggleAura, KeyBinding> keyBindings;
 
     private AuraKeyHandler() {
+        keyBindings = new EnumMap<GoggleAura, KeyBinding>(GoggleAura.class);
         keyBindings.put(GoggleAura.ANCHOR, new KeyBinding("railcraft.keybind.aura.anchor", Keyboard.KEY_F9, Railcraft.MOD_ID));
         keyBindings.put(GoggleAura.TUNING, new KeyBinding("railcraft.keybind.aura.tuning", Keyboard.KEY_P, Railcraft.MOD_ID));
         keyBindings.put(GoggleAura.SURVEYING, new KeyBinding("railcraft.keybind.aura.surveying", Keyboard.KEY_O, Railcraft.MOD_ID));
