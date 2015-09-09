@@ -74,30 +74,31 @@ public class RoutingLogic {
         conditions = stack;
     }
 
-    private boolean canRouteCart(EntityMinecart cart) {
+    private EntityMinecart getRoutableCart(EntityMinecart cart) {
         Train train = Train.getTrain(cart);
         if (train == null)
-            return false;
+            return null;
         if (train.size() == 1)
-            return true;
+            return cart;
         if (train.isTrainEnd(cart)) {
             if (cart instanceof IRoutableCart)
-                return true;
+                return cart;
             if (cart instanceof IPaintedCart)
-                return true;
+                return cart;
             if (cart instanceof IRefuelableCart)
-                return true;
+                return cart;
         }
-        return false;
+        return train.getLocomotive();
     }
 
     public boolean matches(IRoutingTile tile, EntityMinecart cart) {
         if (conditions == null)
             return false;
-        if (!canRouteCart(cart))
+        EntityMinecart controllingCart = getRoutableCart(cart);
+        if (controllingCart == null)
             return false;
         for (Condition condition : conditions) {
-            if (condition.matches(tile, cart))
+            if (condition.matches(tile, controllingCart))
                 return true;
         }
         return false;
