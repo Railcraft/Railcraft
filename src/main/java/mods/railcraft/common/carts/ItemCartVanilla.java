@@ -20,7 +20,7 @@ public class ItemCartVanilla extends ItemCart {
 
     private final Item original;
 
-    public ItemCartVanilla(EnumCart cart, Item original) {
+    public ItemCartVanilla(ICartType cart, Item original) {
         super(cart);
         this.original = original;
     }

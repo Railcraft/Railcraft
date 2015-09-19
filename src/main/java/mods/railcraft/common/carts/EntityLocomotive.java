@@ -135,7 +135,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
             model = nbt.getString("model");
     }
 
-    public abstract EnumCart getCartType();
+    public abstract ICartType getCartType();
 
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {

@@ -19,6 +19,7 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.ICartType;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.ItemGear.EnumGear;
 import mods.railcraft.common.items.ItemGoggles;
@@ -236,7 +237,7 @@ public class ThaumcraftPlugin {
         ThaumcraftApi.registerComplexObjectTag(stack, aspects);
     }
 
-    private static void addCartAspect(EnumCart cart, AspectList aspects) {
+    private static void addCartAspect(ICartType cart, AspectList aspects) {
         addItemAspect(cart.getCartItem(), aspects);
         ThaumcraftApi.registerEntityTag(cart.getTag(), aspects);
     }

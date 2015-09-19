@@ -10,8 +10,8 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IItemCart;
-import mods.railcraft.api.carts.ITrainTransferHelper;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
@@ -57,7 +57,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
     }
 
     @Override
-    public EnumCart getCartType() {
+    public ICartType getCartType() {
         return EnumCart.LOCO_STEAM_SOLID;
     }
 
@@ -159,6 +159,9 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             case SLOT_FUEL_C:
                 return StackFilter.FUEL.matches(stack);
             case SLOT_LIQUID_INPUT:
+                FluidStack fluidStack = FluidItemHelper.getFluidStackInContainer(stack);
+                if (fluidStack != null && fluidStack.amount > FluidHelper.BUCKET_VOLUME)
+                    return false;
                 return FluidItemHelper.containsFluid(stack, Fluids.WATER.get(1));
             case SLOT_TICKET:
                 return ItemTicket.FILTER.matches(stack);

@@ -11,11 +11,10 @@ package mods.railcraft.common.util.crafting;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import mods.railcraft.common.carts.EntityCartTank;
+import mods.railcraft.common.carts.ICartType;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import net.minecraft.item.ItemStack;
 import mods.railcraft.common.carts.EnumCart;
-import mods.railcraft.common.carts.ItemCart;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -35,7 +34,7 @@ public class CraftingHandler {
                 count++;
                 if (stack.getItem() == ItemFirestoneCracked.item)
                     craftMatrix.setInventorySlotContents(i, null);
-                EnumCart cartType = EnumCart.getCartType(stack);
+                ICartType cartType = EnumCart.getCartType(stack);
                 if (cartType != null && cartType != EnumCart.BASIC)
                     cartItem = stack;
             }

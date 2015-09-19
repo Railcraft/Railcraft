@@ -28,10 +28,10 @@ import net.minecraft.block.BlockDispenser;
 
 public class ItemCart extends ItemMinecart implements IMinecartItem {
 
-    private final EnumCart type;
+    private final ICartType type;
     private int rarity = 0;
 
-    public ItemCart(EnumCart cart) {
+    public ItemCart(ICartType cart) {
         super(0);
         maxStackSize = RailcraftConfig.getMinecartStackSize();
         this.type = cart;
@@ -69,7 +69,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem {
         return false;
     }
 
-    public EnumCart getCartType() {
+    public ICartType getCartType() {
         return type;
     }
 

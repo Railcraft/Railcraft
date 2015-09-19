@@ -22,7 +22,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
  */
 public class ItemCartAnchor extends ItemCart {
 
-    public ItemCartAnchor(EnumCart cartType) {
+    public ItemCartAnchor(ICartType cartType) {
         super(cartType);
     }
 

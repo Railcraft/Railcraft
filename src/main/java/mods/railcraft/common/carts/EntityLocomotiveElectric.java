@@ -50,7 +50,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     }
 
     @Override
-    public EnumCart getCartType() {
+    public ICartType getCartType() {
         return EnumCart.LOCO_ELECTRIC;
     }
 

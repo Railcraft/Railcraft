@@ -38,7 +38,7 @@ public class ItemLocomotive extends ItemCart {
     private final LocomotiveRenderType renderType;
     private IIcon blankIcon;
 
-    public ItemLocomotive(EnumCart cart, LocomotiveRenderType renderType) {
+    public ItemLocomotive(ICartType cart, LocomotiveRenderType renderType) {
         super(cart);
         this.renderType = renderType;
         setMaxStackSize(1);

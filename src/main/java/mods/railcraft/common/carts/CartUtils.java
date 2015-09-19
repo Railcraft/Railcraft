@@ -34,8 +34,8 @@ import net.minecraft.world.WorldServer;
  */
 public class CartUtils {
 
-    public static Map<Item, EnumCart> vanillaCartItemMap = new HashMap<Item, EnumCart>();
-    public static Map<Class<? extends EntityMinecart>, EnumCart> classReplacements = new HashMap<Class<? extends EntityMinecart>, EnumCart>();
+    public static Map<Item, ICartType> vanillaCartItemMap = new HashMap<Item, ICartType>();
+    public static Map<Class<? extends EntityMinecart>, ICartType> classReplacements = new HashMap<Class<? extends EntityMinecart>, ICartType>();
 
     /**
      * Spawns a new cart entity using the provided item.
@@ -60,14 +60,14 @@ public class CartUtils {
             return null;
         cart = cart.copy();
 
-        EnumCart vanillaType = vanillaCartItemMap.get(cart.getItem());
+        ICartType vanillaType = vanillaCartItemMap.get(cart.getItem());
         if (vanillaType != null)
             return placeCart(vanillaType, owner, cart, world, x, y, z);
 
         return CartTools.placeCart(owner, cart, world, x, y, z);
     }
 
-    public static EntityMinecart placeCart(EnumCart cartType, GameProfile owner, ItemStack cartStack, World world, int i, int j, int k) {
+    public static EntityMinecart placeCart(ICartType cartType, GameProfile owner, ItemStack cartStack, World world, int i, int j, int k) {
         Block block = world.getBlock(i, j, k);
         if (TrackTools.isRailBlock(block))
             if (!CartTools.isMinecartAt(world, i, j, k, 0)) {

@@ -66,7 +66,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
     }
 
     @Override
-    public EnumCart getCartType() {
+    public ICartType getCartType() {
         return EnumCart.LOCO_STEAM_MAGIC;
     }
 
