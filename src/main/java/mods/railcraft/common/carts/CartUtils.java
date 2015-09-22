@@ -92,10 +92,13 @@ public class CartUtils {
     public static boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
         if (stack == null)
             return false;
-        if (cart instanceof IMinecart)
+        if (cart instanceof IMinecart) {
+            if (stack.hasDisplayName())
+                return ((IMinecart) cart).doesCartMatchFilter(stack, cart) && stack.getDisplayName().equals(cart.getCartItem().getDisplayName());
             return ((IMinecart) cart).doesCartMatchFilter(stack, cart);
+        }
         ItemStack cartItem = cart.getCartItem();
-        return cartItem != null && InvTools.isItemEqual(stack, cartItem, true, false);
+        return cartItem != null && InvTools.isCartItemEqual(stack, cartItem, true);
     }
 
     public static void explodeCart(EntityMinecart cart) {
