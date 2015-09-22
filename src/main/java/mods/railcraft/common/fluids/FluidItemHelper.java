@@ -31,6 +31,7 @@ public class FluidItemHelper {
         if (fluidStack == null)
             return new FillReturn(container, 0);
         if (container.getItem() instanceof IFluidContainerItem) {
+            container.stackSize = 1;
             IFluidContainerItem fluidCon = (IFluidContainerItem) container.getItem();
             return new FillReturn(container, fluidCon.fill(container, fluidStack, true));
         }
@@ -55,6 +56,7 @@ public class FluidItemHelper {
         container = container.copy();
         if (container.getItem() instanceof IFluidContainerItem) {
             Item item = container.getItem();
+            container.stackSize = 1;
             IFluidContainerItem fluidCon = (IFluidContainerItem) item;
             FluidStack drained = fluidCon.drain(container, maxDrain, true);
             boolean overridesGetContainerItem = false;

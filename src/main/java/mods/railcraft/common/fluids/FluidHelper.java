@@ -35,7 +35,7 @@ public final class FluidHelper {
     public static final int BUCKET_FILL_TIME = 8;
     public static final int NETWORK_UPDATE_INTERVAL = 128;
     public static final int BUCKET_VOLUME = 1000;
-    public static final int PROCESS_VOLUME = BUCKET_VOLUME * 5;
+    public static final int PROCESS_VOLUME = BUCKET_VOLUME * 4;
     private static final List<FluidRegistrar> adapters = new ArrayList<FluidRegistrar>();
 
     static {
@@ -125,9 +125,9 @@ public final class FluidHelper {
         FluidItemHelper.FillReturn fill = FluidItemHelper.fillContainer(input, new FluidStack(fluidToFill, PROCESS_VOLUME));
         if (fill.container != null && hasPlaceToPutContainer(output, fill.container)) {
             FluidStack drain = fluidHandler.drain(ForgeDirection.UNKNOWN, fill.amount, false);
-            if (drain != null && drain.amount > 0) {
+            if (drain != null && drain.amount == fill.amount) {
                 fill = FluidItemHelper.fillContainer(input, drain);
-                if (fill.container != null && fill.amount > 0) {
+                if (fill.container != null && fill.amount == drain.amount) {
                     fluidHandler.drain(ForgeDirection.UNKNOWN, fill.amount, true);
                     storeContainer(inv, inputSlot, outputSlot, fill.container);
                 }
@@ -155,10 +155,9 @@ public final class FluidHelper {
     }
 
     private static boolean hasPlaceToPutContainer(ItemStack output, ItemStack container) {
-        if (container.getItem() instanceof IFluidContainerItem) {
+        if (output == null)
             return true;
-        }
-        return output == null || (output.stackSize < output.getMaxStackSize() && InvTools.isItemEqual(container, output));
+        return output.stackSize < output.getMaxStackSize() && InvTools.isItemEqual(container, output);
     }
 
     /**
@@ -176,15 +175,6 @@ public final class FluidHelper {
             return;
         }
         ItemStack output = inv.getStackInSlot(outputSlot);
-        if (container.getItem() instanceof IFluidContainerItem) {
-            if (output == null && (FluidItemHelper.isFullContainer(container) || FluidItemHelper.isEmptyContainer(container))) {
-                inv.setInventorySlotContents(inputSlot, null);
-                inv.setInventorySlotContents(outputSlot, container);
-            } else {
-                inv.setInventorySlotContents(inputSlot, container);
-            }
-            return;
-        }
         if (output == null)
             inv.setInventorySlotContents(outputSlot, container);
         else
