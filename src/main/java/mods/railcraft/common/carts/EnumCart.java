@@ -34,6 +34,7 @@ public enum EnumCart implements ICartType {
     FURNACE(0, EntityCartFurnace.class, new ItemStack(Blocks.furnace)),
     TNT_WOOD(0, EntityCartTNTWood.class, new ItemStack(Blocks.tnt)),
     TANK(0, EntityCartTank.class, null),
+    CARGO(0, EntityCartCargo.class, new ItemStack(Blocks.trapped_chest)),
     ANCHOR(0, EntityCartAnchor.class, null),
     WORK(0, EntityCartWork.class, new ItemStack(Blocks.crafting_table)),
     TRACK_RELAYER(1, EntityCartTrackRelayer.class, null),

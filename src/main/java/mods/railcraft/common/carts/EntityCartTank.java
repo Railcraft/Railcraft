@@ -45,7 +45,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCartTank extends CartContainerBase implements IFluidHandler, ILiquidTransfer, IEntityAdditionalSpawnData, ISidedInventory, IMinecart, IFluidCart {
+public class EntityCartTank extends EntityCartFiltered implements IFluidHandler, ILiquidTransfer, IEntityAdditionalSpawnData, ISidedInventory, IMinecart, IFluidCart {
     private static final byte FLUID_ID_DATA_ID = 25;
     private static final byte FLUID_QTY_DATA_ID = 26;
     private static final byte FLUID_COLOR_DATA_ID = 27;
@@ -55,7 +55,6 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private final TankManager tankManager = new TankManager();
     private final StandardTank tank = new StandardTank(RailcraftConfig.getTankCartCapacity());
-    private final PhantomInventory invFilter = new PhantomInventory(1, this);
     private final IInventory invLiquids = new InventoryMapper(this, false);
     private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1, false);
     private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1, false);
@@ -77,31 +76,6 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         prevPosZ = d2;
     }
 
-    public static ItemStack getFilterFromCartItem(ItemStack cart) {
-        ItemStack filter = null;
-        NBTTagCompound nbt = cart.getTagCompound();
-        if (nbt != null) {
-            NBTTagCompound filterNBT = nbt.getCompoundTag("filterStack");
-            filter = ItemStack.loadItemStackFromNBT(filterNBT);
-        }
-        return filter;
-    }
-
-    public static ItemStack getCartItemForFilter(ItemStack filter) {
-        ItemStack stack = EnumCart.TANK.getCartItem();
-        return getCartItemForFilter(stack, filter);
-    }
-
-    public static ItemStack getCartItemForFilter(ItemStack cart, ItemStack filter) {
-        if (filter != null) {
-            NBTTagCompound nbt = InvTools.getItemData(cart);
-            NBTTagCompound filterNBT = new NBTTagCompound();
-            filter.writeToNBT(filterNBT);
-            nbt.setTag("filterStack", filterNBT);
-        }
-        return cart;
-    }
-
     @Override
     protected void entityInit() {
         super.entityInit();
@@ -109,13 +83,6 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         dataWatcher.addObject(FLUID_QTY_DATA_ID, new Integer(0));
         dataWatcher.addObject(FLUID_COLOR_DATA_ID, new Integer(StandardTank.DEFAULT_COLOR));
         dataWatcher.addObject(FILLING_DATA_ID, Byte.valueOf((byte) 0));
-    }
-
-    @Override
-    public void initEntityFromItem(ItemStack stack) {
-        super.initEntityFromItem(stack);
-        ItemStack filter = EntityCartTank.getFilterFromCartItem(stack);
-        setFilter(filter);
     }
 
     private int getFluidQty() {
@@ -215,25 +182,6 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         return true;
     }
 
-    @Override
-    public ItemStack getCartItem() {
-        ItemStack stack = getCartItemForFilter(getFilterItem());
-        if (hasCustomInventoryName())
-            stack.setStackDisplayName(getCommandSenderName());
-        return stack;
-    }
-
-    @Override
-    public List<ItemStack> getItemsDropped() {
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        items.add(getCartItem());
-        return items;
-    }
-
-    @Override
-    public boolean canBeRidden() {
-        return false;
-    }
 
     @Override
     public int getSizeInventory() {
@@ -241,25 +189,14 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
     }
 
     @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.TANK.getTag());
-    }
-
-    @Override
     protected void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
-
-        invFilter.readFromNBT("invFilter", data);
-
         tankManager.readTanksFromNBT(data);
     }
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
-
-        invFilter.writeToNBT("invFilter", data);
-
         tankManager.writeTanksToNBT(data);
     }
 
@@ -316,9 +253,6 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         dataWatcher.updateObject(FILLING_DATA_ID, Byte.valueOf(fill ? 1 : (byte) 0));
     }
 
-    public boolean hasFilter() {
-        return getFilterItem() != null;
-    }
 
     public Fluid getFilterFluid() {
         ItemStack filter = getFilterItem();
@@ -327,38 +261,9 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         return FluidItemHelper.getFluidInContainer(filter);
     }
 
-    public ItemStack getFilterItem() {
-        return getFilter().getStackInSlot(0);
-    }
-
-    public PhantomInventory getFilter() {
-        return invFilter;
-    }
-
-    public void setFilter(ItemStack filter) {
-        getFilter().setInventorySlotContents(0, filter);
-    }
 
     public IInventory getInvLiquids() {
         return invLiquids;
-    }
-
-    @Override
-    public void writeSpawnData(ByteBuf data) {
-        try {
-            DataOutputStream byteStream = new DataOutputStream(new ByteBufOutputStream(data));
-            DataTools.writeItemStack(getFilterItem(), byteStream);
-        } catch (IOException ex) {
-        }
-    }
-
-    @Override
-    public void readSpawnData(ByteBuf data) {
-        try {
-            DataInputStream byteSteam = new DataInputStream(new ByteBufInputStream(data));
-            setFilter(DataTools.readItemStack(byteSteam));
-        } catch (IOException ex) {
-        }
     }
 
     @Override
@@ -379,11 +284,6 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, int side) {
         return slot == SLOT_OUTPUT;
-    }
-
-    @Override
-    public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return EnumCart.getCartType(stack) == EnumCart.TANK;
     }
 
     @Override
@@ -465,8 +365,4 @@ public class EntityCartTank extends CartContainerBase implements IFluidHandler, 
         return canPassFluidRequests(fluid);
     }
 
-    @Override
-    public double getDrag() {
-        return CartConstants.STANDARD_DRAG;
-    }
 }

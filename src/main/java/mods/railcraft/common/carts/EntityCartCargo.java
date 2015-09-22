@@ -11,6 +11,8 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
@@ -23,13 +25,20 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCartChest extends CartContainerBase implements IItemCart {
-    public EntityCartChest(World world) {
+public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
+    public EntityCartCargo(World world) {
         super(world);
     }
 
-    public EntityCartChest(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityCartCargo(World world, double d, double d1, double d2) {
+        this(world);
+        setPosition(d, d1 + (double) yOffset, d2);
+        motionX = 0.0D;
+        motionY = 0.0D;
+        motionZ = 0.0D;
+        prevPosX = d;
+        prevPosY = d1;
+        prevPosZ = d2;
     }
 
     @Override
@@ -37,30 +46,18 @@ public class EntityCartChest extends CartContainerBase implements IItemCart {
         List<ItemStack> items = new ArrayList<ItemStack>();
         if (RailcraftConfig.doCartsBreakOnDrop()) {
             items.add(new ItemStack(Items.minecart));
-            items.add(new ItemStack(Blocks.chest));
+            items.add(new ItemStack(Blocks.trapped_chest));
         } else
             items.add(getCartItem());
         return items;
     }
 
     @Override
-    public ItemStack getCartItem() {
-        ItemStack stack = new ItemStack(Items.chest_minecart);
-        if (hasCustomInventoryName())
-            stack.setStackDisplayName(getCommandSenderName());
-        return stack;
-    }
-
-    @Override
     public boolean doInteract(EntityPlayer player) {
-        if (Game.isHost(worldObj))
-            player.displayGUIChest(this);
+        if (Game.isHost(worldObj)) {
+            GuiHandler.openGui(EnumGui.CART_CARGO, player, worldObj, this);
+        }
         return true;
-    }
-
-    @Override
-    public int getMinecartType() {
-        return 1;
     }
 
     @Override
@@ -74,18 +71,8 @@ public class EntityCartChest extends CartContainerBase implements IItemCart {
     }
 
     @Override
-    public boolean canBeRidden() {
-        return false;
-    }
-
-    @Override
     public int getSizeInventory() {
-        return 27;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return "Chest Cart";
+        return 18;
     }
 
     @Override

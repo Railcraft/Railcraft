@@ -32,8 +32,6 @@ import net.minecraft.init.Items;
  */
 public class ModuleTransport extends RailcraftModule {
 
-    private boolean tankCartEnabled = false;
-
     @Override
     public void initFirst() {
         EnumMachineAlpha alpha = EnumMachineAlpha.TANK_WATER;
@@ -151,7 +149,6 @@ public class ModuleTransport extends RailcraftModule {
         EnumCart cart = EnumCart.TANK;
 
         if (cart.setup()) {
-            tankCartEnabled = true;
             if (EnumMachineBeta.TANK_IRON_GAUGE.isAvaliable()) {
                 CraftingPlugin.addShapedRecipe(cart.getCartItem(),
                         "T",
@@ -168,6 +165,18 @@ public class ModuleTransport extends RailcraftModule {
                         'M', Items.minecart);
                 cart.setContents(new ItemStack(Blocks.glass, 8));
             }
+            CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), cart.getCartItem());
+            CraftingPlugin.addRecipe(new TankCartFilterRecipe());
+        }
+
+        cart = EnumCart.CARGO;
+
+        if (cart.setup()) {
+            CraftingPlugin.addShapedRecipe(cart.getCartItem(),
+                    "B",
+                    "M",
+                    'B', Blocks.trapped_chest,
+                    'M', Items.minecart);
             CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), cart.getCartItem());
             CraftingPlugin.addRecipe(new TankCartFilterRecipe());
         }

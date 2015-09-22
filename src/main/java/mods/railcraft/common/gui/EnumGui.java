@@ -9,7 +9,6 @@
 package mods.railcraft.common.gui;
 
 /**
- *
  * @author CovertJaguar
  */
 public enum EnumGui {
@@ -49,6 +48,7 @@ public enum EnumGui {
     CART_BORE(true),
     CART_TNT_FUSE(false),
     CART_TNT_BLAST(false),
+    CART_CARGO(true),
     CART_WORK(true),
     CART_ENERGY(true),
     CART_TANK(true),
@@ -74,7 +74,7 @@ public enum EnumGui {
     private static final EnumGui[] VALUES = values();
     private final boolean hasContainer;
 
-    private EnumGui(boolean hasContainer) {
+    EnumGui(boolean hasContainer) {
         this.hasContainer = hasContainer;
     }
 

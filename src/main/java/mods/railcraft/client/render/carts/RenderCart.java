@@ -11,6 +11,7 @@ package mods.railcraft.client.render.carts;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
 import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.api.carts.locomotive.IRenderer;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
@@ -41,6 +42,7 @@ public class RenderCart extends Render implements IRenderer {
 
         renderersCore.put(EntityLocomotive.class, LocomotiveRenderer.INSTANCE);
 
+        renderersContent.put(EntityCartCargo.class, new CartContentRendererFiltered());
         renderersContent.put(EntityCartTank.class, new CartContentRendererTank());
         renderersContent.put(CartExplosiveBase.class, new CartContentRendererTNT());
         renderersContent.put(CartMaintenanceBase.class, new CartContentRendererMaintance());

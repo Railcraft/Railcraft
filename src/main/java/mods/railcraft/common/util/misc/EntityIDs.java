@@ -9,7 +9,6 @@
 package mods.railcraft.common.util.misc;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class EntityIDs {
@@ -20,6 +19,7 @@ public class EntityIDs {
     public static final int CART_FURNACE = 3;
     public static final int CART_TNT_WOOD = 4;
     public static final int CART_TANK = 5;
+    public static final int CART_CARGO = 6;
     public static final int CART_ANCHOR = 7;
     public static final int CART_WORK = 8;
     public static final int CART_TRACK_RELAYER = 9;

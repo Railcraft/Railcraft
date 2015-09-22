@@ -140,6 +140,8 @@ public class FactoryGui {
                     return new GuiCartEnergy(inv, (EntityCartEnergy) obj);
                 case CART_TANK:
                     return new GuiCartTank(inv, (EntityCartTank) obj);
+                case CART_CARGO:
+                    return new GuiCartCargo(inv, (EntityCartCargo) obj);
                 case CART_ANCHOR:
                     return new GuiCartAnchor(inv, (EntityCartAnchor) obj);
                 case CART_TNT_FUSE:

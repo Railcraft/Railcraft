@@ -31,7 +31,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FactoryContainer {
@@ -107,6 +106,8 @@ public class FactoryContainer {
                     return new ContainerCartEnergy(inv, (EntityCartEnergy) obj);
                 case CART_TANK:
                     return new ContainerTankCart(inv, (EntityCartTank) obj);
+                case CART_CARGO:
+                    return new ContainerCargoCart(inv, (EntityCartCargo) obj);
                 case CART_ANCHOR:
                     return new ContainerAnchor(inv, (EntityCartAnchor) obj);
                 case CART_WORK:
