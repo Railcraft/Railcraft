@@ -95,7 +95,7 @@ public class CartUtils {
         if (cart instanceof IMinecart)
             return ((IMinecart) cart).doesCartMatchFilter(stack, cart);
         ItemStack cartItem = cart.getCartItem();
-        return cartItem != null && InvTools.isItemEqual(stack, cartItem, true, false);
+        return cartItem != null && InvTools.isCartItemEqual(stack, cartItem, true);
     }
 
     public static void explodeCart(EntityMinecart cart) {
