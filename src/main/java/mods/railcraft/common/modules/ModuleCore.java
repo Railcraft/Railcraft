@@ -230,7 +230,7 @@ public class ModuleCore extends RailcraftModule {
         Blocks.activator_rail.setHarvestLevel("pickaxe", 0);
         Blocks.activator_rail.setHarvestLevel("crowbar", 0);
 
-        // Define Recipies
+        // Define Recipes
         if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
             IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.minecart), false, new Object[]{
                     "I I",
@@ -350,6 +350,7 @@ public class ModuleCore extends RailcraftModule {
     @Override
     public void postInit() {
         RailcraftFluids.postInitFluids();
+        RailcraftItem.definePostRecipes();
 
         GameRegistry.registerFuelHandler(FuelPlugin.getFuelHandler());
 

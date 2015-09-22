@@ -10,6 +10,7 @@ package mods.railcraft.common.items;
 
 import java.util.List;
 import java.util.Locale;
+
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -86,9 +87,17 @@ public class ItemTie extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
+        ItemStack tieStone = RailcraftItem.tie.getStack(1, EnumTie.STONE);
+        CraftingPlugin.addShapedRecipe(tieStone,
+                " O ",
+                "###",
+                'O', RailcraftItem.rebar.getRecipeObject(),
+                '#', new ItemStack(Blocks.stone_slab, 1, 0));
+    }
 
+    @Override
+    public void definePostRecipes() {
         ItemStack tieWood = RailcraftItem.tie.getStack(1, EnumTie.WOOD);
-
         for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.getB(1))) {
             CraftingPlugin.addShapedRecipe(tieWood,
                     " O ",
@@ -96,13 +105,6 @@ public class ItemTie extends ItemRailcraft {
                     'O', container,
                     '#', "slabWood");
         }
-
-        ItemStack tieStone = RailcraftItem.tie.getStack(1, EnumTie.STONE);
-        CraftingPlugin.addShapedRecipe(tieStone,
-                " O ",
-                "###",
-                'O', RailcraftItem.rebar.getRecipeObject(),
-                '#', new ItemStack(Blocks.stone_slab, 1, 0));
     }
 
 }

@@ -96,6 +96,9 @@ public class ItemRailcraft extends Item {
     public void defineRecipes() {
     }
 
+    public void definePostRecipes() {
+    }
+
     public void initItem() {
     }
 }

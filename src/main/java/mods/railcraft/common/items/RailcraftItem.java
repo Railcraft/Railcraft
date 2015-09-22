@@ -16,6 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.EnumSet;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -36,7 +38,7 @@ public enum RailcraftItem {
     private final Object[] altRecipeObjects;
     private ItemRailcraft item;
 
-    private RailcraftItem(Class<? extends ItemRailcraft> itemClass, String tag, Object... altRecipeObjects) {
+    RailcraftItem(Class<? extends ItemRailcraft> itemClass, String tag, Object... altRecipeObjects) {
         this.itemClass = itemClass;
         this.tag = tag;
         this.altRecipeObjects = altRecipeObjects;
@@ -131,18 +133,10 @@ public enum RailcraftItem {
         return RailcraftConfig.isItemEnabled(tag);
     }
 
-//    public static void defineRecipes() {
-//        EnumSet<RailcraftItem> toProcess = EnumSet.allOf(RailcraftItem.class);
-//        EnumSet<RailcraftItem> processed = EnumSet.noneOf(RailcraftItem.class);
-//        do {
-//            processed.clear();
-//            for (RailcraftItem item : toProcess) {
-//                if (item.item == null)
-//                    continue;
-//                item.item.defineRecipes();
-//                processed.add(item);
-//            }
-//            toProcess.removeAll(processed);
-//        } while (!processed.isEmpty());
-//    }
+    public static void definePostRecipes() {
+        for (RailcraftItem item : VALUES) {
+            if (item.item != null)
+                item.definePostRecipes();
+        }
+    }
 }
