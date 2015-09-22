@@ -125,7 +125,7 @@ public class ForestryPlugin {
                             '#', Blocks.wool,
                             'V', new ItemStack(Blocks.rail),
                             'X', Items.string,
-                            'Y', new ItemStack(Blocks.chest));
+                            'Y', "chestWood");
                 }
 
                 tag = "railcraft.backpack.trackman.t2";
@@ -143,7 +143,7 @@ public class ForestryPlugin {
                                 "WXW",
                                 "WTW",
                                 "WWW",
-                                'X', Items.diamond,
+                                'X', "gemDiamond",
                                 'W', silk,
                                 'T', trackmanBackpackT1});
                     }
@@ -162,7 +162,7 @@ public class ForestryPlugin {
                             '#', Blocks.wool,
                             'V', new ItemStack(Blocks.snow),
                             'X', Items.string,
-                            'Y', new ItemStack(Blocks.chest));
+                            'Y', "chestWood");
                 }
 
                 tag = "railcraft.backpack.iceman.t2";
@@ -180,7 +180,7 @@ public class ForestryPlugin {
                                 "WXW",
                                 "WTW",
                                 "WWW",
-                                'X', Items.diamond,
+                                'X', "gemDiamond",
                                 'W', silk,
                                 'T', icemanBackpackT1});
                     }
@@ -203,7 +203,7 @@ public class ForestryPlugin {
                             '#', Blocks.wool,
                             'V', new ItemStack(Items.potionitem, 1, 8197),
                             'X', Items.string,
-                            'Y', new ItemStack(Blocks.chest));
+                            'Y', "chestWood");
                     CraftingPlugin.addShapedRecipe(output,
                             "X#X",
                             "VYV",
@@ -211,7 +211,7 @@ public class ForestryPlugin {
                             '#', Blocks.wool,
                             'V', new ItemStack(Items.potionitem, 1, 8261),
                             'X', Items.string,
-                            'Y', new ItemStack(Blocks.chest));
+                            'Y', "chestWood");
                     CraftingPlugin.addShapedRecipe(output,
                             "X#X",
                             "VYV",
@@ -219,7 +219,7 @@ public class ForestryPlugin {
                             '#', Blocks.wool,
                             'V', new ItemStack(Items.potionitem, 1, 8229),
                             'X', Items.string,
-                            'Y', new ItemStack(Blocks.chest));
+                            'Y', "chestWood");
 //                } else
 //                    ApothecariesBackpack.registerThaumcraftResearch();
                 }
@@ -239,7 +239,7 @@ public class ForestryPlugin {
                                 "WXW",
                                 "WTW",
                                 "WWW",
-                                'X', Items.diamond,
+                                'X', "gemDiamond",
                                 'W', silk,
                                 'T', apothecariesBackpackT1});
                     }

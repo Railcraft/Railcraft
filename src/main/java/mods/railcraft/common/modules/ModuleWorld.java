@@ -105,8 +105,8 @@ public class ModuleWorld extends RailcraftModule {
                 fert.stackSize = 2;
                 CraftingPlugin.addShapelessRecipe(fert,
                         "dustSaltpeter",
-                        new ItemStack(Blocks.sand),
-                        new ItemStack(Blocks.sand),
+                        "sand",
+                        "sand",
                         new ItemStack(Blocks.dirt),
                         new ItemStack(Blocks.dirt));
             }

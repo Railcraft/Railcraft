@@ -43,7 +43,7 @@ public class ModuleExtras extends RailcraftModule {
             CraftingPlugin.addShapedRecipe(cart.getCartItem(),
                     "B",
                     "M",
-                    'B', Blocks.crafting_table,
+                    'B', "craftingTableWood",
                     'M', Items.minecart);
             CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), cart.getCartItem());
             LootPlugin.addLootRailway(cart.getCartItem(), 1, 1, cart.getTag());

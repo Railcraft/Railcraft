@@ -68,7 +68,7 @@ public class ModuleTransport extends RailcraftModule {
                     "SSS",
                     "SLS",
                     "SDS",
-                    'S', new ItemStack(Blocks.cobblestone),
+                    'S', "cobblestone",
                     'D', detector,
                     'L', new ItemStack(Blocks.hopper));
 
@@ -94,7 +94,7 @@ public class ModuleTransport extends RailcraftModule {
                     "SSS",
                     "SDS",
                     "SLS",
-                    'S', new ItemStack(Blocks.cobblestone),
+                    'S', "cobblestone",
                     'D', detector,
                     'L', new ItemStack(Blocks.hopper));
 
@@ -164,7 +164,7 @@ public class ModuleTransport extends RailcraftModule {
                         "GGG",
                         "GMG",
                         "GGG",
-                        'G', new ItemStack(Blocks.glass),
+                        'G', "blockGlassColorless",
                         'M', Items.minecart);
                 cart.setContents(new ItemStack(Blocks.glass, 8));
             }
