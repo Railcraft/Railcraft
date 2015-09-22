@@ -134,9 +134,9 @@ public enum RailcraftItem {
     }
 
     public static void definePostRecipes() {
-        for (RailcraftItem item : VALUES) {
-            if (item.item != null)
-                item.definePostRecipes();
+        for (RailcraftItem type : VALUES) {
+            if (type.item != null)
+                type.item.definePostRecipes();
         }
     }
 }
