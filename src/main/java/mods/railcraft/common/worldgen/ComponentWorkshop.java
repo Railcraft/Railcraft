@@ -180,6 +180,21 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
             if (EnumMachineBeta.ENGINE_STEAM_HOBBY.isAvaliable() && RailcraftConfig.machinesRequirePower())
                 placeEngine(world, 9, 1, 6, sbb);
         }
+		
+		
+        // foundation
+        for (int k = 0; k < 11; ++k) {
+			for (int l = 4; l < 11; ++l) {
+				this.clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
+				this.func_151554_b(world, Blocks.cobblestone, 0, l, -1, k, sbb);
+			}
+		}
+        for (int k = 1; k < 6; ++k) {
+			for (int l = 0; l < 4; ++l) {
+				this.clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
+				this.func_151554_b(world, Blocks.cobblestone, 0, l, -1, k, sbb);
+			}
+		}
 
         placeChest(world, 9, 1, 4, 3, random, sbb);
 
