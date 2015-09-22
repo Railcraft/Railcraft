@@ -83,6 +83,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
 public class ModuleCore extends RailcraftModule {
@@ -141,6 +142,9 @@ public class ModuleCore extends RailcraftModule {
         RecipeSorter.register("railcraft:routing.table.copy", RoutingTableCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
         RecipeSorter.register("railcraft:routing.ticket.copy", RoutingTicketCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
         RecipeSorter.register("railcraft:tank.cart.filter", TankCartFilterRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+
+        OreDictionary.registerOre("chestWood", Blocks.chest);
+        OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
     }
 
     @Override

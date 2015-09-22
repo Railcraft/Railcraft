@@ -55,7 +55,7 @@ public class ModuleAutomation extends RailcraftModule {
                     "XXX",
                     "XPX",
                     "XXX",
-                    'X', Blocks.stone,
+                    'X', "stone",
                     'P', Blocks.stone_pressure_plate);
             CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.EMPTY.ordinal()),
                     "XXX",
@@ -79,7 +79,7 @@ public class ModuleAutomation extends RailcraftModule {
                     "XXX",
                     "XPX",
                     "XXX",
-                    'X', Blocks.cobblestone,
+                    'X', "cobblestone",
                     'P', Blocks.stone_pressure_plate);
             CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.PLAYER.ordinal()),
                     "XXX",
