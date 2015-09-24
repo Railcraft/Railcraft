@@ -9,7 +9,9 @@
 package mods.railcraft.common.worldgen;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 import java.util.Random;
+
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -20,7 +22,6 @@ import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SaltpeterGenerator {
@@ -52,7 +53,9 @@ public class SaltpeterGenerator {
 
     private boolean canGen(World world, Random rand, int x, int z) {
         BiomeGenBase biome = world.getBiomeGenForCoords(x + 16, z + 16);
-        if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.DESERT))
+        if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SANDY))
+            return false;
+        if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.DRY))
             return false;
         if (biome.canSpawnLightningBolt())
             return false;

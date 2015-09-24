@@ -23,10 +23,6 @@ import net.minecraft.item.ItemBlock;
  */
 public class OreDictPlugin {
 
-    public static String getOreName(ItemStack ore) {
-        return OreDictionary.getOreName(OreDictionary.getOreID(ore));
-    }
-
     public static boolean isOreType(String oreName, ItemStack stack) {
         List<ItemStack> ores = OreDictionary.getOres(oreName);
         for (ItemStack ore : ores) {

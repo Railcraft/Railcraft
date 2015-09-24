@@ -10,10 +10,12 @@ package mods.railcraft.common.blocks.aesthetics.stairs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
@@ -78,7 +80,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileStair)
             return new ItemStack(this, 1, ((TileStair) tile).getStair().ordinal());
@@ -120,7 +122,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     }
 
     @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
         player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
         player.addExhaustion(0.025F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)

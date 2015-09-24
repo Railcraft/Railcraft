@@ -10,7 +10,9 @@ package mods.railcraft.common.items.waterstone;
 
 import mods.railcraft.common.items.firestone.*;
 import cpw.mods.fml.common.registry.GameRegistry;
+
 import java.util.List;
+
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -30,7 +32,6 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ItemWaterstoneRefined extends ItemRailcraft {
@@ -68,7 +69,7 @@ public class ItemWaterstoneRefined extends ItemRailcraft {
     }
 
     @Override
-    public boolean hasContainerItem() {
+    public boolean hasContainerItem(ItemStack stack) {
         return true;
     }
 
@@ -157,10 +158,10 @@ public class ItemWaterstoneRefined extends ItemRailcraft {
      * Returning null here will not kill the EntityItem and will leave it to
      * function normally. Called when the item it placed in a world.
      *
-     * @param world The world object
+     * @param world    The world object
      * @param location The EntityItem object, useful for getting the position of
-     * the entity
-     * @param stack The current item stack
+     *                 the entity
+     * @param stack    The current item stack
      * @return A new Entity object to spawn or null
      */
     @Override

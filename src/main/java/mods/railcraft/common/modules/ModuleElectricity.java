@@ -19,9 +19,7 @@ import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.items.RailcraftPartItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RotorRepairRecipe;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**

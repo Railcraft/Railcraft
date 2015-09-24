@@ -10,8 +10,10 @@ package mods.railcraft.common.blocks.aesthetics.cube;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.List;
 import java.util.Random;
+
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -168,7 +170,7 @@ public class BlockCube extends Block {
     }
 
     @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, int i, int j, int k) {
+    public boolean removedByPlayer(World world, EntityPlayer player, int i, int j, int k, boolean willHarvest) {
         int meta = world.getBlockMetadata(i, j, k);
         return EnumCube.fromOrdinal(meta).getBlockDef().removedByPlayer(world, player, i, j, k);
     }

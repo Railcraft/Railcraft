@@ -107,8 +107,8 @@ public abstract class InvTools {
         if (tile == null || !(tile instanceof IInventory))
             return null;
 
-        if (!PipeManager.canExtractItems(null, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord))
-            return null;
+//        if (!PipeManager.canExtractItems(null, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord))
+//            return null;
 
         if (tile instanceof TileEntityChest) {
             TileEntityChest chest = (TileEntityChest) tile;

@@ -66,7 +66,7 @@ public class QuarryPopulator {
         if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.FOREST)) {
             return false;
         }
-        if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.FROZEN)) {
+        if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SNOWY)) {
             return false;
         }
         return rand.nextDouble() <= 0.025;

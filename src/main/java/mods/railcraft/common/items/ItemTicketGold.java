@@ -29,7 +29,6 @@ import net.minecraft.world.World;
 import static mods.railcraft.common.items.ItemTicket.getOwner;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemTicketGold extends ItemTicket implements IEditableItem {
@@ -70,7 +69,7 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
     }
 
     @Override
-    public boolean hasContainerItem() {
+    public boolean hasContainerItem(ItemStack stack) {
         return true;
     }
 

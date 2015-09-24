@@ -9,8 +9,10 @@
 package mods.railcraft.common.blocks.detector;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -75,13 +77,13 @@ public class BlockDetector extends BlockContainer {
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileDetector) {
             TileDetector detector = (TileDetector) tile;
             return detector.getDetector().getType().getItem();
         }
-        return super.getPickBlock(target, world, x, y, z);
+        return super.getPickBlock(target, world, x, y, z, player);
     }
 
     @Override
@@ -113,7 +115,7 @@ public class BlockDetector extends BlockContainer {
     }
 
     @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
         player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
         player.addExhaustion(0.025F);
         TileEntity tile = world.getTileEntity(x, y, z);

@@ -97,7 +97,7 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                             if (receiver.getTile() != controller.getTile()) {
                                 controller.registerReceiver(receiver);
                                 controller.endPairing();
-                                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.success", controller.getName(), receiver.getName());
+                                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.success", controller.getLocalizationTag(), receiver.getLocalizationTag());
                                 item.setTagCompound(null);
                                 return true;
                             }
@@ -114,11 +114,11 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                 if (Game.isHost(world)) {
                     SignalController controller = ((IControllerTile) tile).getController();
                     if (cPos == null || (i != cPos.x || j != cPos.y || k != cPos.z)) {
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.start", controller.getName());
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.start", controller.getLocalizationTag());
                         setControllerData(item, tile);
                         controller.startPairing();
                     } else {
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.stop", controller.getName());
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.stop", controller.getLocalizationTag());
                         controller.endPairing();
                         item.setTagCompound(null);
                     }

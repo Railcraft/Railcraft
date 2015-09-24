@@ -9,7 +9,6 @@ import mods.railcraft.common.plugins.buildcraft.triggers.TriggerProvider;
 import mods.railcraft.common.util.misc.Game;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BuildcraftPlugin {
@@ -25,7 +24,7 @@ public class BuildcraftPlugin {
 
     public static void addFacade(Block block, int meta) {
         if (block == null) return;
-        FMLInterModComms.sendMessage("BuildCraft|Transport", "add-facade", String.format("%s@%d", GameData.blockRegistry.getNameForObject(block), meta));
+        FMLInterModComms.sendMessage("BuildCraft|Transport", "add-facade", String.format("%s@%d", GameData.getBlockRegistry().getNameForObject(block), meta));
     }
 
 }

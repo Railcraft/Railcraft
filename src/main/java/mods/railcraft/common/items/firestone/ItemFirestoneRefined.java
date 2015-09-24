@@ -65,7 +65,7 @@ public class ItemFirestoneRefined extends ItemFirestoneBase {
     }
 
     @Override
-    public boolean hasContainerItem() {
+    public boolean hasContainerItem(ItemStack stack) {
         return true;
     }
 
