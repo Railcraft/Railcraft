@@ -68,8 +68,11 @@ public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
 
     @Override
     public Block func_145820_n() {
-        return Blocks.trapped_chest;
+        return null;
     }
+//    public Block func_145820_n() {
+//        return Blocks.trapped_chest;
+//    }
 
     @Override
     public int getDefaultDisplayTileOffset() {
@@ -84,7 +87,7 @@ public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         ItemStack filter = getFilterItem();
-        if (filter != null && !InvTools.isItemEqual(stack, filter))
+        if (!InvTools.isItemEqual(stack, filter))
             return false;
         if (!RailcraftConfig.chestAllowLiquids())
             return getStackInSlot(slot) == null || !FluidItemHelper.isContainer(stack);

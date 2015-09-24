@@ -63,7 +63,6 @@ public class CartContentRendererFiltered extends CartContentRenderer {
 
 //        float yOffset = firestoneTile.preYOffset + (firestoneTile.yOffset - firestoneTile.preYOffset) * time;
 //        GL11.glTranslatef((float) x + 0.5F, (float) y + 0.5F + yOffset, (float) z + 0.5F);
-        GL11.glTranslatef(0, 1, 0);
 
 
 //        GL11.glTranslatef(shift, shift, shift);
@@ -72,21 +71,42 @@ public class CartContentRendererFiltered extends CartContentRenderer {
 
 //        GL11.glTranslatef(0, 0, 1 - 0.02F);
 
-        EntityItem entityitem = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem());
-        entityitem.getEntityItem().stackSize = 1;
-        entityitem.hoverStart = 0.0F;
+        EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
+        item.getEntityItem().stackSize = 64;
+        item.hoverStart = 0.0F;
 
-        RenderItem.renderInFrame = true;
-        RenderManager.instance.renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
-        if (!RenderManager.instance.options.fancyGraphics) {
-            GL11.glRotatef(180, 0, 1, 0);
-            RenderManager.instance.renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
-            GL11.glRotatef(-180, 0, 1, 0);
-        }
-        RenderItem.renderInFrame = false;
+//        GL11.glTranslatef(0.68F, -0.5F, 0);
+//        GL11.glTranslatef(0.0F, 0.56F, 0);
+        GL11.glPushMatrix();
+        GL11.glTranslatef(0.0F, -0.44F, -0.2F);
+        float scale = 2.0F;
+        GL11.glScalef(scale, scale, scale);
+        GL11.glRotatef(90.F, 0.0F, 1.0F, 0.0F);
+        renderItem(item);
+        GL11.glPopMatrix();
+
+//        GL11.glPushMatrix();
+//        item.getEntityItem().stackSize = 1;
+//        GL11.glTranslatef(0.68F, -0.5F, 0);
+//        scale = 1.2F;
+//        GL11.glScalef(scale, scale, scale);
+//        GL11.glRotatef(90.F, 0.0F, 1.0F, 0.0F);
+//        renderItem(item);
+//        GL11.glPopMatrix();
 
         GL11.glPopAttrib();
         GL11.glPopMatrix();
+    }
+
+    private void renderItem(EntityItem item) {
+        RenderItem.renderInFrame = true;
+        RenderManager.instance.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+        if (!RenderManager.instance.options.fancyGraphics) {
+            GL11.glRotatef(180, 0, 1, 0);
+            RenderManager.instance.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+            GL11.glRotatef(-180, 0, 1, 0);
+        }
+        RenderItem.renderInFrame = false;
     }
 
     @Override

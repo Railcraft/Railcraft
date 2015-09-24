@@ -29,7 +29,7 @@ public class ContainerCartCargo extends RailcraftContainer {
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 6; k++) {
-                addSlot(new SlotLinked(cart, k + i * 6, 62 + k * 18, 18 + i * 18, filter).setAllowNull());
+                addSlot(new SlotLinked(cart, k + i * 6, 62 + k * 18, 18 + i * 18, filter));
             }
         }
 
