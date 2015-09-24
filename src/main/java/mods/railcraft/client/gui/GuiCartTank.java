@@ -12,7 +12,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.StatCollector;
 import mods.railcraft.common.carts.EntityCartTank;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.containers.ContainerTankCart;
+import mods.railcraft.common.gui.containers.ContainerCartTank;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 
 /**
@@ -27,7 +27,7 @@ public class GuiCartTank extends EntityGui
 
     public GuiCartTank(InventoryPlayer inv, EntityCartTank cart)
     {
-        super(cart, new ContainerTankCart(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_tank.png");
+        super(cart, new ContainerCartTank(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_tank.png");
         this.cart = cart;
         label = cart.getCommandSenderName();
     }

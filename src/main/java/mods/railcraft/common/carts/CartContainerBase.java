@@ -12,6 +12,7 @@ import java.util.List;
 
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartContainer;
@@ -43,6 +44,8 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
         renderDistanceWeight = CartConstants.RENDER_DIST_MULTIPLIER;
     }
 
+    public abstract ICartType getCartType();
+
     @Override
     public void initEntityFromItem(ItemStack stack) {
     }
@@ -71,6 +74,11 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
     }
 
     public abstract List<ItemStack> getItemsDropped();
+
+    @Override
+    public String getInventoryName() {
+        return LocalizationPlugin.translate(getCartType().getTag());
+    }
 
     @Override
     public void setDead() {

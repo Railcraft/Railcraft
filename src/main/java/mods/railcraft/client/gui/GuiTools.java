@@ -9,6 +9,7 @@
 package mods.railcraft.client.gui;
 
 import java.util.List;
+
 import net.minecraft.client.gui.FontRenderer;
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -32,6 +33,15 @@ public class GuiTools {
         int sWidth = fr.getStringWidth(s);
         int sPos = guiWidth / 2 - sWidth / 2;
         fr.drawString(s, sPos, y, color, shadow);
+    }
+
+    public static void drawStringCenteredAtPos(FontRenderer fr, String s, int x, int y) {
+        drawStringCenteredAtPos(fr, s, x, y, 0x404040, false);
+    }
+
+    public static void drawStringCenteredAtPos(FontRenderer fr, String s, int x, int y, int color, boolean shadow) {
+        int sWidth = fr.getStringWidth(s);
+        fr.drawString(s, x - sWidth / 2, y, color, shadow);
     }
 
     public static void newButtonRowAuto(List buttonList, int xStart, int xSize, List<? extends GuiBetterButton> buttons) {

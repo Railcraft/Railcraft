@@ -10,6 +10,7 @@ package mods.railcraft.common.carts;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -91,7 +92,7 @@ public abstract class EntityCartEnergy extends CartContainerBase implements IEne
 
     @Override
     public float getMaxCartSpeedOnRail() {
-        int numLocomotives = LinkageManager.instance().getTrain(this).getNumRunningLocomotives();
+        int numLocomotives = Train.getTrain(this).getNumRunningLocomotives();
         if (numLocomotives == 0)
             return super.getMaxCartSpeedOnRail();
         return Math.min(1.2F, 0.18F - 0.05F * getTier() + (numLocomotives - 1) * 0.075F);

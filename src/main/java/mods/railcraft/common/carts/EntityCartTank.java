@@ -77,6 +77,11 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     }
 
     @Override
+    public ICartType getCartType() {
+        return EnumCart.TANK;
+    }
+
+    @Override
     protected void entityInit() {
         super.entityInit();
         dataWatcher.addObject(FLUID_ID_DATA_ID, new Integer(-1));
@@ -182,7 +187,6 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
         return true;
     }
 
-
     @Override
     public int getSizeInventory() {
         return 2;
@@ -253,14 +257,12 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
         dataWatcher.updateObject(FILLING_DATA_ID, Byte.valueOf(fill ? 1 : (byte) 0));
     }
 
-
     public Fluid getFilterFluid() {
         ItemStack filter = getFilterItem();
         if (filter == null)
             return null;
         return FluidItemHelper.getFluidInContainer(filter);
     }
-
 
     public IInventory getInvLiquids() {
         return invLiquids;

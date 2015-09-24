@@ -11,19 +11,27 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.common.carts.EntityCartCargo;
 import mods.railcraft.common.gui.slots.SlotFilter;
 import mods.railcraft.common.gui.slots.SlotFluidFilter;
+import mods.railcraft.common.gui.slots.SlotLinked;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
-public class ContainerCargoCart extends RailcraftContainer {
+public class ContainerCartCargo extends RailcraftContainer {
 
     private EntityCartCargo cart;
 
-    public ContainerCargoCart(InventoryPlayer inventoryplayer, EntityCartCargo cart) {
+    public ContainerCartCargo(InventoryPlayer inventoryplayer, EntityCartCargo cart) {
         super(cart);
         this.cart = cart;
 
-        addSlot(new SlotFilter(cart.getFilter(), 0, 25, 35));
+        Slot filter = new SlotFilter(cart.getFilter(), 0, 25, 35).setStackLimit(1);
+        addSlot(filter);
+
+        for (int i = 0; i < 3; i++) {
+            for (int k = 0; k < 6; k++) {
+                addSlot(new SlotLinked(cart, k + i * 6, 62 + k * 18, 18 + i * 18, filter).setAllowNull());
+            }
+        }
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {

@@ -16,10 +16,16 @@ import mods.railcraft.common.util.inventory.InvTools;
 public class SlotLinked extends Slot {
 
     private Slot masterSlot;
+    private boolean allowNull = false;
 
     public SlotLinked(IInventory iinventory, int slotIndex, int posX, int posY, Slot masterSlot) {
         super(iinventory, slotIndex, posX, posY);
         this.masterSlot = masterSlot;
+    }
+
+    public SlotLinked setAllowNull() {
+        allowNull = true;
+        return this;
     }
 
     @Override
@@ -30,6 +36,8 @@ public class SlotLinked extends Slot {
     @Override
     public boolean isItemValid(ItemStack stack) {
         ItemStack master = masterSlot.getStack();
+        if (allowNull && master == null)
+            return true;
         return InvTools.isItemEqual(stack, master);
     }
 }

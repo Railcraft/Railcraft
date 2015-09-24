@@ -12,7 +12,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.StatCollector;
 import mods.railcraft.common.carts.EntityCartWork;
-import mods.railcraft.common.gui.containers.ContainerWorkCart;
+import mods.railcraft.common.gui.containers.ContainerCartWork;
 
 public class GuiCartWork extends EntityGui
 {
@@ -21,7 +21,7 @@ public class GuiCartWork extends EntityGui
 
     public GuiCartWork(InventoryPlayer inv, EntityCartWork cart)
     {
-        super(cart, new ContainerWorkCart(inv, cart), "textures/gui/container/crafting_table.png");
+        super(cart, new ContainerCartWork(inv, cart), "textures/gui/container/crafting_table.png");
         this.cart = cart;
     }
 

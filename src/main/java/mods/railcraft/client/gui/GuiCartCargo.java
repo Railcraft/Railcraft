@@ -9,10 +9,8 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.EntityCartCargo;
-import mods.railcraft.common.carts.EntityCartTank;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.containers.ContainerCargoCart;
-import mods.railcraft.common.gui.containers.ContainerTankCart;
+import mods.railcraft.common.gui.containers.ContainerCartCargo;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.StatCollector;
@@ -26,17 +24,15 @@ public class GuiCartCargo extends EntityGui {
     private final EntityCartCargo cart;
 
     public GuiCartCargo(InventoryPlayer inv, EntityCartCargo cart) {
-        super(cart, new ContainerCargoCart(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_cargo.png");
+        super(cart, new ContainerCartCargo(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_cargo.png");
         this.cart = cart;
         label = cart.getCommandSenderName();
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        int sWidth = fontRendererObj.getStringWidth(label);
-        int sPos = xSize / 2 - sWidth / 2;
-        fontRendererObj.drawString(label, sPos, 6, 0x404040);
-        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.filter"), 67, 27, 0x404040);
+        GuiTools.drawCenteredString(fontRendererObj, label, 6);
+        GuiTools.drawStringCenteredAtPos(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.filter"), 35, 22);
         fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 }

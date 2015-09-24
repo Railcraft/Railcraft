@@ -222,6 +222,11 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return true;
     }
 
+    @Override
+    public ICartType getCartType() {
+        return EnumCart.BORE;
+    }
+
     private boolean isMinableBlock(Block block, int meta) {
         if (RailcraftConfig.boreMinesAllBlocks())
             return true;

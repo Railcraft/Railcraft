@@ -16,13 +16,13 @@ import mods.railcraft.common.gui.slots.SlotLinked;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-public class ContainerUndercutter extends RailcraftContainer {
+public class ContainerCartUndercutter extends RailcraftContainer {
 
     private EntityCartUndercutter cart;
     private Slot under;
     private Slot side;
 
-    public ContainerUndercutter(InventoryPlayer inventoryplayer, EntityCartUndercutter cart) {
+    public ContainerCartUndercutter(InventoryPlayer inventoryplayer, EntityCartUndercutter cart) {
         super(cart);
         this.cart = cart;
 

@@ -36,6 +36,11 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
     }
 
     @Override
+    public ICartType getCartType() {
+        return EnumCart.TRACK_LAYER;
+    }
+
+    @Override
     protected void func_145821_a(int trackX, int trackY, int trackZ, double maxSpeed, double slopeAdjustment, Block trackBlock, int trackMeta) {
         super.func_145821_a(trackX, trackY, trackZ, maxSpeed, slopeAdjustment, trackBlock, trackMeta);
         if (Game.isNotHost(worldObj))

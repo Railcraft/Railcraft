@@ -135,8 +135,6 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
             model = nbt.getString("model");
     }
 
-    public abstract ICartType getCartType();
-
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
         return EnumCart.getCartType(stack) == getCartType();
@@ -527,7 +525,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         if (getUniqueID() == entity.getUniqueID())
             return false;
         LinkageManager lm = LinkageManager.instance();
-        if (lm.areInSameTrain(this, otherLoco))
+        if (Train.areInSameTrain(this, otherLoco))
             return false;
         return cartVelocityIsGreaterThan(0.2f) && otherLoco.cartVelocityIsGreaterThan(0.2f)
                 && (Math.abs(motionX - entity.motionX) > 0.3f || Math.abs(motionZ - entity.motionZ) > 0.3f);

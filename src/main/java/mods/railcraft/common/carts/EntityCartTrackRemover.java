@@ -2,6 +2,7 @@ package mods.railcraft.common.carts;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
@@ -30,6 +31,11 @@ public class EntityCartTrackRemover extends CartMaintenanceBase {
         prevPosX = d;
         prevPosY = d1;
         prevPosZ = d2;
+    }
+
+    @Override
+    public ICartType getCartType() {
+        return EnumCart.TRACK_REMOVER;
     }
 
     @Override

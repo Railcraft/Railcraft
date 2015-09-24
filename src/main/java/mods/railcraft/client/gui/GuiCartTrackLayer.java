@@ -2,7 +2,7 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.EntityCartTrackLayer;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.containers.ContainerTrackLayer;
+import mods.railcraft.common.gui.containers.ContainerCartTrackLayer;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.StatCollector;
@@ -12,7 +12,7 @@ public class GuiCartTrackLayer extends EntityGui {
     private final String label;
 
     public GuiCartTrackLayer(InventoryPlayer inventoryPlayer, EntityCartTrackLayer cart) {
-        super(cart, new ContainerTrackLayer(inventoryPlayer, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_track_layer.png");
+        super(cart, new ContainerCartTrackLayer(inventoryPlayer, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_track_layer.png");
         label = cart.getCommandSenderName();
     }
 

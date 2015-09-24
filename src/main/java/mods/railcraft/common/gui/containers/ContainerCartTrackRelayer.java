@@ -14,12 +14,12 @@ import mods.railcraft.common.carts.EntityCartTrackRelayer;
 import mods.railcraft.common.gui.slots.SlotLinked;
 import mods.railcraft.common.gui.slots.SlotTrackFilter;
 
-public class ContainerTrackRelayer extends RailcraftContainer {
+public class ContainerCartTrackRelayer extends RailcraftContainer {
 
     private EntityCartTrackRelayer cart;
     private Slot track;
 
-    public ContainerTrackRelayer(InventoryPlayer inventoryplayer, EntityCartTrackRelayer cart) {
+    public ContainerCartTrackRelayer(InventoryPlayer inventoryplayer, EntityCartTrackRelayer cart) {
         super(cart);
         this.cart = cart;
         addSlot(new SlotTrackFilter(cart.getPattern(), 0, 26, 43));

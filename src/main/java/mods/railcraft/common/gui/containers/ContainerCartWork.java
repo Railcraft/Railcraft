@@ -20,7 +20,7 @@ import net.minecraft.inventory.SlotCrafting;
 import mods.railcraft.common.carts.EntityCartWork;
 import mods.railcraft.common.gui.slots.SlotUnshiftable;
 
-public final class ContainerWorkCart extends RailcraftContainer {
+public final class ContainerCartWork extends RailcraftContainer {
 
     /**
      * The crafting matrix inventory (3x3).
@@ -29,7 +29,7 @@ public final class ContainerWorkCart extends RailcraftContainer {
     public IInventory craftResult = new InventoryCraftResult();
     private EntityCartWork cart;
 
-    public ContainerWorkCart(InventoryPlayer inv, EntityCartWork cart) {
+    public ContainerCartWork(InventoryPlayer inv, EntityCartWork cart) {
         this.cart = cart;
         this.addSlot(new SlotCrafting(inv.player, this.craftMatrix, this.craftResult, 0, 124, 35));
         int var6;

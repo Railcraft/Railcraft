@@ -14,7 +14,6 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class EntityCartEnergyCESU extends EntityCartEnergy {
@@ -32,6 +31,11 @@ public class EntityCartEnergyCESU extends EntityCartEnergy {
         prevPosX = d;
         prevPosY = d1;
         prevPosZ = d2;
+    }
+
+    @Override
+    public ICartType getCartType() {
+        return EnumCart.ENERGY_CESU;
     }
 
     @Override

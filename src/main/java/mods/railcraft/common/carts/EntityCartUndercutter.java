@@ -11,6 +11,7 @@ package mods.railcraft.common.carts;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -76,6 +77,11 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
         prevPosX = d;
         prevPosY = d1;
         prevPosZ = d2;
+    }
+
+    @Override
+    public ICartType getCartType() {
+        return EnumCart.UNDERCUTTER;
     }
 
     @Override
@@ -220,7 +226,7 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
     public String getInventoryName() {
         return LocalizationPlugin.translate(EnumCart.UNDERCUTTER.getTag());
     }
-    
+
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
         return SLOTS;

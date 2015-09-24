@@ -35,6 +35,11 @@ public class EntityCartEnergyMFE extends EntityCartEnergy {
     }
 
     @Override
+    public ICartType getCartType() {
+        return EnumCart.ENERGY_MFE;
+    }
+
+    @Override
     public int getTier() {
         return 3;
     }

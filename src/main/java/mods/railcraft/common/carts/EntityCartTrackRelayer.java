@@ -9,6 +9,7 @@
 package mods.railcraft.common.carts;
 
 import java.util.EnumSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -50,6 +51,11 @@ public class EntityCartTrackRelayer extends CartMaintenancePatternBase {
     }
 
     @Override
+    public ICartType getCartType() {
+        return EnumCart.TRACK_RELAYER;
+    }
+
+    @Override
     public void onUpdate() {
         super.onUpdate();
         if (Game.isNotHost(worldObj))
@@ -84,8 +90,8 @@ public class EntityCartTrackRelayer extends CartMaintenancePatternBase {
                     }
                 }
             }
-            
-            if(nextToSuspended)
+
+            if (nextToSuspended)
                 return;
 
             if (trackExist != null && trackStock != null)

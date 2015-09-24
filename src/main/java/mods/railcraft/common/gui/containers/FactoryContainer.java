@@ -105,19 +105,19 @@ public class FactoryContainer {
                 case CART_ENERGY:
                     return new ContainerCartEnergy(inv, (EntityCartEnergy) obj);
                 case CART_TANK:
-                    return new ContainerTankCart(inv, (EntityCartTank) obj);
+                    return new ContainerCartTank(inv, (EntityCartTank) obj);
                 case CART_CARGO:
-                    return new ContainerCargoCart(inv, (EntityCartCargo) obj);
+                    return new ContainerCartCargo(inv, (EntityCartCargo) obj);
                 case CART_ANCHOR:
                     return new ContainerAnchor(inv, (EntityCartAnchor) obj);
                 case CART_WORK:
-                    return new ContainerWorkCart(inv, (EntityCartWork) obj);
+                    return new ContainerCartWork(inv, (EntityCartWork) obj);
                 case CART_TRACK_LAYER:
-                    return new ContainerTrackLayer(inv, (EntityCartTrackLayer) obj);
+                    return new ContainerCartTrackLayer(inv, (EntityCartTrackLayer) obj);
                 case CART_TRACK_RELAYER:
-                    return new ContainerTrackRelayer(inv, (EntityCartTrackRelayer) obj);
+                    return new ContainerCartTrackRelayer(inv, (EntityCartTrackRelayer) obj);
                 case CART_UNDERCUTTER:
-                    return new ContainerUndercutter(inv, (EntityCartUndercutter) obj);
+                    return new ContainerCartUndercutter(inv, (EntityCartUndercutter) obj);
                 case LOCO_STEAM:
                     return ContainerLocomotiveSteamSolid.make(inv, (EntityLocomotiveSteamSolid) obj);
                 case LOCO_ELECTRIC:

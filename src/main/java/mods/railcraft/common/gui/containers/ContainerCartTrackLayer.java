@@ -6,9 +6,9 @@ import mods.railcraft.common.gui.slots.SlotTrackFilter;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
-public class ContainerTrackLayer extends RailcraftContainer {
+public class ContainerCartTrackLayer extends RailcraftContainer {
 
-    public ContainerTrackLayer(InventoryPlayer inventoryplayer, EntityCartTrackLayer cart) {
+    public ContainerCartTrackLayer(InventoryPlayer inventoryplayer, EntityCartTrackLayer cart) {
         super(cart);
         Slot track;
         addSlot(track = new SlotTrackFilter(cart.getPattern(), 0, 49, 43));

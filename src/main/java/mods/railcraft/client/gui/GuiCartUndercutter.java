@@ -12,7 +12,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.StatCollector;
 import mods.railcraft.common.carts.EntityCartUndercutter;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.containers.ContainerUndercutter;
+import mods.railcraft.common.gui.containers.ContainerCartUndercutter;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 
 /**
@@ -26,7 +26,7 @@ public class GuiCartUndercutter extends EntityGui
 
     public GuiCartUndercutter(InventoryPlayer inv, EntityCartUndercutter cart)
     {
-        super(cart, new ContainerUndercutter(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_undercutter.png");
+        super(cart, new ContainerCartUndercutter(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_undercutter.png");
         label = cart.getCommandSenderName();
         ySize = 205;
     }

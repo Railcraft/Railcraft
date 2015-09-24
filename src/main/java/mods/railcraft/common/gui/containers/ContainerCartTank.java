@@ -16,12 +16,12 @@ import mods.railcraft.common.gui.slots.SlotFluidFilter;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 
-public class ContainerTankCart extends RailcraftContainer {
+public class ContainerCartTank extends RailcraftContainer {
 
     private EntityCartTank tank;
     private final Slot input;
 
-    public ContainerTankCart(InventoryPlayer inventoryplayer, EntityCartTank cart) {
+    public ContainerCartTank(InventoryPlayer inventoryplayer, EntityCartTank cart) {
         super(cart);
         this.tank = cart;
 

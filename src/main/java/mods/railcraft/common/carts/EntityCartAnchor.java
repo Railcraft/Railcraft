@@ -66,6 +66,11 @@ public class EntityCartAnchor extends CartContainerBase implements ICartContents
     }
 
     @Override
+    public ICartType getCartType() {
+        return EnumCart.ANCHOR;
+    }
+
+    @Override
     public void initEntityFromItem(ItemStack stack) {
         super.initEntityFromItem(stack);
         long fuel = ItemCartAnchor.getFuel(stack);

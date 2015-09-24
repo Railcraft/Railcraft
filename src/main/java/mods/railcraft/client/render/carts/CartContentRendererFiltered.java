@@ -10,10 +10,16 @@ package mods.railcraft.client.render.carts;
 
 import mods.railcraft.client.render.RenderFakeBlock;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
+import mods.railcraft.client.render.RenderTools;
 import mods.railcraft.common.carts.EntityCartFiltered;
 import mods.railcraft.common.carts.EntityCartTank;
+import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
+import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -41,6 +47,48 @@ public class CartContentRendererFiltered extends CartContentRenderer {
     public void renderOther(RenderCart renderer, EntityMinecart cart, float light, float time, int x, int y, int z) {
     }
 
+    public void renderFilterItem(RenderCart renderer, EntityCartFiltered cart, float light, float time, int x, int y, int z) {
+        if (!cart.hasFilter())
+            return;
+
+        GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+//            GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_BLEND);
+//        GL11.glEnable(GL11.GL_CULL_FACE);
+
+//        float pix = RenderTools.PIXEL;
+//        float shift = 0.5F;
+//        float scale = 0.6F;
+
+//        float yOffset = firestoneTile.preYOffset + (firestoneTile.yOffset - firestoneTile.preYOffset) * time;
+//        GL11.glTranslatef((float) x + 0.5F, (float) y + 0.5F + yOffset, (float) z + 0.5F);
+        GL11.glTranslatef(0, 1, 0);
+
+
+//        GL11.glTranslatef(shift, shift, shift);
+//        GL11.glScalef(scale, scale, scale);
+//        GL11.glTranslatef(-shift, -shift, -shift);
+
+//        GL11.glTranslatef(0, 0, 1 - 0.02F);
+
+        EntityItem entityitem = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem());
+        entityitem.getEntityItem().stackSize = 1;
+        entityitem.hoverStart = 0.0F;
+
+        RenderItem.renderInFrame = true;
+        RenderManager.instance.renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+        if (!RenderManager.instance.options.fancyGraphics) {
+            GL11.glRotatef(180, 0, 1, 0);
+            RenderManager.instance.renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+            GL11.glRotatef(-180, 0, 1, 0);
+        }
+        RenderItem.renderInFrame = false;
+
+        GL11.glPopAttrib();
+        GL11.glPopMatrix();
+    }
+
     @Override
     public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
         super.render(renderer, cart, light, time);
@@ -58,41 +106,42 @@ public class CartContentRendererFiltered extends CartContentRenderer {
         renderOther(renderer, cart, light, time, x, y, z);
 
         EntityCartFiltered cartFiltered = (EntityCartFiltered) cart;
-        ItemStack filter = cartFiltered.getFilterItem();
-
-        if (filter != null && filter.getItem() != null) {
-
-            GL11.glPushMatrix();
-            GL11.glScalef(FILTER_SCALE_X, FILTER_SCALE_Y, FILTER_SCALE_Z);
-            GL11.glTranslatef(0, -0.4f, 0);
-
-            renderer.bindTex(TextureMap.locationItemsTexture);
-
-            int meta = filter.getItemDamage();
-            for (int pass = 0; pass < filter.getItem().getRenderPasses(meta); ++pass) {
-                IIcon texture = filter.getItem().getIconFromDamageForRenderPass(meta, pass);
-                if (texture == null)
-                    continue;
-
-                int color = filter.getItem().getColorFromItemStack(filter, pass);
-
-                float c1 = (float) (color >> 16 & 255) / 255.0F;
-                float c2 = (float) (color >> 8 & 255) / 255.0F;
-                float c3 = (float) (color & 255) / 255.0F;
-
-                float dim = 0.7f;
-
-                GL11.glColor4f(c1 * light * dim, c2 * light * dim, c3 * light * dim, 1.0F);
-
-                Tessellator tess = Tessellator.instance;
-                tess.setBrightness(filterSign.template.getMixedBrightnessForBlock(cart.worldObj, x, y, z));
-
-                filterSign.texture[0] = texture;
-                RenderFakeBlock.renderBlockForEntity(filterSign, cart.worldObj, x, y, z, false, true);
-            }
-
-            GL11.glPopMatrix();
-        }
+        renderFilterItem(renderer, cartFiltered, light, time, x, y, z);
+//        ItemStack filter = cartFiltered.getFilterItem();
+//
+//        if (filter != null && filter.getItem() != null) {
+//
+//            GL11.glPushMatrix();
+//            GL11.glScalef(FILTER_SCALE_X, FILTER_SCALE_Y, FILTER_SCALE_Z);
+//            GL11.glTranslatef(0, -0.4f, 0);
+//
+//            renderer.bindTex(TextureMap.locationItemsTexture);
+//
+//            int meta = filter.getItemDamage();
+//            for (int pass = 0; pass < filter.getItem().getRenderPasses(meta); ++pass) {
+//                IIcon texture = filter.getItem().getIconFromDamageForRenderPass(meta, pass);
+//                if (texture == null)
+//                    continue;
+//
+//                int color = filter.getItem().getColorFromItemStack(filter, pass);
+//
+//                float c1 = (float) (color >> 16 & 255) / 255.0F;
+//                float c2 = (float) (color >> 8 & 255) / 255.0F;
+//                float c3 = (float) (color & 255) / 255.0F;
+//
+//                float dim = 0.7f;
+//
+//                GL11.glColor4f(c1 * light * dim, c2 * light * dim, c3 * light * dim, 1.0F);
+//
+//                Tessellator tess = Tessellator.instance;
+//                tess.setBrightness(filterSign.template.getMixedBrightnessForBlock(cart.worldObj, x, y, z));
+//
+//                filterSign.texture[0] = texture;
+//                RenderFakeBlock.renderBlockForEntity(filterSign, cart.worldObj, x, y, z, false, true);
+//            }
+//
+//            GL11.glPopMatrix();
+//        }
 
         GL11.glPopAttrib();
         GL11.glPopMatrix();

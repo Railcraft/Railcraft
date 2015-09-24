@@ -116,11 +116,6 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IE
     }
 
     @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.TANK.getTag());
-    }
-
-    @Override
     protected void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
 
@@ -170,7 +165,7 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IE
 
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return EnumCart.getCartType(stack) == EnumCart.TANK;
+        return EnumCart.getCartType(stack) == getCartType();
     }
 
 }

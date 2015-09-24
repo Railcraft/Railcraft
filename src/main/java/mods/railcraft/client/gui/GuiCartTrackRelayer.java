@@ -12,7 +12,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.StatCollector;
 import mods.railcraft.common.carts.EntityCartTrackRelayer;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.containers.ContainerTrackRelayer;
+import mods.railcraft.common.gui.containers.ContainerCartTrackRelayer;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 
 /**
@@ -25,7 +25,7 @@ public class GuiCartTrackRelayer extends EntityGui {
     private EntityCartTrackRelayer cart;
 
     public GuiCartTrackRelayer(InventoryPlayer inv, EntityCartTrackRelayer cart) {
-        super(cart, new ContainerTrackRelayer(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_track_relayer.png");
+        super(cart, new ContainerCartTrackRelayer(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_track_relayer.png");
         label = cart.getCommandSenderName();
         this.cart = cart;
     }

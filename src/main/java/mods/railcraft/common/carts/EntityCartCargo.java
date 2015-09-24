@@ -13,6 +13,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
@@ -42,6 +43,11 @@ public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
     }
 
     @Override
+    public ICartType getCartType() {
+        return EnumCart.CARGO;
+    }
+
+    @Override
     public List<ItemStack> getItemsDropped() {
         List<ItemStack> items = new ArrayList<ItemStack>();
         if (RailcraftConfig.doCartsBreakOnDrop()) {
@@ -62,7 +68,7 @@ public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
 
     @Override
     public Block func_145820_n() {
-        return Blocks.chest;
+        return Blocks.trapped_chest;
     }
 
     @Override
@@ -77,6 +83,9 @@ public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        ItemStack filter = getFilterItem();
+        if (filter != null && !InvTools.isItemEqual(stack, filter))
+            return false;
         if (!RailcraftConfig.chestAllowLiquids())
             return getStackInSlot(slot) == null || !FluidItemHelper.isContainer(stack);
         return true;
