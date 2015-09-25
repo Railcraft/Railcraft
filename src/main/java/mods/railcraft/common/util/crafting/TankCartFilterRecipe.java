@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.util.crafting;
 
-import mods.railcraft.common.carts.EntityCartTank;
+import mods.railcraft.common.carts.EntityCartFiltered;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import net.minecraft.inventory.InventoryCrafting;
@@ -17,7 +17,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TankCartFilterRecipe implements IRecipe {
@@ -59,7 +58,7 @@ public class TankCartFilterRecipe implements IRecipe {
             return null;
 
         container.stackSize = 1;
-        return EntityCartTank.getCartItemForFilter(cart, container);
+        return EntityCartFiltered.addFilterToCartItem(cart, container);
     }
 
     @Override

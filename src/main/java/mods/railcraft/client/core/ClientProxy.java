@@ -183,6 +183,10 @@ public class ClientProxy extends CommonProxy {
         if (stack != null)
             MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderTankCartItem());
 
+        stack = EnumCart.CARGO.getCartItem();
+        if (stack != null)
+            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderTankCartItem());
+
         Minecraft.getMinecraft().entityRenderer.debugViewDirection = 0;
         FMLCommonHandler.instance().bus().register(new DebugViewTicker());
 

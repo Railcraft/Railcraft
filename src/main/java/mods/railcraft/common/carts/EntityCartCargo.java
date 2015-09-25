@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
+    private static final byte SLOTS_FILLED_DATA_ID = 25;
+
     public EntityCartCargo(World world) {
         super(world);
     }
@@ -45,6 +47,27 @@ public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
     @Override
     public ICartType getCartType() {
         return EnumCart.CARGO;
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        dataWatcher.addObject(SLOTS_FILLED_DATA_ID, new Integer(-1));
+    }
+
+    public int getSlotsFilled() {
+        return dataWatcher.getWatchableObjectInt(SLOTS_FILLED_DATA_ID);
+    }
+
+    private void setSlotsFilled(int slotsFilled) {
+        dataWatcher.updateObject(SLOTS_FILLED_DATA_ID, slotsFilled);
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if (Game.isHost(worldObj))
+            setSlotsFilled(InvTools.countStacks(this));
     }
 
     @Override

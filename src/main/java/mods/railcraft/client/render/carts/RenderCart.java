@@ -42,7 +42,7 @@ public class RenderCart extends Render implements IRenderer {
 
         renderersCore.put(EntityLocomotive.class, LocomotiveRenderer.INSTANCE);
 
-        renderersContent.put(EntityCartCargo.class, new CartContentRendererFiltered());
+        renderersContent.put(EntityCartCargo.class, new CartContentRendererCargo());
         renderersContent.put(EntityCartTank.class, new CartContentRendererTank());
         renderersContent.put(CartExplosiveBase.class, new CartContentRendererTNT());
         renderersContent.put(CartMaintenanceBase.class, new CartContentRendererMaintance());

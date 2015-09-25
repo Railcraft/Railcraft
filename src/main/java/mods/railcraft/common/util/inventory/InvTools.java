@@ -384,6 +384,16 @@ public abstract class InvTools {
         return count;
     }
 
+    public static int countStacks(IInventory inv) {
+        int count = 0;
+        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+            ItemStack stack = slot.getStackInSlot();
+            if (stack != null)
+                count++;
+        }
+        return count;
+    }
+
     /**
      * Returns true if the inventory contains the specified item.
      *

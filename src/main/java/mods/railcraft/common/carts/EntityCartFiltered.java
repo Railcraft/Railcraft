@@ -12,32 +12,14 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import mods.railcraft.api.carts.IFluidCart;
-import mods.railcraft.api.carts.ILiquidTransfer;
 import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.fluids.FluidItemHelper;
-import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.StandardTank;
-import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.DataTools;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -73,12 +55,7 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IE
         return filter;
     }
 
-    public static ItemStack getCartItemForFilter(ItemStack filter) {
-        ItemStack stack = EnumCart.TANK.getCartItem();
-        return getCartItemForFilter(stack, filter);
-    }
-
-    public static ItemStack getCartItemForFilter(ItemStack cart, ItemStack filter) {
+    public static ItemStack addFilterToCartItem(ItemStack cart, ItemStack filter) {
         if (filter != null) {
             NBTTagCompound nbt = InvTools.getItemData(cart);
             NBTTagCompound filterNBT = new NBTTagCompound();
@@ -86,6 +63,11 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IE
             nbt.setTag("filterStack", filterNBT);
         }
         return cart;
+    }
+
+    public ItemStack getFilteredCartItem(ItemStack filter) {
+        ItemStack stack = getCartType().getCartItem();
+        return addFilterToCartItem(stack, filter);
     }
 
     @Override
@@ -97,7 +79,7 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IE
 
     @Override
     public ItemStack getCartItem() {
-        ItemStack stack = getCartItemForFilter(getFilterItem());
+        ItemStack stack = getFilteredCartItem(getFilterItem());
         if (hasCustomInventoryName())
             stack.setStackDisplayName(getCommandSenderName());
         return stack;

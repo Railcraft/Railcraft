@@ -10,6 +10,8 @@ package mods.railcraft.client.render.carts;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import mods.railcraft.client.render.models.carts.ModelLowSidesMinecart;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelMinecart;
@@ -21,7 +23,6 @@ import mods.railcraft.common.carts.*;
 import mods.railcraft.common.core.RailcraftConstants;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CartModelManager {
@@ -32,17 +33,21 @@ public class CartModelManager {
     public final static Map<Class, ModelTextured> modelsContents = new HashMap<Class, ModelTextured>();
 
     static {
+        ModelLowSidesMinecart lowSides = new ModelLowSidesMinecart();
+        modelsCore.put(EntityCartTank.class, lowSides);
+        modelsCore.put(EntityCartCargo.class, lowSides);
+
         ModelTextured tank = new ModelSimpleCube();
         tank.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_tank.png");
         tank.doBackFaceCulling(false);
         modelsContents.put(EntityCartTank.class, tank);
 
         modelsContents.put(EntityCartGift.class, new ModelGift());
-        
+
         ModelTextured maint = new ModelMaintance();
         maint.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_undercutter.png");
         modelsContents.put(EntityCartUndercutter.class, maint);
-        
+
         maint = new ModelMaintance();
         maint.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_track_relayer.png");
         modelsContents.put(EntityCartTrackRelayer.class, maint);
