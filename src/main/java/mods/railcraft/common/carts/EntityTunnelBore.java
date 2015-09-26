@@ -10,6 +10,7 @@ package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
 
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
@@ -718,15 +719,13 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
         if (!canMineBlock(x, y, z, block, meta))
             return false;
-        
+
         // Start of Event Fire
-        GameProfile railcraftFakePlayer = new GameProfile(UUID.fromString("41C82C87-7AfB-4024-BA57-13D2C99CAE78"), "[Railcraft]");
-        BreakEvent breakEvent = new BreakEvent(x, y, z, worldObj, worldObj.getBlock(x, y, z), worldObj.getBlockMetadata(x, y, z), net.minecraftforge.common.util.FakePlayerFactory.get((WorldServer)worldObj, railcraftFakePlayer));
+        BreakEvent breakEvent = new BreakEvent(x, y, z, worldObj, block, meta, PlayerPlugin.getFakePlayer((WorldServer) worldObj, posX, posY, posZ));
         MinecraftForge.EVENT_BUS.post(breakEvent);
 
-        if (breakEvent.isCanceled()) {
+        if (breakEvent.isCanceled())
             return false;
-        }
         // End of Event Fire
 
         ArrayList<ItemStack> items = block.getDrops(worldObj, x, y, z, meta, 0);
