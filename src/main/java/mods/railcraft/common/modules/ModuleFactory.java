@@ -72,7 +72,7 @@ public class ModuleFactory extends RailcraftModule {
                     "BMB",
                     "MBM",
                     'B', "ingotBrick",
-                    'M', new ItemStack(Blocks.sand));
+                    'M', "sand");
 
             if (RailcraftToolItems.getCoalCoke() != null)
                 RailcraftCraftingManager.cokeOven.addRecipe(new ItemStack(Items.coal, 1, 0), true, false, RailcraftToolItems.getCoalCoke(), Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE), COKE_COOK_TIME);
@@ -300,7 +300,7 @@ public class ModuleFactory extends RailcraftModule {
                     "IPI",
                     'I', "ingotIron",
                     'P', Blocks.piston,
-                    'C', Blocks.crafting_table);
+                    'C', "craftingTableWood");
         } else
             RollingMachineCraftingManager.copyRecipesToWorkbench();
 
@@ -403,7 +403,7 @@ public class ModuleFactory extends RailcraftModule {
                         " S ",
                         " B ",
                         'B', EnumBrick.SANDY.get(BrickVariant.BRICK, 1),
-                        'S', new ItemStack(Blocks.sand));
+                        'S', "sand");
             }
         }
 

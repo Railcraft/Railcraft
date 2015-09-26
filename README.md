@@ -35,9 +35,9 @@ More information about issue Labels can be found [here](https://github.com/Cover
 
 ## Contributing
 
-The Official Railcraft Project welcomes contributions from anyone, provided they have signed the Contributor Licensing Agreement (CLA) found [here](https://www.clahub.com/agreements/CovertJaguar/Railcraft).
+The Official Railcraft Project welcomes contributions from anyone, provided they have signed the Contributor Licensing Agreement (CLA) found [here](https://cla-assistant.io/CovertJaguar/Railcraft).
 
-Signing the CLA is simple, just follow the link, fill out your name and email, and hit the "I Agree" button and you are good to go.
+Signing the CLA is simple, just follow the link, and hit the "I Agree" button and you are good to go.
 
 Regarding new features/behavior changes, please submit a Suggestion Issue to the Tracker before you write a single line of code. Keeping everyone on the same page saves time and effort and reduces negative experiences all around when a change turns out to be controversial.
 

@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.tracks;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -23,7 +24,7 @@ import mods.railcraft.common.carts.EntityLocomotive.LocoSpeed;
 
 public class TrackLimiter extends TrackBaseRailcraft implements ITrackPowered {
 
-    private static final int NUM_MODES = 4;
+    private static final int NUM_MODES = 5;
     private boolean powered = false;
     private byte mode = 0;
 
@@ -35,7 +36,7 @@ public class TrackLimiter extends TrackBaseRailcraft implements ITrackPowered {
     @Override
     public IIcon getIcon() {
         if (isPowered()) {
-            return getIcon(mode % NUM_MODES);
+            return getIcon(mode);
         }
         return getIcon(NUM_MODES);
     }
@@ -47,6 +48,7 @@ public class TrackLimiter extends TrackBaseRailcraft implements ITrackPowered {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
             if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
                 mode++;
+                mode %= NUM_MODES;
                 crowbar.onWhack(player, current, getX(), getY(), getZ());
                 sendUpdateToClient();
                 return true;
@@ -59,7 +61,7 @@ public class TrackLimiter extends TrackBaseRailcraft implements ITrackPowered {
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             if (cart instanceof EntityLocomotive) {
-                ((EntityLocomotive) cart).setSpeed(LocoSpeed.VALUES[mode % NUM_MODES]);
+                ((EntityLocomotive) cart).setSpeed(LocoSpeed.VALUES[mode]);
             }
         }
     }
@@ -83,14 +85,20 @@ public class TrackLimiter extends TrackBaseRailcraft implements ITrackPowered {
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("powered", powered);
-        data.setByte("mode", mode);
+        data.setByte("mode5", mode);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         powered = data.getBoolean("powered");
-        mode = data.getByte("mode");
+
+        if (data.hasKey("mode")) {
+            mode = data.getByte("mode");
+            mode %= 4;
+        } else {
+            mode = data.getByte("mode5");
+        }
     }
 
     @Override

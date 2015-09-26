@@ -77,7 +77,7 @@ public class ModuleStructures extends RailcraftModule {
                             "ISI",
                             "SIS",
                             'I', RailcraftItem.rebar.getRecipeObject(),
-                            'S', Blocks.stone);
+                            'S', "stone");
                 } else {
                     stack.stackSize = 4;
                     CraftingPlugin.addShapedRecipe(stack,
@@ -85,7 +85,7 @@ public class ModuleStructures extends RailcraftModule {
                             "SIS",
                             " S ",
                             'I', "ingotIron",
-                            'S', Blocks.stone);
+                            'S', "stone");
                 }
             }
         }
@@ -158,7 +158,7 @@ public class ModuleStructures extends RailcraftModule {
                     "SIS",
                     "SIS",
                     'I', RailcraftItem.rebar.getRecipeObject(),
-                    'S', Blocks.stone);
+                    'S', "stone");
             CraftingPlugin.addShapedRecipe(EnumPost.STONE_PLATFORM.getItem(),
                     " T ",
                     " I ",
