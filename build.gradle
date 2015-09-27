@@ -1,7 +1,7 @@
 allprojects {
-    apply plugin: 'java'
-    sourceCompatibility = 1.6
-    targetCompatibility = 1.6
+	apply plugin: 'java'
+	sourceCompatibility = 1.6
+	targetCompatibility = 1.6
 }
 
 evaluationDependsOn(':version')
@@ -72,8 +72,8 @@ configurations{
 }
 
 dependencies {
-	api 'net.industrial-craft:industrialcraft-2:2.2.717-experimental:api'
-	api 'com.mod-buildcraft:buildcraft:6.4.11:dev'
+	api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
+	api 'com.mod-buildcraft:buildcraft:6.4.16:dev'
 }
 
 processResources
@@ -134,6 +134,8 @@ jar {
 				exclude '**/ic2/api/network/**'
 				exclude '**/ic2/api/event/**'
 				exclude '**/ic2/api/reactor/**'
+				exclude '**/ic2/api/package-info.java'
+				exclude '**/ic2/api/package-info.class'
 			}
 		}
 	}
@@ -144,7 +146,7 @@ jar {
 	into ('forestry/api') {
 		from project.apiForestry + "/LICENSE.txt"
 	}
-        into ('thaumcraft/api') {
+		into ('thaumcraft/api') {
 		from project.apiThaumcraft + "/LICENSE"
 	}
 	into ('cofh/api') {
@@ -239,6 +241,8 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 				exclude '**/ic2/api/network/**'
 				exclude '**/ic2/api/event/**'
 				exclude '**/ic2/api/reactor/**'
+				exclude '**/ic2/api/package-info.java'
+				exclude '**/ic2/api/package-info.class'
 			}
 		}
 	}
