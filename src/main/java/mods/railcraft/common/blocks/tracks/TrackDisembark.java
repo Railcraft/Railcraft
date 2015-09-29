@@ -11,7 +11,9 @@ package mods.railcraft.common.blocks.tracks;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -60,16 +62,7 @@ public class TrackDisembark extends TrackBaseRailcraft implements ITrackPowered 
                 z += offset;
             else
                 z -= offset;
-            Entity rider = cart.riddenByEntity;
-//            rider.mountEntity(null);
-            rider.ridingEntity = null;
-            cart.riddenByEntity = null;
-            if (rider instanceof EntityPlayerMP) {
-                EntityPlayerMP player = ((EntityPlayerMP) rider);
-                player.playerNetServerHandler.sendPacket(new S1BPacketEntityAttach(0, rider, null));
-                player.setPositionAndUpdate(x + 0.5, getY() + 1, z + 0.5);
-            } else
-                rider.setLocationAndAngles(x + 0.5, getY() + 1, z + 0.5, rider.rotationYaw, rider.rotationPitch);
+            CartUtils.dismount(cart, x + 0.5, getY() + 1, z + 0.5);
             cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
         }
     }
