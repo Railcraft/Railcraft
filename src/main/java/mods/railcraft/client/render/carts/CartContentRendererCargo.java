@@ -71,7 +71,7 @@ public class CartContentRendererCargo extends CartContentRenderer {
                 float ty = (float) rand.nextGaussian() * 0.01F;
                 float tz = (float) rand.nextGaussian() * 0.2F;
                 GL11.glTranslatef(tx, ty, tz);
-                RenderManager.instance.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+                renderEntityItem(item);
                 GL11.glPopMatrix();
             }
         } else {
@@ -94,7 +94,7 @@ public class CartContentRendererCargo extends CartContentRenderer {
                 float ty = (float) rand.nextGaussian() * 0.06F;
                 float tz = (float) rand.nextGaussian() * 0.15F;
                 GL11.glTranslatef(tx, ty, tz);
-                RenderManager.instance.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+                renderEntityItem(item);
                 GL11.glPopMatrix();
             }
         }
@@ -104,6 +104,13 @@ public class CartContentRendererCargo extends CartContentRenderer {
 
         GL11.glPopAttrib();
         GL11.glPopMatrix();
+    }
+
+    private void renderEntityItem(EntityItem item) {
+        try {
+            RenderManager.instance.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+        } catch (Exception ex) {
+        }
     }
 
     @Override
