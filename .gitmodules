@@ -13,3 +13,6 @@
 [submodule "api/thaumcraft/thaumcraft/api"]
 	path = api/thaumcraft/thaumcraft/api
 	url = https://github.com/Azanor/thaumcraft-api.git
+[submodule "ic2classic"]
+	path = api\\ic2classic
+	url = https://github.com/TinyModularThings/IC2Classic.git

@@ -12,6 +12,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import ic2.api.energy.tile.IEnergySourceInfo;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,7 +29,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitterDelegate, IGuiReturnHandler {
+public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEnergySourceInfo, IEmitterDelegate, IGuiReturnHandler {
     private static final int[] OUTPUT_LEVELS = {512, 2048};
     private boolean waitTillEmpty = true;
     private TileEntity emitterDelegate;
@@ -213,5 +214,10 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
                 Game.logErrorAPI("IndustrialCraft", error);
             }
         return emitterDelegate;
+    }
+
+    @Override
+    public int getMaxEnergyAmount() {
+        return transformerUpgrades > 0 ? OUTPUT_LEVELS[1] : OUTPUT_LEVELS[0];
     }
 }

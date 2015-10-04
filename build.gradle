@@ -33,6 +33,7 @@ ext.apiRailcraft = "./api/railcraft"
 ext.apiForestry = "./api/forestry"
 ext.apiRedstoneFlux = "./api/redstoneflux"
 ext.apiThaumcraft = "./api/thaumcraft"
+ext.apiIC2Classic = "./api/IC2Classic"
 
 ext.dirLang = "./lang"
 
@@ -52,6 +53,7 @@ sourceSets {
 			srcDir project.apiForestry
 			srcDir project.apiRedstoneFlux + "/src/main/java"
 			srcDir project.apiThaumcraft
+			srcDir project.apiIC2Classic
 		}
 		resources {
 			srcDir project.dirLang
@@ -59,25 +61,16 @@ sourceSets {
 	}
 }
 
-repositories {
-	maven {
-		name = "ic2"
-		url = "http://maven.ic2.player.to/"
-	}
-}
-
-configurations{
+configurations {
 	api
 	compile.extendsFrom api
 }
 
 dependencies {
-	api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
 	api 'com.mod-buildcraft:buildcraft:6.4.16:dev'
 }
 
-processResources
-{
+processResources {
 	// this will ensure that this task is redone when the versions change.
 	inputs.property "version", project.version
 	inputs.property "mcversion", project.minecraft.version
@@ -146,7 +139,7 @@ jar {
 	into ('forestry/api') {
 		from project.apiForestry + "/LICENSE.txt"
 	}
-		into ('thaumcraft/api') {
+	into ('thaumcraft/api') {
 		from project.apiThaumcraft + "/LICENSE"
 	}
 	into ('cofh/api') {
