@@ -21,3 +21,4 @@ private/
 *.iws
 out/
 bin/
+classes/
