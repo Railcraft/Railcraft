@@ -212,6 +212,7 @@ public class ModuleCore extends RailcraftModule {
         }
 
         // Items
+        replaceVanillaCart(EnumCart.COMMAND_BLOCK, Items.command_block_minecart, "MinecartCommandBlock", 40);
         replaceVanillaCart(EnumCart.BASIC, Items.minecart, "MinecartRideable", 42);
         replaceVanillaCart(EnumCart.CHEST, Items.chest_minecart, "MinecartChest", 43);
         replaceVanillaCart(EnumCart.FURNACE, Items.furnace_minecart, "MinecartFurnace", 44);
