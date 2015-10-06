@@ -8,8 +8,8 @@
  */
 package mods.railcraft.client.core;
 
+import mods.railcraft.client.render.carts.*;
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
-import mods.railcraft.common.blocks.signals.TileBoxController;
 import mods.railcraft.common.blocks.signals.TileSignalFoundation;
 import org.apache.logging.log4j.Level;
 import net.minecraft.client.Minecraft;
@@ -25,10 +25,6 @@ import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import mods.railcraft.client.render.*;
-import mods.railcraft.client.render.carts.LocomotiveRendererDefault;
-import mods.railcraft.client.render.carts.LocomotiveRendererElectric;
-import mods.railcraft.client.render.carts.RenderCart;
-import mods.railcraft.client.render.carts.RenderItemLocomotive;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid;
 import mods.railcraft.client.sounds.RCSoundHandler;
@@ -181,7 +177,7 @@ public class ClientProxy extends CommonProxy {
 
         stack = EnumCart.TANK.getCartItem();
         if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderTankCartItem());
+            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderCartItemTank());
 
         stack = EnumCart.CARGO.getCartItem();
         if (stack != null)

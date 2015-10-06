@@ -6,33 +6,33 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.client.render;
+package mods.railcraft.client.render.carts;
 
-import java.util.Random;
-import net.minecraft.item.ItemStack;
+import mods.railcraft.client.render.RenderTools;
+import mods.railcraft.common.carts.EntityCartTank;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
-import org.lwjgl.opengl.GL11;
-import mods.railcraft.common.carts.EntityCartTank;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
+import org.lwjgl.opengl.GL11;
 
-import static net.minecraftforge.client.IItemRenderer.ItemRenderType.*;
+import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderTankCartItem implements IItemRenderer {
+public class RenderCartItemCargo implements IItemRenderer {
 
     private static final ResourceLocation BLOCK_TEXTURE = TextureMap.locationBlocksTexture;
     private static final ResourceLocation ITEM_TEXTURE = TextureMap.locationItemsTexture;
@@ -41,7 +41,7 @@ public class RenderTankCartItem implements IItemRenderer {
 
     @Override
     public boolean handleRenderType(ItemStack stack, ItemRenderType type) {
-        switch(type){
+        switch (type) {
             case INVENTORY:
             case ENTITY:
             case EQUIPPED:
@@ -89,7 +89,7 @@ public class RenderTankCartItem implements IItemRenderer {
         int meta = stack.getItemDamage();
         for (int pass = 0; pass < stack.getItem().getRenderPasses(meta); ++pass) {
             IIcon icon = stack.getItem().getIconFromDamageForRenderPass(meta, pass);
-            if(icon == null)
+            if (icon == null)
                 continue;
             int color = stack.getItem().getColorFromItemStack(stack, pass);
             float c1 = (float) (color >> 16 & 255) / 255.0F;
@@ -156,7 +156,7 @@ public class RenderTankCartItem implements IItemRenderer {
         int meta = stack.getItemDamage();
         for (int pass = 0; pass < stack.getItem().getRenderPasses(meta); ++pass) {
             IIcon icon = stack.getItem().getIconFromDamageForRenderPass(meta, pass);
-            if(icon == null)
+            if (icon == null)
                 continue;
             int color = stack.getItem().getColorFromItemStack(stack, pass);
             float c1 = (float) (color >> 16 & 255) / 255.0F;
@@ -244,47 +244,86 @@ public class RenderTankCartItem implements IItemRenderer {
     }
 
     private void render(ItemRenderType type, ItemStack stack) {
+
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
+//        GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        
-        
+
         IIcon cartTexture = stack.getIconIndex();
         renderItem.renderIcon(0, 0, cartTexture, 16, 16);
 
-
         ItemStack filter = EntityCartTank.getFilterFromCartItem(stack);
-
         if (filter != null) {
+            EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, filter);
+            item.getEntityItem().stackSize = 1;
+            item.hoverStart = 0.0F;
 
-            int meta = filter.getItemDamage();
+            boolean renderIn3D = RenderBlocks.renderItemIn3d(Block.getBlockFromItem(item.getEntityItem().getItem()).getRenderType());
 
-            float scale = 0.6f;
-            GL11.glScalef(scale, scale, 1);
-            GL11.glTranslatef(0, 11f, 0);
-            if (type == ItemRenderType.ENTITY)
-                GL11.glTranslatef(0, 0, -0.01f);
+            RenderItem.renderInFrame = true;
 
-            for (int pass = 0; pass < filter.getItem().getRenderPasses(meta); ++pass) {
-                IIcon bucketTexture = filter.getItem().getIconFromDamageForRenderPass(meta, pass);
-                if (bucketTexture == null)
-                    continue;
-                int color = filter.getItem().getColorFromItemStack(filter, pass);
-                float c1 = (float) (color >> 16 & 255) / 255.0F;
-                float c2 = (float) (color >> 8 & 255) / 255.0F;
-                float c3 = (float) (color & 255) / 255.0F;
-
-                if (renderItem.renderWithColor)
-                    GL11.glColor4f(c1, c2, c3, 1.0F);
-
-                renderItem.renderIcon(0, 0, bucketTexture, 16, 16);
+            float scale = 18F;
+            GL11.glScalef(scale, scale, scale);
+            GL11.glTranslatef(0.45F, 0.5F, 1f);
+            GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
+            if(renderIn3D) {
+                GL11.glRotatef(45.0F, 1.0F, 1.0F, 0.0F);
+//                GL11.glRotatef(45.0F, 1.0F, 1.0F, 0.0F);
             }
+
+            RenderManager.instance.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+
+            RenderItem.renderInFrame = false;
         }
+
 
         GL11.glPopAttrib();
         GL11.glPopMatrix();
+
+//        GL11.glPushMatrix();
+//        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+//        GL11.glEnable(GL11.GL_DEPTH_TEST);
+//        GL11.glEnable(GL11.GL_BLEND);
+//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//
+//
+//        IIcon cartTexture = stack.getIconIndex();
+//        renderItem.renderIcon(0, 0, cartTexture, 16, 16);
+//
+//
+//        ItemStack filter = EntityCartTank.getFilterFromCartItem(stack);
+//
+//        if (filter != null) {
+//
+//            int meta = filter.getItemDamage();
+//
+//            float scale = 0.6f;
+//            GL11.glScalef(scale, scale, 1);
+//            GL11.glTranslatef(0, 11f, 0);
+//            if (type == ItemRenderType.ENTITY)
+//                GL11.glTranslatef(0, 0, -0.01f);
+//
+//            for (int pass = 0; pass < filter.getItem().getRenderPasses(meta); ++pass) {
+//                IIcon bucketTexture = filter.getItem().getIconFromDamageForRenderPass(meta, pass);
+//                if (bucketTexture == null)
+//                    continue;
+//                int color = filter.getItem().getColorFromItemStack(filter, pass);
+//                float c1 = (float) (color >> 16 & 255) / 255.0F;
+//                float c2 = (float) (color >> 8 & 255) / 255.0F;
+//                float c3 = (float) (color & 255) / 255.0F;
+//
+//                if (renderItem.renderWithColor)
+//                    GL11.glColor4f(c1, c2, c3, 1.0F);
+//
+//                renderItem.renderIcon(0, 0, bucketTexture, 16, 16);
+//            }
+//        }
+//
+//        GL11.glPopAttrib();
+//        GL11.glPopMatrix();
     }
 
 }
