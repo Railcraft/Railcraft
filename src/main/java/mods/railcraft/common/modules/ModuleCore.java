@@ -9,6 +9,8 @@
 package mods.railcraft.common.modules;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -19,6 +21,7 @@ import java.util.Set;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.commands.CommandDebug;
+import net.minecraft.entity.Entity;
 import org.apache.logging.log4j.Level;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -175,6 +178,7 @@ public class ModuleCore extends RailcraftModule {
 
         FMLCommonHandler.instance().bus().register(new CraftingHandler());
         FMLCommonHandler.instance().bus().register(new SoundLimiterTicker());
+        FMLCommonHandler.instance().bus().register(this);
 
         if (RailcraftConfig.useCollisionHandler()) {
             if (EntityMinecart.getCollisionHandler() != null)
@@ -320,7 +324,6 @@ public class ModuleCore extends RailcraftModule {
     }
 
     @Override
-
     public void initSecond() {
         if (RailcraftConfig.useCreosoteFurnaceRecipes() || !EnumMachineAlpha.COKE_OVEN.isAvaliable()) {
             FurnaceRecipes.smelting().func_151394_a(new ItemStack(Items.coal, 1, 0), FluidContainers.getCreosoteOilBottle(2), 0.0F);
@@ -398,5 +401,15 @@ public class ModuleCore extends RailcraftModule {
 //        System.out.printf("Ran for %d ticks.%n", ticks);
 //        System.out.printf("Steam Produced=%s%n", tankSteam.getFluidAmount());
 //        System.exit(0);
+    }
+
+    @SubscribeEvent
+    public void tick(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.player.ridingEntity instanceof EntityMinecart) {
+            Entity p = event.player;
+            EntityMinecart cart = (EntityMinecart) event.player.ridingEntity;
+            if (Train.getTrain(cart).size() > 1)
+                CartUtils.dismount(cart, p.posX, p.posY + 1, p.posZ);
+        }
     }
 }

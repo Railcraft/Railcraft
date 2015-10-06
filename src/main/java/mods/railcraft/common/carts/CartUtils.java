@@ -9,27 +9,32 @@
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IMinecart;
+import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.server.S1BPacketEntityAttach;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CartUtils {
@@ -39,10 +44,10 @@ public class CartUtils {
 
     /**
      * Spawns a new cart entity using the provided item.
-     *
+     * <p/>
      * The backing item must implement <code>IMinecartItem</code> and/or extend
      * <code>ItemMinecart</code>.
-     *
+     * <p/>
      * Generally Forge requires all cart items to extend ItemMinecart.
      *
      * @param owner The player name that should used as the owner
@@ -53,7 +58,7 @@ public class CartUtils {
      * @param y     y-Coord
      * @param z     z-Coord
      * @return the cart placed or null if failed
-     * @see IMinecartItem, ItemMinecart
+     * @see IMinecartItem , ItemMinecart
      */
     public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, int x, int y, int z) {
         if (cart == null)
@@ -145,4 +150,17 @@ public class CartUtils {
         return carts;
     }
 
+    public static void dismount(EntityMinecart cart, double x, double y, double z) {
+        if (cart.riddenByEntity == null)
+            return;
+        Entity rider = cart.riddenByEntity;
+        rider.ridingEntity = null;
+        cart.riddenByEntity = null;
+        if (rider instanceof EntityPlayerMP) {
+            EntityPlayerMP player = ((EntityPlayerMP) rider);
+            player.playerNetServerHandler.sendPacket(new S1BPacketEntityAttach(0, rider, null));
+            player.setPositionAndUpdate(x, y, z);
+        } else
+            rider.setLocationAndAngles(x, y, z, rider.rotationYaw, rider.rotationPitch);
+    }
 }
