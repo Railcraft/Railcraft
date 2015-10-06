@@ -8,7 +8,10 @@
  */
 package mods.railcraft.common.util.inventory.wrappers;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -18,7 +21,7 @@ import net.minecraft.item.ItemStack;
  */
 public class InventoryIterator implements Iterable<IInvSlot> {
 
-    public static Iterable<IInvSlot> getIterable(IInventory inv) {
+    public static InventoryIterator getIterable(IInventory inv) {
         if (inv instanceof ISidedInventory)
             return new SidedInventoryIterator((ISidedInventory) inv);
         return new InventoryIterator(inv);
@@ -27,9 +30,18 @@ public class InventoryIterator implements Iterable<IInvSlot> {
     private final IInventory inv;
     private final int invSize;
 
-    private InventoryIterator(IInventory inv) {
+    protected InventoryIterator(IInventory inv) {
         this.inv = inv;
         this.invSize = inv.getSizeInventory();
+    }
+
+    public Iterable<IInvSlot> notNull() {
+        List<IInvSlot> filledSlots = new ArrayList<IInvSlot>(invSize);
+        for (IInvSlot slot : this) {
+            if (slot.getStackInSlot() != null)
+                filledSlots.add(slot);
+        }
+        return filledSlots;
     }
 
     @Override

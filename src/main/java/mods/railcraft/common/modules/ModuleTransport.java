@@ -20,7 +20,7 @@ import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.TankCartFilterRecipe;
+import mods.railcraft.common.util.crafting.CartFilterRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.init.Blocks;
@@ -166,7 +166,7 @@ public class ModuleTransport extends RailcraftModule {
                 cart.setContents(new ItemStack(Blocks.glass, 8));
             }
             CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), cart.getCartItem());
-            CraftingPlugin.addRecipe(new TankCartFilterRecipe());
+            CraftingPlugin.addRecipe(new CartFilterRecipe());
         }
 
         cart = EnumCart.CARGO;
@@ -178,7 +178,7 @@ public class ModuleTransport extends RailcraftModule {
                     'B', Blocks.trapped_chest,
                     'M', Items.minecart);
             CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), cart.getCartItem());
-            CraftingPlugin.addRecipe(new TankCartFilterRecipe());
+            CraftingPlugin.addRecipe(new CartFilterRecipe());
         }
 
     }

@@ -9,17 +9,19 @@
 package mods.railcraft.common.util.inventory.wrappers;
 
 import java.util.Iterator;
+
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SidedInventoryIterator implements Iterable<IInvSlot> {
+public class SidedInventoryIterator extends InventoryIterator {
 
     private final ISidedInventory inv;
 
-    SidedInventoryIterator(ISidedInventory inv) {
+    protected SidedInventoryIterator(ISidedInventory inv) {
+        super(inv);
         this.inv = inv;
     }
 

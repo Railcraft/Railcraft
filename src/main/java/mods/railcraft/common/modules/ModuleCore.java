@@ -144,7 +144,7 @@ public class ModuleCore extends RailcraftModule {
         RecipeSorter.register("railcraft:locomotive.painting", LocomotivePaintingRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
         RecipeSorter.register("railcraft:routing.table.copy", RoutingTableCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
         RecipeSorter.register("railcraft:routing.ticket.copy", RoutingTicketCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-        RecipeSorter.register("railcraft:tank.cart.filter", TankCartFilterRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+        RecipeSorter.register("railcraft:cart.filter", CartFilterRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
         OreDictionary.registerOre("chestWood", Blocks.chest);
         OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
