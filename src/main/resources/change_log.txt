@@ -1,3 +1,19 @@
+9.7.0.1:
+	NEW: Added Cargo Cart, a filterable Cart for moving items.
+	NEW: Locomotive Limiter can now put Locomotives into reverse. (contribution by cruck1000)
+	CHANGE: Tin Bushing can now spawn in Mineshaft and Workshop loot chests. (contribution by Yopu)
+	CHANGE: Loader/Unloader filter slots now match against custom Cart names. (contribution by Woodstone)
+	FIx: Fixed IFluidContainer dupe bugs (I hope).
+	FIX: Logging out while riding a cart should no longer take the cart with you (and break trains apart).
+	FIX: Tunnel Bore should now obey permission events when breaking blocks. (contribution by Dockter)
+	FIX: Animal Detector can now tell cows and mooshrooms apart. (contribution by cruck1000)
+	FIX: Added foundation to village workshop. (contribution by notabadminer)
+	FIX: Various Undercutter bugfixes. (contribution by Yopu)
+	FIX: Fixed crash when Goggles are disabled. (contribution by Yopu)
+	FIX: Loosen up Routing logic so that Locomotives don't have to be at the front of the train.
+	FIX: Ore Dictionary support expanded to newest standards. (contribution by Adaptivity)
+	FIX: Override Command Block Cart to fix interactivity issues. (contribution by liach)
+
 9.7.0.0:
 	FIX: Fix minor issue with Energy Loaders.
 
