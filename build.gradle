@@ -77,7 +77,7 @@ configurations{
 
 dependencies {
 	api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
-	compile 'IC2Classic:IC2Classic:1.1.1.5-1:api'
+	api 'IC2Classic:IC2Classic:1.1.1.5-1:api'
 	api 'com.mod-buildcraft:buildcraft:6.4.16:dev'
 }
 
@@ -151,7 +151,7 @@ jar {
 	into ('forestry/api') {
 		from project.apiForestry + "/LICENSE.txt"
 	}
-		into ('thaumcraft/api') {
+	into ('thaumcraft/api') {
 		from project.apiThaumcraft + "/LICENSE"
 	}
 	into ('cofh/api') {
@@ -241,7 +241,15 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
 				exclude '**/buildcraft/api/blueprints/**'
+				exclude '**/buildcraft/api/boards/**'
+				exclude '**/buildcraft/api/events/**'
+				exclude '**/buildcraft/api/facades/**'
 				exclude '**/buildcraft/api/filler/**'
+				exclude '**/buildcraft/api/fuels/**'
+				exclude '**/buildcraft/api/gates/**'
+				exclude '**/buildcraft/api/power/**'
+				exclude '**/buildcraft/api/recipes/**'
+				exclude '**/buildcraft/api/robots/**'
 				exclude '**/ic2/api/crops/**'
 				exclude '**/ic2/api/network/**'
 				exclude '**/ic2/api/event/**'
