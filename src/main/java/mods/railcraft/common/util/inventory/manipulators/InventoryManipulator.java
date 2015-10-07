@@ -8,17 +8,17 @@
  */
 package mods.railcraft.common.util.inventory.manipulators;
 
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInvSlot;
 import mods.railcraft.common.util.inventory.wrappers.InventoryIterator;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class InventoryManipulator {
@@ -98,7 +98,6 @@ public class InventoryManipulator {
     }
 
     /**
-     *
      * @param slot
      * @param stack
      * @param available Amount we can move
@@ -208,7 +207,8 @@ public class InventoryManipulator {
                     if (doRemove) {
                         stack.stackSize -= amountNeeded;
                         if (stack.stackSize <= 0)
-                            slot.setStackInSlot(null);
+                            stack = null;
+                        slot.setStackInSlot(stack);
                     }
                     amountNeeded = 0;
                     outputList.add(output);

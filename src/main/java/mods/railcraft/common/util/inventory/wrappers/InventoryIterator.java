@@ -83,7 +83,6 @@ public class InventoryIterator implements Iterable<IInvSlot> {
         @Override
         public void setStackInSlot(ItemStack stack) {
             inv.setInventorySlotContents(slot, stack);
-            inv.markDirty();
         }
 
         @Override
@@ -98,9 +97,7 @@ public class InventoryIterator implements Iterable<IInvSlot> {
 
         @Override
         public ItemStack decreaseStackInSlot() {
-            ItemStack stack = inv.decrStackSize(slot, 1);
-            inv.markDirty();
-            return stack;
+            return inv.decrStackSize(slot, 1);
         }
 
         @Override
