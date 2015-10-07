@@ -8,10 +8,10 @@
  */
 package mods.railcraft.common.util.inventory.wrappers;
 
-import java.util.Iterator;
-
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+
+import java.util.Iterator;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -49,22 +49,10 @@ public class SidedInventoryIterator extends InventoryIterator {
         };
     }
 
-    private class InvSlot implements IInvSlot {
-
-        private final int slot;
+    private class InvSlot extends InventoryIterator.InvSlot implements IInvSlot {
 
         public InvSlot(int slot) {
-            this.slot = slot;
-        }
-
-        @Override
-        public ItemStack getStackInSlot() {
-            return inv.getStackInSlot(slot);
-        }
-
-        @Override
-        public void setStackInSlot(ItemStack stack) {
-            inv.setInventorySlotContents(slot, stack);
+            super(slot);
         }
 
         @Override
@@ -75,22 +63,6 @@ public class SidedInventoryIterator extends InventoryIterator {
         @Override
         public boolean canTakeStackFromSlot(ItemStack stack) {
             return inv.canExtractItem(slot, stack, 0);
-        }
-
-        @Override
-        public ItemStack decreaseStackInSlot() {
-            return inv.decrStackSize(slot, 1);
-        }
-
-        @Override
-        public int getIndex() {
-            return slot;
-        }
-
-        @Override
-        public String toString() {
-            ItemStack stack = getStackInSlot();
-            return "SlotNum = " + slot + " Stack = " + stack == null ? "null" : getStackInSlot().toString();
         }
 
     }
