@@ -18,14 +18,11 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TileIC2MultiEmitterDelegate extends TileIC2SourceDelegate implements IMetaDelegate {
-
-    private final IMultiEmitterDelegate delegate;
+public class TileIC2MultiEmitterDelegate extends TileIC2EmitterDelegate implements IMetaDelegate {
     private final List<TileEntity> subTiles = new ArrayList<TileEntity>(30);
 
     public TileIC2MultiEmitterDelegate(IMultiEmitterDelegate delegate) {
-        super(delegate.getTile());
-        this.delegate = delegate;
+        super(delegate);
         subTiles.addAll(delegate.getSubTiles());
     }
 
@@ -35,23 +32,9 @@ public class TileIC2MultiEmitterDelegate extends TileIC2SourceDelegate implement
     }
 
     @Override
-    public double getOfferedEnergy() {
-        return delegate.getOfferedEnergy();
-    }
-
-    @Override
-    public void drawEnergy(double amount) {
-        delegate.drawEnergy(amount);
-    }
-
-    @Override
     public List<TileEntity> getSubTiles() {
         return subTiles;
     }
 
-    @Override
-    public int getSourceTier() {
-        return delegate.getSourceTier();
-    }
 
 }

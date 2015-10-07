@@ -9,15 +9,13 @@
 package mods.railcraft.common.plugins.ic2;
 
 import ic2.api.energy.tile.IEnergySource;
-import ic2.api.energy.tile.IEnergySourceInfo;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TileIC2EmitterDelegate extends TileIC2SourceDelegate implements IEnergySource, IEnergySourceInfo {
+public class TileIC2EmitterDelegate extends TileIC2Delegate implements IEnergySource {
 
     private final IEmitterDelegate delegate;
 
