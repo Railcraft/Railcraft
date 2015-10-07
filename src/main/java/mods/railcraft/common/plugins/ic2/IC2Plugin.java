@@ -19,27 +19,28 @@ import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.RecipeOutput;
 import ic2.api.recipe.Recipes;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.common.MinecraftForge;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.Game;
-import net.minecraft.init.Items;
-import net.minecraft.tileentity.TileEntity;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class IC2Plugin {
 
+    public static final int[] POWER_TIERS = {1, 6, 32, 512, 2048, 8192};
     private static final Map<String, ItemStack> itemCache = new HashMap<String, ItemStack>();
     private static final Map<String, Boolean> itemCacheFlag = new HashMap<String, Boolean>();
     private static Boolean modLoaded = null;
@@ -93,7 +94,6 @@ public class IC2Plugin {
     }
 
     /**
-     *
      * @param stack
      * @return energy used
      */
@@ -108,7 +108,6 @@ public class IC2Plugin {
     }
 
     /**
-     *
      * @param stack
      * @return energy received
      */

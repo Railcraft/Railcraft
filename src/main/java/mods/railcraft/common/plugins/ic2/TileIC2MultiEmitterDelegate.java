@@ -8,21 +8,17 @@
  */
 package mods.railcraft.common.plugins.ic2;
 
-import cpw.mods.fml.common.Optional;
-import ic2.api.energy.tile.IEnergySource;
-import ic2.api.energy.tile.IEnergySourceInfo;
 import ic2.api.energy.tile.IMetaDelegate;
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySourceInfo", modid = "IC2-Classic-Spmod")
-public class TileIC2MultiEmitterDelegate extends TileIC2Delegate implements IEnergySource, IEnergySourceInfo, IMetaDelegate {
+public class TileIC2MultiEmitterDelegate extends TileIC2SourceDelegate implements IMetaDelegate {
 
     private final IMultiEmitterDelegate delegate;
     private final List<TileEntity> subTiles = new ArrayList<TileEntity>(30);
@@ -58,31 +54,4 @@ public class TileIC2MultiEmitterDelegate extends TileIC2Delegate implements IEne
         return delegate.getSourceTier();
     }
 
-    @Override
-    public int getMaxEnergyAmount() {
-        int ret;
-        switch (this.getSourceTier()) {
-            case 0:
-                ret = 1;
-                break;
-            case 1:
-                ret = 6;
-                break;
-            case 2:
-                ret = 32;
-                break;
-            case 3:
-                ret = 512;
-                break;
-            case 4:
-                ret = 2048;
-                break;
-            case 5:
-                ret = 8192;
-                break;
-            default:
-                ret = 0;
-        }
-        return ret;
-    }
 }

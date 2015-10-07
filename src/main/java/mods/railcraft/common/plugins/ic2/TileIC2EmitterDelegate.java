@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.plugins.ic2;
 
-import cpw.mods.fml.common.Optional;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.energy.tile.IEnergySourceInfo;
 import net.minecraft.tileentity.TileEntity;
@@ -18,8 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySourceInfo", modid = "IC2-Classic-Spmod")
-public class TileIC2EmitterDelegate extends TileIC2Delegate implements IEnergySource, IEnergySourceInfo {
+public class TileIC2EmitterDelegate extends TileIC2SourceDelegate implements IEnergySource, IEnergySourceInfo {
 
     private final IEmitterDelegate delegate;
 
@@ -48,31 +46,4 @@ public class TileIC2EmitterDelegate extends TileIC2Delegate implements IEnergySo
         return delegate.getSourceTier();
     }
 
-    @Override
-    public int getMaxEnergyAmount() {
-        int ret;
-        switch (this.getSourceTier()) {
-            case 0:
-                ret = 1;
-                break;
-            case 1:
-                ret = 6;
-                break;
-            case 2:
-                ret = 32;
-                break;
-            case 3:
-                ret = 512;
-                break;
-            case 4:
-                ret = 2048;
-                break;
-            case 5:
-                ret = 8192;
-                break;
-            default:
-                ret = 0;
-        }
-        return ret;
-    }
 }
