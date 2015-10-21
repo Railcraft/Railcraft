@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.worldgen;
 
-import java.util.List;
-import java.util.Random;
 import mods.railcraft.api.tracks.ITrackReversable;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -23,7 +21,6 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -36,6 +33,9 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.List;
+import java.util.Random;
 
 public class ComponentWorkshop extends StructureVillagePieces.Village {
 
@@ -133,7 +133,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         placeBlockAtCurrentPosition(world, Blocks.torch, 0, 9, 3, 1, sbb);
         placeBlockAtCurrentPosition(world, Blocks.torch, 0, 9, 3, 5, sbb);
         placeBlockAtCurrentPosition(world, Blocks.torch, 0, 9, 3, 9, sbb);
- 
+
 //        meta = getMetadataWithOffset(Blocks.torch, 3);
         placeBlockAtCurrentPosition(world, Blocks.torch, 0, 5, 3, 1, sbb);
         placeBlockAtCurrentPosition(world, Blocks.torch, 0, 5, 3, 5, sbb);
@@ -180,21 +180,21 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
             if (EnumMachineBeta.ENGINE_STEAM_HOBBY.isAvaliable() && RailcraftConfig.machinesRequirePower())
                 placeEngine(world, 9, 1, 6, sbb);
         }
-		
-		
+
+
         // foundation
         for (int k = 0; k < 11; ++k) {
-			for (int l = 4; l < 11; ++l) {
-				this.clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
-				this.func_151554_b(world, Blocks.cobblestone, 0, l, -1, k, sbb);
-			}
-		}
+            for (int l = 4; l < 11; ++l) {
+                this.clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
+                this.func_151554_b(world, Blocks.cobblestone, 0, l, -1, k, sbb);
+            }
+        }
         for (int k = 1; k < 6; ++k) {
-			for (int l = 0; l < 4; ++l) {
-				this.clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
-				this.func_151554_b(world, Blocks.cobblestone, 0, l, -1, k, sbb);
-			}
-		}
+            for (int l = 0; l < 4; ++l) {
+                this.clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
+                this.func_151554_b(world, Blocks.cobblestone, 0, l, -1, k, sbb);
+            }
+        }
 
         placeChest(world, 9, 1, 4, 3, random, sbb);
 
@@ -208,6 +208,10 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
     }
 
     private void placeTrack(EnumTrack track, World world, int x, int y, int z, StructureBoundingBox sbb, int meta, boolean reversed) {
+        if (!track.isEnabled()) {
+            placeBlockAtCurrentPosition(world, Blocks.rail, 0, x, y, z, sbb);
+            return;
+        }
         int xx = this.getXWithOffset(x, z);
         int yy = this.getYWithOffset(y);
         int zz = this.getZWithOffset(x, z);

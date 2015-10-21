@@ -8,19 +8,20 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import java.util.*;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.items.*;
+import mods.railcraft.common.items.ItemCrowbar;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
+import mods.railcraft.common.items.ItemTicket;
+import mods.railcraft.common.items.ItemTicketGold;
 import mods.railcraft.common.items.ItemTie.EnumTie;
+import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -28,6 +29,9 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
+import java.util.*;
 
 public enum EnumTrack {
 
@@ -151,7 +155,7 @@ public enum EnumTrack {
         HOLDING_TRAIN.depreciated = true;
     }
 
-    private EnumTrack(Module module, int numIcons, int itemIconIndex, String tag, int recipeOutput, Class<? extends TrackBaseRailcraft> trackInstance) {
+    EnumTrack(Module module, int numIcons, int itemIconIndex, String tag, int recipeOutput, Class<? extends TrackBaseRailcraft> trackInstance) {
         this.module = module;
         this.numIcons = numIcons;
         this.itemIconIndex = itemIconIndex;
@@ -169,18 +173,17 @@ public enum EnumTrack {
             Game.logErrorAPI("Railcraft", error, TrackSpec.class);
             trackSpec = new TrackSpec((short) ordinal(), getTag(), TrackTextureLoader.INSTANCE, trackInstance);
         }
-        if (trackSpec != null)
-            try {
-                TrackRegistry.registerTrackSpec(trackSpec);
-                trackSpecs.add(trackSpec);
-                registerRecipe();
-            } catch (Error error) {
-                Game.logErrorAPI(Railcraft.getModId(), error, TrackRegistry.class, TrackSpec.class);
-            }
+        try {
+            TrackRegistry.registerTrackSpec(trackSpec);
+            trackSpecs.add(trackSpec);
+            registerRecipe();
+        } catch (Error error) {
+            Game.logErrorAPI(Railcraft.getModId(), error, TrackRegistry.class, TrackSpec.class);
+        }
     }
 
     public boolean isEnabled() {
-        return ModuleManager.isModuleLoaded(module) && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDepreciated();
+        return ModuleManager.isModuleLoaded(module) && RailcraftConfig.isBlockEnabled("track") && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDepreciated();
     }
 
     public boolean isDepreciated() {
@@ -226,8 +229,8 @@ public enum EnumTrack {
     public static List<EnumTrack> getCreativeList() {
         return creativeList;
     }
-    
-    public static Collection<TrackSpec> getRailcraftTrackSpecs(){
+
+    public static Collection<TrackSpec> getRailcraftTrackSpecs() {
         return trackSpecs;
     }
 
