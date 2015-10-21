@@ -10,20 +10,9 @@ package mods.railcraft.common.blocks;
 
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IOwnable;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
@@ -33,13 +22,25 @@ import mods.railcraft.common.util.network.PacketTileEntity;
 import mods.railcraft.common.util.network.RailcraftPacket;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable {
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
     protected int clock = MiscTools.getRand().nextInt();
     private GameProfile owner = new GameProfile(null, "[Railcraft]");
     private boolean sendClientUpdate = false;
+    private UUID uuid;
 
     public static boolean isUseableByPlayerHelper(TileEntity tile, EntityPlayer player) {
         if (tile.isInvalid())
@@ -47,6 +48,12 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         if (tile.getWorldObj().getTileEntity(tile.xCoord, tile.yCoord, tile.zCoord) != tile)
             return false;
         return player.getDistanceSq(tile.xCoord, tile.yCoord, tile.zCoord) <= 64;
+    }
+
+    public UUID getUUID() {
+        if (uuid == null)
+            uuid = UUID.randomUUID();
+        return uuid;
     }
 
     public AdjacentTileCache getTileCache() {
@@ -158,12 +165,15 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
             data.setString("owner", owner.getName());
         if (owner.getId() != null)
             data.setString("ownerId", owner.getId().toString());
+
+        MiscTools.writeUUID(data, "uuid", uuid);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         owner = PlayerPlugin.readOwnerFromNBT(data);
+        uuid = MiscTools.readUUID(data, "uuid");
     }
 
     public final int getX() {

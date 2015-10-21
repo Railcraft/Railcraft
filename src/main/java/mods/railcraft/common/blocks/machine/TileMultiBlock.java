@@ -37,8 +37,6 @@ import net.minecraft.inventory.IInventory;
 
 public abstract class TileMultiBlock extends TileMachineBase {
     private static final int UNKNOWN_STATE_RECHECK = 256;
-
-    ;
     private static final int NETWORK_RECHECK = 64;
     private final Timer netTimer = new Timer();
     private final List<? extends MultiBlockPattern> patterns;
@@ -54,18 +52,11 @@ public abstract class TileMultiBlock extends TileMachineBase {
     private MultiBlockState state;
     private TileMultiBlock masterBlock;
     private MultiBlockPattern currentPattern;
-    private UUID uuid;
     private UUID uuidMaster;
     public TileMultiBlock(List<? extends MultiBlockPattern> patterns) {
         this.patterns = patterns;
         currentPattern = patterns.get(0);
         tested = FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER;
-    }
-
-    public UUID getUUID() {
-        if (uuid == null)
-            uuid = UUID.randomUUID();
-        return uuid;
     }
 
     public UUID getMasterUUID() {
@@ -370,7 +361,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     public void markDirty() {
         super.markDirty();
         if (!isMaster) {
-            TileMultiBlock mBlock = (TileMultiBlock) getMasterBlock();
+            TileMultiBlock mBlock = getMasterBlock();
             if (mBlock != null)
                 mBlock.markDirty();
         }
@@ -383,7 +374,6 @@ public abstract class TileMultiBlock extends TileMachineBase {
         data.setBoolean("master", isMaster);
         data.setByte("pattern", getPatternIndex());
 
-        MiscTools.writeUUID(data, "uuid", uuid);
         MiscTools.writeUUID(data, "uuidMaster", uuidMaster);
     }
 
@@ -395,9 +385,9 @@ public abstract class TileMultiBlock extends TileMachineBase {
         try {
             currentPattern = patterns.get(data.getByte("pattern"));
         } catch (Exception ex) {
+            //NOOP
         }
 
-        uuid = MiscTools.readUUID(data, "uuid");
         uuidMaster = MiscTools.readUUID(data, "uuidMaster");
     }
 
@@ -519,7 +509,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
         public final MultiBlockState type;
         public final String message;
 
-        private MultiBlockStateReturn(MultiBlockState type, String msg) {
+        MultiBlockStateReturn(MultiBlockState type, String msg) {
             this.type = type;
             this.message = msg;
         }
