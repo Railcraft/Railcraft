@@ -1,3 +1,7 @@
+9.8.0.0:
+	FIX: Fixed a possible crash during Worldgen if you disable the Track block.
+	FIX: Fixed Anchor interaction with FunkyLocomotion.
+
 9.7.0.1:
 	NEW: Added Cargo Cart, a filterable Cart for moving items.
 	NEW: Locomotive Limiter can now put Locomotives into reverse. (contribution by cruck1000)
