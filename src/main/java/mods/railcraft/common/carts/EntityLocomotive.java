@@ -495,7 +495,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     @Override
     public void applyEntityCollision(Entity entity) {
         if (Game.isHost(worldObj)) {
-            if (entity.isDead)
+            if (!entity.isEntityAlive())
                 return;
             if (entity != this.riddenByEntity && (cartVelocityIsGreaterThan(0.2f) || getEntityData().getBoolean("HighSpeed")) && MiscTools.isKillabledEntity(entity)) {
                 EntityLivingBase living = (EntityLivingBase) entity;
@@ -510,7 +510,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
             if (collidedWithOtherLocomotive(entity)) {
                 EntityLocomotive otherLoco = (EntityLocomotive) entity;
                 explode();
-                if (!otherLoco.isDead)
+                if (otherLoco.isEntityAlive())
                     otherLoco.explode();
                 return;
             }

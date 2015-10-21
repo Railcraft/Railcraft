@@ -33,7 +33,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IMinecartCollisionHandler;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
@@ -95,7 +94,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 
     @Override
     public void onEntityCollision(EntityMinecart cart, Entity other) {
-        if (Game.isNotHost(cart.worldObj) || other == cart.riddenByEntity || other.isDead || cart.isDead)
+        if (Game.isNotHost(cart.worldObj) || other == cart.riddenByEntity || !other.isEntityAlive() || !cart.isEntityAlive())
             return;
 
         ILinkageManager lm = LinkageManager.instance();
