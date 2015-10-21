@@ -21,6 +21,7 @@ import java.util.Set;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.commands.CommandDebug;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import org.apache.logging.log4j.Level;
 import net.minecraft.item.crafting.CraftingManager;
@@ -213,6 +214,7 @@ public class ModuleCore extends RailcraftModule {
 
         // Items
         replaceVanillaCart(EnumCart.COMMAND_BLOCK, Items.command_block_minecart, "MinecartCommandBlock", 40);
+        Items.command_block_minecart.setCreativeTab(CreativeTabs.tabTransport);
         replaceVanillaCart(EnumCart.BASIC, Items.minecart, "MinecartRideable", 42);
         replaceVanillaCart(EnumCart.CHEST, Items.chest_minecart, "MinecartChest", 43);
         replaceVanillaCart(EnumCart.FURNACE, Items.furnace_minecart, "MinecartFurnace", 44);

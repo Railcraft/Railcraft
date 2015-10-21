@@ -69,7 +69,7 @@ public class EntityCartCommand extends CartBase {
         super(world);
     }
 
-    public EntityCartCommand(World world, int x, int y, int z) {
+    public EntityCartCommand(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
@@ -128,6 +128,7 @@ public class EntityCartCommand extends CartBase {
         }
     }
 
+    @Override
     public void func_145781_i(int dataValueId) {
         super.func_145781_i(dataValueId);
 

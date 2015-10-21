@@ -66,7 +66,7 @@ repositories {
 	}
 }
 
-configurations{
+configurations {
 	api
 	compile.extendsFrom api
 }
@@ -76,8 +76,7 @@ dependencies {
 	api 'com.mod-buildcraft:buildcraft:6.4.16:dev'
 }
 
-processResources
-{
+processResources {
 	// this will ensure that this task is redone when the versions change.
 	inputs.property "version", project.version
 	inputs.property "mcversion", project.minecraft.version
@@ -286,4 +285,10 @@ release.shouldRunAfter uploadArchives
 
 artifacts {
 	archives mainJar, devJar, apiZip
+}
+
+idea.module.inheritOutputDirs = true
+
+task wrapper(type: Wrapper) {
+	gradleVersion = "2.7"
 }
