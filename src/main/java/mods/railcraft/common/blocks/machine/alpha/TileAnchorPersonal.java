@@ -8,18 +8,18 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileAnchorPersonal extends TileAnchorWorld {
@@ -49,7 +49,7 @@ public class TileAnchorPersonal extends TileAnchorWorld {
 
     @Override
     public void updateEntity() {
-        if (ticket != null) {
+        if (Game.isHost(worldObj) && hasActiveTicket()) {
             if (PlayerPlugin.isPlayerConnected(getOwner()))
                 ticksSincePlayerLogged = 0;
             else
