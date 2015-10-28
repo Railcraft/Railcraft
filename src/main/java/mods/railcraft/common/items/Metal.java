@@ -21,7 +21,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public enum Metal {
@@ -62,7 +61,7 @@ public enum Metal {
 
     private final String tag;
 
-    private Metal(String tag) {
+    Metal(String tag) {
         this.tag = tag;
         nuggetFilter = new OreStackFilter(getNuggetTag());
         ingotFilter = new OreStackFilter(getIngotTag());
@@ -82,7 +81,7 @@ public enum Metal {
             case GOLD:
                 return new ItemStack(Items.gold_nugget, qty);
             default: {
-                ItemStack stack = ItemNugget.getNugget(nuggetMap.get(this), qty);
+                ItemStack stack = RailcraftItem.nugget.getStack(qty, nuggetMap.get(this));
                 if (stack == null)
                     stack = OreDictPlugin.getOre(getNuggetTag(), qty);
                 return stack;
@@ -105,7 +104,7 @@ public enum Metal {
             case GOLD:
                 return new ItemStack(Items.gold_ingot, qty);
             default: {
-                ItemStack stack = ItemIngot.getIngot(ingotMap.get(this), qty);
+                ItemStack stack = RailcraftItem.ingot.getStack(qty, ingotMap.get(this));
                 if (stack == null || stack.getItem() == Items.iron_ingot)
                     stack = OreDictPlugin.getOre(getIngotTag(), qty);
                 return stack;

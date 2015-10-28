@@ -9,7 +9,6 @@
 package mods.railcraft.common.items;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IItemMetaEnum {
@@ -17,5 +16,7 @@ public interface IItemMetaEnum {
     int ordinal();
 
     Class<? extends ItemRailcraft> getItemClass();
+
+    Object getAlternate();
 
 }

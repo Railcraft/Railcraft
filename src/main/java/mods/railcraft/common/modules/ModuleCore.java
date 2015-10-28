@@ -13,26 +13,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.common.commands.CommandDebug;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import org.apache.logging.log4j.Level;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.api.helpers.Helpers;
@@ -49,46 +30,48 @@ import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.carts.*;
+import mods.railcraft.common.commands.CommandDebug;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
+import mods.railcraft.common.fluids.*;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.items.CrowbarHandler;
-import mods.railcraft.common.items.ItemCrowbar;
-import mods.railcraft.common.plugins.forge.FuelPlugin;
-import mods.railcraft.common.items.ItemGoggles;
-import mods.railcraft.common.items.ItemMagnifyingGlass;
-import mods.railcraft.common.items.ItemNugget;
-import mods.railcraft.common.items.ItemCrowbarReinforced;
-import mods.railcraft.common.items.RailcraftToolItems;
-import mods.railcraft.common.fluids.BucketHandler;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
-import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
-import mods.railcraft.common.util.crafting.CokeOvenCraftingManager;
-import mods.railcraft.common.util.crafting.CraftingHandler;
-import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
-import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
-import mods.railcraft.common.fluids.FluidContainers;
-import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.items.*;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
+import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
+import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.crafting.*;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import org.apache.logging.log4j.Level;
+
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class ModuleCore extends RailcraftModule {
     public static void addLiquidFuels() {
@@ -168,7 +151,7 @@ public class ModuleCore extends RailcraftModule {
 
         RailcraftToolItems.initializeToolsArmor();
 
-        ItemNugget.getNugget(ItemNugget.EnumNugget.IRON);
+        RailcraftItem.nugget.getStack(ItemNugget.EnumNugget.IRON);
 
         EntityEnderman.setCarriable(Blocks.gravel, false);
 

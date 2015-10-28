@@ -8,15 +8,14 @@
  */
 package mods.railcraft.common.items;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
- * 
  * @author CovertJaguar <http://www.railcraft.info/>
  * @deprecated Items are being migrated to the RailcraftItem enum
  */
@@ -41,18 +40,17 @@ public class RailcraftPartItems {
 
         String tag = "railcraft.part.turbine.blade";
         if (!RailcraftConfig.isItemEnabled(tag))
-            return ItemIngot.getIngot(ItemIngot.EnumIngot.STEEL, qty);
+            return RailcraftItem.ingot.getStack(qty, ItemIngot.EnumIngot.STEEL);
 
         item = new ItemRailcraft().setUnlocalizedName(tag);
         RailcraftRegistry.register(item);
         ItemStack stack = new ItemStack(item);
 
-        CraftingPlugin.addShapedRecipe(stack, new Object[]{
-            "I",
-            "I",
-            "I",
-            'I', "ingotSteel"
-        });
+        CraftingPlugin.addShapedRecipe(stack,
+                "I",
+                "I",
+                "I",
+                'I', "ingotSteel");
 
         itemTurbineBlade = item;
 

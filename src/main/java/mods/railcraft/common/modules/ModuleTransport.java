@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.modules;
 
-import net.minecraft.item.ItemStack;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -25,9 +24,9 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ModuleTransport extends RailcraftModule {
@@ -211,7 +210,7 @@ public class ModuleTransport extends RailcraftModule {
 
     private boolean defineIronTank(EnumMachineBeta type, Object... recipe) {
         if (defineTank(type, recipe)) {
-            RailcraftCraftingManager.blastFurnace.addRecipe(type.getItem(), true, false, 640, ItemNugget.getNugget(ItemNugget.EnumNugget.STEEL, 4));
+            RailcraftCraftingManager.blastFurnace.addRecipe(type.getItem(), true, false, 640, RailcraftItem.nugget.getStack(4, ItemNugget.EnumNugget.STEEL));
             return true;
         }
         return false;

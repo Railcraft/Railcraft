@@ -543,7 +543,7 @@ public enum EnumTrack {
                         "IPI",
                         "ItI",
                         'I', railStandard,
-                        'P', RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL),
+                        'P', RailcraftItem.plate, EnumPlate.STEEL,
                         't', woodTie);
                 break;
             case BUFFER_STOP:

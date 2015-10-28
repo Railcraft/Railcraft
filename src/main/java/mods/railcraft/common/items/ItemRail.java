@@ -8,37 +8,50 @@
  */
 package mods.railcraft.common.items;
 
-import java.util.List;
-import java.util.Locale;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.items.ItemTie.EnumTie;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.LootPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.items.ItemTie.EnumTie;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.plugins.forge.LootPlugin;
-import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
-import net.minecraft.init.Items;
+
+import java.util.List;
+import java.util.Locale;
 
 public class ItemRail extends ItemRailcraft {
 
     public enum EnumRail implements IItemMetaEnum {
 
-        STANDARD, ADVANCED, WOOD, SPEED, REINFORCED, ELECTRIC;
+        STANDARD("ingotIron"), ADVANCED("ingotGold"), WOOD("slabWood"), SPEED("ingotSteel"), REINFORCED("ingotSteel"), ELECTRIC("ingotCopper");
         public static final EnumRail[] VALUES = values();
         private IIcon icon;
+        private Object alternate;
+
+        EnumRail(Object alt) {
+            this.alternate = alt;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return alternate;
+        }
 
         @Override
         public Class<? extends ItemRailcraft> getItemClass() {
             return ItemRail.class;
         }
 
-    };
+    }
+
+    ;
 
     public ItemRail() {
         setHasSubtypes(true);
@@ -123,7 +136,7 @@ public class ItemRail extends ItemRailcraft {
                 'I', "ingotSteel",
                 'D', "dustObsidian");
         RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
-        
+
         // Electric
         recipe = new ShapedOreRecipe(item.getStack(6, EnumRail.ELECTRIC),
                 "ICI",

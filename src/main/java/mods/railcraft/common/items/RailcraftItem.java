@@ -11,37 +11,42 @@ package mods.railcraft.common.items;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.EnumSet;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public enum RailcraftItem {
 
-    rail(ItemRail.class, "part.rail", Items.iron_ingot, Items.gold_ingot, "slabWood", "ingotSteel", "ingotSteel"),
-    railbed(ItemRailbed.class, "part.railbed", "stickWood", "slabStone"),
-    tie(ItemTie.class, "part.tie", "slabWood", Blocks.stone_slab),
+    circuit(ItemCircuit.class, "part.circuit"),
+    dust(ItemDust.class, "dust"),
+    gear(ItemGear.class, "part.gear"),
+    ingot(ItemIngot.class, "ingot"),
+    nugget(ItemNugget.class, "nugget"),
+    plate(ItemPlate.class, "part.plate"),
+    rail(ItemRail.class, "part.rail"),
+    railbed(ItemRailbed.class, "part.railbed"),
+    rebar(ItemRebar.class, "part.rebar", "ingotIron"),
     signalLamp(ItemSignalLamp.class, "part.signal.lamp", Blocks.redstone_lamp),
-    rebar(ItemRebar.class, "part.rebar", Items.iron_ingot),
-    plate(ItemPlate.class, "part.plate", Items.iron_ingot, "ingotSteel", "ingotTin"),
-    gear(ItemGear.class, "part.gear", Items.gold_ingot, Blocks.iron_block, "blockSteel", "ingotTin"),
-    circuit(ItemCircuit.class, "part.circuit", Items.comparator, Blocks.redstone_torch, Items.repeater),
-    dust(ItemDust.class, "dust", "dustObsidian", "dustSulfur", "dustSaltpeter", "dustCharcoal");
+    tie(ItemTie.class, "part.tie");
     public static final RailcraftItem[] VALUES = values();
     private final Class<? extends ItemRailcraft> itemClass;
     private final String tag;
-    private final Object[] altRecipeObjects;
+    private final Object altRecipeObject;
     private ItemRailcraft item;
 
-    RailcraftItem(Class<? extends ItemRailcraft> itemClass, String tag, Object... altRecipeObjects) {
+    RailcraftItem(Class<? extends ItemRailcraft> itemClass, String tag) {
         this.itemClass = itemClass;
         this.tag = tag;
-        this.altRecipeObjects = altRecipeObjects;
+        this.altRecipeObject = null;
+    }
+
+    RailcraftItem(Class<? extends ItemRailcraft> itemClass, String tag, Object alt) {
+        this.itemClass = itemClass;
+        this.tag = tag;
+        this.altRecipeObject = alt;
     }
 
     public void registerItem() {
@@ -112,7 +117,7 @@ public enum RailcraftItem {
         registerItem();
         if (item != null)
             return item.getRecipeObject(null);
-        Object obj = altRecipeObjects[0];
+        Object obj = altRecipeObject;
         if (obj instanceof ItemStack)
             obj = ((ItemStack) obj).copy();
         return obj;
@@ -123,7 +128,9 @@ public enum RailcraftItem {
         registerItem();
         if (item != null)
             return item.getRecipeObject(meta);
-        Object obj = altRecipeObjects[meta.ordinal()];
+        Object obj = meta.getAlternate();
+        if (obj == null)
+            obj = altRecipeObject;
         if (obj instanceof ItemStack)
             obj = ((ItemStack) obj).copy();
         return obj;

@@ -8,36 +8,50 @@
  */
 package mods.railcraft.common.items;
 
-import java.util.List;
-import java.util.Locale;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemCircuit extends ItemRailcraft {
 
-    public static enum EnumCircuit implements IItemMetaEnum {
+    public enum EnumCircuit implements IItemMetaEnum {
 
-        CONTROLLER, RECEIVER, SIGNAL;
+        CONTROLLER(Items.comparator),
+        RECEIVER(Blocks.redstone_torch),
+        SIGNAL(Items.repeater);
         public static EnumCircuit[] VALUES = values();
         private IIcon icon;
+        private Object alternate;
+
+        EnumCircuit(Object alt) {
+            this.alternate = alt;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return alternate;
+        }
 
         @Override
         public Class<? extends ItemRailcraft> getItemClass() {
             return ItemCircuit.class;
         }
 
-    };
+    }
+
+    ;
 
     public ItemCircuit() {
         super();

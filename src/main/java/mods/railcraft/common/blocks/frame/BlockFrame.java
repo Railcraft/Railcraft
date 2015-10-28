@@ -35,7 +35,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class BlockFrame extends Block implements IPostConnection {
@@ -61,8 +60,8 @@ public class BlockFrame extends Block implements IPostConnection {
                         "PPP",
                         "I I",
                         "III",
-                        'P', RailcraftItem.plate.getRecipeObject(EnumPlate.IRON),
-                        'I', RailcraftItem.rebar.getRecipeObject());
+                        'P', RailcraftItem.plate, EnumPlate.IRON,
+                        'I', RailcraftItem.rebar);
             }
     }
 
@@ -120,7 +119,7 @@ public class BlockFrame extends Block implements IPostConnection {
 
     @Override
     public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
-        return flipTextures ? true : super.shouldSideBeRendered(world, x, y, z, side);
+        return flipTextures || super.shouldSideBeRendered(world, x, y, z, side);
     }
 
     @Override

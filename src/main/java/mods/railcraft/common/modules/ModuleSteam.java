@@ -8,13 +8,11 @@
  */
 package mods.railcraft.common.modules;
 
-import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
+import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemGear.EnumGear;
 import mods.railcraft.common.items.ItemIngot;
@@ -22,11 +20,12 @@ import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ModuleSteam extends RailcraftModule {
@@ -66,7 +65,7 @@ public class ModuleSteam extends RailcraftModule {
                         'C', "blockGlassColorless",
                         'G', "gearIron");
 
-                RailcraftCraftingManager.blastFurnace.addRecipe(stack, true, false, 15360, ItemIngot.getIngot(ItemIngot.EnumIngot.STEEL, 12));
+                RailcraftCraftingManager.blastFurnace.addRecipe(stack, true, false, 15360, RailcraftItem.ingot.getStack(12, ItemIngot.EnumIngot.STEEL));
             }
         }
 
@@ -132,7 +131,7 @@ public class ModuleSteam extends RailcraftModule {
                         "P",
                         'P', RailcraftItem.plate.getRecipeObject(EnumPlate.IRON));
 
-                RailcraftCraftingManager.blastFurnace.addRecipe(stack, true, false, 2560, ItemIngot.getIngot(ItemIngot.EnumIngot.STEEL, 2));
+                RailcraftCraftingManager.blastFurnace.addRecipe(stack, true, false, 2560, RailcraftItem.ingot.getStack(2, ItemIngot.EnumIngot.STEEL));
             }
         }
 
@@ -199,9 +198,9 @@ public class ModuleSteam extends RailcraftModule {
         else if (EnumMachineBeta.TANK_STEEL_WALL.isAvaliable())
             tank = EnumMachineBeta.TANK_STEEL_WALL.getItem();
         else
-            tank =  RailcraftItem.plate.getStack(1, EnumPlate.STEEL);
+            tank = RailcraftItem.plate.getStack(1, EnumPlate.STEEL);
         if (tank == null)
-            tank = ItemIngot.getIngot(ItemIngot.EnumIngot.STEEL);
+            tank = RailcraftItem.ingot.getStack(1, ItemIngot.EnumIngot.STEEL);
         if (tank == null)
             tank = new ItemStack(Blocks.iron_block);
         return tank;

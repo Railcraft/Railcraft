@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.modules;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
@@ -17,17 +15,20 @@ import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.carts.LocomotivePaintingRecipe;
-import mods.railcraft.common.items.*;
 import mods.railcraft.common.items.ItemGear.EnumGear;
+import mods.railcraft.common.items.ItemIngot;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
+import mods.railcraft.common.items.ItemWhistleTuner;
+import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ModuleLocomotives extends RailcraftModule {
@@ -57,8 +58,8 @@ public class ModuleLocomotives extends RailcraftModule {
                 tank = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getItem();
             else if (EnumMachineBeta.TANK_IRON_WALL.isAvaliable())
                 tank = EnumMachineBeta.TANK_IRON_WALL.getItem();
-            else if (ItemIngot.getIngot(ItemIngot.EnumIngot.STEEL) != null)
-                tank = ItemIngot.getIngot(ItemIngot.EnumIngot.STEEL);
+            else if (RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL) != null)
+                tank = RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL);
             else
                 tank = new ItemStack(Items.iron_ingot);
 
@@ -81,7 +82,7 @@ public class ModuleLocomotives extends RailcraftModule {
         }
 
         cart = EnumCart.LOCO_ELECTRIC;
-        if (cart.setup()){
+        if (cart.setup()) {
             paintLocomotive(cart.getCartItem());
             RailcraftItem.gear.registerItem();
             RailcraftItem.plate.registerItem();

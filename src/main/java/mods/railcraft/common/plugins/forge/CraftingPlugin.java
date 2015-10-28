@@ -8,17 +8,21 @@
  */
 package mods.railcraft.common.plugins.forge;
 
+import com.google.common.collect.Lists;
 import cpw.mods.fml.common.registry.GameRegistry;
-import org.apache.logging.log4j.Level;
+import mods.railcraft.common.items.IItemMetaEnum;
+import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import org.apache.logging.log4j.Level;
+
+import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CraftingPlugin {
@@ -39,13 +43,31 @@ public class CraftingPlugin {
         FurnaceRecipes.smelting().func_151394_a(input, output, xp);
     }
 
-    public static void addShapedRecipe(ItemStack result, Object... input) {
+    private static Object[] cleanRecipeArray(Object[] recipeArray) {
+        List<Object> recipeList = Lists.newArrayList(recipeArray);
+        for (int i = 0; i < recipeList.size(); i++) {
+            Object obj = recipeList.get(i);
+            if (obj instanceof RailcraftItem) {
+                Object obj2 = i + 1 < recipeList.size() ? recipeList.get(i + 1) : null;
+                if (obj2 instanceof IItemMetaEnum) {
+                    recipeList.set(i, ((RailcraftItem) obj).getRecipeObject((IItemMetaEnum) obj2));
+                    recipeList.remove(i + 1);
+                } else {
+                    recipeList.set(i, ((RailcraftItem) obj).getRecipeObject());
+                }
+            }
+        }
+        return recipeList.toArray();
+    }
+
+    public static void addShapedRecipe(ItemStack result, Object... recipeArray) {
         if (result == null || result.stackSize <= 0) {
             Game.logTrace(Level.WARN, "Tried to define invalid shaped recipe, the result was null or zero. Skipping");
             return;
         }
+        recipeArray = cleanRecipeArray(recipeArray);
         boolean oreRecipe = false;
-        for (Object obj : input) {
+        for (Object obj : recipeArray) {
             if (obj instanceof String) {
                 if (((String) obj).length() > 3)
                     oreRecipe = true;
@@ -57,24 +79,24 @@ public class CraftingPlugin {
             }
         }
         if (oreRecipe) {
-            IRecipe recipe = new ShapedOreRecipe(result, input);
+            IRecipe recipe = new ShapedOreRecipe(result, recipeArray);
             addRecipe(recipe);
         } else
-            GameRegistry.addRecipe(result, input);
+            GameRegistry.addRecipe(result, recipeArray);
     }
 
     /**
-     *
      * @param result
-     * @param input
+     * @param recipeArray
      */
-    public static void addShapelessRecipe(ItemStack result, Object... input) {
+    public static void addShapelessRecipe(ItemStack result, Object... recipeArray) {
         if (result == null || result.stackSize <= 0) {
             Game.logTrace(Level.WARN, "Tried to define invalid shapeless recipe, the result was null or zero. Skipping");
             return;
         }
+        recipeArray = cleanRecipeArray(recipeArray);
         boolean oreRecipe = false;
-        for (Object obj : input) {
+        for (Object obj : recipeArray) {
             if (obj instanceof String)
                 oreRecipe = true;
             else if (obj == null) {
@@ -83,10 +105,10 @@ public class CraftingPlugin {
             }
         }
         if (oreRecipe) {
-            IRecipe recipe = new ShapelessOreRecipe(result, input);
+            IRecipe recipe = new ShapelessOreRecipe(result, recipeArray);
             addRecipe(recipe);
         } else
-            GameRegistry.addShapelessRecipe(result, input);
+            GameRegistry.addShapelessRecipe(result, recipeArray);
     }
 
     public static void addRecipe(IRecipe recipe) {

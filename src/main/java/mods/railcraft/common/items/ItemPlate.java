@@ -8,27 +8,38 @@
  */
 package mods.railcraft.common.items;
 
-import java.util.List;
-import java.util.Locale;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
-import net.minecraft.init.Items;
+
+import java.util.List;
+import java.util.Locale;
 
 public class ItemPlate extends ItemRailcraft {
 
     public enum EnumPlate implements IItemMetaEnum {
 
-        IRON, STEEL, TIN, COPPER;
+        IRON("ingotIron"), STEEL("ingotSteel"), TIN("ingotTin"), COPPER("ingotCopper");
         public static final EnumPlate[] VALUES = values();
         private IIcon icon;
+        private Object alternate;
+
+        EnumPlate(Object alt) {
+            this.alternate = alt;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return alternate;
+        }
 
         @Override
         public Class<? extends ItemRailcraft> getItemClass() {
@@ -74,10 +85,10 @@ public class ItemPlate extends ItemRailcraft {
     @Override
     public void defineRecipes() {
         // Iron Plate
-        RailcraftCraftingManager.rollingMachine.addRecipe(new ItemStack(this, 4), new Object[]{
-            "II",
-            "II",
-            'I', Items.iron_ingot});
+        RailcraftCraftingManager.rollingMachine.addRecipe(new ItemStack(this, 4),
+                "II",
+                "II",
+                'I', Items.iron_ingot);
 
         // Steel Plate
         IRecipe recipe = new ShapedOreRecipe(RailcraftItem.plate.getStack(4, EnumPlate.STEEL),
@@ -90,7 +101,7 @@ public class ItemPlate extends ItemRailcraft {
         recipe = new ShapedOreRecipe(RailcraftItem.plate.getStack(4, EnumPlate.TIN),
                 "IT",
                 "TI",
-                'I', Items.iron_ingot,
+                'I', "ironIngot",
                 'T', "ingotTin");
         RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
 
@@ -101,7 +112,7 @@ public class ItemPlate extends ItemRailcraft {
                 'I', "ingotCopper");
         RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
 
-        RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItem.plate.getStack(EnumPlate.IRON), true, false, 1280, ItemIngot.getIngot(ItemIngot.EnumIngot.STEEL));
+        RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItem.plate.getStack(EnumPlate.IRON), true, false, 1280, RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL));
     }
 
     @Override

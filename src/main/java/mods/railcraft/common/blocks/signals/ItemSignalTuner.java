@@ -56,7 +56,7 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                         "BRB",
                         "   ",
                         'B', Blocks.stone_button,
-                        'R', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
+                        'R', RailcraftItem.circuit, ItemCircuit.EnumCircuit.RECEIVER,
                         'T', Blocks.redstone_torch);
 
                 LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, "tool.signal.tuner");

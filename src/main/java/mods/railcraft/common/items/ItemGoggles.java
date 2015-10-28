@@ -52,7 +52,7 @@ public class ItemGoggles extends ItemArmor {
                         "GCG",
                         "I I",
                         "LLL",
-                        'C', RailcraftItem.circuit.getRecipeObject(ItemCircuit.EnumCircuit.RECEIVER),
+                        'C', RailcraftItem.circuit, ItemCircuit.EnumCircuit.RECEIVER,
                         'I', "ingotSteel",
                         'L', Items.leather,
                         'G', "paneGlassColorless");

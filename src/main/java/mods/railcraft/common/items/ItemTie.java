@@ -8,15 +8,11 @@
  */
 package mods.railcraft.common.items;
 
-import java.util.List;
-import java.util.Locale;
-
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.LootPlugin;
-
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -24,13 +20,26 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+import java.util.List;
+import java.util.Locale;
+
 public class ItemTie extends ItemRailcraft {
 
     public enum EnumTie implements IItemMetaEnum {
-
-        WOOD, STONE;
+        WOOD("slabWood"),
+        STONE(Blocks.stone_slab);
         public static final EnumTie[] VALUES = values();
         private IIcon icon;
+        private Object alternate;
+
+        EnumTie(Object alt) {
+            this.alternate = alt;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return alternate;
+        }
 
         @Override
         public Class<? extends ItemRailcraft> getItemClass() {
@@ -91,7 +100,7 @@ public class ItemTie extends ItemRailcraft {
         CraftingPlugin.addShapedRecipe(tieStone,
                 " O ",
                 "###",
-                'O', RailcraftItem.rebar.getRecipeObject(),
+                'O', RailcraftItem.rebar,
                 '#', new ItemStack(Blocks.stone_slab, 1, 0));
     }
 
