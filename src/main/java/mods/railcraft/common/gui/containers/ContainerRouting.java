@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.UUID;
 import mods.railcraft.common.blocks.signals.IRouter;
 import mods.railcraft.common.blocks.signals.RoutingLogic;

@@ -8,8 +8,8 @@
  */
 package mods.railcraft.client.particles;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.util.Vec3;

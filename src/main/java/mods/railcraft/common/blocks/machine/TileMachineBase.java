@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.machine;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.common.blocks.RailcraftTileEntity;

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import java.util.Iterator;
 import java.util.Map;
 import mods.railcraft.common.gui.slots.SlotRailcraft;

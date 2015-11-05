@@ -1,8 +1,8 @@
 package mods.railcraft.common.plugins.buildcraft;
 
 import buildcraft.api.statements.StatementManager;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import mods.railcraft.common.plugins.buildcraft.actions.ActionProvider;
 import mods.railcraft.common.plugins.buildcraft.triggers.TriggerProvider;

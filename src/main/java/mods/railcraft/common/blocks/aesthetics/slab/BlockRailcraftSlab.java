@@ -9,8 +9,8 @@
 package mods.railcraft.common.blocks.aesthetics.slab;
 
 import net.minecraft.block.*;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;

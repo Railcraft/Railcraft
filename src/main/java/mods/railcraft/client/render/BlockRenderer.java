@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.render;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.block.Block;

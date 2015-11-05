@@ -9,7 +9,7 @@
 package mods.railcraft.common.items.waterstone;
 
 import mods.railcraft.common.items.firestone.*;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.List;
 

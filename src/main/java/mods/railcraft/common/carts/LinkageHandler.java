@@ -9,7 +9,7 @@
 package mods.railcraft.common.carts;
 
 import com.google.common.collect.MapMaker;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Map;
 

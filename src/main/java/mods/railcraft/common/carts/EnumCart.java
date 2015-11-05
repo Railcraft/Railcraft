@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.carts;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import java.lang.reflect.Constructor;
 import java.util.Locale;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;

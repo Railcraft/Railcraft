@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks;
 
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;

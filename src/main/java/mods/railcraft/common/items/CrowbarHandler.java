@@ -9,7 +9,7 @@
 package mods.railcraft.common.items;
 
 import com.google.common.collect.MapMaker;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.core.items.IToolCrowbar;

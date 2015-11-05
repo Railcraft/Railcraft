@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import mods.railcraft.api.core.items.TagList;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.ModuleManager;

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.carts;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.entity.item.EntityMinecartFurnace;

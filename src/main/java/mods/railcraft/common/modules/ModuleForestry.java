@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.modules;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 
 /**

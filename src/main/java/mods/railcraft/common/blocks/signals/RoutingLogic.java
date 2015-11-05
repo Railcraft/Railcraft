@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IPaintedCart;
 import mods.railcraft.api.carts.IRefuelableCart;

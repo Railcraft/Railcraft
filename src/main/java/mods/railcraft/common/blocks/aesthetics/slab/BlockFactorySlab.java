@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.aesthetics.slab;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
 import mods.railcraft.common.core.Railcraft;

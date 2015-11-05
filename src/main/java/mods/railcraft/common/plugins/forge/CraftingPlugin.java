@@ -9,7 +9,7 @@
 package mods.railcraft.common.plugins.forge;
 
 import com.google.common.collect.Lists;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import mods.railcraft.common.items.IItemMetaEnum;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.util.misc.Game;

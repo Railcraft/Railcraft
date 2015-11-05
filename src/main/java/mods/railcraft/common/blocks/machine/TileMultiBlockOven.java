@@ -9,8 +9,8 @@
 package mods.railcraft.common.blocks.machine;
 
 import buildcraft.api.statements.IActionExternal;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

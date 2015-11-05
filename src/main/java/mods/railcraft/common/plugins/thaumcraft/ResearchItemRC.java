@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.plugins.thaumcraft;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

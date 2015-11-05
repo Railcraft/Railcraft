@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.util.effects;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 import java.io.DataInputStream;
 import java.io.IOException;

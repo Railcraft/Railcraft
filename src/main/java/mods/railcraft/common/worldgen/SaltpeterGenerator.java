@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.worldgen;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Random;
 

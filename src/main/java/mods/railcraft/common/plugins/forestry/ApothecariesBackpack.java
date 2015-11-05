@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.plugins.forestry;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.common.plugins.thaumcraft.ResearchItemRC;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;

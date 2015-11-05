@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine.alpha.ai;
 
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;

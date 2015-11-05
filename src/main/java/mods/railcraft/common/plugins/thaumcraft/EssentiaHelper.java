@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.plugins.thaumcraft;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.aspects.Aspect;

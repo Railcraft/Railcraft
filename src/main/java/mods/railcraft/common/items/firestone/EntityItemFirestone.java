@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.items.firestone;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.EntityItemFireproof;
 import mods.railcraft.common.util.misc.EntityIDs;

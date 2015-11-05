@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.plugins.forestry;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.api.core.items.IMinecartItem;
 import net.minecraft.block.Block;

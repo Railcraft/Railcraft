@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.worldgen;
 
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import java.util.Random;
 import mods.railcraft.common.blocks.signals.ItemSignalBlockSurveyor;
 import mods.railcraft.common.blocks.signals.ItemSignalTuner;

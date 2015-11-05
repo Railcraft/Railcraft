@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.gui;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 import org.apache.logging.log4j.Level;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

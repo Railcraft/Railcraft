@@ -8,9 +8,9 @@
  */
 package mods.railcraft.common.blocks.hidden;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import java.util.Map;
 import java.util.WeakHashMap;
 import mods.railcraft.api.core.WorldCoordinate;

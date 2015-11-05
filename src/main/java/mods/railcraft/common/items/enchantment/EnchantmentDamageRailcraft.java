@@ -1,6 +1,6 @@
 package mods.railcraft.common.items.enchantment;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.lang.ref.WeakReference;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;

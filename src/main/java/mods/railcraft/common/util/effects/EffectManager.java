@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.util.effects;
 
-import cpw.mods.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 

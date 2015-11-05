@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.worldgen;
 
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
 import java.util.List;
 import java.util.Random;
 import net.minecraft.world.gen.structure.StructureVillagePieces.PieceWeight;

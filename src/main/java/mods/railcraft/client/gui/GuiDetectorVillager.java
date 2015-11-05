@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.gui;
 
-import cpw.mods.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.passive.EntityVillager;
 import mods.railcraft.client.gui.buttons.GuiToggleButtonSmall;

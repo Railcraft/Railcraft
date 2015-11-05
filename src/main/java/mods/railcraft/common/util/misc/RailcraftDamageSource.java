@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.util.misc;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;

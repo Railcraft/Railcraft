@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.modules.orehandlers;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Level;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;

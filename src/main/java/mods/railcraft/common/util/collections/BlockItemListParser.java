@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.util.collections;
 
-import cpw.mods.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameData;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.items;
 
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import mods.railcraft.common.blocks.hidden.BlockHidden;
 import mods.railcraft.common.blocks.hidden.TrailTicker;
 import mods.railcraft.common.core.RailcraftConfig;

@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.aesthetics.wall;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.block.*;
 import java.util.List;
 import net.minecraft.block.material.Material;

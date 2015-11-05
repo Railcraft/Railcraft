@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.util.crafting;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import mods.railcraft.common.carts.EntityCartFiltered;
 import mods.railcraft.common.carts.EntityCartTank;
 import mods.railcraft.common.carts.ICartType;

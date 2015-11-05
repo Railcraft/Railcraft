@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import mods.railcraft.common.carts.EntityLocomotiveSteamSolid;

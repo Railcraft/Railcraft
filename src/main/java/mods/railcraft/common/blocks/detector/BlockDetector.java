@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.detector;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.sounds;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import mods.railcraft.common.core.Railcraft;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;

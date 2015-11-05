@@ -11,7 +11,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.common.worldgen.ComponentWorkshop;
 import mods.railcraft.common.worldgen.VillagerTradeHandler;
 import mods.railcraft.common.worldgen.WorkshopCreationHandeler;
-import cpw.mods.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import net.minecraft.item.crafting.CraftingManager;

@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.aesthetics.brick;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.block.Block;

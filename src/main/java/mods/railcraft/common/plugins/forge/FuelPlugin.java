@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import cpw.mods.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.IFuelHandler;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.items.RailcraftToolItems;

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.items;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.api.signals.SignalAspect;

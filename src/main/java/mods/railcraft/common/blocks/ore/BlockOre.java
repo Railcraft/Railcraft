@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.ore;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.client.particles.ParticleHelperCallback;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.util.network;
 
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

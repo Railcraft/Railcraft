@@ -9,8 +9,8 @@
 package mods.railcraft.client.gui;
 
 import net.minecraft.client.gui.*;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import mods.railcraft.common.gui.containers.ContainerAnvil;
 import net.minecraft.client.Minecraft;

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.Arrays;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;

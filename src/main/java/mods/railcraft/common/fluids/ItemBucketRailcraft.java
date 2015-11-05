@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.fluids;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;

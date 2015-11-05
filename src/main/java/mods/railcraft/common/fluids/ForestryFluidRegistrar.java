@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.fluids;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 import mods.railcraft.common.items.ModItems;
 import net.minecraft.item.ItemStack;
 import mods.railcraft.common.util.inventory.InvTools;
