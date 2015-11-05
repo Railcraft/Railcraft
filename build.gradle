@@ -8,7 +8,7 @@ evaluationDependsOn(':version')
 
 buildscript {
 	repositories {
-		mavenCentral()
+		jcenter()
 		maven {
 			name = "forge"
 			url = "http://files.minecraftforge.net/maven"
@@ -19,14 +19,14 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
 	}
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 
-group = "mods.railcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "com.covertjaguar.railcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Railcraft_" + project.mcversion
 
 ext.apiRailcraft = "./api/railcraft"
@@ -39,8 +39,10 @@ ext.dirLang = "./lang"
 ext.dirDest = './build/dist'
 
 minecraft {
-	version = project.mcversion + "-" + project.forgeversion + "-" + project.forgebranch
+	version = project.mcversion + "-" + project.forgeversion
 	runDir = "run"
+	
+	mappings = "snapshot_20141130"
 
 	replace '@VERSION@', project.version
 }
@@ -97,14 +99,6 @@ processResources {
 }
 
 runClient {
-	if( project.hasProperty('mcUsername') && project.hasProperty('mcPassword') ) {
-		args "--username=${project.mcUsername}"
-		args "--password=${project.mcPassword}"
-	}
-
-}
-
-debugClient {
 	if( project.hasProperty('mcUsername') && project.hasProperty('mcPassword') ) {
 		args "--username=${project.mcUsername}"
 		args "--password=${project.mcPassword}"
