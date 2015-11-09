@@ -351,6 +351,8 @@ public abstract class SignalBlock extends AbstractPair {
     public void tickServer() {
         super.tickServer();
         update++;
+        if (!isLoaded())
+            return;
         if (update % Signals.getSignalUpdateInterval() == 0) {
             SignalAspect prev = getSignalAspect();
             if (prev != SignalAspect.BLINK_RED)
