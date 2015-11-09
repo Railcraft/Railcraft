@@ -64,6 +64,10 @@ repositories {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
 	}
+	ivy {
+		name "BuildCraft"
+		artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
+	}
 }
 
 configurations {
@@ -73,7 +77,7 @@ configurations {
 
 dependencies {
 	api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
-	api 'com.mod-buildcraft:buildcraft:6.4.16:dev'
+	api name: "buildcraft", version: "7.1.13", classifier: "dev"
 }
 
 processResources {
