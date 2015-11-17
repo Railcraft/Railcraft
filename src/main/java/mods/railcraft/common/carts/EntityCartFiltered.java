@@ -8,26 +8,19 @@
  */
 package mods.railcraft.common.carts;
 
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
-import mods.railcraft.common.util.network.DataTools;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-public abstract class EntityCartFiltered extends CartContainerBase implements IEntityAdditionalSpawnData, IMinecart {
+public abstract class EntityCartFiltered extends CartContainerBase implements IMinecart {
+    private static final byte FILTER_DATA_ID = 29;
     private final PhantomInventory invFilter = new PhantomInventory(1, this);
 
     public EntityCartFiltered(World world) {
@@ -43,6 +36,12 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IE
         prevPosX = d;
         prevPosY = d1;
         prevPosZ = d2;
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        dataWatcher.addObjectByDataType(FILTER_DATA_ID, 5);
     }
 
     public static ItemStack getFilterFromCartItem(ItemStack cart) {
@@ -102,6 +101,7 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IE
         super.readEntityFromNBT(data);
 
         invFilter.readFromNBT("invFilter", data);
+        dataWatcher.updateObject(FILTER_DATA_ID, invFilter.getStackInSlot(0));
     }
 
     @Override
@@ -116,7 +116,8 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IE
     }
 
     public ItemStack getFilterItem() {
-        return getFilter().getStackInSlot(0);
+        //return getFilter().getStackInSlot(0);
+        return dataWatcher.getWatchableObjectItemStack(FILTER_DATA_ID);
     }
 
     public PhantomInventory getFilter() {
@@ -124,25 +125,8 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IE
     }
 
     public void setFilter(ItemStack filter) {
+        dataWatcher.updateObject(FILTER_DATA_ID, filter);
         getFilter().setInventorySlotContents(0, filter);
-    }
-
-    @Override
-    public void writeSpawnData(ByteBuf data) {
-        try {
-            DataOutputStream byteStream = new DataOutputStream(new ByteBufOutputStream(data));
-            DataTools.writeItemStack(getFilterItem(), byteStream);
-        } catch (IOException ex) {
-        }
-    }
-
-    @Override
-    public void readSpawnData(ByteBuf data) {
-        try {
-            DataInputStream byteSteam = new DataInputStream(new ByteBufInputStream(data));
-            setFilter(DataTools.readItemStack(byteSteam));
-        } catch (IOException ex) {
-        }
     }
 
     @Override
