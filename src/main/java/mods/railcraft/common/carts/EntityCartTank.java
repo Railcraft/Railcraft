@@ -8,10 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.ILiquidTransfer;
 import mods.railcraft.api.carts.IMinecart;
@@ -22,13 +18,10 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.network.DataTools;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -39,13 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-public class EntityCartTank extends EntityCartFiltered implements IFluidHandler, ILiquidTransfer, IEntityAdditionalSpawnData, ISidedInventory, IMinecart, IFluidCart {
+public class EntityCartTank extends EntityCartFiltered implements IFluidHandler, ILiquidTransfer, ISidedInventory, IMinecart, IFluidCart {
     private static final byte FLUID_ID_DATA_ID = 25;
     private static final byte FLUID_QTY_DATA_ID = 26;
     private static final byte FLUID_COLOR_DATA_ID = 27;
