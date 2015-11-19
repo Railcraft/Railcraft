@@ -45,7 +45,7 @@ public class RenderBlockPost extends BlockRenderer {
         renderer.addCombinedRenderer(EnumPost.STONE.ordinal(), new RenderPostStone());
         renderer.addCombinedRenderer(EnumPost.STONE_PLATFORM.ordinal(), new RenderPostStone());
         renderer.addCombinedRenderer(EnumPost.METAL_UNPAINTED.ordinal(), new RenderPost());
-        renderer.addCombinedRenderer(EnumPost.METAL_UNPAINTED_PLATFORM.ordinal(), new RenderPost());
+        renderer.addCombinedRenderer(EnumPost.METAL_PLATFORM_UNPAINTED.ordinal(), new RenderPost());
         renderer.addCombinedRenderer(EnumPost.EMBLEM.ordinal(), new RenderPostSign());
         return renderer;
     }

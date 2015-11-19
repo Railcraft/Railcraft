@@ -68,7 +68,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
             HarvestPlugin.setHarvestLevel(block, EnumPost.EMBLEM.ordinal(), "pickaxe", 2);
             HarvestPlugin.setHarvestLevel(block, EnumPost.WOOD_PLATFORM.ordinal(), "axe", 0);
             HarvestPlugin.setHarvestLevel(block, EnumPost.STONE_PLATFORM.ordinal(), "pickaxe", 1);
-            HarvestPlugin.setHarvestLevel(block, EnumPost.METAL_UNPAINTED_PLATFORM.ordinal(), "pickaxe", 2);
+            HarvestPlugin.setHarvestLevel(block, EnumPost.METAL_PLATFORM_UNPAINTED.ordinal(), "pickaxe", 2);
 
             ForestryPlugin.addBackpackItem("builder", block);
         }
@@ -79,7 +79,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         switch (EnumPost.fromId(meta)) {
             case WOOD_PLATFORM:
             case STONE_PLATFORM:
-            case METAL_UNPAINTED_PLATFORM:
+            case METAL_PLATFORM_UNPAINTED:
                 return true;
         }
         return false;
@@ -104,7 +104,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         EnumPost.STONE.setTexture(stoneIcon);
         EnumPost.STONE_PLATFORM.setTexture(stoneIcon);
         EnumPost.METAL_UNPAINTED.setTexture(metalIcon);
-        EnumPost.METAL_UNPAINTED_PLATFORM.setTexture(metalIcon);
+        EnumPost.METAL_PLATFORM_UNPAINTED.setTexture(metalIcon);
         EnumPost.EMBLEM.setTexture(metalIcon);
     }
 

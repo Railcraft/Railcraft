@@ -44,7 +44,7 @@ public class SoundRegistry {
             registerCustomStepSound(block, EnumPost.METAL_UNPAINTED.ordinal(), Block.soundTypeMetal);
             registerCustomStepSound(block, EnumPost.WOOD_PLATFORM.ordinal(), Block.soundTypeWood);
             registerCustomStepSound(block, EnumPost.STONE_PLATFORM.ordinal(), Block.soundTypeStone);
-            registerCustomStepSound(block, EnumPost.METAL_UNPAINTED_PLATFORM.ordinal(), Block.soundTypeMetal);
+            registerCustomStepSound(block, EnumPost.METAL_PLATFORM_UNPAINTED.ordinal(), Block.soundTypeMetal);
         }
 
         block = BlockCube.getBlock();
