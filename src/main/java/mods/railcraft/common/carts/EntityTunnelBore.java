@@ -157,7 +157,6 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     private int burnTime;
     private int fuel;
     private boolean hasInit;
-    private double yHeight;
     private EntityTunnelBorePart[] partArray;
     private EntityTunnelBorePart partHead1;
     private EntityTunnelBorePart partHead2;
@@ -174,7 +173,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         partArray = new EntityTunnelBorePart[]{
                 // ------------------------------------- width, height, forwardOffset, sideOffset
                 partHead1 = new EntityTunnelBorePart(this, "head1", 1.9F, 2.6F, 2F, -0.6F),
-                partHead1 = new EntityTunnelBorePart(this, "head2", 1.9F, 2.6F, 2F, 0.6F),
+                partHead2 = new EntityTunnelBorePart(this, "head2", 1.9F, 2.6F, 2F, 0.6F),
                 partBody = new EntityTunnelBorePart(this, "body", 2.0F, 1.9F, 0.6F),
                 partTail1 = new EntityTunnelBorePart(this, "tail1", 1.6F, 1.4F, -1F),
                 partTail2 = new EntityTunnelBorePart(this, "tail2", 1.6F, 1.4F, -2.2F),
@@ -375,7 +374,6 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         }
 
         super.onUpdate();
-//        posY = yHeight;
 
         for (Entity part : partArray) {
             part.onUpdate();
