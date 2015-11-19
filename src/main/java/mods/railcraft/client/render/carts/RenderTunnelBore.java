@@ -6,17 +6,20 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.client.render;
+package mods.railcraft.client.render.carts;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
-import org.lwjgl.opengl.GL11;
 import mods.railcraft.api.carts.bore.IBoreHead;
+import mods.railcraft.client.render.models.bore.ModelTunnelBore;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.client.render.models.bore.ModelTunnelBore;
+import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class RenderTunnelBore extends Render {
 
@@ -27,7 +30,7 @@ public class RenderTunnelBore extends Render {
         modelTunnelBore = new ModelTunnelBore();
     }
 
-    public void render(EntityTunnelBore bore, double d, double d1, double d2, float yaw, float f1) {
+    public void render(EntityTunnelBore bore, double x, double y, double z, float yaw, float time) {
         // System.out.println("Render Yaw = " + f);
         GL11.glPushMatrix();
         long var10 = (long) bore.getEntityId() * 493286711L;
@@ -36,7 +39,30 @@ public class RenderTunnelBore extends Render {
         float ty = (((float) (var10 >> 20 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
         float tz = (((float) (var10 >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
         GL11.glTranslatef(tx, ty, tz);
-        GL11.glTranslatef((float) d, (float) d1, (float) d2);
+
+        if (RenderManager.debugBoundingBox) {
+            GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+//            GL11.glDepthMask(false);
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            GL11.glDisable(GL11.GL_CULL_FACE);
+            GL11.glDisable(GL11.GL_BLEND);
+            for (Entity part : bore.getParts()) {
+                GL11.glPushMatrix();
+                double posX = part.lastTickPosX + (part.posX - part.lastTickPosX) * (double) time - RenderManager.renderPosX;
+                double posY = part.lastTickPosY + (part.posY - part.lastTickPosY) * (double) time - RenderManager.renderPosY;
+                double posZ = part.lastTickPosZ + (part.posZ - part.lastTickPosZ) * (double) time - RenderManager.renderPosZ;
+                GL11.glTranslatef((float) posX, (float) posY, (float) posZ);
+                float halfWidth = part.width / 2.0F;
+                AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth);
+                RenderGlobal.drawOutlinedBoundingBox(axisalignedbb, 16777215);
+                GL11.glPopMatrix();
+            }
+//            GL11.glDepthMask(true);
+            GL11.glPopAttrib();
+        }
+
+        GL11.glTranslatef((float) x, (float) y, (float) z);
         switch (bore.getFacing()) {
             case NORTH:
                 yaw = 90;
@@ -52,8 +78,8 @@ public class RenderTunnelBore extends Render {
                 break;
         }
         GL11.glRotatef(yaw, 0.0F, 1.0F, 0.0F);
-        float f3 = (float) bore.getRollingAmplitude() - f1;
-        float f4 = (float) bore.getDamage() - f1;
+        float f3 = (float) bore.getRollingAmplitude() - time;
+        float f4 = (float) bore.getDamage() - time;
         if (f4 < 0.0F) {
             f4 = 0.0F;
         }
@@ -63,9 +89,8 @@ public class RenderTunnelBore extends Render {
             angle = Math.copySign(angle, bore.getRollingDirection());
             GL11.glRotatef(angle, 1.0F, 0.0F, 0.0F);
         }
-        float light = bore.getBrightness(f1);
+        float light = bore.getBrightness(time);
         light = light + ((1.0f - light) * 0.4f);
-
 
 
         int j = 0xffffff;

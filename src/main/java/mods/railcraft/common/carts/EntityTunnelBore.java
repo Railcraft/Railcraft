@@ -8,12 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import com.mojang.authlib.GameProfile;
-
-import mods.railcraft.common.plugins.forge.PlayerPlugin;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.bore.IBoreHead;
@@ -27,6 +21,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.collections.BlockSet;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -50,13 +45,16 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 import java.util.*;
 
 public class EntityTunnelBore extends CartContainerBase implements IInventory, ILinkableCart {
     public static final float SPEED = 0.03F;
-    public static final float LENGTH = 6f;
+    public static final float LENGTH = 6.2f;
     public static final int MAX_FILL_DEPTH = 10;
     public static final int FAIL_DELAY = 200;
     public static final int STANDARD_DELAY = 5;
@@ -159,6 +157,13 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     private int burnTime;
     private int fuel;
     private boolean hasInit;
+    private double yHeight;
+    private EntityTunnelBorePart[] partArray;
+    private EntityTunnelBorePart partHead1;
+    private EntityTunnelBorePart partHead2;
+    private EntityTunnelBorePart partBody;
+    private EntityTunnelBorePart partTail1;
+    private EntityTunnelBorePart partTail2;
 
     public EntityTunnelBore(World world, double i, double j, double k) {
         this(world, i, j, k, ForgeDirection.SOUTH);
@@ -166,6 +171,14 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     public EntityTunnelBore(World world, double i, double j, double k, ForgeDirection f) {
         super(world);
+        partArray = new EntityTunnelBorePart[]{
+                // ------------------------------------- width, height, forwardOffset, sideOffset
+                partHead1 = new EntityTunnelBorePart(this, "head1", 1.9F, 2.6F, 2F, -0.6F),
+                partHead1 = new EntityTunnelBorePart(this, "head2", 1.9F, 2.6F, 2F, 0.6F),
+                partBody = new EntityTunnelBorePart(this, "body", 2.0F, 1.9F, 0.6F),
+                partTail1 = new EntityTunnelBorePart(this, "tail1", 1.6F, 1.4F, -1F),
+                partTail2 = new EntityTunnelBorePart(this, "tail2", 1.6F, 1.4F, -2.2F),
+        };
         hasInit = true;
         setPosition(i, j + (double) yOffset, k);
         motionX = 0.0D;
@@ -176,7 +189,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         prevPosZ = k;
 //        cargoItems = new ItemStack[25];
         setFacing(f);
-        setSize(LENGTH, 2.7F);
+        setSize(LENGTH, 4F);
     }
 
     public EntityTunnelBore(World world) {
@@ -362,8 +375,14 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         }
 
         super.onUpdate();
+//        posY = yHeight;
+
+        for (Entity part : partArray) {
+            part.onUpdate();
+        }
 
         if (Game.isHost(worldObj)) {
+
             updateFuel();
 //            if(update % 64 == 0){
 //                System.out.println("bore tick");
@@ -517,6 +536,34 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             z -= offset;
         else if (getFacing() == ForgeDirection.SOUTH)
             z += offset;
+        return z;
+    }
+
+    protected double getOffsetX(double x, double forwardOffset, double sideOffset) {
+        switch(getFacing()){
+            case NORTH:
+                return x + sideOffset;
+            case SOUTH:
+                return x - sideOffset;
+            case EAST:
+                return x + forwardOffset;
+            case WEST:
+                return x - forwardOffset;
+        }
+        return x;
+    }
+
+    protected double getOffsetZ(double z, double forwardOffset, double sideOffset) {
+        switch(getFacing()){
+            case NORTH:
+                return z - forwardOffset;
+            case SOUTH:
+                return z + forwardOffset;
+            case EAST:
+                return z - sideOffset;
+            case WEST:
+                return z + sideOffset;
+        }
         return z;
     }
 
@@ -846,7 +893,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     @Override
     public AxisAlignedBB getBoundingBox() {
-        return boundingBox;
+        return null;
     }
 
     @Override
@@ -1090,5 +1137,13 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     public IInventory getInventoryRails() {
         return invRails;
+    }
+
+    public Entity[] getParts() {
+        return this.partArray;
+    }
+
+    public boolean attackEntityFromPart(EntityTunnelBorePart part, DamageSource damageSource, float damage) {
+        return attackEntityFrom(damageSource, damage);
     }
 }
