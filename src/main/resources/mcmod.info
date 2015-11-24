@@ -1,17 +1,21 @@
-[
 {
-  "modid": "Railcraft",
-  "name": "Railcraft",
-  "description": "Redefine your rails",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "logoFile": "assets/railcraft/logo.png",
-  "url": "http://railcraft.info/",
-  "updateUrl": "",
-  "authors": ["CovertJaguar"],
-  "credits": "Created by CovertJaguar",
-  "parent": "",
-  "screenshots": [],
-  "dependencies": []
+  "modListVersion": 2,
+  "modList": [{
+    "modid": "Railcraft",
+    "name": "Railcraft",
+    "description": "Redefine your rails",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "http://railcraft.info/",
+    "updateUrl": "http://www.railcraft.info/releases/",
+    "authorList": [ "CovertJaguar" ],
+    "credits": "Created by CovertJaguar",
+    "logoFile": "assets/railcraft/logo.png",
+    "screenshots": [],
+    "parent": "",
+    "requiredMods": [ "Forge" ],
+    "dependencies": [],
+    "dependants": [],
+    "useDependencyInformation": true
+  }]
 }
-]

@@ -351,6 +351,12 @@ public abstract class SignalBlock extends AbstractPair {
     public void tickServer() {
         super.tickServer();
         update++;
+        try {
+            if (!isLoaded())
+                return;
+        } catch (Throwable ex) {
+            Game.logErrorAPI("Railcraft", ex, AbstractPair.class);
+        }
         if (update % Signals.getSignalUpdateInterval() == 0) {
             SignalAspect prev = getSignalAspect();
             if (prev != SignalAspect.BLINK_RED)

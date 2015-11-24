@@ -110,7 +110,7 @@ public class BlockPostMetal extends BlockPostBase {
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         if (isPlatform)
-            list.add(EnumPost.METAL_UNPAINTED_PLATFORM.getItem());
+            list.add(EnumPost.METAL_PLATFORM_UNPAINTED.getItem());
         else
             list.add(EnumPost.METAL_UNPAINTED.getItem());
         return list;

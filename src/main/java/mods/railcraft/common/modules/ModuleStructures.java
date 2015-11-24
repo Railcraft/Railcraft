@@ -181,7 +181,7 @@ public class ModuleStructures extends RailcraftModule {
                     'I', "ingotIron");
             RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
 
-            CraftingPlugin.addShapedRecipe(EnumPost.METAL_UNPAINTED_PLATFORM.getItem(4),
+            CraftingPlugin.addShapedRecipe(EnumPost.METAL_PLATFORM_UNPAINTED.getItem(4),
                     " T ",
                     " I ",
                     'T', BlockRailcraftSlab.getItem(EnumBlockMaterial.IRON),
@@ -254,7 +254,7 @@ public class ModuleStructures extends RailcraftModule {
 
         if (BlockPostMetal.post != null && BlockPostMetal.platform != null) {
             ItemStack stackColored = BlockPostMetal.platform.getItem(1, OreDictionary.WILDCARD_VALUE);
-            ItemStack stackRaw = EnumPost.METAL_UNPAINTED_PLATFORM.getItem();
+            ItemStack stackRaw = EnumPost.METAL_PLATFORM_UNPAINTED.getItem();
 
             for (EnumColor color : EnumColor.values()) {
                 ItemStack outputStack = new ItemStack(BlockPostMetal.platform, 8, color.ordinal());
