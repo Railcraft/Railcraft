@@ -82,7 +82,8 @@ public enum EnumTrack {
     ELECTRIC_JUNCTION(Module.TRACKS_ELECTRIC, 1, 0, "electric.junction", 8, TrackElectricJunction.class),
     ELECTRIC_SWITCH(Module.TRACKS_ELECTRIC, 4, 0, "electric.switch", 8, TrackElectricSwitch.class),
     ELECTRIC_WYE(Module.TRACKS_ELECTRIC, 2, 0, "electric.wye", 8, TrackElectricWye.class),
-    FORCE(Module.ELECTRICITY, 1, 0, "force", 1, TrackForce.class),;
+    FORCE(Module.ELECTRICITY, 1, 0, "force", 1, TrackForce.class),
+    AUTOLOCOCOUPLER(Module.LOCOMOTIVES, 2, 1, "autolococoupler", 8, TrackAutoLocoCoupler.class);
     public static final EnumTrack[] VALUES = values();
     private static final List<EnumTrack> creativeList = new ArrayList<EnumTrack>(50);
     private static final Set<TrackSpec> trackSpecs = new HashSet<TrackSpec>(50);
@@ -116,6 +117,7 @@ public enum EnumTrack {
         creativeList.add(WHISTLE);
         creativeList.add(LOCOMOTIVE);
         creativeList.add(LIMITER);
+        creativeList.add(AUTOLOCOCOUPLER);
         creativeList.add(ROUTING);
         creativeList.add(BUFFER_STOP);
         creativeList.add(ONEWAY);
@@ -671,6 +673,16 @@ public enum EnumTrack {
                         "III",
                         'I', railReinforced,
                         '#', reinforcedRailbed);
+                break;
+            case AUTOLOCOCOUPLER:
+                CraftingPlugin.addShapedRecipe(output,
+                        "IrI",
+                        "I#I",
+                        "IcI",
+                        'I', railStandard,
+                        '#', woodRailbed,
+                		'r', "dustRedstone",
+                		'c', RailcraftItem.circuit);
                 break;
         }
         return output;

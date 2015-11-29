@@ -44,6 +44,7 @@ public class ModuleLocomotives extends RailcraftModule {
         MiscTools.registerTrack(EnumTrack.WHISTLE);
         MiscTools.registerTrack(EnumTrack.LOCOMOTIVE);
         MiscTools.registerTrack(EnumTrack.LIMITER);
+        MiscTools.registerTrack(EnumTrack.AUTOLOCOCOUPLER);
 
         ItemWhistleTuner.registerItem();
 

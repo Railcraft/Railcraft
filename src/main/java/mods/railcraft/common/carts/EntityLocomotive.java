@@ -40,6 +40,7 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -85,6 +86,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     private int whistleDelay;
     private int tempIdle;
     private float whistlePitch = getNewWhistlePitch();
+    public boolean readyToLink;
 
     public EntityLocomotive(World world) {
         super(world);
@@ -513,6 +515,15 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
                 if (otherLoco.isEntityAlive())
                     otherLoco.explode();
                 return;
+            }
+            if (entity instanceof EntityMinecart) {
+            	if (readyToLink) {
+            		ILinkageManager lm = CartTools.getLinkageManager(entity.worldObj);
+            		lm.createLink((EntityMinecart)entity, this);
+            		LinkageManager.printDebug("Reason For New Link: Passed Auto Coupler Track And Collided With First Cart.");
+            		readyToLink = false;
+            		setSpeed(LocoSpeed.SLOWEST);
+            	}
             }
         }
         super.applyEntityCollision(entity);
