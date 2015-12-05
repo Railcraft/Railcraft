@@ -8,14 +8,22 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.carts.CartUtils;
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class TrackDisposal extends TrackSuspended {
+public class TrackDisposal extends TrackSuspended implements ITrackPowered {
 
     private static final int TIME_TILL_NEXT_MOUNT = 40;
+    private boolean powered = false;
 
     @Override
     public EnumTrack getTrackType() {
@@ -29,7 +37,7 @@ public class TrackDisposal extends TrackSuspended {
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        if (cart.canBeRidden()) {
+        if (!isPowered() && cart.canBeRidden()) {
             if (cart.riddenByEntity != null) {
                 CartUtils.dismount(cart, cart.posX, cart.posY - 2, cart.posZ);
             }
@@ -42,6 +50,46 @@ public class TrackDisposal extends TrackSuspended {
         if (!world.isAirBlock(x, y - 1, z))
             return false;
         return super.canPlaceRailAt(world, x, y, z);
+    }
+
+    @Override
+    public void onNeighborBlockChange(Block block) {
+        super.onNeighborBlockChange(block);
+        testPower();
+    }
+
+    @Override
+    public boolean isPowered() {
+        return powered;
+    }
+
+    @Override
+    public void setPowered(boolean powered) {
+        this.powered = powered;
+    }
+    @Override
+    public void writeToNBT(NBTTagCompound nbttagcompound) {
+        super.writeToNBT(nbttagcompound);
+        nbttagcompound.setBoolean("powered", powered);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbttagcompound) {
+        super.readFromNBT(nbttagcompound);
+        powered = nbttagcompound.getBoolean("powered");
+    }
+
+    @Override
+    public void writePacketData(DataOutputStream data) throws IOException {
+        super.writePacketData(data);
+        data.writeBoolean(powered);
+    }
+
+    @Override
+    public void readPacketData(DataInputStream data) throws IOException {
+        super.readPacketData(data);
+        powered = data.readBoolean();
+        markBlockNeedsUpdate();
     }
 
 }
