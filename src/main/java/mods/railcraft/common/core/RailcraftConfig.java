@@ -112,6 +112,7 @@ public class RailcraftConfig {
     private static int maxTankSize;
     private static int locomotiveHorsepower;
     private static int creosoteTorchOutput;
+    private static int coalcokeTorchOutput;
     private static int villagerID;
     private static int wreckingID;
     private static int implosionID;
@@ -315,6 +316,7 @@ public class RailcraftConfig {
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
         loadRecipeProperty("railcraft.misc", "gunpowder", true, "change to '{t}=false' to disable the sulfur, saltpeter, charcoal dust recipe for gunpowder");
         creosoteTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "creosote.torches", 0, 6, 16, "set the output of the creosote and woool recipe for torches, setting to 0 will disable'\nmin=0, default=6, max=16");
+        coalcokeTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "coalcoke.torches", 0, 8, 32, "set the output of the coalcoke and stick recipe for torches, setting to 0 will disable'\nmin=0, default=8, max=32");
         loadRecipeProperty("railcraft.cart", "bronze", true, "change to '{t}=false' to disable the bronze recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "steel", true, "change to '{t}=false' to disable the steel recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "furnace", false, "change to '{t}=true' to enable the Furnace Minecart recipe");
@@ -724,9 +726,9 @@ public class RailcraftConfig {
         return getRecipeConfig("minecraft.furnace.creosote");
     }
 
-    public static int creosoteTorchOutput() {
-        return creosoteTorchOutput;
-    }
+    public static int creosoteTorchOutput() { return creosoteTorchOutput; }
+
+    public static int coalcokeTorchOutput() { return coalcokeTorchOutput; }
 
     public static boolean doUpdateCheck() {
         return doUpdateCheck;
