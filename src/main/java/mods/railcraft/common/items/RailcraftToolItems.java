@@ -358,6 +358,12 @@ public class RailcraftToolItems {
                 Item item = itemCoalCoke = new ItemRailcraft().setUnlocalizedName(tag);
                 RailcraftRegistry.register(itemCoalCoke);
 
+                CraftingPlugin.addShapedRecipe(new ItemStack(Blocks.torch, 8),
+                        "C",
+                        "S",
+                        'C', new ItemStack(itemCoalCoke),
+                        'S', "stickWood");
+
                 LootPlugin.addLootTool(new ItemStack(item), 4, 16, tag);
                 LootPlugin.addLootWorkshop(new ItemStack(item), 4, 16, tag);
 
