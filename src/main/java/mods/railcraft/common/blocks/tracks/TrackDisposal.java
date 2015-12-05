@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class TrackDisposal extends TrackSuspended implements ITrackPowered {
@@ -56,6 +57,14 @@ public class TrackDisposal extends TrackSuspended implements ITrackPowered {
     public void onNeighborBlockChange(Block block) {
         super.onNeighborBlockChange(block);
         testPower();
+    }
+
+    @Override
+    public IIcon getIcon() {
+        if (isPowered()) {
+            return getIcon(1);
+        }
+        return getIcon(0);
     }
 
     @Override
