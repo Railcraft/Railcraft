@@ -30,9 +30,11 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
     private boolean[] switchOnAspects = new boolean[SignalAspect.values().length];
     private boolean switchAspect;
+    private boolean ignoreRedstone;
 
     public TileSwitchMotor() {
         switchOnAspects[SignalAspect.RED.ordinal()] = true;
+        ignoreRedstone = false;
     }
 
     @Override
@@ -95,6 +97,8 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
 
         data.setBoolean("switchAspect", switchAspect);
 
+        data.setBoolean("ignoreRedstone", ignoreRedstone);
+
         receiver.writeToNBT(data);
     }
 
@@ -110,6 +114,8 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
         }
 
         switchAspect = data.getBoolean("switchAspect");
+
+        ignoreRedstone = data.getBoolean("ignoreRedstone"); //defaults to false for existing motors without this tag.
 
         receiver.readFromNBT(data);
     }
@@ -140,6 +146,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
             bits |= (switchOnAspects[i] ? 1 : 0) << i;
         }
         data.writeByte(bits);
+        data.writeBoolean(ignoreRedstone);
     }
 
     @Override
@@ -149,6 +156,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
         for (int bit = 0; bit < switchOnAspects.length; bit++) {
             switchOnAspects[bit] = ((bits >> bit) & 1) == 1;
         }
+        ignoreRedstone = data.readBoolean();
     }
 
     @Override
@@ -161,6 +169,13 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
         switchOnAspects[aspect.ordinal()] = trigger;
     }
 
+    public boolean doesActionOnRedstone() {
+        return !ignoreRedstone;
+    }
+
+    public void doActionOnRedstone(boolean trigger) {
+        ignoreRedstone = !trigger;
+    }
     @Override
     public SimpleSignalReceiver getReceiver() {
         return receiver;
@@ -168,7 +183,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
 
     @Override
     public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
-        return switchAspect || isPowered();
+        return switchAspect || (!ignoreRedstone && isPowered() );
     }
 
 }
