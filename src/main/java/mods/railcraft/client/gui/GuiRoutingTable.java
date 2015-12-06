@@ -10,11 +10,6 @@ package mods.railcraft.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
 import mods.railcraft.client.gui.buttons.GuiButtonRoutingTableNextPage;
 import mods.railcraft.common.core.Railcraft;
@@ -35,6 +30,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 @SideOnly(Side.CLIENT)
 public class GuiRoutingTable extends GuiScreen {
@@ -186,6 +186,7 @@ public class GuiRoutingTable extends GuiScreen {
     /**
      * Fired when a control is clicked. This is the equivalent of
      * ActionListener.actionPerformed(ActionEvent e).
+     *
      * @param button
      */
     @Override
@@ -414,8 +415,10 @@ public class GuiRoutingTable extends GuiScreen {
         String currentText = getLine(currLine);
         String newText = currentText + string;
 
-        if (newText.length() < ItemRoutingTable.LINE_LENGTH)
+        if (newText.length() < ItemRoutingTable.LINE_LENGTH) {
             this.setLine(currPage, currLine, newText);
+            currChar = getLine(currLine).length();
+        }
     }
 
     /**
