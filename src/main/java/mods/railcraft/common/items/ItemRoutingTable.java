@@ -10,26 +10,15 @@ package mods.railcraft.common.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.client.gui.GuiRoutingTable;
 import mods.railcraft.common.blocks.signals.RoutingLogic;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.plugins.forge.NBTPlugin.NBTList;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IEditableItem;
-import mods.railcraft.common.util.network.PacketCurrentItemNBT;
-import mods.railcraft.common.util.network.PacketDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,8 +30,12 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
@@ -144,7 +137,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         return contents;
     }
 
-    public static List<List<String>> getPages(ItemStack routingTable) {
+    public static LinkedList<LinkedList<String>> getPages(ItemStack routingTable) {
         if (routingTable == null || routingTable.getItem() != item)
             return null;
         NBTTagCompound nbt = routingTable.getTagCompound();
@@ -152,10 +145,10 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
             return null;
 
         NBTList<NBTTagList> pagesList = NBTPlugin.getNBTList(nbt, "pages", NBTPlugin.EnumNBTType.LIST);
-        List<List<String>> contents = new LinkedList<List<String>>();
+        LinkedList<LinkedList<String>> contents = new LinkedList<LinkedList<String>>();
         for (NBTTagList pageNBT : pagesList) {
             NBTList<NBTTagString> pageList = new NBTList<NBTTagString>(pageNBT);
-            List<String> page = new LinkedList<String>();
+            LinkedList<String> page = new LinkedList<String>();
             contents.add(page);
             for (NBTTagString line : pageList) {
                 if (line.func_150285_a_() == null)
@@ -166,11 +159,11 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         return contents;
     }
 
-    public static void setPages(ItemStack routingTable, List<List<String>> pages) {
-        cleanEmptyLines(pages);
+    public static void setPages(ItemStack routingTable, LinkedList<LinkedList<String>> pages) {
+        cleanEmptyPages(pages);
 
         NBTTagList data = new NBTTagList();
-        ListIterator<List<String>> pageIt = pages.listIterator();
+        ListIterator<LinkedList<String>> pageIt = pages.listIterator();
         while (pageIt.hasNext()) {
             List<String> page = pageIt.next();
             NBTTagList pageNBT = new NBTTagList();
@@ -186,18 +179,17 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         nbt.setTag("pages", data);
     }
 
-    private static void cleanEmptyLines(List<List<String>> pages) {
-        Iterator<List<String>> pageIt = pages.iterator();
+    private static void cleanEmptyPages(LinkedList<LinkedList<String>> pages) {
+        Iterator<LinkedList<String>> pageIt = pages.descendingIterator();
         while (pageIt.hasNext()) {
             List<String> page = pageIt.next();
             Iterator<String> lineIt = page.iterator();
             while (lineIt.hasNext()) {
                 String line = lineIt.next();
-                if (line.equals(""))
-                    lineIt.remove();
+                if (!line.equals(""))
+                    return;
             }
-            if (page.isEmpty())
-                pageIt.remove();
+            pageIt.remove();
         }
     }
 

@@ -64,7 +64,7 @@ public class GuiRoutingTable extends GuiScreen {
     private final int bookImageHeight = 192;
     private final int numManualPages;
     private int currPage, currLine, currChar;
-    private final List<List<String>> bookPages;
+    private final LinkedList<LinkedList<String>> bookPages;
     private String bookTitle = "";
     private GuiButtonRoutingTableNextPage buttonNextPage;
     private GuiButtonRoutingTableNextPage buttonPreviousPage;
@@ -76,9 +76,9 @@ public class GuiRoutingTable extends GuiScreen {
         this.player = player;
         this.bookStack = stack;
 
-        List<List<String>> pages = ItemRoutingTable.getPages(stack);
+        LinkedList<LinkedList<String>> pages = ItemRoutingTable.getPages(stack);
         if (pages == null) {
-            bookPages = new LinkedList<List<String>>();
+            bookPages = new LinkedList<LinkedList<String>>();
             initPages();
         } else {
             bookPages = pages;
@@ -102,7 +102,7 @@ public class GuiRoutingTable extends GuiScreen {
     }
 
     private void initPages() {
-        List<String> page = new LinkedList<String>();
+        LinkedList<String> page = new LinkedList<String>();
         bookPages.add(page);
         page.add("");
     }
@@ -240,7 +240,7 @@ public class GuiRoutingTable extends GuiScreen {
 
     private void addNewPage() {
         if (bookPages.size() < 50) {
-            List<String> page = new LinkedList<String>();
+            LinkedList<String> page = new LinkedList<String>();
             page.add("");
             bookPages.add(page);
             bookModified = true;
