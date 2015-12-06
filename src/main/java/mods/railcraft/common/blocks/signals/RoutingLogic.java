@@ -14,7 +14,8 @@ import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IPaintedCart;
 import mods.railcraft.api.carts.IRefuelableCart;
 import mods.railcraft.api.carts.IRoutableCart;
-import mods.railcraft.common.carts.LinkageManager;
+import mods.railcraft.common.carts.EntityLocomotive;
+import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -124,6 +125,8 @@ public class RoutingLogic {
                 return new RidingCondition(line);
             if (line.startsWith("Redstone"))
                 return new RedstoneCondition(line);
+            if (line.startsWith("Loco"))
+                return new LocoCondition(line);
         } catch (RoutingLogicException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -414,6 +417,32 @@ public class RoutingLogic {
                 IPaintedCart pCart = (IPaintedCart) cart;
                 return (primary == null || primary.ordinal() == pCart.getPrimaryColor()) && (secondary == null || secondary.ordinal() == pCart.getSecondaryColor());
             }
+            return false;
+        }
+
+    }
+    
+    private class LocoCondition extends ParsedCondition {
+
+        public LocoCondition(String line) throws RoutingLogicException {
+            super("Loco", false, line);
+        }
+
+        @Override
+        public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+        	if (cart instanceof EntityLocomotive) {
+        		EntityLocomotive loco = (EntityLocomotive)cart;
+	            if (value.equalsIgnoreCase("Electric"))
+	                return loco.getCartType() == EnumCart.LOCO_ELECTRIC;
+	            if (value.equalsIgnoreCase("Steam"))
+	            	return loco.getCartType() == EnumCart.LOCO_STEAM_SOLID;
+	            if (value.equalsIgnoreCase("Steam_Magic"))
+	            	return loco.getCartType() == EnumCart.LOCO_STEAM_MAGIC;
+	            if (value.equalsIgnoreCase("None"))
+	            	return false;
+        	}
+        	if (value.equalsIgnoreCase("None"))
+        		return true;
             return false;
         }
 
