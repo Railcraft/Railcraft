@@ -35,6 +35,8 @@ import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.steam.Steam;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -67,6 +69,7 @@ public class RailcraftConfig {
     private static final String CAT_TWEAKS_BLOCKS = CAT_TWEAKS + ".blocks";
     private static final String CAT_TWEAKS_ITEMS = CAT_TWEAKS + ".items";
     private static final String CAT_TWEAKS_ROUTING = CAT_TWEAKS + ".routing";
+    private static final Set<String> entitiesExcludedFromHighSpeedExplosions = new HashSet<String>();
     private static final Map<String, Boolean> enabledItems = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> enabledBlocks = new HashMap<String, Boolean>();
     private static final Map<String, Boolean> carts = new HashMap<String, Boolean>();
@@ -250,7 +253,11 @@ public class RailcraftConfig {
         maxHighSpeed = get(CAT_TWEAKS_TRACKS + ".speed", "max.speed", 0.6f, 0.8f, 1.2f, "change '{t}' to limit max speed on high speed rails, useful if your computer can't keep up with chunk loading, min=0.6, default=0.8, max=1.2");
 
         launchRailMaxForce = get(CAT_TWEAKS_TRACKS + ".launch", "force.max", 5, 30, 50, "change the value to your desired max launch rail force, min=5, default=30, max=50");
+
+        String[] strings = get(CAT_TWEAKS_TRACKS + ".speed", "entities.excluded", new String[0], "add entity names to exclude them from explosions caused by high speed collisions");
+        Collections.addAll(entitiesExcludedFromHighSpeedExplosions, strings);
     }
+
 
     private static void loadRoutingTweaks() {
         routingOpsOnly = get(CAT_TWEAKS_ROUTING, "ops.only", false, "change to '{t}=true' to limit the editing of Golden Tickets to server admins only");
@@ -955,6 +962,21 @@ public class RailcraftConfig {
         return gen;
     }
 
+    public static boolean isEntityExcludedFromHighSpeedExplosions(Entity entity) {
+        String entityString = EntityList.getEntityString(entity);
+        return entitiesExcludedFromHighSpeedExplosions.contains(entityString);
+    }
+
+    public static void excludedAllEntityFromHighSpeedExplosions(Iterable<String> iterable) {
+        for (String entityName : iterable) {
+            excludedEntityFromHighSpeedExplosions(entityName);
+        }
+    }
+
+    public static void excludedEntityFromHighSpeedExplosions(String entityName) {
+        entitiesExcludedFromHighSpeedExplosions.add(entityName);
+    }
+
     private static List<Integer> getIntegerList(String cat, String tag, int maxEntries) {
         Property prop = configMain.get(cat, tag, "");
         String value = prop.getString();
@@ -977,9 +999,8 @@ public class RailcraftConfig {
     }
 
     private static void loadRecipeProperty(String subcat, String tag, boolean defaultValue, String comment) {
-        comment = COMMENT_PREFIX + comment.replace("{t}", tag) + COMMENT_SUFFIX;
         Property prop = configMain.get(CAT_RECIPES + "." + subcat, tag, defaultValue);
-        prop.comment = comment;
+        decorateComment(prop, tag, comment);
         recipes.put(subcat + "." + tag, prop.getBoolean(defaultValue));
     }
 
@@ -988,9 +1009,8 @@ public class RailcraftConfig {
     }
 
     private static boolean get(String cat, String tag, boolean defaultValue, boolean reset, String comment) {
-        comment = COMMENT_PREFIX + comment.replace("{t}", tag) + COMMENT_SUFFIX;
         Property prop = configMain.get(cat, tag, defaultValue);
-        prop.comment = comment;
+        decorateComment(prop, tag, comment);
         boolean ret = prop.getBoolean(defaultValue);
         if (reset)
             prop.set(defaultValue);
@@ -1012,16 +1032,14 @@ public class RailcraftConfig {
     }
 
     private static int get(String cat, String tag, int defaultValue, String comment) {
-        comment = COMMENT_PREFIX + comment.replace("{t}", tag) + COMMENT_SUFFIX;
         Property prop = configMain.get(cat, tag, defaultValue);
-        prop.comment = comment;
+        decorateComment(prop, tag, comment);
         return parseInteger(prop, defaultValue);
     }
 
     private static int get(String cat, String tag, int min, int defaultValue, int max, String comment) {
-        comment = COMMENT_PREFIX + comment.replace("{t}", tag) + COMMENT_SUFFIX;
         Property prop = configMain.get(cat, tag, defaultValue);
-        prop.comment = comment;
+        decorateComment(prop, tag, comment);
         int parsed = parseInteger(prop, defaultValue);
         int clamped = Math.max(parsed, min);
         clamped = Math.min(clamped, max);
@@ -1031,15 +1049,20 @@ public class RailcraftConfig {
     }
 
     private static float get(String cat, String tag, float min, float defaultValue, float max, String comment) {
-        comment = COMMENT_PREFIX + comment.replace("{t}", tag) + COMMENT_SUFFIX;
         Property prop = configMain.get(cat, tag, defaultValue);
-        prop.comment = comment;
+        decorateComment(prop, tag, comment);
         double parsed = parseDouble(prop, defaultValue);
         double clamped = Math.max(parsed, min);
         clamped = Math.min(clamped, max);
         if (clamped != parsed)
             prop.set(clamped);
         return (float) clamped;
+    }
+
+    private static String[] get(String category, String tag, String[] defaultValues, String comment) {
+        Property property = configMain.get(category, tag, defaultValues, comment);
+        decorateComment(property, tag, comment);
+        return property.getStringList();
     }
 
     private static int parseInteger(Property prop, int defaultValue) {
@@ -1073,9 +1096,8 @@ public class RailcraftConfig {
     }
 
     private static Property get(String cat, String tag, String defaultValue, String comment) {
-        comment = COMMENT_PREFIX + comment.replace("{t}", tag) + COMMENT_SUFFIX;
         Property prop = configMain.get(cat, tag, defaultValue);
-        prop.comment = comment;
+        decorateComment(prop, tag, comment);
         return prop;
     }
 
@@ -1083,6 +1105,11 @@ public class RailcraftConfig {
         Property prop = configMain.get(CAT_LOOT, tag, defaultValue);
         int chance = parseInteger(prop, defaultValue);
         lootChances.put(tag, chance);
+    }
+
+    private static void decorateComment(Property property, String tag, String comment) {
+        comment = COMMENT_PREFIX + comment.replace("{t}", tag) + COMMENT_SUFFIX;
+        property.comment = comment;
     }
 
     private static void loadCartProperty(String tag) {

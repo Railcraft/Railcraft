@@ -17,19 +17,13 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.GameRegistry;
-
-import java.io.File;
-
-import mods.railcraft.common.commands.RootCommand;
-import mods.railcraft.common.modules.ModuleCore;
-import net.minecraft.command.CommandHandler;
-import org.apache.logging.log4j.Level;
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.carts.LinkageManager;
+import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.items.ItemMagnifyingGlass;
 import mods.railcraft.common.items.firestone.BlockFirestoneRecharge;
@@ -42,11 +36,15 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketHandler;
 import net.minecraft.block.Block;
+import net.minecraft.command.CommandHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import org.apache.logging.log4j.Level;
+
+import java.io.File;
 
 @Mod(modid = Railcraft.MOD_ID, name = "Railcraft",
         version = Railcraft.VERSION,
@@ -136,6 +134,15 @@ public final class Railcraft {
                         NBTTagCompound outputNBT = nbt.getCompoundTag("output" + i);
                         recipe.addOutput(ItemStack.loadItemStackFromNBT(outputNBT), outputNBT.getFloat("chance"));
                     }
+                }
+            } else if (mess.key.equals("high-speed-explosion-excluded-entities")) {
+                NBTTagCompound nbt = mess.getNBTValue();
+                if (nbt.hasKey("entities")) {
+                    String entities = nbt.getString("entities");
+                    Iterable<String> split = splitter.split(entities);
+                    RailcraftConfig.excludedAllEntityFromHighSpeedExplosions(split);
+                } else {
+                    Game.log(Level.WARN, "Mod %s attempted to exclude an entity from H.S. explosions, but failed: %s", mess.getSender(), nbt);
                 }
             }
         }
