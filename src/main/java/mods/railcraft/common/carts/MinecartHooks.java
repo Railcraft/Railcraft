@@ -351,8 +351,10 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 
             if (other instanceof EntityMinecart) {
                 boolean otherHighSpeed = other.getEntityData().getBoolean("HighSpeed");
-                if (!otherHighSpeed || (cart.motionX > 0 ^ other.motionX > 0) || (cart.motionZ > 0 ^ other.motionZ > 0))
+                if (!otherHighSpeed || (cart.motionX > 0 ^ other.motionX > 0) || (cart.motionZ > 0 ^ other.motionZ > 0)) {
                     primeToExplode(cart);
+                    return;
+                }
             }
 
             if (RailcraftConfig.isEntityExcludedFromHighSpeedExplosions(other))
