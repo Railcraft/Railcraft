@@ -40,7 +40,7 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
     private void checkRedstone() {
         if (Game.isNotHost(getWorld()))
             return;
-        boolean p = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
+        boolean p = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         if (powered != p) {
             powered = p;
             sendUpdateToClient();
@@ -48,8 +48,8 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isNotHost(worldObj))
             return;
 
@@ -107,13 +107,8 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
     public FluidTankInfo[] getTankInfo(EnumFacing from) {
         FluidStack fluidStack = Fluids.STEAM.get(FluidHelper.BUCKET_VOLUME);
         return new FluidTankInfo[]{
-            new FluidTankInfo(fluidStack, FluidHelper.BUCKET_VOLUME)
+                new FluidTankInfo(fluidStack, FluidHelper.BUCKET_VOLUME)
         };
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        return getMachineType().getTexture(powered ? 0 : 6);
     }
 
     @Override

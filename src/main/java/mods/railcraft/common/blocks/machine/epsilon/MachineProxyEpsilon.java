@@ -10,13 +10,10 @@ package mods.railcraft.common.blocks.machine.epsilon;
 
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.IMachineProxy;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class MachineProxyEpsilon implements IMachineProxy {
@@ -30,11 +27,4 @@ public class MachineProxyEpsilon implements IMachineProxy {
     public List<? extends IEnumMachine> getCreativeList() {
         return EnumMachineEpsilon.getCreativeList();
     }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        EnumMachineEpsilon.registerIcons(iconRegister);
-    }
-
 }

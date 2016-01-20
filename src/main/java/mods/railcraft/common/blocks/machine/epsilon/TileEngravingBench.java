@@ -33,6 +33,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import java.io.DataInputStream;
@@ -71,16 +72,6 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     @Override
     public IEnumMachine getMachineType() {
         return EnumMachineEpsilon.ENGRAVING_BENCH;
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        if (side == EnumFacing.UP.ordinal()) {
-            if (flippedAxis)
-                return getMachineType().getTexture(6);
-            return getMachineType().getTexture(1);
-        }
-        return getMachineType().getTexture(side);
     }
 
     @Override
@@ -136,10 +127,10 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
                 currentEmblem = data.readUTF();
                 break;
             case OPEN_UNLOCK:
-                GuiHandler.openGui(EnumGui.ENGRAVING_BENCH_UNLOCK, sender, worldObj, xCoord, yCoord, zCoord);
+                GuiHandler.openGui(EnumGui.ENGRAVING_BENCH_UNLOCK, sender, worldObj, getPos());
                 break;
             case OPEN_NORMAL:
-                GuiHandler.openGui(EnumGui.ENGRAVING_BENCH, sender, worldObj, xCoord, yCoord, zCoord);
+                GuiHandler.openGui(EnumGui.ENGRAVING_BENCH, sender, worldObj, getPos());
                 break;
             case UNLOCK_EMBLEM:
                 if (EmblemToolsServer.manager != null) {
@@ -153,9 +144,10 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        if (player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) > 64D)
+        BlockPos offsetPos = getPos().add(0.5, 0.5, 0.5);
+        if (player.getDistanceSq(offsetPos) > 64D)
             return false;
-        GuiHandler.openGui(EnumGui.ENGRAVING_BENCH, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.ENGRAVING_BENCH, player, worldObj, getPos());
         return true;
     }
 
@@ -172,13 +164,8 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     }
 
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(worldObj))
             return;
@@ -258,18 +245,18 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return slot == SLOT_RESULT;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return index == SLOT_RESULT;
     }
 
     @Override
@@ -290,7 +277,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        EnumFacing facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
+        EnumFacing facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, getPos(), entityliving);
         if (facing == EnumFacing.EAST || facing == EnumFacing.WEST)
             flippedAxis = true;
     }
@@ -336,5 +323,4 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
             return 0;
         return energyStorage.getMaxEnergyStored();
     }
-
 }

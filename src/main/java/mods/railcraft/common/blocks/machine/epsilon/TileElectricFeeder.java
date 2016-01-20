@@ -22,7 +22,6 @@ import net.minecraft.util.EnumFacing;
 
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileElectricFeeder extends TileMachineBase implements IElectricGrid, ISinkDelegate {
@@ -37,13 +36,8 @@ public class TileElectricFeeder extends TileMachineBase implements IElectricGrid
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        return getMachineType().getTexture(0);
-    }
-
-    @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld()))
             return;
@@ -126,5 +120,4 @@ public class TileElectricFeeder extends TileMachineBase implements IElectricGrid
             }
         return sinkDelegate;
     }
-
 }

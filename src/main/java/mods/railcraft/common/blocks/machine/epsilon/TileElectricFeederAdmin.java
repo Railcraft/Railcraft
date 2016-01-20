@@ -35,7 +35,7 @@ public class TileElectricFeederAdmin extends TileMachineBase implements IElectri
     private void checkRedstone() {
         if (Game.isNotHost(getWorld()))
             return;
-        boolean p = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
+        boolean p = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         if (powered != p) {
             powered = p;
             sendUpdateToClient();
@@ -43,8 +43,8 @@ public class TileElectricFeederAdmin extends TileMachineBase implements IElectri
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld()))
             return;
@@ -77,11 +77,6 @@ public class TileElectricFeederAdmin extends TileMachineBase implements IElectri
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        return getMachineType().getTexture(powered ? 0 : 6);
-    }
-
-    @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
@@ -110,5 +105,4 @@ public class TileElectricFeederAdmin extends TileMachineBase implements IElectri
             markBlockForUpdate();
         }
     }
-
 }

@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.epsilon;
 
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
@@ -20,15 +19,11 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar
  */
 public enum EnumMachineEpsilon implements IEnumMachine {
@@ -42,7 +37,6 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     private final Module module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
-    private IIcon[] texture = new IIcon[12];
     private final int[] textureInfo;
     private static final List<EnumMachineEpsilon> creativeList = new ArrayList<EnumMachineEpsilon>();
     private static final EnumMachineEpsilon[] VALUES = values();
@@ -75,50 +69,6 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     @Override
     public boolean isDepreciated() {
         return module == null;
-    }
-
-    public void setTexture(IIcon[] tex) {
-        this.texture = tex;
-    }
-
-    public IIcon[] getTexture() {
-        return texture;
-    }
-
-    @Override
-    public IIcon getTexture(int index) {
-        if (index < 0 || index >= texture.length)
-            index = 0;
-        return texture[index];
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void registerIcons(IIconRegister iconRegister) {
-        for (EnumMachineEpsilon machine : VALUES) {
-            if (machine.isDepreciated()) continue;
-            if (machine.textureInfo.length == 0) continue;
-            machine.texture = new IIcon[machine.textureInfo.length - 2];
-            int columns = machine.textureInfo[0];
-            int rows = machine.textureInfo[1];
-            IIcon[] icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:" + machine.tag, columns, rows);
-            for (int i = 0; i < machine.texture.length; i++) {
-                machine.texture[i] = icons[machine.textureInfo[i + 2]];
-            }
-        }
-
-        IIcon emitterSide = iconRegister.registerIcon("railcraft:" + FORCE_TRACK_EMITTER.tag + ".side");
-        FORCE_TRACK_EMITTER.texture = new IIcon[9];
-        Arrays.fill(FORCE_TRACK_EMITTER.texture, emitterSide);
-        FORCE_TRACK_EMITTER.texture[6] = iconRegister.registerIcon("railcraft:" + FORCE_TRACK_EMITTER.tag + ".side.unpowered");
-        FORCE_TRACK_EMITTER.texture[7] = iconRegister.registerIcon("railcraft:" + FORCE_TRACK_EMITTER.tag + ".facing");
-        FORCE_TRACK_EMITTER.texture[8] = iconRegister.registerIcon("railcraft:" + FORCE_TRACK_EMITTER.tag + ".facing.unpowered");
-
-        IIcon transformerSide = iconRegister.registerIcon("railcraft:" + FLUX_TRANSFORMER.tag + ".side");
-        IIcon transformerCap = iconRegister.registerIcon("railcraft:" + FLUX_TRANSFORMER.tag + ".cap");
-        FLUX_TRANSFORMER.texture = new IIcon[6];
-        Arrays.fill(FLUX_TRANSFORMER.texture, transformerSide);
-        FLUX_TRANSFORMER.texture[0] = transformerCap;
-        FLUX_TRANSFORMER.texture[1] = transformerCap;
     }
 
     public static EnumMachineEpsilon fromId(int id) {
@@ -184,5 +134,4 @@ public enum EnumMachineEpsilon implements IEnumMachine {
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
     }
-
 }

@@ -32,7 +32,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileForceTrackEmitter extends TileMachineBase implements IElectricGrid {
@@ -77,14 +76,14 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
+        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, getPos(), entityliving);
         checkRedstone();
     }
 
     private void checkRedstone() {
         if (Game.isNotHost(getWorld()))
             return;
-        boolean p = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
+        boolean p = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         if (powered != p) {
             powered = p;
             sendUpdateToClient();
@@ -95,16 +94,16 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     public void onBlockRemoval() {
         super.onBlockRemoval();
         while (numTracks > 0) {
-            int x = xCoord + numTracks * facing.offsetX;
-            int y = yCoord + 1;
-            int z = zCoord + numTracks * facing.offsetZ;
+            int x = getPos() + numTracks * facing.getFrontOffsetX();
+            int y = getY() + 1;
+            int z = getZ() + numTracks * facing.getFrontOffsetZ();
             removeTrack(x, y, z);
         }
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld()))
             return;
@@ -150,9 +149,9 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         if (numTracks >= MAX_TRACKS)
             state = State.EXTENDED;
         else if (clock % TICKS_PER_ACTION == 0) {
-            int x = xCoord + (numTracks + 1) * facing.offsetX;
-            int y = yCoord + 1;
-            int z = zCoord + (numTracks + 1) * facing.offsetZ;
+            int x = getX() + (numTracks + 1) * facing.getFrontOffsetX();
+            int y = getY() + 1;
+            int z = getZ() + (numTracks + 1) * facing.getFrontOffsetZ();
             if (WorldPlugin.blockExists(worldObj, x, y, z)) {
                 Block block = WorldPlugin.getBlock(worldObj, x, y, z);
                 EnumTrackMeta meta;
@@ -212,9 +211,9 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         if (numTracks <= 0)
             state = State.RETRACTED;
         else if (clock % TICKS_PER_ACTION == 0) {
-            int x = xCoord + numTracks * facing.offsetX;
-            int y = yCoord + 1;
-            int z = zCoord + numTracks * facing.offsetZ;
+            int x = getX() + numTracks * facing.getFrontOffsetX();
+            int y = getY() + 1;
+            int z = getZ() + numTracks * facing.getFrontOffsetZ();
             removeTrack(x, y, z);
         }
     }
@@ -240,13 +239,6 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     @Override
     public IEnumMachine getMachineType() {
         return EnumMachineEpsilon.FORCE_TRACK_EMITTER;
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        if (side == facing.ordinal())
-            return getMachineType().getTexture(powered ? 7 : 8);
-        return getMachineType().getTexture(powered ? 0 : 6);
     }
 
     @Override
@@ -318,5 +310,4 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     public EnumFacing getFacing() {
         return facing;
     }
-
 }
