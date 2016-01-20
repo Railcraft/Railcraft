@@ -50,7 +50,7 @@ public class CircularVec3Queue extends ForwardingQueue<Vec3> {
         if (poolIndex >= pool.length)
             poolIndex = 0;
         if (pool[poolIndex] == null)
-            return pool[poolIndex++] = Vec3.createVectorHelper(x, y, z);
+            return pool[poolIndex++] = new Vec3(x, y, z);
         else {
             pool[poolIndex].xCoord = x;
             pool[poolIndex].yCoord = y;

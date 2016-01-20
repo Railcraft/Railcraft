@@ -192,7 +192,7 @@ public abstract class MiscTools {
 
     public static MovingObjectPosition rayTracePlayerLook(EntityPlayer player) {
         double distance = player.capabilities.isCreativeMode ? 5.0F : 4.5F;
-        Vec3 posVec = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
+        Vec3 posVec = new Vec3(player.posX, player.posY, player.posZ);
         Vec3 lookVec = player.getLook(1);
         posVec.yCoord += player.getEyeHeight();
         lookVec = posVec.addVector(lookVec.xCoord * distance, lookVec.yCoord * distance, lookVec.zCoord * distance);

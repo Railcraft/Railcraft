@@ -283,7 +283,7 @@ public class LinkageHandler {
 //        // Probably needs some kind of logic to compare the distance from the
 //        // new position to the current position and determine if its a valid position.
 //        Vec3 closestPoint = null;
-//        Vec3 linkedVec = Vec3.createVectorHelper(linked.posX, linked.posY, linked.posZ);
+//        Vec3 linkedVec = new Vec3(linked.posX, linked.posY, linked.posZ);
 //        double distance = Math.abs(optimalDist - currentDistance);
 //        for (Vec3 pos : leaderHistory) {
 //            double historyDistance = linkedVec.squareDistanceTo(pos);

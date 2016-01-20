@@ -141,14 +141,14 @@ public class RenderSwitch implements ICombinedRenderer {
         float vx = pix;
         float vz = pix;
         float vy = pix * LEVER_HEIGHT;
-        vertices[0] = Vec3.createVectorHelper((double) (-vx), 0.0D, (double) (-vz));
-        vertices[1] = Vec3.createVectorHelper((double) vx, 0.0D, (double) (-vz));
-        vertices[2] = Vec3.createVectorHelper((double) vx, 0.0D, (double) vz);
-        vertices[3] = Vec3.createVectorHelper((double) (-vx), 0.0D, (double) vz);
-        vertices[4] = Vec3.createVectorHelper((double) (-vx), (double) vy, (double) (-vz));
-        vertices[5] = Vec3.createVectorHelper((double) vx, (double) vy, (double) (-vz));
-        vertices[6] = Vec3.createVectorHelper((double) vx, (double) vy, (double) vz);
-        vertices[7] = Vec3.createVectorHelper((double) (-vx), (double) vy, (double) vz);
+        vertices[0] = new Vec3((double) (-vx), 0.0D, (double) (-vz));
+        vertices[1] = new Vec3((double) vx, 0.0D, (double) (-vz));
+        vertices[2] = new Vec3((double) vx, 0.0D, (double) vz);
+        vertices[3] = new Vec3((double) (-vx), 0.0D, (double) vz);
+        vertices[4] = new Vec3((double) (-vx), (double) vy, (double) (-vz));
+        vertices[5] = new Vec3((double) vx, (double) vy, (double) (-vz));
+        vertices[6] = new Vec3((double) vx, (double) vy, (double) vz);
+        vertices[7] = new Vec3((double) (-vx), (double) vy, (double) vz);
 
         for (int i = 0; i < 8; ++i) {
             if (thrown) {
