@@ -10,7 +10,7 @@ package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.electricity.IElectricGrid;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
+
 
 public class TrackElectric extends TrackBaseRailcraft implements IElectricGrid {
 

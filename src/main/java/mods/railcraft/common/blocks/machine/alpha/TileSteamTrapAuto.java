@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import net.minecraft.util.IIcon;
+
 
 /**
  *

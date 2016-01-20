@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.machine.beta;
 import mods.railcraft.common.blocks.machine.IComparatorOverride;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.IMachineProxy;
-import net.minecraft.client.renderer.texture.IIconRegister;
 
 import java.util.List;
 

@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 import java.util.Locale;
 

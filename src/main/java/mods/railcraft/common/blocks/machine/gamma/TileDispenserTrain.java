@@ -28,7 +28,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.WorldServer;
 
 import java.util.Map;

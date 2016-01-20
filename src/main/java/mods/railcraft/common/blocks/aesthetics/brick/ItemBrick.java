@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.brick;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+
 
 public class ItemBrick extends ItemBlock {
 

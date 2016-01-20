@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.IIcon;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

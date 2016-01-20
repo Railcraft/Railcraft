@@ -16,7 +16,6 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import org.lwjgl.opengl.GL11;
 
 /**

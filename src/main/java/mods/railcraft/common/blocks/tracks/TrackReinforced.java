@@ -10,7 +10,7 @@ package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerReinforced;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.IIcon;
+
 
 public class TrackReinforced extends TrackBaseRailcraft {
 

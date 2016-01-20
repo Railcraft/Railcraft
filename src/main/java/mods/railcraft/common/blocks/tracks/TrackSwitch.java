@@ -14,7 +14,6 @@ import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

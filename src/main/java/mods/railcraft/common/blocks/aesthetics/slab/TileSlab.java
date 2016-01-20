@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.aesthetics.slab;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

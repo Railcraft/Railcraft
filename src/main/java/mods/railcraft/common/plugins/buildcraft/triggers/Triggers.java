@@ -8,10 +8,8 @@ import buildcraft.api.statements.*;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.beta.TileEngine.EnergyStage;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 
 import java.util.EnumSet;
 

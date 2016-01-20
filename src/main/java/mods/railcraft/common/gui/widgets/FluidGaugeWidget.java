@@ -12,7 +12,6 @@ import mods.railcraft.client.gui.GuiContainerRailcraft;
 import mods.railcraft.client.render.FluidRenderer;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import net.minecraft.util.IIcon;
 import org.lwjgl.opengl.GL11;
 
 /**

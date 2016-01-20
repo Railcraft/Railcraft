@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.render;
 
-import net.minecraft.util.IIcon;
+
 
 /**
  *

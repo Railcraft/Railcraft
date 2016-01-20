@@ -13,7 +13,7 @@ import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedController;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.IIcon;
+
 
 /**
  *

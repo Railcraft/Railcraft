@@ -10,12 +10,10 @@ package mods.railcraft.client.util.textures;
 
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.Level;
 

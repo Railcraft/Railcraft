@@ -12,7 +12,6 @@ import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 
 import java.util.List;
 import java.util.UUID;

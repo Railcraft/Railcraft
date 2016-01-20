@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.tracks;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversable;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.IIcon;
+
 
 public class TrackGatedOneWay extends TrackGated implements ITrackReversable, ITrackPowered {
 

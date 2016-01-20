@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerHighSp
 import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class TrackSpeed extends TrackBaseRailcraft {

@@ -13,7 +13,6 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class ItemMachine extends ItemBlockRailcraftMultiType {

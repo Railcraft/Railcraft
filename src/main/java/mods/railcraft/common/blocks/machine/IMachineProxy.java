@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+
 
 import java.util.List;
 

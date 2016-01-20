@@ -12,7 +12,6 @@ import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
