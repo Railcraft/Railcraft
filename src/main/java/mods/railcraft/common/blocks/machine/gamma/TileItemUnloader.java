@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class TileItemUnloader extends TileLoaderItemBase {
+
     private static final EnumRedstoneMode[] REDSTONE_MODES = new EnumRedstoneMode[]{EnumRedstoneMode.IMMEDIATE, EnumRedstoneMode.COMPLETE, EnumRedstoneMode.MANUAL};
     private final IInventory invBuffer;
     private final Map<ItemStack, Short> transferedItems = new ItemStackMap<Short>();
@@ -65,11 +66,6 @@ public class TileItemUnloader extends TileLoaderItemBase {
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        return getMachineType().getTexture(side);
-    }
-
-    @Override
     public void updateEntity() {
         super.updateEntity();
         if (Game.isNotHost(getWorld())) {
@@ -82,7 +78,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
 
     private void emptyCart() {
         movedItemCart = false;
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.1f, getOrientation());
+        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0.1f, getOrientation());
 
         if (cart == null) {
             setPowered(false);
@@ -331,7 +327,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOADER_ITEM, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.LOADER_ITEM, player, worldObj, getPos());
         return true;
     }
 
@@ -340,7 +336,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
     }
 

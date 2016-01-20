@@ -28,6 +28,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitterDelegate, IGuiReturnHandler {
+
     private static final int[] OUTPUT_LEVELS = {512, 2048};
     private boolean waitTillEmpty = true;
     private TileEntity emitterDelegate;
@@ -38,17 +39,8 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (direction.ordinal() == side)
-            return getMachineType().getTexture(3);
-        if (side != 0 && side != 1)
-            return getMachineType().getTexture(2);
-        return getMachineType().getTexture(1);
-    }
-
-    @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.UNLOADER_ENERGY, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.UNLOADER_ENERGY, player, worldObj, getPos());
         return true;
     }
 
@@ -62,7 +54,7 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
         transferredEnergy = false;
         transferRate = 0;
 
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.1f, direction);
+        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0.1f, direction);
 
         if (cart != currentCart) {
             setPowered(false);

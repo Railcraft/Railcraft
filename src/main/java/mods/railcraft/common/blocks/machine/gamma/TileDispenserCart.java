@@ -53,15 +53,6 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (direction.ordinal() == side)
-            return getMachineType().getTexture(3);
-        if (side != 0 && side != 1)
-            return getMachineType().getTexture(2);
-        return getMachineType().getTexture(1);
-    }
-
-    @Override
     public boolean rotateBlock(EnumFacing axis) {
         if (direction == axis)
             direction = axis.getOpposite();
@@ -73,40 +64,35 @@ public class TileDispenserCart extends TileMachineItem {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.CART_DISPENSER, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.CART_DISPENSER, player, worldObj, getPos());
         return true;
     }
 
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        direction = MiscTools.getSideFacingTrack(worldObj, xCoord, yCoord, zCoord);
+        direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)
-            direction = MiscTools.getSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
+            direction = MiscTools.getSideClosestToPlayer(worldObj, getPos(), entityliving);
     }
 
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (timeSinceLastSpawn < Integer.MAX_VALUE)
             timeSinceLastSpawn++;
     }
 
     public void onPulse() {
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0, direction);
+        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0, direction);
         if (cart == null) {
             if (timeSinceLastSpawn > RailcraftConfig.getCartDispenserMinDelay() * 20)
                 for (int ii = 0; ii < getSizeInventory(); ii++) {
                     ItemStack cartStack = getStackInSlot(ii);
                     if (cartStack != null) {
-                        int x = MiscTools.getXOnSide(xCoord, direction);
-                        int y = MiscTools.getYOnSide(yCoord, direction);
-                        int z = MiscTools.getZOnSide(zCoord, direction);
+                        int x = MiscTools.getXOnSide(getX(), direction);
+                        int y = MiscTools.getYOnSide(getY(), direction);
+                        int z = MiscTools.getZOnSide(getZ(), direction);
                         boolean minecartItem = cartStack.getItem() instanceof IMinecartItem;
                         if (cartStack.getItem() instanceof ItemMinecart || minecartItem) {
                             boolean canPlace = true;
@@ -138,8 +124,8 @@ public class TileDispenserCart extends TileMachineItem {
         } else if (!cart.isDead && cart.getCartItem() != null) {
             IInventory testInv = new InventoryCopy(this);
             ItemStack cartStack = cart.getCartItem();
-            if (cart.hasCustomInventoryName())
-                cartStack.setStackDisplayName(cart.getCommandSenderName());
+            if (cart.hasCustomName())
+                cartStack.setStackDisplayName(cart.getName());
             ItemStack remainder = InvTools.moveItemStack(cartStack.copy(), testInv);
             if (remainder == null) {
                 InvTools.moveItemStack(cartStack, this);
@@ -155,7 +141,7 @@ public class TileDispenserCart extends TileMachineItem {
         super.onNeighborBlockChange(block);
         if (Game.isNotHost(getWorld()))
             return;
-        boolean newPower = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
+        boolean newPower = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         if (!powered && newPower) {
             powered = newPower;
             onPulse();
@@ -213,5 +199,4 @@ public class TileDispenserCart extends TileMachineItem {
     public int getInventoryStackLimit() {
         return 64;
     }
-
 }

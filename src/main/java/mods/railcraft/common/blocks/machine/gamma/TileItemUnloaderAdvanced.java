@@ -57,20 +57,11 @@ public class TileItemUnloaderAdvanced extends TileItemUnloader {
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (direction.ordinal() == side)
-            return getMachineType().getTexture(3);
-        if (side != 0 && side != 1)
-            return getMachineType().getTexture(2);
-        return getMachineType().getTexture(1);
-    }
-
-    @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        direction = MiscTools.getSideFacingTrack(worldObj, xCoord, yCoord, zCoord);
+        direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)
-            direction = MiscTools.getSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
+            direction = MiscTools.getSideClosestToPlayer(worldObj, getPos(), entityliving);
     }
 
     @Override
@@ -87,5 +78,4 @@ public class TileItemUnloaderAdvanced extends TileItemUnloader {
     public EnumFacing getOrientation() {
         return direction;
     }
-
 }

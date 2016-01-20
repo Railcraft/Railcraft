@@ -25,6 +25,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -34,6 +35,7 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiReturnHandler, ISidedInventory {
+
     protected static final int[] SLOTS = InvTools.buildSlotArray(0, 9);
     private final PhantomInventory invFilters = new PhantomInventory(9, this);
     private final MultiButtonController<EnumTransferMode> transferModeController = new MultiButtonController(EnumTransferMode.ALL.ordinal(), EnumTransferMode.values());
@@ -59,13 +61,13 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
     public abstract Slot getBufferSlot(int id, int x, int y);
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
@@ -218,6 +220,5 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         public ToolTip getToolTip() {
             return tip;
         }
-
     }
 }

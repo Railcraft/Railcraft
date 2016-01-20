@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
@@ -20,14 +19,11 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar
  */
 public enum EnumMachineGamma implements IEnumMachine {
@@ -46,10 +42,8 @@ public enum EnumMachineGamma implements IEnumMachine {
     private final String tag;
     private final int extraIcons;
     private final Class<? extends TileMachineBase> tile;
-    private IIcon[] texture;
     private static final List<EnumMachineGamma> creativeList = new ArrayList<EnumMachineGamma>();
     private static final EnumMachineGamma[] VALUES = values();
-    public static final IIcon[] pipeTexture = new IIcon[6];
     private ToolTip tip;
 
     static {
@@ -75,57 +69,6 @@ public enum EnumMachineGamma implements IEnumMachine {
     @Override
     public boolean isDepreciated() {
         return module == null;
-    }
-
-    public void setTexture(IIcon... tex) {
-        this.texture = tex;
-    }
-
-    @Override
-    public IIcon getTexture(int index) {
-        if (index < 0 || index >= texture.length)
-            index = 0;
-        return texture[index];
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void registerIcons(IIconRegister iconRegister) {
-        for (EnumMachineGamma machine : VALUES) {
-            machine.texture = new IIcon[machine.extraIcons + 6];
-            IIcon[] icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:" + machine.tag, machine.extraIcons + 3);
-            IIcon cap = icons[0];
-            IIcon side = icons[1];
-            IIcon face = icons[2];
-
-            machine.texture[0] = cap;
-            machine.texture[1] = cap;
-            for (int i = 2; i < 6; i++) {
-                machine.texture[i] = side;
-            }
-
-            switch (machine) {
-                case ITEM_LOADER:
-                case FLUID_LOADER:
-                    machine.texture[0] = face;
-                    break;
-                case ITEM_UNLOADER:
-                case FLUID_UNLOADER:
-                    machine.texture[1] = face;
-                    break;
-                default:
-                    machine.texture[3] = face;
-            }
-
-            if (machine.extraIcons > 0)
-                System.arraycopy(icons, 3, machine.texture, 6, machine.extraIcons);
-        }
-
-        IIcon[] pipe = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:loader.pipe", 2);
-        pipeTexture[0] = pipe[0];
-        pipeTexture[1] = pipe[0];
-        for (int i = 2; i < 6; i++) {
-            pipeTexture[i] = pipe[1];
-        }
     }
 
     public static EnumMachineGamma fromId(int id) {
@@ -205,5 +148,4 @@ public enum EnumMachineGamma implements IEnumMachine {
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
     }
-
 }

@@ -18,7 +18,6 @@ import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
@@ -103,13 +102,8 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
     }
 
     @Override
-    public final boolean canUpdate() {
-        return true;
-    }
-
-    @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isNotHost(getWorld()))
             return;
         if (pause > 0)
@@ -125,8 +119,8 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
     public final boolean isPoweringTo(EnumFacing side) {
         if (!isPowered())
             return false;
-        EnumFacing opSide = MiscTools.getOppositeSide(side);
-        Block block = WorldPlugin.getBlockOnSide(worldObj, xCoord, yCoord, zCoord, opSide);
+        EnumFacing opSide = side.getOpposite()
+        Block block = WorldPlugin.getBlockOnSide(worldObj, getPos(), opSide);
         return TrackTools.isRailBlock(block) || block == Blocks.redstone_wire || block == Blocks.powered_repeater || block == Blocks.unpowered_repeater;
     }
 

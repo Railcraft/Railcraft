@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class TileItemLoader extends TileLoaderItemBase {
+
     private final Map<ItemStack, Short> transferredItems = new ItemStackMap<Short>();
     private final Set<ItemStack> checkedItems = new ItemStackSet();
     private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(this, tileCache, new ITileFilter() {
@@ -53,11 +54,6 @@ public class TileItemLoader extends TileLoaderItemBase {
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        return getMachineType().getTexture(side);
-    }
-
-    @Override
     public Slot getBufferSlot(int id, int x, int y) {
         return new Slot(this, id, x, y);
     }
@@ -76,7 +72,7 @@ public class TileItemLoader extends TileLoaderItemBase {
 
         movedItemCart = false;
 
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.1f, getOrientation());
+        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0.1f, getOrientation());
 
         if (cart != currentCart) {
             setPowered(false);
@@ -321,12 +317,12 @@ public class TileItemLoader extends TileLoaderItemBase {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOADER_ITEM, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.LOADER_ITEM, player, worldObj, getPos());
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return false;
     }
 

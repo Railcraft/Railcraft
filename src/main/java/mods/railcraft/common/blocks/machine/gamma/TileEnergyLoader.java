@@ -28,6 +28,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDelegate, IGuiReturnHandler {
+
     private static final short[] INPUT_LEVELS = {512, 2048};
     private boolean waitTillFull = false;
     private boolean waitIfEmpty = true;
@@ -39,17 +40,8 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (direction.ordinal() == side)
-            return getMachineType().getTexture(3);
-        if (side != 0 && side != 1)
-            return getMachineType().getTexture(2);
-        return getMachineType().getTexture(1);
-    }
-
-    @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOADER_ENERGY, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.LOADER_ENERGY, player, worldObj, getPos());
         return true;
     }
 
@@ -63,7 +55,7 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
         transferredEnergy = false;
         transferRate = 0;
 
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.1f, direction);
+        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0.1f, direction);
 
         if (cart != currentCart) {
             setPowered(false);
@@ -105,7 +97,7 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
 
     @Override
     public boolean canHandleCart(EntityMinecart cart) {
-        if(!super.canHandleCart(cart))
+        if (!super.canHandleCart(cart))
             return false;
         IEnergyTransfer energyCart = (IEnergyTransfer) cart;
         return energyCart.canInjectEnergy();

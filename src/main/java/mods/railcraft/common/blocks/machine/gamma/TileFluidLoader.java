@@ -49,6 +49,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHandler {
+
     private static final int RESET_WAIT = 200;
     private static final int TRANSFER_RATE = 20;
     private static final float MAX_PIPE_LENGTH = 16 * 0.0625f;
@@ -112,14 +113,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return AxisAlignedBB.fromBounds(xCoord, yCoord - 1, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        if (side > 1)
-            return getMachineType().getTexture(6);
-        return getMachineType().getTexture(side);
+        return AxisAlignedBB.fromBounds(getX(), getY() - 1, getZ(), getX() + 1, getY() + 1, getZ() + 1);
     }
 
     @Override
@@ -165,9 +159,9 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
 
         boolean needsPipe = false;
 
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.2f, EnumFacing.DOWN);
+        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0.2f, EnumFacing.DOWN);
         if (cart == null) {
-            cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord - 1, zCoord, 0.2f, EnumFacing.DOWN);
+            cart = CartTools.getMinecartOnSide(worldObj, getPos().down(), 0.2f, EnumFacing.DOWN);
             needsPipe = true;
         }
 
@@ -278,7 +272,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
         if (p) {
             resetPipe();
             if (worldObj != null) {
-                TileEntity tile = worldObj.getTileEntity(xCoord, yCoord - 2, zCoord);
+                TileEntity tile = worldObj.getTileEntity(getPos().down(2));
                 if (tile instanceof TileTrack) {
                     TileTrack trackTile = (TileTrack) tile;
                     ITrackInstance track = trackTile.getTrackInstance();
@@ -380,7 +374,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOADER_FLUID, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.LOADER_FLUID, player, worldObj, getPos());
         return true;
     }
 
@@ -436,6 +430,5 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
         public ToolTip getToolTip() {
             return tip;
         }
-
     }
 }

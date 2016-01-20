@@ -58,17 +58,8 @@ public class TileDispenserTrain extends TileDispenserCart {
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (direction.ordinal() == side)
-            return getMachineType().getTexture(3);
-        if (side != 0 && side != 1)
-            return getMachineType().getTexture(2);
-        return getMachineType().getTexture(1);
-    }
-
-    @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.TRAIN_DISPENSER, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.TRAIN_DISPENSER, player, worldObj, getPos());
         return true;
     }
 
@@ -117,11 +108,11 @@ public class TileDispenserTrain extends TileDispenserCart {
             resetSpawnSequence();
             return false;
         }
-        int x = MiscTools.getXOnSide(xCoord, direction);
-        int y = MiscTools.getYOnSide(yCoord, direction);
-        int z = MiscTools.getZOnSide(zCoord, direction);
+        int x = MiscTools.getXOnSide(getX(), direction);
+        int y = MiscTools.getYOnSide(getY(), direction);
+        int z = MiscTools.getZOnSide(getZ(), direction);
         if ((spawn.getItem() instanceof ItemMinecart || spawn.getItem() instanceof IMinecartItem)
-                && CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0, direction) == null) {
+                && CartTools.getMinecartOnSide(worldObj, getPos(), 0, direction) == null) {
             ItemStack cartItem = InvTools.removeOneItem(invStock, filter);
             if (cartItem != null) {
                 EntityMinecart cartPlaced = CartUtils.placeCart(getOwner(), cartItem, (WorldServer) worldObj, x, y, z);
@@ -146,8 +137,8 @@ public class TileDispenserTrain extends TileDispenserCart {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (spawningTrain && clock % 4 == 0)
             spawnNextCart();
@@ -155,7 +146,7 @@ public class TileDispenserTrain extends TileDispenserCart {
 
     @Override
     public void onPulse() {
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0, direction);
+        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0, direction);
         if (cart == null)
             if (!spawningTrain && canBuildTrain())
                 if (timeSinceLastSpawn > RailcraftConfig.getCartDispenserMinDelay() * 20)
@@ -197,45 +188,45 @@ public class TileDispenserTrain extends TileDispenserCart {
             getPattern().readFromNBT("invPattern", data);
     }
 
-//    @Override
-//    public int addItem(ItemStack stack, boolean doAdd, EnumFacing from) {
-//        if (InvTools.isInventoryEmpty(getPattern()))
-//            return 0;
-//        IInventory inv = invStock;
-//        if (!doAdd)
-//            inv = new InventoryCopy(inv);
-//        ItemStack leftOver = InvTools.moveItemStack(stack, inv);
-//        if (leftOver == null)
-//            return stack.stackSize;
-//        return stack.stackSize - leftOver.stackSize;
-//    }
-//
-//    @Override
-//    public ItemStack[] extractItem(boolean doRemove, EnumFacing from, int maxItemCount) {
-//        Set<ItemStack> patternSet = new ItemStackSet();
-//        Set<ItemStack> bufferSet = new ItemStackSet();
-//
-//        for (ItemStack stack : getPattern().getContents()) {
-//            if (stack != null)
-//                patternSet.add(stack);
-//        }
-//
-//        for (ItemStack stack : getInventory().getContents()) {
-//            if (stack != null)
-//                bufferSet.add(stack);
-//        }
-//
-//        bufferSet.removeAll(patternSet);
-//
-//        IInventory inv = invStock;
-//        if (!doRemove)
-//            inv = new InventoryCopy(inv);
-//
-//        for (ItemStack stack : bufferSet) {
-//            ItemStack removed = InvTools.removeOneItem(inv, stack);
-//            return removed != null ? new ItemStack[]{removed} : new ItemStack[0];
-//        }
-//
-//        return new ItemStack[0];
-//    }
+    /*@Override
+    public int addItem(ItemStack stack, boolean doAdd, EnumFacing from) {
+        if (InvTools.isInventoryEmpty(getPattern()))
+            return 0;
+        IInventory inv = invStock;
+        if (!doAdd)
+            inv = new InventoryCopy(inv);
+        ItemStack leftOver = InvTools.moveItemStack(stack, inv);
+        if (leftOver == null)
+            return stack.stackSize;
+        return stack.stackSize - leftOver.stackSize;
+    }
+
+    @Override
+    public ItemStack[] extractItem(boolean doRemove, EnumFacing from, int maxItemCount) {
+        Set<ItemStack> patternSet = new ItemStackSet();
+        Set<ItemStack> bufferSet = new ItemStackSet();
+
+        for (ItemStack stack : getPattern().getContents()) {
+            if (stack != null)
+                patternSet.add(stack);
+        }
+
+        for (ItemStack stack : getInventory().getContents()) {
+            if (stack != null)
+                bufferSet.add(stack);
+        }
+
+        bufferSet.removeAll(patternSet);
+
+        IInventory inv = invStock;
+        if (!doRemove)
+            inv = new InventoryCopy(inv);
+
+        for (ItemStack stack : bufferSet) {
+            ItemStack removed = InvTools.removeOneItem(inv, stack);
+            return removed != null ? new ItemStack[]{removed} : new ItemStack[0];
+        }
+
+        return new ItemStack[0];
+    }*/
 }

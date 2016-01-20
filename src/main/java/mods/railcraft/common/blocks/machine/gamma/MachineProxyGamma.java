@@ -14,7 +14,6 @@ import mods.railcraft.common.blocks.machine.IMachineProxy;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class MachineProxyGamma implements IMachineProxy {
@@ -28,10 +27,4 @@ public class MachineProxyGamma implements IMachineProxy {
     public List<? extends IEnumMachine> getCreativeList() {
         return EnumMachineGamma.getCreativeList();
     }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        EnumMachineGamma.registerIcons(iconRegister);
-    }
-
 }

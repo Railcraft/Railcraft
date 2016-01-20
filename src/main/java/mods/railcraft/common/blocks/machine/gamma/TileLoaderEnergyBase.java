@@ -28,6 +28,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISidedInventory {
+
     private static final int SLOT_CHARGE = 0;
     private static final int SLOT_BATTERY = 1;
     private static final int TIER = 2;
@@ -51,33 +52,33 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        switch (slot) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        switch (index) {
             case SLOT_CHARGE:
-                return IC2Plugin.canCharge(stack, getTier());
+                return IC2Plugin.canCharge(itemStackIn, getTier());
             case SLOT_BATTERY:
-                return IC2Plugin.canDischarge(stack, getTier());
+                return IC2Plugin.canDischarge(itemStackIn, getTier());
             default:
                 return false;
         }
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
     }
 
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        direction = MiscTools.getSideFacingTrack(worldObj, xCoord, yCoord, zCoord);
+        direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)
-            direction = MiscTools.getSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
+            direction = MiscTools.getSideClosestToPlayer(worldObj, getPos(), entityliving);
     }
 
     protected void countUpgrades() {
@@ -145,8 +146,8 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     public abstract TileEntity getIC2Delegate();
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld()))
             return;

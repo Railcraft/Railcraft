@@ -50,13 +50,6 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (side > 1)
-            return getMachineType().getTexture(6);
-        return getMachineType().getTexture(side);
-    }
-
-    @Override
     public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         return super.blockActivated(player, side);
     }
@@ -86,7 +79,7 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
 
         tankManager.outputLiquid(tileCache, TankManager.TANK_FILTER, EnumFacing.VALUES, 0, TRANSFER_RATE);
 
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.1f, EnumFacing.UP);
+        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0.1f, EnumFacing.UP);
 
         if (cart != currentCart) {
             setPowered(false);
@@ -187,7 +180,7 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.UNLOADER_FLUID, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.UNLOADER_FLUID, player, worldObj, getPos());
         return true;
     }
 
@@ -232,7 +225,5 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
         public ToolTip getToolTip() {
             return tip;
         }
-
     }
-
 }

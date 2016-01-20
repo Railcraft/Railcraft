@@ -113,8 +113,8 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isHost(getWorld()) && clock % FluidHelper.NETWORK_UPDATE_INTERVAL == 0)
             sendUpdateToClient();
     }
@@ -145,18 +145,18 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return slot == SLOT_OUTPUT;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return index == SLOT_OUTPUT;
     }
 
     @Override
@@ -195,5 +195,4 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
 
         tankManager.readPacketData(data);
     }
-
 }
