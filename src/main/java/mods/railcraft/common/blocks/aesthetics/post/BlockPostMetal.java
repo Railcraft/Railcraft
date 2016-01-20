@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -16,25 +15,27 @@ import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockPostMetal extends BlockPostBase {
 
     public static BlockPostMetal post;
     public static BlockPostMetal platform;
-    public static IIcon[] textures;
     public final boolean isPlatform;
 
     private BlockPostMetal(int renderType, boolean isPlatform) {
@@ -55,7 +56,7 @@ public class BlockPostMetal extends BlockPostBase {
 
     private static BlockPostMetal make(String tag, boolean isPlatform) {
         BlockPostMetal block = new BlockPostMetal(Railcraft.getProxy().getRenderId(), isPlatform);
-        block.setBlockName("railcraft." + tag);
+        block.setRegistryName("railcraft." + tag);
         RailcraftRegistry.register(block, ItemPostMetal.class);
 
         HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
@@ -101,12 +102,12 @@ public class BlockPostMetal extends BlockPostBase {
     }
 
     @Override
-    public boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int metadata) {
+    public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         return true;
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> list = new ArrayList<ItemStack>();
         if (isPlatform)
             list.add(EnumPost.METAL_PLATFORM_UNPAINTED.getItem());
@@ -116,25 +117,13 @@ public class BlockPostMetal extends BlockPostBase {
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        if (!isPlatform)
-            textures = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:post.metal.painted", 16);
-    }
-
-    @Override
-    public IIcon getIcon(int side, int meta) {
-        return textures[meta];
-    }
-
-    @Override
-    public boolean recolourBlock(World world, int x, int y, int z, EnumFacing side, int colour) {
-        int c = 15 - colour;
-        int meta = world.getBlockMetadata(x, y, z);
+    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
+        int c = 15 - color.ordinal();
+        int meta = world.getBlockMetadata(pos);
         if (meta != c) {
-            world.setBlockMetadataWithNotify(x, y, z, c, 3);
+            world.setBlockState(pos, newState, 3);
             return true;
         }
         return false;
     }
-
 }

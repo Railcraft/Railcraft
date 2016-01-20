@@ -31,7 +31,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        setFacing(MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving));
+        setFacing(MiscTools.getHorizontalSideClosestToPlayer(worldObj, getPos(), entityliving));
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt != null) {
             if (nbt.hasKey("color"))
@@ -46,10 +46,11 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     public void setFacing(EnumFacing f) {
+        if (f == null)
+            return;
         switch (f) {
             case UP:
             case DOWN:
-            case UNKNOWN:
                 return;
         }
         if (f != facing) {
@@ -78,11 +79,6 @@ public class TilePostEmblem extends RailcraftTileEntity {
             this.color = color;
             sendUpdateToClient();
         }
-    }
-
-    @Override
-    public boolean canUpdate() {
-        return false;
     }
 
     @Override

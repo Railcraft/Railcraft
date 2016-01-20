@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemPostMetal extends ItemBlock {
@@ -32,17 +31,9 @@ public class ItemPostMetal extends ItemBlock {
     }
 
     @Override
-    public IIcon getIconFromDamage(int damage) {
-        if (damage == -1 || damage == OreDictionary.WILDCARD_VALUE)
-            return EnumPost.METAL_UNPAINTED.getIcon();
-        return BlockPostMetal.textures[damage];
-    }
-
-    @Override
     public String getUnlocalizedName(ItemStack stack) {
         if (stack.getItemDamage() == -1 || stack.getItemDamage() == OreDictionary.WILDCARD_VALUE)
             return EnumPost.METAL_UNPAINTED.getTag();
         return super.getUnlocalizedName() + "." + EnumColor.fromId(stack.getItemDamage()).getBasicTag();
     }
-
 }

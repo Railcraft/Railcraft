@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import java.util.Locale;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum EnumPost {
@@ -26,14 +25,11 @@ public enum EnumPost {
     STONE_PLATFORM,
     METAL_PLATFORM_UNPAINTED;
     public static final EnumPost[] VALUES = values();
-    private IIcon texture;
 
-    public IIcon getIcon() {
-        return texture;
-    }
-
-    public void setTexture(IIcon tex) {
-        this.texture = tex;
+    public static EnumPost fromId(int id) {
+        if (id < 0 || id >= EnumPost.values().length)
+            id = 0;
+        return EnumPost.values()[id];
     }
 
     public ItemStack getItem() {
@@ -48,12 +44,6 @@ public enum EnumPost {
 
     public boolean isEnabled() {
         return BlockPost.block != null;
-    }
-
-    public static EnumPost fromId(int id) {
-        if (id < 0 || id >= EnumPost.values().length)
-            id = 0;
-        return EnumPost.values()[id];
     }
 
     public String getTag() {

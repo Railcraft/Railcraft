@@ -17,6 +17,7 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -128,7 +129,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public int damageDropped(int meta) {
+    public int damageDropped(IBlockState state) {
         return meta;
     }
 

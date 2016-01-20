@@ -19,6 +19,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSign;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
@@ -26,7 +27,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class PostConnectionHelper {
@@ -75,11 +75,12 @@ public class PostConnectionHelper {
         int x2 = MiscTools.getXOnSide(x1, side);
         int y2 = MiscTools.getYOnSide(y1, side);
         int z2 = MiscTools.getZOnSide(z1, side);
+        BlockPos pos = new BlockPos(x2, y2, z2);
 
-        if (world.isAirBlock(x2, y2, z2))
+        if (world.isAirBlock(pos))
             return ConnectStyle.NONE;
 
-        Block otherBlock = WorldPlugin.getBlock(world, x2, y2, z2);
+        Block otherBlock = WorldPlugin.getBlock(world, pos);
         EnumFacing oppositeSide = side.getOpposite();
 
         try {
@@ -99,18 +100,18 @@ public class PostConnectionHelper {
             return ConnectStyle.TWO_THIN;
 
         if (otherBlock instanceof BlockSign) {
-            int meta = world.getBlockMetadata(x2, y2, z2);
+            int meta = world.getBlockMetadata(pos);
             return meta == side.ordinal() ? ConnectStyle.SINGLE_THICK : ConnectStyle.NONE;
         }
 
         if (otherBlock instanceof BlockLantern)
             return ConnectStyle.SINGLE_THICK;
 
-        TileEntity otherTile = world.getTileEntity(x2, y2, z2);
+        TileEntity otherTile = world.getTileEntity(pos);
         if (otherTile instanceof ISignalTile)
             return ConnectStyle.TWO_THIN;
 
-        if (world.isSideSolid(x2, y2, z2, oppositeSide, false))
+        if (world.isSideSolid(pos, oppositeSide, false))
             return ConnectStyle.TWO_THIN;
 
         // RedPower 2 compat
