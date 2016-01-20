@@ -102,7 +102,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
         if (!powered && feed != null && feed.stackSize > 0 && feedTime <= 0) {
             feedTime = MIN_FEED_INTERVAL + rand.nextInt(FEED_VARIANCE);
 
-            AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord, yCoord - 1, zCoord, xCoord + 1, yCoord + 3, zCoord + 1);
+            AxisAlignedBB box = AxisAlignedBB.fromBounds(xCoord, yCoord - 1, zCoord, xCoord + 1, yCoord + 3, zCoord + 1);
             box = box.expand(AREA, 0, AREA);
             List<EntityAnimal> animals = worldObj.getEntitiesWithinAABB(EntityAnimal.class, box);
 

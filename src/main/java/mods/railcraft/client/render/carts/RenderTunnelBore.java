@@ -54,7 +54,7 @@ public class RenderTunnelBore extends Render {
                 double posZ = part.lastTickPosZ + (part.posZ - part.lastTickPosZ) * (double) time - RenderManager.renderPosZ;
                 GL11.glTranslatef((float) posX, (float) posY, (float) posZ);
                 float halfWidth = part.width / 2.0F;
-                AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth);
+                AxisAlignedBB axisalignedbb = AxisAlignedBB.fromBounds(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth);
                 RenderGlobal.drawOutlinedBoundingBox(axisalignedbb, 16777215);
                 GL11.glPopMatrix();
             }

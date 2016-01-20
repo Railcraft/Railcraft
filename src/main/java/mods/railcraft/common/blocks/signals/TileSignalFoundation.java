@@ -88,11 +88,11 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
     }
 
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.getBoundingBox(i, j, k, i + 1, j + 1, k + 1);
+        return AxisAlignedBB.fromBounds(i, j, k, i + 1, j + 1, k + 1);
     }
 
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.getBoundingBox(i, j, k, i + 1, j + 1, k + 1);
+        return AxisAlignedBB.fromBounds(i, j, k, i + 1, j + 1, k + 1);
     }
 
     public boolean isSideSolid(IBlockAccess world, int i, int j, int k, EnumFacing side) {

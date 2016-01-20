@@ -50,7 +50,7 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversable, 
 
     @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool() {
-        return AxisAlignedBB.getBoundingBox(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity.xCoord + 1, tileEntity.yCoord + 1, tileEntity.zCoord + 1);
+        return AxisAlignedBB.fromBounds(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity.xCoord + 1, tileEntity.yCoord + 1, tileEntity.zCoord + 1);
     }
 
     @Override
@@ -64,9 +64,9 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversable, 
         if (isGateOpen())
             return null;
         if (meta == 0)
-            return AxisAlignedBB.getBoundingBox(tileEntity.xCoord, tileEntity.yCoord, (float) tileEntity.zCoord + 0.375F, tileEntity.xCoord + 1, (float) tileEntity.yCoord + 1.5F, (float) tileEntity.zCoord + 0.625F);
+            return AxisAlignedBB.fromBounds(tileEntity.xCoord, tileEntity.yCoord, (float) tileEntity.zCoord + 0.375F, tileEntity.xCoord + 1, (float) tileEntity.yCoord + 1.5F, (float) tileEntity.zCoord + 0.625F);
         else
-            return AxisAlignedBB.getBoundingBox((float) tileEntity.xCoord + 0.375F, tileEntity.yCoord, tileEntity.zCoord, (float) tileEntity.xCoord + 0.625F, (float) tileEntity.yCoord + 1.5F, tileEntity.zCoord + 1);
+            return AxisAlignedBB.fromBounds((float) tileEntity.xCoord + 0.375F, tileEntity.yCoord, tileEntity.zCoord, (float) tileEntity.xCoord + 0.625F, (float) tileEntity.yCoord + 1.5F, tileEntity.zCoord + 1);
     }
 
     @Override

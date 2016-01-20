@@ -62,12 +62,12 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
 
     @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.getBoundingBox(i + BOUNDS, j + 0.35f, k + BOUNDS, i + 1 - BOUNDS, j + 1, k + 1 - BOUNDS);
+        return AxisAlignedBB.fromBounds(i + BOUNDS, j + 0.35f, k + BOUNDS, i + 1 - BOUNDS, j + 1, k + 1 - BOUNDS);
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.getBoundingBox(i + BOUNDS, j + 0.35f, k + BOUNDS, i + 1 - BOUNDS, j + 1, k + 1 - BOUNDS);
+        return AxisAlignedBB.fromBounds(i + BOUNDS, j + 0.35f, k + BOUNDS, i + 1 - BOUNDS, j + 1, k + 1 - BOUNDS);
     }
 
     @Override

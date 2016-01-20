@@ -84,7 +84,7 @@ public class TrackEmbarking extends TrackBaseRailcraft implements ITrackPowered,
     public void onMinecartPass(EntityMinecart cart) {
         if (powered && cart.canBeRidden() && cart.riddenByEntity == null && cart.getEntityData().getInteger("MountPrevention") <= 0) {
             int a = area;
-            AxisAlignedBB box = AxisAlignedBB.getBoundingBox(getX(), getY(), getZ(), getX() + 1, getY() + 1, getZ() + 1);
+            AxisAlignedBB box = AxisAlignedBB.fromBounds(getX(), getY(), getZ(), getX() + 1, getY() + 1, getZ() + 1);
             box = box.expand(a, a, a);
             List entities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, box);
 

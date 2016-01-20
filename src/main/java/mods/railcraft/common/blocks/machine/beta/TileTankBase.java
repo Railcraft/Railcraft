@@ -143,7 +143,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
         for (int i = 4; i <= 8; i++) {
             char[][][] map = buildMap(i, bottom, middle, top, border);
-            AxisAlignedBB entityCheck = AxisAlignedBB.getBoundingBox(0, 1, 0, 1, i - 1, 1);
+            AxisAlignedBB entityCheck = AxisAlignedBB.fromBounds(0, 1, 0, 1, i - 1, 1);
             pats.add(buildPattern(map, xOffset, yOffset, zOffset, entityCheck));
         }
 
@@ -193,7 +193,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
             for (int i = 4; i <= 8; i++) {
                 char[][][] map = buildMap(i, bottom, middle, top, border);
-                AxisAlignedBB entityCheck = AxisAlignedBB.getBoundingBox(-1, 1, -1, 2, i - 1, 2);
+                AxisAlignedBB entityCheck = AxisAlignedBB.fromBounds(-1, 1, -1, 2, i - 1, 2);
                 pats.add(buildPattern(map, xOffset, yOffset, zOffset, entityCheck));
             }
         }
@@ -252,7 +252,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
             for (int i = 4; i <= 8; i++) {
                 char[][][] map = buildMap(i, bottom, middle, top, border);
-                AxisAlignedBB entityCheck = AxisAlignedBB.getBoundingBox(-2, 1, -2, 3, i - 1, 3);
+                AxisAlignedBB entityCheck = AxisAlignedBB.fromBounds(-2, 1, -2, 3, i - 1, 3);
                 pats.add(buildPattern(map, xOffset, yOffset, zOffset, entityCheck));
             }
         }
@@ -319,7 +319,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
             for (int i = 4; i <= 8; i++) {
                 char[][][] map = buildMap(i, bottom, middle, top, border);
-                AxisAlignedBB entityCheck = AxisAlignedBB.getBoundingBox(-3, 1, -3, 4, i - 1, 4);
+                AxisAlignedBB entityCheck = AxisAlignedBB.fromBounds(-3, 1, -3, 4, i - 1, 4);
                 pats.add(buildPattern(map, xOffset, yOffset, zOffset, entityCheck));
             }
         }

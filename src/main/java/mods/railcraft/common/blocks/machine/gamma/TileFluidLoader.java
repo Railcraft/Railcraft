@@ -112,7 +112,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return AxisAlignedBB.getBoundingBox(xCoord, yCoord - 1, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
+        return AxisAlignedBB.fromBounds(xCoord, yCoord - 1, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
     }
 
     @Override

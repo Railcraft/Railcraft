@@ -152,7 +152,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
         } catch (Error error) {
             Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class);
         }
-        return AxisAlignedBB.getBoundingBox((double) x + minX, (double) y + minY, (double) z + minZ, (double) x + maxX, (double) y + maxY, (double) z + maxZ);
+        return AxisAlignedBB.fromBounds((double) x + minX, (double) y + minY, (double) z + minZ, (double) x + maxX, (double) y + maxY, (double) z + maxZ);
     }
 
     @Override

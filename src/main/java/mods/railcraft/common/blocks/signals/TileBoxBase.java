@@ -26,12 +26,12 @@ public abstract class TileBoxBase extends TileSignalFoundation {
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.getBoundingBox(i + BOUND, j, k + BOUND, i + 1 - BOUND, j + 1 - BOUND / 2, k + 1 - BOUND);
+        return AxisAlignedBB.fromBounds(i + BOUND, j, k + BOUND, i + 1 - BOUND, j + 1 - BOUND / 2, k + 1 - BOUND);
     }
 
     @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.getBoundingBox(i + BOUND, j, k + BOUND, i + 1 - BOUND, j + 1 - BOUND / 2, k + 1 - BOUND);
+        return AxisAlignedBB.fromBounds(i + BOUND, j, k + BOUND, i + 1 - BOUND, j + 1 - BOUND / 2, k + 1 - BOUND);
     }
 
     @Override

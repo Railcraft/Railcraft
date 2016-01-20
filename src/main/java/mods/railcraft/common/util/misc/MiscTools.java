@@ -99,18 +99,18 @@ public abstract class MiscTools {
     }
 
     public static <T extends Entity> List<T> getNearbyEntities(World world, Class<T> entityClass, float x, float minY, float maxY, float z, float radius) {
-        AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, minY, z, x + 1, maxY, z + 1);
+        AxisAlignedBB box = AxisAlignedBB.fromBounds(x, minY, z, x + 1, maxY, z + 1);
         box = box.expand(radius, 0, radius);
         return world.getEntitiesWithinAABB(entityClass, box);
     }
 
     public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass, int x, int y, int z) {
-        AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1);
+        AxisAlignedBB box = AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
         return (List<T>) world.selectEntitiesWithinAABB(entityClass, box, IEntitySelector.selectAnything);
     }
 
     public static <T extends Entity> T getEntityAt(World world, Class<T> entityClass, int x, int y, int z) {
-        AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1);
+        AxisAlignedBB box = AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
         List<T> entities = (List<T>) world.selectEntitiesWithinAABB(entityClass, box, IEntitySelector.selectAnything);
         if (!entities.isEmpty())
             return entities.get(0);

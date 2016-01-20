@@ -70,7 +70,7 @@ public class BoundingBoxManager {
         }
 
         public AxisAlignedBB getBox(World world, int x, int y, int z) {
-            return AxisAlignedBB.getBoundingBox(x + min, y + min, z + min, x + max, y + max, z + max);
+            return AxisAlignedBB.fromBounds(x + min, y + min, z + min, x + max, y + max, z + max);
         }
 
     }

@@ -135,7 +135,7 @@ public class CartUtils {
     @SuppressWarnings("rawtypes")
     public static List<UUID> getMinecartUUIDsAt(World world, int i, int j, int k, float sensitivity) {
         sensitivity = Math.min(sensitivity, 0.49f);
-        List entities = world.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(i + sensitivity, j + sensitivity, k + sensitivity, i + 1 - sensitivity, j + 1 - sensitivity, k + 1 - sensitivity));
+        List entities = world.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.fromBounds(i + sensitivity, j + sensitivity, k + sensitivity, i + 1 - sensitivity, j + 1 - sensitivity, k + 1 - sensitivity));
         List<UUID> carts = new ArrayList<UUID>();
         for (Object o : entities) {
             EntityMinecart cart = (EntityMinecart) o;

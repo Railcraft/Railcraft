@@ -111,7 +111,7 @@ public class BlockTrackElevator extends Block {
     @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
         setBlockBoundsBasedOnState(world, i, j, k);
-        return AxisAlignedBB.getBoundingBox((double) i + minX, (double) j + minY, (double) k + minZ, (double) i + maxX, (double) j + maxY, (double) k + maxZ);
+        return AxisAlignedBB.fromBounds((double) i + minX, (double) j + minY, (double) k + minZ, (double) i + maxX, (double) j + maxY, (double) k + maxZ);
     }
 
     @Override

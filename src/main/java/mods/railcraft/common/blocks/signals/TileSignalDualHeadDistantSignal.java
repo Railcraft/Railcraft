@@ -76,12 +76,12 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
 
     @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.getBoundingBox(i + 0.15f, j, k + 0.15f, i + 0.85f, j + 1f, k + 0.85f);
+        return AxisAlignedBB.fromBounds(i + 0.15f, j, k + 0.15f, i + 0.85f, j + 1f, k + 0.85f);
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.getBoundingBox(i + SIZE, j, k + SIZE, i + 1 - SIZE, j + 1, k + 1 - SIZE);
+        return AxisAlignedBB.fromBounds(i + SIZE, j, k + SIZE, i + 1 - SIZE, j + 1, k + 1 - SIZE);
     }
 
     @Override

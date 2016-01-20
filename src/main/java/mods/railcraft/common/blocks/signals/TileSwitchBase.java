@@ -46,12 +46,12 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.getBoundingBox(i + 0.2f, j, k + 0.2f, i + 0.8f, j + 0.4F, k + 0.8f);
+        return AxisAlignedBB.fromBounds(i + 0.2f, j, k + 0.2f, i + 0.8f, j + 0.4F, k + 0.8f);
     }
 
     @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.getBoundingBox(i + 0.2f, j, k + 0.2f, i + 0.8f, j + 0.8f, k + 0.8f);
+        return AxisAlignedBB.fromBounds(i + 0.2f, j, k + 0.2f, i + 0.8f, j + 0.8f, k + 0.8f);
     }
 
     @Override

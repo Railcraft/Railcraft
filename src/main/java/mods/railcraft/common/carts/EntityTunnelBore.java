@@ -474,7 +474,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                 double i = getXAhead(posX, 3.3);
                 double k = getZAhead(posZ, 3.3);
                 double size = 0.8;
-                List entities = worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getBoundingBox(i - size, posY, k - size, i + size, posY + 2, k + size));
+                List entities = worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.fromBounds(i - size, posY, k - size, i + size, posY + 2, k + size));
                 for (Object e : entities) {
                     if (e instanceof EntityLivingBase) {
                         EntityLivingBase ent = (EntityLivingBase) e;

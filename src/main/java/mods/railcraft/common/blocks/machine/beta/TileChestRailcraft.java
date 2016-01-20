@@ -87,7 +87,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
         int x = xCoord;
         int y = yCoord;
         int z = zCoord;
-        Iterator it = worldObj.getEntitiesWithinAABB(EntityOcelot.class, AxisAlignedBB.getBoundingBox(x, (y + 1), z, (x + 1), (y + 2), (z + 1))).iterator();
+        Iterator it = worldObj.getEntitiesWithinAABB(EntityOcelot.class, AxisAlignedBB.fromBounds(x, (y + 1), z, (x + 1), (y + 2), (z + 1))).iterator();
         EntityOcelot cat;
         do {
             if (!it.hasNext())
