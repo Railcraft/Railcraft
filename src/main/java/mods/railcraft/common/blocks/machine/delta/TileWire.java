@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileWire extends TileMachineBase implements IElectricGrid {
@@ -49,17 +48,13 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
         }
 
     }
+
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.WIRE, 0.25);
     private AddonType addon = AddonType.NONE;
 
     @Override
     public IEnumMachine getMachineType() {
         return EnumMachineDelta.WIRE;
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        return getMachineType().getTexture(0);
     }
 
     @Override
@@ -90,8 +85,8 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld()))
             return;
@@ -175,7 +170,5 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
             }
             return BoundingBoxManager.DEFAULT.getBox(world, x, y, z);
         }
-
     }
-
 }

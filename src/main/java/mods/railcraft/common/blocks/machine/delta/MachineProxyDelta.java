@@ -10,13 +10,10 @@ package mods.railcraft.common.blocks.machine.delta;
 
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.IMachineProxy;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class MachineProxyDelta implements IMachineProxy {
@@ -30,11 +27,4 @@ public class MachineProxyDelta implements IMachineProxy {
     public List<? extends IEnumMachine> getCreativeList() {
         return EnumMachineDelta.getCreativeList();
     }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        EnumMachineDelta.registerIcons(iconRegister);
-    }
-
 }

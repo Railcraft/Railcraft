@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileCage extends TileMachineBase {
@@ -44,13 +43,6 @@ public class TileCage extends TileMachineBase {
     @Override
     public IEnumMachine getMachineType() {
         return EnumMachineDelta.CAGE;
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        if (side != 0 && side != 1 && isOpen)
-            return getMachineType().getTexture(6);
-        return getMachineType().getTexture(side);
     }
 
     @Override
@@ -76,8 +68,8 @@ public class TileCage extends TileMachineBase {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isNotHost(worldObj))
             if (entity != null) {
 //                entity.onUpdate();
@@ -93,7 +85,7 @@ public class TileCage extends TileMachineBase {
                     if (lookTarget == null)
                         lookHelper.setLookPosition(lookX, entity.getEyeHeight(), lookZ, 10, entity.getVerticalFaceSpeed());
                     else
-                        lookHelper.setLookPosition(lookTarget.posX - (xCoord + 0.5), lookTarget.posY - (yCoord + entity.getEyeHeight()), lookTarget.posZ - (zCoord + 0.5), 10, entity.getVerticalFaceSpeed());
+                        lookHelper.setLookPosition(lookTarget.posX - (getX() + 0.5), lookTarget.posY - (getY() + entity.getEyeHeight()), lookTarget.posZ - (getZ() + 0.5), 10, entity.getVerticalFaceSpeed());
                 }
 
                 lookHelper.onUpdateLook();
@@ -115,7 +107,6 @@ public class TileCage extends TileMachineBase {
                     }
                 }
             }
-        return;
     }
 
     @Override
@@ -133,5 +124,4 @@ public class TileCage extends TileMachineBase {
             markBlockForUpdate();
         }
     }
-
 }
