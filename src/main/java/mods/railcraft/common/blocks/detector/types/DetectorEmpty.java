@@ -18,7 +18,6 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class DetectorEmpty extends Detector {

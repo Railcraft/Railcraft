@@ -14,6 +14,7 @@ import mods.railcraft.common.gui.EnumGui;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
@@ -22,7 +23,6 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class DetectorSheep extends DetectorFilter {
@@ -37,7 +37,7 @@ public class DetectorSheep extends DetectorFilter {
             if (cart.riddenByEntity instanceof EntitySheep) {
                 EntitySheep sheep = (EntitySheep) cart.riddenByEntity;
                 ItemStack wool = getFilters().getStackInSlot(0);
-                if (!sheep.isChild() && !sheep.getSheared() && (wool == null || sheep.getFleeceColor() == wool.getItemDamage())) {
+                if (!sheep.isChild() && !sheep.getSheared() && (wool == null || sheep.getFleeceColor() == EnumDyeColor.byDyeDamage(wool.getItemDamage()))) {
                     return FULL_POWER;
                 }
             }
@@ -55,5 +55,4 @@ public class DetectorSheep extends DetectorFilter {
     public EnumDetector getType() {
         return EnumDetector.SHEEP;
     }
-
 }

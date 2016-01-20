@@ -34,11 +34,11 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class DetectorRouting extends DetectorSecured implements IRouter, IRoutingTile {
 
+    private final MultiButtonController<RoutingButtonState> routingController = new MultiButtonController<RoutingButtonState>(0, RoutingButtonState.values());
     private RoutingLogic logic;
     private final StandaloneInventory inv = new StandaloneInventory(1, null, new StandaloneInventory.Callback() {
         @Override
@@ -53,7 +53,6 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
         }
 
     });
-    private final MultiButtonController<RoutingButtonState> routingController = new MultiButtonController<RoutingButtonState>(0, RoutingButtonState.values());
     private boolean powered;
 
     @Override
@@ -87,7 +86,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
     @Override
     public void onBlockRemoved() {
         super.onBlockRemoved();
-        InvTools.dropInventory(inv, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
+        InvTools.dropInventory(inv, tile.getWorld(), getTile().getPos());
     }
 
     @Override
@@ -122,9 +121,9 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
     }
 
     private void checkPower() {
-        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALUES) {
             if (side == tile.direction) continue;
-            if (PowerPlugin.isBlockBeingPowered(getWorld(), tile.xCoord, tile.yCoord, tile.zCoord, side)) {
+            if (PowerPlugin.isBlockBeingPowered(getWorld(), getTile().getPos(), side)) {
                 powered = true;
                 return;
             }
@@ -166,5 +165,4 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
     public IInventory getInventory() {
         return inv;
     }
-
 }

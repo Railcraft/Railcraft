@@ -26,10 +26,6 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 public class DetectorVillager extends Detector {
 
-    public enum Mode {
-
-        ANY, NONE, NOT, EQUALS
-    }
     private int profession;
     private Mode mode = Mode.ANY;
 
@@ -79,20 +75,20 @@ public class DetectorVillager extends Detector {
         return true;
     }
 
-    public void setMode(Mode mode) {
-        this.mode = mode;
-    }
-
     public Mode getMode() {
         return mode;
     }
 
-    public void setProfession(int profession) {
-        this.profession = profession;
+    public void setMode(Mode mode) {
+        this.mode = mode;
     }
 
     public int getProfession() {
         return profession;
+    }
+
+    public void setProfession(int profession) {
+        this.profession = profession;
     }
 
     @Override
@@ -137,6 +133,11 @@ public class DetectorVillager extends Detector {
     public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
         profession = data.readInt();
         mode = Mode.values()[data.readByte()];
+    }
+
+    public enum Mode {
+
+        ANY, NONE, NOT, EQUALS
     }
 
 }

@@ -31,32 +31,9 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class DetectorItem extends DetectorFilter {
-
-    public enum PrimaryMode {
-
-        EMPTY, FULL, ANYTHING, FILTERED, NOT_EMPTY, ANALOG;
-
-        @Override
-        public String toString() {
-            return LocalizationPlugin.translate("railcraft.gui.detector.item." + name().toLowerCase(Locale.ENGLISH));
-        }
-
-    }
-
-    public enum FilterMode {
-
-        AT_LEAST, AT_MOST, EXACTLY, LESS_THAN, GREATER_THAN;
-
-        @Override
-        public String toString() {
-            return LocalizationPlugin.translate("railcraft.gui.detector.item." + name().toLowerCase(Locale.ENGLISH));
-        }
-
-    }
 
     private PrimaryMode primaryMode = PrimaryMode.ANYTHING;
     private FilterMode filterMode = FilterMode.AT_LEAST;
@@ -186,12 +163,12 @@ public class DetectorItem extends DetectorFilter {
         return primaryMode;
     }
 
-    public FilterMode getFilterMode() {
-        return filterMode;
-    }
-
     public void setPrimaryMode(PrimaryMode primaryMode) {
         this.primaryMode = primaryMode;
+    }
+
+    public FilterMode getFilterMode() {
+        return filterMode;
     }
 
     public void setFilterMode(FilterMode filterMode) {
@@ -211,6 +188,28 @@ public class DetectorItem extends DetectorFilter {
     @Override
     public EnumDetector getType() {
         return EnumDetector.ITEM;
+    }
+
+    public enum PrimaryMode {
+
+        EMPTY, FULL, ANYTHING, FILTERED, NOT_EMPTY, ANALOG;
+
+        @Override
+        public String toString() {
+            return LocalizationPlugin.translate("railcraft.gui.detector.item." + name().toLowerCase(Locale.ENGLISH));
+        }
+
+    }
+
+    public enum FilterMode {
+
+        AT_LEAST, AT_MOST, EXACTLY, LESS_THAN, GREATER_THAN;
+
+        @Override
+        public String toString() {
+            return LocalizationPlugin.translate("railcraft.gui.detector.item." + name().toLowerCase(Locale.ENGLISH));
+        }
+
     }
 
 }

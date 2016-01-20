@@ -23,7 +23,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -65,12 +64,12 @@ public class DetectorTank extends DetectorFilter {
                 TankToolkit tank = new TankToolkit((IFluidHandler) cart);
                 boolean liquidMatches = false;
                 Fluid filterFluid = getFilterLiquid();
-                FluidStack tankLiquid = tank.drain(EnumFacing.UNKNOWN, 1, false);
+                FluidStack tankLiquid = tank.drain(null, 1, false);
                 if (filterFluid == null)
                     liquidMatches = true;
                 else if (Fluids.areEqual(filterFluid, tankLiquid))
                     liquidMatches = true;
-                else if (tank.canPutFluid(EnumFacing.UNKNOWN, new FluidStack(filterFluid, 1)))
+                else if (tank.canPutFluid(null, new FluidStack(filterFluid, 1)))
                     liquidMatches = true;
                 boolean quantityMatches = false;
                 ButtonState state = buttonController.getButtonState();
