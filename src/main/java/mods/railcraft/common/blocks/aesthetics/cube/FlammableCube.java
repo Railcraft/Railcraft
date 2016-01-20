@@ -12,7 +12,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class FlammableCube extends SimpleCube {

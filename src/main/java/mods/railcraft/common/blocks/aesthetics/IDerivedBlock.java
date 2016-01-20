@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.aesthetics;
 import net.minecraft.block.Block;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IDerivedBlock {
@@ -19,5 +18,4 @@ public interface IDerivedBlock {
     Block getSourceBlock();
 
     int getSourceMeta();
-
 }

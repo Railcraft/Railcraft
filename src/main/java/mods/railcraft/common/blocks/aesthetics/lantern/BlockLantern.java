@@ -33,21 +33,12 @@ import static net.minecraft.util.EnumParticleTypes.SMOKE_NORMAL;
 
 public class BlockLantern extends Block {
 
-    public static boolean useCandleIcon = false;
     private static final float SELECT = 2 * 0.0625f;
+    public static boolean useCandleIcon = false;
     static BlockLantern stone;
     static BlockLantern metal;
-
-    public static BlockLantern getBlockStone() {
-        return stone;
-    }
-
-    public static BlockLantern getBlockMetal() {
-        return metal;
-    }
-
-    private final int renderId;
     public final LanternProxy proxy;
+    private final int renderId;
 
     public BlockLantern(int renderId, LanternProxy proxy) {
         super(Material.redstoneLight);
@@ -62,6 +53,14 @@ public class BlockLantern extends Block {
         lightOpacity = 0;
         setLightLevel(0.9375F);
         setHarvestLevel("pickaxe", 0);
+    }
+
+    public static BlockLantern getBlockStone() {
+        return stone;
+    }
+
+    public static BlockLantern getBlockMetal() {
+        return metal;
     }
 
     @Override

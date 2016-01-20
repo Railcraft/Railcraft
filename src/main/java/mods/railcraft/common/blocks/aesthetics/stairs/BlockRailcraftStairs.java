@@ -43,7 +43,18 @@ import java.util.Random;
 
 public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProvider {
 
+    public static int currentRenderPass;
     static BlockRailcraftStairs block;
+    private final int renderId;
+
+    protected BlockRailcraftStairs(int renderId) {
+        super(Blocks.stonebrick, 0);
+        this.renderId = renderId;
+        this.setStepSound(RailcraftSound.getInstance());
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        useNeighborBrightness = true;
+        isBlockContainer = true;
+    }
 
     public static BlockRailcraftStairs getBlock() {
         return block;
@@ -65,18 +76,6 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
 
     public static boolean isEnabled(EnumBlockMaterial mat) {
         return ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES) && RailcraftConfig.isSubBlockEnabled(getTag(mat)) && getBlock() != null;
-    }
-
-    private final int renderId;
-    public static int currentRenderPass;
-
-    protected BlockRailcraftStairs(int renderId) {
-        super(Blocks.stonebrick, 0);
-        this.renderId = renderId;
-        this.setStepSound(RailcraftSound.getInstance());
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        useNeighborBrightness = true;
-        isBlockContainer = true;
     }
 
     @Override

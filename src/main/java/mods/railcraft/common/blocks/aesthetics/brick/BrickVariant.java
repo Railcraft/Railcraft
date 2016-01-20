@@ -12,8 +12,8 @@ package mods.railcraft.common.blocks.aesthetics.brick;
 import java.util.Locale;
 
 /**
-* Created by CovertJaguar on 3/12/2015.
-*/
+ * Created by CovertJaguar on 3/12/2015.
+ */
 public enum BrickVariant {
 
     BRICK, FITTED, BLOCK, ORNATE, ETCHED, COBBLE;

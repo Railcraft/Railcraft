@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar
  */
 public enum EnumCube {
@@ -37,11 +36,6 @@ public enum EnumCube {
     TIN_BLOCK(Module.FACTORY, "tin", new SimpleCube(), 3f, 10f),
     LEAD_BLOCK(Module.FACTORY, "lead", new SimpleCube(), 2f, 20f),;
     public static final EnumCube[] VALUES = values();
-    private final Module module;
-    private final String tag;
-    private final SimpleCube blockDef;
-    private final float hardness;
-    private final float resistance;
     private static final List<EnumCube> creativeList = new ArrayList<EnumCube>();
 
     static {
@@ -57,6 +51,12 @@ public enum EnumCube {
         creativeList.add(QUARRIED_STONE);
     }
 
+    private final Module module;
+    private final String tag;
+    private final SimpleCube blockDef;
+    private final float hardness;
+    private final float resistance;
+
     EnumCube(Module module, String tag, SimpleCube blockDef, float hardness, float resistance) {
         this.module = module;
         this.tag = tag;
@@ -67,6 +67,12 @@ public enum EnumCube {
 
     public static List<EnumCube> getCreativeList() {
         return creativeList;
+    }
+
+    public static EnumCube fromOrdinal(int id) {
+        if (id < 0 || id >= VALUES.length)
+            return CONCRETE_BLOCK;
+        return VALUES[id];
     }
 
     public Module getModule() {
@@ -91,12 +97,6 @@ public enum EnumCube {
 
     public boolean isEnabled() {
         return getModule() != null && ModuleManager.isModuleLoaded(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag()) && BlockCube.getBlock() != null;
-    }
-
-    public static EnumCube fromOrdinal(int id) {
-        if (id < 0 || id >= VALUES.length)
-            return CONCRETE_BLOCK;
-        return VALUES[id];
     }
 
     public ItemStack getItem() {

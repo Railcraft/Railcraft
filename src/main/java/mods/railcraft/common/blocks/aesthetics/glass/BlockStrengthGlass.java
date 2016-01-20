@@ -35,8 +35,19 @@ import java.util.List;
  */
 public class BlockStrengthGlass extends BlockGlass {
 
-    private static BlockStrengthGlass instance;
     public static boolean renderingHighlight;
+    private static BlockStrengthGlass instance;
+    private final int renderId;
+
+    public BlockStrengthGlass(int renderId) {
+        super(Material.glass, false);
+        this.renderId = renderId;
+        setResistance(5);
+        setHardness(1);
+        setStepSound(Block.soundTypeGlass);
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setRegistryName("railcraft.glass");
+    }
 
     public static BlockStrengthGlass getBlock() {
         return instance;
@@ -65,18 +76,6 @@ public class BlockStrengthGlass extends BlockGlass {
         return new ItemStack(instance, qty, meta);
     }
 
-    private final int renderId;
-
-    public BlockStrengthGlass(int renderId) {
-        super(Material.glass, false);
-        this.renderId = renderId;
-        setResistance(5);
-        setHardness(1);
-        setStepSound(Block.soundTypeGlass);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setRegistryName("railcraft.glass");
-    }
-
     @Override
     public int getRenderType() {
         return renderId;
@@ -90,11 +89,6 @@ public class BlockStrengthGlass extends BlockGlass {
     @Override
     protected boolean canSilkHarvest() {
         return true;
-    }
-
-    private enum Neighbors {
-
-        TOP, BOTTOM
     }
 
     @Override
@@ -125,6 +119,11 @@ public class BlockStrengthGlass extends BlockGlass {
             return super.colorMultiplier(worldIn, pos, renderPass);
         int meta = worldIn.getBlockMetadata(pos);
         return EnumColor.fromId(15 - meta).getHexColor();
+    }
+
+    private enum Neighbors {
+
+        TOP, BOTTOM
     }
 
 }

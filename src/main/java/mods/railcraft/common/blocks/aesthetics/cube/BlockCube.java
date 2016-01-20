@@ -16,7 +16,6 @@ import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -24,7 +23,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
@@ -43,6 +41,25 @@ public class BlockCube extends Block {
     private static BlockCube instance;
     @SideOnly(Side.CLIENT)
     private RenderInfo override;
+
+    public BlockCube() {
+        super(Material.rock);
+        setRegistryName("railcraft.cube");
+        setResistance(20);
+        setHardness(5);
+        setStepSound(RailcraftSound.getInstance());
+
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+
+        setHarvestLevel("pickaxe", 1, EnumCube.COKE_BLOCK.ordinal());
+        setHarvestLevel("pickaxe", 1, EnumCube.ABYSSAL_STONE.ordinal());
+        setHarvestLevel("pickaxe", 2, EnumCube.STEEL_BLOCK.ordinal());
+        setHarvestLevel("pickaxe", 1, EnumCube.CONCRETE_BLOCK.ordinal());
+        setHarvestLevel("crowbar", 0, EnumCube.CONCRETE_BLOCK.ordinal());
+        setHarvestLevel("axe", 0, EnumCube.CREOSOTE_BLOCK.ordinal());
+        setHarvestLevel("crowbar", 0, EnumCube.CREOSOTE_BLOCK.ordinal());
+        setHarvestLevel("shovel", 3, EnumCube.CRUSHED_OBSIDIAN.ordinal());
+    }
 
     public static BlockCube getBlock() {
         return instance;
@@ -74,23 +91,8 @@ public class BlockCube extends Block {
             }
     }
 
-    public BlockCube() {
-        super(Material.rock);
-        setRegistryName("railcraft.cube");
-        setResistance(20);
-        setHardness(5);
-        setStepSound(RailcraftSound.getInstance());
-
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-
-        setHarvestLevel("pickaxe", 1, EnumCube.COKE_BLOCK.ordinal());
-        setHarvestLevel("pickaxe", 1, EnumCube.ABYSSAL_STONE.ordinal());
-        setHarvestLevel("pickaxe", 2, EnumCube.STEEL_BLOCK.ordinal());
-        setHarvestLevel("pickaxe", 1, EnumCube.CONCRETE_BLOCK.ordinal());
-        setHarvestLevel("crowbar", 0, EnumCube.CONCRETE_BLOCK.ordinal());
-        setHarvestLevel("axe", 0, EnumCube.CREOSOTE_BLOCK.ordinal());
-        setHarvestLevel("crowbar", 0, EnumCube.CREOSOTE_BLOCK.ordinal());
-        setHarvestLevel("shovel", 3, EnumCube.CRUSHED_OBSIDIAN.ordinal());
+    public static String getBlockNameFromMetadata(int meta) {
+        return EnumCube.fromOrdinal(meta).getTag();
     }
 
     @Override
@@ -107,10 +109,6 @@ public class BlockCube extends Block {
     @SideOnly(Side.CLIENT)
     public void setTextureOverride(RenderInfo info) {
         override = info;
-    }
-
-    public static String getBlockNameFromMetadata(int meta) {
-        return EnumCube.fromOrdinal(meta).getTag();
     }
 
     @Override
@@ -197,6 +195,6 @@ public class BlockCube extends Block {
     public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
         int metadata = world.getBlockMetadata(pos);
         return EnumCube.fromOrdinal(metadata).getBlockDef().isFlammable(world, pos, face);
-}
+    }
 
 }

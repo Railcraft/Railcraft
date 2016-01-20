@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemLantern extends ItemBlock {

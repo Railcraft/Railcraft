@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface LanternInfo {
@@ -29,5 +28,5 @@ public interface LanternInfo {
     String getTag();
 
     boolean isEnabled();
-    
+
 }

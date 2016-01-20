@@ -17,6 +17,7 @@ import net.minecraft.block.Block.SoundType;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum EnumBlockMaterial implements IDerivedBlock {
@@ -258,10 +258,6 @@ public enum EnumBlockMaterial implements IDerivedBlock {
         return SANDY_BRICK;
     }
 
-    public IIcon getIcon(int side) {
-        return getSourceBlock().getIcon(side, sourceMeta);
-    }
-
     @Override
     public Block getSourceBlock() {
         if (source == null) return Blocks.stonebrick;
@@ -296,7 +292,7 @@ public enum EnumBlockMaterial implements IDerivedBlock {
         return this == ICE;
     }
 
-    public float getBlockHardness(World world, int x, int y, int z) {
+    public float getBlockHardness(World world, BlockPos pos) {
         switch (this) {
             case CONCRETE:
                 return EnumCube.CONCRETE_BLOCK.getHardness();
@@ -311,8 +307,8 @@ public enum EnumBlockMaterial implements IDerivedBlock {
             default:
                 Block block = getSourceBlock();
                 if (block == null)
-                    return Blocks.brick_block.getBlockHardness(world, x, y, z);
-                return block.getBlockHardness(world, x, y, z);
+                    return Blocks.brick_block.getBlockHardness(world, pos);
+                return block.getBlockHardness(world, pos);
         }
     }
 

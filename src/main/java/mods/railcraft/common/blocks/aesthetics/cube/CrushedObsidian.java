@@ -20,10 +20,23 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CrushedObsidian extends SimpleCube {
+
+    /**
+     * Checks to see if the sand can fall into the block below it
+     */
+    public static boolean canFallBelow(World world, int x, int y, int z) {
+        if (world.isAirBlock(x, y, z))
+            return true;
+
+        Block block = WorldPlugin.getBlock(world, x, y, z);
+        if (block == Blocks.fire)
+            return true;
+
+        return block.getMaterial().isLiquid();
+    }
 
     @Override
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
@@ -75,20 +88,6 @@ public class CrushedObsidian extends SimpleCube {
                     par1World.setBlock(x, y, z, BlockCube.getBlock(), EnumCube.CRUSHED_OBSIDIAN.ordinal(), 3);
             }
         }
-    }
-
-    /**
-     * Checks to see if the sand can fall into the block below it
-     */
-    public static boolean canFallBelow(World world, int x, int y, int z) {
-        if (world.isAirBlock(x, y, z))
-            return true;
-
-        Block block = WorldPlugin.getBlock(world, x, y, z);
-        if (block == Blocks.fire)
-            return true;
-
-        return block.getMaterial().isLiquid();
     }
 
 }
