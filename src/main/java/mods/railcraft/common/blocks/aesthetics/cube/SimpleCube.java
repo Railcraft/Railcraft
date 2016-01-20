@@ -20,7 +20,7 @@ import java.util.Random;
 public class SimpleCube {
 
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
-        return type != EnumCreatureType.creature;
+        return type != EnumCreatureType.CREATURE;
     }
 
     public void updateTick(World world, int x, int y, int z, Random rand) {
@@ -42,7 +42,7 @@ public class SimpleCube {
     }
 
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-        return world.setBlockToAir(x, y, z);
+        return world.setBlockToAir(pos);
     }
 
     public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {

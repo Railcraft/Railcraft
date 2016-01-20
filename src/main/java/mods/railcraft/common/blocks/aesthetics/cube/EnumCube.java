@@ -42,7 +42,6 @@ public enum EnumCube {
     private final SimpleCube blockDef;
     private final float hardness;
     private final float resistance;
-    private IIcon icon;
     private static final List<EnumCube> creativeList = new ArrayList<EnumCube>();
 
     static {
@@ -109,13 +108,4 @@ public enum EnumCube {
             return null;
         return new ItemStack(BlockCube.getBlock(), qty, ordinal());
     }
-
-    public void setIcon(IIcon tex) {
-        this.icon = tex;
-    }
-
-    public IIcon getIcon() {
-        return icon;
-    }
-
 }

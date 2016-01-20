@@ -113,10 +113,10 @@ public class RenderFakeBlock {
     public static void renderAsBlock(RenderInfo info, RenderBlocks renderBlocks, IBlockAccess blockAccess, double x, double y, double z) {
         BlockCube block = BlockCube.getBlock();
         if (block != null) {
-            block.setTextureOveride(info);
+            block.setTextureOverride(info);
             renderBlocks.setRenderBounds(info.minX, info.minY, info.minZ, info.maxX, info.maxY, info.maxZ);
             renderBlocks.renderStandardBlock(block, (int) x, (int) y, (int) z);
-            block.setTextureOveride(null);
+            block.setTextureOverride(null);
         } else
             renderBlock(info, blockAccess, x, y, z, true, false);
     }

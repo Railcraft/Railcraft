@@ -28,8 +28,7 @@ public class ReplacerCube extends SimpleCube {
 
     private void replaceBlock(World world, int x, int y, int z) {
         if (block != null) {
-            world.setBlock(x, y, z, block, meta, 3);
+            world.setBlockState(pos, newState, 3);
         }
     }
-
 }

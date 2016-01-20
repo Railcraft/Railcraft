@@ -25,11 +25,6 @@ public class ItemCube extends ItemBlock {
     }
 
     @Override
-    public IIcon getIconFromDamage(int meta) {
-        return EnumCube.fromOrdinal(meta).getIcon();
-    }
-
-    @Override
     public int getMetadata(int meta) {
         return meta;
     }
