@@ -10,7 +10,7 @@ package mods.railcraft.common.plugins.ic2;
 
 import ic2.api.energy.tile.IMetaDelegate;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -9,7 +9,7 @@
 package mods.railcraft.common.plugins.ic2;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  *

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.signals.SignalAspect;
 
 /**

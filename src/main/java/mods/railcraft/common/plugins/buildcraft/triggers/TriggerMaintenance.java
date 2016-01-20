@@ -2,7 +2,7 @@ package mods.railcraft.common.plugins.buildcraft.triggers;
 
 import buildcraft.api.statements.IStatementParameter;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  *

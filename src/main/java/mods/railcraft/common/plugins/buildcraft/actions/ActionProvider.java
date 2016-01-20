@@ -7,7 +7,7 @@ import buildcraft.api.statements.IStatementContainer;
 import java.util.Collection;
 import java.util.LinkedList;
 import mods.railcraft.common.plugins.buildcraft.triggers.*;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  *

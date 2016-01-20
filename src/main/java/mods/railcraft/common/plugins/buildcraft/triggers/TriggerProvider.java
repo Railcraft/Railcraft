@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import net.minecraft.tileentity.TileEntity;
 import mods.railcraft.common.blocks.machine.beta.TileEngine;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  *

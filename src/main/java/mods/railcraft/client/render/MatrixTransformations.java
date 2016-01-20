@@ -8,7 +8,6 @@
  */
 package mods.railcraft.client.render;
 
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  *

@@ -22,7 +22,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.init.Blocks;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import static net.minecraftforge.common.util.ForgeDirection.*;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
 

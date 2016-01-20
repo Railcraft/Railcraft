@@ -29,7 +29,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
 
 public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {

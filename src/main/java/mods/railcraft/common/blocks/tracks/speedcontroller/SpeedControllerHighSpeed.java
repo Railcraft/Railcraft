@@ -10,7 +10,7 @@ package mods.railcraft.common.blocks.tracks.speedcontroller;
 
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.common.blocks.tracks.TrackSpeed;
 import mods.railcraft.common.blocks.tracks.TrackTools;

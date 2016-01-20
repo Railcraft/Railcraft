@@ -14,7 +14,7 @@ import java.io.IOException;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.tracks.ITrackPowered;
 
 public class TrackSlowBooster extends TrackSlow implements ITrackPowered {

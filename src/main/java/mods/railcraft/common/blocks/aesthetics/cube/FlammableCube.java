@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.aesthetics.cube;
 
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  *

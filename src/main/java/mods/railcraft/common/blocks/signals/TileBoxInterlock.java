@@ -12,7 +12,7 @@ import mods.railcraft.api.signals.*;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
