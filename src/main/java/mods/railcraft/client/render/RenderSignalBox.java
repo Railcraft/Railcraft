@@ -84,7 +84,7 @@ public class RenderSignalBox implements ICombinedRenderer {
 
         // Aspect
         for (int side = 2; side < 6; side++) {
-            SignalAspect aspect = tile.getBoxSignalAspect(EnumFacing.getOrientation(side));
+            SignalAspect aspect = tile.getBoxSignalAspect(EnumFacing.VALUES[side]);
             if (!aspect.isLit())
                 aspect = SignalAspect.OFF;
             IIcon lamp = BlockSignalRailcraft.texturesLampBox[aspect.getTextureIndex()];

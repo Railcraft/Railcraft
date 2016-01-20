@@ -58,7 +58,7 @@ public class ItemSlab extends ItemBlock {
                 return true;
             }
             if (isSingleSlabShifted(worldIn, x, y, z, side)) {
-                EnumFacing s = EnumFacing.getOrientation(side);
+                EnumFacing s = EnumFacing.VALUES[side];
                 x = MiscTools.getXOnSide(x, s);
                 y = MiscTools.getYOnSide(y, s);
                 z = MiscTools.getZOnSide(z, s);
@@ -85,7 +85,7 @@ public class ItemSlab extends ItemBlock {
     }
 
     private boolean isSingleSlabShifted(World world, int x, int y, int z, int side) {
-        EnumFacing s = EnumFacing.getOrientation(side);
+        EnumFacing s = EnumFacing.VALUES[side];
         x = MiscTools.getXOnSide(x, s);
         y = MiscTools.getYOnSide(y, s);
         z = MiscTools.getZOnSide(z, s);
@@ -139,7 +139,7 @@ public class ItemSlab extends ItemBlock {
         }
 
 //        boolean shifted = world.getBlockId(x, y, z) != blockID;
-//        EnumFacing s = EnumFacing.getOrientation(side).getOpposite();
+//        EnumFacing s = EnumFacing.VALUES[side].getOpposite();
 //        int cx = shifted ? MiscTools.getXOnSide(x, s) : x;
 //        int cy = shifted ? MiscTools.getYOnSide(y, s) : y;
 //        int cz = shifted ? MiscTools.getZOnSide(z, s) : z;

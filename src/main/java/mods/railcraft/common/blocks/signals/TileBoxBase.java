@@ -56,7 +56,7 @@ public abstract class TileBoxBase extends TileSignalFoundation {
 
     public final void updateNeighborBoxes() {
         for (int side = 2; side < 6; side++) {
-            EnumFacing forgeSide = EnumFacing.getOrientation(side);
+            EnumFacing forgeSide = EnumFacing.VALUES[side];
             TileEntity tile = tileCache.getTileOnSide(forgeSide);
             if (tile instanceof TileBoxBase) {
                 TileBoxBase box = (TileBoxBase) tile;

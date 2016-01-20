@@ -95,7 +95,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     private SignalAspect getOverrideAspect() {
         SignalAspect newAspect = SignalAspect.GREEN;
         for (int side = 2; side < 6; side++) {
-            EnumFacing forgeSide = EnumFacing.getOrientation(side);
+            EnumFacing forgeSide = EnumFacing.VALUES[side];
             TileEntity t = tileCache.getTileOnSide(forgeSide);
             if (t instanceof TileBoxBase) {
                 TileBoxBase tile = (TileBoxBase) t;

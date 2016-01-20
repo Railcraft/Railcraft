@@ -100,7 +100,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     private SignalAspect determineAspect() {
         SignalAspect newAspect = powered ? poweredAspect : defaultAspect;
         for (int side = 2; side < 6; side++) {
-            EnumFacing forgeSide = EnumFacing.getOrientation(side);
+            EnumFacing forgeSide = EnumFacing.VALUES[side];
             TileEntity t = tileCache.getTileOnSide(forgeSide);
             if (t instanceof TileBoxBase) {
                 TileBoxBase tile = (TileBoxBase) t;

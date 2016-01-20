@@ -65,7 +65,7 @@ public abstract class InvTools {
     public static List<IInventory> getAdjacentInventories(World world, int i, int j, int k, Class<? extends IInventory> type) {
         List<IInventory> list = new ArrayList<IInventory>(5);
         for (int side = 0; side < 6; side++) {
-            IInventory inv = getInventoryFromSide(world, i, j, k, EnumFacing.getOrientation(side), type, null);
+            IInventory inv = getInventoryFromSide(world, i, j, k, EnumFacing.VALUES[side], type, null);
             if (inv != null)
                 list.add(inv);
         }
@@ -79,7 +79,7 @@ public abstract class InvTools {
     public static Map<Integer, IInventory> getAdjacentInventoryMap(World world, int i, int j, int k, Class<? extends IInventory> type) {
         Map<Integer, IInventory> map = new TreeMap<Integer, IInventory>();
         for (int side = 0; side < 6; side++) {
-            IInventory inv = getInventoryFromSide(world, i, j, k, EnumFacing.getOrientation(side), type, null);
+            IInventory inv = getInventoryFromSide(world, i, j, k, EnumFacing.VALUES[side], type, null);
             if (inv != null)
                 map.put(side, inv);
         }

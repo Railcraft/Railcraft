@@ -85,7 +85,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
 
     @Override
     protected boolean handleClick(EntityPlayer player, int side) {
-        if (FluidHelper.handleRightClick(this, EnumFacing.getOrientation(side), player, true, false))
+        if (FluidHelper.handleRightClick(this, EnumFacing.VALUES[side], player, true, false))
             return true;
         return super.handleClick(player, side);
     }

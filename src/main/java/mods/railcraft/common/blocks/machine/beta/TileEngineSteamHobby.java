@@ -87,7 +87,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() != Items.bucket)
             if (Game.isHost(worldObj)) {
-                if (FluidHelper.handleRightClick(this, EnumFacing.getOrientation(side), player, true, false))
+                if (FluidHelper.handleRightClick(this, EnumFacing.VALUES[side], player, true, false))
                     return true;
             } else if (FluidItemHelper.isContainer(current))
                 return true;

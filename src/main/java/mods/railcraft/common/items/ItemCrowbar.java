@@ -123,7 +123,7 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
         if (isBannedRotation(block.getClass()))
             return false;
 
-        if (block.rotateBlock(world, x, y, z, EnumFacing.getOrientation(side))) {
+        if (block.rotateBlock(world, x, y, z, EnumFacing.VALUES[side])) {
             player.swingItem();
             return !world.isRemote;
         }

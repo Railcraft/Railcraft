@@ -285,7 +285,7 @@ public abstract class MiscTools {
     public static EnumFacing getOppositeSide(int side) {
         int s = side;
         s = s % 2 == 0 ? s + 1 : s - 1;
-        return EnumFacing.getOrientation(s);
+        return EnumFacing.VALUES[s];
     }
 
     public static int getXOnSide(int x, EnumFacing side) {

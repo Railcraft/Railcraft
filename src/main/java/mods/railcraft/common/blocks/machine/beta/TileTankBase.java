@@ -452,7 +452,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         ItemStack current = player.getCurrentEquippedItem();
         if (Game.isHost(worldObj)) {
-            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), EnumFacing.getOrientation(side), player, true, true)) {
+            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), EnumFacing.VALUES[side], player, true, true)) {
                 TileTankBase master = (TileTankBase) getMasterBlock();
                 if (master != null)
                     master.syncClient();

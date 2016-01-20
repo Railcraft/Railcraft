@@ -151,7 +151,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
     public IIcon getIcon(int side) {
         if (!isStructureValid() || getPattern() == null)
             return getMachineType().getTexture(side);
-        EnumFacing s = EnumFacing.getOrientation(side);
+        EnumFacing s = EnumFacing.VALUES[side];
         char markerSide = getPattern().getPatternMarkerChecked(MiscTools.getXOnSide(getPatternPositionX(), s), MiscTools.getYOnSide(getPatternPositionY(), s), MiscTools.getZOnSide(getPatternPositionZ(), s));
 
         if (!isMapPositionOtherBlock(markerSide)) {

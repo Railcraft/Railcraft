@@ -32,7 +32,7 @@ public class WorldGenSulfur extends WorldGenSmallDeposits {
     @Override
     protected boolean canGen(World world, int x, int y, int z) {
         for (int side = 2; side < 6; side++) {
-            EnumFacing s = EnumFacing.getOrientation(side);
+            EnumFacing s = EnumFacing.VALUES[side];
             int i = MiscTools.getXOnSide(x, s);
             int j = MiscTools.getYOnSide(y, s);
             int k = MiscTools.getZOnSide(z, s);

@@ -235,7 +235,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     private IFluidHandler[] getOutputs() {
         IFluidHandler[] outputs = new IFluidHandler[6];
         for (int side = 2; side < 6; side++) {
-            EnumFacing dir = EnumFacing.getOrientation(side);
+            EnumFacing dir = EnumFacing.VALUES[side];
             outputs[side] = getOutputOnSide(dir);
         }
         return outputs;

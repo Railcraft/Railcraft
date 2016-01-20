@@ -233,7 +233,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
     }
 
     protected boolean handleClick(EntityPlayer player, int side) {
-        return FluidHelper.handleRightClick(this, EnumFacing.getOrientation(side), player, true, false);
+        return FluidHelper.handleRightClick(this, EnumFacing.VALUES[side], player, true, false);
     }
 
     @Override

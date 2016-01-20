@@ -298,8 +298,8 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
             update = true;
         }
         byte f = data.readByte();
-        if (facing != EnumFacing.getOrientation(f)) {
-            facing = EnumFacing.getOrientation(f);
+        if (facing != EnumFacing.VALUES[f]) {
+            facing = EnumFacing.VALUES[f];
             update = true;
         }
 

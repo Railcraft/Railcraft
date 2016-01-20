@@ -104,7 +104,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
                 if (PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos()))
                     hasInput = true;
                 for (int side = 2; side < 6; side++) { //get most restrictive aspect from adjacent (active) boxes
-                    EnumFacing forgeSide = EnumFacing.getOrientation(side);
+                    EnumFacing forgeSide = EnumFacing.VALUES[side];
                     TileEntity tile = tileCache.getTileOnSide(forgeSide);
                     if (tile instanceof TileBoxBase) {
                         TileBoxBase box = (TileBoxBase) tile;

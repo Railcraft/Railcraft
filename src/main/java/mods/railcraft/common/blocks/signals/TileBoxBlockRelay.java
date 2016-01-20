@@ -84,7 +84,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     private void updateNeighbors() {
         notifyBlocksOfNeighborChange();
         for (int side = 2; side < 6; side++) {
-            EnumFacing forgeSide = EnumFacing.getOrientation(side);
+            EnumFacing forgeSide = EnumFacing.VALUES[side];
             TileEntity tile = tileCache.getTileOnSide(forgeSide);
             if (tile instanceof TileBoxBase) {
                 TileBoxBase box = (TileBoxBase) tile;
@@ -98,7 +98,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
         TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, getPos(), MiscTools.getOppositeSide(side));
         if (tile instanceof TileBoxBase)
             return NO_POWER;
-        return isEmittingRedstone(EnumFacing.getOrientation(side)) ? FULL_POWER : NO_POWER;
+        return isEmittingRedstone(EnumFacing.VALUES[side]) ? FULL_POWER : NO_POWER;
     }
 
     @Override

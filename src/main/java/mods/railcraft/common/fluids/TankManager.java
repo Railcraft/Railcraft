@@ -292,7 +292,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
         for (int side = 0; side < 6; side++) {
             IFluidHandler nearbyTank = outputs[side];
             if (nearbyTank != null)
-                outputLiquid(nearbyTank, EnumFacing.getOrientation(side), tankIndex, amount);
+                outputLiquid(nearbyTank, EnumFacing.VALUES[side], tankIndex, amount);
         }
     }
 
