@@ -173,9 +173,6 @@ public class ClientProxy extends CommonProxy {
         if (stack != null)
             MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Cargo));
 
-        Minecraft.getMinecraft().entityRenderer.debugViewDirection = 0;
-        FMLCommonHandler.instance().bus().register(new DebugViewTicker());
-
         if (RailcraftConfig.isWorldGenEnabled("workshop")) {
             int id = RailcraftConfig.villagerID();
             VillagerRegistry.instance().registerVillagerSkin(id, ModuleWorld.VILLAGER_TEXTURE);
