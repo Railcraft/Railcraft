@@ -8,8 +8,9 @@
  */
 package mods.railcraft.common.util.collections;
 
-import java.util.HashSet;
 import net.minecraft.block.Block;
+
+import java.util.HashSet;
 
 /**
  *

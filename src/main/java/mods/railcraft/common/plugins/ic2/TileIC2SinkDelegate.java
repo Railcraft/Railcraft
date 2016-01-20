@@ -31,7 +31,7 @@ public class TileIC2SinkDelegate extends TileIC2Delegate implements IEnergySink 
     }
 
     @Override
-    public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
+    public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
         return delegate.injectEnergy(directionFrom, amount);
     }
 
@@ -41,7 +41,7 @@ public class TileIC2SinkDelegate extends TileIC2Delegate implements IEnergySink 
     }
 
     @Override
-    public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
+    public boolean acceptsEnergyFrom(TileEntity emitter, EnumFacing direction) {
         return delegate.acceptsEnergyFrom(emitter, direction);
     }
 

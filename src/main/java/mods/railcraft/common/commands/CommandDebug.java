@@ -18,8 +18,8 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFactory;
@@ -177,7 +177,7 @@ public class CommandDebug extends SubCommand {
                 printLine(sender, "Railcraft Receiver Debug Start");
                 printLine(sender, "Target: {0} = {1}, {2}", shortCoords(rec.getCoords()), recTile, rec);
                 if (recTile instanceof TileBoxBase) {
-                    printLine(sender, "Rec Tile Aspect = {0}", ((TileBoxBase) recTile).getBoxSignalAspect(ForgeDirection.NORTH));
+                    printLine(sender, "Rec Tile Aspect = {0}", ((TileBoxBase) recTile).getBoxSignalAspect(EnumFacing.NORTH));
                 }
                 for (WorldCoordinate pair : rec.getPairs()) {
                     printLine(sender, "Con at {0}", shortCoords(pair));

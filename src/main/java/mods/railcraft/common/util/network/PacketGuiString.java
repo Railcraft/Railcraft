@@ -8,13 +8,14 @@
  */
 package mods.railcraft.common.util.network;
 
-import net.minecraftforge.fml.client.FMLClientHandler;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.client.FMLClientHandler;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class PacketGuiString extends RailcraftPacket {
 

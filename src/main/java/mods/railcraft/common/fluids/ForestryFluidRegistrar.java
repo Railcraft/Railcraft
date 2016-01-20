@@ -8,13 +8,13 @@
  */
 package mods.railcraft.common.fluids;
 
-import net.minecraftforge.fml.common.Optional;
 import mods.railcraft.common.items.ModItems;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fml.common.Optional;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

@@ -8,18 +8,21 @@
  */
 package mods.railcraft.common.blocks.detector.types;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.List;
 import mods.railcraft.common.blocks.detector.Detector;
 import mods.railcraft.common.blocks.detector.EnumDetector;
+import mods.railcraft.common.gui.EnumGui;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import mods.railcraft.common.gui.EnumGui;
-import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.List;
+
+import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
+import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 public class DetectorVillager extends Detector {
 

@@ -8,11 +8,11 @@
  */
 package mods.railcraft.client.core;
 
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.Level;
-import mods.railcraft.common.util.misc.Game;
-import net.minecraft.client.Minecraft;
 
 /**
  *

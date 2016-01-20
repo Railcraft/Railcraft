@@ -8,6 +8,13 @@
  */
 package mods.railcraft.common.util.network;
 
+import mods.railcraft.api.core.WorldCoordinate;
+import mods.railcraft.api.signals.*;
+import mods.railcraft.common.blocks.signals.ISignalBlockTile;
+import mods.railcraft.common.blocks.signals.SignalBlock;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -15,18 +22,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Collection;
-
-import mods.railcraft.common.blocks.signals.ISignalBlockTile;
-import mods.railcraft.common.blocks.signals.SignalBlock;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.api.signals.AbstractPair;
-import mods.railcraft.api.signals.IControllerTile;
-import mods.railcraft.api.signals.IReceiverTile;
-import mods.railcraft.api.signals.SignalController;
-import mods.railcraft.api.signals.SignalReceiver;
-import mods.railcraft.common.util.misc.Game;
 
 public class PacketPairUpdate extends RailcraftPacket {
     private AbstractPair pairing;

@@ -19,11 +19,11 @@ public interface ISinkDelegate {
 
     double getDemandedEnergy();
 
-    double injectEnergy(ForgeDirection directionFrom, double amount);
+    double injectEnergy(EnumFacing directionFrom, double amount);
 
     int getSinkTier();
     
-    boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction);
+    boolean acceptsEnergyFrom(TileEntity emitter, EnumFacing direction);
 
     TileEntity getTile();
 

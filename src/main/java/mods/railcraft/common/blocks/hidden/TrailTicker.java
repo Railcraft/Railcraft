@@ -8,11 +8,6 @@
  */
 package mods.railcraft.common.blocks.hidden;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import java.util.Map;
-import java.util.WeakHashMap;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -22,10 +17,16 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  *
@@ -67,7 +68,7 @@ public class TrailTicker {
         boolean success = trySetMarker(world, x, y, z, player);
 
         for (int i = 0; i < 8 && !success; i++) {
-            ForgeDirection dir = ForgeDirection.getOrientation(MiscTools.RANDOM.nextInt(6));
+            EnumFacing dir = EnumFacing.getOrientation(MiscTools.RANDOM.nextInt(6));
             int newX = MiscTools.getXOnSide(x, dir);
             int newY = MiscTools.getYOnSide(y, dir);
             int newZ = MiscTools.getZOnSide(z, dir);

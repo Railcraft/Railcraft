@@ -8,9 +8,9 @@
  */
 package mods.railcraft.client.gui.buttons;
 
+import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 
 @SideOnly(Side.CLIENT)
 public class GuiToggleButtonSmall extends GuiToggleButton {

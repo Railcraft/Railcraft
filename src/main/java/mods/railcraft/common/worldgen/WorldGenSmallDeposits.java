@@ -8,13 +8,14 @@
  */
 package mods.railcraft.common.worldgen;
 
-import java.util.Random;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.common.util.misc.MiscTools;
+
+import java.util.Random;
 
 /**
  *
@@ -51,7 +52,7 @@ public class WorldGenSmallDeposits extends WorldGenerator {
             if (block != null && block.isReplaceableOreGen(world, x, y, z, replace))
                 world.setBlock(x, y, z, ore, meta, 2);
 
-            ForgeDirection dir = ForgeDirection.getOrientation(rand.nextInt(6));
+            EnumFacing dir = EnumFacing.getOrientation(rand.nextInt(6));
 
             x = MiscTools.getXOnSide(x, dir);
             y = MiscTools.getYOnSide(y, dir);

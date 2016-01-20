@@ -8,14 +8,15 @@
  */
 package mods.railcraft.common.util.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import org.apache.logging.log4j.Level;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import org.apache.logging.log4j.Level;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class PacketCurrentItemNBT extends RailcraftPacket {
 

@@ -8,14 +8,15 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import mods.railcraft.api.tracks.ITrackPowered;
+import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import mods.railcraft.api.tracks.ITrackPowered;
-import mods.railcraft.common.carts.EntityLocomotive;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class TrackSpeedBoost extends TrackSpeed implements ITrackPowered {
 

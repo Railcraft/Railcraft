@@ -8,7 +8,6 @@
  */
 package mods.railcraft.client.render;
 
-import java.util.Random;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -16,6 +15,8 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
 import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class ItemRenderer implements IItemRenderer {
 

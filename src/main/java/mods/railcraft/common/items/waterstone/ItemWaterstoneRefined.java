@@ -8,15 +8,10 @@
  */
 package mods.railcraft.common.items.waterstone;
 
-import mods.railcraft.common.items.firestone.*;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import java.util.List;
-
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemRailcraft;
+import mods.railcraft.common.items.firestone.EntityItemFirestone;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -30,6 +25,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

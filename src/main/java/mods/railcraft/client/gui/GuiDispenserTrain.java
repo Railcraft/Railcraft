@@ -8,10 +8,10 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
 import mods.railcraft.common.blocks.machine.gamma.TileDispenserTrain;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerDispenserTrain;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiDispenserTrain extends TileGui
 {

@@ -8,15 +8,10 @@
  */
 package mods.railcraft.common.blocks.machine.epsilon;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackLockdown;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.tracks.*;
@@ -28,8 +23,14 @@ import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  *
@@ -44,7 +45,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     public static final int MAX_TRACKS = 64;
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 0.0);
     private boolean powered;
-    private ForgeDirection facing = ForgeDirection.NORTH;
+    private EnumFacing facing = EnumFacing.NORTH;
     private int numTracks;
     private State state = State.RETRACTED;
 
@@ -135,7 +136,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     private void extended() {
-        TileEntity tile = tileCache.getTileOnSide(ForgeDirection.UP);
+        TileEntity tile = tileCache.getTileOnSide(EnumFacing.UP);
         if (tile instanceof TileTrack) {
             TileTrack trackTile = (TileTrack) tile;
             ITrackInstance track = trackTile.getTrackInstance();
@@ -156,7 +157,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
             if (WorldPlugin.blockExists(worldObj, x, y, z)) {
                 Block block = WorldPlugin.getBlock(worldObj, x, y, z);
                 EnumTrackMeta meta;
-                if (facing == ForgeDirection.NORTH || facing == ForgeDirection.SOUTH)
+                if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH)
                     meta = EnumTrackMeta.NORTH_SOUTH;
                 else
                     meta = EnumTrackMeta.EAST_WEST;
@@ -250,12 +251,12 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     @Override
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         if (Game.isNotHost(worldObj))
             return false;
         if (state != State.RETRACTED)
             return false;
-        if (axis == ForgeDirection.UP || axis == ForgeDirection.DOWN)
+        if (axis == EnumFacing.UP || axis == EnumFacing.DOWN)
             return false;
         if (facing == axis)
             facing = axis.getOpposite();
@@ -282,7 +283,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
         powered = data.getBoolean("powered");
-        facing = ForgeDirection.getOrientation(data.getByte("facing"));
+        facing = EnumFacing.getOrientation(data.getByte("facing"));
         numTracks = data.getInteger("numTracks");
         state = State.valueOf(data.getString("state"));
     }
@@ -306,8 +307,8 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
             update = true;
         }
         byte f = data.readByte();
-        if (facing != ForgeDirection.getOrientation(f)) {
-            facing = ForgeDirection.getOrientation(f);
+        if (facing != EnumFacing.getOrientation(f)) {
+            facing = EnumFacing.getOrientation(f);
             update = true;
         }
 
@@ -315,7 +316,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
             markBlockForUpdate();
     }
 
-    public ForgeDirection getFacing() {
+    public EnumFacing getFacing() {
         return facing;
     }
 

@@ -8,15 +8,16 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.Timer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.util.Random;
 
 /**
@@ -43,14 +44,14 @@ public class TileTankIronGauge extends TileTankBase {
         int py = getPatternPositionY();
         int pz = getPatternPositionZ();
 
-        ForgeDirection s = ForgeDirection.getOrientation(side);
+        EnumFacing s = EnumFacing.getOrientation(side);
         char markerSide = getPattern().getPatternMarkerChecked(MiscTools.getXOnSide(px, s), MiscTools.getYOnSide(py, s), MiscTools.getZOnSide(pz, s));
 
         if (!isMapPositionOtherBlock(markerSide)) {
             return getTextureFromMachine(9);
         }
 
-        if (s == ForgeDirection.UP || s == ForgeDirection.DOWN) {
+        if (s == EnumFacing.UP || s == EnumFacing.DOWN) {
             int markerTop = getPattern().getPatternMarkerChecked(px, py + 1, pz);
             if (markerTop == 'A' || markerTop == 'O') {
                 int metaUp = worldObj.getBlockMetadata(xCoord, yCoord, zCoord - 1);

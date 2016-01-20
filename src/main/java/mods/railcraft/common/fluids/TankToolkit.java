@@ -31,7 +31,7 @@ public class TankToolkit implements IFluidHandler {
         if (fluid == null)
             return 0;
         int amount = 0;
-        for (FluidTankInfo tank : getTankInfo(ForgeDirection.UNKNOWN)) {
+        for (FluidTankInfo tank : getTankInfo(EnumFacing.UNKNOWN)) {
             if (tank.fluid != null && fluid == tank.fluid.getFluid())
                 amount += tank.fluid.amount;
         }
@@ -47,12 +47,12 @@ public class TankToolkit implements IFluidHandler {
     public boolean isTankFull(Fluid fluid) {
         if (fluid == null)
             return areTanksFull();
-        int fill = fill(ForgeDirection.UNKNOWN, new FluidStack(fluid, 1), false);
+        int fill = fill(EnumFacing.UNKNOWN, new FluidStack(fluid, 1), false);
         return fill <= 0;
     }
 
     public boolean areTanksFull() {
-        for (FluidTankInfo tank : getTankInfo(ForgeDirection.UNKNOWN)) {
+        for (FluidTankInfo tank : getTankInfo(EnumFacing.UNKNOWN)) {
             if (tank.fluid == null || tank.fluid.amount < tank.capacity)
                 return false;
         }
@@ -64,7 +64,7 @@ public class TankToolkit implements IFluidHandler {
     }
 
     public boolean isFluidInTank() {
-        for (FluidTankInfo tank : getTankInfo(ForgeDirection.UNKNOWN)) {
+        for (FluidTankInfo tank : getTankInfo(EnumFacing.UNKNOWN)) {
             boolean empty = tank.fluid == null || tank.fluid.amount <= 0;
             if (!empty)
                 return true;
@@ -75,7 +75,7 @@ public class TankToolkit implements IFluidHandler {
     public float getFluidLevel() {
         int amount = 0;
         int capacity = 0;
-        for (FluidTankInfo tank : getTankInfo(ForgeDirection.UNKNOWN)) {
+        for (FluidTankInfo tank : getTankInfo(EnumFacing.UNKNOWN)) {
             FluidStack liquid = tank.fluid;
             amount += liquid == null ? 0 : liquid.amount;
             capacity += tank.capacity;
@@ -86,7 +86,7 @@ public class TankToolkit implements IFluidHandler {
     public float getFluidLevel(Fluid fluid) {
         int amount = 0;
         int capacity = 0;
-        for (FluidTankInfo tank : getTankInfo(ForgeDirection.UNKNOWN)) {
+        for (FluidTankInfo tank : getTankInfo(EnumFacing.UNKNOWN)) {
             FluidStack liquid = tank.fluid;
             if (liquid == null || liquid.getFluid() != fluid)
                 continue;
@@ -96,39 +96,39 @@ public class TankToolkit implements IFluidHandler {
         return capacity == 0 ? 0 : amount / (float) capacity;
     }
 
-    public boolean canPutFluid(ForgeDirection from, FluidStack liquid) {
+    public boolean canPutFluid(EnumFacing from, FluidStack liquid) {
         if (liquid == null)
             return false;
         return fill(from, liquid, false) > 0;
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         return tankContainer.fill(from, resource, doFill);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return tankContainer.drain(from, maxDrain, doDrain);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         return tankContainer.drain(from, resource, doDrain);
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection side) {
+    public FluidTankInfo[] getTankInfo(EnumFacing side) {
         return tankContainer.getTankInfo(side);
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return tankContainer.canFill(from, fluid);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return tankContainer.canDrain(from, fluid);
     }
 

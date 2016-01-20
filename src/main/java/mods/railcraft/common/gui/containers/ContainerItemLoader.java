@@ -8,11 +8,11 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderItemBase;
 import mods.railcraft.common.gui.slots.SlotFilter;
 import mods.railcraft.common.gui.slots.SlotMinecartFilter;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 
 public class ContainerItemLoader extends RailcraftContainer {
 

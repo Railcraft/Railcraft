@@ -8,12 +8,12 @@
  */
 package mods.railcraft.common.util.crafting;
 
+import mods.railcraft.common.items.RailcraftPartItems;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
-import mods.railcraft.common.items.RailcraftPartItems;
-import mods.railcraft.common.util.inventory.InvTools;
 
 /**
  *

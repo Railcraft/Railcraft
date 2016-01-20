@@ -8,12 +8,11 @@
  */
 package mods.railcraft.client.render;
 
+import mods.railcraft.common.blocks.machine.alpha.TileSteamTurbine;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-
-import mods.railcraft.common.blocks.machine.alpha.TileSteamTurbine;
 import org.lwjgl.opengl.GL11;
 
 public class RenderTurbineGauge extends TileEntitySpecialRenderer {

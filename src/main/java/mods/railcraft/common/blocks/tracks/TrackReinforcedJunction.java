@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import net.minecraft.entity.Entity;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerReinforced;
+import net.minecraft.entity.Entity;
 
 public class TrackReinforcedJunction extends TrackJunction {
 

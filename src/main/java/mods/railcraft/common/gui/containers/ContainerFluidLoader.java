@@ -8,16 +8,16 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.blocks.machine.gamma.TileFluidLoader;
 import mods.railcraft.common.gui.slots.SlotFluidContainerFilled;
 import mods.railcraft.common.gui.slots.SlotFluidFilter;
 import mods.railcraft.common.gui.slots.SlotMinecartFilter;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerFluidLoader extends RailcraftContainer {
 

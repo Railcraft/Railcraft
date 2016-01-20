@@ -8,22 +8,21 @@
  */
 package mods.railcraft.client.core;
 
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
-
-import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

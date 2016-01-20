@@ -8,18 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemMinecart;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
@@ -35,11 +23,24 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemMinecart;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.WorldServer;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class TileDispenserCart extends TileMachineItem {
 
-    protected ForgeDirection direction = ForgeDirection.NORTH;
+    protected EnumFacing direction = EnumFacing.NORTH;
     protected boolean powered;
     protected int timeSinceLastSpawn;
 
@@ -62,7 +63,7 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         if (direction == axis)
             direction = axis.getOpposite();
         else
@@ -81,7 +82,7 @@ public class TileDispenserCart extends TileMachineItem {
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, xCoord, yCoord, zCoord);
-        if (direction == ForgeDirection.UNKNOWN)
+        if (direction == EnumFacing.UNKNOWN)
             direction = MiscTools.getSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
     }
 
@@ -178,7 +179,7 @@ public class TileDispenserCart extends TileMachineItem {
         super.readFromNBT(data);
 
         powered = data.getBoolean("powered");
-        direction = ForgeDirection.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getOrientation(data.getByte("direction"));
 
         timeSinceLastSpawn = data.getInteger("time");
     }
@@ -195,7 +196,7 @@ public class TileDispenserCart extends TileMachineItem {
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = ForgeDirection.getOrientation(data.readByte());
+        direction = EnumFacing.getOrientation(data.readByte());
 //        powered = data.readBoolean();
 
         markBlockForUpdate();

@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.gui.slots;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 
 public class SlotMinecartFilter extends SlotMinecart {

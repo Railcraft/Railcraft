@@ -10,7 +10,6 @@ package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 public class TrackDisposal extends TrackSuspended {

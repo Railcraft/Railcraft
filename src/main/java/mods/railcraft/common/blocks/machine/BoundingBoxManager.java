@@ -8,10 +8,11 @@
  */
 package mods.railcraft.common.blocks.machine;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *

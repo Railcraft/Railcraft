@@ -9,23 +9,16 @@
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,6 +26,8 @@ import net.minecraft.network.play.server.S1BPacketEntityAttach;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+
+import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

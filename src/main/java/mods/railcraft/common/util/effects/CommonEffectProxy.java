@@ -8,25 +8,22 @@
  */
 package mods.railcraft.common.util.effects;
 
+import mods.railcraft.common.items.ItemGoggles;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.PacketEffect;
+import mods.railcraft.common.util.network.PacketEffect.Effect;
+import mods.railcraft.common.util.sounds.SoundHelper;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.World;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
-
-import mods.railcraft.common.items.ItemGoggles;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.entity.Entity;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.PacketEffect;
-import mods.railcraft.common.util.network.PacketEffect.Effect;
-import mods.railcraft.common.util.sounds.SoundHelper;
-import net.minecraft.util.MathHelper;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

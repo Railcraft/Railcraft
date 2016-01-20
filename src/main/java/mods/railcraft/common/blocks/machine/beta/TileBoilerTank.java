@@ -8,14 +8,15 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
+import mods.railcraft.common.util.misc.ITileFilter;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.common.util.misc.ITileFilter;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 
 /**
  *
@@ -59,7 +60,7 @@ public abstract class TileBoilerTank extends TileBoiler {
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         return 0;
     }
 

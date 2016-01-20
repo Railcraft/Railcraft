@@ -8,25 +8,24 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 import mods.railcraft.api.carts.IEnergyTransfer;
-import mods.railcraft.common.carts.CartUtils;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.modules.ModuleIC2;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISidedInventory {
     private static final int SLOT_CHARGE = 0;
@@ -42,7 +41,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     protected int energy;
     protected short transformerUpgrades;
     protected short overclockerUpgrades;
-    protected ForgeDirection direction = ForgeDirection.NORTH;
+    protected EnumFacing direction = EnumFacing.NORTH;
     protected boolean transferredEnergy;
     private boolean addedToIC2EnergyNet;
 
@@ -77,7 +76,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, xCoord, yCoord, zCoord);
-        if (direction == ForgeDirection.UNKNOWN)
+        if (direction == EnumFacing.UNKNOWN)
             direction = MiscTools.getSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
     }
 
@@ -201,7 +200,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         energy = data.getInteger("energy");
-        direction = ForgeDirection.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getOrientation(data.getByte("direction"));
 
         countUpgrades();
     }
@@ -219,13 +218,13 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = ForgeDirection.getOrientation(data.readByte());
+        direction = EnumFacing.getOrientation(data.readByte());
         storageUpgrades = data.readShort();
         lapotronUpgrades = data.readShort();
     }
 
     @Override
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         if (direction == axis)
             direction = axis.getOpposite();
         else

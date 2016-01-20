@@ -8,12 +8,12 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.carts.EntityCartUndercutter;
 import mods.railcraft.common.gui.slots.SlotBlockFilter;
 import mods.railcraft.common.gui.slots.SlotLinked;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerCartUndercutter extends RailcraftContainer {

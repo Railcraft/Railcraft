@@ -8,19 +8,10 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.api.signals.SimpleSignalReceiver;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalController;
+import mods.railcraft.api.signals.SimpleSignalReceiver;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
@@ -28,8 +19,17 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
-import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
+import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 public class TileBoxReceiver extends TileBoxActionManager implements IAspectActionManager, IGuiReturnHandler, IReceiverTile, IAspectProvider {
     private static final int FORCED_UPDATE = 512;
@@ -124,7 +124,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     }
 
     @Override
-    public boolean isConnected(ForgeDirection side) {
+    public boolean isConnected(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);
         if (tile instanceof TileBoxBase)
             return ((TileBoxBase) tile).canReceiveAspect();
@@ -132,12 +132,12 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     }
 
     @Override
-    public boolean isEmittingRedstone(ForgeDirection side) {
+    public boolean isEmittingRedstone(EnumFacing side) {
         return doesActionOnAspect(receiver.getAspect());
     }
 
     @Override
-    public boolean canEmitRedstone(ForgeDirection side) {
+    public boolean canEmitRedstone(EnumFacing side) {
         return true;
     }
 
@@ -148,7 +148,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(ForgeDirection side) {
+    public SignalAspect getBoxSignalAspect(EnumFacing side) {
         return receiver.getAspect();
     }
 

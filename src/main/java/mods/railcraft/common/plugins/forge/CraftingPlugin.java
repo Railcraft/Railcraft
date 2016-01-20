@@ -9,13 +9,13 @@
 package mods.railcraft.common.plugins.forge;
 
 import com.google.common.collect.Lists;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import mods.railcraft.common.items.IItemMetaEnum;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.apache.logging.log4j.Level;

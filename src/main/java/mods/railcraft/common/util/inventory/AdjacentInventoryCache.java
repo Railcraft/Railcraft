@@ -8,13 +8,14 @@
  */
 package mods.railcraft.common.util.inventory;
 
-import java.util.*;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
+import java.util.*;
 
 /**
  *
@@ -55,7 +56,7 @@ public final class AdjacentInventoryCache {
         if (changed || Game.IS_BUKKIT) {
             changed = false;
             invs.clear();
-            for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+            for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
                 TileEntity tile = cache.getTileOnSide(side);
                 if (tile != null && (filter == null || filter.matches(tile))) {
                     IInventory inv = InvTools.getInventoryFromTile(tile, side.getOpposite());

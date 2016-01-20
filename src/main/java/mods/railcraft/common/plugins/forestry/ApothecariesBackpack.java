@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.plugins.forestry;
 
-import net.minecraftforge.fml.common.Optional;
 import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.common.plugins.thaumcraft.ResearchItemRC;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
@@ -16,6 +15,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.Optional;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;

@@ -8,9 +8,9 @@
  */
 package mods.railcraft.client.particles;
 
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
 public class EntityChimneyFX extends EntitySimpleParticleFX {

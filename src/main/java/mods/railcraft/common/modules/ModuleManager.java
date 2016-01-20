@@ -8,14 +8,6 @@
  */
 package mods.railcraft.common.modules;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import java.io.File;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Set;
-import org.apache.logging.log4j.Level;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.misc.Game;
@@ -25,6 +17,15 @@ import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.Level;
+
+import java.io.File;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Set;
 
 public class ModuleManager {
 

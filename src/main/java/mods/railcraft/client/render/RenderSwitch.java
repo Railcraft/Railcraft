@@ -9,7 +9,6 @@
 package mods.railcraft.client.render;
 
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
-import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.EnumSignal;

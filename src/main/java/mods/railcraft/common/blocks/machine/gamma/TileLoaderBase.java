@@ -125,7 +125,7 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
     public final boolean isPoweringTo(int side) {
         if (!isPowered())
             return false;
-        ForgeDirection opSide = MiscTools.getOppositeSide(side);
+        EnumFacing opSide = MiscTools.getOppositeSide(side);
         Block block = WorldPlugin.getBlockOnSide(worldObj, xCoord, yCoord, zCoord, opSide);
         return TrackTools.isRailBlock(block) || block == Blocks.redstone_wire || block == Blocks.powered_repeater || block == Blocks.unpowered_repeater;
     }

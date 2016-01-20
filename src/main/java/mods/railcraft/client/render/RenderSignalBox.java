@@ -8,21 +8,21 @@
  */
 package mods.railcraft.client.render;
 
-import net.minecraft.block.Block;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.item.ItemStack;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.TileBoxBase;
-import net.minecraft.util.IIcon;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import org.lwjgl.opengl.GL11;
 
-import static net.minecraftforge.common.util.ForgeDirection.*;
+import static net.minecraftforge.common.util.EnumFacing.*;
 
 public class RenderSignalBox implements ICombinedRenderer {
 
@@ -85,7 +85,7 @@ public class RenderSignalBox implements ICombinedRenderer {
 
         // Aspect
         for (int side = 2; side < 6; side++) {
-            SignalAspect aspect = tile.getBoxSignalAspect(ForgeDirection.getOrientation(side));
+            SignalAspect aspect = tile.getBoxSignalAspect(EnumFacing.getOrientation(side));
             if (!aspect.isLit())
                 aspect = SignalAspect.OFF;
             IIcon lamp = BlockSignalRailcraft.texturesLampBox[aspect.getTextureIndex()];

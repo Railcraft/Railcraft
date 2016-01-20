@@ -8,15 +8,14 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import java.util.UUID;
 import mods.railcraft.common.blocks.signals.IAspectActionManager;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
-import net.minecraft.inventory.ICrafting;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.ICrafting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerAspectAction extends RailcraftContainer {
 

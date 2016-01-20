@@ -17,11 +17,11 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraft.util.EnumFacing;
 
 /**
  *
@@ -57,7 +57,7 @@ public class RenderBlockLamp extends BlockRenderer {
 
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderblocks) {
-        if (canConnect(world, x, y, z, ForgeDirection.DOWN))
+        if (canConnect(world, x, y, z, EnumFacing.DOWN))
             renderCenteredCube(x, y, z, block, renderblocks, PILLAR_BORDER, PILLAR_HEIGHT, PILLAR_THICKNESS);
 
         renderCenteredCube(x, y, z, block, renderblocks, BASE_BORDER, BASE_HEIGHT, BASE_THICKNESS);
@@ -74,7 +74,7 @@ public class RenderBlockLamp extends BlockRenderer {
         renderCornerPost(x, y, z, block, renderblocks, one, zero);
         renderCornerPost(x, y, z, block, renderblocks, one, one);
 
-        if (canConnect(world, x, y, z, ForgeDirection.NORTH)) {
+        if (canConnect(world, x, y, z, EnumFacing.NORTH)) {
             int[] conn = new int[4];
             conn[0] = BASE_BORDER + CORNER_THICKNESS;
             conn[1] = 0;
@@ -82,7 +82,7 @@ public class RenderBlockLamp extends BlockRenderer {
             conn[3] = BASE_BORDER + CORNER_THICKNESS;
             renderConnector(x, y, z, block, renderblocks, conn[0], conn[1], conn[2], conn[3]);
         }
-        if (canConnect(world, x, y, z, ForgeDirection.SOUTH)) {
+        if (canConnect(world, x, y, z, EnumFacing.SOUTH)) {
             int[] conn = new int[4];
             conn[0] = BASE_BORDER + CORNER_THICKNESS;
             conn[1] = 16 - BASE_BORDER - CORNER_THICKNESS;
@@ -90,7 +90,7 @@ public class RenderBlockLamp extends BlockRenderer {
             conn[3] = 16;
             renderConnector(x, y, z, block, renderblocks, conn[0], conn[1], conn[2], conn[3]);
         }
-        if (canConnect(world, x, y, z, ForgeDirection.EAST)) {
+        if (canConnect(world, x, y, z, EnumFacing.EAST)) {
             int[] conn = new int[4];
             conn[0] = 16 - BASE_BORDER - CORNER_THICKNESS;
             conn[1] = BASE_BORDER + CORNER_THICKNESS;
@@ -98,7 +98,7 @@ public class RenderBlockLamp extends BlockRenderer {
             conn[3] = 16 - BASE_BORDER - CORNER_THICKNESS;
             renderConnector(x, y, z, block, renderblocks, conn[0], conn[1], conn[2], conn[3]);
         }
-        if (canConnect(world, x, y, z, ForgeDirection.WEST)) {
+        if (canConnect(world, x, y, z, EnumFacing.WEST)) {
             int[] conn = new int[4];
             conn[0] = 0;
             conn[1] = BASE_BORDER + CORNER_THICKNESS;
@@ -126,13 +126,13 @@ public class RenderBlockLamp extends BlockRenderer {
         RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
     }
 
-    private boolean canConnect(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    private boolean canConnect(IBlockAccess world, int x, int y, int z, EnumFacing side) {
         int sx = MiscTools.getXOnSide(x, side);
         int sy = MiscTools.getYOnSide(y, side);
         int sz = MiscTools.getZOnSide(z, side);
         if (world.isSideSolid(sx, sy, sz, side.getOpposite(), false))
             return true;
-        if (side == ForgeDirection.DOWN) {
+        if (side == EnumFacing.DOWN) {
             if (World.doesBlockHaveSolidTopSurface(world, sx, sy, sz))
                 return true;
             if (world instanceof ChunkCache) {

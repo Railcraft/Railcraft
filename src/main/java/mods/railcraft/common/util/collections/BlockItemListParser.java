@@ -8,15 +8,16 @@
  */
 package mods.railcraft.common.util.collections;
 
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameData;
+import org.apache.logging.log4j.Level;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.apache.logging.log4j.Level;
-import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 
 
 /**

@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.modules;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.signals.ItemSignalBlockSurveyor;
@@ -18,8 +16,10 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 public class ModuleSignals extends RailcraftModule {
 

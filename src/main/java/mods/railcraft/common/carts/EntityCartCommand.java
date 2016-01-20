@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -21,6 +19,8 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Credits to CovertJaguar.

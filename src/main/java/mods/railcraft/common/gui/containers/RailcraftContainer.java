@@ -8,26 +8,26 @@
  */
 package mods.railcraft.common.gui.containers;
 
+import mods.railcraft.common.gui.slots.SlotRailcraft;
+import mods.railcraft.common.gui.widgets.Widget;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.network.PacketBuilder;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import mods.railcraft.common.gui.widgets.Widget;
-import net.minecraft.inventory.Container;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.inventory.Slot;
-import mods.railcraft.common.gui.slots.SlotRailcraft;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.ICrafting;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

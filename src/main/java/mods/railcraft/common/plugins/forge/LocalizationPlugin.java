@@ -8,11 +8,11 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import java.util.IllegalFormatException;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.StatCollector;
+
+import java.util.IllegalFormatException;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

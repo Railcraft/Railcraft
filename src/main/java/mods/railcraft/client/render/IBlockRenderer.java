@@ -9,8 +9,8 @@
 package mods.railcraft.client.render;
 
 import net.minecraft.block.Block;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.world.IBlockAccess;
 
 /**
  *

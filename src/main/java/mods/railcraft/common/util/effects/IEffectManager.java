@@ -8,17 +8,16 @@
  */
 package mods.railcraft.common.util.effects;
 
+import mods.railcraft.api.signals.IPairEffectRenderer;
+import mods.railcraft.common.items.ItemGoggles;
+import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.World;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Set;
-
-import mods.railcraft.common.items.ItemGoggles;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
-import mods.railcraft.api.signals.IPairEffectRenderer;
-import net.minecraft.tileentity.TileEntity;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

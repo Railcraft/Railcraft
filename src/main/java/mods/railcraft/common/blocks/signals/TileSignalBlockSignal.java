@@ -8,17 +8,17 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import mods.railcraft.common.core.RailcraftConfig;
-import net.minecraft.nbt.NBTTagCompound;
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SimpleSignalController;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.Level;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class TileSignalBlockSignal extends TileSignalBase implements IControllerTile, ISignalTile, ISignalBlockTile {
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);

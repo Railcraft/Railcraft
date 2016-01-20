@@ -18,8 +18,8 @@ import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -72,8 +72,8 @@ public class TileSmoker extends TileMachineBase {
     }
 
     @Override
-    public boolean isSideSolid(ForgeDirection side) {
-        return side != ForgeDirection.UP;
+    public boolean isSideSolid(EnumFacing side) {
+        return side != EnumFacing.UP;
     }
 
     @Override

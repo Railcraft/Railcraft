@@ -8,8 +8,9 @@
  */
 package mods.railcraft.common.util.inventory;
 
-import java.util.Comparator;
 import net.minecraft.inventory.IInventory;
+
+import java.util.Comparator;
 
 /**
  *

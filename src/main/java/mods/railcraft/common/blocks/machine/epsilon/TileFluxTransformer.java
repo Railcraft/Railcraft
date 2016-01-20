@@ -2,6 +2,7 @@ package mods.railcraft.common.blocks.machine.epsilon;
 
 import cofh.api.energy.IEnergyHandler;
 import mods.railcraft.api.electricity.IElectricGrid;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
@@ -9,12 +10,12 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import mods.railcraft.common.blocks.RailcraftBlocks;
-import net.minecraft.world.World;
 
 public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid, IEnergyHandler {
 
@@ -87,7 +88,7 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
     }
 
     @Override
-    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         if (!isStructureValid())
             return 0;
         double chargeDifference = chargeHandler.getCapacity() - chargeHandler.getCharge();
@@ -100,22 +101,22 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         return 0;
     }
 
     @Override
-    public int getEnergyStored(ForgeDirection from) {
+    public int getEnergyStored(EnumFacing from) {
         return 0;
     }
 
     @Override
-    public int getMaxEnergyStored(ForgeDirection from) {
+    public int getMaxEnergyStored(EnumFacing from) {
         return 0;
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection from) {
+    public boolean canConnectEnergy(EnumFacing from) {
         return true;
     }
 

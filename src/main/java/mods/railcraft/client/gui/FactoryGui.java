@@ -8,12 +8,8 @@
  */
 package mods.railcraft.client.gui;
 
-import org.apache.logging.log4j.Level;
-
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.detector.TileDetector;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.InventoryPlayer;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.alpha.*;
@@ -22,18 +18,17 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.machine.gamma.*;
-import mods.railcraft.common.blocks.signals.IAspectActionManager;
-import mods.railcraft.common.blocks.signals.IRouter;
-import mods.railcraft.common.blocks.signals.TileBoxAnalogController;
-import mods.railcraft.common.blocks.signals.TileBoxCapacitor;
-import mods.railcraft.common.blocks.signals.TileBoxController;
+import mods.railcraft.common.blocks.signals.*;
 import mods.railcraft.common.blocks.tracks.*;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
 
 /**
  *

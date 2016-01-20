@@ -8,11 +8,11 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import org.apache.logging.log4j.Level;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.common.util.misc.Game;
+import org.apache.logging.log4j.Level;
 
 /**
  *

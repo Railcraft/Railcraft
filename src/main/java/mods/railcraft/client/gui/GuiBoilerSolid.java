@@ -8,12 +8,12 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.StatCollector;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerBoilerSolid;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.StatCollector;
 
 public class GuiBoilerSolid extends TileGui {
 

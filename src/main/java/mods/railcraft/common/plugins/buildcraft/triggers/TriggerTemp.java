@@ -19,7 +19,7 @@ public class TriggerTemp extends Trigger {
     }
 
     @Override
-    public boolean isTriggerActive(ForgeDirection side, TileEntity tile, IStatementParameter[] parameter) {
+    public boolean isTriggerActive(EnumFacing side, TileEntity tile, IStatementParameter[] parameter) {
         if (tile instanceof ITemperature) {
             float temp = ((ITemperature) tile).getTemperature();
             return temp >= min && temp < max;

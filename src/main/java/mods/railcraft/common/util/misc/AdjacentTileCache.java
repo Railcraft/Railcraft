@@ -39,12 +39,12 @@ public final class AdjacentTileCache {
         listeners.add(listener);
     }
 
-    private TileEntity searchSide(ForgeDirection side) {
+    private TileEntity searchSide(EnumFacing side) {
         return WorldPlugin.getTileEntityOnSide(source.getWorldObj(), source.xCoord, source.yCoord, source.zCoord, side);
     }
 
     public void refresh() {
-        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
             getTileOnSide(side);
         }
     }
@@ -78,7 +78,7 @@ public final class AdjacentTileCache {
         }
     }
 
-    public TileEntity getTileOnSide(ForgeDirection side) {
+    public TileEntity getTileOnSide(EnumFacing side) {
         if (Game.IS_BUKKIT)
             return searchSide(side);
         int s = side.ordinal();

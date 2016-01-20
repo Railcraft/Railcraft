@@ -9,15 +9,16 @@
 package mods.railcraft.common.util.crafting;
 
 import com.google.common.collect.Maps;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.api.crafting.IRockCrusherCraftingManager;
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class RockCrusherCraftingManager implements IRockCrusherCraftingManager {
 

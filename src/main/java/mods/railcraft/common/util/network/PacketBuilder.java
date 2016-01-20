@@ -8,12 +8,12 @@
  */
 package mods.railcraft.common.util.network;
 
-import net.minecraft.world.WorldServer;
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.ISignalPacketBuilder;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.network.PacketKeyPress.EnumKeyBinding;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.world.WorldServer;
 
 /**
  *

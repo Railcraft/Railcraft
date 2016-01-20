@@ -8,38 +8,38 @@
  */
 package mods.railcraft.common.blocks.machine;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import mods.railcraft.api.core.IPostConnection;
-import org.apache.logging.log4j.Level;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.common.blocks.machine.beta.MachineProxyBeta;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.Level;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class BlockMachine extends BlockContainer implements IPostConnection {
 
@@ -115,7 +115,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     }
 
     @Override
-    public boolean recolourBlock(World world, int x, int y, int z, ForgeDirection side, int colour) {
+    public boolean recolourBlock(World world, int x, int y, int z, EnumFacing side, int colour) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).recolourBlock(colour);
@@ -136,7 +136,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     }
 
     @Override
-    public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
+    public boolean rotateBlock(World world, int x, int y, int z, EnumFacing axis) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).rotateBlock(axis);
@@ -144,7 +144,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     }
 
     @Override
-    public ForgeDirection[] getValidRotations(World world, int x, int y, int z) {
+    public EnumFacing[] getValidRotations(World world, int x, int y, int z) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).getValidRotations();
@@ -165,7 +165,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, EnumFacing side) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).isSideSolid(side);
@@ -378,7 +378,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, EnumFacing side) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).connectsToPost(side);

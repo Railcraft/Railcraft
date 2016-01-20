@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.items;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import mods.railcraft.common.blocks.hidden.BlockHidden;
 import mods.railcraft.common.blocks.hidden.TrailTicker;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -24,6 +23,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.List;
 

@@ -8,7 +8,6 @@
  */
 package mods.railcraft.client.render.carts;
 
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import mods.railcraft.api.carts.locomotive.IRenderer;
 import mods.railcraft.client.render.TexturedQuadAdv;
 import mods.railcraft.client.render.models.ModelSimple;
@@ -20,6 +19,7 @@ import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.lwjgl.opengl.GL11;
 
 /**

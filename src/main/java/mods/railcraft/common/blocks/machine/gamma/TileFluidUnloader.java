@@ -8,21 +8,10 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import mods.railcraft.common.fluids.*;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.fluids.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
@@ -33,9 +22,19 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturnHandler {
 
@@ -86,9 +85,9 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
         if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
             FluidHelper.fillContainers(tankManager, this, SLOT_INPUT, SLOT_OUTPUT, loaderTank.getFluidType());
 
-        tankManager.outputLiquid(tileCache, TankManager.TANK_FILTER, ForgeDirection.VALID_DIRECTIONS, 0, TRANSFER_RATE);
+        tankManager.outputLiquid(tileCache, TankManager.TANK_FILTER, EnumFacing.VALID_DIRECTIONS, 0, TRANSFER_RATE);
 
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.1f, ForgeDirection.UP);
+        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.1f, EnumFacing.UP);
 
         if (cart != currentCart) {
             setPowered(false);
@@ -109,10 +108,10 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
 
         TankToolkit tankCart = new TankToolkit((IFluidHandler) cart);
 
-        FluidStack drained = tankCart.drain(ForgeDirection.DOWN, RailcraftConfig.getTankCartFillRate(), false);
+        FluidStack drained = tankCart.drain(EnumFacing.DOWN, RailcraftConfig.getTankCartFillRate(), false);
         if (getFilterFluid() == null || Fluids.areEqual(getFilterFluid(), drained)) {
             flow = tankManager.get(0).fill(drained, true);
-            tankCart.drain(ForgeDirection.DOWN, flow, true);
+            tankCart.drain(EnumFacing.DOWN, flow, true);
         }
 
         if (flow > 0)
@@ -135,17 +134,17 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         return 0;
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return false;
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return true;
     }
 
@@ -183,8 +182,8 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
         stateController.setCurrentState(data.readByte());
     }
 
-    public ForgeDirection getOrientation() {
-        return ForgeDirection.UP;
+    public EnumFacing getOrientation() {
+        return EnumFacing.UP;
     }
 
     @Override

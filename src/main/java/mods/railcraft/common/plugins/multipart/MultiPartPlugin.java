@@ -8,9 +8,9 @@
  */
 package mods.railcraft.common.plugins.multipart;
 
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 /**
  *

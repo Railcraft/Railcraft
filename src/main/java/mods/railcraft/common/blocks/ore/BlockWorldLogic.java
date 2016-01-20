@@ -8,20 +8,21 @@
  */
 package mods.railcraft.common.blocks.ore;
 
-import java.util.EnumSet;
-import java.util.Random;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
+import java.util.EnumSet;
+import java.util.Random;
 
 /**
  *
@@ -96,7 +97,7 @@ public class BlockWorldLogic extends Block {
 
         int airCount = 0;
         Block ore = BlockOre.getBlock();
-        for (ForgeDirection side : EnumSet.of(ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST)) {
+        for (EnumFacing side : EnumSet.of(EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.EAST, EnumFacing.WEST)) {
             boolean isAir = world.isAirBlock(MiscTools.getXOnSide(x, side), MiscTools.getYOnSide(surfaceY, side), MiscTools.getZOnSide(z, side));
             if (isAir)
                 airCount++;

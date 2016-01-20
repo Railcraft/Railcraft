@@ -8,33 +8,34 @@
  */
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class BlockPost extends BlockPostBase implements IPostConnection {
 
@@ -167,11 +168,11 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, EnumFacing side) {
         int meta = world.getBlockMetadata(x, y, z);
         if (meta == EnumPost.EMBLEM.ordinal())
             return false;
-        return side == ForgeDirection.DOWN || side == ForgeDirection.UP;
+        return side == EnumFacing.DOWN || side == EnumFacing.UP;
     }
 
     @Override
@@ -187,7 +188,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         int metadata = world.getBlockMetadata(x, y, z);
         if (metadata == EnumPost.WOOD.ordinal())
             return 300;
@@ -195,7 +196,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public int getFlammability(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         int metadata = world.getBlockMetadata(x, y, z);
         if (metadata == EnumPost.WOOD.ordinal())
             return 5;
@@ -203,13 +204,13 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public boolean isFlammable(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         int metadata = world.getBlockMetadata(x, y, z);
         return metadata == EnumPost.WOOD.ordinal();
     }
 
     @Override
-    public boolean recolourBlock(World world, int x, int y, int z, ForgeDirection side, int colour) {
+    public boolean recolourBlock(World world, int x, int y, int z, EnumFacing side, int colour) {
         int meta = world.getBlockMetadata(x, y, z);
         if (meta == EnumPost.METAL_UNPAINTED.ordinal())
             if (BlockPostMetal.post != null) {
@@ -228,7 +229,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, EnumFacing side) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TilePostEmblem) {
             TilePostEmblem tileEmblem = (TilePostEmblem) tile;

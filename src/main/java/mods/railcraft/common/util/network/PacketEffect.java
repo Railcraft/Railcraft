@@ -8,13 +8,14 @@
  */
 package mods.railcraft.common.util.network;
 
+import mods.railcraft.common.util.effects.EffectManager;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.world.World;
-import mods.railcraft.common.util.effects.EffectManager;
 
 public class PacketEffect extends RailcraftPacket {
 

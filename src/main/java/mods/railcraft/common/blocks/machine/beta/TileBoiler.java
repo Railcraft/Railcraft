@@ -188,7 +188,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
                 StandardTank tank = mBlock.tankManager.get(TANK_STEAM);
                 FluidStack steam = tank.getFluid();
                 if (steam != null && (!mBlock.boiler.isBoiling() || steam.amount >= tank.getCapacity() / 2))
-                    mBlock.tankManager.outputLiquid(tileCache, getOutputFilter(), ForgeDirection.VALID_DIRECTIONS, TANK_STEAM, TRANSFER_RATE);
+                    mBlock.tankManager.outputLiquid(tileCache, getOutputFilter(), EnumFacing.VALID_DIRECTIONS, TANK_STEAM, TRANSFER_RATE);
             }
         }
     }
@@ -244,7 +244,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock == null)
             return null;
@@ -252,14 +252,14 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if (Fluids.STEAM.is(resource))
             return drain(from, resource.amount, doDrain);
         return null;
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         return 0;
     }
 
@@ -275,12 +275,12 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return Fluids.WATER.is(fluid);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         if (fluid == null) return true;
         return Fluids.STEAM.is(fluid);
     }
@@ -297,7 +297,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection dir) {
+    public FluidTankInfo[] getTankInfo(EnumFacing dir) {
         TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager.getTankInfo();

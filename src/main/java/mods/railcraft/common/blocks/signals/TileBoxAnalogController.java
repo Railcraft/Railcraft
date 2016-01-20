@@ -1,12 +1,5 @@
 package mods.railcraft.common.blocks.signals;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.BitSet;
-import java.util.EnumMap;
-import java.util.Map;
-
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SimpleSignalController;
@@ -20,6 +13,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.BitSet;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class TileBoxAnalogController extends TileBoxBase implements IControllerTile, IGuiReturnHandler {
 
@@ -86,8 +86,8 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
 
     private int getPowerLevel() {
         int p = 0, tmp;
-        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-            if (side == ForgeDirection.UP)
+        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
+            if (side == EnumFacing.UP)
                 continue;
             if (tileCache.getTileOnSide(side) instanceof TileBoxBase)
                 continue;
@@ -190,12 +190,12 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public boolean isConnected(ForgeDirection side) {
+    public boolean isConnected(EnumFacing side) {
         return false;
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(ForgeDirection side) {
+    public SignalAspect getBoxSignalAspect(EnumFacing side) {
         return controller.getAspect();
     }
 

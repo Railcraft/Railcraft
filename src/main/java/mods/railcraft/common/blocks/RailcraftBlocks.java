@@ -8,25 +8,20 @@
  */
 package mods.railcraft.common.blocks;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import java.util.Arrays;
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.MachineProxyAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.MachineProxyBeta;
-import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
-import mods.railcraft.common.blocks.machine.gamma.MachineProxyGamma;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.delta.MachineProxyDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.epsilon.MachineProxyEpsilon;
-import mods.railcraft.common.blocks.signals.*;
+import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
+import mods.railcraft.common.blocks.machine.gamma.MachineProxyGamma;
+import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
+import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
@@ -36,7 +31,12 @@ import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import net.minecraft.init.Items;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 public class RailcraftBlocks {
 

@@ -8,9 +8,8 @@
  */
 package mods.railcraft.common.modules;
 
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Optional;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import net.minecraftforge.fml.common.Optional;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

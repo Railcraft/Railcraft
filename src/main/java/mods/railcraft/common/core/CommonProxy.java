@@ -8,10 +8,11 @@
  */
 package mods.railcraft.common.core;
 
-import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.UUID;
 
 public class CommonProxy {
 

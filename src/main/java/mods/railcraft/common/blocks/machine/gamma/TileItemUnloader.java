@@ -23,8 +23,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -336,8 +336,8 @@ public class TileItemUnloader extends TileLoaderItemBase {
         return true;
     }
 
-    public ForgeDirection getOrientation() {
-        return ForgeDirection.UP;
+    public EnumFacing getOrientation() {
+        return EnumFacing.UP;
     }
 
     @Override

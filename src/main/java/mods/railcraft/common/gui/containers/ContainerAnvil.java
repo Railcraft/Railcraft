@@ -8,9 +8,6 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import java.util.Iterator;
-import java.util.Map;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.BlockAnvil;
@@ -25,7 +22,11 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  *

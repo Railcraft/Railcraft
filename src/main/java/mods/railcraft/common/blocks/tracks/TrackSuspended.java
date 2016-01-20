@@ -9,11 +9,11 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.tracks.ITrackCustomPlaced;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlaced {
 
@@ -73,7 +73,7 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
         if (!world.blockExists(i, j, k))
             return true;
         if (TrackTools.isRailBlockAt(world, i, j, k))
-            return world.isSideSolid(i, j - 1, k, ForgeDirection.UP);
+            return world.isSideSolid(i, j - 1, k, EnumFacing.UP);
         return false;
     }
 
@@ -102,7 +102,7 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
 //        }
         if (isSupported(world, i, j, k, 0) || isSupported(world, i, j, k, 1))
             return true;
-        return world.isSideSolid(i, j - 1, k, ForgeDirection.UP);
+        return world.isSideSolid(i, j - 1, k, EnumFacing.UP);
     }
 
 }

@@ -8,11 +8,11 @@
  */
 package mods.railcraft.common.blocks.ore;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 /**
  *

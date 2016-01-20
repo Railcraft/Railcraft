@@ -8,13 +8,6 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -22,14 +15,24 @@ import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import static net.minecraftforge.common.util.ForgeDirection.*;
-import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
+import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
+import static net.minecraftforge.common.util.EnumFacing.*;
 
 public class TileBoxSequencer extends TileBoxBase {
 
     private static final int MAX_ITERATIONS = 64;
-    private ForgeDirection sideOutput = ForgeDirection.NORTH;
+    private EnumFacing sideOutput = EnumFacing.NORTH;
     private boolean powerState = false;
     private boolean neighborState = false;
 
@@ -55,7 +58,7 @@ public class TileBoxSequencer extends TileBoxBase {
     }
 
     @Override
-    public void onNeighborStateChange(TileBoxBase neighbor, ForgeDirection side) {
+    public void onNeighborStateChange(TileBoxBase neighbor, EnumFacing side) {
         if (worldObj.isRemote)
             return;
         if (neighbor instanceof TileBoxSequencer)
@@ -81,7 +84,7 @@ public class TileBoxSequencer extends TileBoxBase {
             }
         }
 
-        ForgeDirection newSide = sideOutput.getRotation(UP);
+        EnumFacing newSide = sideOutput.getRotation(UP);
         while (newSide != sideOutput && !canOutputToSide(newSide)) {
             newSide = newSide.getRotation(UP);
         }
@@ -98,7 +101,7 @@ public class TileBoxSequencer extends TileBoxBase {
         }
     }
 
-    private boolean canOutputToSide(ForgeDirection side) {
+    private boolean canOutputToSide(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);
         if (tile instanceof TileBoxSequencer)
             return true;
@@ -138,12 +141,12 @@ public class TileBoxSequencer extends TileBoxBase {
     }
 
     @Override
-    public boolean isEmittingRedstone(ForgeDirection side) {
+    public boolean isEmittingRedstone(EnumFacing side) {
         return sideOutput == side;
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(ForgeDirection side) {
+    public SignalAspect getBoxSignalAspect(EnumFacing side) {
         return sideOutput == side ? SignalAspect.GREEN : SignalAspect.RED;
     }
 
@@ -158,7 +161,7 @@ public class TileBoxSequencer extends TileBoxBase {
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        sideOutput = ForgeDirection.getOrientation(data.getByte("sideOutput"));
+        sideOutput = EnumFacing.getOrientation(data.getByte("sideOutput"));
         powerState = data.getBoolean("powerState");
         neighborState = data.getBoolean("neighborState");
     }
@@ -172,12 +175,12 @@ public class TileBoxSequencer extends TileBoxBase {
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        sideOutput = ForgeDirection.getOrientation(data.readByte());
+        sideOutput = EnumFacing.getOrientation(data.readByte());
         markBlockForUpdate();
     }
 
     @Override
-    public boolean isConnected(ForgeDirection side) {
+    public boolean isConnected(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);
         if (tile instanceof TileBoxSequencer)
             return true;

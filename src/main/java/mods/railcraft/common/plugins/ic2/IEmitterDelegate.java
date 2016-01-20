@@ -21,7 +21,7 @@ public interface IEmitterDelegate {
 
     void drawEnergy(double amount);
 
-    boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction);
+    boolean emitsEnergyTo(TileEntity receiver, EnumFacing direction);
 
     TileEntity getTile();
 

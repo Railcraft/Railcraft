@@ -8,9 +8,6 @@
  */
 package mods.railcraft.common.modules;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import java.util.*;
 import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.modules.ModuleManager.Module;
@@ -18,6 +15,13 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 
 public abstract class RailcraftModule {
 

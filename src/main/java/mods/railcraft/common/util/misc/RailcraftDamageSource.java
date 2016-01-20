@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.util.misc;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -17,6 +16,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  *

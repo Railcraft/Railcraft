@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.detector.types;
 
-import java.util.List;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.blocks.detector.DetectorSecured;
 import mods.railcraft.common.blocks.detector.EnumDetector;
@@ -29,7 +28,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
+import java.util.List;
+
+import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
+import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 /**
  *
@@ -120,7 +122,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
     }
 
     private void checkPower() {
-        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
             if (side == tile.direction) continue;
             if (PowerPlugin.isBlockBeingPowered(getWorld(), tile.xCoord, tile.yCoord, tile.zCoord, side)) {
                 powered = true;

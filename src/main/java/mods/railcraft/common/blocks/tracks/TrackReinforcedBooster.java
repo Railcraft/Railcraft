@@ -8,14 +8,15 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import mods.railcraft.api.tracks.ITrackPowered;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.api.tracks.ITrackPowered;
 
 public class TrackReinforcedBooster extends TrackReinforced implements ITrackPowered {
 
@@ -60,15 +61,15 @@ public class TrackReinforcedBooster extends TrackReinforced implements ITrackPow
                 cart.motionX += (cart.motionX / speed) * BOOST_FACTOR;
                 cart.motionZ += (cart.motionZ / speed) * BOOST_FACTOR;
             } else if (dirMeta == 1) {
-                if (getWorld().isSideSolid(i - 1, j, k, ForgeDirection.EAST)) {
+                if (getWorld().isSideSolid(i - 1, j, k, EnumFacing.EAST)) {
                     cart.motionX = START_BOOST;
-                } else if (getWorld().isSideSolid(i + 1, j, k, ForgeDirection.WEST)) {
+                } else if (getWorld().isSideSolid(i + 1, j, k, EnumFacing.WEST)) {
                     cart.motionX = -START_BOOST;
                 }
             } else if (dirMeta == 0) {
-                if (getWorld().isSideSolid(i, j, k - 1, ForgeDirection.SOUTH)) {
+                if (getWorld().isSideSolid(i, j, k - 1, EnumFacing.SOUTH)) {
                     cart.motionZ = START_BOOST;
-                } else if (getWorld().isSideSolid(i, j, k + 1, ForgeDirection.NORTH)) {
+                } else if (getWorld().isSideSolid(i, j, k + 1, EnumFacing.NORTH)) {
                     cart.motionZ = -START_BOOST;
                 }
             }

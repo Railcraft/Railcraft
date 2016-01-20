@@ -43,11 +43,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 import java.util.*;
@@ -165,10 +165,10 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     private EntityTunnelBorePart partTail2;
 
     public EntityTunnelBore(World world, double i, double j, double k) {
-        this(world, i, j, k, ForgeDirection.SOUTH);
+        this(world, i, j, k, EnumFacing.SOUTH);
     }
 
-    public EntityTunnelBore(World world, double i, double j, double k, ForgeDirection f) {
+    public EntityTunnelBore(World world, double i, double j, double k, EnumFacing f) {
         super(world);
         partArray = new EntityTunnelBorePart[]{
                 // ------------------------------------- width, height, forwardOffset, sideOffset
@@ -192,7 +192,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     }
 
     public EntityTunnelBore(World world) {
-        this(world, 0, 0, 0, ForgeDirection.SOUTH);
+        this(world, 0, 0, 0, EnumFacing.SOUTH);
     }
 
     public static void addMineableBlock(Block block) {
@@ -343,7 +343,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         double x2 = i;
         double z1 = k;
         double z2 = k;
-        if (getFacing() == ForgeDirection.WEST || getFacing() == ForgeDirection.EAST) {
+        if (getFacing() == EnumFacing.WEST || getFacing() == EnumFacing.EAST) {
             x1 -= l;
             x2 += l;
             z1 -= w;
@@ -394,7 +394,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                 int y = MathHelper.floor_double(posY);
                 int z;
                 EnumTrackMeta dir = EnumTrackMeta.NORTH_SOUTH;
-                if (getFacing() == ForgeDirection.WEST || getFacing() == ForgeDirection.EAST)
+                if (getFacing() == EnumFacing.WEST || getFacing() == EnumFacing.EAST)
                     dir = EnumTrackMeta.EAST_WEST;
 
                 if (getDelay() == 0) {
@@ -411,7 +411,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                             setActive(false);
                         }
                         placeBallast = false;
-                    } else if (!worldObj.isSideSolid(x, y - 1, z, ForgeDirection.UP)) {
+                    } else if (!worldObj.isSideSolid(x, y - 1, z, EnumFacing.UP)) {
                         placeBallast = true;
                         setDelay(BALLAST_DELAY);
                     }
@@ -522,17 +522,17 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     }
 
     protected double getXAhead(double x, double offset) {
-        if (getFacing() == ForgeDirection.EAST)
+        if (getFacing() == EnumFacing.EAST)
             x += offset;
-        else if (getFacing() == ForgeDirection.WEST)
+        else if (getFacing() == EnumFacing.WEST)
             x -= offset;
         return x;
     }
 
     protected double getZAhead(double z, double offset) {
-        if (getFacing() == ForgeDirection.NORTH)
+        if (getFacing() == EnumFacing.NORTH)
             z -= offset;
-        else if (getFacing() == ForgeDirection.SOUTH)
+        else if (getFacing() == EnumFacing.SOUTH)
             z += offset;
         return z;
     }
@@ -583,7 +583,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             double flameX2 = posX;
             double flameZ1 = posZ;
             double flameZ2 = posZ;
-            if (getFacing() == ForgeDirection.NORTH) {
+            if (getFacing() == EnumFacing.NORTH) {
                 smokeX1 += smokeSideOffset;
                 smokeX2 -= smokeSideOffset;
                 smokeZ1 += forwardOffset;
@@ -593,7 +593,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                 flameX2 -= flameSideOffset;
                 flameZ1 += forwardOffset + (rand.nextGaussian() * randomFactor);
                 flameZ2 += forwardOffset + (rand.nextGaussian() * randomFactor);
-            } else if (getFacing() == ForgeDirection.EAST) {
+            } else if (getFacing() == EnumFacing.EAST) {
                 smokeX1 -= forwardOffset;
                 smokeX2 -= forwardOffset;
                 smokeZ1 += smokeSideOffset;
@@ -603,7 +603,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                 flameX2 -= forwardOffset + (rand.nextGaussian() * randomFactor);
                 flameZ1 += flameSideOffset;
                 flameZ2 -= flameSideOffset;
-            } else if (getFacing() == ForgeDirection.SOUTH) {
+            } else if (getFacing() == EnumFacing.SOUTH) {
                 smokeX1 += smokeSideOffset;
                 smokeX2 -= smokeSideOffset;
                 smokeZ1 -= forwardOffset;
@@ -613,7 +613,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                 flameX2 -= flameSideOffset;
                 flameZ1 -= forwardOffset + (rand.nextGaussian() * randomFactor);
                 flameZ2 -= forwardOffset + (rand.nextGaussian() * randomFactor);
-            } else if (getFacing() == ForgeDirection.WEST) {
+            } else if (getFacing() == EnumFacing.WEST) {
                 smokeX1 += forwardOffset;
                 smokeX2 += forwardOffset;
                 smokeZ1 += smokeSideOffset;
@@ -645,12 +645,12 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     }
 
     protected boolean placeBallast(int i, int j, int k) {
-        if (!worldObj.isSideSolid(i, j, k, ForgeDirection.UP))
+        if (!worldObj.isSideSolid(i, j, k, EnumFacing.UP))
             for (int inv = 0; inv < invBallast.getSizeInventory(); inv++) {
                 ItemStack stack = invBallast.getStackInSlot(inv);
                 if (stack != null && BallastRegistry.isItemBallast(stack)) {
                     for (int y = j; y > j - MAX_FILL_DEPTH; y--) {
-                        if (worldObj.isSideSolid(i, y, k, ForgeDirection.UP)) {
+                        if (worldObj.isSideSolid(i, y, k, EnumFacing.UP)) {
                             invBallast.decrStackSize(inv, 1);
                             worldObj.setBlock(i, j, k, InvTools.getBlockFromStack(stack), stack.getItemDamage(), 3);
                             return true;
@@ -675,7 +675,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         if (replaceableBlocks.contains(block))
             worldObj.func_147480_a(x, y, z, true);
 
-        if (worldObj.isAirBlock(x, y, z) && worldObj.isSideSolid(x, y - 1, z, ForgeDirection.UP))
+        if (worldObj.isAirBlock(x, y, z) && worldObj.isSideSolid(x, y - 1, z, EnumFacing.UP))
             for (int inv = 0; inv < invRails.getSizeInventory(); inv++) {
                 ItemStack stack = invRails.getStackInSlot(inv);
                 if (stack != null) {
@@ -917,7 +917,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     @Override
     protected void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
-        setFacing(ForgeDirection.getOrientation(data.getByte("facing")));
+        setFacing(EnumFacing.getOrientation(data.getByte("facing")));
         setDelay(data.getInteger("delay"));
         setActive(data.getBoolean("active"));
         setBurnTime(data.getInteger("burnTime"));
@@ -1069,11 +1069,11 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             setDelay(STANDARD_DELAY);
     }
 
-    public final ForgeDirection getFacing() {
-        return ForgeDirection.getOrientation(dataWatcher.getWatchableObjectByte(WATCHER_ID_FACING));
+    public final EnumFacing getFacing() {
+        return EnumFacing.getOrientation(dataWatcher.getWatchableObjectByte(WATCHER_ID_FACING));
     }
 
-    protected final void setFacing(ForgeDirection facing) {
+    protected final void setFacing(EnumFacing facing) {
         dataWatcher.updateObject(WATCHER_ID_FACING, (byte) facing.ordinal());
 
         setYaw();

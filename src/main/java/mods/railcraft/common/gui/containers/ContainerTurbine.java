@@ -8,13 +8,13 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.blocks.machine.alpha.TileSteamTurbine;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.items.RailcraftPartItems;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerTurbine extends RailcraftContainer {

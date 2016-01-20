@@ -8,13 +8,11 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import net.minecraftforge.fml.common.IFuelHandler;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.fluids.FluidItemHelper;
-import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.items.ItemRailcraft;
+import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -24,6 +22,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.IFuelHandler;
 
 /**
  *

@@ -8,13 +8,13 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.carts.EntityCartTank;
-import mods.railcraft.common.gui.slots.SlotLiquidContainer;
 import mods.railcraft.common.gui.slots.SlotFluidFilter;
+import mods.railcraft.common.gui.slots.SlotLiquidContainer;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 
 public class ContainerCartTank extends RailcraftContainer {
 

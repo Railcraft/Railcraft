@@ -8,15 +8,16 @@
  */
 package mods.railcraft.common.util.network;
 
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import mods.railcraft.common.util.misc.Game;
 
 public class PacketTileExtraData extends RailcraftPacket
 {

@@ -9,9 +9,6 @@
 package mods.railcraft.common.worldgen;
 
 import com.google.common.collect.MapMaker;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import java.util.Map;
-import java.util.Random;
 import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.worldgen.NoiseGen.NoiseGenSimplex;
@@ -22,6 +19,10 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.Map;
+import java.util.Random;
 
 /**
  *

@@ -11,7 +11,7 @@ import net.minecraft.util.EnumFacing;
 public class TriggerMaintenance extends Trigger {
 
     @Override
-    public boolean isTriggerActive(ForgeDirection side, TileEntity tile, IStatementParameter[] parameter) {
+    public boolean isTriggerActive(EnumFacing side, TileEntity tile, IStatementParameter[] parameter) {
         if (tile instanceof INeedsMaintenance) {
             return ((INeedsMaintenance) tile).needsMaintenance();
         }

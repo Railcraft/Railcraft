@@ -8,9 +8,9 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import net.minecraft.world.World;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.gui.buttons.LockButtonState;
+import net.minecraft.world.World;
 
 /**
  *

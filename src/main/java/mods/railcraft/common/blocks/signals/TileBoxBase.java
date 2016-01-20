@@ -8,12 +8,12 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.signals.SignalAspect;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public abstract class TileBoxBase extends TileSignalFoundation {
 
@@ -39,9 +39,9 @@ public abstract class TileBoxBase extends TileSignalFoundation {
         return true;
     }
 
-    public abstract boolean isConnected(ForgeDirection side);
+    public abstract boolean isConnected(EnumFacing side);
 
-    public abstract SignalAspect getBoxSignalAspect(ForgeDirection side);
+    public abstract SignalAspect getBoxSignalAspect(EnumFacing side);
 
     public boolean canTransferAspect() {
         return false;
@@ -51,12 +51,12 @@ public abstract class TileBoxBase extends TileSignalFoundation {
         return false;
     }
 
-    public void onNeighborStateChange(TileBoxBase neighbor, ForgeDirection side) {
+    public void onNeighborStateChange(TileBoxBase neighbor, EnumFacing side) {
     }
 
     public final void updateNeighborBoxes() {
         for (int side = 2; side < 6; side++) {
-            ForgeDirection forgeSide = ForgeDirection.getOrientation(side);
+            EnumFacing forgeSide = EnumFacing.getOrientation(side);
             TileEntity tile = tileCache.getTileOnSide(forgeSide);
             if (tile instanceof TileBoxBase) {
                 TileBoxBase box = (TileBoxBase) tile;
@@ -65,17 +65,17 @@ public abstract class TileBoxBase extends TileSignalFoundation {
         }
     }
 
-    public boolean isEmittingRedstone(ForgeDirection side) {
+    public boolean isEmittingRedstone(EnumFacing side) {
         return false;
     }
 
-    public boolean canEmitRedstone(ForgeDirection side) {
+    public boolean canEmitRedstone(EnumFacing side) {
         return false;
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int i, int j, int k, ForgeDirection side) {
-        return side == ForgeDirection.UP;
+    public boolean isSideSolid(IBlockAccess world, int i, int j, int k, EnumFacing side) {
+        return side == EnumFacing.UP;
     }
 
     @Override

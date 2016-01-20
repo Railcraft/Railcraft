@@ -26,11 +26,11 @@ public class SidedInventoryMapper implements ISidedInventory {
     private final int side;
     private boolean checkItems = true;
 
-    public SidedInventoryMapper(ISidedInventory inv, ForgeDirection side) {
+    public SidedInventoryMapper(ISidedInventory inv, EnumFacing side) {
         this(inv, side, true);
     }
 
-    public SidedInventoryMapper(ISidedInventory inv, ForgeDirection side, boolean checkItems) {
+    public SidedInventoryMapper(ISidedInventory inv, EnumFacing side, boolean checkItems) {
         this.inv = inv;
         this.side = side.ordinal();
         this.checkItems = checkItems;

@@ -8,10 +8,11 @@
  */
 package mods.railcraft.common.util.inventory;
 
+import net.minecraft.item.ItemStack;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import net.minecraft.item.ItemStack;
 
 public class ItemStackSizeSorter implements Comparator<ItemStack> {
 

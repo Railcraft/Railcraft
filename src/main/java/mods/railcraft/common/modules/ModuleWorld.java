@@ -8,30 +8,25 @@
  */
 package mods.railcraft.common.modules;
 
-import mods.railcraft.common.worldgen.ComponentWorkshop;
-import mods.railcraft.common.worldgen.VillagerTradeHandler;
-import mods.railcraft.common.worldgen.WorkshopCreationHandeler;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.BlockWorldLogic;
 import mods.railcraft.common.blocks.ore.EnumOre;
-import mods.railcraft.common.worldgen.SaltpeterGenerator;
-import mods.railcraft.common.worldgen.SulfurGenerator;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.worldgen.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 /**
  *

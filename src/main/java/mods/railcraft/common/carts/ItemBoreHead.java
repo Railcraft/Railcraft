@@ -8,11 +8,11 @@
  */
 package mods.railcraft.common.carts;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
 import mods.railcraft.api.carts.bore.IBoreHead;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
 
 public abstract class ItemBoreHead extends Item implements IBoreHead {
 

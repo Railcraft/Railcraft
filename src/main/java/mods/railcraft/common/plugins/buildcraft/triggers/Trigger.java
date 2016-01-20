@@ -10,5 +10,5 @@ import net.minecraft.util.EnumFacing;
  */
 public abstract class Trigger {
 
-    public abstract boolean isTriggerActive(ForgeDirection side, TileEntity tile, IStatementParameter[] parameter);
+    public abstract boolean isTriggerActive(EnumFacing side, TileEntity tile, IStatementParameter[] parameter);
 }

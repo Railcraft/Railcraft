@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.items.firestone;
 
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.EntityItemFireproof;
 import mods.railcraft.common.util.misc.EntityIDs;
@@ -17,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 /**
  *

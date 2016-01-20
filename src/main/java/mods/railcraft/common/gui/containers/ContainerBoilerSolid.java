@@ -8,18 +8,18 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
-import mods.railcraft.common.gui.widgets.IndicatorWidget;
+import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.gui.slots.SlotFuel;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotWater;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
-import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.gui.widgets.IndicatorWidget;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.Slot;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerBoilerSolid extends RailcraftContainer {
 

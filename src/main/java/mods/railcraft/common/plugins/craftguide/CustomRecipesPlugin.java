@@ -11,19 +11,14 @@ package mods.railcraft.common.plugins.craftguide;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.items.ItemTicket;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.common.items.ItemTicketGold;
 import mods.railcraft.common.items.RailcraftPartItems;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import uristqwerty.CraftGuide.api.ItemSlot;
-import uristqwerty.CraftGuide.api.RecipeGenerator;
-import uristqwerty.CraftGuide.api.RecipeProvider;
-import uristqwerty.CraftGuide.api.RecipeTemplate;
-import uristqwerty.CraftGuide.api.Slot;
-import uristqwerty.CraftGuide.api.SlotType;
+import uristqwerty.CraftGuide.api.*;
 
 /**
  *

@@ -8,13 +8,14 @@
  */
 package mods.railcraft.common.blocks.aesthetics.cube;
 
-import java.util.Random;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
+
+import java.util.Random;
 
 public class SimpleCube {
 
@@ -44,15 +45,15 @@ public class SimpleCube {
         return world.setBlockToAir(x, y, z);
     }
 
-    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         return 0;
     }
 
-    public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public int getFlammability(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         return 0;
     }
 
-    public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public boolean isFlammable(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         return false;
     }
 

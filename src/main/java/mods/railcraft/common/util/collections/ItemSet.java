@@ -8,11 +8,11 @@
  */
 package mods.railcraft.common.util.collections;
 
-import java.util.HashSet;
-
 import mods.railcraft.api.core.items.IStackFilter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.HashSet;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

@@ -8,13 +8,14 @@
  */
 package mods.railcraft.common.util.network;
 
-import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import io.netty.buffer.Unpooled;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import mods.railcraft.common.util.misc.Game;
 
 public abstract class RailcraftPacket {
 

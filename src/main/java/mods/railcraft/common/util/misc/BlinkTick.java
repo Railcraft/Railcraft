@@ -8,10 +8,10 @@
  */
 package mods.railcraft.common.util.misc;
 
+import mods.railcraft.api.signals.SignalAspect;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import mods.railcraft.api.signals.SignalAspect;
 
 /**
  *

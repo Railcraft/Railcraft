@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.blocks.ore;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.client.particles.ParticleHelperCallback;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
@@ -36,12 +34,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -230,7 +230,7 @@ public class BlockOre extends Block {
         if (renderPass == 0)
             switch (EnumOre.fromMeta(meta)) {
                 case SALTPETER:
-                    return Blocks.sandstone.getIcon(ForgeDirection.DOWN.ordinal(), 0);
+                    return Blocks.sandstone.getIcon(EnumFacing.DOWN.ordinal(), 0);
                 case FIRESTONE:
                     return Blocks.netherrack.getIcon(0, 0);
                 case DARK_DIAMOND:

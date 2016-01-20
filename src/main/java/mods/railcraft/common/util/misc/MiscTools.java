@@ -8,27 +8,24 @@
  */
 package mods.railcraft.common.util.misc;
 
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.*;
+import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 public abstract class MiscTools {
 
@@ -209,11 +206,11 @@ public abstract class MiscTools {
      * @param player EntityPlayer
      * @return a side value 0-5
      */
-    public static ForgeDirection getCurrentMousedOverSide(EntityPlayer player) {
+    public static EnumFacing getCurrentMousedOverSide(EntityPlayer player) {
         MovingObjectPosition mouseOver = rayTracePlayerLook(player);
         if (mouseOver != null)
-            return ForgeDirection.getOrientation(mouseOver.sideHit);
-        return ForgeDirection.UNKNOWN;
+            return EnumFacing.getOrientation(mouseOver.sideHit);
+        return EnumFacing.UNKNOWN;
     }
 
     /**
@@ -227,32 +224,32 @@ public abstract class MiscTools {
      * @param entityplayer
      * @return a side
      */
-    public static ForgeDirection getSideClosestToPlayer(World world, int i, int j, int k, EntityLivingBase entityplayer) {
+    public static EnumFacing getSideClosestToPlayer(World world, int i, int j, int k, EntityLivingBase entityplayer) {
         if (MathHelper.abs((float) entityplayer.posX - (float) i) < 2.0F && MathHelper.abs((float) entityplayer.posZ - (float) k) < 2.0F) {
             double d = (entityplayer.posY + 1.82D) - (double) entityplayer.yOffset;
             if (d - (double) j > 2D)
-                return ForgeDirection.UP;
+                return EnumFacing.UP;
             if ((double) j - d > 0.0D)
-                return ForgeDirection.DOWN;
+                return EnumFacing.DOWN;
         }
         int dir = MathHelper.floor_double((double) ((entityplayer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
         switch (dir) {
             case 0:
-                return ForgeDirection.NORTH;
+                return EnumFacing.NORTH;
             case 1:
-                return ForgeDirection.EAST;
+                return EnumFacing.EAST;
             case 2:
-                return ForgeDirection.SOUTH;
+                return EnumFacing.SOUTH;
         }
-        return dir != 3 ? ForgeDirection.DOWN : ForgeDirection.WEST;
+        return dir != 3 ? EnumFacing.DOWN : EnumFacing.WEST;
     }
 
-    public static ForgeDirection getSideFacingTrack(World world, int x, int y, int z) {
-        for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+    public static EnumFacing getSideFacingTrack(World world, int x, int y, int z) {
+        for (EnumFacing dir : EnumFacing.VALID_DIRECTIONS) {
             if (TrackTools.isRailBlockAt(world, MiscTools.getXOnSide(x, dir), MiscTools.getYOnSide(y, dir), MiscTools.getZOnSide(z, dir)))
                 return dir;
         }
-        return ForgeDirection.UNKNOWN;
+        return EnumFacing.UNKNOWN;
     }
 
     /**
@@ -266,40 +263,40 @@ public abstract class MiscTools {
      * @param player
      * @return a side
      */
-    public static ForgeDirection getHorizontalSideClosestToPlayer(World world, int x, int y, int z, EntityLivingBase player) {
+    public static EnumFacing getHorizontalSideClosestToPlayer(World world, int x, int y, int z, EntityLivingBase player) {
         int dir = MathHelper.floor_double((double) ((player.rotationYaw * 4.0F) / 360.0F) + 0.5) & 3;
         switch (dir) {
             case 0:
-                return ForgeDirection.NORTH;
+                return EnumFacing.NORTH;
             case 1:
-                return ForgeDirection.EAST;
+                return EnumFacing.EAST;
             case 2:
-                return ForgeDirection.SOUTH;
+                return EnumFacing.SOUTH;
             case 3:
-                return ForgeDirection.WEST;
+                return EnumFacing.WEST;
         }
-        return ForgeDirection.NORTH;
+        return EnumFacing.NORTH;
     }
 
-    public static ForgeDirection getOppositeSide(int side) {
+    public static EnumFacing getOppositeSide(int side) {
         int s = side;
         s = s % 2 == 0 ? s + 1 : s - 1;
-        return ForgeDirection.getOrientation(s);
+        return EnumFacing.getOrientation(s);
     }
 
-    public static int getXOnSide(int x, ForgeDirection side) {
+    public static int getXOnSide(int x, EnumFacing side) {
         return x + side.offsetX;
     }
 
-    public static int getYOnSide(int y, ForgeDirection side) {
+    public static int getYOnSide(int y, EnumFacing side) {
         return y + side.offsetY;
     }
 
-    public static int getZOnSide(int z, ForgeDirection side) {
+    public static int getZOnSide(int z, EnumFacing side) {
         return z + side.offsetZ;
     }
 
-    public static boolean areCoordinatesOnSide(int x, int y, int z, ForgeDirection side, int xCoord, int yCoord, int zCoord) {
+    public static boolean areCoordinatesOnSide(int x, int y, int z, EnumFacing side, int xCoord, int yCoord, int zCoord) {
         return x + side.offsetX == xCoord && y + side.offsetY == yCoord && z + side.offsetZ == zCoord;
     }
 

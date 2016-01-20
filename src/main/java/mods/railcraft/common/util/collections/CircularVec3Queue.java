@@ -9,10 +9,11 @@
 package mods.railcraft.common.util.collections;
 
 import com.google.common.collect.ForwardingQueue;
+import net.minecraft.util.Vec3;
+
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Queue;
-import net.minecraft.util.Vec3;
 
 /**
  *

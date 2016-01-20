@@ -10,10 +10,10 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
-import mods.railcraft.common.util.misc.MiscTools;
 
 public class ItemSteelHoe extends ItemHoe {
 

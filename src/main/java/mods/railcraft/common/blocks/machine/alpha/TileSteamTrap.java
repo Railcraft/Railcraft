@@ -8,14 +8,9 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.List;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.util.steam.ISteamUser;
-import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -24,6 +19,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.sounds.SoundHelper;
+import mods.railcraft.common.util.steam.ISteamUser;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -35,6 +31,11 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.List;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -44,7 +45,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     private static final byte JET_TIME = 40;
     private static final byte DAMAGE = 8;
     private static final double RANGE = 3.5;
-    protected ForgeDirection direction = ForgeDirection.NORTH;
+    protected EnumFacing direction = EnumFacing.NORTH;
     protected boolean powered;
     private byte jet;
     private final TankManager tankManager = new TankManager();
@@ -88,32 +89,32 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         return tankManager.fill(0, resource, doFill);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return null;
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         return null;
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return fluid == null || Fluids.STEAM.is(fluid);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return false;
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection direction) {
+    public FluidTankInfo[] getTankInfo(EnumFacing direction) {
         return tankManager.getTankInfo(direction);
     }
 
@@ -151,7 +152,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     }
 
     @Override
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         if (direction == axis)
             direction = axis.getOpposite();
         else
@@ -171,7 +172,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        direction = ForgeDirection.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getOrientation(data.getByte("direction"));
         powered = data.getBoolean("powered");
         tankManager.readTanksFromNBT(data);
     }
@@ -187,7 +188,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         jet = data.readByte();
-        direction = ForgeDirection.getOrientation(data.readByte());
+        direction = EnumFacing.getOrientation(data.readByte());
         markBlockForUpdate();
     }
 

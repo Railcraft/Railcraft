@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.items.firestone;
 
-import java.util.List;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -25,6 +24,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 /**
  *

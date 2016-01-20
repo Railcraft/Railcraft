@@ -8,10 +8,10 @@
  */
 package mods.railcraft.common.gui.slots;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.util.inventory.filters.StackFilter;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class SlotFeed extends Slot
 {

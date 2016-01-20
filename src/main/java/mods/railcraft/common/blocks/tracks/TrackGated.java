@@ -8,27 +8,25 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.tracks.ITrackBlocksMovement;
 import mods.railcraft.api.tracks.ITrackCustomShape;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
-import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 
-import static net.minecraftforge.common.util.ForgeDirection.DOWN;
-import static net.minecraftforge.common.util.ForgeDirection.UP;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 // Referenced classes of package net.minecraft.src:
 //            TileEntity, NBTTagCompound, World
@@ -160,7 +158,7 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversable, 
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, EnumFacing side) {
         switch (side) {
             case UP:
             case DOWN:

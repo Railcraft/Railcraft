@@ -9,12 +9,13 @@
 package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.util.collections.BlockKey;
-import java.util.HashSet;
-import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Register an item here to designate it as a possible ballast that can be used

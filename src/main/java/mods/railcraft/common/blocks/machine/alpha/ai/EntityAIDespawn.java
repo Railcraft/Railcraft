@@ -8,10 +8,11 @@
  */
 package mods.railcraft.common.blocks.machine.alpha.ai;
 
-import java.util.List;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityAnimal;
+
+import java.util.List;
 
 public class EntityAIDespawn extends EntityAIBase
 {

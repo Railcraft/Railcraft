@@ -9,13 +9,13 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.api.core.items.IMinecartItem;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.blocks.machine.gamma.TileDispenserTrain;
 import mods.railcraft.common.gui.slots.SlotMinecart;
 import mods.railcraft.common.gui.slots.SlotMinecartFilter;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class ContainerDispenserTrain extends RailcraftContainer {
 

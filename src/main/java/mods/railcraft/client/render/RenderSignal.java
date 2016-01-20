@@ -9,12 +9,6 @@
 package mods.railcraft.client.render;
 
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
-import net.minecraft.block.Block;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.item.ItemStack;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -23,8 +17,14 @@ import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.TileSignalBase;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.world.World;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import org.lwjgl.opengl.GL11;
 
 public class RenderSignal implements ICombinedRenderer {
@@ -107,8 +107,8 @@ public class RenderSignal implements ICombinedRenderer {
         max = 10 * pix;
         Block below = WorldPlugin.getBlock(iBlockAccess, x, y - 1, z);
         World world = Game.getWorld();
-        if (PostConnectionHelper.connect(iBlockAccess, x, y, z, ForgeDirection.DOWN) != ConnectStyle.NONE
-                || iBlockAccess.isSideSolid(x, y - 1, z, ForgeDirection.UP, true)
+        if (PostConnectionHelper.connect(iBlockAccess, x, y, z, EnumFacing.DOWN) != ConnectStyle.NONE
+                || iBlockAccess.isSideSolid(x, y - 1, z, EnumFacing.UP, true)
                 || (below != null && below.canPlaceTorchOnTop(world, x, y - 1, z))) {
             info.setBlockBounds(min, 0, min, max, 15 * pix, max);
             RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, true, false);
@@ -117,10 +117,10 @@ public class RenderSignal implements ICombinedRenderer {
         // Post Connections
         boolean east_west = false;
         boolean north_south = false;
-        boolean west = PostConnectionHelper.connect(iBlockAccess, x, y, z, ForgeDirection.WEST) != ConnectStyle.NONE;
-        boolean east = PostConnectionHelper.connect(iBlockAccess, x, y, z, ForgeDirection.EAST) != ConnectStyle.NONE;
-        boolean north = PostConnectionHelper.connect(iBlockAccess, x, y, z, ForgeDirection.NORTH) != ConnectStyle.NONE;
-        boolean south = PostConnectionHelper.connect(iBlockAccess, x, y, z, ForgeDirection.SOUTH) != ConnectStyle.NONE;
+        boolean west = PostConnectionHelper.connect(iBlockAccess, x, y, z, EnumFacing.WEST) != ConnectStyle.NONE;
+        boolean east = PostConnectionHelper.connect(iBlockAccess, x, y, z, EnumFacing.EAST) != ConnectStyle.NONE;
+        boolean north = PostConnectionHelper.connect(iBlockAccess, x, y, z, EnumFacing.NORTH) != ConnectStyle.NONE;
+        boolean south = PostConnectionHelper.connect(iBlockAccess, x, y, z, EnumFacing.SOUTH) != ConnectStyle.NONE;
         if (east || west)
             east_west = true;
         if (north || south)

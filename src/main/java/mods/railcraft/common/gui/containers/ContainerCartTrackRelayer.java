@@ -8,11 +8,11 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.carts.EntityCartTrackRelayer;
 import mods.railcraft.common.gui.slots.SlotLinked;
 import mods.railcraft.common.gui.slots.SlotTrackFilter;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 
 public class ContainerCartTrackRelayer extends RailcraftContainer {
 

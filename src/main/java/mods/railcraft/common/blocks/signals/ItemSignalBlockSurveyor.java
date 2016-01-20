@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import net.minecraftforge.fml.common.Optional;
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -25,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
 public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, IActivationBlockingItem {

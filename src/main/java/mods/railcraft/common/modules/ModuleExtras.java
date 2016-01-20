@@ -8,16 +8,16 @@
  */
 package mods.railcraft.common.modules;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 public class ModuleExtras extends RailcraftModule {
 

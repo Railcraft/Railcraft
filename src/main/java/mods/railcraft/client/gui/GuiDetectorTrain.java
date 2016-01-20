@@ -11,10 +11,10 @@ package mods.railcraft.client.gui;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorTrain;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.client.gui.GuiButton;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
+import net.minecraft.client.gui.GuiButton;
 
 public class GuiDetectorTrain extends GuiBasic {
 

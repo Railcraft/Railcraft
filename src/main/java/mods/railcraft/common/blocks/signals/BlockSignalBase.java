@@ -8,25 +8,25 @@
  */
 package mods.railcraft.common.blocks.signals;
 
+import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.core.RailcraftConfig;
-import org.apache.logging.log4j.Level;
+import mods.railcraft.common.items.IActivationBlockingItem;
+import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.common.items.IActivationBlockingItem;
-import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.util.misc.Game;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.IIcon;
+import org.apache.logging.log4j.Level;
 
 public abstract class BlockSignalBase extends BlockContainer implements IPostConnection {
     private final int renderType;
@@ -64,7 +64,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
+    public boolean rotateBlock(World world, int x, int y, int z, EnumFacing axis) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileSignalFoundation)
             return ((TileSignalFoundation) tile).rotateBlock(axis);
@@ -72,7 +72,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public ForgeDirection[] getValidRotations(World world, int x, int y, int z) {
+    public EnumFacing[] getValidRotations(World world, int x, int y, int z) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileSignalFoundation)
             return ((TileSignalFoundation) tile).getValidRotations();
@@ -106,7 +106,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
             TileEntity tile = world.getTileEntity(x, y, z);
             if (tile instanceof TileSignalFoundation) {
                 TileSignalFoundation structure = (TileSignalFoundation) tile;
-                if (structure.getSignalType().needsSupport() && !world.isSideSolid(x, y - 1, z, ForgeDirection.UP))
+                if (structure.getSignalType().needsSupport() && !world.isSideSolid(x, y - 1, z, EnumFacing.UP))
                     world.func_147480_a(x, y, z, true);
                 else
                     structure.onNeighborBlockChange(block);
@@ -173,7 +173,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int i, int j, int k, ForgeDirection side) {
+    public boolean isSideSolid(IBlockAccess world, int i, int j, int k, EnumFacing side) {
         TileEntity tile = world.getTileEntity(i, j, k);
         if (tile instanceof TileSignalFoundation)
             return ((TileSignalFoundation) tile).isSideSolid(world, i, j, k, side);
@@ -184,7 +184,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
 //    public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side) {
 //        int md = world.getBlockMetadata(x, y, z);
 //        EnumSignal type = EnumSignal.fromId(md);
-//        return super.canPlaceBlockOnSide(world, x, y, z, side) && (!type.needsSupport() || world.isSideSolid(x, y - 1, z, ForgeDirection.UP));
+//        return super.canPlaceBlockOnSide(world, x, y, z, side) && (!type.needsSupport() || world.isSideSolid(x, y - 1, z, EnumFacing.UP));
 //    }
     @Override
     public boolean isOpaqueCube() {
@@ -256,7 +256,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, EnumFacing side) {
         TileEntity t = world.getTileEntity(x, y, z);
         if (t instanceof ISignalTile)
             return ConnectStyle.TWO_THIN;

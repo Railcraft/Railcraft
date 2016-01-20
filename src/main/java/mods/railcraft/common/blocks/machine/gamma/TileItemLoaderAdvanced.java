@@ -8,20 +8,21 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class TileItemLoaderAdvanced extends TileItemLoader {
 
-    private ForgeDirection direction = ForgeDirection.NORTH;
+    private EnumFacing direction = EnumFacing.NORTH;
 
     public TileItemLoaderAdvanced() {
         super();
@@ -43,7 +44,7 @@ public class TileItemLoaderAdvanced extends TileItemLoader {
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        direction = ForgeDirection.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getOrientation(data.getByte("direction"));
     }
 
     @Override
@@ -57,7 +58,7 @@ public class TileItemLoaderAdvanced extends TileItemLoader {
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = ForgeDirection.getOrientation(data.readByte());
+        direction = EnumFacing.getOrientation(data.readByte());
 
         markBlockForUpdate();
     }
@@ -75,12 +76,12 @@ public class TileItemLoaderAdvanced extends TileItemLoader {
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, xCoord, yCoord, zCoord);
-        if (direction == ForgeDirection.UNKNOWN)
+        if (direction == EnumFacing.UNKNOWN)
             direction = MiscTools.getSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
     }
 
     @Override
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         if (direction == axis)
             direction = axis.getOpposite();
         else
@@ -90,7 +91,7 @@ public class TileItemLoaderAdvanced extends TileItemLoader {
     }
 
     @Override
-    public ForgeDirection getOrientation() {
+    public EnumFacing getOrientation() {
         return direction;
     }
 

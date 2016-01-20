@@ -8,11 +8,11 @@
  */
 package mods.railcraft.common.plugins.craftguide;
 
-import net.minecraft.item.ItemStack;
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.RailcraftConstants;
+import net.minecraft.item.ItemStack;
 import uristqwerty.CraftGuide.api.*;
 
 /**

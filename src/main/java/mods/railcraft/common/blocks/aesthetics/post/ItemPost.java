@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import java.util.List;
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -21,6 +20,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+
+import java.util.List;
 
 /**
  *

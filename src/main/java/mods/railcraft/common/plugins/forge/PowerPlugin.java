@@ -8,12 +8,13 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import net.minecraft.block.Block;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import static net.minecraftforge.common.util.ForgeDirection.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+
+import static net.minecraftforge.common.util.EnumFacing.*;
 
 /**
  *
@@ -21,7 +22,7 @@ import static net.minecraftforge.common.util.ForgeDirection.*;
  */
 public class PowerPlugin {
 
-    private static final ForgeDirection[] SIDES = {NORTH, EAST, SOUTH, WEST};
+    private static final EnumFacing[] SIDES = {NORTH, EAST, SOUTH, WEST};
     public static final int NO_POWER = 0;
     public static final int FULL_POWER = 15;
 
@@ -29,27 +30,27 @@ public class PowerPlugin {
         return world.isBlockIndirectlyGettingPowered(x, y, z);
     }
 
-    public static boolean isBlockBeingPowered(World world, int x, int y, int z, ForgeDirection from) {
+    public static boolean isBlockBeingPowered(World world, int x, int y, int z, EnumFacing from) {
         x = MiscTools.getXOnSide(x, from);
         y = MiscTools.getYOnSide(y, from);
         z = MiscTools.getZOnSide(z, from);
         return world.getIndirectPowerOutput(x, y, z, from.ordinal());
     }
     
-    public static int getBlockPowerLevel(World world, int x, int y, int z, ForgeDirection from) {
+    public static int getBlockPowerLevel(World world, int x, int y, int z, EnumFacing from) {
     	x = MiscTools.getXOnSide(x, from);
     	y = MiscTools.getYOnSide(y, from);
     	z = MiscTools.getZOnSide(z, from);
     	return world.getIndirectPowerLevelTo(x, y, z, from.ordinal());
     }
 
-    public static boolean isBlockBeingPoweredByRepeater(World world, int x, int y, int z, ForgeDirection from) {
+    public static boolean isBlockBeingPoweredByRepeater(World world, int x, int y, int z, EnumFacing from) {
         Block block = WorldPlugin.getBlockOnSide(world, x, y, z, from);
         return block == Blocks.powered_repeater && isBlockBeingPowered(world, x, y, z, from);
     }
 
     public static boolean isBlockBeingPoweredByRepeater(World world, int x, int y, int z) {
-        for (ForgeDirection side : SIDES) {
+        for (EnumFacing side : SIDES) {
             if (isBlockBeingPoweredByRepeater(world, x, y, z, side))
                 return true;
         }
@@ -57,14 +58,14 @@ public class PowerPlugin {
     }
 
     public static boolean isRedstonePowered(World world, int x, int y, int z) {
-        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
             if (isRedstonePowering(world, x, y, z, 0, side) || isRedstonePowering(world, x, y, z, -1, side))
                 return true;
         }
         return false;
     }
 
-    private static boolean isRedstonePowering(World world, int x, int y, int z, int yOffset, ForgeDirection side) {
+    private static boolean isRedstonePowering(World world, int x, int y, int z, int yOffset, EnumFacing side) {
         Block block = WorldPlugin.getBlockOnSide(world, x, y + yOffset, z, side);
         if (block == Blocks.redstone_wire) {
             int meta = WorldPlugin.getBlockMetadataOnSide(world, x, y + yOffset, z, side);

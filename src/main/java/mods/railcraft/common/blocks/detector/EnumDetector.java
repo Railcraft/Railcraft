@@ -8,12 +8,13 @@
  */
 package mods.railcraft.common.blocks.detector;
 
-import java.util.Locale;
 import mods.railcraft.common.blocks.detector.types.*;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+
+import java.util.Locale;
 
 /**
  *

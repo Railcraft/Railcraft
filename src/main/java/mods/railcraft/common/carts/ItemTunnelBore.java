@@ -9,18 +9,18 @@
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
 public class ItemTunnelBore extends ItemCart implements IMinecartItem {
 
@@ -39,23 +39,23 @@ public class ItemTunnelBore extends ItemCart implements IMinecartItem {
                     int playerYaw = -90 - MathHelper.floor_float(player.rotationYaw);
                     for (; playerYaw > 360; playerYaw -= 360);
                     for (; playerYaw < 0; playerYaw += 360);
-                    ForgeDirection facing = ForgeDirection.EAST;
+                    EnumFacing facing = EnumFacing.EAST;
                     if (Math.abs(90 - playerYaw) <= 45) {
-                        facing = ForgeDirection.NORTH;
+                        facing = EnumFacing.NORTH;
                     } else if (Math.abs(180 - playerYaw) <= 45) {
-                        facing = ForgeDirection.WEST;
+                        facing = EnumFacing.WEST;
                     } else if (Math.abs(270 - playerYaw) <= 45) {
-                        facing = ForgeDirection.SOUTH;
+                        facing = EnumFacing.SOUTH;
                     }
 
-                    if (meta == 0 && facing == ForgeDirection.WEST) {
-                        facing = ForgeDirection.NORTH;
-                    } else if (meta == 0 && facing == ForgeDirection.EAST) {
-                        facing = ForgeDirection.SOUTH;
-                    } else if (meta == 1 && facing == ForgeDirection.SOUTH) {
-                        facing = ForgeDirection.EAST;
-                    } else if (meta == 1 && facing == ForgeDirection.NORTH) {
-                        facing = ForgeDirection.WEST;
+                    if (meta == 0 && facing == EnumFacing.WEST) {
+                        facing = EnumFacing.NORTH;
+                    } else if (meta == 0 && facing == EnumFacing.EAST) {
+                        facing = EnumFacing.SOUTH;
+                    } else if (meta == 1 && facing == EnumFacing.SOUTH) {
+                        facing = EnumFacing.EAST;
+                    } else if (meta == 1 && facing == EnumFacing.NORTH) {
+                        facing = EnumFacing.WEST;
                     }
 
 //					System.out.println("PlayerYaw = " + playerYaw + " Yaw = " + facing + " Meta = " + meta);

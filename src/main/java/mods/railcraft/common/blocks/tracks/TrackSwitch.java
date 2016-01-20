@@ -13,8 +13,8 @@ import mods.railcraft.api.tracks.ITrackReversable;
 import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -220,20 +220,20 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
     }
 
     @Override
-    public ForgeDirection getActuatorLocation() {
-        ForgeDirection dir = ForgeDirection.NORTH;
+    public EnumFacing getActuatorLocation() {
+        EnumFacing dir = EnumFacing.NORTH;
         int meta = tileEntity.getBlockMetadata();
         if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
             if (isMirrored()) {
-                dir = ForgeDirection.EAST;
+                dir = EnumFacing.EAST;
             } else {
-                dir = ForgeDirection.WEST;
+                dir = EnumFacing.WEST;
             }
         } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
             if (isMirrored()) {
-                dir = ForgeDirection.SOUTH;
+                dir = EnumFacing.SOUTH;
             } else {
-                dir = ForgeDirection.NORTH;
+                dir = EnumFacing.NORTH;
             }
         }
         return dir;

@@ -8,17 +8,6 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import java.util.List;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.ITrackCustomPlaced;
 import mods.railcraft.api.tracks.ITrackInstance;
@@ -27,9 +16,21 @@ import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ItemTrack extends ItemBlock implements ITrackItem {
 
@@ -134,7 +135,7 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
         if (track instanceof ITrackCustomPlaced)
             canPlace &= ((ITrackCustomPlaced) track).canPlaceRailAt(world, i, j, k);
         else
-            canPlace &= world.isSideSolid(i, j - 1, k, ForgeDirection.UP);
+            canPlace &= world.isSideSolid(i, j - 1, k, EnumFacing.UP);
         if (canPlace) {
             boolean placed = world.setBlock(i, j, k, blockTrack);
             // System.out.println("Block placement attempted");

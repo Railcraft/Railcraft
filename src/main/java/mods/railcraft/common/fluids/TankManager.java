@@ -207,7 +207,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         return fill(0, resource, doFill);
     }
 
@@ -219,7 +219,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return drain(0, maxDrain, doDrain);
     }
 
@@ -231,7 +231,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         for (StandardTank tank : tanks) {
             if (tankCanDrainFluid(tank, resource))
                 return tank.drain(resource.amount, doDrain);
@@ -240,17 +240,17 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return true;
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return true;
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection direction) {
+    public FluidTankInfo[] getTankInfo(EnumFacing direction) {
         List<FluidTankInfo> info = new ArrayList<FluidTankInfo>(size());
         for (StandardTank tank : this) {
             if (!tank.isHidden())
@@ -260,7 +260,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     }
 
     public FluidTankInfo[] getTankInfo() {
-        return getTankInfo(ForgeDirection.UNKNOWN);
+        return getTankInfo(EnumFacing.UNKNOWN);
     }
 
     @Override
@@ -278,8 +278,8 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
             fluidStack.amount = capacity;
     }
 
-    public void outputLiquid(AdjacentTileCache cache, ITileFilter filter, ForgeDirection[] sides, int tankIndex, int amount) {
-        for (ForgeDirection side : sides) {
+    public void outputLiquid(AdjacentTileCache cache, ITileFilter filter, EnumFacing[] sides, int tankIndex, int amount) {
+        for (EnumFacing side : sides) {
             TileEntity tile = cache.getTileOnSide(side);
             if (!filter.matches(tile)) continue;
             IFluidHandler tank = getTankFromTile(tile);
@@ -292,11 +292,11 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
         for (int side = 0; side < 6; side++) {
             IFluidHandler nearbyTank = outputs[side];
             if (nearbyTank != null)
-                outputLiquid(nearbyTank, ForgeDirection.getOrientation(side), tankIndex, amount);
+                outputLiquid(nearbyTank, EnumFacing.getOrientation(side), tankIndex, amount);
         }
     }
 
-    private void outputLiquid(IFluidHandler tank, ForgeDirection side, int tankIndex, int amount) {
+    private void outputLiquid(IFluidHandler tank, EnumFacing side, int tankIndex, int amount) {
         FluidStack available = drain(tankIndex, amount, false);
         if (available != null) {
             int used = tank.fill(side.getOpposite(), available, true);

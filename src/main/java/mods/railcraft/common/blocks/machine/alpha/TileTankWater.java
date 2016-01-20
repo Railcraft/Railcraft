@@ -32,11 +32,11 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -61,7 +61,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     private final static int SLOT_INPUT = 0;
     private final static int SLOT_OUTPUT = 1;
     private final static int[] SLOTS = InvTools.buildSlotArray(0, 2);
-    private final static ForgeDirection[] LIQUID_OUTPUTS = {ForgeDirection.DOWN, ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH};
+    private final static EnumFacing[] LIQUID_OUTPUTS = {EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH};
     private final static ITileFilter LIQUID_OUTPUT_FILTER = new ITileFilter() {
         @Override
         public boolean matches(TileEntity tile) {
@@ -155,7 +155,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     @Override
     public boolean blockActivated(EntityPlayer player, int side) {
         if (Game.isHost(worldObj)) {
-            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), ForgeDirection.getOrientation(side), player, true, true))
+            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), EnumFacing.getOrientation(side), player, true, true))
                 return true;
         } else if (FluidItemHelper.isContainer(player.inventory.getCurrentItem()))
             return true;
@@ -200,7 +200,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
 //                    System.out.println(debug);
 
                     FluidStack fillStack = Fluids.WATER.get(rateFinal);
-                    fill(ForgeDirection.UP, fillStack, true);
+                    fill(EnumFacing.UP, fillStack, true);
                 }
 
                 if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
@@ -229,27 +229,27 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-        if (from != ForgeDirection.UP || resource == null || !Fluids.WATER.is(resource))
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+        if (from != EnumFacing.UP || resource == null || !Fluids.WATER.is(resource))
             return 0;
         return super.fill(from, resource, doFill);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if (resource == null || !Fluids.WATER.is(resource))
             return null;
         return super.drain(from, resource.amount, doDrain);
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
-        return from == ForgeDirection.UP && Fluids.WATER.is(fluid);
+    public boolean canFill(EnumFacing from, Fluid fluid) {
+        return from == EnumFacing.UP && Fluids.WATER.is(fluid);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        return from != ForgeDirection.UP && Fluids.WATER.is(fluid);
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
+        return from != EnumFacing.UP && Fluids.WATER.is(fluid);
     }
 
     @Override

@@ -8,14 +8,15 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import mods.railcraft.api.tracks.ITrackPowered;
+import mods.railcraft.api.tracks.ITrackReversable;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import mods.railcraft.api.tracks.ITrackPowered;
-import mods.railcraft.api.tracks.ITrackReversable;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class TrackControl extends TrackBaseRailcraft implements ITrackPowered, ITrackReversable {
 

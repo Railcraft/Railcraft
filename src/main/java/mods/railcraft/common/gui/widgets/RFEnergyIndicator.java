@@ -21,7 +21,7 @@ public class RFEnergyIndicator extends IndicatorController {
     private final int maxEnergy;
 
     public RFEnergyIndicator(IEnergyHandler energyHandler) {
-        this.maxEnergy = energyHandler.getMaxEnergyStored(ForgeDirection.UNKNOWN);
+        this.maxEnergy = energyHandler.getMaxEnergyStored(EnumFacing.UNKNOWN);
     }
 
     public RFEnergyIndicator(int maxEnergy) {

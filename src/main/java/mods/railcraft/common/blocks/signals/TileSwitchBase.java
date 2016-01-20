@@ -16,16 +16,16 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class TileSwitchBase extends TileSignalFoundation implements ISwitchDevice {
-    private byte facing = (byte) ForgeDirection.NORTH.ordinal();
+    private byte facing = (byte) EnumFacing.NORTH.ordinal();
     private boolean powered;
     private boolean lastSwitchState;
     private ArrowDirection redArrowRenderState = ArrowDirection.EAST_WEST;

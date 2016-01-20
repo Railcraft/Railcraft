@@ -21,11 +21,11 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
-import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -71,10 +71,10 @@ public class RenderBlockPost extends BlockRenderer {
         private boolean renderTwoThinConnectStyle(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, BlockPostBase block) {
             boolean east_west = false;
             boolean north_south = false;
-            boolean west = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.WEST) == ConnectStyle.TWO_THIN;
-            boolean east = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.EAST) == ConnectStyle.TWO_THIN;
-            boolean north = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.NORTH) == ConnectStyle.TWO_THIN;
-            boolean south = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.SOUTH) == ConnectStyle.TWO_THIN;
+            boolean west = PostConnectionHelper.connect(world, x, y, z, EnumFacing.WEST) == ConnectStyle.TWO_THIN;
+            boolean east = PostConnectionHelper.connect(world, x, y, z, EnumFacing.EAST) == ConnectStyle.TWO_THIN;
+            boolean north = PostConnectionHelper.connect(world, x, y, z, EnumFacing.NORTH) == ConnectStyle.TWO_THIN;
+            boolean south = PostConnectionHelper.connect(world, x, y, z, EnumFacing.SOUTH) == ConnectStyle.TWO_THIN;
             if (east || west)
                 east_west = true;
             if (north || south)
@@ -114,10 +114,10 @@ public class RenderBlockPost extends BlockRenderer {
         private void renderSingleThickConnectStyle(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, BlockPostBase block, boolean thinConnected, boolean renderColumn) {
             boolean east_west = false;
             boolean north_south = false;
-            boolean west = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.WEST) == ConnectStyle.SINGLE_THICK;
-            boolean east = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.EAST) == ConnectStyle.SINGLE_THICK;
-            boolean north = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.NORTH) == ConnectStyle.SINGLE_THICK;
-            boolean south = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.SOUTH) == ConnectStyle.SINGLE_THICK;
+            boolean west = PostConnectionHelper.connect(world, x, y, z, EnumFacing.WEST) == ConnectStyle.SINGLE_THICK;
+            boolean east = PostConnectionHelper.connect(world, x, y, z, EnumFacing.EAST) == ConnectStyle.SINGLE_THICK;
+            boolean north = PostConnectionHelper.connect(world, x, y, z, EnumFacing.NORTH) == ConnectStyle.SINGLE_THICK;
+            boolean south = PostConnectionHelper.connect(world, x, y, z, EnumFacing.SOUTH) == ConnectStyle.SINGLE_THICK;
             if (east || west)
                 east_west = true;
             if (north || south)
@@ -163,10 +163,10 @@ public class RenderBlockPost extends BlockRenderer {
             Block below = WorldPlugin.getBlock(world, x, y - 1, z);
             Block above = WorldPlugin.getBlock(world, x, y + 1, z);
             if (below == null || !TrackTools.isRailBlock(below))
-                if (world.isSideSolid(x, y - 1, z, ForgeDirection.UP, true) || PostConnectionHelper.connect(world, x, y, z, ForgeDirection.DOWN) != ConnectStyle.NONE)
+                if (world.isSideSolid(x, y - 1, z, EnumFacing.UP, true) || PostConnectionHelper.connect(world, x, y, z, EnumFacing.DOWN) != ConnectStyle.NONE)
                     return true;
                 else if (above instanceof BlockPostBase)
-                    //                else if (PostConnectionHelper.connect(world, x, y, z, ForgeDirection.UP) || above instanceof BlockPostBase)
+                    //                else if (PostConnectionHelper.connect(world, x, y, z, EnumFacing.UP) || above instanceof BlockPostBase)
                     return true;
             return false;
         }
@@ -282,10 +282,10 @@ public class RenderBlockPost extends BlockRenderer {
 
             boolean east_west = false;
             boolean north_south = false;
-            boolean west = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.WEST) != ConnectStyle.NONE;
-            boolean east = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.EAST) != ConnectStyle.NONE;
-            boolean north = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.NORTH) != ConnectStyle.NONE;
-            boolean south = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.SOUTH) != ConnectStyle.NONE;
+            boolean west = PostConnectionHelper.connect(world, x, y, z, EnumFacing.WEST) != ConnectStyle.NONE;
+            boolean east = PostConnectionHelper.connect(world, x, y, z, EnumFacing.EAST) != ConnectStyle.NONE;
+            boolean north = PostConnectionHelper.connect(world, x, y, z, EnumFacing.NORTH) != ConnectStyle.NONE;
+            boolean south = PostConnectionHelper.connect(world, x, y, z, EnumFacing.SOUTH) != ConnectStyle.NONE;
             if (east || west)
                 east_west = true;
             if (north || south)
@@ -403,7 +403,7 @@ public class RenderBlockPost extends BlockRenderer {
             float b2 = (8 + w / 2) * pix;
 
             minY = 2 * pix;
-            if (world.isSideSolid(x, y - 1, z, ForgeDirection.UP, true) || PostConnectionHelper.connect(world, x, y, z, ForgeDirection.DOWN) != ConnectStyle.NONE)
+            if (world.isSideSolid(x, y - 1, z, EnumFacing.UP, true) || PostConnectionHelper.connect(world, x, y, z, EnumFacing.DOWN) != ConnectStyle.NONE)
                 minY = 0;
             block.setBlockBounds(b1, minY, b1, b2, 1.0F, b2);
             RenderTools.renderStandardBlock(renderblocks, block, x, y, z);

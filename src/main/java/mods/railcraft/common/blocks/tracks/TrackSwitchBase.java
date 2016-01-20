@@ -392,7 +392,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
 
     protected abstract List<UUID> getCartsAtDecisionEntrance();
 
-    public abstract ForgeDirection getActuatorLocation();
+    public abstract EnumFacing getActuatorLocation();
 
     public abstract ArrowDirection getRedSignDirection();
 

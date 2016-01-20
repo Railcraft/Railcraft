@@ -8,15 +8,16 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import java.util.List;
+import mods.railcraft.client.util.textures.TextureAtlasSheet;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.util.List;
 
 public class BlockSignalRailcraft extends BlockSignalBase {
 

@@ -8,13 +8,9 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.common.gui.buttons.IButtonTextureSet;
-import mods.railcraft.common.gui.buttons.IMultiButtonState;
-import mods.railcraft.common.gui.buttons.MultiButtonController;
-import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
+import mods.railcraft.common.gui.buttons.*;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.gui.buttons.*;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.inventory.IInventory;
 

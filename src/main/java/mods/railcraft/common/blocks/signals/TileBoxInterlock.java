@@ -22,10 +22,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
-import static net.minecraftforge.common.util.ForgeDirection.*;
+import static net.minecraftforge.common.util.EnumFacing.*;
 
 public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IReceiverTile, IAspectProvider {
-    private static final ForgeDirection[] SIDES = {NORTH, WEST, SOUTH, EAST};
+    private static final EnumFacing[] SIDES = {NORTH, WEST, SOUTH, EAST};
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
     private boolean prevBlinkState;
@@ -79,7 +79,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     private void mergeInterlocks() {
-        for (ForgeDirection side : SIDES) {
+        for (EnumFacing side : SIDES) {
             TileEntity tile = tileCache.getTileOnSide(side);
             if (tile instanceof TileBoxInterlock) {
                 TileBoxInterlock box = (TileBoxInterlock) tile;
@@ -94,7 +94,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     private SignalAspect getOverrideAspect() {
         SignalAspect newAspect = SignalAspect.GREEN;
         for (int side = 2; side < 6; side++) {
-            ForgeDirection forgeSide = ForgeDirection.getOrientation(side);
+            EnumFacing forgeSide = EnumFacing.getOrientation(side);
             TileEntity t = tileCache.getTileOnSide(forgeSide);
             if (t instanceof TileBoxBase) {
                 TileBoxBase tile = (TileBoxBase) t;
@@ -111,7 +111,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(ForgeDirection side) {
+    public SignalAspect getBoxSignalAspect(EnumFacing side) {
         return controller.getAspect();
     }
 
@@ -147,7 +147,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     @Override
-    public boolean isConnected(ForgeDirection side) {
+    public boolean isConnected(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);
         if (tile instanceof TileBoxInterlock)
             return true;

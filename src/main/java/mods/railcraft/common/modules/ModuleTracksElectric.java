@@ -8,11 +8,12 @@
  */
 package mods.railcraft.common.modules;
 
-import java.util.EnumSet;
-import java.util.Set;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.util.misc.MiscTools;
+
+import java.util.EnumSet;
+import java.util.Set;
 
 /**
  *

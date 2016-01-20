@@ -8,12 +8,12 @@
  */
 package mods.railcraft.common.util.misc;
 
+import mods.railcraft.common.core.Railcraft;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.World;
-import mods.railcraft.common.core.Railcraft;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.message.Message;

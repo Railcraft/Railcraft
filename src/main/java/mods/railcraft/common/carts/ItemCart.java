@@ -9,13 +9,13 @@
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
-
-import mods.railcraft.common.gui.tooltips.ToolTipLine;
+import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,12 +24,10 @@ import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import mods.railcraft.api.core.items.IMinecartItem;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.block.BlockDispenser;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ItemCart extends ItemMinecart implements IMinecartItem {
 

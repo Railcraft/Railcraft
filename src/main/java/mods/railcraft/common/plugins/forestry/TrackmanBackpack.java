@@ -8,12 +8,8 @@
  */
 package mods.railcraft.common.plugins.forestry;
 
-import net.minecraftforge.fml.common.Optional;
 import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.api.core.items.IMinecartItem;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemMinecart;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -21,14 +17,12 @@ import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.signals.ItemSignalBlockSurveyor;
 import mods.railcraft.common.blocks.signals.ItemSignalTuner;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.items.ItemCrowbar;
-import mods.railcraft.common.items.ItemCrowbarReinforced;
-import mods.railcraft.common.items.ItemGoggles;
-import mods.railcraft.common.items.ItemMagnifyingGlass;
-import mods.railcraft.common.items.ItemWhistleTuner;
-import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.fluids.FluidContainers;
 import mods.railcraft.common.items.*;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemMinecart;
+import net.minecraftforge.fml.common.Optional;
 
 /**
  *

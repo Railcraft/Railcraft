@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.modules;
 
-import net.minecraft.item.ItemStack;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.EnumDetector;
@@ -18,7 +17,7 @@ import mods.railcraft.common.items.ItemCrowbar;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 /**
  *

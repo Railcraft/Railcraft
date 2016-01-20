@@ -8,11 +8,11 @@
  */
 package mods.railcraft.common.modules;
 
-import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarVoid;
-import org.apache.logging.log4j.Level;
 import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarMagic;
+import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarVoid;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.misc.Game;
+import org.apache.logging.log4j.Level;
 
 /**
  *

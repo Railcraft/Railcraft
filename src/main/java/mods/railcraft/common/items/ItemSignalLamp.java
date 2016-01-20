@@ -10,8 +10,6 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 public class ItemSignalLamp extends ItemRailcraft {

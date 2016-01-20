@@ -10,20 +10,6 @@ package mods.railcraft.common.items;
 
 import buildcraft.api.tools.IToolWrench;
 import ic2.api.item.IBoxable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
-import net.minecraft.world.World;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -32,14 +18,24 @@ import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.*;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench {
 
@@ -128,7 +124,7 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
         if (isBannedRotation(block.getClass()))
             return false;
 
-        if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+        if (block.rotateBlock(world, x, y, z, EnumFacing.getOrientation(side))) {
             player.swingItem();
             return !world.isRemote;
         }

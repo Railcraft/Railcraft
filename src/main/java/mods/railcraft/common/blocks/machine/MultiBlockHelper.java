@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.helpers.StructureHelper;
-import java.util.List;
 import mods.railcraft.common.blocks.machine.alpha.*;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
@@ -18,6 +17,8 @@ import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.util.List;
 
 /**
  *

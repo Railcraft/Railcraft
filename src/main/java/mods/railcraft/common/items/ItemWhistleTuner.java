@@ -8,10 +8,10 @@
  */
 package mods.railcraft.common.items;
 
-import net.minecraft.item.ItemStack;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import net.minecraft.item.ItemStack;
 
 public class ItemWhistleTuner extends ItemRailcraft {
 

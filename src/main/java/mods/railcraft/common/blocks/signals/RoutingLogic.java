@@ -8,13 +8,10 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IPaintedCart;
 import mods.railcraft.api.carts.IRefuelableCart;
 import mods.railcraft.api.carts.IRoutableCart;
-import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -23,6 +20,8 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier;
 
 import java.util.Deque;
 import java.util.Iterator;

@@ -27,7 +27,7 @@ public class TileIC2MultiEmitterDelegate extends TileIC2EmitterDelegate implemen
     }
 
     @Override
-    public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
+    public boolean emitsEnergyTo(TileEntity receiver, EnumFacing direction) {
         return true;
     }
 

@@ -8,20 +8,16 @@
  */
 package mods.railcraft.common.core;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import mods.railcraft.common.util.misc.Game;
+import org.apache.logging.log4j.Level;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import org.apache.logging.log4j.Level;
-import mods.railcraft.common.util.misc.Game;
 
 /**
  *

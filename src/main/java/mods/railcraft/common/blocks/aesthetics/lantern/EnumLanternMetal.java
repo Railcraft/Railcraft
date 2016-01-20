@@ -17,8 +17,8 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 
 import java.util.*;
 
@@ -72,7 +72,7 @@ public enum EnumLanternMetal implements LanternInfo {
 
     @Override
     public IIcon getTexture(int side) {
-        return InvTools.getBlockFromStack(source).getIcon(ForgeDirection.UP.ordinal(), source.getItemDamage());
+        return InvTools.getBlockFromStack(source).getIcon(EnumFacing.UP.ordinal(), source.getItemDamage());
     }
 
     @Override

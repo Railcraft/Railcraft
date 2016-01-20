@@ -11,14 +11,8 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.IRefuelableCart;
 import mods.railcraft.common.core.RailcraftConfig;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
@@ -28,7 +22,16 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.steam.Steam;
 import mods.railcraft.common.util.steam.SteamBoiler;
-import net.minecraftforge.fluids.*;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -176,7 +179,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         if (doFill && Fluids.WATER.is(resource))
             if (boiler.isSuperHeated() && Steam.BOILERS_EXPLODE) {
                 FluidStack water = tankWater.getFluid();
@@ -187,27 +190,27 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return null;
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         return null;
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return Fluids.WATER.is(fluid);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return false;
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection direction) {
+    public FluidTankInfo[] getTankInfo(EnumFacing direction) {
         return tankManager.getTankInfo();
     }
 

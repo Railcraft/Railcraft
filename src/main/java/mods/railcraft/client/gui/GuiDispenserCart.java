@@ -8,10 +8,10 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
 import mods.railcraft.common.blocks.machine.gamma.TileDispenserCart;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerDispenserCart;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiDispenserCart extends TileGui
 {

@@ -8,24 +8,25 @@
  */
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import java.util.ArrayList;
-import java.util.List;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.EnumColor;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -128,7 +129,7 @@ public class BlockPostMetal extends BlockPostBase {
     }
 
     @Override
-    public boolean recolourBlock(World world, int x, int y, int z, ForgeDirection side, int colour) {
+    public boolean recolourBlock(World world, int x, int y, int z, EnumFacing side, int colour) {
         int c = 15 - colour;
         int meta = world.getBlockMetadata(x, y, z);
         if (meta != c) {

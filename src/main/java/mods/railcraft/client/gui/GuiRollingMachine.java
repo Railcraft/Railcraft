@@ -8,11 +8,11 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.StatCollector;
 import mods.railcraft.common.blocks.machine.alpha.TileRollingMachine;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerRollingMachine;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.StatCollector;
 
 public class GuiRollingMachine extends TileGui {
 

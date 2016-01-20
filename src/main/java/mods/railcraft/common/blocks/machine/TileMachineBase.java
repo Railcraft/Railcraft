@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
@@ -23,8 +21,10 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
 import java.util.ArrayList;
@@ -92,15 +92,15 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
         return openGui(player);
     }
 
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         return false;
     }
 
-    public ForgeDirection[] getValidRotations() {
-        return ForgeDirection.VALID_DIRECTIONS;
+    public EnumFacing[] getValidRotations() {
+        return EnumFacing.VALID_DIRECTIONS;
     }
 
-    public boolean isSideSolid(ForgeDirection side) {
+    public boolean isSideSolid(EnumFacing side) {
         return true;
     }
 
@@ -184,7 +184,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
         return false;
     }
 
-    public ConnectStyle connectsToPost(ForgeDirection side) {
+    public ConnectStyle connectsToPost(EnumFacing side) {
         if (isSideSolid(side.getOpposite()))
             return ConnectStyle.TWO_THIN;
         return ConnectStyle.NONE;

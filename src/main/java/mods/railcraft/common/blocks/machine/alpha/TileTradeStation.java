@@ -8,10 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.List;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.blocks.machine.alpha.ai.EntityAIMoveToBlock;
@@ -32,10 +28,15 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
-import net.minecraft.util.EnumFacing;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 /**
  *
@@ -54,7 +55,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     private final PhantomInventory recipeSlots = new PhantomInventory(9);
     private final InventoryMapper invInput;
     private final InventoryMapper invOutput;
-    protected ForgeDirection direction = ForgeDirection.NORTH;
+    protected EnumFacing direction = EnumFacing.NORTH;
 
     public TileTradeStation() {
         setInventorySize(16);
@@ -161,7 +162,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     }
 
     @Override
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         if (direction == axis)
             direction = axis.getOpposite();
         else
@@ -185,7 +186,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         recipeSlots.readFromNBT("recipe", data);
 
         profession = data.getInteger("profession");
-        direction = ForgeDirection.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getOrientation(data.getByte("direction"));
     }
 
     @Override
@@ -199,7 +200,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         profession = data.readInt();
-        ForgeDirection f = ForgeDirection.getOrientation(data.readByte());
+        EnumFacing f = EnumFacing.getOrientation(data.readByte());
         if (direction != f) {
             direction = f;
             markBlockForUpdate();

@@ -8,7 +8,6 @@
  */
 package mods.railcraft.client.render;
 
-import java.util.EnumSet;
 import mods.railcraft.api.electricity.GridTools;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler.ConnectType;
@@ -24,10 +23,12 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer;
-import net.minecraft.util.EnumFacing;
+
+import java.util.EnumSet;
 
 /**
  *
@@ -57,21 +58,21 @@ public class RenderBlockMachineDelta extends BlockRenderer {
 
         @Override
         public void renderBlock(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block) {
-            EnumSet<ForgeDirection> wireCons = EnumSet.noneOf(ForgeDirection.class);
+            EnumSet<EnumFacing> wireCons = EnumSet.noneOf(EnumFacing.class);
 
-            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+            for (EnumFacing dir : EnumFacing.VALID_DIRECTIONS) {
                 TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, dir);
                 if (tile instanceof TileWire)
                     wireCons.add(dir);
             }
 
-            EnumSet<ForgeDirection> plugCons = EnumSet.noneOf(ForgeDirection.class);
+            EnumSet<EnumFacing> plugCons = EnumSet.noneOf(EnumFacing.class);
 
-            EnumSet<ForgeDirection> search = EnumSet.allOf(ForgeDirection.class);
-            search.remove(ForgeDirection.UNKNOWN);
+            EnumSet<EnumFacing> search = EnumSet.allOf(EnumFacing.class);
+            search.remove(EnumFacing.UNKNOWN);
             search.removeAll(wireCons);
 
-            for (ForgeDirection dir : search) {
+            for (EnumFacing dir : search) {
                 TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, dir);
                 if (tile instanceof IElectricGrid && ((IElectricGrid) tile).getChargeHandler().getType() == ConnectType.BLOCK)
                     plugCons.add(dir);
@@ -82,8 +83,8 @@ public class RenderBlockMachineDelta extends BlockRenderer {
             boolean powered = false;
             IElectricGrid above = GridTools.getGridObjectAt(world, x, y + 1, z);
             if (above != null && TrackTools.isRailBlockAt(world, x, y + 1, z)) {
-                wireCons.add(ForgeDirection.UP);
-                plugCons.add(ForgeDirection.UP);
+                wireCons.add(EnumFacing.UP);
+                plugCons.add(EnumFacing.UP);
 //                renderPlatform(renderblocks, world, x, y, z, block);
                 powered = true;
             }
@@ -114,7 +115,7 @@ public class RenderBlockMachineDelta extends BlockRenderer {
             RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
         }
 
-        private void renderWire(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block, EnumSet<ForgeDirection> wireCons) {
+        private void renderWire(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block, EnumSet<EnumFacing> wireCons) {
             float pix = RenderTools.PIXEL;
             float max = 0.999F;
             float min = 0.001F;
@@ -126,29 +127,29 @@ public class RenderBlockMachineDelta extends BlockRenderer {
                 return;
             }
 
-            boolean down = wireCons.contains(ForgeDirection.DOWN);
-            boolean up = wireCons.contains(ForgeDirection.UP);
+            boolean down = wireCons.contains(EnumFacing.DOWN);
+            boolean up = wireCons.contains(EnumFacing.UP);
             if (down || up) {
                 block.setBlockBounds(6 * pix, down ? min : 6 * pix, 6 * pix, 10 * pix, up ? max : 10 * pix, 10 * pix);
                 RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
             }
 
-            boolean north = wireCons.contains(ForgeDirection.NORTH);
-            boolean south = wireCons.contains(ForgeDirection.SOUTH);
+            boolean north = wireCons.contains(EnumFacing.NORTH);
+            boolean south = wireCons.contains(EnumFacing.SOUTH);
             if (north || south) {
                 block.setBlockBounds(6 * pix - 0.0001f, 6 * pix - 0.0001f, north ? min : 6 * pix - 0.0001f, 10 * pix + 0.0001f, 10 * pix + 0.0001f, south ? max : 10 * pix + 0.0001f);
                 RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
             }
 
-            boolean west = wireCons.contains(ForgeDirection.WEST);
-            boolean east = wireCons.contains(ForgeDirection.EAST);
+            boolean west = wireCons.contains(EnumFacing.WEST);
+            boolean east = wireCons.contains(EnumFacing.EAST);
             if (west || east) {
                 block.setBlockBounds(west ? min : 6 * pix - 0.0002f, 6 * pix - 0.0002f, 6 * pix - 0.0002f, east ? max : 10 * pix + 0.0002f, 10 * pix + 0.0002f, 10 * pix + 0.0002f);
                 RenderTools.renderStandardBlock(renderblocks, block, x, y, z);
             }
         }
 
-        private void renderPlug(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block, EnumSet<ForgeDirection> plugCons) {
+        private void renderPlug(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block, EnumSet<EnumFacing> plugCons) {
             if (plugCons.isEmpty())
                 return;
 
@@ -182,7 +183,7 @@ public class RenderBlockMachineDelta extends BlockRenderer {
             plugB[2][1] = center + length;
 
             float[][] rotated;
-            for (ForgeDirection dir : plugCons) {
+            for (EnumFacing dir : plugCons) {
                 rotated = MatrixTransformations.deepClone(plugA);
                 MatrixTransformations.transform(rotated, dir);
                 block.setBlockBounds(rotated[0][0], rotated[1][0], rotated[2][0], rotated[0][1], rotated[1][1], rotated[2][1]);

@@ -8,11 +8,12 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import java.util.HashMap;
-import java.util.Map;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *

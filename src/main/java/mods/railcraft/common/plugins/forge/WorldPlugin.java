@@ -9,15 +9,14 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.WorldCoordinate;
-
-import static mods.railcraft.common.util.misc.MiscTools.*;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
+
+import static mods.railcraft.common.util.misc.MiscTools.*;
 
 /**
  *
@@ -37,7 +36,7 @@ public class WorldPlugin {
         return world.getTileEntity(x, y, z);
     }
 
-    public static Block getBlockOnSide(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    public static Block getBlockOnSide(IBlockAccess world, int x, int y, int z, EnumFacing side) {
         return world.getBlock(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side));
     }
 
@@ -59,7 +58,7 @@ public class WorldPlugin {
         return world.isAirBlock(x, y, z);
     }
 
-    public static boolean blockExistsOnSide(World world, int x, int y, int z, ForgeDirection side) {
+    public static boolean blockExistsOnSide(World world, int x, int y, int z, EnumFacing side) {
         return world.blockExists(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side));
     }
 
@@ -67,11 +66,11 @@ public class WorldPlugin {
         return world.getBlockMetadata(x, y, z);
     }
 
-    public static int getBlockMetadataOnSide(IBlockAccess world, int i, int j, int k, ForgeDirection side) {
+    public static int getBlockMetadataOnSide(IBlockAccess world, int i, int j, int k, EnumFacing side) {
         return world.getBlockMetadata(getXOnSide(i, side), getYOnSide(j, side), getZOnSide(k, side));
     }
 
-    public static TileEntity getTileEntityOnSide(World world, int x, int y, int z, ForgeDirection side) {
+    public static TileEntity getTileEntityOnSide(World world, int x, int y, int z, EnumFacing side) {
         int sx = getXOnSide(x, side);
         int sy = getYOnSide(y, side);
         int sz = getZOnSide(z, side);
@@ -80,7 +79,7 @@ public class WorldPlugin {
         return null;
     }
 
-    public static TileEntity getTileEntityOnSide(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    public static TileEntity getTileEntityOnSide(IBlockAccess world, int x, int y, int z, EnumFacing side) {
         int sx = getXOnSide(x, side);
         int sy = getYOnSide(y, side);
         int sz = getZOnSide(z, side);
@@ -108,7 +107,7 @@ public class WorldPlugin {
             world.notifyBlocksOfNeighborChange(x, y, z, block);
     }
 
-    public static void notifyBlocksOfNeighborChangeOnSide(World world, int x, int y, int z, Block block, ForgeDirection side) {
+    public static void notifyBlocksOfNeighborChangeOnSide(World world, int x, int y, int z, Block block, EnumFacing side) {
         world.notifyBlocksOfNeighborChange(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side), block);
     }
 

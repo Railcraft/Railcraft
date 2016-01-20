@@ -8,9 +8,6 @@
  */
 package mods.railcraft.common.blocks.aesthetics.glass;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import java.util.*;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -27,10 +24,17 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -151,7 +155,7 @@ public class BlockStrengthGlass extends BlockGlass {
     }
 
     @Override
-    public boolean recolourBlock(World world, int x, int y, int z, ForgeDirection side, int colour) {
+    public boolean recolourBlock(World world, int x, int y, int z, EnumFacing side, int colour) {
         int meta = world.getBlockMetadata(x, y, z);
         if (meta != colour) {
             world.setBlockMetadataWithNotify(x, y, z, colour, 3);

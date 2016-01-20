@@ -9,9 +9,9 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.EntityLocomotiveElectric;
-import net.minecraft.entity.player.InventoryPlayer;
 import mods.railcraft.common.gui.containers.ContainerLocomotiveElectric;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiLocomotiveElectric extends GuiLocomotive {
 

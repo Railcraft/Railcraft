@@ -8,9 +8,6 @@
  */
 package mods.railcraft.common.blocks.tracks.speedcontroller;
 
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.common.blocks.tracks.TrackSpeed;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -18,6 +15,9 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 /**
  *
@@ -66,7 +66,7 @@ public class SpeedControllerHighSpeed extends SpeedController {
         float maxSpeed = RailcraftConfig.getMaxHighSpeed();
         if (dist < LOOK_AHEAD_DIST)
             for (int side = 2; side < 6; side++) {
-                ForgeDirection dir = ForgeDirection.getOrientation(side);
+                EnumFacing dir = EnumFacing.getOrientation(side);
                 int xx = MiscTools.getXOnSide(x, dir);
                 int yy = y;
                 int zz = MiscTools.getZOnSide(z, dir);

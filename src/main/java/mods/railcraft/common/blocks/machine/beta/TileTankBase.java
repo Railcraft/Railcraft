@@ -8,9 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
@@ -39,9 +36,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -449,7 +449,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public boolean blockActivated(EntityPlayer player, int side) {
         ItemStack current = player.getCurrentEquippedItem();
         if (Game.isHost(worldObj)) {
-            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), ForgeDirection.getOrientation(side), player, true, true)) {
+            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), EnumFacing.getOrientation(side), player, true, true)) {
                 TileTankBase master = (TileTankBase) getMasterBlock();
                 if (master != null)
                     master.syncClient();

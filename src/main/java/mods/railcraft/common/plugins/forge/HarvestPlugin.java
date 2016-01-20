@@ -10,7 +10,6 @@ package mods.railcraft.common.plugins.forge;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  *

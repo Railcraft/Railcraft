@@ -8,39 +8,40 @@
  */
 package mods.railcraft.common.util.inventory;
 
-import buildcraft.api.transport.PipeManager;
-
-import java.util.*;
-
+import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.filters.ArrayStackFilter;
+import mods.railcraft.common.util.inventory.filters.InvertedStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
+import mods.railcraft.common.util.inventory.wrappers.ChestWrapper;
+import mods.railcraft.common.util.inventory.wrappers.IInvSlot;
+import mods.railcraft.common.util.inventory.wrappers.InventoryIterator;
+import mods.railcraft.common.util.inventory.wrappers.SidedInventoryMapper;
+import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.ITileFilter;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
-import mods.railcraft.api.core.items.IStackFilter;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.filters.ArrayStackFilter;
-import mods.railcraft.common.util.inventory.filters.StackFilter;
-import mods.railcraft.common.util.inventory.filters.InvertedStackFilter;
-import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
-import mods.railcraft.common.util.inventory.wrappers.*;
-import mods.railcraft.common.util.misc.EnumColor;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.ITileFilter;
-import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+
+import java.util.*;
 
 public abstract class InvTools {
     private static final String TAG_SLOT = "Slot";
@@ -64,7 +65,7 @@ public abstract class InvTools {
     public static List<IInventory> getAdjacentInventories(World world, int i, int j, int k, Class<? extends IInventory> type) {
         List<IInventory> list = new ArrayList<IInventory>(5);
         for (int side = 0; side < 6; side++) {
-            IInventory inv = getInventoryFromSide(world, i, j, k, ForgeDirection.getOrientation(side), type, null);
+            IInventory inv = getInventoryFromSide(world, i, j, k, EnumFacing.getOrientation(side), type, null);
             if (inv != null)
                 list.add(inv);
         }
@@ -78,14 +79,14 @@ public abstract class InvTools {
     public static Map<Integer, IInventory> getAdjacentInventoryMap(World world, int i, int j, int k, Class<? extends IInventory> type) {
         Map<Integer, IInventory> map = new TreeMap<Integer, IInventory>();
         for (int side = 0; side < 6; side++) {
-            IInventory inv = getInventoryFromSide(world, i, j, k, ForgeDirection.getOrientation(side), type, null);
+            IInventory inv = getInventoryFromSide(world, i, j, k, EnumFacing.getOrientation(side), type, null);
             if (inv != null)
                 map.put(side, inv);
         }
         return map;
     }
 
-    public static IInventory getInventoryFromSide(World world, int x, int y, int z, ForgeDirection side, final Class<? extends IInventory> type, final Class<? extends IInventory> exclude) {
+    public static IInventory getInventoryFromSide(World world, int x, int y, int z, EnumFacing side, final Class<? extends IInventory> type, final Class<? extends IInventory> exclude) {
         return getInventoryFromSide(world, x, y, z, side, new ITileFilter() {
             @Override
             public boolean matches(TileEntity tile) {
@@ -96,14 +97,14 @@ public abstract class InvTools {
         });
     }
 
-    public static IInventory getInventoryFromSide(World world, int x, int y, int z, ForgeDirection side, ITileFilter filter) {
+    public static IInventory getInventoryFromSide(World world, int x, int y, int z, EnumFacing side, ITileFilter filter) {
         TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, side);
         if (tile == null || !(tile instanceof IInventory) || !filter.matches(tile))
             return null;
         return getInventoryFromTile(tile, side.getOpposite());
     }
 
-    public static IInventory getInventoryFromTile(TileEntity tile, ForgeDirection side) {
+    public static IInventory getInventoryFromTile(TileEntity tile, EnumFacing side) {
         if (tile == null || !(tile instanceof IInventory))
             return null;
 
@@ -117,7 +118,7 @@ public abstract class InvTools {
         return getInventory((IInventory) tile, side);
     }
 
-    public static IInventory getInventory(IInventory inv, ForgeDirection side) {
+    public static IInventory getInventory(IInventory inv, EnumFacing side) {
         if (inv == null)
             return null;
 
@@ -267,7 +268,7 @@ public abstract class InvTools {
         }
     }
 
-    public static boolean isInventoryEmpty(IInventory inv, ForgeDirection side) {
+    public static boolean isInventoryEmpty(IInventory inv, EnumFacing side) {
         return isInventoryEmpty(getInventory(inv, side));
     }
 
@@ -281,7 +282,7 @@ public abstract class InvTools {
         return stack == null;
     }
 
-    public static boolean isAccessibleInventoryEmpty(IInventory inv, ForgeDirection side) {
+    public static boolean isAccessibleInventoryEmpty(IInventory inv, EnumFacing side) {
         return isInventoryEmpty(getInventory(inv, side));
     }
 
@@ -294,7 +295,7 @@ public abstract class InvTools {
         return true;
     }
 
-    public static boolean isInventoryFull(IInventory inv, ForgeDirection side) {
+    public static boolean isInventoryFull(IInventory inv, EnumFacing side) {
         return isInventoryFull(getInventory(inv, side));
     }
 
@@ -770,7 +771,7 @@ public abstract class InvTools {
      */
     public static ItemStack[] removeItems(IInventory inv, int numItems) {
 //        if (inv instanceof ISpecialInventory)
-//            return ((ISpecialInventory) inv).extractItem(true, ForgeDirection.UNKNOWN, numItems);
+//            return ((ISpecialInventory) inv).extractItem(true, EnumFacing.UNKNOWN, numItems);
         StandaloneInventory output = new StandaloneInventory(27);
         for (int i = 0; i < inv.getSizeInventory(); i++) {
             if (numItems <= 0)

@@ -8,10 +8,10 @@
  */
 package mods.railcraft.client.sounds;
 
+import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
-import mods.railcraft.common.util.sounds.SoundHelper;
 
 /**
  *

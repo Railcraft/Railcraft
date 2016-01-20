@@ -14,8 +14,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 /**
  *
@@ -54,7 +54,7 @@ public class ItemSlab extends ItemBlock {
                 return true;
             }
             if (isSingleSlabShifted(world, x, y, z, side)) {
-                ForgeDirection s = ForgeDirection.getOrientation(side);
+                EnumFacing s = EnumFacing.getOrientation(side);
                 x = MiscTools.getXOnSide(x, s);
                 y = MiscTools.getYOnSide(y, s);
                 z = MiscTools.getZOnSide(z, s);
@@ -81,7 +81,7 @@ public class ItemSlab extends ItemBlock {
     }
 
     private boolean isSingleSlabShifted(World world, int x, int y, int z, int side) {
-        ForgeDirection s = ForgeDirection.getOrientation(side);
+        EnumFacing s = EnumFacing.getOrientation(side);
         x = MiscTools.getXOnSide(x, s);
         y = MiscTools.getYOnSide(y, s);
         z = MiscTools.getZOnSide(z, s);
@@ -135,7 +135,7 @@ public class ItemSlab extends ItemBlock {
         }
 
 //        boolean shifted = world.getBlockId(x, y, z) != blockID;
-//        ForgeDirection s = ForgeDirection.getOrientation(side).getOpposite();
+//        EnumFacing s = EnumFacing.getOrientation(side).getOpposite();
 //        int cx = shifted ? MiscTools.getXOnSide(x, s) : x;
 //        int cy = shifted ? MiscTools.getYOnSide(y, s) : y;
 //        int cz = shifted ? MiscTools.getZOnSide(z, s) : z;

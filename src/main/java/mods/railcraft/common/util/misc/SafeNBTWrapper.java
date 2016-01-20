@@ -8,13 +8,7 @@
  */
 package mods.railcraft.common.util.misc;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.nbt.NBTTagShort;
+import net.minecraft.nbt.*;
 
 public class SafeNBTWrapper {
 

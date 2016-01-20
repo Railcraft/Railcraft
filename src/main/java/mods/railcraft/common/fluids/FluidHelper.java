@@ -8,25 +8,25 @@
  */
 package mods.railcraft.common.fluids;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import mods.railcraft.common.items.ModItems;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -46,7 +46,7 @@ public final class FluidHelper {
     private FluidHelper() {
     }
 
-    public static boolean handleRightClick(IFluidHandler tank, ForgeDirection side, EntityPlayer player, boolean fill, boolean drain) {
+    public static boolean handleRightClick(IFluidHandler tank, EnumFacing side, EntityPlayer player, boolean fill, boolean drain) {
         if (player == null)
             return false;
         ItemStack current = player.inventory.getCurrentItem();
@@ -124,11 +124,11 @@ public final class FluidHelper {
         ItemStack output = inv.getStackInSlot(outputSlot);
         FluidItemHelper.FillReturn fill = FluidItemHelper.fillContainer(input, new FluidStack(fluidToFill, PROCESS_VOLUME));
         if (fill.container != null && hasPlaceToPutContainer(output, fill.container)) {
-            FluidStack drain = fluidHandler.drain(ForgeDirection.UNKNOWN, fill.amount, false);
+            FluidStack drain = fluidHandler.drain(EnumFacing.UNKNOWN, fill.amount, false);
             if (drain != null && drain.amount == fill.amount) {
                 fill = FluidItemHelper.fillContainer(input, drain);
                 if (fill.container != null && fill.amount == drain.amount) {
-                    fluidHandler.drain(ForgeDirection.UNKNOWN, fill.amount, true);
+                    fluidHandler.drain(EnumFacing.UNKNOWN, fill.amount, true);
                     storeContainer(inv, inputSlot, outputSlot, fill.container);
                 }
                 return true;
@@ -143,9 +143,9 @@ public final class FluidHelper {
         if (input != null) {
             FluidItemHelper.DrainReturn drain = FluidItemHelper.drainContainer(input, PROCESS_VOLUME);
             if (drain.fluidDrained != null && (drain.container == null || hasPlaceToPutContainer(output, drain.container))) {
-                int used = fluidHandler.fill(ForgeDirection.UNKNOWN, drain.fluidDrained, false);
+                int used = fluidHandler.fill(EnumFacing.UNKNOWN, drain.fluidDrained, false);
                 if ((drain.isAtomic && used == drain.fluidDrained.amount) || (!drain.isAtomic && drain.fluidDrained.amount > 0)) {
-                    fluidHandler.fill(ForgeDirection.UNKNOWN, drain.fluidDrained, true);
+                    fluidHandler.fill(EnumFacing.UNKNOWN, drain.fluidDrained, true);
                     storeContainer(inv, inputSlot, outputSlot, drain.container);
                     return true;
                 }

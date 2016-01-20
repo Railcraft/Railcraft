@@ -8,25 +8,25 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.Iterator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
 
-import static net.minecraftforge.common.util.ForgeDirection.DOWN;
-import static net.minecraftforge.common.util.ForgeDirection.UP;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Iterator;
+
+import static net.minecraftforge.common.util.EnumFacing.DOWN;
+import static net.minecraftforge.common.util.EnumFacing.UP;
 
 /**
  *
@@ -34,9 +34,9 @@ import static net.minecraftforge.common.util.ForgeDirection.UP;
  */
 public abstract class TileChestRailcraft extends TileMachineItem {
 
-    private static final ForgeDirection[] UP_DOWN_AXES = new ForgeDirection[]{UP, DOWN};
+    private static final EnumFacing[] UP_DOWN_AXES = new EnumFacing[]{UP, DOWN};
     private static final int TICK_PER_SYNC = 64;
-    private ForgeDirection facing = ForgeDirection.EAST;
+    private EnumFacing facing = EnumFacing.EAST;
     public float lidAngle;
     public float prevLidAngle;
     public int numUsingPlayers;
@@ -45,7 +45,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
         super(27);
     }
 
-    public final ForgeDirection getFacing() {
+    public final EnumFacing getFacing() {
         return facing;
     }
 
@@ -56,7 +56,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     }
 
     @Override
-    public final boolean rotateBlock(ForgeDirection axis) {
+    public final boolean rotateBlock(EnumFacing axis) {
         if (axis == UP || axis == DOWN)
             return false;
         if (facing == axis)
@@ -68,13 +68,13 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     }
 
     @Override
-    public final ForgeDirection[] getValidRotations() {
+    public final EnumFacing[] getValidRotations() {
         return UP_DOWN_AXES;
     }
 
     @Override
     public final boolean openGui(EntityPlayer player) {
-        if (worldObj.isSideSolid(xCoord, yCoord + 1, zCoord, ForgeDirection.DOWN))
+        if (worldObj.isSideSolid(xCoord, yCoord + 1, zCoord, EnumFacing.DOWN))
             return false;
         else if (isCatOnChest())
             return false;
@@ -162,7 +162,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        facing = ForgeDirection.getOrientation(data.getByte("facing"));
+        facing = EnumFacing.getOrientation(data.getByte("facing"));
     }
 
     @Override
@@ -174,7 +174,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        facing = ForgeDirection.getOrientation(data.readByte());
+        facing = EnumFacing.getOrientation(data.readByte());
     }
 
 }

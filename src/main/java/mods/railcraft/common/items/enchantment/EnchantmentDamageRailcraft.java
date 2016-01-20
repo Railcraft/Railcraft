@@ -1,12 +1,13 @@
 package mods.railcraft.common.items.enchantment;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import java.lang.ref.WeakReference;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.lang.ref.WeakReference;
 
 public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
 

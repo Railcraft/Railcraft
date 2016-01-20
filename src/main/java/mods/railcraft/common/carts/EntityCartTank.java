@@ -28,8 +28,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 
 public class EntityCartTank extends EntityCartFiltered implements IFluidHandler, ILiquidTransfer, ISidedInventory, IMinecart, IFluidCart {
@@ -167,7 +167,7 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     @Override
     public boolean doInteract(EntityPlayer player) {
         if (Game.isHost(worldObj)) {
-            if (FluidHelper.handleRightClick(this, ForgeDirection.UNKNOWN, player, true, true))
+            if (FluidHelper.handleRightClick(this, EnumFacing.UNKNOWN, player, true, true))
                 return true;
             GuiHandler.openGui(EnumGui.CART_TANK, player, worldObj, this);
         }
@@ -192,7 +192,7 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         if (resource == null)
             return 0;
         Fluid filterFluid = getFilterFluid();
@@ -202,12 +202,12 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return tank.drain(maxDrain, doDrain);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if (resource == null)
             return null;
         if (tank.getFluidType() == resource.getFluid())
@@ -216,13 +216,13 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         Fluid filterFluid = getFilterFluid();
         return filterFluid == null || fluid == filterFluid;
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return true;
     }
 
@@ -230,7 +230,7 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
      * @return Array of {@link StandardTank}s contained in this ITankContainer
      */
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection side) {
+    public FluidTankInfo[] getTankInfo(EnumFacing side) {
         return tankManager.getTankInfo();
     }
 
@@ -279,7 +279,7 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     @Deprecated
     public int offerLiquid(Object source, FluidStack offer) {
         int qty = offer.amount;
-        int used = fill(ForgeDirection.UNKNOWN, offer, true);
+        int used = fill(EnumFacing.UNKNOWN, offer, true);
 
         offer.amount = qty - used;
         if (offer.amount <= 0)
@@ -305,11 +305,11 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     @Override
     @Deprecated
     public int requestLiquid(Object source, FluidStack request) {
-        FluidStack acquired = drain(ForgeDirection.UNKNOWN, request.amount, false);
+        FluidStack acquired = drain(EnumFacing.UNKNOWN, request.amount, false);
         if (acquired == null || !request.isFluidEqual(acquired))
             return 0;
 
-        drain(ForgeDirection.UNKNOWN, request.amount, true);
+        drain(EnumFacing.UNKNOWN, request.amount, true);
 
         if (acquired.amount >= request.amount)
             return acquired.amount;

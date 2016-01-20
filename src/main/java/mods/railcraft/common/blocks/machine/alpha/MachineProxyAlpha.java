@@ -8,10 +8,11 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import java.util.List;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.IMachineProxy;
 import net.minecraft.client.renderer.texture.IIconRegister;
+
+import java.util.List;
 
 /**
  *

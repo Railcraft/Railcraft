@@ -65,12 +65,12 @@ public class DetectorTank extends DetectorFilter {
                 TankToolkit tank = new TankToolkit((IFluidHandler) cart);
                 boolean liquidMatches = false;
                 Fluid filterFluid = getFilterLiquid();
-                FluidStack tankLiquid = tank.drain(ForgeDirection.UNKNOWN, 1, false);
+                FluidStack tankLiquid = tank.drain(EnumFacing.UNKNOWN, 1, false);
                 if (filterFluid == null)
                     liquidMatches = true;
                 else if (Fluids.areEqual(filterFluid, tankLiquid))
                     liquidMatches = true;
-                else if (tank.canPutFluid(ForgeDirection.UNKNOWN, new FluidStack(filterFluid, 1)))
+                else if (tank.canPutFluid(EnumFacing.UNKNOWN, new FluidStack(filterFluid, 1)))
                     liquidMatches = true;
                 boolean quantityMatches = false;
                 ButtonState state = buttonController.getButtonState();

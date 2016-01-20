@@ -8,15 +8,15 @@
  */
 package mods.railcraft.client.particles;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.common.items.ItemGoggles;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.effects.EffectManager.EffectSourceEntity;
 import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

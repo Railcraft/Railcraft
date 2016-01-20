@@ -8,13 +8,13 @@
  */
 package mods.railcraft.client.render;
 
-import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class RenderElevator implements ISimpleBlockRenderingHandler {
 

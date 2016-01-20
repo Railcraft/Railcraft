@@ -9,10 +9,10 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.detector.TileDetector;
-import net.minecraft.entity.player.InventoryPlayer;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerDetectorLocomotive;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiDetectorLocomotive extends TileGui {
 

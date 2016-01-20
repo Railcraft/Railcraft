@@ -9,13 +9,13 @@
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
  *

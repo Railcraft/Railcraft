@@ -8,8 +8,8 @@
  */
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
 import mods.railcraft.api.carts.locomotive.IRenderer;
+import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.MiscTools;

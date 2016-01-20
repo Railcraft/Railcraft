@@ -8,40 +8,41 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import java.util.ArrayList;
-import java.util.List;
 import mods.railcraft.api.electricity.IElectricGrid;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.machine.MultiBlockPattern;
+import mods.railcraft.common.blocks.machine.TileMultiBlock;
+import mods.railcraft.common.blocks.machine.beta.TileBoilerFirebox;
+import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.fluids.tanks.FakeTank;
+import mods.railcraft.common.fluids.tanks.FilteredTank;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.items.RailcraftPartItems;
+import mods.railcraft.common.plugins.buildcraft.triggers.INeedsMaintenance;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import mods.railcraft.common.plugins.ic2.IMultiEmitterDelegate;
+import mods.railcraft.common.plugins.ic2.TileIC2MultiEmitterDelegate;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.steam.ISteamUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.EnumFacing;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.blocks.machine.TileMultiBlock;
-import mods.railcraft.common.util.steam.ISteamUser;
-import mods.railcraft.common.blocks.machine.beta.TileBoilerFirebox;
-import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.items.RailcraftPartItems;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.plugins.buildcraft.triggers.INeedsMaintenance;
-import mods.railcraft.common.plugins.ic2.IC2Plugin;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
-import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.FakeTank;
-import mods.railcraft.common.fluids.tanks.FilteredTank;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.plugins.ic2.IMultiEmitterDelegate;
-import mods.railcraft.common.plugins.ic2.TileIC2MultiEmitterDelegate;
-import mods.railcraft.common.util.misc.Game;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -230,7 +231,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
             tMan.outputLiquid(getOutputs(), 0, WATER_OUTPUT);
     }
 
-    private IFluidHandler getOutputOnSide(ForgeDirection side) {
+    private IFluidHandler getOutputOnSide(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);
         if (tile instanceof TileBoilerFirebox)
             return (IFluidHandler) tile;
@@ -240,7 +241,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     private IFluidHandler[] getOutputs() {
         IFluidHandler[] outputs = new IFluidHandler[6];
         for (int side = 2; side < 6; side++) {
-            ForgeDirection dir = ForgeDirection.getOrientation(side);
+            EnumFacing dir = EnumFacing.getOrientation(side);
             outputs[side] = getOutputOnSide(dir);
         }
         return outputs;
@@ -436,7 +437,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     }
 
     @Override
-    public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
+    public boolean emitsEnergyTo(TileEntity receiver, EnumFacing direction) {
         return true;
     }
 
@@ -465,40 +466,40 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         TankManager tMan = getTankManager();
         if (tMan != null) return tMan.fill(TANK_STEAM, resource, doFill);
         return 0;
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         TankManager tMan = getTankManager();
         if (tMan != null) return tMan.drain(TANK_WATER, maxDrain, doDrain);
         return null;
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if (Fluids.WATER.is(resource))
             return drain(from, resource.amount, doDrain);
         return null;
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection side) {
+    public FluidTankInfo[] getTankInfo(EnumFacing side) {
         TankManager tMan = getTankManager();
         if (tMan != null) return tMan.getTankInfo();
         return FakeTank.INFO;
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return fluid == null || Fluids.STEAM.is(fluid);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return fluid == null || Fluids.WATER.is(fluid);
     }
 

@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import java.util.List;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;

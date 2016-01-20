@@ -8,16 +8,16 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import mods.railcraft.common.blocks.machine.ITankTile;
+import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.gui.slots.SlotOutput;
+import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-import mods.railcraft.common.blocks.machine.ITankTile;
-import mods.railcraft.common.gui.slots.SlotOutput;
-import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
-import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.StandardTank;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerTank extends RailcraftContainer {
 

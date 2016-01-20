@@ -8,15 +8,15 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import mods.railcraft.api.core.items.TagList;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.ModuleManager;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * This class contains a registry of all currently active Railcraft items. Which

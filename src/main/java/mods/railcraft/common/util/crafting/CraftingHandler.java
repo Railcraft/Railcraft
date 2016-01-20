@@ -8,20 +8,18 @@
  */
 package mods.railcraft.common.util.crafting;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import mods.railcraft.common.carts.EntityCartFiltered;
-import mods.railcraft.common.carts.EntityCartTank;
+import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.ICartType;
-import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInvSlot;
 import mods.railcraft.common.util.inventory.wrappers.InventoryIterator;
-import net.minecraft.item.ItemStack;
-import mods.railcraft.common.carts.EnumCart;
-import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 public class CraftingHandler {
 

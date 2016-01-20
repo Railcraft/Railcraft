@@ -8,17 +8,16 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import mods.railcraft.common.blocks.machine.alpha.TileBlastFurnace;
+import mods.railcraft.common.gui.slots.SlotStackFilter;
+import mods.railcraft.common.util.network.PacketBuilder;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
-import mods.railcraft.common.blocks.machine.alpha.TileBlastFurnace;
-import mods.railcraft.common.gui.slots.SlotStackFilter;
-import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerBlastFurnace extends RailcraftContainer {
 

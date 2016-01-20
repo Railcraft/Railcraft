@@ -11,9 +11,9 @@ package mods.railcraft.client.render.carts;
 import mods.railcraft.api.carts.locomotive.IRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.client.emblems.EmblemToolsClient;
-import net.minecraft.entity.item.EntityMinecart;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.util.misc.EnumColor;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 
 /**

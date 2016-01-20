@@ -10,10 +10,11 @@ package mods.railcraft.common.gui.tooltips;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ForwardingList;
-import java.util.ArrayList;
-import java.util.List;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

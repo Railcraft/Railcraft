@@ -32,7 +32,7 @@ import java.io.IOException;
 public abstract class TileEngine extends TileMachineBase implements IEnergyConnection {
     public float currentOutput = 0;
     public int energy;
-    private ForgeDirection direction = ForgeDirection.UP;
+    private EnumFacing direction = EnumFacing.UP;
     private float pistonProgress = 0;
     private int pistonStage;
     private boolean powered;
@@ -129,7 +129,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         burn();
     }
 
-    private boolean canTileReceivePower(TileEntity tile, ForgeDirection side) {
+    private boolean canTileReceivePower(TileEntity tile, EnumFacing side) {
         if (tile instanceof IEnergyReceiver) {
             IEnergyReceiver handler = (IEnergyReceiver) tile;
             return handler.canConnectEnergy(side);
@@ -190,7 +190,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         if (getEnergyStage() == EnergyStage.OVERHEAT)
             return false;
         return switchOrientation();
@@ -230,7 +230,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
     public boolean switchOrientation() {
         for (int i = direction.ordinal() + 1; i < direction.ordinal() + 6; ++i) {
-            ForgeDirection dir = ForgeDirection.getOrientation(i % 6);
+            EnumFacing dir = EnumFacing.getOrientation(i % 6);
 
             TileEntity tile = tileCache.getTileOnSide(dir);
 
@@ -246,12 +246,12 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         return false;
     }
 
-    public ForgeDirection getOrientation() {
+    public EnumFacing getOrientation() {
         return direction;
     }
 
     @Override
-    public boolean isSideSolid(ForgeDirection side) {
+    public boolean isSideSolid(EnumFacing side) {
         return direction.getOpposite() == side;
     }
 
@@ -380,7 +380,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        direction = ForgeDirection.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getOrientation(data.getByte("direction"));
         powered = data.getBoolean("powered");
         energy = data.getInteger("energyRF");
         currentOutput = data.getFloat("currentOutput");
@@ -400,13 +400,13 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = ForgeDirection.getOrientation(data.readByte());
+        direction = EnumFacing.getOrientation(data.readByte());
         energyStage = EnergyStage.fromOrdinal(data.readByte());
         isActive = data.readBoolean();
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection from) {
+    public boolean canConnectEnergy(EnumFacing from) {
         return from == direction;
     }
 

@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.tracks;
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 
 import java.util.List;
 import java.util.UUID;
@@ -175,20 +175,20 @@ public class TrackWye extends TrackSwitchBase {
     }
 
     @Override
-    public ForgeDirection getActuatorLocation() {
-        ForgeDirection dir = ForgeDirection.NORTH;
+    public EnumFacing getActuatorLocation() {
+        EnumFacing dir = EnumFacing.NORTH;
         int meta = tileEntity.getBlockMetadata();
         if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
             if (isMirrored()) {
-                dir = ForgeDirection.SOUTH;
+                dir = EnumFacing.SOUTH;
             } else {
-                dir = ForgeDirection.NORTH;
+                dir = EnumFacing.NORTH;
             }
         } else if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
             if (isMirrored()) {
-                dir = ForgeDirection.EAST;
+                dir = EnumFacing.EAST;
             } else {
-                dir = ForgeDirection.WEST;
+                dir = EnumFacing.WEST;
             }
         }
         return dir;

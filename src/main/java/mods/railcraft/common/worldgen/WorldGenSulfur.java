@@ -11,11 +11,11 @@ package mods.railcraft.common.worldgen;
 import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import net.minecraft.block.Block;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 /**
  *
@@ -32,7 +32,7 @@ public class WorldGenSulfur extends WorldGenSmallDeposits {
     @Override
     protected boolean canGen(World world, int x, int y, int z) {
         for (int side = 2; side < 6; side++) {
-            ForgeDirection s = ForgeDirection.getOrientation(side);
+            EnumFacing s = EnumFacing.getOrientation(side);
             int i = MiscTools.getXOnSide(x, s);
             int j = MiscTools.getYOnSide(y, s);
             int k = MiscTools.getZOnSide(z, s);

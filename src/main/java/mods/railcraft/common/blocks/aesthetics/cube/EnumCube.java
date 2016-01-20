@@ -8,13 +8,14 @@
  */
 package mods.railcraft.common.blocks.aesthetics.cube;
 
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

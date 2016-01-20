@@ -8,12 +8,12 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.StatCollector;
 import mods.railcraft.common.carts.EntityCartTank;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCartTank;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.StatCollector;
 
 /**
  *

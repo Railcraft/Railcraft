@@ -8,13 +8,6 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -29,8 +22,17 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
+import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
 
@@ -102,7 +104,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
                 if (PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, xCoord, yCoord, zCoord))
                     hasInput = true;
                 for (int side = 2; side < 6; side++) { //get most restrictive aspect from adjacent (active) boxes
-                    ForgeDirection forgeSide = ForgeDirection.getOrientation(side);
+                    EnumFacing forgeSide = EnumFacing.getOrientation(side);
                     TileEntity tile = tileCache.getTileOnSide(forgeSide);
                     if (tile instanceof TileBoxBase) {
                         TileBoxBase box = (TileBoxBase) tile;
@@ -141,7 +143,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public void onNeighborStateChange(TileBoxBase neighbor, ForgeDirection side) {
+    public void onNeighborStateChange(TileBoxBase neighbor, EnumFacing side) {
         if (neighbor.isEmittingRedstone(side)) {
             ticksPowered = ticksToPower;
             if (stateModeController.getButtonState().equals(EnumStateMode.IMMEDIATE))
@@ -224,7 +226,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public boolean isConnected(ForgeDirection side) {
+    public boolean isConnected(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);
         if (tile instanceof TileBoxBase)
             return ((TileBoxBase) tile).canTransferAspect() || ((TileBoxBase) tile).canReceiveAspect();
@@ -232,7 +234,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(ForgeDirection side) {
+    public SignalAspect getBoxSignalAspect(EnumFacing side) {
         return ticksPowered > 0 ? aspect : SignalAspect.RED;
     }
 

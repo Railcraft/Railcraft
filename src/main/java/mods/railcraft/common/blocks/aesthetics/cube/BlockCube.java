@@ -8,21 +8,7 @@
  */
 package mods.railcraft.common.blocks.aesthetics.cube;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
-import java.util.Random;
-
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -31,10 +17,23 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
+import java.util.Random;
 
 public class BlockCube extends Block {
 
@@ -202,19 +201,19 @@ public class BlockCube extends Block {
     }
 
     @Override
-    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         int metadata = world.getBlockMetadata(x, y, z);
         return EnumCube.fromOrdinal(metadata).getBlockDef().getFireSpreadSpeed(world, x, y, z, face);
     }
 
     @Override
-    public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public int getFlammability(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         int metadata = world.getBlockMetadata(x, y, z);
         return EnumCube.fromOrdinal(metadata).getBlockDef().getFlammability(world, x, y, z, face);
     }
 
     @Override
-    public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public boolean isFlammable(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         int metadata = world.getBlockMetadata(x, y, z);
         return EnumCube.fromOrdinal(metadata).getBlockDef().isFlammable(world, x, y, z, face);
     }

@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.detector;
 
-import net.minecraft.nbt.NBTTagCompound;
 import mods.railcraft.common.util.inventory.PhantomInventory;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  *

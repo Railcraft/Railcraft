@@ -8,17 +8,9 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import java.util.Map;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemMinecart;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.carts.ItemCartAnchor;
@@ -27,10 +19,19 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.inventory.PhantomInventory;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemMinecart;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.WorldServer;
+
+import java.util.Map;
 
 public class TileDispenserTrain extends TileDispenserCart {
 
@@ -198,7 +199,7 @@ public class TileDispenserTrain extends TileDispenserCart {
     }
 
 //    @Override
-//    public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
+//    public int addItem(ItemStack stack, boolean doAdd, EnumFacing from) {
 //        if (InvTools.isInventoryEmpty(getPattern()))
 //            return 0;
 //        IInventory inv = invStock;
@@ -211,7 +212,7 @@ public class TileDispenserTrain extends TileDispenserCart {
 //    }
 //
 //    @Override
-//    public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
+//    public ItemStack[] extractItem(boolean doRemove, EnumFacing from, int maxItemCount) {
 //        Set<ItemStack> patternSet = new ItemStackSet();
 //        Set<ItemStack> bufferSet = new ItemStackSet();
 //

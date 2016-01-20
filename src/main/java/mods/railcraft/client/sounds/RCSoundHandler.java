@@ -8,19 +8,17 @@
  */
 package mods.railcraft.client.sounds;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import mods.railcraft.common.core.Railcraft;
-import net.minecraft.world.World;
-import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import mods.railcraft.common.util.sounds.IBlockSoundProvider;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.sound.PlaySoundEvent17;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  *

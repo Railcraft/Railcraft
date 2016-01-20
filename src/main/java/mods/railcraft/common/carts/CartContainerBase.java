@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import java.util.List;
-
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -19,10 +17,12 @@ import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+
+import java.util.List;
 
 /**
  * It also contains some generic code that most carts will find useful.
@@ -30,9 +30,9 @@ import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class CartContainerBase extends EntityMinecartContainer implements IRailcraftCart, IItemCart {
-    private final ForgeDirection[] travelDirectionHistory = new ForgeDirection[2];
-    protected ForgeDirection travelDirection = ForgeDirection.UNKNOWN;
-    protected ForgeDirection verticalTravelDirection = ForgeDirection.UNKNOWN;
+    private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
+    protected EnumFacing travelDirection = EnumFacing.UNKNOWN;
+    protected EnumFacing verticalTravelDirection = EnumFacing.UNKNOWN;
 
     public CartContainerBase(World world) {
         super(world);
@@ -108,58 +108,58 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
     protected void updateTravelDirection(int trackX, int trackY, int trackZ, int meta) {
         EnumTrackMeta trackMeta = EnumTrackMeta.fromMeta(meta);
         if (trackMeta != null) {
-            ForgeDirection forgeDirection = determineTravelDirection(trackMeta);
-            ForgeDirection previousForgeDirection = travelDirectionHistory[1];
-            if (previousForgeDirection != ForgeDirection.UNKNOWN && travelDirectionHistory[0] == previousForgeDirection) {
-                travelDirection = forgeDirection;
+            EnumFacing EnumFacing = determineTravelDirection(trackMeta);
+            EnumFacing previousEnumFacing = travelDirectionHistory[1];
+            if (previousEnumFacing != EnumFacing.UNKNOWN && travelDirectionHistory[0] == previousEnumFacing) {
+                travelDirection = EnumFacing;
                 verticalTravelDirection = determineVerticalTravelDirection(trackMeta);
             }
-            travelDirectionHistory[0] = previousForgeDirection;
-            travelDirectionHistory[1] = forgeDirection;
+            travelDirectionHistory[0] = previousEnumFacing;
+            travelDirectionHistory[1] = EnumFacing;
         }
     }
 
-    private ForgeDirection determineTravelDirection(EnumTrackMeta trackMeta) {
+    private EnumFacing determineTravelDirection(EnumTrackMeta trackMeta) {
         if (trackMeta.isStraightTrack()) {
             if (posX - prevPosX > 0)
-                return ForgeDirection.EAST;
+                return EnumFacing.EAST;
             if (posX - prevPosX < 0)
-                return ForgeDirection.WEST;
+                return EnumFacing.WEST;
             if (posZ - prevPosZ > 0)
-                return ForgeDirection.SOUTH;
+                return EnumFacing.SOUTH;
             if (posZ - prevPosZ < 0)
-                return ForgeDirection.NORTH;
+                return EnumFacing.NORTH;
         } else {
             switch (trackMeta) {
                 case EAST_SOUTH_CORNER:
                     if (prevPosZ > posZ)
-                        return ForgeDirection.EAST;
+                        return EnumFacing.EAST;
                     else
-                        return ForgeDirection.SOUTH;
+                        return EnumFacing.SOUTH;
                 case WEST_SOUTH_CORNER:
                     if (prevPosZ > posZ)
-                        return ForgeDirection.WEST;
+                        return EnumFacing.WEST;
                     else
-                        return ForgeDirection.SOUTH;
+                        return EnumFacing.SOUTH;
                 case WEST_NORTH_CORNER:
                     if (prevPosZ > posZ)
-                        return ForgeDirection.NORTH;
+                        return EnumFacing.NORTH;
                     else
-                        return ForgeDirection.WEST;
+                        return EnumFacing.WEST;
                 case EAST_NORTH_CORNER:
                     if (prevPosZ > posZ)
-                        return ForgeDirection.NORTH;
+                        return EnumFacing.NORTH;
                     else
-                        return ForgeDirection.EAST;
+                        return EnumFacing.EAST;
             }
         }
-        return ForgeDirection.UNKNOWN;
+        return EnumFacing.UNKNOWN;
     }
 
-    private ForgeDirection determineVerticalTravelDirection(EnumTrackMeta trackMeta) {
+    private EnumFacing determineVerticalTravelDirection(EnumTrackMeta trackMeta) {
         if (trackMeta.isSlopeTrack())
-            return prevPosY < posY ? ForgeDirection.UP : ForgeDirection.DOWN;
-        return ForgeDirection.UNKNOWN;
+            return prevPosY < posY ? EnumFacing.UP : EnumFacing.DOWN;
+        return EnumFacing.UNKNOWN;
     }
 
     @Override

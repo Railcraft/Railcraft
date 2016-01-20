@@ -9,15 +9,15 @@
 package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftMultiType;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.common.blocks.RailcraftBlocks;
-import net.minecraft.init.Blocks;
 
 public class ItemSignal extends ItemBlockRailcraftMultiType {
 
@@ -66,7 +66,7 @@ public class ItemSignal extends ItemBlockRailcraftMultiType {
                 ++x;
         }
 
-        return world.canPlaceEntityOnSide(field_150939_a, x, y, z, false, side, (Entity) null, stack) && (!getStructureType(stack).needsSupport() || world.isSideSolid(x, y - 1, z, ForgeDirection.UP));
+        return world.canPlaceEntityOnSide(field_150939_a, x, y, z, false, side, (Entity) null, stack) && (!getStructureType(stack).needsSupport() || world.isSideSolid(x, y - 1, z, EnumFacing.UP));
     }
 
 }

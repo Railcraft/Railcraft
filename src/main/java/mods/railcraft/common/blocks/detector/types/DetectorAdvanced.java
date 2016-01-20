@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.detector.types;
 
-import java.util.List;
 import mods.railcraft.common.blocks.detector.DetectorFilter;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.carts.CartUtils;
@@ -16,6 +15,8 @@ import mods.railcraft.common.gui.EnumGui;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;

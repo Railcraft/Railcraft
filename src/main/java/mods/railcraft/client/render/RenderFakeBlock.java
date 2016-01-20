@@ -8,15 +8,16 @@
  */
 package mods.railcraft.client.render;
 
-import java.util.Arrays;
+import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import net.minecraft.block.Block;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
-import org.lwjgl.opengl.GL11;
-import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Arrays;
 
 public class RenderFakeBlock {
 

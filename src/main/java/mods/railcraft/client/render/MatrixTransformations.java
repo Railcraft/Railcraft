@@ -9,6 +9,8 @@
 package mods.railcraft.client.render;
 
 
+import net.minecraft.util.EnumFacing;
+
 /**
  *
  * @author Krapht
@@ -52,7 +54,7 @@ public final class MatrixTransformations {
      * @param targetArray the array that should be transformed
      * @param direction
      */
-    public static void transform(float[][] targetArray, ForgeDirection direction) {
+    public static void transform(float[][] targetArray, EnumFacing direction) {
         if ((direction.ordinal() & 0x1) == 1)
             mirrorY(targetArray);
 

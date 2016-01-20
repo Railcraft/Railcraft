@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.util.inventory.filters;
 
-import net.minecraft.item.ItemStack;
 import mods.railcraft.api.core.items.IStackFilter;
+import net.minecraft.item.ItemStack;
 
 /**
  *

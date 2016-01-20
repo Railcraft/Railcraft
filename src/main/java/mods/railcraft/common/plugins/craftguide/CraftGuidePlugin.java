@@ -8,10 +8,11 @@
  */
 package mods.railcraft.common.plugins.craftguide;
 
-import net.minecraftforge.fml.common.Loader;
-import java.lang.reflect.Method;
-import org.apache.logging.log4j.Level;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraftforge.fml.common.Loader;
+import org.apache.logging.log4j.Level;
+
+import java.lang.reflect.Method;
 
 /**
  *

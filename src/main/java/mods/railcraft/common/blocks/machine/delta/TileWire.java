@@ -8,17 +8,11 @@
  */
 package mods.railcraft.common.blocks.machine.delta;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.BoundingBoxManager;
 import mods.railcraft.common.blocks.machine.BoundingBoxManager.ReducedBoundingBox;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -26,10 +20,17 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -83,9 +84,9 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
     }
 
     @Override
-    public boolean isSideSolid(ForgeDirection side) {
+    public boolean isSideSolid(EnumFacing side) {
         if (addon == AddonType.FRAME)
-            return side == ForgeDirection.UP;
+            return side == EnumFacing.UP;
         return false;
     }
 
@@ -152,7 +153,7 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
     }
 
     @Override
-    public IPostConnection.ConnectStyle connectsToPost(ForgeDirection side) {
+    public IPostConnection.ConnectStyle connectsToPost(EnumFacing side) {
         if (getAddon() == AddonType.FRAME)
             return IPostConnection.ConnectStyle.TWO_THIN;
         return IPostConnection.ConnectStyle.NONE;

@@ -8,11 +8,6 @@
  */
 package mods.railcraft.client.gui;
 
-import java.awt.Color;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import org.lwjgl.opengl.GL11;
 import mods.railcraft.client.gui.buttons.GuiButtonSmall;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorItem;
@@ -21,6 +16,12 @@ import mods.railcraft.common.gui.containers.ContainerDetectorItem;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class GuiDetectorItem extends TileGui {
 

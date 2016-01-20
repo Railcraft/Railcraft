@@ -86,7 +86,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() != Items.bucket)
             if (Game.isHost(worldObj)) {
-                if (FluidHelper.handleRightClick(this, ForgeDirection.getOrientation(side), player, true, false))
+                if (FluidHelper.handleRightClick(this, EnumFacing.getOrientation(side), player, true, false))
                     return true;
             } else if (FluidItemHelper.isContainer(current))
                 return true;
@@ -243,7 +243,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         if (isPowered() && Fluids.STEAM.is(resource))
             return fill(0, resource, doFill);
         if (Fluids.WATER.is(resource))

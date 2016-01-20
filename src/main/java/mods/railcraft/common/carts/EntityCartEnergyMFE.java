@@ -8,10 +8,10 @@
  */
 package mods.railcraft.common.carts;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 /**
  *

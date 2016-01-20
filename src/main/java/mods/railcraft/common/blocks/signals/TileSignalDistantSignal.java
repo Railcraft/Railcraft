@@ -8,16 +8,13 @@
  */
 package mods.railcraft.common.blocks.signals;
 
+import mods.railcraft.api.signals.*;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.nbt.NBTTagCompound;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.nbt.NBTTagCompound;
-import mods.railcraft.api.signals.IReceiverTile;
-import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.api.signals.SignalController;
-import mods.railcraft.api.signals.SignalReceiver;
-import mods.railcraft.api.signals.SimpleSignalReceiver;
-import mods.railcraft.common.util.misc.Game;
 
 public class TileSignalDistantSignal extends TileSignalBase implements IReceiverTile {
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);

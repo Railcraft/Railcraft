@@ -8,7 +8,6 @@
  */
 package mods.railcraft.client.render.models.carts;
 
-import mods.railcraft.client.render.RenderTools;
 import mods.railcraft.client.render.models.ModelTextured;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;

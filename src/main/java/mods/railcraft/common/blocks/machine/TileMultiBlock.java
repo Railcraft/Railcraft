@@ -10,22 +10,9 @@ package mods.railcraft.common.blocks.machine;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.*;
-
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.Timer;
@@ -33,7 +20,22 @@ import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketTileRequest;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 public abstract class TileMultiBlock extends TileMachineBase {
     private static final int UNKNOWN_STATE_RECHECK = 256;
@@ -325,7 +327,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     }
 
     private void onBlockChange() {
-        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
             TileEntity tile = tileCache.getTileOnSide(side);
             if (isStructureTile(tile))
                 ((TileMultiBlock) tile).onBlockChange(getMaxRecursionDepth());
@@ -345,7 +347,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
                 return;
             }
 
-            for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+            for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
                 TileEntity tile = tileCache.getTileOnSide(side);
                 if (isStructureTile(tile))
                     ((TileMultiBlock) tile).onBlockChange(depth);

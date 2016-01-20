@@ -8,18 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.inventory.Slot;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
@@ -28,7 +16,19 @@ import mods.railcraft.common.util.inventory.*;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class TileItemLoader extends TileLoaderItemBase {
     private final Map<ItemStack, Short> transferredItems = new ItemStackMap<Short>();
@@ -63,8 +63,8 @@ public class TileItemLoader extends TileLoaderItemBase {
         return new Slot(this, id, x, y);
     }
 
-    public ForgeDirection getOrientation() {
-        return ForgeDirection.DOWN;
+    public EnumFacing getOrientation() {
+        return EnumFacing.DOWN;
     }
 
     @Override

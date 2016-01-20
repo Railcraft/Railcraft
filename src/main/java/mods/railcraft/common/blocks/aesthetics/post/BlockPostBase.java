@@ -9,15 +9,15 @@
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.client.sounds.RailcraftSound;
+import mods.railcraft.common.blocks.signals.MaterialStructure;
+import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.common.blocks.signals.*;
-import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
 
 public abstract class BlockPostBase extends Block {
 
@@ -76,8 +76,8 @@ public abstract class BlockPostBase extends Block {
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-        return side == ForgeDirection.DOWN || side == ForgeDirection.UP;
+    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, EnumFacing side) {
+        return side == EnumFacing.DOWN || side == EnumFacing.UP;
     }
 
     @Override

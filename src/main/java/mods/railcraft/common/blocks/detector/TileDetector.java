@@ -20,7 +20,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import scala.tools.nsc.interpreter.Power;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -30,7 +29,7 @@ import java.util.List;
 public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandler {
     public static final float SENSITIVITY = 0.2f;
     private static final int POWER_DELAY = 10;
-    public ForgeDirection direction = ForgeDirection.UP;
+    public EnumFacing direction = EnumFacing.UP;
     public int powerState = 0;
     public Detector detector = Detector.DUMMY;
     private boolean tested;
@@ -83,7 +82,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
 
         SafeNBTWrapper safe = new SafeNBTWrapper(data);
 
-        direction = ForgeDirection.getOrientation(safe.getByte("direction"));
+        direction = EnumFacing.getOrientation(safe.getByte("direction"));
         powerState = data.getByte("powerState");
         powerDelay = data.getByte("powerDelay");
 
@@ -108,7 +107,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
         if (detector == Detector.DUMMY || detector.getType().ordinal() != type)
             setDetector(EnumDetector.fromOrdinal(type));
         powerState = data.readByte();
-        direction = ForgeDirection.getOrientation(data.readByte());
+        direction = EnumFacing.getOrientation(data.readByte());
         detector.readPacketData(data);
         markBlockForUpdate();
     }

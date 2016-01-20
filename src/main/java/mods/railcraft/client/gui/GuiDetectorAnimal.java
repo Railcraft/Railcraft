@@ -8,9 +8,6 @@
  */
 package mods.railcraft.client.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.client.gui.GuiButton;
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
 import mods.railcraft.client.gui.buttons.GuiToggleButton;
 import mods.railcraft.common.blocks.detector.TileDetector;
@@ -19,6 +16,10 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
+import net.minecraft.client.gui.GuiButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiDetectorAnimal extends GuiBasic {
 

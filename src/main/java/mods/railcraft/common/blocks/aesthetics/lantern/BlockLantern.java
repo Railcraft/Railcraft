@@ -8,13 +8,9 @@
  */
 package mods.railcraft.common.blocks.aesthetics.lantern;
 
-import net.minecraft.block.*;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import java.util.List;
-import java.util.Random;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -26,6 +22,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
+import java.util.Random;
 
 public class BlockLantern extends Block {
 

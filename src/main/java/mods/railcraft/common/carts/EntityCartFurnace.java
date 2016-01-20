@@ -8,19 +8,20 @@
  */
 package mods.railcraft.common.carts;
 
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.entity.item.EntityMinecartFurnace;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.entity.item.EntityMinecartFurnace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityCartFurnace extends EntityMinecartFurnace {
 

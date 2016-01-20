@@ -8,16 +8,13 @@
  */
 package mods.railcraft.common.blocks.machine;
 
-import mods.railcraft.common.blocks.machine.epsilon.TileAdminSteamProducer;
-import mods.railcraft.common.blocks.machine.epsilon.TileElectricFeederAdmin;
-import mods.railcraft.common.blocks.machine.epsilon.TileElectricFeeder;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import mods.railcraft.common.blocks.machine.alpha.*;
 import mods.railcraft.common.blocks.machine.beta.*;
 import mods.railcraft.common.blocks.machine.delta.TileCage;
 import mods.railcraft.common.blocks.machine.delta.TileWire;
 import mods.railcraft.common.blocks.machine.epsilon.*;
 import mods.railcraft.common.blocks.machine.gamma.*;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  *

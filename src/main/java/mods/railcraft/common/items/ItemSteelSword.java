@@ -10,10 +10,10 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import mods.railcraft.common.util.misc.MiscTools;
 
 public class ItemSteelSword extends ItemSword {
 

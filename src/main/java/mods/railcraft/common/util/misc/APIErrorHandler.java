@@ -8,9 +8,10 @@
  */
 package mods.railcraft.common.util.misc;
 
+import org.apache.logging.log4j.Level;
+
 import java.util.HashSet;
 import java.util.Set;
-import org.apache.logging.log4j.Level;
 
 /**
  * This class is used for printing API related errors to the log files.

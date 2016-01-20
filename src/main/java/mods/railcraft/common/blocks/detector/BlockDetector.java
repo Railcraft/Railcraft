@@ -8,37 +8,36 @@
  */
 package mods.railcraft.common.blocks.detector;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockDetector extends BlockContainer {
 
@@ -92,7 +91,7 @@ public class BlockDetector extends BlockContainer {
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int i, int j, int k, ForgeDirection side) {
+    public boolean isSideSolid(IBlockAccess world, int i, int j, int k, EnumFacing side) {
         return true;
     }
 
@@ -175,7 +174,7 @@ public class BlockDetector extends BlockContainer {
     }
 
     @Override
-    public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
+    public boolean rotateBlock(World world, int x, int y, int z, EnumFacing axis) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileDetector) {
             TileDetector detector = (TileDetector) tile;
@@ -190,8 +189,8 @@ public class BlockDetector extends BlockContainer {
     }
 
     @Override
-    public ForgeDirection[] getValidRotations(World worldObj, int x, int y, int z) {
-        return ForgeDirection.VALID_DIRECTIONS;
+    public EnumFacing[] getValidRotations(World worldObj, int x, int y, int z) {
+        return EnumFacing.VALID_DIRECTIONS;
     }
 
     @Override

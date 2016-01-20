@@ -8,15 +8,11 @@
  */
 package mods.railcraft.common.plugins.craftguide;
 
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import uristqwerty.CraftGuide.api.ItemSlot;
-import uristqwerty.CraftGuide.api.RecipeGenerator;
-import uristqwerty.CraftGuide.api.RecipeProvider;
-import uristqwerty.CraftGuide.api.RecipeTemplate;
-import uristqwerty.CraftGuide.api.SlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import uristqwerty.CraftGuide.api.*;
 
 /**
  *

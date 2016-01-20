@@ -9,13 +9,10 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
-import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.ForgeChunkManager;
 
 /**

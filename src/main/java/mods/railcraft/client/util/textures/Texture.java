@@ -8,8 +8,9 @@
  */
 package mods.railcraft.client.util.textures;
 
-import java.awt.image.BufferedImage;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+
+import java.awt.image.BufferedImage;
 
 /**
  *

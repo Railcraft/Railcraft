@@ -8,34 +8,35 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.alpha.TileCokeOven;
 import mods.railcraft.common.blocks.machine.alpha.TileSteamOven;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.triggers.INeedsFuel;
-import mods.railcraft.common.util.inventory.filters.StackFilter;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.InvertedStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *

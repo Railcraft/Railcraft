@@ -28,7 +28,7 @@ public class InventoryMapper implements IInventory {
     private int stackSizeLimit = -1;
     private boolean checkItems = true;
 
-    public InventoryMapper(IInventory inv, ForgeDirection side) {
+    public InventoryMapper(IInventory inv, EnumFacing side) {
         this(inv, getInventoryStart(inv, side), getInventorySize(inv, side));
     }
 
@@ -59,11 +59,11 @@ public class InventoryMapper implements IInventory {
         this.checkItems = checkItems;
     }
 
-    protected static int getInventorySize(IInventory inv, ForgeDirection side) {
+    protected static int getInventorySize(IInventory inv, EnumFacing side) {
         return inv.getSizeInventory();
     }
 
-    protected static int getInventoryStart(IInventory inv, ForgeDirection side) {
+    protected static int getInventoryStart(IInventory inv, EnumFacing side) {
         return 0;
     }
 

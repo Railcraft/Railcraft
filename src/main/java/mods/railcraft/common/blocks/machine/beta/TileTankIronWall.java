@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import net.minecraft.util.IIcon;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
+import net.minecraft.util.IIcon;
 
 /**
  *

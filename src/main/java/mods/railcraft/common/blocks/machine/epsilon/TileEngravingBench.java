@@ -9,18 +9,8 @@
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import buildcraft.api.statements.IActionExternal;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.*;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -36,10 +26,21 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TileEngravingBench extends TileMachineItem implements IEnergyHandler, ISidedInventory, IHasWork, IGuiReturnHandler {
 
@@ -75,7 +76,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
 
     @Override
     public IIcon getIcon(int side) {
-        if (side == ForgeDirection.UP.ordinal()) {
+        if (side == EnumFacing.UP.ordinal()) {
             if (flippedAxis)
                 return getMachineType().getTexture(6);
             return getMachineType().getTexture(1);
@@ -290,13 +291,13 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        ForgeDirection facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
-        if (facing == ForgeDirection.EAST || facing == ForgeDirection.WEST)
+        EnumFacing facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
+        if (facing == EnumFacing.EAST || facing == EnumFacing.WEST)
             flippedAxis = true;
     }
 
     @Override
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         flippedAxis = !flippedAxis;
         sendUpdateToClient();
         return true;
@@ -307,31 +308,31 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection side) {
+    public boolean canConnectEnergy(EnumFacing side) {
         return energyStorage != null;
     }
 
     @Override
-    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         if (energyStorage == null)
             return 0;
         return energyStorage.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         return 0;
     }
 
     @Override
-    public int getEnergyStored(ForgeDirection from) {
+    public int getEnergyStored(EnumFacing from) {
         if (energyStorage == null)
             return 0;
         return energyStorage.getEnergyStored();
     }
 
     @Override
-    public int getMaxEnergyStored(ForgeDirection from) {
+    public int getMaxEnergyStored(EnumFacing from) {
         if (energyStorage == null)
             return 0;
         return energyStorage.getMaxEnergyStored();

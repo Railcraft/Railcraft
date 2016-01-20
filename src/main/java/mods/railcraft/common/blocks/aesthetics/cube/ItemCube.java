@@ -8,13 +8,14 @@
  */
 package mods.railcraft.common.blocks.aesthetics.cube;
 
-import java.util.List;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+
+import java.util.List;
 
 public class ItemCube extends ItemBlock {
 

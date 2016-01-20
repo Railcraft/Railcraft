@@ -8,12 +8,7 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
-import net.minecraft.entity.player.InventoryPlayer;
 import mods.railcraft.common.blocks.machine.alpha.TileTradeStation;
 import mods.railcraft.common.blocks.machine.alpha.TileTradeStation.GuiPacketType;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -24,9 +19,16 @@ import mods.railcraft.common.util.collections.RevolvingList;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
-import static mods.railcraft.common.blocks.machine.alpha.TileTradeStation.GuiPacketType.*;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import static mods.railcraft.common.blocks.machine.alpha.TileTradeStation.GuiPacketType.NEXT_TRADE;
+import static mods.railcraft.common.blocks.machine.alpha.TileTradeStation.GuiPacketType.SET_PROFESSION;
 
 public class GuiTradeStation extends TileGui {
 

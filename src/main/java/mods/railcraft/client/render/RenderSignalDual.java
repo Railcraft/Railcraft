@@ -13,16 +13,16 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.PostConnectionHelper;
-import net.minecraft.block.Block;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.item.ItemStack;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.signals.IDualHeadSignal;
-import net.minecraft.util.IIcon;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import org.lwjgl.opengl.GL11;
 
 public class RenderSignalDual implements ICombinedRenderer {
@@ -104,10 +104,10 @@ public class RenderSignalDual implements ICombinedRenderer {
         // Render Side Posts        
         boolean east_west = false;
         boolean north_south = false;
-        boolean west = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.WEST) != ConnectStyle.NONE;
-        boolean east = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.EAST) != ConnectStyle.NONE;
-        boolean north = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.NORTH) != ConnectStyle.NONE;
-        boolean south = PostConnectionHelper.connect(world, x, y, z, ForgeDirection.SOUTH) != ConnectStyle.NONE;
+        boolean west = PostConnectionHelper.connect(world, x, y, z, EnumFacing.WEST) != ConnectStyle.NONE;
+        boolean east = PostConnectionHelper.connect(world, x, y, z, EnumFacing.EAST) != ConnectStyle.NONE;
+        boolean north = PostConnectionHelper.connect(world, x, y, z, EnumFacing.NORTH) != ConnectStyle.NONE;
+        boolean south = PostConnectionHelper.connect(world, x, y, z, EnumFacing.SOUTH) != ConnectStyle.NONE;
         if (east || west)
             east_west = true;
         if (north || south)

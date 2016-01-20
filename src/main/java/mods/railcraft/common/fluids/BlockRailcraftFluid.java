@@ -8,22 +8,23 @@
  */
 package mods.railcraft.common.fluids;
 
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import java.util.Random;
 import mods.railcraft.client.particles.EntityDropParticleFX;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 /**
  *
@@ -100,22 +101,22 @@ public class BlockRailcraftFluid extends BlockFluidClassic {
     }
 
     @Override
-    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         return flammable ? 300 : 0;
     }
 
     @Override
-    public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public int getFlammability(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         return flammability;
     }
 
     @Override
-    public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+    public boolean isFlammable(IBlockAccess world, int x, int y, int z, EnumFacing face) {
         return flammable;
     }
 
     @Override
-    public boolean isFireSource(World world, int x, int y, int z, ForgeDirection side) {
+    public boolean isFireSource(World world, int x, int y, int z, EnumFacing side) {
         return flammable && flammability == 0;
     }
 

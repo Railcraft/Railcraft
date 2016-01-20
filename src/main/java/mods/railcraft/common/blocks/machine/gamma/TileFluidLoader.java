@@ -15,7 +15,6 @@ import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackLockdown;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.tracks.TileTrack;
-import mods.railcraft.common.carts.EntityCartTank;
 import mods.railcraft.common.carts.EntityLocomotiveSteam;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -40,8 +39,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -145,8 +144,8 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
         if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
             FluidHelper.drainContainers(this, this, SLOT_INPUT, SLOT_OUTPUT);
 
-        for (ForgeDirection side : ForgeDirection.values()) {
-            if (side == ForgeDirection.UNKNOWN)
+        for (EnumFacing side : EnumFacing.values()) {
+            if (side == EnumFacing.UNKNOWN)
                 continue;
             TileEntity tile = tileCache.getTileOnSide(side);
             if (tile instanceof IFluidHandler) {
@@ -167,9 +166,9 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
 
         boolean needsPipe = false;
 
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.2f, ForgeDirection.DOWN);
+        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.2f, EnumFacing.DOWN);
         if (cart == null) {
-            cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord - 1, zCoord, 0.2f, ForgeDirection.DOWN);
+            cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord - 1, zCoord, 0.2f, EnumFacing.DOWN);
             needsPipe = true;
         }
 
@@ -229,7 +228,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
         if (cartNeedsFilling && (!needsPipe || pipeIsExtended())) {
             FluidStack drained = tankManager.drain(0, RailcraftConfig.getTankCartFillRate(), false);
             if (drained != null) {
-                flow = tankCart.fill(ForgeDirection.UP, drained, true);
+                flow = tankCart.fill(EnumFacing.UP, drained, true);
                 tankManager.drain(0, flow, true);
             }
         }
@@ -253,7 +252,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
 
     private boolean cartNeedsFilling(TankToolkit tankCart) {
         FluidStack loaderLiquid = loaderTank.getFluid();
-        return loaderLiquid != null && loaderLiquid.amount > 0 && tankCart.canPutFluid(ForgeDirection.UP, loaderLiquid);
+        return loaderLiquid != null && loaderLiquid.amount > 0 && tankCart.canPutFluid(EnumFacing.UP, loaderLiquid);
     }
 
     @Override
@@ -262,7 +261,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
             return true;
         TankToolkit tankCart = new TankToolkit((IFluidHandler) cart);
         Fluid fluidHandled = getFluidHandled();
-        if (!loaderTank.isEmpty() && !tankCart.canPutFluid(ForgeDirection.UP, loaderTank.getFluid()))
+        if (!loaderTank.isEmpty() && !tankCart.canPutFluid(EnumFacing.UP, loaderTank.getFluid()))
             return true;
         else if (stateController.getButtonState() != ButtonState.FORCE_FULL && !tankCart.isTankEmpty(fluidHandled))
             return true;
@@ -311,7 +310,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         Fluid fluidFilter = getFilterFluid();
         if (resource == null || (fluidFilter != null && !Fluids.areEqual(fluidFilter, resource)))
             return 0;
@@ -319,23 +318,23 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return null;
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         return null;
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         Fluid fluidFilter = getFilterFluid();
         return fluidFilter == null || fluid.equals(fluidFilter);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return false;
     }
 

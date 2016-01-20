@@ -32,9 +32,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -146,7 +146,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
 
     @Override
     public boolean blockActivated(EntityPlayer player, int side) {
-        if (isStructureValid() && FluidHelper.handleRightClick(this, ForgeDirection.getOrientation(side), player, false, true))
+        if (isStructureValid() && FluidHelper.handleRightClick(this, EnumFacing.getOrientation(side), player, false, true))
             return true;
         else if (FluidItemHelper.isContainer(player.inventory.getCurrentItem()))
             return true;
@@ -262,12 +262,12 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         return 0;
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         TankManager tMan = getTankManager();
         if (tMan != null)
             return tMan.drain(0, maxDrain, doDrain);
@@ -275,7 +275,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if (resource == null)
             return null;
         if (!Fluids.CREOSOTE.is(resource))
@@ -284,17 +284,17 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return false;
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return fluid == null || Fluids.CREOSOTE.is(fluid);
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection dir) {
+    public FluidTankInfo[] getTankInfo(EnumFacing dir) {
         TankManager tMan = getTankManager();
         if (tMan != null)
             return tMan.getTankInfo();

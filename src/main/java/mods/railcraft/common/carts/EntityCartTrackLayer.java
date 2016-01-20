@@ -9,10 +9,10 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
-import net.minecraft.util.EnumFacing;
 
 public class EntityCartTrackLayer extends CartMaintenancePatternBase {
 
@@ -48,7 +48,7 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
 
         stockItems(SLOT_REPLACE, SLOT_STOCK);
         updateTravelDirection(trackX, trackY, trackZ, trackMeta);
-        if (travelDirection != ForgeDirection.UNKNOWN)
+        if (travelDirection != EnumFacing.UNKNOWN)
             placeTrack(trackX, trackY, trackZ);
     }
 
@@ -57,19 +57,19 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
         z = z + travelDirection.offsetZ;
 
         EnumTrackMeta trackMeta = EnumTrackMeta.NORTH_SOUTH;
-        if (travelDirection == ForgeDirection.EAST || travelDirection == ForgeDirection.WEST)
+        if (travelDirection == EnumFacing.EAST || travelDirection == EnumFacing.WEST)
             trackMeta = EnumTrackMeta.EAST_WEST;
         if (!isValidReplacementBlock(x, y, z) && isValidReplacementBlock(x, y + 1, z) && trackMeta.isStraightTrack())
             y++;
         if (isValidReplacementBlock(x, y, z) && isValidReplacementBlock(x, y - 1, z)) {
             y--;
-            if (travelDirection == ForgeDirection.NORTH)
+            if (travelDirection == EnumFacing.NORTH)
                 trackMeta = EnumTrackMeta.SOUTH_SLOPE;
-            if (travelDirection == ForgeDirection.SOUTH)
+            if (travelDirection == EnumFacing.SOUTH)
                 trackMeta = EnumTrackMeta.NORTH_SLOPE;
-            if (travelDirection == ForgeDirection.WEST)
+            if (travelDirection == EnumFacing.WEST)
                 trackMeta = EnumTrackMeta.EAST_SLOPE;
-            if (travelDirection == ForgeDirection.EAST)
+            if (travelDirection == EnumFacing.EAST)
                 trackMeta = EnumTrackMeta.WEST_SLOPE;
         }
 

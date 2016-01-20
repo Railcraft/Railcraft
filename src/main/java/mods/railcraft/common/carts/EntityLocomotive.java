@@ -9,8 +9,6 @@
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -45,10 +43,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -199,7 +199,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
                 }
                 return true;
             }
-            if (this instanceof IFluidHandler && FluidHelper.handleRightClick((IFluidHandler) this, ForgeDirection.UNKNOWN, player, true, false))
+            if (this instanceof IFluidHandler && FluidHelper.handleRightClick((IFluidHandler) this, EnumFacing.UNKNOWN, player, true, false))
                 return true;
             if (!isPrivate() || PlayerPlugin.isOwnerOrOp(getOwner(), player.getGameProfile()))
                 openGui(player);

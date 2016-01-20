@@ -10,9 +10,9 @@ package mods.railcraft.client.render;
 
 import mods.railcraft.common.blocks.machine.delta.TileCage;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class RenderCagedEntity extends TileEntitySpecialRenderer {

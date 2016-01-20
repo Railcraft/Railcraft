@@ -24,8 +24,8 @@ import mods.railcraft.common.util.steam.FluidFuelProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -83,7 +83,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
 
     @Override
     protected boolean handleClick(EntityPlayer player, int side) {
-        if (FluidHelper.handleRightClick(this, ForgeDirection.getOrientation(side), player, true, false))
+        if (FluidHelper.handleRightClick(this, EnumFacing.getOrientation(side), player, true, false))
             return true;
         return super.handleClick(player, side);
     }
@@ -100,14 +100,14 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         if (fluid == null) return false;
         if (FuelManager.getBoilerFuelValue(fluid) > 0) return true;
         return super.canFill(from, fluid);
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         if (Fluids.WATER.is(resource))
             return fill(TANK_WATER, resource, doFill);
         return fill(TANK_FUEL, resource, doFill);

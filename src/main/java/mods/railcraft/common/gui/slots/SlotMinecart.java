@@ -8,10 +8,10 @@
  */
 package mods.railcraft.common.gui.slots;
 
+import mods.railcraft.api.core.items.IMinecartItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
-import mods.railcraft.api.core.items.IMinecartItem;
 
 public class SlotMinecart extends SlotRailcraft
 {

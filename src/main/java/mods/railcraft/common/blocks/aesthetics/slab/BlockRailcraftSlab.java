@@ -8,12 +8,6 @@
  */
 package mods.railcraft.common.blocks.aesthetics.slab;
 
-import net.minecraft.block.*;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
@@ -23,6 +17,7 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.IBlockSoundProvider;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -33,13 +28,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Facing;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 
 public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundProvider {
@@ -365,14 +362,14 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, EnumFacing side) {
         TileSlab tile = getSlabTile(world, x, y, z);
         if (tile != null) {
             if (tile.isDoubleSlab())
                 return true;
-            if (side == ForgeDirection.DOWN && tile.isBottomSlab())
+            if (side == EnumFacing.DOWN && tile.isBottomSlab())
                 return true;
-            if (side == ForgeDirection.UP && tile.isTopSlab())
+            if (side == EnumFacing.UP && tile.isTopSlab())
                 return true;
         }
         return false;

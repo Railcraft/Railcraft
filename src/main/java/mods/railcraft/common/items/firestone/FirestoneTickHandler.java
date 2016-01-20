@@ -8,10 +8,6 @@
  */
 package mods.railcraft.common.items.firestone;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import java.util.Random;
 import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -21,8 +17,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.Random;
 
 /**
  *
@@ -80,7 +81,7 @@ public class FirestoneTickHandler {
     private boolean canBurn(World world, int x, int y, int z) {
         if (world.getBlock(x, y, z) != Blocks.air)
             return false;
-        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
             int sx = MiscTools.getXOnSide(x, side);
             int sy = MiscTools.getYOnSide(y, side);
             int sz = MiscTools.getZOnSide(z, side);

@@ -8,12 +8,9 @@
  */
 package mods.railcraft.common.util.inventory;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import net.minecraft.item.ItemStack;
+
+import java.util.*;
 
 /**
  * This is a custom data structure designed specifically

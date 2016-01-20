@@ -8,16 +8,17 @@
  */
 package mods.railcraft.common.util.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityLocomotive.LocoMode;
-import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.carts.Train;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import static mods.railcraft.common.util.network.PacketKeyPress.EnumKeyBinding.*;
 
 public class PacketKeyPress extends RailcraftPacket {

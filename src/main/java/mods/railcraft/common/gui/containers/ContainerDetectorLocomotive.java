@@ -10,11 +10,11 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.detector.TileDetector;
+import mods.railcraft.common.blocks.detector.types.DetectorLocomotive;
+import mods.railcraft.common.gui.slots.SlotColorFilter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import mods.railcraft.common.blocks.detector.types.DetectorLocomotive;
-import mods.railcraft.common.gui.slots.SlotColorFilter;
 
 public class ContainerDetectorLocomotive extends RailcraftContainer {
 

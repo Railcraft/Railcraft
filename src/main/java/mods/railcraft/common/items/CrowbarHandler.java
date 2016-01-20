@@ -9,9 +9,7 @@
 package mods.railcraft.common.items;
 
 import com.google.common.collect.MapMaker;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import mods.railcraft.api.carts.ILinkableCart;
-import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.carts.IDirectionalCart;
@@ -25,6 +23,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Map;
 

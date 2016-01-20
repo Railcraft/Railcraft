@@ -8,8 +8,8 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.entity.Entity;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
+import net.minecraft.entity.Entity;
 
 /**
  *

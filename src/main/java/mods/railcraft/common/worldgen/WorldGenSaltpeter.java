@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.worldgen;
 
-import net.minecraft.world.gen.feature.*;
-import java.util.Random;
 import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.BlockWorldLogic;
 import mods.railcraft.common.blocks.ore.EnumOre;
@@ -17,6 +15,9 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 public class WorldGenSaltpeter extends WorldGenerator {
 

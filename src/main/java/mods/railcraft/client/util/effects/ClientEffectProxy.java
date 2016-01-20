@@ -8,29 +8,11 @@
  */
 package mods.railcraft.client.util.effects;
 
-import net.minecraftforge.fml.client.FMLClientHandler;
-
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Set;
-
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.client.render.RenderTESRSignals;
-import mods.railcraft.common.util.effects.IEffectManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import mods.railcraft.client.core.AuraKeyHandler;
-import mods.railcraft.client.particles.EntityChimneyFX;
-import mods.railcraft.client.particles.EntityChunkLoaderFX;
-import mods.railcraft.client.particles.EntitySteamFX;
-import mods.railcraft.client.particles.EntityTuningFX;
 import mods.railcraft.api.signals.SignalTools;
+import mods.railcraft.client.core.AuraKeyHandler;
 import mods.railcraft.client.particles.*;
+import mods.railcraft.client.render.RenderTESRSignals;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 import mods.railcraft.common.util.effects.CommonEffectProxy;
@@ -39,6 +21,17 @@ import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketEffect.Effect;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.Set;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

@@ -8,23 +8,17 @@
  */
 package mods.railcraft.common.carts;
 
-import com.google.common.collect.MapMaker;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.Map;
-
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
-import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.RailTools;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
-import mods.railcraft.common.util.collections.CircularVec3Queue;
 import mods.railcraft.common.util.misc.Vec2D;
-import net.minecraft.util.Vec3;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class LinkageHandler {
     public static final String LINK_A_TIMER = "linkA_timer";

@@ -8,17 +8,17 @@
  */
 package mods.railcraft.common.gui;
 
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.network.IGuiHandler;
-import org.apache.logging.log4j.Level;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import mods.railcraft.client.gui.FactoryGui;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.gui.containers.FactoryContainer;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
+import org.apache.logging.log4j.Level;
 
 public class GuiHandler implements IGuiHandler
 {

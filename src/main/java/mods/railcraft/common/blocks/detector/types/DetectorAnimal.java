@@ -8,25 +8,22 @@
  */
 package mods.railcraft.common.blocks.detector.types;
 
+import mods.railcraft.common.blocks.detector.Detector;
+import mods.railcraft.common.blocks.detector.EnumDetector;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.util.network.IGuiReturnHandler;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.passive.*;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
-import mods.railcraft.common.blocks.detector.Detector;
-import mods.railcraft.common.blocks.detector.EnumDetector;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityMooshroom;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntityWolf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.network.IGuiReturnHandler;
-import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
+
+import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
+import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 public class DetectorAnimal extends Detector implements IGuiReturnHandler {
 

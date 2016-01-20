@@ -8,19 +8,19 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.passive.EntityVillager;
 import mods.railcraft.client.gui.buttons.GuiToggleButtonSmall;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorVillager;
 import mods.railcraft.common.blocks.detector.types.DetectorVillager.Mode;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.collections.RevolvingList;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 public class GuiDetectorVillager extends GuiBasic {
 

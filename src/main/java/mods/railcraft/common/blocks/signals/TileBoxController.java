@@ -20,7 +20,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 
 import java.io.DataInputStream;
@@ -29,7 +28,7 @@ import java.io.IOException;
 import java.util.EnumSet;
 
 public class TileBoxController extends TileBoxBase implements IControllerTile, IGuiReturnHandler {
-    private static final EnumSet<ForgeDirection> powerSides = EnumSet.of(ForgeDirection.DOWN, ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH);
+    private static final EnumSet<EnumFacing> powerSides = EnumSet.of(EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH);
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     public SignalAspect defaultAspect = SignalAspect.GREEN;
     public SignalAspect poweredAspect = SignalAspect.RED;
@@ -86,7 +85,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     private boolean isBeingPowered() {
-        for (ForgeDirection side : powerSides) {
+        for (EnumFacing side : powerSides) {
             if (tileCache.getTileOnSide(side) instanceof TileBoxBase)
                 continue;
             if (PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord, side))
@@ -100,7 +99,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     private SignalAspect determineAspect() {
         SignalAspect newAspect = powered ? poweredAspect : defaultAspect;
         for (int side = 2; side < 6; side++) {
-            ForgeDirection forgeSide = ForgeDirection.getOrientation(side);
+            EnumFacing forgeSide = EnumFacing.getOrientation(side);
             TileEntity t = tileCache.getTileOnSide(forgeSide);
             if (t instanceof TileBoxBase) {
                 TileBoxBase tile = (TileBoxBase) t;
@@ -174,7 +173,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public boolean isConnected(ForgeDirection side) {
+    public boolean isConnected(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);
         if (tile instanceof TileBoxBase)
             return ((TileBoxBase) tile).canTransferAspect();
@@ -182,7 +181,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(ForgeDirection side) {
+    public SignalAspect getBoxSignalAspect(EnumFacing side) {
         return controller.getAspect();
     }
 

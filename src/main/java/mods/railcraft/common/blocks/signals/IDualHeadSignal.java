@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.signals.SignalAspect;
+import net.minecraft.util.EnumFacing;
 
 /**
  *
@@ -19,7 +19,7 @@ public interface IDualHeadSignal {
     
     EnumSignal getSignalType();
 
-    ForgeDirection getFacing();
+    EnumFacing getFacing();
 
     SignalAspect getTopAspect();
 

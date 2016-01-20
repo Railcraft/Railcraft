@@ -8,14 +8,14 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.api.electricity.IElectricMinecart;
 import mods.railcraft.common.carts.EntityLocomotiveElectric;
+import mods.railcraft.common.gui.widgets.ChargeIndicator;
+import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
-import mods.railcraft.common.gui.widgets.IndicatorWidget;
-import mods.railcraft.common.gui.widgets.ChargeIndicator;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerLocomotiveElectric extends ContainerLocomotive {
 

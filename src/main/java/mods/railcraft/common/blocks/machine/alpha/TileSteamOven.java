@@ -39,9 +39,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -52,13 +52,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
 
-import static net.minecraftforge.common.util.ForgeDirection.DOWN;
-import static net.minecraftforge.common.util.ForgeDirection.UP;
+import static net.minecraftforge.common.util.EnumFacing.DOWN;
+import static net.minecraftforge.common.util.EnumFacing.UP;
 
 public class TileSteamOven extends TileMultiBlockInventory implements IFluidHandler, ISidedInventory, ISteamUser, IHasWork {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
-    private static final ForgeDirection[] UP_DOWN_AXES = new ForgeDirection[]{UP, DOWN};
+    private static final EnumFacing[] UP_DOWN_AXES = new EnumFacing[]{UP, DOWN};
     private static final int STEAM_PER_BATCH = 8000;
     private static final int TOTAL_COOK_TIME = 256;
     private static final int COOK_STEP = 16;
@@ -99,7 +99,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
     public int cookTime;
     public boolean finishedCycle = false;
-    private ForgeDirection facing = ForgeDirection.NORTH;
+    private EnumFacing facing = EnumFacing.NORTH;
     private boolean paused = false;
     public TileSteamOven() {
         super("railcraft.gui.steam.oven", 18, patterns);
@@ -197,7 +197,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
         return -1;
     }
 
-    public ForgeDirection getFacing() {
+    public EnumFacing getFacing() {
         TileSteamOven masterOven = (TileSteamOven) getMasterBlock();
         if (masterOven != null)
             return masterOven.facing;
@@ -300,7 +300,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         if (axis == UP || axis == DOWN)
             return false;
         TileSteamOven master = (TileSteamOven) getMasterBlock();
@@ -316,7 +316,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public ForgeDirection[] getValidRotations() {
+    public EnumFacing[] getValidRotations() {
         return UP_DOWN_AXES;
     }
 
@@ -343,7 +343,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
         cookTime = data.getInteger("cookTime");
-        facing = ForgeDirection.getOrientation(data.getByte("facing"));
+        facing = EnumFacing.getOrientation(data.getByte("facing"));
     }
 
     @Override
@@ -359,13 +359,13 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
         byte f = data.readByte();
         finishedCycle = data.readBoolean();
         if (f != facing.ordinal()) {
-            facing = ForgeDirection.getOrientation(f);
+            facing = EnumFacing.getOrientation(f);
             markBlockForUpdate();
         }
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         if (resource == null) return 0;
         TankManager tMan = getTankManager();
         if (tMan == null)
@@ -374,27 +374,27 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return null;
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         return null;
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return fluid == null || Fluids.STEAM.is(fluid);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return false;
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection dir) {
+    public FluidTankInfo[] getTankInfo(EnumFacing dir) {
         TankManager tMan = getTankManager();
         if (tMan != null)
             return tMan.getTankInfo();

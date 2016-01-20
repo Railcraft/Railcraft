@@ -8,21 +8,18 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.tracks.ITrackPowered;
+import mods.railcraft.common.carts.CartUtils;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
-import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.common.carts.CartUtils;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import mods.railcraft.api.tracks.ITrackPowered;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.S1BPacketEntityAttach;
 
 public class TrackDisembark extends TrackBaseRailcraft implements ITrackPowered {
 

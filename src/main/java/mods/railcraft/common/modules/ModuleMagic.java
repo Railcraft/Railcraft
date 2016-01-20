@@ -8,19 +8,17 @@
  */
 package mods.railcraft.common.modules;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.items.firestone.FirestoneTickHandler;
 import mods.railcraft.common.items.firestone.*;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**

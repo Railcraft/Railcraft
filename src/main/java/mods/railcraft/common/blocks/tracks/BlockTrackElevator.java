@@ -8,25 +8,21 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.util.*;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 /**
  * Implementation of the iron ladder blocks. Iron ladders act much like normal
@@ -155,24 +151,24 @@ public class BlockTrackElevator extends Block {
 
     @Override
     public boolean canPlaceBlockAt(World world, int i, int j, int k) {
-        if (world.isSideSolid(i - 1, j, k, ForgeDirection.EAST))
+        if (world.isSideSolid(i - 1, j, k, EnumFacing.EAST))
             return true;
-        if (world.isSideSolid(i + 1, j, k, ForgeDirection.WEST))
+        if (world.isSideSolid(i + 1, j, k, EnumFacing.WEST))
             return true;
-        if (world.isSideSolid(i, j, k - 1, ForgeDirection.SOUTH))
+        if (world.isSideSolid(i, j, k - 1, EnumFacing.SOUTH))
             return true;
-        return world.isSideSolid(i, j, k + 1, ForgeDirection.NORTH);
+        return world.isSideSolid(i, j, k + 1, EnumFacing.NORTH);
     }
 
     @Override
     public int onBlockPlaced(World world, int x, int y, int z, int side, float par6, float par7, float par8, int meta) {
-        if ((meta == 0 || side == 2) && world.isSideSolid(x, y, z + 1, ForgeDirection.NORTH))
+        if ((meta == 0 || side == 2) && world.isSideSolid(x, y, z + 1, EnumFacing.NORTH))
             meta = 2;
-        if ((meta == 0 || side == 3) && world.isSideSolid(x, y, z - 1, ForgeDirection.SOUTH))
+        if ((meta == 0 || side == 3) && world.isSideSolid(x, y, z - 1, EnumFacing.SOUTH))
             meta = 3;
-        if ((meta == 0 || side == 4) && world.isSideSolid(x + 1, y, z, ForgeDirection.WEST))
+        if ((meta == 0 || side == 4) && world.isSideSolid(x + 1, y, z, EnumFacing.WEST))
             meta = 4;
-        if ((meta == 0 || side == 5) && world.isSideSolid(x - 1, y, z, ForgeDirection.EAST))
+        if ((meta == 0 || side == 5) && world.isSideSolid(x - 1, y, z, EnumFacing.EAST))
             meta = 5;
         return meta;
     }
@@ -223,13 +219,13 @@ public class BlockTrackElevator extends Block {
         int meta = world.getBlockMetadata(i, j, k);
         int ladderMeta = getLadderFacingMetadata(world, i, j, k);
         boolean valid = false;
-        if (ladderMeta == 2 && world.isSideSolid(i, j, k + 1, ForgeDirection.NORTH))
+        if (ladderMeta == 2 && world.isSideSolid(i, j, k + 1, EnumFacing.NORTH))
             valid = true;
-        if (ladderMeta == 3 && world.isSideSolid(i, j, k - 1, ForgeDirection.SOUTH))
+        if (ladderMeta == 3 && world.isSideSolid(i, j, k - 1, EnumFacing.SOUTH))
             valid = true;
-        if (ladderMeta == 4 && world.isSideSolid(i + 1, j, k, ForgeDirection.WEST))
+        if (ladderMeta == 4 && world.isSideSolid(i + 1, j, k, EnumFacing.WEST))
             valid = true;
-        if (ladderMeta == 5 && world.isSideSolid(i - 1, j, k, ForgeDirection.EAST))
+        if (ladderMeta == 5 && world.isSideSolid(i - 1, j, k, EnumFacing.EAST))
             valid = true;
         if (!valid) {
             dropBlockAsItem(world, i, j, k, ladderMeta, 0);

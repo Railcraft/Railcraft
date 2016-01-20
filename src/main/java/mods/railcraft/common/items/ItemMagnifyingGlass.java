@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.items;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.api.signals.SignalAspect;
@@ -28,6 +27,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.EnumSet;
 import java.util.List;

@@ -8,11 +8,11 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerBore;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiCartBore extends EntityGui {
 

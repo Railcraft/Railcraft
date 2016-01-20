@@ -8,15 +8,6 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SimpleSignalController;
 import mods.railcraft.common.gui.EnumGui;
@@ -26,7 +17,18 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
-import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.EnumSkyBlock;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
+import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBlockTile, IAspectActionManager, IGuiReturnHandler, IAspectProvider {
 
@@ -82,7 +84,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     private void updateNeighbors() {
         notifyBlocksOfNeighborChange();
         for (int side = 2; side < 6; side++) {
-            ForgeDirection forgeSide = ForgeDirection.getOrientation(side);
+            EnumFacing forgeSide = EnumFacing.getOrientation(side);
             TileEntity tile = tileCache.getTileOnSide(forgeSide);
             if (tile instanceof TileBoxBase) {
                 TileBoxBase box = (TileBoxBase) tile;
@@ -96,16 +98,16 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
         TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, MiscTools.getOppositeSide(side));
         if (tile instanceof TileBoxBase)
             return NO_POWER;
-        return isEmittingRedstone(ForgeDirection.getOrientation(side)) ? FULL_POWER : NO_POWER;
+        return isEmittingRedstone(EnumFacing.getOrientation(side)) ? FULL_POWER : NO_POWER;
     }
 
     @Override
-    public boolean isEmittingRedstone(ForgeDirection side) {
+    public boolean isEmittingRedstone(EnumFacing side) {
         return doesActionOnAspect(getBoxSignalAspect(side));
     }
 
     @Override
-    public boolean canEmitRedstone(ForgeDirection side) {
+    public boolean canEmitRedstone(EnumFacing side) {
         return true;
     }
 
@@ -161,7 +163,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     }
 
     @Override
-    public boolean isConnected(ForgeDirection side) {
+    public boolean isConnected(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);
         if (tile instanceof TileBoxBase)
             return ((TileBoxBase) tile).canReceiveAspect();
@@ -169,7 +171,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(ForgeDirection side) {
+    public SignalAspect getBoxSignalAspect(EnumFacing side) {
         return controller.getAspect();
     }
 

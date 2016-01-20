@@ -8,14 +8,14 @@
  */
 package mods.railcraft.common.gui.containers;
 
+import mods.railcraft.common.blocks.machine.alpha.TileSteamOven;
+import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.gui.slots.SlotSmelting;
+import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
-import mods.railcraft.common.blocks.machine.alpha.TileSteamOven;
-import mods.railcraft.common.gui.slots.SlotSmelting;
-import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
-import mods.railcraft.common.fluids.TankManager;
 
 public class ContainerSteamOven extends RailcraftContainer {
 

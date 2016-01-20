@@ -8,23 +8,24 @@
  */
 package mods.railcraft.common.blocks.machine;
 
+import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.fluids.tanks.FakeTank;
+import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.gui.slots.SlotLiquidContainer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.inventory.Slot;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.common.gui.slots.SlotLiquidContainer;
-import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.FakeTank;
-import mods.railcraft.common.fluids.tanks.StandardTank;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 /**
  *
@@ -67,7 +68,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         TankManager tMan = getTankManager();
         if (tMan != null) {
             return tMan.fill(from, resource, doFill);
@@ -76,7 +77,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         TankManager tMan = getTankManager();
         if (tMan != null) {
             return tMan.drain(from, maxDrain, doDrain);
@@ -85,7 +86,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if (resource == null)
             return null;
         TankManager tMan = getTankManager();
@@ -96,7 +97,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection side) {
+    public FluidTankInfo[] getTankInfo(EnumFacing side) {
         TankManager tMan = getTankManager();
         if (tMan != null) {
             return tMan.getTankInfo();

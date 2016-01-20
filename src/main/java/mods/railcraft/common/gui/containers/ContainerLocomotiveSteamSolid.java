@@ -8,15 +8,17 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import mods.railcraft.common.carts.EntityLocomotiveSteamSolid;
+import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.gui.slots.SlotFuel;
+import mods.railcraft.common.gui.slots.SlotOutput;
+import mods.railcraft.common.gui.slots.SlotWaterLimited;
+import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
+import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
-import mods.railcraft.common.carts.EntityLocomotiveSteamSolid;
-import mods.railcraft.common.gui.widgets.IndicatorWidget;
-import mods.railcraft.common.gui.slots.*;
-import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
-import mods.railcraft.common.fluids.TankManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
 

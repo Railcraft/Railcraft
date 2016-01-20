@@ -8,8 +8,9 @@
  */
 package mods.railcraft.common.util.misc;
 
-import java.util.Locale;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+
+import java.util.Locale;
 
 /**
  *

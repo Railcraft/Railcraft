@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.aesthetics.cube;
 
-import java.util.Random;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
@@ -17,6 +16,8 @@ import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 /**
  *

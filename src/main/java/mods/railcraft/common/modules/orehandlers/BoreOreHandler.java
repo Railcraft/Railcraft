@@ -8,14 +8,14 @@
  */
 package mods.railcraft.common.modules.orehandlers;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.logging.log4j.Level;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
+import org.apache.logging.log4j.Level;
 
 public class BoreOreHandler {
 

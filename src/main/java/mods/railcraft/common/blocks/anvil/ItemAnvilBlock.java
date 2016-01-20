@@ -8,9 +8,10 @@
  */
 package mods.railcraft.common.blocks.anvil;
 
-import net.minecraft.item.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAnvil;
+import net.minecraft.item.ItemMultiTexture;
+import net.minecraft.item.ItemStack;
 
 public class ItemAnvilBlock extends ItemMultiTexture {
 

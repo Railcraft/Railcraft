@@ -9,10 +9,11 @@
 package mods.railcraft.common.plugins.forge;
 
 import com.google.common.collect.ForwardingList;
+import net.minecraft.nbt.*;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.nbt.*;
 
 /**
  *

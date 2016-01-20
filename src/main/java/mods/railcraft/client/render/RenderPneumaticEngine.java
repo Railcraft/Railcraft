@@ -8,22 +8,22 @@
  */
 package mods.railcraft.client.render;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraft.util.EnumFacing;
-import org.lwjgl.opengl.GL11;
-import mods.railcraft.common.blocks.machine.beta.TileEngine;
-import mods.railcraft.common.blocks.machine.beta.TileEngine.EnergyStage;
 import mods.railcraft.client.render.models.engine.ModelEngineBase;
 import mods.railcraft.client.render.models.engine.ModelEngineFrame;
 import mods.railcraft.client.render.models.engine.ModelEnginePiston;
 import mods.railcraft.client.render.models.engine.ModelEngineTrunk;
+import mods.railcraft.common.blocks.machine.beta.TileEngine;
+import mods.railcraft.common.blocks.machine.beta.TileEngine.EnergyStage;
 import mods.railcraft.common.core.RailcraftConstants;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import org.lwjgl.opengl.GL11;
 
 public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements IInvRenderer {
 
@@ -38,12 +38,12 @@ public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements 
     private final ResourceLocation texture;
 
     static {
-        angleMap[ForgeDirection.EAST.ordinal()] = (float) -Math.PI / 2;
-        angleMap[ForgeDirection.WEST.ordinal()] = (float) Math.PI / 2;
-        angleMap[ForgeDirection.UP.ordinal()] = 0;
-        angleMap[ForgeDirection.DOWN.ordinal()] = (float) Math.PI;
-        angleMap[ForgeDirection.SOUTH.ordinal()] = (float) Math.PI / 2;
-        angleMap[ForgeDirection.NORTH.ordinal()] = (float) -Math.PI / 2;
+        angleMap[EnumFacing.EAST.ordinal()] = (float) -Math.PI / 2;
+        angleMap[EnumFacing.WEST.ordinal()] = (float) Math.PI / 2;
+        angleMap[EnumFacing.UP.ordinal()] = 0;
+        angleMap[EnumFacing.DOWN.ordinal()] = (float) Math.PI;
+        angleMap[EnumFacing.SOUTH.ordinal()] = (float) Math.PI / 2;
+        angleMap[EnumFacing.NORTH.ordinal()] = (float) -Math.PI / 2;
     }
 
     private RenderPneumaticEngine(String texture) {
@@ -53,7 +53,7 @@ public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements 
 
     @Override
     public void renderItem(RenderBlocks render, ItemStack item, ItemRenderType renderType) {
-        render(EnergyStage.BLUE, 0.25F, ForgeDirection.UP, -0.5, -0.5, -0.5);
+        render(EnergyStage.BLUE, 0.25F, EnumFacing.UP, -0.5, -0.5, -0.5);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements 
         }
     }
 
-    private void render(EnergyStage energy, float progress, ForgeDirection orientation, double x, double y, double z) {
+    private void render(EnergyStage energy, float progress, EnumFacing orientation, double x, double y, double z) {
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glEnable(GL11.GL_LIGHTING);

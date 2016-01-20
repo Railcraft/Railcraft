@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.items;
 
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.util.misc.EntityIDs;
 import net.minecraft.block.material.Material;
@@ -16,6 +15,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 /**
  *

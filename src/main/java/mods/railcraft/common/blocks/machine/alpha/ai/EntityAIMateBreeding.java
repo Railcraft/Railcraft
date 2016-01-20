@@ -8,21 +8,18 @@
  */
 package mods.railcraft.common.blocks.machine.alpha.ai;
 
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityAISit;
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.*;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 public class EntityAIMateBreeding extends EntityAIBase
 {

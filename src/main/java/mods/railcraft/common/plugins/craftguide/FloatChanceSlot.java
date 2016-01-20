@@ -8,8 +8,12 @@
  */
 package mods.railcraft.common.plugins.craftguide;
 
+import uristqwerty.CraftGuide.api.ItemFilter;
+import uristqwerty.CraftGuide.api.ItemSlot;
+import uristqwerty.CraftGuide.api.Renderer;
+import uristqwerty.CraftGuide.api.SlotType;
+
 import java.text.DecimalFormat;
-import uristqwerty.CraftGuide.api.*;
 import java.util.List;
 
 /**

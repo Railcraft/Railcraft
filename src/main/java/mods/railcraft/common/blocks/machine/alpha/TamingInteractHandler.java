@@ -8,11 +8,12 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.Random;
 
 /**
  *

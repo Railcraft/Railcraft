@@ -135,7 +135,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
             return null;
         for (EntityMinecart cart : carts) {
             if (canAcceptPushedFluid(requester, cart, fluidStack.getFluid())) {
-                fluidStack.amount -= ((IFluidHandler) cart).fill(ForgeDirection.UP, fluidStack, true);
+                fluidStack.amount -= ((IFluidHandler) cart).fill(EnumFacing.UP, fluidStack, true);
             }
             if (fluidStack.amount <= 0 || !canPassFluidRequests(cart, fluidStack.getFluid()))
                 break;
@@ -159,8 +159,8 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         for (EntityMinecart cart : carts) {
             if (canProvidePulledFluid(requester, cart, fluidStack.getFluid())) {
                 IFluidHandler fluidHandler = (IFluidHandler) cart;
-                if (fluidHandler.canDrain(ForgeDirection.DOWN, fluidStack.getFluid())) {
-                    FluidStack drained = fluidHandler.drain(ForgeDirection.DOWN, fluidStack, true);
+                if (fluidHandler.canDrain(EnumFacing.DOWN, fluidStack.getFluid())) {
+                    FluidStack drained = fluidHandler.drain(EnumFacing.DOWN, fluidStack, true);
                     if (drained != null)
                         return drained;
                 }
@@ -177,7 +177,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
             return false;
         if (cart instanceof IFluidCart)
             return ((IFluidCart) cart).canAcceptPushedFluid(requester, fluid);
-        return ((IFluidHandler) cart).canFill(ForgeDirection.UP, fluid);
+        return ((IFluidHandler) cart).canFill(EnumFacing.UP, fluid);
     }
 
     private boolean canProvidePulledFluid(EntityMinecart requester, EntityMinecart cart, Fluid fluid) {
@@ -185,7 +185,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
             return false;
         if (cart instanceof IFluidCart)
             return ((IFluidCart) cart).canProvidePulledFluid(requester, fluid);
-        return ((IFluidHandler) cart).canDrain(ForgeDirection.DOWN, fluid);
+        return ((IFluidHandler) cart).canDrain(EnumFacing.DOWN, fluid);
     }
 
     private boolean canPassFluidRequests(EntityMinecart cart, Fluid fluid) {
@@ -199,7 +199,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     }
 
     private boolean hasMatchingTank(IFluidHandler handler, Fluid fluid) {
-        FluidTankInfo[] tankInfo = handler.getTankInfo(ForgeDirection.UP);
+        FluidTankInfo[] tankInfo = handler.getTankInfo(EnumFacing.UP);
         for (FluidTankInfo info : tankInfo) {
             if (info.capacity >= TANK_CAPACITY) {
                 if (info.fluid == null || info.fluid.amount == 0 || info.fluid.getFluid() == fluid)

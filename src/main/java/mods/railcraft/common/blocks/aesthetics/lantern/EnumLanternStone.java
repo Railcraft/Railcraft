@@ -8,12 +8,6 @@
  */
 package mods.railcraft.common.blocks.aesthetics.lantern;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -23,8 +17,10 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+
+import java.util.*;
 
 /**
  *
@@ -83,7 +79,7 @@ public enum EnumLanternStone implements LanternInfo {
 
     @Override
     public IIcon getTexture(int side) {
-        return InvTools.getBlockFromStack(source).getIcon(ForgeDirection.UP.ordinal(), source.getItemDamage());
+        return InvTools.getBlockFromStack(source).getIcon(EnumFacing.UP.ordinal(), source.getItemDamage());
     }
 
     @Override

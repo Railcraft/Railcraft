@@ -8,20 +8,21 @@
  */
 package mods.railcraft.common.util.crafting;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import mods.railcraft.api.crafting.IRollingMachineCraftingManager;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import net.minecraft.block.Block;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
-import mods.railcraft.api.crafting.IRollingMachineCraftingManager;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class RollingMachineCraftingManager implements IRollingMachineCraftingManager
 {

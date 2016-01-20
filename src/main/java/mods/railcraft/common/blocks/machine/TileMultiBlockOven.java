@@ -9,8 +9,15 @@
 package mods.railcraft.common.blocks.machine;
 
 import buildcraft.api.statements.IActionExternal;
+import mods.railcraft.common.plugins.buildcraft.actions.Actions;
+import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
+import mods.railcraft.common.plugins.buildcraft.triggers.INeedsFuel;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -18,12 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import mods.railcraft.common.plugins.buildcraft.actions.Actions;
-import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
-import mods.railcraft.common.plugins.buildcraft.triggers.INeedsFuel;
-import mods.railcraft.common.util.misc.Game;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.EnumSkyBlock;
 
 public abstract class TileMultiBlockOven extends TileMultiBlockInventory implements INeedsFuel, IHasWork {
 

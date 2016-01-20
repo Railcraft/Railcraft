@@ -8,8 +8,9 @@
  */
 package mods.railcraft.common.plugins.ic2;
 
-import java.util.List;
 import net.minecraft.tileentity.TileEntity;
+
+import java.util.List;
 
 /**
  *

@@ -15,9 +15,9 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import org.apache.logging.log4j.Level;
 
 public abstract class TileSignalFoundation extends RailcraftTileEntity {
@@ -69,12 +69,12 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
         return false;
     }
 
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         return false;
     }
 
-    public ForgeDirection[] getValidRotations() {
-        return ForgeDirection.VALID_DIRECTIONS;
+    public EnumFacing[] getValidRotations() {
+        return EnumFacing.VALID_DIRECTIONS;
     }
 
     public void onBlockPlaced() {
@@ -95,7 +95,7 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
         return AxisAlignedBB.getBoundingBox(i, j, k, i + 1, j + 1, k + 1);
     }
 
-    public boolean isSideSolid(IBlockAccess world, int i, int j, int k, ForgeDirection side) {
+    public boolean isSideSolid(IBlockAccess world, int i, int j, int k, EnumFacing side) {
         return false;
     }
 

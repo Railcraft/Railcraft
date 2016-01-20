@@ -8,35 +8,36 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
-import static net.minecraftforge.common.util.ForgeDirection.DOWN;
-import static net.minecraftforge.common.util.ForgeDirection.UP;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import static net.minecraftforge.common.util.EnumFacing.DOWN;
+import static net.minecraftforge.common.util.EnumFacing.UP;
 
 public abstract class TileSignalBase extends TileSignalFoundation implements ISignalTile, IAspectProvider {
 
-    private static final ForgeDirection[] UP_DOWN_AXES = new ForgeDirection[]{UP, DOWN};
+    private static final EnumFacing[] UP_DOWN_AXES = new EnumFacing[]{UP, DOWN};
     protected static final float BOUNDS = 0.15f;
-    private ForgeDirection facing = ForgeDirection.NORTH;
+    private EnumFacing facing = EnumFacing.NORTH;
     private boolean prevLightState;
     private boolean prevBlinkState;
 
     @Override
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         if (axis == UP || axis == DOWN) {
             return false;
         }
@@ -50,7 +51,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     }
 
     @Override
-    public ForgeDirection[] getValidRotations() {
+    public EnumFacing[] getValidRotations() {
         return UP_DOWN_AXES;
     }
 
@@ -118,11 +119,11 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
         return 0;
     }
 
-    public void setFacing(ForgeDirection facing) {
+    public void setFacing(EnumFacing facing) {
         this.facing = facing;
     }
 
-    public ForgeDirection getFacing() {
+    public EnumFacing getFacing() {
         return facing;
     }
 
@@ -141,7 +142,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        facing = ForgeDirection.getOrientation(data.getByte("Facing"));
+        facing = EnumFacing.getOrientation(data.getByte("Facing"));
     }
 
     @Override
@@ -155,7 +156,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        facing = ForgeDirection.getOrientation(data.readByte());
+        facing = EnumFacing.getOrientation(data.readByte());
 
         markBlockForUpdate();
     }

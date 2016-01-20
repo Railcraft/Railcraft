@@ -8,11 +8,12 @@
  */
 package mods.railcraft.common.worldgen;
 
-import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
-import java.util.List;
-import java.util.Random;
 import net.minecraft.world.gen.structure.StructureVillagePieces.PieceWeight;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
+
+import java.util.List;
+import java.util.Random;
 
 public class WorkshopCreationHandeler implements IVillageCreationHandler {
 

@@ -24,7 +24,7 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TilePostEmblem extends RailcraftTileEntity {
-    private ForgeDirection facing = ForgeDirection.NORTH;
+    private EnumFacing facing = EnumFacing.NORTH;
     private String emblem = "";
     private EnumColor color = null;
 
@@ -41,11 +41,11 @@ public class TilePostEmblem extends RailcraftTileEntity {
         }
     }
 
-    public ForgeDirection getFacing() {
+    public EnumFacing getFacing() {
         return facing;
     }
 
-    public void setFacing(ForgeDirection f) {
+    public void setFacing(EnumFacing f) {
         switch (f) {
             case UP:
             case DOWN:
@@ -99,7 +99,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         emblem = data.getString("emblem");
-        facing = ForgeDirection.getOrientation(data.getByte("facing"));
+        facing = EnumFacing.getOrientation(data.getByte("facing"));
 
         if (data.hasKey("color"))
             color = EnumColor.fromId(data.getByte("color"));
@@ -118,7 +118,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
         super.readPacketData(data);
 
         boolean needsUpdate = false;
-        ForgeDirection f = ForgeDirection.getOrientation(data.readByte());
+        EnumFacing f = EnumFacing.getOrientation(data.readByte());
         if (facing != f) {
             facing = f;
             needsUpdate = true;

@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.blocks.frame;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
@@ -29,10 +27,12 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -107,12 +107,12 @@ public class BlockFrame extends Block implements IPostConnection {
 
     @Override
     public IIcon getIcon(int side, int meta) {
-        if (ForgeDirection.UP.ordinal() == side) {
+        if (EnumFacing.UP.ordinal() == side) {
             if (flipTextures)
                 return icons[1];
             return poweredTexture ? icons[2] : icons[0];
         }
-        if (flipTextures && ForgeDirection.DOWN.ordinal() == side)
+        if (flipTextures && EnumFacing.DOWN.ordinal() == side)
             return icons[0];
         return icons[1];
     }
@@ -138,8 +138,8 @@ public class BlockFrame extends Block implements IPostConnection {
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-        return side == ForgeDirection.UP;
+    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, EnumFacing side) {
+        return side == EnumFacing.UP;
     }
 
     @Override
@@ -160,7 +160,7 @@ public class BlockFrame extends Block implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, EnumFacing side) {
         return ConnectStyle.TWO_THIN;
     }
 

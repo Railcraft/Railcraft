@@ -25,6 +25,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -32,7 +33,6 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
 import net.minecraftforge.common.ChestGenHooks;
-import net.minecraft.util.EnumFacing;
 
 import java.util.List;
 import java.util.Random;
@@ -249,7 +249,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         if (tile instanceof TileEngineSteamHobby) {
             TileEngineSteamHobby engine = (TileEngineSteamHobby) tile;
             engine.switchOrientation();
-            engine.fill(ForgeDirection.UP, Fluids.WATER.getB(4), true);
+            engine.fill(EnumFacing.UP, Fluids.WATER.getB(4), true);
 //            engine.setInventorySlotContents(TileEngineSteamHobby.SLOT_FUEL, new ItemStack(Items.coal, 16));
         }
     }

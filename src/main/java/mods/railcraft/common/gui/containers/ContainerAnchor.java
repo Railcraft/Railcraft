@@ -8,16 +8,16 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.gui.slots.SlotStackFilter;
+import mods.railcraft.common.util.misc.IAnchor;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.slots.SlotStackFilter;
-import mods.railcraft.common.util.misc.IAnchor;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerAnchor extends RailcraftContainer {
 

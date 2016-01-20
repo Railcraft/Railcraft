@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.tracks.speedcontroller;
 
-import net.minecraft.entity.item.EntityMinecart;
 import mods.railcraft.api.tracks.ITrackInstance;
+import net.minecraft.entity.item.EntityMinecart;
 
 /**
  *

@@ -8,10 +8,9 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.client.gui.GuiButton;
-import mods.railcraft.client.gui.buttons.GuiToggleButton;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
+import mods.railcraft.client.gui.buttons.GuiToggleButton;
 import mods.railcraft.common.blocks.signals.IAspectActionManager;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.LockButtonState;
@@ -21,6 +20,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiAspectAction extends GuiContainerRailcraft {

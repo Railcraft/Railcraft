@@ -10,9 +10,7 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.carts.EntityCartCargo;
 import mods.railcraft.common.gui.slots.SlotFilter;
-import mods.railcraft.common.gui.slots.SlotFluidFilter;
 import mods.railcraft.common.gui.slots.SlotLinked;
-import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 

@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import net.minecraft.entity.item.EntityMinecart;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerHighSpeed;
+import net.minecraft.entity.item.EntityMinecart;
 
 public class TrackSpeedWye extends TrackWye {
 

@@ -8,14 +8,15 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *

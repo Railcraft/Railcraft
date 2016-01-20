@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.fluids;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
@@ -19,12 +17,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBucketRailcraft extends Item {
 
@@ -73,7 +73,7 @@ public class ItemBucketRailcraft extends Item {
             if (!world.canMineBlock(player, x, y, z))
                 return stack;
 
-            ForgeDirection sideHit = ForgeDirection.getOrientation(mop.sideHit);
+            EnumFacing sideHit = EnumFacing.getOrientation(mop.sideHit);
 
             x += sideHit.offsetX;
             y += sideHit.offsetY;

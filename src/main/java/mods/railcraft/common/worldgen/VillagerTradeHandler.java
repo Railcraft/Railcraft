@@ -8,9 +8,6 @@
  */
 package mods.railcraft.common.worldgen;
 
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
-import java.util.Random;
 import mods.railcraft.common.blocks.signals.ItemSignalBlockSurveyor;
 import mods.railcraft.common.blocks.signals.ItemSignalTuner;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
@@ -25,6 +22,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
+
+import java.util.Random;
 
 public class VillagerTradeHandler implements IVillageTradeHandler {
 

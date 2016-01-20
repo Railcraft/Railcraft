@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import java.util.HashSet;
-import java.util.Set;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
@@ -21,8 +19,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSign;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -66,7 +67,7 @@ public class PostConnectionHelper {
         noConnect.add(Blocks.sponge);
     }
 
-    public static ConnectStyle connect(IBlockAccess world, int x1, int y1, int z1, ForgeDirection side) {
+    public static ConnectStyle connect(IBlockAccess world, int x1, int y1, int z1, EnumFacing side) {
         Block block = WorldPlugin.getBlock(world, x1, y1, z1);
         if (block instanceof IPostConnection && ((IPostConnection) block).connectsToPost(world, x1, y1, z1, side) == ConnectStyle.NONE)
             return ConnectStyle.NONE;
@@ -79,7 +80,7 @@ public class PostConnectionHelper {
             return ConnectStyle.NONE;
 
         Block otherBlock = WorldPlugin.getBlock(world, x2, y2, z2);
-        ForgeDirection oppositeSide = side.getOpposite();
+        EnumFacing oppositeSide = side.getOpposite();
 
         try {
             if (otherBlock instanceof IPostConnection)

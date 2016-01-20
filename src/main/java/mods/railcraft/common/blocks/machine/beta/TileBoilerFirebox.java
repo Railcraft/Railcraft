@@ -8,32 +8,33 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
+import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.machine.MultiBlockPattern;
+import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
+import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.steam.ISteamUser;
+import mods.railcraft.common.util.steam.Steam;
+import mods.railcraft.common.util.steam.SteamBoiler;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.EnumFacing;
-import mods.railcraft.common.blocks.machine.MultiBlockPattern;
-import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
-import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.ITileFilter;
-import mods.railcraft.common.util.steam.Steam;
-import mods.railcraft.common.util.steam.SteamBoiler;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraftforge.fluids.FluidStack;
 
 /**
  *
@@ -249,11 +250,11 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
     }
 
     protected boolean handleClick(EntityPlayer player, int side) {
-        return FluidHelper.handleRightClick(this, ForgeDirection.getOrientation(side), player, true, false);
+        return FluidHelper.handleRightClick(this, EnumFacing.getOrientation(side), player, true, false);
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         return fill(TANK_WATER, resource, doFill);
     }
 

@@ -11,8 +11,8 @@ import buildcraft.api.statements.StatementManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 
 /**
  *
@@ -63,7 +63,7 @@ public enum Actions implements IActionExternal {
     }
 
     @Override
-    public void actionActivate(TileEntity tile, ForgeDirection side, IStatementContainer isc, IStatementParameter[] isps) {
+    public void actionActivate(TileEntity tile, EnumFacing side, IStatementContainer isc, IStatementParameter[] isps) {
         if (tile instanceof IActionReceptor)
             ((IActionReceptor) tile).actionActivated(this);
     }
