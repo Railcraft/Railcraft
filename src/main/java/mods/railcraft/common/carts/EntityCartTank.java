@@ -167,7 +167,7 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     @Override
     public boolean doInteract(EntityPlayer player) {
         if (Game.isHost(worldObj)) {
-            if (FluidHelper.handleRightClick(this, EnumFacing.UNKNOWN, player, true, true))
+            if (FluidHelper.handleRightClick(this, null, player, true, true))
                 return true;
             GuiHandler.openGui(EnumGui.CART_TANK, player, worldObj, this);
         }
@@ -279,7 +279,7 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     @Deprecated
     public int offerLiquid(Object source, FluidStack offer) {
         int qty = offer.amount;
-        int used = fill(EnumFacing.UNKNOWN, offer, true);
+        int used = fill(null, offer, true);
 
         offer.amount = qty - used;
         if (offer.amount <= 0)
@@ -305,11 +305,11 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     @Override
     @Deprecated
     public int requestLiquid(Object source, FluidStack request) {
-        FluidStack acquired = drain(EnumFacing.UNKNOWN, request.amount, false);
+        FluidStack acquired = drain(null, request.amount, false);
         if (acquired == null || !request.isFluidEqual(acquired))
             return 0;
 
-        drain(EnumFacing.UNKNOWN, request.amount, true);
+        drain(null, request.amount, true);
 
         if (acquired.amount >= request.amount)
             return acquired.amount;

@@ -199,7 +199,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
                 }
                 return true;
             }
-            if (this instanceof IFluidHandler && FluidHelper.handleRightClick((IFluidHandler) this, EnumFacing.UNKNOWN, player, true, false))
+            if (this instanceof IFluidHandler && FluidHelper.handleRightClick((IFluidHandler) this, null, player, true, false))
                 return true;
             if (!isPrivate() || PlayerPlugin.isOwnerOrOp(getOwner(), player.getGameProfile()))
                 openGui(player);

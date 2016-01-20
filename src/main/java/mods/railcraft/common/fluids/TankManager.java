@@ -260,7 +260,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     }
 
     public FluidTankInfo[] getTankInfo() {
-        return getTankInfo(EnumFacing.UNKNOWN);
+        return getTankInfo(null);
     }
 
     @Override

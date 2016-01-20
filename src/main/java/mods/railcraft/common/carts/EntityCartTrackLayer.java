@@ -48,7 +48,7 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
 
         stockItems(SLOT_REPLACE, SLOT_STOCK);
         updateTravelDirection(trackX, trackY, trackZ, trackMeta);
-        if (travelDirection != EnumFacing.UNKNOWN)
+        if (travelDirection != null)
             placeTrack(trackX, trackY, trackZ);
     }
 

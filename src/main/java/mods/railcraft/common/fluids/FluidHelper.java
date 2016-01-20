@@ -124,11 +124,11 @@ public final class FluidHelper {
         ItemStack output = inv.getStackInSlot(outputSlot);
         FluidItemHelper.FillReturn fill = FluidItemHelper.fillContainer(input, new FluidStack(fluidToFill, PROCESS_VOLUME));
         if (fill.container != null && hasPlaceToPutContainer(output, fill.container)) {
-            FluidStack drain = fluidHandler.drain(EnumFacing.UNKNOWN, fill.amount, false);
+            FluidStack drain = fluidHandler.drain(null, fill.amount, false);
             if (drain != null && drain.amount == fill.amount) {
                 fill = FluidItemHelper.fillContainer(input, drain);
                 if (fill.container != null && fill.amount == drain.amount) {
-                    fluidHandler.drain(EnumFacing.UNKNOWN, fill.amount, true);
+                    fluidHandler.drain(null, fill.amount, true);
                     storeContainer(inv, inputSlot, outputSlot, fill.container);
                 }
                 return true;
@@ -143,9 +143,9 @@ public final class FluidHelper {
         if (input != null) {
             FluidItemHelper.DrainReturn drain = FluidItemHelper.drainContainer(input, PROCESS_VOLUME);
             if (drain.fluidDrained != null && (drain.container == null || hasPlaceToPutContainer(output, drain.container))) {
-                int used = fluidHandler.fill(EnumFacing.UNKNOWN, drain.fluidDrained, false);
+                int used = fluidHandler.fill(null, drain.fluidDrained, false);
                 if ((drain.isAtomic && used == drain.fluidDrained.amount) || (!drain.isAtomic && drain.fluidDrained.amount > 0)) {
-                    fluidHandler.fill(EnumFacing.UNKNOWN, drain.fluidDrained, true);
+                    fluidHandler.fill(null, drain.fluidDrained, true);
                     storeContainer(inv, inputSlot, outputSlot, drain.container);
                     return true;
                 }

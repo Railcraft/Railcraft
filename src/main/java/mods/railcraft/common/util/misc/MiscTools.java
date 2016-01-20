@@ -210,7 +210,7 @@ public abstract class MiscTools {
         MovingObjectPosition mouseOver = rayTracePlayerLook(player);
         if (mouseOver != null)
             return EnumFacing.getOrientation(mouseOver.sideHit);
-        return EnumFacing.UNKNOWN;
+        return null;
     }
 
     /**
@@ -249,7 +249,7 @@ public abstract class MiscTools {
             if (TrackTools.isRailBlockAt(world, MiscTools.getXOnSide(x, dir), MiscTools.getYOnSide(y, dir), MiscTools.getZOnSide(z, dir)))
                 return dir;
         }
-        return EnumFacing.UNKNOWN;
+        return null;
     }
 
     /**

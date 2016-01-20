@@ -68,7 +68,7 @@ public class RenderBlockMachineDelta extends BlockRenderer {
             EnumSet<EnumFacing> plugCons = EnumSet.noneOf(EnumFacing.class);
 
             EnumSet<EnumFacing> search = EnumSet.allOf(EnumFacing.class);
-            search.remove(EnumFacing.UNKNOWN);
+            search.remove(null);
             search.removeAll(wireCons);
 
             for (EnumFacing dir : search) {

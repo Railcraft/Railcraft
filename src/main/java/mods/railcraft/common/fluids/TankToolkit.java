@@ -31,7 +31,7 @@ public class TankToolkit implements IFluidHandler {
         if (fluid == null)
             return 0;
         int amount = 0;
-        for (FluidTankInfo tank : getTankInfo(EnumFacing.UNKNOWN)) {
+        for (FluidTankInfo tank : getTankInfo(null)) {
             if (tank.fluid != null && fluid == tank.fluid.getFluid())
                 amount += tank.fluid.amount;
         }
@@ -47,12 +47,12 @@ public class TankToolkit implements IFluidHandler {
     public boolean isTankFull(Fluid fluid) {
         if (fluid == null)
             return areTanksFull();
-        int fill = fill(EnumFacing.UNKNOWN, new FluidStack(fluid, 1), false);
+        int fill = fill(null, new FluidStack(fluid, 1), false);
         return fill <= 0;
     }
 
     public boolean areTanksFull() {
-        for (FluidTankInfo tank : getTankInfo(EnumFacing.UNKNOWN)) {
+        for (FluidTankInfo tank : getTankInfo(null)) {
             if (tank.fluid == null || tank.fluid.amount < tank.capacity)
                 return false;
         }
@@ -64,7 +64,7 @@ public class TankToolkit implements IFluidHandler {
     }
 
     public boolean isFluidInTank() {
-        for (FluidTankInfo tank : getTankInfo(EnumFacing.UNKNOWN)) {
+        for (FluidTankInfo tank : getTankInfo(null)) {
             boolean empty = tank.fluid == null || tank.fluid.amount <= 0;
             if (!empty)
                 return true;
@@ -75,7 +75,7 @@ public class TankToolkit implements IFluidHandler {
     public float getFluidLevel() {
         int amount = 0;
         int capacity = 0;
-        for (FluidTankInfo tank : getTankInfo(EnumFacing.UNKNOWN)) {
+        for (FluidTankInfo tank : getTankInfo(null)) {
             FluidStack liquid = tank.fluid;
             amount += liquid == null ? 0 : liquid.amount;
             capacity += tank.capacity;
@@ -86,7 +86,7 @@ public class TankToolkit implements IFluidHandler {
     public float getFluidLevel(Fluid fluid) {
         int amount = 0;
         int capacity = 0;
-        for (FluidTankInfo tank : getTankInfo(EnumFacing.UNKNOWN)) {
+        for (FluidTankInfo tank : getTankInfo(null)) {
             FluidStack liquid = tank.fluid;
             if (liquid == null || liquid.getFluid() != fluid)
                 continue;

@@ -771,7 +771,7 @@ public abstract class InvTools {
      */
     public static ItemStack[] removeItems(IInventory inv, int numItems) {
 //        if (inv instanceof ISpecialInventory)
-//            return ((ISpecialInventory) inv).extractItem(true, EnumFacing.UNKNOWN, numItems);
+//            return ((ISpecialInventory) inv).extractItem(true, null, numItems);
         StandaloneInventory output = new StandaloneInventory(27);
         for (int i = 0; i < inv.getSizeInventory(); i++) {
             if (numItems <= 0)

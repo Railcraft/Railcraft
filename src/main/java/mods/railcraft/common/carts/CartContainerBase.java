@@ -31,8 +31,8 @@ import java.util.List;
  */
 public abstract class CartContainerBase extends EntityMinecartContainer implements IRailcraftCart, IItemCart {
     private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
-    protected EnumFacing travelDirection = EnumFacing.UNKNOWN;
-    protected EnumFacing verticalTravelDirection = EnumFacing.UNKNOWN;
+    protected EnumFacing travelDirection = null;
+    protected EnumFacing verticalTravelDirection = null;
 
     public CartContainerBase(World world) {
         super(world);
@@ -110,7 +110,7 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
         if (trackMeta != null) {
             EnumFacing EnumFacing = determineTravelDirection(trackMeta);
             EnumFacing previousEnumFacing = travelDirectionHistory[1];
-            if (previousEnumFacing != EnumFacing.UNKNOWN && travelDirectionHistory[0] == previousEnumFacing) {
+            if (previousEnumFacing != null && travelDirectionHistory[0] == previousEnumFacing) {
                 travelDirection = EnumFacing;
                 verticalTravelDirection = determineVerticalTravelDirection(trackMeta);
             }
@@ -153,13 +153,13 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
                         return EnumFacing.EAST;
             }
         }
-        return EnumFacing.UNKNOWN;
+        return null;
     }
 
     private EnumFacing determineVerticalTravelDirection(EnumTrackMeta trackMeta) {
         if (trackMeta.isSlopeTrack())
             return prevPosY < posY ? EnumFacing.UP : EnumFacing.DOWN;
-        return EnumFacing.UNKNOWN;
+        return null;
     }
 
     @Override

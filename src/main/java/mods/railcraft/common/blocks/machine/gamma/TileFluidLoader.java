@@ -144,7 +144,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
             FluidHelper.drainContainers(this, this, SLOT_INPUT, SLOT_OUTPUT);
 
         for (EnumFacing side : EnumFacing.values()) {
-            if (side == EnumFacing.UNKNOWN)
+            if (side == null)
                 continue;
             TileEntity tile = tileCache.getTileOnSide(side);
             if (tile instanceof IFluidHandler) {
