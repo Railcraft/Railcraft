@@ -12,7 +12,6 @@ import mods.railcraft.api.tracks.ITrackInstance;
 import net.minecraft.entity.item.EntityMinecart;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SpeedControllerSlow extends SpeedController {
@@ -30,5 +29,4 @@ public class SpeedControllerSlow extends SpeedController {
     public float getMaxSpeed(ITrackInstance track, EntityMinecart cart) {
         return MAX_SPEED;
     }
-
 }

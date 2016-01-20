@@ -12,24 +12,20 @@ import mods.railcraft.api.tracks.ITrackInstance;
 import net.minecraft.entity.item.EntityMinecart;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SpeedController
-{
+public class SpeedController {
 
     private static SpeedController instance;
 
-    public static SpeedController getInstance()
-    {
-        if(instance == null) {
+    public static SpeedController getInstance() {
+        if (instance == null) {
             instance = new SpeedController();
         }
         return instance;
     }
 
-    public float getMaxSpeed(ITrackInstance track, EntityMinecart cart)
-    {
+    public float getMaxSpeed(ITrackInstance track, EntityMinecart cart) {
         return 0.4f;
     }
 }

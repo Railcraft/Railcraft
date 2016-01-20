@@ -20,7 +20,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SpeedControllerHighSpeed extends SpeedController {
@@ -65,8 +64,7 @@ public class SpeedControllerHighSpeed extends SpeedController {
     private static float speedForNextTrack(World world, int x, int y, int z, int dist) {
         float maxSpeed = RailcraftConfig.getMaxHighSpeed();
         if (dist < LOOK_AHEAD_DIST)
-            for (int side = 2; side < 6; side++) {
-                EnumFacing dir = EnumFacing.getOrientation(side);
+            for (EnumFacing dir: EnumFacing.HORIZONTALS) {
                 int xx = MiscTools.getXOnSide(x, dir);
                 int yy = y;
                 int zz = MiscTools.getZOnSide(z, dir);
@@ -92,5 +90,4 @@ public class SpeedControllerHighSpeed extends SpeedController {
             }
         return maxSpeed;
     }
-
 }
