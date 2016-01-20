@@ -28,8 +28,7 @@ public class ItemWall extends ItemBlock {
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         if (stack == null) return getUnlocalizedName();
-        BlockRailcraftWall block = (BlockRailcraftWall) field_150939_a;
+        BlockRailcraftWall block = (BlockRailcraftWall) getBlock();
         return block.proxy.fromMeta(stack.getItemDamage()).getTag();
     }
-
 }

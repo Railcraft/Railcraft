@@ -17,12 +17,15 @@ import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -32,9 +35,26 @@ import java.util.List;
 
 public class BlockRailcraftWall extends BlockWall {
 
+    public static int currentRenderPass;
     private static BlockRailcraftWall alpha;
     private static BlockRailcraftWall beta;
-    public static int currentRenderPass;
+    public final WallProxy proxy;
+    private final int renderId;
+    private final boolean alphaBlend;
+
+    public BlockRailcraftWall(int renderId, boolean alphaBlend, WallProxy proxy) {
+        super(Blocks.stonebrick);
+
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
+            this.renderId = 32;
+        else
+            this.renderId = renderId;
+
+        this.alphaBlend = alphaBlend;
+        this.proxy = proxy;
+        this.setStepSound(RailcraftSound.getInstance());
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
 
     public static BlockRailcraftWall getBlockAlpha() {
         return alpha;
@@ -48,7 +68,7 @@ public class BlockRailcraftWall extends BlockWall {
         if (alpha == null && RailcraftConfig.isBlockEnabled("wall.alpha")) {
             int renderId = Railcraft.getProxy().getRenderId();
             alpha = new BlockRailcraftWall(renderId, true, new WallProxyApha());
-            alpha.setBlockName("railcraft.wall.alpha");
+            alpha.setRegistryName("railcraft.wall.alpha");
             RailcraftRegistry.register(alpha, ItemWall.class);
 
             for (EnumWallAlpha wall : EnumWallAlpha.VALUES) {
@@ -73,7 +93,7 @@ public class BlockRailcraftWall extends BlockWall {
         if (beta == null && RailcraftConfig.isBlockEnabled("wall.beta")) {
             int renderId = Railcraft.getProxy().getRenderId();
             beta = new BlockRailcraftWall(renderId, false, new WallProxyBeta());
-            beta.setBlockName("railcraft.wall.beta");
+            beta.setRegistryName("railcraft.wall.beta");
             RailcraftRegistry.register(beta, ItemWall.class);
 
             for (EnumWallBeta wall : EnumWallBeta.VALUES) {
@@ -94,71 +114,31 @@ public class BlockRailcraftWall extends BlockWall {
         EnumWallBeta.initialize();
     }
 
-    private final int renderId;
-    public final WallProxy proxy;
-    private final boolean alphaBlend;
-
-    public BlockRailcraftWall(int renderId, boolean alphaBlend, WallProxy proxy) {
-        super(Blocks.stonebrick);
-
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
-            this.renderId = 32;
-        else
-            this.renderId = renderId;
-        
-        this.alphaBlend = alphaBlend;
-        this.proxy = proxy;
-        this.setStepSound(RailcraftSound.getInstance());
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-    }
-
-    @Override
-    public IIcon getIcon(int side, int meta) {
-        WallInfo wall = proxy.fromMeta(meta);
-        Block source = wall.getSource();
-        if (source == null)
-            return Blocks.cobblestone.getIcon(side, 0);
-        return source.getIcon(side, wall.getSourceMeta());
-    }
-
     /**
      * The type of render function that is called for this block
-     * @return 
+     *
+     * @return
      */
     @Override
     public int getRenderType() {
         return renderId;
     }
 
-    @Override
-    public int getRenderBlockPass() {
-        return alphaBlend ? 1 : 0;
-    }
-
-    @Override
-    public boolean canRenderInPass(int pass) {
-        currentRenderPass = pass;
-        if (!alphaBlend) return getRenderBlockPass() == pass;
-        return pass == 0 || pass == 1;
-    }
-
     /**
      * Return whether an adjacent block can connect to a wall.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
+     * @param worldIn
+     * @param pos
      * @return
      */
     @Override
-    public boolean canConnectWallTo(IBlockAccess world, int x, int y, int z) {
-        Block block = WorldPlugin.getBlock(world, x, y, z);
+    public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos) {
+        Block block = WorldPlugin.getBlock(worldIn, pos);
 
         if (block instanceof BlockRailcraftWall)
             return true;
-        else if (block != this && block != Blocks.fence_gate)
-            return block != null && block.getMaterial().isOpaque() && block.renderAsNormalBlock() ? block.getMaterial() != Material.gourd : false;
+        else if (block != this && !(block instanceof BlockFenceGate))
+            return (block != null && block.getMaterial().isOpaque() && block.isBlockNormalCube()) && block.getMaterial() != Material.gourd;
         else
             return true;
     }
@@ -169,13 +149,12 @@ public class BlockRailcraftWall extends BlockWall {
      * fences.
      *
      * @param world The current world
-     * @param x X Position
-     * @param y Y Position
-     * @param z Z Position
+     * @param pos
      * @return True to allow the torch to be placed
      */
+
     @Override
-    public boolean canPlaceTorchOnTop(World world, int x, int y, int z) {
+    public boolean canPlaceTorchOnTop(IBlockAccess world, BlockPos pos) {
         return true;
     }
 
@@ -188,17 +167,16 @@ public class BlockRailcraftWall extends BlockWall {
     }
 
     @Override
-    public float getBlockHardness(World world, int x, int y, int z) {
-        int meta = world.getBlockMetadata(x, y, z);
+    public float getBlockHardness(World worldIn, BlockPos pos) {
+        int meta = worldIn.getBlockMetadata(pos);
         WallInfo wall = proxy.fromMeta(meta);
-        return wall.getBlockHardness(world, x, y, z);
+        return wall.getBlockHardness(worldIn, pos);
     }
 
     @Override
-    public float getExplosionResistance(Entity entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ) {
-        int meta = world.getBlockMetadata(x, y, z);
+    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
+        int meta = world.getBlockMetadata(pos);
         WallInfo wall = proxy.fromMeta(meta);
-        return wall.getExplosionResistance(entity);
+        return wall.getExplosionResistance(exploder);
     }
-
 }

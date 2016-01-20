@@ -19,6 +19,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum EnumWallAlpha implements WallInfo {
@@ -151,15 +151,15 @@ public enum EnumWallAlpha implements WallInfo {
     }
 
     @Override
-    public float getBlockHardness(World world, int x, int y, int z) {
+    public float getBlockHardness(World world, BlockPos pos) {
         switch (this) {
             case CONCRETE:
                 return EnumCube.CONCRETE_BLOCK.getHardness();
             default:
                 Block block = getSource();
                 if (block == null)
-                    return Blocks.brick_block.getBlockHardness(world, x, y, z);
-                return block.getBlockHardness(world, x, y, z);
+                    return Blocks.brick_block.getBlockHardness(world, pos);
+                return block.getBlockHardness(world, pos);
         }
     }
 

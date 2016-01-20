@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.aesthetics.wall;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface WallProxy {

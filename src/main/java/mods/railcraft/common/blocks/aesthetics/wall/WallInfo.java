@@ -11,10 +11,10 @@ package mods.railcraft.common.blocks.aesthetics.wall;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface WallInfo {
@@ -33,10 +33,9 @@ public interface WallInfo {
 
     boolean isEnabled();
 
-    float getBlockHardness(World world, int x, int y, int z);
+    float getBlockHardness(World world, BlockPos pos);
 
     float getExplosionResistance(Entity entity);
 
     Block getBlock();
-    
 }

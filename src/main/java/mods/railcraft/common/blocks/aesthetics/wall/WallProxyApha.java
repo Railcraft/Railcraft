@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.aesthetics.wall;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class WallProxyApha implements WallProxy {
@@ -25,5 +24,4 @@ public class WallProxyApha implements WallProxy {
     public WallInfo fromMeta(int meta) {
         return EnumWallAlpha.fromMeta(meta);
     }
-
 }
