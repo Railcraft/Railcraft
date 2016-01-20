@@ -164,7 +164,7 @@ public enum EnumBrick {
             @Override
             protected void doBlockInit() {
                 block = new BlockBrick(EnumBrick.this);
-                block.setBlockName("railcraft.brick." + themeTag());
+                block.setRegistryName("railcraft.brick." + themeTag());
                 RailcraftRegistry.register(block, ItemBrick.class);
                 ForestryPlugin.addBackpackItem("builder", block);
 

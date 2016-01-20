@@ -8,21 +8,20 @@
  */
 package mods.railcraft.common.blocks.aesthetics.brick;
 
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
 public class BlockBrick extends Block {
+
     private final EnumBrick theme;
-    private IIcon[] icons;
 
     public BlockBrick(EnumBrick theme) {
         super(Material.rock);
@@ -35,21 +34,8 @@ public class BlockBrick extends Block {
     }
 
     @Override
-    public int damageDropped(int meta) {
+    public int damageDropped(IBlockState state) {
         return meta;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:brick." + theme.themeTag(), BrickVariant.VALUES.length);
-    }
-
-    @Override
-    public IIcon getIcon(int side, int meta) {
-        if (meta >= icons.length)
-            meta = 0;
-        return icons[meta];
     }
 
     @Override
@@ -60,7 +46,7 @@ public class BlockBrick extends Block {
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
         return false;
     }
 }

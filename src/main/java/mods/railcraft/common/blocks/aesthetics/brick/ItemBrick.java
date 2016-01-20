@@ -22,11 +22,6 @@ public class ItemBrick extends ItemBlock {
     }
 
     @Override
-    public IIcon getIconFromDamage(int meta) {
-        return EnumBrick.INFERNAL.getBlock().getIcon(0, meta);
-    }
-
-    @Override
     public int getMetadata(int meta) {
         return meta;
     }
