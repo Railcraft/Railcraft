@@ -278,6 +278,10 @@ public abstract class MiscTools {
         return EnumFacing.NORTH;
     }
 
+    /**
+     * @deprecated use {@link EnumFacing#getOpposite()}
+     */
+    @Deprecated
     public static EnumFacing getOppositeSide(int side) {
         int s = side;
         s = s % 2 == 0 ? s + 1 : s - 1;
