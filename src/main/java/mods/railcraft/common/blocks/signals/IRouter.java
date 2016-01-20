@@ -15,7 +15,6 @@ import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.inventory.IInventory;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IRouter extends ISecure<LockButtonState>, IGuiReturnHandler {

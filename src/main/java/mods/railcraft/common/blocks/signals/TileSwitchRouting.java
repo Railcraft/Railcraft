@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRoutingTile {
+
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
     private final MultiButtonController<RoutingButtonState> routingController = new MultiButtonController<RoutingButtonState>(0, RoutingButtonState.values());
     private RoutingLogic logic;
@@ -54,7 +55,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
                     }
                     return true;
                 }
-            GuiHandler.openGui(EnumGui.ROUTING, player, worldObj, xCoord, yCoord, zCoord);
+            GuiHandler.openGui(EnumGui.ROUTING, player, worldObj, getPos());
         }
         return true;
     }
@@ -62,7 +63,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, worldObj, xCoord, yCoord, zCoord);
+        InvTools.dropInventory(inv, worldObj, getPos());
     }
 
     @Override

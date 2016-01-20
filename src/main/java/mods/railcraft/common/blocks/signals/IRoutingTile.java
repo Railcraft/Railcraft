@@ -9,9 +9,10 @@
 package mods.railcraft.common.blocks.signals;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IRoutingTile {
+
     boolean isPowered();
+
 }

@@ -82,5 +82,4 @@ public abstract class TileBoxBase extends TileSignalFoundation {
     public boolean canConnectRedstone(int dir) {
         return true;
     }
-
 }

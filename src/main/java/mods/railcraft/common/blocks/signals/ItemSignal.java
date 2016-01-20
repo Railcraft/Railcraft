@@ -30,11 +30,6 @@ public class ItemSignal extends ItemBlockRailcraftMultiType {
     }
 
     @Override
-    public IIcon getIconFromDamage(int damage) {
-        return RailcraftBlocks.getBlockSignal().getIcon(2, damage);
-    }
-
-    @Override
     public String getUnlocalizedName(ItemStack stack) {
         return getStructureType(stack).getTag();
     }
@@ -67,5 +62,4 @@ public class ItemSignal extends ItemBlockRailcraftMultiType {
 
         return world.canPlaceEntityOnSide(field_150939_a, x, y, z, false, side, (Entity) null, stack) && (!getStructureType(stack).needsSupport() || world.isSideSolid(x, y - 1, z, EnumFacing.UP));
     }
-
 }

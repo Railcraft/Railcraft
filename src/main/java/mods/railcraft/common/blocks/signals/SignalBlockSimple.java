@@ -13,7 +13,6 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SignalBlockSimple extends SignalBlock {
@@ -23,7 +22,7 @@ public class SignalBlockSimple extends SignalBlock {
     protected SignalBlockSimple(RailcraftTileEntity tile) {
         super(tile, 1);
     }
-    
+
     @Override
     public void updateSignalAspect() {
         aspect = determineAspect(pairings.peek());

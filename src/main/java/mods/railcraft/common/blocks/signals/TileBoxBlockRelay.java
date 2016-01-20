@@ -46,7 +46,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
         if (player.isSneaking())
             return false;
         if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.BOX_RELAY, player, worldObj, xCoord, yCoord, zCoord);
+            GuiHandler.openGui(EnumGui.BOX_RELAY, player, worldObj, getPos());
         return true;
     }
 
@@ -63,7 +63,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
             signalBlock.tickClient();
             if (clock % 4 == 0 && controller.getAspect().isBlinkAspect() && prevBlinkState != SignalAspect.isBlinkOn()) {
                 prevBlinkState = SignalAspect.isBlinkOn();
-                worldObj.updateLightByType(EnumSkyBlock.Block, getX(), getY(), getZ());
+                worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
                 markBlockForUpdate();
             }
             return;
@@ -95,7 +95,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
 
     @Override
     public int getPowerOutput(int side) {
-        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, MiscTools.getOppositeSide(side));
+        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, getPos(), MiscTools.getOppositeSide(side));
         if (tile instanceof TileBoxBase)
             return NO_POWER;
         return isEmittingRedstone(EnumFacing.getOrientation(side)) ? FULL_POWER : NO_POWER;
@@ -184,5 +184,4 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     public SignalAspect getTriggerAspect() {
         return getBoxSignalAspect(null);
     }
-
 }

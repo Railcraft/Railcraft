@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SignalBlockRelay extends SignalBlock {

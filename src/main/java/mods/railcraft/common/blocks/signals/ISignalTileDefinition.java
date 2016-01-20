@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.signals;
 import net.minecraft.block.Block;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface ISignalTileDefinition {

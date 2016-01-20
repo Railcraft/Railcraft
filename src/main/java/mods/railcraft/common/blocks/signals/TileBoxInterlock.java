@@ -22,9 +22,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
-import static net.minecraftforge.common.util.EnumFacing.*;
+import static net.minecraft.util.EnumFacing.*;
 
 public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IReceiverTile, IAspectProvider {
+
     private static final EnumFacing[] SIDES = {NORTH, WEST, SOUTH, EAST};
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
@@ -200,12 +201,12 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
 
         @Override
         public int compare(TileBoxInterlock o1, TileBoxInterlock o2) {
-            if (o1.xCoord != o2.xCoord)
-                return o1.xCoord - o2.xCoord;
-            if (o1.zCoord != o2.zCoord)
-                return o1.zCoord - o2.zCoord;
-            if (o1.yCoord != o2.yCoord)
-                return o1.yCoord - o2.yCoord;
+            if (o1.getX() != o2.getX())
+                return o1.getX() - o2.getX();
+            if (o1.getZ() != o2.getZ())
+                return o1.getZ() - o2.getZ();
+            if (o1.getY() != o2.getY())
+                return o1.getY() - o2.getY();
             return 0;
         }
     }

@@ -15,19 +15,23 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 
 public abstract class BlockSignalBase extends BlockContainer implements IPostConnection {
+
     private final int renderType;
 
     public BlockSignalBase(int renderType) {
@@ -42,73 +46,60 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
 
     public abstract ISignalTileDefinition getSignalType(int meta);
 
-    @Override
-    public abstract IIcon getIcon(int side, int meta);
 
     @Override
-    public int damageDropped(int meta) {
+    public int damageDropped(IBlockState state) {
         return meta;
     }
 
     @Override
-    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int side, float u1, float u2, float u3) {
-        ItemStack current = player.getCurrentEquippedItem();
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack current = playerIn.getCurrentEquippedItem();
         if (current != null)
             if (current.getItem() instanceof IActivationBlockingItem)
                 return false;
-        TileEntity tile = world.getTileEntity(i, j, k);
+        TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).blockActivated(side, player);
+            return ((TileSignalFoundation) tile).blockActivated(side, playerIn);
         return false;
     }
 
     @Override
-    public boolean rotateBlock(World world, int x, int y, int z, EnumFacing axis) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
             return ((TileSignalFoundation) tile).rotateBlock(axis);
         return false;
     }
 
     @Override
-    public EnumFacing[] getValidRotations(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public EnumFacing[] getValidRotations(World world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
             return ((TileSignalFoundation) tile).getValidRotations();
-        return super.getValidRotations(world, x, y, z);
+        return super.getValidRotations(world, pos);
     }
 
     @Override
-    public void onPostBlockPlaced(World world, int x, int y, int z, int meta) {
-        super.onPostBlockPlaced(world, x, y, z, meta);
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         if (RailcraftConfig.printSignalDebug()) {
-            Game.logTrace(Level.INFO, 10, "Signal Block onPostBlockPlaced. [{0}, {1}, {2}]", x, y, y);
+            Game.logTrace(Level.INFO, 10, "Signal Block onBlockPlacedBy. [{0}]", pos);
         }
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
-            ((TileSignalFoundation) tile).onBlockPlaced();
+            ((TileSignalFoundation) tile).onBlockPlacedBy(placer, stack);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
-        if (RailcraftConfig.printSignalDebug()) {
-            Game.logTrace(Level.INFO, 10, "Signal Block onBlockPlacedBy. [{0}, {1}, {2}]", x, y, z);
-        }
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof TileSignalFoundation)
-            ((TileSignalFoundation) tile).onBlockPlacedBy(entityliving, stack);
-    }
-
-    @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
         try {
-            TileEntity tile = world.getTileEntity(x, y, z);
+            TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileSignalFoundation) {
                 TileSignalFoundation structure = (TileSignalFoundation) tile;
-                if (structure.getSignalType().needsSupport() && !world.isSideSolid(x, y - 1, z, EnumFacing.UP))
-                    world.func_147480_a(x, y, z, true);
+                if (structure.getSignalType().needsSupport() && !worldIn.isSideSolid(pos.down(), EnumFacing.UP))
+                    worldIn.func_147480_a(x, y, z, true);
                 else
-                    structure.onNeighborBlockChange(block);
+                    structure.onNeighborBlockChange(neighborBlock);
             }
         } catch (StackOverflowError error) {
             Game.logThrowable(Level.ERROR, "Error in BlockSignalBase.onNeighborBlockChange()", 10, error);
@@ -117,65 +108,65 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (RailcraftConfig.printSignalDebug()) {
-            Game.logTrace(Level.INFO, 10, "Signal Block breakBlock. [{0}, {1}, {2}]", x, y, z);
+            Game.logTrace(Level.INFO, 10, "Signal Block breakBlock. [{0}]", pos);
         }
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
             ((TileSignalFoundation) tile).onBlockRemoval();
-        super.breakBlock(world, x, y, z, block, meta);
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
+        TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
-            ((TileSignalFoundation) tile).setBlockBoundsBasedOnState(world, i, j, k);
+            ((TileSignalFoundation) tile).setBlockBoundsBasedOnState(worldIn, pos);
         else
             setBlockBounds(0, 0, 0, 1, 1, 1);
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
+        TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).getCollisionBoundingBoxFromPool(world, i, j, k);
+            return ((TileSignalFoundation) tile).getCollisionBoundingBoxFromPool(worldIn, pos);
         setBlockBounds(0, 0, 0, 1, 1, 1);
-        return super.getCollisionBoundingBoxFromPool(world, i, j, k);
+        return super.getCollisionBoundingBox(worldIn, pos, state);
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
+        TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).getSelectedBoundingBoxFromPool(world, x, y, z);
-        return AxisAlignedBB.fromBounds((double) x + minX, (double) y + minY, (double) z + minZ, (double) x + maxX, (double) y + maxY, (double) z + maxZ);
+            return ((TileSignalFoundation) tile).getSelectedBoundingBoxFromPool(worldIn, pos);
+        return AxisAlignedBB.fromBounds((double) pos.getX() + minX, (double) pos.getY() + minY, (double) pos.getZ() + minZ, (double) pos.getX() + maxX, (double) pos.getY() + maxY, (double) pos.getZ() + maxZ);
     }
 
     @Override
-    public int getLightValue(IBlockAccess world, int x, int y, int z) {
-        if (y < 0)
+    public int getLightValue(IBlockAccess world, BlockPos pos) {
+        if (pos.getY() < 0)
             return 0;
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof ISignalTile)
             return ((ISignalTile) tile).getLightValue();
         return 0;
     }
 
     @Override
-    public float getBlockHardness(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public float getBlockHardness(World worldIn, BlockPos pos) {
+        TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
             return ((TileSignalFoundation) tile).getHardness();
         return 3;
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int i, int j, int k, EnumFacing side) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).isSideSolid(world, i, j, k, side);
+            return ((TileSignalFoundation) tile).isSideSolid(world, pos, side);
         return false;
     }
 
@@ -191,7 +182,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
+    public boolean isNormalCube(IBlockAccess world, BlockPos pos) {
         return false;
     }
 
@@ -206,7 +197,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public abstract TileEntity createTileEntity(World world, int metadata);
+    public abstract TileEntity createTileEntity(World world, IBlockState state);
 
     @Override
     public boolean canProvidePower() {
@@ -214,10 +205,10 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockAccess world, int i, int j, int k, int dir) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).canConnectRedstone(dir);
+            return ((TileSignalFoundation) tile).canConnectRedstone(side);
         return false;
     }
 
@@ -227,35 +218,35 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
+    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
         return true;
     }
 
     @Override
-    public int isProvidingWeakPower(IBlockAccess world, int i, int j, int k, int side) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public int getWeakPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side) {
+        TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
             return ((TileSignalFoundation) tile).getPowerOutput(side);
         return PowerPlugin.NO_POWER;
     }
 
     @Override
-    public boolean hasTileEntity(int metadata) {
+    public boolean hasTileEntity(IBlockState state) {
         return true;
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
+    public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, EnumFacing side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
         TileEntity t = world.getTileEntity(x, y, z);
         if (t instanceof ISignalTile)
             return ConnectStyle.TWO_THIN;

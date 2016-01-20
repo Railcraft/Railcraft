@@ -21,18 +21,14 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 
 public abstract class TileSignalFoundation extends RailcraftTileEntity {
+
     private boolean checkedBlock = false;
 
     public abstract ISignalTileDefinition getSignalType();
 
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(worldObj))
             return;
@@ -42,24 +38,24 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
             checkedBlock = true;
 
             if (!getSignalType().isEnabled()) {
-                worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+                worldObj.setBlockToAir(getPos());
                 return;
             }
 
             if (getBlockType() != getSignalType().getBlock()) {
-                Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), getBlockType(), getSignalType().getBlock(), xCoord, yCoord, zCoord);
-                worldObj.setBlock(xCoord, yCoord, zCoord, getSignalType().getBlock(), getId(), 3);
+                Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getSignalType().getBlock(), getPos());
+                worldObj.setBlockState(getPos(), newState/*getSignalType().getBlock(), getId()*/, 3);
                 validate();
-                worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
+                worldObj.setTileEntity(getPos(), this);
                 updateContainingBlockInfo();
             }
 
-            int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+            int meta = worldObj.getBlockMetadata(getPos());
             if (getBlockType() != null && getClass() != ((BlockSignalBase) getBlockType()).getSignalType(meta).getTileClass()) {
-                worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, getSignalType().getMeta(), 3);
+                worldObj.setBlockState(getPos(), newState/*getSignalType().getMeta()*/, 3);
                 validate();
-                worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
-                Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), meta, getSignalType().getMeta(), xCoord, yCoord, zCoord);
+                worldObj.setTileEntity(getPos(), this);
+                Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), meta, getSignalType().getMeta(), getPos());
                 updateContainingBlockInfo();
             }
         }

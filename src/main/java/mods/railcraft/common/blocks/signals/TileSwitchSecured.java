@@ -82,5 +82,4 @@ public abstract class TileSwitchSecured extends TileSwitchBase implements IGuiRe
             lockController.setCurrentState(lock);
         }
     }
-
 }

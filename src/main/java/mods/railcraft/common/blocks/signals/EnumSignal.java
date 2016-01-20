@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.client.render.IIconProvider;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
@@ -19,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum EnumSignal implements IIconProvider, ISignalTileDefinition {
+public enum EnumSignal implements ISignalTileDefinition {
 
     // Name (module, hardness, needsSupport, tag, tile)
     BOX_INTERLOCK(Module.SIGNALS, 3, true, "box.interlock", TileBoxInterlock.class),
@@ -41,7 +40,6 @@ public enum EnumSignal implements IIconProvider, ISignalTileDefinition {
     private final boolean needsSupport;
     private final String tag;
     private final Class<? extends TileSignalFoundation> tile;
-    private IIcon icon;
     private static final List<EnumSignal> creativeList = new ArrayList<EnumSignal>();
     public static final EnumSignal[] VALUES = values();
 
@@ -105,15 +103,6 @@ public enum EnumSignal implements IIconProvider, ISignalTileDefinition {
     @Override
     public float getHardness() {
         return hardness;
-    }
-
-    public void setIcon(IIcon icon) {
-        this.icon = icon;
-    }
-
-    @Override
-    public IIcon getIcon() {
-        return icon;
     }
 
     public static EnumSignal fromId(int id) {

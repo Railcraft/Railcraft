@@ -18,7 +18,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class TileBoxActionManager extends TileBoxSecured implements IAspectActionManager, IGuiReturnHandler {

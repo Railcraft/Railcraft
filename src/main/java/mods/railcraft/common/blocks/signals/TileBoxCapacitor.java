@@ -43,37 +43,37 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
 
     public TileBoxCapacitor() {
     }
-    
+
     public enum EnumStateMode implements IMultiButtonState {
-    	IMMEDIATE("railcraft.gui.box.capacitor.immediate"),
-    	DELAYED("railcraft.gui.box.capacitor.delayed");
-    	private final String label;
+        IMMEDIATE("railcraft.gui.box.capacitor.immediate"),
+        DELAYED("railcraft.gui.box.capacitor.delayed");
+        private final String label;
         private final ToolTip tip;
-        
-        EnumStateMode(String label){
-        	this.label = label;
+
+        EnumStateMode(String label) {
+            this.label = label;
             this.tip = ToolTip.buildToolTip(label + ".tip");
         }
 
-		@Override
-		public String getLabel() {
-			return LocalizationPlugin.translate(label);
-		}
+        @Override
+        public String getLabel() {
+            return LocalizationPlugin.translate(label);
+        }
 
-		@Override
-		public IButtonTextureSet getTextureSet() {
-			return StandardButtonTextureSets.SMALL_BUTTON;
-		}
+        @Override
+        public IButtonTextureSet getTextureSet() {
+            return StandardButtonTextureSets.SMALL_BUTTON;
+        }
 
-		@Override
-		public ToolTip getToolTip() {
-			return tip;
-		}
-    	
+        @Override
+        public ToolTip getToolTip() {
+            return tip;
+        }
+
     }
-    
-    public MultiButtonController<EnumStateMode> getStateModeController(){
-    	return stateModeController;
+
+    public MultiButtonController<EnumStateMode> getStateModeController() {
+        return stateModeController;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     public boolean blockActivated(int side, EntityPlayer player) {
         if (player.isSneaking())
             return false;
-        GuiHandler.openGui(EnumGui.BOX_CAPACITOR, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.BOX_CAPACITOR, player, worldObj, getPos());
         return true;
     }
 
@@ -95,13 +95,13 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
 
         if (Game.isNotHost(worldObj))
             return;
-        
+
         if (ticksPowered > 0) {
             ticksPowered--;
-            if (stateModeController.getButtonState().equals(EnumStateMode.DELAYED)){ //new behavior
+            if (stateModeController.getButtonState().equals(EnumStateMode.DELAYED)) { //new behavior
                 SignalAspect tmpaspect = SignalAspect.GREEN;
                 Boolean hasInput = false;
-                if (PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, xCoord, yCoord, zCoord))
+                if (PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos()))
                     hasInput = true;
                 for (int side = 2; side < 6; side++) { //get most restrictive aspect from adjacent (active) boxes
                     EnumFacing forgeSide = EnumFacing.getOrientation(side);
@@ -114,9 +114,9 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
                         }
                     }
                 }
-                if (hasInput){
-            	    ticksPowered = ticksToPower; //undo any previous decrements
-                    if (!aspect.equals(tmpaspect) ) {
+                if (hasInput) {
+                    ticksPowered = ticksToPower; //undo any previous decrements
+                    if (!aspect.equals(tmpaspect)) {
                         aspect = tmpaspect; //change to the most restrictive aspect found above.
                         updateNeighbors();
                     }
@@ -133,7 +133,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
         super.onNeighborBlockChange(block);
         if (worldObj.isRemote)
             return;
-        boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, xCoord, yCoord, zCoord);
+        boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos());
         if (ticksPowered <= 0 && p) {
             ticksPowered = ticksToPower;
             if (stateModeController.getButtonState().equals(EnumStateMode.IMMEDIATE))
@@ -187,7 +187,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
             stateModeController.readFromNBT(data, "mode");
         else //set old boxes to immediate mode to retain old behavior
             stateModeController.setCurrentState(EnumStateMode.IMMEDIATE.ordinal());
-            	
+
     }
 
     @Override
@@ -216,7 +216,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     public void writeGuiData(DataOutputStream data) throws IOException {
         data.writeShort(ticksToPower);
         data.writeByte(stateModeController.getCurrentState());
-        
+
     }
 
     @Override
@@ -247,5 +247,4 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     public boolean canTransferAspect() {
         return true;
     }
-
 }

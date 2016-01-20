@@ -25,6 +25,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class TileSwitchBase extends TileSignalFoundation implements ISwitchDevice {
+
     private byte facing = (byte) EnumFacing.NORTH.ordinal();
     private boolean powered;
     private boolean lastSwitchState;
@@ -63,11 +64,6 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
 
     @Override
     public abstract boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart);
-
-    @Override
-    public boolean canUpdate() {
-        return true;
-    }
 
     @Override
     public void onSwitch(boolean isSwitched) {
@@ -151,6 +147,6 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     }
 
     protected boolean isBeingPoweredByRedstone() {
-        return PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord) || PowerPlugin.isRedstonePowered(worldObj, xCoord, yCoord, zCoord);
+        return PowerPlugin.isBlockBeingPowered(worldObj, getPos()) || PowerPlugin.isRedstonePowered(worldObj, getPos());
     }
 }

@@ -44,7 +44,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     public boolean blockActivated(int side, EntityPlayer player) {
         if (player.isSneaking())
             return false;
-        GuiHandler.openGui(EnumGui.BOX_ANALOG_CONTROLLER, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.BOX_ANALOG_CONTROLLER, player, worldObj, getPos());
         return true;
     }
 

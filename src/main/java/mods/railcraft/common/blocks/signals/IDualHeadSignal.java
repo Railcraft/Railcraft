@@ -12,11 +12,10 @@ import mods.railcraft.api.signals.SignalAspect;
 import net.minecraft.util.EnumFacing;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IDualHeadSignal {
-    
+
     EnumSignal getSignalType();
 
     EnumFacing getFacing();

@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.EnumSet;
 
 public class TileBoxController extends TileBoxBase implements IControllerTile, IGuiReturnHandler {
+
     private static final EnumSet<EnumFacing> powerSides = EnumSet.of(EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH);
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     public SignalAspect defaultAspect = SignalAspect.GREEN;
@@ -44,7 +45,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     public boolean blockActivated(int side, EntityPlayer player) {
         if (player.isSneaking())
             return false;
-        GuiHandler.openGui(EnumGui.BOX_CONTROLLER, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.BOX_CONTROLLER, player, worldObj, getPos());
         return true;
     }
 
@@ -77,7 +78,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
         super.onNeighborBlockChange(block);
         if (Game.isNotHost(getWorld()))
             return;
-        boolean p = isBeingPowered() || PowerPlugin.isRedstonePowered(worldObj, xCoord, yCoord, zCoord);
+        boolean p = isBeingPowered() || PowerPlugin.isRedstonePowered(worldObj, getPos());
         if (p != powered) {
             powered = p;
             sendUpdateToClient();
@@ -88,7 +89,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
         for (EnumFacing side : powerSides) {
             if (tileCache.getTileOnSide(side) instanceof TileBoxBase)
                 continue;
-            if (PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord, side))
+            if (PowerPlugin.isBlockBeingPowered(worldObj, getPos(), side))
                 return true;
 //            if (PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord - 1, zCoord, side))
 //                return true;

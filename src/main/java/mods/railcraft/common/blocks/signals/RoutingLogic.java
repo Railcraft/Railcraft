@@ -280,7 +280,7 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            String customName = cart.func_95999_t();
+            String customName = cart.getName();
             if (customName == null)
                 return "null".equals(value);
             if (isRegex)
@@ -361,7 +361,7 @@ public class RoutingLogic {
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
             for (EntityMinecart c : Train.getTrain(cart)) {
                 if (c != null && c.riddenByEntity instanceof EntityPlayer)
-                    return c.riddenByEntity.getCommandSenderName().equalsIgnoreCase(value);
+                    return c.riddenByEntity.getName().equalsIgnoreCase(value);
             }
             return false;
         }
@@ -415,6 +415,5 @@ public class RoutingLogic {
             }
             return false;
         }
-
     }
 }

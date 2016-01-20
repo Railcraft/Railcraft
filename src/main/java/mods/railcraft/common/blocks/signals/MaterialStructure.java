@@ -11,11 +11,9 @@ package mods.railcraft.common.blocks.signals;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 
-public class MaterialStructure extends Material
-{
+public class MaterialStructure extends Material {
 
-    public MaterialStructure()
-    {
+    public MaterialStructure() {
         super(MapColor.ironColor);
         setRequiresTool();
     }

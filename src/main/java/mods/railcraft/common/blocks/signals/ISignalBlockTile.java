@@ -11,10 +11,10 @@ package mods.railcraft.common.blocks.signals;
 import mods.railcraft.api.core.IOwnable;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ISignalBlockTile extends IOwnable {
 
     SignalBlock getSignalBlock();
+
 }

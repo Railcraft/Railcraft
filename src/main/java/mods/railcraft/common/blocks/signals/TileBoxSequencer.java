@@ -49,7 +49,7 @@ public class TileBoxSequencer extends TileBoxBase {
         super.onNeighborBlockChange(block);
         if (worldObj.isRemote)
             return;
-        boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, xCoord, yCoord, zCoord);
+        boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos());
         if (!powerState && p) {
             powerState = p;
             incrementSequencer(true, new HashSet<TileEntity>(), 0);
@@ -107,7 +107,7 @@ public class TileBoxSequencer extends TileBoxBase {
             return true;
         if (tile instanceof TileBoxBase)
             return ((TileBoxBase) tile).canReceiveAspect();
-        Block block = WorldPlugin.getBlockOnSide(worldObj, xCoord, yCoord, zCoord, side);
+        Block block = WorldPlugin.getBlockOnSide(worldObj, getPos(), side);
         if (block == Blocks.redstone_wire)
             return true;
         if (block == Blocks.unpowered_repeater || block == Blocks.powered_repeater) {
@@ -198,5 +198,4 @@ public class TileBoxSequencer extends TileBoxBase {
     public boolean canReceiveAspect() {
         return true;
     }
-
 }

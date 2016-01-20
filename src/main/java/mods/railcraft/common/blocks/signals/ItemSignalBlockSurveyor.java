@@ -22,12 +22,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
 public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, IActivationBlockingItem {
+
     private static Item item;
 
     private ItemSignalBlockSurveyor() {
@@ -66,61 +69,61 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
     }
 
     @Override
-    public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 //        System.out.println("click");
-        if (Game.isHost(world) && item.hasTagCompound() && player.isSneaking()) {
-            WorldCoordinate pos = getSignalData(item);
-            if (pos != null) {
-                TileEntity tile = DimensionManager.getWorld(pos.dimension).getTileEntity(pos.x, pos.y, pos.z);
+        if (Game.isHost(worldIn) && item.hasTagCompound() && playerIn.isSneaking()) {
+            WorldCoordinate signalPos = getSignalData(item);
+            if (signalPos != null) {
+                TileEntity tile = DimensionManager.getWorld(signalPos.dimension).getTileEntity(signalPos.x, signalPos.y, signalPos.z);
                 if (tile instanceof ISignalBlockTile) {
                     ((ISignalBlockTile) tile).getSignalBlock().endPairing();
                 }
             }
-            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.abandon");
+            ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.abandon");
             item.setTagCompound(null);
             return false;
         }
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = worldIn.getTileEntity(pos);
         if (tile != null)
             if (tile instanceof ISignalBlockTile) {
 //            System.out.println("target found");
-                if (Game.isHost(world)) {
+                if (Game.isHost(worldIn)) {
                     ISignalBlockTile signalTile = (ISignalBlockTile) tile;
                     SignalBlock signalBlock = signalTile.getSignalBlock();
-                    WorldCoordinate pos = getSignalData(item);
+                    WorldCoordinate signalPos = getSignalData(item);
                     WorldCoordinate track = signalBlock.getTrackLocation();
                     if (track == null)
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.track", signalTile.getLocalizationTag());
-                    else if (pos == null) {
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.begin");
+                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.track", signalTile.getLocalizationTag());
+                    else if (signalPos == null) {
+                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.begin");
                         setSignalData(item, tile);
                         signalBlock.startPairing();
-                    } else if (x != pos.x || y != pos.y || z != pos.z) {
+                    } else if (pos.getX() != signalPos.x || pos.getY() != signalPos.y || pos.getZ() != signalPos.z) {
 //                System.out.println("attempt pairing");
-                        tile = world.getTileEntity(pos.x, pos.y, pos.z);
+                        tile = worldIn.getTileEntity(signalPos.x, signalPos.y, signalPos.z);
                         if (tile != null && tile instanceof ISignalBlockTile) {
                             ISignalBlockTile otherTile = (ISignalBlockTile) tile;
                             SignalBlock otherSignal = otherTile.getSignalBlock();
                             if (signalBlock.createSignalBlock(otherSignal)) {
-                                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.success");
+                                ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.success");
                                 item.setTagCompound(null);
                             } else
-                                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.invalid");
-                        } else if (world.blockExists(pos.x, pos.y, pos.z)) {
-                            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.lost");
+                                ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.invalid");
+                        } else if (worldIn.blockExists(signalPos.x, signalPos.y, signalPos.z)) {
+                            ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.lost");
                             signalBlock.endPairing();
                             item.setTagCompound(null);
                         } else
-                            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.unloaded");
+                            ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.unloaded");
                     } else {
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.abandon");
+                        ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.abandon");
                         signalBlock.endPairing();
                         item.setTagCompound(null);
                     }
                 }
                 return true;
-            } else if (Game.isHost(world))
-                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.wrong");
+            } else if (Game.isHost(worldIn))
+                ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.wrong");
         return false;
     }
 
@@ -139,10 +142,10 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
 
     private void setSignalData(ItemStack item, TileEntity tile) {
         NBTTagCompound data = new NBTTagCompound();
-        data.setInteger("signalDim", tile.getWorldObj().provider.dimensionId);
-        data.setInteger("signalX", tile.xCoord);
-        data.setInteger("signalY", tile.yCoord);
-        data.setInteger("signalZ", tile.zCoord);
+        data.setInteger("signalDim", tile.getWorld().provider.getDimensionId());
+        data.setInteger("signalX", tile.getPos().getX());
+        data.setInteger("signalY", tile.getPos().getY());
+        data.setInteger("signalZ", tile.getPos().getZ());
         item.setTagCompound(data);
     }
 

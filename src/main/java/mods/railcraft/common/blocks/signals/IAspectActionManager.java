@@ -13,7 +13,6 @@ import mods.railcraft.common.gui.buttons.LockButtonState;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IAspectActionManager extends ISecure<LockButtonState> {

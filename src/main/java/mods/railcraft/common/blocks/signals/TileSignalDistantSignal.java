@@ -17,6 +17,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TileSignalDistantSignal extends TileSignalBase implements IReceiverTile {
+
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
 
     @Override

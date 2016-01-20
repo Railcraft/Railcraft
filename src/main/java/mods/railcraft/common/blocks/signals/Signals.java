@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.signals;
 import mods.railcraft.common.core.RailcraftConfig;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class Signals {

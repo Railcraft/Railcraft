@@ -21,6 +21,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TileSignalBlockSignal extends TileSignalBase implements IControllerTile, ISignalTile, ISignalBlockTile {
+
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SignalBlock signalBlock = new SignalBlockSimple(this);
 
@@ -49,7 +50,7 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
             sendUpdateToClient();
         }
         if (RailcraftConfig.printSignalDebug() && prevAspect != SignalAspect.BLINK_RED && controller.getAspect() == SignalAspect.BLINK_RED) {
-            Game.log(Level.INFO, "Signal Tile changed aspect to BLINK_RED: source:[{0}, {1}, {2}]", xCoord, yCoord, zCoord);
+            Game.log(Level.INFO, "Signal Tile changed aspect to BLINK_RED: source:[{0}]", getPos());
         }
     }
 

@@ -25,8 +25,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import static net.minecraftforge.common.util.EnumFacing.DOWN;
-import static net.minecraftforge.common.util.EnumFacing.UP;
+import static net.minecraft.util.EnumFacing.DOWN;
+import static net.minecraft.util.EnumFacing.UP;
 
 public abstract class TileSignalBase extends TileSignalFoundation implements ISignalTile, IAspectProvider {
 
@@ -130,7 +130,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
+        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, getPos(), entityliving);
     }
 
     @Override

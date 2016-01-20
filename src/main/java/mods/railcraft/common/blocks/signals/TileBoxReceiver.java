@@ -32,6 +32,7 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 public class TileBoxReceiver extends TileBoxActionManager implements IAspectActionManager, IGuiReturnHandler, IReceiverTile, IAspectProvider {
+
     private static final int FORCED_UPDATE = 512;
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
     private boolean prevBlinkState;
@@ -46,7 +47,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
         if (player.isSneaking())
             return false;
         if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.BOX_RECEIVER, player, worldObj, xCoord, yCoord, zCoord);
+            GuiHandler.openGui(EnumGui.BOX_RECEIVER, player, worldObj, getPos());
         return true;
     }
 
@@ -86,7 +87,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
 
     @Override
     public int getPowerOutput(int side) {
-        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, xCoord, yCoord, zCoord, MiscTools.getOppositeSide(side));
+        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, getPos(), MiscTools.getOppositeSide(side));
         if (tile instanceof TileBoxBase)
             return NO_POWER;
         return doesActionOnAspect(receiver.getAspect()) ? FULL_POWER : NO_POWER;
