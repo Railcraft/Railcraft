@@ -24,11 +24,6 @@ public class ItemStrengthGlass extends ItemBlock {
     }
 
     @Override
-    public IIcon getIconFromDamage(int meta) {
-        return BlockStrengthGlass.getBlock().getIcon(0, 0);
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack stack, int pass) {
         if (BlockStrengthGlass.renderingHighlight)
