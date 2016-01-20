@@ -17,16 +17,11 @@ import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.Vec3;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class EntityAIMoveToBlock extends EntityAIBase {
 
     private final EntityCreature entity;
-    /**
-     * The closest entity which is being watched by this one.
-     */
-    protected WorldCoordinate watchedBlock;
     /**
      * This is the Maximum distance that the AI will look for the Entity
      */
@@ -34,6 +29,10 @@ public class EntityAIMoveToBlock extends EntityAIBase {
     private final float weight;
     private final Block searchedBlock;
     private final int searchedMeta;
+    /**
+     * The closest entity which is being watched by this one.
+     */
+    protected WorldCoordinate watchedBlock;
 
     public EntityAIMoveToBlock(EntityCreature entity, Block searchedBlock, int searchedMeta, int maxDist) {
         this(entity, searchedBlock, searchedMeta, maxDist, 0.001F);
@@ -89,7 +88,7 @@ public class EntityAIMoveToBlock extends EntityAIBase {
     @Override
     public void startExecuting() {
         if (entity.getDistanceSq(watchedBlock.x + 0.5D, watchedBlock.y + 0.5D, watchedBlock.z + 0.5D) > 256.0D) {
-            Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(entity, 14, 3, Vec3.createVectorHelper(watchedBlock.x + 0.5D, watchedBlock.y + 0.5D, watchedBlock.z + 0.5D));
+            Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(entity, 14, 3, new Vec3(watchedBlock.x + 0.5D, watchedBlock.y + 0.5D, watchedBlock.z + 0.5D));
             if (vec3 != null)
                 move(vec3.xCoord, vec3.yCoord, vec3.zCoord);
         } else
@@ -109,5 +108,4 @@ public class EntityAIMoveToBlock extends EntityAIBase {
     public void resetTask() {
         this.watchedBlock = null;
     }
-
 }

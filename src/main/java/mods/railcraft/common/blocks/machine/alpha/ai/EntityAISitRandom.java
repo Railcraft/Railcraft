@@ -12,14 +12,17 @@ package mods.railcraft.common.blocks.machine.alpha.ai;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityTameable;
 
-public class EntityAISitRandom extends EntityAIBase
-{
+public class EntityAISitRandom extends EntityAIBase {
 
     private static final int SIT_TICKS = 600;
     private final EntityTameable theAnimal;
-    /** Tracks for how long the task has been executing */
+    /**
+     * Tracks for how long the task has been executing
+     */
     private int currentTick = 0;
-    /** For how long the Ocelot should be sitting */
+    /**
+     * For how long the Ocelot should be sitting
+     */
     private int maxSittingTicks = 0;
 
     public EntityAISitRandom(EntityTameable par1EntityOcelot) {
@@ -50,7 +53,7 @@ public class EntityAISitRandom extends EntityAIBase
     public void startExecuting() {
         this.currentTick = 0;
         this.maxSittingTicks = this.theAnimal.getRNG().nextInt(this.theAnimal.getRNG().nextInt(SIT_TICKS) + SIT_TICKS) + SIT_TICKS;
-        this.theAnimal.func_70907_r().setSitting(false);
+        this.theAnimal.getAISit().setSitting(false);
     }
 
     /**
@@ -67,9 +70,9 @@ public class EntityAISitRandom extends EntityAIBase
     @Override
     public void updateTask() {
         this.currentTick++;
-        this.theAnimal.func_70907_r().setSitting(false);
+        this.theAnimal.getAISit().setSitting(false);
 
-        if(!this.theAnimal.isSitting()) {
+        if (!this.theAnimal.isSitting()) {
             this.theAnimal.setSitting(true);
         }
     }

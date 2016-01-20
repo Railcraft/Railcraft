@@ -15,24 +15,23 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class EntityAIWatchBlock extends EntityAIBase {
 
     private final EntityLiving theWatcher;
     /**
-     * The closest entity which is being watched by this one.
-     */
-    protected WorldCoordinate watchedBlock;
-    /**
      * This is the Maximum distance that the AI will look for the Entity
      */
     private final int maxDist;
-    private int lookTime;
     private final float weight;
     private final Block searchedBlock;
     private final int searchedMeta;
+    /**
+     * The closest entity which is being watched by this one.
+     */
+    protected WorldCoordinate watchedBlock;
+    private int lookTime;
 
     public EntityAIWatchBlock(EntityLiving entity, Block searchedBlock, int searchedMeta, int maxDist) {
         this(entity, searchedBlock, searchedMeta, maxDist, 0.02F);
@@ -107,5 +106,4 @@ public class EntityAIWatchBlock extends EntityAIBase {
         this.theWatcher.getLookHelper().setLookPosition(watchedBlock.x + 0.5, watchedBlock.y + 0.5, watchedBlock.z + 0.5, 10.0F, (float) this.theWatcher.getVerticalFaceSpeed());
         --this.lookTime;
     }
-
 }

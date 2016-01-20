@@ -14,8 +14,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 
 import java.util.List;
 
-public class EntityAIDespawn extends EntityAIBase
-{
+public class EntityAIDespawn extends EntityAIBase {
 
     private static final double CHILD_DESPAWN_CHANCE = 0.01;
     private static final double ADULT_DESPAWN_CHANCE = 0.005;
@@ -33,9 +32,9 @@ public class EntityAIDespawn extends EntityAIBase
     @Override
     public boolean shouldExecute() {
         double chance = ADULT_DESPAWN_CHANCE;
-        if(theAnimal.isChild()) chance = CHILD_DESPAWN_CHANCE;
-        if(theAnimal.getRNG().nextDouble() > chance) return false;
-        List nearbyEntites = theAnimal.worldObj.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.boundingBox.expand(1, 1, 1));
+        if (theAnimal.isChild()) chance = CHILD_DESPAWN_CHANCE;
+        if (theAnimal.getRNG().nextDouble() > chance) return false;
+        List nearbyEntites = theAnimal.worldObj.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.getEntityBoundingBox().expand(1, 1, 1));
         return nearbyEntites.size() > MAX_ANIMALS;
     }
 

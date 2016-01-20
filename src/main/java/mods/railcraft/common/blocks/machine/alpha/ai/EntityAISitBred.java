@@ -36,7 +36,7 @@ public class EntityAISitBred extends EntityAISit {
             return false;
         else {
             Entity owner = theEntity.getOwner();
-            String ownerId = theEntity.func_152113_b();
+            String ownerId = theEntity.getOwnerId();
             if ((ownerId != null && ownerId.trim().length() > 0) && owner == null)
                 return true;
 
@@ -52,5 +52,4 @@ public class EntityAISitBred extends EntityAISit {
         super.setSitting(sit);
         this.isSitting = sit;
     }
-
 }
