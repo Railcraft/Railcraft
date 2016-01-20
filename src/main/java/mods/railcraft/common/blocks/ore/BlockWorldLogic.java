@@ -15,7 +15,9 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -23,7 +25,6 @@ import java.util.EnumSet;
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockWorldLogic extends Block {
@@ -43,7 +44,7 @@ public class BlockWorldLogic extends Block {
 
     public BlockWorldLogic() {
         super(Material.rock);
-        setBlockName("railcraft.worldlogic");
+        setRegistryName("railcraft.worldlogic");
         setResistance(6000000.0F);
         setBlockUnbreakable();
         setStepSound(Block.soundTypeStone);
@@ -54,49 +55,40 @@ public class BlockWorldLogic extends Block {
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(world, pos, state);
+        world.scheduleBlockUpdate(pos, this, tickRate(world), 0);
     }
 
     @Override
-    public IIcon getIcon(int side, int meta) {
-        return Blocks.bedrock.getIcon(side, meta);
-    }
-
-    @Override
-    public void onBlockAdded(World world, int x, int y, int z) {
-        super.onBlockAdded(world, x, y, z);
-        world.scheduleBlockUpdate(x, y, z, this, tickRate(world));
-    }
-
-    @Override
-    public void updateTick(World world, int x, int y, int z, Random rand) {
-        world.scheduleBlockUpdate(x, y, z, this, tickRate(world));
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        world.scheduleBlockUpdate(pos, this, tickRate(world), 0);
         if (MiscTools.getRand().nextInt(32) != 0)
             return;
         BlockOre blockOre = BlockOre.getBlock();
         if (blockOre == null || !EnumOre.SALTPETER.isEnabled() || !RailcraftConfig.isWorldGenEnabled("saltpeter"))
             return;
-        int surfaceY = world.getTopSolidOrLiquidBlock(x, z) - 2;
+        int surfaceY = world.getTopSolidOrLiquidBlock(pos).getY() - 2;
 
         if (surfaceY < 50 || surfaceY > 100)
             return;
 
-        Block block = WorldPlugin.getBlock(world, x, surfaceY, z);
+        Block block = WorldPlugin.getBlock(world, pos.getX(), surfaceY, pos.getZ());
         if (block != Blocks.sand)
             return;
 
-        Block above = WorldPlugin.getBlock(world, x, surfaceY + 1, z);
+        Block above = WorldPlugin.getBlock(world, pos.getX(), surfaceY + 1, pos.getZ());
         if (above != Blocks.sand)
             return;
 
-        Block below = WorldPlugin.getBlock(world, x, surfaceY - 1, z);
+        Block below = WorldPlugin.getBlock(world, pos.getX(), surfaceY - 1, pos.getZ());
         if (below != Blocks.sand && below != Blocks.sandstone)
             return;
 
         int airCount = 0;
         Block ore = BlockOre.getBlock();
         for (EnumFacing side : EnumSet.of(EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.EAST, EnumFacing.WEST)) {
-            boolean isAir = world.isAirBlock(MiscTools.getXOnSide(x, side), MiscTools.getYOnSide(surfaceY, side), MiscTools.getZOnSide(z, side));
+            boolean isAir = world.isAirBlock(MiscTools.getXOnSide(pos.getX(), side), MiscTools.getYOnSide(surfaceY, side), MiscTools.getZOnSide(pos.getZ(), side));
             if (isAir)
                 airCount++;
 
@@ -106,12 +98,12 @@ public class BlockWorldLogic extends Block {
             if (isAir)
                 continue;
 
-            block = WorldPlugin.getBlockOnSide(world, x, surfaceY, z, side);
+            block = WorldPlugin.getBlockOnSide(world, pos.getX(), surfaceY, pos.getZ(), side);
             if (block != Blocks.sand && block != Blocks.sandstone && block != ore)
                 return;
         }
 
-        world.setBlock(x, surfaceY, z, ore, EnumOre.SALTPETER.ordinal(), 3);
+        world.setBlockState(new BlockPos(pos.getX(), surfaceY, pos.getZ()), newState/*ore, EnumOre.SALTPETER.ordinal()*/, 3);
 //        System.out.println("saltpeter spawned");
     }
 
@@ -119,5 +111,4 @@ public class BlockWorldLogic extends Block {
     public int tickRate(World world) {
         return 6000;
     }
-
 }

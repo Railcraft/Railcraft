@@ -10,7 +10,6 @@ package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.client.particles.ParticleHelperCallback;
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -22,18 +21,17 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -50,6 +48,7 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockOre extends Block {
+
     private static final ParticleHelperCallback callback = new ParticleCallback();
     public static int renderPass;
     private static BlockOre instance;
@@ -59,7 +58,7 @@ public class BlockOre extends Block {
     public BlockOre(int renderId) {
         super(Material.rock);
         renderType = renderId;
-        setBlockName("railcraft.ore");
+        setRegistryName("railcraft.ore");
         setResistance(5);
         setHardness(3);
         setStepSound(Block.soundTypeStone);
@@ -141,14 +140,14 @@ public class BlockOre extends Block {
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-        int meta = world.getBlockMetadata(x, y, z);
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+        int meta = world.getBlockMetadata(pos);
         return EnumOre.fromMeta(meta).getItem();
     }
 
     @Override
-    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float par6, int fortune) {
-        super.dropBlockAsItemWithChance(world, x, y, z, meta, par6, fortune);
+    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
+        super.dropBlockAsItemWithChance(worldIn, pos, state, chance, fortune);
 
         switch (EnumOre.fromMeta(meta)) {
             case SULFUR:
@@ -156,14 +155,14 @@ public class BlockOre extends Block {
             case DARK_DIAMOND:
             case DARK_EMERALD:
             case DARK_LAPIS: {
-                int xp = MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
-                this.dropXpOnBlockBreak(world, x, y, z, xp);
+                int xp = MathHelper.getRandomIntegerInRange(worldIn.rand, 2, 5);
+                this.dropXpOnBlockBreak(worldIn, pos, xp);
             }
         }
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
         switch (EnumOre.fromMeta(meta)) {
             case SULFUR: {
@@ -201,46 +200,18 @@ public class BlockOre extends Block {
                 return drops;
             }
             default:
-                return super.getDrops(world, x, y, z, meta, fortune);
+                return super.getDrops(world, pos, state, fortune);
         }
     }
 
     @Override
-    public int damageDropped(int meta) {
+    public int damageDropped(IBlockState state) {
         return meta;
     }
 
     @Override
-    public boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int metadata) {
+    public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         return true;
-    }
-
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        for (EnumOre ore : EnumOre.VALUES) {
-            if (ore != EnumOre.WATERSTONE)
-                ore.setTexture(iconRegister.registerIcon("railcraft:" + MiscTools.cleanTag(ore.getTag())));
-        }
-    }
-
-    @Override
-    public IIcon getIcon(int side, int meta) {
-        if (renderPass == 0)
-            switch (EnumOre.fromMeta(meta)) {
-                case SALTPETER:
-                    return Blocks.sandstone.getIcon(EnumFacing.DOWN.ordinal(), 0);
-                case FIRESTONE:
-                    return Blocks.netherrack.getIcon(0, 0);
-                case DARK_DIAMOND:
-                case DARK_EMERALD:
-                case DARK_LAPIS:
-                    IIcon icon = EnumCube.ABYSSAL_STONE.getIcon();
-                    if (icon != null)
-                        return icon;
-                default:
-                    return Blocks.stone.getIcon(side, 0);
-            }
-        return EnumOre.fromMeta(meta).getTexture(side);
     }
 
     @Override
@@ -256,16 +227,16 @@ public class BlockOre extends Block {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
-        return ParticleHelper.addDestroyEffects(worldObj, instance, x, y, z, meta, effectRenderer, callback);
+    public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+        return ParticleHelper.addDestroyEffects(world, instance, pos, effectRenderer, callback);
     }
 
     @Override
-    public int getLightValue(IBlockAccess world, int x, int y, int z) {
-        int meta = world.getBlockMetadata(x, y, z);
+    public int getLightValue(IBlockAccess world, BlockPos pos) {
+        int meta = world.getBlockMetadata(pos);
         if (EnumOre.FIRESTONE.ordinal() == meta)
             return 15;
-        return super.getLightValue(world, x, y, z);
+        return super.getLightValue(world, pos);
     }
 
     private static class ParticleCallback implements ParticleHelperCallback {

@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum EnumOre {
@@ -33,7 +32,6 @@ public enum EnumOre {
     POOR_TIN("poor.tin"),
     POOR_LEAD("poor.lead"),;
     public static final EnumOre[] VALUES = values();
-    private IIcon texture;
     private final String tag;
     private boolean depreciated;
 
@@ -57,14 +55,6 @@ public enum EnumOre {
         return new ItemStack(BlockOre.getBlock(), qty, ordinal());
     }
 
-    public void setTexture(IIcon icon) {
-        this.texture = icon;
-    }
-
-    public IIcon getTexture(int side) {
-        return texture;
-    }
-
     public boolean isEnabled() {
         return ModuleManager.isModuleLoaded(Module.WORLD) && BlockOre.getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
     }
@@ -78,5 +68,4 @@ public enum EnumOre {
             return SULFUR;
         return values()[meta];
     }
-
 }
