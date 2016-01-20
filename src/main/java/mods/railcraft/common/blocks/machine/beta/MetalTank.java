@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.machine.beta;
 import net.minecraft.entity.Entity;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class MetalTank {
@@ -23,4 +22,5 @@ public abstract class MetalTank {
     public abstract boolean isWallBlock(int meta);
 
     public abstract float getResistance(Entity exploder);
+
 }

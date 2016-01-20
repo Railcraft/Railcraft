@@ -35,8 +35,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
+import static net.minecraft.util.EnumParticleTypes.FLAME;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileBoilerFirebox extends TileBoiler implements IInventory, ISidedInventory, ITemperature {
@@ -54,13 +55,6 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
         inventory = new StandaloneInventory(invSize, (IInventory) this);
         boiler = new SteamBoiler(tankWater, tankSteam);
         boiler.setTile(this);
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        if (side > 1 && isBurning())
-            return getMachineType().getTexture(6);
-        return getMachineType().getTexture(side);
     }
 
     @Override
@@ -83,7 +77,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
         boolean b = isBurning();
         if (wasLit != b) {
             wasLit = b;
-            worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+            worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
             markBlockForUpdate();
         }
     }
@@ -101,15 +95,15 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
         if (isStructureValid()) {
             updateLighting();
             if (isBurning() && random.nextInt(100) < 20) {
-                float f = (float) xCoord + 0.5F;
-                float f1 = yCoord + 0.4375F + (random.nextFloat() * 3F / 16F);
-                float f2 = (float) zCoord + 0.5F;
+                float f = (float) getX() + 0.5F;
+                float f1 = getY() + 0.4375F + (random.nextFloat() * 3F / 16F);
+                float f2 = (float) getZ() + 0.5F;
                 float f3 = 0.52F;
                 float f4 = random.nextFloat() * 0.6F - 0.3F;
-                worldObj.spawnParticle("flame", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-                worldObj.spawnParticle("flame", f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-                worldObj.spawnParticle("flame", f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
-                worldObj.spawnParticle("flame", f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+                worldObj.spawnParticle(FLAME, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                worldObj.spawnParticle(FLAME, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+                worldObj.spawnParticle(FLAME, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+                worldObj.spawnParticle(FLAME, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -120,8 +114,8 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld()))
             return;
@@ -221,16 +215,11 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
     }
 
     @Override
-    public String getInventoryName() {
-        return getName();
+    public void openInventory(EntityPlayer player) {
     }
 
     @Override
-    public void openInventory() {
-    }
-
-    @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
     }
 
     @Override
@@ -241,11 +230,6 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
     @Override
     public int getSizeInventory() {
         return inventory.getSizeInventory();
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int var1) {
-        return null;
     }
 
     protected boolean handleClick(EntityPlayer player, int side) {
@@ -269,5 +253,4 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
     public boolean isUseableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
-
 }

@@ -12,7 +12,6 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.steam.Steam;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileEngineSteamLow extends TileEngineSteam {
@@ -46,5 +45,4 @@ public class TileEngineSteamLow extends TileEngineSteam {
     public int maxEnergyReceived() {
         return 6000;
     }
-
 }

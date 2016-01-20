@@ -25,11 +25,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static net.minecraftforge.common.util.EnumFacing.DOWN;
-import static net.minecraftforge.common.util.EnumFacing.UP;
+import static net.minecraft.util.EnumFacing.DOWN;
+import static net.minecraft.util.EnumFacing.UP;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileChestRailcraft extends TileMachineItem {
@@ -52,7 +51,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
+        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, getPos(), entityliving);
     }
 
     @Override
@@ -74,7 +73,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
 
     @Override
     public final boolean openGui(EntityPlayer player) {
-        if (worldObj.isSideSolid(xCoord, yCoord + 1, zCoord, EnumFacing.DOWN))
+        if (worldObj.isSideSolid(getPos().up(), DOWN))
             return false;
         else if (isCatOnChest())
             return false;
@@ -84,9 +83,9 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     }
 
     private boolean isCatOnChest() {
-        int x = xCoord;
-        int y = yCoord;
-        int z = zCoord;
+        int x = getX();
+        int y = getY();
+        int z = getZ();
         Iterator it = worldObj.getEntitiesWithinAABB(EntityOcelot.class, AxisAlignedBB.fromBounds(x, (y + 1), z, (x + 1), (y + 2), (z + 1))).iterator();
         EntityOcelot cat;
         do {
@@ -99,17 +98,17 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (clock % TICK_PER_SYNC == 0)
-            WorldPlugin.addBlockEvent(worldObj, xCoord, yCoord, zCoord, getBlockType(), 1, numUsingPlayers);
+            WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, numUsingPlayers);
 
         this.prevLidAngle = this.lidAngle;
         float angleChange = 0.1F;
 
         if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F)
-            this.worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            this.worldObj.playSoundEffect(getX() + 0.5D, getY() + 0.5D, getZ() + 0.5D, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 
         if (this.numUsingPlayers == 0 && this.lidAngle > 0.0F || this.numUsingPlayers > 0 && this.lidAngle < 1.0F) {
             float angle = this.lidAngle;
@@ -125,7 +124,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
             float openAngle = 0.5F;
 
             if (this.lidAngle < openAngle && angle >= openAngle)
-                this.worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                this.worldObj.playSoundEffect(getX() + 0.5D, getY() + 0.5D, getZ() + 0.5D, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 
             if (this.lidAngle < 0.0F)
                 this.lidAngle = 0.0F;
@@ -142,15 +141,15 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
         ++this.numUsingPlayers;
-        WorldPlugin.addBlockEvent(worldObj, xCoord, yCoord, zCoord, getBlockType(), 1, numUsingPlayers);
+        WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, numUsingPlayers);
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
         --this.numUsingPlayers;
-        WorldPlugin.addBlockEvent(worldObj, xCoord, yCoord, zCoord, getBlockType(), 1, numUsingPlayers);
+        WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, numUsingPlayers);
     }
 
     @Override
@@ -176,5 +175,4 @@ public abstract class TileChestRailcraft extends TileMachineItem {
         super.readPacketData(data);
         facing = EnumFacing.getOrientation(data.readByte());
     }
-
 }

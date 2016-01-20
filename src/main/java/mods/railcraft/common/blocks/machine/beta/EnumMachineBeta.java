@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
@@ -20,14 +19,11 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar
  */
 public enum EnumMachineBeta implements IEnumMachine {
@@ -51,7 +47,6 @@ public enum EnumMachineBeta implements IEnumMachine {
     private final Module module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
-    private IIcon[] texture = new IIcon[12];
     private final int[] textureInfo;
     private static final List<EnumMachineBeta> creativeList = new ArrayList<EnumMachineBeta>();
     private static final EnumMachineBeta[] VALUES = values();
@@ -90,39 +85,10 @@ public enum EnumMachineBeta implements IEnumMachine {
         }
         return false;
     }
-    
+
     @Override
     public boolean isDepreciated() {
         return module == null;
-    }
-
-    public void setTexture(IIcon[] tex) {
-        this.texture = tex;
-    }
-
-    public IIcon[] getTexture() {
-        return texture;
-    }
-
-    @Override
-    public IIcon getTexture(int index) {
-        if (index < 0 || index >= texture.length)
-            index = 0;
-        return texture[index];
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void registerIcons(IIconRegister iconRegister) {
-        for (EnumMachineBeta machine : VALUES) {
-            if (machine.isDepreciated()) continue;
-            machine.texture = new IIcon[machine.textureInfo.length - 2];
-            int columns = machine.textureInfo[0];
-            int rows = machine.textureInfo[1];
-            IIcon[] icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:" + machine.tag, columns, rows);
-            for (int i = 0; i < machine.texture.length; i++) {
-                machine.texture[i] = icons[machine.textureInfo[i + 2]];
-            }
-        }
     }
 
     public static EnumMachineBeta fromId(int id) {
@@ -192,5 +158,4 @@ public enum EnumMachineBeta implements IEnumMachine {
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
     }
-
 }

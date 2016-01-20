@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import static mods.railcraft.common.blocks.machine.beta.TileTankSteelWall.STEEL_TANK;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTankSteelValve extends TileTankIronValve {

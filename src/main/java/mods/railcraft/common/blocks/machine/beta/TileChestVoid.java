@@ -26,8 +26,8 @@ public class TileChestVoid extends TileChestRailcraft {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (clock % TICK_PER_VOID == 0 && Game.isHost(worldObj))
             for (int slot = 0; slot < getSizeInventory(); slot++) {
@@ -38,5 +38,4 @@ public class TileChestVoid extends TileChestRailcraft {
                 }
             }
     }
-
 }

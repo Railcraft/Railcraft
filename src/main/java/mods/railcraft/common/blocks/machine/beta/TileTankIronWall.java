@@ -12,7 +12,6 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTankIronWall extends TileTankBase {
@@ -20,10 +19,5 @@ public class TileTankIronWall extends TileTankBase {
     @Override
     public IEnumMachine getMachineType() {
         return EnumMachineBeta.TANK_IRON_WALL;
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        return getMachineType().getTexture(side);
     }
 }

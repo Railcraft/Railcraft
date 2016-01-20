@@ -15,7 +15,6 @@ import mods.railcraft.common.blocks.machine.IMachineProxy;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class MachineProxyBeta implements IMachineProxy, IComparatorOverride {
@@ -29,10 +28,4 @@ public class MachineProxyBeta implements IMachineProxy, IComparatorOverride {
     public List<? extends IEnumMachine> getCreativeList() {
         return EnumMachineBeta.getCreativeList();
     }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        EnumMachineBeta.registerIcons(iconRegister);
-    }
-
 }

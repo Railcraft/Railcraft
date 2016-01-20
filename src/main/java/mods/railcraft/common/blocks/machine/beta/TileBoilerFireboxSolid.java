@@ -32,6 +32,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -39,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsFuel {
@@ -104,7 +104,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.BOILER_SOLID, player, worldObj, mBlock.xCoord, mBlock.yCoord, mBlock.zCoord);
+            GuiHandler.openGui(EnumGui.BOILER_SOLID, player, worldObj, mBlock.getPos());
             return true;
         }
         return false;
@@ -119,8 +119,8 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (worldObj.isRemote)
             return;
@@ -137,23 +137,23 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return slot == SLOT_LIQUID_OUTPUT;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return index == SLOT_LIQUID_OUTPUT;
     }
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if(!isStructureValid())
+        if (!isStructureValid())
             return false;
         if (slot >= SLOT_BURN)
             return FuelPlugin.getBurnTime(stack) > 0;
@@ -171,8 +171,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return false;
     }
-
 }

@@ -57,6 +57,7 @@ import java.util.Map;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
+
     public final static int CAPACITY_PER_BLOCK_IRON = 16 * FluidHelper.BUCKET_VOLUME;
     public final static int CAPACITY_PER_BLOCK_STEEL = 32 * FluidHelper.BUCKET_VOLUME;
     protected final static int SLOT_INPUT = 0;
@@ -398,7 +399,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         super.initFromItem(stack);
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt != null && nbt.hasKey("color"))
-            recolourBlock(15 - nbt.getByte("color"));
+            recolourBlock(EnumDyeColor.byMetadata(15 - nbt.getByte("color")));
     }
 
     @Override
@@ -428,7 +429,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @Override
     public boolean recolourBlock(EnumDyeColor cID) {
-        EnumColor c = EnumColor.fromId(15 - cID);
+        EnumColor c = EnumColor.fromId(15 - cID.getMetadata());
         if (color != c) {
             color = c;
             markBlockForUpdate();
@@ -470,7 +471,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.TANK, player, worldObj, mBlock.xCoord, mBlock.yCoord, mBlock.zCoord);
+            GuiHandler.openGui(EnumGui.TANK, player, worldObj, mBlock.getPos());
             return true;
         }
         return false;
@@ -516,7 +517,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         switch (mapPos) {
             case 'O': // Other
             {
-                Block block = WorldPlugin.getBlock(worldObj, x, y, z);
+                Block block = WorldPlugin.getBlock(worldObj, getPos());
                 if (block == getBlockType()) {
                     int meta = worldObj.getBlockMetadata(x, y, z);
                     if (getTankType().isTankBlock(meta))
@@ -526,7 +527,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
             }
             case 'W': // Gauge or Valve
             {
-                Block block = WorldPlugin.getBlock(worldObj, x, y, z);
+                Block block = WorldPlugin.getBlock(worldObj, getPos());
                 if (block != getBlockType())
                     return false;
                 int meta = worldObj.getBlockMetadata(x, y, z);
@@ -534,7 +535,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
             }
             case 'B': // Block
             {
-                Block block = WorldPlugin.getBlock(worldObj, x, y, z);
+                Block block = WorldPlugin.getBlock(worldObj, getPos());
                 if (block != getBlockType())
                     return false;
                 int meta = worldObj.getBlockMetadata(x, y, z);
@@ -543,30 +544,30 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
             case 'M': // Master
             case 'T': // Top Block
             {
-                Block block = WorldPlugin.getBlock(worldObj, x, y, z);
+                Block block = WorldPlugin.getBlock(worldObj, getPos());
                 if (block != getBlockType())
                     return false;
                 int meta = worldObj.getBlockMetadata(x, y, z);
                 if (!getTankType().isTankBlock(meta))
                     return false;
-                TileEntity tile = worldObj.getTileEntity(x, y, z);
+                TileEntity tile = worldObj.getTileEntity(getPos());
                 if (!(tile instanceof TileMultiBlock)) {
-                    worldObj.removeTileEntity(x, y, z);
+                    worldObj.removeTileEntity(getPos());
                     return true;
                 }
                 return !((TileMultiBlock) tile).isStructureValid();
             }
             case 'A': // Air
             {
-                return worldObj.isAirBlock(x, y, z);
+                return worldObj.isAirBlock(getPos());
             }
         }
         return true;
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isHost(worldObj))
             if (isMaster) {

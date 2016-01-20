@@ -19,7 +19,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileBoilerTank extends TileBoiler {
@@ -68,5 +67,4 @@ public abstract class TileBoilerTank extends TileBoiler {
     public ITileFilter getOutputFilter() {
         return OUTPUT_FILTER;
     }
-
 }

@@ -36,9 +36,11 @@ import java.util.Map;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileBoilerFireboxFluid extends TileBoilerFirebox {
+
     private static final int TANK_FUEL = 2;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     protected final BoilerFuelTank tankFuel = new BoilerFuelTank(FluidHelper.BUCKET_VOLUME * 16, this);
+
     public TileBoilerFireboxFluid() {
         super(2);
         tankManager.add(tankFuel);
@@ -75,7 +77,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
 //        }
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.BOILER_LIQUID, player, worldObj, mBlock.xCoord, mBlock.yCoord, mBlock.zCoord);
+            GuiHandler.openGui(EnumGui.BOILER_LIQUID, player, worldObj, mBlock.getPos());
             return true;
         }
         return false;
@@ -114,23 +116,23 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return false;
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return slot == SLOT_LIQUID_OUTPUT;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return index == SLOT_LIQUID_OUTPUT;
     }
 
     @Override

@@ -12,11 +12,9 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.steam.Steam;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileEngineSteamHigh extends TileEngineSteam
-{
+public class TileEngineSteamHigh extends TileEngineSteam {
 
     private static final int OUTPUT_RF = 80;
 
@@ -35,7 +33,7 @@ public class TileEngineSteamHigh extends TileEngineSteam
 
     @Override
     public int steamUsedPerTick() {
-        return Steam.STEAM_PER_10RF * (OUTPUT_RF/10);
+        return Steam.STEAM_PER_10RF * (OUTPUT_RF / 10);
     }
 
     @Override

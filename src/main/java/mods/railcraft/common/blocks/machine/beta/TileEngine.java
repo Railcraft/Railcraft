@@ -30,6 +30,7 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileEngine extends TileMachineBase implements IEnergyConnection {
+
     public float currentOutput = 0;
     public int energy;
     private EnumFacing direction = EnumFacing.UP;
@@ -59,8 +60,8 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isNotHost(worldObj)) {
             if (pistonStage != 0) {
                 pistonProgress += getPistonSpeed();
@@ -179,10 +180,10 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         if (current != null)
             if (current.getItem() instanceof IToolWrench) {
                 IToolWrench wrench = (IToolWrench) current.getItem();
-                if (wrench.canWrench(player, xCoord, yCoord, zCoord))
+                if (wrench.canWrench(player, getX(), getY(), getZ()))
                     if (Game.isHost(worldObj) && getEnergyStage() == EnergyStage.OVERHEAT) {
                         resetEnergyStage();
-                        wrench.wrenchUsed(player, xCoord, yCoord, zCoord);
+                        wrench.wrenchUsed(player, getX(), getY(), getZ());
                         return true;
                     }
             }
@@ -212,7 +213,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     private void checkPower() {
-        boolean p = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
+        boolean p = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         if (powered != p) {
             powered = p;
             sendUpdateToClient();

@@ -39,6 +39,7 @@ import net.minecraftforge.fluids.FluidStack;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileEngineSteamHobby extends TileEngineSteam implements IInventory, ISidedInventory, INeedsFuel, ITemperature {
+
     public static final byte SLOT_FUEL = 0;
     public static final byte SLOT_LIQUID_INPUT = 1;
     public static final byte SLOT_LIQUID_OUTPUT = 2;
@@ -77,7 +78,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.ENGINE_HOBBY, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.ENGINE_HOBBY, player, worldObj, getPos());
         return true;
     }
 
@@ -104,11 +105,11 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isHost(worldObj)) {
             if (explode) {
-                worldObj.createExplosion(null, xCoord, yCoord, zCoord, 2, true);
+                worldObj.createExplosion(null, getX(), getY(), getZ(), 2, true);
                 explode = false;
             }
         }
@@ -140,11 +141,6 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int var1) {
-        return null;
-    }
-
-    @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
         inv.setInventorySlotContents(slot, stack);
     }
@@ -155,21 +151,16 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
     }
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
-    }
-
-    @Override
-    public String getInventoryName() {
-        return getName();
     }
 
     @Override
@@ -210,20 +201,20 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
-        if (getOrientation().ordinal() == side)
+    public int[] getSlotsForFace(EnumFacing side) {
+        if (getOrientation() == side)
             return NO_SLOTS;
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return slot == SLOT_LIQUID_OUTPUT;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return index == SLOT_LIQUID_OUTPUT;
     }
 
     @Override
@@ -238,7 +229,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return false;
     }
 

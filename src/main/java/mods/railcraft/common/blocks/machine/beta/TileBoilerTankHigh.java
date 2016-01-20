@@ -12,7 +12,6 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileBoilerTankHigh extends TileBoilerTank {
@@ -26,8 +25,4 @@ public class TileBoilerTankHigh extends TileBoilerTank {
         return EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE;
     }
 
-    @Override
-    public IIcon getIcon(int side) {
-        return EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getTexture(side);
-    }
 }

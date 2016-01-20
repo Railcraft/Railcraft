@@ -21,7 +21,6 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileChestMetals extends TileChestRailcraft {
@@ -42,88 +41,83 @@ public class TileChestMetals extends TileChestRailcraft {
     enum Target {
 
         NUGGET_CONDENSE {
-
-                    @Override
-                    public boolean evaluate(IInventory inv) {
-                        InventoryManipulator im = InventoryManipulator.get(inv);
-                        for (Metal metal : Metal.VALUES) {
-                            if (metal.getIngot() != null && im.canRemoveItems(metal.nuggetFilter, 9) && im.canAddStack(metal.getIngot())) {
-                                im.removeItems(metal.nuggetFilter, 9);
-                                im.addStack(metal.getIngot());
-                                return true;
-                            }
-                        }
-                        return false;
+            @Override
+            public boolean evaluate(IInventory inv) {
+                InventoryManipulator im = InventoryManipulator.get(inv);
+                for (Metal metal : Metal.VALUES) {
+                    if (metal.getIngot() != null && im.canRemoveItems(metal.nuggetFilter, 9) && im.canAddStack(metal.getIngot())) {
+                        im.removeItems(metal.nuggetFilter, 9);
+                        im.addStack(metal.getIngot());
+                        return true;
                     }
+                }
+                return false;
+            }
 
-                },
+        },
         INGOT_CONDENSE {
-
-                    @Override
-                    public boolean evaluate(IInventory inv) {
-                        InventoryManipulator im = InventoryManipulator.get(inv);
-                        for (Metal metal : Metal.VALUES) {
-                            if (metal.getBlock() != null && im.canRemoveItems(metal.ingotFilter, 9) && im.canAddStack(metal.getBlock())) {
-                                im.removeItems(metal.ingotFilter, 9);
-                                im.addStack(metal.getBlock());
-                                return true;
-                            }
-                        }
-                        return false;
+            @Override
+            public boolean evaluate(IInventory inv) {
+                InventoryManipulator im = InventoryManipulator.get(inv);
+                for (Metal metal : Metal.VALUES) {
+                    if (metal.getBlock() != null && im.canRemoveItems(metal.ingotFilter, 9) && im.canAddStack(metal.getBlock())) {
+                        im.removeItems(metal.ingotFilter, 9);
+                        im.addStack(metal.getBlock());
+                        return true;
                     }
+                }
+                return false;
+            }
 
-                },
+        },
         NUGGET_SWAP {
-
-                    @Override
-                    public boolean evaluate(IInventory inv) {
-                        InventoryManipulator im = InventoryManipulator.get(inv);
-                        for (Metal metal : Metal.VALUES) {
-                            IStackFilter filter = nuggetFilters.get(metal);
-                            if (metal.getNugget() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getNugget())) {
-                                im.removeItems(filter, 1);
-                                im.addStack(metal.getNugget());
-                                return true;
-                            }
-                        }
-                        return false;
+            @Override
+            public boolean evaluate(IInventory inv) {
+                InventoryManipulator im = InventoryManipulator.get(inv);
+                for (Metal metal : Metal.VALUES) {
+                    IStackFilter filter = nuggetFilters.get(metal);
+                    if (metal.getNugget() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getNugget())) {
+                        im.removeItems(filter, 1);
+                        im.addStack(metal.getNugget());
+                        return true;
                     }
+                }
+                return false;
+            }
 
-                },
+        },
         INGOT_SWAP {
-
-                    @Override
-                    public boolean evaluate(IInventory inv) {
-                        InventoryManipulator im = InventoryManipulator.get(inv);
-                        for (Metal metal : Metal.VALUES) {
-                            IStackFilter filter = ingotFilters.get(metal);
-                            if (metal.getIngot() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getIngot())) {
-                                im.removeItems(filter, 1);
-                                im.addStack(metal.getIngot());
-                                return true;
-                            }
-                        }
-                        return false;
+            @Override
+            public boolean evaluate(IInventory inv) {
+                InventoryManipulator im = InventoryManipulator.get(inv);
+                for (Metal metal : Metal.VALUES) {
+                    IStackFilter filter = ingotFilters.get(metal);
+                    if (metal.getIngot() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getIngot())) {
+                        im.removeItems(filter, 1);
+                        im.addStack(metal.getIngot());
+                        return true;
                     }
+                }
+                return false;
+            }
 
-                },
+        },
         BLOCK_SWAP {
-
-                    @Override
-                    public boolean evaluate(IInventory inv) {
-                        InventoryManipulator im = InventoryManipulator.get(inv);
-                        for (Metal metal : Metal.VALUES) {
-                            IStackFilter filter = blockFilters.get(metal);
-                            if (metal.getBlock() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getBlock())) {
-                                im.removeItems(filter, 1);
-                                im.addStack(metal.getBlock());
-                                return true;
-                            }
-                        }
-                        return false;
+            @Override
+            public boolean evaluate(IInventory inv) {
+                InventoryManipulator im = InventoryManipulator.get(inv);
+                for (Metal metal : Metal.VALUES) {
+                    IStackFilter filter = blockFilters.get(metal);
+                    if (metal.getBlock() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getBlock())) {
+                        im.removeItems(filter, 1);
+                        im.addStack(metal.getBlock());
+                        return true;
                     }
+                }
+                return false;
+            }
 
-                };
+        };
 
         public final static Target[] VALUES = values();
 
@@ -151,5 +145,4 @@ public class TileChestMetals extends TileChestRailcraft {
             if (!target.evaluate(this))
                 target = target.next();
     }
-
 }

@@ -42,6 +42,7 @@ import java.util.Set;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler {
+
     public static final int TANK_WATER = 0;
     public static final int TANK_STEAM = 1;
     public final static int TRANSFER_RATE = FluidHelper.BUCKET_VOLUME;
@@ -176,11 +177,11 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isHost(worldObj)) {
             if (explode) {
-                worldObj.createExplosion(null, xCoord, yCoord, zCoord, 5f + 0.1f * getNumTanks(), true);
+                worldObj.createExplosion(null, getX(), getY(), getZ(), 5f + 0.1f * getNumTanks(), true);
                 explode = false;
                 return;
             }
@@ -211,8 +212,8 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        Block block = WorldPlugin.getBlock(worldObj, x, y, z);
-        int meta = worldObj.getBlockMetadata(x, y, z);
+        Block block = WorldPlugin.getBlock(worldObj, pos);
+        int meta = worldObj.getBlockMetadata(pos);
 
         switch (mapPos) {
             case 'O': // Other
@@ -232,7 +233,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
                     return false;
                 break;
             case 'A': // Air
-                if (!worldObj.isAirBlock(x, y, z))
+                if (!worldObj.isAirBlock(pos))
                     return false;
                 break;
         }

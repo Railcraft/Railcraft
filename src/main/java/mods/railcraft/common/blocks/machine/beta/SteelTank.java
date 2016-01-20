@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SteelTank extends MetalTank {

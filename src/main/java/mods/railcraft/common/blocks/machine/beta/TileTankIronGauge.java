@@ -9,9 +9,7 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.Timer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +18,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTankIronGauge extends TileTankBase {
@@ -34,60 +31,13 @@ public class TileTankIronGauge extends TileTankBase {
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (!isStructureValid() || getPattern() == null) {
-            return getTextureFromMachine(side);
-        }
-
-        int px = getPatternPositionX();
-        int py = getPatternPositionY();
-        int pz = getPatternPositionZ();
-
-        EnumFacing s = EnumFacing.getOrientation(side);
-        char markerSide = getPattern().getPatternMarkerChecked(MiscTools.getXOnSide(px, s), MiscTools.getYOnSide(py, s), MiscTools.getZOnSide(pz, s));
-
-        if (!isMapPositionOtherBlock(markerSide)) {
-            return getTextureFromMachine(9);
-        }
-
-        if (s == EnumFacing.UP || s == EnumFacing.DOWN) {
-            int markerTop = getPattern().getPatternMarkerChecked(px, py + 1, pz);
-            if (markerTop == 'A' || markerTop == 'O') {
-                int metaUp = worldObj.getBlockMetadata(xCoord, yCoord, zCoord - 1);
-                int metaDown = worldObj.getBlockMetadata(xCoord, yCoord, zCoord + 1);
-                return getTextureBasedOnNeighbors(metaUp, metaDown);
-            }
-            return getTextureFromMachine(0);
-        }
-
-        int metaUp = worldObj.getBlockMetadata(xCoord, yCoord + 1, zCoord);
-        int metaDown = worldObj.getBlockMetadata(xCoord, yCoord - 1, zCoord);
-        return getTextureBasedOnNeighbors(metaUp, metaDown);
-    }
-
-    private IIcon getTextureBasedOnNeighbors(int metaUp, int metaDown) {
-        if (metaUp == getBlockMetadata() && metaDown == getBlockMetadata()) {
-            return getTextureFromMachine(7);
-        } else if (metaUp == getBlockMetadata()) {
-            return getTextureFromMachine(8);
-        } else if (metaDown == getBlockMetadata()) {
-            return getTextureFromMachine(6);
-        }
-        return getTextureFromMachine(0);
-    }
-
-    private IIcon getTextureFromMachine(int index) {
-        return getMachineType().getTexture(index);
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(Random rand) {
         int oldLightValue = lightValue;
         if (timer.hasTriggered(worldObj, 80) && isStructureValid())
             updateLightValue();
         if (oldLightValue != lightValue)
-            worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+            worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
     }
 
     @Override

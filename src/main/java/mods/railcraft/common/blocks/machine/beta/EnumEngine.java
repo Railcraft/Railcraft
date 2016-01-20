@@ -9,11 +9,9 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumEngine
-{
+public enum EnumEngine {
 
     STEAM_LOW
 

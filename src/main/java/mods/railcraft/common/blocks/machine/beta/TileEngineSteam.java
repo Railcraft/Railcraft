@@ -32,7 +32,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileEngineSteam extends TileEngine implements IFluidHandler, ISteamUser {
@@ -50,12 +49,12 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
 
     @Override
     protected void playSoundOut() {
-        SoundHelper.playSoundClient(worldObj, xCoord, yCoord, zCoord, SoundHelper.SOUND_STEAM_BURST, 0.15F, (float) (0.5F + MiscTools.getRand().nextGaussian() * 0.1));
+        SoundHelper.playSoundClient(worldObj, getPos(), SoundHelper.SOUND_STEAM_BURST, 0.15F, (float) (0.5F + MiscTools.getRand().nextGaussian() * 0.1));
     }
 
     @Override
     protected void playSoundIn() {
-        SoundHelper.playSoundClient(worldObj, xCoord, yCoord, zCoord, SoundHelper.SOUND_STEAM_BURST, 0.15F, (float) (1 + MiscTools.getRand().nextGaussian() * 0.1));
+        SoundHelper.playSoundClient(worldObj, getPos(), SoundHelper.SOUND_STEAM_BURST, 0.15F, (float) (1 + MiscTools.getRand().nextGaussian() * 0.1));
     }
 
     private int getParticleRate() {
@@ -79,7 +78,7 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.ENGINE_STEAM, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.ENGINE_STEAM, player, worldObj, getPos());
         return true;
     }
 
@@ -198,5 +197,4 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
     public TankManager getTankManager() {
         return tankManager;
     }
-
 }
