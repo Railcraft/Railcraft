@@ -48,7 +48,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     private int numTracks;
     private State state = State.RETRACTED;
 
-    private static enum State {
+    private enum State {
 
         EXTENDED, RETRACTED, EXTENDING, RETRACTING, HALTED;
 

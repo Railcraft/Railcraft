@@ -63,7 +63,7 @@ public class ContainerCokeOven extends RailcraftContainer {
             tMan.updateGuiData(this, crafters, 0);
 
         for (int i = 0; i < crafters.size(); i++) {
-            ICrafting icrafting = (ICrafting) crafters.get(i);
+            ICrafting icrafting = crafters.get(i);
 
             int cookTime = tile.getCookTime();
             if (lastCookTime != cookTime)
@@ -114,9 +114,7 @@ public class ContainerCokeOven extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            if (stack != null && !InvTools.isSynthetic(stack) && RailcraftCraftingManager.cokeOven.getRecipe(stack) != null)
-                return true;
-            return false;
+            return stack != null && !InvTools.isSynthetic(stack) && RailcraftCraftingManager.cokeOven.getRecipe(stack) != null;
         }
 
     }

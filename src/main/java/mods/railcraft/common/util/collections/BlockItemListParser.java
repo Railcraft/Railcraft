@@ -54,7 +54,7 @@ public class BlockItemListParser {
 
         public abstract Object makeKey(String entry);
 
-    };
+    }
 
     public enum ValueType {
 

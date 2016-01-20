@@ -110,7 +110,7 @@ public class BlockStrengthGlass extends BlockGlass {
 
     private enum Neighbors {
 
-        TOP, BOTTOM;
+        TOP, BOTTOM
     }
 
     @Override

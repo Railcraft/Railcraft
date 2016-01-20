@@ -76,7 +76,7 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
         GL11.glPopMatrix();
     }
 
-    public static enum ColorProfile {
+    public enum ColorProfile {
         RAINBOW {
             private final WorldCoordinate[] coords = new WorldCoordinate[2];
             private final boolean apiUpdated = Comparable.class.isAssignableFrom(WorldCoordinate.class);

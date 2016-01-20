@@ -15,6 +15,6 @@ package mods.railcraft.common.blocks.machine.beta;
 public enum EnumEngine
 {
 
-    STEAM_LOW;
-    
+    STEAM_LOW
+
 }

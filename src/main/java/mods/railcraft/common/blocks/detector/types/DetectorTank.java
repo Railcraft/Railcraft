@@ -192,7 +192,7 @@ public class DetectorTank extends DetectorFilter {
         private final String label;
         private ToolTip tip;
 
-        private ButtonState(String label) {
+        ButtonState(String label) {
             this.label = label;
             this.tip = ToolTip.buildToolTip("gui.detector.tank.tip." + name().toLowerCase(Locale.ENGLISH).replace("_", "."));
         }

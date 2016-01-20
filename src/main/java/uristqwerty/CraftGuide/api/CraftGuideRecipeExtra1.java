@@ -10,6 +10,6 @@ import net.minecraft.item.ItemStack;
  */
 public interface CraftGuideRecipeExtra1
 {
-	public boolean containsItem(ItemStack filter, SlotType type);
-	public boolean containsItem(ItemFilter filter, SlotType type);
+	boolean containsItem(ItemStack filter, SlotType type);
+	boolean containsItem(ItemFilter filter, SlotType type);
 }

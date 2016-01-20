@@ -245,5 +245,5 @@ public class SteamBoiler {
             return (int) ((getHeat() - Steam.COLD_TEMP) * size / (getMaxHeat() - Steam.COLD_TEMP));
         }
 
-    };
+    }
 }

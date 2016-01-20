@@ -29,9 +29,6 @@ public class RecipeFilter implements BasicRecipeFilter
         boolean tankCart = recipe.containsItem(stackTankCart);
         boolean cart = recipe.containsItem(stackCart);
 
-        if(tankCart && !cart) {
-            return false;
-        }
-        return true;
+        return !(tankCart && !cart);
     }
 }

@@ -20,7 +20,7 @@ import net.minecraft.entity.ai.EntityAITasks;
 public class AIPlugin {
 
     public static boolean addAITask(EntityLiving entity, int priority, EntityAIBase task) {
-        for (EntityAITasks.EntityAITaskEntry entry : (List<EntityAITasks.EntityAITaskEntry>) entity.tasks.taskEntries) {
+        for (EntityAITasks.EntityAITaskEntry entry : entity.tasks.taskEntries) {
             if (entry.action.getClass() == task.getClass())
                 return false;
         }

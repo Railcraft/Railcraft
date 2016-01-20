@@ -87,10 +87,7 @@ public class ItemStackMap<V> implements Map<ItemStack, V>
             if(stack.getItem() != other.stack.getItem()) {
                 return false;
             }
-            if(stack.getItemDamage() != other.stack.getItemDamage()) {
-                return false;
-            }
-            return true;
+            return stack.getItemDamage() == other.stack.getItemDamage();
         }
 
         @Override

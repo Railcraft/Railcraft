@@ -139,7 +139,7 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
                 return;
 
             double x = posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
-            double y = (double) (posY + mob.height + rand.nextInt(3));
+            double y = posY + mob.height + rand.nextInt(3);
             double z = posZ + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
             EntityLiving living = mob instanceof EntityLiving ? (EntityLiving) mob : null;
             mob.setLocationAndAngles(x, y, z, rand.nextFloat() * 360.0F, 0.0F);
@@ -175,7 +175,7 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
         ItemStack potion = new ItemStack(Items.potionitem, 1, meta);
 
         double x = posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
-        double y = (double) (posY + 1 + rand.nextInt(3) - 1);
+        double y = posY + 1 + rand.nextInt(3) - 1;
         double z = posZ + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
         InvTools.dropItem(potion, worldObj, x, y, z);
     }

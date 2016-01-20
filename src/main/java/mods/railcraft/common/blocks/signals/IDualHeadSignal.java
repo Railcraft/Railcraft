@@ -17,11 +17,11 @@ import mods.railcraft.api.signals.SignalAspect;
  */
 public interface IDualHeadSignal {
     
-    public EnumSignal getSignalType();
+    EnumSignal getSignalType();
 
-    public ForgeDirection getFacing();
+    ForgeDirection getFacing();
 
-    public SignalAspect getTopAspect();
+    SignalAspect getTopAspect();
 
-    public SignalAspect getBottomAspect();
+    SignalAspect getBottomAspect();
 }

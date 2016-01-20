@@ -49,7 +49,7 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     }
 
     protected void setBlink(byte blink) {
-        dataWatcher.updateObject(DATA_ID_BLINK, (byte) blink);
+        dataWatcher.updateObject(DATA_ID_BLINK, blink);
     }
 
     protected byte getBlink() {

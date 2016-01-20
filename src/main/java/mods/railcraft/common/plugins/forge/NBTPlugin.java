@@ -37,7 +37,7 @@ public class NBTPlugin {
         public static final EnumNBTType[] VALUES = values();
         public final Class<? extends NBTBase> classObject;
 
-        private EnumNBTType(Class<? extends NBTBase> c) {
+        EnumNBTType(Class<? extends NBTBase> c) {
             this.classObject = c;
         }
 

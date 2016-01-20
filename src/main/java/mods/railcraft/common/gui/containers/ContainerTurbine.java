@@ -43,7 +43,7 @@ public class ContainerTurbine extends RailcraftContainer {
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
         for (int i = 0; i < crafters.size(); i++) {
-            ICrafting icrafting = (ICrafting) crafters.get(i);
+            ICrafting icrafting = crafters.get(i);
 
             if (lastOutput != Math.round(tile.output))
                 icrafting.sendProgressBarUpdate(this, 0, Math.round(tile.output));

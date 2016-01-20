@@ -54,7 +54,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         END_TL(6), END_TR(7), END_BL(8), END_BR(9), SIDE_A(0), SIDE_B(10), GUAGE(11);
         private final int index;
 
-        private Texture(int index) {
+        Texture(int index) {
             this.index = index;
         }
 

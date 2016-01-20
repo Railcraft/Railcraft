@@ -23,5 +23,5 @@ public enum InventorySorter implements Comparator<IInventory> {
             return inv2.getSizeInventory() - inv1.getSizeInventory();
         }
 
-    };
+    }
 }

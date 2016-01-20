@@ -63,7 +63,7 @@ public enum RailcraftFluids {
     protected Fluid railcraftFluid;
     protected Block railcraftBlock;
 
-    private RailcraftFluids(String tag, Fluids standardFluid, int density, int viscosity) {
+    RailcraftFluids(String tag, Fluids standardFluid, int density, int viscosity) {
         this.tag = tag;
         this.standardFluid = standardFluid;
         this.density = density;

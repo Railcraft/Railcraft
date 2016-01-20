@@ -106,12 +106,10 @@ public class ModuleIC2 extends RailcraftModule {
             cart.setContents(batbox);
             ItemStack stack = cart.getCartItem();
             if (stack != null) {
-                CraftingPlugin.addShapedRecipe(stack, new Object[]{
-                    "E",
-                    "M",
-                    'E', batbox,
-                    'M', Items.minecart
-                });
+                CraftingPlugin.addShapedRecipe(stack, "E",
+                        "M",
+                        'E', batbox,
+                        'M', Items.minecart);
                 CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
             }
         }
@@ -122,12 +120,10 @@ public class ModuleIC2 extends RailcraftModule {
             cart.setContents(cesu);
             ItemStack stack = cart.getCartItem();
             if (stack != null) {
-                CraftingPlugin.addShapedRecipe(stack, new Object[]{
-                    "E",
-                    "M",
-                    'E', cesu,
-                    'M', Items.minecart
-                });
+                CraftingPlugin.addShapedRecipe(stack, "E",
+                        "M",
+                        'E', cesu,
+                        'M', Items.minecart);
                 CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
             }
         }
@@ -138,12 +134,10 @@ public class ModuleIC2 extends RailcraftModule {
             cart.setContents(mfe);
             ItemStack stack = cart.getCartItem();
             if (stack != null) {
-                CraftingPlugin.addShapedRecipe(stack, new Object[]{
-                    "E",
-                    "M",
-                    'E', mfe,
-                    'M', Items.minecart
-                });
+                CraftingPlugin.addShapedRecipe(stack, "E",
+                        "M",
+                        'E', mfe,
+                        'M', Items.minecart);
                 CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
             }
         }
@@ -187,14 +181,13 @@ public class ModuleIC2 extends RailcraftModule {
             if (lapotron != null && glassCable != null && circuit != null) {
                 lapotron.copy();
 //                lapotron.setItemDamage(-1);
-                Recipes.advRecipes.addRecipe(new ItemStack(lapotronUpgrade), new Object[]{
-                    "GGG",
-                    "wLw",
-                    "GCG",
-                    'G', new ItemStack(Blocks.glass, 1, 0),
-                    'w', glassCable,
-                    'C', circuit,
-                    'L', lapotron,});
+                Recipes.advRecipes.addRecipe(new ItemStack(lapotronUpgrade), "GGG",
+                        "wLw",
+                        "GCG",
+                        'G', new ItemStack(Blocks.glass, 1, 0),
+                        'w', glassCable,
+                        'C', circuit,
+                        'L', lapotron);
             }
         }
     }

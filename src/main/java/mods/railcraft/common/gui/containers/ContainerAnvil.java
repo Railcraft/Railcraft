@@ -72,7 +72,7 @@ public class ContainerAnvil extends ContainerRepair {
         int j = 0;
 
         if (inputA == null) {
-            this.outputSlot.setInventorySlotContents(0, (ItemStack) null);
+            this.outputSlot.setInventorySlotContents(0, null);
             this.maximumCost = 0;
         } else {
             ItemStack inputACopy = inputA.copy();
@@ -97,7 +97,7 @@ public class ContainerAnvil extends ContainerRepair {
                     l = Math.min(inputACopy.getItemDamageForDisplay(), inputACopy.getMaxDamage() / 4);
 
                     if (l <= 0) {
-                        this.outputSlot.setInventorySlotContents(0, (ItemStack) null);
+                        this.outputSlot.setInventorySlotContents(0, null);
                         this.maximumCost = 0;
                         return;
                     }
@@ -112,7 +112,7 @@ public class ContainerAnvil extends ContainerRepair {
                     this.stackSizeToBeUsedInRepair = i1;
                 } else {
                     if (!isBook && (inputACopy.getItem() != inputB.getItem() || !inputACopy.isItemStackDamageable())) {
-                        this.outputSlot.setInventorySlotContents(0, (ItemStack) null);
+                        this.outputSlot.setInventorySlotContents(0, null);
                         this.maximumCost = 0;
                         return;
                     }
@@ -355,7 +355,7 @@ public class ContainerAnvil extends ContainerRepair {
             
             float breakChance = ForgeHooks.onAnvilRepair(player, stackInSlot, repairContainer.inputSlots.getStackInSlot(0), repairContainer.inputSlots.getStackInSlot(1));
 
-            repairContainer.inputSlots.setInventorySlotContents(0, (ItemStack) null);
+            repairContainer.inputSlots.setInventorySlotContents(0, null);
 
             if (repairContainer.stackSizeToBeUsedInRepair > 0) {
                 ItemStack itemstack1 = repairContainer.inputSlots.getStackInSlot(1);
@@ -364,9 +364,9 @@ public class ContainerAnvil extends ContainerRepair {
                     itemstack1.stackSize -= repairContainer.stackSizeToBeUsedInRepair;
                     repairContainer.inputSlots.setInventorySlotContents(1, itemstack1);
                 } else
-                    repairContainer.inputSlots.setInventorySlotContents(1, (ItemStack) null);
+                    repairContainer.inputSlots.setInventorySlotContents(1, null);
             } else
-                repairContainer.inputSlots.setInventorySlotContents(1, (ItemStack) null);
+                repairContainer.inputSlots.setInventorySlotContents(1, null);
 
             this.repairContainer.maximumCost = 0;
 

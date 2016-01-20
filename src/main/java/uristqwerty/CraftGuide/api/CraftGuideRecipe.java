@@ -26,7 +26,7 @@ public interface CraftGuideRecipe
 	 * @param filter
 	 * @return
 	 */
-	public boolean containsItem(ItemStack filter);
+	boolean containsItem(ItemStack filter);
 
 	/**
 	 * Checks whether this recipe contains an item that matches the
@@ -36,7 +36,7 @@ public interface CraftGuideRecipe
 	 * @param filter
 	 * @return
 	 */
-	public boolean containsItem(ItemFilter filter);
+	boolean containsItem(ItemFilter filter);
 
 	/**
 	 * When a mouse click occurs within the rectangle occupied by this recipe,
@@ -48,7 +48,7 @@ public interface CraftGuideRecipe
 	 * @param y coordinate, relative to the top left of this recipe
 	 * @return a new ItemFilter, or null to keep the current one
 	 */
-	public ItemFilter getRecipeClickedResult(int x, int y);
+	ItemFilter getRecipeClickedResult(int x, int y);
 
 	/**
 	 * Draws this recipe at the specified screen coordinates. If isMouseOver
@@ -63,7 +63,7 @@ public interface CraftGuideRecipe
 	 * @param mouseX
 	 * @param mouseY
 	 */
-	public void draw(Renderer renderer, int x, int y, boolean isMouseOver, int mouseX, int mouseY);
+	void draw(Renderer renderer, int x, int y, boolean isMouseOver, int mouseX, int mouseY);
 
 	/**
 	 * Called to get the text to display when the user moves their cursor
@@ -74,7 +74,7 @@ public interface CraftGuideRecipe
 	 * @param mouseY
 	 * @return a List of Strings, or null
 	 */
-	public List<String> getItemText(int mouseX, int mouseY);
+	List<String> getItemText(int mouseX, int mouseY);
 
 	/**
 	 * Gets an array of Objects, representing the contents of this recipe.
@@ -85,19 +85,19 @@ public interface CraftGuideRecipe
 	 * {@link containsItem} is preferred wherever possible.
 	 * @return
 	 */
-	public Object[] getItems();
+	Object[] getItems();
 
 	/**
 	 * Gets the width of this recipe; used to determine grid spacing and
 	 * if the cursor is currently positioned over this recipe
 	 * @return
 	 */
-	public int width();
+	int width();
 
 	/**
 	 * Gets the height of this recipe; used to determine grid spacing and
 	 * if the cursor is currently positioned over this recipe
 	 * @return
 	 */
-	public int height();
+	int height();
 }

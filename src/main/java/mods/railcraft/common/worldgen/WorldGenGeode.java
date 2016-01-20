@@ -118,9 +118,7 @@ public class WorldGenGeode extends WorldGenerator {
             return true;
         if (existing.getMaterial() == Material.water)
             return true;
-        if (ores.contains(existing))
-            return true;
-        return false;
+        return ores.contains(existing);
     }
 
 }

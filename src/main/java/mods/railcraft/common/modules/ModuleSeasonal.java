@@ -29,14 +29,12 @@ public class ModuleSeasonal extends RailcraftModule {
             int month = cal.get(Calendar.MONTH);
             if (month == Calendar.OCTOBER || month == Calendar.NOVEMBER) {
                 Game.log(Level.INFO, "Activating Halloween Seasonal Pack");
-                CraftingPlugin.addShapedRecipe(cart.getCartItem(), new Object[]{
-                            "GGG",
-                            "WPW",
-                            "WWW",
-                            'G', new ItemStack(Items.gunpowder),
-                            'P', new ItemStack(Blocks.pumpkin),
-                            'W', "slabWood"
-                        });
+                CraftingPlugin.addShapedRecipe(cart.getCartItem(), "GGG",
+                        "WPW",
+                        "WWW",
+                        'G', new ItemStack(Items.gunpowder),
+                        'P', new ItemStack(Blocks.pumpkin),
+                        'W', "slabWood");
             }
         }
 
@@ -47,14 +45,12 @@ public class ModuleSeasonal extends RailcraftModule {
             int month = cal.get(Calendar.MONTH);
             if (month == Calendar.DECEMBER || month == Calendar.JANUARY) {
                 Game.log(Level.INFO, "Activating Christmas Seasonal Pack");
-                CraftingPlugin.addShapedRecipe(cart.getCartItem(), new Object[]{
-                            "GGG",
-                            "WEW",
-                            "WWW",
-                            'G', new ItemStack(Items.gunpowder),
-                            'E', "gemEmerald",
-                            'W', "slabWood"
-                        });
+                CraftingPlugin.addShapedRecipe(cart.getCartItem(), "GGG",
+                        "WEW",
+                        "WWW",
+                        'G', new ItemStack(Items.gunpowder),
+                        'E', "gemEmerald",
+                        'W', "slabWood");
             }
         }
     }

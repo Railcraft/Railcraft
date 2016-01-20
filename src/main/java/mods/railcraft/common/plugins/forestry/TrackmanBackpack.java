@@ -59,14 +59,14 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
         addItem(RailcraftToolItems.getOveralls());
 
         for (Object id : Block.blockRegistry.getKeys()) {
-            Block block = (Block) Block.blockRegistry.getObject(id);
+            Block block = Block.blockRegistry.getObject(id);
             if (block == null) continue;
             if (TrackTools.isRailBlock(block))
                 addItem(block);
         }
 
         for (Object id : Item.itemRegistry.getKeys()) {
-            Item item = (Item) Item.itemRegistry.getObject(id);
+            Item item = Item.itemRegistry.getObject(id);
             if (item instanceof ItemMinecart || item instanceof IMinecartItem)
                 addItem(item);
         }

@@ -57,7 +57,7 @@ public class PacketKeyPress extends RailcraftPacket {
 //        if(!(player instanceof EntityPlayer)){
 //            return;
 //        }
-        EntityPlayer entityPlayer = (EntityPlayer) player;
+        EntityPlayer entityPlayer = player;
         if (entityPlayer == null)
             return;
         if (!(entityPlayer.ridingEntity instanceof EntityMinecart))

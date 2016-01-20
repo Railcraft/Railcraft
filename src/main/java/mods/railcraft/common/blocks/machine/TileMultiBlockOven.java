@@ -71,7 +71,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         updateLighting();
         if (getPatternMarker() == 'W' && isStructureValid() && random.nextInt(100) < 20 && isBurning()) {
             float f = (float) xCoord + 0.5F;
-            float f1 = (float) yCoord + 0.4375F + (random.nextFloat() * 3F / 16F);
+            float f1 = yCoord + 0.4375F + (random.nextFloat() * 3F / 16F);
             float f2 = (float) zCoord + 0.5F;
             float f3 = 0.52F;
             float f4 = random.nextFloat() * 0.6F - 0.3F;

@@ -40,10 +40,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
     private AdjacentInventoryCache invCache = new AdjacentInventoryCache(this, tileCache, new ITileFilter() {
         @Override
         public boolean matches(TileEntity tile) {
-            if (tile instanceof TileItemUnloader) {
-                return false;
-            }
-            return true;
+            return !(tile instanceof TileItemUnloader);
         }
     }, InventorySorter.SIZE_DECENDING);
 
@@ -306,10 +303,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                 return false;
             }
         }
-        if (InvTools.countItems(cartInv) > max) {
-            return false;
-        }
-        return true;
+        return InvTools.countItems(cartInv) <= max;
     }
 
     private boolean isAllComplete(List<IInventory> chests, ItemStack[] filters) {

@@ -22,9 +22,7 @@ public class SlotBlockFilter extends SlotRailcraft {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        if (stack != null && stack.getItem() instanceof ItemBlock)
-            return true;
-        return false;
+        return stack != null && stack.getItem() instanceof ItemBlock;
     }
 
 }

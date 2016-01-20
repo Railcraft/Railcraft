@@ -32,7 +32,7 @@ public enum ModItems {
     private boolean needsInit = true;
     private ItemStack stack;
 
-    private ModItems(Mod mod, String itemTag) {
+    ModItems(Mod mod, String itemTag) {
         this.mod = mod;
         this.itemTag = itemTag;
     }
@@ -52,8 +52,8 @@ public enum ModItems {
            Game.log(Level.DEBUG, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);
     }
 
-    private static enum Mod {
+    private enum Mod {
 
-        FORESTRY, IC2;
-    };
+        FORESTRY, IC2
+    }
 }

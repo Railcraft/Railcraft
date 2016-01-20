@@ -79,7 +79,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
         else if (isCatOnChest())
             return false;
         if (Game.isHost(worldObj))
-            player.displayGUIChest((IInventory) this);
+            player.displayGUIChest(this);
         return true;
     }
 
@@ -93,7 +93,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
             if (!it.hasNext())
                 return false;
             EntityOcelot entityocelot = (EntityOcelot) it.next();
-            cat = (EntityOcelot) entityocelot;
+            cat = entityocelot;
         } while (!cat.isSitting());
         return true;
     }

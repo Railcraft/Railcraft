@@ -59,9 +59,7 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
             return false;
         if (block.isOpaqueCube())
             return true;
-        if (stack.getItem() instanceof ItemPost)
-            return true;
-        return false;
+        return stack.getItem() instanceof ItemPost;
     }
 
     public EntityCartUndercutter(World world) {

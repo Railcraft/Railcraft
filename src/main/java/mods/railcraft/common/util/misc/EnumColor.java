@@ -70,7 +70,7 @@ public enum EnumColor {
         "White"};
     private final int color;
 
-    private EnumColor(int color) {
+    EnumColor(int color) {
         this.color = color;
     }
 

@@ -21,15 +21,15 @@ public class EffectManager {
     @SidedProxy(clientSide = "mods.railcraft.client.util.effects.ClientEffectProxy", serverSide = "mods.railcraft.common.util.effects.CommonEffectProxy")
     public static IEffectManager instance;
 
-    public static interface IEffectSource {
+    public interface IEffectSource {
 
-        public double getX();
+        double getX();
 
-        public double getY();
+        double getY();
 
-        public double getZ();
+        double getZ();
 
-        public boolean isDead();
+        boolean isDead();
     }
 
     public static class EffectSourceTile implements IEffectSource {

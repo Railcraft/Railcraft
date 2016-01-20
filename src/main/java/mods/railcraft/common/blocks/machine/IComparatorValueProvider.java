@@ -7,6 +7,6 @@ import net.minecraft.world.World;
  *
  */
 public interface IComparatorValueProvider {
-	public int getComparatorInputOverride(World world, int x, int y, int z, int side);
+	int getComparatorInputOverride(World world, int x, int y, int z, int side);
 
 }

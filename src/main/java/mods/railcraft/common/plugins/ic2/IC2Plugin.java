@@ -208,7 +208,7 @@ public class IC2Plugin {
     }
 
     public static void nerfSyntheticCoal() {
-        for (IRecipe recipe : (List<IRecipe>) CraftingManager.getInstance().getRecipeList()) {
+        for (IRecipe recipe : CraftingManager.getInstance().getRecipeList()) {
             try {
                 ItemStack output = recipe.getRecipeOutput();
                 if (output != null)

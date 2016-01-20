@@ -62,7 +62,7 @@ public class ContainerBlastFurnace extends RailcraftContainer {
         super.sendUpdateToClient();
 
         for (int i = 0; i < crafters.size(); ++i) {
-            ICrafting player = (ICrafting) crafters.get(i);
+            ICrafting player = crafters.get(i);
 
             if (lastCookTime != furnace.getCookTime())
                 player.sendProgressBarUpdate(this, 0, furnace.getCookTime());

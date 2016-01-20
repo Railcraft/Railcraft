@@ -64,7 +64,7 @@ public class ContainerSteamOven extends RailcraftContainer {
         int cookTime = tile.cookTime;
 
         for (int i = 0; i < crafters.size(); i++) {
-            ICrafting icrafting = (ICrafting) crafters.get(i);
+            ICrafting icrafting = crafters.get(i);
 
 
             if (lastCookTime != cookTime) {

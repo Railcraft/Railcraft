@@ -77,7 +77,7 @@ public enum EnumMachineBeta implements IEnumMachine {
         creativeList.add(METALS_CHEST);
     }
 
-    private EnumMachineBeta(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineBeta(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;

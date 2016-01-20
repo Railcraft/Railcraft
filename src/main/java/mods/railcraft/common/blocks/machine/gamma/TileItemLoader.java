@@ -299,10 +299,7 @@ public class TileItemLoader extends TileLoaderItemBase {
                 return false;
             }
         }
-        if (InvTools.countItems(chests) > max) {
-            return false;
-        }
-        return true;
+        return InvTools.countItems(chests) <= max;
     }
 
     private boolean isAllComplete(IInventory cart, ItemStack[] filters) {

@@ -63,7 +63,7 @@ public class ContainerEngineSteam extends RailcraftContainer {
         tile.getTankManager().updateGuiData(this, crafters, 0);
 
         for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting crafter = (ICrafting) this.crafters.get(var1);
+            ICrafting crafter = this.crafters.get(var1);
 
             if (this.lastEnergy != tile.energy)
                 PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) crafter, windowId, 13, tile.energy);

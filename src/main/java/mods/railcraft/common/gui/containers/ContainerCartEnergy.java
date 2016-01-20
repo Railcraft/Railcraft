@@ -55,7 +55,7 @@ public class ContainerCartEnergy extends RailcraftContainer {
         super.sendUpdateToClient();
 
         for (int i = 0; i < crafters.size(); ++i) {
-            ICrafting player = (ICrafting) crafters.get(i);
+            ICrafting player = crafters.get(i);
 
             if (lastEnergy != cart.getEnergy())
                 PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 0, (int)cart.getEnergy());

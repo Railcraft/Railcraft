@@ -16,6 +16,6 @@ import net.minecraft.util.IIcon;
  */
 public interface IIconProvider {
 
-    public IIcon getIcon();
+    IIcon getIcon();
 
 }

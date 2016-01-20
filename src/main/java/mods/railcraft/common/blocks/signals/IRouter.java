@@ -24,13 +24,13 @@ import net.minecraft.inventory.IInventory;
  */
 public interface IRouter extends ISecure<LockButtonState>, IGuiReturnHandler {
 
-    public enum RoutingButtonState implements IMultiButtonState {
+    enum RoutingButtonState implements IMultiButtonState {
 
         PUBLIC("railcraft.gui.routing.type.public"),
         PRIVATE("railcraft.gui.routing.type.private");
         private final String labelTag;
 
-        private RoutingButtonState(String labelTag) {
+        RoutingButtonState(String labelTag) {
             this.labelTag = labelTag;
         }
 

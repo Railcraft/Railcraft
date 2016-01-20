@@ -14,7 +14,7 @@ package mods.railcraft.common.carts;
  */
 public interface IDirectionalCart {
 
-    public void setRenderYaw(float yaw);
+    void setRenderYaw(float yaw);
     
-    public void reverse();
+    void reverse();
 }

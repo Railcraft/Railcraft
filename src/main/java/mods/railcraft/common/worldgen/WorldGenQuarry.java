@@ -138,9 +138,7 @@ public class WorldGenQuarry extends WorldGenerator {
             return false;
         if (existing.isReplaceableOreGen(world, x, y, z, Blocks.stone))
             return true;
-        if (replaceable.contains(existing))
-            return true;
-        return false;
+        return replaceable.contains(existing);
     }
 
 }

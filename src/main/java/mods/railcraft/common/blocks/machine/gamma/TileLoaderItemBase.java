@@ -168,7 +168,7 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         private final String label;
         private final ToolTip tip;
 
-        private EnumTransferMode(String label) {
+        EnumTransferMode(String label) {
             this.label = label;
             this.tip = ToolTip.buildToolTip(label + ".tip");
         }
@@ -199,7 +199,7 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         private final String label;
         private final ToolTip tip;
 
-        private EnumRedstoneMode(String label) {
+        EnumRedstoneMode(String label) {
             this.label = label;
             this.tip = ToolTip.buildToolTip(label + ".tip");
         }

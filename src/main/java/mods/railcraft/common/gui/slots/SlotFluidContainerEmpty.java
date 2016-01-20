@@ -22,10 +22,7 @@ public class SlotFluidContainerEmpty extends Slot {
         if (itemstack == null) {
             return false;
         }
-        if (FluidItemHelper.isEmptyContainer(itemstack)) {
-            return true;
-        }
-        return false;
+        return FluidItemHelper.isEmptyContainer(itemstack);
     }
 
     @Override

@@ -68,9 +68,9 @@ public class TileCage extends TileMachineBase {
     @SideOnly(Side.CLIENT)
     public Entity getEntity() {
         if (entity == null) {
-            entity = (EntityLiving) EntityList.createEntityByName("Chicken", (World) null);
-            lookHelper = new EntityLookHelper((EntityLiving) entity);
-            bodyHelper = new EntityBodyHelper((EntityLiving) entity);
+            entity = (EntityLiving) EntityList.createEntityByName("Chicken", null);
+            lookHelper = new EntityLookHelper(entity);
+            bodyHelper = new EntityBodyHelper(entity);
         }
         return entity;
     }

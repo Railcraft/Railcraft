@@ -16,8 +16,8 @@ import net.minecraft.block.Block;
  */
 public interface IDerivedBlock {
 
-    public Block getSourceBlock();
+    Block getSourceBlock();
 
-    public int getSourceMeta();
+    int getSourceMeta();
 
 }

@@ -53,10 +53,7 @@ public enum EnumTrackMeta {
     private static final EnumTrackMeta[] VALUES = values();
 
     public boolean isEqual(int meta) {
-        if (ordinal() == meta) {
-            return true;
-        }
-        return false;
+        return ordinal() == meta;
     }
 
     public static EnumTrackMeta fromMeta(int meta) {

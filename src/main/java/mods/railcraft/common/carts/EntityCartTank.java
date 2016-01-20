@@ -339,9 +339,7 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     public boolean canPassFluidRequests(Fluid fluid) {
         if (hasFilter())
             return getFilterFluid() == fluid;
-        if (!tank.isEmpty() && tank.getFluidType() != fluid)
-            return false;
-        return true;
+        return !(!tank.isEmpty() && tank.getFluidType() != fluid);
     }
 
     @Override

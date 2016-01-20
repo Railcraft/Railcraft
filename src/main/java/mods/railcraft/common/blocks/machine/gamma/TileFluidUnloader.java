@@ -215,7 +215,7 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
         private final String label;
         private final ToolTip tip;
 
-        private ButtonState(String label) {
+        ButtonState(String label) {
             this.label = label;
             this.tip = ToolTip.buildToolTip(label + ".tip");
         }

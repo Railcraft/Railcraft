@@ -13,7 +13,7 @@ public interface RecipeTemplate
 	 * @param height
 	 * @return this template, to allow method chaining
 	 */
-	public RecipeTemplate setSize(int width, int height);
+	RecipeTemplate setSize(int width, int height);
 
 	/**
 	 * Gets an ItemStack that represents the type of the recipe.
@@ -24,7 +24,7 @@ public interface RecipeTemplate
 	 *
 	 * @return the ItemStack, or null to default to a workbench
 	 */
-	public ItemStack getCraftingType();
+	ItemStack getCraftingType();
 
 	/**
 	 * Generate a recipe from an Object[] representing the contents
@@ -32,5 +32,5 @@ public interface RecipeTemplate
 	 * @param items
 	 * @return
 	 */
-	public CraftGuideRecipe generate(Object[] items);
+	CraftGuideRecipe generate(Object[] items);
 }

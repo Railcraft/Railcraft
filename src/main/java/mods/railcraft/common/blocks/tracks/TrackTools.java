@@ -238,7 +238,7 @@ public class TrackTools {
             VALID,
             UNKNOWN,
             NOT_ALIGNED,
-            PATH_NOT_FOUND;
+            PATH_NOT_FOUND
         }
     }
 }

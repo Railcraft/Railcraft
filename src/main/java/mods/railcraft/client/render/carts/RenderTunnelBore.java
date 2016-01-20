@@ -79,7 +79,7 @@ public class RenderTunnelBore extends Render {
         }
         GL11.glRotatef(yaw, 0.0F, 1.0F, 0.0F);
         float f3 = (float) bore.getRollingAmplitude() - time;
-        float f4 = (float) bore.getDamage() - time;
+        float f4 = bore.getDamage() - time;
         if (f4 < 0.0F) {
             f4 = 0.0F;
         }

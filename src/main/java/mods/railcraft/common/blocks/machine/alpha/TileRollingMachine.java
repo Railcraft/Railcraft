@@ -302,9 +302,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
             return false;
         if (stack.getItem().hasContainerItem(stack))
             return false;
-        if (getStackInSlot(slot) == null)
-            return false;
-        return true;
+        return getStackInSlot(slot) != null;
     }
 
     @Override

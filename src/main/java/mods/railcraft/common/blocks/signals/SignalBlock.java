@@ -461,7 +461,7 @@ public abstract class SignalBlock extends AbstractPair {
         return Status.INVALID;
     }
 
-    public static enum Status {
+    public enum Status {
 
         VALID, INVALID, UNKNOWN
     }

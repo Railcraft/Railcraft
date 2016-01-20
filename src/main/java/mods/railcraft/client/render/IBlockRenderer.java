@@ -19,5 +19,5 @@ import net.minecraft.client.renderer.RenderBlocks;
 public interface IBlockRenderer
 {
 
-    public void renderBlock(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block);
+    void renderBlock(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block);
 }

@@ -163,9 +163,7 @@ public class Train implements Iterable<EntityMinecart> {
                         if (next != null && next != last)
                             return true;
                         next = lm.getLinkedCartB(current);
-                        if (next != null && next != last)
-                            return true;
-                        return false;
+                        return next != null && next != last;
                     }
 
                     @Override

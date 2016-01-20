@@ -16,5 +16,5 @@ import mods.railcraft.api.signals.SignalAspect;
  */
 public interface IAspectProvider {
 
-    public SignalAspect getTriggerAspect();
+    SignalAspect getTriggerAspect();
 }

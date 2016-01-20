@@ -47,7 +47,7 @@ public class FirestoneTickHandler {
         clock++;
         if (clock % 4 != 0)
             return;
-        EntityPlayer player = (EntityPlayer) event.player;
+        EntityPlayer player = event.player;
         if (player.openContainer != player.inventoryContainer) return;
         for (ItemStack stack : player.inventory.mainInventory) {
             if (shouldBurn(stack)) {

@@ -100,7 +100,7 @@ public class ItemStackSet implements Set<ItemStack> {
             if (!(obj instanceof ItemStack)) {
                 return false;
             }
-            if (!contains((ItemStack) obj)) {
+            if (!contains(obj)) {
                 return false;
             }
         }

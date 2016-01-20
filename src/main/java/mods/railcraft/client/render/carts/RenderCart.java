@@ -117,7 +117,7 @@ public class RenderCart extends Render implements IRenderer {
         GL11.glRotatef(-pitch, 0.0F, 0.0F, 1.0F);
 
         float f3 = (float) cart.getRollingAmplitude() - time;
-        float f4 = (float) cart.getDamage() - time;
+        float f4 = cart.getDamage() - time;
         if (f4 < 0.0F)
             f4 = 0.0F;
         if (f3 > 0.0F) {

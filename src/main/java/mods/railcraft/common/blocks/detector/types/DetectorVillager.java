@@ -23,7 +23,7 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
 
 public class DetectorVillager extends Detector {
 
-    public static enum Mode {
+    public enum Mode {
 
         ANY, NONE, NOT, EQUALS
     }

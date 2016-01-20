@@ -51,8 +51,6 @@ public class ItemCircuit extends ItemRailcraft {
 
     }
 
-    ;
-
     public ItemCircuit() {
         super();
         setHasSubtypes(true);

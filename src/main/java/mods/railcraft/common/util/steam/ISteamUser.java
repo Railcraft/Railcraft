@@ -18,7 +18,7 @@ import net.minecraftforge.fluids.IFluidHandler;
  */
 public interface ISteamUser extends IFluidHandler {
 
-    public static ITileFilter FILTER = new ITileFilter() {
+    ITileFilter FILTER = new ITileFilter() {
         @Override
         public boolean matches(TileEntity tile) {
             return tile instanceof ISteamUser;

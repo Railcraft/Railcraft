@@ -68,9 +68,7 @@ public class ItemOre extends ItemBlock {
      */
     @Override
     public boolean hasCustomEntity(ItemStack stack) {
-        if (stack != null && stack.getItemDamage() == EnumOre.FIRESTONE.ordinal())
-            return true;
-        return false;
+        return stack != null && stack.getItemDamage() == EnumOre.FIRESTONE.ordinal();
     }
 
     /**

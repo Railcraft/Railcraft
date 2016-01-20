@@ -51,8 +51,6 @@ public class ItemRail extends ItemRailcraft {
 
     }
 
-    ;
-
     public ItemRail() {
         setHasSubtypes(true);
         setMaxDamage(0);

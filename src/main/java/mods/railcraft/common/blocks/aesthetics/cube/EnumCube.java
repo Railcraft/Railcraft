@@ -58,7 +58,7 @@ public enum EnumCube {
         creativeList.add(QUARRIED_STONE);
     }
 
-    private EnumCube(Module module, String tag, SimpleCube blockDef, float hardness, float resistance) {
+    EnumCube(Module module, String tag, SimpleCube blockDef, float hardness, float resistance) {
         this.module = module;
         this.tag = tag;
         this.blockDef = blockDef;

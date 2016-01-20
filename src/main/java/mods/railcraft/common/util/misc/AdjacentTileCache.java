@@ -111,7 +111,7 @@ public final class AdjacentTileCache {
         return debug;
     }
 
-    public static interface ICacheListener {
+    public interface ICacheListener {
         void changed();
 
         void purge();

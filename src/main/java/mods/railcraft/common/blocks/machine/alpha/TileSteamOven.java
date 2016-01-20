@@ -456,7 +456,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
         DOOR_TL(6), DOOR_TR(7), DOOR_BL(8), DOOR_BR(9), SIDE(2), CAP(0);
         private final int index;
 
-        private Texture(int index) {
+        Texture(int index) {
             this.index = index;
         }
 

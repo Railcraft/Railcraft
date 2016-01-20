@@ -37,12 +37,11 @@ public class ModuleTrain extends RailcraftModule {
         MiscTools.registerTrack(EnumTrack.COUPLER);
 
         if (BlockDetector.getBlock() != null) {
-            CraftingPlugin.addShapedRecipe(EnumDetector.TRAIN.getItem(), new Object[]{
-                "XXX",
-                "XPX",
-                "XXX",
-                'X', Blocks.nether_brick,
-                'P', Blocks.stone_pressure_plate,});
+            CraftingPlugin.addShapedRecipe(EnumDetector.TRAIN.getItem(), "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', Blocks.nether_brick,
+                    'P', Blocks.stone_pressure_plate);
         }
 
         EnumMachineGamma.DISPENSER_TRAIN.register();

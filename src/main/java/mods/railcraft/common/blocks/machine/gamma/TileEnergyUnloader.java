@@ -194,9 +194,7 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
 
     @Override
     public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
-        if (this.direction == direction)
-            return false;
-        return true;
+        return this.direction != direction;
     }
 
     @Override

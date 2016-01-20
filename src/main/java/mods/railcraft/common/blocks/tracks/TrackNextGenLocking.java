@@ -406,7 +406,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         public final String tag;
         private final Class<? extends LockingProfile> profileClass;
 
-        private LockingProfileType(Class<? extends LockingProfile> profileClass, LockType lockType, String tag) {
+        LockingProfileType(Class<? extends LockingProfile> profileClass, LockType lockType, String tag) {
             this.profileClass = profileClass;
             this.lockType = lockType;
             this.tag = tag;

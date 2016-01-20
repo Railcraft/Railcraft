@@ -66,7 +66,7 @@ public enum EnumMachineGamma implements IEnumMachine {
         creativeList.add(DISPENSER_TRAIN);
     }
 
-    private EnumMachineGamma(Module module, String tag, int numTextures, Class<? extends TileMachineBase> tile) {
+    EnumMachineGamma(Module module, String tag, int numTextures, Class<? extends TileMachineBase> tile) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;

@@ -79,7 +79,7 @@ public enum EnumMachineAlpha implements IEnumMachine {
         creativeList.add(STEAM_TRAP_AUTO);
     }
 
-    private EnumMachineAlpha(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineAlpha(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;

@@ -23,7 +23,7 @@ public enum StandardButtonTextureSets implements IButtonTextureSet{
     DICE_BUTTON(176, 0, 16, 16);
     private final int x, y, height, width;
 
-    private StandardButtonTextureSets(int x, int y, int height, int width) {
+    StandardButtonTextureSets(int x, int y, int height, int width) {
         this.x = x;
         this.y = y;
         this.height = height;

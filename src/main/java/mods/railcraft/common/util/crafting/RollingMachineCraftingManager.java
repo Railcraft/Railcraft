@@ -111,7 +111,7 @@ public class RollingMachineCraftingManager implements IRollingMachineCraftingMan
     @Override
     public ItemStack findMatchingRecipe(InventoryCrafting inv, World world) {
         for(int k = 0; k < recipes.size(); k++) {
-            IRecipe irecipe = (IRecipe)recipes.get(k);
+            IRecipe irecipe = recipes.get(k);
             if(irecipe.matches(inv, world)) {
                 return irecipe.getCraftingResult(inv);
             }

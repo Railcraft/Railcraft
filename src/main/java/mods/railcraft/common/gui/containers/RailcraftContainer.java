@@ -72,7 +72,7 @@ public abstract class RailcraftContainer extends Container {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
             sendUpdateToClient();
             for (Widget widget : widgets) {
-                for (ICrafting player : (List<ICrafting>) crafters) {
+                for (ICrafting player : crafters) {
                     widget.updateWidget(player);
                 }
             }
@@ -103,7 +103,7 @@ public abstract class RailcraftContainer extends Container {
 
     @Override
     public ItemStack slotClick(int slotNum, int mouseButton, int modifier, EntityPlayer player) {
-        Slot slot = slotNum < 0 ? null : (Slot) this.inventorySlots.get(slotNum);
+        Slot slot = slotNum < 0 ? null : this.inventorySlots.get(slotNum);
         if (slot instanceof SlotRailcraft && ((SlotRailcraft) slot).isPhantom())
             return slotClickPhantom((SlotRailcraft) slot, mouseButton, modifier, player);
         return super.slotClick(slotNum, mouseButton, modifier, player);
@@ -155,7 +155,7 @@ public abstract class RailcraftContainer extends Container {
         stackSlot.stackSize = stackSize;
 
         if (stackSlot.stackSize <= 0)
-            slot.putStack((ItemStack) null);
+            slot.putStack(null);
     }
 
     protected void fillPhantomSlot(SlotRailcraft slot, ItemStack stackHeld, int mouseButton, int modifier) {
@@ -174,7 +174,7 @@ public abstract class RailcraftContainer extends Container {
         boolean changed = false;
         if (stackToShift.isStackable())
             for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
-                Slot slot = (Slot) inventorySlots.get(slotIndex);
+                Slot slot = inventorySlots.get(slotIndex);
                 ItemStack stackInSlot = slot.getStack();
                 if (stackInSlot != null && InvTools.isItemEqual(stackInSlot, stackToShift)) {
                     int resultingStackSize = stackInSlot.stackSize + stackToShift.stackSize;
@@ -194,7 +194,7 @@ public abstract class RailcraftContainer extends Container {
             }
         if (stackToShift.stackSize > 0)
             for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
-                Slot slot = (Slot) inventorySlots.get(slotIndex);
+                Slot slot = inventorySlots.get(slotIndex);
                 ItemStack stackInSlot = slot.getStack();
                 if (stackInSlot == null) {
                     int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
@@ -211,7 +211,7 @@ public abstract class RailcraftContainer extends Container {
 
     private boolean tryShiftItem(ItemStack stackToShift, int numSlots) {
         for (int machineIndex = 0; machineIndex < numSlots - 9 * 4; machineIndex++) {
-            Slot slot = (Slot) inventorySlots.get(machineIndex);
+            Slot slot = inventorySlots.get(machineIndex);
             if (slot instanceof SlotRailcraft) {
                 SlotRailcraft slotRailcraft = (SlotRailcraft) slot;
                 if (slotRailcraft.isPhantom())
@@ -230,7 +230,7 @@ public abstract class RailcraftContainer extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
         ItemStack originalStack = null;
-        Slot slot = (Slot) inventorySlots.get(slotIndex);
+        Slot slot = inventorySlots.get(slotIndex);
         int numSlots = inventorySlots.size();
         if (slot != null && slot.getHasStack()) {
             ItemStack stackInSlot = slot.getStack();

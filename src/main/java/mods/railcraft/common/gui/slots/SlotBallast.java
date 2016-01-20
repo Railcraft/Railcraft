@@ -21,9 +21,7 @@ public class SlotBallast extends SlotRailcraft {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        if (stack != null && BallastRegistry.isItemBallast(stack))
-            return true;
-        return false;
+        return stack != null && BallastRegistry.isItemBallast(stack);
     }
 
 }

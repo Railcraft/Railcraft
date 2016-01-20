@@ -25,7 +25,7 @@ public abstract class SubCommand implements IModCommand {
         EVERYONE(0), ADMIN(2);
         int permLevel;
 
-        private PermLevel(int permLevel) {
+        PermLevel(int permLevel) {
             this.permLevel = permLevel;
         }
 

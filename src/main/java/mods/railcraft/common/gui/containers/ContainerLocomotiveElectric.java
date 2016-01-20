@@ -54,7 +54,7 @@ public class ContainerLocomotiveElectric extends ContainerLocomotive {
         super.sendUpdateToClient();
 
         for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = (ICrafting) this.crafters.get(var1);
+            ICrafting var2 = this.crafters.get(var1);
 
             if (this.lastCharge != chargeHandler.getCharge())
                 var2.sendProgressBarUpdate(this, 21, (int) Math.round(chargeHandler.getCharge()));

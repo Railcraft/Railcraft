@@ -114,7 +114,7 @@ public class GuiDetectorItem extends TileGui {
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             for (int slotNum = 0; slotNum < 9; slotNum++) {
-                Slot slot = (Slot) this.inventorySlots.inventorySlots.get(slotNum);
+                Slot slot = this.inventorySlots.inventorySlots.get(slotNum);
 
                 int displayX = slot.xDisplayPosition;
                 displayY = slot.yDisplayPosition;

@@ -192,7 +192,7 @@ public class GuiRoutingTable extends GuiScreen {
     protected void actionPerformed(GuiButton button) {
         if (button.enabled) {
             if (button == buttonDone) {
-                this.mc.displayGuiScreen((GuiScreen) null);
+                this.mc.displayGuiScreen(null);
                 this.sendBookToServer();
             } else if (button == buttonSign) {
                 editingTitle = !editingTitle;
@@ -378,7 +378,7 @@ public class GuiRoutingTable extends GuiScreen {
             case Keyboard.KEY_RETURN:
                 if (bookTitle.length() > 0) {
                     sendBookToServer();
-                    mc.displayGuiScreen((GuiScreen) null);
+                    mc.displayGuiScreen(null);
                 }
 
                 return;

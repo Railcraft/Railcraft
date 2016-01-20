@@ -48,7 +48,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     	private final String label;
         private final ToolTip tip;
         
-        private EnumStateMode(String label){
+        EnumStateMode(String label){
         	this.label = label;
             this.tip = ToolTip.buildToolTip(label + ".tip");
         }

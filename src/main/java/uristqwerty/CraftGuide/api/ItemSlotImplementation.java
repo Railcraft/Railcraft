@@ -16,7 +16,7 @@ public interface ItemSlotImplementation
 	 * @param data
 	 * @return
 	 */
-	public List<String> getTooltip(ItemSlot itemSlot, Object data);
+	List<String> getTooltip(ItemSlot itemSlot, Object data);
 	
 	/**
 	 * Draws an ItemSlot.
@@ -27,7 +27,7 @@ public interface ItemSlotImplementation
 	 * @param data
 	 * @param isMouseOver
 	 */
-	public void draw(ItemSlot itemSlot, Renderer renderer, int x, int y, Object data, boolean isMouseOver);
+	void draw(ItemSlot itemSlot, Renderer renderer, int x, int y, Object data, boolean isMouseOver);
 	
 	/**
 	 * Return an ItemFilter representing the ItemSlot contents.
@@ -36,7 +36,7 @@ public interface ItemSlotImplementation
 	 * @param object
 	 * @return
 	 */
-	public ItemFilter getClickedFilter(int x, int y, Object object);
+	ItemFilter getClickedFilter(int x, int y, Object object);
 	
 	/**
 	 * Compare the contents of an ItemSlot with an ItemFilter.
@@ -46,7 +46,7 @@ public interface ItemSlotImplementation
 	 * @param type
 	 * @return
 	 */
-	public boolean matches(ItemSlot itemSlot, ItemFilter search, Object object, SlotType type);
+	boolean matches(ItemSlot itemSlot, ItemFilter search, Object object, SlotType type);
 	
 	/**
 	 * Does some simple math to test if a point, relative to the containing
@@ -57,5 +57,5 @@ public interface ItemSlotImplementation
 	 * @param y
 	 * @return
 	 */
-	public boolean isPointInBounds(ItemSlot itemSlot, int x, int y);
+	boolean isPointInBounds(ItemSlot itemSlot, int x, int y);
 }

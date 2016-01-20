@@ -110,7 +110,7 @@ public class EntityAIMateBreeding extends EntityAIBase
         int matePriority = -1;
         int sitPriority = -1;
         boolean hasDespawn = false;
-        Iterator<EntityAITaskEntry> it = ((List<EntityAITaskEntry>)animal.tasks.taskEntries).iterator();
+        Iterator<EntityAITaskEntry> it = animal.tasks.taskEntries.iterator();
         while(it.hasNext()) {
             EntityAITaskEntry task = it.next();
             if(tame && task.action instanceof EntityAISit) {

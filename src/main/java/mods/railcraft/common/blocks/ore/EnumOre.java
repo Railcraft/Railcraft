@@ -41,7 +41,7 @@ public enum EnumOre {
         WATERSTONE.depreciated = true;
     }
 
-    private EnumOre(String tag) {
+    EnumOre(String tag) {
         this.tag = tag;
     }
 

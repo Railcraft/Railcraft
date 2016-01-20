@@ -11,5 +11,5 @@ package mods.railcraft.common.blocks.signals;
 
 public interface ISignalTile
 {
-    public int getLightValue();
+    int getLightValue();
 }

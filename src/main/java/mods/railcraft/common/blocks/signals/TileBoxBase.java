@@ -75,9 +75,7 @@ public abstract class TileBoxBase extends TileSignalFoundation {
 
     @Override
     public boolean isSideSolid(IBlockAccess world, int i, int j, int k, ForgeDirection side) {
-        if (side == ForgeDirection.UP)
-            return true;
-        return false;
+        return side == ForgeDirection.UP;
     }
 
     @Override

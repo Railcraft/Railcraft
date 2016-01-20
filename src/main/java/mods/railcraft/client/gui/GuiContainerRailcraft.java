@@ -170,7 +170,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
 //    }
     private Slot getSlotAtPosition(int par1, int par2) {
         for (int var3 = 0; var3 < this.inventorySlots.inventorySlots.size(); ++var3) {
-            Slot var4 = (Slot) this.inventorySlots.inventorySlots.get(var3);
+            Slot var4 = this.inventorySlots.inventorySlots.get(var3);
 
             if (this.isMouseOverSlot(var4, par1, par2))
                 return var4;

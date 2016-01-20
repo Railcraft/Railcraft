@@ -43,10 +43,11 @@ import net.minecraft.util.EnumFacing;
  */
 public class TileTradeStation extends TileMachineItem implements IGuiReturnHandler, ISidedInventory {
 
-    public static enum GuiPacketType {
+    public enum GuiPacketType {
 
         NEXT_TRADE, SET_PROFESSION
-    };
+    }
+
     private static final int AREA = 6;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 16);
     private int profession;
@@ -116,7 +117,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         ItemStack sell = recipeSlots.getStackInSlot(tradeSet * 3 + 2);
         for (EntityVillager villager : villagers) {
             MerchantRecipeList recipes = villager.getRecipes(null);
-            for (MerchantRecipe recipe : (List<MerchantRecipe>) recipes) {
+            for (MerchantRecipe recipe : recipes) {
                 if (recipe.isRecipeDisabled())
                     continue;
                 if (recipe.getItemToBuy() != null && !InvTools.isItemLessThanOrEqualTo(recipe.getItemToBuy(), buy1))
@@ -227,7 +228,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         EntityVillager villager = new EntityVillager(worldObj);
         villager.setProfession(profession);
         MerchantRecipeList recipes = villager.getRecipes(null);
-        MerchantRecipe recipe = (MerchantRecipe) recipes.get(MiscTools.RANDOM.nextInt(recipes.size()));
+        MerchantRecipe recipe = recipes.get(MiscTools.RANDOM.nextInt(recipes.size()));
         recipeSlots.setInventorySlotContents(tradeSet * 3 + 0, recipe.getItemToBuy());
         recipeSlots.setInventorySlotContents(tradeSet * 3 + 1, recipe.getSecondItemToBuy());
         recipeSlots.setInventorySlotContents(tradeSet * 3 + 2, recipe.getItemToSell());

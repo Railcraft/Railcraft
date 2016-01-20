@@ -13,11 +13,11 @@ import java.io.IOException;
 
 public interface ITileExtraDataHandler
 {
-    public void onUpdatePacket(DataInputStream data) throws IOException;
+    void onUpdatePacket(DataInputStream data) throws IOException;
 
-    public int getX();
+    int getX();
 
-    public int getY();
+    int getY();
 
-    public int getZ();
+    int getZ();
 }

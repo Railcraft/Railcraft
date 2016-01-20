@@ -30,9 +30,6 @@ public class SlotMinecart extends SlotRailcraft
         if(stack.getItem() instanceof IMinecartItem) {
             return true;
         }
-        if(stack.getItem() instanceof ItemMinecart) {
-            return true;
-        }
-        return false;
+        return stack.getItem() instanceof ItemMinecart;
     }
 }

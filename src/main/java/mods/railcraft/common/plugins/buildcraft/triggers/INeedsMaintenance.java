@@ -6,5 +6,5 @@ package mods.railcraft.common.plugins.buildcraft.triggers;
  */
 public interface INeedsMaintenance
 {
-    public boolean needsMaintenance();
+    boolean needsMaintenance();
 }

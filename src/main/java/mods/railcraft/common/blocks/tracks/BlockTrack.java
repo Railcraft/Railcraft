@@ -224,7 +224,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
                     ItemStack pants = player.getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
                     player.setCurrentItemOrArmor(MiscTools.ArmorSlots.LEGS.ordinal() + 1, InvTools.damageItem(pants, 1));
                 }
-            } else if (((EntityLivingBase) entity).attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
+            } else if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
                 chargeHandler.removeCharge(2000);
     }
 

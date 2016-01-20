@@ -43,7 +43,7 @@ public enum EnumDetector {
     private final Class<? extends Detector> handler;
     private final Module module;
 
-    private EnumDetector(Module module, Class<? extends Detector> handler) {
+    EnumDetector(Module module, Class<? extends Detector> handler) {
         this.handler = handler;
         this.module = module;
     }

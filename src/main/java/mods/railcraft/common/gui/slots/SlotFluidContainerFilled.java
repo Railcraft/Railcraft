@@ -32,9 +32,6 @@ public class SlotFluidContainerFilled extends Slot
         if(itemstack == null) {
             return false;
         }
-        if(FluidItemHelper.getFluidStackInContainer(itemstack) != null) {
-            return true;
-        }
-        return false;
+        return FluidItemHelper.getFluidStackInContainer(itemstack) != null;
     }
 }

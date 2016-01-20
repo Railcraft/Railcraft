@@ -78,7 +78,7 @@ public class RenderFluidLoader extends TileEntitySpecialRenderer {
                 if (FluidRenderer.getFluidTexture(tank.renderData.fluid, false) != null) {
 
                     float cap = tank.getCapacity();
-                    float level = (float) Math.min(tank.renderData.amount, cap) / cap;
+                    float level = Math.min(tank.renderData.amount, cap) / cap;
 
                     bindTexture(FluidRenderer.getFluidSheet(tank.renderData.fluid));
                     FluidRenderer.setColorForTank(tank);

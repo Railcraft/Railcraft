@@ -104,7 +104,7 @@ public abstract class MiscTools {
     public static <T extends Entity> List<T> getNearbyEntities(World world, Class<T> entityClass, float x, float minY, float maxY, float z, float radius) {
         AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x, minY, z, x + 1, maxY, z + 1);
         box = box.expand(radius, 0, radius);
-        return (List<T>) world.getEntitiesWithinAABB(entityClass, box);
+        return world.getEntitiesWithinAABB(entityClass, box);
     }
 
     public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass, int x, int y, int z) {

@@ -43,10 +43,11 @@ import net.minecraft.inventory.ISidedInventory;
 
 public class TileEngravingBench extends TileMachineItem implements IEnergyHandler, ISidedInventory, IHasWork, IGuiReturnHandler {
 
-    public static enum GuiPacketType {
+    public enum GuiPacketType {
 
         START_CRAFTING, NORMAL_RETURN, OPEN_UNLOCK, OPEN_NORMAL, UNLOCK_EMBLEM
-    };
+    }
+
     private final static int PROCESS_TIME = 100;
     private final static int ACTIVATION_POWER = 50;
     private final static int MAX_RECEIVE = 1000;

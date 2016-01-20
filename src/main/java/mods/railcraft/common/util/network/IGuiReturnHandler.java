@@ -20,9 +20,9 @@ import net.minecraft.world.World;
  */
 public interface IGuiReturnHandler
 {
-    public World getWorld();
+    World getWorld();
 
-    public void writeGuiData(DataOutputStream data) throws IOException;
+    void writeGuiData(DataOutputStream data) throws IOException;
 
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException;
+    void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException;
 }

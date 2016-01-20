@@ -89,7 +89,7 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
             double usage = (int) (energyCart.getTransferLimit() * Math.pow(1.5, overclockerUpgrades));
             double injection = (int) (energyCart.getTransferLimit() * Math.pow(1.3, overclockerUpgrades));
             if (usage > energy) {
-                double ratio = (double) energy / (double) usage;
+                double ratio = (double) energy / usage;
                 usage = energy;
                 injection = (int) (injection * ratio);
             }

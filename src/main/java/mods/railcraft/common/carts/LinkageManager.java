@@ -465,9 +465,7 @@ public class LinkageManager implements ILinkageManager {
                         if (next != null && next != last)
                             return true;
                         next = lm.getLinkedCartB(current);
-                        if (next != null && next != last)
-                            return true;
-                        return false;
+                        return next != null && next != last;
                     }
 
                     @Override
@@ -504,12 +502,12 @@ public class LinkageManager implements ILinkageManager {
         };
     }
 
-    public static enum LinkType {
+    public enum LinkType {
         LINK_A(LINK_A_HIGH, LINK_A_LOW),
         LINK_B(LINK_B_HIGH, LINK_B_LOW);
         public final String tagHigh, tagLow;
 
-        private LinkType(String tagHigh, String tagLow) {
+        LinkType(String tagHigh, String tagLow) {
             this.tagHigh = tagHigh;
             this.tagLow = tagLow;
         }

@@ -43,7 +43,7 @@ public enum Triggers implements ITriggerExternal {
     private final String tag;
     private IIcon icon;
 
-    private Triggers(String tag, Trigger trigger) {
+    Triggers(String tag, Trigger trigger) {
         this.tag = tag;
         this.trigger = trigger;
     }

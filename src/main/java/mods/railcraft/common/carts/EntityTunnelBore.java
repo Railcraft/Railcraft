@@ -355,7 +355,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             z2 += l;
         }
 
-        boundingBox.setBounds(x1, (j - (double) yOffset) + (double) ySize, z1, x2, (j - (double) yOffset) + (double) ySize + h, z2);
+        boundingBox.setBounds(x1, (j - (double) yOffset) + (double) ySize, z1, x2, (j - (double) yOffset) + ySize + h, z2);
     }
 
     @Override
@@ -787,9 +787,9 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
             if (stack != null && stack.stackSize > 0 && !RailcraftConfig.boreDestroysBlocks()) {
                 float f = 0.7F;
-                double xr = (double) (worldObj.rand.nextFloat() - 0.5D) * f;
-                double yr = (double) (worldObj.rand.nextFloat() - 0.5D) * f;
-                double zr = (double) (worldObj.rand.nextFloat() - 0.5D) * f;
+                double xr = (worldObj.rand.nextFloat() - 0.5D) * f;
+                double yr = (worldObj.rand.nextFloat() - 0.5D) * f;
+                double zr = (worldObj.rand.nextFloat() - 0.5D) * f;
                 EntityItem entityitem = new EntityItem(worldObj, getXAhead(posX, -3.2) + xr, posY + 0.3 + yr, getZAhead(posZ, -3.2) + zr, stack);
                 worldObj.spawnEntityInWorld(entityitem);
             }

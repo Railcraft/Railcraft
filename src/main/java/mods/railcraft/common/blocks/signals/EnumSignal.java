@@ -62,7 +62,7 @@ public enum EnumSignal implements IIconProvider, ISignalTileDefinition {
         creativeList.add(BOX_INTERLOCK);
     }
 
-    private EnumSignal(Module module, float hardness, boolean needsSupport, String tag, Class<? extends TileSignalFoundation> tile) {
+    EnumSignal(Module module, float hardness, boolean needsSupport, String tag, Class<? extends TileSignalFoundation> tile) {
         this.module = module;
         this.hardness = hardness;
         this.needsSupport = needsSupport;

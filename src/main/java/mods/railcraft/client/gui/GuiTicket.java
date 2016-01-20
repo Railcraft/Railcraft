@@ -119,9 +119,9 @@ public class GuiTicket extends GuiScreen {
     protected void actionPerformed(GuiButton button) {
         if (button.enabled) {
             if (button == buttonCancel) {
-                this.mc.displayGuiScreen((GuiScreen) null);
+                this.mc.displayGuiScreen(null);
             } else if (button == buttonDone) {
-                this.mc.displayGuiScreen((GuiScreen) null);
+                this.mc.displayGuiScreen(null);
                 this.sendToServer();
             } else if (button == buttonHelp) {
                 readingManual = !readingManual;

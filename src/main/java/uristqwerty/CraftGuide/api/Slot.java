@@ -34,7 +34,7 @@ public interface Slot
 	 * @param dataIndex
 	 * @param isMouseOver
 	 */
-	public void draw(Renderer renderer, int x, int y, Object[] data, int dataIndex, boolean isMouseOver);
+	void draw(Renderer renderer, int x, int y, Object[] data, int dataIndex, boolean isMouseOver);
 	
 	/**
 	 * When this slot is clicked on in a recipe, this method is called in
@@ -50,7 +50,7 @@ public interface Slot
 	 * @param dataIndex this slot's index in data
 	 * @return null, or an IItemFilter
 	 */
-	public ItemFilter getClickedFilter(int x, int y, Object[] data, int dataIndex);
+	ItemFilter getClickedFilter(int x, int y, Object[] data, int dataIndex);
 	
 	/**
 	 * This method is used by CraftGuide to determine whether a specific point
@@ -63,7 +63,7 @@ public interface Slot
 	 * @param dataIndex this slot's index in data
 	 * @return true if (x, y) is within this slot's bounds, otherwise false
 	 */
-	public boolean isPointInBounds(int x, int y, Object[] data, int dataIndex);
+	boolean isPointInBounds(int x, int y, Object[] data, int dataIndex);
 	
 	/**
 	 * When the user moves their cursor over a recipe containing this slot, and
@@ -78,7 +78,7 @@ public interface Slot
 	 * @return a List of Strings, representing one or more lines of text, or
 	 * null if the tooltip should not be displayed
 	 */
-	public List<String> getTooltip(int x, int y, Object[] data, int dataIndex);
+	List<String> getTooltip(int x, int y, Object[] data, int dataIndex);
 
 	/**
 	 * Used to test if a specific slot matches the searched {@link ItemFilter}
@@ -88,5 +88,5 @@ public interface Slot
 	 * @param dataIndex	this slot's index
 	 * @param type		the type of slot that is being searched for
 	 */
-	public boolean matches(ItemFilter filter, Object[] data, int dataIndex, SlotType type);
+	boolean matches(ItemFilter filter, Object[] data, int dataIndex, SlotType type);
 }

@@ -93,7 +93,7 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
 
     @Override
     public short getId() {
-        return (short) track.getTrackSpec().getTrackId();
+        return track.getTrackSpec().getTrackId();
     }
 
     @Override

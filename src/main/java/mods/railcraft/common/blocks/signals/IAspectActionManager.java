@@ -18,10 +18,10 @@ import mods.railcraft.common.gui.buttons.LockButtonState;
  */
 public interface IAspectActionManager extends ISecure<LockButtonState> {
 
-    public boolean doesActionOnAspect(SignalAspect aspect);
+    boolean doesActionOnAspect(SignalAspect aspect);
 
-    public void doActionOnAspect(SignalAspect aspect, boolean trigger);
+    void doActionOnAspect(SignalAspect aspect, boolean trigger);
 
-    public World getWorld();
+    World getWorld();
 
 }

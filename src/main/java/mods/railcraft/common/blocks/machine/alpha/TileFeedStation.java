@@ -105,7 +105,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
 
             AxisAlignedBB box = AxisAlignedBB.getBoundingBox(xCoord, yCoord - 1, zCoord, xCoord + 1, yCoord + 3, zCoord + 1);
             box = box.expand(AREA, 0, AREA);
-            List<EntityAnimal> animals = (List<EntityAnimal>) worldObj.getEntitiesWithinAABB(EntityAnimal.class, box);
+            List<EntityAnimal> animals = worldObj.getEntitiesWithinAABB(EntityAnimal.class, box);
 
             for (EntityAnimal target : animals) {
                 if (target.isBreedingItem(getStackInSlot(0)) && feedAnimal(target)) {

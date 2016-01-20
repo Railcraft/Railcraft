@@ -58,7 +58,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
         creativeList.add(ENGRAVING_BENCH);
     }
 
-    private EnumMachineEpsilon(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineEpsilon(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;

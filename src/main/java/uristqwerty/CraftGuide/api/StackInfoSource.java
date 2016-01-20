@@ -4,5 +4,5 @@ import net.minecraft.item.ItemStack;
 
 public interface StackInfoSource
 {
-	public String getInfo(ItemStack itemStack);
+	String getInfo(ItemStack itemStack);
 }

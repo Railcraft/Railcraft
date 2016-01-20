@@ -248,14 +248,14 @@ public class EntityCartGift extends EntityCartTNTWood {
         }
 
         double x = posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
-        double y = (double) (posY + 1 + rand.nextInt(3) - 1);
+        double y = posY + 1 + rand.nextInt(3) - 1;
         double z = posZ + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
         InvTools.dropItem(gift.stack.copy(), worldObj, x, y, z);
     }
 
     private void spawnCoal() {
         double x = posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
-        double y = (double) (posY + 1 + rand.nextInt(3) - 1);
+        double y = posY + 1 + rand.nextInt(3) - 1;
         double z = posZ + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
         InvTools.dropItem(new ItemStack(Items.coal), worldObj, x, y, z);
     }
@@ -265,7 +265,7 @@ public class EntityCartGift extends EntityCartTNTWood {
         ItemStack potion = new ItemStack(Items.potionitem, 1, meta);
 
         double x = posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
-        double y = (double) (posY + 1 + rand.nextInt(3) - 1);
+        double y = posY + 1 + rand.nextInt(3) - 1;
         double z = posZ + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
         InvTools.dropItem(potion, worldObj, x, y, z);
     }

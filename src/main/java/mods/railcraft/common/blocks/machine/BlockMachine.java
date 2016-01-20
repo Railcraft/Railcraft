@@ -363,9 +363,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     
     @Override
     public boolean hasComparatorInputOverride() {
-        if (proxy instanceof IComparatorOverride)
-        	return true;
-        return false;
+        return proxy instanceof IComparatorOverride;
     }
 
     /**

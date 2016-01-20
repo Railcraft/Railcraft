@@ -104,9 +104,7 @@ public class ContainerRockCrusher extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            if (stack != null && RailcraftCraftingManager.rockCrusher.getRecipe(stack) != null)
-                return true;
-            return false;
+            return stack != null && RailcraftCraftingManager.rockCrusher.getRecipe(stack) != null;
         }
 
     }

@@ -82,7 +82,7 @@ public abstract class ContainerLocomotive extends RailcraftContainer {
         super.sendUpdateToClient();
 
         for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = (ICrafting) this.crafters.get(var1);
+            ICrafting var2 = this.crafters.get(var1);
 
             LocoSpeed speed = loco.getSpeed();
             if (this.lastSpeed != speed)

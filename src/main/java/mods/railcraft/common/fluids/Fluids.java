@@ -24,7 +24,7 @@ public enum Fluids {
     WATER, LAVA, FUEL, BIOFUEL, CREOSOTE, STEAM, BIOETHANOL, COAL, PYROTHEUM, FRESHWATER;
     private final String tag;
 
-    private Fluids() {
+    Fluids() {
         tag = name().toLowerCase(Locale.ENGLISH);
     }
 

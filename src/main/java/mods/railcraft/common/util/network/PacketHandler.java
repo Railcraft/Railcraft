@@ -105,7 +105,7 @@ public class PacketHandler {
                     pkt = new PacketPairRequest(player, type);
                     break;
                 case ITEM_NBT:
-                    pkt = new PacketCurrentItemNBT((EntityPlayer) player, ((EntityPlayer) player).getCurrentEquippedItem());
+                    pkt = new PacketCurrentItemNBT(player, player.getCurrentEquippedItem());
                     break;
                 case KEY_PRESS:
                     pkt = new PacketKeyPress(player);

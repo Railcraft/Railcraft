@@ -33,7 +33,7 @@ public class ModuleManager {
 
     public enum Stage {
 
-        PRE_INIT, INIT_FIRST, INIT_SECOND, POST_INIT, POST_INIT_NOT_LOADED, FINISHED;
+        PRE_INIT, INIT_FIRST, INIT_SECOND, POST_INIT, POST_INIT_NOT_LOADED, FINISHED
     }
 
     public enum Module {
@@ -65,7 +65,7 @@ public class ModuleManager {
         ELECTRICITY(ModuleElectricity.class);
         private final RailcraftModule instance;
 
-        private Module(Class<? extends RailcraftModule> moduleClass) {
+        Module(Class<? extends RailcraftModule> moduleClass) {
             RailcraftModule inst = null;
             if (moduleClass != null)
                 try {
@@ -90,7 +90,8 @@ public class ModuleManager {
             return moduleClass;
         }
 
-    };
+    }
+
     private static final Set<Module> loadedModules = EnumSet.noneOf(Module.class);
     private static final Set<Module> unloadedModules = EnumSet.allOf(Module.class);
     private static Stage stage = Stage.PRE_INIT;

@@ -23,9 +23,6 @@ public class SlotLiquidContainer extends Slot {
         if (itemstack == null) {
             return false;
         }
-        if (FluidItemHelper.isContainer(itemstack)) {
-            return true;
-        }
-        return false;
+        return FluidItemHelper.isContainer(itemstack);
     }
 }

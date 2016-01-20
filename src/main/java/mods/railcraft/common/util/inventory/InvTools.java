@@ -669,9 +669,7 @@ public abstract class InvTools {
     public static boolean isCartItemEqual(final ItemStack a, final ItemStack b, final boolean matchDamage) {
         if (!isItemEqual(a, b, matchDamage, false))
             return false;
-        if (a.hasDisplayName() && !a.getDisplayName().equals(b.getDisplayName()))
-            return false;
-        return true;
+        return !(a.hasDisplayName() && !a.getDisplayName().equals(b.getDisplayName()));
     }
 
     /**

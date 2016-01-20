@@ -16,5 +16,5 @@ import mods.railcraft.api.core.IOwnable;
  */
 public interface ISignalBlockTile extends IOwnable {
 
-    public SignalBlock getSignalBlock();
+    SignalBlock getSignalBlock();
 }

@@ -485,8 +485,8 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     public int getDamageToRoadKill(EntityLivingBase entity) {
         if (entity instanceof EntityPlayer)
             if (ItemOveralls.isPlayerWearing((EntityPlayer) entity)) {
-                ItemStack pants = ((EntityPlayer) entity).getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
-                ((EntityPlayer) entity).setCurrentItemOrArmor(MiscTools.ArmorSlots.LEGS.ordinal() + 1, InvTools.damageItem(pants, 5));
+                ItemStack pants = entity.getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
+                entity.setCurrentItemOrArmor(MiscTools.ArmorSlots.LEGS.ordinal() + 1, InvTools.damageItem(pants, 5));
                 return 4;
             }
         return 25;
@@ -761,7 +761,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         public static final LocoLockButtonState[] VALUES = values();
         private final IButtonTextureSet texture;
 
-        private LocoLockButtonState(IButtonTextureSet texture) {
+        LocoLockButtonState(IButtonTextureSet texture) {
             this.texture = texture;
         }
 

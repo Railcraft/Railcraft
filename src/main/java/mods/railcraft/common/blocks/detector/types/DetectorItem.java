@@ -45,7 +45,7 @@ public class DetectorItem extends DetectorFilter {
             return LocalizationPlugin.translate("railcraft.gui.detector.item." + name().toLowerCase(Locale.ENGLISH));
         }
 
-    };
+    }
 
     public enum FilterMode {
 
@@ -56,7 +56,8 @@ public class DetectorItem extends DetectorFilter {
             return LocalizationPlugin.translate("railcraft.gui.detector.item." + name().toLowerCase(Locale.ENGLISH));
         }
 
-    };
+    }
+
     private PrimaryMode primaryMode = PrimaryMode.ANYTHING;
     private FilterMode filterMode = FilterMode.AT_LEAST;
 

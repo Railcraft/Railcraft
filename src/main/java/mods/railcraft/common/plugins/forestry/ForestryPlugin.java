@@ -139,13 +139,12 @@ public class ForestryPlugin {
 
                         ItemStack output = new ItemStack(trackmanBackpackT2);
                         addBackpackTooltip(output);
-                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
-                                "WXW",
+                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, "WXW",
                                 "WTW",
                                 "WWW",
                                 'X', "gemDiamond",
                                 'W', silk,
-                                'T', trackmanBackpackT1});
+                                'T', trackmanBackpackT1);
                     }
                 }
 
@@ -176,13 +175,12 @@ public class ForestryPlugin {
 
                         ItemStack output = new ItemStack(icemanBackpackT2);
                         addBackpackTooltip(output);
-                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
-                                "WXW",
+                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, "WXW",
                                 "WTW",
                                 "WWW",
                                 'X', "gemDiamond",
                                 'W', silk,
-                                'T', icemanBackpackT1});
+                                'T', icemanBackpackT1);
                     }
                 }
 
@@ -235,13 +233,12 @@ public class ForestryPlugin {
 
                         ItemStack output = new ItemStack(apothecariesBackpackT2);
                         addBackpackTooltip(output);
-                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, new Object[]{
-                                "WXW",
+                        forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, output, "WXW",
                                 "WTW",
                                 "WWW",
                                 'X', "gemDiamond",
                                 'W', silk,
-                                'T', apothecariesBackpackT1});
+                                'T', apothecariesBackpackT1);
                     }
                 }
             } catch (Throwable error) {

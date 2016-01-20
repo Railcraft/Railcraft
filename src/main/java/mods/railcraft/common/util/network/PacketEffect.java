@@ -23,7 +23,8 @@ public class PacketEffect extends RailcraftPacket {
         TELEPORT,
         FIRESPARK,
         FORCE_SPAWN
-    };
+    }
+
     private Effect effect;
     private ByteArrayOutputStream bytes;
     private DataOutputStream outStream;

@@ -28,7 +28,7 @@ public class GuiLoaderItem extends TileGui {
     private final TileLoaderItemBase tile;
 
     public GuiLoaderItem(InventoryPlayer inv, TileLoaderItemBase tile) {
-        super((RailcraftTileEntity) tile, new ContainerItemLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_item_loader.png");
+        super(tile, new ContainerItemLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_item_loader.png");
         this.tile = tile;
     }
 

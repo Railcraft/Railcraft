@@ -14,5 +14,5 @@ package mods.railcraft.common.gui.slots;
  */
 public interface ISlotController
 {
-    public boolean isSlotEnabled();
+    boolean isSlotEnabled();
 }

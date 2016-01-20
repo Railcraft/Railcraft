@@ -142,9 +142,7 @@ public class RenderBlockLamp extends BlockRenderer {
             }
         }
         Block block = WorldPlugin.getBlock(world, sx, sy, sz);
-        if (block instanceof BlockPostBase)
-            return true;
-        return false;
+        return block instanceof BlockPostBase;
     }
 
     @Override

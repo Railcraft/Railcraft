@@ -67,7 +67,7 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
 
         crafter.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
         crafter.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
-        crafter.sendProgressBarUpdate(this, 12, (int) Math.round(tile.currentOutput * 100));
+        crafter.sendProgressBarUpdate(this, 12, Math.round(tile.currentOutput * 100));
         crafter.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) crafter, windowId, 14, tile.energy);
     }
@@ -79,7 +79,7 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
         tile.getTankManager().updateGuiData(this, crafters, 1);
 
         for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting crafter = (ICrafting) this.crafters.get(var1);
+            ICrafting crafter = this.crafters.get(var1);
 
             if (this.lastBurnTime != tile.boiler.burnTime)
                 crafter.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
@@ -88,7 +88,7 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
                 crafter.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
 
             if (this.lastOutput != tile.currentOutput)
-                crafter.sendProgressBarUpdate(this, 12, (int) Math.round(tile.currentOutput * 100));
+                crafter.sendProgressBarUpdate(this, 12, Math.round(tile.currentOutput * 100));
 
             if (this.lastHeat != tile.boiler.getHeat())
                 crafter.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));

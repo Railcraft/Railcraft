@@ -26,7 +26,7 @@ public enum Actions implements IActionExternal {
     private final String tag;
     private IIcon icon;
 
-    private Actions(String tag) {
+    Actions(String tag) {
         this.tag = tag;
     }
 

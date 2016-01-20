@@ -20,5 +20,5 @@ public interface RecipeFilter
 	 * @param recipeType
 	 * @return
 	 */
-	public List<CraftGuideRecipe> filterRecipes(List<CraftGuideRecipe> source, ItemStack recipeType);
+	List<CraftGuideRecipe> filterRecipes(List<CraftGuideRecipe> source, ItemStack recipeType);
 }
