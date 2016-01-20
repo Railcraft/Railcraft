@@ -14,7 +14,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemStair extends ItemBlock {
@@ -30,5 +29,4 @@ public class ItemStair extends ItemBlock {
     public String getUnlocalizedName(ItemStack stack) {
         return "tile." + BlockRailcraftStairs.getTag(EnumBlockMaterial.fromOrdinal(stack.getItemDamage()));
     }
-
 }

@@ -16,8 +16,8 @@ import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.IBlockSoundProvider;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -28,7 +28,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -78,8 +80,8 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileStair)
             return new ItemStack(this, 1, ((TileStair) tile).getStair().ordinal());
         return null;
@@ -94,8 +96,8 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(World world, int i, int j, int k, int md, int fortune) {
-        TileEntity tile = world.getTileEntity(i, j, k);
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        TileEntity tile = world.getTileEntity(pos);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if (tile instanceof TileStair)
             items.add(new ItemStack(this, 1, ((TileStair) tile).getStair().ordinal()));
@@ -103,91 +105,66 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     }
 
     @Override
-    public int quantityDropped(int meta, int fortune, Random random) {
+    public int quantityDropped(IBlockState state, int fortune, Random random) {
         return 1;
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-        super.onBlockPlacedBy(world, x, y, z, entity, stack);
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+        TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileStair)
             ((TileStair) tile).setStair(EnumBlockMaterial.fromOrdinal(stack.getItemDamage()));
     }
 
     @Override
-    public void harvestBlock(World world, EntityPlayer entityplayer, int i, int j, int k, int l) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
     }
 
     @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
         player.addExhaustion(0.025F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
-            dropBlockAsItem(world, x, y, z, 0, 0);
-        return world.setBlockToAir(x, y, z);
+            dropBlockAsItem(world, pos, state, 0);
+        return world.setBlockToAir(pos);
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int par6) {
-        super.breakBlock(world, x, y, z, block, par6);
-        world.removeTileEntity(x, y, z);
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        super.breakBlock(worldIn, pos, state);
+        worldIn.removeTileEntity(pos);
     }
 
     @Override
-    public boolean hasTileEntity(int metadata) {
+    public boolean hasTileEntity(IBlockState state) {
         return true;
     }
 
     @Override
-    public TileEntity createTileEntity(World world, int metadata) {
+    public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileStair();
     }
 
     @Override
-    public float getBlockHardness(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public float getBlockHardness(World worldIn, BlockPos pos) {
+        TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileStair)
-            return ((TileStair) tile).getStair().getBlockHardness(world, x, y, z);
-        return super.getBlockHardness(world, x, y, z);
+            return ((TileStair) tile).getStair().getBlockHardness(worldIn, pos);
+        return super.getBlockHardness(worldIn, pos);
     }
 
     @Override
-    public float getExplosionResistance(Entity entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileStair)
-            return ((TileStair) tile).getStair().getExplosionResistance(entity);
-        return super.getExplosionResistance(entity, world, x, y, z, explosionX, explosionY, explosionZ);
+            return ((TileStair) tile).getStair().getExplosionResistance(exploder);
+        return super.getExplosionResistance(world, pos, exploder, explosion);
     }
 
     @Override
     public int getRenderType() {
         return renderId;
-    }
-
-    @Override
-    public int getRenderBlockPass() {
-        return 1;
-    }
-
-    @Override
-    public boolean canRenderInPass(int pass) {
-        currentRenderPass = pass;
-        return pass == 0 || pass == 1;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public IIcon getIcon(int side, int meta) {
-        return EnumBlockMaterial.fromOrdinal(meta).getIcon(side);
-    }
-
-    @Override
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof TileStair)
-            return ((TileStair) tile).getTexture(side);
-        return super.getIcon(world, x, y, z, side);
     }
 
     @SideOnly(Side.CLIENT)
@@ -196,23 +173,17 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         return ParticleHelper.addHitEffects(worldObj, block, target, effectRenderer, null);
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
-    public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
-        return ParticleHelper.addDestroyEffects(worldObj, block, x, y, z, meta, effectRenderer, null);
+    public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+        return ParticleHelper.addDestroyEffects(world, block, pos, meta, effectRenderer, null);
     }
 
     @Override
     public SoundType getSound(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+        BlockPos pos = new BlockPos(x, y, z);
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileStair)
             return ((TileStair) tile).getStair().getSound();
         return null;
     }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerBlockIcons(IIconRegister par1IconRegister) {
-    }
-
 }

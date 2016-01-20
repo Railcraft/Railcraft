@@ -22,16 +22,8 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileStair extends RailcraftTileEntity {
+
     private EnumBlockMaterial stair = EnumBlockMaterial.SANDY_BRICK;
-
-    @Override
-    public boolean canUpdate() {
-        return false;
-    }
-
-    public IIcon getTexture(int side) {
-        return stair.getIcon(side);
-    }
 
     public EnumBlockMaterial getStair() {
         return stair;
