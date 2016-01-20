@@ -31,7 +31,4 @@ public class ItemAnvilBlock extends ItemMultiTexture {
     public String getUnlocalizedName(ItemStack stack) {
         return super.getUnlocalizedName(stack);
     }
-    
-    
-
 }

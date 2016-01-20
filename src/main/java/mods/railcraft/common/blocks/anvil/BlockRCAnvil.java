@@ -17,18 +17,27 @@ import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAnvil;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class BlockRCAnvil extends BlockAnvil {
 
     private static final String[] anvilIconNames = new String[]{"anvil_top_damaged_0", "anvil_top_damaged_1", "anvil_top_damaged_2"};
     private static Block block;
+
+    public BlockRCAnvil() {
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setHardness(5.0F);
+        setStepSound(Block.soundTypeAnvil);
+        setResistance(2000.0F);
+    }
 
     public static Block getBlock() {
         return block;
@@ -38,7 +47,7 @@ public class BlockRCAnvil extends BlockAnvil {
         if (block == null) {
             String tag = "railcraft.anvil";
             if (RailcraftConfig.isBlockEnabled(tag)) {
-                block = new BlockRCAnvil().setBlockName(tag);
+                block = new BlockRCAnvil().setRegistryName(tag);
                 RailcraftRegistry.register(block, ItemAnvilBlock.class);
 
                 ForestryPlugin.addBackpackItem("builder", block);
@@ -52,40 +61,12 @@ public class BlockRCAnvil extends BlockAnvil {
         return new ItemStack(block);
     }
 
-    private IIcon[] iconArray;
-
-    public BlockRCAnvil() {
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setHardness(5.0F);
-        setStepSound(Block.soundTypeAnvil);
-        setResistance(2000.0F);
-    }
-
     @Override
-    public IIcon getIcon(int par1, int par2) {
-        if (this.anvilRenderSide == 3 && par1 == 1) {
-            int k = (par2 >> 2) % this.iconArray.length;
-            return this.iconArray[k];
-        } else
-            return this.blockIcon;
-    }
-
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        this.blockIcon = iconRegister.registerIcon("railcraft:anvil_base");
-        this.iconArray = new IIcon[anvilIconNames.length];
-
-        for (int i = 0; i < this.iconArray.length; ++i) {
-            this.iconArray[i] = iconRegister.registerIcon("railcraft:" + anvilIconNames[i]);
-        }
-    }
-
-    @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        if (world.isRemote)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (worldIn.isRemote)
             return true;
         else {
-            GuiHandler.openGui(EnumGui.ANVIL, player, world, x, y, z);
+            GuiHandler.openGui(EnumGui.ANVIL, playerIn, worldIn, pos);
             return true;
         }
     }
