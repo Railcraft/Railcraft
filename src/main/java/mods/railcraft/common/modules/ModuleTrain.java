@@ -49,7 +49,7 @@ public class ModuleTrain extends RailcraftModule {
     @Override
     public void initSecond() {
         EnumMachineGamma type = EnumMachineGamma.DISPENSER_TRAIN;
-        if (type.isAvaliable() && EnumMachineGamma.DISPENSER_CART.isAvaliable()) {
+        if (type.isAvailable() && EnumMachineGamma.DISPENSER_CART.isAvailable()) {
             ItemStack crowbar = ItemCrowbar.getItem();
             crowbar.setItemDamage(-1);
             CraftingPlugin.addShapedRecipe(type.getItem(),

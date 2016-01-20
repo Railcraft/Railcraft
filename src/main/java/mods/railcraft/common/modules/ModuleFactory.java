@@ -321,7 +321,7 @@ public class ModuleFactory extends RailcraftModule {
 
                 LootPlugin.addLootTool(type.getItem(), 1, 1, "steel.block");
 
-                if (EnumMachineAlpha.BLAST_FURNACE.isAvaliable())
+                if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
                     RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Blocks.iron_block), false, false, 11520, EnumCube.STEEL_BLOCK.getItem());
             }
 
@@ -386,7 +386,7 @@ public class ModuleFactory extends RailcraftModule {
     @Override
     public void initSecond() {
         if (ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES)) {
-            if (EnumMachineAlpha.BLAST_FURNACE.isAvaliable() && EnumBrick.INFERNAL.getBlock() != null) {
+            if (EnumMachineAlpha.BLAST_FURNACE.isAvailable() && EnumBrick.INFERNAL.getBlock() != null) {
 
                 ItemStack stack = EnumMachineAlpha.BLAST_FURNACE.getItem(4);
                 CraftingPlugin.addShapedRecipe(stack,
@@ -396,7 +396,7 @@ public class ModuleFactory extends RailcraftModule {
                         'B', EnumBrick.INFERNAL.get(BrickVariant.BRICK, 1),
                         'P', Items.magma_cream);
             }
-            if (EnumMachineAlpha.COKE_OVEN.isAvaliable() && EnumBrick.SANDY.getBlock() != null) {
+            if (EnumMachineAlpha.COKE_OVEN.isAvailable() && EnumBrick.SANDY.getBlock() != null) {
                 ItemStack stack = EnumMachineAlpha.COKE_OVEN.getItem();
                 CraftingPlugin.addShapedRecipe(stack,
                         " B ",
@@ -444,7 +444,7 @@ public class ModuleFactory extends RailcraftModule {
         if (OreDictionary.getOres("blockSteel").isEmpty())
             OreDictionary.registerOre("blockSteel", Blocks.iron_block);
 
-        if (!EnumMachineAlpha.BLAST_FURNACE.isAvaliable())
+        if (!EnumMachineAlpha.BLAST_FURNACE.isAvailable())
             registerAltSteelFurnaceRecipe();
 
         List<ItemStack> logs = new ArrayList<ItemStack>(25);

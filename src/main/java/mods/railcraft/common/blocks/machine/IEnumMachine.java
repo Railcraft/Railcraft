@@ -22,7 +22,7 @@ public interface IEnumMachine {
 
     String getTag();
 
-    boolean isAvaliable();
+    boolean isAvailable();
 
     ItemStack getItem();
 

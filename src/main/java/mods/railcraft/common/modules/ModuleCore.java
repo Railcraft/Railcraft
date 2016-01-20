@@ -311,7 +311,7 @@ public class ModuleCore extends RailcraftModule {
 
     @Override
     public void initSecond() {
-        if (RailcraftConfig.useCreosoteFurnaceRecipes() || !EnumMachineAlpha.COKE_OVEN.isAvaliable()) {
+        if (RailcraftConfig.useCreosoteFurnaceRecipes() || !EnumMachineAlpha.COKE_OVEN.isAvailable()) {
             FurnaceRecipes.smelting().func_151394_a(new ItemStack(Items.coal, 1, 0), FluidContainers.getCreosoteOilBottle(2), 0.0F);
             FurnaceRecipes.smelting().func_151394_a(new ItemStack(Items.coal, 1, 1), FluidContainers.getCreosoteOilBottle(1), 0.0F);
         }
@@ -335,7 +335,7 @@ public class ModuleCore extends RailcraftModule {
         machines.addAll(EnumSet.allOf(EnumMachineEpsilon.class));
 
         for (IEnumMachine machine : machines) {
-            if (machine.isAvaliable())
+            if (machine.isAvailable())
                 RailcraftRegistry.register(machine.getItem());
         }
     }

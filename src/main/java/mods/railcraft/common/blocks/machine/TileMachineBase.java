@@ -116,7 +116,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
         if (!checkedBlock) {
             checkedBlock = true;
 
-            if (!getMachineType().isAvaliable()) {
+            if (!getMachineType().isAvailable()) {
                 worldObj.setBlockToAir(getPos());
                 return;
             }

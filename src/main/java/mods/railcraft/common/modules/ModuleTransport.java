@@ -148,7 +148,7 @@ public class ModuleTransport extends RailcraftModule {
         EnumCart cart = EnumCart.TANK;
 
         if (cart.setup()) {
-            if (EnumMachineBeta.TANK_IRON_GAUGE.isAvaliable()) {
+            if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable()) {
                 CraftingPlugin.addShapedRecipe(cart.getCartItem(),
                         "T",
                         "M",

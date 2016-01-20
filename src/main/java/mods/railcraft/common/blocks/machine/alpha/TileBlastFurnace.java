@@ -35,6 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import java.io.DataInputStream;
@@ -46,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
+
     public static final IStackFilter INPUT_FILTER = new IStackFilter() {
         @Override
         public boolean matches(ItemStack stack) {
@@ -77,6 +79,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
             return false;
         }
     }, InventorySorter.SIZE_DECENDING);
+
     static {
         char[][][] map = {
                 {
@@ -124,6 +127,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         };
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
+
     /**
      * The number of ticks that the furnace will keep burning
      */
@@ -161,18 +165,8 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (side > 1 && getPatternMarker() == 'W' && isStructureValid()) {
-            if (isBurning())
-                return getMachineType().getTexture(7);
-            return getMachineType().getTexture(6);
-        }
-        return getMachineType().getTexture(0);
-    }
-
-    @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        Block block = worldObj.getBlock(i, j, k);
+        Block block = worldObj.getBlockState(pos).getBlock();
         switch (mapPos) {
             case 'O':
                 if (block != RailcraftBlocks.getBlockMachineAlpha() || worldObj.getBlockMetadata(i, j, k) != getBlockMetadata())
@@ -184,7 +178,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                     return true;
                 break;
             case 'A':
-                if (block.isAir(worldObj, i, j, k) || block.getMaterial() == Material.lava)
+                if (block.isAir(worldObj, pos) || block.getMaterial() == Material.lava)
                     return true;
                 break;
         }
@@ -211,37 +205,34 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     private void setLavaIdle() {
-        int xLava = xCoord + 1;
-        int yLava = yCoord + 1;
-        int zLava = zCoord + 1;
-        if (worldObj.isAirBlock(xLava, yLava, zLava))
-            worldObj.setBlock(xLava, yLava, zLava, Blocks.lava, 7, 3);
+        BlockPos offsetPos = getPos().add(1, 1, 1);
+        if (worldObj.isAirBlock(offsetPos))
+            worldObj.setBlockState(offsetPos, Blocks.lava, 7, 3);
     }
 
     private void setLavaBurn() {
-        int xLava = xCoord + 1;
-        int yLava = yCoord + 1;
-        int zLava = zCoord + 1;
-        if (worldObj.isAirBlock(xLava, yLava, zLava))
-            worldObj.setBlock(xLava, yLava, zLava, Blocks.flowing_lava, 1, 3);
-        yLava += 1;
-        if (worldObj.isAirBlock(xLava, yLava, zLava))
-            worldObj.setBlock(xLava, yLava, zLava, Blocks.flowing_lava, 1, 3);
+        BlockPos offsetPos = getPos().add(1, 1, 1);
+        if (worldObj.isAirBlock(offsetPos))
+            worldObj.setBlockState(offsetPos, Blocks.flowing_lava, 1, 3);
+        offsetPos = offsetPos.up();
+        if (worldObj.isAirBlock(offsetPos))
+            worldObj.setBlockState(offsetPos, Blocks.flowing_lava, 1, 3);
     }
 
-    //    private void destroyLava() {
-//        int xLava = xCoord + 1;
-//        int yLava = yCoord + 2;
-//        int zLava = zCoord + 1;
-//        if (worldObj.getBlock(xLava, yLava, zLava).getMaterial() == Material.lava)
-//            worldObj.setBlockToAir(xLava, yLava, zLava);
-//        yLava -= 1;
-//        if (worldObj.getBlock(xLava, yLava, zLava).getMaterial() == Material.lava)
-//            worldObj.setBlockToAir(xLava, yLava, zLava);
-//    }
+    /*private void destroyLava() {
+        int xLava = xCoord + 1;
+        int yLava = yCoord + 2;
+        int zLava = zCoord + 1;
+        if (worldObj.getBlock(xLava, yLava, zLava).getMaterial() == Material.lava)
+            worldObj.setBlockToAir(xLava, yLava, zLava);
+        yLava -= 1;
+        if (worldObj.getBlock(xLava, yLava, zLava).getMaterial() == Material.lava)
+            worldObj.setBlockToAir(xLava, yLava, zLava);
+    }*/
+
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld()))
             return;
@@ -320,7 +311,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock != null) {
-            GuiHandler.openGui(EnumGui.BLAST_FURNACE, player, worldObj, masterBlock.xCoord, masterBlock.yCoord, masterBlock.zCoord);
+            GuiHandler.openGui(EnumGui.BLAST_FURNACE, player, worldObj, masterBlock.getX(), masterBlock.getY(), masterBlock.getZ());
             return true;
         }
         return false;
@@ -387,17 +378,17 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return slot == SLOT_OUTPUT;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return index == SLOT_OUTPUT;
     }
 }

@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDelegate, IFluidHandler, INeedsMaintenance, ISteamUser, IElectricGrid {
@@ -57,12 +56,8 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         Texture(int index) {
             this.index = index;
         }
-
-        public IIcon getIcon() {
-            return EnumMachineAlpha.TURBINE.getTexture(index);
-        }
-
     }
+
     private static final int DAMAGE_CHANCE = 200;
     private static final int IC2_OUTPUT = 200;
     private static final int BC_OUTPUT = 64;
@@ -94,62 +89,62 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
     static {
         char[][][] map1 = {
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'B', 'W', 'B', 'O'},
-                {'O', 'B', 'W', 'B', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O', 'O'}
-            }
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'W', 'B', 'O'},
+                        {'O', 'B', 'W', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                }
         };
         patterns.add(new MultiBlockPattern(map1));
 
         char[][][] map2 = {
-            {
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O'},
-                {'O', 'B', 'B', 'O'},
-                {'O', 'W', 'W', 'O'},
-                {'O', 'B', 'B', 'O'},
-                {'O', 'O', 'O', 'O'}
-            },
-            {
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'}
-            }
+                {
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'O'},
+                        {'O', 'W', 'W', 'O'},
+                        {'O', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'}
+                }
         };
         patterns.add(new MultiBlockPattern(map2));
     }
@@ -172,8 +167,8 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isHost(worldObj)) {
             if (isStructureValid()) {
@@ -220,7 +215,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 //                System.out.println("addedEnergy=" + addedEnergy);
                 if (clock % 4 == 0) {
                     gaugeState = (byte) getOutput();
-                    WorldPlugin.addBlockEvent(worldObj, xCoord, yCoord, zCoord, getBlockType(), 1, gaugeState);
+                    WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, gaugeState);
                 }
             }
         }
@@ -284,14 +279,14 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, worldObj, xCoord, yCoord, zCoord);
+        InvTools.dropInventory(inv, worldObj, getPos());
     }
 
     @Override
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.TURBINE, player, worldObj, mBlock.xCoord, mBlock.yCoord, mBlock.zCoord);
+            GuiHandler.openGui(EnumGui.TURBINE, player, worldObj, mBlock.getPos());
             return true;
         }
         return false;
@@ -328,65 +323,6 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         if (mBlock == null)
             return 0;
         return mBlock.gaugeState * 0.01F;
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        if (isStructureValid()) {
-            int patIndex = patterns.indexOf(getPattern());
-            if (side == 0 || side == 1) {
-                if (patIndex == 0)
-                    return Texture.SIDE_B.getIcon();
-                return Texture.SIDE_A.getIcon();
-            }
-
-            if (getPatternMarker() == 'W')
-                return Texture.GUAGE.getIcon();
-            if (patIndex == 0)
-                switch (side) {
-                    case 2:
-                        if (getPatternPositionY() == 2) {
-                            if (getPatternPositionX() == 2)
-                                return Texture.END_TL.getIcon();
-                            return Texture.END_TR.getIcon();
-                        }
-                        if (getPatternPositionX() == 2)
-                            return Texture.END_BL.getIcon();
-                        return Texture.END_BR.getIcon();
-                    case 3:
-                        if (getPatternPositionY() == 2) {
-                            if (getPatternPositionX() == 1)
-                                return Texture.END_TL.getIcon();
-                            return Texture.END_TR.getIcon();
-                        }
-                        if (getPatternPositionX() == 1)
-                            return Texture.END_BL.getIcon();
-                        return Texture.END_BR.getIcon();
-                }
-            else
-                switch (side) {
-                    case 4:
-                        if (getPatternPositionY() == 2) {
-                            if (getPatternPositionZ() == 1)
-                                return Texture.END_TL.getIcon();
-                            return Texture.END_TR.getIcon();
-                        }
-                        if (getPatternPositionZ() == 1)
-                            return Texture.END_BL.getIcon();
-                        return Texture.END_BR.getIcon();
-                    case 5:
-                        if (getPatternPositionY() == 2) {
-                            if (getPatternPositionZ() == 2)
-                                return Texture.END_TL.getIcon();
-                            return Texture.END_TR.getIcon();
-                        }
-                        if (getPatternPositionZ() == 2)
-                            return Texture.END_BL.getIcon();
-                        return Texture.END_BR.getIcon();
-                }
-
-        }
-        return Texture.SIDE_A.getIcon();
     }
 
     @Override
@@ -502,22 +438,23 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         return fluid == null || Fluids.WATER.is(fluid);
     }
 
-//    @Override
-//    public void onDisable(int duration) {
-//        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
-//        if (mBlock != null) {
-//            mBlock.disabled = duration;
-//        }
-//    }
-//
-//    @Override
-//    public boolean isDisabled() {
-//        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
-//        if (mBlock != null) {
-//            return mBlock.disabled <= 0;
-//        }
-//        return true;
-//    }
+    /*@Override
+    public void onDisable(int duration) {
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        if (mBlock != null) {
+            mBlock.disabled = duration;
+        }
+    }
+
+    @Override
+    public boolean isDisabled() {
+        TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
+        if (mBlock != null) {
+            return mBlock.disabled <= 0;
+        }
+        return true;
+    }*/
+
     @Override
     public boolean needsMaintenance() {
         TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
@@ -532,5 +469,4 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         }
         return false;
     }
-
 }

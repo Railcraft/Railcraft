@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, ISidedInventory {
+
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
     public static final int SLOT_LIQUID_OUTPUT = 2;
@@ -57,6 +58,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     private final StandardTank tank;
     private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
     private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 2, false);
+
     static {
         char[][][] map = {
                 {
@@ -96,6 +98,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
                 },};
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
+
     public int cookTimeTotal = 3600;
     private int finishedAt;
 
@@ -134,16 +137,6 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (getPatternMarker() == 'W' && isStructureValid()) {
-            if (isBurning())
-                return getMachineType().getTexture(7);
-            return getMachineType().getTexture(6);
-        }
-        return getMachineType().getTexture(0);
-    }
-
-    @Override
     public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         if (isStructureValid() && FluidHelper.handleRightClick(this, EnumFacing.getOrientation(side), player, false, true))
             return true;
@@ -172,8 +165,8 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isHost(getWorld()))
             if (isMaster()) {
@@ -242,7 +235,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock != null && isStructureValid()) {
-            GuiHandler.openGui(EnumGui.COKE_OVEN, player, worldObj, masterBlock.xCoord, masterBlock.yCoord, masterBlock.zCoord);
+            GuiHandler.openGui(EnumGui.COKE_OVEN, player, worldObj, masterBlock.getPos());
             return true;
         }
         return false;
@@ -315,17 +308,17 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return slot == SLOT_OUTPUT || slot == SLOT_LIQUID_OUTPUT;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return index == SLOT_OUTPUT || index == SLOT_LIQUID_OUTPUT;
     }
 }

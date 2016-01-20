@@ -12,7 +12,6 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TileSteamTrapManual extends TileSteamTrap {
@@ -23,21 +22,9 @@ public class TileSteamTrapManual extends TileSteamTrap {
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (direction.ordinal() == side) {
-            return getMachineType().getTexture(8);
-        }
-        if (side == 0 || side == 1) {
-            return getMachineType().getTexture(6);
-        }
-        return getMachineType().getTexture(7);
-    }
-
-    @Override
     protected void triggerCheck() {
         if (powered) {
             jet();
         }
     }
-
 }

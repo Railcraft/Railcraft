@@ -32,6 +32,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -49,6 +50,7 @@ import java.util.Map;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTankWater extends TileTank implements ISidedInventory {
+
     private final static int OUTPUT_RATE = 40;
     private final static int TANK_CAPACITY = FluidHelper.BUCKET_VOLUME * 400;
     private final static int REFILL_INTERVAL = 8;
@@ -162,22 +164,22 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isHost(getWorld())) {
             if (isMaster()) {
-                if (worldObj.provider.dimensionId != -1 && clock % REFILL_INTERVAL == 0) {
+                if (worldObj.provider.getDimensionId() != -1 && clock % REFILL_INTERVAL == 0) {
                     float rate = REFILL_RATE;
-                    BiomeGenBase biome = worldObj.getBiomeGenForCoords(xCoord, zCoord);
+                    BiomeGenBase biome = worldObj.getBiomeGenForCoords(getX(), getZ());
                     float humidity = biome.rainfall;
                     rate *= humidity;
 //                    String debug = "Biome=" + biome.biomeName + ", Humidity=" + humidity;
 
                     boolean outside = false;
-                    for (int x = xCoord - 1; x <= xCoord + 1; x++) {
-                        for (int z = zCoord - 1; z <= zCoord + 1; z++) {
-                            outside = worldObj.canBlockSeeTheSky(x, yCoord + 3, z);
+                    for (int x = getX() - 1; x <= getX() + 1; x++) {
+                        for (int z = getZ() - 1; z <= getZ() + 1; z++) {
+                            outside = worldObj.canBlockSeeSky(new BlockPos(x, getY() + 3, z));
 //                            System.out.println(x + ", " + (yCoord + 3) + ", " + z);
                             if (outside)
                                 break;
@@ -216,15 +218,10 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.TANK, player, worldObj, mBlock.xCoord, mBlock.yCoord, mBlock.zCoord);
+            GuiHandler.openGui(EnumGui.TANK, player, worldObj, mBlock.getPos());
             return true;
         }
         return false;
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        return EnumMachineAlpha.TANK_WATER.getTexture(side);
     }
 
     @Override
@@ -252,18 +249,18 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return slot == SLOT_OUTPUT;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return index == SLOT_OUTPUT;
     }
 
     @Override

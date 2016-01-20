@@ -101,7 +101,7 @@ public class ModuleChunkLoading extends RailcraftModule {
 
         // Define Anchor Cart
         EnumCart cart = EnumCart.ANCHOR;
-        if (EnumMachineAlpha.WORLD_ANCHOR.isAvaliable() && cart.setup()) {
+        if (EnumMachineAlpha.WORLD_ANCHOR.isAvailable() && cart.setup()) {
             ItemStack anchor = EnumMachineAlpha.WORLD_ANCHOR.getItem();
             if (RailcraftConfig.canCraftPersonalAnchors()) {
                 CraftingPlugin.addShapedRecipe(cart.getCartItem(),
@@ -117,7 +117,7 @@ public class ModuleChunkLoading extends RailcraftModule {
 
         // Define Personal Anchor Cart
         cart = EnumCart.ANCHOR_PERSONAL;
-        if (EnumMachineAlpha.PERSONAL_ANCHOR.isAvaliable() && cart.setup()) {
+        if (EnumMachineAlpha.PERSONAL_ANCHOR.isAvailable() && cart.setup()) {
             ItemStack anchor = EnumMachineAlpha.PERSONAL_ANCHOR.getItem();
             if (RailcraftConfig.canCraftPersonalAnchors()) {
                 CraftingPlugin.addShapedRecipe(cart.getCartItem(),
@@ -132,7 +132,7 @@ public class ModuleChunkLoading extends RailcraftModule {
 
         // Define Admin Anchor Cart
         cart = EnumCart.ANCHOR_ADMIN;
-        if (EnumMachineAlpha.ADMIN_ANCHOR.isAvaliable() && cart.setup()) {
+        if (EnumMachineAlpha.ADMIN_ANCHOR.isAvailable() && cart.setup()) {
             ItemStack anchor = EnumMachineAlpha.ADMIN_ANCHOR.getItem();
             cart.setContents(anchor);
         }

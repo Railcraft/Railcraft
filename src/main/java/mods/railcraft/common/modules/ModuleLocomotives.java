@@ -52,11 +52,11 @@ public class ModuleLocomotives extends RailcraftModule {
             paintLocomotive(cart.getCartItem());
 
             ItemStack tank;
-            if (EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.isAvaliable())
+            if (EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.isAvailable())
                 tank = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getItem();
-            else if (EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.isAvaliable())
+            else if (EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.isAvailable())
                 tank = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getItem();
-            else if (EnumMachineBeta.TANK_IRON_WALL.isAvaliable())
+            else if (EnumMachineBeta.TANK_IRON_WALL.isAvailable())
                 tank = EnumMachineBeta.TANK_IRON_WALL.getItem();
             else if (RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL) != null)
                 tank = RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL);
@@ -64,9 +64,9 @@ public class ModuleLocomotives extends RailcraftModule {
                 tank = new ItemStack(Items.iron_ingot);
 
             ItemStack firebox;
-            if (EnumMachineBeta.BOILER_FIREBOX_SOLID.isAvaliable())
+            if (EnumMachineBeta.BOILER_FIREBOX_SOLID.isAvailable())
                 firebox = EnumMachineBeta.BOILER_FIREBOX_SOLID.getItem();
-            else if (EnumMachineAlpha.BLAST_FURNACE.isAvaliable())
+            else if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
                 firebox = EnumMachineAlpha.BLAST_FURNACE.getItem();
             else
                 firebox = new ItemStack(Blocks.furnace);
@@ -92,7 +92,7 @@ public class ModuleLocomotives extends RailcraftModule {
     @Override
     public void initSecond() {
         if (EnumCart.LOCO_ELECTRIC.isEnabled()) {
-            Object feederUnit = EnumMachineEpsilon.ELECTRIC_FEEDER.isAvaliable() ? EnumMachineEpsilon.ELECTRIC_FEEDER.getItem() : "blockCopper";
+            Object feederUnit = EnumMachineEpsilon.ELECTRIC_FEEDER.isAvailable() ? EnumMachineEpsilon.ELECTRIC_FEEDER.getItem() : "blockCopper";
             ItemStack cartStack = EnumCart.LOCO_ELECTRIC.getCartItem();
             ItemLocomotive.setItemColorData(cartStack, EnumColor.YELLOW, EnumColor.BLACK);
             CraftingPlugin.addShapedRecipe(cartStack,

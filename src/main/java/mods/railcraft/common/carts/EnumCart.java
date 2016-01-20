@@ -99,7 +99,7 @@ public enum EnumCart implements ICartType {
     public ItemStack getContents() {
         switch (this) {
             case TANK:
-                if (EnumMachineBeta.TANK_IRON_GAUGE.isAvaliable())
+                if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable())
                     return EnumMachineBeta.TANK_IRON_GAUGE.getItem();
             default: {
                 if (contents == null)

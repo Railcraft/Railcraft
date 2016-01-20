@@ -37,6 +37,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -91,30 +92,23 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (!hasTicket && side < 2)
-            return getMachineType().getTexture(6);
-        return getMachineType().getTexture(side);
-    }
-
-    @Override
     public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, xCoord, yCoord, zCoord)) {
+            if (crowbar.canWhack(player, current, getPos())) {
                 if (Game.isHost(worldObj)) {
                     WorldCoordinate target = sentinelPairingMap.get(player);
                     if (target == null)
                         setTarget(this, player);
-                    else if (worldObj.provider.dimensionId != target.dimension)
+                    else if (worldObj.provider.getDimensionId() != target.dimension)
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getLocalizationTag());
                     else if (new WorldCoordinate(this).equals(target)) {
                         removeTarget(player);
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getLocalizationTag());
                     } else
                         setSentinel(player, target);
-                    crowbar.onWhack(player, current, xCoord, yCoord, zCoord);
+                    crowbar.onWhack(player, current, getPos());
                 }
                 return true;
             }
@@ -138,7 +132,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     @Override
     public boolean openGui(EntityPlayer player) {
         if (needsFuel()) {
-            GuiHandler.openGui(EnumGui.WORLD_ANCHOR, player, worldObj, xCoord, yCoord, zCoord);
+            GuiHandler.openGui(EnumGui.WORLD_ANCHOR, player, worldObj, getPos());
             return true;
         }
         return false;
@@ -152,11 +146,11 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     public static TileEntity getTargetAt(EntityPlayer player, RailcraftTileEntity searcher, WorldCoordinate coord) {
-        if (!WorldPlugin.blockExists(searcher.getWorldObj(), coord.x, coord.y, coord.z)) {
+        if (!WorldPlugin.blockExists(searcher.getWorld(), coord.x, coord.y, coord.z)) {
             ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.unloaded", searcher.getLocalizationTag());
             return null;
         }
-        return WorldPlugin.getBlockTile(searcher.getWorldObj(), coord.x, coord.y, coord.z);
+        return WorldPlugin.getBlockTile(searcher.getWorld(), coord.x, coord.y, coord.z);
     }
 
     public boolean setSentinel(EntityPlayer player, WorldCoordinate coord) {
@@ -164,11 +158,11 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         if (tile == null)
             return false;
         if (tile instanceof TileSentinel) {
-            int xChunk = xCoord >> 4;
-            int zChunk = zCoord >> 4;
+            int xChunk = getX() >> 4;
+            int zChunk = getZ() >> 4;
 
-            int xSentinelChunk = tile.xCoord >> 4;
-            int zSentinelChunk = tile.zCoord >> 4;
+            int xSentinelChunk = tile.getPos().getX() >> 4;
+            int zSentinelChunk = tile.getPos().getZ() >> 4;
 
             if (xChunk != xSentinelChunk && zChunk != zSentinelChunk) {
                 ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.alignment", getLocalizationTag(), ((TileSentinel) tile).getLocalizationTag());
@@ -181,9 +175,9 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                 return false;
             }
 
-            xSentinel = tile.xCoord;
-            ySentinel = tile.yCoord;
-            zSentinel = tile.zCoord;
+            xSentinel = tile.getPos().getX();
+            ySentinel = tile.getPos().getY();
+            zSentinel = tile.getPos().getZ();
 
             requestTicket();
             sendUpdateToClient();
@@ -236,8 +230,8 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isNotHost(worldObj)) {
             if (chunks != null)
                 EffectManager.instance.chunkLoaderEffect(worldObj, this, chunks);
@@ -246,15 +240,15 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
         if (RailcraftConfig.deleteAnchors()) {
             releaseTicket();
-            worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.obsidian);
+            worldObj.setBlockState(getPos(), Blocks.obsidian);
             return;
         }
 
-        if (xCoord != prevX || yCoord != prevY || zCoord != prevZ) {
+        if (getX() != prevX || getY() != prevY || getZ() != prevZ) {
             releaseTicket();
-            prevX = xCoord;
-            prevY = yCoord;
-            prevZ = zCoord;
+            prevX = getX();
+            prevY = getY();
+            prevZ = getZ();
         }
 
         if (hasActiveTicket() && (refreshTicket || powered))
@@ -280,7 +274,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         }
 
         if (clock % SENTINEL_CHECK == 0 && hasSentinel()) {
-            TileEntity tile = worldObj.getTileEntity(xSentinel, ySentinel, zSentinel);
+            TileEntity tile = worldObj.getTileEntity(new BlockPos(xSentinel, ySentinel, zSentinel));
             if (!(tile instanceof TileSentinel))
                 clearSentinel();
         }
@@ -291,8 +285,8 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         if (RailcraftConfig.printAnchorDebug() && hasActiveTicket())
             if (clock % 64 == 0) {
                 int numChunks = chunks == null ? 0 : chunks.size();
-                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has loaded %d chunks and is ticking at <%d,%d,%d> in dim:%d - logged on tick %d", getName(), numChunks, xCoord, yCoord, zCoord, worldObj.provider.dimensionId, worldObj.getWorldTime());
-                Game.log(Level.DEBUG, "{0} has loaded {1} chunks and is ticking at <{2},{3},{4}> in dim:{5} - logged on tick {6}", getName(), numChunks, xCoord, yCoord, zCoord, worldObj.provider.dimensionId, worldObj.getWorldTime());
+                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has loaded %d chunks and is ticking at <%d> in dim:%d - logged on tick %d", getName(), numChunks, getPos(), worldObj.provider.getDimensionId(), worldObj.getWorldTime());
+                Game.log(Level.DEBUG, "{0} has loaded {1} chunks and is ticking at <{2}> in dim:{3} - logged on tick {4}", getName(), numChunks, getPos(), worldObj.provider.getDimensionId(), worldObj.getWorldTime());
             }
     }
 
@@ -347,9 +341,9 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     protected void setTicketData(Ticket chunkTicket) {
-        chunkTicket.getModData().setInteger("xCoord", xCoord);
-        chunkTicket.getModData().setInteger("yCoord", yCoord);
-        chunkTicket.getModData().setInteger("zCoord", zCoord);
+        chunkTicket.getModData().setInteger("xCoord", getX());
+        chunkTicket.getModData().setInteger("yCoord", getY());
+        chunkTicket.getModData().setInteger("zCoord", getZ());
         chunkTicket.getModData().setString("type", getMachineType().getTag());
     }
 
@@ -396,9 +390,9 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         if (!hasTicket)
             chunks = null;
         else if (hasSentinel())
-            chunks = ChunkManager.getInstance().getChunksBetween(xCoord >> 4, zCoord >> 4, xSentinel >> 4, zSentinel >> 4, getMaxSentinelChunks());
+            chunks = ChunkManager.getInstance().getChunksBetween(getX() >> 4, getZ() >> 4, xSentinel >> 4, zSentinel >> 4, getMaxSentinelChunks());
         else
-            chunks = ChunkManager.getInstance().getChunksAround(xCoord >> 4, zCoord >> 4, ANCHOR_RADIUS);
+            chunks = ChunkManager.getInstance().getChunksAround(getX() >> 4, getZ() >> 4, ANCHOR_RADIUS);
     }
 
     public boolean isPowered() {
@@ -414,7 +408,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         super.onNeighborBlockChange(block);
         if (Game.isNotHost(getWorld()))
             return;
-        boolean newPower = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
+        boolean newPower = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         if (powered != newPower)
             powered = newPower;
     }
@@ -498,20 +492,19 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
         if (RailcraftConfig.anchorsCanInteractWithPipes())
             return SLOTS;
         return SLOTS_NO_ACCESS;
     }
 
     @Override
-    public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return RailcraftConfig.anchorsCanInteractWithPipes();
     }
 
     @Override
-    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return false;
     }
-
 }

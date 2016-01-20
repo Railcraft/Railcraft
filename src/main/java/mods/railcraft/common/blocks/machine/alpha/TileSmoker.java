@@ -29,6 +29,7 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileSmoker extends TileMachineBase {
+
     private static final int SNOW_MELT_INTERVAL = 32;
     private static final Random rand = MiscTools.getRand();
     private boolean powered;
@@ -39,25 +40,20 @@ public class TileSmoker extends TileMachineBase {
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        return getMachineType().getTexture(side);
-    }
-
-    @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (!powered) {
             if (Game.isHost(worldObj)) {
                 if (clock % SNOW_MELT_INTERVAL == 0) {
-                    Block blockAbove = WorldPlugin.getBlock(worldObj, xCoord, yCoord + 1, zCoord);
+                    Block blockAbove = WorldPlugin.getBlock(worldObj, getPos().up());
                     if (blockAbove == Blocks.snow_layer)
-                        WorldPlugin.setBlockToAir(worldObj, xCoord, yCoord + 1, zCoord);
+                        WorldPlugin.setBlockToAir(worldObj, getPos().up());
                 }
             } else {
-                if (!WorldPlugin.blockIsAir(worldObj, xCoord, yCoord + 1, zCoord)) return;
-                double px = xCoord + rand.nextFloat();
-                double py = yCoord + rand.nextFloat() * 0.5F + 1;
-                double pz = zCoord + rand.nextFloat();
+                if (!WorldPlugin.blockIsAir(worldObj, getPos().up())) return;
+                double px = getX() + rand.nextFloat();
+                double py = getY() + rand.nextFloat() * 0.5F + 1;
+                double pz = getZ() + rand.nextFloat();
                 EffectManager.instance.chimneyEffect(worldObj, px, py, pz);
             }
         }
@@ -66,7 +62,7 @@ public class TileSmoker extends TileMachineBase {
     @Override
     public void onNeighborBlockChange(Block block) {
         super.onNeighborBlockChange(block);
-        powered = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
+        powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         sendUpdateToClient();
     }
 

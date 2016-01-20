@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.machine.alpha;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileAnchorAdmin extends TileAnchorWorld {
@@ -25,5 +24,4 @@ public class TileAnchorAdmin extends TileAnchorWorld {
     public boolean needsFuel() {
         return false;
     }
-
 }

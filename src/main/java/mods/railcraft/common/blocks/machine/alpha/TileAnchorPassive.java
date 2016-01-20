@@ -19,6 +19,7 @@ import net.minecraftforge.common.ForgeChunkManager;
  * Created by Terpo on 2/24/2015.
  */
 public class TileAnchorPassive extends TileAnchorWorld {
+
     @Override
     public IEnumMachine getMachineType() {
         return EnumMachineAlpha.PASSIVE_ANCHOR;

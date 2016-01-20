@@ -172,7 +172,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     }
 
     @Override
-    public boolean isAvaliable() {
+    public boolean isAvailable() {
         return ModuleManager.isModuleLoaded(getModule()) && getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 

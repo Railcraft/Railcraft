@@ -77,11 +77,6 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        return getMachineType().getTexture(side);
-    }
-
-    @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
@@ -109,9 +104,9 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        if (player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) > 64D)
+        if (player.getDistanceSq(getPos().add(0.5, 0.5, 0.5)) > 64D)
             return false;
-        GuiHandler.openGui(EnumGui.ROLLING_MACHINE, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.ROLLING_MACHINE, player, worldObj, getPos());
         return true;
     }
 
@@ -123,7 +118,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, worldObj, xCoord, yCoord, zCoord);
+        InvTools.dropInventory(inv, worldObj, getPos());
     }
 
     public void setProgress(int progress) {
@@ -143,13 +138,8 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     }
 
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(worldObj))
             return;
@@ -276,18 +266,18 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return slot == SLOT_RESULT;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return index == SLOT_RESULT;
     }
 
     @Override
@@ -324,20 +314,15 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-        return inv.getStackInSlotOnClosing(slot);
+    public void openInventory(EntityPlayer player) {
     }
 
     @Override
-    public void openInventory() {
+    public void closeInventory(EntityPlayer player) {
     }
 
     @Override
-    public void closeInventory() {
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return false;
     }
 
@@ -349,11 +334,6 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
-    }
-
-    @Override
-    public String getInventoryName() {
-        return getName();
     }
 
     public EnergyStorage getEnergyStorage() {
@@ -390,5 +370,4 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
             return 0;
         return energyStorage.getMaxEnergyStored();
     }
-
 }

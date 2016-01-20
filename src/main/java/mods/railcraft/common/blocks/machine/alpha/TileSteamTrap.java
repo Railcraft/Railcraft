@@ -37,7 +37,6 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class TileSteamTrap extends TileMachineBase implements IFluidHandler, ISteamUser {
@@ -56,8 +55,8 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (jet > 0) {
             jet--;
             if (jet == 0)
@@ -82,8 +81,8 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     @SuppressWarnings("unchecked")
     public List<EntityLivingBase> getEntitiesInSteamArea() {
         AxisAlignedBB area = AxisAlignedBB.fromBounds(-0.5D, -0.5D, -0.5D, 0.5D, 0.5D, 0.5D);
-        MiscTools.addCoordToAABB(area, direction.offsetX * RANGE, direction.offsetY * RANGE, direction.offsetZ * RANGE);
-        area.offset(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+        MiscTools.addCoordToAABB(area, direction.getFrontOffsetX() * RANGE, direction.getFrontOffsetY() * RANGE, direction.getFrontOffsetZ() * RANGE);
+        area.offset(getX() + 0.5, getY() + 0.5, getZ() + 0.5);
         List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, area);
         return entities;
     }
@@ -124,7 +123,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
         if (!canJet()) return;
         jet = JET_TIME;
         tank.setFluid(null);
-        SoundHelper.playSound(worldObj, xCoord, yCoord, zCoord, SoundHelper.SOUND_STEAM_HISS, 1, (float) (1 + MiscTools.getRand().nextGaussian() * 0.1));
+        SoundHelper.playSound(worldObj, getPos(), SoundHelper.SOUND_STEAM_HISS, 1, (float) (1 + MiscTools.getRand().nextGaussian() * 0.1));
         sendUpdateToClient();
     }
 
@@ -142,13 +141,13 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        direction = MiscTools.getSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
+        direction = MiscTools.getSideClosestToPlayer(worldObj, getPos(), entityliving);
     }
 
     @Override
     public void onNeighborBlockChange(Block block) {
         super.onNeighborBlockChange(block);
-        powered = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
+        powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
     }
 
     @Override
@@ -191,5 +190,4 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
         direction = EnumFacing.getOrientation(data.readByte());
         markBlockForUpdate();
     }
-
 }

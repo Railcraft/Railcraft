@@ -29,6 +29,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -39,6 +40,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+
+import static net.minecraft.util.EnumParticleTypes.HEART;
 
 public class TileFeedStation extends TileMachineItem implements ITileExtraDataHandler {
 
@@ -62,23 +65,13 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.FEED_STATION, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.FEED_STATION, player, worldObj, getPos());
         return true;
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        return getMachineType().getTexture(side);
-    }
-
-    @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld())) {
             return;
@@ -87,7 +80,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
         ItemStack feed = getStackInSlot(0);
 
         if (clock % (MIN_FEED_INTERVAL / 4) == 0 && (feed == null || feed.stackSize < feed.getMaxStackSize())) {
-            List<IInventory> chests = InvTools.getAdjacentInventories(worldObj, xCoord, yCoord, zCoord);
+            List<IInventory> chests = InvTools.getAdjacentInventories(worldObj, getPos());
 
             for (IInventory inv : chests) {
                 if (InvTools.moveOneItem(inv, this, StackFilter.FEED) != null) {
@@ -102,7 +95,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
         if (!powered && feed != null && feed.stackSize > 0 && feedTime <= 0) {
             feedTime = MIN_FEED_INTERVAL + rand.nextInt(FEED_VARIANCE);
 
-            AxisAlignedBB box = AxisAlignedBB.fromBounds(xCoord, yCoord - 1, zCoord, xCoord + 1, yCoord + 3, zCoord + 1);
+            AxisAlignedBB box = AxisAlignedBB.fromBounds(getX(), getY() - 1, getZ(), getX() + 1, getY() + 3, getZ() + 1);
             box = box.expand(AREA, 0, AREA);
             List<EntityAnimal> animals = worldObj.getEntitiesWithinAABB(EntityAnimal.class, box);
 
@@ -126,7 +119,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
             DataOutputStream data = pkt.getDataStream();
             data.writeInt(animal.getEntityId());
 
-            PacketDispatcher.sendToAllAround(pkt, new NetworkRegistry.TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 80));
+            PacketDispatcher.sendToAllAround(pkt, new NetworkRegistry.TargetPoint(worldObj.provider.getDimensionId(), getX(), getY(), getZ(), 80));
         } catch (IOException ex) {
         }
     }
@@ -156,7 +149,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
                     double d = rand.nextGaussian() * 0.02D;
                     double d1 = rand.nextGaussian() * 0.02D;
                     double d2 = rand.nextGaussian() * 0.02D;
-                    worldObj.spawnParticle("heart", (animal.posX + (double) (rand.nextFloat() * animal.width * 2.0F)) - animal.width, animal.posY + 0.5D + (double) (rand.nextFloat() * animal.height), (animal.posZ + (double) (rand.nextFloat() * animal.width * 2.0F)) - animal.width, d, d1, d2);
+                    worldObj.spawnParticle(HEART, (animal.posX + (double) (rand.nextFloat() * animal.width * 2.0F)) - animal.width, animal.posY + 0.5D + (double) (rand.nextFloat() * animal.height), (animal.posZ + (double) (rand.nextFloat() * animal.width * 2.0F)) - animal.width, d, d1, d2);
                 }
 
                 return true;
@@ -170,7 +163,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     @Override
     public void onNeighborBlockChange(Block block) {
         super.onNeighborBlockChange(block);
-        powered = PowerPlugin.isBlockBeingPowered(worldObj, xCoord, yCoord, zCoord);
+        powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
     }
 
     @Override

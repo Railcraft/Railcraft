@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
@@ -22,14 +21,11 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar
  */
 public enum EnumMachineAlpha implements IEnumMachine {
@@ -47,14 +43,13 @@ public enum EnumMachineAlpha implements IEnumMachine {
     STEAM_TRAP_AUTO(Module.EXTRAS, "steam.trap.auto", TileSteamTrapAuto.class, 4, 1, 0, 2, 1, 1, 1, 1, 0, 1, 2, 3),
     FEED_STATION(Module.AUTOMATION, "feed.station", TileFeedStation.class, 2, 1, 0, 0, 1, 1, 1, 1),
     BLAST_FURNACE(Module.FACTORY, "blast.furnace", TileBlastFurnace.class, 3, 1, 0, 0, 0, 0, 1, 0, 1, 2),
-    PASSIVE_ANCHOR(Module.CHUNK_LOADING, "anchor.passive",TileAnchorPassive.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
+    PASSIVE_ANCHOR(Module.CHUNK_LOADING, "anchor.passive", TileAnchorPassive.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
     TANK_WATER(Module.TRANSPORT, "tank.water", TileTankWater.class, 2, 1, 0, 0, 1, 1, 1, 1),
     ROCK_CRUSHER(Module.FACTORY, "rock.crusher", TileRockCrusher.class, 4, 3, 3, 11, 3, 3, 7, 3, 7, 0, 1, 2, 4, 6, 8, 9, 10);
     private final Module module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
     private final int[] textureInfo;
-    private IIcon[] texture = new IIcon[12];
     private static final List<EnumMachineAlpha> creativeList = new ArrayList<EnumMachineAlpha>();
     private static final EnumMachineAlpha[] VALUES = values();
     private ToolTip tip;
@@ -88,27 +83,6 @@ public enum EnumMachineAlpha implements IEnumMachine {
     @Override
     public boolean isDepreciated() {
         return module == null;
-    }
-
-    @Override
-    public IIcon getTexture(int index) {
-        if (index < 0 || index >= texture.length)
-            index = 0;
-        return texture[index];
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void registerIcons(IIconRegister iconRegister) {
-        for (EnumMachineAlpha machine : VALUES) {
-            if (machine.isDepreciated()) continue;
-            machine.texture = new IIcon[machine.textureInfo.length - 2];
-            int columns = machine.textureInfo[0];
-            int rows = machine.textureInfo[1];
-            IIcon[] icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:" + machine.tag, columns, rows);
-            for (int i = 0; i < machine.texture.length; i++) {
-                machine.texture[i] = icons[machine.textureInfo[i + 2]];
-            }
-        }
     }
 
     public static EnumMachineAlpha fromId(int id) {
@@ -176,7 +150,7 @@ public enum EnumMachineAlpha implements IEnumMachine {
      * @return
      */
     @Override
-    public boolean isAvaliable() {
+    public boolean isAvailable() {
         return getBlock() != null && isEnabled();
     }
 
@@ -217,5 +191,4 @@ public enum EnumMachineAlpha implements IEnumMachine {
         }
         return false;
     }
-
 }

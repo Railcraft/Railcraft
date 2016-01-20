@@ -184,7 +184,7 @@ public enum EnumMachineGamma implements IEnumMachine {
     }
 
     @Override
-    public boolean isAvaliable() {
+    public boolean isAvailable() {
         return getBlock() != null && isEnabled();
     }
 

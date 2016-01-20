@@ -175,9 +175,9 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         placeBlockAtCurrentPosition(world, Blocks.torch, 0, 2, 3, 4, sbb);
 
         // machines
-        if (EnumMachineAlpha.ROLLING_MACHINE.isAvaliable()) {
+        if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable()) {
             placeBlockAtCurrentPosition(world, RailcraftBlocks.getBlockMachineAlpha(), EnumMachineAlpha.ROLLING_MACHINE.ordinal(), 9, 1, 5, sbb);
-            if (EnumMachineBeta.ENGINE_STEAM_HOBBY.isAvaliable() && RailcraftConfig.machinesRequirePower())
+            if (EnumMachineBeta.ENGINE_STEAM_HOBBY.isAvailable() && RailcraftConfig.machinesRequirePower())
                 placeEngine(world, 9, 1, 6, sbb);
         }
 

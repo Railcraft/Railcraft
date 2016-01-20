@@ -48,7 +48,7 @@ public class TileAnchorPersonal extends TileAnchorWorld {
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (Game.isHost(worldObj) && hasActiveTicket()) {
             if (PlayerPlugin.isPlayerConnected(getOwner()))
                 ticksSincePlayerLogged = 0;
@@ -57,7 +57,6 @@ public class TileAnchorPersonal extends TileAnchorWorld {
             if (ticksSincePlayerLogged > RailcraftConstants.TICKS_PER_MIN * MINUTES_BEFORE_DISABLE)
                 releaseTicket();
         }
-        super.updateEntity();
+        super.update();
     }
-
 }

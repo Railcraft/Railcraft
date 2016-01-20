@@ -52,6 +52,7 @@ import java.util.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyHandler, IHasWork, ISidedInventory {
+
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
     private final static int PROCESS_TIME = 100;
@@ -66,6 +67,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
     private final IInventory invInput = new InventoryMapper(this, 0, 9);
     private final IInventory invOutput = new InventoryMapper(this, 9, 9, false);
     private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
+
     static {
         char[][][] map1 = {
                 {
@@ -127,6 +129,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
         };
         patterns.add(new MultiBlockPattern(map2));
     }
+
     private int processTime;
     private EnergyStorage energyStorage;
     private boolean isWorking = false;
@@ -170,10 +173,10 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        Block block = WorldPlugin.getBlock(worldObj, x, y, z);
+        Block block = WorldPlugin.getBlock(worldObj, pos);
         switch (mapPos) {
             case 'O': // Other
-                if (block == getBlockType() && worldObj.getBlockMetadata(x, y, z) == getBlockMetadata())
+                if (block == getBlockType() && worldObj.getBlockMetadata(pos) == getBlockMetadata())
                     return false;
                 break;
             case 'D': // Window
@@ -186,11 +189,11 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
             case 'f': // Block
             case 'g': // Block
             case 'h': // Block
-                if (block != getBlockType() || worldObj.getBlockMetadata(x, y, z) != getBlockMetadata())
+                if (block != getBlockType() || worldObj.getBlockMetadata(pos) != getBlockMetadata())
                     return false;
                 break;
             case 'A': // Air
-                if (!worldObj.isAirBlock(x, y, z))
+                if (!worldObj.isAirBlock(pos))
                     return false;
                 break;
         }
@@ -208,13 +211,13 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isHost(getWorld())) {
 
             if (isStructureValid()) {
-                EntityItem item = TileEntityHopper.func_145897_a(worldObj, xCoord, yCoord + 1, zCoord);
+                EntityItem item = TileEntityHopper.func_145897_a(worldObj, getX(), getY() + 1, getZ());
                 if (item != null && useMasterEnergy(SUCKING_POWER_COST, false)) {
                     ItemStack stack = item.getEntityItem().copy();
                     if (InventoryManipulator.get(invInput).addStack(stack) != null)
@@ -222,7 +225,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
                     item.setDead();
                 }
 
-                EntityLivingBase entity = MiscTools.getEntityAt(worldObj, EntityLivingBase.class, xCoord, yCoord + 1, zCoord);
+                EntityLivingBase entity = MiscTools.getEntityAt(worldObj, EntityLivingBase.class, getX(), getY() + 1, getZ());
                 if (entity != null && useMasterEnergy(KILLING_POWER_COST, false))
                     if (entity.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
                         useMasterEnergy(KILLING_POWER_COST, true);
@@ -267,7 +270,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
                             InvTools.removeOneItem(invInput, input);
 
-                            SoundHelper.playSound(worldObj, xCoord, yCoord, zCoord, "mob.irongolem.death", 1.0f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                            SoundHelper.playSound(worldObj, getX(), getY(), getZ(), "mob.irongolem.death", 1.0f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
 
                             processTime = 0;
                         }
@@ -294,25 +297,10 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, worldObj, mBlock.xCoord, mBlock.yCoord, mBlock.zCoord);
+            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, worldObj, mBlock.getX(), mBlock.getY(), mBlock.getZ());
             return true;
         }
         return false;
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        if (isStructureValid()) {
-            if (side > 1 && getPatternMarker() == 'D')
-                return getMachineType().getTexture(6);
-            if (side == 1) {
-                char m = getPatternMarker();
-                return getMachineType().getTexture(m - 'a' + 7);
-            }
-        }
-        if (side > 1)
-            return getMachineType().getTexture(0);
-        return getMachineType().getTexture(side);
     }
 
     @Override
@@ -381,20 +369,20 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
-        if (side == EnumFacing.UP.ordinal())
+    public int[] getSlotsForFace(EnumFacing side) {
+        if (side == EnumFacing.UP)
             return SLOTS_INPUT;
         return SLOTS_OUTPUT;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return slot >= 9;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return index >= 9;
     }
 
     @Override
