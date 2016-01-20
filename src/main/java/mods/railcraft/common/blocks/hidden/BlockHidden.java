@@ -12,12 +12,14 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
@@ -49,24 +51,11 @@ public class BlockHidden extends BlockContainer {
 
     public BlockHidden() {
         super(Material.air);
-        setBlockName("railcraft.residual.heat");
+        setRegistryName("railcraft.residual.heat");
         disableStats();
         setStepSound(new SoundType("null", 0, 0));
 
         GameRegistry.registerTileEntity(TileHidden.class, "RCHiddenTile");
-    }
-
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
-    }
-
-    @Override
-    public IIcon getIcon(int side, int meta) {
-        try {
-            return Blocks.tallgrass.getIcon(side, meta);
-        } catch (NullPointerException ex) {
-            return null;
-        }
     }
 
     @Override
@@ -75,7 +64,7 @@ public class BlockHidden extends BlockContainer {
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         return new ArrayList<ItemStack>();
     }
 
@@ -90,31 +79,31 @@ public class BlockHidden extends BlockContainer {
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
+    public boolean isFullCube() {
         return false;
     }
 
     @Override
-    public boolean isAir(IBlockAccess world, int x, int y, int z) {
+    public boolean isAir(IBlockAccess world, BlockPos pos) {
         return true;
     }
 
     @Override
-    public void addCollisionBoxesToList(World par1World, int par2, int par3, int par4, AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity) {
+    public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
+    public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
         return null;
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
+    public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
         return null;
     }
 
     @Override
-    public boolean canCollideCheck(int par1, boolean par2) {
+    public boolean canCollideCheck(IBlockState state, boolean hitIfLiquid) {
         return false;
     }
 
@@ -124,12 +113,12 @@ public class BlockHidden extends BlockContainer {
     }
 
     @Override
-    public MovingObjectPosition collisionRayTrace(World par1World, int par2, int par3, int par4, Vec3 par5Vec3, Vec3 par6Vec3) {
+    public MovingObjectPosition collisionRayTrace(World worldIn, BlockPos pos, Vec3 start, Vec3 end) {
         return null;
     }
 
     @Override
-    public final void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entityIn) {
     }
 
     @Override
@@ -143,12 +132,12 @@ public class BlockHidden extends BlockContainer {
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
         return true;
     }
 
     @Override
-    public boolean addDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
+    public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
         return true;
     }
 
@@ -156,5 +145,4 @@ public class BlockHidden extends BlockContainer {
     public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
         return true;
     }
-
 }

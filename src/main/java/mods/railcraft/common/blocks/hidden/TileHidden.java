@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TileHidden extends RailcraftTileEntity {
+
     private static final int DURATION_MIINUTES = 15;
     private static final long DURATION_MILLISECONDS = TimeUnit.MILLISECONDS.convert(DURATION_MIINUTES, TimeUnit.MINUTES);
     public WorldCoordinate lastMarker;
@@ -47,19 +48,19 @@ public class TileHidden extends RailcraftTileEntity {
 
         if (clock % 64 == 0) {
             if (BlockHidden.getBlock() == null || !RailcraftConfig.isTrackingAuraEnabled()) {
-                worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+                worldObj.setBlockToAir(getPos());
                 return;
             }
 
-            Block block = WorldPlugin.getBlock(worldObj, xCoord, yCoord, zCoord);
+            Block block = WorldPlugin.getBlock(worldObj, getPos());
             if (block != BlockHidden.getBlock()) {
-                worldObj.removeTileEntity(xCoord, yCoord, zCoord);
+                worldObj.removeTileEntity(getPos());
                 return;
             }
 
             boolean timeElapsed = System.currentTimeMillis() - timestamp >= DURATION_MILLISECONDS;
             if (timeElapsed)
-                worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.air, 0, 6);
+                worldObj.setBlockToAir(getPos());
         }
     }
 

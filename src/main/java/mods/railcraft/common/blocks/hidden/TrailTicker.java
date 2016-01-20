@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TrailTicker {
@@ -63,7 +62,7 @@ public class TrailTicker {
         int y = MathHelper.floor_double(player.posY);
         int z = MathHelper.floor_double(player.posZ);
 
-        World world = DimensionManager.getWorld(player.worldObj.provider.dimensionId); // Because Lava Boats
+        World world = DimensionManager.getWorld(player.worldObj.provider.getDimensionId()); // Because Lava Boats
 
         boolean success = trySetMarker(world, x, y, z, player);
 
@@ -79,8 +78,8 @@ public class TrailTicker {
     private boolean trySetMarker(World world, int x, int y, int z, EntityPlayer player) {
         Block block = WorldPlugin.getBlock(world, x, y, z);
         if (block == Blocks.air) {
-            world.setBlock(x, y, z, BlockHidden.getBlock(), 0, 6);
-            TileEntity tile = world.getTileEntity(x, y, z);
+            world.setBlockState(pos, BlockHidden.getBlock(), 0, 6);
+            TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TileHidden) {
                 TileHidden hidden = (TileHidden) tile;
                 hidden.timestamp = System.currentTimeMillis();
@@ -89,11 +88,10 @@ public class TrailTicker {
                 if (last != null)
                     hidden.lastMarker = last;
                 hidden.sendUpdateToClient();
-                lastPosition.put(player, new WorldCoordinate(world.provider.dimensionId, x, y, z));
+                lastPosition.put(player, new WorldCoordinate(world.provider.getDimensionId(), x, y, z));
                 return true;
             }
         }
         return block == BlockHidden.getBlock();
     }
-
 }
