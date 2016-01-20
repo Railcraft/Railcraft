@@ -23,7 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ItemBlockRailcraft extends ItemBlock {
@@ -56,5 +55,4 @@ public class ItemBlockRailcraft extends ItemBlock {
                 info.add(line.text);
             }
     }
-
 }

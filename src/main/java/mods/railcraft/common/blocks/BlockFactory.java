@@ -12,7 +12,6 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager.Module;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class BlockFactory {
@@ -51,5 +50,4 @@ public abstract class BlockFactory {
 
     protected void doBlockFinalize(Module module) {
     }
-
 }

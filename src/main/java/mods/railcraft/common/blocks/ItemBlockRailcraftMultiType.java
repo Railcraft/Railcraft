@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks;
 import net.minecraft.block.Block;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ItemBlockRailcraftMultiType extends ItemBlockRailcraft {
@@ -26,5 +25,4 @@ public class ItemBlockRailcraftMultiType extends ItemBlockRailcraft {
     public int getMetadata(int damage) {
         return damage;
     }
-
 }

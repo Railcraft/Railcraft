@@ -198,4 +198,5 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     public abstract short getId();
+
 }
