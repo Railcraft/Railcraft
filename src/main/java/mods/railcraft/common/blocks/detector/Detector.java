@@ -26,7 +26,6 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class Detector implements IGuiReturnHandler {
@@ -35,12 +34,12 @@ public class Detector implements IGuiReturnHandler {
     public static final float SENSITIVITY = 0.2f;
     protected TileDetector tile;
 
-    public void setTile(TileDetector tile) {
-        this.tile = tile;
-    }
-
     public TileDetector getTile() {
         return tile;
+    }
+
+    public void setTile(TileDetector tile) {
+        this.tile = tile;
     }
 
     public EnumDetector getType() {
@@ -86,12 +85,12 @@ public class Detector implements IGuiReturnHandler {
     }
 
     protected final void openGui(EnumGui gui, EntityPlayer player) {
-        GuiHandler.openGui(gui, player, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
+        GuiHandler.openGui(gui, player, tile.getWorld(), tile.getPos());
     }
 
     @Override
     public final World getWorld() {
-        return tile.getWorldObj();
+        return tile.getWorld();
     }
 
     @Override
@@ -101,5 +100,4 @@ public class Detector implements IGuiReturnHandler {
     @Override
     public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
     }
-
 }

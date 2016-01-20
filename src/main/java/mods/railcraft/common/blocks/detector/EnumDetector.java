@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import java.util.Locale;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public enum EnumDetector {
@@ -39,7 +38,6 @@ public enum EnumDetector {
     LOCOMOTIVE(Module.AUTOMATION, DetectorLocomotive.class),
     ROUTING(Module.ROUTING, DetectorRouting.class);
     public static final EnumDetector[] VALUES = values();
-    public IIcon[] textures;
     private final Class<? extends Detector> handler;
     private final Module module;
 
@@ -78,7 +76,7 @@ public enum EnumDetector {
         return new ItemStack(BlockDetector.getBlock(), qty, ordinal());
     }
 
-    public boolean isEnabled(){
+    public boolean isEnabled() {
         return BlockDetector.getBlock() != null && ModuleManager.isModuleLoaded(module);
     }
 }

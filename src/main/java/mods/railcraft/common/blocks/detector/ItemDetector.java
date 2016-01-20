@@ -9,10 +9,13 @@
 package mods.railcraft.common.blocks.detector;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemDetector extends ItemBlock {
@@ -28,11 +31,6 @@ public class ItemDetector extends ItemBlock {
     }
 
     @Override
-    public IIcon getIconFromDamage(int meta) {
-        return BlockDetector.getBlock().getIcon(2, meta);
-    }
-
-    @Override
     public String getUnlocalizedName(ItemStack stack) {
         return EnumDetector.fromOrdinal(stack.getItemDamage()).getTag();
     }
@@ -41,36 +39,32 @@ public class ItemDetector extends ItemBlock {
      * Called to actually place the block, after the location is determined and
      * all permission checks have been made.
      *
-     * @param stack The item stack that was used to place the block. This can be
-     * changed inside the method.
-     * @param player The player who is placing the block. Can be null if the
-     * block is not being placed by a player.
+     * @param stack    The item stack that was used to place the block. This can be
+     *                 changed inside the method.
+     * @param player   The player who is placing the block. Can be null if the
+     *                 block is not being placed by a player.
      * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param side The side the player (or machine) right-clicked on.
+     * @param pos
+     * @param side     The side the player (or machine) right-clicked on.
      * @param hitX
      * @param hitY
      * @param hitZ
-     * @param metadata
+     * @param newState
      * @return
      */
     @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-        if (!world.setBlock(x, y, z, blockDetector, metadata, 3))
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+        if (!world.setBlockState(pos, newState, 3))
             return false;
 
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileDetector)
             ((TileDetector) tile).setDetector(EnumDetector.fromOrdinal(stack.getItemDamage()));
 
-        if (world.getBlock(x, y, z) == blockDetector) {
-            blockDetector.onBlockPlacedBy(world, x, y, z, player, stack);
-            blockDetector.onPostBlockPlaced(world, x, y, z, metadata);
+        if (world.getBlockState(pos).getBlock() == blockDetector) {
+            blockDetector.onBlockPlacedBy(world, pos, player, stack);
         }
 
         return true;
     }
-
 }

@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandler {
+
     public static final float SENSITIVITY = 0.2f;
     private static final int POWER_DELAY = 10;
     public EnumFacing direction = EnumFacing.UP;
@@ -54,7 +55,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     }
 
     public List<EntityMinecart> getCarts() {
-        return CartTools.getMinecartsOnAllSides(worldObj, xCoord, yCoord, zCoord, SENSITIVITY);
+        return CartTools.getMinecartsOnAllSides(worldObj, getPos(), SENSITIVITY);
     }
 
     public boolean blockActivated(EntityPlayer player) {
@@ -113,23 +114,18 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     }
 
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
     public void updateEntity() {
         super.updateEntity();
         if (Game.isNotHost(getWorld()))
             return;
         if (!tested) {
             tested = true;
-            int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+            int meta = worldObj.getBlockMetadata(getPos());
             if (meta != 0) {
-                worldObj.removeTileEntity(xCoord, yCoord, yCoord);
+                worldObj.removeTileEntity(getPos());
                 Block block = BlockDetector.getBlock();
                 if (block != null)
-                    worldObj.setBlock(xCoord, yCoord, yCoord, block, 0, 3);
+                    worldObj.setBlockState(getPos(), newState, 3);
             }
         }
         if (powerDelay > 0)
@@ -141,8 +137,8 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
                 if (powerState > PowerPlugin.NO_POWER)
                     powerDelay = POWER_DELAY;
                 sendUpdateToClient();
-                worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, BlockDetector.getBlock());
-                WorldPlugin.notifyBlocksOfNeighborChangeOnSide(worldObj, xCoord, yCoord, zCoord, BlockDetector.getBlock(), direction);
+                worldObj.notifyNeighborsOfStateChange(getPos(), BlockDetector.getBlock());
+                WorldPlugin.notifyBlocksOfNeighborChangeOnSide(worldObj, getPos(), BlockDetector.getBlock(), direction);
             }
         }
     }

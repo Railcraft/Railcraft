@@ -12,7 +12,6 @@ import mods.railcraft.common.util.inventory.PhantomInventory;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class DetectorFilter extends Detector {
@@ -43,5 +42,4 @@ public abstract class DetectorFilter extends Detector {
         NBTTagCompound filters = data.getCompoundTag("filters");
         getFilters().readFromNBT("Items", filters);
     }
-
 }
