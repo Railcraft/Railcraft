@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.frame;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.delta.TileWire;
@@ -23,14 +22,16 @@ import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import static net.minecraft.util.EnumFacing.UP;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -73,7 +74,6 @@ public class BlockFrame extends Block implements IPostConnection {
     }
 
     private final int renderId;
-    private IIcon[] icons;
     public static boolean flipTextures;
     public static boolean poweredTexture;
 
@@ -84,7 +84,7 @@ public class BlockFrame extends Block implements IPostConnection {
         setHardness(5);
         setStepSound(Block.soundTypeMetal);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setBlockName("railcraft.frame");
+        setRegistryName("railcraft.frame");
     }
 
     @Override
@@ -93,40 +93,17 @@ public class BlockFrame extends Block implements IPostConnection {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:frame", 3);
+    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+        return flipTextures || super.shouldSideBeRendered(worldIn, pos, side);
     }
 
     @Override
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        return getIcon(side, 0);
-    }
-
-    @Override
-    public IIcon getIcon(int side, int meta) {
-        if (EnumFacing.UP.ordinal() == side) {
-            if (flipTextures)
-                return icons[1];
-            return poweredTexture ? icons[2] : icons[0];
-        }
-        if (flipTextures && EnumFacing.DOWN.ordinal() == side)
-            return icons[0];
-        return icons[1];
-    }
-
-    @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
-        return flipTextures || super.shouldSideBeRendered(world, x, y, z, side);
-    }
-
-    @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
+    public boolean isNormalCube(IBlockAccess world, BlockPos pos) {
         return false;
     }
 
@@ -136,29 +113,29 @@ public class BlockFrame extends Block implements IPostConnection {
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, EnumFacing side) {
-        return side == EnumFacing.UP;
+    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return side == UP;
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        ItemStack current = player.getCurrentEquippedItem();
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack current = playerIn.getCurrentEquippedItem();
         if (current != null && InvTools.isItemEqualIgnoreNBT(current, EnumMachineDelta.WIRE.getItem()))
-            if (WorldPlugin.setBlock(world, x, y, z, EnumMachineDelta.WIRE.getBlock(), EnumMachineDelta.WIRE.ordinal(), 2)) {
-                TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+            if (WorldPlugin.setBlock(worldIn, pos, EnumMachineDelta.WIRE.getBlock(), EnumMachineDelta.WIRE.ordinal(), 2)) {
+                TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
                 if (tile instanceof TileWire) {
                     TileWire wire = (TileWire) tile;
                     wire.setAddon(AddonType.FRAME);
                 }
-                if (!player.capabilities.isCreativeMode)
-                    player.setCurrentItemOrArmor(0, InvTools.depleteItem(current));
+                if (!playerIn.capabilities.isCreativeMode)
+                    playerIn.setCurrentItemOrArmor(0, InvTools.depleteItem(current));
                 return true;
             }
         return false;
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, EnumFacing side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
         return ConnectStyle.TWO_THIN;
     }
 
