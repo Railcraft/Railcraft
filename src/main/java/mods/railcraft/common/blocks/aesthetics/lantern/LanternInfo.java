@@ -26,8 +26,6 @@ public interface LanternInfo {
 
     Block getBlock();
 
-    IIcon getTexture(int side);
-
     String getTag();
 
     boolean isEnabled();

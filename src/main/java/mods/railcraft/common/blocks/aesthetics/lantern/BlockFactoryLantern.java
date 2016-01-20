@@ -16,7 +16,6 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class BlockFactoryLantern extends BlockFactory {
@@ -29,7 +28,7 @@ public class BlockFactoryLantern extends BlockFactory {
     protected void doBlockInit() {
         int renderId = Railcraft.getProxy().getRenderId();
         BlockLantern.stone = new BlockLantern(renderId, new LanternProxyStone());
-        BlockLantern.stone.setBlockName("railcraft.lantern.stone");
+        BlockLantern.stone.setRegistryName("railcraft.lantern.stone");
         RailcraftRegistry.register(BlockLantern.stone, ItemLantern.class);
 
         for (EnumLanternStone lamp : EnumLanternStone.VALUES) {
@@ -39,7 +38,7 @@ public class BlockFactoryLantern extends BlockFactory {
         }
 
         BlockLantern.metal = new BlockLantern(renderId, new LanternProxyMetal());
-        BlockLantern.metal.setBlockName("railcraft.lantern.metal");
+        BlockLantern.metal.setRegistryName("railcraft.lantern.metal");
         RailcraftRegistry.register(BlockLantern.metal, ItemLantern.class);
 
         for (EnumLanternMetal lamp : EnumLanternMetal.VALUES) {

@@ -13,16 +13,13 @@ import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 
 import java.util.*;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum EnumLanternMetal implements LanternInfo {
@@ -66,12 +63,6 @@ public enum EnumLanternMetal implements LanternInfo {
         if (lamp != null)
             return lamp;
         return IRON;
-    }
-
-
-    @Override
-    public IIcon getTexture(int side) {
-        return InvTools.getBlockFromStack(source).getIcon(EnumFacing.UP.ordinal(), source.getItemDamage());
     }
 
     @Override

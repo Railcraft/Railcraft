@@ -12,12 +12,14 @@ import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,6 +27,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Random;
+
+import static net.minecraft.util.EnumParticleTypes.FLAME;
+import static net.minecraft.util.EnumParticleTypes.SMOKE_NORMAL;
 
 public class BlockLantern extends Block {
 
@@ -42,7 +47,6 @@ public class BlockLantern extends Block {
     }
 
     private final int renderId;
-    public IIcon candleIcon;
     public final LanternProxy proxy;
 
     public BlockLantern(int renderId, LanternProxy proxy) {
@@ -61,8 +65,8 @@ public class BlockLantern extends Block {
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-        int meta = world.getBlockMetadata(x, y, z);
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+        int meta = world.getBlockMetadata(pos);
         return new ItemStack(this, 1, meta);
     }
 
@@ -75,18 +79,18 @@ public class BlockLantern extends Block {
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-        return AxisAlignedBB.getBoundingBox(x + SELECT, y + 2 * 0.0625f, z + SELECT, x + 1 - SELECT, y + 1.0F - 1 * 0.0625f, z + 1 - SELECT);
+    public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
+        return AxisAlignedBB.fromBounds(pos.getX() + SELECT, pos.getY() + 2 * 0.0625f, pos.getZ() + SELECT, pos.getX() + 1 - SELECT, pos.getY() + 1.0F - 1 * 0.0625f, pos.getZ() + 1 - SELECT);
     }
 
     @Override
-    public void randomDisplayTick(World world, int x, int y, int z, Random par5Random) {
-        double dx = x + 0.5F;
-        double dy = y + 0.65F;
-        double dz = z + 0.5F;
+    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        double dx = pos.getX() + 0.5F;
+        double dy = pos.getY() + 0.65F;
+        double dz = pos.getZ() + 0.5F;
 
-        world.spawnParticle("smoke", dx, dy, dz, 0.0D, 0.0D, 0.0D);
-        world.spawnParticle("flame", dx, dy, dz, 0.0D, 0.0D, 0.0D);
+        worldIn.spawnParticle(SMOKE_NORMAL, dx, dy, dz, 0.0D, 0.0D, 0.0D);
+        worldIn.spawnParticle(FLAME, dx, dy, dz, 0.0D, 0.0D, 0.0D);
     }
 
     @Override
@@ -105,12 +109,12 @@ public class BlockLantern extends Block {
     }
 
     @Override
-    public int damageDropped(int meta) {
+    public int damageDropped(IBlockState state) {
         return meta;
     }
 
     @Override
-    public int quantityDropped(int meta, int fortune, Random random) {
+    public int quantityDropped(IBlockState state, int fortune, Random random) {
         return 1;
     }
 
@@ -121,29 +125,12 @@ public class BlockLantern extends Block {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public IIcon getIcon(int side, int meta) {
-        if (useCandleIcon)
-            return candleIcon;
-        //BlockLantern block = this;
-        return this.proxy.fromOrdinal(meta).getTexture(side);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
     public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
         return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, null);
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
-    public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
-        return ParticleHelper.addDestroyEffects(worldObj, this, x, y, z, meta, effectRenderer, null);
+    public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+        return ParticleHelper.addDestroyEffects(world, this, x, y, z, meta, effectRenderer, null);
     }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        candleIcon = iconRegister.registerIcon("railcraft:stonelamp.candle");
-    }
-
 }

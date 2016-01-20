@@ -26,20 +26,13 @@ public class ItemLantern extends ItemBlock {
     }
 
     @Override
-    public IIcon getIconFromDamage(int meta) {
-        BlockLantern block = (BlockLantern) field_150939_a;
-        return block.proxy.fromOrdinal(meta).getTexture(0);
-    }
-
-    @Override
     public int getMetadata(int meta) {
         return meta;
     }
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        BlockLantern block = (BlockLantern) field_150939_a;
+        BlockLantern block = (BlockLantern) getBlock();
         return "tile." + block.proxy.fromOrdinal(stack.getItemDamage()).getTag();
     }
-
 }

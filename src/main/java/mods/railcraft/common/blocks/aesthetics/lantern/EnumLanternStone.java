@@ -13,16 +13,13 @@ import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 
 import java.util.*;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum EnumLanternStone implements LanternInfo {
@@ -77,11 +74,6 @@ public enum EnumLanternStone implements LanternInfo {
     }
 
     @Override
-    public IIcon getTexture(int side) {
-        return InvTools.getBlockFromStack(source).getIcon(EnumFacing.UP.ordinal(), source.getItemDamage());
-    }
-
-    @Override
     public Block getBlock() {
         return BlockLantern.getBlockStone();
     }
@@ -113,5 +105,4 @@ public enum EnumLanternStone implements LanternInfo {
     public boolean isEnabled() {
         return ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES) && RailcraftConfig.isSubBlockEnabled(getTag()) && getBlock() != null;
     }
-
 }
