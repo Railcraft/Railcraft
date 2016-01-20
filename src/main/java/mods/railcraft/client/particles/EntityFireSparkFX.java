@@ -10,6 +10,8 @@ package mods.railcraft.client.particles;
 
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,8 +48,8 @@ public class EntityFireSparkFX extends EntityFX {
     }
 
     private void calculateVector(double dist) {
-        Vec3 endPoint = Vec3.createVectorHelper(endX, endY, endZ);
-        Vec3 vecParticle = Vec3.createVectorHelper(posX, posY, posZ);
+        Vec3 endPoint = new Vec3(endX, endY, endZ);
+        Vec3 vecParticle = new Vec3(posX, posY, posZ);
 
         Vec3 vel = vecParticle.subtract(endPoint);
         vel = vel.normalize();
@@ -75,10 +77,10 @@ public class EntityFireSparkFX extends EntityFX {
     }
 
     @Override
-    public void renderParticle(Tessellator par1Tessellator, float par2, float par3, float par4, float par5, float par6, float par7) {
+    public void renderParticle(WorldRenderer world, Entity entity, float par2, float par3, float par4, float par5, float par6, float par7) {
         float f6 = ((float) this.particleAge + par2) / (float) this.particleMaxAge;
         this.particleScale = this.lavaParticleScale * (1.0F - f6 * f6);
-        super.renderParticle(par1Tessellator, par2, par3, par4, par5, par6, par7);
+        super.renderParticle(world, entity, par2, par3, par4, par5, par6, par7);
     }
 
     /**

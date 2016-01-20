@@ -25,6 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -32,6 +33,8 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Set;
+
+import static net.minecraft.util.EnumParticleTypes.PORTAL;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -67,7 +70,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
             double pX = startX + (destX - startX) * travel + (rand.nextDouble() - 0.5D) * 2.0D;
             double pY = startY + (destY - startY) * travel + (rand.nextDouble() - 0.5D) * 2.0D;
             double pZ = startZ + (destZ - startZ) * travel + (rand.nextDouble() - 0.5D) * 2.0D;
-            Game.getWorld().spawnParticle("portal", pX, pY, pZ, vX, vY, vZ);
+            Game.getWorld().spawnParticle(PORTAL, pX, pY, pZ, vX, vY, vZ);
         }
     }
 
@@ -104,14 +107,19 @@ public class ClientEffectProxy extends CommonEffectProxy {
         return AuraKeyHandler.isAuraEnabled(aura);
     }
 
+    private double getRandomParticleOffset() {
+        return 0.5 + rand.nextGaussian() * 0.1;
+    }
+
     @Override
     public void tuningEffect(TileEntity start, TileEntity dest) {
         if (!shouldSpawnParticle(false))
             return;
         if (rand.nextInt(2) == 0) {
-            double px = start.xCoord + 0.5 + rand.nextGaussian() * 0.1;
-            double py = start.yCoord + 0.5 + rand.nextGaussian() * 0.1;
-            double pz = start.zCoord + 0.5 + rand.nextGaussian() * 0.1;
+            BlockPos pos = start.getPos();
+            double px = pos.getX() + getRandomParticleOffset();
+            double py = pos.getY() + getRandomParticleOffset();
+            double pz = pos.getZ() + getRandomParticleOffset();
 
             RenderTESRSignals.ColorProfile colorProfile = RenderTESRSignals.ColorProfile.RAINBOW;
             if (isGoggleAuraActive(GoggleAura.SIGNALLING))
@@ -119,7 +127,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
 
             int color = colorProfile.getColor(start, new WorldCoordinate(start), new WorldCoordinate(dest));
 
-            EntityFX particle = new EntityTuningFX(start.getWorldObj(), px, py, pz, EffectManager.getEffectSource(dest), color);
+            EntityFX particle = new EntityTuningFX(start.getWorld(), px, py, pz, EffectManager.getEffectSource(dest), color);
             spawnParticle(particle);
         }
     }
@@ -134,7 +142,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
             double px = startX + 0.5 + rand.nextGaussian() * 0.1;
             double py = startY + 0.5 + rand.nextGaussian() * 0.1;
             double pz = startZ + 0.5 + rand.nextGaussian() * 0.1;
-            EntityFX particle = new EntityHeatTrailFX(dest.getWorldObj(), px, py, pz, colorSeed, EffectManager.getEffectSource(dest));
+            EntityFX particle = new EntityHeatTrailFX(dest.getWorld(), px, py, pz, colorSeed, EffectManager.getEffectSource(dest));
             spawnParticle(particle);
         }
     }

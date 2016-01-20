@@ -47,8 +47,8 @@ public class EntityTuningFX extends EntityFX {
     }
 
     private void calculateVector() {
-        Vec3 endPoint = Vec3.createVectorHelper(source.getX(), source.getY(), source.getZ());
-        Vec3 vecParticle = Vec3.createVectorHelper(posX, posY, posZ);
+        Vec3 endPoint = new Vec3(source.getX(), source.getY(), source.getZ());
+        Vec3 vecParticle = new Vec3(posX, posY, posZ);
 
         Vec3 vel = vecParticle.subtract(endPoint);
         vel = vel.normalize();

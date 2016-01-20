@@ -12,12 +12,16 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
+
+import static net.minecraft.util.EnumFacing.*;
 
 /**
  *
@@ -29,11 +33,12 @@ public class ParticleHelper {
 
     @SideOnly(Side.CLIENT)
     public static boolean addHitEffects(World world, Block block, MovingObjectPosition target, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
-        int x = target.blockX;
-        int y = target.blockY;
-        int z = target.blockZ;
+        BlockPos pos = target.getBlockPos();
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
 
-        int sideHit = target.sideHit;
+        EnumFacing sideHit = target.sideHit;
 
         if (block != WorldPlugin.getBlock(world, x, y, z)) return true;
         int meta = world.getBlockMetadata(x, y, z);
@@ -43,22 +48,22 @@ public class ParticleHelper {
         double py = y + rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - (b * 2.0F)) + b + block.getBlockBoundsMinY();
         double pz = z + rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (b * 2.0F)) + b + block.getBlockBoundsMinZ();
 
-        if (sideHit == 0)
+        if (sideHit == DOWN)
             py = (double) y + block.getBlockBoundsMinY() - (double) b;
 
-        if (sideHit == 1)
+        if (sideHit == UP)
             py = (double) y + block.getBlockBoundsMaxY() + (double) b;
 
-        if (sideHit == 2)
+        if (sideHit == NORTH)
             pz = (double) z + block.getBlockBoundsMinZ() - (double) b;
 
-        if (sideHit == 3)
+        if (sideHit == SOUTH)
             pz = (double) z + block.getBlockBoundsMaxZ() + (double) b;
 
-        if (sideHit == 4)
+        if (sideHit == WEST)
             px = (double) x + block.getBlockBoundsMinX() - (double) b;
 
-        if (sideHit == 5)
+        if (sideHit == EAST)
             px = (double) x + block.getBlockBoundsMaxX() + (double) b;
         EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, 0.0D, 0.0D, 0.0D, block, sideHit, meta);
         fx.setParticleIcon(block.getIcon(world, x, y, z, 0));

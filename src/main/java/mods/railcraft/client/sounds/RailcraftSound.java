@@ -30,7 +30,7 @@ public class RailcraftSound extends SoundType {
     }
 
     @Override
-    public String func_150496_b() {
+    public String getPlaceSound() {
         return "place." + this.soundName;
     }
 }
