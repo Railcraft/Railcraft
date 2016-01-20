@@ -42,6 +42,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityHopper;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -168,7 +169,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
     }
 
     @Override
-    protected boolean isMapPositionValid(int x, int y, int z, char mapPos) {
+    protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
         Block block = WorldPlugin.getBlock(worldObj, x, y, z);
         switch (mapPos) {
             case 'O': // Other

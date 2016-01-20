@@ -34,6 +34,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.io.DataInputStream;
@@ -170,7 +171,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     @Override
-    protected boolean isMapPositionValid(int i, int j, int k, char mapPos) {
+    protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
         Block block = worldObj.getBlock(i, j, k);
         switch (mapPos) {
             case 'O':

@@ -348,7 +348,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return RailcraftTileEntity.isUseableByPlayerHelper(this, player);
+        return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 
     @Override

@@ -27,8 +27,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import static net.minecraft.util.EnumFacing.UP;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileTank extends TileMultiBlockInventory implements IFluidHandler, ITankTile, ISidedInventory {
@@ -106,20 +107,20 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
-        if (side == 1) {
+    public int[] getSlotsForFace(EnumFacing side) {
+        if (side == UP) {
             return new int[]{0};
         }
         return new int[]{1};
     }
 
     @Override
-    public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return true;
     }
 
@@ -146,5 +147,4 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
         super.readPacketData(data);
         tankManager.readPacketData(data);
     }
-
 }

@@ -144,7 +144,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, int side) {
+    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         if (isStructureValid() && FluidHelper.handleRightClick(this, EnumFacing.getOrientation(side), player, false, true))
             return true;
         else if (FluidItemHelper.isContainer(player.inventory.getCurrentItem()))

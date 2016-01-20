@@ -18,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
 
 /**
@@ -37,7 +38,7 @@ public class TileSentinel extends TileMachineBase {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, int side) {
+    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();

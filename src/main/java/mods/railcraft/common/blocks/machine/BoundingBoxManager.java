@@ -15,14 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class BoundingBoxManager {
 
+    public static final BoundingBox DEFAULT = new BoundingBox();
     private static final Map<IEnumMachine, BoundingBox> collisionBoxes = new HashMap<IEnumMachine, BoundingBox>();
     private static final Map<IEnumMachine, BoundingBox> selectionBoxes = new HashMap<IEnumMachine, BoundingBox>();
-    public static final BoundingBox DEFAULT = new BoundingBox();
 
     private BoundingBoxManager() {
 
@@ -90,5 +89,4 @@ public class BoundingBoxManager {
         }
 
     }
-
 }

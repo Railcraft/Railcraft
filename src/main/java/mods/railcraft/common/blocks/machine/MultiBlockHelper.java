@@ -21,7 +21,6 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class MultiBlockHelper implements StructureHelper {
@@ -75,5 +74,4 @@ public class MultiBlockHelper implements StructureHelper {
     public void placeFluxTransformer(World world, int x, int y, int z) {
         TileFluxTransformer.placeFluxTransformer(world, x, y, z);
     }
-
 }

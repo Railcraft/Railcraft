@@ -96,7 +96,7 @@ public class ContainerEngineSteam extends RailcraftContainer {
 
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        return RailcraftTileEntity.isUseableByPlayerHelper(tile, entityplayer);
+        return RailcraftTileEntity.isUsableByPlayerHelper(tile, entityplayer);
     }
 
 }

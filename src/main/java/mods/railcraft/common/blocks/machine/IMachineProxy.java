@@ -9,11 +9,9 @@
 package mods.railcraft.common.blocks.machine;
 
 
-
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IMachineProxy {
@@ -21,7 +19,5 @@ public interface IMachineProxy {
     IEnumMachine getMachine(int meta);
 
     List<? extends IEnumMachine> getCreativeList();
-
-    void registerIcons(IIconRegister iconRegister);
 
 }

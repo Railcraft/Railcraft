@@ -16,7 +16,6 @@ import net.minecraft.tileentity.TileEntity;
 
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IEnumMachine {
@@ -28,8 +27,6 @@ public interface IEnumMachine {
     ItemStack getItem();
 
     ItemStack getItem(int qty);
-
-    IIcon getTexture(int side);
 
     Class getTileClass();
 

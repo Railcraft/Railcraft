@@ -18,6 +18,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -53,7 +54,7 @@ public class TileCage extends TileMachineBase {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, int side) {
+    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
 //        if (player.isSneaking()) {
         if (Game.isHost(worldObj)) {
             isOpen = !isOpen;

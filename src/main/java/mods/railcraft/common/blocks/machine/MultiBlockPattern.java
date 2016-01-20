@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import java.util.Map;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class MultiBlockPattern {
@@ -125,14 +124,13 @@ public class MultiBlockPattern {
                     int y = py + yOffset;
                     int z = pz + zOffset;
 
-                    world.setBlock(x, y, z, block, metadata, 3);
+                    world.setBlockState(pos, blockState, 3);
 
                     if (px == getMasterOffsetX() && py == getMasterOffsetY() && pz == getMasterOffsetZ())
-                        master = world.getTileEntity(x, y, z);
+                        master = world.getTileEntity(pos);
                 }
             }
         }
         return master;
     }
-
 }

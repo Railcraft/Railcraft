@@ -37,15 +37,15 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     }
 
     protected void dropItem(ItemStack stack) {
-        InvTools.dropItem(stack, worldObj, xCoord, yCoord, zCoord);
+        InvTools.dropItem(stack, worldObj, getPos());
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
     }
 
     @Override
@@ -69,11 +69,6 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     }
 
     @Override
-    public String getInventoryName() {
-        return getName();
-    }
-
-    @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         inv.readFromNBT("Items", data);
@@ -91,12 +86,7 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-        return null;
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return false;
     }
 
@@ -107,7 +97,6 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return RailcraftTileEntity.isUseableByPlayerHelper(this, player);
+        return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
-
 }

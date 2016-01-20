@@ -17,7 +17,6 @@ import mods.railcraft.common.blocks.machine.gamma.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class MachineTileRegistery {
@@ -75,7 +74,7 @@ public class MachineTileRegistery {
         // Delta
         GameRegistry.registerTileEntity(TileCage.class, "RCCageTile");
         GameRegistry.registerTileEntity(TileWire.class, "RCWireTile");
-        
+
         // Epsilon
         GameRegistry.registerTileEntity(TileElectricFeeder.class, "RCElectricFeederTile");
         GameRegistry.registerTileEntity(TileElectricFeederAdmin.class, "RCElectricFeederAdminTile");
@@ -83,7 +82,5 @@ public class MachineTileRegistery {
         GameRegistry.registerTileEntity(TileFluxTransformer.class, "RCFluxTransformerTile");
         GameRegistry.registerTileEntity(TileForceTrackEmitter.class, "RCForceTrackEmitterTile");
         GameRegistry.registerTileEntity(TileEngravingBench.class, "RCEngravingBenchTile");
-
     }
-
 }

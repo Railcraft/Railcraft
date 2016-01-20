@@ -152,7 +152,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, int side) {
+    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         if (Game.isHost(worldObj)) {
             if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), EnumFacing.getOrientation(side), player, true, true))
                 return true;

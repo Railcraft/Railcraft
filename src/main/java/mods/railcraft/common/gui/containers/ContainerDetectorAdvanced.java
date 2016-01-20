@@ -43,7 +43,7 @@ public class ContainerDetectorAdvanced extends RailcraftContainer {
 
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        return RailcraftTileEntity.isUseableByPlayerHelper(detector.getTile(), entityplayer);
+        return RailcraftTileEntity.isUsableByPlayerHelper(detector.getTile(), entityplayer);
     }
 
 }

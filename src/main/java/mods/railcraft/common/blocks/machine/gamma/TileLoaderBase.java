@@ -117,12 +117,12 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
     }
 
     @Override
-    public final boolean canConnectRedstone(int dir) {
+    public final boolean canConnectRedstone(EnumFacing dir) {
         return true;
     }
 
     @Override
-    public final boolean isPoweringTo(int side) {
+    public final boolean isPoweringTo(EnumFacing side) {
         if (!isPowered())
             return false;
         EnumFacing opSide = MiscTools.getOppositeSide(side);

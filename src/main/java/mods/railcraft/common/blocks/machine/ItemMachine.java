@@ -11,8 +11,11 @@ package mods.railcraft.common.blocks.machine;
 import mods.railcraft.common.blocks.ItemBlockRailcraftMultiType;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemMachine extends ItemBlockRailcraftMultiType {
@@ -26,24 +29,18 @@ public class ItemMachine extends ItemBlockRailcraftMultiType {
     }
 
     @Override
-    public IIcon getIconFromDamage(int damage) {
-        return machineBlock.getIcon(2, damage);
-    }
-
-    @Override
     public String getUnlocalizedName(ItemStack stack) {
         return machineBlock.getMachineProxy().getMachine(stack.getItemDamage()).getTag();
     }
 
     @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-        if (!world.setBlock(x, y, z, machineBlock, metadata, 3))
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+        if (!world.setBlockState(pos, newState, 3))
             return false;
 
-        if (world.getBlock(x, y, z) == machineBlock) {
-            machineBlock.onBlockPlacedBy(world, x, y, z, player, stack);
-            machineBlock.onPostBlockPlaced(world, x, y, z, metadata);
-            machineBlock.initFromItem(world, x, y, z, stack);
+        if (world.getBlockState(pos).getBlock() == machineBlock) {
+            machineBlock.onBlockPlacedBy(world, pos, newState, player, stack);
+            machineBlock.initFromItem(world, pos, stack);
         }
 
         return true;
@@ -53,5 +50,4 @@ public class ItemMachine extends ItemBlockRailcraftMultiType {
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
         return machineBlock.getMachineProxy().getMachine(stack.getItemDamage()).getToolTip(stack, player, adv);
     }
-
 }

@@ -25,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
@@ -35,19 +36,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable {
+public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable, ITickable {
+
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
     protected int clock = MiscTools.getRand().nextInt();
     private GameProfile owner = new GameProfile(null, "[Railcraft]");
     private boolean sendClientUpdate = false;
     private UUID uuid;
 
-    public static boolean isUseableByPlayerHelper(TileEntity tile, EntityPlayer player) {
+    public static boolean isUsableByPlayerHelper(TileEntity tile, EntityPlayer player) {
         if (tile.isInvalid())
             return false;
-        if (tile.getWorldObj().getTileEntity(tile.xCoord, tile.yCoord, tile.zCoord) != tile)
+        if (tile.getWorld().getTileEntity(tile.getPos()) != tile)
             return false;
-        return player.getDistanceSq(tile.xCoord, tile.yCoord, tile.zCoord) <= 64;
+        return player.getDistanceSq(tile.getPos()) <= 64;
     }
 
     public UUID getUUID() {
@@ -61,8 +63,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
         clock++;
 
         if (sendClientUpdate) {
@@ -91,12 +92,12 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     public void markBlockForUpdate() {
 //        System.out.println("updating");
         if (worldObj != null)
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(getPos());
     }
 
     public void notifyBlocksOfNeighborChange() {
         if (worldObj != null)
-            WorldPlugin.notifyBlocksOfNeighborChange(worldObj, xCoord, yCoord, zCoord, getBlockType());
+            WorldPlugin.notifyBlocksOfNeighborChange(worldObj, getPos(), getBlockType());
     }
 
     public void sendUpdateToClient() {
@@ -130,7 +131,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     public final int getDimension() {
         if (worldObj == null)
             return 0;
-        return worldObj.provider.dimensionId;
+        return worldObj.provider.getDimensionId();
     }
 
     @Override
@@ -152,7 +153,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         List<String> debug = new ArrayList<String>();
         debug.add("Railcraft Tile Entity Data Dump");
         debug.add("Object: " + this);
-        debug.add(String.format("Coordinates: d=%d, %d,%d,%d", worldObj.provider.dimensionId, xCoord, yCoord, zCoord));
+        debug.add(String.format("Coordinates: d=%d, %s", worldObj.provider.getDimensionId(), getPos()));
         debug.add("Owner: " + (owner == null ? "null" : owner.getName()));
         debug.addAll(tileCache.getDebugOutput());
         return debug;
@@ -176,16 +177,19 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         uuid = MiscTools.readUUID(data, "uuid");
     }
 
+    @Deprecated
     public final int getX() {
-        return xCoord;
+        return getPos().getX();
     }
 
+    @Deprecated
     public final int getY() {
-        return yCoord;
+        return getPos().getY();
     }
 
+    @Deprecated
     public final int getZ() {
-        return zCoord;
+        return getPos().getZ();
     }
 
     @Override

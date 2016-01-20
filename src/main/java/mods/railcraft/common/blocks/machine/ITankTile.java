@@ -14,7 +14,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ITankTile {
@@ -28,4 +27,5 @@ public interface ITankTile {
     String getTitle();
 
     Slot getInputSlot(IInventory inv, int slotNum, int x, int y);
+
 }

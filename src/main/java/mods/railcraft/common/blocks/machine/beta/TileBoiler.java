@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -130,7 +131,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, int side) {
+    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() != Items.bucket)
             if (Game.isHost(worldObj)) {
@@ -209,7 +210,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     }
 
     @Override
-    protected boolean isMapPositionValid(int x, int y, int z, char mapPos) {
+    protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
         Block block = WorldPlugin.getBlock(worldObj, x, y, z);
         int meta = worldObj.getBlockMetadata(x, y, z);
 

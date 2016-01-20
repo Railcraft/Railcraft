@@ -174,7 +174,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, int side) {
+    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         ItemStack current = player.inventory.getCurrentItem();
         if (current != null)
             if (current.getItem() instanceof IToolWrench) {
@@ -224,7 +224,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public boolean canConnectRedstone(int dir) {
+    public boolean canConnectRedstone(EnumFacing dir) {
         return true;
     }
 

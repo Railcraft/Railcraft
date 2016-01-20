@@ -267,7 +267,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return RailcraftTileEntity.isUseableByPlayerHelper(this, player);
+        return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 
 }

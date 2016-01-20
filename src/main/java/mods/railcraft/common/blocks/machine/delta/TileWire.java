@@ -63,7 +63,7 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, int side) {
+    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && InvTools.isStackEqualToBlock(current, BlockFrame.getBlock()))
             if (setAddon(AddonType.FRAME)) {

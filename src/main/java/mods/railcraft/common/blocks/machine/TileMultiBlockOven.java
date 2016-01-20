@@ -26,21 +26,23 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import static net.minecraft.util.EnumParticleTypes.FLAME;
+
 public abstract class TileMultiBlockOven extends TileMultiBlockInventory implements INeedsFuel, IHasWork {
 
+    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
     protected int cookTime;
     protected boolean cooking;
-    private boolean wasBurning;
     protected boolean paused = false;
-    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
+    private boolean wasBurning;
 
     public TileMultiBlockOven(String name, int invNum, List<? extends MultiBlockPattern> patterns) {
         super(name, invNum, patterns);
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (getPatternMarker() == 'W') {
             if (clock % 4 == 0) {
@@ -61,7 +63,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         boolean b = isBurning();
         if (wasBurning != b) {
             wasBurning = b;
-            worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+            worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
             markBlockForUpdate();
         }
     }
@@ -71,15 +73,15 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     public void randomDisplayTick(Random random) {
         updateLighting();
         if (getPatternMarker() == 'W' && isStructureValid() && random.nextInt(100) < 20 && isBurning()) {
-            float f = (float) xCoord + 0.5F;
-            float f1 = yCoord + 0.4375F + (random.nextFloat() * 3F / 16F);
-            float f2 = (float) zCoord + 0.5F;
+            float f = (float) getX() + 0.5F;
+            float f1 = getY() + 0.4375F + (random.nextFloat() * 3F / 16F);
+            float f2 = (float) getZ() + 0.5F;
             float f3 = 0.52F;
             float f4 = random.nextFloat() * 0.6F - 0.3F;
-            worldObj.spawnParticle("flame", f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-            worldObj.spawnParticle("flame", f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-            worldObj.spawnParticle("flame", f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
-            worldObj.spawnParticle("flame", f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+            worldObj.spawnParticle(FLAME, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+            worldObj.spawnParticle(FLAME, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
+            worldObj.spawnParticle(FLAME, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
+            worldObj.spawnParticle(FLAME, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -123,16 +125,16 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         return -1;
     }
 
+    public void setCookTime(int i) {
+        cookTime = i;
+    }
+
     public boolean isCooking() {
         TileMultiBlockOven masterOven = (TileMultiBlockOven) getMasterBlock();
         if (masterOven != null) {
             return masterOven.cooking;
         }
         return false;
-    }
-
-    public boolean isBurning() {
-        return isCooking();
     }
 
     public void setCooking(boolean c) {
@@ -142,8 +144,8 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         }
     }
 
-    public void setCookTime(int i) {
-        cookTime = i;
+    public boolean isBurning() {
+        return isCooking();
     }
 
     public abstract int getTotalCookTime();
@@ -190,5 +192,4 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
             mBlock.actions.add(action);
         }
     }
-
 }

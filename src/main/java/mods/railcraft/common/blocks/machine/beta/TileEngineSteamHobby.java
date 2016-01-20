@@ -82,7 +82,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, int side) {
+    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() != Items.bucket)
             if (Game.isHost(worldObj)) {
@@ -164,7 +164,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return RailcraftTileEntity.isUseableByPlayerHelper(this, player);
+        return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 
     @Override

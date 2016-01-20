@@ -32,10 +32,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -425,7 +427,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public boolean recolourBlock(int cID) {
+    public boolean recolourBlock(EnumDyeColor cID) {
         EnumColor c = EnumColor.fromId(15 - cID);
         if (color != c) {
             color = c;
@@ -446,7 +448,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, int side) {
+    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         ItemStack current = player.getCurrentEquippedItem();
         if (Game.isHost(worldObj)) {
             if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), EnumFacing.getOrientation(side), player, true, true)) {
@@ -510,7 +512,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    protected boolean isMapPositionValid(int x, int y, int z, char mapPos) {
+    protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
         switch (mapPos) {
             case 'O': // Other
             {

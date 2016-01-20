@@ -57,7 +57,7 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, int side) {
+    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         return super.blockActivated(player, side);
     }
 

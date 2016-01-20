@@ -17,9 +17,10 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class TileMachineBase extends RailcraftTileEntity {
+
     private boolean checkedBlock = false;
 
     public abstract IEnumMachine getMachineType();
@@ -44,7 +46,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
         return (short) getMachineType().ordinal();
     }
 
-    public boolean canCreatureSpawn(EnumCreatureType type) {
+    public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
         return true;
     }
 
@@ -73,10 +75,10 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
      */
     public void onBlockRemoval() {
         if (this instanceof IInventory)
-            InvTools.dropInventory(new InventoryMapper((IInventory) this), worldObj, xCoord, yCoord, zCoord);
+            InvTools.dropInventory(new InventoryMapper((IInventory) this), worldObj, getPos());
     }
 
-    public boolean blockActivated(EntityPlayer player, int side) {
+    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         if (player.isSneaking())
             return false;
         ItemStack stack = player.getCurrentEquippedItem();
@@ -104,13 +106,8 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
     }
 
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(worldObj))
             return;
@@ -120,24 +117,24 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
             checkedBlock = true;
 
             if (!getMachineType().isAvaliable()) {
-                worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+                worldObj.setBlockToAir(getPos());
                 return;
             }
 
             if (getBlockType() != getMachineType().getBlock()) {
-                Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), getBlockType(), getMachineType().getBlock(), xCoord, yCoord, zCoord);
-                worldObj.setBlock(xCoord, yCoord, zCoord, getMachineType().getBlock(), getId(), 3);
+                Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getMachineType().getBlock(), getPos());
+                worldObj.setBlockState(getPos(), newState, 3);
                 validate();
-                worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
+                worldObj.setTileEntity(getPos(), this);
                 updateContainingBlockInfo();
             }
 
-            int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+            int meta = worldObj.getBlockMetadata(getPos());
             if (getBlockType() != null && getClass() != ((BlockMachine) getBlockType()).getMachineProxy().getMachine(meta).getTileClass()) {
-                worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, getId(), 3);
+                worldObj.setBlockState(getPos(), getId(), 3);
                 validate();
-                worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
-                Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), meta, getId(), xCoord, yCoord, zCoord);
+                worldObj.setTileEntity(getPos(), this);
+                Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), meta, getId(), getPos());
                 updateContainingBlockInfo();
             }
         }
@@ -145,10 +142,6 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
 
     public boolean openGui(EntityPlayer player) {
         return false;
-    }
-
-    public IIcon getIcon(int side) {
-        return getMachineType().getTexture(side);
     }
 
     public int getLightValue() {
@@ -163,11 +156,11 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
         return 2.0f;
     }
 
-    public boolean isPoweringTo(int side) {
+    public boolean isPoweringTo(EnumFacing side) {
         return false;
     }
 
-    public boolean canConnectRedstone(int dir) {
+    public boolean canConnectRedstone(EnumFacing dir) {
         return false;
     }
 
@@ -179,7 +172,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
         return 16777215;
     }
 
-    public boolean recolourBlock(int color) {
+    public boolean recolourBlock(EnumDyeColor color) {
         return false;
     }
 

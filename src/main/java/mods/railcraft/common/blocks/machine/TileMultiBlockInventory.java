@@ -23,6 +23,7 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileMultiBlockInventory extends TileMultiBlock implements IInventory {
+
     protected final StandaloneInventory inv;
     private final String guiTag;
 
@@ -33,7 +34,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
     }
 
     protected void dropItem(ItemStack stack) {
-        InvTools.dropItem(stack, worldObj, xCoord, yCoord, zCoord);
+        InvTools.dropItem(stack, worldObj, getPos());
     }
 
     @Override
@@ -77,18 +78,8 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
     }
 
     @Override
-    public String getInventoryName() {
-        return getName();
-    }
-
-    @Override
     public int getSizeInventory() {
         return inv.getSizeInventory();
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int var1) {
-        return null;
     }
 
     @Override
@@ -102,20 +93,20 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return false;
     }
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return RailcraftTileEntity.isUseableByPlayerHelper(this, player);
+        return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 }
