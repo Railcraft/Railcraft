@@ -245,7 +245,7 @@ public abstract class MiscTools {
     }
 
     public static EnumFacing getSideFacingTrack(World world, int x, int y, int z) {
-        for (EnumFacing dir : EnumFacing.VALID_DIRECTIONS) {
+        for (EnumFacing dir : EnumFacing.VALUES) {
             if (TrackTools.isRailBlockAt(world, MiscTools.getXOnSide(x, dir), MiscTools.getYOnSide(y, dir), MiscTools.getZOnSide(z, dir)))
                 return dir;
         }

@@ -327,7 +327,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     }
 
     private void onBlockChange() {
-        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALUES) {
             TileEntity tile = tileCache.getTileOnSide(side);
             if (isStructureTile(tile))
                 ((TileMultiBlock) tile).onBlockChange(getMaxRecursionDepth());
@@ -347,7 +347,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
                 return;
             }
 
-            for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
+            for (EnumFacing side : EnumFacing.VALUES) {
                 TileEntity tile = tileCache.getTileOnSide(side);
                 if (isStructureTile(tile))
                     ((TileMultiBlock) tile).onBlockChange(depth);

@@ -188,7 +188,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
                 StandardTank tank = mBlock.tankManager.get(TANK_STEAM);
                 FluidStack steam = tank.getFluid();
                 if (steam != null && (!mBlock.boiler.isBoiling() || steam.amount >= tank.getCapacity() / 2))
-                    mBlock.tankManager.outputLiquid(tileCache, getOutputFilter(), EnumFacing.VALID_DIRECTIONS, TANK_STEAM, TRANSFER_RATE);
+                    mBlock.tankManager.outputLiquid(tileCache, getOutputFilter(), EnumFacing.VALUES, TANK_STEAM, TRANSFER_RATE);
             }
         }
     }

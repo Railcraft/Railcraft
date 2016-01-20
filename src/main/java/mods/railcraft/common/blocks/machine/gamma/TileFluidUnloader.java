@@ -84,7 +84,7 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
         if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
             FluidHelper.fillContainers(tankManager, this, SLOT_INPUT, SLOT_OUTPUT, loaderTank.getFluidType());
 
-        tankManager.outputLiquid(tileCache, TankManager.TANK_FILTER, EnumFacing.VALID_DIRECTIONS, 0, TRANSFER_RATE);
+        tankManager.outputLiquid(tileCache, TankManager.TANK_FILTER, EnumFacing.VALUES, 0, TRANSFER_RATE);
 
         EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.1f, EnumFacing.UP);
 

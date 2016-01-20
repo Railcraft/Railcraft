@@ -74,7 +74,7 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
     }
 
     public EnumFacing[] getValidRotations() {
-        return EnumFacing.VALID_DIRECTIONS;
+        return EnumFacing.VALUES;
     }
 
     public void onBlockPlaced() {

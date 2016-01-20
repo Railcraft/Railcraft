@@ -81,7 +81,7 @@ public class FirestoneTickHandler {
     private boolean canBurn(World world, int x, int y, int z) {
         if (world.getBlock(x, y, z) != Blocks.air)
             return false;
-        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALUES) {
             int sx = MiscTools.getXOnSide(x, side);
             int sy = MiscTools.getYOnSide(y, side);
             int sz = MiscTools.getZOnSide(z, side);

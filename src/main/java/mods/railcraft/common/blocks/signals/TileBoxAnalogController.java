@@ -86,7 +86,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
 
     private int getPowerLevel() {
         int p = 0, tmp;
-        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALUES) {
             if (side == EnumFacing.UP)
                 continue;
             if (tileCache.getTileOnSide(side) instanceof TileBoxBase)

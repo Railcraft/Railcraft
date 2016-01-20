@@ -59,7 +59,7 @@ public class RenderBlockMachineDelta extends BlockRenderer {
         public void renderBlock(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block) {
             EnumSet<EnumFacing> wireCons = EnumSet.noneOf(EnumFacing.class);
 
-            for (EnumFacing dir : EnumFacing.VALID_DIRECTIONS) {
+            for (EnumFacing dir : EnumFacing.VALUES) {
                 TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, dir);
                 if (tile instanceof TileWire)
                     wireCons.add(dir);

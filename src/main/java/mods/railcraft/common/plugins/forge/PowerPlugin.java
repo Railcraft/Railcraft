@@ -58,7 +58,7 @@ public class PowerPlugin {
     }
 
     public static boolean isRedstonePowered(World world, int x, int y, int z) {
-        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALUES) {
             if (isRedstonePowering(world, x, y, z, 0, side) || isRedstonePowering(world, x, y, z, -1, side))
                 return true;
         }

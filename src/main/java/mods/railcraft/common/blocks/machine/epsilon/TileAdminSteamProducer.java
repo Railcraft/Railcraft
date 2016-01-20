@@ -56,7 +56,7 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
         if (!powered)
             return;
 
-        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALUES) {
             TileEntity tile = tileCache.getTileOnSide(side);
             if (tile instanceof IFluidHandler) {
                 IFluidHandler fluidHandler = (IFluidHandler) tile;

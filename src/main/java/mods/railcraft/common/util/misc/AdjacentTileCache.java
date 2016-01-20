@@ -44,7 +44,7 @@ public final class AdjacentTileCache {
     }
 
     public void refresh() {
-        for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
+        for (EnumFacing side : EnumFacing.VALUES) {
             getTileOnSide(side);
         }
     }

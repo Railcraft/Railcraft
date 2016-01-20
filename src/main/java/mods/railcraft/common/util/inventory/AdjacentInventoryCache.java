@@ -56,7 +56,7 @@ public final class AdjacentInventoryCache {
         if (changed || Game.IS_BUKKIT) {
             changed = false;
             invs.clear();
-            for (EnumFacing side : EnumFacing.VALID_DIRECTIONS) {
+            for (EnumFacing side : EnumFacing.VALUES) {
                 TileEntity tile = cache.getTileOnSide(side);
                 if (tile != null && (filter == null || filter.matches(tile))) {
                     IInventory inv = InvTools.getInventoryFromTile(tile, side.getOpposite());

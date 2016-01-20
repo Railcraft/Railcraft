@@ -96,7 +96,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
     }
 
     public EnumFacing[] getValidRotations() {
-        return EnumFacing.VALID_DIRECTIONS;
+        return EnumFacing.VALUES;
     }
 
     public boolean isSideSolid(EnumFacing side) {
