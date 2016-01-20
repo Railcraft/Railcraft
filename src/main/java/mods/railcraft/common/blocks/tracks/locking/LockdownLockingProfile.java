@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.tracks.locking;
 import mods.railcraft.common.blocks.tracks.TrackNextGenLocking;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class LockdownLockingProfile extends LockingProfile {
@@ -19,5 +18,4 @@ public class LockdownLockingProfile extends LockingProfile {
     public LockdownLockingProfile(TrackNextGenLocking track) {
         super(track);
     }
-
 }

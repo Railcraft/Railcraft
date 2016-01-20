@@ -18,7 +18,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class HoldingLockingProfile extends LockingProfile {
@@ -102,5 +101,4 @@ public class HoldingLockingProfile extends LockingProfile {
 
         track.markBlockNeedsUpdate();
     }
-
 }

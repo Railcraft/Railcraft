@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.tracks.TrackNextGenLocking;
 import net.minecraft.entity.item.EntityMinecart;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class BoardingLockingProfile extends LockingProfile {
@@ -44,9 +43,8 @@ public class BoardingLockingProfile extends LockingProfile {
             else
                 cart.motionX += boostX;
     }
-    
-    private boolean isReversed(){
+
+    private boolean isReversed() {
         return track.getProfileType() == TrackNextGenLocking.LockingProfileType.BOARDING_B || track.getProfileType() == TrackNextGenLocking.LockingProfileType.BOARDING_B_TRAIN;
     }
-
 }

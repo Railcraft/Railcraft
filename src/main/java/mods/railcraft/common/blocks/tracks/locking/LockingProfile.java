@@ -17,7 +17,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class LockingProfile {
@@ -45,5 +44,4 @@ public abstract class LockingProfile {
 
     public void readPacketData(DataInputStream data) throws IOException {
     }
-
 }
