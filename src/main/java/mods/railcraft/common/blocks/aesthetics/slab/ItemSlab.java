@@ -11,14 +11,18 @@ package mods.railcraft.common.blocks.aesthetics.slab;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import static net.minecraft.util.EnumFacing.DOWN;
+import static net.minecraft.util.EnumFacing.UP;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemSlab extends ItemBlock {
@@ -41,28 +45,28 @@ public class ItemSlab extends ItemBlock {
      * false if it don't. This is for ITEMS, not BLOCKS
      */
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (stack.stackSize == 0) {
             return false;
         }
 
-        if (!player.canPlayerEdit(x, y, z, side, stack)) {
+        if (!playerIn.canPlayerEdit(pos, side, stack)) {
             return false;
         } else {
-            if (isSingleSlab(world, x, y, z, side)) {
-                tryAddSlab(world, x, y, z, stack);
+            if (isSingleSlab(worldIn, x, y, z, side)) {
+                tryAddSlab(worldIn, x, y, z, stack);
                 return true;
             }
-            if (isSingleSlabShifted(world, x, y, z, side)) {
+            if (isSingleSlabShifted(worldIn, x, y, z, side)) {
                 EnumFacing s = EnumFacing.getOrientation(side);
                 x = MiscTools.getXOnSide(x, s);
                 y = MiscTools.getYOnSide(y, s);
                 z = MiscTools.getZOnSide(z, s);
-                tryAddSlab(world, x, y, z, stack);
+                tryAddSlab(worldIn, x, y, z, stack);
                 return true;
             }
 
-            return super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
+            return super.onItemUse(stack, playerIn, worldIn, x, y, z, side, hitX, hitY, hitZ);
 
         }
     }
@@ -121,16 +125,16 @@ public class ItemSlab extends ItemBlock {
      * Called to actually place the block, after the location is determined and
      * all permission checks have been made.
      *
-     * @param stack The item stack that was used to place the block. This can be
-     * changed inside the method.
+     * @param stack  The item stack that was used to place the block. This can be
+     *               changed inside the method.
      * @param player The player who is placing the block. Can be null if the
-     * block is not being placed by a player.
-     * @param side The side the player (or machine) right-clicked on.
+     *               block is not being placed by a player.
+     * @param side   The side the player (or machine) right-clicked on.
      */
     @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-        Block block = field_150939_a;
-        if (!world.checkNoEntityCollision(block.getCollisionBoundingBoxFromPool(world, x, y, z))) {
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+        Block block = getBlock();
+        if (!world.checkNoEntityCollision(block.getCollisionBoundingBox(world, pos, newState))) {
             return false;
         }
 
@@ -149,21 +153,21 @@ public class ItemSlab extends ItemBlock {
 //            }
 //        }
 
-        if (!world.setBlock(x, y, z, field_150939_a)) {
+        if (!world.setBlockState(pos, newState)) {
             return false;
         }
 
-        if (world.getBlock(x, y, z) == field_150939_a) {
-            TileSlab slab = BlockRailcraftSlab.getSlabTile(world, x, y, z);
+        if (world.getBlockState(pos).getBlock() == getBlock()) {
+            TileSlab slab = BlockRailcraftSlab.getSlabTile(world, pos);
             if (slab != null) {
-                if (side != 0 && (side == 1 || (double) hitY <= 0.5D)) {
+                if (side != DOWN && (side == UP || (double) hitY <= 0.5D)) {
                     slab.setBottomSlab(EnumBlockMaterial.fromOrdinal(stack.getItemDamage()));
                 } else {
                     slab.setTopSlab(EnumBlockMaterial.fromOrdinal(stack.getItemDamage()));
                 }
             }
-            field_150939_a.onBlockPlacedBy(world, x, y, z, player, stack);
-            field_150939_a.onPostBlockPlaced(world, x, y, z, metadata);
+            getBlock().onBlockPlacedBy(world, pos, newState, player, stack);
+            getBlock().onPostBlockPlaced(world, x, y, z, metadata);
         }
 
         return true;

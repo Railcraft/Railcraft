@@ -9,12 +9,8 @@
 package mods.railcraft.client.render;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
 
 import java.util.HashMap;
 import java.util.Map;

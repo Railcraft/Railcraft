@@ -20,23 +20,9 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileSlab extends RailcraftTileEntity {
+
     private EnumBlockMaterial top = null;
     private EnumBlockMaterial bottom = null;
-
-    @Override
-    public boolean canUpdate() {
-        return false;
-    }
-
-    public IIcon getTexture(int side) {
-        if (bottom != null) {
-            return bottom.getIcon(side);
-        }
-        if (top != null) {
-            return top.getIcon(side);
-        }
-        return EnumBlockMaterial.SANDY_BRICK.getIcon(side);
-    }
 
     public EnumBlockMaterial getTopSlab() {
         return top;
