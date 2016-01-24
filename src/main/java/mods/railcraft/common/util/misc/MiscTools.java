@@ -8,12 +8,12 @@
  */
 package mods.railcraft.common.util.misc;
 
+import com.google.common.base.Predicate;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -80,23 +80,37 @@ public abstract class MiscTools {
         return null;
     }
 
-    public static AxisAlignedBB addCoordToAABB(AxisAlignedBB box, double x, double y, double z) {
+    public static AxisAlignedBB expandAABBToCoordinate(AxisAlignedBB box, double x, double y, double z) {
+        double minX = box.minX;
+        double maxX = box.maxX;
+        double minY = box.minY;
+        double maxY = box.maxY;
+        double minZ = box.minZ;
+        double maxZ = box.maxZ;
+
         if (x < box.minX)
-            box.minX = x;
+            minX = x;
         else if (x > box.maxX)
-            box.maxX = x;
+            maxX = x;
 
         if (y < box.minY)
-            box.minY = y;
+            minY = y;
         else if (y > box.maxY)
-            box.maxY = y;
+            maxY = y;
 
         if (z < box.minZ)
-            box.minZ = z;
+            minZ = z;
         else if (z > box.maxZ)
-            box.maxZ = z;
-        return box;
+            maxZ = z;
+
+        return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
     }
+
+    public static final Predicate<Entity> livingEntitySelector = new Predicate<Entity>() {
+        public boolean apply(Entity entity) {
+            return entity.isEntityAlive() && EntitySelectors.NOT_SPECTATING.apply(entity);
+        }
+    };
 
     public static <T extends Entity> List<T> getNearbyEntities(World world, Class<T> entityClass, float x, float minY, float maxY, float z, float radius) {
         AxisAlignedBB box = AxisAlignedBB.fromBounds(x, minY, z, x + 1, maxY, z + 1);
@@ -106,12 +120,12 @@ public abstract class MiscTools {
 
     public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass, int x, int y, int z) {
         AxisAlignedBB box = AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
-        return (List<T>) world.selectEntitiesWithinAABB(entityClass, box, IEntitySelector.selectAnything);
+        return (List<T>) world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
     }
 
     public static <T extends Entity> T getEntityAt(World world, Class<T> entityClass, int x, int y, int z) {
         AxisAlignedBB box = AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
-        List<T> entities = (List<T>) world.selectEntitiesWithinAABB(entityClass, box, IEntitySelector.selectAnything);
+        List<T> entities = (List<T>) world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
         if (!entities.isEmpty())
             return entities.get(0);
         return null;
@@ -194,7 +208,7 @@ public abstract class MiscTools {
         double distance = player.capabilities.isCreativeMode ? 5.0F : 4.5F;
         Vec3 posVec = new Vec3(player.posX, player.posY, player.posZ);
         Vec3 lookVec = player.getLook(1);
-        posVec.yCoord += player.getEyeHeight();
+        lookVec = lookVec.addVector(0, player.getEyeHeight(), 0);
         lookVec = posVec.addVector(lookVec.xCoord * distance, lookVec.yCoord * distance, lookVec.zCoord * distance);
         return player.worldObj.rayTraceBlocks(posVec, lookVec);
     }

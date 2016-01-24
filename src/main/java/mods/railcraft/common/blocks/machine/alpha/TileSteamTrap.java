@@ -81,7 +81,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     @SuppressWarnings("unchecked")
     public List<EntityLivingBase> getEntitiesInSteamArea() {
         AxisAlignedBB area = AxisAlignedBB.fromBounds(-0.5D, -0.5D, -0.5D, 0.5D, 0.5D, 0.5D);
-        MiscTools.addCoordToAABB(area, direction.getFrontOffsetX() * RANGE, direction.getFrontOffsetY() * RANGE, direction.getFrontOffsetZ() * RANGE);
+        MiscTools.expandAABBToCoordinate(area, direction.getFrontOffsetX() * RANGE, direction.getFrontOffsetY() * RANGE, direction.getFrontOffsetZ() * RANGE);
         area.offset(getX() + 0.5, getY() + 0.5, getZ() + 0.5);
         List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, area);
         return entities;
