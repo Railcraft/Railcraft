@@ -42,7 +42,7 @@ minecraft {
 	version = project.mcversion + "-" + project.forgeversion
 	runDir = "run"
 	
-	mappings = "snapshot_20141130"
+	mappings = project.mappingsversion
 
 	replace '@VERSION@', project.version
 }
