@@ -135,6 +135,15 @@ public final class Railcraft {
                         recipe.addOutput(ItemStack.loadItemStackFromNBT(outputNBT), outputNBT.getFloat("chance"));
                     }
                 }
+            } else if (mess.key.equals("high-speed-explosion-excluded-entities")) {
+                NBTTagCompound nbt = mess.getNBTValue();
+                if (nbt.hasKey("entities")) {
+                    String entities = nbt.getString("entities");
+                    Iterable<String> split = splitter.split(entities);
+                    RailcraftConfig.excludedAllEntityFromHighSpeedExplosions(split);
+                } else {
+                    Game.log(Level.WARN, "Mod %s attempted to exclude an entity from H.S. explosions, but failed: %s", mess.getSender(), nbt);
+                }
             }
         }
     }
