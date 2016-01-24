@@ -1,3 +1,11 @@
+9.8.0.3:
+	NEW: Convert the Tunnel Bore into a multipart entity to allow for more fine tuned control of the collision box.
+	NEW: New Routing Table keyword: Loco. Returns true if the locomotive type matches "electric", "steam", or "none". Using "none" only returns true if there is NO locomotive. (contribution by Cream-Tea)
+	NEW: Coal Coke torch recipe. (contribution by daniel)
+	FIX: Package correct RF API.
+	FIX: Fixed NPE when loading a world with a Personal Anchor. (contribution by Yopu)
+	CONFIG: Added H.S. explosion entity exclusion list. (contribution by Yopu)
+
 9.8.0.0:
 	FIX: Fixed a possible crash during Worldgen if you disable the Track block.
 	FIX: Fixed Anchor interaction with FunkyLocomotion.
