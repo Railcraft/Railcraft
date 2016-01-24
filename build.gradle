@@ -41,8 +41,8 @@ ext.dirDest = './build/dist'
 minecraft {
 	version = project.mcversion + "-" + project.forgeversion
 	runDir = "run"
-
-	mappings = "snapshot_20160112"
+	
+	mappings = project.mappingsversion
 
 	replace '@VERSION@', project.version
 }
