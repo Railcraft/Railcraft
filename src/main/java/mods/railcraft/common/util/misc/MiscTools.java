@@ -120,67 +120,67 @@ public abstract class MiscTools {
 
     public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass, int x, int y, int z) {
         AxisAlignedBB box = AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
-        return (List<T>) world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
+        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
     }
 
     public static <T extends Entity> T getEntityAt(World world, Class<T> entityClass, int x, int y, int z) {
         AxisAlignedBB box = AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
-        List<T> entities = (List<T>) world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
+        List<T> entities = world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
         if (!entities.isEmpty())
             return entities.get(0);
         return null;
     }
 
-    public static MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1, int i, int j, int k) {
-        vec3d = vec3d.addVector(-i, -j, -k);
-        vec3d1 = vec3d1.addVector(-i, -j, -k);
-        Vec3 vec3d2 = vec3d.getIntermediateWithXValue(vec3d1, 0);
-        Vec3 vec3d3 = vec3d.getIntermediateWithXValue(vec3d1, 1);
-        Vec3 vec3d4 = vec3d.getIntermediateWithYValue(vec3d1, 0);
-        Vec3 vec3d5 = vec3d.getIntermediateWithYValue(vec3d1, 1);
-        Vec3 vec3d6 = vec3d.getIntermediateWithZValue(vec3d1, 0);
-        Vec3 vec3d7 = vec3d.getIntermediateWithZValue(vec3d1, 1);
-        if (!isVecInsideYZBounds(vec3d2))
-            vec3d2 = null;
-        if (!isVecInsideYZBounds(vec3d3))
-            vec3d3 = null;
-        if (!isVecInsideXZBounds(vec3d4))
-            vec3d4 = null;
-        if (!isVecInsideXZBounds(vec3d5))
-            vec3d5 = null;
-        if (!isVecInsideXYBounds(vec3d6))
-            vec3d6 = null;
-        if (!isVecInsideXYBounds(vec3d7))
-            vec3d7 = null;
-        Vec3 vec3d8 = null;
-        if (vec3d2 != null && (vec3d8 == null || vec3d.distanceTo(vec3d2) < vec3d.distanceTo(vec3d8)))
-            vec3d8 = vec3d2;
-        if (vec3d3 != null && (vec3d8 == null || vec3d.distanceTo(vec3d3) < vec3d.distanceTo(vec3d8)))
-            vec3d8 = vec3d3;
-        if (vec3d4 != null && (vec3d8 == null || vec3d.distanceTo(vec3d4) < vec3d.distanceTo(vec3d8)))
-            vec3d8 = vec3d4;
-        if (vec3d5 != null && (vec3d8 == null || vec3d.distanceTo(vec3d5) < vec3d.distanceTo(vec3d8)))
-            vec3d8 = vec3d5;
-        if (vec3d6 != null && (vec3d8 == null || vec3d.distanceTo(vec3d6) < vec3d.distanceTo(vec3d8)))
-            vec3d8 = vec3d6;
-        if (vec3d7 != null && (vec3d8 == null || vec3d.distanceTo(vec3d7) < vec3d.distanceTo(vec3d8)))
-            vec3d8 = vec3d7;
-        if (vec3d8 == null)
+    public static MovingObjectPosition collisionRayTrace(Vec3 start, Vec3 end, BlockPos pos) {
+        start = start.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
+        end = end.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
+        Vec3 minX = start.getIntermediateWithXValue(end, 0);
+        Vec3 maxX = start.getIntermediateWithXValue(end, 1);
+        Vec3 minY = start.getIntermediateWithYValue(end, 0);
+        Vec3 maxY = start.getIntermediateWithYValue(end, 1);
+        Vec3 minZ = start.getIntermediateWithZValue(end, 0);
+        Vec3 maxZ = start.getIntermediateWithZValue(end, 1);
+        if (!isVecInsideYZBounds(minX))
+            minX = null;
+        if (!isVecInsideYZBounds(maxX))
+            maxX = null;
+        if (!isVecInsideXZBounds(minY))
+            minY = null;
+        if (!isVecInsideXZBounds(maxY))
+            maxY = null;
+        if (!isVecInsideXYBounds(minZ))
+            minZ = null;
+        if (!isVecInsideXYBounds(maxZ))
+            maxZ = null;
+        Vec3 closest = null;
+        if (minX != null && (closest == null || start.distanceTo(minX) < start.distanceTo(closest)))
+            closest = minX;
+        if (maxX != null && (closest == null || start.distanceTo(maxX) < start.distanceTo(closest)))
+            closest = maxX;
+        if (minY != null && (closest == null || start.distanceTo(minY) < start.distanceTo(closest)))
+            closest = minY;
+        if (maxY != null && (closest == null || start.distanceTo(maxY) < start.distanceTo(closest)))
+            closest = maxY;
+        if (minZ != null && (closest == null || start.distanceTo(minZ) < start.distanceTo(closest)))
+            closest = minZ;
+        if (maxZ != null && (closest == null || start.distanceTo(maxZ) < start.distanceTo(closest)))
+            closest = maxZ;
+        if (closest == null)
             return null;
-        byte byte0 = -1;
-        if (vec3d8 == vec3d2)
-            byte0 = 4;
-        if (vec3d8 == vec3d3)
-            byte0 = 5;
-        if (vec3d8 == vec3d4)
-            byte0 = 0;
-        if (vec3d8 == vec3d5)
-            byte0 = 1;
-        if (vec3d8 == vec3d6)
-            byte0 = 2;
-        if (vec3d8 == vec3d7)
-            byte0 = 3;
-        return new MovingObjectPosition(i, j, k, byte0, vec3d8.addVector(i, j, k));
+        EnumFacing enumfacing = null;
+        if (closest == minX)
+            enumfacing = EnumFacing.WEST;
+        if (closest == maxX)
+            enumfacing = EnumFacing.EAST;
+        if (closest == minY)
+            enumfacing = EnumFacing.DOWN;
+        if (closest == maxY)
+            enumfacing = EnumFacing.UP;
+        if (closest == minZ)
+            enumfacing = EnumFacing.NORTH;
+        if (closest == maxZ)
+            enumfacing = EnumFacing.SOUTH;
+        return new MovingObjectPosition(closest.addVector(pos.getX(), pos.getY(), pos.getZ()), enumfacing, pos);
     }
 
     private static boolean isVecInsideYZBounds(Vec3 vec3d) {
@@ -223,7 +223,7 @@ public abstract class MiscTools {
     public static EnumFacing getCurrentMousedOverSide(EntityPlayer player) {
         MovingObjectPosition mouseOver = rayTracePlayerLook(player);
         if (mouseOver != null)
-            return EnumFacing.getOrientation(mouseOver.sideHit);
+            return mouseOver.sideHit;
         return null;
     }
 
@@ -240,7 +240,7 @@ public abstract class MiscTools {
      */
     public static EnumFacing getSideClosestToPlayer(World world, int i, int j, int k, EntityLivingBase entityplayer) {
         if (MathHelper.abs((float) entityplayer.posX - (float) i) < 2.0F && MathHelper.abs((float) entityplayer.posZ - (float) k) < 2.0F) {
-            double d = (entityplayer.posY + 1.82D) - (double) entityplayer.yOffset;
+            double d = (entityplayer.posY + 1.82D) - entityplayer.getYOffset();
             if (d - (double) j > 2D)
                 return EnumFacing.UP;
             if ((double) j - d > 0.0D)
@@ -303,19 +303,19 @@ public abstract class MiscTools {
     }
 
     public static int getXOnSide(int x, EnumFacing side) {
-        return x + side.offsetX;
+        return x + side.getFrontOffsetX();
     }
 
     public static int getYOnSide(int y, EnumFacing side) {
-        return y + side.offsetY;
+        return y + side.getFrontOffsetY();
     }
 
     public static int getZOnSide(int z, EnumFacing side) {
-        return z + side.offsetZ;
+        return z + side.getFrontOffsetZ();
     }
 
     public static boolean areCoordinatesOnSide(int x, int y, int z, EnumFacing side, int xCoord, int yCoord, int zCoord) {
-        return x + side.offsetX == xCoord && y + side.offsetY == yCoord && z + side.offsetZ == zCoord;
+        return x + side.getFrontOffsetX() == xCoord && y + side.getFrontOffsetY() == yCoord && z + side.getFrontOffsetZ() == zCoord;
     }
 
     public static boolean isKillabledEntity(Entity entity) {
