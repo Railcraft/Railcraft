@@ -608,6 +608,7 @@ public class RailcraftConfig {
         loadItemProperty("fluid.creosote.bucket");
 
         loadItemProperty("part.signal.lamp");
+        loadItemProperty("tool.signal.label");
 
         loadItemProperty("part.circuit");
 
