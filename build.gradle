@@ -76,6 +76,7 @@ configurations {
 }
 
 dependencies {
+	compile 'com.intellij:annotations:12.0'
 	api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
 	api name: "buildcraft", version: "7.1.13", classifier: "dev"
 }
