@@ -6,18 +6,24 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
+
 package mods.railcraft.client.render;
 
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.IControllerTile;
+import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.signals.ISignalBlockTile;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.EnumColor;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
@@ -26,25 +32,52 @@ import java.util.Arrays;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class RenderTESRSignals extends TileEntitySpecialRenderer {
+
     @Override
     public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f) {
         if (tile instanceof IControllerTile) {
-            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TUNING))
+            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TUNING)) {
                 renderPairs(tile, x, y, z, f, ((IControllerTile) tile).getController(), ColorProfile.RAINBOW);
-            else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING))
+            } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
                 renderPairs(tile, x, y, z, f, ((IControllerTile) tile).getController(), ColorProfile.ASPECT);
+            }
         }
         if (tile instanceof ISignalBlockTile) {
-            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING))
+            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING)) {
                 renderPairs(tile, x, y, z, f, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.RAINBOW);
-            else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING))
+            } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
                 renderPairs(tile, x, y, z, f, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.BLUE);
+            }
+        }
+        AbstractPair pair = null;
+        if (tile instanceof IReceiverTile) {
+            pair = ((IReceiverTile) tile).getReceiver();
+        } else if (tile instanceof IControllerTile) {
+            pair = ((IControllerTile) tile).getController();
+        }
+        if (pair != null) {
+            String name = pair.getName();
+            if (name != null) {
+                EntityLivingBase player = RenderManager.instance.livingPlayer;
+                if (player != null) {
+                    final float viewDist = 8f;
+                    double dist = player.getDistanceSq(tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5);
+
+                    if (dist <= (double) (viewDist * viewDist)) {
+                        MovingObjectPosition mop = player.rayTrace(8, f);
+                        if (mop.typeOfHit == MovingObjectType.BLOCK && player.worldObj.getTileEntity(mop.blockX, mop.blockY, mop.blockZ) == tile) {
+                            RenderTools.renderString(name, x + 0.5, y + 1.5, z + 0.5);
+                        }
+                    }
+                }
+            }
         }
     }
 
     private void renderPairs(TileEntity tile, double x, double y, double z, float f, AbstractPair pair, ColorProfile colorProfile) {
-        if (pair.getPairs().isEmpty())
+        if (pair.getPairs().isEmpty()) {
             return;
+        }
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -85,8 +118,9 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
             public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
                 coords[0] = source;
                 coords[1] = target;
-                if (apiUpdated)
+                if (apiUpdated) {
                     Arrays.sort(coords);
+                }
                 return Arrays.hashCode(coords);
             }
         },

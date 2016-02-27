@@ -10,7 +10,9 @@ package mods.railcraft.common.plugins.forge;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.S0BPacketAnimation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -98,6 +100,13 @@ public class PlayerPlugin {
 
     public static boolean isPlayerConnected(GameProfile player) {
         return FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(player.getName()) != null;
+    }
+
+    public static void swingItem(EntityPlayer player) {
+        player.swingItem();
+        if(player instanceof EntityPlayerMP && ((EntityPlayerMP) player).playerNetServerHandler != null) {
+            ((EntityPlayerMP) player).playerNetServerHandler.sendPacket(new S0BPacketAnimation(player, 0));
+        }
     }
 
 }

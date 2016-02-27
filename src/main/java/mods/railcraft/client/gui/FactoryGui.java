@@ -31,7 +31,6 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FactoryGui {
@@ -112,7 +111,7 @@ public class FactoryGui {
                 case TRACK_ROUTING:
                     return new GuiTrackRouting(inv, (TrackRouting) ((TileTrack) obj).getTrackInstance());
                 case SWITCH_MOTOR:
-                    return new GuiAspectAction(inv.player, (IAspectActionManager) obj, LocalizationPlugin.translate("railcraft.gui.switch.motor.action"));
+                    return new GuiSwitchMotor(inv.player, (TileSwitchMotor) obj, LocalizationPlugin.translate("railcraft.gui.switch.motor.action"));
                 case BOX_RECEIVER:
                     return new GuiAspectAction(inv.player, (IAspectActionManager) obj, LocalizationPlugin.translate("railcraft.gui.box.aspect.action"));
                 case BOX_RELAY:
@@ -120,7 +119,7 @@ public class FactoryGui {
                 case BOX_CONTROLLER:
                     return new GuiBoxController((TileBoxController) obj);
                 case BOX_ANALOG_CONTROLLER:
-                	return new GuiBoxAnalogController((TileBoxAnalogController) obj);
+                    return new GuiBoxAnalogController((TileBoxAnalogController) obj);
                 case BOX_CAPACITOR:
                     return new GuiBoxCapacitor((TileBoxCapacitor) obj);
                 case TRACK_LAUNCHER:

@@ -32,6 +32,7 @@ public class ModuleSignals extends RailcraftModule {
 
             ItemSignalBlockSurveyor.registerItem();
             ItemSignalTuner.registerItem();
+            RailcraftItem.signalLabel.registerItem();
 
             // Define Block Signal
             EnumSignal structure = EnumSignal.BLOCK_SIGNAL;

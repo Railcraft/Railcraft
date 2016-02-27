@@ -85,12 +85,14 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         controller.writePacketData(data);
+        signalBlock.writePacketData(data);
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         controller.readPacketData(data);
+        signalBlock.readPacketData(data);
     }
 
     @Override

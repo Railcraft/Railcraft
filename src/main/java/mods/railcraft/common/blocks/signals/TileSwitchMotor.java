@@ -31,6 +31,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
     private boolean[] switchOnAspects = new boolean[SignalAspect.values().length];
     private boolean switchAspect;
+    private boolean switchOnRedstone = true;
 
     public TileSwitchMotor() {
         switchOnAspects[SignalAspect.RED.ordinal()] = true;
@@ -96,6 +97,8 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
 
         data.setBoolean("switchAspect", switchAspect);
 
+        data.setBoolean("switchOnRedstone", switchOnRedstone);
+
         receiver.writeToNBT(data);
     }
 
@@ -111,6 +114,9 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
         }
 
         switchAspect = data.getBoolean("switchAspect");
+
+        if (data.hasKey("switchOnRedstone"))
+            switchOnRedstone = data.getBoolean("switchOnRedstone");
 
         receiver.readFromNBT(data);
     }
@@ -141,6 +147,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
             bits |= (switchOnAspects[i] ? 1 : 0) << i;
         }
         data.writeByte(bits);
+        data.writeBoolean(switchOnRedstone);
     }
 
     @Override
@@ -150,6 +157,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
         for (int bit = 0; bit < switchOnAspects.length; bit++) {
             switchOnAspects[bit] = ((bits >> bit) & 1) == 1;
         }
+        switchOnRedstone = data.readBoolean();
     }
 
     @Override
@@ -169,6 +177,14 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
 
     @Override
     public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
-        return switchAspect || isPowered();
+        return switchAspect || (shouldSwitchOnRedstone() && isPowered());
+    }
+
+    public boolean shouldSwitchOnRedstone() {
+        return switchOnRedstone;
+    }
+
+    public void setSwitchOnRedstone(boolean switchOnRedstone) {
+        this.switchOnRedstone = switchOnRedstone;
     }
 }
