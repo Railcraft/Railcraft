@@ -64,7 +64,7 @@ public enum EnumTrack {
     REINFORCED_JUNCTION(Module.TRACKS_REINFORCED, 1, 0, "reinforced.junction", 8, TrackReinforcedJunction.class),
     REINFORCED_SWITCH(Module.TRACKS_REINFORCED, 4, 0, "reinforced.switch", 8, TrackReinforcedSwitch.class),
     BUFFER_STOP(Module.TRACKS, 2, 0, "buffer.stop", 8, TrackBufferStop.class),
-    DISPOSAL(Module.TRACKS, 1, 0, "disposal", 8, TrackDisposal.class),
+    DISPOSAL(Module.TRACKS, 2, 0, "disposal", 8, TrackDisposal.class),
     DETECTOR_DIRECTION(Module.TRACKS, 4, 0, "detector.direction", 8, TrackDetectorDirection.class),
     EMBARKING(Module.TRACKS, 2, 1, "embarking", 8, TrackEmbarking.class),
     WYE(Module.TRACKS, 2, 0, "wye", 8, TrackWye.class),
