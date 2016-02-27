@@ -1,3 +1,7 @@
+9.8.0.3:
+	FIX: Some API stuff for Vexatos.
+	API: Might possible break anyone using depreciated functions of the Signal API.
+
 9.8.0.2:
 	NEW: Signal devices can now be named using the Signal Label item and Anvil. (contribution by Vexatos)
 	NEW: Disposal Track can be disabled with a Redstone Signal. (contribution by wshadow)
