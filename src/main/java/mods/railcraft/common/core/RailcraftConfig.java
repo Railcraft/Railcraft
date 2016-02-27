@@ -258,7 +258,6 @@ public class RailcraftConfig {
         Collections.addAll(entitiesExcludedFromHighSpeedExplosions, strings);
     }
 
-
     private static void loadRoutingTweaks() {
         routingOpsOnly = get(CAT_TWEAKS_ROUTING, "ops.only", false, "change to '{t}=true' to limit the editing of Golden Tickets to server admins only");
     }
@@ -586,6 +585,8 @@ public class RailcraftConfig {
 
         loadItemProperty("tool.surveyor");
 
+        loadItemProperty("tool.signal.label");
+
         loadItemProperty("tool.signal.tuner");
 
         loadItemProperty("tool.electric.meter");
@@ -608,7 +609,6 @@ public class RailcraftConfig {
         loadItemProperty("fluid.creosote.bucket");
 
         loadItemProperty("part.signal.lamp");
-        loadItemProperty("tool.signal.label");
 
         loadItemProperty("part.circuit");
 
@@ -734,9 +734,13 @@ public class RailcraftConfig {
         return getRecipeConfig("minecraft.furnace.creosote");
     }
 
-    public static int creosoteTorchOutput() { return creosoteTorchOutput; }
+    public static int creosoteTorchOutput() {
+        return creosoteTorchOutput;
+    }
 
-    public static int coalcokeTorchOutput() { return coalcokeTorchOutput; }
+    public static int coalcokeTorchOutput() {
+        return coalcokeTorchOutput;
+    }
 
     public static boolean doUpdateCheck() {
         return doUpdateCheck;

@@ -14,7 +14,6 @@ import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.client.util.RenderUtil;
 import mods.railcraft.common.blocks.signals.ISignalBlockTile;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -34,122 +33,122 @@ import java.util.Arrays;
  */
 public class RenderTESRSignals extends TileEntitySpecialRenderer {
 
-	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f) {
-		if(tile instanceof IControllerTile) {
-			if(EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TUNING)) {
-				renderPairs(tile, x, y, z, f, ((IControllerTile) tile).getController(), ColorProfile.RAINBOW);
-			} else if(EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
-				renderPairs(tile, x, y, z, f, ((IControllerTile) tile).getController(), ColorProfile.ASPECT);
-			}
-		}
-		if(tile instanceof ISignalBlockTile) {
-			if(EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING)) {
-				renderPairs(tile, x, y, z, f, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.RAINBOW);
-			} else if(EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
-				renderPairs(tile, x, y, z, f, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.BLUE);
-			}
-		}
-		AbstractPair pair = null;
-		if(tile instanceof IReceiverTile) {
-			pair = ((IReceiverTile) tile).getReceiver();
-		} else if(tile instanceof IControllerTile) {
-			pair = ((IControllerTile) tile).getController();
-		}
-		if(pair != null) {
-			String name = pair.getName();
-			if(name != null) {
-				EntityLivingBase player = RenderManager.instance.livingPlayer;
-				if(player != null) {
-					final float viewDist = 8f;
-					double dist = player.getDistanceSq(tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5);
+    @Override
+    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f) {
+        if (tile instanceof IControllerTile) {
+            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TUNING)) {
+                renderPairs(tile, x, y, z, f, ((IControllerTile) tile).getController(), ColorProfile.RAINBOW);
+            } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
+                renderPairs(tile, x, y, z, f, ((IControllerTile) tile).getController(), ColorProfile.ASPECT);
+            }
+        }
+        if (tile instanceof ISignalBlockTile) {
+            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING)) {
+                renderPairs(tile, x, y, z, f, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.RAINBOW);
+            } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
+                renderPairs(tile, x, y, z, f, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.BLUE);
+            }
+        }
+        AbstractPair pair = null;
+        if (tile instanceof IReceiverTile) {
+            pair = ((IReceiverTile) tile).getReceiver();
+        } else if (tile instanceof IControllerTile) {
+            pair = ((IControllerTile) tile).getController();
+        }
+        if (pair != null) {
+            String name = pair.getName();
+            if (name != null) {
+                EntityLivingBase player = RenderManager.instance.livingPlayer;
+                if (player != null) {
+                    final float viewDist = 8f;
+                    double dist = player.getDistanceSq(tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5);
 
-					if(dist <= (double) (viewDist * viewDist)) {
-						MovingObjectPosition mop = player.rayTrace(8, f);
-						if(mop.typeOfHit == MovingObjectType.BLOCK && player.worldObj.getTileEntity(mop.blockX, mop.blockY, mop.blockZ) == tile) {
-							RenderUtil.renderString(name, x + 0.5, y + 1.5, z + 0.5);
-						}
-					}
-				}
-			}
-		}
-	}
+                    if (dist <= (double) (viewDist * viewDist)) {
+                        MovingObjectPosition mop = player.rayTrace(8, f);
+                        if (mop.typeOfHit == MovingObjectType.BLOCK && player.worldObj.getTileEntity(mop.blockX, mop.blockY, mop.blockZ) == tile) {
+                            RenderTools.renderString(name, x + 0.5, y + 1.5, z + 0.5);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	private void renderPairs(TileEntity tile, double x, double y, double z, float f, AbstractPair pair, ColorProfile colorProfile) {
-		if(pair.getPairs().isEmpty()) {
-			return;
-		}
-		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+    private void renderPairs(TileEntity tile, double x, double y, double z, float f, AbstractPair pair, ColorProfile colorProfile) {
+        if (pair.getPairs().isEmpty()) {
+            return;
+        }
+        GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
-		GL11.glLineWidth(5F);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+        GL11.glLineWidth(5F);
 
-		GL11.glBegin(GL11.GL_LINES);
-		for(WorldCoordinate target : pair.getPairs()) {
-			int color = colorProfile.getColor(tile, pair.getCoords(), target);
-			float c1 = (float) (color >> 16 & 255) / 255.0F;
-			float c2 = (float) (color >> 8 & 255) / 255.0F;
-			float c3 = (float) (color & 255) / 255.0F;
-			GL11.glColor3f(c1, c2, c3);
+        GL11.glBegin(GL11.GL_LINES);
+        for (WorldCoordinate target : pair.getPairs()) {
+            int color = colorProfile.getColor(tile, pair.getCoords(), target);
+            float c1 = (float) (color >> 16 & 255) / 255.0F;
+            float c2 = (float) (color >> 8 & 255) / 255.0F;
+            float c3 = (float) (color & 255) / 255.0F;
+            GL11.glColor3f(c1, c2, c3);
 
-			GL11.glVertex3f((float) x + 0.5f, (float) y + 0.5f, (float) z + 0.5f);
-			float tx = (float) x + target.x - tile.xCoord;
-			float ty = (float) y + target.y - tile.yCoord;
-			float tz = (float) z + target.z - tile.zCoord;
-			GL11.glVertex3f(tx + 0.5f, ty + 0.5f, tz + 0.5f);
-		}
-		GL11.glEnd();
+            GL11.glVertex3f((float) x + 0.5f, (float) y + 0.5f, (float) z + 0.5f);
+            float tx = (float) x + target.x - tile.xCoord;
+            float ty = (float) y + target.y - tile.yCoord;
+            float tz = (float) z + target.z - tile.zCoord;
+            GL11.glVertex3f(tx + 0.5f, ty + 0.5f, tz + 0.5f);
+        }
+        GL11.glEnd();
 
-		GL11.glPopAttrib();
-		GL11.glPopMatrix();
-	}
+        GL11.glPopAttrib();
+        GL11.glPopMatrix();
+    }
 
-	public static enum ColorProfile {
-		RAINBOW {
-			private final WorldCoordinate[] coords = new WorldCoordinate[2];
-			private final boolean apiUpdated = Comparable.class.isAssignableFrom(WorldCoordinate.class);
+    public enum ColorProfile {
+        RAINBOW {
+            private final WorldCoordinate[] coords = new WorldCoordinate[2];
+            private final boolean apiUpdated = Comparable.class.isAssignableFrom(WorldCoordinate.class);
 
-			@Override
-			public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
-				coords[0] = source;
-				coords[1] = target;
-				if(apiUpdated) {
-					Arrays.sort(coords);
-				}
-				return Arrays.hashCode(coords);
-			}
-		},
-		BLUE {
-			@Override
-			public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
-				return EnumColor.BLUE.getHexColor();
-			}
-		},
-		ASPECT {
-			@Override
-			public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
-				if(tile instanceof IControllerTile) {
-					SignalAspect aspect = ((IControllerTile) tile).getController().getAspectFor(target);
-					switch(aspect) {
-						case GREEN:
-							return EnumColor.LIME.getHexColor();
-						case YELLOW:
-						case BLINK_YELLOW:
-							return EnumColor.YELLOW.getHexColor();
-						default:
-							return EnumColor.RED.getHexColor();
-					}
-				}
-				return BLUE.getColor(tile, source, target);
-			}
-		};
+            @Override
+            public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
+                coords[0] = source;
+                coords[1] = target;
+                if (apiUpdated) {
+                    Arrays.sort(coords);
+                }
+                return Arrays.hashCode(coords);
+            }
+        },
+        BLUE {
+            @Override
+            public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
+                return EnumColor.BLUE.getHexColor();
+            }
+        },
+        ASPECT {
+            @Override
+            public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
+                if (tile instanceof IControllerTile) {
+                    SignalAspect aspect = ((IControllerTile) tile).getController().getAspectFor(target);
+                    switch (aspect) {
+                        case GREEN:
+                            return EnumColor.LIME.getHexColor();
+                        case YELLOW:
+                        case BLINK_YELLOW:
+                            return EnumColor.YELLOW.getHexColor();
+                        default:
+                            return EnumColor.RED.getHexColor();
+                    }
+                }
+                return BLUE.getColor(tile, source, target);
+            }
+        };
 
-		public abstract int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target);
-	}
+        public abstract int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target);
+    }
 }

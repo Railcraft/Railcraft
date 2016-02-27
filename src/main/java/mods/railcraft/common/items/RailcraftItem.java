@@ -29,9 +29,9 @@ public enum RailcraftItem {
     rail(ItemRail.class, "part.rail"),
     railbed(ItemRailbed.class, "part.railbed"),
     rebar(ItemRebar.class, "part.rebar", "ingotIron"),
+    signalLabel(ItemSignalLabel.class, "tool.signal.label"),
     signalLamp(ItemSignalLamp.class, "part.signal.lamp", Blocks.redstone_lamp),
-    tie(ItemTie.class, "part.tie"),
-    signalLabel(ItemSignalLabel.class, "tool.signal.label");
+    tie(ItemTie.class, "part.tie");
     public static final RailcraftItem[] VALUES = values();
     private final Class<? extends ItemRailcraft> itemClass;
     private final String tag;
