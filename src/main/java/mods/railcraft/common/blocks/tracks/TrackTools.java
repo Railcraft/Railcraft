@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -31,14 +32,14 @@ import net.minecraft.world.World;
 public class TrackTools {
     public static final int TRAIN_LOCKDOWN_DELAY = 200;
 
-    public static boolean isRailBlockAt(IBlockAccess world, int x, int y, int z) {
-        return isRailBlock(WorldPlugin.getBlock(world, x, y, z));
+    public static boolean isRailBlockAt(IBlockAccess world, BlockPos pos) {
+        return isRailBlock(WorldPlugin.getBlock(world, pos));
     }
 
-    public static boolean isStraightTrackAt(IBlockAccess world, int x, int y, int z) {
-        Block block = WorldPlugin.getBlock(world, x, y, z);
+    public static boolean isStraightTrackAt(IBlockAccess world, BlockPos pos) {
+        Block block = WorldPlugin.getBlock(world, pos);
         if (isRailBlock(block))
-            return getTrackMetaEnum(world, block, null, x, y, z).isStraightTrack();
+            return getTrackMetaEnum(world, block, null, pos).isStraightTrack();
         return false;
     }
 
@@ -61,65 +62,65 @@ public class TrackTools {
         return false;
     }
 
-    public static int getTrackMeta(IBlockAccess world, EntityMinecart cart, int x, int y, int z) {
-        return getTrackMeta(world, world.getBlock(x, y, z), cart, x, y, z);
+    public static int getTrackMeta(IBlockAccess world, EntityMinecart cart, BlockPos pos) {
+        return getTrackMeta(world, world.getBlock(pos), cart, pos);
     }
 
-    public static int getTrackMeta(IBlockAccess world, Block block, EntityMinecart cart, int x, int y, int z) {
-        return ((BlockRailBase) block).getBasicRailMetadata(world, cart, x, y, z);
+    public static int getTrackMeta(IBlockAccess world, Block block, EntityMinecart cart, BlockPos pos) {
+        return ((BlockRailBase) block).getBasicRailMetadata(world, cart, pos);
     }
 
-    public static EnumTrackMeta getTrackMetaEnum(IBlockAccess world, EntityMinecart cart, int x, int y, int z) {
-        return EnumTrackMeta.fromMeta(getTrackMeta(world, cart, x, y, z));
+    public static EnumTrackMeta getTrackMetaEnum(IBlockAccess world, EntityMinecart cart, BlockPos pos) {
+        return EnumTrackMeta.fromMeta(getTrackMeta(world, cart, pos));
     }
 
-    public static EnumTrackMeta getTrackMetaEnum(IBlockAccess world, Block block, EntityMinecart cart, int x, int y, int z) {
-        return EnumTrackMeta.fromMeta(getTrackMeta(world, block, cart, x, y, z));
+    public static EnumTrackMeta getTrackMetaEnum(IBlockAccess world, Block block, EntityMinecart cart, BlockPos pos) {
+        return EnumTrackMeta.fromMeta(getTrackMeta(world, block, cart, pos));
     }
 
-    public static ITrackInstance getTrackInstanceAt(IBlockAccess world, int x, int y, int z) {
-        if (WorldPlugin.getBlock(world, x, y, z) != RailcraftBlocks.getBlockTrack())
+    public static ITrackInstance getTrackInstanceAt(IBlockAccess world, BlockPos pos) {
+        if (WorldPlugin.getBlock(world, pos) != RailcraftBlocks.getBlockTrack())
             return null;
-        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrack)
             return ((TileTrack) tile).getTrackInstance();
         return null;
     }
 
-    public static boolean isTrackAt(IBlockAccess world, int x, int y, int z, EnumTrack track, Block block) {
-        return isTrackSpecAt(world, x, y, z, track.getTrackSpec(), block);
+    public static boolean isTrackAt(IBlockAccess world, BlockPos pos, EnumTrack track, Block block) {
+        return isTrackSpecAt(world, pos, track.getTrackSpec(), block);
     }
 
-    public static boolean isTrackAt(IBlockAccess world, int x, int y, int z, EnumTrack track) {
-        return isTrackSpecAt(world, x, y, z, track.getTrackSpec());
+    public static boolean isTrackAt(IBlockAccess world, BlockPos pos, EnumTrack track) {
+        return isTrackSpecAt(world, pos, track.getTrackSpec());
     }
 
-    public static boolean isTrackSpecAt(IBlockAccess world, int x, int y, int z, TrackSpec trackSpec, Block block) {
+    public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, TrackSpec trackSpec, Block block) {
         if (block != RailcraftBlocks.getBlockTrack())
             return false;
-        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         return isTrackSpec(tile, trackSpec);
     }
 
-    public static boolean isTrackSpecAt(IBlockAccess world, int x, int y, int z, TrackSpec trackSpec) {
-        return isTrackSpecAt(world, x, y, z, trackSpec, WorldPlugin.getBlock(world, x, y, z));
+    public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, TrackSpec trackSpec) {
+        return isTrackSpecAt(world, pos, trackSpec, WorldPlugin.getBlock(world, pos));
     }
 
     public static boolean isTrackSpec(TileEntity tile, TrackSpec trackSpec) {
         return (tile instanceof TileTrack) && ((TileTrack) tile).getTrackInstance().getTrackSpec() == trackSpec;
     }
 
-    public static boolean isHighSpeedTrackAt(IBlockAccess world, int x, int y, int z) {
-        ITrackInstance track = getTrackInstanceAt(world, x, y, z);
+    public static boolean isHighSpeedTrackAt(IBlockAccess world, BlockPos pos) {
+        ITrackInstance track = getTrackInstanceAt(world, pos);
         if (track instanceof TrackBaseRailcraft)
             return ((TrackBaseRailcraft) track).speedController instanceof SpeedControllerHighSpeed;
         return false;
     }
 
-    public static TileTrack placeTrack(TrackSpec track, World world, int x, int y, int z, int meta) {
-        WorldPlugin.setBlock(world, x, y, z, RailcraftBlocks.getBlockTrack(), meta);
+    public static TileTrack placeTrack(TrackSpec track, World world, BlockPos pos, int meta) {
+        WorldPlugin.setBlock(world, pos, RailcraftBlocks.getBlockTrack(), meta);
         TileTrack tile = TrackFactory.makeTrackTile(track.createInstanceFromSpec());
-        world.setTileEntity(x, y, z, tile);
+        world.setTileEntity(pos, tile);
         return tile;
     }
 
@@ -174,7 +175,7 @@ public class TrackTools {
                 yy = y2;
             }
             for (int xx = min; xx <= max; xx++) {
-//                if (world.blockExists(xx, yy, z1))
+//                if (world.isBlockLoaded(xx, yy, z1))
                 if (isRailBlockAt(world, xx, yy, z1)) {
                 } else if (isRailBlockAt(world, xx, yy - 1, z1)) {
                     yy--;
@@ -184,7 +185,7 @@ public class TrackTools {
                     yy++;
                     if (yy > maxY)
                         maxY = yy;
-                } else if (!WorldPlugin.blockExists(world, xx, yy, z1)) {
+                } else if (!WorldPlugin.isBlockLoaded(world, xx, yy, z1)) {
                     return new TrackScan(TrackScan.Result.UNKNOWN, minY, maxY);
                 } else
                     return new TrackScan(TrackScan.Result.PATH_NOT_FOUND, minY, maxY);
@@ -203,7 +204,7 @@ public class TrackTools {
                 yy = y2;
             }
             for (int zz = min; zz <= max; zz++) {
-//                if (world.blockExists(x1, yy, zz))
+//                if (world.isBlockLoaded(x1, yy, zz))
                 if (isRailBlockAt(world, x1, yy, zz)) {
                 } else if (isRailBlockAt(world, x1, yy - 1, zz)) {
                     yy--;
@@ -213,7 +214,7 @@ public class TrackTools {
                     yy++;
                     if (yy > maxY)
                         maxY = yy;
-                } else if (!WorldPlugin.blockExists(world, x1, yy, zz)) {
+                } else if (!WorldPlugin.isBlockLoaded(world, x1, yy, zz)) {
                     return new TrackScan(TrackScan.Result.UNKNOWN, minY, maxY);
                 } else
                     return new TrackScan(TrackScan.Result.PATH_NOT_FOUND, minY, maxY);

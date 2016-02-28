@@ -12,6 +12,7 @@ import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -19,118 +20,105 @@ import net.minecraft.world.World;
 import static mods.railcraft.common.util.misc.MiscTools.*;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class WorldPlugin {
 
-    public static Block getBlock(IBlockAccess world, int x, int y, int z) {
-        return world.getBlock(x, y, z);
+    @Deprecated
+    public static Block getBlock(IBlockAccess world, BlockPos pos) {
+        return world.getBlock(pos);
     }
 
+    @Deprecated
     public static Block getBlock(IBlockAccess world, WorldCoordinate pos) {
         return world.getBlock(pos.x, pos.y, pos.z);
     }
 
-    public static TileEntity getBlockTile(IBlockAccess world, int x, int y, int z) {
-        return world.getTileEntity(x, y, z);
+    public static TileEntity getBlockTile(IBlockAccess world, BlockPos pos) {
+        return world.getTileEntity(pos);
     }
 
-    public static Block getBlockOnSide(IBlockAccess world, int x, int y, int z, EnumFacing side) {
+    @Deprecated
+    public static Block getBlockOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
         return world.getBlock(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side));
     }
 
-    public static boolean isBlockAt(World world, int x, int y, int z, Block block, int meta) {
-        if (getBlock(world, x, y, z) != block)
+    public static boolean isBlockAt(World world, BlockPos pos, Block block, int meta) {
+        if (getBlock(world, pos) != block)
             return false;
-        return meta == -1 || getBlockMetadata(world, x, y, z) == meta;
+        return meta == -1 || getBlockMetadata(world, pos) == meta;
     }
 
-    public static boolean blockExists(World world, int x, int y, int z) {
-        return world.blockExists(x, y, z);
+    public static boolean isBlockLoaded(World world, BlockPos pos) {
+        return world.isBlockLoaded(pos);
     }
 
-    public static boolean blockIsAir(World world, int x, int y, int z, Block block) {
-        return block.isAir(world, x, y, z);
+    public static boolean isBlockAir(World world, BlockPos pos, Block block) {
+        return block.isAir(world, pos);
     }
 
-    public static boolean blockIsAir(World world, int x, int y, int z) {
-        return world.isAirBlock(x, y, z);
+    public static boolean isBlockAir(World world, BlockPos pos) {
+        return world.isAirBlock(pos);
     }
 
-    public static boolean blockExistsOnSide(World world, int x, int y, int z, EnumFacing side) {
+    public static boolean blockExistsOnSide(World world, BlockPos pos, EnumFacing side) {
         return world.blockExists(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side));
     }
 
-    public static int getBlockMetadata(IBlockAccess world, int x, int y, int z) {
-        return world.getBlockMetadata(x, y, z);
+    @Deprecated
+    public static int getBlockMetadata(IBlockAccess world, BlockPos pos) {
+        return world.getBlockMetadata(pos);
     }
 
+    @Deprecated
     public static int getBlockMetadataOnSide(IBlockAccess world, int i, int j, int k, EnumFacing side) {
         return world.getBlockMetadata(getXOnSide(i, side), getYOnSide(j, side), getZOnSide(k, side));
     }
 
-    public static TileEntity getTileEntityOnSide(World world, int x, int y, int z, EnumFacing side) {
-        int sx = getXOnSide(x, side);
-        int sy = getYOnSide(y, side);
-        int sz = getZOnSide(z, side);
-        if (blockExists(world, sx, sy, sz) && getBlock(world, sx, sy, sz) != Blocks.air)
-            return getBlockTile(world, sx, sy, sz);
+    public static TileEntity getTileEntityOnSide(World world, BlockPos pos, EnumFacing side) {
+        pos = pos.offset(side);
+        if (isBlockLoaded(world, pos) && getBlock(world, pos) != Blocks.air)
+            return getBlockTile(world, pos);
         return null;
     }
 
-    public static TileEntity getTileEntityOnSide(IBlockAccess world, int x, int y, int z, EnumFacing side) {
-        int sx = getXOnSide(x, side);
-        int sy = getYOnSide(y, side);
-        int sz = getZOnSide(z, side);
-        return world.getTileEntity(sx, sy, sz);
+    public static TileEntity getTileEntityOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        pos = pos.offset(side);
+        return world.getTileEntity(pos);
     }
 
-    public static boolean setBlock(World world, int x, int y, int z, Block block) {
-        return world.setBlock(x, y, z, block);
+    public static boolean setBlock(World world, BlockPos pos, Block block) {
+        return world.setBlock(pos, block);
     }
 
-    public static boolean setBlock(World world, int x, int y, int z, Block block, int meta) {
-        return world.setBlock(x, y, z, block, meta, 3);
+    public static boolean setBlock(World world, BlockPos pos, Block block, int meta) {
+        return world.setBlock(pos, block, meta, 3);
     }
 
-    public static boolean setBlock(World world, int x, int y, int z, Block block, int meta, int update) {
-        return world.setBlock(x, y, z, block, meta, update);
+    public static boolean setBlock(World world, BlockPos pos, Block block, int meta, int update) {
+        return world.setBlock(pos, block, meta, update);
     }
 
-    public static boolean setBlockToAir(World world, int x, int y, int z) {
-        return world.setBlockToAir(x, y, z);
+    public static boolean setBlockToAir(World world, BlockPos pos) {
+        return world.setBlockToAir(pos);
     }
 
-    public static void notifyBlocksOfNeighborChange(World world, int x, int y, int z, Block block) {
+    public static void notifyBlocksOfNeighborChange(World world, BlockPos pos, Block block) {
         if (world != null && block != null)
-            world.notifyBlocksOfNeighborChange(x, y, z, block);
+            world.notifyNeighborsOfStateChange(pos, block);
     }
 
-    public static void notifyBlocksOfNeighborChangeOnSide(World world, int x, int y, int z, Block block, EnumFacing side) {
-        world.notifyBlocksOfNeighborChange(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side), block);
+    public static void notifyBlocksOfNeighborChangeOnSide(World world, BlockPos pos, Block block, EnumFacing side) {
+        pos = pos.offset(side);
+        world.notifyNeighborsOfStateChange(pos, block);
     }
 
-    public static void addBlockEvent(World world, int x, int y, int z, Block block, int key, int value) {
+    public static void addBlockEvent(World world, BlockPos pos, Block block, int key, int value) {
         if (world != null && block != null)
-            world.addBlockEvent(x, y, z, block, key, value);
+            world.addBlockEvent(pos, block, key, value);
     }
 
-    public static double getDistanceSq(WorldCoordinate a, WorldCoordinate b) {
-        double distX = a.x - b.x;
-        double distY = a.y - b.y;
-        double distZ = a.z - b.z;
-        return distX * distX + distY * distY + distZ * distZ;
-    }
-
-    public static double getDistanceSq(WorldCoordinate a, double x, double y, double z) {
-        double distX = a.x - x;
-        double distY = a.y - y;
-        double distZ = a.z - z;
-        return distX * distX + distY * distY + distZ * distZ;
-    }
-
-    public static WorldCoordinate findBlock(World world, int x, int y, int z, int distance, Block block, int meta) {
+    public static WorldCoordinate findBlock(World world, BlockPos pos, int distance, Block block, int meta) {
         for (int yy = y - distance; yy < y + distance; yy++) {
             for (int xx = x - distance; xx < x + distance; xx++) {
                 for (int zz = z - distance; zz < z + distance; zz++) {

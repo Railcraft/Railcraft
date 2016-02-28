@@ -75,7 +75,7 @@ public class WorldGenGeode extends WorldGenerator {
     }
 
     private void placeAir(World world, Random rand, int x, int y, int z) {
-//        if (!world.blockExists(x, y, z)) {
+//        if (!world.isBlockLoaded(x, y, z)) {
 //            return;
 //        }
         if (isReplaceable(world, x, y, z))
@@ -83,7 +83,7 @@ public class WorldGenGeode extends WorldGenerator {
     }
 
     private void placeStone(World world, Random rand, int x, int y, int z) {
-//        if (!world.blockExists(x, y, z)) {
+//        if (!world.isBlockLoaded(x, y, z)) {
 //            return;
 //        }
         if (isReplaceable(world, x, y, z))
@@ -91,7 +91,7 @@ public class WorldGenGeode extends WorldGenerator {
     }
 
     private void placeOre(World world, Random rand, int x, int y, int z) {
-//        if (!world.blockExists(x, y, z)) {
+//        if (!world.isBlockLoaded(x, y, z)) {
 //            return;
 //        }
         if (WorldPlugin.getBlock(world, x, y, z) == blockStone) {

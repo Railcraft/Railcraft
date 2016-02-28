@@ -152,7 +152,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
             int x = getX() + (numTracks + 1) * facing.getFrontOffsetX();
             int y = getY() + 1;
             int z = getZ() + (numTracks + 1) * facing.getFrontOffsetZ();
-            if (WorldPlugin.blockExists(worldObj, x, y, z)) {
+            if (WorldPlugin.isBlockLoaded(worldObj, x, y, z)) {
                 Block block = WorldPlugin.getBlock(worldObj, x, y, z);
                 EnumTrackMeta meta;
                 if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH)
@@ -219,7 +219,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     private void removeTrack(int x, int y, int z) {
-        if (WorldPlugin.blockExists(worldObj, x, y, z) && TrackTools.isTrackAt(worldObj, x, y, z, EnumTrack.FORCE)) {
+        if (WorldPlugin.isBlockLoaded(worldObj, x, y, z) && TrackTools.isTrackAt(worldObj, x, y, z, EnumTrack.FORCE)) {
             spawnParticles(x, y, z);
             WorldPlugin.setBlockToAir(worldObj, x, y, z);
         }

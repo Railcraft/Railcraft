@@ -100,7 +100,7 @@ public class WorldGenQuarry extends WorldGenerator {
     }
 
     private boolean placeAir(World world, Random rand, int x, int y, int z) {
-//        if (!world.blockExists(x, y, z)) {
+//        if (!world.isBlockLoaded(x, y, z)) {
 //            return false;
 //        }
         if (WorldPlugin.getBlock(world, x, y + 1, z) != Blocks.air)
@@ -122,7 +122,7 @@ public class WorldGenQuarry extends WorldGenerator {
     }
 
     private void placeStone(World world, Random rand, int x, int y, int z) {
-//        if (!world.blockExists(x, y, z)) {
+//        if (!world.isBlockLoaded(x, y, z)) {
 //            return;
 //        }
         //Removes tallgrass

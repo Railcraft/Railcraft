@@ -146,7 +146,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     public static TileEntity getTargetAt(EntityPlayer player, RailcraftTileEntity searcher, WorldCoordinate coord) {
-        if (!WorldPlugin.blockExists(searcher.getWorld(), coord.x, coord.y, coord.z)) {
+        if (!WorldPlugin.isBlockLoaded(searcher.getWorld(), coord.x, coord.y, coord.z)) {
             ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.unloaded", searcher.getLocalizationTag());
             return null;
         }

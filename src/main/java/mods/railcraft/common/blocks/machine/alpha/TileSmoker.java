@@ -50,7 +50,7 @@ public class TileSmoker extends TileMachineBase {
                         WorldPlugin.setBlockToAir(worldObj, getPos().up());
                 }
             } else {
-                if (!WorldPlugin.blockIsAir(worldObj, getPos().up())) return;
+                if (!WorldPlugin.isBlockAir(worldObj, getPos().up())) return;
                 double px = getX() + rand.nextFloat();
                 double py = getY() + rand.nextFloat() * 0.5F + 1;
                 double pz = getZ() + rand.nextFloat();
