@@ -266,7 +266,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
 
                     if (burnTime <= FUEL_PER_TICK * 2) {
                         ItemStack fuel = getStackInSlot(SLOT_FUEL);
-                        if (FUEL_FILTER.matches(fuel)) {
+                        if (FUEL_FILTER.apply(fuel)) {
                             int itemBurnTime = FuelPlugin.getBurnTime(fuel);
                             if (itemBurnTime > 0) {
                                 currentItemBurnTime = itemBurnTime + burnTime;

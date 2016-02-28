@@ -112,15 +112,12 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
     public enum ColorProfile {
         RAINBOW {
             private final WorldCoordinate[] coords = new WorldCoordinate[2];
-            private final boolean apiUpdated = Comparable.class.isAssignableFrom(WorldCoordinate.class);
 
             @Override
             public int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target) {
                 coords[0] = source;
                 coords[1] = target;
-                if (apiUpdated) {
-                    Arrays.sort(coords);
-                }
+                Arrays.sort(coords);
                 return Arrays.hashCode(coords);
             }
         },
