@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.slots;
 
-import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -35,6 +35,6 @@ public class SlotFeed extends Slot
 
     public static boolean canPlaceItem(ItemStack stack)
     {
-        return  StackFilter.FEED.matches(stack);
+        return  StandardStackFilters.FEED.matches(stack);
     }
 }

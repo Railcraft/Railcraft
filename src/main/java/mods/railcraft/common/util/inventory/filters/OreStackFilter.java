@@ -8,15 +8,17 @@
  */
 package mods.railcraft.common.util.inventory.filters;
 
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class OreStackFilter implements IStackFilter {
+public class OreStackFilter extends StackFilter {
 
     private final String oreTag;
 
@@ -25,7 +27,7 @@ public class OreStackFilter implements IStackFilter {
     }
 
     @Override
-    public boolean matches(ItemStack stack) {
+    public boolean apply(final ItemStack stack) {
         return OreDictPlugin.isOreType(oreTag, stack);
     }
 

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.slots;
 
-import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -26,6 +26,6 @@ public class SlotFuel extends SlotRailcraft
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return StackFilter.FUEL.matches(stack);
+        return StandardStackFilters.FUEL.matches(stack);
     }
 }

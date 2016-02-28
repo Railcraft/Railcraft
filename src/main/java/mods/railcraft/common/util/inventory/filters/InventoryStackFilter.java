@@ -8,26 +8,24 @@
  */
 package mods.railcraft.common.util.inventory.filters;
 
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.items.StackFilter;
+import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InvertedStackFilter implements IStackFilter {
+public class InventoryStackFilter extends StackFilter {
 
-    private final IStackFilter filter;
+    private final IInventory inv;
 
-    public InvertedStackFilter(IStackFilter filter) {
-        this.filter = filter;
+    public InventoryStackFilter(IInventory inv) {
+        this.inv = inv;
     }
 
     @Override
-    public boolean matches(ItemStack stack) {
-        if (stack == null) {
-            return false;
-        }
-        return !filter.matches(stack);
+    public boolean apply(final ItemStack stack) {
+        return InvTools.containsItem(inv, stack);
     }
 }

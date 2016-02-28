@@ -23,7 +23,7 @@ import mods.railcraft.common.items.ItemMagnifyingGlass;
 import mods.railcraft.common.items.firestone.BlockFirestoneRecharge;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.craftguide.CraftGuidePlugin;
-import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.BlinkTick;
 import mods.railcraft.common.util.misc.Game;
@@ -168,7 +168,7 @@ public final class Railcraft {
 
         StartupChecks.checkForNewVersion();
 
-        StackFilter.initialize();
+        StandardStackFilters.initialize();
 
         ModuleManager.preInit();
 

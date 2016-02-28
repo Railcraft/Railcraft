@@ -12,22 +12,37 @@ import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 
+import java.util.List;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ExclusionStackFilter extends StackFilter {
+public class ListStackFilter extends StackFilter {
 
-    private final ItemStack[] exclude;
+    private final List<ItemStack> stacks;
 
-    public ExclusionStackFilter(ItemStack... exclude) {
-        this.exclude = exclude;
+    public ListStackFilter(List<ItemStack> stacks) {
+        this.stacks = stacks;
     }
 
     @Override
     public boolean apply(final ItemStack stack) {
-        if (stack == null)
-            return false;
-        return !InvTools.isItemEqual(stack, exclude);
+        if (stacks.isEmpty() || !hasFilter()) {
+            return true;
+        }
+        return InvTools.isItemEqual(stack, stacks);
     }
 
+    public List<ItemStack> getStacks() {
+        return stacks;
+    }
+
+    public boolean hasFilter() {
+        for (ItemStack filter : stacks) {
+            if (filter != null) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

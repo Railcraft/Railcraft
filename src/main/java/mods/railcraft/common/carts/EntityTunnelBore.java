@@ -25,7 +25,7 @@ import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.collections.BlockSet;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.Game;
@@ -638,7 +638,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     protected void stockBallast() {
         if (InvTools.isEmptySlot(invBallast)) {
-            ItemStack stack = CartTools.transferHelper.pullStack(this, StackFilter.BALLAST);
+            ItemStack stack = CartTools.transferHelper.pullStack(this, StandardStackFilters.BALLAST);
             if (stack != null)
                 InvTools.moveItemStack(stack, invBallast);
         }
@@ -664,7 +664,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     protected void stockTracks() {
         if (InvTools.isEmptySlot(invRails)) {
-            ItemStack stack = CartTools.transferHelper.pullStack(this, StackFilter.TRACK);
+            ItemStack stack = CartTools.transferHelper.pullStack(this, StandardStackFilters.TRACK);
             if (stack != null)
                 InvTools.moveItemStack(stack, invRails);
         }
@@ -776,7 +776,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         ArrayList<ItemStack> items = block.getDrops(worldObj, x, y, z, meta, 0);
 
         for (ItemStack stack : items) {
-            if (StackFilter.FUEL.matches(stack))
+            if (StandardStackFilters.FUEL.matches(stack))
                 stack = InvTools.moveItemStack(stack, invFuel);
 
             if (stack != null && stack.stackSize > 0 && InvTools.isStackEqualToBlock(stack, Blocks.gravel))
@@ -984,7 +984,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     protected void stockFuel() {
         if (InvTools.isEmptySlot(invFuel)) {
-            ItemStack stack = CartTools.transferHelper.pullStack(this, StackFilter.FUEL);
+            ItemStack stack = CartTools.transferHelper.pullStack(this, StandardStackFilters.FUEL);
             if (stack != null)
                 InvTools.moveItemStack(stack, invFuel);
         }

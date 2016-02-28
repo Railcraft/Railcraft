@@ -24,7 +24,7 @@ import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.InvertedStackFilter;
-import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
@@ -69,7 +69,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
     private static final int SLOT_FUEL_B = 4;
     private static final int SLOT_FUEL_C = 5;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 6);
-    private static final IStackFilter NOT_FUEL = new InvertedStackFilter(StackFilter.FUEL);
+    private static final IStackFilter NOT_FUEL = new InvertedStackFilter(StandardStackFilters.FUEL);
     private IInventory invBurn = new InventoryMapper(this, SLOT_BURN, 1);
     private IInventory invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
     private IInventory invFuel = new InventoryMapper(this, SLOT_BURN, 4);
@@ -132,7 +132,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
             TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
 
             if (mBlock != null)
-                InvTools.moveOneItem(invCache.getAdjacentInventories(), mBlock.invFuel, StackFilter.FUEL);
+                InvTools.moveOneItem(invCache.getAdjacentInventories(), mBlock.invFuel, StandardStackFilters.FUEL);
         }
     }
 

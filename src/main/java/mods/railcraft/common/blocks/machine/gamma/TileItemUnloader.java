@@ -180,7 +180,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                     }
                 }
                 if (!movedItemCart) {
-                    movedItemCart = InvTools.moveOneItemExcept(cartInv, chests, getItemFilters().getContents()) != null;
+                    movedItemCart = InvTools.moveOneItemExcept(cartInv, chests, getFilters()) != null;
                 }
                 break;
             }

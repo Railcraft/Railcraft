@@ -18,7 +18,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
@@ -97,7 +97,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             InvTools.moveOneItem(invStock, invBurn);
             InvTools.moveOneItem(invBurn, invWaterOutput, FluidContainerRegistry.EMPTY_BUCKET);
             if (InvTools.isEmptySlot(invStock)) {
-                ItemStack stack = CartTools.transferHelper.pullStack(this, StackFilter.FUEL);
+                ItemStack stack = CartTools.transferHelper.pullStack(this, StandardStackFilters.FUEL);
                 if (stack != null)
                     InvTools.moveItemStack(stack, invStock);
             }
@@ -157,7 +157,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             case SLOT_FUEL_A:
             case SLOT_FUEL_B:
             case SLOT_FUEL_C:
-                return StackFilter.FUEL.matches(stack);
+                return StandardStackFilters.FUEL.matches(stack);
             case SLOT_LIQUID_INPUT:
                 FluidStack fluidStack = FluidItemHelper.getFluidStackInContainer(stack);
                 if (fluidStack != null && fluidStack.amount > FluidHelper.BUCKET_VOLUME)
@@ -177,7 +177,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
     @Override
     public boolean canAcceptPushedItem(EntityMinecart requester, ItemStack stack) {
-        return StackFilter.FUEL.matches(stack);
+        return StandardStackFilters.FUEL.matches(stack);
     }
 
     @Override

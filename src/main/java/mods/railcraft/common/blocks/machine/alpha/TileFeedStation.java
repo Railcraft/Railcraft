@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.ITileExtraDataHandler;
@@ -29,7 +29,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -83,7 +82,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
             List<IInventory> chests = InvTools.getAdjacentInventories(worldObj, getPos());
 
             for (IInventory inv : chests) {
-                if (InvTools.moveOneItem(inv, this, StackFilter.FEED) != null) {
+                if (InvTools.moveOneItem(inv, this, StandardStackFilters.FEED) != null) {
                     break;
                 }
             }

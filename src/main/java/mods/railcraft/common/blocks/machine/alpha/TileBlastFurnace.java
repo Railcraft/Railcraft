@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -22,6 +23,7 @@ import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventorySorter;
+import mods.railcraft.common.util.inventory.filters.ListStackFilter;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
@@ -48,18 +50,13 @@ import java.util.Map;
 
 public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
 
-    public static final IStackFilter INPUT_FILTER = new IStackFilter() {
+    public static final IStackFilter INPUT_FILTER = new StackFilter() {
         @Override
-        public boolean matches(ItemStack stack) {
+        public boolean apply(ItemStack stack) {
             return RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
         }
     };
-    public static final IStackFilter FUEL_FILTER = new IStackFilter() {
-        @Override
-        public boolean matches(ItemStack stack) {
-            return stack != null && InvTools.isItemEqual(stack, RailcraftCraftingManager.blastFurnace.getFuels());
-        }
-    };
+    public static final IStackFilter FUEL_FILTER = new ListStackFilter(RailcraftCraftingManager.blastFurnace.getFuels());
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_OUTPUT = 2;

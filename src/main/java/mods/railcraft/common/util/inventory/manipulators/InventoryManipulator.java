@@ -156,7 +156,7 @@ public class InventoryManipulator {
     public ItemStack tryRemoveItem(IStackFilter filter) {
         for (IInvSlot slot : getSlots()) {
             ItemStack stack = slot.getStackInSlot();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.matches(stack)) {
+            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack)) {
                 ItemStack output = stack.copy();
                 output.stackSize = 1;
                 return output;
@@ -174,7 +174,7 @@ public class InventoryManipulator {
     public ItemStack removeItem(IStackFilter filter) {
         for (IInvSlot slot : getSlots()) {
             ItemStack stack = slot.getStackInSlot();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.matches(stack))
+            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack))
                 return slot.decreaseStackInSlot();
         }
         return null;
@@ -200,7 +200,7 @@ public class InventoryManipulator {
             if (amountNeeded <= 0)
                 break;
             ItemStack stack = slot.getStackInSlot();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.matches(stack)) {
+            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack)) {
                 ItemStack output = stack.copy();
                 if (output.stackSize >= amountNeeded) {
                     output.stackSize = amountNeeded;
@@ -227,7 +227,7 @@ public class InventoryManipulator {
         InventoryManipulator imDest = InventoryManipulator.get(dest);
         for (IInvSlot slot : getSlots()) {
             ItemStack stack = slot.getStackInSlot();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.matches(stack)) {
+            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack)) {
                 stack = stack.copy();
                 stack.stackSize = 1;
                 stack = imDest.addStack(stack);

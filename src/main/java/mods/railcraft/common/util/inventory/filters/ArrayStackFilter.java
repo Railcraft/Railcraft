@@ -8,15 +8,17 @@
  */
 package mods.railcraft.common.util.inventory.filters;
 
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ArrayStackFilter implements IStackFilter {
+public class ArrayStackFilter extends StackFilter {
 
     private final ItemStack[] stacks;
 
@@ -25,7 +27,7 @@ public class ArrayStackFilter implements IStackFilter {
     }
 
     @Override
-    public boolean matches(ItemStack stack) {
+    public boolean apply(final ItemStack stack) {
         if (stacks.length == 0 || !hasFilter()) {
             return true;
         }
