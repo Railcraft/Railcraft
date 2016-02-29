@@ -254,7 +254,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
                         isWorking = false;
                         IInventory tempInv = new InventoryCopy(invOutput);
                         boolean hasRoom = true;
-                        List<ItemStack> outputs = recipe.getRandomizedOuputs();
+                        List<ItemStack> outputs = recipe.getRandomizedOutputs();
                         for (ItemStack output : outputs) {
                             output = InvTools.moveItemStack(output, tempInv);
                             if (output != null) {
