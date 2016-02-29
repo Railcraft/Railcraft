@@ -63,7 +63,7 @@ public class RockCrusherCraftingManager implements IRockCrusherCraftingManager {
         }
 
         @Override
-        public List<ItemStack> getPossibleOuputs() {
+        public List<ItemStack> getPossibleOutputs() {
             List<ItemStack> list = new ArrayList<ItemStack>();
             for (Map.Entry<ItemStack, Float> entry : outputs) {
                 ItemStack output = entry.getKey();
@@ -88,7 +88,7 @@ public class RockCrusherCraftingManager implements IRockCrusherCraftingManager {
         }
 
         @Override
-        public List<ItemStack> getRandomizedOuputs() {
+        public List<ItemStack> getRandomizedOutputs() {
             List<ItemStack> list = new ArrayList<ItemStack>();
             for (Map.Entry<ItemStack, Float> entry : outputs) {
                 if (MiscTools.getRand().nextFloat() <= entry.getValue()) {

@@ -10,6 +10,7 @@ package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -24,14 +25,12 @@ import static mods.railcraft.common.util.misc.MiscTools.*;
  */
 public class WorldPlugin {
 
-    @Deprecated
-    public static Block getBlock(IBlockAccess world, BlockPos pos) {
-        return world.getBlock(pos);
+    public static IBlockState getBlockState(IBlockAccess world, BlockPos pos) {
+        return world.getBlockState(pos);
     }
 
-    @Deprecated
-    public static Block getBlock(IBlockAccess world, WorldCoordinate pos) {
-        return world.getBlock(pos.x, pos.y, pos.z);
+    public static Block getBlock(IBlockAccess world, BlockPos pos) {
+        return getBlockState(world, pos).getBlock();
     }
 
     public static TileEntity getBlockTile(IBlockAccess world, BlockPos pos) {
@@ -40,7 +39,7 @@ public class WorldPlugin {
 
     @Deprecated
     public static Block getBlockOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return world.getBlock(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side));
+        return getBlockState(world, pos.offset(side)).getBlock();
     }
 
     public static boolean isBlockAt(World world, BlockPos pos, Block block, int meta) {
@@ -59,10 +58,6 @@ public class WorldPlugin {
 
     public static boolean isBlockAir(World world, BlockPos pos) {
         return world.isAirBlock(pos);
-    }
-
-    public static boolean blockExistsOnSide(World world, BlockPos pos, EnumFacing side) {
-        return world.blockExists(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side));
     }
 
     @Deprecated
