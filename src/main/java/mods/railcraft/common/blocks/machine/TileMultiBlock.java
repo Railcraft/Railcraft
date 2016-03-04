@@ -48,9 +48,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     private final List<TileEntity> componentsImmutable = Collections.unmodifiableList(components);
     public ListMultimap<MultiBlockStateReturn, Integer> patternStates = ArrayListMultimap.create();
     protected boolean isMaster;
-    private byte patternX;
-    private byte patternY;
-    private byte patternZ;
+    private BlockPos posInPattern;
     private boolean tested;
     private boolean requestPacket;
     private MultiBlockState state;
@@ -286,7 +284,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
 
         AxisAlignedBB entityCheckBounds = map.getEntityCheckBounds(getX(), getY(), getZ());
 //                if(entityCheckBounds != null) {
-//                    System.out.println("test entitys: " + entityCheckBounds.toString());
+//                    System.out.println("test entities: " + entityCheckBounds.toString());
 //                }
         if (entityCheckBounds != null && !worldObj.getEntitiesWithinAABB(EntityLivingBase.class, entityCheckBounds).isEmpty())
             return MultiBlockStateReturn.ENTITY_IN_WAY;
@@ -401,9 +399,9 @@ public abstract class TileMultiBlock extends TileMachineBase {
             byte patternIndex = getPatternIndex();
             data.writeByte(patternIndex);
 
-            data.writeByte(patternX);
-            data.writeByte(patternY);
-            data.writeByte(patternZ);
+            data.writeByte(posInPattern.getX());
+            data.writeByte(posInPattern.getY());
+            data.writeByte(posInPattern.getZ());
         }
     }
 
@@ -425,24 +423,20 @@ public abstract class TileMultiBlock extends TileMachineBase {
             byte pY = data.readByte();
             byte pZ = data.readByte();
 
-            if (patternX != pX || patternY != pY || patternZ != pZ) {
-                patternX = pX;
-                patternY = pY;
-                patternZ = pZ;
+            if (posInPattern == null || posInPattern.getX() != pX || posInPattern.getY() != pY || posInPattern.getZ() != pZ) {
+                posInPattern = new BlockPos(pX, pY, pZ);
                 needsRenderUpdate = true;
             }
 
-            isMaster = pX == pat.getMasterOffsetX() && pY == pat.getMasterOffsetY() && pZ == pat.getMasterOffsetZ();
+            isMaster = pat.isMasterPosition(posInPattern);
 
             setPattern(pat);
 
-            int masterX = pat.getMasterRelativeX(getX(), pX);
-            int masterY = pat.getMasterRelativeY(getY(), pY);
-            int masterZ = pat.getMasterRelativeZ(getZ(), pZ);
+            BlockPos masterPos = pat.getMasterPosition(getPos(), posInPattern);
 
             TileEntity tile = null;
             if (worldObj != null)
-                tile = worldObj.getTileEntity(new BlockPos(masterX, masterY, masterZ));
+                tile = worldObj.getTileEntity(masterPos);
             if (tile != null)
                 if (masterBlock != tile && isStructureTile(tile)) {
                     needsRenderUpdate = true;
@@ -493,7 +487,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
 
     @Override
     public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
-        return (isStructureValid() && getPatternPositionY() < 2) ? false : super.canCreatureSpawn(type);
+        return (!(isStructureValid() && getPatternPositionY() < 2)) && super.canCreatureSpawn(type);
     }
 
     public enum MultiBlockState {

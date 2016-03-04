@@ -8,9 +8,11 @@
  */
 package mods.railcraft.common.blocks.machine;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 
 import java.util.Map;
@@ -21,9 +23,7 @@ import java.util.Map;
 public class MultiBlockPattern {
 
     public final char[][][] pattern;
-    private final int offsetX;
-    private final int offsetY;
-    private final int offsetZ;
+    private final BlockPos masterOffset;
     private final AxisAlignedBB entityCheckBounds;
 
     public MultiBlockPattern(char[][][] pattern) {
@@ -36,16 +36,14 @@ public class MultiBlockPattern {
 
     public MultiBlockPattern(char[][][] pattern, int offsetX, int offsetY, int offsetZ, AxisAlignedBB entityCheckBounds) {
         this.pattern = pattern;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
-        this.offsetZ = offsetZ;
+        this.masterOffset = new BlockPos(offsetX, offsetY, offsetZ);
         this.entityCheckBounds = entityCheckBounds;
     }
 
     public AxisAlignedBB getEntityCheckBounds(int masterX, int masterY, int masterZ) {
         if (entityCheckBounds == null)
             return null;
-        return entityCheckBounds.copy().offset(masterX, masterY, masterZ);
+        return entityCheckBounds.offset(masterX, masterY, masterZ);
     }
 
     public char getPatternMarkerChecked(int x, int y, int z) {
@@ -60,16 +58,8 @@ public class MultiBlockPattern {
         return pattern[y][x][z];
     }
 
-    public int getMasterOffsetX() {
-        return offsetX;
-    }
-
-    public int getMasterOffsetY() {
-        return offsetY;
-    }
-
-    public int getMasterOffsetZ() {
-        return offsetZ;
+    public Vec3i getMasterOffset() {
+        return masterOffset;
     }
 
     public int getPatternHeight() {
@@ -84,29 +74,23 @@ public class MultiBlockPattern {
         return pattern[0][0].length;
     }
 
-    public int getMasterRelativeX(int posX, int patternX) {
-        return (offsetX - patternX) + posX;
+    public BlockPos getMasterPosition(BlockPos myPos, BlockPos posInPattern) {
+        return masterOffset.subtract(posInPattern).add(myPos);
     }
 
-    public int getMasterRelativeY(int posY, int patternY) {
-        return (offsetY - patternY) + posY;
+    public boolean isMasterPosition(BlockPos posInPattern) {
+        return masterOffset.equals(posInPattern);
     }
 
-    public int getMasterRelativeZ(int posZ, int patternZ) {
-        return (offsetZ - patternZ) + posZ;
-    }
-
-    public TileEntity placeStructure(World world, int xCoord, int yCoord, int zCoord, Block block, Map<Character, Integer> blockMapping) {
-        if (block == null)
+    public TileEntity placeStructure(World world, BlockPos pos, IBlockState blockState, Map<Character, Integer> blockMapping) {
+        if (blockState == null)
             return null;
 
         int xWidth = getPatternWidthX();
         int zWidth = getPatternWidthZ();
         int height = getPatternHeight();
 
-        int xOffset = xCoord - getMasterOffsetX();
-        int yOffset = yCoord - getMasterOffsetY();
-        int zOffset = zCoord - getMasterOffsetZ();
+        BlockPos offset = pos.subtract(getMasterOffset());
 
         TileEntity master = null;
 
@@ -120,13 +104,10 @@ public class MultiBlockPattern {
                     if (metadata == null)
                         continue;
 
-                    int x = px + xOffset;
-                    int y = py + yOffset;
-                    int z = pz + zOffset;
+                    BlockPos p = new BlockPos(px, py, pz).add(offset);
+                    world.setBlockState(p, blockState, 3);
 
-                    world.setBlockState(pos, blockState, 3);
-
-                    if (px == getMasterOffsetX() && py == getMasterOffsetY() && pz == getMasterOffsetZ())
+                    if (px == masterOffset.getX() && py == masterOffset.getY() && pz == masterOffset.getZ())
                         master = world.getTileEntity(pos);
                 }
             }
