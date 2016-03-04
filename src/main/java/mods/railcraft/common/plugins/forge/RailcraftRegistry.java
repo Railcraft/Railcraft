@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.plugins.forge;
 
+import mods.railcraft.api.core.items.RailcraftItemRegistry;
 import mods.railcraft.api.core.items.TagList;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.ModuleManager;
@@ -52,7 +53,8 @@ public final class RailcraftRegistry {
      */
     public static ItemStack getItem(String tag, int qty) {
         tag = MiscTools.cleanTag(tag);
-        return GameRegistry.findItemStack(Railcraft.getModId(), tag, qty);
+        return RailcraftItemRegistry.getStack(tag, qty);
+//        return GameRegistry.findItemStack(Railcraft.getModId(), tag, qty);
     }
 
     /**
@@ -72,9 +74,10 @@ public final class RailcraftRegistry {
 //        System.out.println(tag);
         Item existingItem = GameRegistry.findItem(Railcraft.getModId(), tag);
         Block existingBlock = GameRegistry.findBlock(Railcraft.getModId(), tag);
-        if (existingItem == null && existingBlock == null)
-            GameRegistry.registerCustomItemStack(tag, stack);
-        else
+        if (existingItem == null && existingBlock == null) {
+//            GameRegistry.registerCustomItemStack(tag, stack);
+            RailcraftItemRegistry.register(tag, stack);
+        } else
             throw new RuntimeException("ItemStack registrations must be unique!");
     }
 
@@ -137,8 +140,7 @@ public final class RailcraftRegistry {
      * This should generally only be called by Railcraft itself while the mod is
      * initializing during the pre-init and init stages.
      *
-     * @param block     The block
-     * @param itemclass
+     * @param block The block
      */
     public static void register(Block block, Class<? extends ItemBlock> itemclass) {
         if (ModuleManager.getStage() != ModuleManager.Stage.PRE_INIT && ModuleManager.getStage() != ModuleManager.Stage.INIT_FIRST)
