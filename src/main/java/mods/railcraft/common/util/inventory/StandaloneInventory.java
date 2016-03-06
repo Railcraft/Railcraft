@@ -15,20 +15,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 
 import java.util.Iterator;
 
 /**
  * Creates a standalone instance of IInventory.
- *
+ * <p/>
  * Useful for hiding parts of an inventory from outsiders.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
 
-    private Callback callback;
     private final String name;
+    private Callback callback;
     private ItemStack contents[];
 
     public StandaloneInventory(int size, String name, IInventory callback) {
@@ -96,6 +98,14 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
     }
 
     @Override
+    public ItemStack removeStackFromSlot(int index) {
+        ItemStack stack = contents[index];
+        contents[index] = null;
+        markDirty();
+        return stack;
+    }
+
+    @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
         contents[i] = itemstack;
         if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
@@ -105,14 +115,24 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
     }
 
     @Override
-    public String getInventoryName() {
+    public boolean hasCustomName() {
+        return name != null || callback.hasCustomName();
+    }
+
+    @Override
+    public String getName() {
         if (name != null) {
             return LocalizationPlugin.translate(name);
         }
-        if (callback != null) {
-            return callback.getInventoryName();
+        if (callback != null && callback.hasCustomName()) {
+            return callback.getName();
         }
         return invTypeName();
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return new ChatComponentText(getName());
     }
 
     protected String invTypeName() {
@@ -140,22 +160,17 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
         if (callback != null) {
-            callback.openInventory();
+            callback.openInventory(player);
         }
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
         if (callback != null) {
-            callback.closeInventory();
+            callback.closeInventory(player);
         }
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-        return null;
     }
 
     public ItemStack[] getContents() {
@@ -176,32 +191,54 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
-
-    @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
         return true;
     }
 
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < contents.length; i++) {
+            contents[i] = null;
+        }
+        markDirty();
+    }
+
     public static abstract class Callback {
 
-        public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+        public boolean isUseableByPlayer(EntityPlayer player) {
             return true;
         }
 
-        public void openInventory() {
+        public void openInventory(EntityPlayer player) {
         }
 
-        public void closeInventory() {
+        public void closeInventory(EntityPlayer player) {
         }
 
         public void markDirty() {
         }
 
-        public String getInventoryName() {
+        public String getName() {
             return "Standalone";
+        }
+
+        public Boolean hasCustomName() {
+            return false;
         }
 
     }
@@ -215,18 +252,18 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
         }
 
         @Override
-        public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-            return inv.isUseableByPlayer(entityplayer);
+        public boolean isUseableByPlayer(EntityPlayer player) {
+            return inv.isUseableByPlayer(player);
         }
 
         @Override
-        public void openInventory() {
-            inv.openInventory();
+        public void openInventory(EntityPlayer player) {
+            inv.openInventory(player);
         }
 
         @Override
-        public void closeInventory() {
-            inv.closeInventory();
+        public void closeInventory(EntityPlayer player) {
+            inv.closeInventory(player);
         }
 
         @Override
@@ -235,29 +272,38 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
         }
 
         @Override
-        public String getInventoryName() {
-            return inv.getInventoryName();
+        public String getName() {
+            return inv.getName();
+        }
+
+        @Override
+        public Boolean hasCustomName() {
+            return inv.hasCustomName();
         }
 
     }
 
     private static class TileCallback extends Callback {
 
-        private final RailcraftTileEntity inv;
+        private final RailcraftTileEntity tile;
 
-        public TileCallback(RailcraftTileEntity inv) {
-            this.inv = inv;
+        public TileCallback(RailcraftTileEntity tile) {
+            this.tile = tile;
         }
 
         @Override
         public void markDirty() {
-            inv.markDirty();
+            tile.markDirty();
         }
 
         @Override
-        public String getInventoryName() {
-            return inv.getName();
+        public String getName() {
+            return tile.getName();
         }
 
+        @Override
+        public Boolean hasCustomName() {
+            return true;
+        }
     }
 }

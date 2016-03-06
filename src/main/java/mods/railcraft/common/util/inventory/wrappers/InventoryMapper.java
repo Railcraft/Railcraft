@@ -8,10 +8,8 @@
  */
 package mods.railcraft.common.util.inventory.wrappers;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 
 /**
  * Wrapper class used to specify part of an existing inventory to be treated as
@@ -20,17 +18,12 @@ import net.minecraft.util.EnumFacing;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryMapper implements IInventory {
+public class InventoryMapper extends InvWrapperBase implements IInventory {
 
     private final IInventory inv;
     private final int start;
     private final int size;
     private int stackSizeLimit = -1;
-    private boolean checkItems = true;
-
-    public InventoryMapper(IInventory inv, EnumFacing side) {
-        this(inv, getInventoryStart(inv, side), getInventorySize(inv, side));
-    }
 
     public InventoryMapper(IInventory inv) {
         this(inv, 0, inv.getSizeInventory(), true);
@@ -43,32 +36,20 @@ public class InventoryMapper implements IInventory {
     /**
      * Creates a new InventoryMapper
      *
-     * @param inv The backing inventory
+     * @param inv   The backing inventory
      * @param start The starting index
-     * @param size The size of the new inventory, take care not to exceed the
-     * end of the backing inventory
+     * @param size  The size of the new inventory, take care not to exceed the
+     *              end of the backing inventory
      */
     public InventoryMapper(IInventory inv, int start, int size) {
         this(inv, start, size, true);
     }
 
     public InventoryMapper(IInventory inv, int start, int size, boolean checkItems) {
+        super(inv, checkItems);
         this.inv = inv;
         this.start = start;
         this.size = size;
-        this.checkItems = checkItems;
-    }
-
-    protected static int getInventorySize(IInventory inv, EnumFacing side) {
-        return inv.getSizeInventory();
-    }
-
-    protected static int getInventoryStart(IInventory inv, EnumFacing side) {
-        return 0;
-    }
-
-    public IInventory getBaseInventory() {
-        return inv;
     }
 
     @Override
@@ -91,11 +72,6 @@ public class InventoryMapper implements IInventory {
         inv.setInventorySlotContents(start + slot, itemstack);
     }
 
-    @Override
-    public String getInventoryName() {
-        return inv.getInventoryName();
-    }
-
     public void setStackSizeLimit(int limit) {
         stackSizeLimit = limit;
     }
@@ -106,40 +82,8 @@ public class InventoryMapper implements IInventory {
     }
 
     @Override
-    public void markDirty() {
-        inv.markDirty();
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        return inv.isUseableByPlayer(entityplayer);
-    }
-
-    @Override
-    public void openInventory() {
-        inv.openInventory();
-    }
-
-    @Override
-    public void closeInventory() {
-        inv.closeInventory();
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-        return inv.getStackInSlotOnClosing(start + slot);
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return inv.hasCustomInventoryName();
-    }
-
-    @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if (checkItems)
-            return inv.isItemValidForSlot(start + slot, stack);
-        return true;
+        return !checkItems() || inv.isItemValidForSlot(start + slot, stack);
     }
 
 }

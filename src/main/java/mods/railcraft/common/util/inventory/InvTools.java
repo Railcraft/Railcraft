@@ -37,6 +37,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
@@ -61,14 +62,14 @@ public abstract class InvTools {
     }
 
     @SuppressWarnings("unused")
-    public static List<IInventory> getAdjacentInventories(World world, int i, int j, int k) {
-        return getAdjacentInventories(world, i, j, k, null);
+    public static List<IInventory> getAdjacentInventories(World world, BlockPos pos) {
+        return getAdjacentInventories(world, pos, null);
     }
 
-    public static List<IInventory> getAdjacentInventories(World world, int i, int j, int k, Class<? extends IInventory> type) {
+    public static List<IInventory> getAdjacentInventories(World world, BlockPos pos, Class<? extends IInventory> type) {
         List<IInventory> list = new ArrayList<IInventory>(5);
         for (int side = 0; side < 6; side++) {
-            IInventory inv = getInventoryFromSide(world, i, j, k, EnumFacing.VALUES[side], type, null);
+            IInventory inv = getInventoryFromSide(world, pos, EnumFacing.VALUES[side], type, null);
             if (inv != null)
                 list.add(inv);
         }
@@ -89,8 +90,8 @@ public abstract class InvTools {
 //        return map;
 //    }
 
-    public static IInventory getInventoryFromSide(World world, int x, int y, int z, EnumFacing side, final Class<? extends IInventory> type, final Class<? extends IInventory> exclude) {
-        return getInventoryFromSide(world, x, y, z, side, new ITileFilter() {
+    public static IInventory getInventoryFromSide(World world, BlockPos pos, EnumFacing side, final Class<? extends IInventory> type, final Class<? extends IInventory> exclude) {
+        return getInventoryFromSide(world, pos, side, new ITileFilter() {
             @SuppressWarnings("SimplifiableIfStatement")
             @Override
             public boolean matches(TileEntity tile) {
@@ -101,8 +102,8 @@ public abstract class InvTools {
         });
     }
 
-    public static IInventory getInventoryFromSide(World world, int x, int y, int z, EnumFacing side, ITileFilter filter) {
-        TileEntity tile = WorldPlugin.getTileEntityOnSide(world, x, y, z, side);
+    public static IInventory getInventoryFromSide(World world, BlockPos pos, EnumFacing side, ITileFilter filter) {
+        TileEntity tile = WorldPlugin.getTileEntityOnSide(world, pos, side);
         if (tile == null || !(tile instanceof IInventory) || !filter.matches(tile))
             return null;
         return getInventoryFromTile(tile, side.getOpposite());
