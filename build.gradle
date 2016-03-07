@@ -55,6 +55,7 @@ sourceSets {
 		}
 		resources {
 			srcDir project.dirLang
+            exclude '**/Thumbs.db'
 		}
 	}
 }
@@ -119,6 +120,8 @@ jar {
 	destinationDir = file("build/tmp")
 	archiveName = "main.jar"
 
+    exclude '**/Thumbs.db'
+    
 	from {
 		configurations.api.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
