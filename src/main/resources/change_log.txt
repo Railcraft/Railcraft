@@ -1,3 +1,6 @@
+9.9.0.0:
+    INFO: Repackage for release.
+
 9.8.0.3:
 	FIX: Some API stuff for Vexatos.
 	API: Might possible break anyone using depreciated functions of the Signal API.
