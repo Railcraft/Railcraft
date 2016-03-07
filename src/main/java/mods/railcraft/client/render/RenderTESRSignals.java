@@ -18,7 +18,10 @@ import mods.railcraft.common.blocks.signals.ISignalBlockTile;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.EnumColor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
@@ -150,5 +153,64 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
         };
 
         public abstract int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target);
+    }
+
+    protected static void doRenderAspect(RenderFakeBlock.RenderInfo info, TileEntity tile, double x, double y, double z){
+        Tessellator tessellator = Tessellator.instance;
+        final float depth = 2 * RenderTools.PIXEL;
+
+        GL11.glPushMatrix();
+        GL11.glTranslated(x,y,z);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+        tessellator.startDrawingQuads();
+
+        if (info.brightness < 0) {
+            float light;
+            float lightBottom = 0.5F;
+            if (info.light < 0) {
+                light = 1;
+            } else {
+                light = info.light;
+            }
+            int br;
+            if (info.brightness < 0) {
+                br = info.template.getMixedBrightnessForBlock(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
+            } else {
+                br = info.brightness;
+            }
+            tessellator.setBrightness(br);
+            tessellator.setColorOpaque_F(lightBottom * light, lightBottom * light, lightBottom * light);
+        } else {
+            tessellator.setBrightness(info.brightness);
+        }
+
+        if(info.renderSide[2]) {
+            tessellator.addVertexWithUV(0, 0, depth, info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(16));
+            tessellator.addVertexWithUV(0, 1, depth, info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(0));
+            tessellator.addVertexWithUV(1, 1, depth, info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(0));
+            tessellator.addVertexWithUV(1, 0, depth, info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(16));
+        }
+        if(info.renderSide[3]) {
+            tessellator.addVertexWithUV(0, 0, 1 - depth, info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(16));
+            tessellator.addVertexWithUV(1, 0, 1 - depth, info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(16));
+            tessellator.addVertexWithUV(1, 1, 1 - depth, info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(0));
+            tessellator.addVertexWithUV(0, 1, 1 - depth, info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(0));
+        }
+        if(info.renderSide[4]) {
+            tessellator.addVertexWithUV(depth, 0, 0, info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(16));
+            tessellator.addVertexWithUV(depth, 0, 1, info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(16));
+            tessellator.addVertexWithUV(depth, 1, 1, info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(0));
+            tessellator.addVertexWithUV(depth, 1, 0, info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(0));
+        }
+        if(info.renderSide[5]){
+            tessellator.addVertexWithUV(1 - depth, 0, 0, info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(16));
+            tessellator.addVertexWithUV(1 - depth, 1, 0, info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(0));
+            tessellator.addVertexWithUV(1 - depth, 1, 1, info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(0));
+            tessellator.addVertexWithUV(1 - depth, 0, 1, info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(16));
+        }
+
+        tessellator.draw();
+
+        GL11.glPopMatrix();
     }
 }

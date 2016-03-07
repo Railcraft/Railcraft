@@ -14,6 +14,7 @@ import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.PostConnectionHelper;
 import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.item.ItemStack;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -25,13 +26,15 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSignalDual implements ICombinedRenderer {
+public class RenderSignalDual extends RenderTESRSignals implements ICombinedRenderer {
 
     private RenderInfo info = new RenderInfo();
 
     public RenderSignalDual() {
         info.texture = new IIcon[6];
         info.template = RailcraftBlocks.getBlockSignal();
+        tesrInfo.texture = new IIcon[6];
+        tesrInfo.template = RailcraftBlocks.getBlockSignal();
     }
 
     @Override
@@ -53,7 +56,7 @@ public class RenderSignalDual implements ICombinedRenderer {
         info.texture[facing] = BlockSignalRailcraft.texturesSignalDual[2];
         RenderFakeBlock.renderBlock(info, world, x, y, z, true, false);
 
-        // Render Aspect
+        /*// Render Aspect
         info.setRenderSingleSide(facing);
 
         SignalAspect aspect = tile.getTopAspect();
@@ -61,14 +64,14 @@ public class RenderSignalDual implements ICombinedRenderer {
             aspect = SignalAspect.OFF;
         info.texture[facing] = BlockSignalRailcraft.texturesLampTop[aspect.getTextureIndex()];
         info.brightness = aspect.getTextureBrightness();
-        RenderFakeBlock.renderBlock(info, world, x, y, z, info.brightness < 0 ? true : false, false);
+        RenderFakeBlock.renderBlock(info, world, x, y, z, info.brightness < 0, false);
 
         aspect = tile.getBottomAspect();
         if (!aspect.isLit())
             aspect = SignalAspect.OFF;
         info.texture[facing] = BlockSignalRailcraft.texturesLampBottom[aspect.getTextureIndex()];
         info.brightness = aspect.getTextureBrightness();
-        RenderFakeBlock.renderBlock(info, world, x, y, z, info.brightness < 0 ? true : false, false);
+        RenderFakeBlock.renderBlock(info, world, x, y, z, info.brightness < 0, false);*/
 
         info.brightness = -1;
         info.setRenderAllSides();
@@ -185,4 +188,36 @@ public class RenderSignalDual implements ICombinedRenderer {
         GL11.glPopAttrib();
     }
 
+    private static final RenderInfo tesrInfo = new RenderInfo();
+
+    @Override
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
+        super.renderTileEntityAt(te, x, y, z, f);
+        if(!(te instanceof IDualHeadSignal)){
+            return;
+        }
+        RenderInfo info = tesrInfo;
+
+        IDualHeadSignal tile = (IDualHeadSignal) te;
+
+        int facing = tile.getFacing().ordinal();
+        if (facing >= info.texture.length)
+            facing = 0;
+
+        info.setRenderSingleSide(facing);
+
+        SignalAspect aspect = tile.getTopAspect();
+        if (!aspect.isLit())
+            aspect = SignalAspect.OFF;
+        info.texture[facing] = BlockSignalRailcraft.texturesLampTop[aspect.getTextureIndex()];
+        info.brightness = aspect.getTextureBrightness();
+        doRenderAspect(info, te, x, y, z);
+
+        aspect = tile.getBottomAspect();
+        if (!aspect.isLit())
+            aspect = SignalAspect.OFF;
+        info.texture[facing] = BlockSignalRailcraft.texturesLampBottom[aspect.getTextureIndex()];
+        info.brightness = aspect.getTextureBrightness();
+        doRenderAspect(info, te, x, y, z);
+    }
 }

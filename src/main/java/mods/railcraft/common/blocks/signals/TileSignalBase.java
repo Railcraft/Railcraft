@@ -13,7 +13,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -33,7 +32,6 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     protected static final float BOUNDS = 0.15f;
     private ForgeDirection facing = ForgeDirection.NORTH;
     private boolean prevLightState;
-    private boolean prevBlinkState;
 
     @Override
     public boolean rotateBlock(ForgeDirection axis) {
@@ -77,33 +75,14 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     @Override
     public void updateEntity() {
         super.updateEntity();
-        if (Game.isNotHost(worldObj)) {
-            updateLighting();
-        }
     }
 
-    private void updateLighting() {
-        if (clock % Signals.LIGHT_CHECK_INTERVAL == 0) {
-            boolean needsUpdate = false;
-            boolean blinkState = SignalAspect.isBlinkOn();
-            if (prevBlinkState != blinkState && isBlinking()) {
-                prevBlinkState = blinkState;
-                needsUpdate = true;
-            }
-            boolean lightState = isLit();
-            if (prevLightState != lightState) {
-                prevLightState = lightState;
-                worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
-                needsUpdate = true;
-            }
-            if (needsUpdate) {
-                markBlockForUpdate();
-            }
-        }
+    protected boolean isLit(SignalAspect aspect) {
+        return aspect != SignalAspect.OFF && !aspect.isBlinkAspect();
     }
 
     protected boolean isLit() {
-        return getSignalAspect().isLit();
+      return isLit(getSignalAspect());
     }
 
     protected boolean isBlinking() {

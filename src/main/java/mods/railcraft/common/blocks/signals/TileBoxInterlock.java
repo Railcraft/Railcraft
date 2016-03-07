@@ -28,7 +28,6 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     private static final ForgeDirection[] SIDES = {NORTH, WEST, SOUTH, EAST};
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SimpleSignalReceiver receiver = new SimpleSignalReceiver(getLocalizationTag(), this);
-    private boolean prevBlinkState;
     private Interlock interlock = new Interlock(this);
     private SignalAspect overrideAspect = SignalAspect.RED;
 
@@ -50,10 +49,6 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
         if (worldObj.isRemote) {
             controller.tickClient();
             receiver.tickClient();
-            if (controller.getAspect().isBlinkAspect() && prevBlinkState != SignalAspect.isBlinkOn()) {
-                prevBlinkState = SignalAspect.isBlinkOn();
-                markBlockForUpdate();
-            }
             return;
         }
 
