@@ -8,10 +8,21 @@
  */
 package mods.railcraft.client.render;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.item.ItemStack;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.world.Teleporter;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
@@ -24,7 +35,7 @@ import org.lwjgl.opengl.GL11;
 
 import static net.minecraftforge.common.util.ForgeDirection.*;
 
-public class RenderSignalBox implements ICombinedRenderer {
+public class RenderSignalBox extends RenderTESRSignals implements ICombinedRenderer {
 
     private static final RenderInfo info = new RenderInfo();
     private final IIconProvider iconProvider;
@@ -32,6 +43,8 @@ public class RenderSignalBox implements ICombinedRenderer {
     public RenderSignalBox(IIconProvider iconProvider) {
         info.texture = new IIcon[6];
         info.template = RailcraftBlocks.getBlockSignal();
+		tesrInfo.texture = new IIcon[6];
+		tesrInfo.template = RailcraftBlocks.getBlockSignal();
         this.iconProvider = iconProvider;
     }
 
@@ -83,7 +96,7 @@ public class RenderSignalBox implements ICombinedRenderer {
         info.renderSide[0] = false;
         info.renderSide[1] = false;
 
-        // Aspect
+      /*  // Aspect
         for (int side = 2; side < 6; side++) {
             SignalAspect aspect = tile.getBoxSignalAspect(ForgeDirection.getOrientation(side));
             if (!aspect.isLit())
@@ -100,7 +113,7 @@ public class RenderSignalBox implements ICombinedRenderer {
             if (!renderblocks.hasOverrideBlockTexture())
                 info.brightness = aspect.getTextureBrightness();
             RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, (info.brightness < 0), false);
-        }
+        }*/
         info.brightness = -1;
         info.setRenderAllSides();
 
@@ -151,13 +164,13 @@ public class RenderSignalBox implements ICombinedRenderer {
     }
 
     @Override
-    public void renderItem(RenderBlocks renderblocks, ItemStack item, ItemRenderType renderType) { 
+    public void renderItem(RenderBlocks renderblocks, ItemStack item, ItemRenderType renderType) {
         GL11.glColor4f(1, 1, 1, 1);
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        
+
         info.override = null;
         float pix = RenderTools.PIXEL;
         info.setBlockBounds(2 * pix, 0, 2 * pix, 14 * pix, 15 * pix, 14 * pix);
@@ -177,8 +190,129 @@ public class RenderSignalBox implements ICombinedRenderer {
         info.texture[5] = BlockSignalRailcraft.texturesLampBox[texture];
         RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
         info.setRenderAllSides();
-        
+
         GL11.glPopAttrib();
     }
 
+	private static final RenderInfo tesrInfo = new RenderInfo();
+
+    @Override
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
+        super.renderTileEntityAt(te, x, y, z, f);
+        if(!(te instanceof TileBoxBase)){
+            return;
+        }
+		RenderInfo info = tesrInfo;
+        GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        TileBoxBase tile = (TileBoxBase) te;
+        Tessellator tessellator = Tessellator.instance;
+
+        float pix = RenderTools.PIXEL;
+
+        final float zOffset = 1/16f;
+		info.setBlockBounds(2 * pix - zOffset, 0 - zOffset, 2 * pix - zOffset, 14 * pix - zOffset, 15 * pix - zOffset, 14 * pix - zOffset);
+
+		info.renderSide[0] = false;
+		info.renderSide[1] = false;
+		info.renderSide[2] = !tile.isConnected(NORTH);
+		info.renderSide[3] = !tile.isConnected(SOUTH);
+		info.renderSide[4] = !tile.isConnected(WEST);
+		info.renderSide[5] = !tile.isConnected(EAST);
+
+		GL11.glTranslated(x,y,z);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+		tessellator.startDrawingQuads();
+
+        // Aspect
+        for (int side = 2; side < 6; side++) {
+            SignalAspect aspect = tile.getBoxSignalAspect(ForgeDirection.getOrientation(side));
+            if (!aspect.isLit())
+                aspect = SignalAspect.OFF;
+            info.texture[side] = BlockSignalRailcraft.texturesLampBox[aspect.getTextureIndex()];
+            info.brightness = aspect.getTextureBrightness();
+            //RenderFakeBlock.renderBlock(info, tile.getWorld(), x,y,z, (info.brightness < 0), true);
+        }
+		if (info.brightness < 0){
+			float light = 0;
+			float lightBottom = 0.5F;
+			if (info.light < 0) {
+				//                light = info.template.getBlockBrightness(blockAccess, (int) lightX, (int) lightY, (int) lightZ);
+				//                light = light + ((1.0f - light) * 0.4f);
+				light = 1;
+			} else
+				light = info.light;
+			int br = 0;
+			if (info.brightness < 0)
+				br = info.template.getMixedBrightnessForBlock(tile.getWorld(), tile.xCoord, tile.yCoord, tile.zCoord);
+			else
+				br = info.brightness;
+			tessellator.setBrightness(br);
+			tessellator.setColorOpaque_F(lightBottom * light, lightBottom * light, lightBottom * light);
+		} else {
+			tessellator.setBrightness(info.brightness);
+		}
+		double xS = info.minX, xE = info.maxX,
+			yS = info.minY, yE = info.maxY,
+			zS = info.minZ, zE = info.maxZ;
+		if(info.renderSide[2]) {
+
+			/*drawQuad(info.minX, info.minY, info.minZ, info.maxX, info.maxY, info.maxZ,
+				info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(0),info.texture[2].getInterpolatedU(16f), info.texture[2].getInterpolatedV(16f));*/
+			tessellator.addVertex(xS, yS, zS);
+			tessellator.addVertex(xS, yE, zS);
+			tessellator.addVertex(xE, yE, zS);
+			tessellator.addVertex(xE, yS, zS);
+			/*tessellator.addVertexWithUV(xS, yS, zS, info.texture[2].getInterpolatedU(0),info.texture[2].getInterpolatedV(0));
+			tessellator.addVertexWithUV(xS, yE, zS,info.texture[2].getInterpolatedU(0),info.texture[2].getInterpolatedV(0));
+			tessellator.addVertexWithUV(xE, yE, zS,info.texture[2].getInterpolatedU(0),info.texture[2].getInterpolatedV(0));
+			tessellator.addVertexWithUV(xE, yS, zS,info.texture[2].getInterpolatedU(0),info.texture[2].getInterpolatedV(0));*/
+		}
+		if(info.renderSide[3]) {
+			tessellator.addVertex(xS, yS, zE);
+			tessellator.addVertex(xE, yS, zE);
+			tessellator.addVertex(xE, yE, zE);
+			tessellator.addVertex(xS, yE, zE);
+		}
+		if(info.renderSide[4]) {
+			tessellator.addVertex(xS, yS, zS);
+			tessellator.addVertex(xS, yS, zE);
+			tessellator.addVertex(xS, yE, zE);
+			tessellator.addVertex(xS, yE, zS);
+		}
+		if(info.renderSide[5]){
+			tessellator.addVertex(xE, yS, zS);
+			tessellator.addVertex(xE, yE, zS);
+			tessellator.addVertex(xE, yE, zE);
+			tessellator.addVertex(xE, yS, zE);
+		}
+		tessellator.draw();
+        GL11.glPopAttrib();
+        GL11.glPopMatrix();
+    }
+
+    /*private void drawQuad(){
+        Tessellator tessellator = Tessellator.instance;
+        tessellator.startDrawingQuads();
+        tessellator.addVertex(xS, yS, zS);
+        tessellator.addVertex(xS, yE, zS);
+        tessellator.addVertex(xE, yE, zS);
+        tessellator.addVertex(xE, yS, zS);
+
+        tessellator.addVertex(xS, yS, zE);
+        tessellator.addVertex(xE, yS, zE);
+        tessellator.addVertex(xE, yE, zE);
+        tessellator.addVertex(xS, yE, zE);
+
+        tessellator.addVertex(xS, yS, zS);
+        tessellator.addVertex(xS, yS, zE);
+        tessellator.addVertex(xS, yE, zE);
+        tessellator.addVertex(xS, yE, zS);
+
+        tessellator.addVertex(xE, yS, zS);
+        tessellator.addVertex(xE, yE, zS);
+        tessellator.addVertex(xE, yE, zE);
+        tessellator.addVertex(xE, yS, zE);
+        tessellator.draw();
+    }*/
 }
