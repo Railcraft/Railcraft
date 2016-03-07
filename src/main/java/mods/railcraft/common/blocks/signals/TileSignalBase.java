@@ -13,6 +13,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -75,6 +76,18 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     @Override
     public void updateEntity() {
         super.updateEntity();
+        if(Game.isNotHost(worldObj)){
+            boolean needsUpdate = false;
+            boolean lightState = isLit();
+            if (prevLightState != lightState) {
+                prevLightState = lightState;
+                worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+                needsUpdate = true;
+            }
+            if (needsUpdate) {
+                markBlockForUpdate();
+            }
+        }
     }
 
     protected boolean isLit(SignalAspect aspect) {
@@ -93,6 +106,9 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     public int getLightValue() {
         if (isLit()) {
             return 5;
+        }
+        if(isBlinking()) {
+            return 3;
         }
         return 0;
     }
