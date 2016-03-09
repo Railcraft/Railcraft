@@ -34,7 +34,7 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
 
     @Override
     protected boolean isLit() {
-        return getTopAspect().isLit() || getBottomAspect().isLit();
+        return isLit(getTopAspect()) || isLit(getBottomAspect());
     }
 
     @Override

@@ -21,7 +21,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.EnumSkyBlock;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -32,7 +31,6 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBlockTile, IAspectActionManager, IGuiReturnHandler, IAspectProvider {
 
-    private boolean prevBlinkState;
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SignalBlock signalBlock = new SignalBlockRelay(this);
 
@@ -46,7 +44,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
         if (player.isSneaking())
             return false;
         if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.BOX_RELAY, player, worldObj, getPos());
+            GuiHandler.openGui(EnumGui.BOX_RELAY, player, worldObj, xCoord, yCoord, zCoord);
         return true;
     }
 
@@ -61,11 +59,6 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
         if (Game.isNotHost(worldObj)) {
             controller.tickClient();
             signalBlock.tickClient();
-            if (clock % 4 == 0 && controller.getAspect().isBlinkAspect() && prevBlinkState != SignalAspect.isBlinkOn()) {
-                prevBlinkState = SignalAspect.isBlinkOn();
-                worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
-                markBlockForUpdate();
-            }
             return;
         }
         controller.tickServer();
@@ -83,22 +76,21 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
 
     private void updateNeighbors() {
         notifyBlocksOfNeighborChange();
-        for (int side = 2; side < 6; side++) {
-            EnumFacing forgeSide = EnumFacing.VALUES[side];
-            TileEntity tile = tileCache.getTileOnSide(forgeSide);
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            TileEntity tile = tileCache.getTileOnSide(side);
             if (tile instanceof TileBoxBase) {
                 TileBoxBase box = (TileBoxBase) tile;
-                box.onNeighborStateChange(this, forgeSide);
+                box.onNeighborStateChange(this, side);
             }
         }
     }
 
     @Override
-    public int getPowerOutput(int side) {
-        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, getPos(), MiscTools.getOppositeSide(side));
+    public int getPowerOutput(EnumFacing side) {
+        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, getPos(), side.getOpposite());
         if (tile instanceof TileBoxBase)
             return NO_POWER;
-        return isEmittingRedstone(EnumFacing.VALUES[side]) ? FULL_POWER : NO_POWER;
+        return isEmittingRedstone(side) ? FULL_POWER : NO_POWER;
     }
 
     @Override
@@ -186,4 +178,5 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     public SignalAspect getTriggerAspect() {
         return getBoxSignalAspect(null);
     }
+
 }

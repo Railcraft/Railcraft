@@ -99,7 +99,7 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
         return false;
     }
 
-    public int getPowerOutput(int side) {
+    public int getPowerOutput(EnumFacing side) {
         return PowerPlugin.NO_POWER;
     }
 

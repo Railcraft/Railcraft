@@ -9,6 +9,12 @@
 package mods.railcraft.client.render;
 
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
+import net.minecraft.block.Block;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -17,16 +23,12 @@ import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.TileSignalBase;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSignal implements ICombinedRenderer {
+public class RenderSignal extends RenderTESRSignals implements ICombinedRenderer {
 
     private final SignalAspect defaultAspect;
     private final RenderInfo info = new RenderInfo();
@@ -35,6 +37,8 @@ public class RenderSignal implements ICombinedRenderer {
         this.defaultAspect = defaultAspect;
         info.template = RailcraftBlocks.getBlockSignal();
         info.texture = new IIcon[6];
+        tesrInfo.template = RailcraftBlocks.getBlockSignal();
+        tesrInfo.texture = new IIcon[6];
     }
 
     @Override
@@ -60,14 +64,14 @@ public class RenderSignal implements ICombinedRenderer {
         info.texture[facing] = BlockSignalRailcraft.texturesSignalSingle[2];
         RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, true, false);
 
-        // Aspect
+        /*// Aspect
         SignalAspect aspect = tile.getSignalAspect();
         if (!aspect.isLit())
             aspect = SignalAspect.OFF;
         info.texture[facing] = BlockSignalRailcraft.texturesLampTop[aspect.getTextureIndex()];
         info.setRenderSingleSide(facing);
         info.brightness = aspect.getTextureBrightness();
-        RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, (info.brightness < 0), false);
+        RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, (info.brightness < 0), false);*/
         info.brightness = -1;
         info.setRenderAllSides();
         info.texture[facing] = BlockSignalRailcraft.texturesSignalSingle[2];
@@ -106,8 +110,8 @@ public class RenderSignal implements ICombinedRenderer {
         max = 10 * pix;
         Block below = WorldPlugin.getBlock(iBlockAccess, x, y - 1, z);
         World world = Game.getWorld();
-        if (PostConnectionHelper.connect(iBlockAccess, x, y, z, EnumFacing.DOWN) != ConnectStyle.NONE
-                || iBlockAccess.isSideSolid(x, y - 1, z, EnumFacing.UP, true)
+        if (PostConnectionHelper.connect(iBlockAccess, x, y, z, ForgeDirection.DOWN) != ConnectStyle.NONE
+                || iBlockAccess.isSideSolid(x, y - 1, z, ForgeDirection.UP, true)
                 || (below != null && below.canPlaceTorchOnTop(world, x, y - 1, z))) {
             info.setBlockBounds(min, 0, min, max, 15 * pix, max);
             RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, true, false);
@@ -116,10 +120,10 @@ public class RenderSignal implements ICombinedRenderer {
         // Post Connections
         boolean east_west = false;
         boolean north_south = false;
-        boolean west = PostConnectionHelper.connect(iBlockAccess, x, y, z, EnumFacing.WEST) != ConnectStyle.NONE;
-        boolean east = PostConnectionHelper.connect(iBlockAccess, x, y, z, EnumFacing.EAST) != ConnectStyle.NONE;
-        boolean north = PostConnectionHelper.connect(iBlockAccess, x, y, z, EnumFacing.NORTH) != ConnectStyle.NONE;
-        boolean south = PostConnectionHelper.connect(iBlockAccess, x, y, z, EnumFacing.SOUTH) != ConnectStyle.NONE;
+        boolean west = PostConnectionHelper.connect(iBlockAccess, x, y, z, ForgeDirection.WEST) != ConnectStyle.NONE;
+        boolean east = PostConnectionHelper.connect(iBlockAccess, x, y, z, ForgeDirection.EAST) != ConnectStyle.NONE;
+        boolean north = PostConnectionHelper.connect(iBlockAccess, x, y, z, ForgeDirection.NORTH) != ConnectStyle.NONE;
+        boolean south = PostConnectionHelper.connect(iBlockAccess, x, y, z, ForgeDirection.SOUTH) != ConnectStyle.NONE;
         if (east || west)
             east_west = true;
         if (north || south)
@@ -197,4 +201,28 @@ public class RenderSignal implements ICombinedRenderer {
         GL11.glPopAttrib();
     }
 
+    private final RenderInfo tesrInfo = new RenderInfo();
+
+    @Override
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
+        super.renderTileEntityAt(te, x, y, z, f);
+        if(!(te instanceof TileSignalBase)){
+            return;
+        }
+        RenderInfo info = tesrInfo;
+
+        TileSignalBase tile = (TileSignalBase) te;
+
+        int facing = tile.getFacing().ordinal();
+        if (facing >= info.texture.length)
+            facing = 0;
+
+        SignalAspect aspect = tile.getSignalAspect();
+        if (!aspect.isLit())
+            aspect = SignalAspect.OFF;
+        info.texture[facing] = BlockSignalRailcraft.texturesLampTop[aspect.getTextureIndex()];
+        info.setRenderSingleSide(facing);
+        info.brightness = aspect.getTextureBrightness();
+        doRenderAspect(info, tile, x, y, z);
+    }
 }

@@ -86,7 +86,7 @@ public class ItemPlate extends ItemRailcraft {
         RailcraftCraftingManager.rollingMachine.addRecipe(new ItemStack(this, 4),
                 "II",
                 "II",
-                'I', Items.iron_ingot);
+                'I', "ingotIron");
 
         // Steel Plate
         IRecipe recipe = new ShapedOreRecipe(RailcraftItem.plate.getStack(4, EnumPlate.STEEL),
@@ -99,7 +99,7 @@ public class ItemPlate extends ItemRailcraft {
         recipe = new ShapedOreRecipe(RailcraftItem.plate.getStack(4, EnumPlate.TIN),
                 "IT",
                 "TI",
-                'I', "ironIngot",
+                'I', "ingotIron",
                 'T', "ingotTin");
         RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
 
