@@ -18,7 +18,7 @@ public class TrackHoldingTrain extends TrackLockingBase {
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (Game.isHost(getWorld()))
             migrateTrack(TrackNextGenLocking.LockingProfileType.HOLDING_TRAIN);
     }

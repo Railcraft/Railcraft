@@ -63,8 +63,8 @@ public class TileItemLoader extends TileLoaderItemBase {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld())) {
             return;

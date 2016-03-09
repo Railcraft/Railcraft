@@ -18,7 +18,7 @@ public class TrackBoardingTrain extends TrackBoarding {
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (Game.isHost(getWorld())) {
             TrackNextGenLocking.LockingProfileType type;
             if (isReversed())

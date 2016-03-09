@@ -231,11 +231,6 @@ public abstract class MiscTools {
      * Returns the side closest to the player. Used in placement logic for
      * blocks.
      *
-     * @param world
-     * @param i
-     * @param j
-     * @param k
-     * @param entityplayer
      * @return a side
      */
     public static EnumFacing getSideClosestToPlayer(World world, int i, int j, int k, EntityLivingBase entityplayer) {
@@ -270,14 +265,9 @@ public abstract class MiscTools {
      * This function unlike getSideClosestToPlayer can only return north, south,
      * east, west.
      *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param player
      * @return a side
      */
-    public static EnumFacing getHorizontalSideClosestToPlayer(World world, int x, int y, int z, EntityLivingBase player) {
+    public static EnumFacing getHorizontalSideFacingPlayer(EntityLivingBase player) {
         int dir = MathHelper.floor_double((double) ((player.rotationYaw * 4.0F) / 360.0F) + 0.5) & 3;
         switch (dir) {
             case 0:

@@ -50,7 +50,7 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (Game.isNotHost(getWorld())) {
             return;
         }

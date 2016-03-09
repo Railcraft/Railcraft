@@ -76,7 +76,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
      * the passed in cart whether the switch is sprung or not. It caches the server
      * responses for the clients to use.
      * Note: This method should not modify any variables except the cache, we leave
-     * that to updateEntity().
+     * that to update().
      *
      * @param cart
      * @return
@@ -286,7 +286,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (Game.isNotHost(getWorld())) {
             switchDevice = getSwitchDevice();
             if (switchDevice != null) {

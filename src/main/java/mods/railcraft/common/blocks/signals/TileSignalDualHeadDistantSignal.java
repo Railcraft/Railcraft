@@ -33,18 +33,13 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
     }
 
     @Override
-    protected boolean isLit() {
-        return isLit(getTopAspect()) || isLit(getBottomAspect());
+    public int getLightValue() {
+        return Math.max(getTopAspect().getLightValue(), getBottomAspect().getLightValue());
     }
 
     @Override
-    protected boolean isBlinking() {
-        return getTopAspect().isBlinkAspect() || getBottomAspect().isBlinkAspect();
-    }
-
-    @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isNotHost(worldObj)) {
             receiver.tickClient();
             return;

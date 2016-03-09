@@ -43,7 +43,7 @@ public class TrackDefault extends TrackInstanceBase {
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (Game.isHost(getWorld())) {
             getWorld().setBlock(getX(), getY(), getZ(), Blocks.rail, tileEntity.getBlockMetadata(), 3);
         }

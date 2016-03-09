@@ -138,8 +138,8 @@ public class TileChestMetals extends TileChestRailcraft {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (clock % TICK_PER_CONDENSE == 0 && Game.isHost(worldObj))
             if (!target.evaluate(this))

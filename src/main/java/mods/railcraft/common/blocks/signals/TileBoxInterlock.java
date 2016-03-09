@@ -45,8 +45,8 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (worldObj.isRemote) {
             controller.tickClient();
             receiver.tickClient();

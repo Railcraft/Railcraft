@@ -26,8 +26,8 @@ public class TileSignalDistantSignal extends TileSignalBase implements IReceiver
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isNotHost(getWorld())) {
             receiver.tickClient();
             return;

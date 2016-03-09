@@ -277,7 +277,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        EnumFacing facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, getPos(), entityliving);
+        EnumFacing facing = MiscTools.getHorizontalSideFacingPlayer(worldObj, getPos(), entityliving);
         if (facing == EnumFacing.EAST || facing == EnumFacing.WEST)
             flippedAxis = true;
     }

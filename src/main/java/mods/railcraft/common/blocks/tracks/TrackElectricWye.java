@@ -31,8 +31,8 @@ public class TrackElectricWye extends TrackWye implements IElectricGrid {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         chargeHandler.tick();
     }
 

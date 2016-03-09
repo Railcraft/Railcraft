@@ -90,13 +90,13 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
      * an onMinecartPass() event.
      */
     @Override
-    public void updateEntity() {
+    public void update() {
 
         if (Game.isHost(getWorld())) {
             boolean updateClient = false; // flag determines whether we send an update to the client, only update when visible changes occur
 
             // At the time we read from NBT, LinkageManager has not been initialized so we cannot
-            // lookup the carts by UUID in readFromNBT(). We must wait until updateEntity(), which
+            // lookup the carts by UUID in readFromNBT(). We must wait until update(), which
             // occurs after LinkageManager gets initialized. The justLoaded flag lets us lookup
             // the carts only after restoring from NBT.
             if (justLoaded) {
@@ -355,7 +355,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
 
         uuid = readUUID("uuid", data);
 
-        justLoaded = true; // This signals updateEntity() to dereference the cart UUID's we read in here
+        justLoaded = true; // This signals update() to dereference the cart UUID's we read in here
     }
 
     @Override

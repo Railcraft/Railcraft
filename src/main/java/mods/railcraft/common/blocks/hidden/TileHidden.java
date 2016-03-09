@@ -36,8 +36,8 @@ public class TileHidden extends RailcraftTileEntity {
     public long timestamp = -1;
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isNotHost(worldObj)) {
             if (lastMarker != null && EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TRACKING))
                 EffectManager.instance.trailEffect(lastMarker.x, lastMarker.y, lastMarker.z, this, colorSeed);

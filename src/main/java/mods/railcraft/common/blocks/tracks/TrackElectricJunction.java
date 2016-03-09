@@ -31,8 +31,8 @@ public class TrackElectricJunction extends TrackJunction implements IElectricGri
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         chargeHandler.tick();
     }
 

@@ -86,9 +86,9 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
-        track.updateEntity();
+    public void update() {
+        super.update();
+        track.update();
     }
 
     @Override

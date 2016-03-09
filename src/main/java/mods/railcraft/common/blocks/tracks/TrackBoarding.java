@@ -22,7 +22,7 @@ public class TrackBoarding extends TrackLockingBase implements ITrackReversable 
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (Game.isHost(getWorld())) {
             TrackNextGenLocking.LockingProfileType type;
             if (isReversed())

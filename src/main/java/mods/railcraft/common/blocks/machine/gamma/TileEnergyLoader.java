@@ -46,8 +46,8 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld()))
             return;

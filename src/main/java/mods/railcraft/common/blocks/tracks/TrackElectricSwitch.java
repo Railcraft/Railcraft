@@ -31,8 +31,8 @@ public class TrackElectricSwitch extends TrackSwitch implements IElectricGrid {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         chargeHandler.tick();
     }
 

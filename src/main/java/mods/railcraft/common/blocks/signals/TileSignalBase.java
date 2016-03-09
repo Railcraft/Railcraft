@@ -10,12 +10,14 @@ package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
@@ -33,7 +35,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     private static final EnumFacing[] UP_DOWN_AXES = new EnumFacing[]{UP, DOWN};
     protected static final float BOUNDS = 0.15f;
     private EnumFacing facing = EnumFacing.NORTH;
-    private int prevLigthValue;
+    private int prevLightValue;
 
     @Override
     public boolean rotateBlock(EnumFacing axis) {
@@ -55,18 +57,18 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
+    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
         getBlockType().setBlockBounds(BOUNDS, 0.35f, BOUNDS, 1 - BOUNDS, 1f, 1 - BOUNDS);
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.fromBounds(i + BOUNDS, j + 0.35f, k + BOUNDS, i + 1 - BOUNDS, j + 1, k + 1 - BOUNDS);
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, BlockPos pos) {
+        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(-BOUNDS).raiseBottom(0.35).build();
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.fromBounds(i + BOUNDS, j + 0.35f, k + BOUNDS, i + 1 - BOUNDS, j + 1, k + 1 - BOUNDS);
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, BlockPos pos) {
+        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(-BOUNDS).raiseBottom(0.35).build();
     }
 
     @Override
@@ -75,14 +77,14 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
-        if(Game.isNotHost(worldObj)){
+    public void update() {
+        super.update();
+        if (Game.isNotHost(worldObj)) {
             boolean needsUpdate = false;
             int lightValue = getLightValue();
-            if (prevLigthValue != lightValue) {
-                prevLigthValue = lightValue;
-                worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+            if (prevLightValue != lightValue) {
+                prevLightValue = lightValue;
+                worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos());
                 needsUpdate = true;
             }
             if (needsUpdate) {
@@ -91,27 +93,9 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
         }
     }
 
-    protected boolean isLit(SignalAspect aspect) {
-        return aspect != SignalAspect.OFF && !aspect.isBlinkAspect();
-    }
-
-    protected boolean isLit() {
-      return isLit(getSignalAspect());
-    }
-
-    protected boolean isBlinking() {
-        return getSignalAspect().isBlinkAspect();
-    }
-
     @Override
     public int getLightValue() {
-        if (isLit()) {
-            return 5;
-        }
-        if(isBlinking()) {
-            return 3;
-        }
-        return 0;
+        return getSignalAspect().getLightValue();
     }
 
     public void setFacing(EnumFacing facing) {
@@ -123,9 +107,9 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
-        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, getPos(), entityliving);
+    public void onBlockPlacedBy(EntityLivingBase entityLiving, ItemStack stack) {
+        super.onBlockPlacedBy(entityLiving, stack);
+        facing = MiscTools.getHorizontalSideFacingPlayer(entityLiving);
     }
 
     @Override
@@ -137,7 +121,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        facing = EnumFacing.getOrientation(data.getByte("Facing"));
+        facing = EnumFacing.getFront(data.getByte("Facing"));
     }
 
     @Override
@@ -151,7 +135,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        facing = EnumFacing.getOrientation(data.readByte());
+        facing = EnumFacing.getFront(data.readByte());
 
         markBlockForUpdate();
     }

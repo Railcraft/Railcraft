@@ -45,8 +45,8 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld()))
             return;

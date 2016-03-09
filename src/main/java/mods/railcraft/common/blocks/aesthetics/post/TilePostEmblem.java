@@ -31,7 +31,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        setFacing(MiscTools.getHorizontalSideClosestToPlayer(worldObj, getPos(), entityliving));
+        setFacing(MiscTools.getHorizontalSideFacingPlayer(worldObj, getPos(), entityliving));
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt != null) {
             if (nbt.hasKey("color"))

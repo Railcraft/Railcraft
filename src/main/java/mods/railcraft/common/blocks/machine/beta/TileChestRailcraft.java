@@ -51,7 +51,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        facing = MiscTools.getHorizontalSideClosestToPlayer(worldObj, getPos(), entityliving);
+        facing = MiscTools.getHorizontalSideFacingPlayer(worldObj, getPos(), entityliving);
     }
 
     @Override

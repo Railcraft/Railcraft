@@ -53,8 +53,8 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isNotHost(worldObj)) {
             preRotationYaw = rotationYaw;
             rotationYaw += 5;
