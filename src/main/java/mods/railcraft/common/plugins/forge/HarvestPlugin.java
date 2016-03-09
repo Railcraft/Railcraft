@@ -9,15 +9,15 @@
 package mods.railcraft.common.plugins.forge;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class HarvestPlugin {
-    
-    public static void setToolClass(Item item, String toolClass, int level){
+
+    public static void setToolClass(Item item, String toolClass, int level) {
         item.setHarvestLevel(toolClass, level);
     }
 
@@ -25,12 +25,12 @@ public class HarvestPlugin {
         block.setHarvestLevel(toolClass, level);
     }
 
-    public static void setHarvestLevel(Block block, int meta, String toolClass, int level) {
-        block.setHarvestLevel(toolClass, level, meta);
+    public static void setHarvestLevel(Block block, IBlockState blockState, String toolClass, int level) {
+        block.setHarvestLevel(toolClass, level, blockState);
     }
 
-    public static int getBlockHarvestLevel(Block block, int meta, String toolClass){
-//        return MinecraftForge.getBlockHarvestLevel(block, meta, toolClass);
+    public static int getBlockHarvestLevel(Block block,IBlockState blockState, String toolClass) {
+//        return block.getHarvestLevel(blockState, toolClass);
         return 0;
     }
 }

@@ -18,14 +18,12 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.IFuelHandler;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FuelPlugin {
@@ -87,9 +85,8 @@ public class FuelPlugin {
         try {
             Item item = stack.getItem();
 
-            if (item instanceof ItemBlock) {
-                Block block = InvTools.getBlockFromStack(stack);
-
+            Block block = InvTools.getBlockFromStack(stack);
+            if (block != null) {
                 String name = block.getUnlocalizedName();
                 if (name != null && name.contains("blockScaffold"))
                     return 0;

@@ -8,69 +8,60 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import static net.minecraftforge.common.util.EnumFacing.*;
-
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class PowerPlugin {
 
-    private static final EnumFacing[] SIDES = {NORTH, EAST, SOUTH, WEST};
     public static final int NO_POWER = 0;
     public static final int FULL_POWER = 15;
 
-    public static boolean isBlockBeingPowered(World world, int x, int y, int z) {
-        return world.isBlockIndirectlyGettingPowered(x, y, z);
+    public static boolean isBlockBeingPowered(World world, BlockPos pos) {
+        return world.isBlockIndirectlyGettingPowered(pos) > 0;
     }
 
-    public static boolean isBlockBeingPowered(World world, int x, int y, int z, EnumFacing from) {
-        x = MiscTools.getXOnSide(x, from);
-        y = MiscTools.getYOnSide(y, from);
-        z = MiscTools.getZOnSide(z, from);
-        return world.getIndirectPowerOutput(x, y, z, from.ordinal());
-    }
-    
-    public static int getBlockPowerLevel(World world, int x, int y, int z, EnumFacing from) {
-    	x = MiscTools.getXOnSide(x, from);
-    	y = MiscTools.getYOnSide(y, from);
-    	z = MiscTools.getZOnSide(z, from);
-    	return world.getIndirectPowerLevelTo(x, y, z, from.ordinal());
+    public static boolean isBlockBeingPowered(World world, BlockPos pos, EnumFacing from) {
+        return world.isSidePowered(pos.offset(from), from);
     }
 
-    public static boolean isBlockBeingPoweredByRepeater(World world, int x, int y, int z, EnumFacing from) {
-        Block block = WorldPlugin.getBlockOnSide(world, x, y, z, from);
-        return block == Blocks.powered_repeater && isBlockBeingPowered(world, x, y, z, from);
+    public static int getBlockPowerLevel(World world, BlockPos pos, EnumFacing from) {
+        return world.getRedstonePower(pos.offset(from), from);
     }
 
-    public static boolean isBlockBeingPoweredByRepeater(World world, int x, int y, int z) {
-        for (EnumFacing side : SIDES) {
-            if (isBlockBeingPoweredByRepeater(world, x, y, z, side))
+    public static boolean isBlockBeingPoweredByRepeater(World world, BlockPos pos, EnumFacing from) {
+        Block block = WorldPlugin.getBlock(world, pos.offset(from));
+        return block == Blocks.powered_repeater && isBlockBeingPowered(world, pos, from);
+    }
+
+    public static boolean isBlockBeingPoweredByRepeater(World world, BlockPos pos) {
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            if (isBlockBeingPoweredByRepeater(world, pos, side))
                 return true;
         }
         return false;
     }
 
-    public static boolean isRedstonePowered(World world, int x, int y, int z) {
+    @Deprecated
+    public static boolean isRedstonePowered(World world, BlockPos pos) {
         for (EnumFacing side : EnumFacing.VALUES) {
-            if (isRedstonePowering(world, x, y, z, 0, side) || isRedstonePowering(world, x, y, z, -1, side))
+            if (isRedstonePowering(world, pos, 0, side) || isRedstonePowering(world, pos, -1, side))
                 return true;
         }
         return false;
     }
 
-    private static boolean isRedstonePowering(World world, int x, int y, int z, int yOffset, EnumFacing side) {
-        Block block = WorldPlugin.getBlockOnSide(world, x, y + yOffset, z, side);
+    @Deprecated
+    private static boolean isRedstonePowering(World world, BlockPos pos, int yOffset, EnumFacing side) {
+        BlockPos wirePos = pos.up(yOffset).offset(side);
+        Block block = WorldPlugin.getBlock(world, wirePos);
         if (block == Blocks.redstone_wire) {
-            int meta = WorldPlugin.getBlockMetadataOnSide(world, x, y + yOffset, z, side);
-            if (meta > 0)
-                return true;
+            return block.getWeakPower(world, wirePos, WorldPlugin.getBlockState(world, wirePos), side) > 0;
         }
         return false;
     }

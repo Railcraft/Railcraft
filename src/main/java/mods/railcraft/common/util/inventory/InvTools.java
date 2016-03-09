@@ -42,6 +42,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
@@ -978,6 +979,7 @@ public abstract class InvTools {
         return !(stack == null || block == null) && stack.getItem() instanceof ItemBlock && ((ItemBlock) stack.getItem()).getBlock() == block;
     }
 
+    @Nullable
     public static Block getBlockFromStack(ItemStack stack) {
         if (stack.getItem() instanceof ItemBlock)
             return ((ItemBlock) stack.getItem()).getBlock();

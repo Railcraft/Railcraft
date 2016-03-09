@@ -40,7 +40,7 @@ public class CraftingPlugin {
             Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the output was null. Skipping", input.getUnlocalizedName());
             return;
         }
-        FurnaceRecipes.smelting().func_151394_a(input, output, xp);
+        FurnaceRecipes.instance().addSmeltingRecipe(input, output, xp);
     }
 
     private static Object[] cleanRecipeArray(Object[] recipeArray) {
@@ -85,10 +85,6 @@ public class CraftingPlugin {
             GameRegistry.addRecipe(result, recipeArray);
     }
 
-    /**
-     * @param result
-     * @param recipeArray
-     */
     public static void addShapelessRecipe(ItemStack result, Object... recipeArray) {
         if (result == null || result.stackSize <= 0) {
             Game.logTrace(Level.WARN, "Tried to define invalid shapeless recipe, the result was null or zero. Skipping");

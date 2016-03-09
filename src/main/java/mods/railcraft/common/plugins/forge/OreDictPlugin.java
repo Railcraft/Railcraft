@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class OreDictPlugin {
