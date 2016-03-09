@@ -20,7 +20,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
-import scala.tools.nsc.interpreter.Power;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
