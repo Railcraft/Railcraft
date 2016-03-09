@@ -32,7 +32,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     private static final ForgeDirection[] UP_DOWN_AXES = new ForgeDirection[]{UP, DOWN};
     protected static final float BOUNDS = 0.15f;
     private ForgeDirection facing = ForgeDirection.NORTH;
-    private boolean prevLightState;
+    private int prevLigthValue;
 
     @Override
     public boolean rotateBlock(ForgeDirection axis) {
@@ -78,9 +78,9 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
         super.updateEntity();
         if(Game.isNotHost(worldObj)){
             boolean needsUpdate = false;
-            boolean lightState = isLit();
-            if (prevLightState != lightState) {
-                prevLightState = lightState;
+            int lightValue = getLightValue();
+            if (prevLigthValue != lightValue) {
+                prevLigthValue = lightValue;
                 worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
                 needsUpdate = true;
             }
