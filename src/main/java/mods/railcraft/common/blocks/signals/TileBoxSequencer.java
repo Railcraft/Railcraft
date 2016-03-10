@@ -133,11 +133,11 @@ public class TileBoxSequencer extends TileBoxBase {
     }
 
     @Override
-    public int getPowerOutput(int side) {
-        TileEntity tile = tileCache.getTileOnSide(MiscTools.getOppositeSide(side));
+    public int getPowerOutput(EnumFacing side) {
+        TileEntity tile = tileCache.getTileOnSide(side.getOpposite());
         if (tile instanceof TileBoxBase)
             return NO_POWER;
-        return sideOutput.getOpposite().ordinal() == side ? FULL_POWER : NO_POWER;
+        return sideOutput.getOpposite() == side ? FULL_POWER : NO_POWER;
     }
 
     @Override
@@ -161,7 +161,7 @@ public class TileBoxSequencer extends TileBoxBase {
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        sideOutput = EnumFacing.getOrientation(data.getByte("sideOutput"));
+        sideOutput = EnumFacing.getFront(data.getByte("sideOutput"));
         powerState = data.getBoolean("powerState");
         neighborState = data.getBoolean("neighborState");
     }
@@ -175,7 +175,7 @@ public class TileBoxSequencer extends TileBoxBase {
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        sideOutput = EnumFacing.getOrientation(data.readByte());
+        sideOutput = EnumFacing.getFront(data.readByte());
         markBlockForUpdate();
     }
 
