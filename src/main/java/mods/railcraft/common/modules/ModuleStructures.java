@@ -120,7 +120,7 @@ public class ModuleStructures extends RailcraftModule {
 //            Block cube = RailcraftBlocks.getBlockCube();
 //            if(cube != null) {
 //                ItemStack stack = cubeType.getItem(8);
-//                RailcraftLanguage.getInstance().registerItemName(stack, cubeType.getTag());
+//                RailcraftLanguage.instance().registerItemName(stack, cubeType.getTag());
 //                ModLoader.addRecipe(stack, new Object[]{
 //                        "WWW",
 //                        "III",
@@ -172,14 +172,14 @@ public class ModuleStructures extends RailcraftModule {
                     " I ",
                     "III",
                     'I', "ingotIron");
-            RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
             recipe = new ShapedOreRecipe(stack,
                     "I I",
                     "III",
                     "I I",
                     'I', "ingotIron");
-            RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
             CraftingPlugin.addShapedRecipe(EnumPost.METAL_PLATFORM_UNPAINTED.getItem(4),
                     " T ",
@@ -193,14 +193,14 @@ public class ModuleStructures extends RailcraftModule {
                     " I ",
                     "III",
                     'I', "ingotSteel");
-            RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
             recipe = new ShapedOreRecipe(stack,
                     "I I",
                     "III",
                     "I I",
                     'I', "ingotSteel");
-            RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
             stack = EnumPost.METAL_UNPAINTED.getItem(12);
             recipe = new ShapedOreRecipe(stack,
@@ -208,13 +208,13 @@ public class ModuleStructures extends RailcraftModule {
                     " I ",
                     "III",
                     'I', "ingotBronze");
-            RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
             recipe = new ShapedOreRecipe(stack,
                     "I I",
                     "III",
                     "I I",
                     'I', "ingotBronze");
-            RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
             stack = EnumPost.METAL_UNPAINTED.getItem(20);
             recipe = new ShapedOreRecipe(stack,
@@ -222,13 +222,13 @@ public class ModuleStructures extends RailcraftModule {
                     " I ",
                     "III",
                     'I', "ingotRefinedIron");
-            RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
             recipe = new ShapedOreRecipe(stack,
                     "I I",
                     "III",
                     "I I",
                     'I', "ingotRefinedIron");
-            RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
         }
 
         if (blockPost != null && BlockPostMetal.post != null) {

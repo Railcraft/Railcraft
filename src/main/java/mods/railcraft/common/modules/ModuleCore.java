@@ -204,11 +204,6 @@ public class ModuleCore extends RailcraftModule {
         replaceVanillaCart(EnumCart.TNT, Items.tnt_minecart, "MinecartTNT", 45);
         replaceVanillaCart(EnumCart.HOPPER, Items.hopper_minecart, "MinecartHopper", 46);
 
-        CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), Items.chest_minecart);
-        CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), Items.furnace_minecart);
-        CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), Items.tnt_minecart);
-        CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), Items.hopper_minecart);
-
         LootPlugin.addLootRailway(EnumCart.BASIC.getCartItem(), 1, 1, "cart.basic");
         LootPlugin.addLootRailway(EnumCart.CHEST.getCartItem(), 1, 1, "cart.chest");
         LootPlugin.addLootRailway(EnumCart.TNT.getCartItem(), 1, 3, "cart.tnt");
@@ -226,18 +221,18 @@ public class ModuleCore extends RailcraftModule {
 
         // Define Recipes
         if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
-            IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.minecart), false, new Object[]{
+            IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.minecart), false,
                     "I I",
                     "III",
-                    'I', "ingotBronze",});
+                    'I', "ingotBronze");
             CraftingManager.getInstance().getRecipeList().add(recipe);
         }
 
         if (RailcraftConfig.getRecipeConfig("railcraft.cart.steel")) {
-            IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.minecart, 2), false, new Object[]{
+            IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.minecart, 2), false,
                     "I I",
                     "III",
-                    'I', "ingotSteel",});
+                    'I', "ingotSteel");
             CraftingManager.getInstance().getRecipeList().add(recipe);
         }
 

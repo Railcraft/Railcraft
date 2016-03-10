@@ -41,7 +41,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
             @Override
             public void setInventorySlotContents(int slot, ItemStack stack) {
                 super.setInventorySlotContents(slot, stack);
-                if (stack != null && Game.isNotHost(tile.getWorldObj()))
+                if (stack != null && Game.isNotHost(tile.getWorld()))
                     InvTools.addItemToolTip(stack, LocalizationPlugin.translate("railcraft.gui.rolling.machine.tip.craft"));
             }
 
@@ -119,7 +119,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
 
     @Override
     public final void onCraftMatrixChanged(IInventory inv) {
-        ItemStack output = RollingMachineCraftingManager.getInstance().findMatchingRecipe(craftMatrix, tile.getWorldObj());
+        ItemStack output = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, tile.getWorldObj());
         craftResult.setInventorySlotContents(0, output);
     }
 

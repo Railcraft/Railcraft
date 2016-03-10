@@ -9,6 +9,7 @@
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.items.RailcraftPartItems;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -16,7 +17,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class RotorRepairRecipe implements IRecipe {
@@ -72,5 +72,10 @@ public class RotorRepairRecipe implements IRecipe {
     @Override
     public ItemStack getRecipeOutput() {
         return null;
+    }
+
+    @Override
+    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+        return CraftingPlugin.emptyContainers(inv);
     }
 }

@@ -93,14 +93,14 @@ public class ItemRail extends ItemRailcraft {
                 "I I",
                 "I I",
                 'I', "ingotBronze");
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
         recipe = new ShapedOreRecipe(item.getStack(16, EnumRail.STANDARD),
                 "I I",
                 "I I",
                 "I I",
                 'I', "ingotSteel");
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
         // Advanced
         RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(8, EnumRail.ADVANCED),
@@ -122,7 +122,7 @@ public class ItemRail extends ItemRailcraft {
                 'I', "ingotSteel",
                 'B', Items.blaze_powder,
                 'G', Items.gold_ingot);
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
         // Reinforced
         recipe = new ShapedOreRecipe(item.getStack(8, EnumRail.REINFORCED),
@@ -131,7 +131,7 @@ public class ItemRail extends ItemRailcraft {
                 "IDI",
                 'I', "ingotSteel",
                 'D', "dustObsidian");
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
         // Electric
         recipe = new ShapedOreRecipe(item.getStack(6, EnumRail.ELECTRIC),
@@ -140,7 +140,7 @@ public class ItemRail extends ItemRailcraft {
                 "ICI",
                 'I', item.getRecipeObject(EnumRail.STANDARD),
                 'C', "ingotCopper");
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
     }
 
     @Override

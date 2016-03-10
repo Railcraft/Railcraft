@@ -164,7 +164,6 @@ public class ModuleTransport extends RailcraftModule {
                         'M', Items.minecart);
                 cart.setContents(new ItemStack(Blocks.glass, 8));
             }
-            CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), cart.getCartItem());
             CraftingPlugin.addRecipe(new CartFilterRecipe());
         }
 
@@ -176,7 +175,6 @@ public class ModuleTransport extends RailcraftModule {
                     "M",
                     'B', Blocks.trapped_chest,
                     'M', Items.minecart);
-            CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), cart.getCartItem());
             CraftingPlugin.addRecipe(new CartFilterRecipe());
         }
 

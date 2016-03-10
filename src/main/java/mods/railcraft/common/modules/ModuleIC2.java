@@ -66,7 +66,7 @@ public class ModuleIC2 extends RailcraftModule {
 //        if(id > 0){
 //            creosoteWood = new ItemRailcraft(id).setItemName("creosoteWood").setIconIndex(184);
 //            ItemStack wood = new ItemStack(creosoteWood);
-//            RailcraftLanguage.getInstance().registerItemName(creosoteWood, "Creosote Wood");
+//            RailcraftLanguage.instance().registerItemName(creosoteWood, "Creosote Wood");
 //
 //            ItemStack oil = RailcraftPartItems.getCreosoteOil(2);
 //            Ic2Recipes.addExtractorRecipe(wood, oil);
@@ -110,7 +110,6 @@ public class ModuleIC2 extends RailcraftModule {
                         "M",
                         'E', batbox,
                         'M', Items.minecart);
-                CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
             }
         }
 
@@ -124,7 +123,6 @@ public class ModuleIC2 extends RailcraftModule {
                         "M",
                         'E', cesu,
                         'M', Items.minecart);
-                CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
             }
         }
 
@@ -138,7 +136,6 @@ public class ModuleIC2 extends RailcraftModule {
                         "M",
                         'E', mfe,
                         'M', Items.minecart);
-                CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
             }
         }
 

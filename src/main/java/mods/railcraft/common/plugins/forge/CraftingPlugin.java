@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import mods.railcraft.common.items.IItemMetaEnum;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
@@ -109,6 +110,17 @@ public class CraftingPlugin {
 
     public static void addRecipe(IRecipe recipe) {
         GameRegistry.addRecipe(recipe);
+    }
+
+    public static ItemStack[] emptyContainers(InventoryCrafting inv) {
+        ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
+
+        for (int i = 0; i < grid.length; ++i) {
+            ItemStack itemstack = inv.getStackInSlot(i);
+            grid[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+        }
+
+        return grid;
     }
 
 }

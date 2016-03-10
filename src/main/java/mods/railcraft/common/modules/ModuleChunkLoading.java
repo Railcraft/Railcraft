@@ -109,7 +109,6 @@ public class ModuleChunkLoading extends RailcraftModule {
                         "M",
                         'A', anchor,
                         'M', Items.minecart);
-                CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), cart.getCartItem());
             }
             cart.setContents(anchor);
         }
@@ -125,7 +124,6 @@ public class ModuleChunkLoading extends RailcraftModule {
                         "M",
                         'A', anchor,
                         'M', Items.minecart);
-                CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), cart.getCartItem());
             }
             cart.setContents(anchor);
         }

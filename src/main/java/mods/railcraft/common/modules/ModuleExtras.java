@@ -17,7 +17,6 @@ import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 public class ModuleExtras extends RailcraftModule {
 
@@ -45,7 +44,6 @@ public class ModuleExtras extends RailcraftModule {
                     "M",
                     'B', "craftingTableWood",
                     'M', Items.minecart);
-            CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), cart.getCartItem());
             LootPlugin.addLootRailway(cart.getCartItem(), 1, 1, cart.getTag());
         }
 

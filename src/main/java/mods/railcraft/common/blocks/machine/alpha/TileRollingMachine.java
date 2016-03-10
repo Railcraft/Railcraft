@@ -153,7 +153,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
             return;
 
         if (clock % 8 == 0) {
-            currentReceipe = RollingMachineCraftingManager.getInstance().findMatchingRecipe(craftMatrix, worldObj);
+            currentReceipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj);
             if (currentReceipe != null)
                 findMoreStuff();
         }
@@ -162,7 +162,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
             if (progress >= PROCESS_TIME) {
                 isWorking = false;
                 if (InvTools.isRoomForStack(currentReceipe, invResult)) {
-                    currentReceipe = RollingMachineCraftingManager.getInstance().findMatchingRecipe(craftMatrix, worldObj);
+                    currentReceipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj);
                     if (currentReceipe != null) {
                         for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
                             craftMatrix.decrStackSize(i, 1);
@@ -253,7 +253,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     }
 
     public boolean canMakeMore() {
-        if (RollingMachineCraftingManager.getInstance().findMatchingRecipe(craftMatrix, worldObj) == null)
+        if (RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj) == null)
             return false;
         if (useLast)
             return true;

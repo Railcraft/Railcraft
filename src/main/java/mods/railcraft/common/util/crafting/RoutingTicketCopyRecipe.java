@@ -10,6 +10,7 @@ package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.ItemTicketGold;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class RoutingTicketCopyRecipe implements IRecipe {
@@ -67,5 +67,10 @@ public class RoutingTicketCopyRecipe implements IRecipe {
     @Override
     public ItemStack getRecipeOutput() {
         return ItemTicket.getTicket();
+    }
+
+    @Override
+    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+        return CraftingPlugin.emptyContainers(inv);
     }
 }

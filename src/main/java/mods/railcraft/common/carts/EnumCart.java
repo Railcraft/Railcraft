@@ -12,7 +12,9 @@ import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.util.crafting.CartUncraftingRecipe;
 import mods.railcraft.common.util.misc.EntityIDs;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -30,40 +32,49 @@ import java.util.Locale;
 
 public enum EnumCart implements ICartType {
 
-    BASIC(0, EntityCartBasic.class, null),
-    CHEST(0, EntityCartChest.class, new ItemStack(Blocks.chest)),
-    FURNACE(0, EntityCartFurnace.class, new ItemStack(Blocks.furnace)),
-    TNT_WOOD(0, EntityCartTNTWood.class, new ItemStack(Blocks.tnt)),
-    TANK(0, EntityCartTank.class, null),
-    CARGO(0, EntityCartCargo.class, new ItemStack(Blocks.trapped_chest)),
-    ANCHOR(0, EntityCartAnchor.class, null),
-    WORK(0, EntityCartWork.class, new ItemStack(Blocks.crafting_table)),
-    TRACK_RELAYER(1, EntityCartTrackRelayer.class, null),
-    UNDERCUTTER(1, EntityCartUndercutter.class, null),
-    PUMPKIN(3, EntityCartPumpkin.class, new ItemStack(Blocks.pumpkin)),
-    GIFT(3, EntityCartGift.class, null),
-    ANCHOR_PERSONAL(0, EntityCartAnchorPersonal.class, null),
-    ANCHOR_ADMIN(3, EntityCartAnchorAdmin.class, null),
-    TNT(0, EntityCartTNT.class, new ItemStack(Blocks.tnt)),
-    LOCO_STEAM_SOLID(1, EntityLocomotiveSteamSolid.class, null),
-    LOCO_STEAM_MAGIC(1, EntityLocomotiveSteamMagic.class, null),
-    LOCO_ELECTRIC(1, EntityLocomotiveElectric.class, null),
-    BORE(1, EntityTunnelBore.class, null),
-    ENERGY_BATBOX(0, EntityCartEnergyBatBox.class, null),
-    ENERGY_CESU(0, EntityCartEnergyCESU.class, null),
-    ENERGY_MFE(0, EntityCartEnergyMFE.class, null),
-    HOPPER(0, EntityMinecartHopper.class, new ItemStack(Blocks.hopper)),
-    TRACK_LAYER(1, EntityCartTrackLayer.class, null),
-    TRACK_REMOVER(1, EntityCartTrackRemover.class, null),
-    COMMAND_BLOCK(3, EntityCartCommand.class, null);
+    BASIC(0, EntityCartBasic.class),
+    CHEST(0, EntityCartChest.class, true, new ItemStack(Blocks.chest)),
+    FURNACE(0, EntityCartFurnace.class, true, new ItemStack(Blocks.furnace)),
+    TNT_WOOD(0, EntityCartTNTWood.class, false, new ItemStack(Blocks.tnt)),
+    TANK(0, EntityCartTank.class, true),
+    CARGO(0, EntityCartCargo.class, true, new ItemStack(Blocks.trapped_chest)),
+    ANCHOR(0, EntityCartAnchor.class, true),
+    WORK(0, EntityCartWork.class, true, new ItemStack(Blocks.crafting_table)),
+    TRACK_RELAYER(1, EntityCartTrackRelayer.class),
+    UNDERCUTTER(1, EntityCartUndercutter.class),
+    PUMPKIN(3, EntityCartPumpkin.class, false, new ItemStack(Blocks.pumpkin)),
+    GIFT(3, EntityCartGift.class),
+    ANCHOR_PERSONAL(0, EntityCartAnchorPersonal.class, true),
+    ANCHOR_ADMIN(3, EntityCartAnchorAdmin.class),
+    TNT(0, EntityCartTNT.class, true, new ItemStack(Blocks.tnt)),
+    LOCO_STEAM_SOLID(1, EntityLocomotiveSteamSolid.class),
+    LOCO_STEAM_MAGIC(1, EntityLocomotiveSteamMagic.class),
+    LOCO_ELECTRIC(1, EntityLocomotiveElectric.class),
+    BORE(1, EntityTunnelBore.class),
+    ENERGY_BATBOX(0, EntityCartEnergyBatBox.class, true),
+    ENERGY_CESU(0, EntityCartEnergyCESU.class, true),
+    ENERGY_MFE(0, EntityCartEnergyMFE.class, true),
+    HOPPER(0, EntityMinecartHopper.class, true, new ItemStack(Blocks.hopper)),
+    TRACK_LAYER(1, EntityCartTrackLayer.class),
+    TRACK_REMOVER(1, EntityCartTrackRemover.class),
+    COMMAND_BLOCK(3, EntityCartCommand.class, true, new ItemStack(Blocks.command_block));
     public static final EnumCart[] VALUES = values();
     private final Class<? extends EntityMinecart> type;
     private final byte id;
     private final byte rarity;
+    private final boolean canBeUncrafted;
     private ItemStack contents = null;
     private ItemStack cartItem;
 
-    EnumCart(int rarity, Class<? extends EntityMinecart> type, ItemStack contents) {
+    EnumCart(int rarity, Class<? extends EntityMinecart> type) {
+        this(rarity, type, false, null);
+    }
+
+    EnumCart(int rarity, Class<? extends EntityMinecart> type, boolean canBeUncrafted) {
+        this(rarity, type, canBeUncrafted, null);
+    }
+
+    EnumCart(int rarity, Class<? extends EntityMinecart> type, boolean canBeUncrafted, ItemStack contents) {
         int entityId = -1;
         try {
             entityId = (byte) EntityIDs.class.getField("CART_" + name()).getInt(null);
@@ -73,7 +84,38 @@ public enum EnumCart implements ICartType {
         this.id = (byte) entityId;
         this.rarity = (byte) rarity;
         this.type = type;
+        this.canBeUncrafted = canBeUncrafted;
         this.contents = contents;
+    }
+
+    public static ICartType fromClass(Class<? extends EntityMinecart> cls) {
+        for (EnumCart cart : VALUES) {
+            if (cls.equals(cart.type))
+                return cart;
+        }
+        return BASIC;
+    }
+
+    public static ICartType fromCart(EntityMinecart cart) {
+        return fromClass(cart.getClass());
+    }
+
+    public static ICartType getCartType(ItemStack cart) {
+        if (cart == null)
+            return null;
+        if (cart.getItem() == Items.minecart)
+            return EnumCart.BASIC;
+        if (cart.getItem() == Items.chest_minecart)
+            return EnumCart.CHEST;
+        if (cart.getItem() == Items.tnt_minecart)
+            return EnumCart.TNT;
+        if (cart.getItem() == Items.furnace_minecart)
+            return EnumCart.FURNACE;
+        if (cart.getItem() == Items.hopper_minecart)
+            return EnumCart.HOPPER;
+        if (cart.getItem() instanceof ItemCart)
+            return ((ItemCart) cart.getItem()).getCartType();
+        return null;
     }
 
     @Override
@@ -91,10 +133,6 @@ public enum EnumCart implements ICartType {
         return type;
     }
 
-    public void setContents(ItemStack stack) {
-        contents = stack.copy();
-    }
-
     @Override
     public ItemStack getContents() {
         switch (this) {
@@ -107,6 +145,10 @@ public enum EnumCart implements ICartType {
                 return contents.copy();
             }
         }
+    }
+
+    public void setContents(ItemStack stack) {
+        contents = stack.copy();
     }
 
     @Override
@@ -179,8 +221,10 @@ public enum EnumCart implements ICartType {
             item.setUnlocalizedName(tag);
             item.setRarity(rarity);
             RailcraftRegistry.register(item);
-            ItemStack stack = new ItemStack(item);
-            setCartItem(stack);
+            ItemStack cartItem = new ItemStack(item);
+            setCartItem(cartItem);
+            if (canBeUncrafted)
+                CraftingPlugin.addRecipe(new CartUncraftingRecipe.EnumCartUncraftingRecipe(this));
             return true;
         }
         return false;
@@ -190,36 +234,6 @@ public enum EnumCart implements ICartType {
     public boolean isEnabled() {
         String tag = getTag();
         return RailcraftConfig.isCartEnabled(tag);
-    }
-
-    public static ICartType fromClass(Class<? extends EntityMinecart> cls) {
-        for (EnumCart cart : VALUES) {
-            if (cls.equals(cart.type))
-                return cart;
-        }
-        return BASIC;
-    }
-
-    public static ICartType fromCart(EntityMinecart cart) {
-        return fromClass(cart.getClass());
-    }
-
-    public static ICartType getCartType(ItemStack cart) {
-        if (cart == null)
-            return null;
-        if (cart.getItem() == Items.minecart)
-            return EnumCart.BASIC;
-        if (cart.getItem() == Items.chest_minecart)
-            return EnumCart.CHEST;
-        if (cart.getItem() == Items.tnt_minecart)
-            return EnumCart.TNT;
-        if (cart.getItem() == Items.furnace_minecart)
-            return EnumCart.FURNACE;
-        if (cart.getItem() == Items.hopper_minecart)
-            return EnumCart.HOPPER;
-        if (cart.getItem() instanceof ItemCart)
-            return ((ItemCart) cart.getItem()).getCartType();
-        return null;
     }
 
 }

@@ -239,22 +239,22 @@ public abstract class InvTools {
         world.spawnEntityInWorld(entityItem);
     }
 
-    public static void dropInventory(IInventory inv, World world, int x, int y, int z) {
+    public static void dropInventory(IInventory inv, World world, BlockPos pos) {
         if (Game.isNotHost(world)) return;
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            spewItem(slot.getStackInSlot(), world, x, y, z);
+            spewItem(slot.getStackInSlot(), world, pos);
             slot.setStackInSlot(null);
         }
     }
 
-    public static void dropItems(Collection<ItemStack> items, World world, int x, int y, int z) {
+    public static void dropItems(Collection<ItemStack> items, World world, BlockPos pos) {
         if (Game.isNotHost(world)) return;
         for (ItemStack stack : items) {
-            spewItem(stack, world, x, y, z);
+            spewItem(stack, world, pos);
         }
     }
 
-    private static void spewItem(ItemStack stack, World world, int x, int y, int z) {
+    private static void spewItem(ItemStack stack, World world, BlockPos pos) {
         if (stack != null) {
             float xOffset = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
             float yOffset = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
@@ -266,7 +266,7 @@ public abstract class InvTools {
                 ItemStack newStack = stack.copy();
                 newStack.stackSize = numToDrop;
                 stack.stackSize -= numToDrop;
-                EntityItem entityItem = new EntityItem(world, (float) x + xOffset, (float) y + yOffset, (float) z + zOffset, newStack);
+                EntityItem entityItem = new EntityItem(world, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, newStack);
                 float variance = 0.05F;
                 entityItem.motionX = (float) MiscTools.getRand().nextGaussian() * variance;
                 entityItem.motionY = (float) MiscTools.getRand().nextGaussian() * variance + 0.2F;

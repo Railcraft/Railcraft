@@ -33,21 +33,21 @@ public class ItemRebar extends ItemRailcraft {
                 " I ",
                 "I  ",
                 'I', "ingotBronze");
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
         recipe = new ShapedOreRecipe(new ItemStack(this, 6), true,
                 "  I",
                 " I ",
                 "I  ",
                 'I', "ingotRefinedIron");
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
         recipe = new ShapedOreRecipe(new ItemStack(this, 8), true,
                 "  I",
                 " I ",
                 "I  ",
                 'I', "ingotSteel");
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
     }
 

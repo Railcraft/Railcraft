@@ -10,9 +10,7 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -93,7 +91,7 @@ public class ItemPlate extends ItemRailcraft {
                 "II",
                 "II",
                 'I', "ingotSteel");
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RailcraftCraftingManager.rollingMachine.addRecipe(recipe);
 
         // Tin Plate
         recipe = new ShapedOreRecipe(RailcraftItem.plate.getStack(4, EnumPlate.TIN),
@@ -101,14 +99,14 @@ public class ItemPlate extends ItemRailcraft {
                 "TI",
                 'I', "ingotIron",
                 'T', "ingotTin");
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RailcraftCraftingManager.rollingMachine.addRecipe(recipe);
 
         // Copper Plate
         recipe = new ShapedOreRecipe(RailcraftItem.plate.getStack(4, EnumPlate.COPPER),
                 "II",
                 "II",
                 'I', "ingotCopper");
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RailcraftCraftingManager.rollingMachine.addRecipe(recipe);
 
         RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItem.plate.getStack(EnumPlate.IRON), true, false, 1280, RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL));
     }
