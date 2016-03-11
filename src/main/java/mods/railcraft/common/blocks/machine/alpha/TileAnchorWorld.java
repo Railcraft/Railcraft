@@ -257,7 +257,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
             prevZ = zCoord;
         }
 
-        if (hasActiveTicket() && (refreshTicket || powered))
+        if (hasActiveTicket() && (getTicket().world != worldObj || refreshTicket || powered))
             releaseTicket();
 
         if (needsFuel()) {
@@ -366,11 +366,13 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         Ticket ticket = getTicket();
         if (ticket != t) {
             if (ticket != null) {
-                for (ChunkCoordIntPair chunk : ticket.getChunkList()) {
-                    if (ForgeChunkManager.getPersistentChunksFor(worldObj).keys().contains(chunk))
-                        ForgeChunkManager.unforceChunk(ticket, chunk);
+                if (ticket.world == worldObj) {
+                    for (ChunkCoordIntPair chunk : ticket.getChunkList()) {
+                        if (ForgeChunkManager.getPersistentChunksFor(worldObj).keys().contains(chunk))
+                            ForgeChunkManager.unforceChunk(ticket, chunk);
+                    }
+                    ForgeChunkManager.releaseTicket(ticket);
                 }
-                ForgeChunkManager.releaseTicket(ticket);
                 tickets.remove(getUUID());
             }
             changed = true;
@@ -514,5 +516,4 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     public boolean canExtractItem(int i, ItemStack itemstack, int j) {
         return false;
     }
-
 }
