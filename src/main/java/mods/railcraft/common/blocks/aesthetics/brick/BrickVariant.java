@@ -9,12 +9,14 @@
 
 package mods.railcraft.common.blocks.aesthetics.brick;
 
+import net.minecraft.util.IStringSerializable;
+
 import java.util.Locale;
 
 /**
  * Created by CovertJaguar on 3/12/2015.
  */
-public enum BrickVariant {
+public enum BrickVariant implements IStringSerializable {
 
     BRICK, FITTED, BLOCK, ORNATE, ETCHED, COBBLE;
     public static final BrickVariant[] VALUES = values();
@@ -30,4 +32,8 @@ public enum BrickVariant {
         return name().toLowerCase(Locale.ENGLISH);
     }
 
+    @Override
+    public String getName() {
+        return name().toLowerCase(Locale.ENGLISH);
+    }
 }

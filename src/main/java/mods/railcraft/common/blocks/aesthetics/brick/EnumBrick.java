@@ -19,6 +19,7 @@ import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -32,7 +33,7 @@ import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
  * Created by CovertJaguar on 3/12/2015.
  */
 public enum EnumBrick {
-    ABYSSAL {
+    ABYSSAL(MapColor.blackColor) {
         @Override
         public void initRecipes() {
             if (EnumCube.ABYSSAL_STONE.isEnabled()) {
@@ -42,7 +43,7 @@ public enum EnumBrick {
             }
         }
     },
-    BLEACHEDBONE {
+    BLEACHEDBONE(MapColor.adobeColor) {
         Item bleachedClay;
 
         @Override
@@ -59,14 +60,14 @@ public enum EnumBrick {
             }
         }
     },
-    BLOODSTAINED {
+    BLOODSTAINED(MapColor.redColor) {
         @Override
         public void initRecipes() {
             CraftingPlugin.addShapelessRecipe(new ItemStack(getBlock(), 1, 2), new ItemStack(Blocks.sandstone, 1, 2), new ItemStack(Items.rotten_flesh));
             CraftingPlugin.addShapelessRecipe(new ItemStack(getBlock(), 1, 2), new ItemStack(Blocks.sandstone, 1, 2), new ItemStack(Items.beef));
         }
     },
-    FROSTBOUND {
+    FROSTBOUND(MapColor.blueColor) {
         @Override
         public void initRecipes() {
             CraftingPlugin.addShapedRecipe(new ItemStack(getBlock(), 8, 2),
@@ -77,7 +78,7 @@ public enum EnumBrick {
                     'L', "gemLapis");
         }
     },
-    INFERNAL {
+    INFERNAL(MapColor.grayColor) {
         @Override
         public void initRecipes() {
             ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).block = getBlock();
@@ -88,7 +89,7 @@ public enum EnumBrick {
                     'M', new ItemStack(Blocks.soul_sand));
         }
     },
-    QUARRIED {
+    QUARRIED(MapColor.snowColor) {
         @Override
         public void initRecipes() {
             if (EnumCube.QUARRIED_STONE.isEnabled()) {
@@ -98,7 +99,7 @@ public enum EnumBrick {
             }
         }
     },
-    SANDY {
+    SANDY(MapColor.sandColor) {
         @Override
         public void initRecipes() {
             ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).block = getBlock();
@@ -109,7 +110,7 @@ public enum EnumBrick {
                     'M', new ItemStack(Blocks.sand));
         }
     },
-    NETHER {
+    NETHER(MapColor.netherrackColor) {
         @Override
         public ItemStack get(BrickVariant variant, int qty) {
             if (variant == BrickVariant.BRICK)
@@ -129,7 +130,16 @@ public enum EnumBrick {
         }
     },;
     public static final EnumBrick[] VALUES = values();
+    private final MapColor mapColor;
     private BlockBrick block;
+
+    EnumBrick(MapColor mapColor) {
+        this.mapColor = mapColor;
+    }
+
+    public final MapColor getMapColor() {
+        return mapColor;
+    }
 
     public final BlockBrick getBlock() {
         return block;
