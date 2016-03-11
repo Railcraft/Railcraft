@@ -10,11 +10,6 @@ package mods.railcraft.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
 import mods.railcraft.client.gui.buttons.GuiButtonRoutingTableNextPage;
 import mods.railcraft.common.core.Railcraft;
@@ -35,6 +30,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 @SideOnly(Side.CLIENT)
 public class GuiRoutingTable extends GuiScreen {
@@ -64,7 +64,7 @@ public class GuiRoutingTable extends GuiScreen {
     private final int bookImageHeight = 192;
     private final int numManualPages;
     private int currPage, currLine, currChar;
-    private final List<List<String>> bookPages;
+    private final LinkedList<LinkedList<String>> bookPages;
     private String bookTitle = "";
     private GuiButtonRoutingTableNextPage buttonNextPage;
     private GuiButtonRoutingTableNextPage buttonPreviousPage;
@@ -76,9 +76,9 @@ public class GuiRoutingTable extends GuiScreen {
         this.player = player;
         this.bookStack = stack;
 
-        List<List<String>> pages = ItemRoutingTable.getPages(stack);
+        LinkedList<LinkedList<String>> pages = ItemRoutingTable.getPages(stack);
         if (pages == null) {
-            bookPages = new LinkedList<List<String>>();
+            bookPages = new LinkedList<LinkedList<String>>();
             initPages();
         } else {
             bookPages = pages;
@@ -102,7 +102,7 @@ public class GuiRoutingTable extends GuiScreen {
     }
 
     private void initPages() {
-        List<String> page = new LinkedList<String>();
+        LinkedList<String> page = new LinkedList<String>();
         bookPages.add(page);
         page.add("");
     }
@@ -186,6 +186,7 @@ public class GuiRoutingTable extends GuiScreen {
     /**
      * Fired when a control is clicked. This is the equivalent of
      * ActionListener.actionPerformed(ActionEvent e).
+     *
      * @param button
      */
     @Override
@@ -239,7 +240,7 @@ public class GuiRoutingTable extends GuiScreen {
 
     private void addNewPage() {
         if (bookPages.size() < 50) {
-            List<String> page = new LinkedList<String>();
+            LinkedList<String> page = new LinkedList<String>();
             page.add("");
             bookPages.add(page);
             bookModified = true;
@@ -414,8 +415,10 @@ public class GuiRoutingTable extends GuiScreen {
         String currentText = getLine(currLine);
         String newText = currentText + string;
 
-        if (newText.length() < ItemRoutingTable.LINE_LENGTH)
+        if (newText.length() < ItemRoutingTable.LINE_LENGTH) {
             this.setLine(currPage, currLine, newText);
+            currChar = getLine(currLine).length();
+        }
     }
 
     /**

@@ -32,8 +32,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     private static final ForgeDirection[] UP_DOWN_AXES = new ForgeDirection[]{UP, DOWN};
     protected static final float BOUNDS = 0.15f;
     private ForgeDirection facing = ForgeDirection.NORTH;
-    private boolean prevLightState;
-    private boolean prevBlinkState;
+    private int prevLigthValue;
 
     @Override
     public boolean rotateBlock(ForgeDirection axis) {
@@ -77,22 +76,11 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     @Override
     public void updateEntity() {
         super.updateEntity();
-        if (Game.isNotHost(worldObj)) {
-            updateLighting();
-        }
-    }
-
-    private void updateLighting() {
-        if (clock % Signals.LIGHT_CHECK_INTERVAL == 0) {
+        if(Game.isNotHost(worldObj)){
             boolean needsUpdate = false;
-            boolean blinkState = SignalAspect.isBlinkOn();
-            if (prevBlinkState != blinkState && isBlinking()) {
-                prevBlinkState = blinkState;
-                needsUpdate = true;
-            }
-            boolean lightState = isLit();
-            if (prevLightState != lightState) {
-                prevLightState = lightState;
+            int lightValue = getLightValue();
+            if (prevLigthValue != lightValue) {
+                prevLigthValue = lightValue;
                 worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
                 needsUpdate = true;
             }
@@ -102,8 +90,12 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
         }
     }
 
+    protected boolean isLit(SignalAspect aspect) {
+        return aspect != SignalAspect.OFF && !aspect.isBlinkAspect();
+    }
+
     protected boolean isLit() {
-        return getSignalAspect().isLit();
+      return isLit(getSignalAspect());
     }
 
     protected boolean isBlinking() {
@@ -114,6 +106,9 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     public int getLightValue() {
         if (isLit()) {
             return 5;
+        }
+        if(isBlinking()) {
+            return 3;
         }
         return 0;
     }

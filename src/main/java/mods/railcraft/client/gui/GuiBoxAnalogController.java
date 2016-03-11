@@ -28,7 +28,7 @@ public class GuiBoxAnalogController extends GuiBasic {
     private final EnumMap<SignalAspect, GuiTextField> textbox = new EnumMap<SignalAspect, GuiTextField>(SignalAspect.class);
 
     public GuiBoxAnalogController(TileBoxAnalogController tile) {
-        super(tile.getName(), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_box_analog.png", 176, 113);
+        super(tile.getName(), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic_large.png", 176, 113);
         this.tile = tile;
         for (Map.Entry<SignalAspect, BitSet> entry : tile.aspects.entrySet()) {
             aspects.put(entry.getKey(), (BitSet) entry.getValue().clone());

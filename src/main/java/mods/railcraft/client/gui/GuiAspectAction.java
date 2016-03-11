@@ -8,10 +8,9 @@
  */
 package mods.railcraft.client.gui;
 
-import net.minecraft.client.gui.GuiButton;
-import mods.railcraft.client.gui.buttons.GuiToggleButton;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
+import mods.railcraft.client.gui.buttons.GuiToggleButton;
 import mods.railcraft.common.blocks.signals.IAspectActionManager;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.LockButtonState;
@@ -21,6 +20,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiAspectAction extends GuiContainerRailcraft {
@@ -37,8 +37,12 @@ public class GuiAspectAction extends GuiContainerRailcraft {
     public String ownerName = "[Unknown]";
 
     public GuiAspectAction(EntityPlayer player, IAspectActionManager actionManager, String title) {
-        super(new ContainerAspectAction(player, actionManager), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic.png");
+        this(player, actionManager, title, RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic.png");
         ySize = 88;
+    }
+
+    protected GuiAspectAction(EntityPlayer player, IAspectActionManager actionManager, String title, String texture) {
+        super(new ContainerAspectAction(player, actionManager), texture);
         this.player = player;
         this.actionManager = actionManager;
         this.title = title;
@@ -73,16 +77,20 @@ public class GuiAspectAction extends GuiContainerRailcraft {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) {
+    protected final void actionPerformed(GuiButton button) {
         if (actionManager == null)
             return;
         if (!button.enabled)
             return;
         if (!canChange())
             return;
-        changed = true;
-        if (button instanceof GuiToggleButton) {
-            SignalAspect aspect = SignalAspect.values()[button.id];
+        markChanged();
+        onButtonPressed(button);
+    }
+
+    protected void onButtonPressed(GuiButton button) {
+        if (button.id <= 4) {
+            SignalAspect aspect = SignalAspect.VALUES[button.id];
             aspects[aspect.ordinal()] = !aspects[aspect.ordinal()];
             ((GuiToggleButton) button).active = aspects[aspect.ordinal()];
         }
@@ -105,15 +113,23 @@ public class GuiAspectAction extends GuiContainerRailcraft {
     @Override
     public void onGuiClosed() {
         if (changed && actionManager instanceof IGuiReturnHandler && canChange()) {
-            for (SignalAspect aspect : SignalAspect.values()) {
-                actionManager.doActionOnAspect(aspect, aspects[aspect.ordinal()]);
-            }
+            prepareForPacket();
             PacketGuiReturn pkt = new PacketGuiReturn((IGuiReturnHandler) actionManager);
             PacketDispatcher.sendToServer(pkt);
         }
     }
 
-    private boolean canChange() {
+    protected void prepareForPacket() {
+        for (SignalAspect aspect : SignalAspect.VALUES) {
+            actionManager.doActionOnAspect(aspect, aspects[aspect.ordinal()]);
+        }
+    }
+
+    public void markChanged() {
+        changed = true;
+    }
+
+    public boolean canChange() {
         return actionManager.getLockController().getButtonState() == LockButtonState.UNLOCKED || ((ContainerAspectAction) container).canLock;
     }
 

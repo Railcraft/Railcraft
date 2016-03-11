@@ -24,7 +24,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class TileBoxAnalogController extends TileBoxBase implements IControllerTile, IGuiReturnHandler {
 
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
-    private boolean prevBlinkState;
     private int strongestSignal;
 
     public EnumMap<SignalAspect, BitSet> aspects = new EnumMap<SignalAspect, BitSet>(SignalAspect.class);
@@ -54,10 +53,6 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
 
         if (Game.isNotHost(worldObj)) {
             controller.tickClient();
-            if (controller.getAspect().isBlinkAspect() && prevBlinkState != SignalAspect.isBlinkOn()) {
-                prevBlinkState = SignalAspect.isBlinkOn();
-                markBlockForUpdate();
-            }
             return;
         }
         controller.tickServer();

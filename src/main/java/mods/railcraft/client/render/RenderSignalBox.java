@@ -9,6 +9,7 @@
 package mods.railcraft.client.render;
 
 import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.item.ItemStack;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -24,7 +25,7 @@ import org.lwjgl.opengl.GL11;
 
 import static net.minecraftforge.common.util.ForgeDirection.*;
 
-public class RenderSignalBox implements ICombinedRenderer {
+public class RenderSignalBox extends RenderTESRSignals implements ICombinedRenderer {
 
     private static final RenderInfo info = new RenderInfo();
     private final IIconProvider iconProvider;
@@ -32,6 +33,8 @@ public class RenderSignalBox implements ICombinedRenderer {
     public RenderSignalBox(IIconProvider iconProvider) {
         info.texture = new IIcon[6];
         info.template = RailcraftBlocks.getBlockSignal();
+		tesrInfo.texture = new IIcon[6];
+		tesrInfo.template = RailcraftBlocks.getBlockSignal();
         this.iconProvider = iconProvider;
     }
 
@@ -83,7 +86,7 @@ public class RenderSignalBox implements ICombinedRenderer {
         info.renderSide[0] = false;
         info.renderSide[1] = false;
 
-        // Aspect
+      /*  // Aspect
         for (int side = 2; side < 6; side++) {
             SignalAspect aspect = tile.getBoxSignalAspect(ForgeDirection.getOrientation(side));
             if (!aspect.isLit())
@@ -100,7 +103,7 @@ public class RenderSignalBox implements ICombinedRenderer {
             if (!renderblocks.hasOverrideBlockTexture())
                 info.brightness = aspect.getTextureBrightness();
             RenderFakeBlock.renderBlock(info, iBlockAccess, x, y, z, (info.brightness < 0), false);
-        }
+        }*/
         info.brightness = -1;
         info.setRenderAllSides();
 
@@ -151,13 +154,13 @@ public class RenderSignalBox implements ICombinedRenderer {
     }
 
     @Override
-    public void renderItem(RenderBlocks renderblocks, ItemStack item, ItemRenderType renderType) { 
+    public void renderItem(RenderBlocks renderblocks, ItemStack item, ItemRenderType renderType) {
         GL11.glColor4f(1, 1, 1, 1);
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        
+
         info.override = null;
         float pix = RenderTools.PIXEL;
         info.setBlockBounds(2 * pix, 0, 2 * pix, 14 * pix, 15 * pix, 14 * pix);
@@ -177,8 +180,37 @@ public class RenderSignalBox implements ICombinedRenderer {
         info.texture[5] = BlockSignalRailcraft.texturesLampBox[texture];
         RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
         info.setRenderAllSides();
-        
+
         GL11.glPopAttrib();
     }
 
+	private static final RenderInfo tesrInfo = new RenderInfo();
+
+	@Override
+	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
+		super.renderTileEntityAt(te, x, y, z, f);
+		if(!(te instanceof TileBoxBase)){
+			return;
+		}
+		RenderInfo info = tesrInfo;
+
+		TileBoxBase tile = (TileBoxBase) te;
+
+		info.renderSide[0] = false;
+		info.renderSide[1] = false;
+		info.renderSide[2] = !tile.isConnected(NORTH);
+		info.renderSide[3] = !tile.isConnected(SOUTH);
+		info.renderSide[4] = !tile.isConnected(WEST);
+		info.renderSide[5] = !tile.isConnected(EAST);
+
+		// Aspect
+		for (int side = 2; side < 6; side++) {
+			SignalAspect aspect = tile.getBoxSignalAspect(ForgeDirection.getOrientation(side));
+			if (!aspect.isLit())
+				aspect = SignalAspect.OFF;
+			info.texture[side] = BlockSignalRailcraft.texturesLampBox[aspect.getTextureIndex()];
+			info.brightness = aspect.getTextureBrightness();
+		}
+		doRenderAspect(info, tile, x, y, z);
+	}
 }

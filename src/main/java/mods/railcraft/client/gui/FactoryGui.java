@@ -27,6 +27,7 @@ import mods.railcraft.common.blocks.signals.IRouter;
 import mods.railcraft.common.blocks.signals.TileBoxAnalogController;
 import mods.railcraft.common.blocks.signals.TileBoxCapacitor;
 import mods.railcraft.common.blocks.signals.TileBoxController;
+import mods.railcraft.common.blocks.signals.TileSwitchMotor;
 import mods.railcraft.common.blocks.tracks.*;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
@@ -117,7 +118,7 @@ public class FactoryGui {
                 case TRACK_ROUTING:
                     return new GuiTrackRouting(inv, (TrackRouting) ((TileTrack) obj).getTrackInstance());
                 case SWITCH_MOTOR:
-                    return new GuiAspectAction(inv.player, (IAspectActionManager) obj, LocalizationPlugin.translate("railcraft.gui.switch.motor.action"));
+                    return new GuiSwitchMotor(inv.player, (TileSwitchMotor) obj, LocalizationPlugin.translate("railcraft.gui.switch.motor.action"));
                 case BOX_RECEIVER:
                     return new GuiAspectAction(inv.player, (IAspectActionManager) obj, LocalizationPlugin.translate("railcraft.gui.box.aspect.action"));
                 case BOX_RELAY:

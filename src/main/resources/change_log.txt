@@ -1,3 +1,23 @@
+9.9.0.0:
+    INFO: Repackage for release.
+
+9.8.0.3:
+	FIX: Some API stuff for Vexatos.
+	API: Might possible break anyone using depreciated functions of the Signal API.
+
+9.8.0.2:
+	NEW: Signal devices can now be named using the Signal Label item and Anvil. (contribution by Vexatos)
+	NEW: Disposal Track can be disabled with a Redstone Signal. (contribution by wshadow)
+	NEW: Switch Motor now has a button that will cause it to ignore Redstone signals. (contribution by wshadow)
+
+9.8.0.1:
+	NEW: Convert the Tunnel Bore into a multipart entity to allow for more fine tuned control of the collision box.
+	NEW: New Routing Table keyword: Loco. Returns true if the locomotive type matches "electric", "steam", or "none". Using "none" only returns true if there is NO locomotive. (contribution by Cream-Tea)
+	NEW: Coal Coke torch recipe. (contribution by daniel)
+	FIX: Package correct RF API.
+	FIX: Fixed NPE when loading a world with a Personal Anchor. (contribution by Yopu)
+	CONFIG: Added H.S. explosion entity exclusion list. (contribution by Yopu)
+
 9.8.0.0:
 	FIX: Fixed a possible crash during Worldgen if you disable the Track block.
 	FIX: Fixed Anchor interaction with FunkyLocomotion.

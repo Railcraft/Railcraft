@@ -176,12 +176,6 @@ public abstract class SignalBlock extends AbstractPair {
     }
 
     @Override
-    @Deprecated
-    public boolean isValidPair(TileEntity otherTile) {
-        return isValidPair(null, otherTile);
-    }
-
-    @Override
     public boolean isValidPair(WorldCoordinate otherCoord, TileEntity otherTile) {
         if (otherTile instanceof ISignalBlockTile) {
             SignalBlock signalBlock = ((ISignalBlockTile) otherTile).getSignalBlock();
