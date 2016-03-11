@@ -10,6 +10,7 @@ package mods.railcraft.common.carts;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import mods.railcraft.common.modules.ModuleIC2;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 
@@ -19,8 +20,11 @@ import mods.railcraft.common.plugins.ic2.IC2Plugin;
  */
 public class EntityCartEnergyMFE extends EntityCartEnergy {
 
+	boolean classic;
+	
     public EntityCartEnergyMFE(World world) {
         super(world);
+        classic = ModuleIC2.classic;
     }
 
     public EntityCartEnergyMFE(World world, double d, double d1, double d2) {
@@ -41,17 +45,17 @@ public class EntityCartEnergyMFE extends EntityCartEnergy {
 
     @Override
     public int getTier() {
-        return 3;
+        return classic ? 2 : 3;
     }
 
     @Override
     public int getCapacity() {
-        return 4000000;
+        return classic ? 600000 : 4000000;
     }
 
     @Override
     public int getTransferLimit() {
-        return 512;
+        return classic ? 128 : 512;
     }
 
     @Override

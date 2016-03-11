@@ -8,8 +8,12 @@
  */
 package mods.railcraft.common.carts;
 
+import java.util.Locale;
+
+import cpw.mods.fml.common.Loader;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import mods.railcraft.common.modules.ModuleIC2;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 
@@ -17,9 +21,12 @@ import mods.railcraft.common.plugins.ic2.IC2Plugin;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class EntityCartEnergyCESU extends EntityCartEnergy {
-
+	
+	boolean classic = false;
+	
     public EntityCartEnergyCESU(World world) {
         super(world);
+        classic = ModuleIC2.classic;
     }
 
     public EntityCartEnergyCESU(World world, double d, double d1, double d2) {
@@ -60,7 +67,8 @@ public class EntityCartEnergyCESU extends EntityCartEnergy {
 
     @Override
     public ItemStack getIC2Item() {
-        return IC2Plugin.getItem("cesuUnit");
+    	//IC2 Classic so no RenderCrash Happens
+        return IC2Plugin.getItem(classic ? "mfsUnit" : "cesuUnit");
     }
 
 }
