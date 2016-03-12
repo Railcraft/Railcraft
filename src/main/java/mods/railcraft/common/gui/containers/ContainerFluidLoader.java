@@ -47,6 +47,12 @@ public class ContainerFluidLoader extends RailcraftContainer {
     }
 
     @Override
+    public void addCraftingToCrafters(ICrafting icrafting) {
+        super.addCraftingToCrafters(icrafting);
+        tile.getTankManager().initGuiData(this, icrafting, 0);
+    }
+
+    @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
         tile.getTankManager().updateGuiData(this, crafters, 0);
