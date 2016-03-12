@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.aesthetics.cube;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
@@ -24,17 +25,17 @@ public class FlammableCube extends SimpleCube {
     }
 
     @Override
-    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return spread;
     }
 
     @Override
-    public int getFlammability(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return flammability;
     }
 
     @Override
-    public boolean isFlammable(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return true;
     }
 

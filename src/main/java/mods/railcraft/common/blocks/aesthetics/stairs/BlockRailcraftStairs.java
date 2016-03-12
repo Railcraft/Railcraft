@@ -87,7 +87,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumBlockMaterial mat : EnumBlockMaterial.creativeList) {
             if (isEnabled(mat))
                 list.add(getItem(mat));

@@ -8,9 +8,12 @@
  */
 package mods.railcraft.common.blocks.aesthetics.cube;
 
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -19,41 +22,42 @@ import java.util.Random;
 
 public class SimpleCube {
 
-    public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
-        return type != EnumCreatureType.CREATURE;
+    public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type, IBlockAccess world, BlockPos pos) {
+        return true;
     }
 
-    public void updateTick(World world, int x, int y, int z, Random rand) {
+    public void updateTick(World world, BlockPos pos, Random rand) {
     }
 
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
     }
 
-    public void onBlockPlaced(World world, int x, int y, int z) {
+    public IBlockState onBlockPlaced(World world, BlockPos pos) {
+        return WorldPlugin.getBlockState(world, pos);
     }
 
-    public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+    public void randomDisplayTick(World world, BlockPos pos, Random rand) {
     }
 
-    public void onBlockAdded(World world, int x, int y, int z) {
+    public void onBlockAdded(World world, BlockPos pos) {
     }
 
-    public void onBlockRemoval(World world, int x, int y, int z) {
+    public void onBlockRemoval(World world, BlockPos pos) {
     }
 
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
+    public boolean removedByPlayer(World world, EntityPlayer player, BlockPos pos) {
         return world.setBlockToAir(pos);
     }
 
-    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return 0;
     }
 
-    public int getFlammability(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return 0;
     }
 
-    public boolean isFlammable(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return false;
     }
 

@@ -83,21 +83,21 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
         return ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES) && RailcraftConfig.isSubBlockEnabled(getTag(mat)) && getBlock() != null;
     }
 
-    public static EnumBlockMaterial getTopSlab(IBlockAccess world, int x, int y, int z) {
+    public static EnumBlockMaterial getTopSlab(IBlockAccess world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab)
             return ((TileSlab) tile).getTopSlab();
         return null;
     }
 
-    public static EnumBlockMaterial getBottomSlab(IBlockAccess world, int x, int y, int z) {
+    public static EnumBlockMaterial getBottomSlab(IBlockAccess world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab)
             return ((TileSlab) tile).getBottomSlab();
         return null;
     }
 
-    public static TileSlab getSlabTile(IBlockAccess world, int x, int y, int z) {
+    public static TileSlab getSlabTile(IBlockAccess world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab)
             return ((TileSlab) tile);
@@ -209,7 +209,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
     }
 
     @Override
-    public SoundType getSound(World world, int x, int y, int z) {
+    public SoundType getSound(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab) {
             EnumBlockMaterial slab = ((TileSlab) tile).getUpmostSlab();

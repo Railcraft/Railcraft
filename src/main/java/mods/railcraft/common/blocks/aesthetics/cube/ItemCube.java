@@ -35,7 +35,7 @@ public class ItemCube extends ItemBlock {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         super.addInformation(stack, player, info, adv);
         String tag = getUnlocalizedName(stack) + ".tip";
         if (LocalizationPlugin.hasTag(tag))

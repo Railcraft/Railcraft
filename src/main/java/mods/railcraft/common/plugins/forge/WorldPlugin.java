@@ -52,6 +52,10 @@ public class WorldPlugin {
         return world.isBlockLoaded(pos);
     }
 
+    public static boolean isAreaLoaded(World world, BlockPos pos1, BlockPos pos2) {
+        return world.isAreaLoaded(pos1, pos2);
+    }
+
     public static boolean isBlockAir(World world, BlockPos pos, Block block) {
         return block.isAir(world, pos);
     }
@@ -80,6 +84,10 @@ public class WorldPlugin {
     public static TileEntity getTileEntityOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
         pos = pos.offset(side);
         return world.getTileEntity(pos);
+    }
+
+    public static boolean setBlockState(World world, BlockPos pos, IBlockState blockState) {
+        return world.setBlockState(pos, blockState);
     }
 
     public static boolean setBlock(World world, BlockPos pos, Block block) {

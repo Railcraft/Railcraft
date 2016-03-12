@@ -12,6 +12,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IStringSerializable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumCube {
+public enum EnumCube implements IStringSerializable{
 
     COKE_BLOCK(Module.FACTORY, "coke", new FlammableCube(5, 10), 2f, 10f),
     CONCRETE_BLOCK(Module.STRUCTURES, "concrete", new SimpleCube(), 3f, 15f),
@@ -107,5 +108,10 @@ public enum EnumCube {
         if (!isEnabled())
             return null;
         return new ItemStack(BlockCube.getBlock(), qty, ordinal());
+    }
+
+    @Override
+    public String getName() {
+        return tag;
     }
 }

@@ -11,9 +11,11 @@ package mods.railcraft.common.blocks.aesthetics.cube;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -27,35 +29,33 @@ public class CrushedObsidian extends SimpleCube {
     /**
      * Checks to see if the sand can fall into the block below it
      */
-    public static boolean canFallBelow(World world, int x, int y, int z) {
-        if (world.isAirBlock(x, y, z))
+    public static boolean canFallInto(World world, BlockPos pos) {
+        if (WorldPlugin.isBlockAir(world, pos))
             return true;
 
-        Block block = WorldPlugin.getBlock(world, x, y, z);
-        if (block == Blocks.fire)
-            return true;
+        Block block = WorldPlugin.getBlock(world, pos);
+        return block == Blocks.fire || block.getMaterial().isLiquid();
 
-        return block.getMaterial().isLiquid();
     }
 
     @Override
-    public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
+    public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public void onBlockAdded(World world, int i, int j, int k) {
-        world.scheduleBlockUpdate(i, j, k, BlockCube.getBlock(), this.tickRate());
+    public void onBlockAdded(World world, BlockPos pos) {
+        world.scheduleBlockUpdate(pos, BlockCube.getBlock(), this.tickRate(), 0);
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int i, int j, int k, Block block) {
-        world.scheduleBlockUpdate(i, j, k, BlockCube.getBlock(), this.tickRate());
+    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
+        world.scheduleBlockUpdate(pos, BlockCube.getBlock(), this.tickRate(), 0);
     }
 
     @Override
-    public void updateTick(World world, int i, int j, int k, Random rand) {
-        this.tryToFall(world, i, j, k);
+    public void updateTick(World world, BlockPos pos, Random rand) {
+        this.tryToFall(world, pos);
     }
 
     /**
@@ -68,24 +68,26 @@ public class CrushedObsidian extends SimpleCube {
     /**
      * If there is space to fall below will start this block falling
      */
-    private void tryToFall(World par1World, int x, int y, int z) {
-        if (canFallBelow(par1World, x, y - 1, z) && y >= 0) {
-            byte var8 = 32;
+    private void tryToFall(World world, BlockPos pos) {
+        if (canFallInto(world, pos.down()) && pos.getY() >= 0) {
+            byte size = 32;
 
-            if (!BlockSand.fallInstantly && par1World.checkChunksExist(x - var8, y - var8, z - var8, x + var8, y + var8, z + var8)) {
-                if (!par1World.isRemote) {
-                    EntityFallingBlock entity = new EntityFallingBlock(par1World, (double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), BlockCube.getBlock(), EnumCube.CRUSHED_OBSIDIAN.ordinal());
-                    par1World.spawnEntityInWorld(entity);
+            if (!BlockSand.fallInstantly && WorldPlugin.isAreaLoaded(world, pos.add(-size, -size, -size), pos.add(size, size, size))) {
+                if (!world.isRemote) {
+                    EntityFallingBlock entity = new EntityFallingBlock(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, world.getBlockState(pos));
+                    world.spawnEntityInWorld(entity);
                 }
             } else {
-                par1World.setBlockToAir(x, y, z);
+                WorldPlugin.setBlockToAir(world, pos);
+                BlockPos blockPos;
 
-                while (canFallBelow(par1World, x, y - 1, z) && y > 0) {
-                    --y;
+                //noinspection StatementWithEmptyBody
+                for (blockPos = pos.down(); canFallInto(world, blockPos) && blockPos.getY() > 0; blockPos = blockPos.down()) {
+                    ; // NOOP
                 }
 
-                if (y > 0)
-                    par1World.setBlock(x, y, z, BlockCube.getBlock(), EnumCube.CRUSHED_OBSIDIAN.ordinal(), 3);
+                if (blockPos.getY() > 0)
+                    WorldPlugin.setBlockState(world, blockPos.up(), BlockCube.getBlock().getDefaultState().withProperty(BlockCube.VARIANT, EnumCube.CRUSHED_OBSIDIAN));
             }
         }
     }

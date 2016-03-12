@@ -9,6 +9,7 @@
 package mods.railcraft.common.util.sounds;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -16,5 +17,5 @@ import net.minecraft.world.World;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IBlockSoundProvider {
-    Block.SoundType getSound(World world, int x, int y, int z);
+    Block.SoundType getSound(World world, BlockPos pos);
 }

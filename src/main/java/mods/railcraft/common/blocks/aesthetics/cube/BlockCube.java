@@ -15,9 +15,12 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -25,6 +28,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.Explosion;
@@ -38,12 +42,15 @@ import java.util.Random;
 
 public class BlockCube extends Block {
 
+    public static final PropertyEnum<EnumCube> VARIANT = PropertyEnum.create("variant", EnumCube.class);
+
     private static BlockCube instance;
     @SideOnly(Side.CLIENT)
     private RenderInfo override;
 
     public BlockCube() {
         super(Material.rock);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumCube.COKE_BLOCK));
         setRegistryName("railcraft.cube");
         setResistance(20);
         setHardness(5);
@@ -89,21 +96,39 @@ public class BlockCube extends Block {
                 MicroBlockPlugin.addMicroBlockCandidate(instance, EnumCube.ABYSSAL_STONE.ordinal());
                 MicroBlockPlugin.addMicroBlockCandidate(instance, EnumCube.QUARRIED_STONE.ordinal());
             }
+
     }
 
-    public static String getBlockNameFromMetadata(int meta) {
-        return EnumCube.fromOrdinal(meta).getTag();
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(VARIANT, EnumCube.fromOrdinal(meta));
+    }
+
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(VARIANT).ordinal();
+    }
+
+    protected BlockState createBlockState() {
+        return new BlockState(this, VARIANT);
+    }
+
+    private EnumCube getVariant(IBlockAccess world, BlockPos pos) {
+        return WorldPlugin.getBlockState(world, pos).getValue(VARIANT);
     }
 
     @Override
-    public float getBlockHardness(World worldIn, BlockPos pos) {
-        int meta = worldIn.getBlockMetadata(pos);
-        return EnumCube.fromOrdinal(meta).getHardness();
+    public float getBlockHardness(World world, BlockPos pos) {
+        return getVariant(world, pos).getHardness();
     }
 
     @Override
     public int damageDropped(IBlockState state) {
-        return meta;
+        return state.getValue(VARIANT).ordinal();
     }
 
     @SideOnly(Side.CLIENT)
@@ -112,61 +137,52 @@ public class BlockCube extends Block {
     }
 
     @Override
-    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-        int meta = world.getBlockMetadata(x, y, z);
-        EnumCube.fromOrdinal(meta).getBlockDef().onNeighborBlockChange(world, pos, neighbor);
+    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
+        getVariant(world, pos).getBlockDef().onNeighborBlockChange(world, pos, state, neighborBlock);
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        int meta = worldIn.getBlockMetadata(x, y, z);
-        EnumCube.fromOrdinal(meta).getBlockDef().updateTick(worldIn, pos, rand);
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        getVariant(world, pos).getBlockDef().updateTick(world, pos, rand);
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        EnumCube.fromOrdinal(meta).getBlockDef().onBlockPlaced(worldIn, pos);
+    public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return getVariant(world, pos).getBlockDef().onBlockPlaced(world, pos);
     }
 
     @Override
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        int meta = worldIn.getBlockMetadata(pos);
-
-        EnumCube.fromOrdinal(meta).getBlockDef().randomDisplayTick(worldIn, pos, rand);
+    public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        getVariant(world, pos).getBlockDef().randomDisplayTick(world, pos, rand);
     }
 
     @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        int meta = worldIn.getBlockMetadata(pos);
-
-        EnumCube.fromOrdinal(meta).getBlockDef().onBlockAdded(worldIn, pos);
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        getVariant(world, pos).getBlockDef().onBlockAdded(world, pos);
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        EnumCube.fromOrdinal(meta).getBlockDef().onBlockRemoval(worldIn, pos);
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        getVariant(world, pos).getBlockDef().onBlockRemoval(world, pos);
     }
 
     @Override
     public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        int meta = world.getBlockMetadata(pos);
-        return EnumCube.fromOrdinal(meta).getBlockDef().removedByPlayer(world, player, pos);
+        return getVariant(world, pos).getBlockDef().removedByPlayer(world, player, pos);
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        if (override != null) return true;
-        return super.shouldSideBeRendered(worldIn, pos, side);
+    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return override != null || super.shouldSideBeRendered(world, pos, side);
     }
 
     @Override
     public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
-        int meta = world.getBlockMetadata(pos);
-        return EnumCube.fromOrdinal(meta).getBlockDef().canCreatureSpawn(type, world, pos);
+        return getVariant(world, pos).getBlockDef().canCreatureSpawn(type, world, pos);
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumCube type : EnumCube.getCreativeList()) {
             if (type.isEnabled())
                 list.add(type.getItem());
@@ -175,26 +191,22 @@ public class BlockCube extends Block {
 
     @Override
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
-        int meta = world.getBlockMetadata(pos);
-        return EnumCube.fromOrdinal(meta).getResistance() * 3f / 5f;
+        return getVariant(world, pos).getResistance() * 3f / 5f;
     }
 
     @Override
     public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
-        int metadata = world.getBlockMetadata(pos);
-        return EnumCube.fromOrdinal(metadata).getBlockDef().getFireSpreadSpeed(world, pos, face);
+        return getVariant(world, pos).getBlockDef().getFireSpreadSpeed(world, pos, face);
     }
 
     @Override
     public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
-        int metadata = world.getBlockMetadata(pos);
-        return EnumCube.fromOrdinal(metadata).getBlockDef().getFlammability(world, pos, face);
+        return getVariant(world, pos).getBlockDef().getFlammability(world, pos, face);
     }
 
     @Override
     public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
-        int metadata = world.getBlockMetadata(pos);
-        return EnumCube.fromOrdinal(metadata).getBlockDef().isFlammable(world, pos, face);
+        return getVariant(world, pos).getBlockDef().isFlammable(world, pos, face);
     }
 
 }

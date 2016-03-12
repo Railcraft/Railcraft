@@ -8,27 +8,28 @@
  */
 package mods.railcraft.common.blocks.aesthetics.cube;
 
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class ReplacerCube extends SimpleCube {
 
-    public Block block = null;
-    public int meta = 0;
+    public IBlockState replacementState;
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-        replaceBlock(world, x, y, z);
+    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
+        replaceBlock(world, pos);
     }
 
     @Override
-    public void onBlockAdded(World world, int x, int y, int z) {
-        replaceBlock(world, x, y, z);
+    public void onBlockAdded(World world, BlockPos pos) {
+        replaceBlock(world, pos);
     }
 
-    private void replaceBlock(World world, int x, int y, int z) {
-        if (block != null) {
-            world.setBlockState(pos, newState, 3);
-        }
+    private void replaceBlock(World world, BlockPos pos) {
+        if (replacementState != null)
+            WorldPlugin.setBlockState(world, pos, replacementState);
     }
 }
