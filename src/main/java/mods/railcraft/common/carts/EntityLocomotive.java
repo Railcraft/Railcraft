@@ -520,8 +520,8 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
             	if (readyToLink) {
             		ILinkageManager lm = CartTools.getLinkageManager(entity.worldObj);
             		lm.createLink((EntityMinecart)entity, this);
-            		LinkageManager.printDebug("Reason For New Link: Passed Auto Coupler Track And Collided With First Cart.");
             		readyToLink = false;
+            		LinkageManager.printDebug("Locomotive Automatically Linked With Cart.");
             		setSpeed(LocoSpeed.SLOWEST);
             	}
             }
