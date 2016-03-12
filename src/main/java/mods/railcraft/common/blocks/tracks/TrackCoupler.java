@@ -91,7 +91,7 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
         	} else {
 	            if(cart instanceof EntityLocomotive) {
 	            	//Sets the locomotive to link with the first cart it collides with, it will then proceed to shunting forward speed.
-	            	((EntityLocomotive)cart).readyToLink = true;
+	            	((EntityLocomotive)cart).autoLink = true;
 	            	LinkageManager.printDebug("Locomotive Set To Auto Link With First Collision.");
 	            }
         	}

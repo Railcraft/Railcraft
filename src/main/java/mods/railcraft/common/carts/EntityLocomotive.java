@@ -86,7 +86,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     private int whistleDelay;
     private int tempIdle;
     private float whistlePitch = getNewWhistlePitch();
-    public boolean readyToLink;
+    public boolean autoLink;
 
     public EntityLocomotive(World world) {
         super(world);
@@ -517,10 +517,10 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
                 return;
             }
             if (entity instanceof EntityMinecart) {
-            	if (readyToLink) {
+            	if (autoLink) {
             		ILinkageManager lm = CartTools.getLinkageManager(entity.worldObj);
             		lm.createLink((EntityMinecart)entity, this);
-            		readyToLink = false;
+            		autoLink = false;
             		LinkageManager.printDebug("Locomotive Automatically Linked With Cart.");
             		setSpeed(LocoSpeed.SLOWEST);
             	}
@@ -589,6 +589,8 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         data.setFloat("whistlePitch", whistlePitch);
 
         data.setInteger("fuel", fuel);
+        
+        data.setBoolean("autolink", autoLink);
 
         lockController.writeToNBT(data, "lock");
     }
@@ -614,6 +616,8 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         whistlePitch = data.getFloat("whistlePitch");
 
         fuel = data.getInteger("fuel");
+        
+        autoLink = data.getBoolean("autolink");
 
         lockController.readFromNBT(data, "lock");
     }
