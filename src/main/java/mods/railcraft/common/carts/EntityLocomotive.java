@@ -40,6 +40,7 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -85,6 +86,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     private int whistleDelay;
     private int tempIdle;
     private float whistlePitch = getNewWhistlePitch();
+    public boolean autoLink;
 
     public EntityLocomotive(World world) {
         super(world);
@@ -514,6 +516,15 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
                     otherLoco.explode();
                 return;
             }
+            if (entity instanceof EntityMinecart) {
+            	if (autoLink) {
+            		ILinkageManager lm = CartTools.getLinkageManager(entity.worldObj);
+            		lm.createLink((EntityMinecart)entity, this);
+            		autoLink = false;
+            		LinkageManager.printDebug("Locomotive Automatically Linked With Cart.");
+            		setSpeed(LocoSpeed.SLOWEST);
+            	}
+            }
         }
         super.applyEntityCollision(entity);
     }
@@ -578,6 +589,8 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         data.setFloat("whistlePitch", whistlePitch);
 
         data.setInteger("fuel", fuel);
+        
+        data.setBoolean("autolink", autoLink);
 
         lockController.writeToNBT(data, "lock");
     }
@@ -603,6 +616,8 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         whistlePitch = data.getFloat("whistlePitch");
 
         fuel = data.getInteger("fuel");
+        
+        autoLink = data.getBoolean("autolink");
 
         lockController.readFromNBT(data, "lock");
     }
