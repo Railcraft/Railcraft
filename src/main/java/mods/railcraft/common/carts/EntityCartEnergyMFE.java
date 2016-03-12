@@ -19,12 +19,9 @@ import mods.railcraft.common.plugins.ic2.IC2Plugin;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class EntityCartEnergyMFE extends EntityCartEnergy {
-
-	boolean classic;
 	
     public EntityCartEnergyMFE(World world) {
         super(world);
-        classic = ModuleIC2.classic;
     }
 
     public EntityCartEnergyMFE(World world, double d, double d1, double d2) {
@@ -45,17 +42,17 @@ public class EntityCartEnergyMFE extends EntityCartEnergy {
 
     @Override
     public int getTier() {
-        return classic ? 2 : 3;
+        return ModuleIC2.classic ? 2 : 3;
     }
 
     @Override
     public int getCapacity() {
-        return classic ? 600000 : 4000000;
+        return ModuleIC2.classic ? 600000 : 4000000;
     }
 
     @Override
     public int getTransferLimit() {
-        return classic ? 128 : 512;
+        return ModuleIC2.classic ? 128 : 512;
     }
 
     @Override

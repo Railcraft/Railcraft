@@ -21,12 +21,9 @@ import mods.railcraft.common.plugins.ic2.IC2Plugin;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class EntityCartEnergyCESU extends EntityCartEnergy {
-	
-	boolean classic = false;
-	
+		
     public EntityCartEnergyCESU(World world) {
         super(world);
-        classic = ModuleIC2.classic;
     }
 
     public EntityCartEnergyCESU(World world, double d, double d1, double d2) {
@@ -68,7 +65,7 @@ public class EntityCartEnergyCESU extends EntityCartEnergy {
     @Override
     public ItemStack getIC2Item() {
     	//IC2 Classic so no RenderCrash Happens
-        return IC2Plugin.getItem(classic ? "mfsUnit" : "cesuUnit");
+        return IC2Plugin.getItem(ModuleIC2.classic ? "mfsUnit" : "cesuUnit");
     }
 
 }
