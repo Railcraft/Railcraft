@@ -13,6 +13,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.block.Block;
@@ -28,6 +29,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -89,6 +91,47 @@ public class BlockStrengthGlass extends BlockGlass {
     @Override
     protected boolean canSilkHarvest() {
         return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister iconRegister) {
+        icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:glass", 1, 5);
+
+        patterns.put(EnumSet.noneOf(Neighbors.class), icons[0]);
+        patterns.put(EnumSet.of(Neighbors.BOTTOM), icons[1]);
+        patterns.put(EnumSet.of(Neighbors.TOP, Neighbors.BOTTOM), icons[2]);
+        patterns.put(EnumSet.of(Neighbors.TOP), icons[3]);
+    }
+
+    private enum Neighbors {
+
+        TOP, BOTTOM;
+    }
+
+    @Override
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+        if (renderingHighlight)
+            return icons[4];
+        if (side <= 1)
+            return icons[0];
+        int meta = world.getBlockMetadata(x, y, z);
+
+        EnumSet neighbors = EnumSet.noneOf(Neighbors.class);
+
+        if (WorldPlugin.getBlock(world, x, y + 1, z) == this && world.getBlockMetadata(x, y + 1, z) == meta)
+            neighbors.add(Neighbors.TOP);
+
+        if (WorldPlugin.getBlock(world, x, y - 1, z) == this && world.getBlockMetadata(x, y - 1, z) == meta)
+            neighbors.add(Neighbors.BOTTOM);
+        return patterns.get(neighbors);
+    }
+
+    @Override
+    public IIcon getIcon(int side, int meta) {
+        if (renderingHighlight)
+            return icons[4];
+        return icons[0];
     }
 
     @Override
