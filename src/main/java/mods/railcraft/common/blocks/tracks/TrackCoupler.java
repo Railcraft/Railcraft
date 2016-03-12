@@ -18,6 +18,7 @@ import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackPowered;
+import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,6 +29,7 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
     private EntityMinecart taggedCart;
     private boolean powered = false;
     private boolean decouple = false;
+    private boolean auto = false;
 
     @Override
     public EnumTrack getTrackType() {
@@ -41,6 +43,8 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
             iconIndex++;
         if (decouple)
             iconIndex += 2;
+        if (auto)
+            iconIndex += 4;
         return getIcon(iconIndex);
     }
 
@@ -50,7 +54,17 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
             if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
-                decouple = !decouple;
+            	//ToDo: Make a state system for easier additions in the future, but this is okay for now.
+                if (!auto && !decouple) {
+                	auto = true;
+                	decouple = false;
+                } else if (auto && !decouple) {
+                	auto = false;
+                	decouple = true;
+                } else if (!auto && decouple) {
+                	auto = false;
+                	decouple = false;
+                }
                 crowbar.onWhack(player, current, getX(), getY(), getZ());
                 if (Game.isNotHost(getWorld()))
                     markBlockNeedsUpdate();
@@ -65,14 +79,22 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
     @Override
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
-            ILinkageManager lm = CartTools.getLinkageManager(cart.worldObj);
-            if (decouple) {
-                lm.breakLinks(cart);
-                LinkageManager.printDebug("Reason For Broken Link: Passed Decoupler Track.");
-            } else {
-                lm.createLink(taggedCart, cart);
-                taggedCart = cart;
-            }
+        	if(!auto) {
+	            ILinkageManager lm = CartTools.getLinkageManager(cart.worldObj);
+	            if (decouple) {
+	                lm.breakLinks(cart);
+	                LinkageManager.printDebug("Reason For Broken Link: Passed Decoupler Track.");
+	            } else {
+	                lm.createLink(taggedCart, cart);
+	                taggedCart = cart;
+	            }
+        	} else {
+	            if(cart instanceof EntityLocomotive) {
+	            	//Sets the locomotive to link with the first cart it collides with, it will then proceed to shunting forward speed.
+	            	((EntityLocomotive)cart).readyToLink = true;
+	            	LinkageManager.printDebug("Locomotive Set To Auto Link With First Collision.");
+	            }
+        	}
         }
     }
 
@@ -96,6 +118,7 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
         super.writeToNBT(data);
         data.setBoolean("powered", powered);
         data.setBoolean("decouple", decouple);
+        data.setBoolean("auto", auto);
     }
 
     @Override
@@ -103,6 +126,7 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
         super.readFromNBT(data);
         powered = data.getBoolean("powered");
         decouple = data.getBoolean("decouple");
+        auto = data.getBoolean("auto");
 
         if (data.getInteger("trackId") == EnumTrack.DECOUPLER.ordinal())
             decouple = true;
@@ -114,6 +138,7 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
 
         data.writeBoolean(powered);
         data.writeBoolean(decouple);
+        data.writeBoolean(auto);
     }
 
     @Override
@@ -122,6 +147,7 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
 
         boolean p = data.readBoolean();
         boolean d = data.readBoolean();
+        boolean a = data.readBoolean();
 
         boolean needsUpdate = false;
         if (p != powered) {
@@ -132,6 +158,11 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
             decouple = d;
             needsUpdate = true;
         }
+        if (a != auto) {
+            auto = a;
+            needsUpdate = true;
+        }
+        
         if (needsUpdate)
             markBlockNeedsUpdate();
     }
