@@ -22,3 +22,6 @@ private/
 out/
 bin/
 classes/
+.settings
+.metadata
+.project
