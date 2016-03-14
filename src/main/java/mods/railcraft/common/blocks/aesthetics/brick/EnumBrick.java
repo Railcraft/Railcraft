@@ -81,7 +81,7 @@ public enum EnumBrick {
     INFERNAL(MapColor.grayColor) {
         @Override
         public void initRecipes() {
-            ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).block = getBlock();
+            ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
             CraftingPlugin.addShapedRecipe(new ItemStack(getBlock(), 2, 2),
                     "MB",
                     "BM",
@@ -102,7 +102,7 @@ public enum EnumBrick {
     SANDY(MapColor.sandColor) {
         @Override
         public void initRecipes() {
-            ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).block = getBlock();
+            ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
             CraftingPlugin.addShapedRecipe(new ItemStack(getBlock(), 1, 2),
                     "BM",
                     "MB",
