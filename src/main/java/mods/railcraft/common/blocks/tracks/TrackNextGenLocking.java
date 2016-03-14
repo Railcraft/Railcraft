@@ -143,10 +143,11 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
                     p = profile.previous();
                 else
                     p = profile.next();
+                crowbar.onWhack(player, current, getX(), getY(), getZ());
                 if (Game.isHost(getWorld()))
                     setProfile(p);
                 else
-                    ChatPlugin.sendLocalizedChat(player, "railcraft.gui.track.locking.change", LocalizationPlugin.translate("railcraft.gui.track.locking.mode." + p.tag));
+                    ChatPlugin.sendLocalizedChat(player, "railcraft.gui.track.mode.change", "\u00A75" + LocalizationPlugin.translate("railcraft.gui.track.locking.mode." + p.tag));
                 return true;
             }
         }

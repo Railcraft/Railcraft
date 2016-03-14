@@ -40,6 +40,7 @@ import java.util.UUID;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class LinkageManager implements ILinkageManager {
+    public static final String AUTO_LINK = "rcAutoLink";
     public static final String LINK_A_HIGH = "rcLinkAHigh";
     public static final String LINK_A_LOW = "rcLinkALow";
     public static final String LINK_B_HIGH = "rcLinkBHigh";
@@ -130,6 +131,45 @@ public class LinkageManager implements ILinkageManager {
         return dist * dist;
     }
 
+    @Override
+    public boolean setAutoLink(EntityMinecart cart, boolean autoLink) {
+        if (autoLink && hasFreeLink(cart)) {
+            cart.getEntityData().setBoolean(AUTO_LINK, true);
+            printDebug("Cart {0}({1}) Set To Auto Link With First Collision.", getLinkageId(cart), cart);
+            return true;
+        }
+        if (!autoLink) {
+            cart.getEntityData().removeTag(AUTO_LINK);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hasAutoLink(EntityMinecart cart) {
+        if (!hasFreeLink(cart))
+            cart.getEntityData().removeTag(AUTO_LINK);
+        return cart.getEntityData().getBoolean(AUTO_LINK);
+    }
+
+    @Override
+    public boolean tryAutoLink(EntityMinecart cart1, EntityMinecart cart2) {
+        if ((hasAutoLink(cart1) || hasAutoLink(cart2))
+                && createLink(cart1, cart2)) {
+            cart1.getEntityData().removeTag(LinkageManager.AUTO_LINK);
+            cart2.getEntityData().removeTag(LinkageManager.AUTO_LINK);
+            printDebug("Automatically Linked Carts {0}({1}) and {2}({3}).", getLinkageId(cart1), cart1, getLinkageId(cart2), cart2);
+            if (cart1 instanceof EntityLocomotive) {
+                ((EntityLocomotive) cart1).setSpeed(EntityLocomotive.LocoSpeed.SLOWEST);
+            }
+            if (cart2 instanceof EntityLocomotive) {
+                ((EntityLocomotive) cart2).setSpeed(EntityLocomotive.LocoSpeed.SLOWEST);
+            }
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Returns true if there is nothing preventing the two carts from being
      * linked.
@@ -199,7 +239,8 @@ public class LinkageManager implements ILinkageManager {
         return false;
     }
 
-    private boolean hasFreeLink(EntityMinecart cart) {
+    @Override
+    public boolean hasFreeLink(EntityMinecart cart) {
         return getLinkedCartA(cart) == null || (hasLink(cart, LinkType.LINK_B) && getLinkedCartB(cart) == null);
     }
 
