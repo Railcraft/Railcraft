@@ -17,6 +17,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -45,6 +46,10 @@ public class TrackTools {
 
     public static boolean isRailBlock(Block block) {
         return block instanceof BlockRailBase;
+    }
+
+    public static boolean isRailBlock(IBlockState state) {
+        return state.getBlock() instanceof BlockRailBase;
     }
 
     public static boolean isRailBlock(ItemStack stack) {
