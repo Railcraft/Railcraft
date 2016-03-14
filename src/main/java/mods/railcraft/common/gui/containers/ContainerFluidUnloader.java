@@ -10,14 +10,15 @@ package mods.railcraft.common.gui.containers;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import mods.railcraft.common.blocks.machine.gamma.TileFluidUnloader;
 import mods.railcraft.common.gui.slots.SlotFluidContainerEmpty;
 import mods.railcraft.common.gui.slots.SlotFluidFilter;
 import mods.railcraft.common.gui.slots.SlotMinecartFilter;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.Slot;
 
 public class ContainerFluidUnloader extends RailcraftContainer {
 
@@ -44,6 +45,12 @@ public class ContainerFluidUnloader extends RailcraftContainer {
         for (int j = 0; j < 9; j++) {
             addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
         }
+    }
+
+    @Override
+    public void addCraftingToCrafters(ICrafting icrafting) {
+        super.addCraftingToCrafters(icrafting);
+        tile.getTankManager().initGuiData(this, icrafting, 0);
     }
 
     @Override

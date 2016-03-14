@@ -8,9 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
@@ -18,6 +15,9 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class EntityCartFiltered extends CartContainerBase implements IMinecart {
     private static final byte FILTER_DATA_ID = 29;
@@ -101,7 +101,6 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
         super.readEntityFromNBT(data);
 
         invFilter.readFromNBT("invFilter", data);
-        dataWatcher.updateObject(FILTER_DATA_ID, invFilter.getStackInSlot(0));
     }
 
     @Override
@@ -116,17 +115,16 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
     }
 
     public ItemStack getFilterItem() {
-        //return getFilter().getStackInSlot(0);
         return dataWatcher.getWatchableObjectItemStack(FILTER_DATA_ID);
     }
 
-    public PhantomInventory getFilter() {
+    public PhantomInventory getFilterInv() {
         return invFilter;
     }
 
     public void setFilter(ItemStack filter) {
-        dataWatcher.updateObject(FILTER_DATA_ID, filter);
-        getFilter().setInventorySlotContents(0, filter);
+//        dataWatcher.updateObject(FILTER_DATA_ID, filter);
+        getFilterInv().setInventorySlotContents(0, filter);
     }
 
     @Override
@@ -134,4 +132,9 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
         return EnumCart.getCartType(stack) == getCartType();
     }
 
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        dataWatcher.updateObject(FILTER_DATA_ID, getFilterInv().getStackInSlot(0));
+    }
 }

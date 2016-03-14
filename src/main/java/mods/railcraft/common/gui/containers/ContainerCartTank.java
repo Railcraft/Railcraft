@@ -27,7 +27,7 @@ public class ContainerCartTank extends RailcraftContainer {
 
         addWidget(new FluidGaugeWidget(cart.getTankManager().get(0), 35, 23, 176, 0, 16, 47));
 
-        addSlot(new SlotFluidFilter(cart.getFilter(), 0, 71, 39));
+        addSlot(new SlotFluidFilter(cart.getFilterInv(), 0, 71, 39));
         addSlot(input = new SlotLiquidContainer(cart.getInvLiquids(), 0, 116, 21));
         addSlot(new SlotOutput(cart.getInvLiquids(), 1, 116, 56));
 
