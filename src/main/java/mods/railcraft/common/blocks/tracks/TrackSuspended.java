@@ -12,6 +12,7 @@ import mods.railcraft.api.tracks.ITrackCustomPlaced;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -30,7 +31,7 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
         World world = getWorld();
         int i = tileEntity.xCoord;
         int j = tileEntity.yCoord;

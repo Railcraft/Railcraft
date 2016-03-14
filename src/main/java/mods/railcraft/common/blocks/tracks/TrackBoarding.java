@@ -8,11 +8,11 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class TrackBoarding extends TrackLockingBase implements ITrackReversable {
+public class TrackBoarding extends TrackLockingBase implements ITrackReversible {
 
     protected boolean reversed = false;
 

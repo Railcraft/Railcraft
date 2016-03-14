@@ -20,6 +20,7 @@ import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.PacketTileEntity;
 import mods.railcraft.common.util.network.RailcraftPacket;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -107,9 +108,9 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
             PacketBuilder.instance().sendTileEntityPacket(this);
     }
 
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        if (entityliving instanceof EntityPlayer)
-            owner = ((EntityPlayer) entityliving).getGameProfile();
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        if (placer instanceof EntityPlayer)
+            owner = ((EntityPlayer) placer).getGameProfile();
     }
 
     public void onNeighborBlockChange(Block id) {

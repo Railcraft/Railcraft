@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.tracks.ITrackCustomShape;
-import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -20,7 +20,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversable, ITrackCustomShape {
+public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversible, ITrackCustomShape {
 
     private static final float CBOX = 0.0625f;
     private static final float SBOX = 0.0625f * 3;

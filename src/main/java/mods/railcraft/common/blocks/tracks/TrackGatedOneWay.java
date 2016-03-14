@@ -9,11 +9,11 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.tracks.ITrackPowered;
-import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.api.tracks.ITrackReversible;
 import net.minecraft.entity.item.EntityMinecart;
 
 
-public class TrackGatedOneWay extends TrackGated implements ITrackReversable, ITrackPowered {
+public class TrackGatedOneWay extends TrackGated implements ITrackReversible, ITrackPowered {
 
     private static final double MOTION_MIN = 0.2;
 

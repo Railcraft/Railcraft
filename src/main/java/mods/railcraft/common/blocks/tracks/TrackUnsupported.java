@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.tracks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 
 /**
  *
@@ -22,7 +23,7 @@ public abstract class TrackUnsupported extends TrackBaseRailcraft {
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
     }
 
 }

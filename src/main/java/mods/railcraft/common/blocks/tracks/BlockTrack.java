@@ -24,6 +24,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -36,10 +37,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -382,27 +380,17 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     // Determine direction here
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
-        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
         if (tile instanceof TileTrack) {
-            ((TileTrack) tile).onBlockPlacedBy(entityliving, stack);
-            ((TileTrack) tile).getTrackInstance().onBlockPlacedBy(entityliving);
+            ((TileTrack) tile).onBlockPlacedBy(state, placer, stack);
+            ((TileTrack) tile).getTrackInstance().onBlockPlacedBy(state, placer, stack);
         }
     }
 
     @Override
-    public void onPostBlockPlaced(World world, int x, int y, int z, int meta) {
-//        if(Game.isNotHost(world)) {
-//            return;
-//        }
-        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
-        try {
-            if (tile instanceof TileTrack)
-                ((TileTrack) tile).getTrackInstance().onBlockPlaced();
-        } catch (Error error) {
-            Game.logErrorAPI(Railcraft.getModId(), error, ITrackInstance.class
-            );
-        }
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(worldIn, pos, state);
     }
 
     @Override
@@ -436,14 +424,14 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
         try {
             if (Game.isNotHost(world))
                 return;
-            TileEntity t = WorldPlugin.getBlockTile(world, x, y, z);
+            TileEntity t = WorldPlugin.getBlockTile(world, pos);
             if (t instanceof TileTrack) {
                 TileTrack tile = (TileTrack) t;
-                tile.onNeighborBlockChange(block);
+                tile.onNeighborBlockChange(state, neighborBlock);
                 tile.getTrackInstance().onNeighborBlockChange(block);
             }
         } catch (StackOverflowError error) {

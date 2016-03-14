@@ -11,7 +11,9 @@ package mods.railcraft.common.blocks.tracks;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import java.io.DataInputStream;
@@ -51,9 +53,9 @@ public class TrackDisposal extends TrackSuspended implements ITrackPowered {
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
-        testPower();
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+        super.onNeighborBlockChange(state, neighborBlock);
+        testPower(state);
     }
 
     @Override

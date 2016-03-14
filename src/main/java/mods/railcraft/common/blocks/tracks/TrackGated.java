@@ -12,7 +12,7 @@ import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.tracks.ITrackBlocksMovement;
 import mods.railcraft.api.tracks.ITrackCustomShape;
 import mods.railcraft.api.tracks.ITrackPowered;
-import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -30,7 +30,7 @@ import java.io.IOException;
 
 // Referenced classes of package net.minecraft.src:
 //            TileEntity, NBTTagCompound, World
-public class TrackGated extends TrackBaseRailcraft implements ITrackReversable, ITrackPowered, ITrackCustomShape, IPostConnection, ITrackBlocksMovement {
+public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, ITrackPowered, ITrackCustomShape, IPostConnection, ITrackBlocksMovement {
 
     protected boolean powered;
     protected boolean open;

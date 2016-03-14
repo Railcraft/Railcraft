@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.tracks.ITrackEmitter;
-import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -20,7 +20,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrackReversable, ITrackEmitter {
+public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrackReversible, ITrackEmitter {
     private static final int POWER_DELAY = 10;
     private boolean reversed = false;
     private byte delay = 0;

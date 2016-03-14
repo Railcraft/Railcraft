@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
-import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-public class TrackSwitch extends TrackSwitchBase implements ITrackReversable {
+public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
     private boolean reversed;
 
     @Override

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
@@ -233,7 +233,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
                 r = true;
                 break;
         }
-        ((ITrackReversable) tile.getTrackInstance()).setReversed(r != reversed);
+        ((ITrackReversible) tile.getTrackInstance()).setReversed(r != reversed);
     }
 
     private void placeEngine(World world, int x, int y, int z, StructureBoundingBox sbb) {

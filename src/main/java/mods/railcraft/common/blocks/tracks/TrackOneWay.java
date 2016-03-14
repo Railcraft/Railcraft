@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.tracks.ITrackPowered;
-import mods.railcraft.api.tracks.ITrackReversable;
+import mods.railcraft.api.tracks.ITrackReversible;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -17,7 +17,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackOneWay extends TrackBaseRailcraft implements ITrackPowered, ITrackReversable {
+public class TrackOneWay extends TrackBaseRailcraft implements ITrackPowered, ITrackReversible {
 
     private boolean reversed = false;
     private boolean powered = false;
