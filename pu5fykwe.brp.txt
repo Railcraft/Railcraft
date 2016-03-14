@@ -1,0 +1,37 @@
+﻿Merge remote-tracking branch 'refs/remotes/CovertJaguar/master'
+
+# Conflicts:
+#	lang
+#	src/main/java/mods/railcraft/common/blocks/tracks/TrackCoupler.java
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   .gitmodules
+#	modified:   api/railcraft
+#	modified:   src/main/java/mods/railcraft/common/blocks/tracks/EnumTrack.java
+#	deleted:    src/main/java/mods/railcraft/common/blocks/tracks/TrackCoupler.java
+#	modified:   src/main/java/mods/railcraft/common/blocks/tracks/TrackNextGenLocking.java
+#	modified:   src/main/java/mods/railcraft/common/carts/EntityCartFiltered.java
+#	modified:   src/main/java/mods/railcraft/common/carts/LinkageManager.java
+#	modified:   src/main/java/mods/railcraft/common/carts/MinecartHooks.java
+#	modified:   src/main/java/mods/railcraft/common/gui/containers/ContainerCartCargo.java
+#	modified:   src/main/java/mods/railcraft/common/gui/containers/ContainerCartTank.java
+#	modified:   src/main/java/mods/railcraft/common/gui/containers/ContainerFluidLoader.java
+#	modified:   src/main/java/mods/railcraft/common/gui/containers/ContainerFluidUnloader.java
+#
+# Changes not staged for commit:
+#	modified:   api/railcraft (new commits)
+#
+
