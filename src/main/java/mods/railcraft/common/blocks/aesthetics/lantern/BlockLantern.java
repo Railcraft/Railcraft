@@ -98,7 +98,7 @@ public class BlockLantern extends Block {
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
+    public boolean isFullCube() {
         return false;
     }
 

@@ -70,7 +70,7 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(int fortune) {
+    public  List<ItemStack> getDrops(int fortune) {
         ArrayList<ItemStack> drops = super.getDrops(fortune);
         if (addon == AddonType.FRAME && BlockFrame.getBlock() != null)
             drops.add(BlockFrame.getItem());

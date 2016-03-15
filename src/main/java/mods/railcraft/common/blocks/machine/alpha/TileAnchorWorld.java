@@ -210,7 +210,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(int fortune) {
+    public  List<ItemStack> getDrops(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         ItemStack drop = getMachineType().getItem();
         if (needsFuel() && hasFuel()) {

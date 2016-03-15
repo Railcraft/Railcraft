@@ -50,7 +50,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
         return true;
     }
 
-    public ArrayList<ItemStack> getDrops(int fortune) {
+    public  List<ItemStack> getDrops(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         items.add(getMachineType().getItem());
         return items;

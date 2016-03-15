@@ -26,7 +26,7 @@ public class BlockFenceReplacement extends BlockFence {
         setHardness(2.0F);
         setResistance(5F);
         setStepSound(soundTypeWood);
-        setBlockName("fence");
+        setUnlocalizedName("fence");
     }
 
     @Override
@@ -38,7 +38,7 @@ public class BlockFenceReplacement extends BlockFence {
         if (tile instanceof TileTrack)
             if (((TileTrack) tile).getTrackInstance() instanceof TrackGated)
                 return true;
-        if (block != null && block.getMaterial().isOpaque() && block.renderAsNormalBlock())
+        if (block != null && block.getMaterial().isOpaque() && block.isFullCube())
             return block.getMaterial() != Material.gourd;
         return false;
     }

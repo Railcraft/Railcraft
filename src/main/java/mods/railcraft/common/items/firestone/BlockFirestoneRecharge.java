@@ -46,7 +46,7 @@ public class BlockFirestoneRecharge extends BlockContainer {
         if (block == null) {
             String tag = "railcraft.firestone.recharge";
             if (RailcraftConfig.isBlockEnabled(tag)) {
-                block = new BlockFirestoneRecharge().setBlockName(tag);
+                block = new BlockFirestoneRecharge().setUnlocalizedName(tag);
                 RailcraftRegistry.register(block);
             }
         }
@@ -83,7 +83,7 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+    public  List<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
         int meta = world.getBlockMetadata(x, y, z);
         TileEntity tile = world.getTileEntity(x, y, z);
@@ -123,7 +123,7 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
+    public boolean isFullCube() {
         return false;
     }
 

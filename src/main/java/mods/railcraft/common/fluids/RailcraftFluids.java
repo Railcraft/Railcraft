@@ -118,7 +118,7 @@ public enum RailcraftFluids {
     private void initBlock() {
         if (railcraftBlock == null && RailcraftConfig.isBlockEnabled(tag)) {
             railcraftBlock = makeBlock();
-            railcraftBlock.setBlockName("railcraft." + tag);
+            railcraftBlock.setUnlocalizedName("railcraft." + tag);
             RailcraftRegistry.register(railcraftBlock);
             railcraftFluid.setBlock(railcraftBlock);
         }

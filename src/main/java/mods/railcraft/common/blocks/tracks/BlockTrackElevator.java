@@ -75,7 +75,7 @@ public class BlockTrackElevator extends Block {
 
     public BlockTrackElevator(int renderId) {
         super(new MaterialElevator());
-//		  setBlockName(name);
+//		  setUnlocalizedName(name);
         setHardness(1.05F);
         setStepSound(soundTypeMetal);
         this.renderType = renderId;
@@ -130,7 +130,7 @@ public class BlockTrackElevator extends Block {
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
+    public boolean isFullCube() {
         return false;
     }
 
