@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.api.core.WorldCoordinate;
+import com.google.common.base.Predicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -17,8 +17,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import static mods.railcraft.common.util.misc.MiscTools.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -42,12 +40,6 @@ public class WorldPlugin {
         return getBlockState(world, pos.offset(side)).getBlock();
     }
 
-    public static boolean isBlockAt(World world, BlockPos pos, Block block, int meta) {
-        if (getBlock(world, pos) != block)
-            return false;
-        return meta == -1 || getBlockMetadata(world, pos) == meta;
-    }
-
     public static boolean isBlockLoaded(World world, BlockPos pos) {
         return world.isBlockLoaded(pos);
     }
@@ -62,16 +54,6 @@ public class WorldPlugin {
 
     public static boolean isBlockAir(World world, BlockPos pos) {
         return world.isAirBlock(pos);
-    }
-
-    @Deprecated
-    public static int getBlockMetadata(IBlockAccess world, BlockPos pos) {
-        return world.getBlockMetadata(pos);
-    }
-
-    @Deprecated
-    public static int getBlockMetadataOnSide(IBlockAccess world, int i, int j, int k, EnumFacing side) {
-        return world.getBlockMetadata(getXOnSide(i, side), getYOnSide(j, side), getZOnSide(k, side));
     }
 
     public static TileEntity getTileEntityOnSide(World world, BlockPos pos, EnumFacing side) {
@@ -90,16 +72,8 @@ public class WorldPlugin {
         return world.setBlockState(pos, blockState);
     }
 
-    public static boolean setBlock(World world, BlockPos pos, Block block) {
-        return world.setBlock(pos, block);
-    }
-
-    public static boolean setBlock(World world, BlockPos pos, Block block, int meta) {
-        return world.setBlock(pos, block, meta, 3);
-    }
-
-    public static boolean setBlock(World world, BlockPos pos, Block block, int meta, int update) {
-        return world.setBlock(pos, block, meta, update);
+    public static boolean setBlockState(World world, BlockPos pos, IBlockState blockState, int update) {
+        return world.setBlockState(pos, blockState, update);
     }
 
     public static boolean setBlockToAir(World world, BlockPos pos) {
@@ -121,12 +95,16 @@ public class WorldPlugin {
             world.addBlockEvent(pos, block, key, value);
     }
 
-    public static WorldCoordinate findBlock(World world, BlockPos pos, int distance, Block block, int meta) {
+    public static BlockPos findBlock(World world, BlockPos pos, int distance, Predicate<IBlockState> matcher) {
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
         for (int yy = y - distance; yy < y + distance; yy++) {
             for (int xx = x - distance; xx < x + distance; xx++) {
                 for (int zz = z - distance; zz < z + distance; zz++) {
-                    if (block == getBlock(world, xx, yy, zz) && meta == getBlockMetadata(world, xx, yy, zz))
-                        return new WorldCoordinate(world.provider.dimensionId, xx, yy, zz);
+                    BlockPos test = new BlockPos(xx, yy, zz);
+                    if (matcher.apply(getBlockState(world, test)))
+                        return test;
                 }
             }
         }
