@@ -9,6 +9,7 @@
 package mods.railcraft.common.commands;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
 import java.util.*;
@@ -59,11 +60,10 @@ public class RootCommand extends CommandBase implements IModCommand {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) {
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (!CommandHelpers.processStandardCommands(sender, this, args))
             CommandHelpers.throwWrongUsage(sender, this);
     }
-
 
     @Override
     public String getFullCommandString() {

@@ -10,14 +10,12 @@
 package mods.railcraft.common.commands;
 
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 /**
@@ -25,7 +23,7 @@ import net.minecraft.world.World;
  */
 public class CommandHelpers {
 
-    public static World getWorld(ICommandSender sender, IModCommand command, String[] args, int worldArgIndex) {
+    public static World getWorld(ICommandSender sender, IModCommand command, String[] args, int worldArgIndex) throws WrongUsageException {
         // Handle passed in world argument
         if (worldArgIndex < args.length)
             try {
@@ -62,14 +60,11 @@ public class CommandHelpers {
     }
 
     /**
-     Avoid using this function if at all possible. Commands are processed on the server,
-     which has no localization information.
-
-     StringUtil.localize() is NOT a valid alternative for sendLocalizedChatMessage().
-     Messages will not be localized properly if you use StringUtil.localize().
-
-     @param sender
-     @param message
+     * Avoid using this function if at all possible. Commands are processed on the server,
+     * which has no localization information.
+     * <p/>
+     * StringUtil.localize() is NOT a valid alternative for sendLocalizedChatMessage().
+     * Messages will not be localized properly if you use StringUtil.localize().
      */
     public static void sendChatMessage(ICommandSender sender, String message) {
         sender.addChatMessage(new ChatComponentText(message));
@@ -79,7 +74,7 @@ public class CommandHelpers {
         throw new WrongUsageException((LocalizationPlugin.translate("command.railcraft.help", command.getCommandUsage(sender))));
     }
 
-    public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) {
+    public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) throws CommandException {
         if (!sender.canCommandSenderUseCommand(child.getRequiredPermissionLevel(), child.getFullCommandString()))
             throw new WrongUsageException(LocalizationPlugin.translate("command.railcraft.noperms"));
         String[] newargs = new String[args.length - 1];
@@ -104,7 +99,7 @@ public class CommandHelpers {
         }
     }
 
-    public static boolean processStandardCommands(ICommandSender sender, IModCommand command, String[] args) {
+    public static boolean processStandardCommands(ICommandSender sender, IModCommand command, String[] args) throws CommandException {
         if (args.length >= 1) {
             if (args[0].equals("help")) {
                 command.printHelp(sender);
@@ -129,5 +124,21 @@ public class CommandHelpers {
                     return true;
             }
         return false;
+    }
+
+    public static BlockPos parseBlockPos(ICommandSender sender, IModCommand command, String[] args, int start) throws WrongUsageException {
+        if (args.length <= start + 3)
+            CommandHelpers.throwWrongUsage(sender, command);
+
+        int x = 0, y = 0, z = 0;
+        try {
+            x = Integer.parseInt(args[start]);
+            y = Integer.parseInt(args[start + 1]);
+            z = Integer.parseInt(args[start + 2]);
+        } catch (NumberFormatException ex) {
+            throwWrongUsage(sender, command);
+        }
+
+        return new BlockPos(x, y, z);
     }
 }

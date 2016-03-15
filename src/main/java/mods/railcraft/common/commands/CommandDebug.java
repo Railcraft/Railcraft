@@ -16,8 +16,10 @@ import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
@@ -45,24 +47,21 @@ public class CommandDebug extends SubCommand {
         sender.addChatMessage(ChatPlugin.getMessage(msgObj.getFormattedMessage()));
     }
 
-    private static void printTarget(ICommandSender sender, World world, WorldCoordinate coord) {
-        int x = coord.x;
-        int y = coord.y;
-        int z = coord.z;
-        Block block = world.getBlock(x, y, z);
+    private static void printTarget(ICommandSender sender, World world, WorldCoordinate pos) {
+        Block block = WorldPlugin.getBlock(world, pos);
         if (block != null)
-            printLine(sender, "Target block [{0}] = {1}, {2}", shortCoords(coord), block.getClass(), block.getUnlocalizedName());
+            printLine(sender, "Target block [{0}] = {1}, {2}", shortCoords(pos), block.getClass(), block.getUnlocalizedName());
         else
-            printLine(sender, "Target block [{0}] = null", shortCoords(coord));
-        TileEntity t = world.getTileEntity(x, y, z);
+            printLine(sender, "Target block [{0}] = null", shortCoords(pos));
+        TileEntity t = world.getTileEntity(pos);
         if (t != null)
-            printLine(sender, "Target tile [{0}, {1}, {2}] = {3}", t.xCoord, t.yCoord, t.zCoord, t.getClass());
+            printLine(sender, "Target tile [{0}, {1}, {2}] = {3}", t.getPos().getX(), t.getPos().getY(), t.getPos().getZ(), t.getClass());
         else
-            printLine(sender, "Target tile [{0}, {1}, {2}] = null", x, y, z);
+            printLine(sender, "Target tile [{0}, {1}, {2}] = null", pos.getY(), pos.getY(), pos.getZ());
     }
 
     private static String shortCoords(WorldCoordinate coord) {
-        return String.format("[%d; %d, %d, %d]", coord.dimension, coord.x, coord.y, coord.z);
+        return String.format("[%d; %d, %d, %d]", coord.getDim(), coord.getX(), coord.getY(), coord.getZ());
     }
 
     public static class CommandDebugTile extends SubCommand {
@@ -73,21 +72,15 @@ public class CommandDebug extends SubCommand {
         }
 
         @Override
-        public void processSubCommand(ICommandSender sender, String[] args) {
+        public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
             if (args.length != 3)
                 CommandHelpers.throwWrongUsage(sender, this);
 
-            int x = 0, y = 0, z = 0;
-            try {
-                x = Integer.parseInt(args[0]);
-                y = Integer.parseInt(args[1]);
-                z = Integer.parseInt(args[2]);
-            } catch (NumberFormatException ex) {
-                CommandHelpers.throwWrongUsage(sender, this);
-            }
+
+            BlockPos pos = CommandHelpers.parseBlockPos(sender, this, args, 0);
 
             World world = CommandHelpers.getWorld(sender, this);
-            TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+            TileEntity tile = WorldPlugin.getBlockTile(world, pos);
             if (tile instanceof RailcraftTileEntity) {
                 List<String> debug = ((RailcraftTileEntity) tile).getDebugOutput();
                 for (String s : debug) {
@@ -106,21 +99,14 @@ public class CommandDebug extends SubCommand {
         }
 
         @Override
-        public void processSubCommand(ICommandSender sender, String[] args) {
+        public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
             if (args.length != 3)
                 CommandHelpers.throwWrongUsage(sender, this);
 
-            int x = 0, y = 0, z = 0;
-            try {
-                x = Integer.parseInt(args[0]);
-                y = Integer.parseInt(args[1]);
-                z = Integer.parseInt(args[2]);
-            } catch (NumberFormatException ex) {
-                CommandHelpers.throwWrongUsage(sender, this);
-            }
+            BlockPos pos = CommandHelpers.parseBlockPos(sender, this, args, 0);
 
             World world = CommandHelpers.getWorld(sender, this);
-            TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+            TileEntity tile = WorldPlugin.getBlockTile(world, pos);
             if (tile instanceof IControllerTile) {
                 IControllerTile conTile = (IControllerTile) tile;
                 SignalController con = conTile.getController();
@@ -136,10 +122,10 @@ public class CommandDebug extends SubCommand {
                         printLine(sender, "Updating Rec Aspect");
                         rec.onControllerAspectChange(con, con.getAspectFor(pair));
                         printLine(sender, "Post Rec Aspect = {0}", ((SimpleSignalReceiver) rec).getAspect());
-                        world.markBlockForUpdate(x, y, z);
+                        world.markBlockForUpdate(pos);
                     } else if (rec == null) {
                         printLine(sender, "Could not find Rec at {0}", shortCoords(pair));
-                        printTarget(sender, tile.getWorldObj(), pair);
+                        printTarget(sender, tile.getWorld(), pair);
                     }
                     printLine(sender, "Railcraft Controller Debug End");
                 }
@@ -156,21 +142,14 @@ public class CommandDebug extends SubCommand {
         }
 
         @Override
-        public void processSubCommand(ICommandSender sender, String[] args) {
+        public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
             if (args.length != 3)
                 CommandHelpers.throwWrongUsage(sender, this);
 
-            int x = 0, y = 0, z = 0;
-            try {
-                x = Integer.parseInt(args[0]);
-                y = Integer.parseInt(args[1]);
-                z = Integer.parseInt(args[2]);
-            } catch (NumberFormatException ex) {
-                CommandHelpers.throwWrongUsage(sender, this);
-            }
+            BlockPos pos = CommandHelpers.parseBlockPos(sender, this, args, 0);
 
             World world = CommandHelpers.getWorld(sender, this);
-            TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+            TileEntity tile = WorldPlugin.getBlockTile(world, pos);
             if (tile instanceof IReceiverTile) {
                 IReceiverTile recTile = (IReceiverTile) tile;
                 SignalReceiver rec = recTile.getReceiver();
@@ -182,7 +161,7 @@ public class CommandDebug extends SubCommand {
                 for (WorldCoordinate pair : rec.getPairs()) {
                     printLine(sender, "Con at {0}", shortCoords(pair));
                     SignalController con = rec.getControllerAt(pair);
-                    if (con instanceof SignalController) {
+                    if (con != null) {
                         printLine(sender, "Con Aspect for Rec = {0}", con.getAspectFor(rec.getCoords()));
                         printLine(sender, "Con Objects = {0}, {1}", con.getTile(), con);
                         if (rec instanceof SimpleSignalReceiver) {
@@ -190,11 +169,11 @@ public class CommandDebug extends SubCommand {
                             printLine(sender, "Updating Rec Aspect");
                             rec.onControllerAspectChange(con, con.getAspectFor(pair));
                             printLine(sender, "Post Rec Aspect = {0}", ((SimpleSignalReceiver) rec).getAspect());
-                            world.markBlockForUpdate(x, y, z);
+                            world.markBlockForUpdate(pos);
                         }
-                    } else if (con == null) {
+                    } else {
                         printLine(sender, "Could not find Con at {0}", shortCoords(pair));
-                        printTarget(sender, tile.getWorldObj(), pair);
+                        printTarget(sender, tile.getWorld(), pair);
                     }
                     printLine(sender, "Railcraft Receiver Debug End");
                 }

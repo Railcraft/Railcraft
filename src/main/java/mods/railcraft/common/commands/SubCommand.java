@@ -9,8 +9,10 @@
 
 package mods.railcraft.common.commands;
 
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.BlockPos;
 
 import java.util.*;
 
@@ -18,7 +20,6 @@ import java.util.*;
  * Created by CovertJaguar on 3/12/2015.
  */
 public abstract class SubCommand implements IModCommand {
-
 
     public enum PermLevel {
 
@@ -77,17 +78,17 @@ public abstract class SubCommand implements IModCommand {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_) {
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         return null;
     }
 
     @Override
-    public final void processCommand(ICommandSender sender, String[] args) {
+    public final void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (!CommandHelpers.processStandardCommands(sender, this, args))
             processSubCommand(sender, args);
     }
 
-    public void processSubCommand(ICommandSender sender, String[] args) {
+    public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
         CommandHelpers.throwWrongUsage(sender, this);
     }
 
@@ -126,12 +127,9 @@ public abstract class SubCommand implements IModCommand {
         return parent.getFullCommandString() + " " + getCommandName();
     }
 
+    @Override
     public int compareTo(ICommand command) {
         return this.getCommandName().compareTo(command.getCommandName());
     }
 
-    @Override
-    public int compareTo(Object command) {
-        return this.compareTo((ICommand) command);
-    }
 }
