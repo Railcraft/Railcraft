@@ -13,6 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S0BPacketAnimation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -79,7 +81,7 @@ public class PlayerPlugin {
     }
 
     public static boolean isOwnerOrOp(GameProfile owner, GameProfile accessor) {
-        return !(owner == null || accessor == null) && (owner.equals(accessor) || isPlayerOp(accessor));
+        return !(owner == null || accessor == null) && (owner.equals(accessor) || getPermissionLevel(accessor) > 2);
     }
 
     public static boolean isSamePlayer(GameProfile a, GameProfile b) {
@@ -88,10 +90,15 @@ public class PlayerPlugin {
         return a.getName() != null && a.getName().equals(b.getName());
     }
 
-    public static boolean isPlayerOp(GameProfile player) {
+    public static int getPermissionLevel(GameProfile gameProfile) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
             throw new RuntimeException("You derped up! Don't call this on the client!");
-        return FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().canSendCommands(player);
+        MinecraftServer mcServer = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (mcServer.getConfigurationManager().canSendCommands(gameProfile)) {
+            UserListOpsEntry opsEntry = mcServer.getConfigurationManager().getOppedPlayers().getEntry(gameProfile);
+            return opsEntry != null ? opsEntry.getPermissionLevel() : 0;
+        }
+        return 0;
     }
 
     public static boolean isPlayerConnected(GameProfile player) {
