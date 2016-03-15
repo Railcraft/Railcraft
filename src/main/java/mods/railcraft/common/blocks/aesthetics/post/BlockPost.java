@@ -35,8 +35,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -45,7 +43,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     public static final PropertyEnum<EnumPost> VARIANT = PropertyEnum.create("variant", EnumPost.class);
     public static BlockPost block;
 
-    protected BlockPost(int renderType) {
+    private BlockPost(int renderType) {
         super(renderType);
         setUnlocalizedName("railcraft.post");
         this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumPost.WOOD));
@@ -68,16 +66,20 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
             }
 
             HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
-            HarvestPlugin.setHarvestLevel(block, EnumPost.WOOD.ordinal(), "axe", 0);
-            HarvestPlugin.setHarvestLevel(block, EnumPost.STONE.ordinal(), "pickaxe", 1);
-            HarvestPlugin.setHarvestLevel(block, EnumPost.METAL_UNPAINTED.ordinal(), "pickaxe", 2);
-            HarvestPlugin.setHarvestLevel(block, EnumPost.EMBLEM.ordinal(), "pickaxe", 2);
-            HarvestPlugin.setHarvestLevel(block, EnumPost.WOOD_PLATFORM.ordinal(), "axe", 0);
-            HarvestPlugin.setHarvestLevel(block, EnumPost.STONE_PLATFORM.ordinal(), "pickaxe", 1);
-            HarvestPlugin.setHarvestLevel(block, EnumPost.METAL_PLATFORM_UNPAINTED.ordinal(), "pickaxe", 2);
+            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.WOOD), "axe", 0);
+            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.STONE), "pickaxe", 1);
+            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.METAL_UNPAINTED), "pickaxe", 2);
+            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.EMBLEM), "pickaxe", 2);
+            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.WOOD_PLATFORM), "axe", 0);
+            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.STONE_PLATFORM), "pickaxe", 1);
+            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.METAL_PLATFORM_UNPAINTED), "pickaxe", 2);
 
             ForestryPlugin.addBackpackItem("builder", block);
         }
+    }
+
+    public static IBlockState getBlockState(EnumPost variant) {
+        return block.getDefaultState().withProperty(VARIANT, variant);
     }
 
     @Override
@@ -99,40 +101,40 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         }
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        IIcon woodIcon = iconRegister.registerIcon("railcraft:post.wood");
-        IIcon stoneIcon = iconRegister.registerIcon("railcraft:concrete");
-        IIcon metalIcon = iconRegister.registerIcon("railcraft:post.metal");
-        EnumPost.WOOD.setTexture(woodIcon);
-        EnumPost.WOOD_PLATFORM.setTexture(woodIcon);
-        EnumPost.STONE.setTexture(stoneIcon);
-        EnumPost.STONE_PLATFORM.setTexture(stoneIcon);
-        EnumPost.METAL_UNPAINTED.setTexture(metalIcon);
-        EnumPost.METAL_PLATFORM_UNPAINTED.setTexture(metalIcon);
-        EnumPost.EMBLEM.setTexture(metalIcon);
-    }
-
-    @Override
-    public IIcon getIcon(int side, int meta) {
-        return EnumPost.fromId(meta).getIcon();
-    }
-
-    @Override
-    public IIcon getIcon(IBlockAccess world, BlockPos pos, int side) {
-        int meta = world.getBlockMetadata(x, y, z);
-        if (meta == EnumPost.EMBLEM.ordinal()) {
-            TileEntity tile = world.getTileEntity(x, y, z);
-            if (tile instanceof TilePostEmblem) {
-                TilePostEmblem post = (TilePostEmblem) tile;
-                EnumColor color = post.getColor();
-                if (color != null && BlockPostMetal.textures != null)
-                    return BlockPostMetal.textures[color.ordinal()];
-            }
-        }
-        return super.getIcon(world, x, y, z, side);
-    }
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public void registerBlockIcons(IIconRegister iconRegister) {
+//        IIcon woodIcon = iconRegister.registerIcon("railcraft:post.wood");
+//        IIcon stoneIcon = iconRegister.registerIcon("railcraft:concrete");
+//        IIcon metalIcon = iconRegister.registerIcon("railcraft:post.metal");
+//        EnumPost.WOOD.setTexture(woodIcon);
+//        EnumPost.WOOD_PLATFORM.setTexture(woodIcon);
+//        EnumPost.STONE.setTexture(stoneIcon);
+//        EnumPost.STONE_PLATFORM.setTexture(stoneIcon);
+//        EnumPost.METAL_UNPAINTED.setTexture(metalIcon);
+//        EnumPost.METAL_PLATFORM_UNPAINTED.setTexture(metalIcon);
+//        EnumPost.EMBLEM.setTexture(metalIcon);
+//    }
+//
+//    @Override
+//    public IIcon getIcon(int side, int meta) {
+//        return EnumPost.fromId(meta).getIcon();
+//    }
+//
+//    @Override
+//    public IIcon getIcon(IBlockAccess world, BlockPos pos, int side) {
+//        int meta = world.getBlockMetadata(x, y, z);
+//        if (meta == EnumPost.EMBLEM.ordinal()) {
+//            TileEntity tile = world.getTileEntity(x, y, z);
+//            if (tile instanceof TilePostEmblem) {
+//                TilePostEmblem post = (TilePostEmblem) tile;
+//                EnumColor color = post.getColor();
+//                if (color != null && BlockPostMetal.textures != null)
+//                    return BlockPostMetal.textures[color.ordinal()];
+//            }
+//        }
+//        return super.getIcon(world, x, y, z, side);
+//    }
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
@@ -164,9 +166,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
 
     @Override
     public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
-        if (isVariant(world, pos, EnumPost.EMBLEM))
-            return false;
-        return side == EnumFacing.DOWN || side == EnumFacing.UP;
+        return !isVariant(world, pos, EnumPost.EMBLEM) && (side == EnumFacing.DOWN || side == EnumFacing.UP);
     }
 
     @Override
@@ -185,6 +185,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         return state.getValue(VARIANT) == variant;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private boolean isVariant(IBlockAccess world, BlockPos pos, EnumPost variant) {
         return getVariant(world, pos) == variant;
     }
@@ -221,21 +222,19 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (isVariant(state, EnumPost.METAL_UNPAINTED))
             if (BlockPostMetal.post != null) {
-                WorldPlugin.setBlockState(world, pos, BlockPostMetal.post.getDefaultState().withProperty(x));
-                world.setBlock(x, y, z, BlockPostMetal.post, 15 - colour, 3);
+                WorldPlugin.setBlockState(world, pos, BlockPostMetal.post.getDefaultState().withProperty(BlockPostMetal.COLOR, EnumColor.fromDye(color)));
                 return true;
             }
         if (isVariant(state, EnumPost.METAL_PLATFORM_UNPAINTED))
             if (BlockPostMetal.platform != null) {
-                WorldPlugin.setBlockState(world, pos, BlockPostMetal.platform.getDefaultState().withProperty(x));
-                world.setBlock(x, y, z, BlockPostMetal.post, 15 - colour, 3);
+                WorldPlugin.setBlockState(world, pos, BlockPostMetal.platform.getDefaultState().withProperty(BlockPostMetal.COLOR, EnumColor.fromDye(color)));
                 return true;
             }
         if (isVariant(state, EnumPost.EMBLEM)) {
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TilePostEmblem) {
                 TilePostEmblem tileEmblem = (TilePostEmblem) tile;
-                tileEmblem.setColor(EnumColor.fromOrdinal(15 - colour));
+                tileEmblem.setColor(EnumColor.fromDye(color));
                 return true;
             }
         }
@@ -260,7 +259,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TilePostEmblem) {
                 TilePostEmblem post = (TilePostEmblem) tile;
-                post.onBlockPlacedBy(entity, stack);
+                post.onBlockPlacedBy(state, entity, stack);
             }
         }
     }
