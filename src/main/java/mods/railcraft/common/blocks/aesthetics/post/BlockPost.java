@@ -14,17 +14,23 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -32,17 +38,17 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class BlockPost extends BlockPostBase implements IPostConnection {
 
+    public static final PropertyEnum<EnumPost> VARIANT = PropertyEnum.create("variant", EnumPost.class);
     public static BlockPost block;
 
     protected BlockPost(int renderType) {
         super(renderType);
-        setBlockName("railcraft.post");
+        setUnlocalizedName("railcraft.post");
+        this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumPost.WOOD));
     }
 
     public static void registerBlock() {
@@ -75,8 +81,8 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public boolean isPlatform(int meta) {
-        switch (EnumPost.fromId(meta)) {
+    public boolean isPlatform(IBlockState state) {
+        switch (getVariant(state)) {
             case WOOD_PLATFORM:
             case STONE_PLATFORM:
             case METAL_PLATFORM_UNPAINTED:
@@ -86,7 +92,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumPost post : EnumPost.values()) {
             if (post == EnumPost.EMBLEM) continue;
             list.add(post.getItem());
@@ -114,7 +120,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+    public IIcon getIcon(IBlockAccess world, BlockPos pos, int side) {
         int meta = world.getBlockMetadata(x, y, z);
         if (meta == EnumPost.EMBLEM.ordinal()) {
             TileEntity tile = world.getTileEntity(x, y, z);
@@ -129,98 +135,107 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public int damageDropped(IBlockState state) {
-        return meta;
-    }
-
-    @Override
-    public int quantityDropped(int meta, int fortune, Random random) {
-        return 1;
-    }
-
-    @Override
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-        if (metadata == EnumPost.EMBLEM.ordinal()) {
-            TileEntity tile = world.getTileEntity(x, y, z);
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        if (state.getValue(VARIANT) == EnumPost.EMBLEM) {
+            TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TilePostEmblem) {
                 TilePostEmblem post = (TilePostEmblem) tile;
-                ArrayList<ItemStack> drops = super.getDrops(world, x, y, z, metadata, fortune);
+                List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
                 InvTools.setItemColor(drops.get(0), post.getColor());
                 ItemPost.setEmblem(drops.get(0), post.getEmblem());
                 return drops;
             }
         }
-        return super.getDrops(world, x, y, z, metadata, fortune);
+        return super.getDrops(world, pos, state, fortune);
     }
 
     @Override
-    public void harvestBlock(World world, EntityPlayer entityplayer, int i, int j, int k, int l) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
     }
 
     @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
         player.addExhaustion(0.025F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
-            dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-        return world.setBlockToAir(x, y, z);
+            dropBlockAsItem(world, pos, WorldPlugin.getBlockState(world, pos), 0);
+        return WorldPlugin.setBlockToAir(world, pos);
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, EnumFacing side) {
-        int meta = world.getBlockMetadata(x, y, z);
-        if (meta == EnumPost.EMBLEM.ordinal())
+    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        if (isVariant(world, pos, EnumPost.EMBLEM))
             return false;
         return side == EnumFacing.DOWN || side == EnumFacing.UP;
     }
 
     @Override
-    public TileEntity createTileEntity(World world, int metadata) {
-        if (metadata == EnumPost.EMBLEM.ordinal())
+    public TileEntity createTileEntity(World world, IBlockState state) {
+        if (isVariant(state, EnumPost.EMBLEM))
             return new TilePostEmblem();
         return null;
     }
 
     @Override
-    public boolean hasTileEntity(int metadata) {
-        return metadata == EnumPost.EMBLEM.ordinal();
+    public boolean hasTileEntity(IBlockState state) {
+        return state.getValue(VARIANT) == EnumPost.EMBLEM;
+    }
+
+    private boolean isVariant(IBlockState state, EnumPost variant) {
+        return state.getValue(VARIANT) == variant;
+    }
+
+    private boolean isVariant(IBlockAccess world, BlockPos pos, EnumPost variant) {
+        return getVariant(world, pos) == variant;
+    }
+
+    private EnumPost getVariant(IBlockState state) {
+        return state.getValue(VARIANT);
+    }
+
+    private EnumPost getVariant(IBlockAccess world, BlockPos pos) {
+        return getVariant(WorldPlugin.getBlockState(world, pos));
     }
 
     @Override
-    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {
-        int metadata = world.getBlockMetadata(x, y, z);
-        if (metadata == EnumPost.WOOD.ordinal())
+    public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+        if (getVariant(world, pos).canBurn())
             return 300;
         return 0;
     }
 
     @Override
-    public int getFlammability(IBlockAccess world, int x, int y, int z, EnumFacing face) {
-        int metadata = world.getBlockMetadata(x, y, z);
-        if (metadata == EnumPost.WOOD.ordinal())
+    public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+        if (getVariant(world, pos).canBurn())
             return 5;
         return 0;
     }
 
     @Override
-    public boolean isFlammable(IBlockAccess world, int x, int y, int z, EnumFacing face) {
-        int metadata = world.getBlockMetadata(x, y, z);
-        return metadata == EnumPost.WOOD.ordinal();
+    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
+        return getVariant(world, pos).canBurn();
     }
 
     @Override
-    public boolean recolourBlock(World world, int x, int y, int z, EnumFacing side, int colour) {
-        int meta = world.getBlockMetadata(x, y, z);
-        if (meta == EnumPost.METAL_UNPAINTED.ordinal())
+    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        if (isVariant(state, EnumPost.METAL_UNPAINTED))
             if (BlockPostMetal.post != null) {
+                WorldPlugin.setBlockState(world, pos, BlockPostMetal.post.getDefaultState().withProperty(x));
                 world.setBlock(x, y, z, BlockPostMetal.post, 15 - colour, 3);
                 return true;
             }
-        if (meta == EnumPost.EMBLEM.ordinal()) {
-            TileEntity tile = world.getTileEntity(x, y, z);
+        if (isVariant(state, EnumPost.METAL_PLATFORM_UNPAINTED))
+            if (BlockPostMetal.platform != null) {
+                WorldPlugin.setBlockState(world, pos, BlockPostMetal.platform.getDefaultState().withProperty(x));
+                world.setBlock(x, y, z, BlockPostMetal.post, 15 - colour, 3);
+                return true;
+            }
+        if (isVariant(state, EnumPost.EMBLEM)) {
+            TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TilePostEmblem) {
                 TilePostEmblem tileEmblem = (TilePostEmblem) tile;
-                tileEmblem.setColor(EnumColor.fromId(15 - colour));
+                tileEmblem.setColor(EnumColor.fromOrdinal(15 - colour));
                 return true;
             }
         }
@@ -228,8 +243,8 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, EnumFacing side) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TilePostEmblem) {
             TilePostEmblem tileEmblem = (TilePostEmblem) tile;
             if (tileEmblem.getFacing() == side)
@@ -239,16 +254,40 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-        super.onBlockPlacedBy(world, x, y, z, entity, stack);
-        int meta = world.getBlockMetadata(x, y, z);
-        if (meta == EnumPost.EMBLEM.ordinal()) {
-            TileEntity tile = world.getTileEntity(x, y, z);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entity, ItemStack stack) {
+        super.onBlockPlacedBy(world, pos, state, entity, stack);
+        if (isVariant(world, pos, EnumPost.EMBLEM)) {
+            TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TilePostEmblem) {
                 TilePostEmblem post = (TilePostEmblem) tile;
                 post.onBlockPlacedBy(entity, stack);
             }
         }
+    }
+
+    /**
+     * Get the MapColor for this Block and the given BlockState
+     */
+    public MapColor getMapColor(IBlockState state) {
+        return getVariant(state).getMapColor();
+    }
+
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(VARIANT, EnumPost.fromId(meta));
+    }
+
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    public int getMetaFromState(IBlockState state) {
+        return getVariant(state).ordinal();
+    }
+
+    protected BlockState createBlockState() {
+        return new BlockState(this, VARIANT);
     }
 
 }

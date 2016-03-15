@@ -23,9 +23,9 @@ public class ItemSignalLamp extends ItemRailcraft {
                 "PG ",
                 "PYT",
                 "PRS",
-                'G', EnumColor.LIME.getDye(),
-                'Y', EnumColor.YELLOW.getDye(),
-                'R', EnumColor.RED.getDye(),
+                'G', EnumColor.LIME.getDyeOreDictTag(),
+                'Y', EnumColor.YELLOW.getDyeOreDictTag(),
+                'R', EnumColor.RED.getDyeOreDictTag(),
                 'S', "dustRedstone",
                 'T', "dustGlowstone",
                 'P', "paneGlassColorless");

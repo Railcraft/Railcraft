@@ -408,7 +408,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(int fortune) {
+    public  List<ItemStack> getDrops(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         ItemStack drop = getMachineType().getItem();
         NBTTagCompound nbt = InvTools.getItemData(drop);
@@ -429,7 +429,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @Override
     public boolean recolourBlock(EnumDyeColor cID) {
-        EnumColor c = EnumColor.fromId(15 - cID.getMetadata());
+        EnumColor c = EnumColor.fromOrdinal(15 - cID.getMetadata());
         if (color != c) {
             color = c;
             markBlockForUpdate();
@@ -612,7 +612,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         tankManager.readTanksFromNBT(data);
         inv.readFromNBT("inv", data);
         if (data.hasKey("color"))
-            color = EnumColor.fromId(data.getByte("color"));
+            color = EnumColor.fromOrdinal(data.getByte("color"));
     }
 
     @Override
@@ -625,7 +625,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        EnumColor c = EnumColor.fromId(data.readByte());
+        EnumColor c = EnumColor.fromOrdinal(data.readByte());
         tankManager.readPacketData(data);
         if (color != c) {
             color = c;

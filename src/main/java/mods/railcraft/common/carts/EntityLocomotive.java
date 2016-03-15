@@ -43,7 +43,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -88,7 +87,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
 
     public EntityLocomotive(World world) {
         super(world);
-        setPrimaryColor(EnumColor.LIGHT_GRAY.ordinal());
+        setPrimaryColor(EnumColor.SILVER.ordinal());
         setSecondaryColor(EnumColor.GRAY.ordinal());
     }
 

@@ -136,7 +136,7 @@ public class ModuleStructures extends RailcraftModule {
                         "GDG",
                         "GGG",
                         'G', BlockStrengthGlass.getBlock(),
-                        'D', color.getDye());
+                        'D', color.getDyeOreDictTag());
             }
     }
 
@@ -242,13 +242,13 @@ public class ModuleStructures extends RailcraftModule {
                         "IDI",
                         "III",
                         'I', stackRaw,
-                        'D', color.getDye());
+                        'D', color.getDyeOreDictTag());
                 CraftingPlugin.addShapedRecipe(outputStack,
                         "III",
                         "IDI",
                         "III",
                         'I', stackColored,
-                        'D', color.getDye());
+                        'D', color.getDyeOreDictTag());
             }
         }
 
@@ -263,13 +263,13 @@ public class ModuleStructures extends RailcraftModule {
                         "IDI",
                         "III",
                         'I', stackRaw,
-                        'D', color.getDye());
+                        'D', color.getDyeOreDictTag());
                 CraftingPlugin.addShapedRecipe(outputStack,
                         "III",
                         "IDI",
                         "III",
                         'I', stackColored,
-                        'D', color.getDye());
+                        'D', color.getDyeOreDictTag());
             }
         }
     }

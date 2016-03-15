@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class DyeHelper {
@@ -26,7 +25,7 @@ public class DyeHelper {
         if (dyes == null) {
             dyes = LinkedListMultimap.create();
             for (EnumColor color : EnumColor.VALUES) {
-                dyes.putAll(color, OreDictionary.getOres(EnumColor.DYES[color.ordinal()]));
+                dyes.putAll(color, OreDictionary.getOres(color.getDyeOreDictTag()));
             }
         }
         return dyes;

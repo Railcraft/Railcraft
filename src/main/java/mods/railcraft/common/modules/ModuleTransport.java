@@ -188,7 +188,7 @@ public class ModuleTransport extends RailcraftModule {
                     "ODO",
                     "OOO",
                     'O', type.getItem(),
-                    'D', color.getDye());
+                    'D', color.getDyeOreDictTag());
         }
     }
 

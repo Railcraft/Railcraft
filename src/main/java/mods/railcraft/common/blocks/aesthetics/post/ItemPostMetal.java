@@ -34,6 +34,6 @@ public class ItemPostMetal extends ItemBlock {
     public String getUnlocalizedName(ItemStack stack) {
         if (stack.getItemDamage() == -1 || stack.getItemDamage() == OreDictionary.WILDCARD_VALUE)
             return EnumPost.METAL_UNPAINTED.getTag();
-        return super.getUnlocalizedName() + "." + EnumColor.fromId(stack.getItemDamage()).getBasicTag();
+        return super.getUnlocalizedName() + "." + EnumColor.fromOrdinal(stack.getItemDamage()).getBaseTag();
     }
 }

@@ -35,7 +35,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt != null) {
             if (nbt.hasKey("color"))
-                setColor(EnumColor.fromId(nbt.getByte("color")));
+                setColor(EnumColor.fromOrdinal(nbt.getByte("color")));
             if (nbt.hasKey("emblem"))
                 setEmblem(nbt.getString("emblem"));
         }
@@ -98,7 +98,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
         facing = EnumFacing.getOrientation(data.getByte("facing"));
 
         if (data.hasKey("color"))
-            color = EnumColor.fromId(data.getByte("color"));
+            color = EnumColor.fromOrdinal(data.getByte("color"));
     }
 
     @Override
@@ -127,7 +127,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
                 needsUpdate = true;
             }
         } else {
-            EnumColor c = EnumColor.fromId(cByte);
+            EnumColor c = EnumColor.fromOrdinal(cByte);
             if (color != c) {
                 color = c;
                 needsUpdate = true;

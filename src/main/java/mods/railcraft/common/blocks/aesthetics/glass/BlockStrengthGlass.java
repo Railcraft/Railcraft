@@ -161,7 +161,7 @@ public class BlockStrengthGlass extends BlockGlass {
         if (renderingHighlight)
             return super.colorMultiplier(worldIn, pos, renderPass);
         int meta = worldIn.getBlockMetadata(pos);
-        return EnumColor.fromId(15 - meta).getHexColor();
+        return EnumColor.fromOrdinal(15 - meta).getHexColor();
     }
 
     private enum Neighbors {

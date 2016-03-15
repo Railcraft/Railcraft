@@ -9,106 +9,89 @@
 package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.block.material.MapColor;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.util.IStringSerializable;
 
 import java.util.Locale;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumColor {
+public enum EnumColor implements IStringSerializable {
 
-    BLACK(0x2D2D2D),
-    RED(0xA33835),
-    GREEN(0x394C1E),
-    BROWN(0x5C3A24),
-    BLUE(0x3441A2),
-    PURPLE(0x843FBF),
-    CYAN(0x36809E),
-    LIGHT_GRAY(0x888888),
-    GRAY(0x444444),
-    PINK(0xE585A0),
-    LIME(0x3FAA36),
-    YELLOW(0xFFC700),
-    LIGHT_BLUE(0x7F9AD1),
-    MAGENTA(0xFF64FF),
-    ORANGE(0xFF6A00),
-    WHITE(0xFFFFFF);
+    BLACK(0x2D2D2D, "dyeBlack", "black"),
+    RED(0xA33835, "dyeRed", "red"),
+    GREEN(0x394C1E, "dyeGreen", "green"),
+    BROWN(0x5C3A24, "dyeBrown", "brown"),
+    BLUE(0x3441A2, "dyeBlue", "blue"),
+    PURPLE(0x843FBF, "dyePurple", "purple"),
+    CYAN(0x36809E, "dyeCyan", "cyan"),
+    SILVER(0x888888, "dyeLightGray", "silver", "lightGray"),
+    GRAY(0x444444, "dyeGray", "gray"),
+    PINK(0xE585A0, "dyePink", "pink"),
+    LIME(0x3FAA36, "dyeLime", "lime"),
+    YELLOW(0xFFC700, "dyeYellow", "yellow"),
+    LIGHT_BLUE(0x7F9AD1, "dyeLightBlue", "lightBlue"),
+    MAGENTA(0xFF64FF, "dyeMagenta", "magenta"),
+    ORANGE(0xFF6A00, "dyeOrange", "orange"),
+    WHITE(0xFFFFFF, "dyeWhite", "white");
     public final static EnumColor[] VALUES = values();
-    public final static String[] DYES = {
-        "dyeBlack",
-        "dyeRed",
-        "dyeGreen",
-        "dyeBrown",
-        "dyeBlue",
-        "dyePurple",
-        "dyeCyan",
-        "dyeLightGray",
-        "dyeGray",
-        "dyePink",
-        "dyeLime",
-        "dyeYellow",
-        "dyeLightBlue",
-        "dyeMagenta",
-        "dyeOrange",
-        "dyeWhite"};
-    public final static String[] NAMES = {
-        "Black",
-        "Red",
-        "Green",
-        "Brown",
-        "Blue",
-        "Purple",
-        "Cyan",
-        "LightGray",
-        "Gray",
-        "Pink",
-        "Lime",
-        "Yellow",
-        "LightBlue",
-        "Magenta",
-        "Orange",
-        "White"};
-    private final int color;
+    private final int hexColor;
+    private final String oreTagDyeName;
+    private final String[] names;
 
-    EnumColor(int color) {
-        this.color = color;
+    EnumColor(int hexColor, String oreTagDyeName, String... names) {
+        this.hexColor = hexColor;
+        this.oreTagDyeName = oreTagDyeName;
+        this.names = names;
+    }
+
+    public EnumDyeColor getDye() {
+        return EnumDyeColor.byDyeDamage(ordinal());
+    }
+
+    public static EnumColor fromDye(EnumDyeColor dyeColor) {
+        return fromOrdinal(dyeColor.getDyeDamage());
+    }
+
+    public MapColor getMapColor() {
+        return getDye().getMapColor();
     }
 
     public int getHexColor() {
-        return color;
+        return hexColor;
     }
 
-    public static EnumColor fromId(int id) {
+    public static EnumColor fromOrdinal(int id) {
         if (id < 0 || id >= VALUES.length)
             return WHITE;
         return VALUES[id];
     }
 
-    public static EnumColor fromDye(String dyeTag) {
-        for (int id = 0; id < DYES.length; id++) {
-            if (DYES[id].equals(dyeTag))
-                return VALUES[id];
+    public static EnumColor fromDyeOreDictTag(String dyeTag) {
+        for (EnumColor color : VALUES) {
+            if (color.getDyeOreDictTag().equalsIgnoreCase(dyeTag))
+                return color;
         }
         return null;
     }
 
     public static EnumColor fromName(String name) {
-        for (int id = 0; id < NAMES.length; id++) {
-            if (NAMES[id].equals(name))
-                return VALUES[id];
+        for (EnumColor color : VALUES) {
+            for (String tag : color.names)
+                if (tag.equalsIgnoreCase(name))
+                    return color;
         }
         return null;
     }
 
-    public EnumColor getNext() {
-        EnumColor next = VALUES[(ordinal() + 1) % VALUES.length];
-        return next;
+    public EnumColor next() {
+        return VALUES[(ordinal() + 1) % VALUES.length];
     }
 
-    public EnumColor getPrevious() {
-        EnumColor previous = VALUES[(ordinal() + VALUES.length - 1) % VALUES.length];
-        return previous;
+    public EnumColor previous() {
+        return VALUES[(ordinal() + VALUES.length - 1) % VALUES.length];
     }
 
     public static EnumColor getRand() {
@@ -120,10 +103,10 @@ public enum EnumColor {
     }
 
     public String getTag() {
-        return "color." + name().replace("_", ".").toLowerCase(Locale.ENGLISH);
+        return "color." + getBaseTag();
     }
 
-    public String getBasicTag() {
+    public String getBaseTag() {
         return name().replace("_", ".").toLowerCase(Locale.ENGLISH);
     }
 
@@ -131,8 +114,8 @@ public enum EnumColor {
         return LocalizationPlugin.translate("railcraft." + getTag());
     }
 
-    public String getDye() {
-        return DYES[ordinal()];
+    public String getDyeOreDictTag() {
+        return oreTagDyeName;
     }
 
     @Override
@@ -146,4 +129,8 @@ public enum EnumColor {
         return b.toString().trim();
     }
 
+    @Override
+    public String getName() {
+        return names[0];
+    }
 }

@@ -12,6 +12,8 @@ import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.signals.MaterialStructure;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -40,18 +42,18 @@ public abstract class BlockPostBase extends Block {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
-    public boolean isPlatform(int meta) {
+    public boolean isPlatform(IBlockState state) {
         return false;
     }
 
     @Override
     public int damageDropped(IBlockState state) {
-        return meta;
+        return getMetaFromState(state);
     }
 
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
-        if (isPlatform(worldIn.getBlockMetadata(pos)))
+        if (isPlatform(WorldPlugin.getBlockState(worldIn, pos)))
             setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 1.0F, 1F);
         else
             setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1.0F, 0.8F);
@@ -59,30 +61,24 @@ public abstract class BlockPostBase extends Block {
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
-        if (isPlatform(worldIn.getBlockMetadata(pos)))
-            return AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
+        if (isPlatform(state))
+            return AABBFactory.make().createBoxForTileAt(pos).build();
         if (!worldIn.isAirBlock(pos.down())
-                && !(worldIn.getBlockState(pos.down()).getBlock() instanceof BlockPostBase)
+                && !(state.getBlock() instanceof BlockPostBase)
                 && !TrackTools.isRailBlockAt(worldIn, pos.up()))
-            return AxisAlignedBB.fromBounds(x + SIZE, y, z + SIZE, x + 1 - SIZE, y + 1.5, z + 1 - SIZE);
-        return AxisAlignedBB.fromBounds(x + SIZE, y, z + SIZE, x + 1 - SIZE, y + 1, z + 1 - SIZE);
+            return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(-SIZE).raiseCeiling(0.5).build();
+        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(-SIZE).build();
     }
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
-        if (isPlatform(worldIn.getBlockMetadata(pos)))
-            return AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
-        return AxisAlignedBB.fromBounds(x + SELECT, y, z + SELECT, x + 1 - SELECT, y + 1.0F, z + 1 - SELECT);
+        if (isPlatform(WorldPlugin.getBlockState(worldIn, pos)))
+            return AABBFactory.make().createBoxForTileAt(pos).build();
+        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(-SELECT).build();
     }
 
     @Override
-    public boolean getBlocksMovement(IBlockAccess world, int x, int y, int z) {
+    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
         return false;
     }
 
@@ -97,7 +93,7 @@ public abstract class BlockPostBase extends Block {
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
+    public boolean isFullCube() {
         return false;
     }
 

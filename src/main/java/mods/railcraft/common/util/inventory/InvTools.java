@@ -147,12 +147,12 @@ public abstract class InvTools {
         if (stack == null)
             return null;
         if (isStackEqualToBlock(stack, Blocks.wool))
-            return EnumColor.fromId(15 - stack.getItemDamage());
+            return EnumColor.fromOrdinal(15 - stack.getItemDamage());
         if (stack.getItem() == Items.dye)
-            return EnumColor.fromId(stack.getItemDamage());
+            return EnumColor.fromOrdinal(stack.getItemDamage());
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt != null && nbt.hasKey("color"))
-            return EnumColor.fromId(nbt.getByte("color"));
+            return EnumColor.fromOrdinal(nbt.getByte("color"));
         return null;
     }
 

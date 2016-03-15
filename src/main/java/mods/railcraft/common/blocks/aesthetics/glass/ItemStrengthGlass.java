@@ -28,7 +28,7 @@ public class ItemStrengthGlass extends ItemBlock {
     public int getColorFromItemStack(ItemStack stack, int pass) {
         if (BlockStrengthGlass.renderingHighlight)
             return super.getColorFromItemStack(stack, pass);
-        return EnumColor.fromId(15 - stack.getItemDamage()).getHexColor();
+        return EnumColor.fromOrdinal(15 - stack.getItemDamage()).getHexColor();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ItemStrengthGlass extends ItemBlock {
 
 //    @Override
 //    public String getUnlocalizedName(ItemStack stack) {
-//        return getUnlocalizedName() + "." + EnumColor.fromId(15 - stack.getItemDamage()).getBasicTag();
+//        return getUnlocalizedName() + "." + EnumColor.fromOrdinal(15 - stack.getItemDamage()).getBaseTag();
 //    }
 
 }
