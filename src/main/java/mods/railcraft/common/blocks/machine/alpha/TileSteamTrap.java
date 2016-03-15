@@ -141,7 +141,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     @Override
     public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(entityliving, stack);
-        direction = MiscTools.getSideClosestToPlayer(worldObj, getPos(), entityliving);
+        direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
     }
 
     @Override

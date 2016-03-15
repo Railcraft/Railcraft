@@ -140,7 +140,7 @@ public class BlockDetector extends BlockContainer {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileDetector) {
-            ((TileDetector) tile).direction = MiscTools.getSideClosestToPlayer(worldIn, pos, placer);
+            ((TileDetector) tile).direction = MiscTools.getSideFacingPlayer(pos, placer);
             ((TileDetector) tile).onBlockPlacedBy(placer, stack);
         }
     }

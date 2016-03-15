@@ -61,7 +61,7 @@ public class TileItemUnloaderAdvanced extends TileItemUnloader {
         super.onBlockPlacedBy(entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)
-            direction = MiscTools.getSideClosestToPlayer(worldObj, getPos(), entityliving);
+            direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
     }
 
     @Override

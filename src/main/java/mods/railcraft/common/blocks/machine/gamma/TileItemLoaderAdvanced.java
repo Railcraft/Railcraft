@@ -67,7 +67,7 @@ public class TileItemLoaderAdvanced extends TileItemLoader {
         super.onBlockPlacedBy(entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)
-            direction = MiscTools.getSideClosestToPlayer(worldObj, getPos(), entityliving);
+            direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
     }
 
     @Override

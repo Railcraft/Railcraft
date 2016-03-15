@@ -233,15 +233,15 @@ public abstract class MiscTools {
      *
      * @return a side
      */
-    public static EnumFacing getSideClosestToPlayer(World world, int i, int j, int k, EntityLivingBase entityplayer) {
-        if (MathHelper.abs((float) entityplayer.posX - (float) i) < 2.0F && MathHelper.abs((float) entityplayer.posZ - (float) k) < 2.0F) {
-            double d = (entityplayer.posY + 1.82D) - entityplayer.getYOffset();
-            if (d - (double) j > 2D)
+    public static EnumFacing getSideFacingPlayer(BlockPos pos, EntityLivingBase player) {
+        if (MathHelper.abs((float) player.posX - pos.getX()) < 2.0F && MathHelper.abs((float) player.posZ - pos.getZ()) < 2.0F) {
+            double d = (player.posY + 1.82D) - player.getYOffset();
+            if (d - pos.getY() > 2D)
                 return EnumFacing.UP;
-            if ((double) j - d > 0.0D)
+            if (pos.getY() - d > 0.0D)
                 return EnumFacing.DOWN;
         }
-        int dir = MathHelper.floor_double((double) ((entityplayer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+        int dir = MathHelper.floor_double((double) ((player.rotationYaw * 4F) / 360F) + 0.5D) & 3;
         switch (dir) {
             case 0:
                 return EnumFacing.NORTH;
@@ -253,16 +253,8 @@ public abstract class MiscTools {
         return dir != 3 ? EnumFacing.DOWN : EnumFacing.WEST;
     }
 
-    public static EnumFacing getSideFacingTrack(World world, int x, int y, int z) {
-        for (EnumFacing dir : EnumFacing.VALUES) {
-            if (TrackTools.isRailBlockAt(world, MiscTools.getXOnSide(x, dir), MiscTools.getYOnSide(y, dir), MiscTools.getZOnSide(z, dir)))
-                return dir;
-        }
-        return null;
-    }
-
     /**
-     * This function unlike getSideClosestToPlayer can only return north, south,
+     * This function unlike getSideFacingPlayer can only return north, south,
      * east, west.
      *
      * @return a side
@@ -282,6 +274,14 @@ public abstract class MiscTools {
         return EnumFacing.NORTH;
     }
 
+    public static EnumFacing getSideFacingTrack(World world, BlockPos pos) {
+        for (EnumFacing dir : EnumFacing.VALUES) {
+            if (TrackTools.isRailBlockAt(world, pos.offset(dir)))
+                return dir;
+        }
+        return null;
+    }
+
     /**
      * @deprecated use {@link EnumFacing#getOpposite()}
      */
@@ -292,14 +292,17 @@ public abstract class MiscTools {
         return EnumFacing.VALUES[s];
     }
 
+    @Deprecated
     public static int getXOnSide(int x, EnumFacing side) {
         return x + side.getFrontOffsetX();
     }
 
+    @Deprecated
     public static int getYOnSide(int y, EnumFacing side) {
         return y + side.getFrontOffsetY();
     }
 
+    @Deprecated
     public static int getZOnSide(int z, EnumFacing side) {
         return z + side.getFrontOffsetZ();
     }
