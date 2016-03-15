@@ -36,7 +36,7 @@ public class ItemCartAnchor extends ItemCart {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         if ((getCartType() == EnumCart.ANCHOR && !RailcraftConfig.anchorFuelWorld.isEmpty()) || (getCartType() == EnumCart.ANCHOR_PERSONAL && !RailcraftConfig.anchorFuelPersonal.isEmpty())) {
             long fuel = getFuel(stack);
             double hours = (double) fuel / RailcraftConstants.TICKS_PER_HOUR;

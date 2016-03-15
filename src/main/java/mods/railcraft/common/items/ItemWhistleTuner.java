@@ -8,41 +8,22 @@
  */
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.item.ItemStack;
 
 public class ItemWhistleTuner extends ItemRailcraft {
 
-    private static ItemWhistleTuner item;
-
-    public static void registerItem() {
-        if (item == null) {
-            String tag = "railcraft.tool.whistle.tuner";
-
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemWhistleTuner();
-                item.setUnlocalizedName(tag);
-                RailcraftRegistry.register(item);
-
-                CraftingPlugin.addShapedRecipe(new ItemStack(item), true,
-                        "N N",
-                        "NNN",
-                        " N ",
-                        'N', "nuggetSteel");
-            }
-        }
-    }
-
-    public static ItemStack getItem() {
-        if (item == null)
-            return null;
-        return new ItemStack(item);
-    }
-
     public ItemWhistleTuner() {
         setMaxDamage(250);
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addShapedRecipe(new ItemStack(this), true,
+                "N N",
+                "NNN",
+                " N ",
+                'N', "nuggetSteel");
     }
 
 }

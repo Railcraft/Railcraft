@@ -22,53 +22,19 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemGoggles extends ItemArmor {
+public class ItemGoggles extends ItemArmor implements IRailcraftItem {
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "goggles.png";
-    private static ItemGoggles item;
 
     public ItemGoggles() {
         super(ItemMaterials.GOGGLES, 0, 0);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-    }
-
-    public static void registerItem() {
-        if (item == null) {
-            String tag = "railcraft.armor.goggles";
-
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemGoggles();
-                item.setUnlocalizedName(tag);
-                RailcraftRegistry.register(item);
-
-                CraftingPlugin.addShapedRecipe(new ItemStack(item), true,
-                        "GCG",
-                        "I I",
-                        "LLL",
-                        'C', RailcraftItem.circuit, ItemCircuit.EnumCircuit.RECEIVER,
-                        'I', "ingotSteel",
-                        'L', Items.leather,
-                        'G', "paneGlassColorless");
-
-                BlockHidden.registerBlock();
-                if (BlockHidden.getBlock() != null && RailcraftConfig.isTrackingAuraEnabled())
-                    FMLCommonHandler.instance().bus().register(new TrailTicker());
-
-                LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, tag);
-            }
-        }
-    }
-
-    public static ItemStack getItem() {
-        if (item == null)
-            return null;
-        return new ItemStack(item);
     }
 
     public static GoggleAura getCurrentAura(ItemStack goggles) {
@@ -99,10 +65,6 @@ public class ItemGoggles extends ItemArmor {
         }
     }
 
-    public static boolean areEnabled() {
-        return item != null;
-    }
-
     public static ItemStack getGoggles(EntityPlayer player) {
         if (player == null)
             return null;
@@ -118,8 +80,24 @@ public class ItemGoggles extends ItemArmor {
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:" + MiscTools.cleanTag(getUnlocalizedName()));
+    public void initItem() {
+        BlockHidden.registerBlock();
+        if (BlockHidden.getBlock() != null && RailcraftConfig.isTrackingAuraEnabled())
+            MinecraftForge.EVENT_BUS.register(new TrailTicker());
+
+        LootPlugin.addLoot(RailcraftItem.goggles, 1, 1, LootPlugin.Type.WORKSHOP);
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addShapedRecipe(new ItemStack(this), true,
+                "GCG",
+                "I I",
+                "LLL",
+                'C', RailcraftItem.circuit, ItemCircuit.EnumCircuit.RECEIVER,
+                'I', "ingotSteel",
+                'L', Items.leather,
+                'G', "paneGlassColorless");
     }
 
     @Override
@@ -143,7 +121,7 @@ public class ItemGoggles extends ItemArmor {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv) {
         NBTTagCompound data = stack.getTagCompound();
         GoggleAura aura = getCurrentAura(stack);
         String mode = LocalizationPlugin.translate("railcraft.gui.goggles.mode");
@@ -151,6 +129,15 @@ public class ItemGoggles extends ItemArmor {
 
         list.add(String.format(mode, "\u00A75" + aura));
         list.add(tip);
+    }
+
+    @Override
+    public Object getRecipeObject(IItemMetaEnum meta) {
+        return this;
+    }
+
+    @Override
+    public void definePostRecipes() {
     }
 
     public enum GoggleAura {

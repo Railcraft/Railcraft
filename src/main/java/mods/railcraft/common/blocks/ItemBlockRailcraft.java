@@ -48,7 +48,7 @@ public class ItemBlockRailcraft extends ItemBlock {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         ToolTip toolTip = getToolTip(stack, player, adv);
         if (toolTip != null)
             for (ToolTipLine line : toolTip) {

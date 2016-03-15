@@ -60,7 +60,7 @@ public class ItemWaterstoneRefined extends ItemRailcraft {
     }
 
     @Override
-    public void getSubItems(Item id, CreativeTabs tab, List list) {
+    public void getSubItems(Item id, CreativeTabs tab, List<ItemStack> list) {
         list.add(new ItemStack(item, 1, 5000));
 //        list.add(new ItemStack(item, 1, 0));
     }
@@ -79,7 +79,7 @@ public class ItemWaterstoneRefined extends ItemRailcraft {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         super.addInformation(stack, player, info, adv);
         String tipTag = getUnlocalizedName() + ".tip.charged";
         if (stack.getItemDamage() >= stack.getMaxDamage() - 5)
@@ -90,7 +90,7 @@ public class ItemWaterstoneRefined extends ItemRailcraft {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.canPlayerEdit(x, y, z, side, stack)) {
             Block block = WorldPlugin.getBlock(world, x, y, z);
             if (block != null && block != Blocks.stone) {

@@ -15,6 +15,7 @@ import mods.railcraft.client.particles.*;
 import mods.railcraft.client.render.RenderTESRSignals;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemGoggles.GoggleAura;
+import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.util.effects.CommonEffectProxy;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
@@ -100,7 +101,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
 
     @Override
     public boolean isGoggleAuraActive(GoggleAura aura) {
-        if (ItemGoggles.areEnabled()) {
+        if (RailcraftItem.goggles.item() != null) {
             ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().thePlayer);
             return ItemGoggles.getCurrentAura(goggles) == aura;
         }

@@ -56,7 +56,7 @@ public class ItemPost extends ItemBlock {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         if (stack.getItemDamage() == EnumPost.EMBLEM.ordinal() && stack.hasTagCompound()) {
             NBTTagCompound nbt = stack.getTagCompound();
             NBTTagString emblemIdent = (NBTTagString) nbt.getTag("emblem");

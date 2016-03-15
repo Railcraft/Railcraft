@@ -10,6 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
@@ -26,9 +28,9 @@ public class ItemSignalLabel extends ItemRailcraft {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-        if (Game.isHost(world) && player.isSneaking() && stack.hasDisplayName()) {
-            TileEntity tile = world.getTileEntity(x, y, z);
+    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (Game.isHost(worldIn) && playerIn.isSneaking() && stack.hasDisplayName()) {
+            TileEntity tile = worldIn.getTileEntity(pos);
             Set<AbstractPair> pairs = new HashSet<AbstractPair>();
             if (tile instanceof IReceiverTile) {
                 pairs.add(((IReceiverTile) tile).getReceiver());
@@ -46,12 +48,12 @@ public class ItemSignalLabel extends ItemRailcraft {
                 }
                 if (done) {
                     --stack.stackSize;
-                    PlayerPlugin.swingItem(player);
-                    world.markBlockForUpdate(x, y, z);
+                    PlayerPlugin.swingItem(playerIn);
+                    worldIn.markBlockForUpdate(pos);
                     return true;
                 }
             }
         }
-        return super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
+        return super.onItemUse(stack, playerIn, worldIn, pos, side, hitX, hitY, hitZ);
     }
 }

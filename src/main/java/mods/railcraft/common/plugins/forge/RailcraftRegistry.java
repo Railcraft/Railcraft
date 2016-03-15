@@ -120,6 +120,7 @@ public final class RailcraftRegistry {
         tag = MiscTools.cleanTag(tag);
         TagList.addTag(tag);
         GameRegistry.registerItem(item, tag);
+        RailcraftItemRegistry.register(tag, new ItemStack(item));
     }
 
     /**
@@ -149,5 +150,6 @@ public final class RailcraftRegistry {
         tag = MiscTools.cleanTag(tag);
         TagList.addTag(tag);
         GameRegistry.registerBlock(block, itemclass, tag);
+        RailcraftItemRegistry.register(tag, new ItemStack(block));
     }
 }

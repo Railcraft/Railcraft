@@ -17,39 +17,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemNugget extends ItemRailcraft {
-
-    public enum EnumNugget implements IItemMetaEnum {
-
-        IRON("nuggetIron"),
-        STEEL("nuggetSteel"),
-        COPPER("nuggetCopper"),
-        TIN("nuggetTin"),
-        LEAD("nuggetLead");
-        public static EnumNugget[] VALUES = values();
-        private IIcon icon;
-        private String oreTag;
-
-        EnumNugget(String oreTag) {
-            this.oreTag = oreTag;
-        }
-
-        @Override
-        public Object getAlternate() {
-            return oreTag;
-        }
-
-        @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
-            return ItemNugget.class;
-        }
-
-    }
 
     public ItemNugget() {
         setHasSubtypes(true);
@@ -87,24 +59,10 @@ public class ItemNugget extends ItemRailcraft {
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        for (EnumNugget nugget : EnumNugget.VALUES) {
-            nugget.icon = iconRegister.registerIcon("railcraft:nugget." + nugget.name().toLowerCase(Locale.ENGLISH));
-        }
-    }
-
-    @Override
-    public void getSubItems(Item id, CreativeTabs tab, List list) {
+    public void getSubItems(Item id, CreativeTabs tab, List<ItemStack> list) {
         for (EnumNugget dust : EnumNugget.VALUES) {
             list.add(new ItemStack(this, 1, dust.ordinal()));
         }
-    }
-
-    @Override
-    public IIcon getIconFromDamage(int damage) {
-        if (damage >= EnumNugget.values().length)
-            return EnumNugget.IRON.icon;
-        return EnumNugget.VALUES[damage].icon;
     }
 
     @Override
@@ -126,6 +84,32 @@ public class ItemNugget extends ItemRailcraft {
             default:
                 return "";
         }
+    }
+
+    public enum EnumNugget implements IItemMetaEnum {
+
+        IRON("nuggetIron"),
+        STEEL("nuggetSteel"),
+        COPPER("nuggetCopper"),
+        TIN("nuggetTin"),
+        LEAD("nuggetLead");
+        public static EnumNugget[] VALUES = values();
+        private String oreTag;
+
+        EnumNugget(String oreTag) {
+            this.oreTag = oreTag;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return oreTag;
+        }
+
+        @Override
+        public Class<? extends ItemRailcraft> getItemClass() {
+            return ItemNugget.class;
+        }
+
     }
 
 }

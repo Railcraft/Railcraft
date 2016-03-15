@@ -10,7 +10,6 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -20,18 +19,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class ItemRailcraft extends Item {
+public class ItemRailcraft extends Item implements IRailcraftItem {
     private float smeltingExperience = -1;
     private int rarity = 0;
 
     public ItemRailcraft() {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:" + MiscTools.cleanTag(getUnlocalizedName()));
     }
 
     public ItemRailcraft setRarity(int rarity) {
@@ -65,13 +58,14 @@ public class ItemRailcraft extends Item {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         super.addInformation(stack, player, info, adv);
         ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tip");
         if (tip != null)
             info.addAll(tip.convertToStrings());
     }
 
+    @Override
     public Object getRecipeObject(IItemMetaEnum meta) {
         assertMeta(meta);
         String oreTag = getOreTag(meta);
@@ -91,12 +85,15 @@ public class ItemRailcraft extends Item {
             throw new RuntimeException("Incorrect Item Meta object used.");
     }
 
+    @Override
     public void defineRecipes() {
     }
 
+    @Override
     public void definePostRecipes() {
     }
 
+    @Override
     public void initItem() {
     }
 }

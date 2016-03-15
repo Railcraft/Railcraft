@@ -17,37 +17,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemCircuit extends ItemRailcraft {
-
-    public enum EnumCircuit implements IItemMetaEnum {
-
-        CONTROLLER(Items.comparator),
-        RECEIVER(Blocks.redstone_torch),
-        SIGNAL(Items.repeater);
-        public static EnumCircuit[] VALUES = values();
-        private IIcon icon;
-        private Object alternate;
-
-        EnumCircuit(Object alt) {
-            this.alternate = alt;
-        }
-
-        @Override
-        public Object getAlternate() {
-            return alternate;
-        }
-
-        @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
-            return ItemCircuit.class;
-        }
-
-    }
 
     public ItemCircuit() {
         super();
@@ -98,24 +72,10 @@ public class ItemCircuit extends ItemRailcraft {
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        for (EnumCircuit gear : EnumCircuit.VALUES) {
-            gear.icon = iconRegister.registerIcon("railcraft:part.circuit." + gear.name().toLowerCase(Locale.ENGLISH));
-        }
-    }
-
-    @Override
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
+    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumCircuit circuit : EnumCircuit.VALUES) {
             list.add(new ItemStack(this, 1, circuit.ordinal()));
         }
-    }
-
-    @Override
-    public IIcon getIconFromDamage(int damage) {
-        if (damage >= EnumCircuit.VALUES.length)
-            return EnumCircuit.RECEIVER.icon;
-        return EnumCircuit.VALUES[damage].icon;
     }
 
     @Override
@@ -133,6 +93,30 @@ public class ItemCircuit extends ItemRailcraft {
             default:
                 return "";
         }
+    }
+
+    public enum EnumCircuit implements IItemMetaEnum {
+
+        CONTROLLER(Items.comparator),
+        RECEIVER(Blocks.redstone_torch),
+        SIGNAL(Items.repeater);
+        public static EnumCircuit[] VALUES = values();
+        private Object alternate;
+
+        EnumCircuit(Object alt) {
+            this.alternate = alt;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return alternate;
+        }
+
+        @Override
+        public Class<? extends ItemRailcraft> getItemClass() {
+            return ItemCircuit.class;
+        }
+
     }
 
 }

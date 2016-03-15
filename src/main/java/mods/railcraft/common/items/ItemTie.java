@@ -19,32 +19,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
-import java.util.Locale;
 
 public class ItemTie extends ItemRailcraft {
-
-    public enum EnumTie implements IItemMetaEnum {
-        WOOD("slabWood"),
-        STONE(Blocks.stone_slab);
-        public static final EnumTie[] VALUES = values();
-        private IIcon icon;
-        private Object alternate;
-
-        EnumTie(Object alt) {
-            this.alternate = alt;
-        }
-
-        @Override
-        public Object getAlternate() {
-            return alternate;
-        }
-
-        @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
-            return ItemTie.class;
-        }
-
-    }
 
     public ItemTie() {
         setHasSubtypes(true);
@@ -52,24 +28,10 @@ public class ItemTie extends ItemRailcraft {
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        for (EnumTie tie : EnumTie.VALUES) {
-            tie.icon = iconRegister.registerIcon("railcraft:part.tie." + tie.name().toLowerCase(Locale.ENGLISH));
-        }
-    }
-
-    @Override
-    public void getSubItems(Item id, CreativeTabs tab, List list) {
+    public void getSubItems(Item id, CreativeTabs tab, List<ItemStack> list) {
         for (int i = 0; i < 2; i++) {
             list.add(new ItemStack(this, 1, i));
         }
-    }
-
-    @Override
-    public IIcon getIconFromDamage(int damage) {
-        if (damage >= EnumTie.VALUES.length)
-            return EnumTie.WOOD.icon;
-        return EnumTie.VALUES[damage].icon;
     }
 
     @Override
@@ -112,6 +74,28 @@ public class ItemTie extends ItemRailcraft {
                     'O', container,
                     '#', "slabWood");
         }
+    }
+
+    public enum EnumTie implements IItemMetaEnum {
+        WOOD("slabWood"),
+        STONE(Blocks.stone_slab);
+        public static final EnumTie[] VALUES = values();
+        private Object alternate;
+
+        EnumTie(Object alt) {
+            this.alternate = alt;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return alternate;
+        }
+
+        @Override
+        public Class<? extends ItemRailcraft> getItemClass() {
+            return ItemTie.class;
+        }
+
     }
 
 }

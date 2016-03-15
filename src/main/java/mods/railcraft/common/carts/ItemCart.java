@@ -86,7 +86,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         super.addInformation(stack, player, info, adv);
         ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tip");
         if (tip != null)

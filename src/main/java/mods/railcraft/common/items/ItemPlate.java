@@ -9,6 +9,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -17,32 +18,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.List;
-import java.util.Locale;
 
 public class ItemPlate extends ItemRailcraft {
-
-    public enum EnumPlate implements IItemMetaEnum {
-
-        IRON("ingotIron"), STEEL("ingotSteel"), TIN("ingotTin"), COPPER("ingotCopper");
-        public static final EnumPlate[] VALUES = values();
-        private IIcon icon;
-        private final Object alternate;
-
-        EnumPlate(Object alt) {
-            this.alternate = alt;
-        }
-
-        @Override
-        public Object getAlternate() {
-            return alternate;
-        }
-
-        @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
-            return ItemPlate.class;
-        }
-
-    }
 
     public ItemPlate() {
         setHasSubtypes(true);
@@ -54,28 +31,16 @@ public class ItemPlate extends ItemRailcraft {
         for (EnumPlate p : EnumPlate.VALUES) {
             ItemStack stack = new ItemStack(this, 1, p.ordinal());
             RailcraftRegistry.register(stack);
+
+            LootPlugin.addLoot(RailcraftItem.plate, p, 6, 18, LootPlugin.Type.WORKSHOP);
         }
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        for (EnumPlate plate : EnumPlate.VALUES) {
-            plate.icon = iconRegister.registerIcon("railcraft:part.plate." + plate.name().toLowerCase(Locale.ENGLISH));
-        }
-    }
-
-    @Override
-    public void getSubItems(Item id, CreativeTabs tab, List list) {
+    public void getSubItems(Item id, CreativeTabs tab, List<ItemStack> list) {
         for (EnumPlate plate : EnumPlate.VALUES) {
             list.add(new ItemStack(this, 1, plate.ordinal()));
         }
-    }
-
-    @Override
-    public IIcon getIconFromDamage(int damage) {
-        if (damage < 0 || damage >= EnumPlate.VALUES.length)
-            return EnumPlate.IRON.icon;
-        return EnumPlate.VALUES[damage].icon;
     }
 
     @Override
@@ -87,7 +52,7 @@ public class ItemPlate extends ItemRailcraft {
                 "II",
                 "II",
                 'I', "ingotIron");
-        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+        RailcraftCraftingManager.rollingMachine.getRecipeList().add(recipe);
 
         // Steel Plate
         recipe = new ShapedOreRecipe(plate.getStack(4, EnumPlate.STEEL),
@@ -131,6 +96,28 @@ public class ItemPlate extends ItemRailcraft {
             default:
                 return "";
         }
+    }
+
+    public enum EnumPlate implements IItemMetaEnum {
+
+        IRON("ingotIron"), STEEL("ingotSteel"), TIN("ingotTin"), COPPER("ingotCopper");
+        public static final EnumPlate[] VALUES = values();
+        private final Object alternate;
+
+        EnumPlate(Object alt) {
+            this.alternate = alt;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return alternate;
+        }
+
+        @Override
+        public Class<? extends ItemRailcraft> getItemClass() {
+            return ItemPlate.class;
+        }
+
     }
 
 }

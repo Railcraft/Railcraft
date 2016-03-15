@@ -10,12 +10,10 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemSteelShovel extends ItemSpade {
@@ -24,11 +22,6 @@ public class ItemSteelShovel extends ItemSpade {
         super(ItemMaterials.STEEL_TOOL);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setUnlocalizedName("railcraft.tool.steel.shovel");
-    }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:" + MiscTools.cleanTag(getUnlocalizedName()));
     }
 
     @Override

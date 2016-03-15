@@ -9,7 +9,6 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemShears;
@@ -17,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.IShearable;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ItemSteelShears extends ItemShears {
@@ -30,17 +28,12 @@ public class ItemSteelShears extends ItemShears {
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:" + MiscTools.cleanTag(getUnlocalizedName()));
-    }
-
-    @Override
-    public float func_150893_a(ItemStack stack, Block block) {
+    public float getStrVsBlock(ItemStack stack, Block block) {
         if (block == Blocks.web || block instanceof IShearable)
             return 15;
         if (block == Blocks.wool)
             return 5;
-        return super.func_150893_a(stack, block);
+        return super.getStrVsBlock(stack, block);
     }
 
 }

@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
-import mods.railcraft.common.items.ItemElectricMeter;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.items.RailcraftPartItems;
@@ -23,14 +22,13 @@ import net.minecraft.init.Items;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ModuleElectricity extends RailcraftModule {
 
     @Override
     public void initFirst() {
-        ItemElectricMeter.register();
+        RailcraftItem.electricMeter.registerItem();
         BlockFrame.registerBlock();
 
         EnumMachineAlpha alpha = EnumMachineAlpha.TURBINE;

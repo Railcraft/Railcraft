@@ -45,6 +45,8 @@ import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.dispenser.IBehaviorDispenseItem;
+import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
@@ -54,7 +56,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
@@ -147,7 +148,8 @@ public class ModuleCore extends RailcraftModule {
         MinecraftForge.EVENT_BUS.register(CrowbarHandler.instance());
 
         ItemMagnifyingGlass.register();
-        ItemGoggles.registerItem();
+        RailcraftItem.goggles.registerItem();
+        RailcraftItem.overalls.registerItem();
 
         RailcraftToolItems.initializeToolsArmor();
 
@@ -204,11 +206,11 @@ public class ModuleCore extends RailcraftModule {
         replaceVanillaCart(EnumCart.TNT, Items.tnt_minecart, "MinecartTNT", 45);
         replaceVanillaCart(EnumCart.HOPPER, Items.hopper_minecart, "MinecartHopper", 46);
 
-        LootPlugin.addLootRailway(EnumCart.BASIC.getCartItem(), 1, 1, "cart.basic");
-        LootPlugin.addLootRailway(EnumCart.CHEST.getCartItem(), 1, 1, "cart.chest");
-        LootPlugin.addLootRailway(EnumCart.TNT.getCartItem(), 1, 3, "cart.tnt");
-        LootPlugin.addLootRailway(new ItemStack(Blocks.rail), 8, 32, "track.basic");
-        LootPlugin.addLootRailway(EnumCart.HOPPER.getCartItem(), 1, 1, "cart.hopper");
+        LootPlugin.addLoot(EnumCart.BASIC.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.basic");
+        LootPlugin.addLoot(EnumCart.CHEST.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.chest");
+        LootPlugin.addLoot(EnumCart.TNT.getCartItem(), 1, 3, LootPlugin.Type.RAILWAY, "cart.tnt");
+        LootPlugin.addLoot(new ItemStack(Blocks.rail), 8, 32, LootPlugin.Type.RAILWAY, "track.basic");
+        LootPlugin.addLoot(EnumCart.HOPPER.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.hopper");
 
         Blocks.rail.setHarvestLevel("pickaxe", 0);
         Blocks.rail.setHarvestLevel("crowbar", 0);
@@ -295,10 +297,15 @@ public class ModuleCore extends RailcraftModule {
         CartUtils.classReplacements.put(minecartClass, cartType);
         CartUtils.vanillaCartItemMap.put(original, cartType);
 
-        EntityList.IDtoClassMapping.remove(entityId);
+        EntityList.idToClassMapping.remove(entityId);
         EntityList.addMapping(cartType.getCartClass(), entityTag, entityId);
 
-        BlockDispenser.dispenseBehaviorRegistry.putObject(original, null);
+        BlockDispenser.dispenseBehaviorRegistry.putObject(original, new IBehaviorDispenseItem() {
+            @Override
+            public ItemStack dispense(IBlockSource source, ItemStack stack) {
+                return stack;
+            }
+        });
 
         original.setMaxStackSize(RailcraftConfig.getMinecartStackSize());
         cartType.setCartItem(new ItemStack(original));
@@ -307,8 +314,8 @@ public class ModuleCore extends RailcraftModule {
     @Override
     public void initSecond() {
         if (RailcraftConfig.useCreosoteFurnaceRecipes() || !EnumMachineAlpha.COKE_OVEN.isAvailable()) {
-            FurnaceRecipes.smelting().func_151394_a(new ItemStack(Items.coal, 1, 0), FluidContainers.getCreosoteOilBottle(2), 0.0F);
-            FurnaceRecipes.smelting().func_151394_a(new ItemStack(Items.coal, 1, 1), FluidContainers.getCreosoteOilBottle(1), 0.0F);
+            CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.coal, 1, 0), FluidContainers.getCreosoteOilBottle(2), 0.0F);
+            CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.coal, 1, 1), FluidContainers.getCreosoteOilBottle(1), 0.0F);
         }
 
         // Finish initializing ItemRegistry

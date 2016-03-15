@@ -20,31 +20,34 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public enum RailcraftItem {
 
+    goggles(ItemGoggles.class, "armor.goggles"),
     circuit(ItemCircuit.class, "part.circuit"),
     dust(ItemDust.class, "dust"),
+    electricMeter(ItemElectricMeter.class, "tool.electric.meter"),
     gear(ItemGear.class, "part.gear"),
     ingot(ItemIngot.class, "ingot"),
     nugget(ItemNugget.class, "nugget"),
+    overalls(ItemOveralls.class, "armor.overalls"),
     plate(ItemPlate.class, "part.plate"),
     rail(ItemRail.class, "part.rail"),
     railbed(ItemRailbed.class, "part.railbed"),
     rebar(ItemRebar.class, "part.rebar", "ingotIron"),
     signalLabel(ItemSignalLabel.class, "tool.signal.label"),
     signalLamp(ItemSignalLamp.class, "part.signal.lamp", Blocks.redstone_lamp),
-    tie(ItemTie.class, "part.tie");
+    tie(ItemTie.class, "part.tie"),
+    whistleTuner(ItemWhistleTuner.class, "tool.whistle.tuner");
     public static final RailcraftItem[] VALUES = values();
-    private final Class<? extends ItemRailcraft> itemClass;
+    private final Class<? extends Item> itemClass;
     private final String tag;
     private final Object altRecipeObject;
-    private ItemRailcraft item;
+    private Item item;
+    private IRailcraftItem railcraftItem;
 
-    RailcraftItem(Class<? extends ItemRailcraft> itemClass, String tag) {
-        this.itemClass = itemClass;
-        this.tag = tag;
-        this.altRecipeObject = null;
+    RailcraftItem(Class<? extends Item> itemClass, String tag) {
+        this(itemClass, tag, null);
     }
 
-    RailcraftItem(Class<? extends ItemRailcraft> itemClass, String tag, Object alt) {
+    RailcraftItem(Class<? extends Item> itemClass, String tag, Object alt) {
         this.itemClass = itemClass;
         this.tag = tag;
         this.altRecipeObject = alt;
@@ -62,10 +65,13 @@ public enum RailcraftItem {
             } catch (IllegalAccessException ex) {
                 throw new RuntimeException("Invalid Item Constructor");
             }
+            if (!(item instanceof IRailcraftItem))
+                throw new RuntimeException("Railcraft Items must implement IRailcraftItem");
+            railcraftItem = (IRailcraftItem) item;
             item.setUnlocalizedName("railcraft." + tag);
             RailcraftRegistry.register(item);
-            item.initItem();
-            item.defineRecipes();
+            railcraftItem.initItem();
+            railcraftItem.defineRecipes();
         }
     }
 
@@ -77,8 +83,12 @@ public enum RailcraftItem {
         return i != null && this.item == i;
     }
 
-    public ItemRailcraft item() {
+    public Item item() {
         return item;
+    }
+
+    public String getBaseTag() {
+        return tag;
     }
 
     public ItemStack getWildcard() {
@@ -116,8 +126,8 @@ public enum RailcraftItem {
 
     public Object getRecipeObject() {
         registerItem();
-        if (item != null)
-            return item.getRecipeObject(null);
+        if (railcraftItem != null)
+            return railcraftItem.getRecipeObject(null);
         Object obj = altRecipeObject;
         if (obj instanceof ItemStack)
             obj = ((ItemStack) obj).copy();
@@ -127,8 +137,8 @@ public enum RailcraftItem {
     public Object getRecipeObject(IItemMetaEnum meta) {
         checkMetaObject(meta);
         registerItem();
-        if (item != null)
-            return item.getRecipeObject(meta);
+        if (railcraftItem != null)
+            return railcraftItem.getRecipeObject(meta);
         Object obj = meta.getAlternate();
         if (obj == null)
             obj = altRecipeObject;
@@ -143,8 +153,8 @@ public enum RailcraftItem {
 
     public static void definePostRecipes() {
         for (RailcraftItem type : VALUES) {
-            if (type.item != null)
-                type.item.definePostRecipes();
+            if (type.railcraftItem != null)
+                type.railcraftItem.definePostRecipes();
         }
     }
 }

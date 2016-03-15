@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
-import java.util.Locale;
 
 public class ItemGear extends ItemRailcraft {
 
@@ -28,7 +27,6 @@ public class ItemGear extends ItemRailcraft {
         STEEL("blockSteel"),
         BUSHING("ingotTin");
         public static final EnumGear[] VALUES = values();
-        private IIcon icon;
         private Object alternate;
 
         EnumGear(Object alt) {
@@ -62,28 +60,14 @@ public class ItemGear extends ItemRailcraft {
         OreDictionary.registerOre("gearIron", RailcraftItem.gear.getStack(1, EnumGear.IRON));
 
         ItemStack itemStack = new ItemStack(this, 1, EnumGear.BUSHING.ordinal());
-        LootPlugin.addLootRailway(itemStack, 1, 8, "gear.bushing");
+        LootPlugin.addLoot(itemStack, 1, 8, LootPlugin.Type.RAILWAY, "gear.bushing");
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        for (EnumGear gear : EnumGear.VALUES) {
-            gear.icon = iconRegister.registerIcon("railcraft:part.gear." + gear.name().toLowerCase(Locale.ENGLISH).replace("_", "."));
-        }
-    }
-
-    @Override
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
+    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumGear gear : EnumGear.VALUES) {
             list.add(new ItemStack(this, 1, gear.ordinal()));
         }
-    }
-
-    @Override
-    public IIcon getIconFromDamage(int damage) {
-        if (damage < 0 || damage >= EnumGear.VALUES.length)
-            return EnumGear.IRON.icon;
-        return EnumGear.VALUES[damage].icon;
     }
 
     @Override

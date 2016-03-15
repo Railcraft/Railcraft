@@ -33,6 +33,7 @@ import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.ItemGoggles;
+import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.items.firestone.TileFirestoneRecharge;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.util.misc.Game;
@@ -85,8 +86,8 @@ public class ClientProxy extends CommonProxy {
 
         FMLCommonHandler.instance().bus().register(LocomotiveKeyHandler.INSTANCE);
 
-        if (!ItemGoggles.areEnabled())
-            FMLCommonHandler.instance().bus().register(AuraKeyHandler.INSTANCE);
+        if (!RailcraftItem.goggles.isEnabled())
+            MinecraftForge.EVENT_BUS.register(AuraKeyHandler.INSTANCE);
 
         Game.log(Level.TRACE, "Init Start: Renderer");
 

@@ -17,38 +17,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemIngot extends ItemRailcraft {
-
-    public enum EnumIngot implements IItemMetaEnum {
-
-        STEEL("ingotSteel"),
-        COPPER("ingotCopper"),
-        TIN("ingotTin"),
-        LEAD("ingotLead");
-        public static final EnumIngot[] VALUES = values();
-        private IIcon icon;
-        private String oreTag;
-
-        EnumIngot(String oreTag) {
-            this.oreTag = oreTag;
-        }
-
-        @Override
-        public Object getAlternate() {
-            return oreTag;
-        }
-
-        @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
-            return ItemIngot.class;
-        }
-
-    }
 
     public ItemIngot() {
         setHasSubtypes(true);
@@ -59,15 +32,15 @@ public class ItemIngot extends ItemRailcraft {
 
     @Override
     public void initItem() {
-        for (EnumIngot i : EnumIngot.VALUES) {
-            ItemStack stack = new ItemStack(this, 1, i.ordinal());
+        for (EnumIngot type : EnumIngot.VALUES) {
+            ItemStack stack = new ItemStack(this, 1, type.ordinal());
             ForestryPlugin.addBackpackItem("miner", stack);
             RailcraftRegistry.register(stack);
-            Metal m = Metal.get(i);
+            Metal m = Metal.get(type);
             OreDictionary.registerOre(m.getIngotTag(), m.getIngot());
+            LootPlugin.addLootUnique(RailcraftItem.ingot, type, 5, 9, LootPlugin.Type.TOOL);
         }
 
-        LootPlugin.addLootTool(new ItemStack(this), 5, 9, "steel.ingot");
     }
 
     @Override
@@ -77,24 +50,10 @@ public class ItemIngot extends ItemRailcraft {
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        for (EnumIngot ingot : EnumIngot.VALUES) {
-            ingot.icon = iconRegister.registerIcon("railcraft:ingot." + ingot.name().toLowerCase(Locale.ENGLISH));
-        }
-    }
-
-    @Override
-    public void getSubItems(Item id, CreativeTabs tab, List list) {
+    public void getSubItems(Item id, CreativeTabs tab, List<ItemStack> list) {
         for (EnumIngot ingot : EnumIngot.VALUES) {
             list.add(new ItemStack(this, 1, ingot.ordinal()));
         }
-    }
-
-    @Override
-    public IIcon getIconFromDamage(int damage) {
-        if (damage >= EnumIngot.VALUES.length)
-            return EnumIngot.STEEL.icon;
-        return EnumIngot.VALUES[damage].icon;
     }
 
     @Override
@@ -114,6 +73,31 @@ public class ItemIngot extends ItemRailcraft {
             default:
                 return "item.railcraft.ingot";
         }
+    }
+
+    public enum EnumIngot implements IItemMetaEnum {
+
+        STEEL("ingotSteel"),
+        COPPER("ingotCopper"),
+        TIN("ingotTin"),
+        LEAD("ingotLead");
+        public static final EnumIngot[] VALUES = values();
+        private String oreTag;
+
+        EnumIngot(String oreTag) {
+            this.oreTag = oreTag;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return oreTag;
+        }
+
+        @Override
+        public Class<? extends ItemRailcraft> getItemClass() {
+            return ItemIngot.class;
+        }
+
     }
 
 }

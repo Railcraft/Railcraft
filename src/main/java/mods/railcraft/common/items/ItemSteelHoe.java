@@ -10,7 +10,6 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 
@@ -20,11 +19,6 @@ public class ItemSteelHoe extends ItemHoe {
         super(ItemMaterials.STEEL_TOOL);
         setUnlocalizedName("railcraft.tool.steel.hoe");
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-    }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:" + MiscTools.cleanTag(getUnlocalizedName()));
     }
 
     @Override

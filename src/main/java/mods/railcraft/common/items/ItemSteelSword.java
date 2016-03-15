@@ -10,7 +10,6 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
@@ -20,11 +19,6 @@ public class ItemSteelSword extends ItemSword {
         super(ItemMaterials.STEEL_TOOL);
         setUnlocalizedName("railcraft.tool.steel.sword");
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-    }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:" + MiscTools.cleanTag(getUnlocalizedName()));
     }
 
     @Override

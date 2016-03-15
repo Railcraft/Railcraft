@@ -17,31 +17,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
-import java.util.Locale;
 
 public class ItemRailbed extends ItemRailcraft {
-
-    public enum EnumRailbed implements IItemMetaEnum {
-        WOOD("stickWood"),
-        STONE(Blocks.stone_slab);
-        public static final EnumRailbed[] VALUES = values();
-        private IIcon icon;
-        private Object alternate;
-
-        EnumRailbed(Object alt) {
-            this.alternate = alt;
-        }
-
-        @Override
-        public Object getAlternate() {
-            return alternate;
-        }
-
-        @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
-            return ItemRailbed.class;
-        }
-    }
 
     public ItemRailbed() {
         setHasSubtypes(true);
@@ -57,24 +34,10 @@ public class ItemRailbed extends ItemRailcraft {
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        for (EnumRailbed railbed : EnumRailbed.VALUES) {
-            railbed.icon = iconRegister.registerIcon("railcraft:part.railbed." + railbed.name().toLowerCase(Locale.ENGLISH));
-        }
-    }
-
-    @Override
-    public void getSubItems(Item id, CreativeTabs tab, List list) {
+    public void getSubItems(Item id, CreativeTabs tab, List<ItemStack> list) {
         for (int i = 0; i < 2; i++) {
             list.add(new ItemStack(this, 1, i));
         }
-    }
-
-    @Override
-    public IIcon getIconFromDamage(int damage) {
-        if (damage >= EnumRailbed.VALUES.length)
-            return EnumRailbed.WOOD.icon;
-        return EnumRailbed.VALUES[damage].icon;
     }
 
     @Override
@@ -98,6 +61,27 @@ public class ItemRailbed extends ItemRailcraft {
         Object tieStone = RailcraftItem.tie.getRecipeObject(EnumTie.STONE);
         CraftingPlugin.addShapelessRecipe(item.getStack(1, EnumRailbed.STONE),
                 tieStone, tieStone, tieStone, tieStone);
+    }
+
+    public enum EnumRailbed implements IItemMetaEnum {
+        WOOD("stickWood"),
+        STONE(Blocks.stone_slab);
+        public static final EnumRailbed[] VALUES = values();
+        private Object alternate;
+
+        EnumRailbed(Object alt) {
+            this.alternate = alt;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return alternate;
+        }
+
+        @Override
+        public Class<? extends ItemRailcraft> getItemClass() {
+            return ItemRailbed.class;
+        }
     }
 
 }

@@ -25,33 +25,6 @@ import java.util.List;
  */
 public class ItemDust extends ItemRailcraft {
 
-    public enum EnumDust implements IItemMetaEnum {
-
-        OBSIDIAN("dust.obsidian", "dustObsidian"),
-        SULFUR("dust.sulfur", "dustSulfur"),
-        SALTPETER("dust.saltpeter", "dustSaltpeter"),
-        CHARCOAL("dust.charcoal", "dustCharcoal");
-        public static final EnumDust[] VALUES = values();
-        private final String tag;
-        private final String oreTag;
-        private IIcon icon;
-
-        EnumDust(String tag, String oreTag) {
-            this.tag = tag;
-            this.oreTag = oreTag;
-        }
-
-        @Override
-        public Object getAlternate() {
-            return oreTag;
-        }
-
-        @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
-            return ItemDust.class;
-        }
-    }
-
     public ItemDust() {
         setHasSubtypes(true);
         setMaxDamage(0);
@@ -75,25 +48,10 @@ public class ItemDust extends ItemRailcraft {
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        for (EnumDust dust : EnumDust.VALUES) {
-            dust.icon = iconRegister.registerIcon("railcraft:" + dust.tag);
-        }
-    }
-
-    @Override
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
+    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumDust dust : EnumDust.VALUES) {
             list.add(new ItemStack(this, 1, dust.ordinal()));
         }
-    }
-
-    @Override
-    public IIcon getIconFromDamage(int damage) {
-        if (damage >= EnumDust.VALUES.length) {
-            return EnumDust.CHARCOAL.icon;
-        }
-        return EnumDust.VALUES[damage].icon;
     }
 
     @Override
@@ -108,6 +66,32 @@ public class ItemDust extends ItemRailcraft {
     public String getOreTag(IItemMetaEnum meta) {
         assertMeta(meta);
         return ((EnumDust) meta).oreTag;
+    }
+
+    public enum EnumDust implements IItemMetaEnum {
+
+        OBSIDIAN("dust.obsidian", "dustObsidian"),
+        SULFUR("dust.sulfur", "dustSulfur"),
+        SALTPETER("dust.saltpeter", "dustSaltpeter"),
+        CHARCOAL("dust.charcoal", "dustCharcoal");
+        public static final EnumDust[] VALUES = values();
+        private final String tag;
+        private final String oreTag;
+
+        EnumDust(String tag, String oreTag) {
+            this.tag = tag;
+            this.oreTag = oreTag;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return oreTag;
+        }
+
+        @Override
+        public Class<? extends ItemRailcraft> getItemClass() {
+            return ItemDust.class;
+        }
     }
 
 }

@@ -12,14 +12,12 @@ import ic2.api.item.IMetalArmor;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemSteelArmor extends ItemArmor implements IMetalArmor {
@@ -30,11 +28,6 @@ public class ItemSteelArmor extends ItemArmor implements IMetalArmor {
     public ItemSteelArmor(int type) {
         super(ItemMaterials.STEEL_ARMOR, 0, type);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-    }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:" + MiscTools.cleanTag(getUnlocalizedName()));
     }
 
     @Override

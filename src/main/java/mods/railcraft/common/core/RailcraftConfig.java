@@ -121,8 +121,8 @@ public class RailcraftConfig {
     private static int implosionID;
     private static int destructionID;
     private static float boreMiningSpeedMultiplier = 1;
-    private static float biolerMultiplierFuel = 1;
-    private static float biolerMultiplierBiofuel = 1;
+    private static float boilerMultiplierFuel = 1;
+    private static float boilerMultiplierBiofuel = 1;
     private static float fuelPerSteamMultiplier = Steam.FUEL_PER_BOILER_CYCLE;
     private static float steamLocomotiveEfficiencyMultiplier = 3;
     private static boolean allowTankStacking;
@@ -131,7 +131,7 @@ public class RailcraftConfig {
     private static Configuration configItems;
 
     public static void preInit() {
-        Game.log(Level.TRACE, "Railcraft Config: Doing preinit parsing");
+        Game.log(Level.TRACE, "Railcraft Config: Doing pre-init parsing");
 
         Locale locale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
@@ -239,8 +239,8 @@ public class RailcraftConfig {
 
         machinesRequirePower = get(CAT_TWEAKS_BLOCKS + ".machines", "requirePower", true, "change to '{t}=false' to disable the Power Requirements for most machines");
 
-        biolerMultiplierFuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "fuelMultiplier", 0.0F, 1.0F, 10F, "adjust the heat value of Fuel in a Boiler");
-        biolerMultiplierBiofuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "biofuelMultiplier", 0.0F, 1.0F, 10F, "adjust the heat value of BioFuel in a Boiler");
+        boilerMultiplierFuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "fuelMultiplier", 0.0F, 1.0F, 10F, "adjust the heat value of Fuel in a Boiler");
+        boilerMultiplierBiofuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "biofuelMultiplier", 0.0F, 1.0F, 10F, "adjust the heat value of BioFuel in a Boiler");
 
         fuelPerSteamMultiplier = get(CAT_TWEAKS + ".steam", "fuelPerSteamMultiplier", 0.2F, 1.0F, 6.0F, "adjust the amount of fuel used to create Steam, min=0.2, default=1.0, max=6.0");
     }
@@ -285,7 +285,7 @@ public class RailcraftConfig {
         boreMinesAllBlocks = get(CAT_TWEAKS_CARTS + ".bore", "mineAllBlocks", true, "change to '{t}=false' to enable mining checks, use true setting with caution, especially on servers");
         boreMiningSpeedMultiplier = get(CAT_TWEAKS_CARTS + ".bore", "miningSpeed", 0.1f, 1.0f, 50.0f, "adjust the speed at which the Bore mines blocks, min=0.1, default=1.0, max=50.0");
 
-        steamLocomotiveEfficiencyMultiplier = get(CAT_TWEAKS_CARTS + ".locomotive.steam", "efficiencyMulitplier", 0.2F, 3.0F, 12.0F, "adjust the multiplier used when calculating fuel use, min=0.2, default=3.0, max=12.0");
+        steamLocomotiveEfficiencyMultiplier = get(CAT_TWEAKS_CARTS + ".locomotive.steam", "efficiencyMultiplier", 0.2F, 3.0F, 12.0F, "adjust the multiplier used when calculating fuel use, min=0.2, default=3.0, max=12.0");
 
         locomotiveDamageMobs = get(CAT_TWEAKS_CARTS + ".locomotive", "damageMobs", true, "change to '{t}=false' to disable Locomotive damage on mobs, they will still knockback mobs");
         locomotiveHorsepower = get(CAT_TWEAKS_CARTS + ".locomotive", "horsepower", 15, 15, 45,
@@ -321,12 +321,12 @@ public class RailcraftConfig {
         loadRecipeProperty("railcraft.track", "useAltRecipes", false, "change to '{t}=true' to use track recipes more similar to vanilla minecraft");
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
         loadRecipeProperty("railcraft.misc", "gunpowder", true, "change to '{t}=false' to disable the sulfur, saltpeter, charcoal dust recipe for gunpowder");
-        creosoteTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "creosote.torches", 0, 6, 16, "set the output of the creosote and woool recipe for torches, setting to 0 will disable'\nmin=0, default=6, max=16");
+        creosoteTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "creosote.torches", 0, 6, 16, "set the output of the creosote and wool recipe for torches, setting to 0 will disable'\nmin=0, default=6, max=16");
         coalcokeTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "coalcoke.torches", 0, 8, 32, "set the output of the coalcoke and stick recipe for torches, setting to 0 will disable'\nmin=0, default=8, max=32");
         loadRecipeProperty("railcraft.cart", "bronze", true, "change to '{t}=false' to disable the bronze recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "steel", true, "change to '{t}=false' to disable the steel recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "furnace", false, "change to '{t}=true' to enable the Furnace Minecart recipe");
-        loadRecipeProperty("ic2.macerator", "obsidian", false, "change to '{t}=false' to disable the IC2 Macerator recipes for Cushed Obsidian and Obsidian Dust");
+        loadRecipeProperty("ic2.macerator", "obsidian", false, "change to '{t}=false' to disable the IC2 Macerator recipes for Crushed Obsidian and Obsidian Dust");
         loadRecipeProperty("ic2.macerator", "charcoal", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Charcoal Dust");
         loadRecipeProperty("ic2.macerator", "ores", true, "change to '{t}=false' to disable the IC2 Macerator recipes for Ore Dusts");
         loadRecipeProperty("ic2.macerator", "bones", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Bonemeal");
@@ -334,9 +334,9 @@ public class RailcraftConfig {
         loadRecipeProperty("ic2.macerator", "cobble", true, "change to '{t}=false' to disable the IC2 Macerator recipes for Cobblestone");
         loadRecipeProperty("ic2.macerator", "dirt", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Dirt");
         loadRecipeProperty("forestry.misc", "fertilizer", true, "change to '{t}=false' to disable the saltpeter recipe for Forestry Fertilizer");
-        loadRecipeProperty("forestry.carpenter", "ties", true, "change to '{t}=false' to disable the Carptenter Tie recipe");
-        loadRecipeProperty("forestry.carpenter", "torches", true, "change to '{t}=false' to disable the Carptenter Creosote Torch recipe");
-        loadRecipeProperty("forestry.carpenter", "creosote.block", true, "change to '{t}=false' to disable the Carptenter Creosote Block recipe");
+        loadRecipeProperty("forestry.carpenter", "ties", true, "change to '{t}=false' to disable the Carpenter Tie recipe");
+        loadRecipeProperty("forestry.carpenter", "torches", true, "change to '{t}=false' to disable the Carpenter Creosote Torch recipe");
+        loadRecipeProperty("forestry.carpenter", "creosote.block", true, "change to '{t}=false' to disable the Carpenter Creosote Block recipe");
     }
 
     private static void loadWorldGen() {
@@ -383,7 +383,8 @@ public class RailcraftConfig {
 
         loadLootProperty("tie.wood", 20);
         loadLootProperty("tie.stone", 10);
-        loadLootProperty("rail.part", 20);
+        loadLootProperty("part.rail", 20);
+        loadLootProperty("part.plate", 20);
         loadLootProperty("cart.basic", 10);
         loadLootProperty("cart.chest", 10);
         loadLootProperty("cart.tnt", 5);
@@ -394,7 +395,12 @@ public class RailcraftConfig {
         loadLootProperty("fuel.coal", 20);
         loadLootProperty("creosote.bottle", 20);
         loadLootProperty("track.basic", 30);
-        loadLootProperty("steel.ingot", 10);
+
+        loadLootProperty("ingot.copper", 10);
+        loadLootProperty("ingot.lead", 10);
+        loadLootProperty("ingot.steel", 10);
+        loadLootProperty("ingot.tin", 10);
+
         loadLootProperty("steel.block", 5);
         loadLootProperty("tool.crowbar", 10);
         loadLootProperty("tool.steel.shears", 5);
@@ -493,7 +499,7 @@ public class RailcraftConfig {
         loadBlockProperty("worldlogic");
 
         configBlock.addCustomCategoryComment(CAT_SUBBLOCKS, "Here is were you can enable/disable various sub-blocks.\n"
-                + "Railcraft will attemtpt to compensate for any missing component by providing alternatives (usually).");
+                + "Railcraft will attempt to compensate for any missing component by providing alternatives (usually).");
 
         for (EnumTrack type : EnumTrack.VALUES) {
 //            if (type.isDepreciated())
@@ -704,9 +710,9 @@ public class RailcraftConfig {
 
     public static void loadBoreMineableBlocks() {
         String tag = "mineableBlocks";
-        Property prop = get(CAT_TWEAKS_CARTS + ".bore", tag, "{}", "add block ids to '{t}' in a common seperated list to define non-vanilla blocks mineable by the tunnel bore \n"
+        Property prop = get(CAT_TWEAKS_CARTS + ".bore", tag, "{}", "add block ids to '{t}' in a common separated list to define non-vanilla blocks mineable by the tunnel bore \n"
                 + "ignored if 'tweaks.carts.bore.mineAllBlocks=true' \n"
-                + "metadata sensative entries can be defined in the form 'modid:blockname#metadata' \n"
+                + "metadata sensitive entries can be defined in the form 'modid:blockname#metadata' \n"
                 + "Example:{t}= { minecraft:stone, minecraft:stonebrick#3 }");
         boreMineableBlocksString = prop.getString();
     }
@@ -875,11 +881,11 @@ public class RailcraftConfig {
     }
 
     public static float boilerFuelMultiplier() {
-        return biolerMultiplierFuel;
+        return boilerMultiplierFuel;
     }
 
     public static float boilerBiofuelMultiplier() {
-        return biolerMultiplierBiofuel;
+        return boilerMultiplierBiofuel;
     }
 
     public static float fuelPerSteamMultiplier() {
@@ -986,7 +992,7 @@ public class RailcraftConfig {
         Property prop = configMain.get(cat, tag, "");
         String value = prop.getString();
         if (value.equals(""))
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         String[] tokens = value.split(",");
         List<Integer> list = new ArrayList<Integer>(maxEntries);
         int count = 0;
@@ -1003,10 +1009,10 @@ public class RailcraftConfig {
         return get(Configuration.CATEGORY_GENERAL, tag, defaultValue, comment);
     }
 
-    private static void loadRecipeProperty(String subcat, String tag, boolean defaultValue, String comment) {
-        Property prop = configMain.get(CAT_RECIPES + "." + subcat, tag, defaultValue);
+    private static void loadRecipeProperty(String subCat, String tag, boolean defaultValue, String comment) {
+        Property prop = configMain.get(CAT_RECIPES + "." + subCat, tag, defaultValue);
         decorateComment(prop, tag, comment);
-        recipes.put(subcat + "." + tag, prop.getBoolean(defaultValue));
+        recipes.put(subCat + "." + tag, prop.getBoolean(defaultValue));
     }
 
     private static boolean get(String cat, String tag, boolean defaultValue, String comment) {
@@ -1076,7 +1082,7 @@ public class RailcraftConfig {
         try {
             parsed = Integer.parseInt(value);
         } catch (NumberFormatException ex) {
-            Game.logThrowable(Level.WARN, "Failed to parse config tag, reseting to default: {0}", 3, ex, prop.getName());
+            Game.logThrowable(Level.WARN, "Failed to parse config tag, resetting to default: {0}", 3, ex, prop.getName());
             prop.set(defaultValue);
             return defaultValue;
         }
@@ -1089,7 +1095,7 @@ public class RailcraftConfig {
         try {
             parsed = Double.parseDouble(value);
         } catch (NumberFormatException ex) {
-            Game.logThrowable(Level.WARN, "Failed to parse config tag, reseting to default: {0}", 3, ex, prop.getName());
+            Game.logThrowable(Level.WARN, "Failed to parse config tag, resetting to default: {0}", 3, ex, prop.getName());
             prop.set(defaultValue);
             return defaultValue;
         }

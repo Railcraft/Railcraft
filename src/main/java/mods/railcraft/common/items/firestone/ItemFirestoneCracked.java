@@ -66,7 +66,7 @@ public class ItemFirestoneCracked extends ItemFirestoneRefined {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         String tipTag = getUnlocalizedName() + ".tip.charged";
         if (stack.getItemDamage() >= stack.getMaxDamage() - 5)
             tipTag = getUnlocalizedName() + ".tip.empty";

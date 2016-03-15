@@ -126,11 +126,11 @@ public class ModuleFactory extends RailcraftModule {
             RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelLegs(), false, false, recycleTime * 5, RailcraftItem.ingot.getStack(5, steel));
             RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelBoots(), false, false, recycleTime * 3, RailcraftItem.ingot.getStack(3, steel));
 
-            RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelSword(), false, false, recycleTime * 1, RailcraftItem.ingot.getStack(1, steel));
+            RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelSword(), false, false, recycleTime, RailcraftItem.ingot.getStack(1, steel));
             RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelPickaxe(), false, false, recycleTime * 2, RailcraftItem.ingot.getStack(2, steel));
-            RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelHoe(), false, false, recycleTime * 1, RailcraftItem.ingot.getStack(1, steel));
+            RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelHoe(), false, false, recycleTime, RailcraftItem.ingot.getStack(1, steel));
             RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelAxe(), false, false, recycleTime * 2, RailcraftItem.ingot.getStack(2, steel));
-            RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelShears(), false, false, recycleTime * 1, RailcraftItem.ingot.getStack(1, steel));
+            RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelShears(), false, false, recycleTime, RailcraftItem.ingot.getStack(1, steel));
         }
 
         alpha = EnumMachineAlpha.ROCK_CRUSHER;
@@ -319,7 +319,7 @@ public class ModuleFactory extends RailcraftModule {
             if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                 initMetalBlock(Metal.STEEL);
 
-                LootPlugin.addLootTool(type.getItem(), 1, 1, "steel.block");
+                LootPlugin.addLoot(type.getItem(), 1, 1, LootPlugin.Type.TOOL, "steel.block");
 
                 if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
                     RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Blocks.iron_block), false, false, 11520, EnumCube.STEEL_BLOCK.getItem());

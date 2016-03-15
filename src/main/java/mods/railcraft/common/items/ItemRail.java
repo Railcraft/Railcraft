@@ -22,32 +22,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.List;
-import java.util.Locale;
 
 public class ItemRail extends ItemRailcraft {
-
-    public enum EnumRail implements IItemMetaEnum {
-
-        STANDARD("ingotIron"), ADVANCED("ingotGold"), WOOD("slabWood"), SPEED("ingotSteel"), REINFORCED("ingotSteel"), ELECTRIC("ingotCopper");
-        public static final EnumRail[] VALUES = values();
-        private IIcon icon;
-        private Object alternate;
-
-        EnumRail(Object alt) {
-            this.alternate = alt;
-        }
-
-        @Override
-        public Object getAlternate() {
-            return alternate;
-        }
-
-        @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
-            return ItemRail.class;
-        }
-
-    }
 
     public ItemRail() {
         setHasSubtypes(true);
@@ -56,22 +32,15 @@ public class ItemRail extends ItemRailcraft {
 
     @Override
     public void initItem() {
-        for (int meta = 0; meta < 5; meta++) {
-            ItemStack stack = new ItemStack(this, 1, meta);
-            RailcraftRegistry.register(stack);
-            LootPlugin.addLootWorkshop(stack, 6, 18, "rail.part");
-        }
-    }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
         for (EnumRail rail : EnumRail.VALUES) {
-            rail.icon = iconRegister.registerIcon("railcraft:part.rail." + rail.name().toLowerCase(Locale.ENGLISH));
+            ItemStack stack = new ItemStack(this, 1, rail.ordinal());
+            RailcraftRegistry.register(stack);
+            LootPlugin.addLoot(RailcraftItem.rail, rail, 6, 18, LootPlugin.Type.RAILWAY);
         }
     }
 
     @Override
-    public void getSubItems(Item id, CreativeTabs tab, List list) {
+    public void getSubItems(Item id, CreativeTabs tab, List<ItemStack> list) {
         for (int i = 0; i < EnumRail.VALUES.length; i++) {
             list.add(new ItemStack(this, 1, i));
         }
@@ -144,13 +113,6 @@ public class ItemRail extends ItemRailcraft {
     }
 
     @Override
-    public IIcon getIconFromDamage(int damage) {
-        if (damage < 0 || damage >= EnumRail.VALUES.length)
-            return EnumRail.STANDARD.icon;
-        return EnumRail.VALUES[damage].icon;
-    }
-
-    @Override
     public String getUnlocalizedName(ItemStack stack) {
         int damage = stack.getItemDamage();
         if (damage < 0 || damage >= EnumRail.VALUES.length)
@@ -171,6 +133,28 @@ public class ItemRail extends ItemRailcraft {
             default:
                 return "";
         }
+    }
+
+    public enum EnumRail implements IItemMetaEnum {
+
+        STANDARD("ingotIron"), ADVANCED("ingotGold"), WOOD("slabWood"), SPEED("ingotSteel"), REINFORCED("ingotSteel"), ELECTRIC("ingotCopper");
+        public static final EnumRail[] VALUES = values();
+        private Object alternate;
+
+        EnumRail(Object alt) {
+            this.alternate = alt;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return alternate;
+        }
+
+        @Override
+        public Class<? extends ItemRailcraft> getItemClass() {
+            return ItemRail.class;
+        }
+
     }
 
 }

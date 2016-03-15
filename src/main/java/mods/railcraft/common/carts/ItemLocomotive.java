@@ -93,7 +93,7 @@ public class ItemLocomotive extends ItemCart {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         GameProfile owner = getOwner(stack);
         if (owner.getName() != null && !owner.getName().equals("[Unknown]")) {
             String format = LocalizationPlugin.translate("railcraft.gui.locomotive.tip.item.owner");

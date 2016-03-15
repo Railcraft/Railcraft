@@ -93,7 +93,7 @@ public class ItemFirestoneRefined extends ItemFirestoneBase {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         String tipTag = getUnlocalizedName() + ".tip.charged";
         if (stack.getItemDamage() >= stack.getMaxDamage() - 5)
             tipTag = getUnlocalizedName() + ".tip.empty";
@@ -103,7 +103,7 @@ public class ItemFirestoneRefined extends ItemFirestoneBase {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.canPlayerEdit(x, y, z, side, stack)) {
             Block block = WorldPlugin.getBlock(world, x, y, z);
             if (block != null && block != Blocks.stone) {

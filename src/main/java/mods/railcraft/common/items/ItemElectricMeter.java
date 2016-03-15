@@ -12,58 +12,25 @@ import mods.railcraft.api.electricity.GridTools;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.electricity.IElectricMinecart;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemElectricMeter extends ItemRailcraft implements IActivationBlockingItem {
-
-    private static Item item;
-
-    public static void register() {
-        if (item == null) {
-            String tag = "railcraft.tool.electric.meter";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemElectricMeter().setUnlocalizedName(tag);
-                RailcraftRegistry.register(item);
-
-                CraftingPlugin.addShapedRecipe(new ItemStack(item),
-                        "T T",
-                        "BGB",
-                        " C ",
-                        'B', Blocks.stone_button,
-                        'G', "paneGlassColorless",
-                        'C', "ingotCopper",
-                        'T', "ingotTin");
-
-                LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, tag);
-            }
-//            CreeperPlugin.fixCreepers();
-        }
-    }
-
-    public static ItemStack getItem() {
-        if (item == null)
-            return null;
-        return new ItemStack(item);
-    }
-
     public ItemElectricMeter() {
         setMaxDamage(0);
         setMaxStackSize(1);
@@ -72,6 +39,24 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    @Override
+    public void initItem() {
+        LootPlugin.addLootWorkshop(new ItemStack(this), 1, 1, "railcraft.tool.electric.meter");
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
+                "T T",
+                "BGB",
+                " C ",
+                'B', Blocks.stone_button,
+                'G', "paneGlassColorless",
+                'C', "ingotCopper",
+                'T', "ingotTin");
+    }
+
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onEntityInteract(EntityInteractEvent event) {
         EntityPlayer player = event.entityPlayer;
@@ -102,12 +87,12 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isNotHost(world))
             return false;
         boolean returnValue = false;
         try {
-            IElectricGrid gridObject = GridTools.getGridObjectAt(world, x, y, z);
+            IElectricGrid gridObject = GridTools.getGridObjectAt(world, pos);
             if (gridObject != null) {
                 IElectricGrid.ChargeHandler ch = gridObject.getChargeHandler();
                 if (ch != null) {

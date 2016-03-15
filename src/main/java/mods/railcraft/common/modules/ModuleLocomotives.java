@@ -18,7 +18,6 @@ import mods.railcraft.common.carts.LocomotivePaintingRecipe;
 import mods.railcraft.common.items.ItemGear.EnumGear;
 import mods.railcraft.common.items.ItemIngot;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
-import mods.railcraft.common.items.ItemWhistleTuner;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -45,7 +44,7 @@ public class ModuleLocomotives extends RailcraftModule {
         MiscTools.registerTrack(EnumTrack.LOCOMOTIVE);
         MiscTools.registerTrack(EnumTrack.LIMITER);
 
-        ItemWhistleTuner.registerItem();
+        RailcraftItem.whistleTuner.registerItem();
 
         EnumCart cart = EnumCart.LOCO_STEAM_SOLID;
         if (cart.setup()) {

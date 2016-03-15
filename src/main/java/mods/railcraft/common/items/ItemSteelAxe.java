@@ -10,8 +10,6 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemAxe;
@@ -26,22 +24,17 @@ public class ItemSteelAxe extends ItemAxe {
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:" + MiscTools.cleanTag(getUnlocalizedName()));
-    }
-
-    @Override
     public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
         return OreDictPlugin.isOreType("ingotSteel", stack);
     }
 
     @Override
-    public float getDigSpeed(ItemStack stack, Block block, int meta) {
-        if (block == Blocks.melon_block)
+    public float getDigSpeed(ItemStack stack, net.minecraft.block.state.IBlockState state) {
+        if (state.getBlock() == Blocks.melon_block)
             return efficiencyOnProperMaterial;
-        if (block.getMaterial() == Material.leaves)
+        if (state.getBlock().getMaterial() == Material.leaves)
             return efficiencyOnProperMaterial;
-        return super.getDigSpeed(stack, block, meta);
+        return super.getDigSpeed(stack, state);
     }
 
 }
