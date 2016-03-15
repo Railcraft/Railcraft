@@ -14,9 +14,9 @@ import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.signals.ISignalTile;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSign;
+import net.minecraft.block.BlockWallSign;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -67,25 +67,24 @@ public class PostConnectionHelper {
         noConnect.add(Blocks.sponge);
     }
 
-    public static ConnectStyle connect(IBlockAccess world, int x1, int y1, int z1, EnumFacing side) {
-        Block block = WorldPlugin.getBlock(world, x1, y1, z1);
-        if (block instanceof IPostConnection && ((IPostConnection) block).connectsToPost(world, x1, y1, z1, side) == ConnectStyle.NONE)
+    public static ConnectStyle connect(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        Block block = WorldPlugin.getBlock(world, pos);
+        if (block instanceof IPostConnection && ((IPostConnection) block).connectsToPost(world, pos, side) == ConnectStyle.NONE)
             return ConnectStyle.NONE;
 
-        int x2 = MiscTools.getXOnSide(x1, side);
-        int y2 = MiscTools.getYOnSide(y1, side);
-        int z2 = MiscTools.getZOnSide(z1, side);
-        BlockPos pos = new BlockPos(x2, y2, z2);
+        pos = pos.offset(side);
 
         if (world.isAirBlock(pos))
             return ConnectStyle.NONE;
 
-        Block otherBlock = WorldPlugin.getBlock(world, pos);
+        IBlockState otherState = WorldPlugin.getBlockState(world, pos);
+        Block otherBlock = otherState.getBlock();
+
         EnumFacing oppositeSide = side.getOpposite();
 
         try {
             if (otherBlock instanceof IPostConnection)
-                return ((IPostConnection) otherBlock).connectsToPost(world, x2, y2, z2, oppositeSide);
+                return ((IPostConnection) otherBlock).connectsToPost(world, pos, oppositeSide);
         } catch (Error error) {
             Game.logErrorAPI("Railcraft", error, IPostConnection.class);
         }
@@ -99,9 +98,8 @@ public class PostConnectionHelper {
         if (canConnect.contains(otherBlock))
             return ConnectStyle.TWO_THIN;
 
-        if (otherBlock instanceof BlockSign) {
-            int meta = world.getBlockMetadata(pos);
-            return meta == side.ordinal() ? ConnectStyle.SINGLE_THICK : ConnectStyle.NONE;
+        if (otherBlock instanceof BlockWallSign) {
+            return otherState.getValue(BlockWallSign.FACING) == side ? ConnectStyle.SINGLE_THICK : ConnectStyle.NONE;
         }
 
         if (otherBlock instanceof BlockLantern)
