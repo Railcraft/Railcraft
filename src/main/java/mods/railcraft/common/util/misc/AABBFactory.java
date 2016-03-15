@@ -97,8 +97,13 @@ public class AABBFactory {
         return this;
     }
 
-    public AABBFactory raiseBottom(double raise) {
+    public AABBFactory raiseFloor(double raise) {
         minY += raise;
+        return this;
+    }
+
+    public AABBFactory raiseCeiling(double raise) {
+        maxY += raise;
         return this;
     }
 }
