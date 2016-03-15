@@ -34,9 +34,9 @@ import net.minecraft.command.CommandHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -46,6 +46,7 @@ import org.apache.logging.log4j.Level;
 
 import java.io.File;
 
+@SuppressWarnings("unused")
 @Mod(modid = Railcraft.MOD_ID, name = "Railcraft",
         version = Railcraft.VERSION,
         certificateFingerprint = "a0c255ac501b2749537d5824bb0f0588bf0320fa",
@@ -62,9 +63,9 @@ import java.io.File;
                 + "after:IC2@[2.2,)")
 public final class Railcraft {
     public static final String MOD_ID = "Railcraft";
-    public static final String VERSION = "@VERSION@";
     public static final String MC_VERSION = "[1.7.10,1.8)";
     public static final RootCommand rootCommand = new RootCommand();
+    static final String VERSION = "@VERSION@";
     @Instance("Railcraft")
     public static Railcraft instance;
     //    public int totalMultiBlockUpdates = 0;
@@ -79,10 +80,6 @@ public final class Railcraft {
 
     public static Railcraft getMod() {
         return instance;
-    }
-
-    public static String getModId() {
-        return MOD_ID;
     }
 
     public static String getVersion() {
@@ -183,7 +180,7 @@ public final class Railcraft {
 
         ModuleManager.init();
 
-        FMLCommonHandler.instance().bus().register(new BlinkTick());
+        MinecraftForge.EVENT_BUS.register(new BlinkTick());
     }
 
     @Mod.EventHandler
@@ -213,7 +210,7 @@ public final class Railcraft {
     public void missingMapping(FMLMissingMappingsEvent event) {
         for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
             if (mapping.type == GameRegistry.Type.BLOCK) {
-                Block block = GameRegistry.findBlock(getModId(), MiscTools.cleanTag(mapping.name));
+                Block block = GameRegistry.findBlock(MOD_ID, MiscTools.cleanTag(mapping.name));
                 if (block != null)
                     remap(block, mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
@@ -229,7 +226,7 @@ public final class Railcraft {
                 else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
                     remap(BlockLantern.getBlockStone(), mapping);
             } else if (mapping.type == GameRegistry.Type.ITEM) {
-                Block block = GameRegistry.findBlock(getModId(), MiscTools.cleanTag(mapping.name));
+                Block block = GameRegistry.findBlock(MOD_ID, MiscTools.cleanTag(mapping.name));
                 if (block != null)
                     remap(Item.getItemFromBlock(block), mapping);
                 else if (mapping.name.equals("Railcraft:tool.mag.glass") && ItemMagnifyingGlass.item != null)
@@ -252,11 +249,11 @@ public final class Railcraft {
 
     private void remap(Block block, FMLMissingMappingsEvent.MissingMapping mapping) {
         mapping.remap(block);
-        Game.log(Level.WARN, "Remapping block " + mapping.name + " to " + getModId() + ":" + MiscTools.cleanTag(block.getUnlocalizedName()));
+        Game.log(Level.WARN, "Remapping block " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(block.getUnlocalizedName()));
     }
 
     private void remap(Item item, FMLMissingMappingsEvent.MissingMapping mapping) {
         mapping.remap(item);
-        Game.log(Level.WARN, "Remapping item " + mapping.name + " to " + getModId() + ":" + MiscTools.cleanTag(item.getUnlocalizedName()));
+        Game.log(Level.WARN, "Remapping item " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(item.getUnlocalizedName()));
     }
 }

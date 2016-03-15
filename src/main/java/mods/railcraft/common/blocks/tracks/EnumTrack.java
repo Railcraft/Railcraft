@@ -102,7 +102,7 @@ public enum EnumTrack {
             TrackRegistry.registerTrackSpec(defaultSpec);
             trackSpecs.add(defaultSpec);
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.getModId(), error, TrackRegistry.class, TrackSpec.class);
+            Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackSpec.class);
             throw error;
         }
         creativeList.add(SWITCH);
@@ -178,7 +178,7 @@ public enum EnumTrack {
             trackSpecs.add(trackSpec);
             registerRecipe();
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.getModId(), error, TrackRegistry.class, TrackSpec.class);
+            Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackSpec.class);
         }
     }
 

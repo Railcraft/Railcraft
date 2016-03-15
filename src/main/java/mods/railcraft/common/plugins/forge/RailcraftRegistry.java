@@ -72,8 +72,8 @@ public final class RailcraftRegistry {
         tag = MiscTools.cleanTag(tag);
         TagList.addTag(tag);
 //        System.out.println(tag);
-        Item existingItem = GameRegistry.findItem(Railcraft.getModId(), tag);
-        Block existingBlock = GameRegistry.findBlock(Railcraft.getModId(), tag);
+        Item existingItem = GameRegistry.findItem(Railcraft.MOD_ID, tag);
+        Block existingBlock = GameRegistry.findBlock(Railcraft.MOD_ID, tag);
         if (existingItem == null && existingBlock == null) {
 //            GameRegistry.registerCustomItemStack(tag, stack);
             RailcraftItemRegistry.register(tag, stack);

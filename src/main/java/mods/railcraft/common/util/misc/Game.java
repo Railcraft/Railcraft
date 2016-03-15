@@ -24,7 +24,7 @@ import org.apache.logging.log4j.message.MessageFormatMessage;
  */
 public class Game {
     public static final boolean IS_OBFUSCATED = !World.class.getSimpleName().equals("World");
-    public static final boolean IS_DEBUG = !Railcraft.VERSION.endsWith("0");
+    public static final boolean IS_DEBUG = !Railcraft.getVersion().endsWith("0");
     public static final boolean IS_BUKKIT;
 
     static {
