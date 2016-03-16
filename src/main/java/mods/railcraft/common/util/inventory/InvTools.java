@@ -14,10 +14,11 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.filters.ArrayStackFilter;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.iterators.IInvSlot;
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
+import mods.railcraft.common.util.inventory.iterators.StandardInventoryIterator;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.inventory.wrappers.ChestWrapper;
-import mods.railcraft.common.util.inventory.wrappers.IInvSlot;
-import mods.railcraft.common.util.inventory.wrappers.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.SidedInventoryMapper;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
@@ -62,15 +63,21 @@ public abstract class InvTools {
         return null;
     }
 
+    public static ItemStack makeSafe(ItemStack stack) {
+        if (stack.stackSize <= 0)
+            return null;
+        return stack;
+    }
+
     @SuppressWarnings("unused")
     public static List<IInventory> getAdjacentInventories(World world, BlockPos pos) {
         return getAdjacentInventories(world, pos, null);
     }
 
     public static List<IInventory> getAdjacentInventories(World world, BlockPos pos, Class<? extends IInventory> type) {
-        List<IInventory> list = new ArrayList<IInventory>(5);
-        for (int side = 0; side < 6; side++) {
-            IInventory inv = getInventoryFromSide(world, pos, EnumFacing.VALUES[side], type, null);
+        List<IInventory> list = new ArrayList<IInventory>(6);
+        for (EnumFacing side : EnumFacing.VALUES) {
+            IInventory inv = getInventoryFromSide(world, pos, side, type, null);
             if (inv != null)
                 list.add(inv);
         }
@@ -241,7 +248,7 @@ public abstract class InvTools {
 
     public static void dropInventory(IInventory inv, World world, BlockPos pos) {
         if (Game.isNotHost(world)) return;
-        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (StandardInventoryIterator.InvSlot slot : InventoryIterator.getIterable(inv)) {
             spewItem(slot.getStackInSlot(), world, pos);
             slot.setStackInSlot(null);
         }

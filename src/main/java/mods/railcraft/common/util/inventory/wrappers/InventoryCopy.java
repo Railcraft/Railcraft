@@ -9,6 +9,8 @@
 package mods.railcraft.common.util.inventory.wrappers;
 
 import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.iterators.IInvSlot;
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 

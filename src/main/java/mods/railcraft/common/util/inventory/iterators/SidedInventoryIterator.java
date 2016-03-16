@@ -1,12 +1,13 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.common.util.inventory.wrappers;
+/******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016                                      *
+ * http://railcraft.info                                                      *
+ * *
+ * This code is the property of CovertJaguar                                  *
+ * and may only be used with explicit written                                 *
+ * permission unless otherwise specified on the                               *
+ * license page at http://railcraft.info/wiki/info:license.                   *
+ ******************************************************************************/
+package mods.railcraft.common.util.inventory.iterators;
 
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,7 @@ import java.util.Iterator;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SidedInventoryIterator extends InventoryIterator {
+public class SidedInventoryIterator extends StandardInventoryIterator {
 
     private final ISidedInventory inv;
 
@@ -27,8 +28,8 @@ public class SidedInventoryIterator extends InventoryIterator {
     }
 
     @Override
-    public Iterator<IInvSlot> iterator() {
-        return new Iterator<IInvSlot>() {
+    public Iterator<StandardInventoryIterator.InvSlot> iterator() {
+        return new Iterator<StandardInventoryIterator.InvSlot>() {
             int[] slots = inv.getSlotsForFace(EnumFacing.DOWN);
             int index = 0;
 
@@ -38,7 +39,7 @@ public class SidedInventoryIterator extends InventoryIterator {
             }
 
             @Override
-            public IInvSlot next() {
+            public InvSlot next() {
                 return new InvSlot(slots[index++]);
             }
 
@@ -50,7 +51,7 @@ public class SidedInventoryIterator extends InventoryIterator {
         };
     }
 
-    private class InvSlot extends InventoryIterator.InvSlot implements IInvSlot {
+    public class InvSlot extends StandardInventoryIterator.InvSlot implements IInvSlot {
 
         public InvSlot(int slot) {
             super(slot);

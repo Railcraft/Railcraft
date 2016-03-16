@@ -12,8 +12,8 @@ package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.IInvSlot;
-import mods.railcraft.common.util.inventory.wrappers.InventoryIterator;
+import mods.railcraft.common.util.inventory.iterators.IInvSlot;
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
