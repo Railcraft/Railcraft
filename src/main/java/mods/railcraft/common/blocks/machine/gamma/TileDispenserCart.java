@@ -108,14 +108,14 @@ public class TileDispenserCart extends TileMachineItem {
                                 }
                             }
                         } else {
-                            float rx = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
-                            float ry = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
-                            float rz = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
+                            float rx = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
+                            float ry = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
+                            float rz = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
                             EntityItem item = new EntityItem(worldObj, x + rx, y + ry, z + rz, cartStack);
                             float factor = 0.05F;
-                            item.motionX = (float) MiscTools.getRand().nextGaussian() * factor;
-                            item.motionY = (float) MiscTools.getRand().nextGaussian() * factor + 0.2F;
-                            item.motionZ = (float) MiscTools.getRand().nextGaussian() * factor;
+                            item.motionX = (float) MiscTools.RANDOM.nextGaussian() * factor;
+                            item.motionY = (float) MiscTools.RANDOM.nextGaussian() * factor + 0.2F;
+                            item.motionZ = (float) MiscTools.RANDOM.nextGaussian() * factor;
                             if (worldObj.spawnEntityInWorld(item))
                                 setInventorySlotContents(ii, null);
                         }

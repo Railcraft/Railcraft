@@ -121,7 +121,7 @@ public abstract class InvTools {
         if (tile == null || !(tile instanceof IInventory))
             return null;
 
-//        if (!PipeManager.canExtractItems(null, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord))
+//        if (!PipeManager.canExtractItems(null, tile.getWorld(), tile.xCoord, tile.yCoord, tile.zCoord))
 //            return null;
 
         if (tile instanceof TileEntityChest) {
@@ -263,11 +263,11 @@ public abstract class InvTools {
 
     private static void spewItem(ItemStack stack, World world, BlockPos pos) {
         if (stack != null) {
-            float xOffset = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
-            float yOffset = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
-            float zOffset = MiscTools.getRand().nextFloat() * 0.8F + 0.1F;
+            float xOffset = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
+            float yOffset = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
+            float zOffset = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
             while (stack.stackSize > 0) {
-                int numToDrop = MiscTools.getRand().nextInt(21) + 10;
+                int numToDrop = MiscTools.RANDOM.nextInt(21) + 10;
                 if (numToDrop > stack.stackSize)
                     numToDrop = stack.stackSize;
                 ItemStack newStack = stack.copy();
@@ -275,9 +275,9 @@ public abstract class InvTools {
                 stack.stackSize -= numToDrop;
                 EntityItem entityItem = new EntityItem(world, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, newStack);
                 float variance = 0.05F;
-                entityItem.motionX = (float) MiscTools.getRand().nextGaussian() * variance;
-                entityItem.motionY = (float) MiscTools.getRand().nextGaussian() * variance + 0.2F;
-                entityItem.motionZ = (float) MiscTools.getRand().nextGaussian() * variance;
+                entityItem.motionX = (float) MiscTools.RANDOM.nextGaussian() * variance;
+                entityItem.motionY = (float) MiscTools.RANDOM.nextGaussian() * variance + 0.2F;
+                entityItem.motionZ = (float) MiscTools.RANDOM.nextGaussian() * variance;
                 world.spawnEntityInWorld(entityItem);
             }
         }

@@ -34,7 +34,7 @@ public class PacketTileRequest extends RailcraftPacket {
 
     @Override
     public void writeData(DataOutputStream data) throws IOException {
-        data.writeInt(tile.getWorldObj().provider.dimensionId);
+        data.writeInt(tile.getWorld().provider.getDimensionId());
         data.writeInt(tile.xCoord);
         data.writeInt(tile.yCoord);
         data.writeInt(tile.zCoord);

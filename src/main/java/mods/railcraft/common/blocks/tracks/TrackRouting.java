@@ -127,7 +127,7 @@ public class TrackRouting extends TrackSecured implements ITrackPowered, IRoutin
     @Override
     public void onBlockRemoved() {
         super.onBlockRemoved();
-        InvTools.dropInventory(inv, tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+        InvTools.dropInventory(inv, tileEntity.getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
     }
 
 }

@@ -75,7 +75,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                 return ((IInventory) tile).getSizeInventory() >= 27;
             return false;
         }
-    }, InventorySorter.SIZE_DECENDING);
+    }, InventorySorter.SIZE_DESCENDING);
 
     static {
         char[][][] map = {

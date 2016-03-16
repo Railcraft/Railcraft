@@ -26,11 +26,11 @@ public class SafeNBTWrapper {
         if (data.hasKey(key)) {
             NBTBase tag = data.getTag(key);
             if (tag instanceof NBTTagByte)
-                return ((NBTTagByte) tag).func_150290_f();
+                return ((NBTTagByte) tag).getByte();
             else if (tag instanceof NBTTagShort)
-                return ((NBTTagShort) tag).func_150290_f();
+                return ((NBTTagShort) tag).getByte();
             else if (tag instanceof NBTTagInt)
-                return ((NBTTagInt) tag).func_150290_f();
+                return ((NBTTagInt) tag).getByte();
         }
         return 0;
     }
@@ -43,11 +43,11 @@ public class SafeNBTWrapper {
         if (data.hasKey(key)) {
             NBTBase tag = data.getTag(key);
             if (tag instanceof NBTTagShort)
-                return ((NBTTagShort) tag).func_150289_e();
+                return ((NBTTagShort) tag).getShort();
             else if (tag instanceof NBTTagInt)
-                return ((NBTTagInt) tag).func_150289_e();
+                return ((NBTTagInt) tag).getShort();
             else if (tag instanceof NBTTagByte)
-                return ((NBTTagByte) tag).func_150289_e();
+                return ((NBTTagByte) tag).getShort();
         }
         return 0;
     }
@@ -60,11 +60,11 @@ public class SafeNBTWrapper {
         if (data.hasKey(key)) {
             NBTBase tag = data.getTag(key);
             if (tag instanceof NBTTagInt)
-                return ((NBTTagInt) tag).func_150287_d();
+                return ((NBTTagInt) tag).getInt();
             else if (tag instanceof NBTTagShort)
-                return ((NBTTagShort) tag).func_150287_d();
+                return ((NBTTagShort) tag).getInt();
             else if (tag instanceof NBTTagByte)
-                return ((NBTTagByte) tag).func_150287_d();
+                return ((NBTTagByte) tag).getInt();
         }
         return 0;
     }
@@ -77,9 +77,9 @@ public class SafeNBTWrapper {
         if (data.hasKey(key)) {
             NBTBase tag = data.getTag(key);
             if (tag instanceof NBTTagFloat)
-                return ((NBTTagFloat) tag).func_150288_h();
+                return ((NBTTagFloat) tag).getFloat();
             else if (tag instanceof NBTTagDouble)
-                return ((NBTTagDouble) tag).func_150288_h();
+                return ((NBTTagDouble) tag).getFloat();
         }
         return 0;
     }
@@ -92,15 +92,15 @@ public class SafeNBTWrapper {
         if (data.hasKey(key)) {
             NBTBase tag = data.getTag(key);
             if (tag instanceof NBTTagFloat)
-                return ((NBTTagFloat) tag).func_150286_g();
+                return ((NBTTagFloat) tag).getDouble();
             else if (tag instanceof NBTTagDouble)
-                return ((NBTTagDouble) tag).func_150286_g();
+                return ((NBTTagDouble) tag).getDouble();
             else if (tag instanceof NBTTagInt)
-                return ((NBTTagInt) tag).func_150287_d();
+                return ((NBTTagInt) tag).getDouble();
             else if (tag instanceof NBTTagShort)
-                return ((NBTTagShort) tag).func_150287_d();
+                return ((NBTTagShort) tag).getDouble();
             else if (tag instanceof NBTTagByte)
-                return ((NBTTagByte) tag).func_150287_d();
+                return ((NBTTagByte) tag).getDouble();
         }
         return 0;
     }

@@ -31,7 +31,7 @@ public class Game {
         boolean foundBukkit = false;
         try {
             foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
-        } catch (ClassNotFoundException er) {
+        } catch (ClassNotFoundException ignored) {
         }
         IS_BUKKIT = foundBukkit;
         if (IS_BUKKIT)
@@ -54,6 +54,7 @@ public class Game {
         return null;
     }
 
+    @SuppressWarnings("SameReturnValue")
     public static boolean isObfuscated() {
         return IS_OBFUSCATED;
     }
@@ -118,6 +119,6 @@ public class Game {
     }
 
     public static void logErrorFingerprint(String mod) {
-        log(Level.FATAL, "{0} failed validation, terminating. Please re-download {0} from an official source.");
+        log(Level.FATAL, "{0} failed validation, terminating. Please re-download {0} from an official source.", mod);
     }
 }

@@ -64,7 +64,7 @@ public class RenderTurbineGauge extends TileEntitySpecialRenderer {
             throw new IllegalStateException("can't detect gauge orientation");
 
         // fix lightmap coords to use the brightness value in front of the block, not inside it (which would be just 0)
-        int lmCoords = tile.getWorldObj().getLightBrightnessForSkyBlocks(tile.xCoord + fx, tile.yCoord, tile.zCoord + fz, 0);
+        int lmCoords = tile.getWorld().getLightBrightnessForSkyBlocks(tile.xCoord + fx, tile.yCoord, tile.zCoord + fz, 0);
         int lmX = lmCoords % 65536;
         int lmY = lmCoords / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lmX / 1.0F, lmY / 1.0F);

@@ -16,7 +16,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class PacketBuilder implements ISignalPacketBuilder {
@@ -33,17 +32,17 @@ public class PacketBuilder implements ISignalPacketBuilder {
     }
 
     public void sendTileEntityPacket(RailcraftTileEntity tile) {
-        if (tile.getWorldObj() instanceof WorldServer) {
-            WorldServer world = (WorldServer) tile.getWorldObj();
+        if (tile.getWorld() instanceof WorldServer) {
+            WorldServer world = (WorldServer) tile.getWorld();
             PacketTileEntity pkt = new PacketTileEntity(tile);
-            PacketDispatcher.sendToWatchers(pkt, world, tile.xCoord, tile.zCoord);
+            PacketDispatcher.sendToWatchers(pkt, world, tile.getPos().getX(), tile.getPos().getZ());
         }
     }
 
     @Override
     public void sendPairPacketUpdate(AbstractPair pairing) {
         PacketPairUpdate pkt = new PacketPairUpdate(pairing);
-        PacketDispatcher.sendToDimension(pkt, pairing.getTile().getWorldObj().provider.dimensionId);
+        PacketDispatcher.sendToDimension(pkt, pairing.getTile().getWorld().provider.getDimensionId());
     }
 
     @Override

@@ -89,7 +89,7 @@ public class TrackEmbarking extends TrackBaseRailcraft implements ITrackPowered,
             List entities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, box);
 
             if (entities.size() > 0) {
-                EntityLivingBase entity = (EntityLivingBase) entities.get(MiscTools.getRand().nextInt(entities.size()));
+                EntityLivingBase entity = (EntityLivingBase) entities.get(MiscTools.RANDOM.nextInt(entities.size()));
 
                 if (entity instanceof EntityPlayer) {
                     EntityPlayer player = (EntityPlayer) entity;

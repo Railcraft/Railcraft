@@ -10,12 +10,13 @@ package mods.railcraft.common.util.inventory;
 
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
  * This is a custom data structure designed specifically for using ItemStacks as
  * elements of a Set.
- *
+ * <p/>
  * Its backed by an ArrayList, so as expected, most operations result in
  * traversing the list one or more times.
  *
@@ -23,7 +24,7 @@ import java.util.*;
  */
 public class ItemStackSet implements Set<ItemStack> {
 
-    private List<ItemStack> set = new ArrayList<ItemStack>();
+    private final List<ItemStack> set = new ArrayList<ItemStack>();
 
     @Override
     public int size() {
@@ -49,18 +50,21 @@ public class ItemStackSet implements Set<ItemStack> {
         return false;
     }
 
+    @Nonnull
     @Override
     public Iterator<ItemStack> iterator() {
         return set.iterator();
     }
 
+    @Nonnull
     @Override
     public Object[] toArray() {
         return set.toArray();
     }
 
+    @Nonnull
     @Override
-    public <T> T[] toArray(T[] a) {
+    public <T> T[] toArray(@Nonnull T[] a) {
         return set.toArray(a);
     }
 
@@ -92,7 +96,7 @@ public class ItemStackSet implements Set<ItemStack> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(@Nonnull Collection<?> c) {
         for (Object obj : c) {
             if (!(obj instanceof ItemStack)) {
                 return false;
@@ -105,7 +109,7 @@ public class ItemStackSet implements Set<ItemStack> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends ItemStack> c) {
+    public boolean addAll(@Nonnull Collection<? extends ItemStack> c) {
         boolean changed = false;
         for (ItemStack stack : c) {
             changed |= add(stack);
@@ -114,12 +118,12 @@ public class ItemStackSet implements Set<ItemStack> {
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(@Nonnull Collection<?> c) {
         boolean changed = false;
         Iterator<ItemStack> it = set.iterator();
         while (it.hasNext()) {
             ItemStack stack = it.next();
-            if (!c.contains(it)) {
+            if (!collectionContains(c, stack)) {
                 it.remove();
                 changed = true;
             }
@@ -127,13 +131,21 @@ public class ItemStackSet implements Set<ItemStack> {
         return changed;
     }
 
+    private boolean collectionContains(Collection<?> c, ItemStack stack) {
+        for (Object obj : c) {
+            if (obj instanceof ItemStack && InvTools.isItemEqual(stack, (ItemStack) obj))
+                return true;
+        }
+        return false;
+    }
+
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(@Nonnull Collection<?> c) {
         boolean changed = false;
         Iterator<ItemStack> it = set.iterator();
         while (it.hasNext()) {
             ItemStack stack = it.next();
-            if (c.contains(it)) {
+            if (collectionContains(c, stack)) {
                 it.remove();
                 changed = true;
             }

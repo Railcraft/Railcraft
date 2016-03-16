@@ -48,7 +48,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     private static final int MIN_FEED_INTERVAL = 128;
     private static final int FEED_VARIANCE = 256;
     private static final byte ANIMALS_PER_FOOD = 2;
-    private static final Random rand = MiscTools.getRand();
+    private static final Random rand = MiscTools.RANDOM;
     private int feedTime;
     private byte feedCounter;
     private boolean powered;

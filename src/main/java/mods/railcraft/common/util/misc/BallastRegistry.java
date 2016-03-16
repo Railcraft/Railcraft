@@ -9,6 +9,7 @@
 package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.util.collections.BlockKey;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -20,7 +21,7 @@ import java.util.Set;
 /**
  * Register an item here to designate it as a possible ballast that can be used
  * in the Bore.
- *
+ * <p/>
  * It is expected that ballast is affected by gravity.
  *
  * @author CovertJaguar <http://www.railcraft.info>
@@ -39,7 +40,7 @@ public abstract class BallastRegistry {
 
     public static boolean isItemBallast(ItemStack stack) {
         if (stack.getItem() instanceof ItemBlock)
-            return ballastRegistry.contains(new BlockKey(((ItemBlock) stack.getItem()).field_150939_a, stack.getItemDamage()));
+            return ballastRegistry.contains(new BlockKey(InvTools.getBlockFromStack(stack), stack.getItemDamage()));
         return false;
     }
 

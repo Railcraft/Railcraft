@@ -44,7 +44,7 @@ public class EntityCartTrackRemover extends CartMaintenanceBase {
             return;
 
         for (WorldCoordinate track : tracksBehind) {
-            if (track.isEqual(worldObj.provider.dimensionId, trackX, trackY, trackZ))
+            if (track.isEqual(worldObj.provider.getDimensionId(), trackX, trackY, trackZ))
                 continue;
             removeTrack(track);
         }
@@ -55,7 +55,7 @@ public class EntityCartTrackRemover extends CartMaintenanceBase {
     }
 
     private void addTravelledTrack(int trackX, int trackY, int trackZ) {
-        tracksBehind.add(new WorldCoordinate(worldObj.provider.dimensionId, trackX, trackY, trackZ));
+        tracksBehind.add(new WorldCoordinate(worldObj.provider.getDimensionId(), trackX, trackY, trackZ));
     }
 
     private void removeTrack(WorldCoordinate track) {

@@ -49,12 +49,12 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
 
     @Override
     protected void playSoundOut() {
-        SoundHelper.playSoundClient(worldObj, getPos(), SoundHelper.SOUND_STEAM_BURST, 0.15F, (float) (0.5F + MiscTools.getRand().nextGaussian() * 0.1));
+        SoundHelper.playSoundClient(worldObj, getPos(), SoundHelper.SOUND_STEAM_BURST, 0.15F, (float) (0.5F + MiscTools.RANDOM.nextGaussian() * 0.1));
     }
 
     @Override
     protected void playSoundIn() {
-        SoundHelper.playSoundClient(worldObj, getPos(), SoundHelper.SOUND_STEAM_BURST, 0.15F, (float) (1 + MiscTools.getRand().nextGaussian() * 0.1));
+        SoundHelper.playSoundClient(worldObj, getPos(), SoundHelper.SOUND_STEAM_BURST, 0.15F, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
     }
 
     private int getParticleRate() {

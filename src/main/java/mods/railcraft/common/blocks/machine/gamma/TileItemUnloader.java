@@ -42,7 +42,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
         public boolean matches(TileEntity tile) {
             return !(tile instanceof TileItemUnloader);
         }
-    }, InventorySorter.SIZE_DECENDING);
+    }, InventorySorter.SIZE_DESCENDING);
 
     public TileItemUnloader() {
         super();

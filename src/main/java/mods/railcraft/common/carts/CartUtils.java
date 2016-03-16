@@ -112,7 +112,7 @@ public class CartUtils {
         if (cart.riddenByEntity != null)
             cart.riddenByEntity.mountEntity(cart);
         cart.worldObj.newExplosion(cart, cart.posX, cart.posY, cart.posZ, 3F, true, true);
-        if (MiscTools.getRand().nextInt(2) == 0)
+        if (MiscTools.RANDOM.nextInt(2) == 0)
             cart.setDead();
     }
 

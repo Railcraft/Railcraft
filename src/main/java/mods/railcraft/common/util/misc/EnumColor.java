@@ -95,7 +95,7 @@ public enum EnumColor implements IStringSerializable {
     }
 
     public static EnumColor getRand() {
-        return VALUES[MiscTools.getRand().nextInt(VALUES.length)];
+        return VALUES[MiscTools.RANDOM.nextInt(VALUES.length)];
     }
 
     public EnumColor inverse() {

@@ -38,7 +38,7 @@ public class TileItemLoader extends TileLoaderItemBase {
         public boolean matches(TileEntity tile) {
             return !(tile instanceof TileItemLoader);
         }
-    }, InventorySorter.SIZE_DECENDING);
+    }, InventorySorter.SIZE_DESCENDING);
     private final InventoryMapper invBuffer;
     private final LinkedList<IInventory> chests = new LinkedList<IInventory>();
 

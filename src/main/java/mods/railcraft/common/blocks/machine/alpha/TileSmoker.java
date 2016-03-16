@@ -31,7 +31,7 @@ import java.util.Random;
 public class TileSmoker extends TileMachineBase {
 
     private static final int SNOW_MELT_INTERVAL = 32;
-    private static final Random rand = MiscTools.getRand();
+    private static final Random rand = MiscTools.RANDOM;
     private boolean powered;
 
     @Override

@@ -91,7 +91,7 @@ public class RockCrusherCraftingManager implements IRockCrusherCraftingManager {
         public List<ItemStack> getRandomizedOutputs() {
             List<ItemStack> list = new ArrayList<ItemStack>();
             for (Map.Entry<ItemStack, Float> entry : outputs) {
-                if (MiscTools.getRand().nextFloat() <= entry.getValue()) {
+                if (MiscTools.RANDOM.nextFloat() <= entry.getValue()) {
                     list.add(entry.getKey().copy());
                 }
             }

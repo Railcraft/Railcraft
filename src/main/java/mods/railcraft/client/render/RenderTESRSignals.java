@@ -171,7 +171,7 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
             }
             int br;
             if (info.brightness < 0) {
-                br = info.template.getMixedBrightnessForBlock(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
+                br = info.template.getMixedBrightnessForBlock(tile.getWorld(), tile.xCoord, tile.yCoord, tile.zCoord);
             } else {
                 br = info.brightness;
             }

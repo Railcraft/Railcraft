@@ -123,7 +123,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
         if (!canJet()) return;
         jet = JET_TIME;
         tank.setFluid(null);
-        SoundHelper.playSound(worldObj, getPos(), SoundHelper.SOUND_STEAM_HISS, 1, (float) (1 + MiscTools.getRand().nextGaussian() * 0.1));
+        SoundHelper.playSound(worldObj, getPos(), SoundHelper.SOUND_STEAM_HISS, 1, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
         sendUpdateToClient();
     }
 

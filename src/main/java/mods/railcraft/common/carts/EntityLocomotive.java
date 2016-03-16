@@ -80,7 +80,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     protected float renderYaw;
     private String model = "";
     private int fuel;
-    private int update = MiscTools.getRand().nextInt();
+    private int update = MiscTools.RANDOM.nextInt();
     private int whistleDelay;
     private int tempIdle;
     private float whistlePitch = getNewWhistlePitch();

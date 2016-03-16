@@ -63,7 +63,7 @@ public class BlockWorldLogic extends Block {
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
         world.scheduleBlockUpdate(pos, this, tickRate(world), 0);
-        if (MiscTools.getRand().nextInt(32) != 0)
+        if (MiscTools.RANDOM.nextInt(32) != 0)
             return;
         BlockOre blockOre = BlockOre.getBlock();
         if (blockOre == null || !EnumOre.SALTPETER.isEnabled() || !RailcraftConfig.isWorldGenEnabled("saltpeter"))

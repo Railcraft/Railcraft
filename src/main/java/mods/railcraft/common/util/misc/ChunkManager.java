@@ -17,6 +17,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -35,6 +36,7 @@ import java.util.Set;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SuppressWarnings("unused")
 public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, ForgeChunkManager.PlayerOrderedLoadingCallback {
 
     private static ChunkManager instance;
@@ -166,7 +168,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                 int z = ticket.getModData().getInteger("zCoord");
 
                 if (y >= 0) {
-                    TileEntity tile = world.getTileEntity(x, y, z);
+                    TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
                     if (tile instanceof TileAnchorWorld) {
                         TileAnchorWorld anchor = (TileAnchorWorld) tile;
                         anchor.forceChunkLoading(ticket);
@@ -179,7 +181,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                     anchor.setChunkTicket(ticket);
 //                    System.out.println("Load Cart Chunks");
                     anchor.forceChunkLoading(anchor.chunkCoordX, anchor.chunkCoordZ);
-                    printAnchor(anchor.getCommandSenderName(), (int) entity.posX, (int) entity.posY, (int) entity.posZ);
+                    printAnchor(anchor.getName(), (int) entity.posX, (int) entity.posY, (int) entity.posZ);
                 }
             }
         }
@@ -194,9 +196,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
         for (Ticket ticket : tickets) {
             Entity entity = ticket.getEntity();
             if (entity == null) {
-                int x = ticket.getModData().getInteger("xCoord");
                 int y = ticket.getModData().getInteger("yCoord");
-                int z = ticket.getModData().getInteger("zCoord");
                 String type = ticket.getModData().getString("type");
 
                 if (y >= 0) {
@@ -204,7 +204,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                         adminTickets.add(ticket);
                     else if (type.equals(EnumMachineAlpha.WORLD_ANCHOR.getTag()))
                         worldTickets.add(ticket);
-                    else if(type.isEmpty())
+                    else if (type.isEmpty())
                         worldTickets.add(ticket);
                 }
             } else {

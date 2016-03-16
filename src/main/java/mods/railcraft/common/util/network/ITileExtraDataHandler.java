@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.util.network;
 
+import net.minecraft.util.BlockPos;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -15,9 +17,5 @@ public interface ITileExtraDataHandler
 {
     void onUpdatePacket(DataInputStream data) throws IOException;
 
-    int getX();
-
-    int getY();
-
-    int getZ();
+    BlockPos getPos();
 }

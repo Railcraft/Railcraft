@@ -30,8 +30,8 @@ import java.util.Iterator;
 public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
 
     private final String name;
-    private Callback callback;
-    private ItemStack contents[];
+    private final Callback callback;
+    private final ItemStack[] contents;
 
     public StandaloneInventory(int size, String name, IInventory callback) {
         this.name = name;
@@ -86,12 +86,12 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
                 markDirty();
                 return itemstack;
             }
-            ItemStack itemstack1 = contents[i].splitStack(j);
+            ItemStack itemStack1 = contents[i].splitStack(j);
             if (contents[i].stackSize <= 0) {
                 contents[i] = null;
             }
             markDirty();
-            return itemstack1;
+            return itemStack1;
         } else {
             return null;
         }
@@ -153,10 +153,7 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        if (callback != null) {
-            return callback.isUseableByPlayer(entityplayer);
-        }
-        return true;
+        return callback == null || callback.isUseableByPlayer(entityplayer);
     }
 
     @Override

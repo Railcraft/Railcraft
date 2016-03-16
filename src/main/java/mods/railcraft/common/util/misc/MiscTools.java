@@ -39,15 +39,6 @@ public abstract class MiscTools {
 
     public static final Random RANDOM = new Random();
 
-    /**
-     * Returns a Random instance.
-     *
-     * @return Random
-     */
-    public static Random getRand() {
-        return RANDOM;
-    }
-
     public static void registerTrack(EnumTrack rail) {
         RailcraftBlocks.registerBlockTrack();
         if (RailcraftBlocks.getBlockTrack() != null)
@@ -140,20 +131,20 @@ public abstract class MiscTools {
         Vec3 maxY = start.getIntermediateWithYValue(end, 1);
         Vec3 minZ = start.getIntermediateWithZValue(end, 0);
         Vec3 maxZ = start.getIntermediateWithZValue(end, 1);
-        if (!isVecInsideYZBounds(minX))
+        if (isVecOutsideYZBounds(minX))
             minX = null;
-        if (!isVecInsideYZBounds(maxX))
+        if (isVecOutsideYZBounds(maxX))
             maxX = null;
-        if (!isVecInsideXZBounds(minY))
+        if (isVecOutsideXZBounds(minY))
             minY = null;
-        if (!isVecInsideXZBounds(maxY))
+        if (isVecOutsideXZBounds(maxY))
             maxY = null;
-        if (!isVecInsideXYBounds(minZ))
+        if (isVecOutsideXYBounds(minZ))
             minZ = null;
-        if (!isVecInsideXYBounds(maxZ))
+        if (isVecOutsideXYBounds(maxZ))
             maxZ = null;
         Vec3 closest = null;
-        if (minX != null && (closest == null || start.distanceTo(minX) < start.distanceTo(closest)))
+        if (minX != null)
             closest = minX;
         if (maxX != null && (closest == null || start.distanceTo(maxX) < start.distanceTo(closest)))
             closest = maxX;
@@ -183,25 +174,16 @@ public abstract class MiscTools {
         return new MovingObjectPosition(closest.addVector(pos.getX(), pos.getY(), pos.getZ()), enumfacing, pos);
     }
 
-    private static boolean isVecInsideYZBounds(Vec3 vec3d) {
-        if (vec3d == null)
-            return false;
-        else
-            return vec3d.yCoord >= 0 && vec3d.yCoord <= 1 && vec3d.zCoord >= 0 && vec3d.zCoord <= 1;
+    private static boolean isVecOutsideYZBounds(Vec3 vec3d) {
+        return vec3d == null || vec3d.yCoord < 0 || vec3d.yCoord > 1 || vec3d.zCoord < 0 || vec3d.zCoord > 1;
     }
 
-    private static boolean isVecInsideXZBounds(Vec3 vec3d) {
-        if (vec3d == null)
-            return false;
-        else
-            return vec3d.xCoord >= 0 && vec3d.xCoord <= 1 && vec3d.zCoord >= 0 && vec3d.zCoord <= 1;
+    private static boolean isVecOutsideXZBounds(Vec3 vec3d) {
+        return vec3d == null || vec3d.xCoord < 0 || vec3d.xCoord > 1 || vec3d.zCoord < 0 || vec3d.zCoord > 1;
     }
 
-    private static boolean isVecInsideXYBounds(Vec3 vec3d) {
-        if (vec3d == null)
-            return false;
-        else
-            return vec3d.xCoord >= 0 && vec3d.xCoord <= 1 && vec3d.yCoord >= 0 && vec3d.yCoord <= 1;
+    private static boolean isVecOutsideXYBounds(Vec3 vec3d) {
+        return vec3d == null || vec3d.xCoord < 0 || vec3d.xCoord > 1 || vec3d.yCoord < 0 || vec3d.yCoord > 1;
     }
 
     public static MovingObjectPosition rayTracePlayerLook(EntityPlayer player) {
@@ -307,16 +289,12 @@ public abstract class MiscTools {
         return z + side.getFrontOffsetZ();
     }
 
-    public static boolean areCoordinatesOnSide(int x, int y, int z, EnumFacing side, int xCoord, int yCoord, int zCoord) {
-        return x + side.getFrontOffsetX() == xCoord && y + side.getFrontOffsetY() == yCoord && z + side.getFrontOffsetZ() == zCoord;
+    public static boolean areCoordinatesOnSide(BlockPos start, BlockPos end, EnumFacing side) {
+        return start.offset(side).equals(end);
     }
 
     public static boolean isKillabledEntity(Entity entity) {
-        if (entity.ridingEntity instanceof EntityMinecart)
-            return false;
-        if (!(entity instanceof EntityLivingBase))
-            return false;
-        return ((EntityLivingBase) entity).getMaxHealth() < 100;
+        return !(entity.ridingEntity instanceof EntityMinecart) && entity instanceof EntityLivingBase && ((EntityLivingBase) entity).getMaxHealth() < 100;
     }
 
 }

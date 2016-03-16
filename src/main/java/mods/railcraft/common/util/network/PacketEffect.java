@@ -47,7 +47,7 @@ public class PacketEffect extends RailcraftPacket {
     }
 
     public void sendPacket(World world, double x, double y, double z) {
-        PacketDispatcher.sendToAllAround(this, new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 80));
+        PacketDispatcher.sendToAllAround(this, new NetworkRegistry.TargetPoint(world.provider.getDimensionId(), x, y, z, 80));
     }
 
     @Override

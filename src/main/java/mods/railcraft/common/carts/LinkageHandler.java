@@ -85,7 +85,7 @@ public class LinkageHandler {
         String timer = LINK_A_TIMER;
         if (link == 'B')
             timer = LINK_B_TIMER;
-        if (cart1.worldObj.provider.dimensionId != cart2.worldObj.provider.dimensionId) {
+        if (cart1.worldObj.provider.getDimensionId() != cart2.worldObj.provider.getDimensionId()) {
             short count = cart1.getEntityData().getShort(timer);
             count++;
             if (count > 200) {

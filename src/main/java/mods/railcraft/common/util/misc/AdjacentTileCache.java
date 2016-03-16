@@ -40,7 +40,7 @@ public final class AdjacentTileCache {
     }
 
     private TileEntity searchSide(EnumFacing side) {
-        return WorldPlugin.getTileEntityOnSide(source.getWorldObj(), source.xCoord, source.yCoord, source.zCoord, side);
+        return WorldPlugin.getTileEntityOnSide(source.getWorld(), source.getPos(), side);
     }
 
     public void refresh() {
@@ -83,12 +83,12 @@ public final class AdjacentTileCache {
             return searchSide(side);
         int s = side.ordinal();
         if (cache[s] != null)
-            if (cache[s].isInvalid() || !MiscTools.areCoordinatesOnSide(source.xCoord, source.yCoord, source.zCoord, side, cache[s].xCoord, cache[s].yCoord, cache[s].zCoord))
+            if (cache[s].isInvalid() || !MiscTools.areCoordinatesOnSide(source.getPos(), cache[s].getPos(), side))
                 setTile(s, null);
             else
                 return cache[s];
 
-        if (timer[s].hasTriggered(source.getWorldObj(), delay[s])) {
+        if (timer[s].hasTriggered(source.getWorld(), delay[s])) {
             setTile(s, searchSide(side));
             if (cache[s] == null)
                 incrementDelay(s);

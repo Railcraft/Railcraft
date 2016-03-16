@@ -45,7 +45,7 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     private final IInventory invLiquids = new InventoryMapper(this, false);
     private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1, false);
     private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1, false);
-    private int update = MiscTools.getRand().nextInt();
+    private int update = MiscTools.RANDOM.nextInt();
 
     public EntityCartTank(World world) {
         super(world);

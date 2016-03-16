@@ -40,7 +40,7 @@ import java.util.UUID;
 public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable, ITickable {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
-    protected int clock = MiscTools.getRand().nextInt();
+    protected int clock = MiscTools.RANDOM.nextInt();
     private GameProfile owner = new GameProfile(null, "[Railcraft]");
     private boolean sendClientUpdate = false;
     private UUID uuid;

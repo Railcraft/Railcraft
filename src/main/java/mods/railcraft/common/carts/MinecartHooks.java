@@ -328,7 +328,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
                     other.onGround = true;
                 }
 
-        if (MiscTools.getRand().nextFloat() < 0.001f) {
+        if (MiscTools.RANDOM.nextFloat() < 0.001f) {
             List<EntityMinecart> carts = CartTools.getMinecartsAt(cart.worldObj, i, j, k, 0);
             if (carts.size() >= 12)
                 primeToExplode(cart);

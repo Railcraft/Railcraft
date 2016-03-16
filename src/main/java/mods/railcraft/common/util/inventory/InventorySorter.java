@@ -18,7 +18,7 @@ import java.util.Comparator;
  */
 public enum InventorySorter implements Comparator<IInventory> {
 
-    SIZE_DECENDING {
+    SIZE_DESCENDING {
         @Override
         public int compare(IInventory inv1, IInventory inv2) {
             return inv2.getSizeInventory() - inv1.getSizeInventory();

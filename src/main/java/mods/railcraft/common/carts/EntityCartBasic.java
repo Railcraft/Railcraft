@@ -46,7 +46,7 @@ public class EntityCartBasic extends EntityMinecartEmpty {
 //                        timeUntilPortal = getPortalCooldown();
 //                        byte dim;
 //
-//                        if (worldObj.provider.dimensionId == -1) {
+//                        if (worldObj.provider.getDimensionId() == -1) {
 //                            dim = 0;
 //                        } else {
 //                            dim = -1;

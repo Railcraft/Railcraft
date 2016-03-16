@@ -153,7 +153,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     protected boolean boreLayer = false;
     protected int boreRotationAngle = 0;
     private boolean active;
-    private int clock = MiscTools.getRand().nextInt();
+    private int clock = MiscTools.RANDOM.nextInt();
     private int burnTime;
     private int fuel;
     private boolean hasInit;

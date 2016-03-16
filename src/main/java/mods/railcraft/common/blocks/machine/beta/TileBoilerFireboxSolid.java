@@ -88,7 +88,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
             return false;
         }
 
-    }, InventorySorter.SIZE_DECENDING);
+    }, InventorySorter.SIZE_DESCENDING);
 
     public TileBoilerFireboxSolid() {
         super(6);
