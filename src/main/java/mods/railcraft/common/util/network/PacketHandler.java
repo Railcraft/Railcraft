@@ -33,10 +33,12 @@ public class PacketHandler {
         channel.register(this);
     }
 
+    @SuppressWarnings("EmptyMethod")
     public static void init() {
         // NOOP
     }
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onPacket(ServerCustomPacketEvent event) {
         byte[] data = new byte[event.packet.payload().readableBytes()];
@@ -45,6 +47,7 @@ public class PacketHandler {
         onPacketData(data, ((NetHandlerPlayServer) event.handler).playerEntity);
     }
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onPacket(ClientCustomPacketEvent event) {
         byte[] data = new byte[event.packet.payload().readableBytes()];
@@ -55,7 +58,7 @@ public class PacketHandler {
         onPacketData(data, null);
     }
 
-    public void onPacketData(byte[] bData, EntityPlayerMP player) {
+    private void onPacketData(byte[] bData, EntityPlayerMP player) {
         DataInputStream data = new DataInputStream(new ByteArrayInputStream(bData));
         try {
             RailcraftPacket pkt;
@@ -114,8 +117,7 @@ public class PacketHandler {
                 default:
                     return;
             }
-            if (pkt != null)
-                pkt.readData(data);
+            pkt.readData(data);
         } catch (IOException e) {
             Game.logThrowable("Exception in PacketHandler.onPacketData: {0}", e, Arrays.toString(bData));
         }
