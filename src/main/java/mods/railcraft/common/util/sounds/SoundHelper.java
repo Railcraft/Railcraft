@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SoundHelper {
@@ -32,9 +32,9 @@ public class SoundHelper {
     public static final String SOUND_STEAM_HISS = "railcraft:machine.steamhiss";
     private static final Map<String, Integer> soundLimiterClient = new HashMap<String, Integer>();
     private static final Map<String, Integer> soundLimiterServer = new HashMap<String, Integer>();
-    
-    private static Map<String, Integer> getSoundLimiter(){
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+
+    private static Map<String, Integer> getSoundLimiter() {
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
             return soundLimiterClient;
         return soundLimiterServer;
     }
@@ -64,17 +64,17 @@ public class SoundHelper {
         }
     }
 
-    public static void playSound(World world, int x, int y, int z, String name, float volume, float pitch) {
+    public static void playSound(World world, BlockPos pos, String name, float volume, float pitch) {
         if (canPlaySound(name)) {
             incrementLimiter(name);
-            world.playSoundEffect(x, y, z, name, volume, pitch);
+            world.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), name, volume, pitch);
         }
     }
 
-    public static void playSoundClient(World world, int x, int y, int z, String name, float volume, float pitch) {
+    public static void playSoundClient(World world, BlockPos pos, String name, float volume, float pitch) {
         if (canPlaySound(name)) {
             incrementLimiter(name);
-            world.playSound(x, y, z, name, volume, pitch, false);
+            world.playSound(pos.getX(), pos.getY(), pos.getZ(), name, volume, pitch, false);
         }
     }
 
@@ -85,22 +85,22 @@ public class SoundHelper {
         }
     }
 
-    public static void playBlockSound(World world, int x, int y, int z, String soundName, float volume, float pitch, Block block, int meta) {
+    public static void playBlockSound(World world, BlockPos pos, String soundName, float volume, float pitch, Block block, int meta) {
         if (world != null && soundName != null) {
             if (soundName.contains("railcraft")) {
                 SoundType sound = SoundRegistry.getSound(block, meta);
                 if (sound != null) {
-                    String newName = soundName.contains("dig") ? sound.getBreakSound() : soundName.contains("step") ? sound.getStepResourcePath() : sound.func_150496_b();
-                    world.playSoundEffect(x, y, z, newName, volume, pitch * sound.getPitch());
+                    String newName = soundName.contains("dig") ? sound.getBreakSound() : soundName.contains("step") ? sound.getStepSound() : sound.getPlaceSound();
+                    world.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), newName, volume, pitch * sound.getFrequency());
                 }
             }
-            world.playSoundEffect(x, y, z, soundName, volume, pitch);
+            world.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), soundName, volume, pitch);
         }
     }
 
-    public static void playFX(World world, EntityPlayer player, int id, int x, int y, int z, int data) {
+    public static void playFX(World world, EntityPlayer player, int id, BlockPos pos, int data) {
         if (RailcraftConfig.playSounds())
-            world.playAuxSFXAtEntity(player, id, x, y, z, data);
+            world.playAuxSFXAtEntity(player, id, pos, data);
     }
 
 }
