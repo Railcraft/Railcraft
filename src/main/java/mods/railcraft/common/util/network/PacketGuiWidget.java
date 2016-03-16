@@ -9,7 +9,7 @@
 package mods.railcraft.common.util.network;
 
 import mods.railcraft.common.gui.containers.RailcraftContainer;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 import java.io.DataInputStream;
@@ -43,7 +43,7 @@ public class PacketGuiWidget extends RailcraftPacket {
         windowId = data.readByte();
         widgetId = data.readByte();
 
-        EntityClientPlayerMP player = FMLClientHandler.instance().getClient().thePlayer;
+        EntityPlayerSP player = FMLClientHandler.instance().getClient().thePlayer;
 
         if (player.openContainer instanceof RailcraftContainer && player.openContainer.windowId == windowId)
             ((RailcraftContainer) player.openContainer).handleWidgetClientData(widgetId, data);

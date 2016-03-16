@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.util.network;
 
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
@@ -47,7 +47,7 @@ public class PacketGuiInteger extends RailcraftPacket {
         dataId = data.readByte();
         value = data.readInt();
 
-        EntityClientPlayerMP player = FMLClientHandler.instance().getClient().thePlayer;
+        EntityPlayerSP player = FMLClientHandler.instance().getClient().thePlayer;
 
         if (player.openContainer != null && player.openContainer.windowId == windowId)
             player.openContainer.updateProgressBar(dataId, value);

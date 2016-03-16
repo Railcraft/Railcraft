@@ -11,6 +11,7 @@ package mods.railcraft.common.util.network;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
@@ -35,9 +36,11 @@ public class PacketTileRequest extends RailcraftPacket {
     @Override
     public void writeData(DataOutputStream data) throws IOException {
         data.writeInt(tile.getWorld().provider.getDimensionId());
-        data.writeInt(tile.xCoord);
-        data.writeInt(tile.yCoord);
-        data.writeInt(tile.zCoord);
+
+        BlockPos pos = tile.getPos();
+        data.writeInt(pos.getX());
+        data.writeInt(pos.getY());
+        data.writeInt(pos.getZ());
     }
 
     @Override
@@ -50,7 +53,7 @@ public class PacketTileRequest extends RailcraftPacket {
         int y = data.readInt();
         int z = data.readInt();
 
-        tile = world.getTileEntity(x, y, z);
+        tile = world.getTileEntity(new BlockPos(x, y, z));
 
         if (tile instanceof RailcraftTileEntity && player != null)
             PacketDispatcher.sendToPlayer(new PacketTileEntity((RailcraftTileEntity) tile), player);

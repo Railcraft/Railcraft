@@ -10,6 +10,7 @@ package mods.railcraft.common.util.network;
 
 import io.netty.buffer.Unpooled;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 import java.io.ByteArrayOutputStream;
@@ -48,7 +49,7 @@ public abstract class RailcraftPacket {
         } catch (IOException e) {
             Game.logThrowable("Error constructing packet: {0}", e, getClass());
         }
-        return new FMLProxyPacket(Unpooled.wrappedBuffer(bytes.toByteArray()), CHANNEL_NAME);
+        return new FMLProxyPacket(new PacketBuffer(Unpooled.wrappedBuffer(bytes.toByteArray())), CHANNEL_NAME);
     }
 
     public abstract void writeData(DataOutputStream data) throws IOException;

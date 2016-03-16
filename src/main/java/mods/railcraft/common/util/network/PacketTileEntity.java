@@ -11,9 +11,11 @@ package mods.railcraft.common.util.network;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackFactory;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,7 +37,7 @@ public class PacketTileEntity extends RailcraftPacket {
 //        System.out.println("Created Tile Packet: " + tile.getClass().getSimpleName());
     }
 
-//    @Override
+    //    @Override
 //    public FMLProxyPacket getPacket() {
 //        Packet pkt = super.getPacket();
 //        pkt.isChunkDataPacket = true;
@@ -43,9 +45,10 @@ public class PacketTileEntity extends RailcraftPacket {
 //    }
     @Override
     public void writeData(DataOutputStream data) throws IOException {
-        data.writeInt(tile.xCoord);
-        data.writeInt(tile.yCoord);
-        data.writeInt(tile.zCoord);
+        BlockPos pos = tile.getPos();
+        data.writeInt(pos.getX());
+        data.writeInt(pos.getY());
+        data.writeInt(pos.getZ());
         data.writeShort(tile.getId());
         tile.writePacketData(data);
     }
@@ -63,13 +66,14 @@ public class PacketTileEntity extends RailcraftPacket {
         int y = data.readInt();
         int z = data.readInt();
         short id = data.readShort();
+        BlockPos pos = new BlockPos(x, y, z);
 
-        if (id < 0 || y < 0 || !world.blockExists(x, y, z)) {
+        if (id < 0 || y < 0 || !WorldPlugin.isBlockLoaded(world, pos)) {
 //            Game.logDebug("Receive Tile Packet: Block not found");
             return;
         }
 
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(pos);
 
         if (te instanceof RailcraftTileEntity) {
             tile = (RailcraftTileEntity) te;
@@ -79,14 +83,14 @@ public class PacketTileEntity extends RailcraftPacket {
             tile = null;
 
         if (tile == null) {
-            Block block = world.getBlock(x, y, z);
+            Block block = WorldPlugin.getBlock(world, pos);
             Block blockTrack = RailcraftBlocks.getBlockTrack();
             if (blockTrack != null && blockTrack == block) {
                 tile = TrackFactory.makeTrackTile(id);
-                world.setTileEntity(x, y, z, tile);
+                world.setTileEntity(pos, tile);
             } else {
-                world.removeTileEntity(x, y, z);
-                te = world.getTileEntity(x, y, z);
+                world.removeTileEntity(pos);
+                te = world.getTileEntity(pos);
                 if (te instanceof RailcraftTileEntity)
                     tile = (RailcraftTileEntity) te;
             }
@@ -94,7 +98,7 @@ public class PacketTileEntity extends RailcraftPacket {
 
         if (tile == null)
             return;
-        
+
 //        Game.logDebug("Receive Tile Packet: {0}", tile.getClass().toString());
 
         try {

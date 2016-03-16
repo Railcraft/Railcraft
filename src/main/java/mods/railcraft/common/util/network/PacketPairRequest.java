@@ -13,6 +13,7 @@ import mods.railcraft.common.blocks.signals.ISignalBlockTile;
 import mods.railcraft.common.blocks.signals.SignalBlock;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
@@ -39,9 +40,10 @@ public class PacketPairRequest extends RailcraftPacket {
     public void writeData(DataOutputStream data) throws IOException {
         TileEntity tile = pairing.getTile();
         data.writeInt(tile.getWorld().provider.getDimensionId());
-        data.writeInt(tile.xCoord);
-        data.writeInt(tile.yCoord);
-        data.writeInt(tile.zCoord);
+        BlockPos pos = tile.getPos();
+        data.writeInt(pos.getX());
+        data.writeInt(pos.getY());
+        data.writeInt(pos.getZ());
     }
 
     @Override
@@ -54,7 +56,7 @@ public class PacketPairRequest extends RailcraftPacket {
         int y = data.readInt();
         int z = data.readInt();
 
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 
         switch (packetType) {
             case CONTROLLER_REQUEST:

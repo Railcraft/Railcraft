@@ -11,6 +11,7 @@ package mods.railcraft.common.util.network;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
@@ -44,9 +45,10 @@ public class PacketGuiReturn extends RailcraftPacket {
         if (obj instanceof TileEntity) {
             TileEntity tile = (TileEntity) obj;
             data.writeBoolean(true);
-            data.writeInt(tile.xCoord);
-            data.writeInt(tile.yCoord);
-            data.writeInt(tile.zCoord);
+            BlockPos pos = tile.getPos();
+            data.writeInt(pos.getX());
+            data.writeInt(pos.getY());
+            data.writeInt(pos.getZ());
         } else if (obj instanceof Entity) {
             Entity entity = (Entity) obj;
             data.writeBoolean(false);
@@ -68,7 +70,7 @@ public class PacketGuiReturn extends RailcraftPacket {
             int y = data.readInt();
             int z = data.readInt();
 
-            TileEntity t = world.getTileEntity(x, y, z);
+            TileEntity t = world.getTileEntity(new BlockPos(x, y, z));
 
             if (t instanceof IGuiReturnHandler)
                 ((IGuiReturnHandler) t).readGuiData(data, sender);

@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.signals.ISignalBlockTile;
 import mods.railcraft.common.blocks.signals.SignalBlock;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,16 +39,17 @@ public class PacketPairUpdate extends RailcraftPacket {
 
     @Override
     public void writeData(DataOutputStream data) throws IOException {
-        data.writeInt(pairing.getTile().xCoord);
-        data.writeInt(pairing.getTile().yCoord);
-        data.writeInt(pairing.getTile().zCoord);
+        BlockPos pos = pairing.getCoords();
+        data.writeInt(pos.getX());
+        data.writeInt(pos.getY());
+        data.writeInt(pos.getZ());
 
         Collection<WorldCoordinate> pairs = pairing.getPairs();
         data.writeByte(pairs.size());
         for (WorldCoordinate coord : pairs) {
-            data.writeInt(coord.x);
-            data.writeInt(coord.y);
-            data.writeInt(coord.z);
+            data.writeInt(coord.getX());
+            data.writeInt(coord.getY());
+            data.writeInt(coord.getZ());
         }
     }
 
@@ -55,11 +57,13 @@ public class PacketPairUpdate extends RailcraftPacket {
     @SideOnly(Side.CLIENT)
     public void readData(DataInputStream data) throws IOException {
         World world = Game.getWorld();
+        if (world == null)
+            return;
         int x = data.readInt();
         int y = data.readInt();
         int z = data.readInt();
 
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 
         if (packetType == PacketType.CONTROLLER_UPDATE) {
             if (tile instanceof IControllerTile)
