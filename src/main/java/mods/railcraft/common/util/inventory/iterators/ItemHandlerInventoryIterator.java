@@ -18,7 +18,7 @@ import java.util.Iterator;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemHandlerInventoryIterator extends InventoryIterator<ItemHandlerInventoryIterator.InvSlot> {
+public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
 
     private final IItemHandler inv;
 
@@ -27,8 +27,8 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<ItemHandlerI
     }
 
     @Override
-    public Iterator<InvSlot> iterator() {
-        return new Iterator<InvSlot>() {
+    public Iterator<IInvSlot> iterator() {
+        return new Iterator<IInvSlot>() {
             int slot = 0;
 
             @Override
@@ -37,7 +37,7 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<ItemHandlerI
             }
 
             @Override
-            public InvSlot next() {
+            public IInvSlot next() {
                 return new InvSlot(slot++);
             }
 
@@ -49,7 +49,7 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<ItemHandlerI
         };
     }
 
-    public class InvSlot implements IInvSlot {
+    private class InvSlot implements IInvSlot {
 
         protected final int slot;
 

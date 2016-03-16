@@ -11,8 +11,8 @@ package mods.railcraft.common.util.inventory.manipulators;
 
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
-import mods.railcraft.common.util.inventory.iterators.StandardInventoryIterator;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class StandardInventoryManipulator extends InventoryManipulator<StandardInventoryIterator.InvSlot> {
+public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSlot> {
 
     private final IInventory inv;
 
@@ -32,7 +32,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<StandardI
     }
 
     @Override
-    public Iterator<StandardInventoryIterator.InvSlot> iterator() {
+    public Iterator<IExtInvSlot> iterator() {
         return InventoryIterator.getIterable(inv).iterator();
     }
 
@@ -40,9 +40,9 @@ public class StandardInventoryManipulator extends InventoryManipulator<StandardI
         if (stack == null || stack.stackSize <= 0)
             return null;
         stack = stack.copy();
-        List<StandardInventoryIterator.InvSlot> filledSlots = new ArrayList<StandardInventoryIterator.InvSlot>(inv.getSizeInventory());
-        List<StandardInventoryIterator.InvSlot> emptySlots = new ArrayList<StandardInventoryIterator.InvSlot>(inv.getSizeInventory());
-        for (StandardInventoryIterator.InvSlot slot : this) {
+        List<IExtInvSlot> filledSlots = new ArrayList<IExtInvSlot>(inv.getSizeInventory());
+        List<IExtInvSlot> emptySlots = new ArrayList<IExtInvSlot>(inv.getSizeInventory());
+        for (IExtInvSlot slot : this) {
             if (slot.canPutStackInSlot(stack))
                 if (slot.getStackInSlot() == null)
                     emptySlots.add(slot);
@@ -59,10 +59,10 @@ public class StandardInventoryManipulator extends InventoryManipulator<StandardI
         return stack;
     }
 
-    private int tryPut(List<StandardInventoryIterator.InvSlot> slots, ItemStack stack, int injected, boolean doAdd) {
+    private int tryPut(List<IExtInvSlot> slots, ItemStack stack, int injected, boolean doAdd) {
         if (injected >= stack.stackSize)
             return injected;
-        for (StandardInventoryIterator.InvSlot slot : slots) {
+        for (IExtInvSlot slot : slots) {
             ItemStack stackInSlot = slot.getStackInSlot();
             if (stackInSlot == null || InvTools.isItemEqual(stackInSlot, stack)) {
                 int used = addToSlot(slot, stack, stack.stackSize - injected, doAdd);
@@ -80,7 +80,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<StandardI
      * @param available Amount we can move
      * @return Return the number of items moved.
      */
-    private int addToSlot(StandardInventoryIterator.InvSlot slot, ItemStack stack, int available, boolean doAdd) {
+    private int addToSlot(IExtInvSlot slot, ItemStack stack, int available, boolean doAdd) {
         int max = Math.min(stack.getMaxStackSize(), inv.getInventoryStackLimit());
 
         ItemStack stackInSlot = slot.getStackInSlot();
@@ -115,7 +115,7 @@ public class StandardInventoryManipulator extends InventoryManipulator<StandardI
     protected List<ItemStack> removeItem(IStackFilter filter, int maxAmount, boolean doRemove) {
         int amountNeeded = maxAmount;
         List<ItemStack> outputList = new ArrayList<ItemStack>();
-        for (StandardInventoryIterator.InvSlot slot : this) {
+        for (IExtInvSlot slot : this) {
             if (amountNeeded <= 0)
                 break;
             ItemStack stack = slot.getStackInSlot();

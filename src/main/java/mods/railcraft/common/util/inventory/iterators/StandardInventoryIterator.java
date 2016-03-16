@@ -18,7 +18,7 @@ import java.util.Iterator;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class StandardInventoryIterator extends InventoryIterator<StandardInventoryIterator.InvSlot> {
+public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
 
     private final IInventory inv;
     private final int invSize;
@@ -29,8 +29,8 @@ public class StandardInventoryIterator extends InventoryIterator<StandardInvento
     }
 
     @Override
-    public Iterator<InvSlot> iterator() {
-        return new Iterator<InvSlot>() {
+    public Iterator<IExtInvSlot> iterator() {
+        return new Iterator<IExtInvSlot>() {
             int slot = 0;
 
             @Override
@@ -39,7 +39,7 @@ public class StandardInventoryIterator extends InventoryIterator<StandardInvento
             }
 
             @Override
-            public InvSlot next() {
+            public IExtInvSlot next() {
                 return new InvSlot(slot++);
             }
 
@@ -51,7 +51,7 @@ public class StandardInventoryIterator extends InventoryIterator<StandardInvento
         };
     }
 
-    public class InvSlot implements IInvSlot {
+    class InvSlot implements IExtInvSlot {
 
         protected final int slot;
 
@@ -64,6 +64,7 @@ public class StandardInventoryIterator extends InventoryIterator<StandardInvento
             return inv.getStackInSlot(slot);
         }
 
+        @Override
         public void setStackInSlot(ItemStack stack) {
             inv.setInventorySlotContents(slot, stack);
         }

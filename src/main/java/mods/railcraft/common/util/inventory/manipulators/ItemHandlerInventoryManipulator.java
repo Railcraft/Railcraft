@@ -12,7 +12,6 @@ package mods.railcraft.common.util.inventory.manipulators;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
-import mods.railcraft.common.util.inventory.iterators.ItemHandlerInventoryIterator;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
@@ -23,7 +22,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemHandlerInventoryManipulator extends InventoryManipulator<ItemHandlerInventoryIterator.InvSlot> {
+public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSlot> {
 
     private final IItemHandler inv;
 
@@ -32,7 +31,7 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<ItemHa
     }
 
     @Override
-    public Iterator<ItemHandlerInventoryIterator.InvSlot> iterator() {
+    public Iterator<IInvSlot> iterator() {
         return InventoryIterator.getIterable(inv).iterator();
     }
 

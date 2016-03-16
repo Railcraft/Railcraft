@@ -22,17 +22,17 @@ import java.util.List;
  */
 public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<T> {
 
-    public static StandardInventoryIterator getIterable(IInventory inv) {
+    public static InventoryIterator<IExtInvSlot> getIterable(IInventory inv) {
         if (inv instanceof ISidedInventory)
             return new SidedInventoryIterator((ISidedInventory) inv);
         return new StandardInventoryIterator(inv);
     }
 
-    public static ItemHandlerInventoryIterator getIterable(IItemHandler inv) {
+    public static InventoryIterator<IInvSlot> getIterable(IItemHandler inv) {
         return new ItemHandlerInventoryIterator(inv);
     }
 
-    public static InventoryIterator getIterable(InventoryObject inv) {
+    public static InventoryIterator<? extends IInvSlot> getIterable(InventoryObject inv) {
         if (inv.getObject() instanceof ISidedInventory)
             return new SidedInventoryIterator((ISidedInventory) inv.getObject());
         if (inv.getObject() instanceof IInventory)

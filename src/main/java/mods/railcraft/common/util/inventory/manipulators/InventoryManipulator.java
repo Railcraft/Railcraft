@@ -10,6 +10,7 @@ package mods.railcraft.common.util.inventory.manipulators;
 
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.common.util.inventory.InventoryObject;
+import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -22,15 +23,15 @@ import java.util.List;
  */
 public abstract class InventoryManipulator<T extends IInvSlot> implements Iterable<T> {
 
-    public static StandardInventoryManipulator get(IInventory inv) {
+    public static InventoryManipulator<IExtInvSlot> get(IInventory inv) {
         return new StandardInventoryManipulator(inv);
     }
 
-    public static ItemHandlerInventoryManipulator get(IItemHandler inv) {
+    public static InventoryManipulator<IInvSlot> get(IItemHandler inv) {
         return new ItemHandlerInventoryManipulator(inv);
     }
 
-    public static InventoryManipulator get(InventoryObject inv) {
+    public static InventoryManipulator<? extends IInvSlot> get(InventoryObject inv) {
         if (inv.getObject() instanceof IInventory)
             return new StandardInventoryManipulator((IInventory) inv.getObject());
         if (inv.getObject() instanceof IItemHandler)

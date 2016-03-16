@@ -14,9 +14,9 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.filters.ArrayStackFilter;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
-import mods.railcraft.common.util.inventory.iterators.StandardInventoryIterator;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.inventory.wrappers.ChestWrapper;
 import mods.railcraft.common.util.inventory.wrappers.SidedInventoryMapper;
@@ -248,7 +248,7 @@ public abstract class InvTools {
 
     public static void dropInventory(IInventory inv, World world, BlockPos pos) {
         if (Game.isNotHost(world)) return;
-        for (StandardInventoryIterator.InvSlot slot : InventoryIterator.getIterable(inv)) {
+        for (IExtInvSlot slot : InventoryIterator.getIterable(inv)) {
             spewItem(slot.getStackInSlot(), world, pos);
             slot.setStackInSlot(null);
         }
