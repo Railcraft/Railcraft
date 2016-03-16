@@ -13,7 +13,7 @@ package mods.railcraft.common.util.inventory.iterators;
 import net.minecraft.item.ItemStack;
 
 /**
- * This interface extends IInvSlot by allowing you modify a slot directly.
+ * This interface extends IInvSlot by allowing you to modify a slot directly.
  * This is only valid on inventories backed by IInventory.
  * <p/>
  * <p/>
