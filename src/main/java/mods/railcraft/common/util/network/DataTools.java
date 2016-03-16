@@ -11,7 +11,6 @@ package mods.railcraft.common.util.network;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.io.DataInputStream;
@@ -21,7 +20,6 @@ import java.util.Arrays;
 import java.util.BitSet;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class DataTools {
@@ -36,7 +34,7 @@ public class DataTools {
             NBTTagCompound nbt = null;
 
             if (stack.getItem().isDamageable() || stack.getItem().getShareTag())
-                nbt = stack.stackTagCompound;
+                nbt = stack.getTagCompound();
 
             writeNBT(nbt, dataStream);
         }
@@ -50,32 +48,22 @@ public class DataTools {
             byte stackSize = dataStream.readByte();
             short damage = dataStream.readShort();
             stack = new ItemStack(Item.getItemById(id), stackSize, damage);
-            stack.stackTagCompound = readNBT(dataStream);
+            stack.setTagCompound(readNBT(dataStream));
         }
 
         return stack;
     }
 
     public static void writeNBT(NBTTagCompound nbt, DataOutputStream dataStream) throws IOException {
-        if (nbt == null)
-            dataStream.writeShort(-1);
-        else {
-            byte[] nbtData = CompressedStreamTools.compress(nbt);
-            dataStream.writeShort((short) nbtData.length);
-            dataStream.write(nbtData);
-        }
+        dataStream.writeBoolean(nbt != null);
+        if (nbt != null)
+            CompressedStreamTools.writeCompressed(nbt, dataStream);
     }
 
     public static NBTTagCompound readNBT(DataInputStream dataStream) throws IOException {
-        short lenght = dataStream.readShort();
-
-        if (lenght < 0)
-            return null;
-        else {
-            byte[] nbtData = new byte[lenght];
-            dataStream.read(nbtData);
-            return CompressedStreamTools.func_152457_a(nbtData, new NBTSizeTracker(2097152L));
-        }
+        if (dataStream.readBoolean())
+            return CompressedStreamTools.read(dataStream);
+        return null;
     }
 
     public static void byteArray2BitSet(BitSet bits, byte[] bytes) {
