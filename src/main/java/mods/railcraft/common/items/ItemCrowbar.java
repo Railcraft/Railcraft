@@ -10,20 +10,6 @@ package mods.railcraft.common.items;
 
 import buildcraft.api.tools.IToolWrench;
 import ic2.api.item.IBoxable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
-import net.minecraft.world.World;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -32,14 +18,24 @@ import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.*;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench {
 
@@ -54,7 +50,6 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
             item = new ItemCrowbar(ToolMaterial.IRON);
             item.setUnlocalizedName(ITEM_TAG);
             RailcraftRegistry.register(item);
-            HarvestPlugin.setToolClass(item, "crowbar", 0);
 
             CraftingPlugin.addShapedRecipe(new ItemStack(item),
                     " RI",
@@ -80,13 +75,22 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
 
     protected ItemCrowbar(ToolMaterial material) {
         super(3, material, new HashSet<Block>(Arrays.asList(new Block[]{
-            Blocks.rail, Blocks.detector_rail, Blocks.golden_rail, Blocks.activator_rail
+                Blocks.rail, Blocks.detector_rail, Blocks.golden_rail, Blocks.activator_rail
         })));
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         shiftRotations.add(BlockLever.class);
         shiftRotations.add(BlockButton.class);
         shiftRotations.add(BlockChest.class);
         bannedRotations.add(BlockRailBase.class);
+
+        setHarvestLevel("crowbar", 2);
+    }
+
+    @Override
+    public float getDigSpeed(ItemStack stack, Block block, int meta) {
+        if (TrackTools.isRailBlock(block))
+            return efficiencyOnProperMaterial;
+        return super.getDigSpeed(stack, block, meta);
     }
 
     @Override
@@ -220,7 +224,7 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
     }
 
     private void removeAndDrop(World world, int x, int y, int z, Block block) {
-    	int meta = WorldPlugin.getBlockMetadata(world, x, y, z);
+        int meta = WorldPlugin.getBlockMetadata(world, x, y, z);
         List<ItemStack> drops = block.getDrops(world, x, y, z, meta, 0);
         InvTools.dropItems(drops, world, x, y, z);
         world.setBlockToAir(x, y, z);

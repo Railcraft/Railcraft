@@ -8,25 +8,20 @@
  */
 package mods.railcraft.common.blocks;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import java.util.Arrays;
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.MachineProxyAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.MachineProxyBeta;
-import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
-import mods.railcraft.common.blocks.machine.gamma.MachineProxyGamma;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.delta.MachineProxyDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.epsilon.MachineProxyEpsilon;
-import mods.railcraft.common.blocks.signals.*;
+import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
+import mods.railcraft.common.blocks.machine.gamma.MachineProxyGamma;
+import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
+import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
@@ -36,7 +31,12 @@ import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import net.minecraft.init.Items;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 public class RailcraftBlocks {
 
@@ -54,8 +54,6 @@ public class RailcraftBlocks {
             int renderId = Railcraft.getProxy().getRenderId();
             blockTrack = new BlockTrack(renderId).setBlockName("railcraft.track");
             RailcraftRegistry.register(blockTrack, ItemTrack.class);
-            blockTrack.setHarvestLevel("crowbar", 0);
-            blockTrack.setHarvestLevel("pickaxe", 0);
         }
     }
 
@@ -69,7 +67,6 @@ public class RailcraftBlocks {
             blockRailElevator = new BlockTrackElevator(renderId).setBlockName("railcraft.track.elevator");
             RailcraftRegistry.register(blockRailElevator, ItemBlockRailcraft.class);
             blockRailElevator.setHarvestLevel("crowbar", 0);
-            blockRailElevator.setHarvestLevel("pickaxe", 0);
             ItemStack stackElevator = new ItemStack(blockRailElevator, 8);
             CraftingPlugin.addShapedRecipe(stackElevator,
                     "IRI",
@@ -97,16 +94,16 @@ public class RailcraftBlocks {
                     case FEED_STATION:
                     case TANK_WATER:
                         blockMachineAlpha.setHarvestLevel("axe", 1, type.ordinal());
-                        blockMachineAlpha.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineAlpha.setHarvestLevel("crowbar", 0, type.ordinal());
                         break;
                     case WORLD_ANCHOR:
                     case PERSONAL_ANCHOR:
                         blockMachineAlpha.setHarvestLevel("pickaxe", 3, type.ordinal());
-                        blockMachineAlpha.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineAlpha.setHarvestLevel("crowbar", 0, type.ordinal());
                         break;
                     default:
                         blockMachineAlpha.setHarvestLevel("pickaxe", 2, type.ordinal());
-                        blockMachineAlpha.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineAlpha.setHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
         }
@@ -144,11 +141,11 @@ public class RailcraftBlocks {
                 switch (type) {
                     case SENTINEL:
                         blockMachineBeta.setHarvestLevel("pickaxe", 3, type.ordinal());
-                        blockMachineBeta.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineBeta.setHarvestLevel("crowbar", 0, type.ordinal());
                         break;
                     default:
                         blockMachineBeta.setHarvestLevel("pickaxe", 2, type.ordinal());
-                        blockMachineBeta.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineBeta.setHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
         }
@@ -174,7 +171,7 @@ public class RailcraftBlocks {
                 switch (type) {
                     default:
                         blockMachineGamma.setHarvestLevel("pickaxe", 2, type.ordinal());
-                        blockMachineGamma.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineGamma.setHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
         }
@@ -200,7 +197,7 @@ public class RailcraftBlocks {
                 switch (type) {
                     default:
                         blockMachineDelta.setHarvestLevel("pickaxe", 2, type.ordinal());
-                        blockMachineDelta.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineDelta.setHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
         }
@@ -222,7 +219,7 @@ public class RailcraftBlocks {
                 switch (type) {
                     default:
                         blockMachineEpsilon.setHarvestLevel("pickaxe", 2, type.ordinal());
-                        blockMachineEpsilon.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineEpsilon.setHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
         }

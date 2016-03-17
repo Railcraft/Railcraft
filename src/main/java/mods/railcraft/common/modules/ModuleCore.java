@@ -29,6 +29,7 @@ import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.blocks.signals.EnumSignal;
+import mods.railcraft.common.blocks.tracks.BlockTrack;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.commands.CommandDebug;
 import mods.railcraft.common.core.Railcraft;
@@ -215,14 +216,11 @@ public class ModuleCore extends RailcraftModule {
         LootPlugin.addLootRailway(new ItemStack(Blocks.rail), 8, 32, "track.basic");
         LootPlugin.addLootRailway(EnumCart.HOPPER.getCartItem(), 1, 1, "cart.hopper");
 
-        Blocks.rail.setHarvestLevel("pickaxe", 0);
-        Blocks.rail.setHarvestLevel("crowbar", 0);
-        Blocks.golden_rail.setHarvestLevel("pickaxe", 0);
-        Blocks.golden_rail.setHarvestLevel("crowbar", 0);
-        Blocks.detector_rail.setHarvestLevel("pickaxe", 0);
-        Blocks.detector_rail.setHarvestLevel("crowbar", 0);
-        Blocks.activator_rail.setHarvestLevel("pickaxe", 0);
-        Blocks.activator_rail.setHarvestLevel("crowbar", 0);
+        float h = BlockTrack.HARDNESS;
+        Blocks.rail.setHardness(h).setHarvestLevel("crowbar", 0);
+        Blocks.golden_rail.setHardness(h).setHarvestLevel("crowbar", 0);
+        Blocks.detector_rail.setHardness(h).setHarvestLevel("crowbar", 0);
+        Blocks.activator_rail.setHardness(h).setHarvestLevel("crowbar", 0);
 
         // Define Recipes
         if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
@@ -230,7 +228,7 @@ public class ModuleCore extends RailcraftModule {
                     "I I",
                     "III",
                     'I', "ingotBronze",});
-            CraftingManager.getInstance().getRecipeList().add(recipe);
+            CraftingPlugin.addRecipe(recipe);
         }
 
         if (RailcraftConfig.getRecipeConfig("railcraft.cart.steel")) {
@@ -238,7 +236,7 @@ public class ModuleCore extends RailcraftModule {
                     "I I",
                     "III",
                     'I', "ingotSteel",});
-            CraftingManager.getInstance().getRecipeList().add(recipe);
+            CraftingPlugin.addRecipe(recipe);
         }
 
         // Old rails

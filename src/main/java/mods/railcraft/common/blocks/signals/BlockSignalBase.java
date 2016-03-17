@@ -37,7 +37,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
         setStepSound(Block.soundTypeMetal);
         setResistance(50);
         setCreativeTab(CreativeTabs.tabTransport);
-        setHarvestLevel("pickaxe", 2);
+//        setHarvestLevel("pickaxe", 2);
         setHarvestLevel("crowbar", 0);
     }
 

@@ -10,19 +10,7 @@ package mods.railcraft.common.blocks.aesthetics.cube;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import java.util.List;
-import java.util.Random;
-
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -31,10 +19,21 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.List;
+import java.util.Random;
 
 public class BlockCube extends Block {
 
@@ -85,9 +84,7 @@ public class BlockCube extends Block {
         setHarvestLevel("pickaxe", 1, EnumCube.ABYSSAL_STONE.ordinal());
         setHarvestLevel("pickaxe", 2, EnumCube.STEEL_BLOCK.ordinal());
         setHarvestLevel("pickaxe", 1, EnumCube.CONCRETE_BLOCK.ordinal());
-        setHarvestLevel("crowbar", 0, EnumCube.CONCRETE_BLOCK.ordinal());
         setHarvestLevel("axe", 0, EnumCube.CREOSOTE_BLOCK.ordinal());
-        setHarvestLevel("crowbar", 0, EnumCube.CREOSOTE_BLOCK.ordinal());
         setHarvestLevel("shovel", 3, EnumCube.CRUSHED_OBSIDIAN.ordinal());
     }
 
