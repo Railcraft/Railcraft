@@ -10,13 +10,11 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemCrowbarReinforced extends ItemCrowbar {
@@ -29,7 +27,6 @@ public class ItemCrowbarReinforced extends ItemCrowbar {
             item = new ItemCrowbarReinforced();
             item.setUnlocalizedName(ITEM_TAG);
             RailcraftRegistry.register(item);
-            HarvestPlugin.setToolClass(item, "crowbar", 0);
 
             CraftingPlugin.addShapedRecipe(new ItemStack(item),
                     " RI",

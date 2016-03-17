@@ -50,7 +50,6 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
             item = new ItemCrowbar(ToolMaterial.IRON);
             item.setUnlocalizedName(ITEM_TAG);
             RailcraftRegistry.register(item);
-            HarvestPlugin.setToolClass(item, "crowbar", 0);
 
             CraftingPlugin.addShapedRecipe(new ItemStack(item),
                     " RI",
@@ -59,8 +58,8 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
                     'I', "ingotIron",
                     'R', "dyeRed");
 
-            LootPlugin.addLootTool(new ItemStack(item), 1, 1, ITEM_TAG);
-            LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, ITEM_TAG);
+            LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.TOOL, ITEM_TAG);
+            LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.WORKSHOP, ITEM_TAG);
         }
     }
 
@@ -79,6 +78,8 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
         shiftRotations.add(BlockButton.class);
         shiftRotations.add(BlockChest.class);
         bannedRotations.add(BlockRailBase.class);
+
+        setHarvestLevel("crowbar", 0);
     }
 
     @Override

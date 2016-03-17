@@ -10,16 +10,15 @@ package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCrowbar;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import thaumcraft.api.IRepairable;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.IArcaneRecipe;
+import thaumcraft.api.items.IRepairable;
 import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 
@@ -40,7 +39,6 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
             item = new ItemCrowbarMagic();
             RailcraftRegistry.register(item);
-            HarvestPlugin.setToolClass(item, "crowbar", 0);
         }
     }
 
@@ -57,7 +55,7 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
                     'R', "dyeRed");
 
             AspectList aspects = new AspectList();
-            aspects.add(Aspect.TOOL, 1).add(Aspect.MECHANISM, 2).add(Aspect.TRAVEL, 1);
+            aspects.add(Aspect.TOOL, 1).add(Aspect.MECHANISM, 2).add(Aspect.METAL, 1);
 
             ResearchItem thaumiumCrowbar = new ResearchItemRC(RESEARCH_TAG, ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 0, 0, 3, new ItemStack(item));
             thaumiumCrowbar.setPages(ThaumcraftPlugin.getResearchPage(RESEARCH_TAG), new ResearchPage(recipe))
