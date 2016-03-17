@@ -65,7 +65,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
                 RailcraftRegistry.register(stack);
             }
 
-            HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
+//            HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
             HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.WOOD), "axe", 0);
             HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.STONE), "pickaxe", 1);
             HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.METAL_UNPAINTED), "pickaxe", 2);

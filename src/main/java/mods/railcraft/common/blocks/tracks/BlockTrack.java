@@ -49,6 +49,8 @@ import java.util.*;
 
 public class BlockTrack extends BlockRailBase implements IPostConnection {
 
+    public static final float HARDNESS = 2F;
+
     protected final int renderType;
 
     public BlockTrack(int modelID) {
@@ -56,9 +58,12 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
         renderType = modelID;
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
         setResistance(3.5F);
-        setHardness(1.05F);
+        setHardness(HARDNESS);
         setStepSound(soundTypeMetal);
         setCreativeTab(CreativeTabs.tabTransport);
+        setHarvestLevel("crowbar", 0);
+
+
         GameRegistry.registerTileEntity(TileTrack.class, "RailcraftTrackTile");
         GameRegistry.registerTileEntity(TileTrackTESR.class, "RailcraftTrackTESRTile");
 

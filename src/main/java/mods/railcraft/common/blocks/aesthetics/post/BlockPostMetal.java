@@ -65,7 +65,7 @@ public class BlockPostMetal extends BlockPostBase {
         block.setRegistryName("railcraft." + tag);
         RailcraftRegistry.register(block, ItemPostMetal.class);
 
-        HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
+//        HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
         HarvestPlugin.setHarvestLevel(block, "pickaxe", 2);
 
         ForestryPlugin.addBackpackItem("builder", block);

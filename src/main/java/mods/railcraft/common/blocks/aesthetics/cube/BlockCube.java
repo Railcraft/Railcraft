@@ -62,9 +62,7 @@ public class BlockCube extends Block {
         setHarvestLevel("pickaxe", 1, EnumCube.ABYSSAL_STONE.ordinal());
         setHarvestLevel("pickaxe", 2, EnumCube.STEEL_BLOCK.ordinal());
         setHarvestLevel("pickaxe", 1, EnumCube.CONCRETE_BLOCK.ordinal());
-        setHarvestLevel("crowbar", 0, EnumCube.CONCRETE_BLOCK.ordinal());
         setHarvestLevel("axe", 0, EnumCube.CREOSOTE_BLOCK.ordinal());
-        setHarvestLevel("crowbar", 0, EnumCube.CREOSOTE_BLOCK.ordinal());
         setHarvestLevel("shovel", 3, EnumCube.CRUSHED_OBSIDIAN.ordinal());
     }
 

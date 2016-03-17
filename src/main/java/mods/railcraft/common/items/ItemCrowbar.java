@@ -79,7 +79,14 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
         shiftRotations.add(BlockChest.class);
         bannedRotations.add(BlockRailBase.class);
 
-        setHarvestLevel("crowbar", 0);
+        setHarvestLevel("crowbar", 2);
+    }
+
+    @Override
+    public float getDigSpeed(ItemStack stack, IBlockState state) {
+        if (TrackTools.isRailBlock(state))
+            return efficiencyOnProperMaterial;
+        return super.getDigSpeed(stack, state);
     }
 
     @Override

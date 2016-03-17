@@ -30,6 +30,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SuppressWarnings("unused")
 public class CrowbarHandler {
     public static final float SMACK_VELOCITY = 0.07f;
     private static final Map<EntityPlayer, EntityMinecart> linkMap = new MapMaker().weakKeys().weakValues().makeMap();
@@ -63,7 +64,7 @@ public class CrowbarHandler {
 
                 if (crowbar.canLink(thePlayer, stack, cart)) {
                     boolean linkable = cart instanceof ILinkableCart;
-                    if (!linkable || (linkable && ((ILinkableCart) cart).isLinkable())) {
+                    if (!linkable || ((ILinkableCart) cart).isLinkable()) {
                         EntityMinecart last = linkMap.remove(thePlayer);
                         if (last != null && !last.isDead) {
                             LinkageManager lm = LinkageManager.instance();
@@ -89,22 +90,24 @@ public class CrowbarHandler {
                 } else if (crowbar.canBoost(thePlayer, stack, cart)) {
                     thePlayer.addExhaustion(1F);
 
+                    //noinspection StatementWithEmptyBody
                     if (thePlayer.ridingEntity != null) {
                         // NOOP
-                    } else if (cart instanceof EntityTunnelBore) {
-                        // NOOP
-                    } else if (cart instanceof IDirectionalCart)
-                        ((IDirectionalCart) cart).reverse();
-                    else {
-                        if (cart.posX < thePlayer.posX)
-                            cart.motionX -= SMACK_VELOCITY;
-                        else
-                            cart.motionX += SMACK_VELOCITY;
-                        if (cart.posZ < thePlayer.posZ)
-                            cart.motionZ -= SMACK_VELOCITY;
-                        else
-                            cart.motionZ += SMACK_VELOCITY;
-                    }
+                    } else //noinspection StatementWithEmptyBody
+                        if (cart instanceof EntityTunnelBore) {
+                            // NOOP
+                        } else if (cart instanceof IDirectionalCart)
+                            ((IDirectionalCart) cart).reverse();
+                        else {
+                            if (cart.posX < thePlayer.posX)
+                                cart.motionX -= SMACK_VELOCITY;
+                            else
+                                cart.motionX += SMACK_VELOCITY;
+                            if (cart.posZ < thePlayer.posZ)
+                                cart.motionZ -= SMACK_VELOCITY;
+                            else
+                                cart.motionZ += SMACK_VELOCITY;
+                        }
                     crowbar.onBoost(thePlayer, stack, cart);
                 }
             }

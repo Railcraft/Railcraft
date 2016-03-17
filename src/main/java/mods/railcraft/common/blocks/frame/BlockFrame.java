@@ -50,7 +50,7 @@ public class BlockFrame extends Block implements IPostConnection {
                 instance = new BlockFrame(Railcraft.proxy.getRenderId());
                 RailcraftRegistry.register(instance, ItemBlockRailcraft.class);
 
-                HarvestPlugin.setHarvestLevel(instance, "crowbar", 0);
+//                HarvestPlugin.setHarvestLevel(instance, "crowbar", 0);
                 HarvestPlugin.setHarvestLevel(instance, "pickaxe", 1);
 
                 ForestryPlugin.addBackpackItem("builder", instance);
