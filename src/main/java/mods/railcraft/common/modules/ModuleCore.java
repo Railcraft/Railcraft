@@ -148,7 +148,7 @@ public class ModuleCore extends RailcraftModule {
         ItemCrowbarReinforced.registerItem();
         MinecraftForge.EVENT_BUS.register(CrowbarHandler.instance());
 
-        ItemMagnifyingGlass.register();
+        RailcraftItem.magGlass.registerItem();
         RailcraftItem.goggles.registerItem();
         RailcraftItem.overalls.registerItem();
 

@@ -18,14 +18,16 @@ import mods.railcraft.common.blocks.signals.ItemSignalBlockSurveyor;
 import mods.railcraft.common.blocks.signals.ItemSignalTuner;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.fluids.FluidContainers;
-import mods.railcraft.common.items.*;
+import mods.railcraft.common.items.ItemCrowbar;
+import mods.railcraft.common.items.ItemCrowbarReinforced;
+import mods.railcraft.common.items.RailcraftItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMinecart;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = "Forestry")
@@ -45,21 +47,17 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
     public void setup() {
         addItem(ItemCrowbar.getItem());
         addItem(ItemCrowbarReinforced.getItem());
-        addItem(ItemWhistleTuner.getItem());
-        addItem(ItemMagnifyingGlass.getItem());
-        addItem(ItemGoggles.getItem());
         addItem(ItemSignalBlockSurveyor.getItem());
         addItem(ItemSignalTuner.getItem());
-        addItem(RailcraftToolItems.getOveralls());
 
-        for (Object id : Block.blockRegistry.getKeys()) {
+        for (ResourceLocation id : Block.blockRegistry.getKeys()) {
             Block block = Block.blockRegistry.getObject(id);
             if (block == null) continue;
             if (TrackTools.isRailBlock(block))
                 addItem(block);
         }
 
-        for (Object id : Item.itemRegistry.getKeys()) {
+        for (ResourceLocation id : Item.itemRegistry.getKeys()) {
             Item item = Item.itemRegistry.getObject(id);
             if (item instanceof ItemMinecart || item instanceof IMinecartItem)
                 addItem(item);
@@ -82,6 +80,10 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
         addItem(RailcraftItem.signalLamp);
         addItem(RailcraftItem.circuit);
         addItem(RailcraftItem.signalLabel);
+        addItem(RailcraftItem.whistleTuner);
+        addItem(RailcraftItem.magGlass);
+        addItem(RailcraftItem.goggles);
+        addItem(RailcraftItem.overalls);
 
         addItem(RailcraftBlocks.getBlockMachineGamma());
         addItem(RailcraftBlocks.getBlockElevator());

@@ -27,6 +27,7 @@ public enum RailcraftItem {
     gear(ItemGear.class, "part.gear"),
     ingot(ItemIngot.class, "ingot"),
     nugget(ItemNugget.class, "nugget"),
+    magGlass(ItemMagnifyingGlass.class, "tool.magnifying.glass"),
     overalls(ItemOveralls.class, "armor.overalls"),
     plate(ItemPlate.class, "part.plate"),
     rail(ItemRail.class, "part.rail"),

@@ -15,15 +15,15 @@ import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlock.MultiBlockStateReturn;
 import mods.railcraft.common.blocks.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.signals.TileSignalBase;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
@@ -36,7 +36,6 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlockingItem {
-    public static Item item;
 
     public ItemMagnifyingGlass() {
         setMaxDamage(0);
@@ -44,36 +43,26 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         setUnlocalizedName("railcraft.tool.magnifying.glass");
         setFull3D();
 
-        MinecraftForge.EVENT_BUS.register(this);
-
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
-    public static void register() {
-        if (item == null) {
-            String tag = "tool.magnifying.glass";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemMagnifyingGlass();
-                RailcraftRegistry.register(item);
-
-                CraftingPlugin.addShapedRecipe(new ItemStack(item),
-                        " G",
-                        "S ",
-                        'S', "stickWood",
-                        'G', "paneGlassColorless"
-                );
-
-                LootPlugin.addLootWorkshop(new ItemStack(item), 1, 1, tag);
-            }
-        }
+    @Override
+    public void initItem() {
+        MinecraftForge.EVENT_BUS.register(this);
+        LootPlugin.addLoot(RailcraftItem.magGlass, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
-    public static ItemStack getItem() {
-        if (item == null)
-            return null;
-        return new ItemStack(item);
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
+                " G",
+                "S ",
+                'S', "stickWood",
+                'G', "paneGlassColorless"
+        );
     }
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onEntityInteract(EntityInteractEvent event) {
         EntityPlayer thePlayer = event.entityPlayer;
@@ -96,10 +85,10 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isNotHost(world))
             return false;
-        TileEntity t = world.getTileEntity(x, y, z);
+        TileEntity t = world.getTileEntity(pos);
         boolean returnValue = false;
         if (t instanceof IOwnable) {
             IOwnable ownable = (IOwnable) t;

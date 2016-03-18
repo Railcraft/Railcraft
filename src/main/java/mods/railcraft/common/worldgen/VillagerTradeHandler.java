@@ -12,7 +12,11 @@ import mods.railcraft.common.blocks.signals.ItemSignalBlockSurveyor;
 import mods.railcraft.common.blocks.signals.ItemSignalTuner;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EnumCart;
-import mods.railcraft.common.items.*;
+import mods.railcraft.common.items.ItemCrowbar;
+import mods.railcraft.common.items.ItemCrowbarReinforced;
+import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftToolItems;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
@@ -24,6 +28,7 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
+import org.apache.logging.log4j.Level;
 
 import java.util.Random;
 
@@ -60,12 +65,12 @@ public class VillagerTradeHandler implements IVillageTradeHandler {
         addTrade(recipeList, rand, 0.3F, new Offer(ItemCrowbar.getItem()), new Offer(Items.emerald, 7, 9));
         addTrade(recipeList, rand, 0.1F, new Offer(ItemCrowbarReinforced.getItem()), new Offer(Items.emerald, 14, 18));
 
-        addTrade(recipeList, rand, 0.3F, new Offer(ItemWhistleTuner.getItem()), new Offer(Items.emerald, 1, 2));
-        addTrade(recipeList, rand, 0.3F, new Offer(ItemMagnifyingGlass.getItem()), new Offer(Items.emerald, 1, 2));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItem.whistleTuner), new Offer(Items.emerald, 1, 2));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItem.magGlass), new Offer(Items.emerald, 1, 2));
         addTrade(recipeList, rand, 0.3F, new Offer(ItemSignalBlockSurveyor.getItem()), new Offer(Items.emerald, 6, 8));
         addTrade(recipeList, rand, 0.3F, new Offer(ItemSignalTuner.getItem()), new Offer(Items.emerald, 6, 8));
-        addTrade(recipeList, rand, 0.4F, new Offer(ItemGoggles.getItem()), new Offer(Items.emerald, 4, 8));
-        addTrade(recipeList, rand, 0.5F, new Offer(RailcraftToolItems.getOveralls()), new Offer(Items.emerald, 2, 4));
+        addTrade(recipeList, rand, 0.4F, new Offer(RailcraftItem.goggles), new Offer(Items.emerald, 4, 8));
+        addTrade(recipeList, rand, 0.5F, new Offer(RailcraftItem.overalls), new Offer(Items.emerald, 2, 4));
     }
 
     private class Offer {
@@ -102,25 +107,32 @@ public class VillagerTradeHandler implements IVillageTradeHandler {
             ItemStack buyStack2 = null;
             if (offers.length >= 2)
                 buyStack2 = prepareStack(rand, offers[1]);
-            recipeList.add(new MerchantRecipe(buyStack1, buyStack2, sellStack));
+            if (sellStack != null && buyStack1 != null) {
+                recipeList.add(new MerchantRecipe(buyStack1, buyStack2, sellStack));
+            } else {
+                Game.logTrace(Level.WARN, "Tried to define invalid trade offer for ({0},{1})->{2}, a necessary item was probably disabled. Skipping", buyStack1, buyStack2, sellStack);
+            }
         }
     }
 
     private ItemStack prepareStack(Random rand, Offer offer) throws IllegalArgumentException {
+        if (offer.obj instanceof RailcraftItem) {
+            return ((RailcraftItem) offer.obj).getStack(stackSize(rand, offer));
+        }
         if (offer.obj instanceof ItemStack) {
             ItemStack stack = (ItemStack) offer.obj;
-            stack.stackSize = stackSize(rand, offer.min, offer.max);
+            stack.stackSize = stackSize(rand, offer);
             return stack;
         }
         if (offer.obj instanceof Item)
-            return new ItemStack((Item) offer.obj, stackSize(rand, offer.min, offer.max));
+            return new ItemStack((Item) offer.obj, stackSize(rand, offer));
         if (offer.obj instanceof Block)
-            return new ItemStack((Block) offer.obj, stackSize(rand, offer.min, offer.max));
-        throw new IllegalArgumentException("Unrecongnized object passed to villager trade setup");
+            return new ItemStack((Block) offer.obj, stackSize(rand, offer));
+        return null;
     }
 
-    private int stackSize(Random rand, int min, int max) {
-        return MathHelper.getRandomIntegerInRange(rand, min, max);
+    private int stackSize(Random rand, Offer offer) {
+        return MathHelper.getRandomIntegerInRange(rand, offer.min, offer.max);
     }
 
     private float adjustProbability(float chance) {
