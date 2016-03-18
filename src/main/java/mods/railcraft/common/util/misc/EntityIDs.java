@@ -40,6 +40,7 @@ public class EntityIDs {
     public static final int CART_ENERGY_BATBOX = 87;
     public static final int CART_ENERGY_CESU = 88;
     public static final int CART_ENERGY_MFE = 89;
+    public static final int CART_ENERGY_MFSU = 90;
     // ENTITY ITEMS
     public static final int ENTITY_ITEM_FIRESTONE = 75;
     public static final int ENTITY_ITEM_FIREPROOF = 76;

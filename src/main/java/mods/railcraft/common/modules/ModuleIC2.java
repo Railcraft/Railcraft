@@ -10,6 +10,8 @@ package mods.railcraft.common.modules;
 
 import ic2.api.recipe.Recipes;
 import org.apache.logging.log4j.Level;
+
+import cpw.mods.fml.common.Loader;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,6 +35,7 @@ public class ModuleIC2 extends RailcraftModule {
 
     public static Item lapotronUpgrade;
 //    private static Item creosoteWood;
+    public static boolean classic;
 
     @Override
     public boolean canModuleLoad() {
@@ -46,7 +49,7 @@ public class ModuleIC2 extends RailcraftModule {
 
     @Override
     public void initFirst() {
-
+    	classic = Loader.isModLoaded("IC2-Classic-Spmod");
         BlockDetector.registerBlock();
         RailcraftBlocks.registerBlockMachineGamma();
 
@@ -60,7 +63,8 @@ public class ModuleIC2 extends RailcraftModule {
 
         EnumCart.ENERGY_BATBOX.setup();
         EnumCart.ENERGY_MFE.setup();
-        EnumCart.ENERGY_CESU.setup();
+        if(classic) EnumCart.ENERGY_MFSU.setup();
+        else EnumCart.ENERGY_CESU.setup();
 
 //        id = RailcraftConfig.getItemId("item.creosote.wood");
 //        if(id > 0){
@@ -116,19 +120,40 @@ public class ModuleIC2 extends RailcraftModule {
             }
         }
 
-        ItemStack cesu = IC2Plugin.getItem("cesuUnit");
-        if (cesu != null) {
-            EnumCart cart = EnumCart.ENERGY_CESU;
-            cart.setContents(cesu);
-            ItemStack stack = cart.getCartItem();
-            if (stack != null) {
-                CraftingPlugin.addShapedRecipe(stack, new Object[]{
-                    "E",
-                    "M",
-                    'E', cesu,
-                    'M', Items.minecart
-                });
-                CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
+        if(!classic)
+        {
+            ItemStack cesu = IC2Plugin.getItem("cesuUnit");
+            if (cesu != null) {
+                EnumCart cart = EnumCart.ENERGY_CESU;
+                cart.setContents(cesu);
+                ItemStack stack = cart.getCartItem();
+                if (stack != null) {
+                    CraftingPlugin.addShapedRecipe(stack, new Object[]{
+                        "E",
+                        "M",
+                        'E', cesu,
+                        'M', Items.minecart
+                    });
+                    CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
+                }
+            }
+        }
+        else
+        {
+            ItemStack mfsu = IC2Plugin.getItem("mfsUnit");
+            if (mfsu != null) {
+                EnumCart cart = EnumCart.ENERGY_MFSU;
+                cart.setContents(mfsu);
+                ItemStack stack = cart.getCartItem();
+                if (stack != null) {
+                    CraftingPlugin.addShapedRecipe(stack, new Object[]{
+                        "E",
+                        "M",
+                        'E', mfsu,
+                        'M', Items.minecart
+                    });
+                    CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
+                }
             }
         }
 
