@@ -8,11 +8,7 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.api.signals.IControllerTile;
-import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.api.signals.SignalTools;
-import mods.railcraft.api.signals.SimpleSignalController;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.api.signals.*;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.Level;

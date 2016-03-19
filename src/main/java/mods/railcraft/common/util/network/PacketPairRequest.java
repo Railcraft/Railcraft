@@ -9,8 +9,8 @@
 package mods.railcraft.common.util.network;
 
 import mods.railcraft.api.signals.*;
-import mods.railcraft.common.blocks.signals.ISignalBlockTile;
-import mods.railcraft.common.blocks.signals.SignalBlock;
+import mods.railcraft.api.signals.ISignalBlockTile;
+import mods.railcraft.api.signals.SignalBlock;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;

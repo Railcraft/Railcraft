@@ -8,14 +8,12 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.api.signals.SimpleSignalController;
+import mods.railcraft.api.signals.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

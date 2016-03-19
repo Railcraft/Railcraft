@@ -14,7 +14,7 @@ import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.blocks.signals.ISignalBlockTile;
+import mods.railcraft.api.signals.ISignalBlockTile;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.EnumColor;
