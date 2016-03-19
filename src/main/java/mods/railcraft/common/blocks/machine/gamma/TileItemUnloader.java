@@ -37,7 +37,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
     private final Map<ItemStack, Short> transferedItems = new ItemStackMap<Short>();
     private final Set<ItemStack> checkedItems = new ItemStackSet();
     private final LinkedList<IInventory> chests = new LinkedList<IInventory>();
-    private AdjacentInventoryCache invCache = new AdjacentInventoryCache(this, tileCache, new ITileFilter() {
+    private AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, new ITileFilter() {
         @Override
         public boolean matches(TileEntity tile) {
             return !(tile instanceof TileItemUnloader);

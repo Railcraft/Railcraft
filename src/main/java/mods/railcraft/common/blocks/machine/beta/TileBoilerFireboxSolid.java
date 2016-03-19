@@ -74,7 +74,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
     private IInventory invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
     private IInventory invFuel = new InventoryMapper(this, SLOT_BURN, 4);
     private boolean needsFuel = false;
-    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(this, tileCache, new ITileFilter() {
+    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, new ITileFilter() {
         @Override
         public boolean matches(TileEntity tile) {
             if (tile instanceof TileSteamOven)

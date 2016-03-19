@@ -16,8 +16,6 @@ import net.minecraft.util.EnumFacing;
 
 import java.util.*;
 
-import java.util.*;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -30,11 +28,11 @@ public final class AdjacentInventoryCache {
     private final ITileFilter filter;
     private final EnumSet<EnumFacing> changedSides = EnumSet.allOf(EnumFacing.class);
 
-    public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache) {
-        this(tile, cache, null, null);
+    public AdjacentInventoryCache(AdjacentTileCache cache) {
+        this(cache, null, null);
     }
 
-    public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter, Comparator<IInventory> sorter) {
+    public AdjacentInventoryCache(AdjacentTileCache cache, ITileFilter filter, Comparator<IInventory> sorter) {
         this.cache = cache;
         cache.addListener(new AdjacentTileCache.ICacheListener() {
             @Override

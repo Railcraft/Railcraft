@@ -54,7 +54,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     private boolean isWorking, paused;
     private ItemStack currentReceipe;
     private int progress;
-    private final AdjacentInventoryCache cache = new AdjacentInventoryCache(this, tileCache, null, InventorySorter.SIZE_DESCENDING);
+    private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
     private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
 
     private static class RollingContainer extends Container {

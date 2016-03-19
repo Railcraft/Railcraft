@@ -10,8 +10,8 @@ package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.*;
 
@@ -52,7 +52,7 @@ public final class AdjacentTileCache {
 
     public Map<EnumFacing, TileEntity> refreshTiles() {
         Map<EnumFacing, TileEntity> tiles = new EnumMap<EnumFacing, TileEntity>(EnumFacing.class);
-        for (EnumFacing side : EnumFacing.) {
+        for (EnumFacing side : EnumFacing.VALUES) {
             tiles.put(side, getTileOnSide(side));
         }
         return tiles;
@@ -73,7 +73,7 @@ public final class AdjacentTileCache {
         Arrays.fill(delay, DELAY_MIN);
     }
 
-    protected void setTile(ForgeDirection side, TileEntity tile) {
+    protected void setTile(EnumFacing side, TileEntity tile) {
         int s = side.ordinal();
         if (cache[s] != tile) {
             cache[s] = tile;
@@ -81,16 +81,16 @@ public final class AdjacentTileCache {
         }
     }
 
-    private void changed(ForgeDirection side) {
+    private void changed(EnumFacing side) {
         for (ICacheListener listener : listeners) {
             listener.changed(side);
         }
     }
 
-    private boolean isInSameChunk(ForgeDirection side) {
-        int sx = MiscTools.getXOnSide(source.xCoord, side);
-        int sz = MiscTools.getZOnSide(source.zCoord, side);
-        return source.xCoord >> 4 == sx >> 4 && source.zCoord >> 4 == sz >> 4;
+    private boolean isInSameChunk(EnumFacing side) {
+        BlockPos pos = source.getPos();
+        BlockPos sidePos = pos.offset(side);
+        return pos.getX() >> 4 == sidePos.getX() >> 4 && pos.getZ() >> 4 == sidePos.getZ() >> 4;
     }
 
     public TileEntity getTileOnSide(EnumFacing side) {
@@ -129,7 +129,7 @@ public final class AdjacentTileCache {
     }
 
     public interface ICacheListener {
-        void changed(ForgeDirection side);
+        void changed(EnumFacing side);
 
         void purge();
     }
