@@ -1,3 +1,14 @@
+9.9.0.1:
+	NEW: Added Auto-Coupler Mode to Coupler Track. Any cart that passes over this track will couple to the next cart it collides with. (contribution by Cream-tea)
+	NEW: Add support for IC2 Classic. (contribution by Speiger)
+	CHANGE: Reworked harvest tools for the entire mod. Tracks and related blocks are by default harvestable by the crowbar instead of pickaxes. Other blocks are either axe or pickaxe depending on material.
+	FIX: Signals and Boxes now use a TESR for rendering the lights, resulting in less render refreshes. (contribution by Vexatos and Player)
+	FIX: Fix OreDict tag in Tin Plate recipe. (issue #781)
+	FIX: Fix issues with server/client sync of filtered Carts.
+	FIX: Only cache Tile Entities located in the same chunk as the cache. Should resolve untold issues with Signals and Multi-Blocks.
+	FIX: Improve High Speed explosion logic to take into account the comparison of Train objects. Might result in less unpredictable explosions.
+	API: SignalBlock was moved to the API so that addons can create new Signal blocks.
+
 9.9.0.0:
     INFO: Repackage for release.
 
