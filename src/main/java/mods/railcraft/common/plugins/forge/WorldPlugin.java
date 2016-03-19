@@ -56,6 +56,10 @@ public class WorldPlugin {
         return world.isAirBlock(pos);
     }
 
+    public static boolean isBlockAir(World world, BlockPos pos, IBlockState state) {
+        return isBlockAir(world, pos, state.getBlock());
+    }
+
     public static TileEntity getTileEntityOnSide(World world, BlockPos pos, EnumFacing side) {
         pos = pos.offset(side);
         if (isBlockLoaded(world, pos) && getBlock(world, pos) != Blocks.air)

@@ -9,10 +9,16 @@
 package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IStringSerializable;
 
+import javax.annotation.Nonnull;
 import java.util.Locale;
 
 /**
@@ -37,6 +43,7 @@ public enum EnumColor implements IStringSerializable {
     ORANGE(0xFF6A00, "dyeOrange", "orange"),
     WHITE(0xFFFFFF, "dyeWhite", "white");
     public final static EnumColor[] VALUES = values();
+    public static final String DEFAULT_COLOR_TAG = "color";
     private final int hexColor;
     private final String oreTagDyeName;
     private final String[] names;
@@ -47,20 +54,8 @@ public enum EnumColor implements IStringSerializable {
         this.names = names;
     }
 
-    public EnumDyeColor getDye() {
-        return EnumDyeColor.byDyeDamage(ordinal());
-    }
-
     public static EnumColor fromDye(EnumDyeColor dyeColor) {
         return fromOrdinal(dyeColor.getDyeDamage());
-    }
-
-    public MapColor getMapColor() {
-        return getDye().getMapColor();
-    }
-
-    public int getHexColor() {
-        return hexColor;
     }
 
     public static EnumColor fromOrdinal(int id) {
@@ -86,16 +81,61 @@ public enum EnumColor implements IStringSerializable {
         return null;
     }
 
+    public static EnumColor getRand() {
+        return VALUES[MiscTools.RANDOM.nextInt(VALUES.length)];
+    }
+
+    public static EnumColor readFromNBT(NBTTagCompound nbt, String tag) {
+        if (nbt != null) {
+            if (nbt.hasKey("color", 8))
+                return EnumColor.fromName(nbt.getString("color"));
+            if (nbt.hasKey("color", 1))
+                return EnumColor.fromOrdinal(nbt.getByte("color"));
+        }
+        return EnumColor.WHITE;
+    }
+
+    public static boolean isColored(ItemStack stack) {
+        if (stack == null)
+            return false;
+        if (InvTools.isStackEqualToBlock(stack, Blocks.wool))
+            return true;
+        if (stack.getItem() == Items.dye)
+            return true;
+        NBTTagCompound nbt = stack.getTagCompound();
+        return nbt.hasKey(DEFAULT_COLOR_TAG);
+    }
+
+    @Nonnull
+    public static EnumColor fromItemStack(ItemStack stack) {
+        if (stack == null)
+            return EnumColor.WHITE;
+        if (InvTools.isStackEqualToBlock(stack, Blocks.wool))
+            return EnumColor.fromOrdinal(15 - stack.getItemDamage());
+        if (stack.getItem() == Items.dye)
+            return EnumColor.fromOrdinal(stack.getItemDamage());
+        NBTTagCompound nbt = stack.getTagCompound();
+        return EnumColor.readFromNBT(nbt, DEFAULT_COLOR_TAG);
+    }
+
+    public EnumDyeColor getDye() {
+        return EnumDyeColor.byDyeDamage(ordinal());
+    }
+
+    public MapColor getMapColor() {
+        return getDye().getMapColor();
+    }
+
+    public int getHexColor() {
+        return hexColor;
+    }
+
     public EnumColor next() {
         return VALUES[(ordinal() + 1) % VALUES.length];
     }
 
     public EnumColor previous() {
         return VALUES[(ordinal() + VALUES.length - 1) % VALUES.length];
-    }
-
-    public static EnumColor getRand() {
-        return VALUES[MiscTools.RANDOM.nextInt(VALUES.length)];
     }
 
     public EnumColor inverse() {
@@ -118,6 +158,10 @@ public enum EnumColor implements IStringSerializable {
         return oreTagDyeName;
     }
 
+    public void writeToNBT(NBTTagCompound nbt, String tag) {
+        nbt.setString(tag, getName());
+    }
+
     @Override
     public String toString() {
         String s = name().replace("_", " ");
@@ -132,5 +176,16 @@ public enum EnumColor implements IStringSerializable {
     @Override
     public String getName() {
         return names[0];
+    }
+
+    public void setItemColor(ItemStack stack) {
+        setItemColor(stack, DEFAULT_COLOR_TAG);
+    }
+
+    public void setItemColor(ItemStack stack, String tag) {
+        if (stack == null)
+            return;
+        NBTTagCompound nbt = InvTools.getItemData(stack);
+        writeToNBT(nbt, tag);
     }
 }

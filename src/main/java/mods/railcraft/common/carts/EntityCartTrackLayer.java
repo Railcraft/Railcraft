@@ -4,11 +4,14 @@ import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -24,15 +27,15 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
         super(world);
     }
 
-    public EntityCartTrackLayer(World world, double d, double d1, double d2) {
+    public EntityCartTrackLayer(World world, double x, double y, double z) {
         this(world);
-        setPosition(d, d1 + (double) yOffset, d2);
+        setPosition(x, y + getYOffset(), z);
         motionX = 0.0D;
         motionY = 0.0D;
         motionZ = 0.0D;
-        prevPosX = d;
-        prevPosY = d1;
-        prevPosZ = d2;
+        prevPosX = x;
+        prevPosY = y;
+        prevPosZ = z;
     }
 
     @Override
@@ -41,28 +44,27 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
     }
 
     @Override
-    protected void func_145821_a(int trackX, int trackY, int trackZ, double maxSpeed, double slopeAdjustment, Block trackBlock, int trackMeta) {
-        super.func_145821_a(trackX, trackY, trackZ, maxSpeed, slopeAdjustment, trackBlock, trackMeta);
+    protected void func_180460_a(BlockPos pos, IBlockState state) {
+        super.func_180460_a(pos, state);
         if (Game.isNotHost(worldObj))
             return;
 
         stockItems(SLOT_REPLACE, SLOT_STOCK);
-        updateTravelDirection(trackX, trackY, trackZ, trackMeta);
+        updateTravelDirection(pos, state);
         if (travelDirection != null)
-            placeTrack(trackX, trackY, trackZ);
+            placeTrack(pos);
     }
 
-    private void placeTrack(int x, int y, int z) {
-        x = x + travelDirection.offsetX;
-        z = z + travelDirection.offsetZ;
+    private void placeTrack(BlockPos pos) {
+        pos = pos.offset(travelDirection);
 
         EnumTrackMeta trackMeta = EnumTrackMeta.NORTH_SOUTH;
         if (travelDirection == EnumFacing.EAST || travelDirection == EnumFacing.WEST)
             trackMeta = EnumTrackMeta.EAST_WEST;
-        if (!isValidReplacementBlock(x, y, z) && isValidReplacementBlock(x, y + 1, z) && trackMeta.isStraightTrack())
-            y++;
-        if (isValidReplacementBlock(x, y, z) && isValidReplacementBlock(x, y - 1, z)) {
-            y--;
+        if (!isValidReplacementBlock(pos) && isValidReplacementBlock(pos.up()) && trackMeta.isStraightTrack())
+            pos = pos.up();
+        if (isValidReplacementBlock(pos) && isValidReplacementBlock(pos.down())) {
+            pos = pos.down();
             if (travelDirection == EnumFacing.NORTH)
                 trackMeta = EnumTrackMeta.SOUTH_SLOPE;
             if (travelDirection == EnumFacing.SOUTH)
@@ -73,26 +75,26 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
                 trackMeta = EnumTrackMeta.WEST_SLOPE;
         }
 
-        if (isValidNewTrackPosition(x, y, z)) {
-            Block block = worldObj.getBlock(x, y, z);
-            int metadata = worldObj.getBlockMetadata(x, y, z);
-            if (placeNewTrack(x, y, z, SLOT_STOCK, trackMeta.ordinal())) {
-                block.dropBlockAsItem(worldObj, x, y, z, metadata, 0);
+        if (isValidNewTrackPosition(pos)) {
+            IBlockState targetState = WorldPlugin.getBlockState(worldObj, pos);
+            if (placeNewTrack(pos, SLOT_STOCK, trackMeta)) {
+                targetState.getBlock().dropBlockAsItem(worldObj, pos, targetState, 0);
             }
         }
     }
 
-    private boolean isValidNewTrackPosition(int x, int y, int z) {
-        return isValidReplacementBlock(x, y, z) && World.doesBlockHaveSolidTopSurface(worldObj, x, y - 1, z);
+    private boolean isValidNewTrackPosition(BlockPos pos) {
+        return isValidReplacementBlock(pos) && World.doesBlockHaveSolidTopSurface(worldObj, pos.down());
     }
 
-    private boolean isValidReplacementBlock(int x, int y, int z) {
-        Block block = worldObj.getBlock(x, y, z);
-        return (worldObj.isAirBlock(x, y, z) ||
+    private boolean isValidReplacementBlock(BlockPos pos) {
+        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
+        Block block = state.getBlock();
+        return (WorldPlugin.isBlockAir(worldObj, pos, state) ||
                 block instanceof IPlantable ||
                 block instanceof IShearable ||
                 EntityTunnelBore.replaceableBlocks.contains(block)) ||
-                block.isReplaceable(worldObj, x, y, z);
+                block.isReplaceable(worldObj, pos);
     }
 
     @Override
@@ -111,10 +113,5 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         ItemStack trackReplace = patternInv.getStackInSlot(SLOT_REPLACE);
         return InvTools.isItemEqual(stack, trackReplace);
-    }
-
-    @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.TRACK_LAYER.getTag());
     }
 }

@@ -408,7 +408,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public  List<ItemStack> getDrops(int fortune) {
+    public List<ItemStack> getDrops(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         ItemStack drop = getMachineType().getItem();
         NBTTagCompound nbt = InvTools.getItemData(drop);
@@ -452,7 +452,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         ItemStack current = player.getCurrentEquippedItem();
         if (Game.isHost(worldObj)) {
-            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), EnumFacing.VALUES[side], player, true, true)) {
+            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), side, player, true, true)) {
                 TileTankBase master = (TileTankBase) getMasterBlock();
                 if (master != null)
                     master.syncClient();
@@ -603,7 +603,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
         inv.writeToNBT("inv", data);
-        data.setByte("color", (byte) color.ordinal());
+        color.writeToNBT(data, "color");
     }
 
     @Override
@@ -611,8 +611,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
         inv.readFromNBT("inv", data);
-        if (data.hasKey("color"))
-            color = EnumColor.fromOrdinal(data.getByte("color"));
+        color = EnumColor.readFromNBT(data, "color");
     }
 
     @Override

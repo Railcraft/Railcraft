@@ -26,7 +26,6 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemOveralls;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.ItemWhistleTuner;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -40,6 +39,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -58,7 +58,8 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class EntityLocomotive extends CartContainerBase implements IDirectionalCart, IGuiReturnHandler, ILinkableCart, IMinecart, ISecure<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
+public abstract class EntityLocomotive extends CartContainerBase implements IDirectionalCart, IGuiReturnHandler,
+        ILinkableCart, IMinecart, ISecure<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
     private static final byte HAS_FUEL_DATA_ID = 16;
     private static final byte PRIMARY_COLOR_DATA_ID = 25;
     private static final byte SECONDARY_COLOR_DATA_ID = 26;
@@ -73,7 +74,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     private static final int WHISTLE_INTERVAL = 256;
     private static final int WHISTLE_DELAY = 160;
     private static final int WHISTLE_CHANCE = 4;
-    private final MultiButtonController<LocoLockButtonState> lockController = new MultiButtonController(0, LocoLockButtonState.VALUES);
+    private final MultiButtonController<LocoLockButtonState> lockController = MultiButtonController.create(0, LocoLockButtonState.VALUES);
     public LocoMode clientMode = LocoMode.SHUTDOWN;
     public LocoSpeed clientSpeed = LocoSpeed.MAX;
     public boolean clientCanLock;
@@ -87,13 +88,13 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
 
     public EntityLocomotive(World world) {
         super(world);
-        setPrimaryColor(EnumColor.SILVER.ordinal());
-        setSecondaryColor(EnumColor.GRAY.ordinal());
+        setPrimaryColor(EnumColor.SILVER.getDye());
+        setSecondaryColor(EnumColor.GRAY.getDye());
     }
 
     public EntityLocomotive(World world, double x, double y, double z) {
         this(world);
-        setPosition(x, y + (double) yOffset, z);
+        setPosition(x, y + getYOffset(), z);
         prevPosX = x;
         prevPosY = y;
         prevPosZ = z;
@@ -118,8 +119,8 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         if (nbt == null)
             return;
 
-        setPrimaryColor(ItemLocomotive.getPrimaryColor(item).ordinal());
-        setSecondaryColor(ItemLocomotive.getSecondaryColor(item).ordinal());
+        setPrimaryColor(ItemLocomotive.getPrimaryColor(item).getDye());
+        setSecondaryColor(ItemLocomotive.getSecondaryColor(item).getDye());
         if (nbt.hasKey("whistlePitch"))
             whistlePitch = nbt.getFloat("whistlePitch");
         if (nbt.hasKey("owner")) {
@@ -137,16 +138,6 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
         return EnumCart.getCartType(stack) == getCartType();
-    }
-
-    @Override
-    public String getName() {
-        return LocalizationPlugin.translate(getLocalizationTag());
-    }
-
-    @Override
-    public String getLocalizationTag() {
-        return getCartType().getTag();
     }
 
     @Override
@@ -179,8 +170,8 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         ItemLocomotive.setItemWhistleData(item, whistlePitch);
         ItemLocomotive.setModel(item, getModel());
         ItemLocomotive.setEmblem(item, getEmblem());
-        if (hasCustomInventoryName())
-            item.setStackDisplayName(getCommandSenderName());
+        if (hasCustomName())
+            item.setStackDisplayName(getCustomNameTag());
         return item;
     }
 
@@ -218,9 +209,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     }
 
     public boolean canControl(GameProfile user) {
-        if (!isPrivate())
-            return true;
-        return PlayerPlugin.isOwnerOrOp(getOwner(), user);
+        return !isPrivate() || PlayerPlugin.isOwnerOrOp(getOwner(), user);
     }
 
     public LocoLockButtonState getSecurityState() {
@@ -297,8 +286,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     }
 
     public boolean isIdle() {
-        if (isShutdown()) return false;
-        return tempIdle > 0 || getMode() == LocoMode.IDLE || Train.getTrain(this).isIdle();
+        return !isShutdown() && (tempIdle > 0 || getMode() == LocoMode.IDLE || Train.getTrain(this).isIdle());
     }
 
     public boolean isShutdown() {
@@ -517,13 +505,13 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         super.applyEntityCollision(entity);
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     private boolean collidedWithOtherLocomotive(Entity entity) {
         if (!(entity instanceof EntityLocomotive))
             return false;
         EntityLocomotive otherLoco = (EntityLocomotive) entity;
         if (getUniqueID() == entity.getUniqueID())
             return false;
-        LinkageManager lm = LinkageManager.instance();
         if (Train.areInSameTrain(this, otherLoco))
             return false;
         return cartVelocityIsGreaterThan(0.2f) && otherLoco.cartVelocityIsGreaterThan(0.2f)
@@ -568,11 +556,11 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
 
         data.setString("dest", getDestination());
 
-        data.setByte("locomode", (byte) getMode().ordinal());
-        data.setByte("locospeed", (byte) getSpeed().ordinal());
+        data.setByte("locoMode", (byte) getMode().ordinal());
+        data.setByte("locoSpeed", (byte) getSpeed().ordinal());
 
-        data.setByte("primaryColor", getPrimaryColor());
-        data.setByte("secondaryColor", getSecondaryColor());
+        EnumColor.fromDye(getPrimaryColor()).writeToNBT(data, "primaryColor");
+        EnumColor.fromDye(getSecondaryColor()).writeToNBT(data, "secondaryColor");
 
         data.setFloat("whistlePitch", whistlePitch);
 
@@ -593,11 +581,11 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
 
         setDestString(data.getString("dest"));
 
-        setMode(LocoMode.values()[data.getByte("locomode")]);
-        setSpeed(LocoSpeed.values()[data.getByte("locospeed")]);
+        setMode(LocoMode.values()[data.getByte("locoMode")]);
+        setSpeed(LocoSpeed.values()[data.getByte("locoSpeed")]);
 
-        setPrimaryColor(data.getByte("primaryColor"));
-        setSecondaryColor(data.getByte("secondaryColor"));
+        setPrimaryColor(EnumColor.readFromNBT(data, "primaryColor").getDye());
+        setPrimaryColor(EnumColor.readFromNBT(data, "secondaryColor").getDye());
 
         whistlePitch = data.getFloat("whistlePitch");
 
@@ -626,9 +614,9 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     public void writeSpawnData(ByteBuf data) {
         try {
             DataOutputStream byteStream = new DataOutputStream(new ByteBufOutputStream(data));
-            byteStream.writeUTF(func_95999_t() != null ? func_95999_t() : "");
+            byteStream.writeUTF(hasCustomName() ? getName() : "");
             byteStream.writeUTF(model);
-        } catch (IOException ex) {
+        } catch (IOException ignored) {
         }
     }
 
@@ -638,9 +626,9 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
             DataInputStream byteSteam = new DataInputStream(new ByteBufInputStream(data));
             String name = byteSteam.readUTF();
             if (!name.equals(""))
-                setMinecartName(name);
+                setCustomNameTag(name);
             model = byteSteam.readUTF();
-        } catch (IOException ex) {
+        } catch (IOException ignored) {
         }
     }
 
@@ -710,21 +698,21 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     public abstract LocomotiveRenderType getRenderType();
 
     @Override
-    public final byte getPrimaryColor() {
-        return dataWatcher.getWatchableObjectByte(PRIMARY_COLOR_DATA_ID);
+    public final EnumDyeColor getPrimaryColor() {
+        return EnumDyeColor.byMetadata(dataWatcher.getWatchableObjectByte(PRIMARY_COLOR_DATA_ID));
     }
 
-    public final void setPrimaryColor(int color) {
-        dataWatcher.updateObject(PRIMARY_COLOR_DATA_ID, (byte) color);
+    public final void setPrimaryColor(EnumDyeColor color) {
+        dataWatcher.updateObject(PRIMARY_COLOR_DATA_ID, color.getMetadata());
     }
 
     @Override
-    public final byte getSecondaryColor() {
-        return dataWatcher.getWatchableObjectByte(SECONDARY_COLOR_DATA_ID);
+    public final EnumDyeColor getSecondaryColor() {
+        return EnumDyeColor.byMetadata(dataWatcher.getWatchableObjectByte(SECONDARY_COLOR_DATA_ID));
     }
 
-    public final void setSecondaryColor(int color) {
-        dataWatcher.updateObject(SECONDARY_COLOR_DATA_ID, (byte) color);
+    public final void setSecondaryColor(EnumDyeColor color) {
+        dataWatcher.updateObject(SECONDARY_COLOR_DATA_ID, color.getMetadata());
     }
 
     public final String getModel() {

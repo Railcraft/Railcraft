@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,10 +33,7 @@ public class ItemBlockRailcraft extends ItemBlock {
     @Override
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack stack, int pass) {
-        EnumColor color = InvTools.getItemColor(stack);
-        if (color != null)
-            return color.getHexColor();
-        return super.getColorFromItemStack(stack, pass);
+        return EnumColor.fromItemStack(stack).getHexColor();
     }
 
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {

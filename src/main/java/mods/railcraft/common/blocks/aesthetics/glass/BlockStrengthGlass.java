@@ -18,7 +18,10 @@ import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGlass;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
@@ -29,7 +32,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -37,6 +39,7 @@ import java.util.List;
  */
 public class BlockStrengthGlass extends BlockGlass {
 
+    public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
     public static boolean renderingHighlight;
     private static BlockStrengthGlass instance;
     private final int renderId;
@@ -49,6 +52,7 @@ public class BlockStrengthGlass extends BlockGlass {
         setStepSound(Block.soundTypeGlass);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setRegistryName("railcraft.glass");
+        this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
     }
 
     public static BlockStrengthGlass getBlock() {
@@ -69,6 +73,10 @@ public class BlockStrengthGlass extends BlockGlass {
             }
     }
 
+    public EnumColor getColor(IBlockState state) {
+        return state.getValue(COLOR);
+    }
+
     public static ItemStack getItem(int meta) {
         return getItem(1, meta);
     }
@@ -85,7 +93,7 @@ public class BlockStrengthGlass extends BlockGlass {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return meta;
+        return getColor(state).inverse().ordinal();
     }
 
     @Override
@@ -93,49 +101,49 @@ public class BlockStrengthGlass extends BlockGlass {
         return true;
     }
 
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public void registerBlockIcons(IIconRegister iconRegister) {
+//        icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:glass", 1, 5);
+//
+//        patterns.put(EnumSet.noneOf(Neighbors.class), icons[0]);
+//        patterns.put(EnumSet.of(Neighbors.BOTTOM), icons[1]);
+//        patterns.put(EnumSet.of(Neighbors.TOP, Neighbors.BOTTOM), icons[2]);
+//        patterns.put(EnumSet.of(Neighbors.TOP), icons[3]);
+//    }
+//
+//    private enum Neighbors {
+//
+//        TOP, BOTTOM;
+//    }
+//
+//    @Override
+//    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+//        if (renderingHighlight)
+//            return icons[4];
+//        if (side <= 1)
+//            return icons[0];
+//        int meta = world.getBlockMetadata(x, y, z);
+//
+//        EnumSet neighbors = EnumSet.noneOf(Neighbors.class);
+//
+//        if (WorldPlugin.getBlock(world, x, y + 1, z) == this && world.getBlockMetadata(x, y + 1, z) == meta)
+//            neighbors.add(Neighbors.TOP);
+//
+//        if (WorldPlugin.getBlock(world, x, y - 1, z) == this && world.getBlockMetadata(x, y - 1, z) == meta)
+//            neighbors.add(Neighbors.BOTTOM);
+//        return patterns.get(neighbors);
+//    }
+//
+//    @Override
+//    public IIcon getIcon(int side, int meta) {
+//        if (renderingHighlight)
+//            return icons[4];
+//        return icons[0];
+//    }
+
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:glass", 1, 5);
-
-        patterns.put(EnumSet.noneOf(Neighbors.class), icons[0]);
-        patterns.put(EnumSet.of(Neighbors.BOTTOM), icons[1]);
-        patterns.put(EnumSet.of(Neighbors.TOP, Neighbors.BOTTOM), icons[2]);
-        patterns.put(EnumSet.of(Neighbors.TOP), icons[3]);
-    }
-
-    private enum Neighbors {
-
-        TOP, BOTTOM;
-    }
-
-    @Override
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        if (renderingHighlight)
-            return icons[4];
-        if (side <= 1)
-            return icons[0];
-        int meta = world.getBlockMetadata(x, y, z);
-
-        EnumSet neighbors = EnumSet.noneOf(Neighbors.class);
-
-        if (WorldPlugin.getBlock(world, x, y + 1, z) == this && world.getBlockMetadata(x, y + 1, z) == meta)
-            neighbors.add(Neighbors.TOP);
-
-        if (WorldPlugin.getBlock(world, x, y - 1, z) == this && world.getBlockMetadata(x, y - 1, z) == meta)
-            neighbors.add(Neighbors.BOTTOM);
-        return patterns.get(neighbors);
-    }
-
-    @Override
-    public IIcon getIcon(int side, int meta) {
-        if (renderingHighlight)
-            return icons[4];
-        return icons[0];
-    }
-
-    @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (int meta = 0; meta < 16; meta++) {
             list.add(new ItemStack(item, 1, meta));
         }
@@ -147,26 +155,46 @@ public class BlockStrengthGlass extends BlockGlass {
     }
 
     @Override
+    public int colorMultiplier(IBlockAccess worldIn, BlockPos pos, int renderPass) {
+        if (renderingHighlight)
+            return super.colorMultiplier(worldIn, pos, renderPass);
+        IBlockState state = WorldPlugin.getBlockState(worldIn, pos);
+        return getColor(state).getHexColor();
+    }
+
+    @Override
     public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
-        int meta = world.getBlockMetadata(pos);
-        if (meta != color) {
-            world.setBlockState(pos, color, 3);
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        if (getColor(state).getDye() != color) {
+            world.setBlockState(pos, getDefaultState().withProperty(COLOR, EnumColor.fromDye(color)));
             return true;
         }
         return false;
     }
 
-    @Override
-    public int colorMultiplier(IBlockAccess worldIn, BlockPos pos, int renderPass) {
-        if (renderingHighlight)
-            return super.colorMultiplier(worldIn, pos, renderPass);
-        int meta = worldIn.getBlockMetadata(pos);
-        return EnumColor.fromOrdinal(15 - meta).getHexColor();
+    /**
+     * Get the MapColor for this Block and the given BlockState
+     */
+    public MapColor getMapColor(IBlockState state) {
+        return getColor(state).getMapColor();
     }
 
-    private enum Neighbors {
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta).inverse());
+    }
 
-        TOP, BOTTOM
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    public int getMetaFromState(IBlockState state) {
+        return getColor(state).inverse().ordinal();
+    }
+
+    protected BlockState createBlockState() {
+        return new BlockState(this, COLOR);
     }
 
 }

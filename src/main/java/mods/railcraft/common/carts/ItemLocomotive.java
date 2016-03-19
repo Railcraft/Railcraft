@@ -20,6 +20,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,7 +30,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemLocomotive extends ItemCart {
@@ -132,17 +132,13 @@ public class ItemLocomotive extends ItemCart {
         }
     }
 
-    public static void setItemColorData(ItemStack stack, EnumColor primaryColor, EnumColor secondaryColor) {
-        setItemColorData(stack, primaryColor.ordinal(), secondaryColor.ordinal());
+    public static void setItemColorData(ItemStack stack, EnumDyeColor primaryColor, EnumDyeColor secondaryColor) {
+        setItemColorData(stack, EnumColor.fromDye(primaryColor), EnumColor.fromDye(secondaryColor));
     }
 
-    public static void setItemColorData(ItemStack stack, int primaryColor, int secondaryColor) {
-        if (primaryColor < 0 || secondaryColor < 0)
-            return;
-        NBTTagCompound nbt = InvTools.getItemData(stack);
-        nbt.setByte("primaryColor", (byte) primaryColor);
-        nbt.setByte("secondaryColor", (byte) secondaryColor);
-
+    public static void setItemColorData(ItemStack stack, EnumColor primaryColor, EnumColor secondaryColor) {
+        primaryColor.setItemColor(stack, "primaryColor");
+        secondaryColor.setItemColor(stack, "secondaryColor");
     }
 
     public static void setItemWhistleData(ItemStack stack, float whistlePitch) {
@@ -201,7 +197,7 @@ public class ItemLocomotive extends ItemCart {
                 return EnumColor.YELLOW;
             return EnumColor.SILVER;
         }
-        return EnumColor.fromOrdinal(nbt.getByte("primaryColor"));
+        return EnumColor.readFromNBT(nbt, "primaryColor");
     }
 
     public static EnumColor getSecondaryColor(ItemStack stack) {
@@ -212,7 +208,7 @@ public class ItemLocomotive extends ItemCart {
                 return EnumColor.BLACK;
             return EnumColor.GRAY;
         }
-        return EnumColor.fromOrdinal(nbt.getByte("secondaryColor"));
+        return  EnumColor.readFromNBT(nbt, "secondaryColor");
     }
 
 }

@@ -17,7 +17,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class LocomotiveRenderer extends CartModelRenderer {
@@ -28,8 +27,8 @@ public class LocomotiveRenderer extends CartModelRenderer {
     public boolean render(IRenderer renderer, EntityMinecart cart, float light, float time) {
         EntityLocomotive loco = (EntityLocomotive) cart;
 
-        int primaryColor = EnumColor.fromOrdinal(loco.getPrimaryColor()).getHexColor();
-        int secondaryColor = EnumColor.fromOrdinal(loco.getSecondaryColor()).getHexColor();
+        int primaryColor = EnumColor.fromDye(loco.getPrimaryColor()).getHexColor();
+        int secondaryColor = EnumColor.fromDye(loco.getSecondaryColor()).getHexColor();
 
         String emblem = loco.getEmblem();
         ResourceLocation emblemTexture = null;

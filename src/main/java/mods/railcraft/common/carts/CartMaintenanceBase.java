@@ -10,10 +10,12 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.tracks.RailTools;
+import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -92,7 +94,7 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
         return dataWatcher.getWatchableObjectByte(DATA_ID_BLINK) > 0;
     }
 
-    protected boolean placeNewTrack(int x, int y, int z, int slotStock, int meta) {
+    protected boolean placeNewTrack(BlockPos pos, int slotStock, EnumTrackMeta meta) {
         ItemStack trackStock = getStackInSlot(slotStock);
         if (trackStock != null)
             if (RailTools.placeRailAt(trackStock, worldObj, x, y, z)) {
