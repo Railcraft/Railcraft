@@ -3,6 +3,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.IReceiverTile;
+import mods.railcraft.api.signals.ISignalBlockTile;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -34,8 +35,12 @@ public class ItemSignalLabel extends ItemRailcraft {
             Set<AbstractPair> pairs = new HashSet<AbstractPair>();
             if (tile instanceof IReceiverTile) {
                 pairs.add(((IReceiverTile) tile).getReceiver());
-            } else if (tile instanceof IControllerTile) {
+            }
+            if (tile instanceof IControllerTile) {
                 pairs.add(((IControllerTile) tile).getController());
+            }
+            if(tile instanceof ISignalBlockTile) {
+                pairs.add(((ISignalBlockTile) tile).getSignalBlock());
             }
             if (!pairs.isEmpty()) {
                 String newName = stack.getDisplayName();

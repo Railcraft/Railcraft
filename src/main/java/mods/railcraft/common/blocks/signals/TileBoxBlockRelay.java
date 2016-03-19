@@ -30,7 +30,7 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBlockTile, IAspectActionManager, IGuiReturnHandler, IAspectProvider {
 
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
-    private final SignalBlock signalBlock = new SignalBlockRelay(this);
+    private final SignalBlock signalBlock = new SignalBlockRelay(getLocalizationTag(), this);
 
     @Override
     public EnumSignal getSignalType() {
