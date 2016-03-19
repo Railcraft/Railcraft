@@ -111,7 +111,6 @@ public class RailcraftConfig {
     private static int launchRailMaxForce;
     private static int cartDispenserDelay;
     private static int minecartStackSize;
-    private static int signalUpdateInterval;
     private static int maxTankSize;
     private static int locomotiveHorsepower;
     private static int creosoteTorchOutput;
@@ -235,7 +234,7 @@ public class RailcraftConfig {
         allowTankStacking = get(CAT_TWEAKS_BLOCKS + ".irontank", "allow.stacking", true, "Change to '{t}=false' to disable the stacking of Iron Tanks");
 
         SignalTools.printSignalDebug = get(CAT_TWEAKS_BLOCKS + ".signals", "printDebug", false, "change to '{t}=true' to log debug info for Signal Blocks");
-        signalUpdateInterval = get(CAT_TWEAKS_BLOCKS + ".signals", "update.interval", 4, "measured in tick, smaller numbers update more often, resulting in more sensitive signals, but cost more cpu power, default = 4");
+        SignalTools.signalUpdateInterval = get(CAT_TWEAKS_BLOCKS + ".signals", "update.interval", 4, "measured in tick, smaller numbers update more often, resulting in more sensitive signals, but cost more cpu power, default = 4");
 
         machinesRequirePower = get(CAT_TWEAKS_BLOCKS + ".machines", "requirePower", true, "change to '{t}=false' to disable the Power Requirements for most machines");
 
@@ -884,10 +883,6 @@ public class RailcraftConfig {
 
     public static float steamLocomotiveEfficiencyMultiplier() {
         return steamLocomotiveEfficiencyMultiplier;
-    }
-
-    public static int getSignalUpdateInterval() {
-        return signalUpdateInterval;
     }
 
     public static int villagerID() {
