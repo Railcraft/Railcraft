@@ -13,12 +13,9 @@ import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalTools;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,19 +35,19 @@ public abstract class SignalBlock extends AbstractPair {
 
     private static final Level DEBUG_LEVEL = Level.INFO;
     //    private static final Map<UUID, Deque<WorldCoordinate>> savedData = new HashMap<UUID, Deque<WorldCoordinate>>();
-    Map<WorldCoordinate, WorldCoordinate> trackCache = new HashMap<WorldCoordinate, WorldCoordinate>();
-    Map<WorldCoordinate, TrackTools.TrackScan> trackScans = new HashMap<WorldCoordinate, TrackTools.TrackScan>();
-    Set<WorldCoordinate> waitingForRetest = new HashSet<WorldCoordinate>();
+    private final Map<WorldCoordinate, WorldCoordinate> trackCache = new HashMap<WorldCoordinate, WorldCoordinate>();
+    private final Map<WorldCoordinate, TrackTools.TrackScan> trackScans = new HashMap<WorldCoordinate, TrackTools.TrackScan>();
+    private final Set<WorldCoordinate> waitingForRetest = new HashSet<WorldCoordinate>();
     private WorldCoordinate trackLocation;
     private int update = rand.nextInt();
-    private UUID uuid = UUID.randomUUID();
+    //    private UUID uuid = UUID.randomUUID();
     private boolean changedAspect = false;
 
-    public SignalBlock(RailcraftTileEntity tile, int numPairs) {
-        super(tile.getLocalizationTag(), tile, numPairs);
+    public SignalBlock(String locTag, TileEntity tile, int numPairs) {
+        super(locTag, tile, numPairs);
     }
 
-    public SignalBlock getSignalAt(WorldCoordinate coord) {
+    private SignalBlock getSignalAt(WorldCoordinate coord) {
         TileEntity recv = getPairAt(coord);
         if (recv != null)
             return ((ISignalBlockTile) recv).getSignalBlock();
@@ -60,12 +57,12 @@ public abstract class SignalBlock extends AbstractPair {
     public abstract SignalAspect getSignalAspect();
 
     private void printDebug(String msg, Object... args) {
-        if (RailcraftConfig.printSignalDebug())
+        if (SignalTools.printSignalDebug)
             Game.log(DEBUG_LEVEL, msg, args);
     }
 
     private void printDebugPair(String msg, TileEntity ot) {
-        if (RailcraftConfig.printSignalDebug())
+        if (SignalTools.printSignalDebug)
             if (ot == null)
                 Game.log(DEBUG_LEVEL, msg + " source:[{0}] target:[null]", tile.getPos());
             else
@@ -73,7 +70,7 @@ public abstract class SignalBlock extends AbstractPair {
     }
 
     private void printDebugPair(String msg, WorldCoordinate coord) {
-        if (RailcraftConfig.printSignalDebug())
+        if (SignalTools.printSignalDebug)
             if (coord == null)
                 Game.log(DEBUG_LEVEL, msg + " source:[{0}] target:[null]", tile.getPos());
             else
@@ -83,7 +80,7 @@ public abstract class SignalBlock extends AbstractPair {
     @Override
     protected void saveNBT(NBTTagCompound data) {
         super.saveNBT(data);
-        MiscTools.writeUUID(data, "uuid", uuid);
+//        MiscTools.writeUUID(data, "uuid", uuid);
         NBTTagList tagList = new NBTTagList();
         for (Map.Entry<WorldCoordinate, WorldCoordinate> cache : trackCache.entrySet()) {
             NBTTagCompound entry = new NBTTagCompound();
@@ -112,7 +109,7 @@ public abstract class SignalBlock extends AbstractPair {
     @Override
     protected void loadNBT(NBTTagCompound data) {
         super.loadNBT(data);
-        uuid = MiscTools.readUUID(data, "uuid");
+//        uuid = MiscTools.readUUID(data, "uuid");
         if (data.hasKey("trackCache")) {
             List<NBTTagCompound> tagList = NBTPlugin.getNBTList(data, "trackCache", NBTPlugin.EnumNBTType.COMPOUND);
             for (NBTTagCompound nbt : tagList) {
@@ -138,7 +135,7 @@ public abstract class SignalBlock extends AbstractPair {
     @Override
     public void clearPairing(WorldCoordinate other) {
         printDebugPair("Signal Block pair cleared. ", other);
-        if (RailcraftConfig.printSignalDebug()) {
+        if (SignalTools.printSignalDebug) {
             Game.logTrace(DEBUG_LEVEL, 10, "Signal Block code Path");
             int x = other.x;
             int y = other.y;
@@ -159,7 +156,7 @@ public abstract class SignalBlock extends AbstractPair {
         super.clearPairing(other);
     }
 
-    public void clearSignalBlockPairing(WorldCoordinate other, String reason, Object... args) {
+    private void clearSignalBlockPairing(WorldCoordinate other, String reason, Object... args) {
         printDebug(reason, args);
         if (other == null)
             clearPairings();
@@ -231,7 +228,7 @@ public abstract class SignalBlock extends AbstractPair {
 
     protected abstract SignalAspect getSignalAspectForPair(WorldCoordinate otherCoord);
 
-    protected SignalAspect determineAspect(WorldCoordinate otherCoord) {
+    public SignalAspect determineAspect(WorldCoordinate otherCoord) {
         if (isWaitingForRetest() || isBeingPaired())
             return SignalAspect.BLINK_YELLOW;
         if (!isPaired())
@@ -291,7 +288,7 @@ public abstract class SignalBlock extends AbstractPair {
         return newAspect;
     }
 
-    public TrackTools.TrackScan getOrCreateTrackScan(WorldCoordinate otherTrack) {
+    private TrackTools.TrackScan getOrCreateTrackScan(WorldCoordinate otherTrack) {
         TrackTools.TrackScan scan = trackScans.get(otherTrack);
         if (scan == null) {
             WorldCoordinate myTrack = getTrackLocation();
@@ -301,7 +298,7 @@ public abstract class SignalBlock extends AbstractPair {
         return scan;
     }
 
-    protected WorldCoordinate getOtherTrackLocation(WorldCoordinate otherCoord) {
+    private WorldCoordinate getOtherTrackLocation(WorldCoordinate otherCoord) {
         SignalBlock other = getSignalAt(otherCoord);
         if (other != null) {
             WorldCoordinate track = other.getTrackLocation();

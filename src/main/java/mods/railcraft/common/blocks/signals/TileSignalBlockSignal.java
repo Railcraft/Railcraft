@@ -10,6 +10,7 @@ package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.api.signals.SimpleSignalController;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.util.misc.Game;
@@ -23,7 +24,7 @@ import java.io.IOException;
 public class TileSignalBlockSignal extends TileSignalBase implements IControllerTile, ISignalTile, ISignalBlockTile {
 
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
-    private final SignalBlock signalBlock = new SignalBlockSimple(this);
+    private final SignalBlock signalBlock = new SignalBlockSimple(getLocalizationTag(), this);
 
     @Override
     public EnumSignal getSignalType() {
@@ -49,7 +50,7 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
         if (prevAspect != controller.getAspect()) {
             sendUpdateToClient();
         }
-        if (RailcraftConfig.printSignalDebug() && prevAspect != SignalAspect.BLINK_RED && controller.getAspect() == SignalAspect.BLINK_RED) {
+        if (SignalTools.printSignalDebug && prevAspect != SignalAspect.BLINK_RED && controller.getAspect() == SignalAspect.BLINK_RED) {
             Game.log(Level.INFO, "Signal Tile changed aspect to BLINK_RED: source:[{0}]", getPos());
         }
     }

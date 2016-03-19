@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.core;
 
+import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternMetal;
@@ -86,7 +87,6 @@ public class RailcraftConfig {
     private static boolean boreDestroysBlocks;
     private static boolean boreMinesAllBlocks;
     private static boolean locomotiveDamageMobs;
-    private static boolean printSignalDebug;
     private static boolean printLinkingDebug;
     private static boolean printAnchorDebug;
     private static boolean deleteAnchors;
@@ -234,7 +234,7 @@ public class RailcraftConfig {
 
         allowTankStacking = get(CAT_TWEAKS_BLOCKS + ".irontank", "allow.stacking", true, "Change to '{t}=false' to disable the stacking of Iron Tanks");
 
-        printSignalDebug = get(CAT_TWEAKS_BLOCKS + ".signals", "printDebug", false, "change to '{t}=true' to log debug info for Signal Blocks");
+        SignalTools.printSignalDebug = get(CAT_TWEAKS_BLOCKS + ".signals", "printDebug", false, "change to '{t}=true' to log debug info for Signal Blocks");
         signalUpdateInterval = get(CAT_TWEAKS_BLOCKS + ".signals", "update.interval", 4, "measured in tick, smaller numbers update more often, resulting in more sensitive signals, but cost more cpu power, default = 4");
 
         machinesRequirePower = get(CAT_TWEAKS_BLOCKS + ".machines", "requirePower", true, "change to '{t}=false' to disable the Power Requirements for most machines");
@@ -774,10 +774,6 @@ public class RailcraftConfig {
 
     public static int locomotiveHorsepower() {
         return locomotiveHorsepower;
-    }
-
-    public static boolean printSignalDebug() {
-        return printSignalDebug;
     }
 
     public static boolean printLinkingDebug() {

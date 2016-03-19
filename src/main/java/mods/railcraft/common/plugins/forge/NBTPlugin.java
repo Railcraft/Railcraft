@@ -59,10 +59,8 @@ public class NBTPlugin {
     public static class NBTList<T extends NBTBase> extends ForwardingList<T> {
 
         private final ArrayList<T> backingList;
-        private final NBTTagList nbtList;
 
         public NBTList(NBTTagList nbtList) {
-            this.nbtList = nbtList;
             backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 0);
         }
 
