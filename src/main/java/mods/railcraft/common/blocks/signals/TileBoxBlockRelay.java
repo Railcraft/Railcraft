@@ -11,14 +11,12 @@ package mods.railcraft.common.blocks.signals;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import mods.railcraft.api.signals.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
-import mods.railcraft.api.signals.IControllerTile;
-import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.api.signals.SimpleSignalController;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
@@ -31,7 +29,7 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.*;
 public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBlockTile, IAspectActionManager, IGuiReturnHandler, IAspectProvider {
 
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
-    private final SignalBlock signalBlock = new SignalBlockRelay(this);
+    private final SignalBlock signalBlock = new SignalBlockRelay(getLocalizationTag(), this);
 
     @Override
     public EnumSignal getSignalType() {
