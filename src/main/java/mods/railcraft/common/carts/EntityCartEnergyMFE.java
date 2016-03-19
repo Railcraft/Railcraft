@@ -8,18 +8,19 @@
  */
 package mods.railcraft.common.carts;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import mods.railcraft.common.modules.ModuleIC2;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class EntityCartEnergyMFE extends EntityCartEnergy {
-	
+    private final int TIER = IC2Plugin.isClassic() ? 2 : 3;
+    private final int CAPACITY = IC2Plugin.isClassic() ? 600000 : 4000000;
+    private final int TRANSFER = IC2Plugin.isClassic() ? 128 : 512;
+
     public EntityCartEnergyMFE(World world) {
         super(world);
     }
@@ -42,17 +43,17 @@ public class EntityCartEnergyMFE extends EntityCartEnergy {
 
     @Override
     public int getTier() {
-        return ModuleIC2.classic ? 2 : 3;
+        return TIER;
     }
 
     @Override
     public int getCapacity() {
-        return ModuleIC2.classic ? 600000 : 4000000;
+        return CAPACITY;
     }
 
     @Override
     public int getTransferLimit() {
-        return ModuleIC2.classic ? 128 : 512;
+        return TRANSFER;
     }
 
     @Override
