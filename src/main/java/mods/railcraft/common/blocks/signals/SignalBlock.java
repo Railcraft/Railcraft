@@ -13,9 +13,8 @@ import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalTools;
-import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.plugins.forge.NBTPlugin;
-import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.api.tracks.RailTools;
+import mods.railcraft.api.tracks.TrackScanner;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,6 +23,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.message.MessageFormatMessage;
 
 import java.util.*;
 
@@ -34,7 +35,7 @@ public abstract class SignalBlock extends AbstractPair {
     private static final Level DEBUG_LEVEL = Level.INFO;
     //    private static final Map<UUID, Deque<WorldCoordinate>> savedData = new HashMap<UUID, Deque<WorldCoordinate>>();
     private final Map<WorldCoordinate, WorldCoordinate> trackCache = new HashMap<WorldCoordinate, WorldCoordinate>();
-    private final Map<WorldCoordinate, TrackTools.TrackScan> trackScans = new HashMap<WorldCoordinate, TrackTools.TrackScan>();
+    private final Map<WorldCoordinate, TrackScanner.ScanResult> trackScans = new HashMap<WorldCoordinate, TrackScanner.ScanResult>();
     private final Set<WorldCoordinate> waitingForRetest = new HashSet<WorldCoordinate>();
     private WorldCoordinate trackLocation;
     private int update = rand.nextInt();
@@ -54,25 +55,30 @@ public abstract class SignalBlock extends AbstractPair {
 
     public abstract SignalAspect getSignalAspect();
 
+    public void log(Level level, String msg, Object... args) {
+        if (msg != null)
+            LogManager.getLogger("Railcraft").log(level, new MessageFormatMessage(msg, args));
+    }
+
     private void printDebug(String msg, Object... args) {
         if (SignalTools.printSignalDebug)
-            Game.log(DEBUG_LEVEL, msg, args);
+            log(DEBUG_LEVEL, msg, args);
     }
 
     private void printDebugPair(String msg, TileEntity ot) {
         if (SignalTools.printSignalDebug)
             if (ot == null)
-                Game.log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
+                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
             else
-                Game.log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, ot.xCoord, ot.yCoord, ot.zCoord, ot.getClass());
+                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, ot.xCoord, ot.yCoord, ot.zCoord, ot.getClass());
     }
 
     private void printDebugPair(String msg, WorldCoordinate coord) {
         if (SignalTools.printSignalDebug)
             if (coord == null)
-                Game.log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
+                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
             else
-                Game.log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.xCoord, tile.yCoord, tile.zCoord, coord.x, coord.y, coord.z);
+                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.xCoord, tile.yCoord, tile.zCoord, coord.x, coord.y, coord.z);
     }
 
     @Override
@@ -109,8 +115,9 @@ public abstract class SignalBlock extends AbstractPair {
         super.loadNBT(data);
 //        uuid = MiscTools.readUUID(data, "uuid");
         if (data.hasKey("trackCache")) {
-            List<NBTTagCompound> tagList = NBTPlugin.getNBTList(data, "trackCache", NBTPlugin.EnumNBTType.COMPOUND);
-            for (NBTTagCompound nbt : tagList) {
+            NBTTagList tagList = data.getTagList("trackCache", 10);
+            for (int i = 0; i < tagList.tagCount(); i++) {
+                NBTTagCompound nbt = tagList.getCompoundTagAt(i);
                 WorldCoordinate key = WorldCoordinate.readFromNBT(nbt, "key");
                 WorldCoordinate value = WorldCoordinate.readFromNBT(nbt, "value");
                 trackCache.put(key, value);
@@ -134,21 +141,21 @@ public abstract class SignalBlock extends AbstractPair {
     public void clearPairing(WorldCoordinate other) {
         printDebugPair("Signal Block pair cleared. ", other);
         if (SignalTools.printSignalDebug) {
-            Game.logTrace(DEBUG_LEVEL, 10, "Signal Block code Path");
+//            logTrace(DEBUG_LEVEL, 10, "Signal Block code Path");
             int x = other.x;
             int y = other.y;
             int z = other.z;
 
             Block block = tile.getWorldObj().getBlock(x, y, z);
             if (block != null)
-                Game.log(DEBUG_LEVEL, "Signal Block target block [{0}, {1}, {2}] = {3}, {4}", x, y, z, block.getClass(), block.getUnlocalizedName());
+                log(DEBUG_LEVEL, "Signal Block target block [{0}, {1}, {2}] = {3}, {4}", x, y, z, block.getClass(), block.getUnlocalizedName());
             else
-                Game.log(DEBUG_LEVEL, "Signal Block target block [{0}, {1}, {2}] = null", x, y, z);
+                log(DEBUG_LEVEL, "Signal Block target block [{0}, {1}, {2}] = null", x, y, z);
             TileEntity t = tile.getWorldObj().getTileEntity(x, y, z);
             if (t != null)
-                Game.log(DEBUG_LEVEL, "Signal Block target tile [{0}, {1}, {2}] = {3}", t.xCoord, t.yCoord, t.zCoord, t.getClass());
+                log(DEBUG_LEVEL, "Signal Block target tile [{0}, {1}, {2}] = {3}", t.xCoord, t.yCoord, t.zCoord, t.getClass());
             else
-                Game.log(DEBUG_LEVEL, "Signal Block target tile [{0}, {1}, {2}] = null", x, y, z);
+                log(DEBUG_LEVEL, "Signal Block target tile [{0}, {1}, {2}] = null", x, y, z);
         }
         super.clearPairing(other);
     }
@@ -207,7 +214,7 @@ public abstract class SignalBlock extends AbstractPair {
             printDebugPair("Signal Block creation failed, could not find Track.", other.tile);
             return false;
         }
-        TrackTools.TrackScan scan = TrackTools.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
+        TrackScanner.ScanResult scan = TrackScanner.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
         if (!scan.areConnected) {
             printDebugPair("Signal Block creation failed, could not find Path.", other.tile);
             return false;
@@ -246,7 +253,7 @@ public abstract class SignalBlock extends AbstractPair {
         if (otherTrack == null)
             return SignalAspect.YELLOW;
 
-        TrackTools.TrackScan scan = getOrCreateTrackScan(otherTrack);
+        TrackScanner.ScanResult scan = getOrCreateTrackScan(otherTrack);
         int y1 = scan.minY;
         int y2 = scan.maxY + 1;
 
@@ -285,11 +292,11 @@ public abstract class SignalBlock extends AbstractPair {
         return newAspect;
     }
 
-    private TrackTools.TrackScan getOrCreateTrackScan(WorldCoordinate otherTrack) {
-        TrackTools.TrackScan scan = trackScans.get(otherTrack);
+    private TrackScanner.ScanResult getOrCreateTrackScan(WorldCoordinate otherTrack) {
+        TrackScanner.ScanResult scan = trackScans.get(otherTrack);
         if (scan == null) {
             WorldCoordinate myTrack = getTrackLocation();
-            scan = TrackTools.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
+            scan = TrackScanner.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
             trackScans.put(otherTrack, scan);
         }
         return scan;
@@ -329,13 +336,13 @@ public abstract class SignalBlock extends AbstractPair {
         }
         if (otherTrack == null)
             return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_TRACK_NULL");
-        TrackTools.TrackScan scan = TrackTools.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
+        TrackScanner.ScanResult scan = TrackScanner.scanStraightTrackSection(tile.getWorldObj(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
         trackScans.put(otherTrack, scan);
-        if (scan.result == TrackTools.TrackScan.Result.VALID)
+        if (scan.verdict == TrackScanner.ScanResult.Verdict.VALID)
             return new TrackValidationStatus(true, "VALID");
-        if (scan.result == TrackTools.TrackScan.Result.UNKNOWN)
+        if (scan.verdict == TrackScanner.ScanResult.Verdict.UNKNOWN)
             return new TrackValidationStatus(true, "UNVERIFIABLE_UNLOADED_CHUNK");
-        return new TrackValidationStatus(false, "INVALID_SCAN_FAIL: " + scan.result.name());
+        return new TrackValidationStatus(false, "INVALID_SCAN_FAIL: " + scan.verdict.name());
     }
 
     @Override
@@ -346,7 +353,7 @@ public abstract class SignalBlock extends AbstractPair {
             if (!isLoaded())
                 return;
         } catch (Throwable ex) {
-            Game.logErrorAPI("Railcraft", ex, AbstractPair.class);
+//            Game.logErrorAPI("Railcraft", ex, AbstractPair.class);
         }
         if (update % Signals.getSignalUpdateInterval() == 0) {
             SignalAspect prev = getSignalAspect();
@@ -398,7 +405,7 @@ public abstract class SignalBlock extends AbstractPair {
             return locateTrack();
         if (!tile.getWorldObj().blockExists(trackLocation.x, trackLocation.y, trackLocation.z))
             return Status.UNKNOWN;
-        if (!TrackTools.isRailBlockAt(tile.getWorldObj(), trackLocation.x, trackLocation.y, trackLocation.z)) {
+        if (!RailTools.isRailBlockAt(tile.getWorldObj(), trackLocation.x, trackLocation.y, trackLocation.z)) {
             trackLocation = null;
             return Status.INVALID;
         }
@@ -444,7 +451,7 @@ public abstract class SignalBlock extends AbstractPair {
         for (int jj = -2; jj < 4; jj++) {
             if (!world.blockExists(x, y - jj, z))
                 return Status.UNKNOWN;
-            if (TrackTools.isRailBlockAt(world, x, y - jj, z)) {
+            if (RailTools.isRailBlockAt(world, x, y - jj, z)) {
                 trackLocation = new WorldCoordinate(world.provider.dimensionId, x, y - jj, z);
                 return Status.VALID;
             }
