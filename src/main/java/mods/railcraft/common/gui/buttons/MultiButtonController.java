@@ -13,27 +13,33 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
- * @param <T>
  */
 public class MultiButtonController<T extends IMultiButtonState> {
 
     private int currentState;
     private final T[] validStates;
 
-    public MultiButtonController(int startState, T... validStates) {
+    private MultiButtonController(int startState, T... validStates) {
         this.currentState = startState;
         this.validStates = validStates;
     }
 
-    protected MultiButtonController(MultiButtonController<T> controller) {
+    private MultiButtonController(MultiButtonController<T> controller) {
         this.currentState = controller.currentState;
         this.validStates = controller.validStates;
     }
 
+    public static <T extends IMultiButtonState> MultiButtonController<T> create(int startState, T... validStates) {
+        return new MultiButtonController<T>(startState, validStates);
+    }
+
+    public static <T extends IMultiButtonState> MultiButtonController<T> create(MultiButtonController<T> controller) {
+        return new MultiButtonController<T>(controller);
+    }
+
     public MultiButtonController<T> copy() {
-        return new MultiButtonController(this);
+        return create(this);
     }
 
     public T[] getValidStates() {
