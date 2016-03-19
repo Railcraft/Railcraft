@@ -47,7 +47,7 @@ public class BlockPostMetal extends BlockPostBase {
         super(renderType);
         setStepSound(Block.soundTypeMetal);
         this.isPlatform = isPlatform;
-        this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumColor.BLACK));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
     }
 
     public static void registerPost() {
