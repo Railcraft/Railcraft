@@ -50,7 +50,7 @@ public class RailcraftDamageSource extends DamageSource {
     @Override
     public IChatComponent func_151519_b(EntityLivingBase entity) {
         String locTag = "death.railcraft." + damageType + "." + (MiscTools.RANDOM.nextInt(numMessages) + 1);
-        return ChatPlugin.chatComp(locTag, entity.getCommandSenderName());
+        return ChatPlugin.chatComp(locTag, entity.getName());
     }
 
     public static final EventHandler EVENT_HANDLER = new EventHandler();

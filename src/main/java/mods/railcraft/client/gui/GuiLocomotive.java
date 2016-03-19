@@ -174,7 +174,7 @@ public abstract class GuiLocomotive extends EntityGui {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String name = loco.getCommandSenderName();
+        String name = loco.getName();
         GuiTools.drawCenteredString(fontRendererObj, name, 6);
         fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }

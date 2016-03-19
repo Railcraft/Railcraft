@@ -29,7 +29,7 @@ public class GuiCartTank extends EntityGui
     {
         super(cart, new ContainerCartTank(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_tank.png");
         this.cart = cart;
-        label = cart.getCommandSenderName();
+        label = cart.getName();
     }
 
     @Override

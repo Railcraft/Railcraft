@@ -11,13 +11,12 @@ package mods.railcraft.common.blocks.signals;
 import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
+import net.minecraft.world.IWorldNameable;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
- * @param <T>
  */
-public interface ISecure<T extends IMultiButtonState> extends IOwnable {
+public interface ISecure<T extends IMultiButtonState> extends IOwnable, IWorldNameable {
 
     MultiButtonController<T> getLockController();
 
@@ -25,7 +24,5 @@ public interface ISecure<T extends IMultiButtonState> extends IOwnable {
      * Indicates if this object is locked
      */
     boolean isSecure();
-
-    String getName();
 
 }

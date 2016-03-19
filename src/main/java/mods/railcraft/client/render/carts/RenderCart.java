@@ -102,7 +102,7 @@ public class RenderCart extends Render implements IRenderer {
 
         boolean name = false;
         if (cart.hasCustomInventoryName()) {
-            renderHaloText(cart, cart.getCommandSenderName(), 0, 0, 0, 64);
+            renderHaloText(cart, cart.getName(), 0, 0, 0, 64);
             name = true;
         }
 

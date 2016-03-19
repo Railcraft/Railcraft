@@ -13,7 +13,7 @@ public class GuiCartTrackLayer extends EntityGui {
 
     public GuiCartTrackLayer(InventoryPlayer inventoryPlayer, EntityCartTrackLayer cart) {
         super(cart, new ContainerCartTrackLayer(inventoryPlayer, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_track_layer.png");
-        label = cart.getCommandSenderName();
+        label = cart.getName();
     }
 
     @Override

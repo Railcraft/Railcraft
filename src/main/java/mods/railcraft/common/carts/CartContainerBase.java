@@ -10,12 +10,14 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -47,6 +49,11 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
     public abstract ICartType getCartType();
 
     @Override
+    public String getName() {
+        return hasCustomName() ? getCustomNameTag() : getCartType().getTag();
+    }
+
+    @Override
     public void initEntityFromItem(ItemStack stack) {
     }
 
@@ -68,17 +75,12 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
     @Override
     public ItemStack getCartItem() {
         ItemStack stack = EnumCart.fromCart(this).getCartItem();
-        if (hasCustomInventoryName())
-            stack.setStackDisplayName(getCommandSenderName());
+        if (hasCustomName())
+            stack.setStackDisplayName(getCustomNameTag());
         return stack;
     }
 
     public abstract List<ItemStack> getItemsDropped();
-
-    @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(getCartType().getTag());
-    }
 
     @Override
     public void setDead() {
@@ -93,19 +95,20 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
     public void killMinecart(DamageSource par1DamageSource) {
         setDead();
         List<ItemStack> drops = getItemsDropped();
-        if (this.func_95999_t() != null)
-            drops.get(0).setStackDisplayName(this.func_95999_t());
+        if (hasCustomName())
+            drops.get(0).setStackDisplayName(getCustomNameTag());
         for (ItemStack item : drops) {
             entityDropItem(item, 0.0F);
         }
     }
 
     @Override
-    public int getMinecartType() {
-        return -1;
+    public EntityMinecart.EnumMinecartType getMinecartType() {
+        return null;
     }
 
-    protected void updateTravelDirection(int trackX, int trackY, int trackZ, int meta) {
+    protected void updateTravelDirection(BlockPos pos, IBlockState state) {
+        TrackTools.getTrackMetaEnum()
         EnumTrackMeta trackMeta = EnumTrackMeta.fromMeta(meta);
         if (trackMeta != null) {
             EnumFacing EnumFacing = determineTravelDirection(trackMeta);

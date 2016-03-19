@@ -26,7 +26,7 @@ public class GuiCartCargo extends EntityGui {
     public GuiCartCargo(InventoryPlayer inv, EntityCartCargo cart) {
         super(cart, new ContainerCartCargo(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_cargo.png");
         this.cart = cart;
-        label = cart.getCommandSenderName();
+        label = cart.getName();
     }
 
     @Override

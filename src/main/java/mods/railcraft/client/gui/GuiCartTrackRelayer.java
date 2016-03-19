@@ -26,7 +26,7 @@ public class GuiCartTrackRelayer extends EntityGui {
 
     public GuiCartTrackRelayer(InventoryPlayer inv, EntityCartTrackRelayer cart) {
         super(cart, new ContainerCartTrackRelayer(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_track_relayer.png");
-        label = cart.getCommandSenderName();
+        label = cart.getName();
         this.cart = cart;
     }
 

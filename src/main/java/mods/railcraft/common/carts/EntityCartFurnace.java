@@ -58,7 +58,7 @@ public class EntityCartFurnace extends EntityMinecartFurnace {
     public ItemStack getCartItem() {
         ItemStack stack = new ItemStack(Items.furnace_minecart);
         if (hasCustomInventoryName())
-            stack.setStackDisplayName(getCommandSenderName());
+            stack.setStackDisplayName(getName());
         return stack;
     }
 

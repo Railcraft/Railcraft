@@ -36,6 +36,13 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
         renderDistanceWeight = CartConstants.RENDER_DIST_MULTIPLIER;
     }
 
+    public abstract ICartType getCartType();
+
+    @Override
+    public String getName() {
+        return hasCustomName() ? getCustomNameTag() : getCartType().getTag();
+    }
+
     @Override
     public void initEntityFromItem(ItemStack stack) {
     }
@@ -56,8 +63,8 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     @Override
     public ItemStack getCartItem() {
         ItemStack stack = EnumCart.fromCart(this).getCartItem();
-        if (hasCustomInventoryName())
-            stack.setStackDisplayName(getCommandSenderName());
+        if (hasCustomName())
+            stack.setStackDisplayName(getCustomNameTag());
         return stack;
     }
 
@@ -71,16 +78,16 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     public void killMinecart(DamageSource par1DamageSource) {
         setDead();
         List<ItemStack> drops = getItemsDropped();
-        if (this.func_95999_t() != null)
-            drops.get(0).setStackDisplayName(this.func_95999_t());
+        if (hasCustomName())
+            drops.get(0).setStackDisplayName(this.getCustomNameTag());
         for (ItemStack item : drops) {
             entityDropItem(item, 0.0F);
         }
     }
 
     @Override
-    public int getMinecartType() {
-        return -1;
+    public EntityMinecart.EnumMinecartType getMinecartType() {
+        return null;
     }
 
     @Override

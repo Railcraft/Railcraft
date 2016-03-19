@@ -96,7 +96,7 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
         boolean canEdit = PlayerPlugin.isPlayerOp(player.getGameProfile());
         if (!canEdit && !RailcraftConfig.isRoutingOpsOnly()) {
             GameProfile owner = getOwner(stack);
-            canEdit |= owner.getId() == null || owner.equals(player.getCommandSenderName());
+            canEdit |= owner.getId() == null || owner.equals(player.getName());
         }
         return canEdit;
     }

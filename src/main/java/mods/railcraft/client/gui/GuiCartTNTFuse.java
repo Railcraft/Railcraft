@@ -22,7 +22,7 @@ public class GuiCartTNTFuse extends GuiBasic {
     CartExplosiveBase cart;
 
     public GuiCartTNTFuse(CartExplosiveBase c) {
-        super(c.getCommandSenderName());
+        super(c.getName());
         cart = c;
         if (cart != null)
             fuse = cart.getFuse();

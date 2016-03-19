@@ -52,7 +52,7 @@ public class EntityCartChest extends CartContainerBase implements IItemCart {
     public ItemStack getCartItem() {
         ItemStack stack = new ItemStack(Items.chest_minecart);
         if (hasCustomInventoryName())
-            stack.setStackDisplayName(getCommandSenderName());
+            stack.setStackDisplayName(getName());
         return stack;
     }
 
