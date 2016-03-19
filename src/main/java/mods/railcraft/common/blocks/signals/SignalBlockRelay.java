@@ -22,8 +22,8 @@ public class SignalBlockRelay extends SignalBlock {
 
     private final Map<WorldCoordinate, SignalAspect> aspects = new HashMap<WorldCoordinate, SignalAspect>();
 
-    public SignalBlockRelay(RailcraftTileEntity tile) {
-        super(tile, 2);
+    public SignalBlockRelay(String locTag, TileEntity tile) {
+        super(tag, tile, 2);
     }
 
     @Override

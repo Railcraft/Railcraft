@@ -10,9 +10,10 @@ package mods.railcraft.common.plugins.forge;
 
 import com.google.common.collect.ForwardingList;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.nbt.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.nbt.*;
 
 /**
  *
@@ -37,7 +38,7 @@ public class NBTPlugin {
         public static final EnumNBTType[] VALUES = values();
         public final Class<? extends NBTBase> classObject;
 
-        private EnumNBTType(Class<? extends NBTBase> c) {
+        EnumNBTType(Class<? extends NBTBase> c) {
             this.classObject = c;
         }
 
@@ -59,10 +60,8 @@ public class NBTPlugin {
     public static class NBTList<T extends NBTBase> extends ForwardingList<T> {
 
         private final ArrayList<T> backingList;
-        private final NBTTagList nbtList;
 
         public NBTList(NBTTagList nbtList) {
-            this.nbtList = nbtList;
             backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 0);
         }
 

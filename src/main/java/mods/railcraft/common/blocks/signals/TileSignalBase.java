@@ -8,21 +8,22 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 import static net.minecraftforge.common.util.ForgeDirection.DOWN;
 import static net.minecraftforge.common.util.ForgeDirection.UP;
@@ -32,7 +33,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     private static final ForgeDirection[] UP_DOWN_AXES = new ForgeDirection[]{UP, DOWN};
     protected static final float BOUNDS = 0.15f;
     private ForgeDirection facing = ForgeDirection.NORTH;
-    private int prevLigthValue;
+    private int prevLightValue;
 
     @Override
     public boolean rotateBlock(ForgeDirection axis) {
@@ -79,8 +80,8 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
         if(Game.isNotHost(worldObj)){
             boolean needsUpdate = false;
             int lightValue = getLightValue();
-            if (prevLigthValue != lightValue) {
-                prevLigthValue = lightValue;
+            if (prevLightValue != lightValue) {
+                prevLightValue = lightValue;
                 worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
                 needsUpdate = true;
             }
