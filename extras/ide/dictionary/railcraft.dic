@@ -8,6 +8,7 @@ derped
 dest
 invs
 iterable
+knockback
 lockdown
 minecart
 minecarts
@@ -27,5 +28,6 @@ redstone
 refuelable
 routable
 spigotmc
+teleported
 uncrafted
 uncrafting
