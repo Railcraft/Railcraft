@@ -43,6 +43,7 @@ public class IC2Plugin {
     private static final Map<String, ItemStack> itemCache = new HashMap<String, ItemStack>();
     private static final Map<String, Boolean> itemCacheFlag = new HashMap<String, Boolean>();
     private static Boolean modLoaded = null;
+    private static Boolean classic = null;
 
     public static ItemStack getItem(String tag) {
         if (!isModInstalled())
@@ -220,8 +221,14 @@ public class IC2Plugin {
 
     public static boolean isModInstalled() {
         if (modLoaded == null)
-            modLoaded = Loader.isModLoaded("IC2");
+            modLoaded = Loader.isModLoaded("IC2") || Loader.isModLoaded("IC2-Classic-Spmod");
         return modLoaded;
+    }
+
+    public static boolean isClassic() {
+        if (classic == null)
+            classic = Loader.isModLoaded("IC2-Classic-Spmod");
+        return classic;
     }
 
 }

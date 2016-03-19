@@ -455,13 +455,14 @@ public class ModuleFactory extends RailcraftModule {
         }
 
         if (IC2Plugin.isModInstalled()) {
-            ItemStack crushedIron = IC2Plugin.getItem("crushedIronOre");
-            ItemStack crushedGold = IC2Plugin.getItem("crushedGoldOre");
-            ItemStack crushedCopper = IC2Plugin.getItem("crushedCopperOre");
-            ItemStack crushedTin = IC2Plugin.getItem("crushedTinOre");
-            ItemStack crushedSilver = IC2Plugin.getItem("crushedSilverOre");
+            boolean classic = IC2Plugin.isClassic();
+            ItemStack crushedIron = IC2Plugin.getItem(classic ? "ironDust" : "crushedIronOre");
+            ItemStack crushedGold = IC2Plugin.getItem(classic ? "goldDust" : "crushedGoldOre");
+            ItemStack crushedCopper = IC2Plugin.getItem(classic ? "copperDust" : "crushedCopperOre");
+            ItemStack crushedTin = IC2Plugin.getItem(classic ? "tinDust" : "crushedTinOre");
+            ItemStack crushedSilver = IC2Plugin.getItem(classic ? "silverDust" : "crushedSilverOre");
             ItemStack crushedLead = IC2Plugin.getItem("crushedLeadOre");
-            ItemStack crushedUranium = IC2Plugin.getItem("crushedUraniumOre");
+            ItemStack crushedUranium = IC2Plugin.getItem(classic ? "uraniumDrop" : "crushedUraniumOre");
 
             if (RailcraftConfig.canCrushOres()) {
                 registerCrushedOreRecipe(new ItemStack(Blocks.iron_ore), crushedIron);

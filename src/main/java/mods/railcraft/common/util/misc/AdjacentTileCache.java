@@ -11,6 +11,7 @@ package mods.railcraft.common.util.misc;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.*;
 
@@ -49,13 +50,20 @@ public final class AdjacentTileCache {
         }
     }
 
+    public Map<EnumFacing, TileEntity> refreshTiles() {
+        Map<EnumFacing, TileEntity> tiles = new EnumMap<EnumFacing, TileEntity>(EnumFacing.class);
+        for (EnumFacing side : EnumFacing.) {
+            tiles.put(side, getTileOnSide(side));
+        }
+        return tiles;
+    }
+
     public void purge() {
         Arrays.fill(cache, null);
         Arrays.fill(delay, DELAY_MIN);
         for (Timer t : timer) {
             t.reset();
         }
-        changed();
         for (ICacheListener listener : listeners) {
             listener.purge();
         }
@@ -65,31 +73,40 @@ public final class AdjacentTileCache {
         Arrays.fill(delay, DELAY_MIN);
     }
 
-    protected void setTile(int side, TileEntity tile) {
-        if (cache[side] != tile) {
-            cache[side] = tile;
-            changed();
+    protected void setTile(ForgeDirection side, TileEntity tile) {
+        int s = side.ordinal();
+        if (cache[s] != tile) {
+            cache[s] = tile;
+            changed(side);
         }
     }
 
-    private void changed() {
+    private void changed(ForgeDirection side) {
         for (ICacheListener listener : listeners) {
-            listener.changed();
+            listener.changed(side);
         }
+    }
+
+    private boolean isInSameChunk(ForgeDirection side) {
+        int sx = MiscTools.getXOnSide(source.xCoord, side);
+        int sz = MiscTools.getZOnSide(source.zCoord, side);
+        return source.xCoord >> 4 == sx >> 4 && source.zCoord >> 4 == sz >> 4;
     }
 
     public TileEntity getTileOnSide(EnumFacing side) {
-        if (Game.IS_BUKKIT)
+        if (Game.IS_BUKKIT || !isInSameChunk(side)) {
+            changed(side);
             return searchSide(side);
+        }
         int s = side.ordinal();
         if (cache[s] != null)
             if (cache[s].isInvalid() || !MiscTools.areCoordinatesOnSide(source.getPos(), cache[s].getPos(), side))
-                setTile(s, null);
+                setTile(side, null);
             else
                 return cache[s];
 
         if (timer[s].hasTriggered(source.getWorld(), delay[s])) {
-            setTile(s, searchSide(side));
+            setTile(side, searchSide(side));
             if (cache[s] == null)
                 incrementDelay(s);
             else
@@ -112,7 +129,7 @@ public final class AdjacentTileCache {
     }
 
     public interface ICacheListener {
-        void changed();
+        void changed(ForgeDirection side);
 
         void purge();
     }

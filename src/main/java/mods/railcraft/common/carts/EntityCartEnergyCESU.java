@@ -60,7 +60,8 @@ public class EntityCartEnergyCESU extends EntityCartEnergy {
 
     @Override
     public ItemStack getIC2Item() {
-        return IC2Plugin.getItem("cesuUnit");
+        //IC2 Classic so no RenderCrash Happens
+        return IC2Plugin.getItem(IC2Plugin.isClassic() ? "mfsUnit" : "cesuUnit");
     }
 
 }

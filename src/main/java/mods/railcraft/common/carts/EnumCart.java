@@ -54,6 +54,7 @@ public enum EnumCart implements ICartType {
     ENERGY_BATBOX(0, EntityCartEnergyBatBox.class, true),
     ENERGY_CESU(0, EntityCartEnergyCESU.class, true),
     ENERGY_MFE(0, EntityCartEnergyMFE.class, true),
+    ENERGY_MFSU(1, EntityCartEnergyMFSU.class, true),
     HOPPER(0, EntityMinecartHopper.class, true, new ItemStack(Blocks.hopper)),
     TRACK_LAYER(1, EntityCartTrackLayer.class),
     TRACK_REMOVER(1, EntityCartTrackRemover.class),
