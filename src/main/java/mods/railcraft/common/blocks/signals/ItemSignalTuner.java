@@ -87,7 +87,20 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
         TileEntity tile = world.getTileEntity(i, j, k);
         if (tile != null) {
             WorldCoordinate cPos = getControllerData(item);
-            if (tile instanceof IReceiverTile && cPos != null) {
+	    if (tile instanceof IControllerTile) {
+                if (Game.isHost(world)) {
+                    SignalController controller = ((IControllerTile) tile).getController();
+                    if (cPos == null || (i != cPos.x || j != cPos.y || k != cPos.z)) {
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.start", controller.getLocalizationTag());
+                        setControllerData(item, tile);
+                        controller.startPairing();
+                    } else {
+                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.stop", controller.getLocalizationTag());
+                        controller.endPairing();
+                        item.setTagCompound(null);
+                    }
+                }
+            } else if (tile instanceof IReceiverTile && cPos != null) {
                 if (Game.isHost(world)) {
                     SignalReceiver receiver = ((IReceiverTile) tile).getReceiver();
                     if (i != cPos.x || j != cPos.y || k != cPos.z) {
@@ -108,19 +121,6 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                             ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.abandon.chunk");
                             item.setTagCompound(null);
                         }
-                    }
-                }
-            } else if (tile instanceof IControllerTile) {
-                if (Game.isHost(world)) {
-                    SignalController controller = ((IControllerTile) tile).getController();
-                    if (cPos == null || (i != cPos.x || j != cPos.y || k != cPos.z)) {
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.start", controller.getLocalizationTag());
-                        setControllerData(item, tile);
-                        controller.startPairing();
-                    } else {
-                        ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.tuner.stop", controller.getLocalizationTag());
-                        controller.endPairing();
-                        item.setTagCompound(null);
                     }
                 }
             } else
