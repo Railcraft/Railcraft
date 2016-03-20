@@ -12,8 +12,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import mods.railcraft.common.blocks.signals.ISignalBlockTile;
-import mods.railcraft.common.blocks.signals.SignalBlock;
+import mods.railcraft.api.signals.ISignalBlockTile;
+import mods.railcraft.api.signals.SignalBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;

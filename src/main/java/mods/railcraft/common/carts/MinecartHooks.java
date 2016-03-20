@@ -338,15 +338,12 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     private void testHighSpeedCollision(EntityMinecart cart, Entity other) {
         boolean highSpeed = cart.getEntityData().getBoolean("HighSpeed");
         if (highSpeed) {
-            ILinkageManager lm = LinkageManager.instance();
-            if (other instanceof EntityMinecart && lm.areLinked(cart, (EntityMinecart) other))
+            if (other instanceof EntityMinecart && Train.areInSameTrain(cart, (EntityMinecart) other))
                 return;
-            EntityMinecart link = lm.getLinkedCartA(cart);
-            if (link != null && other == link.riddenByEntity)
-                return;
-            link = lm.getLinkedCartB(cart);
-            if (link != null && other == link.riddenByEntity)
-                return;
+            for (EntityMinecart c : Train.getTrain(cart)) {
+                if (other == c.riddenByEntity)
+                    return;
+            }
 
             if (other instanceof EntityMinecart) {
                 boolean otherHighSpeed = other.getEntityData().getBoolean("HighSpeed");

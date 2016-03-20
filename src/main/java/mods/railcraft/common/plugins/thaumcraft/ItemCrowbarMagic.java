@@ -10,7 +10,6 @@ package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCrowbar;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.Item;
@@ -40,7 +39,6 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
             item = new ItemCrowbarMagic();
             RailcraftRegistry.register(item);
-            HarvestPlugin.setToolClass(item, "crowbar", 0);
         }
     }
 
@@ -60,7 +58,7 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
             aspects.add(Aspect.TOOL, 1).add(Aspect.MECHANISM, 2).add(Aspect.TRAVEL, 1);
 
             ResearchItem thaumiumCrowbar = new ResearchItemRC(RESEARCH_TAG, ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 0, 0, 3, new ItemStack(item));
-            thaumiumCrowbar.setPages(new ResearchPage[]{ThaumcraftPlugin.getResearchPage(RESEARCH_TAG), new ResearchPage(recipe)})
+            thaumiumCrowbar.setPages(ThaumcraftPlugin.getResearchPage(RESEARCH_TAG), new ResearchPage(recipe))
                     .setParentsHidden("THAUMIUM")
                     .registerResearchItem();
         } catch (Throwable error) {

@@ -8,25 +8,25 @@
  */
 package mods.railcraft.common.util.inventory;
 
-import java.util.*;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
-import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.*;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public final class AdjacentInventoryCache {
 
     private final AdjacentTileCache cache;
-    private boolean changed = true;
-    private final List<IInventory> invs = new LinkedList<IInventory>();
+    private final List<IInventory> sortedInvs = new LinkedList<IInventory>();
+    private final Map<ForgeDirection, IInventory> invs = new EnumMap<ForgeDirection, IInventory>(ForgeDirection.class);
     private final Comparator<IInventory> sorter;
     private final ITileFilter filter;
+    private final EnumSet<ForgeDirection> changedSides = EnumSet.allOf(ForgeDirection.class);
 
     public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache) {
         this(tile, cache, null, null);
@@ -36,12 +36,13 @@ public final class AdjacentInventoryCache {
         this.cache = cache;
         cache.addListener(new AdjacentTileCache.ICacheListener() {
             @Override
-            public void changed() {
-                changed = true;
+            public void changed(ForgeDirection side) {
+                changedSides.add(side);
             }
 
             @Override
             public void purge() {
+                changedSides.addAll(EnumSet.allOf(ForgeDirection.class));
                 invs.clear();
             }
 
@@ -51,22 +52,27 @@ public final class AdjacentInventoryCache {
     }
 
     public Collection<IInventory> getAdjacentInventories() {
-        cache.refresh();
-        if (changed || Game.IS_BUKKIT) {
-            changed = false;
-            invs.clear();
-            for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-                TileEntity tile = cache.getTileOnSide(side);
+        Map<ForgeDirection, TileEntity> tiles = cache.refreshTiles();
+        if (!changedSides.isEmpty()) {
+            for (ForgeDirection side : changedSides) {
+                invs.remove(side);
+                TileEntity tile = tiles.get(side);
                 if (tile != null && (filter == null || filter.matches(tile))) {
                     IInventory inv = InvTools.getInventoryFromTile(tile, side.getOpposite());
                     if (inv != null)
-                        invs.add(inv);
+                        invs.put(side, inv);
                 }
             }
+            changedSides.clear();
+
+            sortedInvs.clear();
+            sortedInvs.addAll(invs.values());
+
             if (sorter != null)
-                Collections.sort(invs, sorter);
+                Collections.sort(sortedInvs, sorter);
         }
-        return invs;
+
+        return sortedInvs;
     }
 
 }

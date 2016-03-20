@@ -11,25 +11,6 @@ package mods.railcraft.common.blocks.tracks;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.*;
-import org.apache.logging.log4j.Level;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.block.BlockRailBase;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.stats.StatList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.ITextureLoader;
 import mods.railcraft.api.electricity.IElectricGrid;
@@ -45,12 +26,34 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import org.apache.logging.log4j.Level;
+
+import java.util.*;
 
 public class BlockTrack extends BlockRailBase implements IPostConnection {
+
+    public static final float HARDNESS = 2F;
 
     protected final int renderType;
 
@@ -59,9 +62,12 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
         renderType = modelID;
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
         setResistance(3.5F);
-        setHardness(1.05F);
+        setHardness(HARDNESS);
         setStepSound(soundTypeMetal);
         setCreativeTab(CreativeTabs.tabTransport);
+        setHarvestLevel("crowbar", 0);
+
+
         GameRegistry.registerTileEntity(TileTrack.class, "RailcraftTrackTile");
         GameRegistry.registerTileEntity(TileTrackTESR.class, "RailcraftTrackTESRTile");
 

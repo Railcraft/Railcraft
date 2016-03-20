@@ -11,6 +11,8 @@ package mods.railcraft.common.blocks.signals;
 import cpw.mods.fml.common.Optional;
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.WorldCoordinate;
+import mods.railcraft.api.signals.ISignalBlockTile;
+import mods.railcraft.api.signals.SignalBlock;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.items.ItemRailcraft;

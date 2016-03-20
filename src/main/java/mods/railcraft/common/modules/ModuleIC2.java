@@ -9,11 +9,6 @@
 package mods.railcraft.common.modules;
 
 import ic2.api.recipe.Recipes;
-import org.apache.logging.log4j.Level;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.EnumDetector;
@@ -24,10 +19,15 @@ import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.ItemRailcraft;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import org.apache.logging.log4j.Level;
 
 public class ModuleIC2 extends RailcraftModule {
 
@@ -46,7 +46,6 @@ public class ModuleIC2 extends RailcraftModule {
 
     @Override
     public void initFirst() {
-
         BlockDetector.registerBlock();
         RailcraftBlocks.registerBlockMachineGamma();
 
@@ -60,7 +59,8 @@ public class ModuleIC2 extends RailcraftModule {
 
         EnumCart.ENERGY_BATBOX.setup();
         EnumCart.ENERGY_MFE.setup();
-        EnumCart.ENERGY_CESU.setup();
+        if (IC2Plugin.isClassic()) EnumCart.ENERGY_MFSU.setup();
+        else EnumCart.ENERGY_CESU.setup();
 
 //        id = RailcraftConfig.getItemId("item.creosote.wood");
 //        if(id > 0){
@@ -106,29 +106,47 @@ public class ModuleIC2 extends RailcraftModule {
             cart.setContents(batbox);
             ItemStack stack = cart.getCartItem();
             if (stack != null) {
-                CraftingPlugin.addShapedRecipe(stack, new Object[]{
-                    "E",
-                    "M",
-                    'E', batbox,
-                    'M', Items.minecart
-                });
+                CraftingPlugin.addShapedRecipe(stack,
+                        "E",
+                        "M",
+                        'E', batbox,
+                        'M', Items.minecart
+                );
                 CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
             }
         }
 
-        ItemStack cesu = IC2Plugin.getItem("cesuUnit");
-        if (cesu != null) {
-            EnumCart cart = EnumCart.ENERGY_CESU;
-            cart.setContents(cesu);
-            ItemStack stack = cart.getCartItem();
-            if (stack != null) {
-                CraftingPlugin.addShapedRecipe(stack, new Object[]{
-                    "E",
-                    "M",
-                    'E', cesu,
-                    'M', Items.minecart
-                });
-                CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
+        if (!IC2Plugin.isClassic()) {
+            ItemStack cesu = IC2Plugin.getItem("cesuUnit");
+            if (cesu != null) {
+                EnumCart cart = EnumCart.ENERGY_CESU;
+                cart.setContents(cesu);
+                ItemStack stack = cart.getCartItem();
+                if (stack != null) {
+                    CraftingPlugin.addShapedRecipe(stack,
+                            "E",
+                            "M",
+                            'E', cesu,
+                            'M', Items.minecart
+                    );
+                    CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
+                }
+            }
+        } else {
+            ItemStack mfsu = IC2Plugin.getItem("mfsUnit");
+            if (mfsu != null) {
+                EnumCart cart = EnumCart.ENERGY_MFSU;
+                cart.setContents(mfsu);
+                ItemStack stack = cart.getCartItem();
+                if (stack != null) {
+                    CraftingPlugin.addShapedRecipe(stack,
+                            "E",
+                            "M",
+                            'E', mfsu,
+                            'M', Items.minecart
+                    );
+                    CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
+                }
             }
         }
 
@@ -138,12 +156,12 @@ public class ModuleIC2 extends RailcraftModule {
             cart.setContents(mfe);
             ItemStack stack = cart.getCartItem();
             if (stack != null) {
-                CraftingPlugin.addShapedRecipe(stack, new Object[]{
-                    "E",
-                    "M",
-                    'E', mfe,
-                    'M', Items.minecart
-                });
+                CraftingPlugin.addShapedRecipe(stack,
+                        "E",
+                        "M",
+                        'E', mfe,
+                        'M', Items.minecart
+                );
                 CraftingPlugin.addShapelessRecipe(new ItemStack(Items.minecart), stack);
             }
         }
@@ -187,14 +205,14 @@ public class ModuleIC2 extends RailcraftModule {
             if (lapotron != null && glassCable != null && circuit != null) {
                 lapotron.copy();
 //                lapotron.setItemDamage(-1);
-                Recipes.advRecipes.addRecipe(new ItemStack(lapotronUpgrade), new Object[]{
-                    "GGG",
-                    "wLw",
-                    "GCG",
-                    'G', new ItemStack(Blocks.glass, 1, 0),
-                    'w', glassCable,
-                    'C', circuit,
-                    'L', lapotron,});
+                Recipes.advRecipes.addRecipe(new ItemStack(lapotronUpgrade),
+                        "GGG",
+                        "wLw",
+                        "GCG",
+                        'G', new ItemStack(Blocks.glass, 1, 0),
+                        'w', glassCable,
+                        'C', circuit,
+                        'L', lapotron);
             }
         }
     }
