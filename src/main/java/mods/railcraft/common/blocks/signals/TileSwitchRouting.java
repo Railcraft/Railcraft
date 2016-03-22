@@ -17,6 +17,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -75,8 +76,8 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityLivingBase, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityLivingBase, stack);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power)
             setPowered(power);

@@ -11,14 +11,12 @@ package mods.railcraft.common.blocks.aesthetics.post;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
-import mods.railcraft.common.blocks.signals.ISignalTile;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWallSign;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
@@ -31,8 +29,8 @@ import java.util.Set;
  */
 public class PostConnectionHelper {
 
-    public static final Set<Block> canConnect = new HashSet<Block>();
-    public static final Set<Block> noConnect = new HashSet<Block>();
+    private static final Set<Block> canConnect = new HashSet<Block>();
+    private static final Set<Block> noConnect = new HashSet<Block>();
 
     static {
         canConnect.add(Blocks.glowstone);
@@ -67,24 +65,29 @@ public class PostConnectionHelper {
         noConnect.add(Blocks.sponge);
     }
 
-    public static ConnectStyle connect(IBlockAccess world, BlockPos pos, EnumFacing side) {
-        Block block = WorldPlugin.getBlock(world, pos);
-        if (block instanceof IPostConnection && ((IPostConnection) block).connectsToPost(world, pos, side) == ConnectStyle.NONE)
+    public static ConnectStyle connect(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
+        try {
+            Block block = state.getBlock();
+            if (block instanceof IPostConnection && ((IPostConnection) block).connectsToPost(world, pos, state, side) == ConnectStyle.NONE)
+                return ConnectStyle.NONE;
+        } catch (Error error) {
+            Game.logErrorAPI("Railcraft", error, IPostConnection.class);
+            return ConnectStyle.NONE;
+        }
+
+        BlockPos otherPos = pos.offset(side);
+
+        if (world.isAirBlock(otherPos))
             return ConnectStyle.NONE;
 
-        pos = pos.offset(side);
-
-        if (world.isAirBlock(pos))
-            return ConnectStyle.NONE;
-
-        IBlockState otherState = WorldPlugin.getBlockState(world, pos);
+        IBlockState otherState = WorldPlugin.getBlockState(world, otherPos);
         Block otherBlock = otherState.getBlock();
 
         EnumFacing oppositeSide = side.getOpposite();
 
         try {
             if (otherBlock instanceof IPostConnection)
-                return ((IPostConnection) otherBlock).connectsToPost(world, pos, oppositeSide);
+                return ((IPostConnection) otherBlock).connectsToPost(world, otherPos, otherState, oppositeSide);
         } catch (Error error) {
             Game.logErrorAPI("Railcraft", error, IPostConnection.class);
         }
@@ -105,14 +108,10 @@ public class PostConnectionHelper {
         if (otherBlock instanceof BlockLantern)
             return ConnectStyle.SINGLE_THICK;
 
-        TileEntity otherTile = world.getTileEntity(pos);
-        if (otherTile instanceof ISignalTile)
-            return ConnectStyle.TWO_THIN;
-
         if (world.isSideSolid(pos, oppositeSide, false))
             return ConnectStyle.TWO_THIN;
 
-        // RedPower 2 compat
+        // RedPower 2 compatibility
 //        if (Blocks.blocksList[id] != null && Blocks.blocksList[id].getClass().getSimpleName().equals("BlockShapedLamp")) {
 //            return true;
 //        }

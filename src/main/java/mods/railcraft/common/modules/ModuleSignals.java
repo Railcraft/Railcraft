@@ -10,8 +10,8 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.signals.EnumSignal;
-import mods.railcraft.common.blocks.signals.ItemSignalBlockSurveyor;
-import mods.railcraft.common.blocks.signals.ItemSignalTuner;
+import mods.railcraft.common.items.ItemSignalBlockSurveyor;
+import mods.railcraft.common.items.ItemSignalTuner;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItem;
@@ -30,8 +30,8 @@ public class ModuleSignals extends RailcraftModule {
         Block blockSignal = RailcraftBlocks.getBlockSignal();
         if (blockSignal != null) {
 
-            ItemSignalBlockSurveyor.registerItem();
-            ItemSignalTuner.registerItem();
+            RailcraftItem.signalBlockSurveyor.registerItem();
+            RailcraftItem.signalTuner.registerItem();
             RailcraftItem.signalLabel.registerItem();
 
             // Define Block Signal

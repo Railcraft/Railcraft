@@ -15,43 +15,44 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import org.apache.logging.log4j.Level;
 
-public class GuiHandler implements IGuiHandler
-{
+public class GuiHandler implements IGuiHandler {
 
-    public static void openGui(EnumGui gui, EntityPlayer player, World world, int x, int y, int z)
-    {
-        if(Game.isHost(world)) {
-            if(gui.hasContainer()) {
+    public static void openGui(EnumGui gui, EntityPlayer player, World world, BlockPos pos) {
+        openGui(gui, player, world, pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    public static void openGui(EnumGui gui, EntityPlayer player, World world, int x, int y, int z) {
+        if (Game.isHost(world)) {
+            if (gui.hasContainer()) {
                 player.openGui(Railcraft.getMod(), gui.ordinal(), world, x, y, z);
             }
-        } else if(!gui.hasContainer()) {
+        } else if (!gui.hasContainer()) {
             TileEntity tile = world.getTileEntity(x, y, z);
             FMLClientHandler.instance().displayGuiScreen(player, FactoryGui.build(gui, player.inventory, tile, world, x, y, z));
         }
     }
 
-    public static void openGui(EnumGui gui, EntityPlayer player, World world, Entity entity)
-    {
-        if(Game.isHost(world)) {
-            if(gui.hasContainer()) {
+    public static void openGui(EnumGui gui, EntityPlayer player, World world, Entity entity) {
+        if (Game.isHost(world)) {
+            if (gui.hasContainer()) {
                 player.openGui(Railcraft.getMod(), gui.ordinal(), world, entity.getEntityId(), -1, 0);
             }
-        } else if(!gui.hasContainer()) {
+        } else if (!gui.hasContainer()) {
             FMLClientHandler.instance().displayGuiScreen(player, FactoryGui.build(gui, player.inventory, entity, world, entity.getEntityId(), -1, 0));
         }
     }
 
     @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-    {
-        if(y < 0) {
+    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        if (y < 0) {
             Entity entity = world.getEntityByID(x);
-            if(entity == null) {
+            if (entity == null) {
                 Game.log(Level.WARN, "[Server] Entity not found when opening GUI: {0}", x);
                 return null;
             }
@@ -62,11 +63,10 @@ public class GuiHandler implements IGuiHandler
     }
 
     @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-    {
-        if(y < 0) {
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        if (y < 0) {
             Entity entity = world.getEntityByID(x);
-            if(entity == null) {
+            if (entity == null) {
                 Game.log(Level.WARN, "[Client] Entity not found when opening GUI: {0}", x);
                 return null;
             }

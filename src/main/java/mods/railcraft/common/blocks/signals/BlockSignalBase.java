@@ -9,9 +9,11 @@
 package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.api.core.IPostConnection;
+import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -42,14 +44,14 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
         setCreativeTab(CreativeTabs.tabTransport);
 //        setHarvestLevel("pickaxe", 2);
         setHarvestLevel("crowbar", 0);
+
     }
 
     public abstract ISignalTileDefinition getSignalType(int meta);
 
-
     @Override
     public int damageDropped(IBlockState state) {
-        return meta;
+        return getMetaFromState(state);
     }
 
     @Override
@@ -59,17 +61,13 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
             if (current.getItem() instanceof IActivationBlockingItem)
                 return false;
         TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).blockActivated(side, playerIn);
-        return false;
+        return tile instanceof TileSignalFoundation && ((TileSignalFoundation) tile).blockActivated(side, playerIn);
     }
 
     @Override
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).rotateBlock(axis);
-        return false;
+        return tile instanceof TileSignalFoundation && ((TileSignalFoundation) tile).rotateBlock(axis);
     }
 
     @Override
@@ -82,12 +80,12 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if (RailcraftConfig.printSignalDebug()) {
+        if (SignalTools.printSignalDebug) {
             Game.logTrace(Level.INFO, 10, "Signal Block onBlockPlacedBy. [{0}]", pos);
         }
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
-            ((TileSignalFoundation) tile).onBlockPlacedBy(placer, stack);
+            ((TileSignalFoundation) tile).onBlockPlacedBy(state, placer, stack);
     }
 
     @Override
@@ -97,7 +95,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
             if (tile instanceof TileSignalFoundation) {
                 TileSignalFoundation structure = (TileSignalFoundation) tile;
                 if (structure.getSignalType().needsSupport() && !worldIn.isSideSolid(pos.down(), EnumFacing.UP))
-                    worldIn.func_147480_a(x, y, z, true);
+                    worldIn.destroyBlock(pos, true);
                 else
                     structure.onNeighborBlockChange(neighborBlock);
             }
@@ -109,7 +107,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        if (RailcraftConfig.printSignalDebug()) {
+        if (SignalTools.printSignalDebug) {
             Game.logTrace(Level.INFO, 10, "Signal Block breakBlock. [{0}]", pos);
         }
         TileEntity tile = worldIn.getTileEntity(pos);
@@ -149,8 +147,8 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
         if (pos.getY() < 0)
             return 0;
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof ISignalTile)
-            return ((ISignalTile) tile).getLightValue();
+        if (tile instanceof TileSignalBase)
+            return ((TileSignalBase) tile).getLightValue();
         return 0;
     }
 
@@ -165,9 +163,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     @Override
     public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).isSideSolid(world, pos, side);
-        return false;
+        return tile instanceof TileSignalFoundation && ((TileSignalFoundation) tile).isSideSolid(world, pos, side);
     }
 
     //    @Override
@@ -207,9 +203,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     @Override
     public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).canConnectRedstone(side);
-        return false;
+        return tile instanceof TileSignalFoundation && ((TileSignalFoundation) tile).canConnectRedstone(side);
     }
 
     @Override
@@ -246,9 +240,9 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-        TileEntity t = world.getTileEntity(x, y, z);
-        if (t instanceof ISignalTile)
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        TileEntity t = WorldPlugin.getBlockTile(world, pos);
+        if (t instanceof TileSignalBase)
             return ConnectStyle.TWO_THIN;
         return ConnectStyle.NONE;
     }

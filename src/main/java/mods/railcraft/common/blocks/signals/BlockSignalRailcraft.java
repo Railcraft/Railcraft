@@ -8,16 +8,24 @@
  */
 package mods.railcraft.common.blocks.signals;
 
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.List;
 
 public class BlockSignalRailcraft extends BlockSignalBase {
+
+    public static final PropertyEnum<EnumSignal> TYPE = PropertyEnum.create("type", EnumSignal.class);
 
     public BlockSignalRailcraft(int renderType) {
         super(renderType);
@@ -41,11 +49,11 @@ public class BlockSignalRailcraft extends BlockSignalBase {
 
     @Override
     public ISignalTileDefinition getSignalType(int meta) {
-        return EnumSignal.fromId(meta);
+        return EnumSignal.fromOrdinal(meta);
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumSignal type : EnumSignal.getCreativeList()) {
             if (type.isEnabled())
                 list.add(type.getItem());
@@ -54,7 +62,29 @@ public class BlockSignalRailcraft extends BlockSignalBase {
 
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return EnumSignal.fromId(metadata).getBlockEntity();
+        return state.getValue(TYPE).getBlockEntity();
     }
 
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(TYPE, EnumSignal.fromOrdinal(meta));
+    }
+
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(TYPE).ordinal();
+    }
+
+    protected BlockState createBlockState() {
+        return new BlockState(this, TYPE);
+    }
+
+    @Override
+    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
+        return false;
+    }
 }

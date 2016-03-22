@@ -14,11 +14,12 @@ import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IStringSerializable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public enum EnumSignal implements ISignalTileDefinition {
+public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
 
     // Name (module, hardness, needsSupport, tag, tile)
     BOX_INTERLOCK(Module.SIGNALS, 3, true, "box.interlock", TileBoxInterlock.class),
@@ -105,7 +106,7 @@ public enum EnumSignal implements ISignalTileDefinition {
         return hardness;
     }
 
-    public static EnumSignal fromId(int id) {
+    public static EnumSignal fromOrdinal(int id) {
         if (id < 0 || id >= VALUES.length)
             return SWITCH_LEVER;
         return VALUES[id];
@@ -136,4 +137,8 @@ public enum EnumSignal implements ISignalTileDefinition {
         return ordinal();
     }
 
+    @Override
+    public String getName() {
+        return tag;
+    }
 }

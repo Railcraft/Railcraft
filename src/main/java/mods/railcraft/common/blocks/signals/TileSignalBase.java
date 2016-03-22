@@ -13,6 +13,7 @@ import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,7 +31,7 @@ import java.io.IOException;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-public abstract class TileSignalBase extends TileSignalFoundation implements ISignalTile, IAspectProvider {
+public abstract class TileSignalBase extends TileSignalFoundation implements IAspectProvider {
 
     private static final EnumFacing[] UP_DOWN_AXES = new EnumFacing[]{UP, DOWN};
     protected static final float BOUNDS = 0.15f;
@@ -93,7 +94,6 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
         }
     }
 
-    @Override
     public int getLightValue() {
         return getSignalAspect().getLightValue();
     }
@@ -107,8 +107,8 @@ public abstract class TileSignalBase extends TileSignalFoundation implements ISi
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityLiving, ItemStack stack) {
-        super.onBlockPlacedBy(entityLiving, stack);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityLiving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityLiving, stack);
         facing = MiscTools.getHorizontalSideFacingPlayer(entityLiving);
     }
 

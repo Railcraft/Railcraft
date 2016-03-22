@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.signals.ItemSignalBlockSurveyor;
-import mods.railcraft.common.blocks.signals.ItemSignalTuner;
+import mods.railcraft.common.items.ItemSignalBlockSurveyor;
+import mods.railcraft.common.items.ItemSignalTuner;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.items.ItemCrowbar;

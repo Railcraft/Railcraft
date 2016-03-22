@@ -21,6 +21,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -77,7 +78,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     }
 
     @Override
-    public boolean canConnectRedstone(int dir) {
+    public boolean canConnectRedstone(EnumFacing dir) {
         return true;
     }
 

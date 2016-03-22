@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftMultiType;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +25,7 @@ public class ItemSignal extends ItemBlockRailcraftMultiType {
     }
 
     public ISignalTileDefinition getStructureType(ItemStack stack) {
-        return EnumSignal.fromId(stack.getItemDamage());
+        return EnumSignal.fromOrdinal(stack.getItemDamage());
     }
 
     @Override

@@ -153,7 +153,7 @@ public class RenderSignalDual extends RenderTESRSignals implements ICombinedRend
 
     @Override
     public void renderItem(RenderBlocks renderblocks, ItemStack item, ItemRenderType renderType) {
-        EnumSignal signalType = EnumSignal.fromId(item.getItemDamage());
+        EnumSignal signalType = EnumSignal.fromOrdinal(item.getItemDamage());
         float pix = RenderTools.PIXEL;
         float f = 3.0F * pix;
         float f1 = 13.0F * pix;

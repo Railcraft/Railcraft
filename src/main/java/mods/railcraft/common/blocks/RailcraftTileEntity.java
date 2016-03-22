@@ -26,7 +26,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
@@ -37,13 +41,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable, ITickable {
+public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable, ITickable, IWorldNameable {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
     protected int clock = MiscTools.RANDOM.nextInt();
     private GameProfile owner = new GameProfile(null, "[Railcraft]");
     private boolean sendClientUpdate = false;
     private UUID uuid;
+    private String customName = "";
 
     public static boolean isUsableByPlayerHelper(TileEntity tile, EntityPlayer player) {
         if (tile.isInvalid())
@@ -144,10 +149,6 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return PlayerPlugin.isSamePlayer(owner, player);
     }
 
-    public String getName() {
-        return LocalizationPlugin.translate(getLocalizationTag());
-    }
-
     public abstract String getLocalizationTag();
 
     public List<String> getDebugOutput() {
@@ -169,6 +170,8 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
             data.setString("ownerId", owner.getId().toString());
 
         MiscTools.writeUUID(data, "uuid", uuid);
+        if (!customName.isEmpty())
+            data.setString("customName", customName);
     }
 
     @Override
@@ -176,6 +179,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         super.readFromNBT(data);
         owner = PlayerPlugin.readOwnerFromNBT(data);
         uuid = MiscTools.readUUID(data, "uuid");
+        customName = data.getString("customName");
     }
 
     @Deprecated
@@ -199,5 +203,25 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     public abstract short getId();
+
+    @Override
+    public boolean hasCustomName() {
+        return !customName.isEmpty();
+    }
+
+    public void setCustomName(String name) {
+        if (name != null)
+            customName = name;
+    }
+
+    @Override
+    public String getName() {
+        return hasCustomName() ? customName : getLocalizationTag();
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return hasCustomName() ? new ChatComponentText(customName) : new ChatComponentTranslation(getLocalizationTag());
+    }
 
 }

@@ -143,7 +143,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
             if (tile instanceof TilePostEmblem) {
                 TilePostEmblem post = (TilePostEmblem) tile;
                 List<ItemStack> drops = super.getDrops(world, pos, state, fortune);
-                InvTools.setItemColor(drops.get(0), post.getColor());
+                post.getColor().setItemColor(drops.get(0));
                 ItemPost.setEmblem(drops.get(0), post.getEmblem());
                 return drops;
             }
@@ -242,7 +242,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TilePostEmblem) {
             TilePostEmblem tileEmblem = (TilePostEmblem) tile;
