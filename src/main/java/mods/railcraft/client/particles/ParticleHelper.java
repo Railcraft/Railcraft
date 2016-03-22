@@ -10,6 +10,7 @@ package mods.railcraft.client.particles;
 
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.util.BlockPos;
@@ -82,17 +83,13 @@ public class ParticleHelper {
      *
      * @param world The current world
      * @param block
-     * @param x X position to spawn the particle
-     * @param y Y position to spawn the particle
-     * @param z Z position to spawn the particle
-     * @param meta The metadata for the block before it was destroyed.
      * @param effectRenderer A reference to the current effect renderer.
      * @param callback
      * @return True to prevent vanilla break particles from spawning.
      */
     @SideOnly(Side.CLIENT)
-    public static boolean addDestroyEffects(World world, Block block, int x, int y, int z, int meta, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
-        if (block != WorldPlugin.getBlock(world, x, y, z)) return true;
+    public static boolean addDestroyEffects(World world, Block block, BlockPos pos, IBlockState state, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
+        if (block != WorldPlugin.getBlock(world, pos)) return true;
         byte its = 4;
         for (int i = 0; i < its; ++i) {
             for (int j = 0; j < its; ++j) {
@@ -101,11 +98,11 @@ public class ParticleHelper {
                     double py = y + (j + 0.5D) / (double) its;
                     double pz = z + (k + 0.5D) / (double) its;
                     int random = rand.nextInt(6);
-                    EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, px - x - 0.5D, py - y - 0.5D, pz - z - 0.5D, block, random, meta);
+                    EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, px - x - 0.5D, py - y - 0.5D, pz - z - 0.5D, block, random, state);
                     fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
                     if (callback != null)
-                        callback.addDestroyEffects(fx, world, x, y, z, meta);
-                    effectRenderer.addEffect(fx.applyColourMultiplier(x, y, z));
+                        callback.addDestroyEffects(fx, world, pos, state);
+                    effectRenderer.addEffect(fx.func_174845_l());
                 }
             }
         }

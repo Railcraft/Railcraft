@@ -12,12 +12,12 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.IStringSerializable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumOre {
+public enum EnumOre implements IStringSerializable {
 
     SULFUR("sulfur"),
     SALTPETER("saltpeter"),
@@ -63,9 +63,14 @@ public enum EnumOre {
         return depreciated;
     }
 
-    public static EnumOre fromMeta(int meta) {
+    public static EnumOre fromOrdinal(int meta) {
         if (meta < 0 || meta >= values().length)
             return SULFUR;
         return values()[meta];
+    }
+
+    @Override
+    public String getName() {
+        return tag;
     }
 }

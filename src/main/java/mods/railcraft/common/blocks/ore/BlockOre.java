@@ -17,12 +17,11 @@ import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
@@ -49,6 +48,7 @@ import java.util.Random;
  */
 public class BlockOre extends Block {
 
+    public static final PropertyEnum<EnumOre> TYPE = PropertyEnum.create("type", EnumOre.class);
     private static final ParticleHelperCallback callback = new ParticleCallback();
     public static int renderPass;
     private static BlockOre instance;
@@ -57,6 +57,7 @@ public class BlockOre extends Block {
 
     public BlockOre(int renderId) {
         super(Material.rock);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EnumOre.SULFUR));
         renderType = renderId;
         setRegistryName("railcraft.ore");
         setResistance(5);
@@ -126,6 +127,10 @@ public class BlockOre extends Block {
             OreDictionary.registerOre(name, ore.getItem());
     }
 
+    public EnumOre getType(IBlockState state) {
+        return state.getValue(TYPE);
+    }
+
     @Override
     public int getRenderType() {
         return renderType;
@@ -142,14 +147,14 @@ public class BlockOre extends Block {
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
         int meta = world.getBlockMetadata(pos);
-        return EnumOre.fromMeta(meta).getItem();
+        return EnumOre.fromOrdinal(meta).getItem();
     }
 
     @Override
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
         super.dropBlockAsItemWithChance(worldIn, pos, state, chance, fortune);
 
-        switch (EnumOre.fromMeta(meta)) {
+        switch (EnumOre.fromOrdinal(meta)) {
             case SULFUR:
             case SALTPETER:
             case DARK_DIAMOND:
@@ -164,7 +169,7 @@ public class BlockOre extends Block {
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-        switch (EnumOre.fromMeta(meta)) {
+        switch (EnumOre.fromOrdinal(meta)) {
             case SULFUR: {
                 int qty = 2 + rand.nextInt(4) + rand.nextInt(fortune + 1);
                 drops.add(RailcraftItem.dust.getStack(qty, ItemDust.EnumDust.SULFUR));
@@ -228,32 +233,55 @@ public class BlockOre extends Block {
     @SideOnly(Side.CLIENT)
     @Override
     public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
-        return ParticleHelper.addDestroyEffects(world, instance, pos, effectRenderer, callback);
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        return ParticleHelper.addDestroyEffects(world, instance, pos, state, effectRenderer, callback);
     }
 
     @Override
     public int getLightValue(IBlockAccess world, BlockPos pos) {
-        int meta = world.getBlockMetadata(pos);
-        if (EnumOre.FIRESTONE.ordinal() == meta)
+        if (EnumOre.FIRESTONE == getType(WorldPlugin.getBlockState(world, pos)))
             return 15;
         return super.getLightValue(world, pos);
+    }
+
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(TYPE, EnumOre.fromOrdinal(meta));
+    }
+
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(TYPE).ordinal();
+    }
+
+    protected BlockState createBlockState() {
+        return new BlockState(this, TYPE);
+    }
+
+    @Override
+    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
+        return false;
     }
 
     private static class ParticleCallback implements ParticleHelperCallback {
         @Override
         @SideOnly(Side.CLIENT)
-        public void addHitEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
-            setTexture(fx, world, x, y, z, meta);
+        public void addHitEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
+            setTexture(fx, world, pos, state);
         }
 
         @Override
         @SideOnly(Side.CLIENT)
-        public void addDestroyEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
-            setTexture(fx, world, x, y, z, meta);
+        public void addDestroyEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
+            setTexture(fx, world, pos, state);
         }
 
         @SideOnly(Side.CLIENT)
-        private void setTexture(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+        private void setTexture(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
             renderPass = 0;
             fx.setParticleIcon(instance.getIcon(0, meta));
         }

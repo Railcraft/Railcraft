@@ -44,7 +44,7 @@ public class ItemOre extends ItemBlock {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         super.addInformation(stack, player, info, adv);
-        String tipTag = EnumOre.fromMeta(stack.getItemDamage()).getTag() + ".tip";
+        String tipTag = EnumOre.fromOrdinal(stack.getItemDamage()).getTag() + ".tip";
         if (LocalizationPlugin.hasTag(tipTag)) {
             ToolTip tip = ToolTip.buildToolTip(tipTag);
             info.addAll(tip.convertToStrings());
