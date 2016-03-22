@@ -18,6 +18,7 @@ multiblock
 noop
 oneway
 ownable
+pickaxe
 printf
 railbed
 railcraft
