@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.signals;
 
+import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
@@ -30,6 +31,7 @@ public class BlockSignalRailcraft extends BlockSignalBase {
     public BlockSignalRailcraft(int renderType) {
         super(renderType);
         setRegistryName("railcraft.signal");
+        this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EnumSignal.BLOCK_SIGNAL));
 
         GameRegistry.registerTileEntity(TileBoxController.class, "RCTileStructureControllerBox");
         GameRegistry.registerTileEntity(TileBoxReceiver.class, "RCTileStructureReceiverBox");
@@ -48,8 +50,8 @@ public class BlockSignalRailcraft extends BlockSignalBase {
     }
 
     @Override
-    public ISignalTileDefinition getSignalType(int meta) {
-        return EnumSignal.fromOrdinal(meta);
+    public ISignalTileDefinition getSignalType(IBlockState state) {
+        return state.getValue(TYPE);
     }
 
     @Override

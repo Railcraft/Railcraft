@@ -233,7 +233,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
-            ((TileMachineBase) tile).onBlockPlacedBy(placer, stack);
+            ((TileMachineBase) tile).onBlockPlacedBy(state, placer, stack);
     }
 
     @Override
@@ -241,7 +241,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
         try {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileMachineBase)
-                ((TileMachineBase) tile).onNeighborBlockChange(neighborBlock);
+                ((TileMachineBase) tile).onNeighborBlockChange(state, neighborBlock);
         } catch (StackOverflowError error) {
             Game.logThrowable(Level.ERROR, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()", 10, error);
             if (Game.IS_DEBUG)

@@ -10,7 +10,6 @@ package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.signals.SignalTools;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -21,7 +20,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -47,7 +45,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
 
     }
 
-    public abstract ISignalTileDefinition getSignalType(int meta);
+    public abstract ISignalTileDefinition getSignalType(IBlockState state);
 
     @Override
     public int damageDropped(IBlockState state) {
@@ -97,7 +95,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
                 if (structure.getSignalType().needsSupport() && !worldIn.isSideSolid(pos.down(), EnumFacing.UP))
                     worldIn.destroyBlock(pos, true);
                 else
-                    structure.onNeighborBlockChange(neighborBlock);
+                    structure.onNeighborBlockChange(state, neighborBlock);
             }
         } catch (StackOverflowError error) {
             Game.logThrowable(Level.ERROR, "Error in BlockSignalBase.onNeighborBlockChange()", 10, error);
@@ -240,7 +238,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
         TileEntity t = WorldPlugin.getBlockTile(world, pos);
         if (t instanceof TileSignalBase)
             return ConnectStyle.TWO_THIN;

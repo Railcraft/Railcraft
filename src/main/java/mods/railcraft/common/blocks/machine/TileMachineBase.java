@@ -28,6 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public abstract class TileMachineBase extends RailcraftTileEntity {
@@ -50,7 +51,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
         return true;
     }
 
-    public  List<ItemStack> getDrops(int fortune) {
+    public List<ItemStack> getDrops(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         items.add(getMachineType().getItem());
         return items;

@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IOwnable;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
@@ -51,11 +50,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     private String customName = "";
 
     public static boolean isUsableByPlayerHelper(TileEntity tile, EntityPlayer player) {
-        if (tile.isInvalid())
-            return false;
-        if (tile.getWorld().getTileEntity(tile.getPos()) != tile)
-            return false;
-        return player.getDistanceSq(tile.getPos()) <= 64;
+        return !tile.isInvalid() && tile.getWorld().getTileEntity(tile.getPos()) == tile && player.getDistanceSq(tile.getPos()) <= 64;
     }
 
     public UUID getUUID() {
@@ -118,7 +113,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
             owner = ((EntityPlayer) placer).getGameProfile();
     }
 
-    public void onNeighborBlockChange(Block id) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
         tileCache.onNeighborChange();
     }
 
