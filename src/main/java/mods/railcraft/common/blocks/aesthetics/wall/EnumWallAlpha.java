@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.wall;
 
-import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -54,9 +55,9 @@ public enum EnumWallAlpha implements WallInfo {
     private int sourceMeta = 0;
 
     public static void initialize() {
-        INFERNAL_BRICK.source = EnumBrick.INFERNAL.getBlock();
-        SANDY_BRICK.source = EnumBrick.SANDY.getBlock();
-        FROST_BOUND_BRICK.source = EnumBrick.FROSTBOUND.getBlock();
+        INFERNAL_BRICK.source = BrickTheme.INFERNAL.getBlock();
+        SANDY_BRICK.source = BrickTheme.SANDY.getBlock();
+        FROST_BOUND_BRICK.source = BrickTheme.FROSTBOUND.getBlock();
         CONCRETE.source = BlockCube.getBlock();
         CONCRETE.sourceMeta = EnumCube.CONCRETE_BLOCK.ordinal();
 

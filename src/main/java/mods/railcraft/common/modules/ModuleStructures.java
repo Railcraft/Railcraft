@@ -1,16 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
@@ -48,7 +49,7 @@ public class ModuleStructures extends RailcraftModule {
         addBlockFactory(new BlockFactoryStairs());
         addBlockFactory(new BlockFactorySlab());
         addBlockFactory(new BlockFactoryLantern());
-        for (EnumBrick brick : EnumBrick.VALUES) {
+        for (BrickTheme brick : BrickTheme.VALUES) {
             addBlockFactory(brick.makeFactory());
         }
     }

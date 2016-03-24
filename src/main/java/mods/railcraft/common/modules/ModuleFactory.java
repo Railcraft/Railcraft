@@ -1,17 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
-import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
@@ -386,23 +387,23 @@ public class ModuleFactory extends RailcraftModule {
     @Override
     public void initSecond() {
         if (ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES)) {
-            if (EnumMachineAlpha.BLAST_FURNACE.isAvailable() && EnumBrick.INFERNAL.getBlock() != null) {
+            if (EnumMachineAlpha.BLAST_FURNACE.isAvailable() && BrickTheme.INFERNAL.getBlock() != null) {
 
                 ItemStack stack = EnumMachineAlpha.BLAST_FURNACE.getItem(4);
                 CraftingPlugin.addShapedRecipe(stack,
                         " B ",
                         "BPB",
                         " B ",
-                        'B', EnumBrick.INFERNAL.get(BrickVariant.BRICK, 1),
+                        'B', BrickTheme.INFERNAL.get(BrickVariant.BRICK, 1),
                         'P', Items.magma_cream);
             }
-            if (EnumMachineAlpha.COKE_OVEN.isAvailable() && EnumBrick.SANDY.getBlock() != null) {
+            if (EnumMachineAlpha.COKE_OVEN.isAvailable() && BrickTheme.SANDY.getBlock() != null) {
                 ItemStack stack = EnumMachineAlpha.COKE_OVEN.getItem();
                 CraftingPlugin.addShapedRecipe(stack,
                         " B ",
                         " S ",
                         " B ",
-                        'B', EnumBrick.SANDY.get(BrickVariant.BRICK, 1),
+                        'B', BrickTheme.SANDY.get(BrickVariant.BRICK, 1),
                         'S', "sand");
             }
         }

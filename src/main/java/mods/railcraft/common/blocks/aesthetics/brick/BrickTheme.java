@@ -1,11 +1,12 @@
-/*
- * Copyright (c) CovertJaguar, 2015 http://railcraft.info
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
  *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
@@ -20,6 +21,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -32,7 +34,7 @@ import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
 /**
  * Created by CovertJaguar on 3/12/2015.
  */
-public enum EnumBrick {
+public enum BrickTheme {
     ABYSSAL(MapColor.blackColor) {
         @Override
         public void initRecipes() {
@@ -129,11 +131,11 @@ public enum EnumBrick {
                 super.initVariant(variant);
         }
     },;
-    public static final EnumBrick[] VALUES = values();
+    public static final BrickTheme[] VALUES = values();
     private final MapColor mapColor;
     private BlockBrick block;
 
-    EnumBrick(MapColor mapColor) {
+    BrickTheme(MapColor mapColor) {
         this.mapColor = mapColor;
     }
 
@@ -143,6 +145,11 @@ public enum EnumBrick {
 
     public final BlockBrick getBlock() {
         return block;
+    }
+
+    public final IBlockState getState(BrickVariant variant) {
+        if (block == null) return null;
+        return block.getState(variant);
     }
 
     public final String themeTag() {
@@ -173,16 +180,16 @@ public enum EnumBrick {
         return new BlockFactory("brick." + themeTag()) {
             @Override
             protected void doBlockInit() {
-                block = new BlockBrick(EnumBrick.this);
+                block = new BlockBrick(BrickTheme.this);
                 block.setRegistryName("railcraft.brick." + themeTag());
                 RailcraftRegistry.register(block, ItemBrick.class);
                 ForestryPlugin.addBackpackItem("builder", block);
 
                 for (BrickVariant variant : BrickVariant.VALUES) {
-                    EnumBrick.this.initVariant(variant);
+                    BrickTheme.this.initVariant(variant);
                 }
 
-                EnumBrick.this.initBlock();
+                BrickTheme.this.initBlock();
             }
 
             @Override
@@ -200,7 +207,7 @@ public enum EnumBrick {
                 recipe.addOutput(get(COBBLE, 1), 1.0F);
 
                 CraftingPlugin.addFurnaceRecipe(get(COBBLE, 1), get(BLOCK, 1), 0.0F);
-                EnumBrick.this.initRecipes();
+                BrickTheme.this.initRecipes();
             }
         };
     }

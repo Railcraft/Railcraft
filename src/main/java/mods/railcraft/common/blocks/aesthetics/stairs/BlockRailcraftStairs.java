@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.stairs;
 
 import mods.railcraft.client.particles.ParticleHelper;
@@ -14,6 +15,7 @@ import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.IBlockSoundProvider;
 import net.minecraft.block.BlockStairs;
@@ -124,8 +126,10 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
         player.addExhaustion(0.025F);
-        if (Game.isHost(world) && !player.capabilities.isCreativeMode)
+        if (Game.isHost(world) && !player.capabilities.isCreativeMode) {
+            IBlockState state = WorldPlugin.getBlockState(world, pos);
             dropBlockAsItem(world, pos, state, 0);
+        }
         return world.setBlockToAir(pos);
     }
 
@@ -174,12 +178,12 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
 
     @Override
     public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
-        return ParticleHelper.addDestroyEffects(world, block, pos, meta, effectRenderer, null);
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        return ParticleHelper.addDestroyEffects(world, block, pos, state, effectRenderer, null);
     }
 
     @Override
-    public SoundType getSound(World world, int x, int y, int z) {
-        BlockPos pos = new BlockPos(x, y, z);
+    public SoundType getSound(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileStair)
             return ((TileStair) tile).getStair().getSound();

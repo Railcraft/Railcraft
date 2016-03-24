@@ -1,17 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -55,7 +55,8 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
         setStepSound(soundTypeStone);
         setTickRandomly(true);
         this.proxy = proxy;
-        this.opaque = opaque;
+        this.fullBlock = opaque;
+
         this.renderId = renderId;
         this.metaOpacity = metaOpacity;
 
@@ -83,8 +84,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
         return proxy;
     }
 
-    public IEnumMachine getMachineType(World world, int x, int y, int z) {
-        int meta = WorldPlugin.getBlockMetadata(world, x, y, z);
+    public IEnumMachine getMachineType(IBlockState state) {
         return proxy.getMachine(meta);
     }
 
@@ -106,7 +106,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return meta;
+        return getMetaFromState(state);
     }
 
     @Override
@@ -305,7 +305,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
 
     @Override
     public final boolean isOpaqueCube() {
-        return opaque;
+        return fullBlock;
     }
 
     @Override

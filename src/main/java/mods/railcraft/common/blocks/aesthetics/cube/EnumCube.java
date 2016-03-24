@@ -1,16 +1,20 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.cube;
 
+import mods.railcraft.common.blocks.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
@@ -20,7 +24,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumCube implements IStringSerializable{
+public enum EnumCube implements IStringSerializable, IVariantEnum<EnumCube> {
 
     COKE_BLOCK(Module.FACTORY, "coke", new FlammableCube(5, 10), 2f, 10f),
     CONCRETE_BLOCK(Module.STRUCTURES, "concrete", new SimpleCube(), 3f, 15f),
@@ -86,6 +90,15 @@ public enum EnumCube implements IStringSerializable{
 
     public SimpleCube getBlockDef() {
         return blockDef;
+    }
+
+    public Block getBlock() {
+        return BlockCube.getBlock();
+    }
+
+    public IBlockState getState() {
+        if (BlockCube.getBlock() == null) return null;
+        return BlockCube.getBlock().getState(this);
     }
 
     public float getHardness() {

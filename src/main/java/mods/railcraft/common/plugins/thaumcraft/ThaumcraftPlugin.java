@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.plugins.thaumcraft;
 
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
-import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
@@ -106,14 +107,14 @@ public class ThaumcraftPlugin {
             AspectList steamAspects = new AspectList().add(Aspect.WATER, 3).add(Aspect.MECHANISM, 2).add(Aspect.FIRE, 3);
             AspectList tankAspects = new AspectList().add(Aspect.VOID, 4).add(Aspect.WATER, 4);
 
-            addBrickAspects(EnumBrick.ABYSSAL, Aspect.DARKNESS);
-            addBrickAspects(EnumBrick.BLEACHEDBONE, Aspect.DEATH);
-            addBrickAspects(EnumBrick.BLOODSTAINED, Aspect.FLESH);
-            addBrickAspects(EnumBrick.FROSTBOUND, Aspect.COLD);
-            addBrickAspects(EnumBrick.INFERNAL, 2, Aspect.FIRE, Aspect.SOUL);
-            addBrickAspects(EnumBrick.NETHER, Aspect.FIRE);
-            addBrickAspects(EnumBrick.QUARRIED, Aspect.LIGHT);
-            addBrickAspects(EnumBrick.SANDY, Aspect.EARTH);
+            addBrickAspects(BrickTheme.ABYSSAL, Aspect.DARKNESS);
+            addBrickAspects(BrickTheme.BLEACHEDBONE, Aspect.DEATH);
+            addBrickAspects(BrickTheme.BLOODSTAINED, Aspect.FLESH);
+            addBrickAspects(BrickTheme.FROSTBOUND, Aspect.COLD);
+            addBrickAspects(BrickTheme.INFERNAL, 2, Aspect.FIRE, Aspect.SOUL);
+            addBrickAspects(BrickTheme.NETHER, Aspect.FIRE);
+            addBrickAspects(BrickTheme.QUARRIED, Aspect.LIGHT);
+            addBrickAspects(BrickTheme.SANDY, Aspect.EARTH);
 
             addItemAspect(EnumCube.ABYSSAL_STONE.getItem(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.DARKNESS, 2));
             addItemAspect(EnumCube.QUARRIED_STONE.getItem(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.LIGHT, 2));
@@ -242,11 +243,11 @@ public class ThaumcraftPlugin {
         ThaumcraftApi.registerEntityTag(cart.getTag(), aspects);
     }
 
-    private static void addBrickAspects(EnumBrick brick, Aspect baseAspect) {
+    private static void addBrickAspects(BrickTheme brick, Aspect baseAspect) {
         addBrickAspects(brick, 4, baseAspect);
     }
 
-    private static void addBrickAspects(EnumBrick brick, int baseAmount, Aspect... baseAspects) {
+    private static void addBrickAspects(BrickTheme brick, int baseAmount, Aspect... baseAspects) {
         Block block = brick.getBlock();
         if (block == null)
             return;

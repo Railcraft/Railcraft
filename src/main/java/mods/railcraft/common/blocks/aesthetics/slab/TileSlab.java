@@ -1,15 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.slab;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.IBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.io.DataInputStream;
@@ -21,14 +23,14 @@ import java.io.IOException;
  */
 public class TileSlab extends RailcraftTileEntity {
 
-    private BlockMaterial top = null;
-    private BlockMaterial bottom = null;
+    private IBlockMaterial top;
+    private IBlockMaterial bottom;
 
-    public BlockMaterial getTopSlab() {
+    public IBlockMaterial getTopSlab() {
         return top;
     }
 
-    public BlockMaterial getBottomSlab() {
+    public IBlockMaterial getBottomSlab() {
         return bottom;
     }
 
@@ -40,7 +42,7 @@ public class TileSlab extends RailcraftTileEntity {
         return top != null && bottom == null;
     }
 
-    public void setTopSlab(BlockMaterial slab) {
+    public void setTopSlab(IBlockMaterial slab) {
         if (top != slab) {
             this.top = slab;
             sendUpdateToClient();
@@ -51,21 +53,21 @@ public class TileSlab extends RailcraftTileEntity {
         return top == null && bottom != null;
     }
 
-    public void setBottomSlab(BlockMaterial slab) {
+    public void setBottomSlab(IBlockMaterial slab) {
         if (bottom != slab) {
             this.bottom = slab;
             sendUpdateToClient();
         }
     }
 
-    public BlockMaterial getUpmostSlab() {
+    public IBlockMaterial getUpmostSlab() {
         if (top != null) {
             return top;
         }
         return bottom;
     }
 
-    public boolean addSlab(BlockMaterial slab) {
+    public boolean addSlab(IBlockMaterial slab) {
         if (bottom == null) {
             setBottomSlab(slab);
             return true;
@@ -79,17 +81,17 @@ public class TileSlab extends RailcraftTileEntity {
 
     @Override
     public String getLocalizationTag() {
-        return "tile." + BlockRailcraftSlab.getTag(getUpmostSlab());
+        return BlockRailcraftSlab.getTag(getUpmostSlab());
     }
 
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         if (top != null) {
-            data.setString("top", top.name());
+            data.setString("top", top.getRegistryName());
         }
         if (bottom != null) {
-            data.setString("bottom", bottom.name());
+            data.setString("bottom", bottom.getRegistryName());
         }
     }
 
@@ -97,32 +99,32 @@ public class TileSlab extends RailcraftTileEntity {
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.hasKey("top")) {
-            top = BlockMaterial.fromName(data.getString("top"));
+            top = MaterialRegistry.get(data.getString("top"));
         }
         if (data.hasKey("bottom")) {
-            bottom = BlockMaterial.fromName(data.getString("bottom"));
+            bottom = MaterialRegistry.get(data.getString("bottom"));
         }
     }
 
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeByte((byte) (top != null ? top.ordinal() : -1));
-        data.writeByte((byte) (bottom != null ? bottom.ordinal() : -1));
+        data.writeUTF(top != null ? top.getRegistryName() : "");
+        data.writeUTF(bottom != null ? bottom.getRegistryName() : "");
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        int t = data.readByte();
-        if (t != -1) {
-            top = BlockMaterial.fromOrdinal(t);
+        String t = data.readUTF();
+        if (!t.isEmpty()) {
+            top = MaterialRegistry.get(t);
         } else {
             top = null;
         }
-        int b = data.readByte();
-        if (b != -1) {
-            bottom = BlockMaterial.fromOrdinal(b);
+        String b = data.readUTF();
+        if (!b.isEmpty()) {
+            bottom = MaterialRegistry.get(b);
         } else {
             bottom = null;
         }

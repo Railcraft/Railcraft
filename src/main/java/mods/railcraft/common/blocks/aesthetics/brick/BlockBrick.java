@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -25,9 +26,9 @@ import java.util.List;
 
 public class BlockBrick extends Block {
     public static final PropertyEnum<BrickVariant> VARIANT = PropertyEnum.create("variant", BrickVariant.class);
-    private final EnumBrick theme;
+    private final BrickTheme theme;
 
-    public BlockBrick(EnumBrick theme) {
+    public BlockBrick(BrickTheme theme) {
         super(Material.rock);
         this.theme = theme;
         this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BrickVariant.BRICK));
@@ -36,6 +37,10 @@ public class BlockBrick extends Block {
         setStepSound(Block.soundTypeStone);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setHarvestLevel("pickaxe", 0);
+    }
+
+    public IBlockState getState(BrickVariant variant) {
+        return getDefaultState().withProperty(VARIANT, variant);
     }
 
     @Override

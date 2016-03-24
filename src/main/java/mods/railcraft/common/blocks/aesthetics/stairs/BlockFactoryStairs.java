@@ -1,19 +1,20 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.stairs;
 
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
-import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -65,17 +66,17 @@ public class BlockFactoryStairs extends BlockFactory {
             }
         }
 
-        addRockCrusherRecipe(EnumBrick.ABYSSAL, ABYSSAL_BLOCK, ABYSSAL_BRICK, ABYSSAL_COBBLE, ABYSSAL_FITTED);
-        addRockCrusherRecipe(EnumBrick.BLEACHEDBONE, BLEACHEDBONE_BLOCK, BLEACHEDBONE_BRICK, BLEACHEDBONE_COBBLE, BLEACHEDBONE_FITTED);
-        addRockCrusherRecipe(EnumBrick.BLOODSTAINED, BLOODSTAINED_BLOCK, BLOODSTAINED_BRICK, BLOODSTAINED_COBBLE, BLOODSTAINED_FITTED);
-        addRockCrusherRecipe(EnumBrick.FROSTBOUND, FROSTBOUND_BLOCK, FROSTBOUND_BRICK, FROSTBOUND_COBBLE, FROSTBOUND_FITTED);
-        addRockCrusherRecipe(EnumBrick.INFERNAL, INFERNAL_BLOCK, INFERNAL_BRICK, INFERNAL_COBBLE, INFERNAL_FITTED);
-        addRockCrusherRecipe(EnumBrick.NETHER, NETHER_BLOCK, NETHER_COBBLE, NETHER_FITTED);
-        addRockCrusherRecipe(EnumBrick.QUARRIED, QUARRIED_BLOCK, QUARRIED_BRICK, QUARRIED_COBBLE, QUARRIED_FITTED);
-        addRockCrusherRecipe(EnumBrick.SANDY, SANDY_BLOCK, SANDY_BRICK, SANDY_COBBLE, SANDY_FITTED);
+        addRockCrusherRecipe(BrickTheme.ABYSSAL, ABYSSAL_BLOCK, ABYSSAL_BRICK, ABYSSAL_COBBLE, ABYSSAL_FITTED);
+        addRockCrusherRecipe(BrickTheme.BLEACHEDBONE, BLEACHEDBONE_BLOCK, BLEACHEDBONE_BRICK, BLEACHEDBONE_COBBLE, BLEACHEDBONE_FITTED);
+        addRockCrusherRecipe(BrickTheme.BLOODSTAINED, BLOODSTAINED_BLOCK, BLOODSTAINED_BRICK, BLOODSTAINED_COBBLE, BLOODSTAINED_FITTED);
+        addRockCrusherRecipe(BrickTheme.FROSTBOUND, FROSTBOUND_BLOCK, FROSTBOUND_BRICK, FROSTBOUND_COBBLE, FROSTBOUND_FITTED);
+        addRockCrusherRecipe(BrickTheme.INFERNAL, INFERNAL_BLOCK, INFERNAL_BRICK, INFERNAL_COBBLE, INFERNAL_FITTED);
+        addRockCrusherRecipe(BrickTheme.NETHER, NETHER_BLOCK, NETHER_COBBLE, NETHER_FITTED);
+        addRockCrusherRecipe(BrickTheme.QUARRIED, QUARRIED_BLOCK, QUARRIED_BRICK, QUARRIED_COBBLE, QUARRIED_FITTED);
+        addRockCrusherRecipe(BrickTheme.SANDY, SANDY_BLOCK, SANDY_BRICK, SANDY_COBBLE, SANDY_FITTED);
     }
 
-    private void addRockCrusherRecipe(EnumBrick brick, BlockMaterial... types) {
+    private void addRockCrusherRecipe(BrickTheme brick, BlockMaterial... types) {
         if (brick.getBlock() == null)
             return;
         ItemStack output = brick.get(BrickVariant.COBBLE, 1);

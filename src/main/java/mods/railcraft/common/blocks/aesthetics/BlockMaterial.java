@@ -1,184 +1,226 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics;
 
 import mods.railcraft.client.sounds.RailcraftSound;
-import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
-import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
+import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static mods.railcraft.common.blocks.aesthetics.wall.EnumWallBeta.QUARTZ_CHISELED;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum BlockMaterial implements IDerivedBlock {
+public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
 
-    SANDY_BRICK,
-    INFERNAL_BRICK,
-    CONCRETE,
-    SNOW,
-    ICE,
-    PACKED_ICE,
-    IRON,
-    GOLD,
-    DIAMOND,
-    FROSTBOUND_BRICK,
-    QUARRIED_BRICK,
-    BLEACHEDBONE_BRICK,
-    BLOODSTAINED_BRICK,
-    ABYSSAL_BRICK,
-    SANDY_FITTED,
-    INFERNAL_FITTED,
-    FROSTBOUND_FITTED,
-    QUARRIED_FITTED,
-    BLEACHEDBONE_FITTED,
-    BLOODSTAINED_FITTED,
-    ABYSSAL_FITTED,
-    NETHER_FITTED,
-    SANDY_BLOCK,
-    INFERNAL_BLOCK,
-    FROSTBOUND_BLOCK,
-    QUARRIED_BLOCK,
-    BLEACHEDBONE_BLOCK,
-    BLOODSTAINED_BLOCK,
-    ABYSSAL_BLOCK,
-    NETHER_BLOCK,
-    SANDY_COBBLE,
-    INFERNAL_COBBLE,
-    FROSTBOUND_COBBLE,
-    QUARRIED_COBBLE,
-    BLEACHEDBONE_COBBLE,
-    BLOODSTAINED_COBBLE,
-    ABYSSAL_COBBLE,
-    NETHER_COBBLE,
-    CREOSOTE,
-    OBSIDIAN,
-    COPPER,
-    TIN,
-    LEAD,
-    STEEL;
+    SNOW(3, "snow"),
+    ICE(4, "ice"),
+    PACKED_ICE(5, "packed_ice"),
+    IRON(6, "iron"),
+    GOLD(7, "gold"),
+    DIAMOND(8, "diamond"),
+    OBSIDIAN(39, "obsidian"),
+
+    STONE_BRICK("stone_brick"),
+    STONE_BRICK_CHISELED("stone_brick_chiseled"),
+    STONE_BRICK_CRACKED("stone_brick_cracked"),
+    STONE_BRICK_MOSSY("stone_brick_mossy"),
+
+    SANDY_BRICK(0, "sandy_brick"),
+    INFERNAL_BRICK(1, "infernal_brick"),
+    FROSTBOUND_BRICK(9, "frost_bound_brick"),
+    QUARRIED_BRICK(10, "quarried_brick"),
+    BLEACHEDBONE_BRICK(11, "bleached_bone_brick"),
+    BLOODSTAINED_BRICK(12, "bloodstained_brick"),
+    ABYSSAL_BRICK(13, "abyssal_brick"),
+
+    SANDY_FITTED(14, "sandy_fitted"),
+    INFERNAL_FITTED(15, "infernal_fitted"),
+    FROSTBOUND_FITTED(16, "frost_bound_fitted"),
+    QUARRIED_FITTED(17, "quarried_fitted"),
+    BLEACHEDBONE_FITTED(18, "bleached_bone_fitted"),
+    BLOODSTAINED_FITTED(19, "bloodstained_fitted"),
+    ABYSSAL_FITTED(20, "abyssal_fitted"),
+    NETHER_FITTED(21, "nether_fitted"),
+
+    SANDY_BLOCK(22, "sandy_block"),
+    INFERNAL_BLOCK(23, "infernal_block"),
+    FROSTBOUND_BLOCK(24, "frost_bound_block"),
+    QUARRIED_BLOCK(25, "quarried_block"),
+    BLEACHEDBONE_BLOCK(26, "bleached_bone_block"),
+    BLOODSTAINED_BLOCK(27, "bloodstained_block"),
+    ABYSSAL_BLOCK(28, "abyssal_block"),
+    NETHER_BLOCK(29, "nether_block"),
+
+    SANDY_COBBLE(30, "sandy_cobble"),
+    INFERNAL_COBBLE(31, "infernal_cobble"),
+    FROSTBOUND_COBBLE(32, "frost_bound_cobble"),
+    QUARRIED_COBBLE(33, "quarried_cobble"),
+    BLEACHEDBONE_COBBLE(34, "bleached_bone_cobble"),
+    BLOODSTAINED_COBBLE(35, "bloodstained_cobble"),
+    ABYSSAL_COBBLE(36, "abyssal_cobble"),
+    NETHER_COBBLE(37, "nether_cobble"),
+
+    CONCRETE(2, "concrete"),
+    CREOSOTE(38, "creosote"),
+    COPPER(40, "copper"),
+    TIN(41, "tin"),
+    LEAD(42, "lead"),
+    STEEL(43, "steel");
     public static final BlockMaterial[] VALUES = values();
     public static final Map<String, BlockMaterial> NAMES = new HashMap<String, BlockMaterial>();
     public static final List<BlockMaterial> creativeList = new ArrayList<BlockMaterial>();
+    public static final BlockMaterial[] OLD_WALL1_MATS;
+    public static final BlockMaterial[] OLD_WALL2_MATS;
+    public static final BlockMaterial[] WALL_SANDY_MATS;
     private static boolean needsInit = true;
     private SoundType sound;
-    private Block source;
-    private int sourceMeta = 0;
+    @Nullable
+    private IBlockState state;
     private String oreTag = null;
-    private String toolClass = "pickaxe";
     private int toolLevel = 0;
+    public final int oldOrdinal;
+    private final String name;
+
+    static {
+        OLD_WALL1_MATS = new BlockMaterial[]{
+                INFERNAL_BRICK,
+                SANDY_BRICK,
+                CONCRETE,
+                SNOW,
+                ICE,
+                STONE_BRICK,
+                STONE_BRICK_MOSSY,
+                STONE_BRICK_CRACKED,
+                STONE_BRICK_CHISELED,
+                NETHER_BRICK,
+                BRICK,
+                SANDSTONE,
+                SANDSTONE_CHISELED,
+                SANDSTONE_SMOOTH,
+                OBSIDIAN,
+                FROSTBOUND_BRICK};
+
+        OLD_WALL2_MATS = new BlockMaterial[]{
+                QUARTZ,
+                QUARTZ_CHISELED,
+                IRON,
+                GOLD,
+                DIAMOND,
+                ABYSSAL_BRICK,
+                QUARRIED_BRICK,
+                BLOODSTAINED_BRICK,
+                BLEACHEDBONE_BRICK};
+
+//        WALL_SANDY_MATS = new BlockMaterial[16] {
+//            SANDY_BRICK,
+//                    SANDY_FITTED,
+//            SANDY_BLOCK,
+//                    SANDY_COBBLE,
+//        } ;
+    }
+
+    BlockMaterial(String name) {
+        this(-1, name);
+    }
+
+    BlockMaterial(int oldOrdinal, String name) {
+        this.oldOrdinal = oldOrdinal;
+        this.name = name;
+    }
 
     public static void initialize() {
         if (!needsInit)
             return;
         needsInit = false;
-        INFERNAL_BRICK.source = EnumBrick.INFERNAL.getBlock();
-        SANDY_BRICK.source = EnumBrick.SANDY.getBlock();
-        FROSTBOUND_BRICK.source = EnumBrick.FROSTBOUND.getBlock();
-        QUARRIED_BRICK.source = EnumBrick.QUARRIED.getBlock();
-        BLEACHEDBONE_BRICK.source = EnumBrick.BLEACHEDBONE.getBlock();
-        BLOODSTAINED_BRICK.source = EnumBrick.BLOODSTAINED.getBlock();
-        ABYSSAL_BRICK.source = EnumBrick.ABYSSAL.getBlock();
 
-        SANDY_FITTED.source = EnumBrick.SANDY.getBlock();
-        SANDY_FITTED.sourceMeta = 1;
-        INFERNAL_FITTED.source = EnumBrick.INFERNAL.getBlock();
-        INFERNAL_FITTED.sourceMeta = 1;
-        FROSTBOUND_FITTED.source = EnumBrick.FROSTBOUND.getBlock();
-        FROSTBOUND_FITTED.sourceMeta = 1;
-        QUARRIED_FITTED.source = EnumBrick.QUARRIED.getBlock();
-        QUARRIED_FITTED.sourceMeta = 1;
-        BLEACHEDBONE_FITTED.source = EnumBrick.BLEACHEDBONE.getBlock();
-        BLEACHEDBONE_FITTED.sourceMeta = 1;
-        BLOODSTAINED_FITTED.source = EnumBrick.BLOODSTAINED.getBlock();
-        BLOODSTAINED_FITTED.sourceMeta = 1;
-        ABYSSAL_FITTED.source = EnumBrick.ABYSSAL.getBlock();
-        ABYSSAL_FITTED.sourceMeta = 1;
-        NETHER_FITTED.source = EnumBrick.NETHER.getBlock();
-        NETHER_FITTED.sourceMeta = 1;
+        SNOW.state = Blocks.snow.getDefaultState();
+        ICE.state = Blocks.ice.getDefaultState();
+        PACKED_ICE.state = Blocks.packed_ice.getDefaultState();
+        IRON.state = Blocks.iron_block.getDefaultState();
+        GOLD.state = Blocks.gold_block.getDefaultState();
+        DIAMOND.state = Blocks.diamond_block.getDefaultState();
+        OBSIDIAN.state = Blocks.obsidian.getDefaultState();
 
-        SANDY_BLOCK.source = EnumBrick.SANDY.getBlock();
-        SANDY_BLOCK.sourceMeta = 2;
-        INFERNAL_BLOCK.source = EnumBrick.INFERNAL.getBlock();
-        INFERNAL_BLOCK.sourceMeta = 2;
-        FROSTBOUND_BLOCK.source = EnumBrick.FROSTBOUND.getBlock();
-        FROSTBOUND_BLOCK.sourceMeta = 2;
-        QUARRIED_BLOCK.source = EnumBrick.QUARRIED.getBlock();
-        QUARRIED_BLOCK.sourceMeta = 2;
-        BLEACHEDBONE_BLOCK.source = EnumBrick.BLEACHEDBONE.getBlock();
-        BLEACHEDBONE_BLOCK.sourceMeta = 2;
-        BLOODSTAINED_BLOCK.source = EnumBrick.BLOODSTAINED.getBlock();
-        BLOODSTAINED_BLOCK.sourceMeta = 2;
-        ABYSSAL_BLOCK.source = EnumBrick.ABYSSAL.getBlock();
-        ABYSSAL_BLOCK.sourceMeta = 2;
-        NETHER_BLOCK.source = EnumBrick.NETHER.getBlock();
-        NETHER_BLOCK.sourceMeta = 2;
+        STONE_BRICK.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT);
+        STONE_BRICK_CHISELED.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+        STONE_BRICK_CRACKED.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CRACKED);
+        STONE_BRICK_MOSSY.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY);
 
-        SANDY_COBBLE.source = EnumBrick.SANDY.getBlock();
-        SANDY_COBBLE.sourceMeta = 5;
-        INFERNAL_COBBLE.source = EnumBrick.INFERNAL.getBlock();
-        INFERNAL_COBBLE.sourceMeta = 5;
-        FROSTBOUND_COBBLE.source = EnumBrick.FROSTBOUND.getBlock();
-        FROSTBOUND_COBBLE.sourceMeta = 5;
-        QUARRIED_COBBLE.source = EnumBrick.QUARRIED.getBlock();
-        QUARRIED_COBBLE.sourceMeta = 5;
-        BLEACHEDBONE_COBBLE.source = EnumBrick.BLEACHEDBONE.getBlock();
-        BLEACHEDBONE_COBBLE.sourceMeta = 5;
-        BLOODSTAINED_COBBLE.source = EnumBrick.BLOODSTAINED.getBlock();
-        BLOODSTAINED_COBBLE.sourceMeta = 5;
-        ABYSSAL_COBBLE.source = EnumBrick.ABYSSAL.getBlock();
-        ABYSSAL_COBBLE.sourceMeta = 5;
-        NETHER_COBBLE.source = EnumBrick.NETHER.getBlock();
-        NETHER_COBBLE.sourceMeta = 5;
+        INFERNAL_BRICK.state = BrickTheme.INFERNAL.getState(BrickVariant.BRICK);
+        SANDY_BRICK.state = BrickTheme.SANDY.getState(BrickVariant.BRICK);
+        FROSTBOUND_BRICK.state = BrickTheme.FROSTBOUND.getState(BrickVariant.BRICK);
+        QUARRIED_BRICK.state = BrickTheme.QUARRIED.getState(BrickVariant.BRICK);
+        BLEACHEDBONE_BRICK.state = BrickTheme.BLEACHEDBONE.getState(BrickVariant.BRICK);
+        BLOODSTAINED_BRICK.state = BrickTheme.BLOODSTAINED.getState(BrickVariant.BRICK);
+        ABYSSAL_BRICK.state = BrickTheme.ABYSSAL.getState(BrickVariant.BRICK);
 
-        CONCRETE.source = BlockCube.getBlock();
-        CONCRETE.sourceMeta = EnumCube.CONCRETE_BLOCK.ordinal();
-        CREOSOTE.source = BlockCube.getBlock();
-        CREOSOTE.sourceMeta = EnumCube.CREOSOTE_BLOCK.ordinal();
+        SANDY_FITTED.state = BrickTheme.SANDY.getState(BrickVariant.FITTED);
+        INFERNAL_FITTED.state = BrickTheme.INFERNAL.getState(BrickVariant.FITTED);
+        FROSTBOUND_FITTED.state = BrickTheme.FROSTBOUND.getState(BrickVariant.FITTED);
+        QUARRIED_FITTED.state = BrickTheme.QUARRIED.getState(BrickVariant.FITTED);
+        BLEACHEDBONE_FITTED.state = BrickTheme.BLEACHEDBONE.getState(BrickVariant.FITTED);
+        BLOODSTAINED_FITTED.state = BrickTheme.BLOODSTAINED.getState(BrickVariant.FITTED);
+        ABYSSAL_FITTED.state = BrickTheme.ABYSSAL.getState(BrickVariant.FITTED);
+        NETHER_FITTED.state = BrickTheme.NETHER.getState(BrickVariant.FITTED);
 
-        SNOW.source = Blocks.snow;
-        SNOW.toolClass = "shovel";
-        ICE.source = Blocks.ice;
-        PACKED_ICE.source = Blocks.packed_ice;
+        SANDY_BLOCK.state = BrickTheme.SANDY.getState(BrickVariant.BLOCK);
+        INFERNAL_BLOCK.state = BrickTheme.INFERNAL.getState(BrickVariant.BLOCK);
+        FROSTBOUND_BLOCK.state = BrickTheme.FROSTBOUND.getState(BrickVariant.BLOCK);
+        QUARRIED_BLOCK.state = BrickTheme.QUARRIED.getState(BrickVariant.BLOCK);
+        BLEACHEDBONE_BLOCK.state = BrickTheme.BLEACHEDBONE.getState(BrickVariant.BLOCK);
+        BLOODSTAINED_BLOCK.state = BrickTheme.BLOODSTAINED.getState(BrickVariant.BLOCK);
+        ABYSSAL_BLOCK.state = BrickTheme.ABYSSAL.getState(BrickVariant.BLOCK);
+        NETHER_BLOCK.state = BrickTheme.NETHER.getState(BrickVariant.BLOCK);
 
-        IRON.source = Blocks.iron_block;
-        GOLD.source = Blocks.gold_block;
-        DIAMOND.source = Blocks.diamond_block;
+        SANDY_COBBLE.state = BrickTheme.SANDY.getState(BrickVariant.COBBLE);
+        INFERNAL_COBBLE.state = BrickTheme.INFERNAL.getState(BrickVariant.COBBLE);
+        FROSTBOUND_COBBLE.state = BrickTheme.FROSTBOUND.getState(BrickVariant.COBBLE);
+        QUARRIED_COBBLE.state = BrickTheme.QUARRIED.getState(BrickVariant.COBBLE);
+        BLEACHEDBONE_COBBLE.state = BrickTheme.BLEACHEDBONE.getState(BrickVariant.COBBLE);
+        BLOODSTAINED_COBBLE.state = BrickTheme.BLOODSTAINED.getState(BrickVariant.COBBLE);
+        ABYSSAL_COBBLE.state = BrickTheme.ABYSSAL.getState(BrickVariant.COBBLE);
+        NETHER_COBBLE.state = BrickTheme.NETHER.getState(BrickVariant.COBBLE);
 
-        OBSIDIAN.source = Blocks.obsidian;
+        CONCRETE.state = EnumCube.CONCRETE_BLOCK.getState();
+        CREOSOTE.state = EnumCube.CREOSOTE_BLOCK.getState();
 
-        COPPER.source = BlockCube.getBlock();
-        COPPER.sourceMeta = EnumCube.COPPER_BLOCK.ordinal();
+        COPPER.state = EnumCube.COPPER_BLOCK.getState();
         COPPER.oreTag = "blockCopper";
-        TIN.source = BlockCube.getBlock();
-        TIN.sourceMeta = EnumCube.TIN_BLOCK.ordinal();
+        TIN.state = EnumCube.TIN_BLOCK.getState();
         TIN.oreTag = "blockTin";
-        LEAD.source = BlockCube.getBlock();
-        LEAD.sourceMeta = EnumCube.LEAD_BLOCK.ordinal();
+        LEAD.state = EnumCube.LEAD_BLOCK.getState();
         LEAD.oreTag = "blockLead";
-        STEEL.source = BlockCube.getBlock();
-        STEEL.sourceMeta = EnumCube.STEEL_BLOCK.ordinal();
+        STEEL.state = EnumCube.STEEL_BLOCK.getState();
         STEEL.oreTag = "blockSteel";
 
         for (BlockMaterial mat : VALUES) {
             NAMES.put(mat.name(), mat);
+            NAMES.put(mat.name, mat);
             switch (mat) {
                 case CONCRETE:
                     mat.sound = Block.soundTypeStone;
@@ -193,11 +235,13 @@ public enum BlockMaterial implements IDerivedBlock {
                     mat.sound = Block.soundTypeMetal;
                     break;
                 default:
-                    mat.sound = mat.source.stepSound;
+                    if (mat.state != null)
+                        mat.sound = mat.state.getBlock().stepSound;
             }
             if (mat.sound == RailcraftSound.getInstance())
                 throw new RuntimeException("Invalid Sound Defined!");
         }
+
 
         creativeList.add(SNOW);
         creativeList.add(ICE);
@@ -245,53 +289,67 @@ public enum BlockMaterial implements IDerivedBlock {
         creativeList.add(FROSTBOUND_COBBLE);
     }
 
+    @Deprecated
     public static BlockMaterial fromOrdinal(int id) {
         if (id < 0 || id >= VALUES.length)
             return VALUES[0];
         return VALUES[id];
     }
 
+    @Deprecated
     public static BlockMaterial fromName(String name) {
-        BlockMaterial stair = NAMES.get(name);
-        if (stair != null)
-            return stair;
+        BlockMaterial mat = NAMES.get(name);
+        if (mat != null)
+            return mat;
         return SANDY_BRICK;
     }
 
     @Override
-    public Block getSourceBlock() {
-        if (source == null) return Blocks.stonebrick;
-        return source;
+    public IBlockState getState() {
+        return state;
     }
 
     @Override
-    public int getSourceMeta() {
-        return sourceMeta;
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getRegistryName() {
+        return "railcraft:" + name;
+    }
+
+    @Override
+    public String getLocalizationSuffix() {
+        return name;
     }
 
     public String getOreTag() {
         return oreTag;
     }
 
+    @Override
     public SoundType getSound() {
         return sound;
     }
 
     public ItemStack getSourceItem() {
-        if (source == null) return null;
-        return new ItemStack(source, 1, sourceMeta);
+        if (state == null) return null;
+        return new ItemStack(state, 1, sourceMeta);
     }
 
     public Object getCraftingEquivelent() {
         if (oreTag != null) return oreTag;
-        if (source == null) return null;
-        return new ItemStack(source, 1, sourceMeta);
+        if (state == null) return null;
+        return new ItemStack(state, 1, sourceMeta);
     }
 
+    @Override
     public boolean isTransparent() {
         return this == ICE;
     }
 
+    @Override
     public float getBlockHardness(World world, BlockPos pos) {
         switch (this) {
             case CONCRETE:
@@ -305,13 +363,14 @@ public enum BlockMaterial implements IDerivedBlock {
             case STEEL:
                 return EnumCube.STEEL_BLOCK.getHardness();
             default:
-                Block block = getSourceBlock();
-                if (block == null)
+                IBlockState state = getState();
+                if (state == null)
                     return Blocks.brick_block.getBlockHardness(world, pos);
-                return block.getBlockHardness(world, pos);
+                return state.getBlock().getBlockHardness(world, pos);
         }
     }
 
+    @Override
     public float getExplosionResistance(Entity entity) {
         switch (this) {
             case CONCRETE:
@@ -325,10 +384,10 @@ public enum BlockMaterial implements IDerivedBlock {
             case STEEL:
                 return EnumCube.STEEL_BLOCK.getResistance() * 3f / 5f;
             default:
-                Block block = getSourceBlock();
-                if (block == null)
+                IBlockState state = getState();
+                if (state == null)
                     return Blocks.brick_block.getExplosionResistance(entity);
-                return block.getExplosionResistance(entity);
+                return state.getBlock().getExplosionResistance(entity);
         }
     }
 

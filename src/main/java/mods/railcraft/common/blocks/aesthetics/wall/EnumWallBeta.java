@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.wall;
 
-import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
@@ -55,10 +56,10 @@ public enum EnumWallBeta implements WallInfo {
         GOLD.source = Blocks.gold_block;
         DIAMOND.source = Blocks.diamond_block;
 
-        ABYSSAL_BRICK.source = EnumBrick.ABYSSAL.getBlock();
-        QUARRIED_BRICK.source = EnumBrick.QUARRIED.getBlock();
-        BLOODSTAINED_BRICK.source = EnumBrick.BLOODSTAINED.getBlock();
-        BLEACHEDBONE_BRICK.source = EnumBrick.BLEACHEDBONE.getBlock();
+        ABYSSAL_BRICK.source = BrickTheme.ABYSSAL.getBlock();
+        QUARRIED_BRICK.source = BrickTheme.QUARRIED.getBlock();
+        BLOODSTAINED_BRICK.source = BrickTheme.BLOODSTAINED.getBlock();
+        BLEACHEDBONE_BRICK.source = BrickTheme.BLEACHEDBONE.getBlock();
 
         for (EnumWallBeta wall : VALUES) {
             if (wall.isEnabled() && wall.source != null)

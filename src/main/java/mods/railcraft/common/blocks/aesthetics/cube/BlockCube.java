@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.cube;
 
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
@@ -58,12 +59,12 @@ public class BlockCube extends Block {
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
 
-        setHarvestLevel("pickaxe", 1, EnumCube.COKE_BLOCK.ordinal());
-        setHarvestLevel("pickaxe", 1, EnumCube.ABYSSAL_STONE.ordinal());
-        setHarvestLevel("pickaxe", 2, EnumCube.STEEL_BLOCK.ordinal());
-        setHarvestLevel("pickaxe", 1, EnumCube.CONCRETE_BLOCK.ordinal());
-        setHarvestLevel("axe", 0, EnumCube.CREOSOTE_BLOCK.ordinal());
-        setHarvestLevel("shovel", 3, EnumCube.CRUSHED_OBSIDIAN.ordinal());
+        setHarvestLevel("pickaxe", 1, EnumCube.COKE_BLOCK.getState());
+        setHarvestLevel("pickaxe", 1, EnumCube.ABYSSAL_STONE.getState());
+        setHarvestLevel("pickaxe", 2, EnumCube.STEEL_BLOCK.getState());
+        setHarvestLevel("pickaxe", 1, EnumCube.CONCRETE_BLOCK.getState());
+        setHarvestLevel("axe", 0, EnumCube.CREOSOTE_BLOCK.getState());
+        setHarvestLevel("shovel", 3, EnumCube.CRUSHED_OBSIDIAN.getState());
     }
 
     public static BlockCube getBlock() {
@@ -117,6 +118,10 @@ public class BlockCube extends Block {
 
     private EnumCube getVariant(IBlockAccess world, BlockPos pos) {
         return WorldPlugin.getBlockState(world, pos).getValue(VARIANT);
+    }
+
+    IBlockState getState(EnumCube cube) {
+        return getDefaultState().withProperty(VARIANT, cube);
     }
 
     @Override

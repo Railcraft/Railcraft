@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.modules;
 
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
-import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.EnumDetector;
@@ -277,12 +278,12 @@ public class ModuleAutomation extends RailcraftModule {
         Block blockDetector = BlockDetector.getBlock();
 
         if (blockDetector != null)
-            if (EnumBrick.INFERNAL.getBlock() != null)
+            if (BrickTheme.INFERNAL.getBlock() != null)
                 CraftingPlugin.addShapedRecipe(new ItemStack(blockDetector, 1, EnumDetector.LOCOMOTIVE.ordinal()),
                         "XXX",
                         "XPX",
                         "XXX",
-                        'X', EnumBrick.INFERNAL.get(BrickVariant.BRICK, 1),
+                        'X', BrickTheme.INFERNAL.get(BrickVariant.BRICK, 1),
                         'P', Blocks.stone_pressure_plate);
     }
 }

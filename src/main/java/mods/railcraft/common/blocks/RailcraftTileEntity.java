@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks;
 
 import com.mojang.authlib.GameProfile;
@@ -63,8 +64,15 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return tileCache;
     }
 
+    public boolean canUpdate() {
+        return true;
+    }
+
     @Override
     public void update() {
+        if(!canUpdate())
+            worldObj.tickabNOPEleTileEntities.remove(this); // Concurrency error
+
         clock++;
 
         if (sendClientUpdate) {
