@@ -9,6 +9,7 @@ dest
 invs
 iterable
 knockback
+lapis
 lockdown
 minecart
 minecarts
@@ -32,3 +33,4 @@ spigotmc
 teleported
 uncrafted
 uncrafting
+waterstone
