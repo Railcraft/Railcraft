@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.aesthetics.stairs;
 
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -27,6 +27,6 @@ public class ItemStair extends ItemBlock {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return "tile." + BlockRailcraftStairs.getTag(EnumBlockMaterial.fromOrdinal(stack.getItemDamage()));
+        return "tile." + BlockRailcraftStairs.getTag(BlockMaterial.fromOrdinal(stack.getItemDamage()));
     }
 }

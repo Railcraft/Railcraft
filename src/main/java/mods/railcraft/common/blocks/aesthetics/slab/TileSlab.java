@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.aesthetics.slab;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.io.DataInputStream;
@@ -21,14 +21,14 @@ import java.io.IOException;
  */
 public class TileSlab extends RailcraftTileEntity {
 
-    private EnumBlockMaterial top = null;
-    private EnumBlockMaterial bottom = null;
+    private BlockMaterial top = null;
+    private BlockMaterial bottom = null;
 
-    public EnumBlockMaterial getTopSlab() {
+    public BlockMaterial getTopSlab() {
         return top;
     }
 
-    public EnumBlockMaterial getBottomSlab() {
+    public BlockMaterial getBottomSlab() {
         return bottom;
     }
 
@@ -40,7 +40,7 @@ public class TileSlab extends RailcraftTileEntity {
         return top != null && bottom == null;
     }
 
-    public void setTopSlab(EnumBlockMaterial slab) {
+    public void setTopSlab(BlockMaterial slab) {
         if (top != slab) {
             this.top = slab;
             sendUpdateToClient();
@@ -51,21 +51,21 @@ public class TileSlab extends RailcraftTileEntity {
         return top == null && bottom != null;
     }
 
-    public void setBottomSlab(EnumBlockMaterial slab) {
+    public void setBottomSlab(BlockMaterial slab) {
         if (bottom != slab) {
             this.bottom = slab;
             sendUpdateToClient();
         }
     }
 
-    public EnumBlockMaterial getUpmostSlab() {
+    public BlockMaterial getUpmostSlab() {
         if (top != null) {
             return top;
         }
         return bottom;
     }
 
-    public boolean addSlab(EnumBlockMaterial slab) {
+    public boolean addSlab(BlockMaterial slab) {
         if (bottom == null) {
             setBottomSlab(slab);
             return true;
@@ -97,10 +97,10 @@ public class TileSlab extends RailcraftTileEntity {
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.hasKey("top")) {
-            top = EnumBlockMaterial.fromName(data.getString("top"));
+            top = BlockMaterial.fromName(data.getString("top"));
         }
         if (data.hasKey("bottom")) {
-            bottom = EnumBlockMaterial.fromName(data.getString("bottom"));
+            bottom = BlockMaterial.fromName(data.getString("bottom"));
         }
     }
 
@@ -116,13 +116,13 @@ public class TileSlab extends RailcraftTileEntity {
         super.readPacketData(data);
         int t = data.readByte();
         if (t != -1) {
-            top = EnumBlockMaterial.fromOrdinal(t);
+            top = BlockMaterial.fromOrdinal(t);
         } else {
             top = null;
         }
         int b = data.readByte();
         if (b != -1) {
-            bottom = EnumBlockMaterial.fromOrdinal(b);
+            bottom = BlockMaterial.fromOrdinal(b);
         } else {
             bottom = null;
         }

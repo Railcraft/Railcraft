@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.aesthetics.stairs;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
@@ -23,13 +23,13 @@ import java.io.IOException;
  */
 public class TileStair extends RailcraftTileEntity {
 
-    private EnumBlockMaterial stair = EnumBlockMaterial.SANDY_BRICK;
+    private BlockMaterial stair = BlockMaterial.SANDY_BRICK;
 
-    public EnumBlockMaterial getStair() {
+    public BlockMaterial getStair() {
         return stair;
     }
 
-    public void setStair(EnumBlockMaterial stair) {
+    public void setStair(BlockMaterial stair) {
         this.stair = stair;
     }
 
@@ -48,9 +48,9 @@ public class TileStair extends RailcraftTileEntity {
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.getTag("stair") instanceof NBTTagString) {
-            stair = EnumBlockMaterial.fromName(data.getString("stair"));
+            stair = BlockMaterial.fromName(data.getString("stair"));
         } else if (data.getTag("stair") instanceof NBTTagByte) {
-            stair = EnumBlockMaterial.fromOrdinal(data.getByte("stair"));
+            stair = BlockMaterial.fromOrdinal(data.getByte("stair"));
         }
     }
 
@@ -63,7 +63,7 @@ public class TileStair extends RailcraftTileEntity {
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        stair = EnumBlockMaterial.fromOrdinal(data.readByte());
+        stair = BlockMaterial.fromOrdinal(data.readByte());
     }
 
     @Override

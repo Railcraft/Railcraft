@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.render;
 
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.stairs.TileStair;
 import net.minecraft.block.Block;
@@ -44,9 +44,9 @@ public class RenderStair extends BlockRenderer {
         return false;
     }
 
-    private boolean canRenderInPass(RenderBlocks renderer, EnumBlockMaterial stair) {
+    private boolean canRenderInPass(RenderBlocks renderer, BlockMaterial stair) {
         int pass = BlockRailcraftStairs.currentRenderPass;
-        return renderer.hasOverrideBlockTexture() || ((pass == 1) == (stair == EnumBlockMaterial.ICE));
+        return renderer.hasOverrideBlockTexture() || ((pass == 1) == (stair == BlockMaterial.ICE));
     }
 
     @Override

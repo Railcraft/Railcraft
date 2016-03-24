@@ -9,7 +9,7 @@
 package mods.railcraft.common.core;
 
 import mods.railcraft.api.signals.SignalTools;
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternMetal;
 import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternStone;
@@ -518,11 +518,11 @@ public class RailcraftConfig {
             loadBlockFeature(type.getTag());
         }
 
-        for (EnumBlockMaterial mat : EnumBlockMaterial.VALUES) {
+        for (BlockMaterial mat : BlockMaterial.VALUES) {
             loadBlockFeature(BlockRailcraftStairs.getTag(mat));
         }
 
-        for (EnumBlockMaterial mat : EnumBlockMaterial.VALUES) {
+        for (BlockMaterial mat : BlockMaterial.VALUES) {
             loadBlockFeature(BlockRailcraftSlab.getTag(mat));
         }
 

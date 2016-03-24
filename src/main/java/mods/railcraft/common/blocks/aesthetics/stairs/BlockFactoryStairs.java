@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.stairs;
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.BlockFactory;
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.core.Railcraft;
@@ -22,7 +22,7 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import static mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial.*;
+import static mods.railcraft.common.blocks.aesthetics.BlockMaterial.*;
 import static mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs.getItem;
 
 /**
@@ -41,7 +41,7 @@ public class BlockFactoryStairs extends BlockFactory {
         RailcraftRegistry.register(BlockRailcraftStairs.block, ItemStair.class);
         GameRegistry.registerTileEntity(TileStair.class, "RCStairTile");
 
-        for (EnumBlockMaterial mat : EnumBlockMaterial.VALUES) {
+        for (BlockMaterial mat : BlockMaterial.VALUES) {
             RailcraftRegistry.register(getItem(mat));
 
             switch (mat) {
@@ -56,8 +56,8 @@ public class BlockFactoryStairs extends BlockFactory {
 
     @Override
     protected void doRecipeInit(ModuleManager.Module module) {
-        EnumBlockMaterial.initialize();
-        for (EnumBlockMaterial mat : EnumBlockMaterial.VALUES) {
+        BlockMaterial.initialize();
+        for (BlockMaterial mat : BlockMaterial.VALUES) {
             if (BlockRailcraftStairs.isEnabled(mat) && mat.getSourceItem() != null) {
                 CraftingPlugin.addShapedRecipe(BlockRailcraftStairs.getItem(mat, 4), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
                 IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(BlockRailcraftStairs.getItem(mat), true, false);
@@ -75,11 +75,11 @@ public class BlockFactoryStairs extends BlockFactory {
         addRockCrusherRecipe(EnumBrick.SANDY, SANDY_BLOCK, SANDY_BRICK, SANDY_COBBLE, SANDY_FITTED);
     }
 
-    private void addRockCrusherRecipe(EnumBrick brick, EnumBlockMaterial... types) {
+    private void addRockCrusherRecipe(EnumBrick brick, BlockMaterial... types) {
         if (brick.getBlock() == null)
             return;
         ItemStack output = brick.get(BrickVariant.COBBLE, 1);
-        for (EnumBlockMaterial mat : types) {
+        for (BlockMaterial mat : types) {
             if (!BlockRailcraftStairs.isEnabled(mat))
                 continue;
             IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(getItem(mat), true, false);

@@ -9,7 +9,7 @@
 package mods.railcraft.common.plugins.forestry;
 
 import forestry.api.storage.IBackpackDefinition;
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.wall.EnumWallAlpha;
@@ -49,10 +49,10 @@ public class IcemanBackpack extends BaseBackpack implements IBackpackDefinition 
         addItem(Blocks.ice);
         addItem(EnumWallAlpha.SNOW.getItem());
         addItem(EnumWallAlpha.ICE.getItem());
-        addItem(BlockRailcraftStairs.getItem(EnumBlockMaterial.SNOW));
-        addItem(BlockRailcraftStairs.getItem(EnumBlockMaterial.ICE));
-        addItem(BlockRailcraftSlab.getItem(EnumBlockMaterial.SNOW));
-        addItem(BlockRailcraftSlab.getItem(EnumBlockMaterial.ICE));
+        addItem(BlockRailcraftStairs.getItem(BlockMaterial.SNOW));
+        addItem(BlockRailcraftStairs.getItem(BlockMaterial.ICE));
+        addItem(BlockRailcraftSlab.getItem(BlockMaterial.SNOW));
+        addItem(BlockRailcraftSlab.getItem(BlockMaterial.ICE));
         addItem(Items.snowball);
     }
 

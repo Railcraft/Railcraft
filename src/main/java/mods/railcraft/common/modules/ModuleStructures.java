@@ -9,7 +9,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.brick.EnumBrick;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
@@ -150,7 +150,7 @@ public class ModuleStructures extends RailcraftModule {
             CraftingPlugin.addShapedRecipe(EnumPost.WOOD_PLATFORM.getItem(),
                     " T ",
                     " I ",
-                    'T', BlockRailcraftSlab.getItem(EnumBlockMaterial.CREOSOTE),
+                    'T', BlockRailcraftSlab.getItem(BlockMaterial.CREOSOTE),
                     'I', EnumPost.WOOD.getItem());
 
             CraftingPlugin.addShapedRecipe(EnumPost.STONE.getItem(8),
@@ -162,7 +162,7 @@ public class ModuleStructures extends RailcraftModule {
             CraftingPlugin.addShapedRecipe(EnumPost.STONE_PLATFORM.getItem(),
                     " T ",
                     " I ",
-                    'T', BlockRailcraftSlab.getItem(EnumBlockMaterial.CONCRETE),
+                    'T', BlockRailcraftSlab.getItem(BlockMaterial.CONCRETE),
                     'I', EnumPost.STONE.getItem());
 
             ItemStack stack = EnumPost.METAL_UNPAINTED.getItem(16);
@@ -184,7 +184,7 @@ public class ModuleStructures extends RailcraftModule {
             CraftingPlugin.addShapedRecipe(EnumPost.METAL_PLATFORM_UNPAINTED.getItem(4),
                     " T ",
                     " I ",
-                    'T', BlockRailcraftSlab.getItem(EnumBlockMaterial.IRON),
+                    'T', BlockRailcraftSlab.getItem(BlockMaterial.IRON),
                     'I', EnumPost.METAL_UNPAINTED.getItem());
 
             stack = EnumPost.METAL_UNPAINTED.getItem(32);

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.aesthetics.lantern;
 
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
@@ -36,12 +36,12 @@ public enum EnumLanternMetal implements LanternInfo {
     private ItemStack source;
 
     public static void initialize() {
-        IRON.source = BlockRailcraftSlab.getItem(EnumBlockMaterial.IRON);
-        GOLD.source = BlockRailcraftSlab.getItem(EnumBlockMaterial.GOLD);
-        COPPER.source = BlockRailcraftSlab.getItem(EnumBlockMaterial.COPPER);
-        TIN.source = BlockRailcraftSlab.getItem(EnumBlockMaterial.TIN);
-        LEAD.source = BlockRailcraftSlab.getItem(EnumBlockMaterial.LEAD);
-        STEEL.source = BlockRailcraftSlab.getItem(EnumBlockMaterial.STEEL);
+        IRON.source = BlockRailcraftSlab.getItem(BlockMaterial.IRON);
+        GOLD.source = BlockRailcraftSlab.getItem(BlockMaterial.GOLD);
+        COPPER.source = BlockRailcraftSlab.getItem(BlockMaterial.COPPER);
+        TIN.source = BlockRailcraftSlab.getItem(BlockMaterial.TIN);
+        LEAD.source = BlockRailcraftSlab.getItem(BlockMaterial.LEAD);
+        STEEL.source = BlockRailcraftSlab.getItem(BlockMaterial.STEEL);
 
         for (EnumLanternMetal lamp : VALUES) {
             NAMES.put(lamp.name(), lamp);

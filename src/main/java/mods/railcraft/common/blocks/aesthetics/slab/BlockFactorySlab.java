@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.aesthetics.slab;
 
 import mods.railcraft.common.blocks.BlockFactory;
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -36,7 +36,7 @@ public class BlockFactorySlab extends BlockFactory {
         RailcraftRegistry.register(BlockRailcraftSlab.block, ItemSlab.class);
         GameRegistry.registerTileEntity(TileSlab.class, "RCSlabTile");
 
-        for (EnumBlockMaterial mat : EnumBlockMaterial.VALUES) {
+        for (BlockMaterial mat : BlockMaterial.VALUES) {
             RailcraftRegistry.register(getItem(mat));
 
             switch (mat) {
@@ -51,8 +51,8 @@ public class BlockFactorySlab extends BlockFactory {
 
     @Override
     protected void doRecipeInit(ModuleManager.Module module) {
-        EnumBlockMaterial.initialize();
-        for (EnumBlockMaterial mat : EnumBlockMaterial.VALUES) {
+        BlockMaterial.initialize();
+        for (BlockMaterial mat : BlockMaterial.VALUES) {
             if (BlockRailcraftSlab.isEnabled(mat) && mat.getSourceItem() != null) {
                 switch (mat) {
                     case SNOW:

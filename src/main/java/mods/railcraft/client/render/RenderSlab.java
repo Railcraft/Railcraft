@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.render;
 
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.slab.TileSlab;
 import net.minecraft.block.Block;
@@ -64,7 +64,7 @@ public class RenderSlab extends BlockRenderer {
         return rendered;
     }
 
-    private boolean canRenderInPass(RenderBlocks renderer, EnumBlockMaterial slab) {
+    private boolean canRenderInPass(RenderBlocks renderer, BlockMaterial slab) {
         int pass = BlockRailcraftSlab.currentRenderPass;
         return renderer.hasOverrideBlockTexture() || ((pass == 1) == (slab.isTransparent()));
     }

@@ -10,7 +10,7 @@ package mods.railcraft.common.blocks.aesthetics.stairs;
 
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.client.sounds.RailcraftSound;
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -60,21 +60,21 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         return block;
     }
 
-    public static ItemStack getItem(EnumBlockMaterial mat) {
+    public static ItemStack getItem(BlockMaterial mat) {
         if (block == null) return null;
         return new ItemStack(block, 1, mat.ordinal());
     }
 
-    public static ItemStack getItem(EnumBlockMaterial mat, int qty) {
+    public static ItemStack getItem(BlockMaterial mat, int qty) {
         if (block == null) return null;
         return new ItemStack(block, qty, mat.ordinal());
     }
 
-    public static String getTag(EnumBlockMaterial mat) {
+    public static String getTag(BlockMaterial mat) {
         return "railcraft.stair." + mat.name().replace("_", ".").toLowerCase(Locale.ENGLISH);
     }
 
-    public static boolean isEnabled(EnumBlockMaterial mat) {
+    public static boolean isEnabled(BlockMaterial mat) {
         return ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES) && RailcraftConfig.isSubBlockEnabled(getTag(mat)) && getBlock() != null;
     }
 
@@ -88,7 +88,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (EnumBlockMaterial mat : EnumBlockMaterial.creativeList) {
+        for (BlockMaterial mat : BlockMaterial.creativeList) {
             if (isEnabled(mat))
                 list.add(getItem(mat));
         }
@@ -113,7 +113,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileStair)
-            ((TileStair) tile).setStair(EnumBlockMaterial.fromOrdinal(stack.getItemDamage()));
+            ((TileStair) tile).setStair(BlockMaterial.fromOrdinal(stack.getItemDamage()));
     }
 
     @Override

@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumBlockMaterial implements IDerivedBlock {
+public enum BlockMaterial implements IDerivedBlock {
 
     SANDY_BRICK,
     INFERNAL_BRICK,
@@ -74,9 +74,9 @@ public enum EnumBlockMaterial implements IDerivedBlock {
     TIN,
     LEAD,
     STEEL;
-    public static final EnumBlockMaterial[] VALUES = values();
-    public static final Map<String, EnumBlockMaterial> NAMES = new HashMap<String, EnumBlockMaterial>();
-    public static final List<EnumBlockMaterial> creativeList = new ArrayList<EnumBlockMaterial>();
+    public static final BlockMaterial[] VALUES = values();
+    public static final Map<String, BlockMaterial> NAMES = new HashMap<String, BlockMaterial>();
+    public static final List<BlockMaterial> creativeList = new ArrayList<BlockMaterial>();
     private static boolean needsInit = true;
     private SoundType sound;
     private Block source;
@@ -177,7 +177,7 @@ public enum EnumBlockMaterial implements IDerivedBlock {
         STEEL.sourceMeta = EnumCube.STEEL_BLOCK.ordinal();
         STEEL.oreTag = "blockSteel";
 
-        for (EnumBlockMaterial mat : VALUES) {
+        for (BlockMaterial mat : VALUES) {
             NAMES.put(mat.name(), mat);
             switch (mat) {
                 case CONCRETE:
@@ -245,14 +245,14 @@ public enum EnumBlockMaterial implements IDerivedBlock {
         creativeList.add(FROSTBOUND_COBBLE);
     }
 
-    public static EnumBlockMaterial fromOrdinal(int id) {
+    public static BlockMaterial fromOrdinal(int id) {
         if (id < 0 || id >= VALUES.length)
             return VALUES[0];
         return VALUES[id];
     }
 
-    public static EnumBlockMaterial fromName(String name) {
-        EnumBlockMaterial stair = NAMES.get(name);
+    public static BlockMaterial fromName(String name) {
+        BlockMaterial stair = NAMES.get(name);
         if (stair != null)
             return stair;
         return SANDY_BRICK;

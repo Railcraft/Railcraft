@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.aesthetics.slab;
 
-import mods.railcraft.common.blocks.aesthetics.EnumBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -36,7 +36,7 @@ public class ItemSlab extends ItemBlock {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return BlockRailcraftSlab.getTag(EnumBlockMaterial.fromOrdinal(stack.getItemDamage()));
+        return BlockRailcraftSlab.getTag(BlockMaterial.fromOrdinal(stack.getItemDamage()));
     }
 
     /**
@@ -103,7 +103,7 @@ public class ItemSlab extends ItemBlock {
         TileSlab slab = BlockRailcraftSlab.getSlabTile(world, x, y, z);
         if (slab != null) {
             Block block = BlockRailcraftSlab.getBlock();
-            if (world.checkNoEntityCollision(block.getCollisionBoundingBoxFromPool(world, x, y, z)) && slab.addSlab(EnumBlockMaterial.fromOrdinal(stack.getItemDamage()))) {
+            if (world.checkNoEntityCollision(block.getCollisionBoundingBoxFromPool(world, x, y, z)) && slab.addSlab(BlockMaterial.fromOrdinal(stack.getItemDamage()))) {
                 world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, block.stepSound.func_150496_b(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
                 --stack.stackSize;
             }
@@ -161,9 +161,9 @@ public class ItemSlab extends ItemBlock {
             TileSlab slab = BlockRailcraftSlab.getSlabTile(world, pos);
             if (slab != null) {
                 if (side != DOWN && (side == UP || (double) hitY <= 0.5D)) {
-                    slab.setBottomSlab(EnumBlockMaterial.fromOrdinal(stack.getItemDamage()));
+                    slab.setBottomSlab(BlockMaterial.fromOrdinal(stack.getItemDamage()));
                 } else {
-                    slab.setTopSlab(EnumBlockMaterial.fromOrdinal(stack.getItemDamage()));
+                    slab.setTopSlab(BlockMaterial.fromOrdinal(stack.getItemDamage()));
                 }
             }
             getBlock().onBlockPlacedBy(world, pos, newState, player, stack);
