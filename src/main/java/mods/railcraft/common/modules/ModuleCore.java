@@ -32,6 +32,7 @@ import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.commands.CommandDebug;
+import mods.railcraft.common.commands.CommandAdmin;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.*;
@@ -108,6 +109,7 @@ public class ModuleCore extends RailcraftModule {
         CartTools.transferHelper = TrainTransferHelper.INSTANCE;
 
         Railcraft.rootCommand.addChildCommand(new CommandDebug());
+        Railcraft.rootCommand.addChildCommand(new CommandAdmin());
 
         RailcraftCraftingManager.cokeOven = new CokeOvenCraftingManager();
         RailcraftCraftingManager.blastFurnace = new BlastFurnaceCraftingManager();
