@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.api.core.IPostConnection;
@@ -15,7 +16,6 @@ import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.material.MapColor;
@@ -41,7 +41,7 @@ import java.util.List;
 public class BlockPost extends BlockPostBase implements IPostConnection {
 
     public static final PropertyEnum<EnumPost> VARIANT = PropertyEnum.create("variant", EnumPost.class);
-    public static BlockPost block;
+    private static BlockPost block;
 
     private BlockPost(int renderType) {
         super(renderType);
@@ -50,7 +50,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     public static void registerBlock() {
-        if (block != null)
+        if (getBlock() != null)
             return;
 
         if (RailcraftConfig.isBlockEnabled("post")) {
@@ -58,28 +58,32 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
 
             GameRegistry.registerTileEntity(TilePostEmblem.class, "RCPostEmblemTile");
 
-            RailcraftRegistry.register(block, ItemPost.class);
+            RailcraftRegistry.register(getBlock(), ItemPost.class);
 
             for (EnumPost post : EnumPost.VALUES) {
                 ItemStack stack = post.getItem();
                 RailcraftRegistry.register(stack);
             }
 
-//            HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
-            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.WOOD), "axe", 0);
-            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.STONE), "pickaxe", 1);
-            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.METAL_UNPAINTED), "pickaxe", 2);
-            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.EMBLEM), "pickaxe", 2);
-            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.WOOD_PLATFORM), "axe", 0);
-            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.STONE_PLATFORM), "pickaxe", 1);
-            HarvestPlugin.setHarvestLevel(block, getBlockState(EnumPost.METAL_PLATFORM_UNPAINTED), "pickaxe", 2);
+//            HarvestPlugin.setStateHarvestLevel(block, "crowbar", 0);
+            HarvestPlugin.setStateHarvestLevel("axe", 0, getBlockState(EnumPost.WOOD));
+            HarvestPlugin.setStateHarvestLevel("pickaxe", 1, getBlockState(EnumPost.STONE));
+            HarvestPlugin.setStateHarvestLevel("pickaxe", 2, getBlockState(EnumPost.METAL_UNPAINTED));
+            HarvestPlugin.setStateHarvestLevel("pickaxe", 2, getBlockState(EnumPost.EMBLEM));
+            HarvestPlugin.setStateHarvestLevel("axe", 0, getBlockState(EnumPost.WOOD_PLATFORM));
+            HarvestPlugin.setStateHarvestLevel("pickaxe", 1, getBlockState(EnumPost.STONE_PLATFORM));
+            HarvestPlugin.setStateHarvestLevel("pickaxe", 2, getBlockState(EnumPost.METAL_PLATFORM_UNPAINTED));
 
-            ForestryPlugin.addBackpackItem("builder", block);
+            ForestryPlugin.addBackpackItem("builder", getBlock());
         }
     }
 
     public static IBlockState getBlockState(EnumPost variant) {
-        return block.getDefaultState().withProperty(VARIANT, variant);
+        return getBlock().getDefaultState().withProperty(VARIANT, variant);
+    }
+
+    public static BlockPost getBlock() {
+        return block;
     }
 
     @Override

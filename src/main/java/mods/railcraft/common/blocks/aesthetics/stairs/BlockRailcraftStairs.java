@@ -12,6 +12,8 @@ package mods.railcraft.common.blocks.aesthetics.stairs;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.IBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -40,8 +42,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
+
+import static mods.railcraft.common.blocks.aesthetics.BlockMaterial.STAIR_MATS;
 
 public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProvider {
 
@@ -49,8 +52,8 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     static BlockRailcraftStairs block;
     private final int renderId;
 
-    protected BlockRailcraftStairs(int renderId) {
-        super(Blocks.stonebrick, 0);
+    BlockRailcraftStairs(int renderId) {
+        super(Blocks.stonebrick.getDefaultState());
         this.renderId = renderId;
         this.setStepSound(RailcraftSound.getInstance());
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
@@ -62,18 +65,19 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         return block;
     }
 
-    public static ItemStack getItem(BlockMaterial mat) {
-        if (block == null) return null;
-        return new ItemStack(block, 1, mat.ordinal());
+    public static ItemStack getItem(IBlockMaterial mat) {
+        return getItem(mat, 1);
     }
 
-    public static ItemStack getItem(BlockMaterial mat, int qty) {
+    public static ItemStack getItem(IBlockMaterial mat, int qty) {
         if (block == null) return null;
-        return new ItemStack(block, qty, mat.ordinal());
+        ItemStack stack = new ItemStack(block, qty);
+        MaterialRegistry.tagItemStack(stack, "material", mat);
+        return stack;
     }
 
-    public static String getTag(BlockMaterial mat) {
-        return "railcraft.stair." + mat.name().replace("_", ".").toLowerCase(Locale.ENGLISH);
+    public static String getTag(IBlockMaterial mat) {
+        return "tile.railcraft.stair." + mat.getLocalizationSuffix();
     }
 
     public static boolean isEnabled(BlockMaterial mat) {
@@ -83,15 +87,16 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileStair)
-            return new ItemStack(this, 1, ((TileStair) tile).getStair().ordinal());
+        if (tile instanceof TileStair) {
+            return getItem(((TileStair) tile).getMaterial());
+        }
         return null;
     }
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (BlockMaterial mat : BlockMaterial.creativeList) {
-            if (isEnabled(mat))
+            if (isEnabled(mat) && STAIR_MATS.contains(mat))
                 list.add(getItem(mat));
         }
     }
@@ -101,7 +106,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         TileEntity tile = world.getTileEntity(pos);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if (tile instanceof TileStair)
-            items.add(new ItemStack(this, 1, ((TileStair) tile).getStair().ordinal()));
+            items.add(getItem(((TileStair) tile).getMaterial()));
         return items;
     }
 
@@ -115,7 +120,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileStair)
-            ((TileStair) tile).setStair(BlockMaterial.fromOrdinal(stack.getItemDamage()));
+            ((TileStair) tile).setStair(MaterialRegistry.from(stack, "material"));
     }
 
     @Override
@@ -153,7 +158,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     public float getBlockHardness(World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileStair)
-            return ((TileStair) tile).getStair().getBlockHardness(worldIn, pos);
+            return ((TileStair) tile).getMaterial().getBlockHardness(worldIn, pos);
         return super.getBlockHardness(worldIn, pos);
     }
 
@@ -161,7 +166,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileStair)
-            return ((TileStair) tile).getStair().getExplosionResistance(exploder);
+            return ((TileStair) tile).getMaterial().getExplosionResistance(exploder);
         return super.getExplosionResistance(world, pos, exploder, explosion);
     }
 
@@ -186,7 +191,17 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     public SoundType getSound(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileStair)
-            return ((TileStair) tile).getStair().getSound();
+            return ((TileStair) tile).getMaterial().getSound();
         return null;
+    }
+
+    @Override
+    public String getHarvestTool(IBlockState state) {
+        return state.;
+    }
+
+    @Override
+    public boolean isToolEffective(String type, IBlockState state) {
+        return super.isToolEffective(type, state);
     }
 }

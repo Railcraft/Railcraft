@@ -62,8 +62,8 @@ public class BlockDetector extends BlockContainer {
             block = new BlockDetector();
             RailcraftRegistry.register(block, ItemDetector.class);
 
-//            HarvestPlugin.setHarvestLevel(block, "pickaxe", 2);
-            HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
+//            HarvestPlugin.setStateHarvestLevel(block, "pickaxe", 2);
+            HarvestPlugin.setBlockHarvestLevel("crowbar", 0, block);
 
             for (EnumDetector d : EnumDetector.VALUES) {
                 ItemStack stack = new ItemStack(block, 1, d.ordinal());

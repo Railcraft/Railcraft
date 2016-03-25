@@ -15,6 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,15 +35,19 @@ public class MaterialRegistry {
         materials.put(material.getRegistryName(), material);
     }
 
+    @Nonnull
     public static IBlockMaterial get(String name) {
         IBlockMaterial mat = materials.get(name);
         if (mat == null)
             mat = materials.get("railcraft:" + name);
         if (mat == null)
             mat = BlockMaterial.fromName(name);
+        if (mat == null)
+            mat = BlockMaterial.STONE_BRICK;
         return mat;
     }
 
+    @Nonnull
     public static IBlockMaterial get(ResourceLocation name) {
         return get(name.toString());
     }
@@ -51,5 +57,15 @@ public class MaterialRegistry {
             return;
         NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
         nbt.setString(key, material.getRegistryName());
+    }
+
+    @Nullable
+    public static IBlockMaterial from(ItemStack stack, String key) {
+        if (stack == null)
+            return BlockMaterial.STONE_BRICK;
+        NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
+        if (nbt.hasKey(key))
+            return get(nbt.getString(key));
+        return BlockMaterial.STONE_BRICK;
     }
 }

@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.plugins.forge;
 
+import mods.railcraft.common.blocks.IBlockContainer;
+import mods.railcraft.common.blocks.IStateContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -21,15 +23,27 @@ public class HarvestPlugin {
         item.setHarvestLevel(toolClass, level);
     }
 
-    public static void setHarvestLevel(Block block, String toolClass, int level) {
+    public static void setBlockHarvestLevel(String toolClass, int level, IBlockContainer blockContainer) {
+        Block block = blockContainer.getBlock();
+        if (block != null)
+            setBlockHarvestLevel(toolClass, level, block);
+    }
+
+    public static void setBlockHarvestLevel(String toolClass, int level, Block block) {
         block.setHarvestLevel(toolClass, level);
     }
 
-    public static void setHarvestLevel(Block block, IBlockState blockState, String toolClass, int level) {
-        block.setHarvestLevel(toolClass, level, blockState);
+    public static void setStateHarvestLevel(String toolClass, int level, IStateContainer stateContainer) {
+        IBlockState state = stateContainer.getState();
+        if (state != null)
+            setStateHarvestLevel(toolClass, level, state);
     }
 
-    public static int getBlockHarvestLevel(Block block,IBlockState blockState, String toolClass) {
+    public static void setStateHarvestLevel(String toolClass, int level, IBlockState blockState) {
+        blockState.getBlock().setHarvestLevel(toolClass, level, blockState);
+    }
+
+    public static int getHarvestLevel(Block block, IBlockState blockState, String toolClass) {
 //        return block.getHarvestLevel(blockState, toolClass);
         return 0;
     }

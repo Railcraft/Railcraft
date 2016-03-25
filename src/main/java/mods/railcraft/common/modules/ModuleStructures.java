@@ -145,7 +145,7 @@ public class ModuleStructures extends RailcraftModule {
     public void initSecond() {
         BlockRailcraftWall.initialize();
 
-        Block blockPost = BlockPost.block;
+        Block blockPost = BlockPost.getBlock();
         if (blockPost != null) {
             CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getItem(4), RailcraftItem.tie.getRecipeObject(ItemTie.EnumTie.WOOD));
             CraftingPlugin.addShapedRecipe(EnumPost.WOOD_PLATFORM.getItem(),

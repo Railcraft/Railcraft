@@ -38,7 +38,7 @@ public class RenderBlockPost extends BlockRenderer {
     }
 
     public static BlockRenderer make() {
-        BlockRenderer renderer = new RenderBlockPost(BlockPost.block);
+        BlockRenderer renderer = new RenderBlockPost(BlockPost.getBlock());
         renderer.addCombinedRenderer(EnumPost.WOOD.ordinal(), new RenderPost());
         renderer.addCombinedRenderer(EnumPost.WOOD_PLATFORM.ordinal(), new RenderPost());
         renderer.addCombinedRenderer(EnumPost.STONE.ordinal(), new RenderPostStone());

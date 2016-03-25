@@ -35,7 +35,7 @@ public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
 
     public EntityCartCargo(World world, double d, double d1, double d2) {
         this(world);
-        setPosition(d, d1 + (double) yOffset, d2);
+        setPosition(d, d1 + getYOffset(), d2);
         motionX = 0.0D;
         motionY = 0.0D;
         motionZ = 0.0D;

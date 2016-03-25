@@ -347,16 +347,16 @@ public class RailcraftConfig {
         worldGen.put("sulfur", get(configMain, CAT_WORLD_GEN + ".generate", "sulfur", true));
         worldGen.put("saltpeter", get(configMain, CAT_WORLD_GEN + ".generate", "saltpeter", true));
         worldGen.put("firestone", get(configMain, CAT_WORLD_GEN + ".generate", "firestone", true));
-        worldGen.put("abyssal", get(configMain, CAT_WORLD_GEN + ".generate", "abyssal", true));
-        worldGen.put("quarried", get(configMain, CAT_WORLD_GEN + ".generate", "quarried", true));
+        worldGen.put("abyssal", get(configMain, CAT_WORLD_GEN + ".generate", "abyssal.geodes", true));
+        worldGen.put("quarried", get(configMain, CAT_WORLD_GEN + ".generate", "quarried.stone", true));
 
-        worldGen.put("workshop", get(configMain, CAT_WORLD_GEN + ".generate", "workshop", true));
+        worldGen.put("workshop", get(configMain, CAT_WORLD_GEN + ".generate", "village.workshop", true));
 
-        worldGen.put("iron", get(configMain, CAT_WORLD_GEN + ".generate", "iron", true));
-        worldGen.put("gold", get(configMain, CAT_WORLD_GEN + ".generate", "gold", true));
-        worldGen.put("copper", get(configMain, CAT_WORLD_GEN + ".generate", "copper", true));
-        worldGen.put("tin", get(configMain, CAT_WORLD_GEN + ".generate", "tin", true));
-        worldGen.put("lead", get(configMain, CAT_WORLD_GEN + ".generate", "lead", true));
+        worldGen.put("iron", get(configMain, CAT_WORLD_GEN + ".generate", "poor.iron", true));
+        worldGen.put("gold", get(configMain, CAT_WORLD_GEN + ".generate", "poor.gold", true));
+        worldGen.put("copper", get(configMain, CAT_WORLD_GEN + ".generate", "poor.copper", true));
+        worldGen.put("tin", get(configMain, CAT_WORLD_GEN + ".generate", "poor.tin", true));
+        worldGen.put("lead", get(configMain, CAT_WORLD_GEN + ".generate", "poor.lead", true));
 
         villagerID = configMain.get(CAT_WORLD_GEN + ".id", "workshop", 456).getInt(456);
     }
@@ -518,11 +518,11 @@ public class RailcraftConfig {
             loadBlockFeature(type.getTag());
         }
 
-        for (BlockMaterial mat : BlockMaterial.VALUES) {
+        for (BlockMaterial mat : BlockMaterial.STAIR_MATS) {
             loadBlockFeature(BlockRailcraftStairs.getTag(mat));
         }
 
-        for (BlockMaterial mat : BlockMaterial.VALUES) {
+        for (BlockMaterial mat : BlockMaterial.SLAB_MATS) {
             loadBlockFeature(BlockRailcraftSlab.getTag(mat));
         }
 
@@ -535,7 +535,7 @@ public class RailcraftConfig {
         }
 
         for (EnumOre type : EnumOre.values()) {
-            if (!type.isDepecriated())
+            if (!type.isDepreciated())
                 loadBlockFeature(type.getTag());
         }
 

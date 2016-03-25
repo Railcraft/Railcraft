@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.common.core.Railcraft;
@@ -65,8 +66,8 @@ public class BlockPostMetal extends BlockPostBase {
         block.setRegistryName("railcraft." + tag);
         RailcraftRegistry.register(block, ItemPostMetal.class);
 
-//        HarvestPlugin.setHarvestLevel(block, "crowbar", 0);
-        HarvestPlugin.setHarvestLevel(block, "pickaxe", 2);
+//        HarvestPlugin.setBlockHarvestLevel(block, "crowbar", 0);
+        HarvestPlugin.setBlockHarvestLevel("pickaxe", 2, block);
 
         ForestryPlugin.addBackpackItem("builder", block);
 

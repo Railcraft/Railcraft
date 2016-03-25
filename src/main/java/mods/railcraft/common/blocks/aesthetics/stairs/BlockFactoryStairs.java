@@ -42,7 +42,7 @@ public class BlockFactoryStairs extends BlockFactory {
         RailcraftRegistry.register(BlockRailcraftStairs.block, ItemStair.class);
         GameRegistry.registerTileEntity(TileStair.class, "RCStairTile");
 
-        for (BlockMaterial mat : BlockMaterial.VALUES) {
+        for (BlockMaterial mat : BlockMaterial.STAIR_MATS) {
             RailcraftRegistry.register(getItem(mat));
 
             switch (mat) {
@@ -58,7 +58,7 @@ public class BlockFactoryStairs extends BlockFactory {
     @Override
     protected void doRecipeInit(ModuleManager.Module module) {
         BlockMaterial.initialize();
-        for (BlockMaterial mat : BlockMaterial.VALUES) {
+        for (BlockMaterial mat : BlockMaterial.STAIR_MATS) {
             if (BlockRailcraftStairs.isEnabled(mat) && mat.getSourceItem() != null) {
                 CraftingPlugin.addShapedRecipe(BlockRailcraftStairs.getItem(mat, 4), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
                 IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(BlockRailcraftStairs.getItem(mat), true, false);
@@ -76,10 +76,10 @@ public class BlockFactoryStairs extends BlockFactory {
         addRockCrusherRecipe(BrickTheme.SANDY, SANDY_BLOCK, SANDY_BRICK, SANDY_COBBLE, SANDY_FITTED);
     }
 
-    private void addRockCrusherRecipe(BrickTheme brick, BlockMaterial... types) {
-        if (brick.getBlock() == null)
+    private void addRockCrusherRecipe(BrickTheme brickTheme, BlockMaterial... types) {
+        if (brickTheme.getBlock() == null)
             return;
-        ItemStack output = brick.get(BrickVariant.COBBLE, 1);
+        ItemStack output = brickTheme.get(BrickVariant.COBBLE, 1);
         for (BlockMaterial mat : types) {
             if (!BlockRailcraftStairs.isEnabled(mat))
                 continue;

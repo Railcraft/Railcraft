@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import net.minecraft.block.material.MapColor;
@@ -50,11 +51,11 @@ public enum EnumPost implements IStringSerializable {
     public ItemStack getItem(int qty) {
         if (!isEnabled())
             return null;
-        return new ItemStack(BlockPost.block, qty, ordinal());
+        return new ItemStack(BlockPost.getBlock(), qty, ordinal());
     }
 
     public boolean isEnabled() {
-        return BlockPost.block != null;
+        return BlockPost.getBlock() != null;
     }
 
     public boolean canBurn() {

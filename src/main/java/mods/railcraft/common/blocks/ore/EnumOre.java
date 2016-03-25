@@ -8,16 +8,21 @@
  */
 package mods.railcraft.common.blocks.ore;
 
+import mods.railcraft.common.blocks.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumOre implements IStringSerializable {
+public enum EnumOre implements IStringSerializable, IVariantEnum<EnumOre> {
 
     SULFUR("sulfur"),
     SALTPETER("saltpeter"),
@@ -43,6 +48,18 @@ public enum EnumOre implements IStringSerializable {
         this.tag = tag;
     }
 
+    @Nullable
+    @Override
+    public Block getBlock() {
+        return BlockOre.getBlock();
+    }
+
+    @Nullable
+    @Override
+    public IBlockState getState() {
+        return null;
+    }
+
     public ItemStack getItem() {
         return getItem(1);
     }
@@ -59,7 +76,7 @@ public enum EnumOre implements IStringSerializable {
         return ModuleManager.isModuleLoaded(Module.WORLD) && BlockOre.getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
-    public boolean isDepecriated() {
+    public boolean isDepreciated() {
         return depreciated;
     }
 

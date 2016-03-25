@@ -39,6 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -48,7 +49,7 @@ import java.util.Random;
  */
 public class BlockOre extends Block {
 
-    public static final PropertyEnum<EnumOre> TYPE = PropertyEnum.create("type", EnumOre.class);
+    public static final PropertyEnum<EnumOre> VARIANT = PropertyEnum.create("variant", EnumOre.class);
     private static final ParticleHelperCallback callback = new ParticleCallback();
     public static int renderPass;
     private static BlockOre instance;
@@ -57,7 +58,7 @@ public class BlockOre extends Block {
 
     public BlockOre(int renderId) {
         super(Material.rock);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EnumOre.SULFUR));
+        setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumOre.SULFUR));
         renderType = renderId;
         setRegistryName("railcraft.ore");
         setResistance(5);
@@ -66,8 +67,16 @@ public class BlockOre extends Block {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
+    @Nullable
     public static BlockOre getBlock() {
         return instance;
+    }
+
+    @Nullable
+    public static IBlockState getState(EnumOre ore) {
+        if (instance == null)
+            return null;
+        return instance.getDefaultState().withProperty(VARIANT, ore);
     }
 
     public static void registerBlock() {
@@ -83,16 +92,16 @@ public class BlockOre extends Block {
 
                 switch (ore) {
                     case FIRESTONE:
-                        HarvestPlugin.setHarvestLevel(instance, ore.ordinal(), "pickaxe", 3);
+                        HarvestPlugin.setStateHarvestLevel("pickaxe", 3, ore);
                         break;
                     case DARK_LAPIS:
                     case POOR_IRON:
                     case POOR_TIN:
                     case POOR_COPPER:
-                        HarvestPlugin.setHarvestLevel(instance, ore.ordinal(), "pickaxe", 1);
+                        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, ore);
                         break;
                     default:
-                        HarvestPlugin.setHarvestLevel(instance, ore.ordinal(), "pickaxe", 2);
+                        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, ore);
                 }
             }
 
@@ -123,12 +132,12 @@ public class BlockOre extends Block {
     }
 
     private static void registerOre(String name, EnumOre ore) {
-        if (!ore.isDepecriated() && ore.isEnabled())
+        if (!ore.isDepreciated() && ore.isEnabled())
             OreDictionary.registerOre(name, ore.getItem());
     }
 
-    public EnumOre getType(IBlockState state) {
-        return state.getValue(TYPE);
+    public EnumOre getVariant(IBlockState state) {
+        return state.getValue(VARIANT);
     }
 
     @Override
@@ -137,31 +146,31 @@ public class BlockOre extends Block {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumOre ore : EnumOre.values()) {
-            if (!ore.isDepecriated() && ore.isEnabled())
+            if (!ore.isDepreciated() && ore.isEnabled())
                 list.add(ore.getItem());
         }
     }
 
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
-        int meta = world.getBlockMetadata(pos);
-        return EnumOre.fromOrdinal(meta).getItem();
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        return getVariant(state).getItem();
     }
 
     @Override
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
         super.dropBlockAsItemWithChance(worldIn, pos, state, chance, fortune);
 
-        switch (EnumOre.fromOrdinal(meta)) {
+        switch (getVariant(state)) {
             case SULFUR:
             case SALTPETER:
             case DARK_DIAMOND:
             case DARK_EMERALD:
             case DARK_LAPIS: {
                 int xp = MathHelper.getRandomIntegerInRange(worldIn.rand, 2, 5);
-                this.dropXpOnBlockBreak(worldIn, pos, xp);
+                dropXpOnBlockBreak(worldIn, pos, xp);
             }
         }
     }
@@ -169,7 +178,7 @@ public class BlockOre extends Block {
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-        switch (EnumOre.fromOrdinal(meta)) {
+        switch (getVariant(state)) {
             case SULFUR: {
                 int qty = 2 + rand.nextInt(4) + rand.nextInt(fortune + 1);
                 drops.add(RailcraftItem.dust.getStack(qty, ItemDust.EnumDust.SULFUR));
@@ -184,7 +193,7 @@ public class BlockOre extends Block {
                 int bonus = rand.nextInt(fortune + 2) - 1;
                 if (bonus < 0)
                     bonus = 0;
-                int qty = 1 * (bonus + 1);
+                int qty = bonus + 1;
                 drops.add(new ItemStack(Items.diamond, qty));
                 return drops;
             }
@@ -192,7 +201,7 @@ public class BlockOre extends Block {
                 int bonus = rand.nextInt(fortune + 2) - 1;
                 if (bonus < 0)
                     bonus = 0;
-                int qty = 1 * (bonus + 1);
+                int qty = bonus + 1;
                 drops.add(new ItemStack(Items.emerald, qty));
                 return drops;
             }
@@ -211,7 +220,7 @@ public class BlockOre extends Block {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return meta;
+        return getVariant(state).ordinal();
     }
 
     @Override
@@ -239,7 +248,7 @@ public class BlockOre extends Block {
 
     @Override
     public int getLightValue(IBlockAccess world, BlockPos pos) {
-        if (EnumOre.FIRESTONE == getType(WorldPlugin.getBlockState(world, pos)))
+        if (EnumOre.FIRESTONE == getVariant(WorldPlugin.getBlockState(world, pos)))
             return 15;
         return super.getLightValue(world, pos);
     }
@@ -247,19 +256,22 @@ public class BlockOre extends Block {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(TYPE, EnumOre.fromOrdinal(meta));
+        return getDefaultState().withProperty(VARIANT, EnumOre.fromOrdinal(meta));
     }
 
     /**
      * Convert the BlockState into the correct metadata value
      */
+    @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(TYPE).ordinal();
+        return state.getValue(VARIANT).ordinal();
     }
 
+    @Override
     protected BlockState createBlockState() {
-        return new BlockState(this, TYPE);
+        return new BlockState(this, VARIANT);
     }
 
     @Override

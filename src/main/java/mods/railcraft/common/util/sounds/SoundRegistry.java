@@ -38,7 +38,7 @@ public class SoundRegistry {
     }
 
     public static void setupBlockSounds() {
-        Block block = BlockPost.block;
+        Block block = BlockPost.getBlock();
         if (block != null) {
             registerCustomStepSound(block, EnumPost.WOOD.ordinal(), Block.soundTypeWood);
             registerCustomStepSound(block, EnumPost.STONE.ordinal(), Block.soundTypeStone);

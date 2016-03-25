@@ -94,16 +94,16 @@ public class RailcraftBlocks {
                     case FEED_STATION:
                     case TANK_WATER:
                         blockMachineAlpha.setHarvestLevel("axe", 1, type.ordinal());
-//                        blockMachineAlpha.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineAlpha.setStateHarvestLevel("crowbar", 0, type.ordinal());
                         break;
                     case WORLD_ANCHOR:
                     case PERSONAL_ANCHOR:
                         blockMachineAlpha.setHarvestLevel("pickaxe", 3, type.ordinal());
-//                        blockMachineAlpha.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineAlpha.setStateHarvestLevel("crowbar", 0, type.ordinal());
                         break;
                     default:
                         blockMachineAlpha.setHarvestLevel("pickaxe", 2, type.ordinal());
-//                        blockMachineAlpha.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineAlpha.setStateHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
         }
@@ -141,11 +141,11 @@ public class RailcraftBlocks {
                 switch (type) {
                     case SENTINEL:
                         blockMachineBeta.setHarvestLevel("pickaxe", 3, type.ordinal());
-//                        blockMachineBeta.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineBeta.setStateHarvestLevel("crowbar", 0, type.ordinal());
                         break;
                     default:
                         blockMachineBeta.setHarvestLevel("pickaxe", 2, type.ordinal());
-//                        blockMachineBeta.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineBeta.setStateHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
         }
@@ -171,7 +171,7 @@ public class RailcraftBlocks {
                 switch (type) {
                     default:
                         blockMachineGamma.setHarvestLevel("pickaxe", 2, type.ordinal());
-//                        blockMachineGamma.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineGamma.setStateHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
         }
@@ -197,7 +197,7 @@ public class RailcraftBlocks {
                 switch (type) {
                     default:
                         blockMachineDelta.setHarvestLevel("pickaxe", 2, type.ordinal());
-//                        blockMachineDelta.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineDelta.setStateHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
         }
@@ -219,7 +219,7 @@ public class RailcraftBlocks {
                 switch (type) {
                     default:
                         blockMachineEpsilon.setHarvestLevel("pickaxe", 2, type.ordinal());
-//                        blockMachineEpsilon.setHarvestLevel("crowbar", 0, type.ordinal());
+//                        blockMachineEpsilon.setStateHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
         }

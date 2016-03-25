@@ -36,7 +36,7 @@ public class RenderStair extends BlockRenderer {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof TileStair) {
             TileStair stair = (TileStair) tile;
-            if (canRenderInPass(renderBlocks, stair.getStair())) {
+            if (canRenderInPass(renderBlocks, stair.getMaterial())) {
                 renderBlocks.renderBlockStairs((BlockStairs) block, x, y, z);
                 return true;
             }

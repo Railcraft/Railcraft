@@ -52,7 +52,7 @@ public class BlockRCAnvil extends BlockAnvil {
 
                 ForestryPlugin.addBackpackItem("builder", block);
 
-                HarvestPlugin.setHarvestLevel(block, "pickaxe", 2);
+                HarvestPlugin.setBlockHarvestLevel("pickaxe", 2, block);
             }
         }
     }

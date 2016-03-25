@@ -31,7 +31,7 @@ public class BlockBrick extends Block {
     public BlockBrick(BrickTheme theme) {
         super(Material.rock);
         this.theme = theme;
-        this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BrickVariant.BRICK));
+        setDefaultState(blockState.getBaseState().withProperty(VARIANT, BrickVariant.BRICK));
         setResistance(15);
         setHardness(5);
         setStepSound(Block.soundTypeStone);
@@ -58,6 +58,7 @@ public class BlockBrick extends Block {
     /**
      * Get the MapColor for this Block and the given BlockState
      */
+    @Override
     public MapColor getMapColor(IBlockState state) {
         return theme.getMapColor();
     }
@@ -65,17 +66,20 @@ public class BlockBrick extends Block {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(VARIANT, BrickVariant.fromOrdinal(meta));
+        return getDefaultState().withProperty(VARIANT, BrickVariant.fromOrdinal(meta));
     }
 
     /**
      * Convert the BlockState into the correct metadata value
      */
+    @Override
     public int getMetaFromState(IBlockState state) {
         return state.getValue(VARIANT).ordinal();
     }
 
+    @Override
     protected BlockState createBlockState() {
         return new BlockState(this, VARIANT);
     }

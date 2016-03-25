@@ -44,6 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
+import static mods.railcraft.common.blocks.aesthetics.slab.ItemSlab.MATERIAL_KEY;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
@@ -73,7 +74,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
     public static ItemStack getItem(IBlockMaterial mat, int qty) {
         if (block == null) return null;
         ItemStack stack = new ItemStack(block, qty);
-        MaterialRegistry.tagItemStack(stack, "material", mat);
+        MaterialRegistry.tagItemStack(stack, MATERIAL_KEY, mat);
         return stack;
     }
 
@@ -122,7 +123,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (BlockMaterial mat : BlockMaterial.creativeList) {
-            if (isEnabled(mat))
+            if (isEnabled(mat) && BlockMaterial.SLAB_MATS.contains(mat))
                 list.add(getItem(mat));
         }
     }

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.wall;
 
 import mods.railcraft.client.sounds.RailcraftSound;
@@ -74,13 +75,13 @@ public class BlockRailcraftWall extends BlockWall {
             for (EnumWallAlpha wall : EnumWallAlpha.VALUES) {
                 switch (wall) {
                     case SNOW:
-                        HarvestPlugin.setHarvestLevel(alpha, wall.ordinal(), "shovel", 0);
+                        HarvestPlugin.setHarvestLevel(wall.ordinal(), "shovel", 0);
                         break;
                     case OBSIDIAN:
-                        HarvestPlugin.setHarvestLevel(alpha, wall.ordinal(), "pickaxe", 3);
+                        HarvestPlugin.setHarvestLevel(wall.ordinal(), "pickaxe", 3);
                         break;
                     default:
-                        HarvestPlugin.setHarvestLevel(alpha, wall.ordinal(), "pickaxe", 2);
+                        HarvestPlugin.setHarvestLevel(wall.ordinal(), "pickaxe", 2);
                 }
 
                 RailcraftRegistry.register(wall.getItem());
@@ -99,7 +100,7 @@ public class BlockRailcraftWall extends BlockWall {
             for (EnumWallBeta wall : EnumWallBeta.VALUES) {
                 switch (wall) {
                     default:
-                        HarvestPlugin.setHarvestLevel(beta, wall.ordinal(), "pickaxe", 2);
+                        HarvestPlugin.setHarvestLevel(wall.ordinal(), "pickaxe", 2);
                 }
 
                 RailcraftRegistry.register(wall.getItem());

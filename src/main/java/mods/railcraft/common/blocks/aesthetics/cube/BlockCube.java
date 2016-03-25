@@ -15,6 +15,7 @@ import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
@@ -58,13 +59,6 @@ public class BlockCube extends Block {
         setStepSound(RailcraftSound.getInstance());
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-
-        setHarvestLevel("pickaxe", 1, EnumCube.COKE_BLOCK.getState());
-        setHarvestLevel("pickaxe", 1, EnumCube.ABYSSAL_STONE.getState());
-        setHarvestLevel("pickaxe", 2, EnumCube.STEEL_BLOCK.getState());
-        setHarvestLevel("pickaxe", 1, EnumCube.CONCRETE_BLOCK.getState());
-        setHarvestLevel("axe", 0, EnumCube.CREOSOTE_BLOCK.getState());
-        setHarvestLevel("shovel", 3, EnumCube.CRUSHED_OBSIDIAN.getState());
     }
 
     public static BlockCube getBlock() {
@@ -76,6 +70,13 @@ public class BlockCube extends Block {
             if (RailcraftConfig.isBlockEnabled("cube")) {
                 instance = new BlockCube();
                 RailcraftRegistry.register(instance, ItemCube.class);
+
+                HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.COKE_BLOCK);
+                HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.ABYSSAL_STONE);
+                HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumCube.STEEL_BLOCK);
+                HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.CONCRETE_BLOCK);
+                HarvestPlugin.setStateHarvestLevel("axe", 0, EnumCube.CREOSOTE_BLOCK);
+                HarvestPlugin.setStateHarvestLevel("shovel", 3, EnumCube.CRUSHED_OBSIDIAN);
 
                 EntityTunnelBore.addMineableBlock(instance);
 

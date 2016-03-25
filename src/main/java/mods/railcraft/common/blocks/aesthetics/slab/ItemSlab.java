@@ -1,15 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.slab;
 
-import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.blocks.aesthetics.IBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,17 +28,18 @@ import static net.minecraft.util.EnumFacing.UP;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemSlab extends ItemBlock {
+    public static final String MATERIAL_KEY = "material";
 
     public ItemSlab(Block block) {
         super(block);
         setMaxDamage(0);
-        setHasSubtypes(true);
+        setHasSubtypes(false);
         setUnlocalizedName("railcraft.slab");
     }
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return BlockRailcraftSlab.getTag(BlockMaterial.fromOrdinal(stack.getItemDamage()));
+        return BlockRailcraftSlab.getTag(getMat(stack));
     }
 
     /**
@@ -53,30 +56,30 @@ public class ItemSlab extends ItemBlock {
         if (!playerIn.canPlayerEdit(pos, side, stack)) {
             return false;
         } else {
-            if (isSingleSlab(worldIn, x, y, z, side)) {
-                tryAddSlab(worldIn, x, y, z, stack);
+            if (isSingleSlab(worldIn, pos, side)) {
+                tryAddSlab(worldIn, pos, stack);
                 return true;
             }
-            if (isSingleSlabShifted(worldIn, x, y, z, side)) {
-                EnumFacing s = EnumFacing.VALUES[side];
-                x = MiscTools.getXOnSide(x, s);
-                y = MiscTools.getYOnSide(y, s);
-                z = MiscTools.getZOnSide(z, s);
-                tryAddSlab(worldIn, x, y, z, stack);
+            if (isSingleSlabShifted(worldIn, pos, side)) {
+                tryAddSlab(worldIn, pos.offset(side), stack);
                 return true;
             }
 
-            return super.onItemUse(stack, playerIn, worldIn, x, y, z, side, hitX, hitY, hitZ);
+            return super.onItemUse(stack, playerIn, worldIn, pos, side, hitX, hitY, hitZ);
 
         }
     }
 
-    private boolean isSingleSlab(World world, int x, int y, int z, int side) {
-        if (world.getBlock(x, y, z) == field_150939_a) {
-            TileSlab slab = BlockRailcraftSlab.getSlabTile(world, x, y, z);
+    private IBlockMaterial getMat(ItemStack stack) {
+        return MaterialRegistry.from(stack, MATERIAL_KEY);
+    }
+
+    private boolean isSingleSlab(World world, BlockPos pos, EnumFacing side) {
+        if (WorldPlugin.getBlock(world, pos) == block) {
+            TileSlab slab = BlockRailcraftSlab.getSlabTile(world, pos);
             if (slab != null) {
                 boolean up = slab.isTopSlab();
-                if ((side == 1 && !up || side == 0 && up) && !slab.isDoubleSlab()) {
+                if ((side == UP && !up || side == DOWN && up) && !slab.isDoubleSlab()) {
                     return true;
                 }
             }
@@ -84,14 +87,11 @@ public class ItemSlab extends ItemBlock {
         return false;
     }
 
-    private boolean isSingleSlabShifted(World world, int x, int y, int z, int side) {
-        EnumFacing s = EnumFacing.VALUES[side];
-        x = MiscTools.getXOnSide(x, s);
-        y = MiscTools.getYOnSide(y, s);
-        z = MiscTools.getZOnSide(z, s);
+    private boolean isSingleSlabShifted(World world, BlockPos pos, EnumFacing side) {
+        pos = pos.offset(side);
 
-        if (world.getBlock(x, y, z) == field_150939_a) {
-            TileSlab slab = BlockRailcraftSlab.getSlabTile(world, x, y, z);
+        if (WorldPlugin.getBlock(world, pos) == block) {
+            TileSlab slab = BlockRailcraftSlab.getSlabTile(world, pos);
             if (slab != null && !slab.isDoubleSlab()) {
                 return true;
             }
@@ -99,26 +99,28 @@ public class ItemSlab extends ItemBlock {
         return false;
     }
 
-    private void tryAddSlab(World world, int x, int y, int z, ItemStack stack) {
-        TileSlab slab = BlockRailcraftSlab.getSlabTile(world, x, y, z);
-        if (slab != null) {
-            Block block = BlockRailcraftSlab.getBlock();
-            if (world.checkNoEntityCollision(block.getCollisionBoundingBoxFromPool(world, x, y, z)) && slab.addSlab(BlockMaterial.fromOrdinal(stack.getItemDamage()))) {
-                world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, block.stepSound.func_150496_b(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
-                --stack.stackSize;
+    private void tryAddSlab(World world, BlockPos pos, ItemStack stack) {
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        if (state.getBlock() == block) {
+            TileSlab slab = BlockRailcraftSlab.getSlabTile(world, pos);
+            if (slab != null) {
+                if (world.checkNoEntityCollision(block.getCollisionBoundingBox(world, pos, state)) && slab.addSlab(getMat(stack))) {
+                    world.playSoundEffect(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F);
+                    --stack.stackSize;
+                }
             }
         }
     }
 
     @Override
-    public boolean func_150936_a(World world, int x, int y, int z, int side, EntityPlayer par6EntityPlayer, ItemStack stack) {
-        if (isSingleSlab(world, x, y, z, side)) {
+    public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side, EntityPlayer player, ItemStack stack) {
+        if (isSingleSlab(world, pos, side)) {
             return true;
         }
-        if (isSingleSlabShifted(world, x, y, z, side)) {
+        if (isSingleSlabShifted(world, pos, side)) {
             return true;
         }
-        return super.func_150936_a(world, x, y, z, side, par6EntityPlayer, stack);
+        return super.canPlaceBlockOnSide(world, pos, side, player, stack);
     }
 
     /**
@@ -133,7 +135,6 @@ public class ItemSlab extends ItemBlock {
      */
     @Override
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
-        Block block = getBlock();
         if (!world.checkNoEntityCollision(block.getCollisionBoundingBox(world, pos, newState))) {
             return false;
         }
@@ -157,17 +158,18 @@ public class ItemSlab extends ItemBlock {
             return false;
         }
 
-        if (world.getBlockState(pos).getBlock() == getBlock()) {
+        IBlockState state = world.getBlockState(pos);
+        if (state.getBlock() == block) {
             TileSlab slab = BlockRailcraftSlab.getSlabTile(world, pos);
             if (slab != null) {
                 if (side != DOWN && (side == UP || (double) hitY <= 0.5D)) {
-                    slab.setBottomSlab(BlockMaterial.fromOrdinal(stack.getItemDamage()));
+                    slab.setBottomSlab(getMat(stack));
                 } else {
-                    slab.setTopSlab(BlockMaterial.fromOrdinal(stack.getItemDamage()));
+                    slab.setTopSlab(getMat(stack));
                 }
             }
-            getBlock().onBlockPlacedBy(world, pos, newState, player, stack);
-            getBlock().onPostBlockPlaced(world, x, y, z, metadata);
+            setTileEntityNBT(world, player, pos, stack);
+            block.onBlockPlacedBy(world, pos, state, player, stack);
         }
 
         return true;

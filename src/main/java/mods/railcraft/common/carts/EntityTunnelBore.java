@@ -212,21 +212,21 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
             boolean mappingExists = false;
 
-            int blockHarvestLevel = HarvestPlugin.getBlockHarvestLevel(block, meta, "pickaxe");
+            int blockHarvestLevel = HarvestPlugin.getHarvestLevel(block, meta, "pickaxe");
             if (blockHarvestLevel > -1) {
                 if (boreHead.getHarvestLevel() >= blockHarvestLevel)
                     return true;
                 mappingExists = true;
             }
 
-            blockHarvestLevel = HarvestPlugin.getBlockHarvestLevel(block, meta, "axe");
+            blockHarvestLevel = HarvestPlugin.getHarvestLevel(block, meta, "axe");
             if (blockHarvestLevel > -1) {
                 if (boreHead.getHarvestLevel() >= blockHarvestLevel)
                     return true;
                 mappingExists = true;
             }
 
-            blockHarvestLevel = HarvestPlugin.getBlockHarvestLevel(block, meta, "shovel");
+            blockHarvestLevel = HarvestPlugin.getHarvestLevel(block, meta, "shovel");
             if (blockHarvestLevel > -1) {
                 if (boreHead.getHarvestLevel() >= blockHarvestLevel)
                     return true;

@@ -13,9 +13,8 @@ import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import net.minecraft.block.Block;
+import net.minecraft.block.*;
 import net.minecraft.block.Block.SoundType;
-import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -25,12 +24,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static mods.railcraft.common.blocks.aesthetics.wall.EnumWallBeta.QUARTZ_CHISELED;
+import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -44,11 +38,19 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
     GOLD(7, "gold"),
     DIAMOND(8, "diamond"),
     OBSIDIAN(39, "obsidian"),
+    BRICK_BLOCK("brick"),
 
     STONE_BRICK("stone_brick"),
     STONE_BRICK_CHISELED("stone_brick_chiseled"),
     STONE_BRICK_CRACKED("stone_brick_cracked"),
     STONE_BRICK_MOSSY("stone_brick_mossy"),
+
+    SANDSTONE("sandstone"),
+    SANDSTONE_CHISELED("sandstone_chiseled"),
+    SANDSTONE_SMOOTH("sandstone_smooth"),
+
+    QUARTZ("quartz"),
+    QUARTZ_CHISELED("quartz_chiseled"),
 
     SANDY_BRICK(0, "sandy_brick"),
     INFERNAL_BRICK(1, "infernal_brick"),
@@ -57,6 +59,7 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
     BLEACHEDBONE_BRICK(11, "bleached_bone_brick"),
     BLOODSTAINED_BRICK(12, "bloodstained_brick"),
     ABYSSAL_BRICK(13, "abyssal_brick"),
+    NETHER_BRICK("nether_brick"),
 
     SANDY_FITTED(14, "sandy_fitted"),
     INFERNAL_FITTED(15, "infernal_fitted"),
@@ -96,13 +99,14 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
     public static final List<BlockMaterial> creativeList = new ArrayList<BlockMaterial>();
     public static final BlockMaterial[] OLD_WALL1_MATS;
     public static final BlockMaterial[] OLD_WALL2_MATS;
-    public static final BlockMaterial[] WALL_SANDY_MATS;
+//    public static final BlockMaterial[] WALL_SANDY_MATS;
+    public static final EnumSet<BlockMaterial> STAIR_MATS;
+    public static final EnumSet<BlockMaterial> SLAB_MATS;
     private static boolean needsInit = true;
     private SoundType sound;
     @Nullable
     private IBlockState state;
-    private String oreTag = null;
-    private int toolLevel = 0;
+    private String oreTag;
     public final int oldOrdinal;
     private final String name;
 
@@ -118,7 +122,7 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
                 STONE_BRICK_CRACKED,
                 STONE_BRICK_CHISELED,
                 NETHER_BRICK,
-                BRICK,
+                BRICK_BLOCK,
                 SANDSTONE,
                 SANDSTONE_CHISELED,
                 SANDSTONE_SMOOTH,
@@ -142,6 +146,26 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
 //            SANDY_BLOCK,
 //                    SANDY_COBBLE,
 //        } ;
+
+        STAIR_MATS = EnumSet.complementOf(EnumSet.of(
+                STONE_BRICK,
+                STONE_BRICK_MOSSY,
+                STONE_BRICK_CHISELED,
+                STONE_BRICK_CRACKED,
+                SANDSTONE,
+                SANDSTONE_CHISELED,
+                SANDSTONE_SMOOTH
+        ));
+
+        SLAB_MATS = EnumSet.complementOf(EnumSet.of(
+                STONE_BRICK,
+                STONE_BRICK_MOSSY,
+                STONE_BRICK_CHISELED,
+                STONE_BRICK_CRACKED,
+                SANDSTONE,
+                SANDSTONE_CHISELED,
+                SANDSTONE_SMOOTH
+        ));
     }
 
     BlockMaterial(String name) {
@@ -162,14 +186,25 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
         ICE.state = Blocks.ice.getDefaultState();
         PACKED_ICE.state = Blocks.packed_ice.getDefaultState();
         IRON.state = Blocks.iron_block.getDefaultState();
+        IRON.oreTag = "blockIron";
         GOLD.state = Blocks.gold_block.getDefaultState();
+        GOLD.oreTag = "blockGold";
         DIAMOND.state = Blocks.diamond_block.getDefaultState();
+        DIAMOND.oreTag = "blockDiamond";
         OBSIDIAN.state = Blocks.obsidian.getDefaultState();
+        BRICK_BLOCK.state = Blocks.brick_block.getDefaultState();
 
         STONE_BRICK.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT);
         STONE_BRICK_CHISELED.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
         STONE_BRICK_CRACKED.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CRACKED);
         STONE_BRICK_MOSSY.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY);
+
+        SANDSTONE.state = Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.DEFAULT);
+        SANDSTONE_CHISELED.state = Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
+        SANDSTONE_SMOOTH.state = Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH);
+
+        QUARTZ.state = Blocks.quartz_block.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.DEFAULT);
+        QUARTZ_CHISELED.state = Blocks.quartz_block.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.CHISELED);
 
         INFERNAL_BRICK.state = BrickTheme.INFERNAL.getState(BrickVariant.BRICK);
         SANDY_BRICK.state = BrickTheme.SANDY.getState(BrickVariant.BRICK);
@@ -178,6 +213,7 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
         BLEACHEDBONE_BRICK.state = BrickTheme.BLEACHEDBONE.getState(BrickVariant.BRICK);
         BLOODSTAINED_BRICK.state = BrickTheme.BLOODSTAINED.getState(BrickVariant.BRICK);
         ABYSSAL_BRICK.state = BrickTheme.ABYSSAL.getState(BrickVariant.BRICK);
+        NETHER_BRICK.state = Blocks.nether_brick.getDefaultState();
 
         SANDY_FITTED.state = BrickTheme.SANDY.getState(BrickVariant.FITTED);
         INFERNAL_FITTED.state = BrickTheme.INFERNAL.getState(BrickVariant.FITTED);
@@ -335,13 +371,12 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
 
     public ItemStack getSourceItem() {
         if (state == null) return null;
-        return new ItemStack(state, 1, sourceMeta);
+        return new ItemStack(state.getBlock(), 1, state.getBlock().damageDropped(state));
     }
 
-    public Object getCraftingEquivelent() {
+    public Object getCraftingEquivalent() {
         if (oreTag != null) return oreTag;
-        if (state == null) return null;
-        return new ItemStack(state, 1, sourceMeta);
+        return getSourceItem();
     }
 
     @Override
@@ -353,6 +388,8 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
     public float getBlockHardness(World world, BlockPos pos) {
         switch (this) {
             case CONCRETE:
+                return EnumCube.CONCRETE_BLOCK.getHardness();
+            case CREOSOTE:
                 return EnumCube.CONCRETE_BLOCK.getHardness();
             case COPPER:
                 return EnumCube.COPPER_BLOCK.getHardness();
@@ -375,6 +412,8 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
         switch (this) {
             case CONCRETE:
                 return EnumCube.CONCRETE_BLOCK.getResistance() * 3f / 5f;
+            case CREOSOTE:
+                return EnumCube.CONCRETE_BLOCK.getResistance() * 3f / 5f;
             case COPPER:
                 return EnumCube.COPPER_BLOCK.getResistance() * 3f / 5f;
             case TIN:
@@ -387,7 +426,11 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
                 IBlockState state = getState();
                 if (state == null)
                     return Blocks.brick_block.getExplosionResistance(entity);
-                return state.getBlock().getExplosionResistance(entity);
+                try {
+                    return state.getBlock().getExplosionResistance(entity);
+                } catch (RuntimeException ex) {
+                    return Blocks.brick_block.getExplosionResistance(entity);
+                }
         }
     }
 

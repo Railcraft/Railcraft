@@ -1,15 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.stairs;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.IBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
@@ -23,47 +26,47 @@ import java.io.IOException;
  */
 public class TileStair extends RailcraftTileEntity {
 
-    private BlockMaterial stair = BlockMaterial.SANDY_BRICK;
+    private IBlockMaterial material = BlockMaterial.SANDY_BRICK;
 
-    public BlockMaterial getStair() {
-        return stair;
+    public IBlockMaterial getMaterial() {
+        return material;
     }
 
-    public void setStair(BlockMaterial stair) {
-        this.stair = stair;
+    public void setStair(IBlockMaterial stair) {
+        this.material = stair;
     }
 
     @Override
     public String getLocalizationTag() {
-        return "tile." + BlockRailcraftStairs.getTag(stair);
+        return BlockRailcraftStairs.getTag(material);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setString("stair", stair.name());
+        data.setString("stair", material.getRegistryName());
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.getTag("stair") instanceof NBTTagString) {
-            stair = BlockMaterial.fromName(data.getString("stair"));
+            material = MaterialRegistry.get(data.getString("stair"));
         } else if (data.getTag("stair") instanceof NBTTagByte) {
-            stair = BlockMaterial.fromOrdinal(data.getByte("stair"));
+            material = BlockMaterial.fromOrdinal(data.getByte("stair"));
         }
     }
 
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeByte((byte) stair.ordinal());
+        data.writeUTF(material.getRegistryName());
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        stair = BlockMaterial.fromOrdinal(data.readByte());
+        material = MaterialRegistry.get(data.readUTF());
     }
 
     @Override
