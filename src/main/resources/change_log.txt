@@ -1,3 +1,6 @@
+9.10.0.0:
+    INFO: Repackage for release.
+
 9.9.0.1:
 	NEW: Added Auto-Coupler Mode to Coupler Track. Any cart that passes over this track will couple to the next cart it collides with. (contribution by Cream-tea)
 	NEW: Add support for IC2 Classic. (contribution by Speiger)
