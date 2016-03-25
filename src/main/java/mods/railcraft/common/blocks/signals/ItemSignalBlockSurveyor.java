@@ -90,8 +90,8 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
                     ISignalBlockTile signalTile = (ISignalBlockTile) tile;
                     SignalBlock signalBlock = signalTile.getSignalBlock();
                     WorldCoordinate pos = getSignalData(item);
-                    WorldCoordinate track = signalBlock.getTrackLocation();
-                    if (track == null)
+                    SignalBlock.Status trackStatus = signalBlock.getTrackStatus();
+                    if (trackStatus == SignalBlock.Status.INVALID)
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.track", signalTile.getLocalizationTag());
                     else if (pos == null) {
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.surveyor.begin");
