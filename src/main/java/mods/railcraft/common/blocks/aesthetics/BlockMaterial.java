@@ -9,6 +9,8 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
@@ -38,7 +40,7 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
     GOLD(7, "gold"),
     DIAMOND(8, "diamond"),
     OBSIDIAN(39, "obsidian"),
-    BRICK_BLOCK("brick"),
+    BRICK("brick"),
 
     STONE_BRICK("stone_brick"),
     STONE_BRICK_CHISELED("stone_brick_chiseled"),
@@ -49,8 +51,14 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
     SANDSTONE_CHISELED("sandstone_chiseled"),
     SANDSTONE_SMOOTH("sandstone_smooth"),
 
+    RED_SANDSTONE("red_sandstone"),
+    RED_SANDSTONE_CHISELED("red_sandstone_chiseled"),
+    RED_SANDSTONE_SMOOTH("red_sandstone_smooth"),
+
     QUARTZ("quartz"),
     QUARTZ_CHISELED("quartz_chiseled"),
+
+//    PURPUR("purpur"),
 
     SANDY_BRICK(0, "sandy_brick"),
     INFERNAL_BRICK(1, "infernal_brick"),
@@ -90,18 +98,23 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
 
     CONCRETE(2, "concrete"),
     CREOSOTE(38, "creosote"),
+    OBSIDIAN_CRUSHED("crushed_obsidian"),
+
     COPPER(40, "copper"),
     TIN(41, "tin"),
     LEAD(42, "lead"),
     STEEL(43, "steel");
     public static final BlockMaterial[] VALUES = values();
     public static final Map<String, BlockMaterial> NAMES = new HashMap<String, BlockMaterial>();
-    public static final List<BlockMaterial> creativeList = new ArrayList<BlockMaterial>();
+    public static final BlockMaterial[] CREATIVE_LIST;
     public static final BlockMaterial[] OLD_WALL1_MATS;
     public static final BlockMaterial[] OLD_WALL2_MATS;
-//    public static final BlockMaterial[] WALL_SANDY_MATS;
+    //    public static final BlockMaterial[] WALL_SANDY_MATS;
     public static final EnumSet<BlockMaterial> STAIR_MATS;
     public static final EnumSet<BlockMaterial> SLAB_MATS;
+    public static final EnumSet<BlockMaterial> VANILLA_STAIRS;
+    public static final EnumSet<BlockMaterial> VANILLA_SLABS;
+    public static final BiMap<BlockMaterial, Integer> OLD_ORDINALS;
     private static boolean needsInit = true;
     private SoundType sound;
     @Nullable
@@ -111,6 +124,9 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
     private final String name;
 
     static {
+        VANILLA_STAIRS = EnumSet.of(SANDSTONE, RED_SANDSTONE, QUARTZ, NETHER_BRICK, STONE_BRICK, BRICK);
+        VANILLA_SLABS = EnumSet.of(SANDSTONE, RED_SANDSTONE, QUARTZ, NETHER_BRICK, STONE_BRICK, BRICK);
+
         OLD_WALL1_MATS = new BlockMaterial[]{
                 INFERNAL_BRICK,
                 SANDY_BRICK,
@@ -122,7 +138,7 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
                 STONE_BRICK_CRACKED,
                 STONE_BRICK_CHISELED,
                 NETHER_BRICK,
-                BRICK_BLOCK,
+                BRICK,
                 SANDSTONE,
                 SANDSTONE_CHISELED,
                 SANDSTONE_SMOOTH,
@@ -166,6 +182,73 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
                 SANDSTONE_CHISELED,
                 SANDSTONE_SMOOTH
         ));
+
+        OLD_ORDINALS = HashBiMap.create();
+        for (BlockMaterial mat : BlockMaterial.VALUES) {
+            if (mat.oldOrdinal >= 0) {
+                OLD_ORDINALS.put(mat, mat.oldOrdinal);
+            }
+        }
+
+        CREATIVE_LIST = new BlockMaterial[]{
+                SNOW,
+                ICE,
+                PACKED_ICE,
+                IRON,
+                STEEL,
+                COPPER,
+                TIN,
+                LEAD,
+                GOLD,
+                DIAMOND,
+                OBSIDIAN,
+                OBSIDIAN_CRUSHED,
+                CONCRETE,
+                CREOSOTE,
+                STONE_BRICK,
+                STONE_BRICK_MOSSY,
+                STONE_BRICK_CRACKED,
+                STONE_BRICK_CHISELED,
+                SANDSTONE,
+                SANDSTONE_CHISELED,
+                SANDSTONE_SMOOTH,
+                RED_SANDSTONE,
+                RED_SANDSTONE_CHISELED,
+                RED_SANDSTONE_SMOOTH,
+                QUARTZ,
+                QUARTZ_CHISELED,
+                ABYSSAL_BRICK,
+                ABYSSAL_FITTED,
+                ABYSSAL_BLOCK,
+                ABYSSAL_COBBLE,
+                INFERNAL_BRICK,
+                INFERNAL_FITTED,
+                INFERNAL_BLOCK,
+                INFERNAL_COBBLE,
+                BLOODSTAINED_BRICK,
+                BLOODSTAINED_FITTED,
+                BLOODSTAINED_BLOCK,
+                BLOODSTAINED_COBBLE,
+                SANDY_BRICK,
+                SANDY_FITTED,
+                SANDY_BLOCK,
+                SANDY_COBBLE,
+                BLEACHEDBONE_BRICK,
+                BLEACHEDBONE_FITTED,
+                BLEACHEDBONE_BLOCK,
+                BLEACHEDBONE_COBBLE,
+                NETHER_BRICK,
+                NETHER_FITTED,
+                NETHER_BLOCK,
+                NETHER_COBBLE,
+                QUARRIED_BRICK,
+                QUARRIED_FITTED,
+                QUARRIED_BLOCK,
+                QUARRIED_COBBLE,
+                FROSTBOUND_BRICK,
+                FROSTBOUND_FITTED,
+                FROSTBOUND_BLOCK,
+                FROSTBOUND_COBBLE};
     }
 
     BlockMaterial(String name) {
@@ -192,7 +275,7 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
         DIAMOND.state = Blocks.diamond_block.getDefaultState();
         DIAMOND.oreTag = "blockDiamond";
         OBSIDIAN.state = Blocks.obsidian.getDefaultState();
-        BRICK_BLOCK.state = Blocks.brick_block.getDefaultState();
+        BRICK.state = Blocks.brick_block.getDefaultState();
 
         STONE_BRICK.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT);
         STONE_BRICK_CHISELED.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
@@ -202,6 +285,10 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
         SANDSTONE.state = Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.DEFAULT);
         SANDSTONE_CHISELED.state = Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
         SANDSTONE_SMOOTH.state = Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH);
+
+        RED_SANDSTONE.state = Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.DEFAULT);
+        RED_SANDSTONE_CHISELED.state = Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED);
+        RED_SANDSTONE_SMOOTH.state = Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH);
 
         QUARTZ.state = Blocks.quartz_block.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.DEFAULT);
         QUARTZ_CHISELED.state = Blocks.quartz_block.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.CHISELED);
@@ -244,6 +331,7 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
 
         CONCRETE.state = EnumCube.CONCRETE_BLOCK.getState();
         CREOSOTE.state = EnumCube.CREOSOTE_BLOCK.getState();
+        OBSIDIAN_CRUSHED.state = EnumCube.CRUSHED_OBSIDIAN.getState();
 
         COPPER.state = EnumCube.COPPER_BLOCK.getState();
         COPPER.oreTag = "blockCopper";
@@ -264,6 +352,9 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
                 case CREOSOTE:
                     mat.sound = Block.soundTypeWood;
                     break;
+                case OBSIDIAN_CRUSHED:
+                    mat.sound = Block.soundTypeGravel;
+                    break;
                 case COPPER:
                 case TIN:
                 case LEAD:
@@ -277,52 +368,6 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
             if (mat.sound == RailcraftSound.getInstance())
                 throw new RuntimeException("Invalid Sound Defined!");
         }
-
-
-        creativeList.add(SNOW);
-        creativeList.add(ICE);
-        creativeList.add(PACKED_ICE);
-        creativeList.add(IRON);
-        creativeList.add(STEEL);
-        creativeList.add(COPPER);
-        creativeList.add(TIN);
-        creativeList.add(LEAD);
-        creativeList.add(GOLD);
-        creativeList.add(DIAMOND);
-        creativeList.add(OBSIDIAN);
-        creativeList.add(CONCRETE);
-        creativeList.add(CREOSOTE);
-        creativeList.add(ABYSSAL_BRICK);
-        creativeList.add(ABYSSAL_FITTED);
-        creativeList.add(ABYSSAL_BLOCK);
-        creativeList.add(ABYSSAL_COBBLE);
-        creativeList.add(INFERNAL_BRICK);
-        creativeList.add(INFERNAL_FITTED);
-        creativeList.add(INFERNAL_BLOCK);
-        creativeList.add(INFERNAL_COBBLE);
-        creativeList.add(BLOODSTAINED_BRICK);
-        creativeList.add(BLOODSTAINED_FITTED);
-        creativeList.add(BLOODSTAINED_BLOCK);
-        creativeList.add(BLOODSTAINED_COBBLE);
-        creativeList.add(SANDY_BRICK);
-        creativeList.add(SANDY_FITTED);
-        creativeList.add(SANDY_BLOCK);
-        creativeList.add(SANDY_COBBLE);
-        creativeList.add(BLEACHEDBONE_BRICK);
-        creativeList.add(BLEACHEDBONE_FITTED);
-        creativeList.add(BLEACHEDBONE_BLOCK);
-        creativeList.add(BLEACHEDBONE_COBBLE);
-        creativeList.add(NETHER_FITTED);
-        creativeList.add(NETHER_BLOCK);
-        creativeList.add(NETHER_COBBLE);
-        creativeList.add(QUARRIED_BRICK);
-        creativeList.add(QUARRIED_FITTED);
-        creativeList.add(QUARRIED_BLOCK);
-        creativeList.add(QUARRIED_COBBLE);
-        creativeList.add(FROSTBOUND_BRICK);
-        creativeList.add(FROSTBOUND_FITTED);
-        creativeList.add(FROSTBOUND_BLOCK);
-        creativeList.add(FROSTBOUND_COBBLE);
     }
 
     @Deprecated
@@ -391,6 +436,8 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
                 return EnumCube.CONCRETE_BLOCK.getHardness();
             case CREOSOTE:
                 return EnumCube.CONCRETE_BLOCK.getHardness();
+            case OBSIDIAN_CRUSHED:
+                return EnumCube.CRUSHED_OBSIDIAN.getHardness();
             case COPPER:
                 return EnumCube.COPPER_BLOCK.getHardness();
             case TIN:
@@ -414,6 +461,8 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
                 return EnumCube.CONCRETE_BLOCK.getResistance() * 3f / 5f;
             case CREOSOTE:
                 return EnumCube.CONCRETE_BLOCK.getResistance() * 3f / 5f;
+            case OBSIDIAN_CRUSHED:
+                return EnumCube.CRUSHED_OBSIDIAN.getResistance() * 3f / 5f;
             case COPPER:
                 return EnumCube.COPPER_BLOCK.getResistance() * 3f / 5f;
             case TIN:

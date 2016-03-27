@@ -153,7 +153,7 @@ public class BlockLantern extends Block {
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (BlockMaterial mat : BlockMaterial.creativeList) {
+        for (BlockMaterial mat : BlockMaterial.CREATIVE_LIST) {
             if (isAvailable(mat))
                 list.add(getItem(mat));
         }
