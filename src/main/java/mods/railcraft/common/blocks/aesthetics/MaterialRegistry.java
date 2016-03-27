@@ -66,6 +66,6 @@ public class MaterialRegistry {
         NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
         if (nbt.hasKey(key))
             return get(nbt.getString(key));
-        return BlockMaterial.STONE_BRICK;
+        return BlockMaterial.OLD_ORDINALS.inverse().get(stack.getItemDamage());
     }
 }

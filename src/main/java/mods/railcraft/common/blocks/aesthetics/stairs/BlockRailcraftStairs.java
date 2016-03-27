@@ -72,7 +72,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     public static ItemStack getItem(IBlockMaterial mat, int qty) {
         if (block == null) return null;
         ItemStack stack = new ItemStack(block, qty);
-        MaterialRegistry.tagItemStack(stack, "material", mat);
+        MaterialRegistry.tagItemStack(stack, ItemStair.MATERIAL_KEY, mat);
         return stack;
     }
 
@@ -95,7 +95,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (BlockMaterial mat : BlockMaterial.creativeList) {
+        for (BlockMaterial mat : BlockMaterial.CREATIVE_LIST) {
             if (isEnabled(mat) && STAIR_MATS.contains(mat))
                 list.add(getItem(mat));
         }
@@ -120,7 +120,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileStair)
-            ((TileStair) tile).setStair(MaterialRegistry.from(stack, "material"));
+            ((TileStair) tile).setStair(ItemStair.getMat(stack));
     }
 
     @Override

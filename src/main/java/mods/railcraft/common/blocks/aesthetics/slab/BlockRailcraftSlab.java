@@ -122,7 +122,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (BlockMaterial mat : BlockMaterial.creativeList) {
+        for (BlockMaterial mat : BlockMaterial.CREATIVE_LIST) {
             if (isEnabled(mat) && BlockMaterial.SLAB_MATS.contains(mat))
                 list.add(getItem(mat));
         }

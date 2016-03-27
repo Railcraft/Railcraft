@@ -9,7 +9,8 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.stairs;
 
-import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.IBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,7 @@ import net.minecraft.item.ItemStack;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemStair extends ItemBlock {
+    public static final String MATERIAL_KEY = "material";
 
     public ItemStair(Block block) {
         super(block);
@@ -26,8 +28,12 @@ public class ItemStair extends ItemBlock {
         setUnlocalizedName("railcraft.stair");
     }
 
+    public static IBlockMaterial getMat(ItemStack stack) {
+        return MaterialRegistry.from(stack, MATERIAL_KEY);
+    }
+
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return "tile." + BlockRailcraftStairs.getTag(BlockMaterial.fromOrdinal(stack.getItemDamage()));
+        return "tile." + BlockRailcraftStairs.getTag(getMat(stack));
     }
 }
