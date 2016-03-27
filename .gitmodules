@@ -13,3 +13,6 @@
 [submodule "api/thaumcraft/thaumcraft/api"]
 	path = api/thaumcraft/thaumcraft/api
 	url = https://github.com/Azanor/thaumcraft-5-api.git
+[submodule "api/buildcraft"]
+	path = api/buildcraft
+	url = https://github.com/BuildCraft/BuildCraftAPI.git
