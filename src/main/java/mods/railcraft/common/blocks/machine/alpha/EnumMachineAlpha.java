@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineAlpha implements IEnumMachine {
+public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
     WORLD_ANCHOR(Module.CHUNK_LOADING, "anchor.world", TileAnchorWorld.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
     TURBINE(Module.ELECTRICITY, "turbine", TileSteamTurbine.class, 3, 3, 2, 2, 2, 2, 6, 2, 0, 1, 3, 4, 5, 7),
@@ -190,5 +190,10 @@ public enum EnumMachineAlpha implements IEnumMachine {
             return getBlock() != null;
         }
         return false;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

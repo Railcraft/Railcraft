@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
 import net.minecraft.entity.item.EntityMinecart;
@@ -28,19 +29,19 @@ public class TrackOneWay extends TrackBaseRailcraft implements ITrackPowered, IT
         return EnumTrack.ONEWAY;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            if (isReversed()) {
-                return getIcon(3);
-            }
-            return getIcon(1);
-        }
-        if (isReversed()) {
-            return getIcon(2);
-        }
-        return getIcon(0);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (!isPowered()) {
+//            if (isReversed()) {
+//                return getIcon(3);
+//            }
+//            return getIcon(1);
+//        }
+//        if (isReversed()) {
+//            return getIcon(2);
+//        }
+//        return getIcon(0);
+//    }
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
@@ -98,6 +99,11 @@ public class TrackOneWay extends TrackBaseRailcraft implements ITrackPowered, IT
     @Override
     public void setPowered(boolean powered) {
         this.powered = powered;
+    }
+    
+    @Override
+    public boolean canPropagatePowerTo(ITrackInstance track) {
+        return false;
     }
 
     @Override

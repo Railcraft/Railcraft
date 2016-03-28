@@ -51,18 +51,14 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     public static final float HARDNESS = 2F;
 
-    protected final int renderType;
-
-    public BlockTrack(int modelID) {
+    public BlockTrack() {
         super(false);
-        renderType = modelID;
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
         setResistance(3.5F);
         setHardness(HARDNESS);
         setStepSound(soundTypeMetal);
         setCreativeTab(CreativeTabs.tabTransport);
         setHarvestLevel("crowbar", 0);
-
 
         GameRegistry.registerTileEntity(TileTrack.class, "RailcraftTrackTile");
         GameRegistry.registerTileEntity(TileTrackTESR.class, "RailcraftTrackTESRTile");
@@ -109,17 +105,12 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public boolean rotateBlock(World worldObj, int x, int y, int z, EnumFacing axis) {
+    public boolean rotateBlock(World worldObj, BlockPos pos, EnumFacing axis) {
         return false;
     }
 
     @Override
-    public int getRenderType() {
-        return renderType;
-    }
-
-    @Override
-    public boolean hasTileEntity(int metadata) {
+    public boolean hasTileEntity(IBlockState state) {
         return true;
     }
 

@@ -30,6 +30,7 @@ import mods.railcraft.common.util.misc.ChunkManager;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.IAnchor;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -48,10 +49,7 @@ import org.apache.logging.log4j.Level;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -101,7 +99,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                     WorldCoordinate target = sentinelPairingMap.get(player);
                     if (target == null)
                         setTarget(this, player);
-                    else if (worldObj.provider.getDimensionId() != target.dimension)
+                    else if (worldObj.provider.getDimensionId() != target.getDim())
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getLocalizationTag());
                     else if (new WorldCoordinate(this).equals(target)) {
                         removeTarget(player);
@@ -146,11 +144,11 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     public static TileEntity getTargetAt(EntityPlayer player, RailcraftTileEntity searcher, WorldCoordinate coord) {
-        if (!WorldPlugin.isBlockLoaded(searcher.getWorld(), coord.x, coord.y, coord.z)) {
+        if (!WorldPlugin.isBlockLoaded(searcher.getWorld(), coord)) {
             ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.unloaded", searcher.getLocalizationTag());
             return null;
         }
-        return WorldPlugin.getBlockTile(searcher.getWorld(), coord.x, coord.y, coord.z);
+        return WorldPlugin.getBlockTile(searcher.getWorld(), coord);
     }
 
     public boolean setSentinel(EntityPlayer player, WorldCoordinate coord) {
@@ -210,7 +208,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     @Override
-    public  List<ItemStack> getDrops(int fortune) {
+    public List<ItemStack> getDrops(int fortune) {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         ItemStack drop = getMachineType().getItem();
         if (needsFuel() && hasFuel()) {
@@ -240,7 +238,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
         if (RailcraftConfig.deleteAnchors()) {
             releaseTicket();
-            worldObj.setBlockState(getPos(), Blocks.obsidian);
+            worldObj.setBlockState(getPos(), Blocks.obsidian.getDefaultState());
             return;
         }
 
@@ -405,10 +403,10 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     public void setPowered(boolean power) {
         powered = power;
     }
-
+    
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+        super.onNeighborBlockChange(state, neighborBlock);
         if (Game.isNotHost(getWorld()))
             return;
         boolean newPower = PowerPlugin.isBlockBeingPowered(worldObj, getPos());

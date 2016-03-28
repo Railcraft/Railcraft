@@ -18,6 +18,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+
 public class ItemDetector extends ItemBlock {
 
     private final BlockDetector blockDetector;
@@ -62,7 +64,7 @@ public class ItemDetector extends ItemBlock {
             ((TileDetector) tile).setDetector(EnumDetector.fromOrdinal(stack.getItemDamage()));
 
         if (world.getBlockState(pos).getBlock() == blockDetector) {
-            blockDetector.onBlockPlacedBy(world, pos, player, stack);
+            blockDetector.onBlockPlacedBy(world, pos, WorldPlugin.getBlockState(world, pos), player, stack);
         }
 
         return true;

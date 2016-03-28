@@ -16,6 +16,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -120,12 +121,13 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
             return;
         if (!tested) {
             tested = true;
-            int meta = worldObj.getBlockMetadata(getPos());
+            IBlockState state =  worldObj.getBlockState(getPos());
+            int meta = state.getBlock().getMetaFromState(state);
             if (meta != 0) {
                 worldObj.removeTileEntity(getPos());
                 Block block = BlockDetector.getBlock();
                 if (block != null)
-                    worldObj.setBlockState(getPos(), newState, 3);
+                    worldObj.setBlockState(getPos(), block.getDefaultState(), 3);
             }
         }
         if (powerDelay > 0)

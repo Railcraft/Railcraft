@@ -1,5 +1,7 @@
 package mods.railcraft.common.blocks.machine;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
@@ -7,6 +9,6 @@ import net.minecraft.world.World;
  */
 public interface IComparatorValueProvider {
 
-    int getComparatorInputOverride(World world, int x, int y, int z, int side);
+    int getComparatorInputOverride(World world, BlockPos pos, EnumFacing face);
 
 }

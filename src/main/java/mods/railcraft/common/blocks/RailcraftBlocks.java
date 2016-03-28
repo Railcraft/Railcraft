@@ -8,6 +8,13 @@
  */
 package mods.railcraft.common.blocks;
 
+import java.util.Arrays;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -32,11 +39,6 @@ import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-
-import java.util.Arrays;
 
 public class RailcraftBlocks {
 
@@ -51,8 +53,7 @@ public class RailcraftBlocks {
 
     public static void registerBlockTrack() {
         if (blockTrack == null && RailcraftConfig.isBlockEnabled("track")) {
-            int renderId = Railcraft.getProxy().getRenderId();
-            blockTrack = new BlockTrack(renderId).setRegistryName("railcraft.track");
+            blockTrack = new BlockTrack().setRegistryName("railcraft.track");
             RailcraftRegistry.register(blockTrack, ItemTrack.class);
         }
     }
@@ -63,8 +64,7 @@ public class RailcraftBlocks {
 
     public static void registerBlockRailElevator() {
         if (blockRailElevator == null && RailcraftConfig.isBlockEnabled("elevator")) {
-            int renderId = Railcraft.getProxy().getRenderId();
-            blockRailElevator = new BlockTrackElevator(renderId).setRegistryName("railcraft.track.elevator");
+            blockRailElevator = new BlockTrackElevator().setRegistryName("railcraft.track.elevator");
             RailcraftRegistry.register(blockRailElevator, ItemBlockRailcraft.class);
             blockRailElevator.setHarvestLevel("crowbar", 0);
             ItemStack stackElevator = new ItemStack(blockRailElevator, 8);
@@ -117,7 +117,6 @@ public class RailcraftBlocks {
     public static Block registerBlockMachineBeta() {
         if (blockMachineBeta == null && RailcraftConfig.isBlockEnabled("machine.beta")) {
 
-            int renderId = Railcraft.getProxy().getRenderId();
             int[] lightOpacity = new int[16];
             Arrays.fill(lightOpacity, 255);
             lightOpacity[EnumMachineBeta.ENGINE_STEAM_HOBBY.ordinal()] = 0;
@@ -134,17 +133,19 @@ public class RailcraftBlocks {
             lightOpacity[EnumMachineBeta.SENTINEL.ordinal()] = 0;
             lightOpacity[EnumMachineBeta.VOID_CHEST.ordinal()] = 0;
             lightOpacity[EnumMachineBeta.METALS_CHEST.ordinal()] = 0;
-            blockMachineBeta = new BlockMachine(renderId, new MachineProxyBeta(), false, lightOpacity).setRegistryName("railcraft.machine.beta");
+            MachineProxyBeta proxy = new MachineProxyBeta();
+            blockMachineBeta = new BlockMachine<EnumMachineBeta>(proxy, false, lightOpacity).setRegistryName("railcraft.machine.beta");
             RailcraftRegistry.register(blockMachineBeta, ItemMachine.class);
 
             for (EnumMachineBeta type : EnumMachineBeta.values()) {
+                IBlockState state = blockMachineBeta.getDefaultState().withProperty(proxy.getVariantProperty(), type);
                 switch (type) {
                     case SENTINEL:
-                        blockMachineBeta.setHarvestLevel("pickaxe", 3, type.ordinal());
+                        blockMachineBeta.setHarvestLevel("pickaxe", 3, state);
 //                        blockMachineBeta.setStateHarvestLevel("crowbar", 0, type.ordinal());
                         break;
                     default:
-                        blockMachineBeta.setHarvestLevel("pickaxe", 2, type.ordinal());
+                        blockMachineBeta.setHarvestLevel("pickaxe", 2, state);
 //                        blockMachineBeta.setStateHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }

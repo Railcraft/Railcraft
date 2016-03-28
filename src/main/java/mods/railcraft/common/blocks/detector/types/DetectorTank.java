@@ -40,13 +40,13 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class DetectorTank extends DetectorFilter {
-    private final MultiButtonController<ButtonState> buttonController = new MultiButtonController(ButtonState.ANALOG.ordinal(), ButtonState.values());
+    private final MultiButtonController<ButtonState> buttonController = MultiButtonController.create(ButtonState.ANALOG.ordinal(), ButtonState.values());
 
     public DetectorTank() {
         super(1);
     }
 
-    public MultiButtonController getButtonController() {
+    public MultiButtonController<ButtonState> getButtonController() {
         return buttonController;
     }
 

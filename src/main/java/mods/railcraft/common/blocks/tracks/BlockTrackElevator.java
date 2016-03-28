@@ -70,15 +70,13 @@ public class BlockTrackElevator extends Block {
      * other data from a metadata value.
      */
     public static final int BLOCK_FACING_DATA_METADATA_MASK = 0x0007;
-    private final int renderType;
     private IIcon[] texture;
 
-    public BlockTrackElevator(int renderId) {
+    public BlockTrackElevator() {
         super(new MaterialElevator());
 //		  setUnlocalizedName(name);
         setHardness(1.05F);
         setStepSound(soundTypeMetal);
-        this.renderType = renderId;
 
         setCreativeTab(CreativeTabs.tabTransport);
     }
@@ -112,11 +110,6 @@ public class BlockTrackElevator extends Block {
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
         setBlockBoundsBasedOnState(world, i, j, k);
         return AxisAlignedBB.fromBounds((double) i + minX, (double) j + minY, (double) k + minZ, (double) i + maxX, (double) j + maxY, (double) k + maxZ);
-    }
-
-    @Override
-    public int getRenderType() {
-        return renderType;
     }
 
     @Override

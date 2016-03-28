@@ -57,7 +57,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
         return items;
     }
 
-    public ArrayList<ItemStack> getBlockDroppedSilkTouch(int fortune) {
+    public List<ItemStack> getBlockDroppedSilkTouch(int fortune) {
         return getDrops(fortune);
     }
 

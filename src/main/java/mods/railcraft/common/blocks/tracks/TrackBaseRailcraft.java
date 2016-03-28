@@ -38,14 +38,14 @@ public abstract class TrackBaseRailcraft extends TrackInstanceBase {
         return TrackRegistry.getTrackSpec(getTrackType().getTag());
     }
     
-    @Override
-    public IIcon getIcon(){
-        return getIcon(0);
-    }
-
-    public IIcon getIcon(int index) {
-        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[index];
-    }
+//    @Override
+//    public IIcon getIcon(){
+//        return getIcon(0);
+//    }
+//
+//    public IIcon getIcon(int index) {
+//        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[index];
+//    }
 
     public int getPowerPropagation() {
         return 0;

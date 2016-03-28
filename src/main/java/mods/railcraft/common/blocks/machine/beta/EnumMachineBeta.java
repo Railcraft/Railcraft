@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineBeta implements IEnumMachine {
+public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
 
     TANK_IRON_WALL(Module.TRANSPORT, "tank.iron.wall", TileTankIronWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
     TANK_IRON_GAUGE(Module.TRANSPORT, "tank.iron.gauge", TileTankIronGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
@@ -157,5 +157,10 @@ public enum EnumMachineBeta implements IEnumMachine {
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

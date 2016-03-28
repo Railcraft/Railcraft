@@ -19,6 +19,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -218,7 +219,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
     }
 
     @Override
-    public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
+    public int getComparatorInputOverride(World world, BlockPos pos, EnumFacing face) {
         TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock instanceof TileTankBase)
             return ((TileTankBase) masterBlock).getComparatorValue();

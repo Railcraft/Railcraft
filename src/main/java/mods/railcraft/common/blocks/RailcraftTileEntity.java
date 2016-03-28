@@ -70,8 +70,8 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     @Override
     public void update() {
-        if(!canUpdate())
-            worldObj.tickabNOPEleTileEntities.remove(this); // Concurrency error
+        if(!canUpdate()) return;
+//            worldObj.tickabNOPEleTileEntities.remove(this); // Concurrency error
 
         clock++;
 

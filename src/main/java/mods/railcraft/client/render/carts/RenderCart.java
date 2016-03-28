@@ -15,6 +15,7 @@ import mods.railcraft.common.carts.*;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.MathHelper;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class RenderCart extends Render implements IRenderer {
+public class RenderCart extends Render<EntityMinecart> implements IRenderer {
 
     private final Random rand = new Random();
     private final RenderInfo fakeBlock = new RenderInfo();
@@ -35,9 +36,10 @@ public class RenderCart extends Render implements IRenderer {
     private final static CartModelRenderer defaultCoreRenderer = new CartModelRenderer();
     private final static CartContentRenderer defaultContentRenderer = new CartContentRenderer();
 
-    public RenderCart() {
+    public RenderCart(RenderManager manager) {
+        super(manager);
         shadowSize = 0.5F;
-        fakeBlock.texture = new IIcon[6];
+        fakeBlock.texture = new TextureAtlasSprite[6];
 
         renderersCore.put(EntityLocomotive.class, LocomotiveRenderer.INSTANCE);
 
@@ -171,8 +173,8 @@ public class RenderCart extends Render implements IRenderer {
     }
 
     @Override
-    public void doRender(Entity entity, double x, double y, double d2, float yaw, float time) {
-        renderCart((EntityMinecart) entity, x, y, d2, yaw, time);
+    public void doRender(EntityMinecart entity, double x, double y, double d2, float yaw, float time) {
+        renderCart(entity, x, y, d2, yaw, time);
     }
 
     @Override
@@ -180,21 +182,17 @@ public class RenderCart extends Render implements IRenderer {
         super.bindTexture(texture);
     }
 
-    public RenderBlocks renderBlocks() {
-        return field_147909_c;
-    }
-
     public RenderManager getRenderManager() {
         return renderManager;
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(EntityMinecart entity) {
         return null;
     }
 
-    public void renderHaloText(Entity entity, String text, double xOffset, double yOffset, double zOffset, int viewDist) {
-        func_147906_a(entity, text, xOffset, yOffset, zOffset, viewDist);
+    public void renderHaloText(EntityMinecart entity, String text, double xOffset, double yOffset, double zOffset, int viewDist) {
+        renderLivingLabel(entity, text, xOffset, yOffset, zOffset, viewDist);
+//        func_147906_a(entity, text, xOffset, yOffset, zOffset, viewDist);
     }
-
 }

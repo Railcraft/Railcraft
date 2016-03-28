@@ -14,6 +14,7 @@ import java.util.Map;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 
+import mods.railcraft.api.core.ITextureLoader;
 import mods.railcraft.api.tracks.ITrackItemIconProvider;
 import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
@@ -21,7 +22,7 @@ import mods.railcraft.client.util.textures.TextureAtlasSheet;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackTextureLoader implements ITrackItemIconProvider {
+public class TrackTextureLoader implements ITrackItemIconProvider, ITextureLoader {
 
     public static final TrackTextureLoader INSTANCE = new TrackTextureLoader();
     public final Map<TrackSpec, TextureAtlasSprite[]> sprites = new HashMap<TrackSpec, TextureAtlasSprite[]>();

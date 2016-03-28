@@ -23,6 +23,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.creativetab.CreativeTabs;
@@ -53,13 +54,11 @@ public class BlockOre extends Block {
     private static final ParticleHelperCallback callback = new ParticleCallback();
     public static int renderPass;
     private static BlockOre instance;
-    private final int renderType;
     private final Random rand = new Random();
 
-    public BlockOre(int renderId) {
+    public BlockOre() {
         super(Material.rock);
         setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumOre.SULFUR));
-        renderType = renderId;
         setRegistryName("railcraft.ore");
         setResistance(5);
         setHardness(3);
@@ -81,8 +80,7 @@ public class BlockOre extends Block {
 
     public static void registerBlock() {
         if (instance == null && RailcraftConfig.isBlockEnabled("ore")) {
-            int renderId = Railcraft.getProxy().getRenderId();
-            instance = new BlockOre(renderId);
+            instance = new BlockOre();
             RailcraftRegistry.register(instance, ItemOre.class);
 
             EntityTunnelBore.addMineableBlock(instance);
@@ -138,11 +136,6 @@ public class BlockOre extends Block {
 
     public EnumOre getVariant(IBlockState state) {
         return state.getValue(VARIANT);
-    }
-
-    @Override
-    public int getRenderType() {
-        return renderType;
     }
 
     @Override
@@ -295,7 +288,7 @@ public class BlockOre extends Block {
         @SideOnly(Side.CLIENT)
         private void setTexture(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
             renderPass = 0;
-            fx.setParticleIcon(instance.getIcon(0, meta));
+            fx.setParticleIcon(Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state));
         }
     }
 }
