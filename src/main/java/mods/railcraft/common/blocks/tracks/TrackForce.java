@@ -8,17 +8,22 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.Explosion;
+
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.epsilon.TileForceTrackEmitter;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import java.util.List;
 
 public class TrackForce extends TrackUnsupported {
 
@@ -35,31 +40,30 @@ public class TrackForce extends TrackUnsupported {
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block block) {
+        super.onNeighborBlockChange(state, block);
         if (Game.isHost(getWorld()))
             checkForEmitter();
     }
 
     public void checkForEmitter() {
-        EnumTrackMeta meta = EnumTrackMeta.fromMeta(tileEntity.getBlockMetadata());
-        int y = getY() - 1;
+        EnumRailDirection meta = getWorld().getBlockState(getPos()).getValue(BlockTrack.TRACK_DIRECTION);
+
+        BlockPos checkPos = getPos().down();
         Block emitterBlock = EnumMachineEpsilon.FORCE_TRACK_EMITTER.getBlock();
-        if (meta == EnumTrackMeta.NORTH_SOUTH) {
+        if (meta == EnumRailDirection.NORTH_SOUTH) {
             if (isValidEmitterTile(emitter, EnumFacing.NORTH, EnumFacing.SOUTH))
                 return;
             else
                 setEmitter(null);
             for (int i = 1; i <= TileForceTrackEmitter.MAX_TRACKS; i++) {
-                int x = getX() + i * EnumFacing.NORTH.offsetX;
-                int z = getZ() + i * EnumFacing.NORTH.offsetZ;
-                if (isValidEmitter(x, y, z, emitterBlock, EnumFacing.SOUTH))
+                BlockPos pos = checkPos.offset(EnumFacing.NORTH, i);
+                if (isValidEmitter(pos, emitterBlock, EnumFacing.SOUTH))
                     return;
             }
             for (int i = 1; i <= TileForceTrackEmitter.MAX_TRACKS; i++) {
-                int x = getX() + i * EnumFacing.SOUTH.offsetX;
-                int z = getZ() + i * EnumFacing.SOUTH.offsetZ;
-                if (isValidEmitter(x, y, z, emitterBlock, EnumFacing.NORTH))
+                BlockPos pos = checkPos.offset(EnumFacing.SOUTH, i);
+                if (isValidEmitter(pos, emitterBlock, EnumFacing.NORTH))
                     return;
             }
         } else {
@@ -68,19 +72,17 @@ public class TrackForce extends TrackUnsupported {
             else
                 setEmitter(null);
             for (int i = 1; i <= TileForceTrackEmitter.MAX_TRACKS; i++) {
-                int x = getX() + i * EnumFacing.EAST.offsetX;
-                int z = getZ() + i * EnumFacing.EAST.offsetZ;
-                if (isValidEmitter(x, y, z, emitterBlock, EnumFacing.WEST))
+                BlockPos pos = checkPos.offset(EnumFacing.EAST, i);
+                if (isValidEmitter(pos, emitterBlock, EnumFacing.WEST))
                     return;
             }
             for (int i = 1; i <= TileForceTrackEmitter.MAX_TRACKS; i++) {
-                int x = getX() + i * EnumFacing.WEST.offsetX;
-                int z = getZ() + i * EnumFacing.WEST.offsetZ;
-                if (isValidEmitter(x, y, z, emitterBlock, EnumFacing.EAST))
+                BlockPos pos = checkPos.offset(EnumFacing.WEST, i);
+                if (isValidEmitter(pos, emitterBlock, EnumFacing.EAST))
                     return;
             }
         }
-        WorldPlugin.setBlockToAir(getWorld(), getX(), getY(), getZ());
+        WorldPlugin.setBlockToAir(getWorld(), getPos());
     }
 
     public TileForceTrackEmitter getEmitter() {
@@ -91,10 +93,10 @@ public class TrackForce extends TrackUnsupported {
         this.emitter = emitter;
     }
 
-    private boolean isValidEmitter(int x, int y, int z, Block emitterBlock, EnumFacing facing) {
-        if (WorldPlugin.getBlock(getWorld(), x, y, z) != emitterBlock)
+    private boolean isValidEmitter(BlockPos pos, Block emitterBlock, EnumFacing facing) {
+        if (WorldPlugin.getBlock(getWorld(), pos) != emitterBlock)
             return false;
-        TileEntity tile = WorldPlugin.getBlockTile(getWorld(), x, y, z);
+        TileEntity tile = WorldPlugin.getBlockTile(getWorld(), pos);
         if (tile instanceof TileForceTrackEmitter && isValidEmitterTile((TileForceTrackEmitter) tile, facing)) {
             setEmitter(emitter);
             return true;
@@ -105,10 +107,8 @@ public class TrackForce extends TrackUnsupported {
     private boolean isValidEmitterTile(TileForceTrackEmitter tile, EnumFacing... facing) {
         if (tile == null || tile.isInvalid())
             return false;
-        if (getY() - 1 != tile.yCoord)
-            return false;
-        if (getX() != tile.xCoord && getZ() != tile.zCoord)
-            return false;
+        BlockPos expected = getPos().down();
+        if (!expected.equals(tile.getPos())) return false;
         EnumFacing emitterFacing = tile.getFacing();
         for (EnumFacing f : facing) {
             if (f == emitterFacing)
@@ -123,7 +123,7 @@ public class TrackForce extends TrackUnsupported {
     }
 
     @Override
-    public float getExplosionResistance(double srcX, double srcY, double srcZ, Entity exploder) {
+    public float getExplosionResistance(Explosion explosion, Entity exploder) {
         return 6000000.0F;
     }
 

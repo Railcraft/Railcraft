@@ -13,6 +13,8 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.LootPlugin.Type;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -50,8 +52,8 @@ public class ItemTie extends ItemRailcraft {
         for (EnumTie tie : EnumTie.VALUES) {
             RailcraftRegistry.register(new ItemStack(this, 1, tie.ordinal()));
         }
-        LootPlugin.addLootRailway(RailcraftItem.tie.getStack(1, EnumTie.WOOD), 4, 16, "tie.wood");
-        LootPlugin.addLootWorkshop(RailcraftItem.tie.getStack(1, EnumTie.STONE), 4, 16, "tie.stone");
+        LootPlugin.addLoot(RailcraftItem.tie.getStack(1, EnumTie.WOOD), 4, 16, Type.RAILWAY, "tie.wood");
+        LootPlugin.addLoot(RailcraftItem.tie.getStack(1, EnumTie.STONE), 4, 16, Type.WORKSHOP, "tie.stone");
     }
 
     @Override

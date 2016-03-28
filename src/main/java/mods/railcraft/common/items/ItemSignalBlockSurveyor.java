@@ -9,7 +9,6 @@
  ******************************************************************************/
 package mods.railcraft.common.items;
 
-import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.ISignalBlockTile;
 import mods.railcraft.api.signals.SignalBlock;
@@ -29,8 +28,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.Optional;
 
-@Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
-public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, IActivationBlockingItem {
+// FIXME IC2 compat
+//@Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
+public class ItemSignalBlockSurveyor extends ItemRailcraft implements/* IBoxable,*/ IActivationBlockingItem {
 
     public ItemSignalBlockSurveyor() {
         setMaxDamage(0);
@@ -138,8 +138,9 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
         item.setTagCompound(data);
     }
 
-    @Override
-    public boolean canBeStoredInToolbox(ItemStack itemstack) {
-        return true;
-    }
+    // FIXME Ic2 Compat
+//    @Override
+//    public boolean canBeStoredInToolbox(ItemStack itemstack) {
+//        return true;
+//    }
 }

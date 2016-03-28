@@ -84,6 +84,10 @@ public class PlayerPlugin {
         return !(owner == null || accessor == null) && (owner.equals(accessor) || getPermissionLevel(accessor) > 2);
     }
 
+    public static boolean isOp(GameProfile profile) {
+        return profile != null && getPermissionLevel(profile) > 2;
+    }
+
     public static boolean isSamePlayer(GameProfile a, GameProfile b) {
         if (a.getId() != null && b.getId() != null)
             return a.getId().equals(b.getId());

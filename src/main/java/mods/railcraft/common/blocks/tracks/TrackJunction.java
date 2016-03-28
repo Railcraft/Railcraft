@@ -22,19 +22,19 @@ public class TrackJunction extends TrackBaseRailcraft {
         return false;
     }
 
-    @Override
-    public int getBasicRailMetadata(EntityMinecart cart) {
-        if (cart == null) {
-            return EnumTrackMeta.NORTH_SOUTH.ordinal();
-        }
-        float yaw = cart.prevRotationYaw;
-        yaw = yaw % 180;
-        while (yaw < 0) {
-            yaw += 180;
-        }
-        if ((yaw >= 45) && (yaw <= 135)) {
-            return EnumTrackMeta.NORTH_SOUTH.ordinal();
-        }
-        return EnumTrackMeta.EAST_WEST.ordinal();
-    }
+//    @Override
+//    public int getBasicRailMetadata(EntityMinecart cart) {
+//        if (cart == null) {
+//            return EnumTrackMeta.NORTH_SOUTH.ordinal();
+//        }
+//        float yaw = cart.prevRotationYaw;
+//        yaw = yaw % 180;
+//        while (yaw < 0) {
+//            yaw += 180;
+//        }
+//        if ((yaw >= 45) && (yaw <= 135)) {
+//            return EnumTrackMeta.NORTH_SOUTH.ordinal();
+//        }
+//        return EnumTrackMeta.EAST_WEST.ordinal();
+//    }
 }

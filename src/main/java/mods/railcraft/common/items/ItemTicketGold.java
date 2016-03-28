@@ -10,6 +10,7 @@ package mods.railcraft.common.items;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
@@ -30,13 +31,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ItemTicketGold extends ItemTicket implements IEditableItem {
 
-    public static final IStackFilter FILTER = new IStackFilter() {
+    public static final IStackFilter FILTER = new StackFilter() {
         @Override
-        public boolean matches(ItemStack stack) {
+        public boolean apply(ItemStack stack) {
             return stack != null && stack.getItem() instanceof ItemTicketGold;
         }
-
     };
+
     public static ItemTicketGold item;
 
     public static void registerItem() {
@@ -60,10 +61,10 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
         return new ItemStack(item);
     }
 
-    @Override
-    public boolean doesContainerItemLeaveCraftingGrid(ItemStack stack) {
-        return false;
-    }
+//    @Override
+//    public boolean doesContainerItemLeaveCraftingGrid(ItemStack stack) {
+//        return false;
+//    }
 
     @Override
     public boolean hasContainerItem(ItemStack stack) {
@@ -77,11 +78,11 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
         return stack;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:ticket.gold");
-    }
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public void registerIcons(IIconRegister iconRegister) {
+//        itemIcon = iconRegister.registerIcon("railcraft:ticket.gold");
+//    }
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
@@ -93,12 +94,13 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
 
     @Override
     public boolean canPlayerEdit(EntityPlayer player, ItemStack stack) {
-        boolean canEdit = PlayerPlugin.isPlayerOp(player.getGameProfile());
-        if (!canEdit && !RailcraftConfig.isRoutingOpsOnly()) {
-            GameProfile owner = getOwner(stack);
-            canEdit |= owner.getId() == null || owner.equals(player.getName());
+        GameProfile ownerProfile = getOwner(stack);
+        GameProfile playerProfile =  player.getGameProfile();
+        if (RailcraftConfig.isRoutingOpsOnly()) {
+            return PlayerPlugin.isOp(playerProfile);
+        } else {
+            return PlayerPlugin.isOwnerOrOp(ownerProfile, playerProfile);
         }
-        return canEdit;
     }
 
 }

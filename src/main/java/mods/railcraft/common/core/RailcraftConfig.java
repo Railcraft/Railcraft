@@ -498,11 +498,11 @@ public class RailcraftConfig {
         configBlock.addCustomCategoryComment(CAT_SUBBLOCKS, "Here is were you can enable/disable various sub-blocks.\n"
                 + "Railcraft will attempt to compensate for any missing component by providing alternatives (usually).");
 
-        for (EnumTrack type : EnumTrack.VALUES) {
+//        for (EnumTrack type : EnumTrack.VALUES) {
 //            if (type.isDepreciated())
 //                continue;
-            loadBlockFeature(type.getTag());
-        }
+//            loadBlockFeature(type.getTag());
+//        }
 
         for (EnumCube type : EnumCube.VALUES) {
             loadBlockFeature(type.getTag());
