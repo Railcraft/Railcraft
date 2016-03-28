@@ -8,23 +8,36 @@
  */
 package mods.railcraft.common.blocks.machine.delta;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.IMachineProxy;
 
 import java.util.List;
 
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class MachineProxyDelta implements IMachineProxy {
+public class MachineProxyDelta implements IMachineProxy<EnumMachineDelta> {
+    public static final PropertyEnum<EnumMachineDelta> VARIANT = PropertyEnum.create("variant", EnumMachineDelta.class);
 
     @Override
-    public IEnumMachine getMachine(int meta) {
+    public IProperty<EnumMachineDelta> getVariantProperty() {
+        return VARIANT;
+    }
+
+    @Override
+    public EnumMachineDelta getMachine(int meta) {
         return EnumMachineDelta.fromId(meta);
     }
 
     @Override
-    public List<? extends IEnumMachine> getCreativeList() {
+    public int getMeta(EnumMachineDelta machine) {
+        return machine.ordinal();
+    }
+
+    @Override
+    public List<EnumMachineDelta> getCreativeList() {
         return EnumMachineDelta.getCreativeList();
     }
 }

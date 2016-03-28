@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine.delta;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.BoundingBoxManager;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineDelta implements IEnumMachine {
+public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
 
     WIRE(Module.ELECTRICITY, "wire", TileWire.class, 1, 1, 0, 0, 0, 0, 0, 0),
     CAGE(Module.TRANSPORT, "cage", TileCage.class, 4, 1, 0, 1, 2, 2, 2, 2, 3);
@@ -112,7 +113,7 @@ public enum EnumMachineDelta implements IEnumMachine {
     }
 
     @Override
-    public Block getBlock() {
+    public BlockMachine<EnumMachineDelta> getBlock() {
         return RailcraftBlocks.getBlockMachineDelta();
     }
 
@@ -132,5 +133,10 @@ public enum EnumMachineDelta implements IEnumMachine {
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

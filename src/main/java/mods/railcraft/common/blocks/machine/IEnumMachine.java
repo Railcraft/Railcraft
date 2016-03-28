@@ -37,7 +37,7 @@ public interface IEnumMachine<M extends IEnumMachine<M>> extends Comparable<M>, 
 
     int ordinal();
 
-    Block getBlock();
+    BlockMachine<M> getBlock();
 
     boolean isDepreciated();
 

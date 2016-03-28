@@ -42,11 +42,11 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 
 public class RailcraftBlocks {
 
-    private static Block blockMachineAlpha;
-    private static Block blockMachineBeta;
-    private static Block blockMachineGamma;
-    private static Block blockMachineDelta;
-    private static Block blockMachineEpsilon;
+    private static BlockMachine<EnumMachineAlpha> blockMachineAlpha;
+    private static BlockMachine<EnumMachineBeta> blockMachineBeta;
+    private static BlockMachine<EnumMachineGamma> blockMachineGamma;
+    private static BlockMachine<EnumMachineDelta> blockMachineDelta;
+    private static BlockMachine<EnumMachineEpsilon> blockMachineEpsilon;
     private static Block blockTrack;
     private static Block blockRailElevator;
     private static Block blockSignal;
@@ -82,27 +82,30 @@ public class RailcraftBlocks {
         return blockRailElevator;
     }
 
-    public static Block registerBlockMachineAlpha() {
+    public static BlockMachine<EnumMachineAlpha> registerBlockMachineAlpha() {
         if (blockMachineAlpha == null && RailcraftConfig.isBlockEnabled("machine.alpha")) {
             int[] lightOpacity = new int[16];
             Arrays.fill(lightOpacity, 255);
-            blockMachineAlpha = new BlockMachine(0, new MachineProxyAlpha(), true, lightOpacity).setRegistryName("railcraft.machine.alpha");
+            MachineProxyAlpha proxy = new MachineProxyAlpha();
+            blockMachineAlpha = new BlockMachine<EnumMachineAlpha>(proxy, true, lightOpacity);
+            blockMachineAlpha.setRegistryName("railcraft.machine.alpha");
             RailcraftRegistry.register(blockMachineAlpha, ItemMachine.class);
 
             for (EnumMachineAlpha type : EnumMachineAlpha.values()) {
+                IBlockState state = blockMachineAlpha.getDefaultState().withProperty(proxy.getVariantProperty(), type);
                 switch (type) {
                     case FEED_STATION:
                     case TANK_WATER:
-                        blockMachineAlpha.setHarvestLevel("axe", 1, type.ordinal());
+                        blockMachineAlpha.setHarvestLevel("axe", 1, state);
 //                        blockMachineAlpha.setStateHarvestLevel("crowbar", 0, type.ordinal());
                         break;
                     case WORLD_ANCHOR:
                     case PERSONAL_ANCHOR:
-                        blockMachineAlpha.setHarvestLevel("pickaxe", 3, type.ordinal());
+                        blockMachineAlpha.setHarvestLevel("pickaxe", 3, state);
 //                        blockMachineAlpha.setStateHarvestLevel("crowbar", 0, type.ordinal());
                         break;
                     default:
-                        blockMachineAlpha.setHarvestLevel("pickaxe", 2, type.ordinal());
+                        blockMachineAlpha.setHarvestLevel("pickaxe", 2, state);
 //                        blockMachineAlpha.setStateHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
@@ -110,11 +113,11 @@ public class RailcraftBlocks {
         return blockMachineAlpha;
     }
 
-    public static Block getBlockMachineAlpha() {
+    public static BlockMachine<EnumMachineAlpha> getBlockMachineAlpha() {
         return blockMachineAlpha;
     }
 
-    public static Block registerBlockMachineBeta() {
+    public static BlockMachine<EnumMachineBeta> registerBlockMachineBeta() {
         if (blockMachineBeta == null && RailcraftConfig.isBlockEnabled("machine.beta")) {
 
             int[] lightOpacity = new int[16];
@@ -134,7 +137,8 @@ public class RailcraftBlocks {
             lightOpacity[EnumMachineBeta.VOID_CHEST.ordinal()] = 0;
             lightOpacity[EnumMachineBeta.METALS_CHEST.ordinal()] = 0;
             MachineProxyBeta proxy = new MachineProxyBeta();
-            blockMachineBeta = new BlockMachine<EnumMachineBeta>(proxy, false, lightOpacity).setRegistryName("railcraft.machine.beta");
+            blockMachineBeta = new BlockMachine<EnumMachineBeta>(proxy, false, lightOpacity);
+            blockMachineBeta.setRegistryName("railcraft.machine.beta");
             RailcraftRegistry.register(blockMachineBeta, ItemMachine.class);
 
             for (EnumMachineBeta type : EnumMachineBeta.values()) {
@@ -153,25 +157,28 @@ public class RailcraftBlocks {
         return blockMachineBeta;
     }
 
-    public static Block getBlockMachineBeta() {
+    public static BlockMachine<EnumMachineBeta> getBlockMachineBeta() {
         return blockMachineBeta;
     }
 
-    public static Block registerBlockMachineGamma() {
+    public static BlockMachine<EnumMachineGamma> registerBlockMachineGamma() {
         if (blockMachineGamma == null && RailcraftConfig.isBlockEnabled("machine.gamma")) {
 
             int[] lightOpacity = new int[16];
             Arrays.fill(lightOpacity, 255);
             lightOpacity[EnumMachineGamma.FLUID_LOADER.ordinal()] = 0;
             lightOpacity[EnumMachineGamma.FLUID_UNLOADER.ordinal()] = 0;
-            blockMachineGamma = new BlockMachine(0, new MachineProxyGamma(), false, lightOpacity).setRegistryName("railcraft.machine.gamma");
+            MachineProxyGamma proxy = new MachineProxyGamma();
+            blockMachineGamma = new BlockMachine<EnumMachineGamma>(proxy, false, lightOpacity);
+            blockMachineGamma.setRegistryName("railcraft.machine.gamma");
             blockMachineGamma.setCreativeTab(CreativeTabs.tabTransport);
             RailcraftRegistry.register(blockMachineGamma, ItemMachine.class);
 
             for (EnumMachineGamma type : EnumMachineGamma.values()) {
+                IBlockState state = blockMachineBeta.getDefaultState().withProperty(proxy.getVariantProperty(), type);
                 switch (type) {
                     default:
-                        blockMachineGamma.setHarvestLevel("pickaxe", 2, type.ordinal());
+                        blockMachineGamma.setHarvestLevel("pickaxe", 2, state);
 //                        blockMachineGamma.setStateHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
@@ -179,25 +186,27 @@ public class RailcraftBlocks {
         return blockMachineGamma;
     }
 
-    public static Block getBlockMachineGamma() {
+    public static BlockMachine<EnumMachineGamma> getBlockMachineGamma() {
         return blockMachineGamma;
     }
 
-    public static Block registerBlockMachineDelta() {
+    public static BlockMachine<EnumMachineDelta> registerBlockMachineDelta() {
         if (blockMachineDelta == null && RailcraftConfig.isBlockEnabled("machine.delta")) {
-            int renderId = Railcraft.getProxy().getRenderId();
             int[] lightOpacity = new int[16];
             Arrays.fill(lightOpacity, 255);
             lightOpacity[EnumMachineDelta.WIRE.ordinal()] = 0;
             lightOpacity[EnumMachineDelta.CAGE.ordinal()] = 0;
-            blockMachineDelta = new BlockMachine(renderId, new MachineProxyDelta(), false, lightOpacity).setRegistryName("railcraft.machine.delta");
+            MachineProxyDelta proxy = new MachineProxyDelta();
+            blockMachineDelta = new BlockMachine<EnumMachineDelta>(proxy, false, lightOpacity);
+            blockMachineDelta.setRegistryName("railcraft.machine.delta");
             blockMachineDelta.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
             RailcraftRegistry.register(blockMachineDelta, ItemMachine.class);
 
             for (EnumMachineDelta type : EnumMachineDelta.values()) {
+                IBlockState state = blockMachineBeta.getDefaultState().withProperty(proxy.getVariantProperty(), type);
                 switch (type) {
                     default:
-                        blockMachineDelta.setHarvestLevel("pickaxe", 2, type.ordinal());
+                        blockMachineDelta.setHarvestLevel("pickaxe", 2, state);
 //                        blockMachineDelta.setStateHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
@@ -205,21 +214,24 @@ public class RailcraftBlocks {
         return blockMachineDelta;
     }
 
-    public static Block getBlockMachineDelta() {
+    public static BlockMachine<EnumMachineDelta> getBlockMachineDelta() {
         return blockMachineDelta;
     }
 
-    public static Block registerBlockMachineEpsilon() {
+    public static BlockMachine<EnumMachineEpsilon> registerBlockMachineEpsilon() {
         if (blockMachineEpsilon == null && RailcraftConfig.isBlockEnabled("machine.epsilon")) {
             int[] lightOpacity = new int[16];
             Arrays.fill(lightOpacity, 255);
-            blockMachineEpsilon = new BlockMachine(0, new MachineProxyEpsilon(), true, lightOpacity).setRegistryName("railcraft.machine.epsilon");
+            MachineProxyEpsilon proxy = new MachineProxyEpsilon();
+            blockMachineEpsilon = new BlockMachine<EnumMachineEpsilon>(proxy, true, lightOpacity);
+            blockMachineEpsilon.setRegistryName("railcraft.machine.epsilon");
             RailcraftRegistry.register(blockMachineEpsilon, ItemMachine.class);
 
             for (EnumMachineEpsilon type : EnumMachineEpsilon.values()) {
+                IBlockState state = blockMachineBeta.getDefaultState().withProperty(proxy.getVariantProperty(), type);
                 switch (type) {
                     default:
-                        blockMachineEpsilon.setHarvestLevel("pickaxe", 2, type.ordinal());
+                        blockMachineEpsilon.setHarvestLevel("pickaxe", 2, state);
 //                        blockMachineEpsilon.setStateHarvestLevel("crowbar", 0, type.ordinal());
                 }
             }
@@ -227,14 +239,13 @@ public class RailcraftBlocks {
         return blockMachineEpsilon;
     }
 
-    public static Block getBlockMachineEpsilon() {
+    public static BlockMachine<EnumMachineEpsilon> getBlockMachineEpsilon() {
         return blockMachineEpsilon;
     }
 
     public static void registerBlockSignal() {
         if (blockSignal == null && RailcraftConfig.isBlockEnabled("signal")) {
-            int renderId = Railcraft.getProxy().getRenderId();
-            blockSignal = new BlockSignalRailcraft(renderId);
+            blockSignal = new BlockSignalRailcraft();
             RailcraftRegistry.register(blockSignal, ItemSignal.class);
         }
     }

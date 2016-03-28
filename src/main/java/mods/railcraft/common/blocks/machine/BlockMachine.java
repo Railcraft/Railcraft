@@ -16,6 +16,8 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -46,6 +48,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
 
     private final IMachineProxy<M> proxy;
     private final int[] metaOpacity;
+    private final BlockState altBlockState;
 
     public BlockMachine(IMachineProxy<M> proxy, boolean opaque, int[] metaOpacity) {
         super(Material.rock);
@@ -54,12 +57,19 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         setStepSound(soundTypeStone);
         setTickRandomly(true);
         this.proxy = proxy;
+        this.altBlockState = new BlockState(this, proxy.getVariantProperty());
+        setDefaultState(altBlockState.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMachine(0)));
         this.fullBlock = opaque;
 
         this.metaOpacity = metaOpacity;
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         lightOpacity = opaque ? 255 : 0;
+    }
+
+    @Override
+    public BlockState getBlockState() {
+        return this.altBlockState;
     }
 
     @Override

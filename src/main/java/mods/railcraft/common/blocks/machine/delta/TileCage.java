@@ -89,11 +89,14 @@ public class TileCage extends TileMachineBase {
                 }
 
                 lookHelper.onUpdateLook();
-                bodyHelper.func_75664_a();
+                bodyHelper.updateRenderAngles();
 
                 if (lookCounter <= 0) {
                     lookTarget = null;
                     if (entity.getRNG().nextDouble() < 0.1) {
+                        float xCoord = getPos().getX();
+                        float yCoord = getPos().getY();
+                        float zCoord = getPos().getZ();
                         List<EntityPlayer> nearby = MiscTools.getNearbyEntities(worldObj, EntityPlayer.class, xCoord, yCoord - 1, yCoord + 3, zCoord, 5);
                         if (!nearby.isEmpty() && entity.getRNG().nextDouble() < 0.4) {
                             lookTarget = nearby.get(MiscTools.RANDOM.nextInt(nearby.size()));

@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineEpsilon implements IEnumMachine {
+public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
 
     ELECTRIC_FEEDER(Module.ELECTRICITY, "electric.feeder", TileElectricFeeder.class, 1, 1, 0),
     ELECTRIC_FEEDER_ADMIN(Module.ELECTRICITY, "electric.feeder.admin", TileElectricFeederAdmin.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
@@ -117,7 +118,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     }
 
     @Override
-    public Block getBlock() {
+    public BlockMachine<EnumMachineEpsilon> getBlock() {
         return RailcraftBlocks.getBlockMachineEpsilon();
     }
 
@@ -133,5 +134,10 @@ public enum EnumMachineEpsilon implements IEnumMachine {
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

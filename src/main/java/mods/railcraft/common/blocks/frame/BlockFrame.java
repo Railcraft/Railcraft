@@ -1,15 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
+/* Copyright (c) CovertJaguar, 2014 http://railcraft.info
  * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+ * This code is the property of CovertJaguar and may only be used with explicit written permission unless otherwise
+ * specified on the license page at http://railcraft.info/wiki/info:license. */
 package mods.railcraft.common.blocks.frame;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
+import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.delta.TileWire;
 import mods.railcraft.common.blocks.machine.delta.TileWire.AddonType;
@@ -33,9 +30,7 @@ import net.minecraft.world.World;
 
 import static net.minecraft.util.EnumFacing.UP;
 
-/**
- * @author CovertJaguar <http://www.railcraft.info/>
- */
+/** @author CovertJaguar <http://www.railcraft.info/> */
 public class BlockFrame extends Block implements IPostConnection {
 
     private static BlockFrame instance;
@@ -45,23 +40,17 @@ public class BlockFrame extends Block implements IPostConnection {
     }
 
     public static void registerBlock() {
-        if (instance == null)
-            if (RailcraftConfig.isBlockEnabled("frame")) {
-                instance = new BlockFrame();
-                RailcraftRegistry.register(instance, ItemBlockRailcraft.class);
+        if (instance == null) if (RailcraftConfig.isBlockEnabled("frame")) {
+            instance = new BlockFrame();
+            RailcraftRegistry.register(instance, ItemBlockRailcraft.class);
 
-//                HarvestPlugin.setStateHarvestLevel(instance, "crowbar", 0);
-                HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, instance);
+            // HarvestPlugin.setStateHarvestLevel(instance, "crowbar", 0);
+            HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, instance);
 
-                ForestryPlugin.addBackpackItem("builder", instance);
+            ForestryPlugin.addBackpackItem("builder", instance);
 
-                CraftingPlugin.addShapedRecipe(getItem(6),
-                        "PPP",
-                        "I I",
-                        "III",
-                        'P', RailcraftItem.plate, EnumPlate.IRON,
-                        'I', RailcraftItem.rebar);
-            }
+            CraftingPlugin.addShapedRecipe(getItem(6), "PPP", "I I", "III", 'P', RailcraftItem.plate, EnumPlate.IRON, 'I', RailcraftItem.rebar);
+        }
     }
 
     public static ItemStack getItem() {
@@ -113,17 +102,20 @@ public class BlockFrame extends Block implements IPostConnection {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack current = playerIn.getCurrentEquippedItem();
-        if (current != null && InvTools.isItemEqualIgnoreNBT(current, EnumMachineDelta.WIRE.getItem()))
-            if (WorldPlugin.setBlock(worldIn, pos, EnumMachineDelta.WIRE.getBlock(), EnumMachineDelta.WIRE.ordinal(), 2)) {
+        if (current != null && InvTools.isItemEqualIgnoreNBT(current, EnumMachineDelta.WIRE.getItem())) {
+            BlockMachine<EnumMachineDelta> block = EnumMachineDelta.WIRE.getBlock();
+            IBlockState newState = block.getDefaultState();
+            newState = newState.withProperty(block.getMachineProxy().getVariantProperty(), EnumMachineDelta.WIRE);
+            if (WorldPlugin.setBlockState(worldIn, pos, newState, 2)) {
                 TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
                 if (tile instanceof TileWire) {
                     TileWire wire = (TileWire) tile;
                     wire.setAddon(AddonType.FRAME);
                 }
-                if (!playerIn.capabilities.isCreativeMode)
-                    playerIn.setCurrentItemOrArmor(0, InvTools.depleteItem(current));
+                if (!playerIn.capabilities.isCreativeMode) playerIn.setCurrentItemOrArmor(0, InvTools.depleteItem(current));
                 return true;
             }
+        }
         return false;
     }
 

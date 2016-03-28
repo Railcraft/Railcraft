@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineGamma implements IEnumMachine {
+public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
     ITEM_LOADER(Module.TRANSPORT, "loader.item", 0, TileItemLoader.class),
     ITEM_UNLOADER(Module.TRANSPORT, "unloader.item", 0, TileItemUnloader.class),
@@ -118,7 +119,7 @@ public enum EnumMachineGamma implements IEnumMachine {
     }
 
     @Override
-    public Block getBlock() {
+    public BlockMachine<EnumMachineGamma> getBlock() {
         return RailcraftBlocks.getBlockMachineGamma();
     }
 
@@ -147,5 +148,10 @@ public enum EnumMachineGamma implements IEnumMachine {
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

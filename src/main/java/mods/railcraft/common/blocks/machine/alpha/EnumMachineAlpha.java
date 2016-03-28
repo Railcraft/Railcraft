@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.carts.ItemCartAnchor;
@@ -131,7 +132,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     }
 
     @Override
-    public Block getBlock() {
+    public BlockMachine<EnumMachineAlpha> getBlock() {
         return RailcraftBlocks.getBlockMachineAlpha();
     }
 

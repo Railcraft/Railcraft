@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -28,8 +26,7 @@ public class BlockSignalRailcraft extends BlockSignalBase {
 
     public static final PropertyEnum<EnumSignal> TYPE = PropertyEnum.create("type", EnumSignal.class);
 
-    public BlockSignalRailcraft(int renderType) {
-        super(renderType);
+    public BlockSignalRailcraft() {
         setRegistryName("railcraft.signal");
         this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EnumSignal.BLOCK_SIGNAL));
 
@@ -70,6 +67,7 @@ public class BlockSignalRailcraft extends BlockSignalBase {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Override
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(TYPE, EnumSignal.fromOrdinal(meta));
     }
@@ -77,10 +75,12 @@ public class BlockSignalRailcraft extends BlockSignalBase {
     /**
      * Convert the BlockState into the correct metadata value
      */
+    @Override
     public int getMetaFromState(IBlockState state) {
         return state.getValue(TYPE).ordinal();
     }
 
+    @Override
     protected BlockState createBlockState() {
         return new BlockState(this, TYPE);
     }
