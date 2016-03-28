@@ -21,11 +21,14 @@ import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.inventory.wrappers.ChestWrapper;
 import mods.railcraft.common.util.inventory.wrappers.SidedInventoryMapper;
+import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -146,6 +149,26 @@ public abstract class InvTools {
             slots[i] = start + i;
         }
         return slots;
+    }
+
+    public static EnumColor getItemColor(ItemStack stack) {
+        if (stack == null)
+            return null;
+        if (isStackEqualToBlock(stack, Blocks.wool))
+            return EnumColor.fromOrdinal(15 - stack.getItemDamage());
+        if (stack.getItem() == Items.dye)
+            return EnumColor.fromOrdinal(stack.getItemDamage());
+        NBTTagCompound nbt = stack.getTagCompound();
+        if (nbt != null && nbt.hasKey("color"))
+            return EnumColor.fromOrdinal(nbt.getByte("color"));
+        return null;
+    }
+
+    public static ItemStack setItemColor(ItemStack stack, EnumColor color) {
+        if (color == null) return stack;
+        NBTTagCompound nbt = getItemData(stack);
+        nbt.setByte("color", (byte) color.ordinal());
+        return stack;
     }
 
     public static boolean isSynthetic(ItemStack stack) {

@@ -41,10 +41,10 @@ public class ModuleWorld extends RailcraftModule {
         if (RailcraftConfig.isWorldGenEnabled("workshop")) {
             int id = RailcraftConfig.villagerID();
             VillagerRegistry.instance().registerVillagerId(id);
-            VillagerRegistry.instance().registerVillageTradeHandler(id, new VillagerTradeHandler());
+//            VillagerRegistry.instance().registerVillageTradeHandler(id, new VillagerTradeHandler());
             VillagerRegistry.instance().registerVillageCreationHandler(new WorkshopCreationHandeler());
             try {
-                MapGenStructureIO.func_143031_a(ComponentWorkshop.class, "railcraft:workshop");
+                MapGenStructureIO.registerStructureComponent(ComponentWorkshop.class, "railcraft:workshop");
             } catch (Throwable e) {
             }
         }

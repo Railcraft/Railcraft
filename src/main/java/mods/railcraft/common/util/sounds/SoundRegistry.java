@@ -31,9 +31,13 @@ public class SoundRegistry {
     private final static Map<Block, Map<Integer, SoundType>> customSounds = new HashMap<Block, Map<Integer, SoundType>>();
 
     public static SoundType getSound(IBlockState state) {
-        Map<Integer, SoundType> blockSounds = customSounds.get(state.getBlock());
+        return getSound(state.getBlock(), state.getBlock().getMetaFromState(state));
+    }
+
+    public static SoundType getSound(Block block, int meta) {
+        Map<Integer, SoundType> blockSounds = customSounds.get(block);
         if (blockSounds != null) {
-            return blockSounds.get(state.getBlock().getMetaFromState(state));
+            return blockSounds.get(meta);
         }
         return null;
     }

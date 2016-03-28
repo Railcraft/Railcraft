@@ -524,13 +524,13 @@ public class RailcraftConfig {
             loadBlockFeature(BlockRailcraftSlab.getTag(mat));
         }
 
-        for (EnumLanternStone type : EnumLanternStone.VALUES) {
-            loadBlockFeature(type.getTag());
-        }
-
-        for (EnumLanternMetal type : EnumLanternMetal.VALUES) {
-            loadBlockFeature(type.getTag());
-        }
+//        for (EnumLanternStone type : EnumLanternStone.VALUES) {
+//            loadBlockFeature(type.getTag());
+//        }
+//
+//        for (EnumLanternMetal type : EnumLanternMetal.VALUES) {
+//            loadBlockFeature(type.getTag());
+//        }
 
         for (EnumOre type : EnumOre.values()) {
             if (!type.isDepreciated())

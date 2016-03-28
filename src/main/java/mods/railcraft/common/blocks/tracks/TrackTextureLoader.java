@@ -8,46 +8,42 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.core.ITextureLoader;
-import mods.railcraft.api.tracks.ITrackItemIconProvider;
-import mods.railcraft.api.tracks.TrackSpec;
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
-import net.minecraft.init.Blocks;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+
+import mods.railcraft.api.tracks.ITrackItemIconProvider;
+import mods.railcraft.api.tracks.TrackSpec;
+import mods.railcraft.client.util.textures.TextureAtlasSheet;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackTextureLoader implements ITextureLoader, ITrackItemIconProvider {
+public class TrackTextureLoader implements ITrackItemIconProvider {
 
     public static final TrackTextureLoader INSTANCE = new TrackTextureLoader();
-    public final Map<TrackSpec, IIcon[]> textures = new HashMap<TrackSpec, IIcon[]>();
-    public final Map<TrackSpec, IIcon> itemIcon = new HashMap<TrackSpec, IIcon>();
+    public final Map<TrackSpec, TextureAtlasSprite[]> sprites = new HashMap<TrackSpec, TextureAtlasSprite[]>();
+    public final Map<TrackSpec, TextureAtlasSprite> itemSprite = new HashMap<TrackSpec, TextureAtlasSprite>();
 
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
+    public void registerSprites(TextureMap textureMap) {
         for (EnumTrack track : EnumTrack.VALUES) {
             if (track.getNumIcons() == 0)
                 continue;
-            IIcon[] icons = TextureAtlasSheet.unstitchIcons(iconRegister, track.getTextureTag(), track.getNumIcons());
-            textures.put(track.getTrackSpec(), icons);
-            itemIcon.put(track.getTrackSpec(), icons[track.getItemIconIndex()]);
+            TextureAtlasSprite[] unstiched = TextureAtlasSheet.unstitchIcons(textureMap, track.getTextureTag(), track.getNumIcons());
+            sprites.put(track.getTrackSpec(), unstiched);
+            itemSprite.put(track.getTrackSpec(), unstiched[track.getItemIconIndex()]);
         }
     }
 
     @Override
-    public IIcon getTrackItemIcon(TrackSpec spec) {
-        IIcon icon = itemIcon.get(spec);
-        if (icon == null)
-            icon = Blocks.rail.getIcon(0, 0);
-        return icon;
+    public TextureAtlasSprite getTrackItemSprite(TrackSpec spec) {
+        return itemSprite.get(spec);
     }
 
-    public IIcon[] getTrackIcons(TrackSpec spec) {
-        return textures.get(spec);
+    public TextureAtlasSprite[] getTrackIcons(TrackSpec spec) {
+        return sprites.get(spec);
     }
 
 }
