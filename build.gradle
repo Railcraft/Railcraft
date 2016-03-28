@@ -52,7 +52,8 @@ sourceSets {
 	main {
 		java {
 			srcDir project.apiRailcraft
-			srcDir project.apiForestry
+            // Disable forestry until we have a stable 1.8.9 API
+			// srcDir project.apiForestry
 			srcDir project.apiRedstoneFlux + "/src/main/java"
 			srcDir project.apiThaumcraft
 		}
