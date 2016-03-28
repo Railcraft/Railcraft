@@ -11,30 +11,32 @@ package mods.railcraft.common.blocks.tracks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
+import mods.railcraft.common.plugins.forge.BlockPlugin;
 
 public class BlockFenceReplacement extends BlockFence {
 
-    public BlockFenceReplacement(int i) {
+    public BlockFenceReplacement() {
         this(Material.wood);
     }
 
     public BlockFenceReplacement(Material material) {
-        super("planks_oak", material);
+        super(material);
         setHardness(2.0F);
         setResistance(5F);
         setStepSound(soundTypeWood);
         setUnlocalizedName("fence");
     }
-
+    
     @Override
-    public boolean canConnectFenceTo(IBlockAccess world, int i, int j, int k) {
-        Block block = world.getBlock(i, j, k);
-        if (block == this || block == Blocks.fence_gate)
+    public boolean canConnectTo(IBlockAccess world, BlockPos pos) {
+        Block block = world.getBlockState(pos).getBlock();
+        if (block == this || BlockPlugin.isGate(block))
             return true;
-        TileEntity tile = world.getTileEntity(i, j, k);
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileTrack)
             if (((TileTrack) tile).getTrackInstance() instanceof TrackGated)
                 return true;
@@ -42,5 +44,4 @@ public class BlockFenceReplacement extends BlockFence {
             return block.getMaterial() != Material.gourd;
         return false;
     }
-
 }

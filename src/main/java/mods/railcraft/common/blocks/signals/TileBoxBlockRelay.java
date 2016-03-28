@@ -38,11 +38,11 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     }
 
     @Override
-    public boolean blockActivated(int side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
         if (player.isSneaking())
             return false;
         if (Game.isHost(worldObj))
-            GuiHandler.openGui(EnumGui.BOX_RELAY, player, worldObj, xCoord, yCoord, zCoord);
+            GuiHandler.openGui(EnumGui.BOX_RELAY, player, worldObj, getPos().getX(), getPos().getY(), getPos().getZ());
         return true;
     }
 

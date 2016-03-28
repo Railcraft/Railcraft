@@ -8,10 +8,8 @@
  */
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.bore.IBoreHead;
-import mods.railcraft.client.render.models.bore.ModelTunnelBore;
-import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.core.RailcraftConstants;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -19,13 +17,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
-public class RenderTunnelBore extends Render {
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+
+import mods.railcraft.api.carts.bore.IBoreHead;
+import mods.railcraft.client.render.models.bore.ModelTunnelBore;
+import mods.railcraft.common.carts.EntityTunnelBore;
+import mods.railcraft.common.core.RailcraftConstants;
+
+public class RenderTunnelBore extends Render<EntityTunnelBore> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.CART_TEXTURE_FOLDER + "tunnel_bore.png");
 
-    public RenderTunnelBore() {
+    public RenderTunnelBore(RenderManager manager) {
+        super(manager);
         shadowSize = 0.5F;
         modelTunnelBore = new ModelTunnelBore();
     }
@@ -40,7 +45,7 @@ public class RenderTunnelBore extends Render {
         float tz = (((float) (var10 >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
         GL11.glTranslatef(tx, ty, tz);
 
-        if (RenderManager.debugBoundingBox) {
+        if (renderManager.isDebugBoundingBox()) {
             GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 //            GL11.glDepthMask(false);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -49,13 +54,14 @@ public class RenderTunnelBore extends Render {
             GL11.glDisable(GL11.GL_BLEND);
             for (Entity part : bore.getParts()) {
                 GL11.glPushMatrix();
-                double posX = part.lastTickPosX + (part.posX - part.lastTickPosX) * (double) time - RenderManager.renderPosX;
-                double posY = part.lastTickPosY + (part.posY - part.lastTickPosY) * (double) time - RenderManager.renderPosY;
-                double posZ = part.lastTickPosZ + (part.posZ - part.lastTickPosZ) * (double) time - RenderManager.renderPosZ;
+                // FIXME: 1.8.9 port renderPos* is no longer visible
+                double posX = part.lastTickPosX + (part.posX - part.lastTickPosX) /* * (double) time - renderManager.renderPosX*/;
+                double posY = part.lastTickPosY + (part.posY - part.lastTickPosY) /* * (double) time - renderManager.renderPosY*/;
+                double posZ = part.lastTickPosZ + (part.posZ - part.lastTickPosZ) /* * (double) time - renderManager.renderPosZ*/;
                 GL11.glTranslatef((float) posX, (float) posY, (float) posZ);
                 float halfWidth = part.width / 2.0F;
                 AxisAlignedBB axisalignedbb = AxisAlignedBB.fromBounds(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth);
-                RenderGlobal.drawOutlinedBoundingBox(axisalignedbb, 16777215);
+                RenderGlobal.drawOutlinedBoundingBox(axisalignedbb, 255, 255, 255, 255);
                 GL11.glPopMatrix();
             }
 //            GL11.glDepthMask(true);
@@ -118,14 +124,23 @@ public class RenderTunnelBore extends Render {
     }
 
     @Override
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        render((EntityTunnelBore) entity, d, d1, d2, f, f1);
+    public void doRender(EntityTunnelBore entity, double d, double d1, double d2, float f, float f1) {
+        render(entity, d, d1, d2, f, f1);
     }
 
     protected ModelTunnelBore modelTunnelBore;
 
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(EntityTunnelBore entity) {
         return TEXTURE;
+    }
+    
+    public enum Factory implements IRenderFactory<EntityTunnelBore> {
+        INSTANCE;
+
+        @Override
+        public RenderTunnelBore createRenderFor(RenderManager manager) {
+            return new RenderTunnelBore(manager);
+        }
     }
 }

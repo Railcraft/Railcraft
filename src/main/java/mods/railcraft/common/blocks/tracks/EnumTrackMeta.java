@@ -8,6 +8,11 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+
+/**
+ * @deprecated Use Minecraft's {@link EnumRailDirection} instead!
+ */
 public enum EnumTrackMeta {
 
     /**

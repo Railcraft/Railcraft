@@ -158,8 +158,8 @@ public class ClientProxy extends CommonProxy {
         registerBlockRenderer(new RenderStair());
         registerBlockRenderer(new RenderSlab());
 
-        RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, new RenderTunnelBore());
-        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, new RenderCart());
+        RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, RenderTunnelBore.Factory.INSTANCE);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, RenderCart.Factory.INSTANCE);
 
 //        stack = EnumCart.TANK.getCartItem();
 //        if (stack != null)

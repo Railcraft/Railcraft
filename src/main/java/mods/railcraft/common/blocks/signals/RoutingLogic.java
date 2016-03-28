@@ -415,7 +415,7 @@ public class RoutingLogic {
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
             if (cart instanceof IPaintedCart) {
                 IPaintedCart pCart = (IPaintedCart) cart;
-                return (primary == null || primary.ordinal() == pCart.getPrimaryColor()) && (secondary == null || secondary.ordinal() == pCart.getSecondaryColor());
+                return (primary == null || primary.getDye() == pCart.getPrimaryColor()) && (secondary == null || secondary.getDye() == pCart.getSecondaryColor());
             }
             return false;
         }

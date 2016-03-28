@@ -10,6 +10,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.DataTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -40,7 +41,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public boolean blockActivated(int side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing face, EntityPlayer player) {
         if (player.isSneaking())
             return false;
         GuiHandler.openGui(EnumGui.BOX_ANALOG_CONTROLLER, player, worldObj, getPos());
@@ -68,8 +69,8 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block neighbour) {
+        super.onNeighborBlockChange(state, neighbour);
         if (Game.isNotHost(getWorld()))
             return;
         int s = getPowerLevel();
@@ -86,9 +87,9 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
                 continue;
             if (tileCache.getTileOnSide(side) instanceof TileBoxBase)
                 continue;
-            if ((tmp = PowerPlugin.getBlockPowerLevel(worldObj, xCoord, yCoord, zCoord, side)) > p)
+            if ((tmp = PowerPlugin.getBlockPowerLevel(worldObj, getPos(), side)) > p)
                 p = tmp;
-            if ((tmp = PowerPlugin.getBlockPowerLevel(worldObj, xCoord, yCoord - 1, zCoord, side)) > p)
+            if ((tmp = PowerPlugin.getBlockPowerLevel(worldObj, getPos().down(), side)) > p)
                 p = tmp;
         }
         return p;

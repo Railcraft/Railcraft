@@ -42,7 +42,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     }
 
     @Override
-    public boolean blockActivated(int side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
         if (player.isSneaking())
             return false;
         if (Game.isHost(worldObj))
@@ -81,8 +81,8 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     }
 
     @Override
-    public int getPowerOutput(int side) {
-        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, getPos(), MiscTools.getOppositeSide(side));
+    public int getPowerOutput(EnumFacing side) {
+        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, getPos(), side.getOpposite());
         if (tile instanceof TileBoxBase)
             return NO_POWER;
         return doesActionOnAspect(receiver.getAspect()) ? FULL_POWER : NO_POWER;

@@ -12,15 +12,16 @@ import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.api.carts.locomotive.IRenderer;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.*;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -103,7 +104,7 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
         GL11.glTranslatef((float) x, (float) y, (float) z);
 
         boolean name = false;
-        if (cart.hasCustomInventoryName()) {
+        if (cart.hasCustomName()) {
             renderHaloText(cart, cart.getName(), 0, 0, 0, 64);
             name = true;
         }
@@ -194,5 +195,14 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
     public void renderHaloText(EntityMinecart entity, String text, double xOffset, double yOffset, double zOffset, int viewDist) {
         renderLivingLabel(entity, text, xOffset, yOffset, zOffset, viewDist);
 //        func_147906_a(entity, text, xOffset, yOffset, zOffset, viewDist);
+    }
+
+    public enum Factory implements IRenderFactory<EntityMinecart> {
+        INSTANCE;
+
+        @Override
+        public RenderCart createRenderFor(RenderManager manager) {
+            return new RenderCart(manager);
+        }
     }
 }

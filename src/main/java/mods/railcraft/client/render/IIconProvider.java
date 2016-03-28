@@ -8,14 +8,12 @@
  */
 package mods.railcraft.client.render;
 
-
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IIconProvider {
-
-    IIcon getIcon();
-
+    TextureAtlasSprite getSprite();
 }

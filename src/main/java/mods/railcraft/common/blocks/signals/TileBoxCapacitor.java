@@ -22,6 +22,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -39,7 +40,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     private short ticksPowered;
     public short ticksToPower = 200;
     private SignalAspect aspect = SignalAspect.OFF;
-    private final MultiButtonController<EnumStateMode> stateModeController = new MultiButtonController(EnumStateMode.IMMEDIATE.ordinal(), EnumStateMode.values());
+    private final MultiButtonController<EnumStateMode> stateModeController = MultiButtonController.create(EnumStateMode.IMMEDIATE.ordinal(), EnumStateMode.values());
 
     public TileBoxCapacitor() {
     }
@@ -82,7 +83,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public boolean blockActivated(int side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
         if (player.isSneaking())
             return false;
         GuiHandler.openGui(EnumGui.BOX_CAPACITOR, player, worldObj, getPos());
@@ -129,8 +130,8 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block neighbour) {
+        super.onNeighborBlockChange(state, neighbour);
         if (worldObj.isRemote)
             return;
         boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos());
@@ -159,8 +160,8 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public int getPowerOutput(int side) {
-        TileEntity tile = tileCache.getTileOnSide(MiscTools.getOppositeSide(side));
+    public int getPowerOutput(EnumFacing side) {
+        TileEntity tile = tileCache.getTileOnSide(side.getOpposite());
         if (tile instanceof TileBoxBase)
             return NO_POWER;
         return ticksPowered > 0 ? FULL_POWER : NO_POWER;
