@@ -67,7 +67,7 @@ public final class ContainerCartWork extends RailcraftContainer {
 
         if (!cart.worldObj.isRemote)
             for (int var2 = 0; var2 < 9; ++var2) {
-                ItemStack var3 = this.craftMatrix.getStackInSlotOnClosing(var2);
+                ItemStack var3 = this.craftMatrix.getStackInSlot(var2);
 
                 if (var3 != null)
                     par1EntityPlayer.dropPlayerItemWithRandomChoice(var3, false);

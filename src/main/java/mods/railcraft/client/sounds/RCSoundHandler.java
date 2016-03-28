@@ -13,13 +13,13 @@ import mods.railcraft.common.util.sounds.IBlockSoundProvider;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -59,19 +59,20 @@ public class RCSoundHandler {
                         newName = sound.getBreakSound();
                     else if (soundName.contains("place"))
                         newName = sound.getPlaceSound();
-                    event.result = new PositionedSoundRecord(new ResourceLocation(newName), event.sound.getVolume(), event.sound.getPitch() * sound.getPitch(), x, y, z);
+                    event.result = new PositionedSoundRecord(new ResourceLocation(newName), event.sound.getVolume(), event.sound.getPitch() * sound.getFrequency(), x, y, z);
                 }
             }
         }
     }
 
     private SoundType getBlockSound(World world, int x, int y, int z) {
-        Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
+        BlockPos pos = new BlockPos(x, y, z);
+        IBlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
         if (block instanceof IBlockSoundProvider)
-            return ((IBlockSoundProvider) block).getSound(world, x, y, z);
+            return ((IBlockSoundProvider) block).getSound(world, pos);
         else {
-            int meta = world.getBlockMetadata(x, y, z);
-            return SoundRegistry.getSound(block, meta);
+            return SoundRegistry.getSound(state);
         }
     }
 

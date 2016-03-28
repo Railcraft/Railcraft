@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.inventory.SlotFurnaceOutput;
 
 public class ContainerSteamOven extends RailcraftContainer {
 
@@ -38,7 +38,7 @@ public class ContainerSteamOven extends RailcraftContainer {
         }
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {
-                addSlot(new SlotFurnace(invPlayer.player, tile, 9 + i * 3 + k, 116 + k * 18, 17 + i * 18));
+                addSlot(new SlotFurnaceOutput(invPlayer.player, tile, 9 + i * 3 + k, 116 + k * 18, 17 + i * 18));
             }
         }
 
@@ -76,8 +76,8 @@ public class ContainerSteamOven extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
         TankManager tMan = tile.getTankManager();
         if (tMan != null) {
             tMan.initGuiData(this, icrafting, 0);

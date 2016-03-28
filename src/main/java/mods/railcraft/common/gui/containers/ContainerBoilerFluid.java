@@ -53,8 +53,8 @@ public class ContainerBoilerFluid extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
         TankManager tMan = tile.getTankManager();
         if (tMan != null) {
             tMan.initGuiData(this, icrafting, 0);

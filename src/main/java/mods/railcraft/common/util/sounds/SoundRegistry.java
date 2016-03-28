@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.aesthetics.wall.EnumWallAlpha;
 import mods.railcraft.common.blocks.aesthetics.wall.EnumWallBeta;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
+import net.minecraft.block.state.IBlockState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,10 +30,10 @@ public class SoundRegistry {
 
     private final static Map<Block, Map<Integer, SoundType>> customSounds = new HashMap<Block, Map<Integer, SoundType>>();
 
-    public static SoundType getSound(Block block, int meta) {
-        Map<Integer, SoundType> blockSounds = customSounds.get(block);
+    public static SoundType getSound(IBlockState state) {
+        Map<Integer, SoundType> blockSounds = customSounds.get(state.getBlock());
         if (blockSounds != null) {
-            return blockSounds.get(meta);
+            return blockSounds.get(state.getBlock().getMetaFromState(state));
         }
         return null;
     }

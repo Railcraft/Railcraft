@@ -27,6 +27,7 @@ import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 
@@ -99,7 +100,7 @@ public class FactoryContainer {
                 case TURBINE:
                     return new ContainerTurbine(inv, (TileSteamTurbine) obj);
                 case ANVIL:
-                    return new ContainerAnvil(inv, world, x, y, z, inv.player);
+                    return new ContainerAnvil(inv, world, new BlockPos(x, y, z), inv.player);
                 case CART_BORE:
                     return new ContainerBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:

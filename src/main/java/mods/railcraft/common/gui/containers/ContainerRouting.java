@@ -75,8 +75,8 @@ public class ContainerRouting extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
 
         icrafting.sendProgressBarUpdate(this, 0, router.getLockController().getCurrentState());
         icrafting.sendProgressBarUpdate(this, 1, router.getRoutingController().getCurrentState());

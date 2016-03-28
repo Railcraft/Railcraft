@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.util.misc.IAnchor;
@@ -28,12 +28,11 @@ public class ContainerAnchor extends RailcraftContainer {
     public ContainerAnchor(InventoryPlayer inventoryplayer, IAnchor a) {
         super(a);
         this.anchor = a;
-        addSlot(new SlotStackFilter(new IStackFilter() {
+        addSlot(new SlotStackFilter(new StackFilter() {
             @Override
-            public boolean matches(ItemStack stack) {
+            public boolean apply(ItemStack stack) {
                 return anchor.getFuelMap().containsKey(stack);
             }
-
         }, anchor, 0, 60, 24));
 
         for (int i = 0; i < 3; i++) {
@@ -49,8 +48,8 @@ public class ContainerAnchor extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
         icrafting.sendProgressBarUpdate(this, 0, getMinutesRemaining(anchor.getAnchorFuel()));
     }
 

@@ -49,8 +49,8 @@ public class ContainerEngineSteam extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting crafter) {
-        super.addCraftingToCrafters(crafter);
+    public void onCraftGuiOpened(ICrafting crafter) {
+        super.onCraftGuiOpened(crafter);
         tile.getTankManager().initGuiData(this, crafter, 0);
 
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) crafter, windowId, 12, tile.energy);

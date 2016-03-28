@@ -66,8 +66,8 @@ public abstract class ContainerLocomotive extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
 
         icrafting.sendProgressBarUpdate(this, 10, loco.getSpeed().ordinal());
         icrafting.sendProgressBarUpdate(this, 11, loco.getMode().ordinal());
