@@ -64,6 +64,7 @@ sourceSets {
 	}
     bc_api {
         java {
+            // For some dumb reason BC doesn't depend on RF properly, so we have to special case it
             srcDir project.apiBuildcraft + "/api"
             exclude "cofh/**"
         }
