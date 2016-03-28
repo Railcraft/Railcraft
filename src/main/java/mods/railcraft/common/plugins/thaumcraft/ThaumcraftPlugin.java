@@ -9,6 +9,19 @@
  ******************************************************************************/
 package mods.railcraft.common.plugins.thaumcraft;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.oredict.OreDictionary;
+
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
@@ -35,23 +48,13 @@ import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.oredict.OreDictionary;
-import thaumcraft.api.ItemApi;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.ThaumcraftMaterials;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchPage;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -74,18 +77,18 @@ public class ThaumcraftPlugin {
             return null;
         try {
             itemCacheFlag.put(tag, Boolean.TRUE);
-            ItemStack stack = ItemApi.getItem(tag, meta);
+            ItemStack stack = ItemsTC.getItem(tag, meta);
             if (stack != null && stack.getItem() != null)
                 itemCache.put(tag, stack.getItem());
             return stack;
         } catch (Throwable error) {
-            Game.logErrorAPI("Thaumcraft", error, ItemApi.class);
+            Game.logErrorAPI("Thaumcraft", error, ItemsTC.class);
         }
         return null;
     }
 
     public static void setupResearch() {
-        ResearchCategories.registerCategory(RESEARCH_CATEGORY, new ResourceLocation("railcraft", "textures/items/tool.crowbar.magic.png"), new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png"));
+        ResearchCategories.registerCategory(RESEARCH_CATEGORY, null, new ResourceLocation("railcraft", "textures/items/tool.crowbar.magic.png"), new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png"));
     }
 
     private static ResearchPage createResearchPage(String key, int pageNum) {
@@ -103,13 +106,16 @@ public class ThaumcraftPlugin {
 
     public static void registerAspects() {
         try {
-            AspectList anchorAspects = new AspectList().add(Aspect.ELDRITCH, 4).add(Aspect.ORDER, 4).add(Aspect.MAGIC, 2).add(Aspect.GREED, 2);
+            AspectList anchorAspects = new AspectList().add(Aspect.ELDRITCH, 4).add(Aspect.ORDER, 4)
+                    // FIXME TC aspect no longer exists
+                    /*.add(Aspect.MAGIC, 2).add(Aspect.GREED, 2)*/
+                    ;
             AspectList steamAspects = new AspectList().add(Aspect.WATER, 3).add(Aspect.MECHANISM, 2).add(Aspect.FIRE, 3);
             AspectList tankAspects = new AspectList().add(Aspect.VOID, 4).add(Aspect.WATER, 4);
 
             addBrickAspects(BrickTheme.ABYSSAL, Aspect.DARKNESS);
             addBrickAspects(BrickTheme.BLEACHEDBONE, Aspect.DEATH);
-            addBrickAspects(BrickTheme.BLOODSTAINED, Aspect.FLESH);
+//            addBrickAspects(BrickTheme.BLOODSTAINED, Aspect.FLESH); FIXME TC aspect no longer exists
             addBrickAspects(BrickTheme.FROSTBOUND, Aspect.COLD);
             addBrickAspects(BrickTheme.INFERNAL, 2, Aspect.FIRE, Aspect.SOUL);
             addBrickAspects(BrickTheme.NETHER, Aspect.FIRE);
@@ -258,12 +264,12 @@ public class ThaumcraftPlugin {
         ThaumcraftApi.registerObjectTag(new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE), aspects);
         ThaumcraftApi.registerObjectTag(brick.get(BrickVariant.COBBLE), aspects.copy().remove(Aspect.EARTH, 2).add(Aspect.ENTROPY, 2));
         ThaumcraftApi.registerObjectTag(brick.get(BrickVariant.BLOCK), aspects.copy().remove(Aspect.EARTH, 2).add(Aspect.ORDER, 2));
-        ThaumcraftApi.registerObjectTag(brick.get(BrickVariant.ETCHED), aspects.copy().remove(Aspect.EARTH, 2).add(Aspect.GREED, 2));
+        ThaumcraftApi.registerObjectTag(brick.get(BrickVariant.ETCHED), aspects.copy().remove(Aspect.EARTH, 2).add(Aspect.DESIRE, 2));
     }
 
     public static ToolMaterial getThaumiumToolMaterial() {
         try {
-            return ThaumcraftApi.toolMatThaumium;
+            return ThaumcraftMaterials.TOOLMAT_THAUMIUM;
         } catch (Throwable error) {
             Game.logErrorAPI("Thaumcraft", error, ThaumcraftApi.class);
         }
@@ -272,7 +278,7 @@ public class ThaumcraftPlugin {
 
     public static ToolMaterial getVoidmetalToolMaterial() {
         try {
-            return ThaumcraftApi.toolMatVoid;
+            return  ThaumcraftMaterials.TOOLMAT_VOID;
         } catch (Throwable error) {
             Game.logErrorAPI("Thaumcraft", error, ThaumcraftApi.class);
         }

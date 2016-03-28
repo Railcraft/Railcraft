@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderBlockFrame extends BlockRenderer {
+public class RenderBlockFrame extends BlockModelBase {
 
     public RenderBlockFrame() {
         super(BlockFrame.getBlock());

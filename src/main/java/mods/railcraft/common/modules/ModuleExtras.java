@@ -13,6 +13,7 @@ import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
+import mods.railcraft.common.plugins.forge.LootPlugin.Type;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -33,7 +34,7 @@ public class ModuleExtras extends RailcraftModule {
                     "WWW",
                     'T', Blocks.tnt,
                     'W', "slabWood");
-            LootPlugin.addLootRailway(cart.getCartItem(), 1, 3, cart.getTag());
+            LootPlugin.addLoot(cart.getCartItem(), 1, 3, Type.RAILWAY, cart.getTag());
         }
 
         // Define Work Cart
@@ -44,7 +45,7 @@ public class ModuleExtras extends RailcraftModule {
                     "M",
                     'B', "craftingTableWood",
                     'M', Items.minecart);
-            LootPlugin.addLootRailway(cart.getCartItem(), 1, 1, cart.getTag());
+            LootPlugin.addLoot(cart.getCartItem(), 1, 1, Type.RAILWAY, cart.getTag());
         }
 
         Block blockTrack = RailcraftBlocks.getBlockTrack();

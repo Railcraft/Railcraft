@@ -18,7 +18,7 @@ import net.minecraft.world.IBlockAccess;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderBoilerTank implements IBlockRenderer {
+public class RenderBoilerTank implements IBlockBaker {
 
     private static final float BORDER = RenderTools.PIXEL;
 

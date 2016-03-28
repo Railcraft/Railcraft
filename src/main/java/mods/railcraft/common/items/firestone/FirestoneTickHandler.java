@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -73,20 +74,19 @@ public class FirestoneTickHandler {
         if (y > player.worldObj.getActualHeight())
             y = player.worldObj.getActualHeight() - 2;
 
-        if (canBurn(player.worldObj, x, y, z))
-            return player.worldObj.setBlock(x, y, z, Blocks.fire);
+        BlockPos pos = new BlockPos(x, y, z);
+        if (canBurn(player.worldObj, pos))
+            return player.worldObj.setBlockState(pos, Blocks.fire.getDefaultState());
         return false;
     }
 
-    private boolean canBurn(World world, int x, int y, int z) {
-        if (world.getBlock(x, y, z) != Blocks.air)
+    private boolean canBurn(World world, BlockPos pos) {
+        if (!world.isAirBlock(pos))
             return false;
         for (EnumFacing side : EnumFacing.VALUES) {
-            int sx = MiscTools.getXOnSide(x, side);
-            int sy = MiscTools.getYOnSide(y, side);
-            int sz = MiscTools.getZOnSide(z, side);
-            if (!world.isAirBlock(sx, sy, sz)) {
-                Block block = WorldPlugin.getBlock(world, sx, sy, sz);
+            BlockPos offset = pos.offset(side);
+            if (!world.isAirBlock(offset)) {
+                Block block = WorldPlugin.getBlock(world, offset);
                 if (block != Blocks.fire)
                     return true;
             }

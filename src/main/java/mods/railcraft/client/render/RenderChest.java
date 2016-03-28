@@ -24,7 +24,7 @@ import org.lwjgl.opengl.GL12;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderChest extends TileEntitySpecialRenderer implements IInvRenderer {
+public class RenderChest extends TileEntitySpecialRenderer implements IItemBaker {
 
     /**
      * The Ender Chest Chest's model.

@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderBlockStrengthGlass extends BlockRenderer {
+public class RenderBlockStrengthGlass extends BlockModelBase {
 
     public RenderBlockStrengthGlass() {
         super(BlockStrengthGlass.getBlock());

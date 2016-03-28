@@ -8,16 +8,11 @@
  */
 package mods.railcraft.client.render;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.world.IBlockAccess;
-
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IBlockRenderer
+public interface ICombinedBaker extends IItemBaker, IBlockBaker
 {
 
-    void renderBlock(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block);
 }

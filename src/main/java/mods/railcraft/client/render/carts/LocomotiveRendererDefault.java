@@ -10,11 +10,16 @@ package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.locomotive.IRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
+import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -29,7 +34,7 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
     private final ModelBase model;
     private final ResourceLocation[] textures;
     private final int[] color = new int[3];
-    protected final IIcon[] itemIcons = new IIcon[3];
+    protected final TextureAtlasSprite[] itemSprites = new TextureAtlasSprite[3];
     private float emblemSize = 0.15F;
     private float emblemOffsetX = 0.47F;
     private float emblemOffsetY = -0.17F;
@@ -64,16 +69,16 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
     }
 
     @Override
-    public IIcon[] getItemIcons() {
-        return itemIcons;
+    public TextureAtlasSprite[] getItemSprites() {
+        return itemSprites;
     }
 
     @Override
-    public void registerItemIcons(IIconRegister iconRegister) {
+    public void registerItemSprites(TextureMap textureMap) {
         String tag = "railcraft:locomotives/" + MiscTools.cleanTag(modelTag);
-        itemIcons[0] = iconRegister.registerIcon(tag + ".primary");
-        itemIcons[1] = iconRegister.registerIcon(tag + ".secondary");
-        itemIcons[2] = iconRegister.registerIcon(tag + ".nocolor");
+        itemSprites[0] = textureMap.registerSprite(new ResourceLocation(tag + ".primary"));
+        itemSprites[1] = textureMap.registerSprite(new ResourceLocation(tag + ".secondary"));
+        itemSprites[2] = textureMap.registerSprite(new ResourceLocation(tag + ".nocolor"));
     }
 
     @Override
@@ -103,22 +108,23 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
 
         if (emblemTexture != null) {
             renderer.bindTex(emblemTexture);
-            Tessellator tess = Tessellator.instance;
+            Tessellator tess = Tessellator.getInstance();
+            WorldRenderer wr = tess.getWorldRenderer();
 
 //            float size = 0.22F;
 //            float offsetX = -0.25F;
 //            float offsetY = -0.25F;
 //            float offsetZ = -0.46F;
-            tess.startDrawingQuads();
-            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, emblemOffsetZ, 0, 0);
-            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY + emblemSize, emblemOffsetZ, 0, 1);
-            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + emblemSize, emblemOffsetZ, 1, 1);
-            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + -emblemSize, emblemOffsetZ, 1, 0);
+            wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+            wr.pos(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, emblemOffsetZ).tex( 0, 0).endVertex();
+            wr.pos(emblemOffsetX - emblemSize, emblemOffsetY + emblemSize, emblemOffsetZ).tex( 0, 1).endVertex();
+            wr.pos(emblemOffsetX + emblemSize, emblemOffsetY + emblemSize, emblemOffsetZ).tex( 1, 1).endVertex();
+            wr.pos(emblemOffsetX + emblemSize, emblemOffsetY + -emblemSize, emblemOffsetZ).tex( 1, 0).endVertex();
 
-            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + -emblemSize, -emblemOffsetZ, 0, 0);
-            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + emblemSize, -emblemOffsetZ, 0, 1);
-            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY + emblemSize, -emblemOffsetZ, 1, 1);
-            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, -emblemOffsetZ, 1, 0);
+            wr.pos(emblemOffsetX + emblemSize, emblemOffsetY + -emblemSize, -emblemOffsetZ).tex( 0, 0).endVertex();
+            wr.pos(emblemOffsetX + emblemSize, emblemOffsetY + emblemSize, -emblemOffsetZ).tex( 0, 1).endVertex();
+            wr.pos(emblemOffsetX - emblemSize, emblemOffsetY + emblemSize, -emblemOffsetZ).tex( 1, 1).endVertex();
+            wr.pos(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, -emblemOffsetZ).tex(1, 0).endVertex();
             tess.draw();
         }
         GL11.glPopMatrix();

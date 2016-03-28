@@ -19,6 +19,8 @@ import java.util.Queue;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+// No longer useful as Vec3 is Immutable
+@Deprecated
 public class CircularVec3Queue extends ForwardingQueue<Vec3> {
 
     private final Vec3[] pool;
@@ -47,16 +49,16 @@ public class CircularVec3Queue extends ForwardingQueue<Vec3> {
     }
 
     private Vec3 getNextVec3(double x, double y, double z) {
-        if (poolIndex >= pool.length)
-            poolIndex = 0;
-        if (pool[poolIndex] == null)
-            return pool[poolIndex++] = new Vec3(x, y, z);
-        else {
-            pool[poolIndex].xCoord = x;
-            pool[poolIndex].yCoord = y;
-            pool[poolIndex].zCoord = z;
-            return pool[poolIndex++];
-        }
+//        if (poolIndex >= pool.length)
+//            poolIndex = 0;
+//        if (pool[poolIndex] == null)
+            return/* pool[poolIndex++] = */new Vec3(x, y, z);
+//        else {
+//            pool[poolIndex].xCoord = x;
+//            pool[poolIndex].yCoord = y;
+//            pool[poolIndex].zCoord = z;
+//            return pool[poolIndex++];
+//        }
     }
 
     public Iterator<Vec3> descendingIterator() {

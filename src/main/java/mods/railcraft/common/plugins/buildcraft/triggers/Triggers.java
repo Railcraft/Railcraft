@@ -6,10 +6,18 @@ package mods.railcraft.common.plugins.buildcraft.triggers;
 
 import buildcraft.api.statements.*;
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.machine.beta.TileEngine.EnergyStage;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.EnumSet;
 
@@ -40,7 +48,8 @@ public enum Triggers implements ITriggerExternal {
     public static final Triggers[] VALUES = values();
     private final Trigger trigger;
     private final String tag;
-    private IIcon icon;
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite sprite;
 
     Triggers(String tag, Trigger trigger) {
         this.tag = tag;
@@ -60,8 +69,9 @@ public enum Triggers implements ITriggerExternal {
     }
 
     @Override
-    public IIcon getIcon() {
-        return icon;
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getGuiSprite() {
+        return sprite;
     }
 
     @Override
@@ -74,9 +84,8 @@ public enum Triggers implements ITriggerExternal {
         return trigger.isTriggerActive(side, tile, parameter);
     }
 
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        icon = iconRegister.registerIcon("railcraft:buildcraft.gate.trigger." + tag);
+    public void registerIcons(TextureMap textureMap) {
+        sprite = textureMap.registerSprite(new ResourceLocation("railcraft:buildcraft.gate.trigger." + tag));
     }
 
     @Override
@@ -98,5 +107,4 @@ public enum Triggers implements ITriggerExternal {
     public IStatement rotateLeft() {
         return this;
     }
-
 }

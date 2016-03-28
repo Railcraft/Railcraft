@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderBlockSignal extends BlockRenderer {
+public class RenderBlockSignal extends BlockModelBase {
 
     public RenderBlockSignal() {
         super(RailcraftBlocks.getBlockSignal());
@@ -39,7 +39,7 @@ public class RenderBlockSignal extends BlockRenderer {
         addCombinedRenderer(EnumSignal.BOX_ANALOG_CONTROLLER, new RenderSignalBox(EnumSignal.BOX_ANALOG_CONTROLLER));
     }
 
-    public void addCombinedRenderer(EnumSignal type, ICombinedRenderer renderer) {
+    public void addCombinedRenderer(EnumSignal type, ICombinedBaker renderer) {
         addCombinedRenderer(type.ordinal(), renderer);
         if(renderer instanceof TileEntitySpecialRenderer){
             ClientRegistry.bindTileEntitySpecialRenderer(type.getTileClass(), (TileEntitySpecialRenderer) renderer);

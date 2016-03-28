@@ -4,13 +4,21 @@
  */
 package mods.railcraft.common.plugins.buildcraft.actions;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import buildcraft.api.statements.IActionExternal;
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.StatementManager;
+
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 
 
 /**
@@ -23,7 +31,8 @@ public enum Actions implements IActionExternal {
     SEND_CART("sendcart");
     public static final Actions[] VALUES = values();
     private final String tag;
-    private IIcon icon;
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite sprite;
 
     Actions(String tag) {
         this.tag = tag;
@@ -42,18 +51,18 @@ public enum Actions implements IActionExternal {
     }
 
     @Override
-    public final IIcon getIcon() {
-        return icon;
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getGuiSprite() {
+        return sprite;
     }
-
+    
     @Override
     public String getDescription() {
         return LocalizationPlugin.translate("gates.action." + tag);
     }
 
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        icon = iconRegister.registerIcon("railcraft:buildcraft.gate.action." + tag);
+    public void registerSprites(TextureMap textureMap) {
+        sprite = textureMap.registerSprite(new ResourceLocation("railcraft:buildcraft.gate.action." + tag));
     }
 
     @Override
@@ -81,5 +90,4 @@ public enum Actions implements IActionExternal {
     public IStatementParameter createParameter(int i) {
         return null;
     }
-
 }

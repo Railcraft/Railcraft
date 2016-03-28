@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderStair extends BlockRenderer {
+public class RenderStair extends BlockModelBase {
 
     public RenderStair() {
         super(BlockRailcraftStairs.getBlock());

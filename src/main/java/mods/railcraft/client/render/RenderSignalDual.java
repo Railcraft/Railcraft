@@ -26,7 +26,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSignalDual extends RenderTESRSignals implements ICombinedRenderer {
+public class RenderSignalDual extends RenderTESRSignals implements ICombinedBaker {
 
     private RenderInfo info = new RenderInfo();
 

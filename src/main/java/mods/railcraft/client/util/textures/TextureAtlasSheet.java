@@ -26,6 +26,8 @@ import java.io.IOException;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+// I don't think this will be useful
+@Deprecated
 public class TextureAtlasSheet extends TextureAtlasSprite {
 
     private final int index;

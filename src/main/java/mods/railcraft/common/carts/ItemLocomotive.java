@@ -35,7 +35,7 @@ import java.util.List;
 public class ItemLocomotive extends ItemCart {
 
     private final LocomotiveRenderType renderType;
-    private IIcon blankIcon;
+//    private IIcon blankIcon;
 
     public ItemLocomotive(ICartType cart, LocomotiveRenderType renderType) {
         super(cart);
@@ -51,21 +51,21 @@ public class ItemLocomotive extends ItemCart {
         }
     }
 
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        renderType.registerIcons(iconRegister);
-        blankIcon = iconRegister.registerIcon("railcraft:locomotives/blank");
-    }
-
-    @Override
-    public boolean requiresMultipleRenderPasses() {
-        return true;
-    }
-
-    @Override
-    public int getRenderPasses(int metadata) {
-        return 3;
-    }
+//    @Override
+//    public void registerIcons(IIconRegister iconRegister) {
+//        renderType.registerIcons(iconRegister);
+//        blankIcon = iconRegister.registerIcon("railcraft:locomotives/blank");
+//    }
+//
+//    @Override
+//    public boolean requiresMultipleRenderPasses() {
+//        return true;
+//    }
+//
+//    @Override
+//    public int getRenderPasses(int metadata) {
+//        return 3;
+//    }
 
     @Override
     public int getColorFromItemStack(ItemStack stack, int pass) {
@@ -79,18 +79,18 @@ public class ItemLocomotive extends ItemCart {
         }
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(ItemStack stack, int pass) {
-        String rendererTag = getModel(stack);
-        LocomotiveModelRenderer renderer = renderType.getRenderer(rendererTag);
-        if (renderer == null)
-            return RenderTools.getMissingIcon();
-        IIcon[] icons = renderer.getItemIcons();
-        if (pass >= icons.length || icons[pass] == null)
-            return blankIcon;
-        return renderer.getItemIcons()[pass];
-    }
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public IIcon getIcon(ItemStack stack, int pass) {
+//        String rendererTag = getModel(stack);
+//        LocomotiveModelRenderer renderer = renderType.getRenderer(rendererTag);
+//        if (renderer == null)
+//            return RenderTools.getMissingIcon();
+//        IIcon[] icons = renderer.getItemSprites();
+//        if (pass >= icons.length || icons[pass] == null)
+//            return blankIcon;
+//        return renderer.getItemSprites()[pass];
+//    }
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {

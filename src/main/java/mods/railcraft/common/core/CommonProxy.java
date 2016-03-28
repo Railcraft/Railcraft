@@ -30,10 +30,6 @@ public class CommonProxy {
         return 15;
     }
 
-    public int getRenderId() {
-        return 0;
-    }
-
     public void preInitClient() {
     }
 

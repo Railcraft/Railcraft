@@ -25,7 +25,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import org.lwjgl.opengl.GL11;
 
-public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements IInvRenderer {
+public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements IItemBaker {
 
     public static final RenderPneumaticEngine renderHobby = new RenderPneumaticEngine(RailcraftConstants.TESR_TEXTURE_FOLDER + "steam_hobby.png");
     public static final RenderPneumaticEngine renderLow = new RenderPneumaticEngine(RailcraftConstants.TESR_TEXTURE_FOLDER + "steam_low.png");

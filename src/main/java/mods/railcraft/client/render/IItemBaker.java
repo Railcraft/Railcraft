@@ -8,11 +8,14 @@
  */
 package mods.railcraft.client.render;
 
+import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.item.ItemStack;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ICombinedRenderer extends IInvRenderer, IBlockRenderer
+public interface IItemBaker
 {
-
+    IBakedModel bakeItem(ItemStack item);
 }

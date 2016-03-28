@@ -24,7 +24,7 @@ public class EmblemToolsServer {
         if (stack.hasTagCompound()) {
             NBTTagCompound nbt = stack.getTagCompound();
             NBTTagString emblemIdent = (NBTTagString) nbt.getTag("emblem");
-            return emblemIdent != null ? emblemIdent.func_150285_a_() : "";
+            return emblemIdent != null ? emblemIdent.getString() : "";
         }
         return "";
     }

@@ -50,9 +50,9 @@ import java.io.File;
 @Mod(modid = Railcraft.MOD_ID, name = "Railcraft",
         version = Railcraft.VERSION,
         certificateFingerprint = "a0c255ac501b2749537d5824bb0f0588bf0320fa",
-        acceptedMinecraftVersions = "[1.7.10,1.8)",
-        dependencies = "required-after:Forge@[10.13.0.1199,);"
-                + "after:BuildCraft|Core[6.1.7,);"
+        acceptedMinecraftVersions = "[1.8.9]",
+        dependencies = "required-after:Forge@[11.15.0.1718,);"
+                + "after:BuildCraft|Core[7.2,);"
                 + "after:BuildCraft|Energy;"
                 + "after:BuildCraft|Builders;"
                 + "after:BuildCraft|Factory;"
@@ -63,13 +63,13 @@ import java.io.File;
                 + "after:IC2@[2.2,)")
 public final class Railcraft {
     public static final String MOD_ID = "Railcraft";
-    public static final String MC_VERSION = "[1.7.10,1.8)";
+    public static final String MC_VERSION = "[1.8.9]";
     public static final RootCommand rootCommand = new RootCommand();
     static final String VERSION = "@VERSION@";
-    @Instance("Railcraft")
+    @Instance/*("Railcraft")*/
     public static Railcraft instance;
-    //    public int totalMultiBlockUpdates = 0;
-//    public int ticksSinceLastMultiBlockPrint = 0;
+//        public int totalMultiBlockUpdates = 0;
+    public int ticksSinceLastMultiBlockPrint = 0;
     @SidedProxy(clientSide = "mods.railcraft.client.core.ClientProxy", serverSide = "mods.railcraft.common.core.CommonProxy")
     public static CommonProxy proxy;
     private File configFolder;

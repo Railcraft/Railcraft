@@ -69,22 +69,17 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public int getRenderId() {
-        return RenderingRegistry.getNextAvailableRenderId();
-    }
-
-    @Override
     public void preInitClient() {
         MinecraftForge.EVENT_BUS.register(RCSoundHandler.INSTANCE);
     }
 
     @Override
     public void initClient() {
-        FMLCommonHandler.instance().bus().register(new LatestVersionMessage());
+        MinecraftForge.EVENT_BUS.register(new LatestVersionMessage());
 
         SoundRegistry.setupBlockSounds();
 
-        FMLCommonHandler.instance().bus().register(LocomotiveKeyHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(LocomotiveKeyHandler.INSTANCE);
 
         if (!RailcraftItem.goggles.isEnabled())
             MinecraftForge.EVENT_BUS.register(AuraKeyHandler.INSTANCE);
@@ -97,17 +92,17 @@ public class ClientProxy extends CommonProxy {
         LocomotiveRenderType.STEAM_MAGIC.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));
         LocomotiveRenderType.ELECTRIC.registerRenderer(new LocomotiveRendererElectric());
 
-        ItemStack stack = LocomotiveRenderType.STEAM_SOLID.getItemWithRenderer("railcraft:default");
-        if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.STEAM_SOLID, (EntityLocomotive) EnumCart.LOCO_STEAM_SOLID.makeCart(stack, null, 0, 0, 0)));
-
-        stack = LocomotiveRenderType.STEAM_MAGIC.getItemWithRenderer("railcraft:default");
-        if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.STEAM_MAGIC, (EntityLocomotive) EnumCart.LOCO_STEAM_MAGIC.makeCart(stack, null, 0, 0, 0)));
-
-        stack = LocomotiveRenderType.ELECTRIC.getItemWithRenderer("railcraft:default");
-        if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.ELECTRIC, (EntityLocomotive) EnumCart.LOCO_ELECTRIC.makeCart(stack, null, 0, 0, 0)));
+//        ItemStack stack = LocomotiveRenderType.STEAM_SOLID.getItemWithRenderer("railcraft:default");
+//        if (stack != null)
+//            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.STEAM_SOLID, (EntityLocomotive) EnumCart.LOCO_STEAM_SOLID.makeCart(stack, null, 0, 0, 0)));
+//
+//        stack = LocomotiveRenderType.STEAM_MAGIC.getItemWithRenderer("railcraft:default");
+//        if (stack != null)
+//            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.STEAM_MAGIC, (EntityLocomotive) EnumCart.LOCO_STEAM_MAGIC.makeCart(stack, null, 0, 0, 0)));
+//
+//        stack = LocomotiveRenderType.ELECTRIC.getItemWithRenderer("railcraft:default");
+//        if (stack != null)
+//            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.ELECTRIC, (EntityLocomotive) EnumCart.LOCO_ELECTRIC.makeCart(stack, null, 0, 0, 0)));
 
         RenderFluidLoader fluidLoaderRenderer = new RenderFluidLoader();
         ClientRegistry.bindTileEntitySpecialRenderer(TileFluidLoader.class, fluidLoaderRenderer);
@@ -141,11 +136,11 @@ public class ClientProxy extends CommonProxy {
         RenderTESRSignals controllerRenderer = new RenderTESRSignals();
         ClientRegistry.bindTileEntitySpecialRenderer(TileSignalFoundation.class, controllerRenderer);
 
-        if (RailcraftBlocks.getBlockTrack() != null)
-            RenderingRegistry.registerBlockHandler(new RenderTrack());
-
-        if (RailcraftBlocks.getBlockElevator() != null)
-            RenderingRegistry.registerBlockHandler(new RenderElevator());
+//        if (RailcraftBlocks.getBlockTrack() != null)
+//            RenderingRegistry.registerBlockHandler(new RenderTrack());
+//
+//        if (RailcraftBlocks.getBlockElevator() != null)
+//            RenderingRegistry.registerBlockHandler(new RenderElevator());
 
         registerBlockRenderer(new RenderBlockMachineBeta());
         registerBlockRenderer(new RenderBlockMachineDelta());
@@ -166,13 +161,13 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, new RenderTunnelBore());
         RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, new RenderCart());
 
-        stack = EnumCart.TANK.getCartItem();
-        if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Tank));
+//        stack = EnumCart.TANK.getCartItem();
+//        if (stack != null)
+//            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Tank));
 
-        stack = EnumCart.CARGO.getCartItem();
-        if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Cargo));
+//        stack = EnumCart.CARGO.getCartItem();
+//        if (stack != null)
+//            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Cargo));
 
         if (RailcraftConfig.isWorldGenEnabled("workshop")) {
             int id = RailcraftConfig.villagerID();
@@ -182,10 +177,10 @@ public class ClientProxy extends CommonProxy {
         Game.log(Level.TRACE, "Init Complete: Renderer");
     }
 
-    private void registerBlockRenderer(BlockRenderer renderer) {
-        if (renderer.getBlock() != null) {
-            RenderingRegistry.registerBlockHandler(renderer);
-            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(renderer.getBlock()), renderer.getItemRenderer());
-        }
+    private void registerBlockRenderer(BlockModelBase renderer) {
+//        if (renderer.getBlock() != null) {
+//            RenderingRegistry.registerBlockHandler(renderer);
+//            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(renderer.getBlock()), renderer.getItemRenderer());
+//        }
     }
 }

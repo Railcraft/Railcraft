@@ -8,17 +8,14 @@
  */
 package mods.railcraft.client.render;
 
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.model.IBakedModel;
 
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IInvRenderer
+public interface IBlockBaker
 {
-
-    void renderItem(RenderBlocks renderBlocks, ItemStack item, ItemRenderType renderType);
-
+    IBakedModel bakeBlock(IBlockState state);
 }
