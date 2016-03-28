@@ -27,3 +27,4 @@ classes/
 .project
 *.launch
 
+/bin/

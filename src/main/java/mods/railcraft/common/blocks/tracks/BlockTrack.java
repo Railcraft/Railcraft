@@ -6,6 +6,8 @@ package mods.railcraft.common.blocks.tracks;
 
 import java.util.*;
 
+import javax.annotation.Nullable;
+
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.block.Block;
@@ -272,13 +274,12 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
         if (tile instanceof TileTrack) ((TileTrack) tile).getTrackInstance().onMinecartPass(cart);
     }
 
-    // FIXME 1.8.9 port removes this
-//    @Override
-//    public int getBasicRailMetadata(IBlockAccess world, EntityMinecart cart, int x, int y, int z) {
-//        TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
-//        if (tile instanceof TileTrack) return ((TileTrack) tile).getTrackInstance().getBasicRailMetadata(cart);
-//        return world.getBlockMetadata(x, y, z);
-//    }
+    @Override
+    public EnumRailDirection getRailDirection(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+        if (tile instanceof TileTrack) return ((TileTrack) tile).getTrackInstance().getRailDirection(cart);
+        return state.getValue(TRACK_DIRECTION);
+    }
 
     @Override
     public float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
