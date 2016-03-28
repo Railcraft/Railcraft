@@ -8,18 +8,20 @@
  */
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.api.tracks.RailTools;
-import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
-import mods.railcraft.common.util.misc.Game;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
+import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.tracks.RailTools;
+import mods.railcraft.common.util.misc.Game;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -94,14 +96,14 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
         return dataWatcher.getWatchableObjectByte(DATA_ID_BLINK) > 0;
     }
 
-    protected boolean placeNewTrack(BlockPos pos, int slotStock, EnumTrackMeta meta) {
+    protected boolean placeNewTrack(BlockPos pos, int slotStock, EnumRailDirection dir) {
         ItemStack trackStock = getStackInSlot(slotStock);
         if (trackStock != null)
-            if (RailTools.placeRailAt(trackStock, worldObj, x, y, z)) {
-                worldObj.setBlockMetadataWithNotify(x, y, z, meta, 0x02);
-                Block block = worldObj.getBlock(x, y, z);
-                block.onNeighborBlockChange(worldObj, x, y, z, block);
-                worldObj.markBlockForUpdate(x, y, z);
+            if (RailTools.placeRailAt(trackStock, worldObj, pos, dir)) {
+                IBlockState state = worldObj.getBlockState(pos);
+                Block block = state.getBlock();
+                block.onNeighborBlockChange(worldObj, pos, state, block);
+                worldObj.markBlockForUpdate(pos);
                 decrStackSize(slotStock, 1);
                 blink();
                 return true;
@@ -109,17 +111,16 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
         return false;
     }
 
-    protected int removeOldTrack(int x, int y, int z, Block block) {
-        List<ItemStack> drops = block.getDrops(worldObj, x, y, z, 0, 0);
+    protected EnumRailDirection removeOldTrack(BlockPos pos, Block block) {
+        IBlockState old = worldObj.getBlockState(pos);
+        List<ItemStack> drops = block.getDrops(worldObj, pos, old, 0);
 
         for (ItemStack stack : drops) {
             CartTools.offerOrDropItem(this, stack);
         }
-        int meta = worldObj.getBlockMetadata(x, y, z);
-        if (((BlockRailBase) block).isPowered())
-            meta = meta & 7;
-        worldObj.setBlockToAir(x, y, z);
-        return meta;
+        worldObj.setBlockToAir(pos);
+        BlockRailBase rail = (BlockRailBase) old.getBlock();
+        return old.getValue(rail.getShapeProperty());
     }
 
 }

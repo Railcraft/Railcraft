@@ -16,12 +16,14 @@ import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 import java.io.DataInputStream;
@@ -58,10 +60,10 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
         dataWatcher.addObject(BLAST_DATA_ID, Byte.valueOf((byte) 8));
         dataWatcher.addObject(PRIMED_DATA_ID, Byte.valueOf((byte) 0));
     }
-
+    
     @Override
-    public Block func_145820_n() {
-        return Blocks.tnt;
+    public IBlockState getDisplayTile() {
+        return Blocks.tnt.getDefaultState();
     }
 
     @Override
@@ -81,7 +83,7 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
             if (getFuse() <= 0) {
                 explode();
             } else {
-                worldObj.spawnParticle("smoke", posX, posY + 0.8D, posZ, 0.0D, 0.0D, 0.0D);
+                worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY + 0.8D, posZ, 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -126,14 +128,14 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
     public void onActivatorRailPass(int x, int y, int z, boolean powered) {
         setPrimed(powered);
     }
-
+    
     @Override
-    protected void fall(float distance) {
+    public void fall(float distance, float damageMultiplier) {
         if (distance >= 3.0F) {
             explode(getBlastRadiusWithFallModifier(distance));
         }
 
-        super.fall(distance);
+        super.fall(distance, damageMultiplier);
     }
 
     @Override
