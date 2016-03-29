@@ -56,31 +56,31 @@ public class TrackTools {
         Block block = InvTools.getBlockFromStack(stack);
         if (block == null)
             return false;
-        return BlockRailBase.func_150051_a(block);
+        return block instanceof BlockRailBase;
     }
 
     public static boolean isRailItem(Item item) {
         if (item instanceof ITrackItem)
             return true;
         if (item instanceof ItemBlock)
-            return BlockRailBase.func_150051_a(((ItemBlock) item).field_150939_a);
+            return isRailBlock(((ItemBlock) item).getBlock());
         return false;
     }
 
-    public static int getTrackMeta(IBlockAccess world, EntityMinecart cart, BlockPos pos) {
-        return getTrackMeta(world, world.getBlock(pos), cart, pos);
+    public static int getTrackDirection(IBlockAccess world, EntityMinecart cart, BlockPos pos) {
+        return getTrackDirection(world, world.getBlock(pos), cart, pos);
     }
 
-    public static int getTrackMeta(IBlockAccess world, Block block, EntityMinecart cart, BlockPos pos) {
-        return ((BlockRailBase) block).getBasicRailMetadata(world, cart, pos);
+    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockRailBase block, EntityMinecart cart, BlockPos pos) {
+        return block.get
     }
 
     public static EnumTrackMeta getTrackMetaEnum(IBlockAccess world, EntityMinecart cart, BlockPos pos) {
-        return EnumTrackMeta.fromMeta(getTrackMeta(world, cart, pos));
+        return EnumTrackMeta.fromMeta(getTrackDirection(world, cart, pos));
     }
 
     public static EnumTrackMeta getTrackMetaEnum(IBlockAccess world, Block block, EntityMinecart cart, BlockPos pos) {
-        return EnumTrackMeta.fromMeta(getTrackMeta(world, block, cart, pos));
+        return EnumTrackMeta.fromMeta(getTrackDirection(world, block, cart, pos));
     }
 
     public static ITrackInstance getTrackInstanceAt(IBlockAccess world, BlockPos pos) {
@@ -122,8 +122,12 @@ public class TrackTools {
         return false;
     }
 
-    public static TileTrack placeTrack(TrackSpec track, World world, BlockPos pos, int meta) {
-        WorldPlugin.setBlock(world, pos, RailcraftBlocks.getBlockTrack(), meta);
+    public static IBlockState getTrackState(BlockRailBase block, BlockRailBase.EnumRailDirection direction) {
+        return block.getDefaultState().withProperty(block.getShapeProperty(), direction);
+    }
+
+    public static TileTrack placeTrack(TrackSpec track, World world, BlockPos pos, BlockRailBase.EnumRailDirection direction) {
+        WorldPlugin.setBlockState(world, pos, getTrackState(RailcraftBlocks.getBlockTrack(), direction));
         TileTrack tile = TrackFactory.makeTrackTile(track.createInstanceFromSpec());
         world.setTileEntity(pos, tile);
         return tile;
