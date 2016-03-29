@@ -27,7 +27,7 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderBlockLamp extends BlockRenderer {
+public class RenderBlockLamp extends BlockModelBase {
 
     private static final float PIX = RenderTools.PIXEL;
     private static final int BASE_BORDER = 4;

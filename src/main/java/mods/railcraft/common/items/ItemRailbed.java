@@ -19,18 +19,20 @@ import net.minecraft.item.ItemStack;
 import java.util.List;
 
 public class ItemRailbed extends ItemRailcraft {
+    private static final String TAG = "part.railbed";
 
     public ItemRailbed() {
         setHasSubtypes(true);
         setMaxDamage(0);
-        setUnlocalizedName("railcraft.part.railbed");
+        setUnlocalizedName("railcraft." + TAG);
+        setRegistryName("Railcraft", TAG);
     }
 
     @Override
     public void initItem() {
-        for (EnumRailbed railbed : EnumRailbed.VALUES) {
-            RailcraftRegistry.register(new ItemStack(this, 1, railbed.ordinal()));
-        }
+//        for (EnumRailbed railbed : EnumRailbed.VALUES) {
+//            RailcraftRegistry.register(new ItemStack(this, 1, railbed.ordinal()));
+//        }
     }
 
     @Override

@@ -43,11 +43,9 @@ public class BlockStrengthGlass extends BlockGlass {
     public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
     public static boolean renderingHighlight;
     private static BlockStrengthGlass instance;
-    private final int renderId;
 
-    public BlockStrengthGlass(int renderId) {
+    public BlockStrengthGlass() {
         super(Material.glass, false);
-        this.renderId = renderId;
         setResistance(5);
         setHardness(1);
         setStepSound(Block.soundTypeGlass);
@@ -63,7 +61,7 @@ public class BlockStrengthGlass extends BlockGlass {
     public static void registerBlock() {
         if (instance == null)
             if (RailcraftConfig.isBlockEnabled("glass")) {
-                instance = new BlockStrengthGlass(Railcraft.proxy.getRenderId());
+                instance = new BlockStrengthGlass();
                 RailcraftRegistry.register(instance, ItemStrengthGlass.class);
 
                 ForestryPlugin.addBackpackItem("builder", instance);
@@ -85,11 +83,6 @@ public class BlockStrengthGlass extends BlockGlass {
     public static ItemStack getItem(int qty, int meta) {
         if (instance == null) return null;
         return new ItemStack(instance, qty, meta);
-    }
-
-    @Override
-    public int getRenderType() {
-        return renderId;
     }
 
     @Override

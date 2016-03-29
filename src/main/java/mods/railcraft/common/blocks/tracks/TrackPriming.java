@@ -40,22 +40,22 @@ public class TrackPriming extends TrackReinforced implements ITrackPowered, IGui
         return false;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            return getIcon(1);
-        }
-        return getIcon(0);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (!isPowered()) {
+//            return getIcon(1);
+//        }
+//        return getIcon(0);
+//    }
 
     @Override
     public boolean blockActivated(EntityPlayer player) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
-                GuiHandler.openGui(EnumGui.TRACK_PRIMING, player, getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+            if (crowbar.canWhack(player, current, getPos())) {
+                GuiHandler.openGui(EnumGui.TRACK_PRIMING, player, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+                crowbar.onWhack(player, current, getPos());
                 return true;
             }
         }

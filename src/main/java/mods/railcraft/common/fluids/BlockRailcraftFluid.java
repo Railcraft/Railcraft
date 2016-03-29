@@ -8,13 +8,17 @@
  */
 package mods.railcraft.common.fluids;
 
-import mods.railcraft.client.particles.EntityDropParticleFX;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -22,7 +26,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Random;
+import mods.railcraft.client.particles.EntityDropParticleFX;
 
 /**
  *
@@ -33,11 +37,8 @@ public class BlockRailcraftFluid extends BlockFluidClassic {
     protected float particleRed;
     protected float particleGreen;
     protected float particleBlue;
-    @SideOnly(Side.CLIENT)
-    protected IIcon[] theIcon;
     protected boolean flammable;
     protected int flammability = 0;
-    private boolean hasFlowIcon = true;
 
     public BlockRailcraftFluid(Fluid fluid, Material material) {
         super(fluid, material);
@@ -45,12 +46,11 @@ public class BlockRailcraftFluid extends BlockFluidClassic {
     }
 
     public BlockRailcraftFluid setNoFlow() {
-        hasFlowIcon = false;
         return this;
     }
 
     @Override
-    public boolean canDrain(World world, int x, int y, int z) {
+    public boolean canDrain(World world, BlockPos pos) {
         return true;
     }
 
@@ -60,31 +60,16 @@ public class BlockRailcraftFluid extends BlockFluidClassic {
     }
 
     @Override
-    public float getFilledPercentage(World world, int x, int y, int z) {
+    public float getFilledPercentage(World world, BlockPos pos) {
         return 1;
     }
-
+    
     @Override
-    public IIcon getIcon(int side, int meta) {
-        return side != 0 && side != 1 ? this.theIcon[1] : this.theIcon[0];
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        IIcon still = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_still");
-        IIcon flowing = still;
-        if (hasFlowIcon)
-            flowing = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_flow");
-        this.theIcon = new IIcon[]{still, flowing};
-    }
-
-    @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-        super.onNeighborBlockChange(world, x, y, z, block);
+    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
+        super.onNeighborBlockChange(world, pos, state, block);
         if (flammable && world.provider.getDimensionId() == -1) {
-            world.newExplosion(null, x, y, z, 4F, true, true);
-            world.setBlockToAir(x, y, z);
+            world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 4F, true, true);
+            world.setBlockToAir(pos);
         }
     }
 
@@ -99,22 +84,22 @@ public class BlockRailcraftFluid extends BlockFluidClassic {
     }
 
     @Override
-    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return flammable ? 300 : 0;
     }
 
     @Override
-    public int getFlammability(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return flammability;
     }
 
     @Override
-    public boolean isFlammable(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return flammable;
     }
 
     @Override
-    public boolean isFireSource(World world, int x, int y, int z, EnumFacing side) {
+    public boolean isFireSource(World world,BlockPos pos, EnumFacing side) {
         return flammable && flammability == 0;
     }
 
@@ -127,17 +112,16 @@ public class BlockRailcraftFluid extends BlockFluidClassic {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-        super.randomDisplayTick(world, x, y, z, rand);
+    public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        super.randomDisplayTick(world, pos, state, rand);
 
-        if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) && !world.getBlock(x, y - 2, z).getMaterial().blocksMovement()) {
-            double px = (double) ((float) x + rand.nextFloat());
-            double py = (double) y - 1.05D;
-            double pz = (double) ((float) z + rand.nextFloat());
+        if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, pos.down()) && !world.getBlockState(pos.down(2)).getBlock().getMaterial().blocksMovement()) {
+            double px = pos.getX() + rand.nextFloat();
+            double py = pos.getY() - 1.05D;
+            double pz = pos.getZ() + rand.nextFloat();
 
             EntityFX fx = new EntityDropParticleFX(world, px, py, pz, particleRed, particleGreen, particleBlue);
             FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
         }
     }
-
 }

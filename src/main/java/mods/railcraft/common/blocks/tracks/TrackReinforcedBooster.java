@@ -37,21 +37,17 @@ public class TrackReinforcedBooster extends TrackReinforced implements ITrackPow
         return false;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            return getIcon(1);
-        }
-        return getIcon(0);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (!isPowered()) {
+//            return getIcon(1);
+//        }
+//        return getIcon(0);
+//    }
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
         int meta = tileEntity.getBlockMetadata();
-
-        int i = tileEntity.xCoord;
-        int j = tileEntity.yCoord;
-        int k = tileEntity.zCoord;
 
         int dirMeta = meta & 7;
         double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
@@ -60,15 +56,15 @@ public class TrackReinforcedBooster extends TrackReinforced implements ITrackPow
                 cart.motionX += (cart.motionX / speed) * BOOST_FACTOR;
                 cart.motionZ += (cart.motionZ / speed) * BOOST_FACTOR;
             } else if (dirMeta == 1) {
-                if (getWorld().isSideSolid(i - 1, j, k, EnumFacing.EAST)) {
+                if (getWorld().isSideSolid(getPos().west(), EnumFacing.EAST)) {
                     cart.motionX = START_BOOST;
-                } else if (getWorld().isSideSolid(i + 1, j, k, EnumFacing.WEST)) {
+                } else if (getWorld().isSideSolid(getPos().east(), EnumFacing.WEST)) {
                     cart.motionX = -START_BOOST;
                 }
             } else if (dirMeta == 0) {
-                if (getWorld().isSideSolid(i, j, k - 1, EnumFacing.SOUTH)) {
+                if (getWorld().isSideSolid(getPos().north(), EnumFacing.SOUTH)) {
                     cart.motionZ = START_BOOST;
-                } else if (getWorld().isSideSolid(i, j, k + 1, EnumFacing.NORTH)) {
+                } else if (getWorld().isSideSolid(getPos().south(), EnumFacing.NORTH)) {
                     cart.motionZ = -START_BOOST;
                 }
             }

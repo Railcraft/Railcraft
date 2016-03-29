@@ -108,7 +108,7 @@ public class ForestryPlugin {
         @Override
         @Optional.Method(modid = "Forestry")
         public void registerBackpacks() {
-            try {
+            /*try {
                 if (forestry.api.storage.BackpackManager.backpackInterface == null)
                     return;
 
@@ -243,9 +243,9 @@ public class ForestryPlugin {
                 }
             } catch (Throwable error) {
                 Game.logErrorAPI("Forestry", error, forestry.api.storage.BackpackManager.class);
-            }
+            }*/
         }
-
+/*
         @Optional.Method(modid = "Forestry")
         private Item registerBackpack(BaseBackpack backpack, forestry.api.storage.EnumBackpackType type, String tag) {
             Item item = forestry.api.storage.BackpackManager.backpackInterface.addBackpack(backpack, type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
@@ -281,6 +281,6 @@ public class ForestryPlugin {
             } catch (Throwable error) {
                 Game.logErrorAPI("Forestry", error, forestry.api.recipes.RecipeManagers.class);
             }
-        }
+        }*/
     }
 }

@@ -1,15 +1,19 @@
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.items.ItemRail.EnumRail;
+import mods.railcraft.common.plugins.forge.BlockPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -58,26 +62,26 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
     private void placeTrack(BlockPos pos) {
         pos = pos.offset(travelDirection);
 
-        EnumTrackMeta trackMeta = EnumTrackMeta.NORTH_SOUTH;
+        EnumRailDirection dir = EnumRailDirection.NORTH_SOUTH;
         if (travelDirection == EnumFacing.EAST || travelDirection == EnumFacing.WEST)
-            trackMeta = EnumTrackMeta.EAST_WEST;
-        if (!isValidReplacementBlock(pos) && isValidReplacementBlock(pos.up()) && trackMeta.isStraightTrack())
+            dir = EnumRailDirection.EAST_WEST;
+        if (!isValidReplacementBlock(pos) && isValidReplacementBlock(pos.up()) && (dir.isAscending() || dir == EnumRailDirection.NORTH_SOUTH || dir == EnumRailDirection.EAST_WEST))
             pos = pos.up();
         if (isValidReplacementBlock(pos) && isValidReplacementBlock(pos.down())) {
             pos = pos.down();
             if (travelDirection == EnumFacing.NORTH)
-                trackMeta = EnumTrackMeta.SOUTH_SLOPE;
+                dir = EnumRailDirection.ASCENDING_SOUTH;
             if (travelDirection == EnumFacing.SOUTH)
-                trackMeta = EnumTrackMeta.NORTH_SLOPE;
+                dir = EnumRailDirection.ASCENDING_NORTH;
             if (travelDirection == EnumFacing.WEST)
-                trackMeta = EnumTrackMeta.EAST_SLOPE;
+                dir = EnumRailDirection.ASCENDING_EAST;
             if (travelDirection == EnumFacing.EAST)
-                trackMeta = EnumTrackMeta.WEST_SLOPE;
+                dir = EnumRailDirection.ASCENDING_WEST;
         }
 
         if (isValidNewTrackPosition(pos)) {
             IBlockState targetState = WorldPlugin.getBlockState(worldObj, pos);
-            if (placeNewTrack(pos, SLOT_STOCK, trackMeta)) {
+            if (placeNewTrack(pos, SLOT_STOCK, dir)) {
                 targetState.getBlock().dropBlockAsItem(worldObj, pos, targetState, 0);
             }
         }
@@ -96,9 +100,9 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
                 EntityTunnelBore.replaceableBlocks.contains(block)) ||
                 block.isReplaceable(worldObj, pos);
     }
-
+    
     @Override
-    public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
@@ -113,5 +117,12 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         ItemStack trackReplace = patternInv.getStackInSlot(SLOT_REPLACE);
         return InvTools.isItemEqual(stack, trackReplace);
+    }
+
+    @Override
+    public String getGuiID() {
+        // TODO Auto-generated method stub
+        throw new AbstractMethodError("Implement this!");
+        return null;
     }
 }

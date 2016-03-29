@@ -22,7 +22,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSwitch implements ICombinedRenderer {
+public class RenderSwitch implements ICombinedBaker {
 
     private static final float PIX = RenderTools.PIXEL;
     private static final int LEVER_HEIGHT = 10;

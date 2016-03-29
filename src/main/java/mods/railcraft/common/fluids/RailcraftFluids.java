@@ -14,6 +14,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -79,10 +81,6 @@ public enum RailcraftFluids {
         }
     }
 
-    public static Object getTextureHook() {
-        return new TextureHook();
-    }
-
     private void init() {
         initFluid();
         initBlock();
@@ -99,7 +97,9 @@ public enum RailcraftFluids {
 
     private void initFluid() {
         if (railcraftFluid == null && RailcraftConfig.isFluidEnabled(standardFluid.getTag())) {
-            railcraftFluid = new Fluid(standardFluid.getTag()).setDensity(density).setViscosity(viscosity).setGaseous(density < 0);
+            String textureBase = "railcraft:blocks/fluids/"+(this.standardFluid == Fluids.STEAM ? "steam" : "creosote") + "_";
+            railcraftFluid = new Fluid(standardFluid.getTag(), new ResourceLocation(textureBase + "still"), new ResourceLocation(textureBase + "flow"));
+            railcraftFluid.setDensity(density).setViscosity(viscosity).setGaseous(density < 0);
 //            if (!FluidRegistry.isFluidRegistered(standardFluid.getTag()))
             FluidRegistry.registerFluid(railcraftFluid);
 //            else {
@@ -119,6 +119,7 @@ public enum RailcraftFluids {
         if (railcraftBlock == null && RailcraftConfig.isBlockEnabled(tag)) {
             railcraftBlock = makeBlock();
             railcraftBlock.setUnlocalizedName("railcraft." + tag);
+            railcraftBlock.setRegistryName("Railcraft:"+ tag);
             RailcraftRegistry.register(railcraftBlock);
             railcraftFluid.setBlock(railcraftBlock);
         }
@@ -150,19 +151,4 @@ public enum RailcraftFluids {
             super("Fluid '" + tag + "' was not found. Please check your configs.");
         }
     }
-
-    public static class TextureHook {
-        @SubscribeEvent
-        @SideOnly(Side.CLIENT)
-        public void textureHook(TextureStitchEvent.Post event) {
-            if (event.map.getTextureType() == 0)
-                for (RailcraftFluids fluidType : VALUES) {
-                    if (fluidType.railcraftFluid != null) {
-                        Block block = fluidType.railcraftBlock != null ? fluidType.railcraftBlock : fluidType.standardFluid.get().getBlock();
-                        fluidType.railcraftFluid.setIcons(block.getBlockTextureFromSide(1), block.getBlockTextureFromSide(2));
-                    }
-                }
-        }
-    }
-
 }

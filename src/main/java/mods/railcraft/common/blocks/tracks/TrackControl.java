@@ -29,13 +29,13 @@ public class TrackControl extends TrackBaseRailcraft implements ITrackPowered, I
         return EnumTrack.CONTROL;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (isPowered() ^ reversed) {
-            return getIcon(1);
-        }
-        return getIcon(0);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (isPowered() ^ reversed) {
+//            return getIcon(1);
+//        }
+//        return getIcon(0);
+//    }
 
     @Override
     public int getPowerPropagation() {

@@ -11,8 +11,6 @@ package mods.railcraft.common.core;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternMetal;
-import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternStone;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.wall.EnumWallAlpha;
@@ -501,8 +499,8 @@ public class RailcraftConfig {
                 + "Railcraft will attempt to compensate for any missing component by providing alternatives (usually).");
 
         for (EnumTrack type : EnumTrack.VALUES) {
-//            if (type.isDepreciated())
-//                continue;
+            if (type.isDepreciated())
+                continue;
             loadBlockFeature(type.getTag());
         }
 
@@ -526,13 +524,13 @@ public class RailcraftConfig {
             loadBlockFeature(BlockRailcraftSlab.getTag(mat));
         }
 
-        for (EnumLanternStone type : EnumLanternStone.VALUES) {
-            loadBlockFeature(type.getTag());
-        }
-
-        for (EnumLanternMetal type : EnumLanternMetal.VALUES) {
-            loadBlockFeature(type.getTag());
-        }
+//        for (EnumLanternStone type : EnumLanternStone.VALUES) {
+//            loadBlockFeature(type.getTag());
+//        }
+//
+//        for (EnumLanternMetal type : EnumLanternMetal.VALUES) {
+//            loadBlockFeature(type.getTag());
+//        }
 
         for (EnumOre type : EnumOre.values()) {
             if (!type.isDepreciated())
@@ -566,12 +564,12 @@ public class RailcraftConfig {
     }
 
     private static void loadBlockProperty(String tag) {
+        System.out.println("loadBlockProperty("+tag+")");
         Property prop = configBlock.get(CAT_BLOCKS, tag, true);
         enabledBlocks.put(tag, prop.getBoolean(true));
     }
 
     private static void loadBlockFeature(String tag) {
-        tag = MiscTools.cleanTag(tag);
         Property prop = configBlock.get(CAT_SUBBLOCKS, tag, true);
         enabledSubBlocks.put(tag, prop.getBoolean(true));
     }
@@ -702,7 +700,7 @@ public class RailcraftConfig {
     }
 
     private static void loadItemProperty(String tag) {
-        tag = MiscTools.cleanTag(tag);
+        System.out.println("loadItemProperty("+tag+")");
         Property prop = configItems.get(CAT_ITEMS, tag, true);
         enabledItems.put(tag, prop.getBoolean(true));
     }
@@ -908,7 +906,6 @@ public class RailcraftConfig {
     }
 
     public static boolean isItemEnabled(String tag) {
-        tag = MiscTools.cleanTag(tag);
         Boolean b = enabledItems.get(tag);
         if (b == null)
             throw new IllegalArgumentException("RailcraftConfig: item tag not found: " + tag);
@@ -916,7 +913,6 @@ public class RailcraftConfig {
     }
 
     public static boolean isBlockEnabled(String tag) {
-        tag = MiscTools.cleanTag(tag);
         tag = tag.replaceFirst("^block\\.", "");
         Boolean b = enabledBlocks.get(tag);
         if (b == null)
@@ -925,7 +921,6 @@ public class RailcraftConfig {
     }
 
     public static boolean isSubBlockEnabled(String tag) {
-        tag = MiscTools.cleanTag(tag);
         Boolean b = enabledSubBlocks.get(tag);
         if (b == null)
             throw new IllegalArgumentException("RailcraftConfig: sub-block tag not found: " + tag);
@@ -933,7 +928,6 @@ public class RailcraftConfig {
     }
 
     public static boolean isCartEnabled(String tag) {
-        tag = MiscTools.cleanTag(tag);
         Boolean enabled = carts.get(tag);
         if (enabled == null)
             throw new IllegalArgumentException("RailcraftConfig: cart tag not found: " + tag);
@@ -941,7 +935,6 @@ public class RailcraftConfig {
     }
 
     public static int getLootChance(String tag) {
-        tag = MiscTools.cleanTag(tag);
         Integer chance = lootChances.get(tag);
         if (chance == null)
             throw new RuntimeException("Railcraft Loot Chance Entry does not exist: " + tag);
@@ -949,7 +942,6 @@ public class RailcraftConfig {
     }
 
     public static boolean isWorldGenEnabled(String tag) {
-        tag = MiscTools.cleanTag(tag);
         Boolean gen = worldGen.get(tag);
         if (gen == null)
             throw new RuntimeException("Railcraft World Gen Entry does not exist: " + tag);
@@ -957,7 +949,6 @@ public class RailcraftConfig {
     }
 
     public static boolean isFluidEnabled(String tag) {
-        tag = MiscTools.cleanTag(tag);
         Boolean gen = fluids.get(tag);
         if (gen == null)
             throw new RuntimeException("Railcraft Fluid Entry does not exist: " + tag);

@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.items;
 
-import ic2.api.item.IMetalArmor;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
@@ -20,7 +19,8 @@ import net.minecraft.item.ItemStack;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemSteelArmor extends ItemArmor implements IMetalArmor {
+// FIXME IC2 compat
+public class ItemSteelArmor extends ItemArmor/* implements IMetalArmor*/ {
 
     private static final String TEXTURE_1 = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "steel_1.png";
     private static final String TEXTURE_2 = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "steel_2.png";
@@ -43,9 +43,10 @@ public class ItemSteelArmor extends ItemArmor implements IMetalArmor {
         return OreDictPlugin.isOreType("ingotSteel", stack);
     }
 
-    @Override
-    public boolean isMetalArmor(ItemStack itemstack, EntityPlayer player) {
-        return true;
-    }
+    // FIXME IC2 compat
+//    @Override
+//    public boolean isMetalArmor(ItemStack itemstack, EntityPlayer player) {
+//        return true;
+//    }
 
 }

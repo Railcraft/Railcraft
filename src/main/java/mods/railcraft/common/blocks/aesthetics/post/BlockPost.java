@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
@@ -43,8 +42,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     public static final PropertyEnum<EnumPost> VARIANT = PropertyEnum.create("variant", EnumPost.class);
     private static BlockPost block;
 
-    private BlockPost(int renderType) {
-        super(renderType);
+    private BlockPost() {
         setUnlocalizedName("railcraft.post");
         this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumPost.WOOD));
     }
@@ -54,7 +52,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
             return;
 
         if (RailcraftConfig.isBlockEnabled("post")) {
-            block = new BlockPost(Railcraft.getProxy().getRenderId());
+            block = new BlockPost();
 
             GameRegistry.registerTileEntity(TilePostEmblem.class, "RCPostEmblemTile");
 

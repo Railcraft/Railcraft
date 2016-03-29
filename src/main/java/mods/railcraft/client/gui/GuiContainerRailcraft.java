@@ -18,9 +18,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 
 public abstract class GuiContainerRailcraft extends GuiContainer {
@@ -190,7 +195,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int button) {
+    protected void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
 
         int mX = mouseX - guiLeft;
         int mY = mouseY - guiTop;
@@ -276,12 +281,13 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     }
 
     public void drawTexture(int x, int y, int w, int h, float uMin, float vMin, float uMax, float vMax) {
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + 0, y + h, zLevel, uMin, vMax);
-        tessellator.addVertexWithUV(x + w, y + h, zLevel, uMax, vMax);
-        tessellator.addVertexWithUV(x + w, y + 0, zLevel, uMax, vMin);
-        tessellator.addVertexWithUV(x + 0, y + 0, zLevel, uMin, vMin);
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer wr = tessellator.getWorldRenderer();
+        wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        wr.pos(x + 0, y + h, zLevel).tex(uMin, vMax).endVertex();
+        wr.pos(x + w, y + h, zLevel).tex(uMax, vMax).endVertex();
+        wr.pos(x + w, y + 0, zLevel).tex(uMax, vMin).endVertex();
+        wr.pos(x + 0, y + 0, zLevel).tex(uMin, vMin).endVertex();
         tessellator.draw();
     }
 

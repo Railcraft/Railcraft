@@ -26,6 +26,6 @@ public class SlotFuel extends SlotRailcraft
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return StandardStackFilters.FUEL.matches(stack);
+        return StandardStackFilters.FUEL.apply(stack);
     }
 }

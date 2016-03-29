@@ -12,7 +12,10 @@ import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerHighSpeed;
 import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class TrackSpeed extends TrackBaseRailcraft {
@@ -29,14 +32,14 @@ public class TrackSpeed extends TrackBaseRailcraft {
         return EnumTrack.SPEED;
     }
 
-    @Override
-    public IIcon getIcon() {
-        int meta = tileEntity.getBlockMetadata();
-        if (meta >= 6) {
-            return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[1];
-        }
-        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[0];
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        int meta = tileEntity.getBlockMetadata();
+//        if (meta >= 6) {
+//            return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[1];
+//        }
+//        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[0];
+//    }
 
     @Override
     public boolean isFlexibleRail() {
@@ -44,8 +47,8 @@ public class TrackSpeed extends TrackBaseRailcraft {
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block block) {
+        super.onNeighborBlockChange(state, block);
         maxSpeed = null;
     }
 
@@ -61,31 +64,33 @@ public class TrackSpeed extends TrackBaseRailcraft {
     }
 
     protected static boolean isTrackSafeForHighSpeed(ITrackInstance track, EntityMinecart cart) {
-        EnumTrackMeta meta = EnumTrackMeta.fromMeta(track.getBasicRailMetadata(cart));
+        IBlockState state = track.getWorld().getBlockState(track.getPos());
+        EnumRailDirection dir = TrackTools.getTrackDirection(track.getWorld(), state, cart, track.getPos());
         World world = track.getWorld();
-        int x = track.getX();
-        int y = track.getY();
-        int z = track.getZ();
-        if (!meta.isStraightTrack()) {
+        if (!TrackTools.isStraightTrack(dir)) {
             return false;
         }
-        if (meta.isNorthSouthTrack()) {
-            if ((isTrackHighSpeedCapable(world, x, y, z + 1) || isTrackHighSpeedCapable(world, x, y + 1, z + 1) || isTrackHighSpeedCapable(world, x, y - 1, z + 1))
-                    && (isTrackHighSpeedCapable(world, x, y, z - 1) || isTrackHighSpeedCapable(world, x, y + 1, z - 1) || isTrackHighSpeedCapable(world, x, y - 1, z - 1))) {
+        if (TrackTools.isNorthSouthTrack(dir)) {
+            BlockPos north = track.getPos().north();
+            BlockPos south = track.getPos().south();
+            if ((isTrackHighSpeedCapable(world, north) || isTrackHighSpeedCapable(world, north.up()) || isTrackHighSpeedCapable(world, north.down()))
+                    && (isTrackHighSpeedCapable(world, south) || isTrackHighSpeedCapable(world, south.up()) || isTrackHighSpeedCapable(world, south.down()))) {
                 return true;
             }
-        } else if (meta.isEastWestTrack()) {
-            if ((isTrackHighSpeedCapable(world, x + 1, y, z) || isTrackHighSpeedCapable(world, x + 1, y + 1, z) || isTrackHighSpeedCapable(world, x + 1, y - 1, z))
-                    && (isTrackHighSpeedCapable(world, x - 1, y, z) || isTrackHighSpeedCapable(world, x - 1, y + 1, z) || isTrackHighSpeedCapable(world, x - 1, y - 1, z))) {
+        } else if (TrackTools.isEastWestTrack(dir)) {
+            BlockPos east = track.getPos().east();
+            BlockPos west = track.getPos().west();
+            if ((isTrackHighSpeedCapable(world, east) || isTrackHighSpeedCapable(world, east.up()) || isTrackHighSpeedCapable(world, east.down()))
+                    && (isTrackHighSpeedCapable(world, west) || isTrackHighSpeedCapable(world, west.up()) || isTrackHighSpeedCapable(world, west.down()))) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean isTrackHighSpeedCapable(World world, int x, int y, int z) {
-        if (!world.blockExists(x, y, z)) return true;
-        return TrackTools.isHighSpeedTrackAt(world, x, y, z);
+    public static boolean isTrackHighSpeedCapable(World world, BlockPos pos) {
+        if (!world.isBlockLoaded(pos)) return true;
+        return TrackTools.isHighSpeedTrackAt(world, pos);
     }
 
     protected static void testCartSpeedForBasic(ITrackInstance track, EntityMinecart cart) {

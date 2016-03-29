@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL11;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderBlockOre extends BlockRenderer {
+public class RenderBlockOre extends BlockModelBase {
 
     public RenderBlockOre() {
         super(BlockOre.getBlock());

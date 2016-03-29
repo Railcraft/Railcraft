@@ -42,21 +42,21 @@ public class TrackRouting extends TrackSecured implements ITrackPowered, IRoutin
         return inv;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (isPowered())
-            return getIcon(0);
-        return getIcon(1);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (isPowered())
+//            return getIcon(0);
+//        return getIcon(1);
+//    }
 
     @Override
     public boolean blockActivated(EntityPlayer player) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
-                GuiHandler.openGui(EnumGui.TRACK_ROUTING, player, getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+            if (crowbar.canWhack(player, current, getPos())) {
+                GuiHandler.openGui(EnumGui.TRACK_ROUTING, player, getWorld(), getPos());
+                crowbar.onWhack(player, current, getPos());
                 return true;
             }
         }
@@ -127,7 +127,7 @@ public class TrackRouting extends TrackSecured implements ITrackPowered, IRoutin
     @Override
     public void onBlockRemoved() {
         super.onBlockRemoved();
-        InvTools.dropInventory(inv, tileEntity.getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+        InvTools.dropInventory(inv, tileEntity.getWorld(), getPos());
     }
 
 }

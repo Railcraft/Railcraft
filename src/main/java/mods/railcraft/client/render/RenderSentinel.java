@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
-public class RenderSentinel implements ICombinedRenderer
+public class RenderSentinel implements ICombinedBaker
 {
 
     @Override

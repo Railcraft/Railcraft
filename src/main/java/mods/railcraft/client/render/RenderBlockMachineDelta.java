@@ -33,7 +33,7 @@ import java.util.EnumSet;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderBlockMachineDelta extends BlockRenderer {
+public class RenderBlockMachineDelta extends BlockModelBase {
 
     public RenderBlockMachineDelta() {
         super(RailcraftBlocks.getBlockMachineDelta());

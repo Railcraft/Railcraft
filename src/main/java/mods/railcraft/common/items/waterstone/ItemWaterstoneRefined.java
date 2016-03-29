@@ -16,6 +16,7 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +25,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -90,17 +93,18 @@ public class ItemWaterstoneRefined extends ItemRailcraft {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (player.canPlayerEdit(x, y, z, side, stack)) {
-            Block block = WorldPlugin.getBlock(world, x, y, z);
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (player.canPlayerEdit(pos, side, stack)) {
+            IBlockState state = world.getBlockState(pos);
+            Block block = state.getBlock();
             if (block != null && block != Blocks.stone) {
-                List<ItemStack> drops = block.getDrops(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+                List<ItemStack> drops = block.getDrops(world, pos, state, 0);
                 if (drops.size() == 1 && drops.get(0) != null && drops.get(0).getItem() instanceof ItemBlock) {
-                    ItemStack cooked = FurnaceRecipes.smelting().getSmeltingResult(drops.get(0));
+                    ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drops.get(0));
                     if (cooked != null && cooked.getItem() instanceof ItemBlock) {
                         int meta = !cooked.getItem().getHasSubtypes() ? 0 : cooked.getItem().getMetadata(cooked.getItemDamage());
-                        world.setBlock(x, y, z, InvTools.getBlockFromStack(cooked), meta, 3);
-                        world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+                        world.setBlockState(pos, InvTools.getBlockFromStack(cooked).getStateFromMeta(meta), 3);
+                        world.playSoundEffect(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
                         stack.damageItem(1, player);
                         return true;
                     }
@@ -108,27 +112,11 @@ public class ItemWaterstoneRefined extends ItemRailcraft {
             }
         }
 
-        if (side == 0)
-            --y;
+        pos = pos.offset(side);
 
-        if (side == 1)
-            ++y;
-
-        if (side == 2)
-            --z;
-
-        if (side == 3)
-            ++z;
-
-        if (side == 4)
-            --x;
-
-        if (side == 5)
-            ++x;
-
-        if (player.canPlayerEdit(x, y, z, side, stack) && world.isAirBlock(x, y, z)) {
-            world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-            world.setBlock(x, y, z, Blocks.fire);
+        if (player.canPlayerEdit(pos, side, stack) && world.isAirBlock(pos)) {
+            world.playSoundEffect(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+            world.setBlockState(pos, Blocks.fire.getDefaultState());
             stack.damageItem(1, player);
             return true;
         }
@@ -167,7 +155,7 @@ public class ItemWaterstoneRefined extends ItemRailcraft {
         entity.motionX = location.motionX;
         entity.motionY = location.motionY;
         entity.motionZ = location.motionZ;
-        entity.delayBeforeCanPickup = 10;
+        entity.setDefaultPickupDelay();
         return entity;
     }
 

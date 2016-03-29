@@ -60,21 +60,21 @@ public class TrackEmbarking extends TrackBaseRailcraft implements ITrackPowered,
         return EnumTrack.EMBARKING;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (isPowered()) {
-            return getIcon(0);
-        }
-        return getIcon(1);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (isPowered()) {
+//            return getIcon(0);
+//        }
+//        return getIcon(1);
+//    }
 
     @Override
     public boolean blockActivated(EntityPlayer player) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            GuiHandler.openGui(EnumGui.TRACK_EMBARKING, player, getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
-            crowbar.onWhack(player, current, getX(), getY(), getZ());
+            GuiHandler.openGui(EnumGui.TRACK_EMBARKING, player, getWorld(), tileEntity.getPos());
+            crowbar.onWhack(player, current, getPos());
             return true;
         }
         return false;
@@ -84,12 +84,15 @@ public class TrackEmbarking extends TrackBaseRailcraft implements ITrackPowered,
     public void onMinecartPass(EntityMinecart cart) {
         if (powered && cart.canBeRidden() && cart.riddenByEntity == null && cart.getEntityData().getInteger("MountPrevention") <= 0) {
             int a = area;
-            AxisAlignedBB box = AxisAlignedBB.fromBounds(getX(), getY(), getZ(), getX() + 1, getY() + 1, getZ() + 1);
+            double x = getPos().getX();
+            double y = getPos().getY();
+            double z = getPos().getZ();
+            AxisAlignedBB box = AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
             box = box.expand(a, a, a);
-            List entities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, box);
+            List<EntityLivingBase> entities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, box);
 
             if (entities.size() > 0) {
-                EntityLivingBase entity = (EntityLivingBase) entities.get(MiscTools.RANDOM.nextInt(entities.size()));
+                EntityLivingBase entity = entities.get(MiscTools.RANDOM.nextInt(entities.size()));
 
                 if (entity instanceof EntityPlayer) {
                     EntityPlayer player = (EntityPlayer) entity;

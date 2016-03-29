@@ -32,27 +32,33 @@ public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversi
         return EnumTrack.BUFFER_STOP;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (reversed) {
-            return getIcon(1);
-        }
-        return getIcon(0);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (reversed) {
+//            return getIcon(1);
+//        }
+//        return getIcon(0);
+//    }
 
     @Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool() {
-        return AxisAlignedBB.fromBounds(tileEntity.xCoord + SBOX, tileEntity.yCoord, tileEntity.zCoord + SBOX, tileEntity.xCoord + 1 - SBOX, tileEntity.yCoord + 1 - SBOXY, tileEntity.zCoord + 1 - SBOX);
+        double x = tileEntity.getPos().getX();
+        double y = tileEntity.getPos().getY();
+        double z = tileEntity.getPos().getZ();
+        return AxisAlignedBB.fromBounds(x + SBOX, y, z + SBOX, x + 1 - SBOX, y + 1 - SBOXY, z + 1 - SBOX);
     }
 
     @Override
     public MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1) {
-        return MiscTools.collisionRayTrace(vec3d, vec3d1, getX(), getY(), getZ());
+        return MiscTools.collisionRayTrace(vec3d, vec3d1, getPos());
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool() {
-        return AxisAlignedBB.fromBounds(tileEntity.xCoord + CBOX, tileEntity.yCoord, tileEntity.zCoord + CBOX, tileEntity.xCoord + 1 - CBOX, tileEntity.yCoord + 1, tileEntity.zCoord + 1 - CBOX);
+        double x = tileEntity.getPos().getX();
+        double y = tileEntity.getPos().getY();
+        double z = tileEntity.getPos().getZ();
+        return AxisAlignedBB.fromBounds(x + CBOX, y, z + CBOX, x + 1 - CBOX, y + 1, z + 1 - CBOX);
     }
 
     @Override

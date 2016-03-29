@@ -9,10 +9,12 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.passive.EntityVillager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -44,7 +46,7 @@ public class GuiTools {
         fr.drawString(s, x - sWidth / 2, y, color, shadow);
     }
 
-    public static void newButtonRowAuto(List buttonList, int xStart, int xSize, List<? extends GuiBetterButton> buttons) {
+    public static void newButtonRowAuto(List<GuiButton> buttonList, int xStart, int xSize, List<? extends GuiBetterButton> buttons) {
         int buttonWidth = 0;
         for (GuiBetterButton b : buttons) {
             buttonWidth += b.getWidth();
@@ -60,7 +62,7 @@ public class GuiTools {
         }
     }
 
-    public static void newButtonRow(List buttonList, int xStart, int spacing, List<? extends GuiBetterButton> buttons) {
+    public static void newButtonRow(List<GuiButton> buttonList, int xStart, int spacing, List<? extends GuiBetterButton> buttons) {
         int pointer = 0;
         for (GuiBetterButton b : buttons) {
             b.xPosition = xStart + pointer;
@@ -75,21 +77,21 @@ public class GuiTools {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glPushMatrix();
-        GL11.glTranslatef((float) x, (float) y, 50.0F);
-        GL11.glScalef((float) (-scale), (float) scale, (float) scale);
+        GL11.glTranslatef(x, y, 50.0F);
+        GL11.glScalef((-scale), scale, scale);
         GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
         GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
         RenderHelper.enableStandardItemLighting();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-((float) Math.atan((double) (pitch / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-        villager.renderYawOffset = (float) Math.atan((double) (yaw / 40.0F)) * 20.0F;
-        villager.rotationYaw = (float) Math.atan((double) (yaw / 40.0F)) * 40.0F;
-        villager.rotationPitch = -((float) Math.atan((double) (pitch / 40.0F))) * 20.0F;
+        GL11.glRotatef(-((float) Math.atan(pitch / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
+        villager.renderYawOffset = (float) Math.atan(yaw / 40.0F) * 20.0F;
+        villager.rotationYaw = (float) Math.atan(yaw / 40.0F) * 40.0F;
+        villager.rotationPitch = -((float) Math.atan(pitch / 40.0F)) * 20.0F;
         villager.rotationYawHead = villager.rotationYaw;
-        GL11.glTranslatef(0.0F, villager.yOffset, 0.0F);
-        RenderManager.instance.playerViewY = 180.0F;
-        RenderManager.instance.renderEntityWithPosYaw(villager, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        GL11.glTranslatef(0.0F, (float) villager.getYOffset(), 0.0F);
+        Minecraft.getMinecraft().getRenderManager().playerViewY = 180.0F;
+        Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(villager, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
         GL11.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);

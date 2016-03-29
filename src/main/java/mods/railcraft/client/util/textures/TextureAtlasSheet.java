@@ -32,21 +32,20 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
     private final int rows;
     private final int columns;
 
-    public static IIcon[] unstitchIcons(IIconRegister iconRegister, String name, int numIcons) {
-        return unstitchIcons(iconRegister, name, numIcons, 1);
+    public static TextureAtlasSprite[] unstitchIcons(TextureMap map, String name, int numIcons) {
+        return unstitchIcons(map, name, numIcons, 1);
     }
 
-    public static IIcon[] unstitchIcons(IIconRegister iconRegister, String name, int columns, int rows) {
-        TextureMap textureMap = (TextureMap) iconRegister;
+    public static TextureAtlasSprite[] unstitchIcons(TextureMap textureMap, String name, int columns, int rows) {
         int numIcons = rows * columns;
-        IIcon[] icons = new IIcon[numIcons];
+        TextureAtlasSprite[] sprites = new TextureAtlasSprite[numIcons];
         for (int i = 0; i < numIcons; i++) {
             String texName = name + "." + i;
             TextureAtlasSheet texture = new TextureAtlasSheet(texName, i, rows, columns);
             textureMap.setTextureEntry(texName, texture);
-            icons[i] = texture;
+            sprites[i] = texture;
         }
-        return icons;
+        return sprites;
     }
 
     private TextureAtlasSheet(String name, int index, int rows, int columns) {

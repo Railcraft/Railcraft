@@ -60,12 +60,12 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         return EnumTrack.LOCKING;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (!locked)
-            return getIcon(profile.ordinal() * 2); // glowing
-        return getIcon(profile.ordinal() * 2 + 1); // not glowing
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (!locked)
+//            return getIcon(profile.ordinal() * 2); // glowing
+//        return getIcon(profile.ordinal() * 2 + 1); // not glowing
+//    }
 
     public LockingProfileType getProfileType() {
         return profile;
@@ -137,13 +137,13 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
+            if (crowbar.canWhack(player, current, getPos())) {
                 LockingProfileType p;
                 if (player.isSneaking())
                     p = profile.previous();
                 else
                     p = profile.next();
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+                crowbar.onWhack(player, current, getPos());
                 if (Game.isHost(getWorld()))
                     setProfile(p);
                 else
@@ -173,15 +173,15 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
                 currentTrain.removeLockingTrack(getUUID());
             currentTrain = train;
             currentTrain.addLockingTrack(getUUID());
-            MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Lock(currentCart, getX(), getY(), getZ()));
+            MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Lock(currentCart, getPos()));
             profileInstance.onLock(currentCart);
             currentCart.motionX = 0.0D;
             currentCart.motionZ = 0.0D;
             int meta = tileEntity.getBlockMetadata();
             if (meta == 0 || meta == 4 || meta == 5)
-                currentCart.posZ = tileEntity.zCoord + 0.5D;
+                currentCart.posZ = getPos().getZ() + 0.5D;
             else
-                currentCart.posX = tileEntity.xCoord + 0.5D;
+                currentCart.posX = getPos().getX() + 0.5D;
         }
     }
 
@@ -194,7 +194,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         if (currentTrain != null)
             currentTrain.removeLockingTrack(getUUID());
         if (currentCart != null) {
-            MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Release(currentCart, getX(), getY(), getZ()));
+            MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Release(currentCart, getPos()));
             profileInstance.onRelease(currentCart);
         }
     }
@@ -225,7 +225,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
                 else
                     trainDelay = 0; // We've encountered a new train, force the delay to 0 so we return false
             } else if (trainLeaving) {
-                List<EntityMinecart> carts = CartTools.getMinecartsAt(getWorld(), getX(), getY(), getZ(), 0.0f);
+                List<EntityMinecart> carts = CartTools.getMinecartsAt(getWorld(), getPos(), 0.0f);
                 for (EntityMinecart cart : carts) {
                     if (Train.areInSameTrain(cart, prevCart)) {
                         trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY;

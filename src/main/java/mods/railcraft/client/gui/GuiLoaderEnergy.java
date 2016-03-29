@@ -106,7 +106,7 @@ public class GuiLoaderEnergy extends TileGui {
     @Override
     public void updateScreen() {
         super.updateScreen();
-        TileEntity t = tile.getWorld().getTileEntity(tile.getX(), tile.getY(), tile.getZ());
+        TileEntity t = tile.getWorld().getTileEntity(tile.getPos());
         if (t instanceof TileEnergyLoader)
             tile = (TileEnergyLoader) t;
         else

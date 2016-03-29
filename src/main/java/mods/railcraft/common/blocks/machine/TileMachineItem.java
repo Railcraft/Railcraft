@@ -16,7 +16,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class TileMachineItem extends TileMachineBase implements IInventory {
+public abstract class TileMachineItem extends TileMachineBase 
+// FIXME REMOVE and replace with capabilities
+implements IInventory {
 
     private StandaloneInventory inv;
 

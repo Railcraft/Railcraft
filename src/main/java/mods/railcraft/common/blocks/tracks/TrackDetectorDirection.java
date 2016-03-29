@@ -30,19 +30,19 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
         return EnumTrack.DETECTOR_DIRECTION;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (getPowerOutput() != 0) {
-            if (isReversed()) {
-                return getIcon(3);
-            }
-            return getIcon(1);
-        }
-        if (isReversed()) {
-            return getIcon(2);
-        }
-        return getIcon(0);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (getPowerOutput() != 0) {
+//            if (isReversed()) {
+//                return getIcon(3);
+//            }
+//            return getIcon(1);
+//        }
+//        if (isReversed()) {
+//            return getIcon(2);
+//        }
+//        return getIcon(0);
+//    }
 
     @Override
     public boolean canUpdate() {
@@ -77,8 +77,8 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
     }
 
     private void notifyNeighbors() {
-        getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), RailcraftBlocks.getBlockTrack());
-        getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), RailcraftBlocks.getBlockTrack());
+        getWorld().notifyBlockOfStateChange(getPos(), RailcraftBlocks.getBlockTrack());
+        getWorld().notifyBlockOfStateChange(getPos().down(), RailcraftBlocks.getBlockTrack());
         sendUpdateToClient();
     }
 

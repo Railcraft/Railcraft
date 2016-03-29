@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerReinforced;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -46,22 +47,22 @@ public class TrackLauncher extends TrackReinforced implements ITrackPowered, IGu
         return false;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            return getIcon(1);
-        }
-        return getIcon(0);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (!isPowered()) {
+//            return getIcon(1);
+//        }
+//        return getIcon(0);
+//    }
 
     @Override
     public boolean blockActivated(EntityPlayer player) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
-                GuiHandler.openGui(EnumGui.TRACK_LAUNCHER, player, getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+            if (crowbar.canWhack(player, current, getPos())) {
+                GuiHandler.openGui(EnumGui.TRACK_LAUNCHER, player, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+                crowbar.onWhack(player, current, getPos());
                 return true;
             }
         }
@@ -151,5 +152,10 @@ public class TrackLauncher extends TrackReinforced implements ITrackPowered, IGu
         force = Math.max(force, MIN_LAUNCH_FORCE);
         force = Math.min(force, RailcraftConfig.getLaunchRailMaxForce());
         launchForce = (byte) force;
+    }
+
+    @Override
+    public boolean canPropagatePowerTo(ITrackInstance track) {
+        return true;
     }
 }

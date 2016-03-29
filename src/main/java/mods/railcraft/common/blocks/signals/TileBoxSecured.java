@@ -25,7 +25,7 @@ import java.io.IOException;
  */
 public abstract class TileBoxSecured extends TileBoxBase implements IAspectActionManager, IGuiReturnHandler {
 
-    private final MultiButtonController<LockButtonState> lockController = new MultiButtonController(0, LockButtonState.VALUES);
+    private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 
     @Override
     public MultiButtonController<LockButtonState> getLockController() {

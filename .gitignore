@@ -25,3 +25,5 @@ classes/
 .settings
 .metadata
 .project
+*.launch
+

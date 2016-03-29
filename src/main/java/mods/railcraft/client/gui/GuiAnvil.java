@@ -8,7 +8,12 @@
  */
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.gui.containers.ContainerAnvil;
+import java.io.IOException;
+import java.util.List;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -19,15 +24,17 @@ import net.minecraft.inventory.ContainerRepair;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
-import java.util.List;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import mods.railcraft.common.gui.containers.ContainerAnvil;
 
 @SideOnly(Side.CLIENT)
 public class GuiAnvil extends GuiContainer implements ICrafting {
@@ -120,7 +127,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
      * KeyListener.keyTyped(KeyEvent e).
      */
     @Override
-    protected void keyTyped(char par1, int par2) {
+    protected void keyTyped(char par1, int par2) throws IOException {
         if (this.itemNameField.textboxKeyTyped(par1, par2))
             this.func_135015_g();
         else
@@ -142,7 +149,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
      * Called when the mouse is clicked.
      */
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) {
+    protected void mouseClicked(int par1, int par2, int par3) throws IOException {
         super.mouseClicked(par1, par2, par3);
         this.itemNameField.mouseClicked(par1, par2, par3);
     }

@@ -16,6 +16,7 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 
@@ -67,7 +68,7 @@ public class CommonEffectProxy implements IEffectManager {
         } catch (IOException ex) {
         }
 
-        SoundHelper.playSound(world, x, y, z, "mob.endermen.portal", 0.25F, 1.0F);
+        SoundHelper.playSound(world, new BlockPos(x, y, z), "mob.endermen.portal", 0.25F, 1.0F);
     }
 
     @Override

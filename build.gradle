@@ -33,6 +33,7 @@ ext.apiRailcraft = "./api/railcraft"
 ext.apiForestry = "./api/forestry"
 ext.apiRedstoneFlux = "./api/redstoneflux"
 ext.apiThaumcraft = "./api/thaumcraft"
+ext.apiBuildcraft = "./api/buildcraft"
 
 ext.dirLang = "./lang"
 
@@ -51,7 +52,8 @@ sourceSets {
 	main {
 		java {
 			srcDir project.apiRailcraft
-			srcDir project.apiForestry
+            // Disable forestry until we have a stable 1.8.9 API
+			// srcDir project.apiForestry
 			srcDir project.apiRedstoneFlux + "/src/main/java"
 			srcDir project.apiThaumcraft
 		}
@@ -60,16 +62,19 @@ sourceSets {
             exclude '**/Thumbs.db'
 		}
 	}
+    bc_api {
+        java {
+            // For some dumb reason BC doesn't depend on RF properly, so we have to special case it
+            srcDir project.apiBuildcraft + "/api"
+            exclude "cofh/**"
+        }
+    }
 }
 
 repositories {
 	maven {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
-	}
-	ivy {
-		name "BuildCraft"
-		artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
 	}
 }
 
@@ -79,8 +84,7 @@ configurations {
 }
 
 dependencies {
-	api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
-	api name: "buildcraft", version: "7.1.13", classifier: "dev"
+//	api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
 }
 
 processResources {

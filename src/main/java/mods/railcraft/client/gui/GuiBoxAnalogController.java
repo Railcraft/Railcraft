@@ -11,6 +11,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.opengl.GL11;
 
+import java.io.IOException;
 import java.util.BitSet;
 import java.util.EnumMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class GuiBoxAnalogController extends GuiBasic {
     }
 
     @Override
-    public void mouseClicked(int i, int j, int k) {
+    public void mouseClicked(int i, int j, int k) throws IOException {
         super.mouseClicked(i, j, k);
         for (GuiTextField t : textbox.values()) {
             t.mouseClicked(i, j, k);
@@ -107,7 +108,8 @@ public class GuiBoxAnalogController extends GuiBasic {
         int h = (height - ySize) / 2;
 
         for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
-            GuiTextField textField = new GuiTextField(fontRendererObj, w + 72, h + getYPosFromIndex(entry.getKey().ordinal()), 95, 10);
+            // FIXME 1.8.9 update: add "0" as the component ID (check)
+            GuiTextField textField = new GuiTextField(0, fontRendererObj, w + 72, h + getYPosFromIndex(entry.getKey().ordinal()), 95, 10);
             textField.setMaxStringLength(37);
             textField.setText(rangeToString(entry.getValue()));
             textbox.put(entry.getKey(), textField);

@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
 
 import static net.minecraftforge.common.util.ForgeDirection.*;
 
-public class RenderSignalBox extends RenderTESRSignals implements ICombinedRenderer {
+public class RenderSignalBox extends RenderTESRSignals implements ICombinedBaker {
 
     private static final RenderInfo info = new RenderInfo();
     private final IIconProvider iconProvider;

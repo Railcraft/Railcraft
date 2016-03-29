@@ -8,16 +8,20 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.api.core.items.RailcraftItemRegistry;
-import mods.railcraft.api.core.items.TagList;
-import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.modules.ModuleManager;
-import mods.railcraft.common.util.misc.MiscTools;
+import java.util.Arrays;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import mods.railcraft.api.core.items.RailcraftItemRegistry;
+import mods.railcraft.api.core.items.TagList;
+import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.modules.ModuleManager;
 
 /**
  * This class contains a registry of all currently active Railcraft items. Which
@@ -52,24 +56,22 @@ public final class RailcraftRegistry {
      * @return The ItemStack or null if no item exists for that tag
      */
     public static ItemStack getItem(String tag, int qty) {
-        tag = MiscTools.cleanTag(tag);
         return RailcraftItemRegistry.getStack(tag, qty);
 //        return GameRegistry.findItemStack(Railcraft.getModId(), tag, qty);
     }
 
     /**
-     * Registers a new item with the GameRegistry.
+     * Registers a new item with the tag manager.
      * <p/>
      * This should generally only be called by Railcraft itself while the mod is
      * initializing during the pre-init and init stages.
      *
-     * @param tag   The tag name
+     * @param tag   The railcraft-specific tag name
      * @param stack The item
      */
     public static void register(String tag, ItemStack stack) {
         if (stack == null)
             throw new RuntimeException("Don't register null items!");
-        tag = MiscTools.cleanTag(tag);
         TagList.addTag(tag);
 //        System.out.println(tag);
         Item existingItem = GameRegistry.findItem(Railcraft.MOD_ID, tag);
@@ -79,20 +81,6 @@ public final class RailcraftRegistry {
             RailcraftItemRegistry.register(tag, stack);
         } else
             throw new RuntimeException("ItemStack registrations must be unique!");
-    }
-
-    /**
-     * Registers a new item with the GameRegistry.
-     * <p/>
-     * This should generally only be called by Railcraft itself while the mod is
-     * initializing during the pre-init and init stages.
-     *
-     * @param stack The item
-     */
-    public static void register(ItemStack stack) {
-        if (stack == null)
-            throw new RuntimeException("Don't register null items!");
-        register(stack.getUnlocalizedName(), stack);
     }
 
     /**
@@ -115,12 +103,19 @@ public final class RailcraftRegistry {
         _register(item);
     }
 
+    public static boolean hasErrored = false;
+    
     private static void _register(Item item) {
-        String tag = item.getUnlocalizedName();
-        tag = MiscTools.cleanTag(tag);
-        TagList.addTag(tag);
-        GameRegistry.registerItem(item, tag);
-        RailcraftItemRegistry.register(tag, new ItemStack(item));
+        if (item.getRegistryName() == null) {
+            System.out.println(item.getClass() + "@" + Arrays.toString(new Throwable().getStackTrace()));
+            hasErrored = true;
+        } else {
+            ResourceLocation location = new ResourceLocation(item.getRegistryName());
+            String modUniqueName = location.getResourcePath();
+            TagList.addTag(modUniqueName);
+            GameRegistry.registerItem(item, modUniqueName);
+            RailcraftItemRegistry.register(modUniqueName, new ItemStack(item));
+        }
     }
 
     /**
@@ -146,10 +141,10 @@ public final class RailcraftRegistry {
     public static void register(Block block, Class<? extends ItemBlock> itemclass) {
         if (ModuleManager.getStage() != ModuleManager.Stage.PRE_INIT && ModuleManager.getStage() != ModuleManager.Stage.INIT_FIRST)
             throw new RuntimeException("Blocks must be initialized in PreInit or InitFirst!");
-        String tag = block.getUnlocalizedName();
-        tag = MiscTools.cleanTag(tag);
-        TagList.addTag(tag);
-        GameRegistry.registerBlock(block, itemclass, tag);
-        RailcraftItemRegistry.register(tag, new ItemStack(block));
+        ResourceLocation location = new ResourceLocation(block.getRegistryName());
+        String modUniqueName = location.getResourcePath();
+        TagList.addTag(modUniqueName);
+        GameRegistry.registerBlock(block, itemclass);
+        RailcraftItemRegistry.register(modUniqueName, new ItemStack(block));
     }
 }

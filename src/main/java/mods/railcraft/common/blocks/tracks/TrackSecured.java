@@ -16,13 +16,15 @@ import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.IChatComponent;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class TrackSecured extends TrackBaseRailcraft implements IGuiReturnHandler, ISecure<LockButtonState> {
-    private final MultiButtonController<LockButtonState> lockController = new MultiButtonController<LockButtonState>(0, LockButtonState.VALUES);
+    private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 
     @Override
     public void writeToNBT(NBTTagCompound data) {
@@ -83,8 +85,17 @@ public abstract class TrackSecured extends TrackBaseRailcraft implements IGuiRet
     public String getName() {
         return ((TileTrack) getTile()).getName();
     }
-
+    
     @Override
+    public boolean hasCustomName() {
+        return false;
+    }
+    
+    @Override
+    public IChatComponent getDisplayName() {
+        return new ChatComponentTranslation(getLocalizationTag());
+    }
+
     public String getLocalizationTag() {
         return ((TileTrack) getTile()).getLocalizationTag();
     }

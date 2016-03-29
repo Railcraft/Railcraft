@@ -1,57 +1,56 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
+/* Copyright (c) CovertJaguar, 2014 http://railcraft.info
  * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+ * This code is the property of CovertJaguar and may only be used with explicit written permission unless otherwise
+ * specified on the license page at http://railcraft.info/wiki/info:license. */
 package mods.railcraft.client.render;
 
-import mods.railcraft.common.blocks.frame.BlockFrame;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import org.lwjgl.opengl.GL11;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- *
- * @author CovertJaguar <http://www.railcraft.info>
- */
-public class RenderBlockFrame extends BlockRenderer {
+import com.google.common.collect.ImmutableList;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.item.ItemStack;
+
+import mods.railcraft.common.blocks.frame.BlockFrame;
+
+/** @author CovertJaguar <http://www.railcraft.info> */
+public class RenderBlockFrame extends BlockModelBase {
 
     public RenderBlockFrame() {
         super(BlockFrame.getBlock());
     }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderblocks) {
-        BlockFrame.flipTextures = true;
-        renderblocks.setRenderBounds(0.999, 0.999, 0.999, 0.001, 0.001, 0.001);
-        renderblocks.renderStandardBlock(block, x, y, z);
-        BlockFrame.flipTextures = false;
-        renderblocks.setRenderBounds(0, 0, 0, 1, 1, 1);
-        renderblocks.renderStandardBlock(block, x, y, z);
-        return true;
+    public IBakedModel bakeItem(ItemStack item) {
+        CuboidRenderHelper helper = CuboidRenderHelper.INSTANCE;
+        List<BakedQuad> quads = new ArrayList<BakedQuad>();
+        IBlockState state = getBlock().getDefaultState();
+        helper.resetAll();
+        helper.fillTexturesFromBlock(state);
+        helper.setBounds(0.999, 0.999, 0.999, 0.001, 0.001, 0.001);
+        helper.bakeAllFaces(DefaultVertexFormats.ITEM, quads);
+        helper.setBounds(0, 0, 0, 1, 1, 1);
+        helper.bakeAllFaces(DefaultVertexFormats.ITEM, quads);
+        TextureAtlasSprite particle = CuboidRenderHelper.getParticleTexture(state);
+        return new PerspAwareModelBase(DefaultVertexFormats.ITEM, ImmutableList.copyOf(quads), particle, getBlockTransforms());
     }
 
     @Override
-    public void renderItem(RenderBlocks renderBlocks, ItemStack item, ItemRenderType renderType) {
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-        BlockFrame.flipTextures = true;
-        getBlock().setBlockBounds(1, 1, 1, 0, 0, 0);
-        RenderTools.renderBlockOnInventory(renderBlocks, getBlock(), item.getItemDamage(), 1);
-        BlockFrame.flipTextures = false;
-        getBlock().setBlockBounds(0, 0, 0, 1, 1, 1);
-        RenderTools.renderBlockOnInventory(renderBlocks, getBlock(), item.getItemDamage(), 1);
-
-        GL11.glPopAttrib();
+    public IBakedModel handleBlockState(IBlockState state) {
+        CuboidRenderHelper helper = CuboidRenderHelper.INSTANCE;
+        List<BakedQuad> quads = new ArrayList<BakedQuad>();
+        helper.resetAll();
+        helper.fillTexturesFromBlock(state);
+        helper.setBounds(0.999, 0.999, 0.999, 0.001, 0.001, 0.001);
+        helper.bakeAllFaces(DefaultVertexFormats.BLOCK, quads);
+        helper.setBounds(0, 0, 0, 1, 1, 1);
+        helper.bakeAllFaces(DefaultVertexFormats.BLOCK, quads);
+        TextureAtlasSprite particle = CuboidRenderHelper.getParticleTexture(state);
+        return new PerspAwareModelBase(DefaultVertexFormats.BLOCK, ImmutableList.copyOf(quads), particle, getBlockTransforms());
     }
-
 }

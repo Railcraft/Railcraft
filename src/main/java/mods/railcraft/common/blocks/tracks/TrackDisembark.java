@@ -31,23 +31,23 @@ public class TrackDisembark extends TrackBaseRailcraft implements ITrackPowered 
         return EnumTrack.DISEMBARK;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (mirrored) {
-            if (isPowered())
-                return getIcon(2);
-            return getIcon(3);
-        }
-        if (isPowered())
-            return getIcon(0);
-        return getIcon(1);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (mirrored) {
+//            if (isPowered())
+//                return getIcon(2);
+//            return getIcon(3);
+//        }
+//        if (isPowered())
+//            return getIcon(0);
+//        return getIcon(1);
+//    }
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
         if (powered && cart.canBeRidden() && cart.riddenByEntity != null) {
-            double x = getX();
-            double z = getZ();
+            double x = getPos().getX();
+            double z = getPos().getZ();
             double offset = 1.5;
             if (EnumTrackMeta.fromMeta(getTile().getBlockMetadata()).isNorthSouthTrack())
                 if (mirrored)
@@ -58,7 +58,7 @@ public class TrackDisembark extends TrackBaseRailcraft implements ITrackPowered 
                 z += offset;
             else
                 z -= offset;
-            CartUtils.dismount(cart, x + 0.5, getY() + 1, z + 0.5);
+            CartUtils.dismount(cart, x + 0.5, getPos().getY() + 1, z + 0.5);
             cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
         }
     }
@@ -68,9 +68,9 @@ public class TrackDisembark extends TrackBaseRailcraft implements ITrackPowered 
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
+            if (crowbar.canWhack(player, current, getPos())) {
                 mirror();
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+                crowbar.onWhack(player, current, getPos());
                 sendUpdateToClient();
                 return true;
             }

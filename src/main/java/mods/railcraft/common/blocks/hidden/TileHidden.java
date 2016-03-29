@@ -16,7 +16,6 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.io.DataInputStream;
@@ -40,7 +39,7 @@ public class TileHidden extends RailcraftTileEntity {
         super.update();
         if (Game.isNotHost(worldObj)) {
             if (lastMarker != null && EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TRACKING))
-                EffectManager.instance.trailEffect(lastMarker.x, lastMarker.y, lastMarker.z, this, colorSeed);
+                EffectManager.instance.trailEffect(lastMarker.getX(), lastMarker.getY(), lastMarker.getZ(), this, colorSeed);
             return;
         }
         if (timestamp == -1)
@@ -69,10 +68,10 @@ public class TileHidden extends RailcraftTileEntity {
         super.writeToNBT(data);
         if (lastMarker != null) {
             NBTTagCompound nbt = new NBTTagCompound();
-            nbt.setInteger("dim", lastMarker.dimension);
-            nbt.setInteger("x", lastMarker.x);
-            nbt.setInteger("y", lastMarker.y);
-            nbt.setInteger("z", lastMarker.z);
+            nbt.setInteger("dim", lastMarker.getDim());
+            nbt.setInteger("x", lastMarker.getX());
+            nbt.setInteger("y", lastMarker.getY());
+            nbt.setInteger("z", lastMarker.getZ());
             data.setTag("last", nbt);
         }
         data.setLong("seed", colorSeed);
@@ -100,10 +99,10 @@ public class TileHidden extends RailcraftTileEntity {
         data.writeLong(colorSeed);
         data.writeBoolean(lastMarker != null);
         if (lastMarker != null) {
-            data.writeInt(lastMarker.dimension);
-            data.writeInt(lastMarker.x);
-            data.writeInt(lastMarker.y);
-            data.writeInt(lastMarker.z);
+            data.writeInt(lastMarker.getDim());
+            data.writeInt(lastMarker.getX());
+            data.writeInt(lastMarker.getY());
+            data.writeInt(lastMarker.getZ());
         }
     }
 

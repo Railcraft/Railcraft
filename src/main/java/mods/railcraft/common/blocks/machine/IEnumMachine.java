@@ -13,12 +13,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IStringSerializable;
 
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IEnumMachine {
+public interface IEnumMachine<M extends IEnumMachine<M>> extends Comparable<M>, IStringSerializable {
 
     String getTag();
 
@@ -36,7 +37,7 @@ public interface IEnumMachine {
 
     int ordinal();
 
-    Block getBlock();
+    BlockMachine<M> getBlock();
 
     boolean isDepreciated();
 

@@ -11,10 +11,7 @@ package mods.railcraft.common.blocks.detector;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IActivationBlockingItem;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
@@ -98,7 +95,7 @@ public class BlockDetector extends BlockContainer {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return meta;
+        return getMetaFromState(state);
     }
 
     @Override
@@ -122,7 +119,7 @@ public class BlockDetector extends BlockContainer {
         if (tile instanceof TileDetector)
             ((TileDetector) tile).getDetector().onBlockRemoved();
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
-            dropBlockAsItem(world, pos, state, 0);
+            dropBlockAsItem(world, pos, WorldPlugin.getBlockState(world, pos), 0);
         return world.setBlockToAir(pos);
     }
 
@@ -141,7 +138,7 @@ public class BlockDetector extends BlockContainer {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileDetector) {
             ((TileDetector) tile).direction = MiscTools.getSideFacingPlayer(pos, placer);
-            ((TileDetector) tile).onBlockPlacedBy(placer, stack);
+            ((TileDetector) tile).onBlockPlacedBy(state, placer, stack);
         }
     }
 

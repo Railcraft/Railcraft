@@ -9,23 +9,36 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.machine.IComparatorOverride;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.IMachineProxy;
 
 import java.util.List;
 
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class MachineProxyBeta implements IMachineProxy, IComparatorOverride {
+public class MachineProxyBeta implements IMachineProxy<EnumMachineBeta>, IComparatorOverride {
+    public static final PropertyEnum<EnumMachineBeta> VARIANT = PropertyEnum.create("variant", EnumMachineBeta.class);
 
     @Override
-    public IEnumMachine getMachine(int meta) {
+    public IProperty<EnumMachineBeta> getVariantProperty() {
+        return VARIANT;
+    }
+
+    @Override
+    public EnumMachineBeta getMachine(int meta) {
         return EnumMachineBeta.fromId(meta);
     }
 
     @Override
-    public List<? extends IEnumMachine> getCreativeList() {
+    public int getMeta(EnumMachineBeta machine) {
+        return machine.ordinal();
+    }
+
+    @Override
+    public List<EnumMachineBeta> getCreativeList() {
         return EnumMachineBeta.getCreativeList();
     }
 }

@@ -23,6 +23,7 @@ import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.items.firestone.BlockFirestoneRecharge;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.craftguide.CraftGuidePlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.BlinkTick;
@@ -50,9 +51,9 @@ import java.io.File;
 @Mod(modid = Railcraft.MOD_ID, name = "Railcraft",
         version = Railcraft.VERSION,
         certificateFingerprint = "a0c255ac501b2749537d5824bb0f0588bf0320fa",
-        acceptedMinecraftVersions = "[1.7.10,1.8)",
-        dependencies = "required-after:Forge@[10.13.0.1199,);"
-                + "after:BuildCraft|Core[6.1.7,);"
+        acceptedMinecraftVersions = "[1.8.9]",
+        dependencies = "required-after:Forge@[11.15.0.1718,);"
+                + "after:BuildCraft|Core[7.2,);"
                 + "after:BuildCraft|Energy;"
                 + "after:BuildCraft|Builders;"
                 + "after:BuildCraft|Factory;"
@@ -63,13 +64,13 @@ import java.io.File;
                 + "after:IC2@[2.2,)")
 public final class Railcraft {
     public static final String MOD_ID = "Railcraft";
-    public static final String MC_VERSION = "[1.7.10,1.8)";
+    public static final String MC_VERSION = "[1.8.9]";
     public static final RootCommand rootCommand = new RootCommand();
     static final String VERSION = "@VERSION@";
-    @Instance("Railcraft")
+    @Instance/*("Railcraft")*/
     public static Railcraft instance;
-    //    public int totalMultiBlockUpdates = 0;
-//    public int ticksSinceLastMultiBlockPrint = 0;
+//        public int totalMultiBlockUpdates = 0;
+    public int ticksSinceLastMultiBlockPrint = 0;
     @SidedProxy(clientSide = "mods.railcraft.client.core.ClientProxy", serverSide = "mods.railcraft.common.core.CommonProxy")
     public static CommonProxy proxy;
     private File configFolder;
@@ -190,9 +191,11 @@ public final class Railcraft {
 
         proxy.initClient();
 
-        CraftGuidePlugin.init();
+//        CraftGuidePlugin.init();
 
         RailcraftConfig.postInit();
+
+        if (RailcraftRegistry.hasErrored) throw new RuntimeException("Registry Error!");
     }
 
     @Mod.EventHandler
@@ -210,7 +213,7 @@ public final class Railcraft {
     public void missingMapping(FMLMissingMappingsEvent event) {
         for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
             if (mapping.type == GameRegistry.Type.BLOCK) {
-                Block block = GameRegistry.findBlock(MOD_ID, MiscTools.cleanTag(mapping.name));
+                Block block = GameRegistry.findBlock(MOD_ID, mapping.resourceLocation.getResourcePath());
                 if (block != null)
                     remap(block, mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
@@ -226,7 +229,7 @@ public final class Railcraft {
                 else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
                     remap(BlockLantern.getBlockStone(), mapping);
             } else if (mapping.type == GameRegistry.Type.ITEM) {
-                Block block = GameRegistry.findBlock(MOD_ID, MiscTools.cleanTag(mapping.name));
+                Block block = GameRegistry.findBlock(MOD_ID, mapping.resourceLocation.getResourcePath());
                 if (block != null)
                     remap(Item.getItemFromBlock(block), mapping);
                 else if (mapping.name.equals("Railcraft:tool.mag.glass") && RailcraftItem.magGlass.item() != null)
@@ -249,11 +252,11 @@ public final class Railcraft {
 
     private void remap(Block block, FMLMissingMappingsEvent.MissingMapping mapping) {
         mapping.remap(block);
-        Game.log(Level.WARN, "Remapping block " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(block.getUnlocalizedName()));
+        Game.log(Level.WARN, "Remapping block " + mapping.name + " to " + block.getRegistryName());
     }
 
     private void remap(Item item, FMLMissingMappingsEvent.MissingMapping mapping) {
         mapping.remap(item);
-        Game.log(Level.WARN, "Remapping item " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(item.getUnlocalizedName()));
+        Game.log(Level.WARN, "Remapping item " + mapping.name + " to " + item.getRegistryName());
     }
 }

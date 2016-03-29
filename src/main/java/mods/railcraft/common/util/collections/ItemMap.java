@@ -9,6 +9,8 @@
 package mods.railcraft.common.util.collections;
 
 import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.items.StackFilter;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -55,9 +57,9 @@ public class ItemMap<V> extends HashMap<ItemKey, V> {
     }
 
     public IStackFilter getStackFilter() {
-        return new IStackFilter() {
+        return new StackFilter() {
             @Override
-            public boolean matches(ItemStack stack) {
+            public boolean apply(ItemStack stack) {
                 return containsKey(stack);
             }
         };

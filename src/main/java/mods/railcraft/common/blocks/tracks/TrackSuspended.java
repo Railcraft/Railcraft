@@ -12,7 +12,11 @@ import mods.railcraft.api.tracks.ITrackCustomPlaced;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -24,8 +28,8 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
     }
 
     @Override
-    public void onBlockPlaced() {
-        super.onBlockPlaced();
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(state, placer, stack);
         if (!isSupported())
             breakRail();
     }
@@ -33,16 +37,14 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
     @Override
     public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
         World world = getWorld();
-        int i = tileEntity.xCoord;
-        int j = tileEntity.yCoord;
-        int k = tileEntity.zCoord;
+        BlockPos pos = tileEntity.getPos();
         if (isSupported()) {
             Block myBlock = RailcraftBlocks.getBlockTrack();
-            if (block != myBlock) {
-                world.notifyBlocksOfNeighborChange(i + 1, j, k, myBlock);
-                world.notifyBlocksOfNeighborChange(i - 1, j, k, myBlock);
-                world.notifyBlocksOfNeighborChange(i, j, k + 1, myBlock);
-                world.notifyBlocksOfNeighborChange(i, j, k - 1, myBlock);
+            if (neighborBlock != myBlock) {
+                world.notifyBlockOfStateChange(pos.east(), myBlock);
+                world.notifyBlockOfStateChange(pos.west(), myBlock);
+                world.notifyBlockOfStateChange(pos.north(), myBlock);
+                world.notifyBlockOfStateChange(pos.south(), myBlock);
             }
         } else
             breakRail();
@@ -50,60 +52,59 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
 
     public void breakRail() {
         if (Game.isHost(getWorld()))
-            getWorld().func_147480_a(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, true);
+            getWorld().destroyBlock(getPos(), true);
     }
 
-    public boolean isSupportedRail(World world, int i, int j, int k, int meta) {
-        if (!TrackTools.isRailBlockAt(world, i, j, k))
+    public boolean isSupportedRail(World world, BlockPos pos, EnumRailDirection dir) {
+        if (!TrackTools.isRailBlockAt(world, pos))
             return false;
-        if (isSupportedBelow(world, i, j, k))
+        if (isSupportedBelow(world, pos))
             return true;
-        if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
-            if (isSupportedBelow(world, i, j, k + 1))
+        if (dir == EnumRailDirection.NORTH_SOUTH) {
+            if (isSupportedBelow(world, pos.north()))
                 return true;
-            return isSupportedBelow(world, i, j, k - 1);
-        } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
-            if (isSupportedBelow(world, i + 1, j, k))
+            return isSupportedBelow(world, pos.south());
+        } else if (dir == EnumRailDirection.EAST_WEST) {
+            if (isSupportedBelow(world, pos.east()))
                 return true;
-            return isSupportedBelow(world, i - 1, j, k);
+            return isSupportedBelow(world, pos.west());
         }
         return false;
     }
 
-    public boolean isSupportedBelow(World world, int i, int j, int k) {
-        if (!world.blockExists(i, j, k))
+    public boolean isSupportedBelow(World world, BlockPos pos) {
+        if (!world.isBlockLoaded(pos))
             return true;
-        if (TrackTools.isRailBlockAt(world, i, j, k))
-            return world.isSideSolid(i, j - 1, k, EnumFacing.UP);
+        if (TrackTools.isRailBlockAt(world, pos))
+            return world.isSideSolid(pos.down(), EnumFacing.UP);
         return false;
     }
 
     public boolean isSupported() {
-        int meta = tileEntity.getBlockMetadata();
-        return isSupported(getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, meta);
+        return isSupported(getWorld(), getPos(), TrackTools.getTrackDirection(getWorld(), null, getPos()));
     }
 
-    public boolean isSupported(World world, int i, int j, int k, int meta) {
-        if (isSupportedRail(world, i, j, k, meta))
+    public boolean isSupported(World world, BlockPos pos, EnumRailDirection dir) {
+        if (isSupportedRail(world, pos, dir))
             return true;
-        if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal())
-            return isSupportedRail(world, i, j, k + 1, meta) || isSupportedRail(world, i, j, k - 1, meta);
-        else if (meta == EnumTrackMeta.EAST_WEST.ordinal())
-            return isSupportedRail(world, i + 1, j, k, meta) || isSupportedRail(world, i - 1, j, k, meta);
+        if (dir == EnumRailDirection.NORTH_SOUTH)
+            return isSupportedRail(world, pos.north(), dir) || isSupportedRail(world, pos.south(), dir);
+        else if (dir == EnumRailDirection.EAST_WEST)
+            return isSupportedRail(world, pos.east(), dir) || isSupportedRail(world, pos.west(), dir);
         return false;
     }
 
     @Override
-    public boolean canPlaceRailAt(World world, int i, int j, int k) {
+    public boolean canPlaceRailAt(World world, BlockPos pos) {
 //        if(BlockRail.isRailBlockAt(world, i, j - 1, k)) {
 //            return false;
 //        }
 //        if(BlockRail.isRailBlockAt(world, i, j + 1, k)) {
 //            return false;
 //        }
-        if (isSupported(world, i, j, k, 0) || isSupported(world, i, j, k, 1))
+        if (isSupported(world, pos, EnumRailDirection.NORTH_SOUTH) || isSupported(world, pos, EnumRailDirection.EAST_WEST))
             return true;
-        return world.isSideSolid(i, j - 1, k, EnumFacing.UP);
+        return world.isSideSolid(pos.down(), EnumFacing.UP);
     }
 
 }

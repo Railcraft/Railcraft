@@ -58,8 +58,8 @@ public class ContainerRockCrusher extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
         icrafting.sendProgressBarUpdate(this, 0, tile.getProcessTime());
         EnergyStorage storage = tile.getEnergyStorage();
         if (storage != null)

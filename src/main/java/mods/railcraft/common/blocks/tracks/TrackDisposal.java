@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.io.DataInputStream;
@@ -46,10 +47,10 @@ public class TrackDisposal extends TrackSuspended implements ITrackPowered {
     }
 
     @Override
-    public boolean canPlaceRailAt(World world, int x, int y, int z) {
-        if (!world.isAirBlock(x, y - 1, z))
+    public boolean canPlaceRailAt(World world, BlockPos pos) {
+        if (!world.isAirBlock(pos.down()))
             return false;
-        return super.canPlaceRailAt(world, x, y, z);
+        return super.canPlaceRailAt(world, pos);
     }
 
     @Override
@@ -58,13 +59,13 @@ public class TrackDisposal extends TrackSuspended implements ITrackPowered {
         testPower(state);
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (isPowered()) {
-            return getIcon(1);
-        }
-        return getIcon(0);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (isPowered()) {
+//            return getIcon(1);
+//        }
+//        return getIcon(0);
+//    }
 
     @Override
     public boolean isPowered() {

@@ -10,7 +10,9 @@ package mods.railcraft.common.fluids;
 
 import mods.railcraft.client.particles.EntityDropParticleFX;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -31,11 +33,8 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite {
     protected float particleRed;
     protected float particleGreen;
     protected float particleBlue;
-    @SideOnly(Side.CLIENT)
-    protected IIcon[] theIcon;
     protected boolean flammable;
     protected int flammability = 0;
-    private boolean hasFlowIcon = true;
 
     public BlockRailcraftFluidFinite( Fluid fluid, Material material) {
         super(fluid, material);
@@ -43,24 +42,23 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite {
     }
 
     public BlockRailcraftFluidFinite setNoFlow() {
-        hasFlowIcon = false;
         return this;
     }
 
-    @Override
-    public IIcon getIcon(int side, int meta) {
-        return side != 0 && side != 1 ? this.theIcon[1] : this.theIcon[0];
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        IIcon still = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_still");
-        IIcon flowing = still;
-        if (hasFlowIcon)
-            flowing = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_flow");
-        this.theIcon = new IIcon[]{still, flowing};
-    }
+//    @Override
+//    public IIcon getIcon(int side, int meta) {
+//        return side != 0 && side != 1 ? this.theIcon[1] : this.theIcon[0];
+//    }
+//
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public void registerBlockIcons(IIconRegister iconRegister) {
+//        IIcon still = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_still");
+//        IIcon flowing = still;
+//        if (hasFlowIcon)
+//            flowing = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_flow");
+//        this.theIcon = new IIcon[]{still, flowing};
+//    }
 
     public BlockRailcraftFluidFinite setFlammable(boolean flammable) {
         this.flammable = flammable;
@@ -73,22 +71,22 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite {
     }
 
     @Override
-    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return flammable ? 300 : 0;
     }
 
     @Override
-    public int getFlammability(IBlockAccess world, int x, int y, int z,  EnumFacing face) {
+    public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return flammability;
     }
 
     @Override
-    public boolean isFlammable(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return flammable;
     }
 
     @Override
-    public boolean isFireSource(World world, int x, int y, int z,  EnumFacing side) {
+    public boolean isFireSource(World world,BlockPos pos, EnumFacing side) {
         return flammable && flammability == 0;
     }
 
@@ -101,17 +99,16 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-        super.randomDisplayTick(world, x, y, z, rand);
+    public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        super.randomDisplayTick(world, pos, state, rand);
 
-        if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) && !world.getBlock(x, y - 2, z).getMaterial().blocksMovement()) {
-            double px = (double) ((float) x + rand.nextFloat());
-            double py = (double) y - 1.05D;
-            double pz = (double) ((float) z + rand.nextFloat());
+        if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, pos.down()) && !world.getBlockState(pos.down(2)).getBlock().getMaterial().blocksMovement()) {
+            double px = pos.getX() + rand.nextFloat();
+            double py = pos.getY() - 1.05D;
+            double pz = pos.getZ() + rand.nextFloat();
 
             EntityFX fx = new EntityDropParticleFX(world, px, py, pz, particleRed, particleGreen, particleBlue);
             FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
         }
     }
-
 }

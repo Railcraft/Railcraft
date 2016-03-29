@@ -60,8 +60,8 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting crafter) {
-        super.addCraftingToCrafters(crafter);
+    public void onCraftGuiOpened(ICrafting crafter) {
+        super.onCraftGuiOpened(crafter);
         tile.getTankManager().initGuiData(this, crafter, 0);
         tile.getTankManager().initGuiData(this, crafter, 1);
 

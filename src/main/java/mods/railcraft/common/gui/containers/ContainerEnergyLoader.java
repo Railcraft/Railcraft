@@ -49,8 +49,8 @@ public class ContainerEnergyLoader extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting player) {
-        super.addCraftingToCrafters(player);
+    public void onCraftGuiOpened(ICrafting player) {
+        super.onCraftGuiOpened(player);
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 0, (int) device.getEnergy());
         player.sendProgressBarUpdate(this, 1, device.storageUpgrades);
         player.sendProgressBarUpdate(this, 2, device.lapotronUpgrades);

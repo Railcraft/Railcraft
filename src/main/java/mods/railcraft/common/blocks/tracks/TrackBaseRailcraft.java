@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.TrackInstanceBase;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackSpec;
@@ -38,16 +39,20 @@ public abstract class TrackBaseRailcraft extends TrackInstanceBase {
         return TrackRegistry.getTrackSpec(getTrackType().getTag());
     }
     
-    @Override
-    public IIcon getIcon(){
-        return getIcon(0);
-    }
-
-    public IIcon getIcon(int index) {
-        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[index];
-    }
+//    @Override
+//    public IIcon getIcon(){
+//        return getIcon(0);
+//    }
+//
+//    public IIcon getIcon(int index) {
+//        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[index];
+//    }
 
     public int getPowerPropagation() {
         return 0;
+    }
+
+    public boolean canPropagatePowerTo(ITrackInstance track){
+        return true;
     }
 }

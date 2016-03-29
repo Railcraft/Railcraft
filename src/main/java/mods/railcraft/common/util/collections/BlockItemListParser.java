@@ -11,6 +11,8 @@ package mods.railcraft.common.util.collections;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.common.registry.GameData;
 import org.apache.logging.log4j.Level;
 
@@ -32,7 +34,7 @@ public class BlockItemListParser {
                     @Override
                     public ItemKey makeKey(String entry) throws IllegalArgumentException {
                         String[] tokens = entry.split("#");
-                        Item item = GameData.getItemRegistry().getObject(tokens[0]);
+                        Item item = GameData.getItemRegistry().getObject(new ResourceLocation(tokens[0]));
                         if (item == null)
                             throw new IllegalArgumentException("Invalid Item Name while parsing config = " + entry);
                         int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;
@@ -44,7 +46,7 @@ public class BlockItemListParser {
                     @Override
                     public BlockKey makeKey(String entry) throws IllegalArgumentException {
                         String[] tokens = entry.split("#");
-                        Block block = GameData.getBlockRegistry().getObject(tokens[0]);
+                        Block block = GameData.getBlockRegistry().getObject(new ResourceLocation(tokens[0]));
                         if (block == null)
                             throw new IllegalArgumentException("Invalid Block Name while parsing config = " + entry);
                         int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;

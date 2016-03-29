@@ -22,6 +22,7 @@ public class ItemSteelShovel extends ItemSpade {
         super(ItemMaterials.STEEL_TOOL);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setUnlocalizedName("railcraft.tool.steel.shovel");
+        setRegistryName("Railcraft:tool.steel.shovel");
     }
 
     @Override

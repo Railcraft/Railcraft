@@ -10,8 +10,9 @@ package mods.railcraft.client.render;
 
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
@@ -20,13 +21,11 @@ import java.util.Arrays;
 
 public class RenderFakeBlock {
 
-    private static RenderBlocks renderBlocks = new RenderBlocks();
+    private static CuboidRenderHelper cuboidRenderHelper = new CuboidRenderHelper();
 
     public static class RenderInfo {
-
-        public Block template = Blocks.stone;
-        public IIcon[] texture = null;
-        public IIcon override = null;
+        public TextureAtlasSprite[] texture = null;
+        public TextureAtlasSprite override = null;
         public float minX = 0;
         public float minY = 0;
         public float minZ = 0;
@@ -41,9 +40,8 @@ public class RenderFakeBlock {
             setRenderAllSides();
         }
 
-        public RenderInfo(Block template, IIcon[] texture) {
+        public RenderInfo(TextureAtlasSprite[] texture) {
             this();
-            this.template = template;
             this.texture = texture;
         }
 
@@ -92,11 +90,11 @@ public class RenderFakeBlock {
             maxZ = 1 - temp;
         }
 
-        public IIcon getBlockTextureFromSide(int i) {
+        public TextureAtlasSprite getBlockTextureFromSide(int i) {
             if (override != null)
                 return override;
             if (texture == null || texture.length == 0)
-                return template.getBlockTextureFromSide(i);
+                return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
             else {
                 if (i >= texture.length)
                     i = 0;
@@ -110,13 +108,13 @@ public class RenderFakeBlock {
         renderBlock(info, blockAccess, -0.5, -0.5, -0.5, i, j, k, doLight, doTessellating);
     }
 
-    public static void renderAsBlock(RenderInfo info, RenderBlocks renderBlocks, IBlockAccess blockAccess, double x, double y, double z) {
+    public static void renderAsBlock(RenderInfo info, CuboidRenderHelper helper, IBlockAccess blockAccess, double x, double y, double z) {
         BlockCube block = BlockCube.getBlock();
         if (block != null) {
-            block.setTextureOverride(info);
-            renderBlocks.setRenderBounds(info.minX, info.minY, info.minZ, info.maxX, info.maxY, info.maxZ);
-            renderBlocks.renderStandardBlock(block, (int) x, (int) y, (int) z);
-            block.setTextureOverride(null);
+            helper.setBounds(info);
+            helper.setTextureState(info);
+            helper.continueUsingRenderer(Tessellator.getInstance().getWorldRenderer());
+            helper.renderAllFaces();
         } else
             renderBlock(info, blockAccess, x, y, z, true, false);
     }

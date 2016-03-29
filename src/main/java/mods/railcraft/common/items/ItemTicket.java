@@ -10,6 +10,7 @@ package mods.railcraft.common.items;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
@@ -31,13 +32,13 @@ import java.util.List;
  */
 public class ItemTicket extends ItemRailcraft {
 
-    public static final IStackFilter FILTER = new IStackFilter() {
+    public static final IStackFilter FILTER = new StackFilter() {
         @Override
-        public boolean matches(ItemStack stack) {
+        public boolean apply(ItemStack stack) {
             return stack != null && stack.getItem() instanceof ItemTicket;
         }
-
     };
+
     public static final int LINE_LENGTH = 32;
     public static ItemTicket item;
 
@@ -65,10 +66,10 @@ public class ItemTicket extends ItemRailcraft {
             return false;
 
         NBTTagString dest = (NBTTagString) nbt.getTag("dest");
-        if (dest.func_150285_a_() == null)
+        if (dest.getString() == null)
             return false;
 
-        return dest.func_150285_a_().length() <= LINE_LENGTH;
+        return dest.getString().length() <= LINE_LENGTH;
     }
 
     public static ItemStack copyTicket(ItemStack source) {
@@ -129,11 +130,11 @@ public class ItemTicket extends ItemRailcraft {
         return dest.length() < LINE_LENGTH;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:ticket");
-    }
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public void registerIcons(IIconRegister iconRegister) {
+//        itemIcon = iconRegister.registerIcon("railcraft:ticket");
+//    }
 
 //    @Override
 //    public String getItemDisplayName(ItemStack stack) {

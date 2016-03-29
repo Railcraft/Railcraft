@@ -26,11 +26,11 @@ public class TrackDefault extends TrackInstanceBase {
         return TrackRegistry.getTrackSpec("Railcraft:default");
     }
 
-    @Override
-    public IIcon getIcon() {
-        int meta = tileEntity.getBlockMetadata();
-        return Blocks.rail.getIcon(0, meta);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        int meta = tileEntity.getBlockMetadata();
+//        return Blocks.rail.getIcon(0, meta);
+//    }
 
     @Override
     public boolean isFlexibleRail() {
@@ -45,7 +45,7 @@ public class TrackDefault extends TrackInstanceBase {
     @Override
     public void update() {
         if (Game.isHost(getWorld())) {
-            getWorld().setBlock(getX(), getY(), getZ(), Blocks.rail, tileEntity.getBlockMetadata(), 3);
+            getWorld().setBlockState(getPos(), Blocks.rail.getStateFromMeta(tileEntity.getBlockMetadata()), 3);
         }
     }
 }

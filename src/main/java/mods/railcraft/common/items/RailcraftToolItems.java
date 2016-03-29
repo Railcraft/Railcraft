@@ -13,6 +13,8 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.LootPlugin.Type;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -54,7 +56,7 @@ public class RailcraftToolItems {
     private static void registerSteelShears() {
         Item item = itemSteelShears;
         if (item == null) {
-            String tag = "railcraft.tool.steel.shears";
+            String tag = "tool.steel.shears";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = itemSteelShears = new ItemSteelShears();
@@ -79,7 +81,7 @@ public class RailcraftToolItems {
     private static void registerSteelSword() {
         Item item = itemSteelSword;
         if (item == null) {
-            String tag = "railcraft.tool.steel.sword";
+            String tag = "tool.steel.sword";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = itemSteelSword = new ItemSteelSword();
                 RailcraftRegistry.register(item);
@@ -91,7 +93,7 @@ public class RailcraftToolItems {
                         'I', "ingotSteel",
                         'S', "stickWood");
 
-                LootPlugin.addLootWarrior(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, Type.WARRIOR, tag);
             }
         }
     }
@@ -105,7 +107,7 @@ public class RailcraftToolItems {
     private static void registerSteelShovel() {
         Item item = itemSteelShovel;
         if (item == null) {
-            String tag = "railcraft.tool.steel.shovel";
+            String tag = "tool.steel.shovel";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = itemSteelShovel = new ItemSteelShovel();
                 RailcraftRegistry.register(item);
@@ -120,7 +122,7 @@ public class RailcraftToolItems {
                 });
                 CraftingManager.getInstance().getRecipeList().add(recipe);
 
-                LootPlugin.addLootTool(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, Type.TOOL, tag);
             }
         }
     }
@@ -134,7 +136,7 @@ public class RailcraftToolItems {
     private static void registerSteelPickaxe() {
         Item item = itemSteelPickaxe;
         if (item == null) {
-            String tag = "railcraft.tool.steel.pickaxe";
+            String tag = "tool.steel.pickaxe";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = itemSteelPickaxe = new ItemSteelPickaxe();
@@ -150,7 +152,7 @@ public class RailcraftToolItems {
                 });
                 CraftingManager.getInstance().getRecipeList().add(recipe);
 
-                LootPlugin.addLootTool(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, Type.TOOL, tag);
             }
         }
     }
@@ -164,7 +166,7 @@ public class RailcraftToolItems {
     private static void registerSteelAxe() {
         Item item = itemSteelAxe;
         if (item == null) {
-            String tag = "railcraft.tool.steel.axe";
+            String tag = "tool.steel.axe";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = itemSteelAxe = new ItemSteelAxe();
@@ -178,7 +180,7 @@ public class RailcraftToolItems {
                         'I', "ingotSteel",
                         'S', "stickWood");
 
-                LootPlugin.addLootTool(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, Type.TOOL, tag);
             }
         }
     }
@@ -192,7 +194,7 @@ public class RailcraftToolItems {
     private static void registerSteelHoe() {
         Item item = itemSteelHoe;
         if (item == null) {
-            String tag = "railcraft.tool.steel.hoe";
+            String tag = "tool.steel.hoe";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = itemSteelHoe = new ItemSteelHoe();
@@ -219,11 +221,12 @@ public class RailcraftToolItems {
     private static void registerSteelHelmet() {
         Item item = itemSteelHelmet;
         if (item == null) {
-            String tag = "railcraft.armor.steel.helmet";
+            String tag = "armor.steel.helmet";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = itemSteelHelmet = new ItemSteelArmor(0);
-                item.setUnlocalizedName(tag);
+                item.setUnlocalizedName("railcraft." + tag);
+                item.setRegistryName("Railcraft", tag);
                 RailcraftRegistry.register(item);
 
                 CraftingPlugin.addShapedRecipe(new ItemStack(item), true, new Object[]{
@@ -231,7 +234,7 @@ public class RailcraftToolItems {
                         "I I",
                         'I', "ingotSteel",});
 
-                LootPlugin.addLootWarrior(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, Type.WARRIOR, tag);
             }
         }
     }
@@ -245,11 +248,12 @@ public class RailcraftToolItems {
     private static void registerSteelArmor() {
         Item item = itemSteelArmor;
         if (item == null) {
-            String tag = "railcraft.armor.steel.plate";
+            String tag = "armor.steel.plate";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = itemSteelArmor = new ItemSteelArmor(1);
-                item.setUnlocalizedName(tag);
+                item.setUnlocalizedName("railcraft." + tag);
+                item.setRegistryName("Railcraft", tag);
                 RailcraftRegistry.register(item);
 
                 CraftingPlugin.addShapedRecipe(new ItemStack(item), true, new Object[]{
@@ -258,7 +262,7 @@ public class RailcraftToolItems {
                         "III",
                         'I', "ingotSteel",});
 
-                LootPlugin.addLootWarrior(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, Type.WARRIOR, tag);
             }
         }
     }
@@ -272,7 +276,7 @@ public class RailcraftToolItems {
     private static void registerSteelLegs() {
         Item item = itemSteelLegs;
         if (item == null) {
-            String tag = "railcraft.armor.steel.legs";
+            String tag = "armor.steel.legs";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = itemSteelLegs = new ItemSteelArmor(2);
@@ -285,7 +289,7 @@ public class RailcraftToolItems {
                         "I I",
                         'I', "ingotSteel",});
 
-                LootPlugin.addLootWarrior(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, Type.WARRIOR, tag);
             }
         }
     }
@@ -299,7 +303,7 @@ public class RailcraftToolItems {
     private static void registerSteelBoots() {
         Item item = itemSteelBoots;
         if (item == null) {
-            String tag = "railcraft.armor.steel.boots";
+            String tag = "armor.steel.boots";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = itemSteelBoots = new ItemSteelArmor(3);
@@ -311,7 +315,7 @@ public class RailcraftToolItems {
                         "I I",
                         'I', "ingotSteel",});
 
-                LootPlugin.addLootWarrior(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, Type.WARRIOR, tag);
             }
         }
     }
@@ -324,9 +328,9 @@ public class RailcraftToolItems {
 
     public static void registerCoalCoke() {
         if (itemCoalCoke == null) {
-            String tag = "railcraft.fuel.coke";
+            String tag = "fuel.coke";
             if (RailcraftConfig.isItemEnabled(tag)) {
-                Item item = itemCoalCoke = new ItemRailcraft().setUnlocalizedName(tag);
+                Item item = itemCoalCoke = new ItemRailcraft().setUnlocalizedName("railcraft." + tag).setRegistryName("Railcraft", tag);
                 RailcraftRegistry.register(itemCoalCoke);
 
                 if (RailcraftConfig.coalcokeTorchOutput() > 0) {
@@ -337,8 +341,8 @@ public class RailcraftToolItems {
                             'S', "stickWood");
                 }
 
-                LootPlugin.addLootTool(new ItemStack(item), 4, 16, tag);
-                LootPlugin.addLootWorkshop(new ItemStack(item), 4, 16, tag);
+                LootPlugin.addLoot(new ItemStack(item), 4, 16, Type.TOOL, tag);
+                LootPlugin.addLoot(new ItemStack(item), 4, 16, Type.WORKSHOP, tag);
 
                 OreDictionary.registerOre("fuelCoke", new ItemStack(itemCoalCoke));
             }

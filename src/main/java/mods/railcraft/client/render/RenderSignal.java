@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSignal extends RenderTESRSignals implements ICombinedRenderer {
+public class RenderSignal extends RenderTESRSignals implements ICombinedBaker {
 
     private final SignalAspect defaultAspect;
     private final RenderInfo info = new RenderInfo();

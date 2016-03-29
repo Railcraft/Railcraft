@@ -21,13 +21,13 @@ public class TrackElectric extends TrackBaseRailcraft implements IElectricGrid {
         return EnumTrack.ELECTRIC;
     }
 
-    @Override
-    public IIcon getIcon() {
-        int meta = tileEntity.getBlockMetadata();
-        if (meta >= 6)
-            return getIcon(1);
-        return getIcon(0);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        int meta = tileEntity.getBlockMetadata();
+//        if (meta >= 6)
+//            return getIcon(1);
+//        return getIcon(0);
+//    }
 
     @Override
     public boolean isFlexibleRail() {

@@ -8,14 +8,13 @@
  */
 package mods.railcraft.client.gui;
 
-import mods.railcraft.client.gui.buttons.GuiBetterButton;
-import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.items.ItemTicket;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.network.PacketCurrentItemNBT;
-import mods.railcraft.common.util.network.PacketDispatcher;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,13 +24,18 @@ import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.List;
+import mods.railcraft.client.gui.buttons.GuiBetterButton;
+import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.items.ItemTicket;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.network.PacketCurrentItemNBT;
+import mods.railcraft.common.util.network.PacketDispatcher;
 
 @SideOnly(Side.CLIENT)
 public class GuiTicket extends GuiScreen {
@@ -137,7 +141,7 @@ public class GuiTicket extends GuiScreen {
      * KeyListener.keyTyped(KeyEvent e).
      */
     @Override
-    protected void keyTyped(char c, int key) {
+    protected void keyTyped(char c, int key) throws IOException {
         super.keyTyped(c, key);
         switch (c) {
             case Keyboard.KEY_U:

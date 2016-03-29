@@ -14,6 +14,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -27,7 +28,6 @@ import java.util.Set;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
-import static net.minecraftforge.common.util.EnumFacing.*;
 
 public class TileBoxSequencer extends TileBoxBase {
 
@@ -45,8 +45,8 @@ public class TileBoxSequencer extends TileBoxBase {
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block block) {
+        super.onNeighborBlockChange(state, block);
         if (worldObj.isRemote)
             return;
         boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos());
@@ -84,9 +84,9 @@ public class TileBoxSequencer extends TileBoxBase {
             }
         }
 
-        EnumFacing newSide = sideOutput.getRotation(UP);
+        EnumFacing newSide = EnumFacing.getFront((sideOutput.ordinal() + 1) % 6);;
         while (newSide != sideOutput && !canOutputToSide(newSide)) {
-            newSide = newSide.getRotation(UP);
+            newSide = EnumFacing.getFront((newSide.ordinal() +1) % 6);
         }
         sideOutput = newSide;
         updateNeighbors();
@@ -107,21 +107,13 @@ public class TileBoxSequencer extends TileBoxBase {
             return true;
         if (tile instanceof TileBoxBase)
             return ((TileBoxBase) tile).canReceiveAspect();
-        Block block = WorldPlugin.getBlockOnSide(worldObj, getPos(), side);
+        IBlockState state = WorldPlugin.getBlockState(worldObj, getPos().offset(side));
+        Block block = state.getBlock();
         if (block == Blocks.redstone_wire)
             return true;
         if (block == Blocks.unpowered_repeater || block == Blocks.powered_repeater) {
-            int facing = BlockDirectional.getDirection(WorldPlugin.getBlockMetadataOnSide(worldObj, xCoord, yCoord, zCoord, side));
-            switch (side) {
-                case NORTH:
-                    return facing == 0;
-                case SOUTH:
-                    return facing == 2;
-                case EAST:
-                    return facing == 1;
-                case WEST:
-                    return facing == 3;
-            }
+            EnumFacing facing = state.getValue(BlockDirectional.FACING);
+            return side == facing;
         }
         return false;
     }

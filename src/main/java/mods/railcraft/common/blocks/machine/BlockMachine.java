@@ -16,6 +16,8 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -42,22 +44,23 @@ import org.apache.logging.log4j.Level;
 import java.util.List;
 import java.util.Random;
 
-public class BlockMachine extends BlockContainer implements IPostConnection {
+public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer implements IPostConnection {
 
-    private final IMachineProxy proxy;
-    private final int renderId;
+    private final IMachineProxy<M> proxy;
     private final int[] metaOpacity;
+    private final BlockState altBlockState;
 
-    public BlockMachine(int renderId, IMachineProxy proxy, boolean opaque, int[] metaOpacity) {
+    public BlockMachine(IMachineProxy<M> proxy, boolean opaque, int[] metaOpacity) {
         super(Material.rock);
         setResistance(4.5F);
         setHardness(2.0F);
         setStepSound(soundTypeStone);
         setTickRandomly(true);
         this.proxy = proxy;
+        this.altBlockState = new BlockState(this, proxy.getVariantProperty());
+        setDefaultState(altBlockState.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMachine(0)));
         this.fullBlock = opaque;
 
-        this.renderId = renderId;
         this.metaOpacity = metaOpacity;
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
@@ -65,8 +68,18 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     }
 
     @Override
-    public int getRenderType() {
-        return renderId;
+    public BlockState getBlockState() {
+        return this.altBlockState;
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return proxy.getMeta(state.getValue(proxy.getVariantProperty()));
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(proxy.getVariantProperty(), proxy.getMachine(meta));
     }
 
     /**
@@ -80,12 +93,12 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
         return 1;
     }
 
-    public IMachineProxy getMachineProxy() {
+    public IMachineProxy<M> getMachineProxy() {
         return proxy;
     }
 
-    public IEnumMachine getMachineType(IBlockState state) {
-        return proxy.getMachine(meta);
+    public M getMachineType(IBlockState state) {
+        return state.getValue(proxy.getVariantProperty());
     }
 
     @Override
@@ -162,11 +175,12 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
         player.addExhaustion(0.025F);
+        IBlockState state = world.getBlockState(pos);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
-            if (canSilkHarvest(world, player, pos, 0) && EnchantmentHelper.getSilkTouchModifier(player)) {
-                List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, 0, 0);
+            if (canSilkHarvest(world, pos, state, player) && EnchantmentHelper.getSilkTouchModifier(player)) {
+                List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, state, 0);
                 for (ItemStack stack : drops) {
-                    dropBlockAsItem(world, pos, stack);
+                    spawnAsEntity(world, pos, stack);
                 }
             } else
                 dropBlockAsItem(world, pos, state, 0);
@@ -198,7 +212,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
 
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
-        List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, state, 0);
+        List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, world.getBlockState(pos), 0);
         return drops.get(0);
     }
 
@@ -272,7 +286,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
 
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return proxy.getMachine(meta).getTileEntity();
+        return getMachineType(state).getTileEntity();
     }
 
     @Override
@@ -296,8 +310,8 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        for (IEnumMachine type : proxy.getCreativeList()) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+        for (M type : proxy.getCreativeList()) {
             if (type.isAvailable())
                 list.add(type.getItem());
         }
@@ -310,7 +324,7 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
 
     @Override
     public int getLightOpacity(IBlockAccess world, BlockPos pos) {
-        int meta = world.getBlockMetadata(pos);
+        int meta = getMetaFromState(world.getBlockState(pos));
         return metaOpacity[meta];
     }
 
@@ -355,25 +369,25 @@ public class BlockMachine extends BlockContainer implements IPostConnection {
     public int getComparatorInputOverride(World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof IComparatorValueProvider)
-            return ((IComparatorValueProvider) tile).getComparatorInputOverride(worldIn, pos);
+            return ((IComparatorValueProvider) tile).getComparatorInputOverride(worldIn, pos, null);
         return 0;
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing face) {
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).connectsToPost(side);
+            return ((TileMachineBase) tile).connectsToPost(face);
         return ConnectStyle.NONE;
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
-        return BoundingBoxManager.getCollisionBox(worldIn, pos, getMachineType(worldIn, pos));
+        return BoundingBoxManager.getCollisionBox(worldIn, pos, getMachineType(worldIn.getBlockState(pos)));
     }
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
-        return BoundingBoxManager.getSelectionBox(worldIn, pos, getMachineType(worldIn, pos));
+        return BoundingBoxManager.getSelectionBox(worldIn, pos, getMachineType(worldIn.getBlockState(pos)));
     }
 }

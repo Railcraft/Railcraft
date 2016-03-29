@@ -22,7 +22,7 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderSlab extends BlockRenderer {
+public class RenderSlab extends BlockModelBase {
 
     public RenderSlab() {
         super(BlockRailcraftSlab.getBlock());

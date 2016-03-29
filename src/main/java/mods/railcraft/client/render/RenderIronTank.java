@@ -23,7 +23,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderIronTank extends TileEntitySpecialRenderer {
+public class RenderIronTank extends TileEntitySpecialRenderer<TileTankBase> {
     private static final RenderInfo fillBlock = new RenderInfo();
 
     public RenderIronTank() {
@@ -79,8 +79,8 @@ public class RenderIronTank extends TileEntitySpecialRenderer {
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f) {
-        if (!((TileMultiBlock) tile).isStructureValid())
+    public void renderTileEntityAt(TileTankBase tile, double x, double y, double z, float f, int destroyStage) {
+        if (!tile.isStructureValid())
             return;
 
         if (tile instanceof TileTankIronValve) {
@@ -144,15 +144,14 @@ public class RenderIronTank extends TileEntitySpecialRenderer {
             }
         }
 
-        TileTankBase ironTank = (TileTankBase) tile;
-        if (!ironTank.isMaster() || ironTank.isInvalid())
+        if (!tile.isMaster() || tile.isInvalid())
             return;
-        int height = getTankHeight(ironTank);
+        int height = getTankHeight(tile);
         float yOffset = height / 2f;
         float vScale = height - 2;
-        float hScale = ironTank.getPattern().getPatternWidthX() - 2;
+        float hScale = tile.getPattern().getPatternWidthX() - 2;
 
-        TankManager tankManager = ironTank.getTankManager();
+        TankManager tankManager = tile.getTankManager();
         if (tankManager == null)
             return;
         StandardTank tank = tankManager.get(0);

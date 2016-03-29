@@ -19,13 +19,14 @@ import net.minecraft.item.ItemStack;
  */
 public class ItemCrowbarReinforced extends ItemCrowbar {
 
-    private static final String ITEM_TAG = "railcraft.tool.crowbar.reinforced";
+    private static final String ITEM_TAG = "tool.crowbar.reinforced";
     public static Item item;
 
     public static void registerItem() {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
             item = new ItemCrowbarReinforced();
-            item.setUnlocalizedName(ITEM_TAG);
+            item.setUnlocalizedName("railcraft." + ITEM_TAG);
+            item.setRegistryName("Railcraft", ITEM_TAG);
             RailcraftRegistry.register(item);
 
             CraftingPlugin.addShapedRecipe(new ItemStack(item),

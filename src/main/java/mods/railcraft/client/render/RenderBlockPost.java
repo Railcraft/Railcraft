@@ -30,15 +30,15 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderBlockPost extends BlockRenderer {
+public class RenderBlockPost extends BlockModelBase {
     private static final float PIX = RenderTools.PIXEL;
 
     protected RenderBlockPost(Block block) {
         super(block);
     }
 
-    public static BlockRenderer make() {
-        BlockRenderer renderer = new RenderBlockPost(BlockPost.getBlock());
+    public static BlockModelBase make() {
+        BlockModelBase renderer = new RenderBlockPost(BlockPost.getBlock());
         renderer.addCombinedRenderer(EnumPost.WOOD.ordinal(), new RenderPost());
         renderer.addCombinedRenderer(EnumPost.WOOD_PLATFORM.ordinal(), new RenderPost());
         renderer.addCombinedRenderer(EnumPost.STONE.ordinal(), new RenderPostStone());
@@ -49,7 +49,7 @@ public class RenderBlockPost extends BlockRenderer {
         return renderer;
     }
 
-    protected static class RenderPost implements ICombinedRenderer {
+    protected static class RenderPost implements ICombinedBaker {
         @Override
         public void renderBlock(RenderBlocks renderblocks, IBlockAccess world, int x, int y, int z, Block block) {
             BlockPostBase blockPost = (BlockPostBase) block;

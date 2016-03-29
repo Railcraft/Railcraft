@@ -18,6 +18,7 @@ public class ItemSteelSword extends ItemSword {
     public ItemSteelSword() {
         super(ItemMaterials.STEEL_TOOL);
         setUnlocalizedName("railcraft.tool.steel.sword");
+        setRegistryName("Railcraft:tool.steel.sword");
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 

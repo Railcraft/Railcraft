@@ -9,7 +9,6 @@
 package mods.railcraft.common.items;
 
 import buildcraft.api.tools.IToolWrench;
-import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -20,6 +19,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,10 +37,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench {
+public class ItemCrowbar extends ItemTool implements IToolCrowbar,
+// FIXME IC2 compat
+/*IBoxable,*/
+IToolWrench {
 
     private static final byte BOOST_DAMAGE = 3;
-    private static final String ITEM_TAG = "railcraft.tool.crowbar";
+    private static final String ITEM_TAG = "tool.crowbar";
     private static Item item;
     private final Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
     private final Set<Class<? extends Block>> bannedRotations = new HashSet<Class<? extends Block>>();
@@ -48,7 +51,8 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
     public static void registerItem() {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
             item = new ItemCrowbar(ToolMaterial.IRON);
-            item.setUnlocalizedName(ITEM_TAG);
+            item.setUnlocalizedName("railcraft." + ITEM_TAG);
+            item.setRegistryName("Railcraft", ITEM_TAG);
             RailcraftRegistry.register(item);
 
             CraftingPlugin.addShapedRecipe(new ItemStack(item),
@@ -159,21 +163,32 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
         player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
         return stack;
     }
+    
+    // FIXME IC2 compat
+//    @Override
+//    public boolean canBeStoredInToolbox(ItemStack itemstack) {
+//        return true;
+//    }
 
     @Override
-    public boolean canBeStoredInToolbox(ItemStack itemstack) {
+    public boolean canWrench(EntityPlayer player, BlockPos pos) {
         return true;
     }
 
     @Override
-    public boolean canWrench(EntityPlayer player, int x, int y, int z) {
-        return true;
-    }
-
-    @Override
-    public void wrenchUsed(EntityPlayer player, int x, int y, int z) {
+    public void wrenchUsed(EntityPlayer player, BlockPos pos) {
         player.getCurrentEquippedItem().damageItem(1, player);
         player.swingItem();
+    }
+    
+    @Override
+    public boolean canWrench(EntityPlayer player, Entity entity) {
+        return false;
+    }
+    
+    @Override
+    public void wrenchUsed(EntityPlayer player, Entity entity) {
+        // FIXME: Design-desision: should this be able to wrench entities?
     }
 
     @Override

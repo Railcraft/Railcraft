@@ -24,7 +24,7 @@ import org.lwjgl.opengl.GL11;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderWall extends BlockRenderer {
+public class RenderWall extends BlockModelBase {
 
     public RenderWall(Block block) {
         super(block);

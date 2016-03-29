@@ -29,13 +29,13 @@ public class TrackSpeedBoost extends TrackSpeed implements ITrackPowered {
         return EnumTrack.SPEED_BOOST;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[1];
-        }
-        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[0];
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (!isPowered()) {
+//            return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[1];
+//        }
+//        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[0];
+//    }
 
     @Override
     public int getPowerPropagation() {

@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.carts.ItemCartAnchor;
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineAlpha implements IEnumMachine {
+public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
     WORLD_ANCHOR(Module.CHUNK_LOADING, "anchor.world", TileAnchorWorld.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
     TURBINE(Module.ELECTRICITY, "turbine", TileSteamTurbine.class, 3, 3, 2, 2, 2, 2, 6, 2, 0, 1, 3, 4, 5, 7),
@@ -131,7 +132,7 @@ public enum EnumMachineAlpha implements IEnumMachine {
     }
 
     @Override
-    public Block getBlock() {
+    public BlockMachine<EnumMachineAlpha> getBlock() {
         return RailcraftBlocks.getBlockMachineAlpha();
     }
 
@@ -190,5 +191,10 @@ public enum EnumMachineAlpha implements IEnumMachine {
             return getBlock() != null;
         }
         return false;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

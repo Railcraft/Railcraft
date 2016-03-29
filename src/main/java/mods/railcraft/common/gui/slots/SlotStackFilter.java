@@ -32,6 +32,6 @@ public class SlotStackFilter extends SlotRailcraft {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return filter.matches(stack);
+        return filter.apply(stack);
     }
 }

@@ -16,6 +16,8 @@ import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.IChatComponent;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -25,7 +27,7 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class DetectorSecured extends Detector implements IGuiReturnHandler, ISecure<LockButtonState> {
-    private final MultiButtonController<LockButtonState> lockController = new MultiButtonController(0, LockButtonState.VALUES);
+    private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 
     public DetectorSecured() {
         super();
@@ -94,8 +96,16 @@ public abstract class DetectorSecured extends Detector implements IGuiReturnHand
     public String getName() {
         return tile.getName();
     }
-
+    
     @Override
+    public IChatComponent getDisplayName() {
+        return new ChatComponentTranslation(getLocalizationTag());
+    }
+
+    /**
+     * @deprecated But this might be needed elsewhere
+     */
+    @Deprecated
     public String getLocalizationTag() {
         return tile.getLocalizationTag();
     }

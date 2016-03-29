@@ -42,17 +42,17 @@ public class EffectManager {
 
         @Override
         public double getX() {
-            return source.xCoord + 0.5;
+            return source.getPos().getX() + 0.5;
         }
 
         @Override
         public double getY() {
-            return source.yCoord + 0.5;
+            return source.getPos().getY() + 0.5;
         }
 
         @Override
         public double getZ() {
-            return source.zCoord + 0.5;
+            return source.getPos().getZ() + 0.5;
         }
 
         @Override
@@ -76,7 +76,7 @@ public class EffectManager {
 
         @Override
         public double getY() {
-            return source.posY + source.yOffset;
+            return source.posY + source.getYOffset();
         }
 
         @Override

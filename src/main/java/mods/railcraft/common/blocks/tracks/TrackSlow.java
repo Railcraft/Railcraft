@@ -24,15 +24,15 @@ public class TrackSlow extends TrackBaseRailcraft
         return EnumTrack.SLOW;
     }
 
-    @Override
-    public IIcon getIcon()
-    {
-        int meta = tileEntity.getBlockMetadata();
-        if(meta >= 6) {
-            return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[1];
-        }
-        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[0];
-    }
+//    @Override
+//    public IIcon getIcon()
+//    {
+//        int meta = tileEntity.getBlockMetadata();
+//        if(meta >= 6) {
+//            return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[1];
+//        }
+//        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[0];
+//    }
 
     @Override
     public boolean isFlexibleRail()

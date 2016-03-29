@@ -10,9 +10,12 @@ package mods.railcraft.client.particles;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -77,7 +80,9 @@ public class EntityDropParticleFX extends EntityFX {
         Material material = this.worldObj.getBlockState(getPosition()).getBlock().getMaterial();
 
         if (material.isLiquid() || material.isSolid()) {
-            double d0 = (double) ((float) (MathHelper.floor_double(this.posY) + 1) - BlockLiquid.getLiquidHeightPercent(this.worldObj.getBlockMetadata(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))));
+            IBlockState state = this.worldObj.getBlockState(new BlockPos(this.posX, this.posY, this.posZ));
+            int meta = state.getBlock().getMetaFromState(state);
+            double d0 = MathHelper.floor_double(this.posY) + 1 - BlockLiquid.getLiquidHeightPercent(meta);
 
             if (this.posY < d0)
                 this.setDead();

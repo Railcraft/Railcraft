@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineBeta implements IEnumMachine {
+public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
 
     TANK_IRON_WALL(Module.TRANSPORT, "tank.iron.wall", TileTankIronWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
     TANK_IRON_GAUGE(Module.TRANSPORT, "tank.iron.gauge", TileTankIronGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
@@ -137,7 +138,7 @@ public enum EnumMachineBeta implements IEnumMachine {
     }
 
     @Override
-    public Block getBlock() {
+    public BlockMachine<EnumMachineBeta> getBlock() {
         return RailcraftBlocks.getBlockMachineBeta();
     }
 
@@ -157,5 +158,10 @@ public enum EnumMachineBeta implements IEnumMachine {
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

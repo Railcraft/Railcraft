@@ -10,6 +10,7 @@ package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerReinforced;
 import net.minecraft.entity.Entity;
+import net.minecraft.world.Explosion;
 
 
 public class TrackReinforced extends TrackBaseRailcraft {
@@ -25,14 +26,14 @@ public class TrackReinforced extends TrackBaseRailcraft {
         return EnumTrack.REINFORCED;
     }
 
-    @Override
-    public IIcon getIcon() {
-        int meta = tileEntity.getBlockMetadata();
-        if (meta >= 6) {
-            return getIcon(1);
-        }
-        return getIcon(0);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        int meta = tileEntity.getBlockMetadata();
+//        if (meta >= 6) {
+//            return getIcon(1);
+//        }
+//        return getIcon(0);
+//    }
 
     @Override
     public boolean isFlexibleRail() {
@@ -40,7 +41,7 @@ public class TrackReinforced extends TrackBaseRailcraft {
     }
 
     @Override
-    public float getExplosionResistance(double srcX, double srcY, double srcZ, Entity exploder) {
+    public float getExplosionResistance(Explosion explosion, Entity exploder) {
         return RESISTANCE;
     }
 }

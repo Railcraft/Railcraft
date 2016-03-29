@@ -25,6 +25,8 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
+
+import net.minecraft.client.gui.GuiRepair;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.world.World;

@@ -24,7 +24,9 @@ public class ItemSteelShears extends ItemShears {
         super();
         setMaxDamage(500);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setUnlocalizedName("railcraft.tool.steel.shears");
+        String tag = "tool.steel.shears";
+        setUnlocalizedName("railcraft." + tag);
+        setRegistryName("Railcraft", tag);
     }
 
     @Override

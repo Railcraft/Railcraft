@@ -17,6 +17,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S1BPacketEntityAttach;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -49,31 +51,30 @@ public class CartUtils {
      * @param cart  An ItemStack containing a cart item, will not be changed by
      *              the function
      * @param world The World object
-     * @param x     x-Coord
-     * @param y     y-Coord
-     * @param z     z-Coord
+     * @param pos   The position
      * @return the cart placed or null if failed
      * @see IMinecartItem , ItemMinecart
      */
-    public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, int x, int y, int z) {
+    public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, BlockPos pos) {
         if (cart == null)
             return null;
         cart = cart.copy();
 
         ICartType vanillaType = vanillaCartItemMap.get(cart.getItem());
         if (vanillaType != null)
-            return placeCart(vanillaType, owner, cart, world, x, y, z);
+            return placeCart(vanillaType, owner, cart, world, pos);
 
-        return CartTools.placeCart(owner, cart, world, x, y, z);
+        return CartTools.placeCart(owner, cart, world, pos);
     }
 
-    public static EntityMinecart placeCart(ICartType cartType, GameProfile owner, ItemStack cartStack, World world, int i, int j, int k) {
-        Block block = world.getBlock(i, j, k);
+    public static EntityMinecart placeCart(ICartType cartType, GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
         if (TrackTools.isRailBlock(block))
-            if (!CartTools.isMinecartAt(world, i, j, k, 0)) {
-                EntityMinecart cart = cartType.makeCart(cartStack, world, (float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F);
+            if (!CartTools.isMinecartAt(world, pos, 0)) {
+                EntityMinecart cart = cartType.makeCart(cartStack, world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 if (cartStack.hasDisplayName())
-                    cart.setMinecartName(cartStack.getDisplayName());
+                    cart.setCustomNameTag(cartStack.getDisplayName());
                 CartTools.setCartOwner(cart, owner);
                 if (world.spawnEntityInWorld(cart))
                     return cart;
@@ -120,27 +121,27 @@ public class CartUtils {
         return Math.abs(cart.motionX) < vel && Math.abs(cart.motionZ) < vel;
     }
 
-    @SuppressWarnings("rawtypes")
     public static List<EntityMinecart> getMinecartsIn(World world, AxisAlignedBB searchBox) {
-        List entities = world.getEntitiesWithinAABB(EntityMinecart.class, searchBox);
+        List<EntityMinecart> entities = world.getEntitiesWithinAABB(EntityMinecart.class, searchBox);
         List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
-        for (Object o : entities) {
-            EntityMinecart cart = (EntityMinecart) o;
+        for (EntityMinecart cart : entities) {
             if (!cart.isDead)
-                carts.add((EntityMinecart) o);
+                carts.add(cart);
         }
         return carts;
     }
 
-    @SuppressWarnings("rawtypes")
+    public static List<UUID> getMinecartUUIDsAt(World world, BlockPos pos, float sensitivity) {
+        return getMinecartUUIDsAt(world, pos.getX(), pos.getY(), pos.getZ(), sensitivity);
+    }
+
     public static List<UUID> getMinecartUUIDsAt(World world, int i, int j, int k, float sensitivity) {
         sensitivity = Math.min(sensitivity, 0.49f);
-        List entities = world.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.fromBounds(i + sensitivity, j + sensitivity, k + sensitivity, i + 1 - sensitivity, j + 1 - sensitivity, k + 1 - sensitivity));
+        List<EntityMinecart> entities = world.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.fromBounds(i + sensitivity, j + sensitivity, k + sensitivity, i + 1 - sensitivity, j + 1 - sensitivity, k + 1 - sensitivity));
         List<UUID> carts = new ArrayList<UUID>();
-        for (Object o : entities) {
-            EntityMinecart cart = (EntityMinecart) o;
+        for (EntityMinecart cart : entities) {
             if (!cart.isDead)
-                carts.add(((EntityMinecart) o).getPersistentID());
+                carts.add(cart.getPersistentID());
         }
         return carts;
     }

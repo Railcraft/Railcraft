@@ -16,10 +16,10 @@ import net.minecraft.block.Block;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderBlockPostMetal extends BlockRenderer {
+public class RenderBlockPostMetal extends BlockModelBase {
 
-    public static BlockRenderer make(BlockPostMetal block) {
-        BlockRenderer renderer = new RenderBlockPostMetal(block);
+    public static BlockModelBase make(BlockPostMetal block) {
+        BlockModelBase renderer = new RenderBlockPostMetal(block);
         renderer.setDefaultRenderer(new RenderPost());
         return renderer;
     }

@@ -20,6 +20,7 @@ import net.minecraft.inventory.ContainerRepair;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -42,7 +43,7 @@ public class ContainerAnvil extends ContainerRepair {
     private String repairedItemName;
     private final IInventory inputSlots;
 
-    public ContainerAnvil(InventoryPlayer playerInv, World world, int x, int y, int z, EntityPlayer player) {
+    public ContainerAnvil(InventoryPlayer playerInv, World world, BlockPos pos, EntityPlayer player) {
         super(playerInv, world, x, y, z, player);
         this.world = world;
         this.player = player;
@@ -50,7 +51,7 @@ public class ContainerAnvil extends ContainerRepair {
         this.y = y;
         this.z = z;
 
-        SlotAnvil slot = new SlotAnvil(this, outputSlot, 2, 134, 47, world, x, y, z);
+        SlotAnvil slot = new SlotAnvil(this, outputSlot, 2, 134, 47, world, pos);
         slot.slotNumber = 2;
         inventorySlots.set(2, slot);
 
@@ -317,19 +318,11 @@ public class ContainerAnvil extends ContainerRepair {
 
     private class SlotAnvil extends SlotRailcraft {
 
-        final World world;
-        final int x;
-        final int y;
-        final int z;
         final ContainerAnvil repairContainer;
 
-        SlotAnvil(ContainerAnvil container, IInventory inv, int index, int slotX, int slotY, World world, int x, int y, int z) {
+        SlotAnvil(ContainerAnvil container, IInventory inv, int index, int slotX, int slotY) {
             super(inv, index, slotX, slotY);
             this.repairContainer = container;
-            this.world = world;
-            this.x = x;
-            this.y = y;
-            this.z = z;
         }
 
         /**
