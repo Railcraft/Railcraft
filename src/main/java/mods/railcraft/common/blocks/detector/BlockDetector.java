@@ -47,7 +47,7 @@ public class BlockDetector extends BlockContainer {
     public BlockDetector() {
         super(Material.rock);
 
-        setRegistryName("railcraft.detector");
+        setUnlocalizedName("railcraft.detector");
         setResistance(4.5F);
         setHardness(2.0F);
         setStepSound(soundTypeStone);

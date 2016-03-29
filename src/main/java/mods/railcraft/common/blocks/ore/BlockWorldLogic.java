@@ -44,7 +44,7 @@ public class BlockWorldLogic extends Block {
 
     public BlockWorldLogic() {
         super(Material.rock);
-        setRegistryName("railcraft.worldlogic");
+        setUnlocalizedName("railcraft.worldlogic");
         setResistance(6000000.0F);
         setBlockUnbreakable();
         setStepSound(Block.soundTypeStone);

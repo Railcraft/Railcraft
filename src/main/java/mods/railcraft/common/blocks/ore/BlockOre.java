@@ -60,7 +60,7 @@ public class BlockOre extends Block {
         super(Material.rock);
         setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumOre.SULFUR));
         renderType = renderId;
-        setRegistryName("railcraft.ore");
+        setUnlocalizedName("railcraft.ore");
         setResistance(5);
         setHardness(3);
         setStepSound(Block.soundTypeStone);

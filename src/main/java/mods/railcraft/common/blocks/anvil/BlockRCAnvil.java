@@ -47,7 +47,7 @@ public class BlockRCAnvil extends BlockAnvil {
         if (block == null) {
             String tag = "railcraft.anvil";
             if (RailcraftConfig.isBlockEnabled(tag)) {
-                block = new BlockRCAnvil().setRegistryName(tag);
+                block = new BlockRCAnvil().setUnlocalizedName(tag);
                 RailcraftRegistry.register(block, ItemAnvilBlock.class);
 
                 ForestryPlugin.addBackpackItem("builder", block);

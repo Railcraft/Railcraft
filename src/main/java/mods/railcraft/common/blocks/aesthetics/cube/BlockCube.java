@@ -53,7 +53,7 @@ public class BlockCube extends Block {
     public BlockCube() {
         super(Material.rock);
         this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumCube.COKE_BLOCK));
-        setRegistryName("railcraft.cube");
+        setUnlocalizedName("railcraft.cube");
         setResistance(20);
         setHardness(5);
         setStepSound(RailcraftSound.getInstance());

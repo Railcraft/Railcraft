@@ -33,7 +33,7 @@ public class BlockFactorySlab extends BlockFactory {
     protected void doBlockInit() {
         int renderId = Railcraft.getProxy().getRenderId();
         BlockRailcraftSlab.block = new BlockRailcraftSlab(renderId);
-        BlockRailcraftSlab.block.setRegistryName("railcraft.slab");
+        BlockRailcraftSlab.block.setUnlocalizedName("railcraft.slab");
         RailcraftRegistry.register(BlockRailcraftSlab.block, ItemSlab.class);
         GameRegistry.registerTileEntity(TileSlab.class, "RCSlabTile");
 

@@ -63,7 +63,7 @@ public class BlockPostMetal extends BlockPostBase {
 
     private static BlockPostMetal make(String tag, boolean isPlatform) {
         BlockPostMetal block = new BlockPostMetal(Railcraft.getProxy().getRenderId(), isPlatform);
-        block.setRegistryName("railcraft." + tag);
+        block.setUnlocalizedName("railcraft." + tag);
         RailcraftRegistry.register(block, ItemPostMetal.class);
 
 //        HarvestPlugin.setBlockHarvestLevel(block, "crowbar", 0);

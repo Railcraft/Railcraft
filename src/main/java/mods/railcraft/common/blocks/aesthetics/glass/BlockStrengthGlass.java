@@ -52,7 +52,7 @@ public class BlockStrengthGlass extends BlockGlass {
         setHardness(1);
         setStepSound(Block.soundTypeGlass);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setRegistryName("railcraft.glass");
+        setUnlocalizedName("railcraft.glass");
         this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
     }
 

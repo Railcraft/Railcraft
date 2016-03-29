@@ -30,7 +30,7 @@ public class BlockSignalRailcraft extends BlockSignalBase {
 
     public BlockSignalRailcraft(int renderType) {
         super(renderType);
-        setRegistryName("railcraft.signal");
+        setUnlocalizedName("railcraft.signal");
         this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EnumSignal.BLOCK_SIGNAL));
 
         GameRegistry.registerTileEntity(TileBoxController.class, "RCTileStructureControllerBox");

@@ -38,7 +38,7 @@ public class BlockFactoryStairs extends BlockFactory {
     protected void doBlockInit() {
         int renderId = Railcraft.getProxy().getRenderId();
         BlockRailcraftStairs.block = new BlockRailcraftStairs(renderId);
-        BlockRailcraftStairs.block.setRegistryName("railcraft.stair");
+        BlockRailcraftStairs.block.setUnlocalizedName("railcraft.stair");
         RailcraftRegistry.register(BlockRailcraftStairs.block, ItemStair.class);
         GameRegistry.registerTileEntity(TileStair.class, "RCStairTile");
 

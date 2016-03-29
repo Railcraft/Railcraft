@@ -51,7 +51,7 @@ public class BlockHidden extends BlockContainer {
 
     public BlockHidden() {
         super(Material.air);
-        setRegistryName("railcraft.residual.heat");
+        setUnlocalizedName("railcraft.residual.heat");
         disableStats();
         setStepSound(new SoundType("null", 0, 0));
 

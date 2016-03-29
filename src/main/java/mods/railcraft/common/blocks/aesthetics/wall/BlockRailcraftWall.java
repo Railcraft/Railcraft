@@ -69,7 +69,7 @@ public class BlockRailcraftWall extends BlockWall {
         if (alpha == null && RailcraftConfig.isBlockEnabled("wall.alpha")) {
             int renderId = Railcraft.getProxy().getRenderId();
             alpha = new BlockRailcraftWall(renderId, true, new WallProxyApha());
-            alpha.setRegistryName("railcraft.wall.alpha");
+            alpha.setUnlocalizedName("railcraft.wall.alpha");
             RailcraftRegistry.register(alpha, ItemWall.class);
 
             for (EnumWallAlpha wall : EnumWallAlpha.VALUES) {
@@ -94,7 +94,7 @@ public class BlockRailcraftWall extends BlockWall {
         if (beta == null && RailcraftConfig.isBlockEnabled("wall.beta")) {
             int renderId = Railcraft.getProxy().getRenderId();
             beta = new BlockRailcraftWall(renderId, false, new WallProxyBeta());
-            beta.setRegistryName("railcraft.wall.beta");
+            beta.setUnlocalizedName("railcraft.wall.beta");
             RailcraftRegistry.register(beta, ItemWall.class);
 
             for (EnumWallBeta wall : EnumWallBeta.VALUES) {

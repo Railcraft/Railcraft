@@ -84,7 +84,7 @@ public class BlockFrame extends Block implements IPostConnection {
         setHardness(5);
         setStepSound(Block.soundTypeMetal);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setRegistryName("railcraft.frame");
+        setUnlocalizedName("railcraft.frame");
     }
 
     @Override
