@@ -8,16 +8,6 @@
  */
 package mods.railcraft.common.plugins.ic2;
 
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
-import ic2.api.energy.tile.IEnergyTile;
-import ic2.api.item.ElectricItem;
-import ic2.api.item.IC2Items;
-import ic2.api.item.IElectricItem;
-import ic2.api.recipe.IRecipeInput;
-import ic2.api.recipe.RecipeInputItemStack;
-import ic2.api.recipe.RecipeOutput;
-import ic2.api.recipe.Recipes;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Items;
@@ -46,50 +36,50 @@ public class IC2Plugin {
     private static Boolean classic = null;
 
     public static ItemStack getItem(String tag) {
-        if (!isModInstalled())
-            return null;
-        ItemStack stack = itemCache.get(tag);
-        if (stack != null)
-            return stack;
-        Boolean wasCached = itemCacheFlag.get(tag);
-        if (wasCached == Boolean.TRUE)
-            return null;
-        try {
-            itemCacheFlag.put(tag, Boolean.TRUE);
-            stack = IC2Items.getItem(tag);
-            if (stack != null)
-                itemCache.put(tag, stack.copy());
-            return stack;
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, Items.class);
-        }
+//        if (!isModInstalled())
+//            return null;
+//        ItemStack stack = itemCache.get(tag);
+//        if (stack != null)
+//            return stack;
+//        Boolean wasCached = itemCacheFlag.get(tag);
+//        if (wasCached == Boolean.TRUE)
+//            return null;
+//        try {
+//            itemCacheFlag.put(tag, Boolean.TRUE);
+//            stack = IC2Items.getItem(tag);
+//            if (stack != null)
+//                itemCache.put(tag, stack.copy());
+//            return stack;
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("IC2", error, Items.class);
+//        }
         return null;
     }
 
     public static void addTileToNet(TileEntity tile) {
-        try {
-            if (tile instanceof IEnergyTile)
-                MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergyTile) tile));
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, EnergyTileLoadEvent.class);
-        }
+//        try {
+//            if (tile instanceof IEnergyTile)
+//                MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergyTile) tile));
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("IC2", error, EnergyTileLoadEvent.class);
+//        }
     }
 
     public static void removeTileFromNet(TileEntity tile) {
-        try {
-            if (tile instanceof IEnergyTile)
-                MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) tile));
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, EnergyTileUnloadEvent.class);
-        }
+//        try {
+//            if (tile instanceof IEnergyTile)
+//                MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) tile));
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("IC2", error, EnergyTileUnloadEvent.class);
+//        }
     }
 
     public static boolean isEnergyItem(ItemStack stack) {
-        try {
-            return stack != null && stack.getItem() instanceof IElectricItem;
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, IElectricItem.class);
-        }
+//        try {
+//            return stack != null && stack.getItem() instanceof IElectricItem;
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("IC2", error, IElectricItem.class);
+//        }
         return false;
     }
 
@@ -98,12 +88,12 @@ public class IC2Plugin {
      * @return energy used
      */
     public static double chargeItem(ItemStack stack, double energy, int tier) {
-        try {
-            if (stack != null && stack.getItem() instanceof IElectricItem && energy > 0)
-                return ElectricItem.manager.charge(stack, energy, tier, false, false);
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, ElectricItem.class);
-        }
+//        try {
+//            if (stack != null && stack.getItem() instanceof IElectricItem && energy > 0)
+//                return ElectricItem.manager.charge(stack, energy, tier, false, false);
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("IC2", error, ElectricItem.class);
+//        }
         return 0;
     }
 
@@ -112,98 +102,98 @@ public class IC2Plugin {
      * @return energy received
      */
     public static double dischargeItem(ItemStack stack, double energyNeeded, int tier) {
-        try {
-            if (stack != null && stack.getItem() instanceof IElectricItem && ((IElectricItem) stack.getItem()).canProvideEnergy(stack))
-                return ElectricItem.manager.discharge(stack, energyNeeded, tier, false, true, false);
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, ElectricItem.class);
-        }
+//        try {
+//            if (stack != null && stack.getItem() instanceof IElectricItem && ((IElectricItem) stack.getItem()).canProvideEnergy(stack))
+//                return ElectricItem.manager.discharge(stack, energyNeeded, tier, false, true, false);
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("IC2", error, ElectricItem.class);
+//        }
         return 0;
     }
 
     public static boolean canCharge(ItemStack stack, int tier) {
-        try {
-            if (stack != null && stack.getItem() instanceof IElectricItem) {
-                IElectricItem battery = (IElectricItem) stack.getItem();
-                return tier >= battery.getTier(stack);
-            }
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, IElectricItem.class);
-        }
+//        try {
+//            if (stack != null && stack.getItem() instanceof IElectricItem) {
+//                IElectricItem battery = (IElectricItem) stack.getItem();
+//                return tier >= battery.getTier(stack);
+//            }
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("IC2", error, IElectricItem.class);
+//        }
         return false;
     }
 
     public static boolean canDischarge(ItemStack stack, int tier) {
-        try {
-            if (stack != null && stack.getItem() instanceof IElectricItem) {
-                IElectricItem battery = (IElectricItem) stack.getItem();
-                return battery.canProvideEnergy(stack) && tier >= battery.getTier(stack);
-            }
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, IElectricItem.class);
-        }
+//        try {
+//            if (stack != null && stack.getItem() instanceof IElectricItem) {
+//                IElectricItem battery = (IElectricItem) stack.getItem();
+//                return battery.canProvideEnergy(stack) && tier >= battery.getTier(stack);
+//            }
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("IC2", error, IElectricItem.class);
+//        }
         return false;
     }
 
     public static void addMaceratorRecipe(ItemStack input, ItemStack output) {
-        try {
-            Recipes.macerator.addRecipe(new RecipeInputItemStack(input), null, output);
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, Recipes.class);
-        }
+//        try {
+//            Recipes.macerator.addRecipe(new RecipeInputItemStack(input), null, output);
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("IC2", error, Recipes.class);
+//        }
     }
 
     public static void removeMaceratorRecipes(ItemStack... items) {
-        try {
-            Map<IRecipeInput, RecipeOutput> recipes = Recipes.macerator.getRecipes();
-
-            Iterator<Entry<IRecipeInput, RecipeOutput>> it = recipes.entrySet().iterator();
-            while (it.hasNext()) {
-                Entry<IRecipeInput, RecipeOutput> entry = it.next();
-                if (doesRecipeRequire(entry.getKey(), items) || doesRecipeProduce(entry.getValue(), items))
-                    it.remove();
-            }
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, Recipes.class);
-        }
+//        try {
+//            Map<IRecipeInput, RecipeOutput> recipes = Recipes.macerator.getRecipes();
+//
+//            Iterator<Entry<IRecipeInput, RecipeOutput>> it = recipes.entrySet().iterator();
+//            while (it.hasNext()) {
+//                Entry<IRecipeInput, RecipeOutput> entry = it.next();
+//                if (doesRecipeRequire(entry.getKey(), items) || doesRecipeProduce(entry.getValue(), items))
+//                    it.remove();
+//            }
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("IC2", error, Recipes.class);
+//        }
     }
 
-    private static boolean doesRecipeRequire(IRecipeInput input, ItemStack... items) {
-        for (ItemStack stack : input.getInputs()) {
-            if (InvTools.isItemEqual(stack, items))
-                return true;
-        }
+    private static boolean doesRecipeRequire(/*IRecipeInput*/Object input, ItemStack... items) {
+//        for (ItemStack stack : input.getInputs()) {
+//            if (InvTools.isItemEqual(stack, items))
+//                return true;
+//        }
         return false;
     }
 
-    private static boolean doesRecipeProduce(RecipeOutput recipe, ItemStack... items) {
-        for (ItemStack output : recipe.items) {
-            if (InvTools.isItemEqual(output, items))
-                return true;
-        }
+    private static boolean doesRecipeProduce(/*RecipeOutput*/Object recipe, ItemStack... items) {
+//        for (ItemStack output : recipe.items) {
+//            if (InvTools.isItemEqual(output, items))
+//                return true;
+//        }
         return false;
     }
 
     public static void removeMaceratorDustRecipes(ItemStack... items) {
-        try {
-            Map<IRecipeInput, RecipeOutput> recipes = Recipes.macerator.getRecipes();
-
-            Iterator<Entry<IRecipeInput, RecipeOutput>> it = recipes.entrySet().iterator();
-            while (it.hasNext()) {
-                Entry<IRecipeInput, RecipeOutput> entry = it.next();
-                if (isInputBlock(entry.getKey(), items) && doesRecipeProduce(entry.getValue(), items))
-                    it.remove();
-            }
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, Recipes.class);
-        }
+//        try {
+//            Map<IRecipeInput, RecipeOutput> recipes = Recipes.macerator.getRecipes();
+//
+//            Iterator<Entry<IRecipeInput, RecipeOutput>> it = recipes.entrySet().iterator();
+//            while (it.hasNext()) {
+//                Entry<IRecipeInput, RecipeOutput> entry = it.next();
+//                if (isInputBlock(entry.getKey(), items) && doesRecipeProduce(entry.getValue(), items))
+//                    it.remove();
+//            }
+//        } catch (Throwable error) {
+//            Game.logErrorAPI("IC2", error, Recipes.class);
+//        }
     }
 
-    private static boolean isInputBlock(IRecipeInput input, ItemStack... items) {
-        for (ItemStack stack : input.getInputs()) {
-            if (stack != null && stack.getItem() instanceof ItemBlock)
-                return true;
-        }
+    private static boolean isInputBlock(/*IRecipeInput*/Object input, ItemStack... items) {
+//        for (ItemStack stack : input.getInputs()) {
+//            if (stack != null && stack.getItem() instanceof ItemBlock)
+//                return true;
+//        }
         return false;
     }
 

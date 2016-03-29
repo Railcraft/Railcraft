@@ -13,6 +13,8 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.LootPlugin.Type;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -63,7 +65,7 @@ public class FluidContainers {
                 item = new ItemFluidContainer().setUnlocalizedName(tag).setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
                 RailcraftRegistry.register(item);
 
-                LootPlugin.addLootRailway(new ItemStack(item), 4, 16, "creosote.bottle");
+                LootPlugin.addLoot(new ItemStack(item), 4, 16, Type.RAILWAY, "creosote.bottle");
 
                 if (!RailcraftConfig.useCreosoteFurnaceRecipes() && RailcraftConfig.isSubBlockEnabled(EnumMachineAlpha.COKE_OVEN.getTag()))
                     FluidHelper.registerBottle(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
