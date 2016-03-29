@@ -17,6 +17,8 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,18 +28,18 @@ import java.util.Map;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class MaterialRegistry {
-    private static final Map<String, IBlockMaterial> materials = new HashMap<String, IBlockMaterial>();
+    private static final Map<String, BlockMaterial> materials = new HashMap<String, BlockMaterial>();
 
     private MaterialRegistry() {
     }
 
-    public static void register(IBlockMaterial material) {
+    public static void register(BlockMaterial material) {
         materials.put(material.getRegistryName(), material);
     }
 
     @Nonnull
-    public static IBlockMaterial get(String name) {
-        IBlockMaterial mat = materials.get(name);
+    public static BlockMaterial get(String name) {
+        BlockMaterial mat = materials.get(name);
         if (mat == null)
             mat = materials.get("railcraft:" + name);
         if (mat == null)
@@ -48,11 +50,11 @@ public class MaterialRegistry {
     }
 
     @Nonnull
-    public static IBlockMaterial get(ResourceLocation name) {
+    public static BlockMaterial get(ResourceLocation name) {
         return get(name.toString());
     }
 
-    public static void tagItemStack(ItemStack stack, String key, IBlockMaterial material) {
+    public static void tagItemStack(ItemStack stack, String key, BlockMaterial material) {
         if (stack == null)
             return;
         NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
@@ -60,12 +62,17 @@ public class MaterialRegistry {
     }
 
     @Nullable
-    public static IBlockMaterial from(ItemStack stack, String key) {
+    public static BlockMaterial from(ItemStack stack, String key) {
         if (stack == null)
             return BlockMaterial.STONE_BRICK;
         NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
         if (nbt.hasKey(key))
             return get(nbt.getString(key));
         return BlockMaterial.OLD_ORDINALS.inverse().get(stack.getItemDamage());
+    }
+
+    @Nonnull
+    public static Collection<BlockMaterial> getRegisteredMats() {
+        return Collections.unmodifiableCollection(materials.values());
     }
 }

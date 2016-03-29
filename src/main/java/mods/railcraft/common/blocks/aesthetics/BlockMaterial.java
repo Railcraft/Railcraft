@@ -25,13 +25,14 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
+public enum BlockMaterial implements IStringSerializable {
 
     SNOW(3, "snow"),
     ICE(4, "ice"),
@@ -116,7 +117,7 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
     public static final EnumSet<BlockMaterial> VANILLA_SLABS;
     public static final BiMap<BlockMaterial, Integer> OLD_ORDINALS;
     private static boolean needsInit = true;
-    private SoundType sound;
+    private SoundType sound = Block.soundTypeStone;
     @Nullable
     private IBlockState state;
     private String oreTag;
@@ -385,7 +386,7 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
         return SANDY_BRICK;
     }
 
-    @Override
+    @Nullable
     public IBlockState getState() {
         return state;
     }
@@ -395,12 +396,12 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
         return name;
     }
 
-    @Override
+    @Nonnull
     public String getRegistryName() {
         return "railcraft:" + name;
     }
 
-    @Override
+    @Nonnull
     public String getLocalizationSuffix() {
         return name;
     }
@@ -409,27 +410,27 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
         return oreTag;
     }
 
-    @Override
+    @Nonnull
     public SoundType getSound() {
         return sound;
     }
 
+    @Nullable
     public ItemStack getSourceItem() {
         if (state == null) return null;
         return new ItemStack(state.getBlock(), 1, state.getBlock().damageDropped(state));
     }
 
+    @Nullable
     public Object getCraftingEquivalent() {
         if (oreTag != null) return oreTag;
         return getSourceItem();
     }
 
-    @Override
     public boolean isTransparent() {
         return this == ICE;
     }
 
-    @Override
     public float getBlockHardness(World world, BlockPos pos) {
         switch (this) {
             case CONCRETE:
@@ -454,7 +455,6 @@ public enum BlockMaterial implements IBlockMaterial, IStringSerializable {
         }
     }
 
-    @Override
     public float getExplosionResistance(Entity entity) {
         switch (this) {
             case CONCRETE:
