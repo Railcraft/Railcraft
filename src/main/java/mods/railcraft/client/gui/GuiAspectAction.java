@@ -33,7 +33,7 @@ public class GuiAspectAction extends GuiContainerRailcraft {
     private boolean changed;
     private ToolTip lockedToolTips;
     private ToolTip unlockedToolTips;
-    private ToolTip notownedToolTips;
+    private ToolTip notOwnedToolTips;
     public String ownerName = "[Unknown]";
 
     public GuiAspectAction(EntityPlayer player, IAspectActionManager actionManager, String title) {
@@ -51,7 +51,7 @@ public class GuiAspectAction extends GuiContainerRailcraft {
         }
         lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.locked", "{owner}=" + ownerName);
         unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.unlocked", "{owner}=" + ownerName);
-        notownedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + ownerName);
+        notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + ownerName);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class GuiAspectAction extends GuiContainerRailcraft {
         buttonList.add(new GuiToggleButton(2, w + 63, h + 30, 50, LocalizationPlugin.translate(SignalAspect.YELLOW.getLocalizationTag()), aspects[SignalAspect.YELLOW.ordinal()]));
         buttonList.add(new GuiToggleButton(3, w + 94, h + 55, 70, LocalizationPlugin.translate(SignalAspect.BLINK_RED.getLocalizationTag()), aspects[SignalAspect.BLINK_RED.ordinal()]));
         buttonList.add(new GuiToggleButton(4, w + 119, h + 30, 50, LocalizationPlugin.translate(SignalAspect.RED.getLocalizationTag()), aspects[SignalAspect.RED.ordinal()]));
-        buttonList.add(lockButton = new GuiMultiButton(5, w + 152, h + 8, 16, actionManager.getLockController()));
+        buttonList.add(lockButton = GuiMultiButton.create(5, w + 152, h + 8, 16, actionManager.getLockController()));
         lockButton.enabled = false;
     }
 
@@ -100,13 +100,13 @@ public class GuiAspectAction extends GuiContainerRailcraft {
     public void updateScreen() {
         super.updateScreen();
         lockButton.enabled = ((ContainerAspectAction) container).canLock;
-        lockButton.setToolTip(actionManager.getLockController().getButtonState() == LockButtonState.LOCKED ? lockedToolTips : lockButton.enabled ? unlockedToolTips : notownedToolTips);
+        lockButton.setToolTip(actionManager.getLockController().getButtonState() == LockButtonState.LOCKED ? lockedToolTips : lockButton.enabled ? unlockedToolTips : notOwnedToolTips);
         String username = ((ContainerAspectAction) container).ownerName;
         if (username != null && !username.equals(ownerName)) {
             ownerName = username;
             lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.locked", "{owner}=" + username);
             unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.unlocked", "{owner}=" + username);
-            notownedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + username);
+            notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + username);
         }
     }
 

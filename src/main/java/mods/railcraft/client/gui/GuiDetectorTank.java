@@ -45,7 +45,7 @@ public class GuiDetectorTank extends TileGui {
         buttonList.clear();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        buttonList.add(button = new GuiMultiButton(0, w + 95, h + 22, 60, detector.getButtonController().copy()));
+        buttonList.add(button = GuiMultiButton.create(0, w + 95, h + 22, 60, detector.getButtonController().copy()));
     }
 
     @Override

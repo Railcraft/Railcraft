@@ -39,8 +39,8 @@ public class GuiLoaderItem extends TileGui {
         buttonList.clear();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        buttonList.add(transferMode = new GuiMultiButton(0, w + 62, h + 45, 52, tile.getTransferModeController().copy()));
-        buttonList.add(redstoneMode = new GuiMultiButton(0, w + 62, h + 62, 52, tile.getRedstoneModeController().copy()));
+        buttonList.add(transferMode = GuiMultiButton.create(0, w + 62, h + 45, 52, tile.getTransferModeController().copy()));
+        buttonList.add(redstoneMode = GuiMultiButton.create(0, w + 62, h + 62, 52, tile.getRedstoneModeController().copy()));
     }
 
     @Override

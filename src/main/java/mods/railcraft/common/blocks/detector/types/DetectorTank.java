@@ -40,13 +40,13 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class DetectorTank extends DetectorFilter {
-    private final MultiButtonController<ButtonState> buttonController = new MultiButtonController(ButtonState.ANALOG.ordinal(), ButtonState.values());
+    private final MultiButtonController<ButtonState> buttonController = MultiButtonController.create(ButtonState.ANALOG.ordinal(), ButtonState.values());
 
     public DetectorTank() {
         super(1);
     }
 
-    public MultiButtonController getButtonController() {
+    public MultiButtonController<ButtonState> getButtonController() {
         return buttonController;
     }
 
@@ -174,7 +174,7 @@ public class DetectorTank extends DetectorFilter {
         return EnumDetector.TANK;
     }
 
-    public enum ButtonState implements IMultiButtonState {
+    private enum ButtonState implements IMultiButtonState {
 
         VOID("L = *"),
         EMPTY("L = 0%"),
@@ -189,7 +189,7 @@ public class DetectorTank extends DetectorFilter {
         LESS_THAN_FULL("L < 100%"),
         ANALOG("L = ~");
         private final String label;
-        private ToolTip tip;
+        private final ToolTip tip;
 
         ButtonState(String label) {
             this.label = label;

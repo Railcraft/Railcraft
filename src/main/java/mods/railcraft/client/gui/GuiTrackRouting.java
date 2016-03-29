@@ -30,7 +30,7 @@ public class GuiTrackRouting extends TileGui {
     private final TrackRouting track;
     private ToolTip lockedToolTips;
     private ToolTip unlockedToolTips;
-    private ToolTip notownedToolTips;
+    private ToolTip notOwnedToolTips;
     private String ownerName = "[Unknown]";
 
     public GuiTrackRouting(InventoryPlayer inv, TrackRouting track) {
@@ -40,7 +40,7 @@ public class GuiTrackRouting extends TileGui {
         this.player = inv.player;
         lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.locked", "{owner}=" + ownerName);
         unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.unlocked", "{owner}=" + ownerName);
-        notownedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + ownerName);
+        notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + ownerName);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class GuiTrackRouting extends TileGui {
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
 
-        buttonList.add(lockButton = new GuiMultiButton(8, w + 152, h + 8, 16, track.getLockController()));
+        buttonList.add(lockButton = GuiMultiButton.create(8, w + 152, h + 8, 16, track.getLockController()));
         lockButton.enabled = ((ContainerTrackRouting) container).canLock;
     }
 
@@ -77,9 +77,9 @@ public class GuiTrackRouting extends TileGui {
             ownerName = username;
             lockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.locked", "{owner}=" + username);
             unlockedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.unlocked", "{owner}=" + username);
-            notownedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + username);
+            notOwnedToolTips = ToolTip.buildToolTip("railcraft.gui.tip.button.lock.notowner", "{owner}=" + username);
         }
-        lockButton.setToolTip(track.getLockController().getButtonState() == LockButtonState.LOCKED ? lockedToolTips : lockButton.enabled ? unlockedToolTips : notownedToolTips);
+        lockButton.setToolTip(track.getLockController().getButtonState() == LockButtonState.LOCKED ? lockedToolTips : lockButton.enabled ? unlockedToolTips : notOwnedToolTips);
     }
 
     @Override

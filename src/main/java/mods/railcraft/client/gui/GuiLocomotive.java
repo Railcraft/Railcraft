@@ -99,7 +99,7 @@ public abstract class GuiLocomotive extends EntityGui {
 
         GuiTools.newButtonRow(buttonList, w + 8, 3, speedButtons);
 
-        buttonList.add(lockButton = new GuiMultiButton(8, w + 152, h + ySize - 111, 16, loco.getLockController()));
+        buttonList.add(lockButton = GuiMultiButton.create(8, w + 152, h + ySize - 111, 16, loco.getLockController()));
         lockButton.enabled = loco.clientCanLock;
     }
 

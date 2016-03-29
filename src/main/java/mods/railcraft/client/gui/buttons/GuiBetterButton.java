@@ -69,7 +69,7 @@ public class GuiBetterButton extends GuiButton {
     public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
         if (!visible)
             return;
-        FontRenderer fontrenderer = minecraft.fontRenderer;
+        FontRenderer fontrenderer = minecraft.fontRendererObj;
         bindButtonTextures(minecraft);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         int xOffset = texture.getX();

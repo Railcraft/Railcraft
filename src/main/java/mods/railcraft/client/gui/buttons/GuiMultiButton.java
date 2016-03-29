@@ -21,18 +21,21 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 /**
- *
  * @author CovertJaguar <http://railcraft.info/wiki/info:license>
  */
 @SideOnly(Side.CLIENT)
-public class GuiMultiButton extends GuiBetterButton {
+public class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton {
 
-    private final MultiButtonController control;
+    private final MultiButtonController<T> control;
     public boolean canChange = true;
 
-    public GuiMultiButton(int id, int x, int y, int width, MultiButtonController control) {
+    private GuiMultiButton(int id, int x, int y, int width, MultiButtonController<T> control) {
         super(id, x, y, width, StandardButtonTextureSets.LARGE_BUTTON, "");
         this.control = control;
+    }
+
+    public static <T extends IMultiButtonState> GuiMultiButton<T> create(int id, int x, int y, int width, MultiButtonController<T> control) {
+        return new GuiMultiButton<T>(id, x, y, width, control);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class GuiMultiButton extends GuiBetterButton {
         if (!visible) {
             return;
         }
-        FontRenderer fontrenderer = minecraft.fontRenderer;
+        FontRenderer fontrenderer = minecraft.fontRendererObj;
         bindButtonTextures(minecraft);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         IMultiButtonState state = control.getButtonState();
@@ -84,7 +87,7 @@ public class GuiMultiButton extends GuiBetterButton {
         return pressed;
     }
 
-    public MultiButtonController getController() {
+    public MultiButtonController<T> getController() {
         return control;
     }
 

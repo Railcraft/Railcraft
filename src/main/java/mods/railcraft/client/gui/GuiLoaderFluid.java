@@ -37,7 +37,7 @@ public class GuiLoaderFluid extends TileGui {
         buttonList.clear();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        button = new GuiMultiButton(0, w + 40, h + 60, 80, tile.getStateController().copy());
+        button = GuiMultiButton.create(0, w + 40, h + 60, 80, tile.getStateController().copy());
         buttonList.add(button);
     }
 
