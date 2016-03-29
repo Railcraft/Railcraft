@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.stairs;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.IBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,13 +26,13 @@ import java.io.IOException;
  */
 public class TileStair extends RailcraftTileEntity {
 
-    private IBlockMaterial material = BlockMaterial.SANDY_BRICK;
+    private BlockMaterial material = BlockMaterial.SANDY_BRICK;
 
-    public IBlockMaterial getMaterial() {
+    public BlockMaterial getMaterial() {
         return material;
     }
 
-    public void setStair(IBlockMaterial stair) {
+    public void setStair(BlockMaterial stair) {
         this.material = stair;
     }
 

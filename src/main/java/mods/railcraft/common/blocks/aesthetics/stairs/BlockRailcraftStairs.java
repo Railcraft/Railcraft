@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.aesthetics.stairs;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.IBlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
@@ -21,6 +20,8 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.IBlockSoundProvider;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -41,13 +42,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
+import static mods.railcraft.common.blocks.aesthetics.BlockMaterial.SANDY_BRICK;
 import static mods.railcraft.common.blocks.aesthetics.BlockMaterial.STAIR_MATS;
 
 public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProvider {
-
+    public static final PropertyEnum<BlockMaterial> MATERIAL = PropertyEnum.create("material", BlockMaterial.class, EnumSet.complementOf(BlockMaterial.VANILLA_STAIRS));
     public static int currentRenderPass;
     static BlockRailcraftStairs block;
     private final int renderId;
@@ -56,6 +59,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         super(Blocks.stonebrick.getDefaultState());
         this.renderId = renderId;
         this.setStepSound(RailcraftSound.getInstance());
+        setDefaultState(getDefaultState().withProperty(MATERIAL, BlockMaterial.SANDY_BRICK));
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         useNeighborBrightness = true;
         isBlockContainer = true;
@@ -65,23 +69,33 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         return block;
     }
 
-    public static ItemStack getItem(IBlockMaterial mat) {
+    public static ItemStack getItem(BlockMaterial mat) {
         return getItem(mat, 1);
     }
 
-    public static ItemStack getItem(IBlockMaterial mat, int qty) {
+    public static ItemStack getItem(BlockMaterial mat, int qty) {
         if (block == null) return null;
         ItemStack stack = new ItemStack(block, qty);
         MaterialRegistry.tagItemStack(stack, ItemStair.MATERIAL_KEY, mat);
         return stack;
     }
 
-    public static String getTag(IBlockMaterial mat) {
+    public static String getTag(BlockMaterial mat) {
         return "tile.railcraft.stair." + mat.getLocalizationSuffix();
     }
 
     public static boolean isEnabled(BlockMaterial mat) {
         return ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES) && RailcraftConfig.isSubBlockEnabled(getTag(mat)) && getBlock() != null;
+    }
+
+    protected BlockState createBlockState() {
+        return new BlockState(this, FACING, HALF, SHAPE, MATERIAL);
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        IBlockState actState = super.getActualState(state, worldIn, pos);
+        return actState.withProperty(MATERIAL, getMat(worldIn, pos));
     }
 
     @Override
@@ -91,6 +105,14 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
             return getItem(((TileStair) tile).getMaterial());
         }
         return null;
+    }
+
+    public BlockMaterial getMat(IBlockAccess world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile instanceof TileStair) {
+            return ((TileStair) tile).getMaterial();
+        }
+        return SANDY_BRICK;
     }
 
     @Override
@@ -197,7 +219,10 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
 
     @Override
     public String getHarvestTool(IBlockState state) {
-        return state.;
+        IBlockState matState = state.getValue(MATERIAL).getState();
+        if (matState != null && matState.getBlock() != null)
+            return matState.getBlock().getHarvestTool(matState);
+        return "pickaxe";
     }
 
     @Override

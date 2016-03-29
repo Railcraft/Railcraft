@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.lantern;
 import com.google.common.collect.BiMap;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.IBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -101,7 +101,7 @@ public class BlockLantern extends Block {
         return metal;
     }
 
-    public static String getTag(IBlockMaterial mat) {
+    public static String getTag(BlockMaterial mat) {
         return "tile.railcraft.lantern." + mat.getLocalizationSuffix();
     }
 

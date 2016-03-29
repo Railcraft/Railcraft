@@ -9,7 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.slab;
 
-import mods.railcraft.common.blocks.aesthetics.IBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
@@ -70,7 +70,7 @@ public class ItemSlab extends ItemBlock {
         }
     }
 
-    private IBlockMaterial getMat(ItemStack stack) {
+    private BlockMaterial getMat(ItemStack stack) {
         return MaterialRegistry.from(stack, MATERIAL_KEY);
     }
 

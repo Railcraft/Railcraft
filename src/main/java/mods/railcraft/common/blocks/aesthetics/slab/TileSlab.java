@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.slab;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.aesthetics.IBlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -23,14 +23,14 @@ import java.io.IOException;
  */
 public class TileSlab extends RailcraftTileEntity {
 
-    private IBlockMaterial top;
-    private IBlockMaterial bottom;
+    private BlockMaterial top;
+    private BlockMaterial bottom;
 
-    public IBlockMaterial getTopSlab() {
+    public BlockMaterial getTopSlab() {
         return top;
     }
 
-    public IBlockMaterial getBottomSlab() {
+    public BlockMaterial getBottomSlab() {
         return bottom;
     }
 
@@ -42,7 +42,7 @@ public class TileSlab extends RailcraftTileEntity {
         return top != null && bottom == null;
     }
 
-    public void setTopSlab(IBlockMaterial slab) {
+    public void setTopSlab(BlockMaterial slab) {
         if (top != slab) {
             this.top = slab;
             sendUpdateToClient();
@@ -53,21 +53,21 @@ public class TileSlab extends RailcraftTileEntity {
         return top == null && bottom != null;
     }
 
-    public void setBottomSlab(IBlockMaterial slab) {
+    public void setBottomSlab(BlockMaterial slab) {
         if (bottom != slab) {
             this.bottom = slab;
             sendUpdateToClient();
         }
     }
 
-    public IBlockMaterial getUpmostSlab() {
+    public BlockMaterial getUpmostSlab() {
         if (top != null) {
             return top;
         }
         return bottom;
     }
 
-    public boolean addSlab(IBlockMaterial slab) {
+    public boolean addSlab(BlockMaterial slab) {
         if (bottom == null) {
             setBottomSlab(slab);
             return true;
