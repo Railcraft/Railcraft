@@ -25,13 +25,15 @@ public abstract class TrackLockingBase extends TrackBaseRailcraft {
     }
 
     public void migrateTrack(TrackNextGenLocking.LockingProfileType type) {
-        Game.log(Level.WARN, "Migrating Legacy Track Type to new implementation: <{0}, {1}, {2}> {3} -> {4}", getX(), getY(), getZ(), getTrackSpec().getTrackTag(), EnumTrack.LOCKING.getTag());
+        String line = "Migrating Legacy Track Type to new implementation: <{0}, {1}, {2}> {3} -> {4}";
+        Object[] args = { getPos().getX(), getPos().getY(), getPos().getZ(), getTrackSpec().getTrackTag(), EnumTrack.LOCKING.getTag() };
+        Game.log(Level.WARN, line, args);
         ITrackInstance track = EnumTrack.LOCKING.getTrackSpec().createInstanceFromSpec();
         TrackNextGenLocking trackLocking = (TrackNextGenLocking) track;
         trackLocking.setProfile(type);
         TileEntity te = TrackFactory.makeTrackTile(track);
-        getWorld().setTileEntity(getX(), getY(), getZ(), te);
-        getWorld().markBlockForUpdate(getX(), getY(), getZ());
+        getWorld().setTileEntity(getPos(), te);
+        getWorld().markBlockForUpdate(getPos());
     }
 
 }

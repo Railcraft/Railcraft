@@ -277,8 +277,9 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     @Override
     public EnumRailDirection getRailDirection(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        if (tile instanceof TileTrack) return ((TileTrack) tile).getTrackInstance().getRailDirection(cart);
-        return state.getValue(TRACK_DIRECTION);
+        EnumRailDirection current = state.getValue(TRACK_DIRECTION);
+        if (tile instanceof TileTrack) return ((TileTrack) tile).getTrackInstance().getRailDirection(state, current, cart);
+        return current;
     }
 
     @Override

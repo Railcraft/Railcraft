@@ -49,11 +49,11 @@ public class TrackOneWay extends TrackBaseRailcraft implements ITrackPowered, IT
         if (isPowered()) {
             if (meta == 1 || meta == 2 || meta == 3) {
                 if ((isReversed() && cart.motionX > 0.0D) || (!isReversed() && cart.motionX < 0.0D)) {
-                    double distX = cart.posX - (tileEntity.xCoord + 0.5D);
+                    double distX = cart.posX - (getPos().getX() + 0.5D);
 //                    System.out.println("cartX=" + cart.posX + ", railX=" + (i + 0.5D) + ", railDir=" + isReversed());
                     if (!isReversed() && distX < -0.01 || isReversed() && distX > 0.01) {
 //                        System.out.println("Setting Position");
-                        cart.setPosition(tileEntity.xCoord + 0.5D, cart.posY, cart.posZ);
+                        cart.setPosition(getPos().getX() + 0.5D, cart.posY, cart.posZ);
                     }
 //                    System.out.println("mX= " + cart.motionX + ", dist=" + distX);
                     if (!isReversed()) {
@@ -64,11 +64,11 @@ public class TrackOneWay extends TrackBaseRailcraft implements ITrackPowered, IT
                 }
             } else if (meta == 0 || meta == 4 || meta == 5) {
                 if ((isReversed() && cart.motionZ < 0.0D) || (!isReversed() && cart.motionZ > 0.0D)) {
-                    double distZ = cart.posZ - (tileEntity.zCoord + 0.5D);
+                    double distZ = cart.posZ - (getPos().getZ() + 0.5D);
 //                    System.out.println("cartZ=" + cart.posZ + ", railZ=" + (k + 0.5D) + ", railDir=" + isReversed());
                     if (isReversed() && distZ < -0.01 || !isReversed() && distZ > 0.01) {
 //                        System.out.println("Setting Position");
-                        cart.setPosition(cart.posX, cart.posY, tileEntity.zCoord + 0.5D);
+                        cart.setPosition(cart.posX, cart.posY, getPos().getZ() + 0.5D);
                     }
 //                    System.out.println("mZ= " + cart.motionZ + ", dist=" + distZ);
                     if (isReversed()) {

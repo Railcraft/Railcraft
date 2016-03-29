@@ -10,7 +10,11 @@ package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.common.carts.CartUtils;
+
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import java.util.List;
@@ -22,115 +26,108 @@ public class TrackWye extends TrackSwitchBase {
         return EnumTrack.WYE;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (isVisuallySwitched()) {
-            return getIcon(1);
-        }
-        return getIcon(0);
-    }
+    // @Override
+    // public IIcon getIcon() {
+    // if (isVisuallySwitched()) {
+    // return getIcon(1);
+    // }
+    // return getIcon(0);
+    // }
 
     @Override
-    public int getBasicRailMetadata(EntityMinecart cart) {
-        int meta = tileEntity.getBlockMetadata();
+    public EnumRailDirection getRailDirection(IBlockState state, EnumRailDirection current, EntityMinecart cart) {
         if (cart != null) {
-            if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
+            if (current == EnumRailDirection.NORTH_SOUTH) {
                 if (isMirrored()) {
                     if (shouldSwitchForCart(cart)) {
-                        meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
+                        return EnumRailDirection.NORTH_WEST;
                     } else {
-                        meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
+                        return EnumRailDirection.SOUTH_WEST;
                     }
                 } else {
                     if (shouldSwitchForCart(cart)) {
-                        meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
+                        return EnumRailDirection.SOUTH_EAST;
                     } else {
-                        meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
+                        return EnumRailDirection.NORTH_EAST;
                     }
                 }
-            } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
+            } else if (current == EnumRailDirection.EAST_WEST) {
                 if (isMirrored()) {
                     if (shouldSwitchForCart(cart)) {
-                        meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
+                        return EnumRailDirection.NORTH_EAST;
                     } else {
-                        meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
+                        return EnumRailDirection.NORTH_WEST;
                     }
                 } else {
                     if (shouldSwitchForCart(cart)) {
-                        meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
+                        return EnumRailDirection.SOUTH_WEST;
                     } else {
-                        meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
+                        return EnumRailDirection.SOUTH_EAST;
                     }
                 }
             }
         }
-        return meta;
+        return current;
     }
 
     @Override
     protected List<UUID> getCartsAtLockEntrance() {
-        int x = tileEntity.xCoord;
-        int y = tileEntity.yCoord;
-        int z = tileEntity.zCoord;
-        int meta = tileEntity.getBlockMetadata();
-        if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
+        EnumRailDirection dir = TrackTools.getTrackDirection(getWorld(), null, getPos());
+        BlockPos offset = getPos();
+        if (dir == EnumRailDirection.EAST_WEST) {
             if (isMirrored()) {
-                x--;
+                offset = offset.west();
             } else {
-                x++;
+                offset = offset.east();
             }
-        } else if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
+        } else if (dir == EnumRailDirection.NORTH_SOUTH) {
             if (isMirrored()) {
-                z++;
+                offset = offset.south();
             } else {
-                z--;
+                offset = offset.north();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.1f);
+        return CartUtils.getMinecartUUIDsAt(getWorld(), offset, 0.1f);
     }
 
     @Override
     protected List<UUID> getCartsAtDecisionEntrance() {
-        int x = tileEntity.xCoord;
-        int y = tileEntity.yCoord;
-        int z = tileEntity.zCoord;
-        int meta = tileEntity.getBlockMetadata();
-        if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
+        EnumRailDirection dir = TrackTools.getTrackDirection(getWorld(), null, getPos());
+        BlockPos offset = getPos();
+        if (dir == EnumRailDirection.EAST_WEST) {
             if (isMirrored()) {
-                z--;
+                offset = offset.north();
             } else {
-                z++;
+                offset = offset.south();
             }
-        } else if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
+        } else if (dir == EnumRailDirection.NORTH_SOUTH) {
             if (isMirrored()) {
-                x--;
+                offset = offset.west();
             } else {
-                x++;
+                offset = offset.east();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.1f);
+        return CartUtils.getMinecartUUIDsAt(getWorld(), offset, 0.1f);
     }
 
     @Override
     protected List<UUID> getCartsAtSpringEntrance() {
-        int x = tileEntity.xCoord;
-        int y = tileEntity.yCoord;
-        int z = tileEntity.zCoord;
-        int meta = tileEntity.getBlockMetadata();
-        if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
+        EnumRailDirection dir = TrackTools.getTrackDirection(getWorld(), null, getPos());
+        BlockPos offset = getPos();
+        if (dir == EnumRailDirection.EAST_WEST) {
             if (isMirrored()) {
-                x++;
+                offset = offset.east();
             } else {
-                x--;
+                offset = offset.west();
             }
-        } else if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
+        } else if (dir == EnumRailDirection.NORTH_SOUTH) {
             if (isMirrored()) {
-                z--;
+                offset = offset.north();
             } else {
-                z++;
+                offset = offset.south();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), x, y, z, 0.1f);
+        return CartUtils.getMinecartUUIDsAt(getWorld(), offset, 0.1f);
     }
 
     @Override

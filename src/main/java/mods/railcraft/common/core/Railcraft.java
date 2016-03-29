@@ -190,7 +190,7 @@ public final class Railcraft {
 
         proxy.initClient();
 
-        CraftGuidePlugin.init();
+//        CraftGuidePlugin.init();
 
         RailcraftConfig.postInit();
     }

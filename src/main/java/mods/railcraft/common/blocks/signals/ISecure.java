@@ -16,7 +16,7 @@ import net.minecraft.world.IWorldNameable;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface ISecure<T extends IMultiButtonState> extends IOwnable, IWorldNameable {
+public interface ISecure<T extends IMultiButtonState> extends IOwnable {
 
     MultiButtonController<T> getLockController();
 

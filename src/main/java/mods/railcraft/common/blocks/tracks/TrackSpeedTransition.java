@@ -31,19 +31,19 @@ public class TrackSpeedTransition extends TrackSpeed implements ITrackPowered, I
         return EnumTrack.SPEED_TRANSITION;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            if (isReversed()) {
-                return getIcon(3);
-            }
-            return getIcon(1);
-        }
-        if (isReversed()) {
-            return getIcon(2);
-        }
-        return getIcon(0);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (!isPowered()) {
+//            if (isReversed()) {
+//                return getIcon(3);
+//            }
+//            return getIcon(1);
+//        }
+//        if (isReversed()) {
+//            return getIcon(2);
+//        }
+//        return getIcon(0);
+//    }
 
     @Override
     public int getPowerPropagation() {

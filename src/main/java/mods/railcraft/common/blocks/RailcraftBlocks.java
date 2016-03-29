@@ -46,18 +46,19 @@ public class RailcraftBlocks {
     private static BlockMachine<EnumMachineGamma> blockMachineGamma;
     private static BlockMachine<EnumMachineDelta> blockMachineDelta;
     private static BlockMachine<EnumMachineEpsilon> blockMachineEpsilon;
-    private static Block blockTrack;
+    private static BlockTrack blockTrack;
     private static Block blockRailElevator;
     private static Block blockSignal;
 
     public static void registerBlockTrack() {
         if (blockTrack == null && RailcraftConfig.isBlockEnabled("track")) {
-            blockTrack = new BlockTrack().setRegistryName("railcraft.track");
+            blockTrack = new BlockTrack();
+            blockTrack.setRegistryName("railcraft.track");
             RailcraftRegistry.register(blockTrack, ItemTrack.class);
         }
     }
 
-    public static Block getBlockTrack() {
+    public static BlockTrack getBlockTrack() {
         return blockTrack;
     }
 

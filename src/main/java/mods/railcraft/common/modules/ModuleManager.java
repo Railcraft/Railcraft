@@ -53,7 +53,7 @@ public class ModuleManager {
         TRANSPORT(ModuleTransport.class),
         IC2(/*ModuleIC2.class*/null),
         FORESTRY(/*ModuleForestry.class*/null),
-        THAUMCRAFT(ModuleThaumcraft.class),
+        THAUMCRAFT(/*ModuleThaumcraft.class*/null),
         STEAM(ModuleSteam.class),
         WORLD(ModuleWorld.class),
         CHUNK_LOADING(ModuleChunkLoading.class),

@@ -26,13 +26,13 @@ public class TrackWhistle extends TrackBaseRailcraft implements ITrackPowered {
         return EnumTrack.WHISTLE;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (isPowered()) {
-            return getIcon(0);
-        }
-        return getIcon(1);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (isPowered()) {
+//            return getIcon(0);
+//        }
+//        return getIcon(1);
+//    }
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {

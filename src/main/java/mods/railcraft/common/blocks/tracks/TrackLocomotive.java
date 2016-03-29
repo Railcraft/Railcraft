@@ -31,22 +31,22 @@ public class TrackLocomotive extends TrackBaseRailcraft implements ITrackPowered
         return EnumTrack.LOCOMOTIVE;
     }
 
-    @Override
-    public IIcon getIcon() {
-        if (isPowered()) {
-            return getIcon(mode % LocoMode.VALUES.length);
-        }
-        return getIcon(LocoMode.VALUES.length + mode % LocoMode.VALUES.length);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        if (isPowered()) {
+//            return getIcon(mode % LocoMode.VALUES.length);
+//        }
+//        return getIcon(LocoMode.VALUES.length + mode % LocoMode.VALUES.length);
+//    }
 
     @Override
     public boolean blockActivated(EntityPlayer player) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
+            if (crowbar.canWhack(player, current, getPos())) {
                 mode++;
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+                crowbar.onWhack(player, current, getPos());
                 sendUpdateToClient();
                 return true;
             }

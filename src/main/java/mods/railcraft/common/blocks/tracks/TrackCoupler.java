@@ -83,27 +83,27 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
         return EnumTrack.COUPLER;
     }
 
-    @Override
-    public IIcon getIcon() {
-        int iconIndex = 0;
-        if (!isPowered())
-            iconIndex++;
-        iconIndex += mode.ordinal() * 2;
-        return getIcon(iconIndex);
-    }
+//    @Override
+//    public IIcon getIcon() {
+//        int iconIndex = 0;
+//        if (!isPowered())
+//            iconIndex++;
+//        iconIndex += mode.ordinal() * 2;
+//        return getIcon(iconIndex);
+//    }
 
     @Override
     public boolean blockActivated(EntityPlayer player) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
+            if (crowbar.canWhack(player, current, getPos())) {
                 Mode m;
                 if (player.isSneaking())
                     m = mode.previous();
                 else
                     m = mode.next();
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+                crowbar.onWhack(player, current, getPos());
                 if (Game.isHost(getWorld()))
                     setMode(m);
                 else
