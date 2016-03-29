@@ -52,10 +52,10 @@ public class ItemGear extends ItemRailcraft {
 
     @Override
     public void initItem() {
-        for (EnumGear gear : EnumGear.values()) {
-            ItemStack stack = new ItemStack(this, 1, gear.ordinal());
-            RailcraftRegistry.register(stack);
-        }
+//        for (EnumGear gear : EnumGear.values()) {
+//            ItemStack stack = new ItemStack(this, 1, gear.ordinal());
+//            RailcraftRegistry.register(stack);
+//        }
 
         OreDictionary.registerOre("gearIron", RailcraftItem.gear.getStack(1, EnumGear.IRON));
 

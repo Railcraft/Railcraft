@@ -49,9 +49,9 @@ public class ItemTie extends ItemRailcraft {
 
     @Override
     public void initItem() {
-        for (EnumTie tie : EnumTie.VALUES) {
-            RailcraftRegistry.register(new ItemStack(this, 1, tie.ordinal()));
-        }
+//        for (EnumTie tie : EnumTie.VALUES) {
+//            RailcraftRegistry.register(new ItemStack(this, 1, tie.ordinal()));
+//        }
         LootPlugin.addLoot(RailcraftItem.tie.getStack(1, EnumTie.WOOD), 4, 16, Type.RAILWAY, "tie.wood");
         LootPlugin.addLoot(RailcraftItem.tie.getStack(1, EnumTie.STONE), 4, 16, Type.WORKSHOP, "tie.stone");
     }

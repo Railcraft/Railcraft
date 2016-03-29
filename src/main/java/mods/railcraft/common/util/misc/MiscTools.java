@@ -50,10 +50,6 @@ public abstract class MiscTools {
             }
     }
 
-    public static String cleanTag(String tag) {
-        return tag.replaceAll("[Rr]ailcraft\\p{Punct}", "").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
-    }
-
     public static void writeUUID(NBTTagCompound data, String tag, UUID uuid) {
         if (uuid == null)
             return;

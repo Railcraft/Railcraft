@@ -40,9 +40,10 @@ public class FluidContainers {
     public static ItemStack getCreosoteOilBucket() {
         Item item = itemCreosoteOilBucket;
         if (item == null) {
-            String tag = "railcraft.fluid.creosote.bucket";
+            String tag = "fluid.creosote.bucket";
             item = new ItemBucketRailcraft(Fluids.CREOSOTE.get());
-            item.setUnlocalizedName(tag);
+            item.setUnlocalizedName("railcraft." + tag);
+            item.setRegistryName("Railcraft", tag);
             RailcraftRegistry.register(item);
 
             FluidHelper.registerBucket(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
@@ -59,10 +60,10 @@ public class FluidContainers {
     public static ItemStack getCreosoteOilBottle(int qty) {
         Item item = itemCreosoteOilBottle;
         if (item == null) {
-            String tag = "railcraft.fluid.creosote.bottle";
+            String tag = "fluid.creosote.bottle";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemFluidContainer().setUnlocalizedName(tag).setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+                item = new ItemFluidContainer().setUnlocalizedName("railcraft."+tag).setRegistryName("Railcraft", tag).setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
                 RailcraftRegistry.register(item);
 
                 LootPlugin.addLoot(new ItemStack(item), 4, 16, Type.RAILWAY, "creosote.bottle");
@@ -84,10 +85,11 @@ public class FluidContainers {
     public static ItemStack getCreosoteOilCan(int qty) {
         ItemFluidContainer item = itemCreosoteOilCan;
         if (item == null) {
-            String tag = "railcraft.fluid.creosote.can";
+            String tag = "fluid.creosote.can";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemFluidContainer();
-                item.setUnlocalizedName(tag);
+                item.setUnlocalizedName("railcraft." + tag);
+                item.setRegistryName("Railcraft", tag);
                 RailcraftRegistry.register(item);
 
                 boolean forestry = FluidHelper.registerCan(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
@@ -108,10 +110,11 @@ public class FluidContainers {
     public static ItemStack getCreosoteOilWax(int qty) {
         ItemFluidContainer item = itemCreosoteOilWax;
         if (item == null) {
-            String tag = "railcraft.fluid.creosote.wax";
+            String tag = "fluid.creosote.wax";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemFluidContainer();
-                item.setUnlocalizedName(tag);
+                item.setUnlocalizedName("railcraft." + tag);
+                item.setRegistryName("Railcraft", tag);
                 RailcraftRegistry.register(item);
 
                 boolean forestry = FluidHelper.registerWax(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
@@ -132,10 +135,11 @@ public class FluidContainers {
     public static ItemStack getCreosoteOilRefactory(int qty) {
         ItemFluidContainer item = itemCreosoteOilRefactory;
         if (item == null) {
-            String tag = "railcraft.fluid.creosote.refactory";
+            String tag = "fluid.creosote.refactory";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemFluidContainer();
-                item.setUnlocalizedName(tag);
+                item.setUnlocalizedName("railcraft." + tag);
+                item.setRegistryName("Railcraft", tag);
                 RailcraftRegistry.register(item);
 
                 boolean forestry = FluidHelper.registerRefactory(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
@@ -156,10 +160,11 @@ public class FluidContainers {
     public static ItemStack getCreosoteOilCell(int qty) {
         ItemFluidContainer item = itemCreosoteOilCell;
         if (item == null) {
-            String tag = "railcraft.fluid.creosote.cell";
+            String tag = "fluid.creosote.cell";
             if (RailcraftConfig.isItemEnabled(tag)) {
                 item = new ItemFluidContainer();
-                item.setUnlocalizedName(tag);
+                item.setUnlocalizedName("railcraft." + tag);
+                item.setRegistryName("Railcraft", tag);
                 RailcraftRegistry.register(item);
 
                 boolean ic2 = FluidHelper.registerCell(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
@@ -180,10 +185,11 @@ public class FluidContainers {
     public static ItemStack getSteamBottle(int qty) {
         Item item = itemSteamBottle;
         if (item == null) {
-            String tag = "railcraft.fluid.steam.bottle";
+            String tag = "fluid.steam.bottle";
 
             item = new ItemBucketRailcraft(Fluids.STEAM.get()).setContainerItemStack(new ItemStack(Items.glass_bottle));
-            item.setUnlocalizedName(tag);
+            item.setUnlocalizedName("railcraft." + tag);
+            item.setRegistryName("Railcraft", tag);
             RailcraftRegistry.register(item);
 
             FluidHelper.registerBottle(Fluids.STEAM.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));

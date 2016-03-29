@@ -23,6 +23,7 @@ import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.items.firestone.BlockFirestoneRecharge;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.craftguide.CraftGuidePlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.BlinkTick;
@@ -193,6 +194,8 @@ public final class Railcraft {
 //        CraftGuidePlugin.init();
 
         RailcraftConfig.postInit();
+
+        if (RailcraftRegistry.hasErrored) throw new RuntimeException("Registry Error!");
     }
 
     @Mod.EventHandler
@@ -210,7 +213,7 @@ public final class Railcraft {
     public void missingMapping(FMLMissingMappingsEvent event) {
         for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
             if (mapping.type == GameRegistry.Type.BLOCK) {
-                Block block = GameRegistry.findBlock(MOD_ID, MiscTools.cleanTag(mapping.name));
+                Block block = GameRegistry.findBlock(MOD_ID, mapping.resourceLocation.getResourcePath());
                 if (block != null)
                     remap(block, mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
@@ -226,7 +229,7 @@ public final class Railcraft {
                 else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
                     remap(BlockLantern.getBlockStone(), mapping);
             } else if (mapping.type == GameRegistry.Type.ITEM) {
-                Block block = GameRegistry.findBlock(MOD_ID, MiscTools.cleanTag(mapping.name));
+                Block block = GameRegistry.findBlock(MOD_ID, mapping.resourceLocation.getResourcePath());
                 if (block != null)
                     remap(Item.getItemFromBlock(block), mapping);
                 else if (mapping.name.equals("Railcraft:tool.mag.glass") && RailcraftItem.magGlass.item() != null)
@@ -249,11 +252,11 @@ public final class Railcraft {
 
     private void remap(Block block, FMLMissingMappingsEvent.MissingMapping mapping) {
         mapping.remap(block);
-        Game.log(Level.WARN, "Remapping block " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(block.getUnlocalizedName()));
+        Game.log(Level.WARN, "Remapping block " + mapping.name + " to " + block.getRegistryName());
     }
 
     private void remap(Item item, FMLMissingMappingsEvent.MissingMapping mapping) {
         mapping.remap(item);
-        Game.log(Level.WARN, "Remapping item " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(item.getUnlocalizedName()));
+        Game.log(Level.WARN, "Remapping item " + mapping.name + " to " + item.getRegistryName());
     }
 }

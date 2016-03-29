@@ -20,6 +20,7 @@ public class ItemSteelAxe extends ItemAxe {
     public ItemSteelAxe() {
         super(ItemMaterials.STEEL_TOOL);
         setUnlocalizedName("railcraft.tool.steel.axe");
+        setRegistryName("Railcraft:tool.steel.axe");
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 

@@ -18,6 +18,7 @@ public class ItemSteelPickaxe extends ItemPickaxe {
     public ItemSteelPickaxe() {
         super(ItemMaterials.STEEL_TOOL);
         setUnlocalizedName("railcraft.tool.steel.pickaxe");
+        setRegistryName("Railcraft:tool.steel.pickaxe");
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 

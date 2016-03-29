@@ -43,7 +43,7 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar,
 IToolWrench {
 
     private static final byte BOOST_DAMAGE = 3;
-    private static final String ITEM_TAG = "railcraft.tool.crowbar";
+    private static final String ITEM_TAG = "tool.crowbar";
     private static Item item;
     private final Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
     private final Set<Class<? extends Block>> bannedRotations = new HashSet<Class<? extends Block>>();
@@ -51,7 +51,8 @@ IToolWrench {
     public static void registerItem() {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
             item = new ItemCrowbar(ToolMaterial.IRON);
-            item.setUnlocalizedName(ITEM_TAG);
+            item.setUnlocalizedName("railcraft." + ITEM_TAG);
+            item.setRegistryName("Railcraft", ITEM_TAG);
             RailcraftRegistry.register(item);
 
             CraftingPlugin.addShapedRecipe(new ItemStack(item),

@@ -31,11 +31,9 @@ public abstract class BlockPostBase extends Block {
 
     private static final float SIZE = 0.15f;
     private static final float SELECT = 4F / 16F;
-    private final int renderType;
 
-    public BlockPostBase(int renderType) {
+    public BlockPostBase() {
         super(new MaterialStructure());
-        this.renderType = renderType;
         setStepSound(RailcraftSound.getInstance());
         setResistance(15);
         setHardness(3);
@@ -96,11 +94,6 @@ public abstract class BlockPostBase extends Block {
     @Override
     public boolean isFullCube() {
         return false;
-    }
-
-    @Override
-    public int getRenderType() {
-        return renderType;
     }
 
     @Override

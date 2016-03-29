@@ -13,6 +13,8 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
@@ -72,6 +74,7 @@ public enum RailcraftItem {
                 throw new RuntimeException("Railcraft Items must implement IRailcraftItem");
             railcraftItem = (IRailcraftItem) item;
             item.setUnlocalizedName("railcraft." + tag);
+            item.setRegistryName(new ResourceLocation("Railcraft", tag));
             RailcraftRegistry.register(item);
             railcraftItem.initItem();
             railcraftItem.defineRecipes();

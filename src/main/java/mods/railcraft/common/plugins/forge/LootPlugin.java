@@ -70,7 +70,7 @@ public class LootPlugin {
 
     public static void addLootUnique(RailcraftItem item, IItemMetaEnum meta, int minStack, int maxStack, Type type) {
         ItemStack stack = item.getStack(meta);
-        addLoot(stack, minStack, maxStack, stack.getUnlocalizedName(), type.locations);
+        addLoot(stack, minStack, maxStack, item.getBaseTag(), type.locations);
     }
 
     public static void addLoot(RailcraftItem item, int minStack, int maxStack, Type type) {

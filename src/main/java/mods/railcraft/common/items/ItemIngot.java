@@ -35,7 +35,7 @@ public class ItemIngot extends ItemRailcraft {
         for (EnumIngot type : EnumIngot.VALUES) {
             ItemStack stack = new ItemStack(this, 1, type.ordinal());
             ForestryPlugin.addBackpackItem("miner", stack);
-            RailcraftRegistry.register(stack);
+//            RailcraftRegistry.register(stack);
             Metal m = Metal.get(type);
             OreDictionary.registerOre(m.getIngotTag(), m.getIngot());
             LootPlugin.addLootUnique(RailcraftItem.ingot, type, 5, 9, LootPlugin.Type.TOOL);

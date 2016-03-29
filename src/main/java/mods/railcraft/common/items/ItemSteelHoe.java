@@ -18,6 +18,7 @@ public class ItemSteelHoe extends ItemHoe {
     public ItemSteelHoe() {
         super(ItemMaterials.STEEL_TOOL);
         setUnlocalizedName("railcraft.tool.steel.hoe");
+        setRegistryName("Railcraft:tool.steel.hoe");
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 

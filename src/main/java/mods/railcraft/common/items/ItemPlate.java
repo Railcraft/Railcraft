@@ -29,8 +29,8 @@ public class ItemPlate extends ItemRailcraft {
     @Override
     public void initItem() {
         for (EnumPlate p : EnumPlate.VALUES) {
-            ItemStack stack = new ItemStack(this, 1, p.ordinal());
-            RailcraftRegistry.register(stack);
+//            ItemStack stack = new ItemStack(this, 1, p.ordinal());
+//            RailcraftRegistry.register(stack);
 
             LootPlugin.addLoot(RailcraftItem.plate, p, 6, 18, LootPlugin.Type.WORKSHOP);
         }

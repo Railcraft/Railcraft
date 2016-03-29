@@ -9,7 +9,6 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
@@ -44,8 +43,8 @@ public class BlockPostMetal extends BlockPostBase {
     public static BlockPostMetal platform;
     public final boolean isPlatform;
 
-    private BlockPostMetal(int renderType, boolean isPlatform) {
-        super(renderType);
+    private BlockPostMetal(boolean isPlatform) {
+        super();
         setStepSound(Block.soundTypeMetal);
         this.isPlatform = isPlatform;
         this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
@@ -62,7 +61,7 @@ public class BlockPostMetal extends BlockPostBase {
     }
 
     private static BlockPostMetal make(String tag, boolean isPlatform) {
-        BlockPostMetal block = new BlockPostMetal(Railcraft.getProxy().getRenderId(), isPlatform);
+        BlockPostMetal block = new BlockPostMetal(isPlatform);
         block.setRegistryName("railcraft." + tag);
         RailcraftRegistry.register(block, ItemPostMetal.class);
 

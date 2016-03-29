@@ -31,10 +31,10 @@ public class ItemCircuit extends ItemRailcraft {
 
     @Override
     public void initItem() {
-        for (EnumCircuit circuit : EnumCircuit.VALUES) {
-            ItemStack stack = new ItemStack(this, 1, circuit.ordinal());
-            RailcraftRegistry.register(stack);
-        }
+//        for (EnumCircuit circuit : EnumCircuit.VALUES) {
+//            ItemStack stack = new ItemStack(this, 1, circuit.ordinal());
+//            RailcraftRegistry.register(stack);
+//        }
     }
 
     @Override
