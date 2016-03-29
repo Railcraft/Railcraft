@@ -9,10 +9,10 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.passive.EntityVillager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -87,9 +87,9 @@ public class GuiTools {
         villager.rotationYaw = (float) Math.atan((double) (yaw / 40.0F)) * 40.0F;
         villager.rotationPitch = -((float) Math.atan((double) (pitch / 40.0F))) * 20.0F;
         villager.rotationYawHead = villager.rotationYaw;
-        GL11.glTranslatef(0.0F, villager.yOffset, 0.0F);
-        RenderManager.instance.playerViewY = 180.0F;
-        RenderManager.instance.renderEntityWithPosYaw(villager, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        GL11.glTranslatef(0.0F, (float) villager.getYOffset(), 0.0F);
+        Minecraft.getMinecraft().getRenderManager().playerViewY = 180.0F;
+        Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(villager, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
         GL11.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);

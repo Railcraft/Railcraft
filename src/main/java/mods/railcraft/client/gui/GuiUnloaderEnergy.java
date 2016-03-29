@@ -24,7 +24,7 @@ public class GuiUnloaderEnergy extends TileGui {
 
     private final String label;
     private final String button1Label = LocalizationPlugin.translate("railcraft.gui.energy.unloader.wait");
-//    private final String BUTTON1 = "Wait till Empty";
+    //    private final String BUTTON1 = "Wait till Empty";
     private TileEnergyUnloader tile;
 
     public GuiUnloaderEnergy(InventoryPlayer inv, TileEnergyUnloader tile) {
@@ -90,7 +90,7 @@ public class GuiUnloaderEnergy extends TileGui {
     @Override
     public void updateScreen() {
         super.updateScreen();
-        TileEntity t = tile.getWorld().getTileEntity(tile.getX(), tile.getY(), tile.getZ());
+        TileEntity t = tile.getWorld().getTileEntity(tile.getPos());
         if (t instanceof TileEnergyUnloader)
             tile = (TileEnergyUnloader) t;
         else

@@ -17,11 +17,12 @@ import mods.railcraft.common.gui.widgets.Widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
 
 public abstract class GuiContainerRailcraft extends GuiContainer {
 
@@ -36,9 +37,6 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
 
     /**
      * Draws the screen and all the components in it.
-     * @param mouseX
-     * @param mouseY
-     * @param par3
      */
     @Override
     public void drawScreen(int mouseX, int mouseY, float par3) {
@@ -133,7 +131,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         super.drawGradientRect(x1, y1, x2, y2, c1, c2);
     }
 
-//    @Override
+    //    @Override
 //    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 //        super.mouseClicked(mouseX, mouseY, mouseButton);
     // TODO: Fix button mouse mode passing
@@ -190,7 +188,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int button) {
+    protected void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
 
         int mX = mouseX - guiLeft;
         int mY = mouseY - guiTop;
@@ -209,7 +207,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     @Override
     protected void mouseClickMove(int x, int y, int mouseButton, long time) {
         Slot slot = getSlotAtPosition(x, y);
-        if (mouseButton == 1 && slot instanceof SlotRailcraft && ((SlotRailcraft)slot).isPhantom())
+        if (mouseButton == 1 && slot instanceof SlotRailcraft && ((SlotRailcraft) slot).isPhantom())
             return;
         super.mouseClickMove(x, y, mouseButton, time);
     }
@@ -253,7 +251,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
 
             for (ToolTipLine tip : toolTips) {
                 String line = tip.text;
-                
+
                 line = line.replace('\u00A0', ' ');
 
                 if (tip.format == null)
@@ -275,14 +273,14 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
     }
 
-    public void drawTexture(int x, int y, int w, int h, float uMin, float vMin, float uMax, float vMax) {
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + 0, y + h, zLevel, uMin, vMax);
-        tessellator.addVertexWithUV(x + w, y + h, zLevel, uMax, vMax);
-        tessellator.addVertexWithUV(x + w, y + 0, zLevel, uMax, vMin);
-        tessellator.addVertexWithUV(x + 0, y + 0, zLevel, uMin, vMin);
-        tessellator.draw();
-    }
+//    public void drawTexture(int x, int y, int w, int h, float uMin, float vMin, float uMax, float vMax) {
+//        Tessellator tessellator = Tessellator.getInstance();
+//        WorldRenderer wr = tessellator.getWorldRenderer();
+//        wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+//        wr.pos(x + 0, y + h, zLevel).tex(uMin, vMax).endVertex();
+//        wr.pos(x + w, y + h, zLevel).tex(uMax, vMax).endVertex();
+//        wr.pos(x + w, y + 0, zLevel).tex(uMax, vMin).endVertex();
+//        wr.pos(x + 0, y + 0, zLevel).tex(uMin, vMin).endVertex();
+//    }
 
 }

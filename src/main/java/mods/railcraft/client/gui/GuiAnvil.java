@@ -8,17 +8,16 @@
  */
 package mods.railcraft.client.gui;
 
+import io.netty.buffer.Unpooled;
 import mods.railcraft.common.gui.containers.ContainerAnvil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerRepair;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -27,6 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import java.io.IOException;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
@@ -52,13 +52,13 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
         Keyboard.enableRepeatEvents(true);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
-        this.itemNameField = new GuiTextField(this.fontRendererObj, i + 62, j + 24, 103, 12);
+        this.itemNameField = new GuiTextField(0, this.fontRendererObj, i + 62, j + 24, 103, 12);
         this.itemNameField.setTextColor(-1);
         this.itemNameField.setDisabledTextColour(-1);
         this.itemNameField.setEnableBackgroundDrawing(false);
         this.itemNameField.setMaxStringLength(40);
         this.inventorySlots.removeCraftingFromCrafters(this);
-        this.inventorySlots.addCraftingToCrafters(this);
+        this.inventorySlots.onCraftGuiOpened(this);
     }
 
     /**
@@ -120,7 +120,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
      * KeyListener.keyTyped(KeyEvent e).
      */
     @Override
-    protected void keyTyped(char par1, int par2) {
+    protected void keyTyped(char par1, int par2) throws IOException {
         if (this.itemNameField.textboxKeyTyped(par1, par2))
             this.func_135015_g();
         else
@@ -135,14 +135,14 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
             s = "";
 
         this.repairContainer.updateItemName(s);
-        this.mc.thePlayer.sendQueue.addToSendQueue(new C17PacketCustomPayload("MC|ItemName", s.getBytes()));
+        this.mc.thePlayer.sendQueue.addToSendQueue(new C17PacketCustomPayload("MC|ItemName", (new PacketBuffer(Unpooled.buffer())).writeString(s)));
     }
 
     /**
      * Called when the mouse is clicked.
      */
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) {
+    protected void mouseClicked(int par1, int par2, int par3) throws IOException {
         super.mouseClicked(par1, par2, par3);
         this.itemNameField.mouseClicked(par1, par2, par3);
     }
@@ -175,8 +175,8 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
     }
 
     @Override
-    public void sendContainerAndContentsToPlayer(Container par1Container, List par2List) {
-        this.sendSlotContents(par1Container, 0, par1Container.getSlot(0).getStack());
+    public void updateCraftingInventory(Container container, List<ItemStack> itemStackList) {
+        this.sendSlotContents(container, 0, container.getSlot(0).getStack());
     }
 
     /**
@@ -205,4 +205,6 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
     public void sendProgressBarUpdate(Container par1Container, int par2, int par3) {
     }
 
+    public void sendAllWindowProperties(Container p_175173_1_, IInventory p_175173_2_) {
+    }
 }

@@ -30,6 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,7 +138,7 @@ public class GuiTicket extends GuiScreen {
      * KeyListener.keyTyped(KeyEvent e).
      */
     @Override
-    protected void keyTyped(char c, int key) {
+    protected void keyTyped(char c, int key) throws IOException {
         super.keyTyped(c, key);
         switch (c) {
             case Keyboard.KEY_U:

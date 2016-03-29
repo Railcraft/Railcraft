@@ -81,7 +81,7 @@ public class GuiTradeStation extends TileGui {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) {
+    protected void actionPerformed(GuiButton button) throws IOException {
         super.actionPerformed(button);
 
         switch (button.id) {

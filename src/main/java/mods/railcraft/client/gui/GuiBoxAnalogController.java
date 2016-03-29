@@ -11,6 +11,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.opengl.GL11;
 
+import java.io.IOException;
 import java.util.BitSet;
 import java.util.EnumMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class GuiBoxAnalogController extends GuiBasic {
     //When doing Pattern.matcher, these are the groups:           ^ 1    ^ 2    ^ 3
 
     private final EnumMap<SignalAspect, BitSet> aspects = new EnumMap<SignalAspect, BitSet>(SignalAspect.class);
-    private final EnumMap<SignalAspect, GuiTextField> textbox = new EnumMap<SignalAspect, GuiTextField>(SignalAspect.class);
+    private final EnumMap<SignalAspect, GuiTextField> textBox = new EnumMap<SignalAspect, GuiTextField>(SignalAspect.class);
 
     public GuiBoxAnalogController(TileBoxAnalogController tile) {
         super(tile.getName(), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic_large.png", 176, 113);
@@ -35,9 +36,9 @@ public class GuiBoxAnalogController extends GuiBasic {
     }
 
     @Override
-    public void mouseClicked(int i, int j, int k) {
+    public void mouseClicked(int i, int j, int k) throws IOException {
         super.mouseClicked(i, j, k);
-        for (GuiTextField t : textbox.values()) {
+        for (GuiTextField t : textBox.values()) {
             t.mouseClicked(i, j, k);
         }
     }
@@ -47,7 +48,7 @@ public class GuiBoxAnalogController extends GuiBasic {
         super.keyTyped(c, i);
         //Disallow any PRINTABLE characters that are not digits, commas, or dashes
         if (c < ' ' || (c >= '0' && c <= '9') || c == '-' || c == ',' || c > '~')
-            for (GuiTextField t : textbox.values()) {
+            for (GuiTextField t : textBox.values()) {
                 t.textboxKeyTyped(c, i);
             }
     }
@@ -77,7 +78,7 @@ public class GuiBoxAnalogController extends GuiBasic {
         if (s.isEmpty() || start == 15)
             return s;
         else
-            return s.substring(0, s.length() - 1);	//Remove trailing comma
+            return s.substring(0, s.length() - 1);    //Remove trailing comma
     }
 
     private void parseRegex(String regex, BitSet bits) {
@@ -107,10 +108,10 @@ public class GuiBoxAnalogController extends GuiBasic {
         int h = (height - ySize) / 2;
 
         for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
-            GuiTextField textField = new GuiTextField(fontRendererObj, w + 72, h + getYPosFromIndex(entry.getKey().ordinal()), 95, 10);
+            GuiTextField textField = new GuiTextField(entry.getKey().ordinal(), fontRendererObj, w + 72, h + getYPosFromIndex(entry.getKey().ordinal()), 95, 10);
             textField.setMaxStringLength(37);
             textField.setText(rangeToString(entry.getValue()));
-            textbox.put(entry.getKey(), textField);
+            textBox.put(entry.getKey(), textField);
         }
 
     }
@@ -119,7 +120,7 @@ public class GuiBoxAnalogController extends GuiBasic {
     public void drawScreen(int x, int y, float f) {
         super.drawScreen(x, y, f);
         GL11.glDisable(GL11.GL_LIGHTING);
-        for (GuiTextField t : textbox.values()) {
+        for (GuiTextField t : textBox.values()) {
             t.drawTextBox();
         }
     }
@@ -133,7 +134,7 @@ public class GuiBoxAnalogController extends GuiBasic {
 
     @Override
     public void updateScreen() {
-        for (GuiTextField t : textbox.values()) {
+        for (GuiTextField t : textBox.values()) {
             t.updateCursorCounter();
         }
 
@@ -144,7 +145,7 @@ public class GuiBoxAnalogController extends GuiBasic {
     public void onGuiClosed() {
         if (Game.isNotHost(tile.getWorld())) {
             for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
-                parseRegex(textbox.get(entry.getKey()).getText(), entry.getValue());
+                parseRegex(textBox.get(entry.getKey()).getText(), entry.getValue());
             }
             tile.aspects = aspects;
             PacketGuiReturn pkt = new PacketGuiReturn(tile);
