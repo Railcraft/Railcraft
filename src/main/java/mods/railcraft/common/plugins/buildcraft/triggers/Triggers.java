@@ -8,8 +8,15 @@ import buildcraft.api.statements.*;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.beta.TileEngine.EnergyStage;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.EnumSet;
 
@@ -40,7 +47,8 @@ public enum Triggers implements ITriggerExternal {
     public static final Triggers[] VALUES = values();
     private final Trigger trigger;
     private final String tag;
-    private IIcon icon;
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite sprite;
 
     Triggers(String tag, Trigger trigger) {
         this.tag = tag;
@@ -54,14 +62,16 @@ public enum Triggers implements ITriggerExternal {
         }
     }
 
-    @Override
-    public String getUniqueTag() {
-        return "railcraft:" + tag;
+    @SideOnly(Side.CLIENT)
+    public static void textureStitchPre(TextureMap map) {
+        for (Triggers trigger : VALUES) {
+            trigger.registerSprite(map);
+        }
     }
 
     @Override
-    public IIcon getIcon() {
-        return icon;
+    public String getUniqueTag() {
+        return "railcraft:" + tag;
     }
 
     @Override
@@ -75,8 +85,14 @@ public enum Triggers implements ITriggerExternal {
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        icon = iconRegister.registerIcon("railcraft:buildcraft.gate.trigger." + tag);
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getGuiSprite() {
+        return sprite;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void registerSprite(TextureMap map) {
+        sprite = map.registerSprite(new ResourceLocation("railcraft", "buildcraft.gate.trigger." + tag));
     }
 
     @Override

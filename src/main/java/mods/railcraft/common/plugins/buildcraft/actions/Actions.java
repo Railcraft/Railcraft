@@ -8,9 +8,18 @@ import buildcraft.api.statements.IActionExternal;
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.StatementManager;
+
+import mods.railcraft.common.plugins.buildcraft.triggers.Triggers;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 /**
@@ -23,7 +32,8 @@ public enum Actions implements IActionExternal {
     SEND_CART("sendcart");
     public static final Actions[] VALUES = values();
     private final String tag;
-    private IIcon icon;
+    @SideOnly(Side.CLIENT)
+    private TextureAtlasSprite sprite;
 
     Actions(String tag) {
         this.tag = tag;
@@ -36,14 +46,16 @@ public enum Actions implements IActionExternal {
         }
     }
 
-    @Override
-    public String getUniqueTag() {
-        return "railcraft:" + tag;
+    @SideOnly(Side.CLIENT)
+    public static void textureStitchPre(TextureMap map) {
+        for (Actions acion : VALUES) {
+            acion.registerSprite(map);
+        }
     }
 
     @Override
-    public final IIcon getIcon() {
-        return icon;
+    public String getUniqueTag() {
+        return "railcraft:" + tag;
     }
 
     @Override
@@ -52,8 +64,14 @@ public enum Actions implements IActionExternal {
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        icon = iconRegister.registerIcon("railcraft:buildcraft.gate.action." + tag);
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getGuiSprite() {
+        return sprite;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void registerSprite(TextureMap map) {
+        sprite = map.registerSprite(new ResourceLocation("railcraft", "buildcraft.gate.action." + tag));
     }
 
     @Override
