@@ -11,7 +11,7 @@ package mods.railcraft.client.render;
 import mods.railcraft.client.render.models.ModelSimple;
 import mods.railcraft.client.render.models.tracks.ModelBufferStop;
 import mods.railcraft.common.blocks.tracks.TileTrack;
-import mods.railcraft.common.blocks.tracks.TrackBufferStop;
+import mods.railcraft.common.blocks.tracks.instances.TrackBufferStop;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;

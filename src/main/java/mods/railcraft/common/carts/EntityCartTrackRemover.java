@@ -2,7 +2,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.common.blocks.tracks.TrackForce;
+import mods.railcraft.common.blocks.tracks.instances.TrackForce;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;

@@ -20,7 +20,7 @@ import mods.railcraft.common.blocks.machine.gamma.*;
 import mods.railcraft.common.blocks.signals.IAspectActionManager;
 import mods.railcraft.common.blocks.signals.IRouter;
 import mods.railcraft.common.blocks.tracks.TileTrack;
-import mods.railcraft.common.blocks.tracks.TrackRouting;
+import mods.railcraft.common.blocks.tracks.instances.TrackRouting;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.modules.ModuleManager;

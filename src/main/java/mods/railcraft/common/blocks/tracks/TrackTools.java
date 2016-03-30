@@ -12,6 +12,7 @@ import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.tracks.instances.TrackBaseRailcraft;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerHighSpeed;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -27,9 +28,12 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SuppressWarnings({"WeakerAccess"})
 public class TrackTools {
     public static final int TRAIN_LOCKDOWN_DELAY = 200;
 
@@ -39,9 +43,7 @@ public class TrackTools {
 
     public static boolean isStraightTrackAt(IBlockAccess world, BlockPos pos) {
         Block block = WorldPlugin.getBlock(world, pos);
-        if (isRailBlock(block))
-            return getTrackMetaEnum(world, block, null, pos).isStraightTrack();
-        return false;
+        return isRailBlock(block) && TrackDirectionHelper.isStraightTrack(getTrackDirection(world, pos, null));
     }
 
     public static boolean isRailBlock(Block block) {
@@ -54,33 +56,24 @@ public class TrackTools {
 
     public static boolean isRailBlock(ItemStack stack) {
         Block block = InvTools.getBlockFromStack(stack);
-        if (block == null)
-            return false;
         return block instanceof BlockRailBase;
     }
 
     public static boolean isRailItem(Item item) {
-        if (item instanceof ITrackItem)
-            return true;
-        if (item instanceof ItemBlock)
-            return isRailBlock(((ItemBlock) item).getBlock());
-        return false;
+        return item instanceof ITrackItem || (item instanceof ItemBlock && isRailBlock(((ItemBlock) item).getBlock()));
     }
 
-    public static int getTrackDirection(IBlockAccess world, EntityMinecart cart, BlockPos pos) {
-        return getTrackDirection(world, world.getBlock(pos), cart, pos);
+    @Nullable
+    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, EntityMinecart cart) {
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        return getTrackDirection(world, pos, state, cart);
     }
 
-    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockRailBase block, EntityMinecart cart, BlockPos pos) {
-        return block.get
-    }
-
-    public static EnumTrackMeta getTrackMetaEnum(IBlockAccess world, EntityMinecart cart, BlockPos pos) {
-        return EnumTrackMeta.fromMeta(getTrackDirection(world, cart, pos));
-    }
-
-    public static EnumTrackMeta getTrackMetaEnum(IBlockAccess world, Block block, EntityMinecart cart, BlockPos pos) {
-        return EnumTrackMeta.fromMeta(getTrackDirection(world, block, cart, pos));
+    @Nullable
+    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state, EntityMinecart cart) {
+        if (state.getBlock() instanceof BlockRailBase)
+            return ((BlockRailBase) state.getBlock()).getRailDirection(world, pos, state, cart);
+        return null;
     }
 
     public static ITrackInstance getTrackInstanceAt(IBlockAccess world, BlockPos pos) {
@@ -117,17 +110,15 @@ public class TrackTools {
 
     public static boolean isHighSpeedTrackAt(IBlockAccess world, BlockPos pos) {
         ITrackInstance track = getTrackInstanceAt(world, pos);
-        if (track instanceof TrackBaseRailcraft)
-            return ((TrackBaseRailcraft) track).speedController instanceof SpeedControllerHighSpeed;
-        return false;
+        return track instanceof TrackBaseRailcraft && ((TrackBaseRailcraft) track).speedController instanceof SpeedControllerHighSpeed;
     }
 
-    public static IBlockState getTrackState(BlockRailBase block, BlockRailBase.EnumRailDirection direction) {
+    public static IBlockState makeTrackState(BlockRailBase block, BlockRailBase.EnumRailDirection direction) {
         return block.getDefaultState().withProperty(block.getShapeProperty(), direction);
     }
 
     public static TileTrack placeTrack(TrackSpec track, World world, BlockPos pos, BlockRailBase.EnumRailDirection direction) {
-        WorldPlugin.setBlockState(world, pos, getTrackState(RailcraftBlocks.getBlockTrack(), direction));
+        WorldPlugin.setBlockState(world, pos, makeTrackState(RailcraftBlocks.getBlockTrack(), direction));
         TileTrack tile = TrackFactory.makeTrackTile(track.createInstanceFromSpec());
         world.setTileEntity(pos, tile);
         return tile;

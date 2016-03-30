@@ -10,7 +10,7 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.tracks.TrackRouting;
+import mods.railcraft.common.blocks.tracks.instances.TrackRouting;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.containers.ContainerTrackRouting;

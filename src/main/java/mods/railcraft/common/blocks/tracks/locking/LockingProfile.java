@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.tracks.locking;
 
-import mods.railcraft.common.blocks.tracks.TrackNextGenLocking;
+import mods.railcraft.common.blocks.tracks.instances.TrackNextGenLocking;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 

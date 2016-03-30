@@ -12,7 +12,7 @@ import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.RailTools;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.TrackSpeed;
+import mods.railcraft.common.blocks.tracks.instances.TrackSpeed;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.util.misc.Game;

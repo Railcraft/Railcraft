@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.tracks.TrackRouting;
+import mods.railcraft.common.blocks.tracks.instances.TrackRouting;
 import mods.railcraft.common.gui.slots.SlotSecure;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemTicketGold;

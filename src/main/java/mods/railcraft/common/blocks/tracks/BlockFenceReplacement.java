@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import mods.railcraft.common.blocks.tracks.instances.TrackGated;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;

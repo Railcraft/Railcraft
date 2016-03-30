@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.tracks.speedcontroller;
 
 import mods.railcraft.api.tracks.ITrackInstance;
-import mods.railcraft.common.blocks.tracks.TrackSpeed;
+import mods.railcraft.common.blocks.tracks.instances.TrackSpeed;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
