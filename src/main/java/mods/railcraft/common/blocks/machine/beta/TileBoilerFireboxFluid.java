@@ -10,7 +10,6 @@ package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -24,6 +23,7 @@ import mods.railcraft.common.util.steam.FluidFuelProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -47,13 +47,13 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
         boiler.setFuelProvider(new FluidFuelProvider(tankFuel));
     }
 
-    public static void placeFluidBoiler(World world, int x, int y, int z, int width, int height, boolean highPressure, int water, FluidStack fuel) {
+    public static void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, FluidStack fuel) {
         for (MultiBlockPattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
                 Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
                 blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_FLUID.ordinal());
                 blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.ordinal() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal());
-                TileEntity tile = pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineBeta(), blockMapping);
+                TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineBeta(), blockMapping);
                 if (tile instanceof TileBoilerFireboxFluid) {
                     TileBoilerFireboxFluid master = (TileBoilerFireboxFluid) tile;
                     master.tankWater.setFluid(Fluids.WATER.get(water));
@@ -65,7 +65,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineBeta getMachineType() {
         return EnumMachineBeta.BOILER_FIREBOX_FLUID;
     }
 
@@ -75,7 +75,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
 //        if (current != null && current.itemID == getBlockId()) {
 //            return false;
 //        }
-        TileMultiBlock mBlock = getMasterBlock();
+        TileMultiBlock<?> mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.BOILER_LIQUID, player, worldObj, mBlock.getPos());
             return true;
@@ -84,8 +84,8 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
     }
 
     @Override
-    protected boolean handleClick(EntityPlayer player, int side) {
-        if (FluidHelper.handleRightClick(this, EnumFacing.VALUES[side], player, true, false))
+    protected boolean handleClick(EntityPlayer player, EnumFacing side) {
+        if (FluidHelper.handleRightClick(this, side, player, true, false))
             return true;
         return super.handleClick(player, side);
     }

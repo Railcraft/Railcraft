@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
-
 import static mods.railcraft.common.blocks.machine.beta.TileTankSteelWall.STEEL_TANK;
 
 /**
@@ -18,7 +16,7 @@ import static mods.railcraft.common.blocks.machine.beta.TileTankSteelWall.STEEL_
 public class TileTankSteelValve extends TileTankIronValve {
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineBeta getMachineType() {
         return EnumMachineBeta.TANK_STEEL_VALVE;
     }
 

@@ -160,4 +160,9 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
     }
+
+    @Override
+    public String getName() {
+        return name();
+    }
 }

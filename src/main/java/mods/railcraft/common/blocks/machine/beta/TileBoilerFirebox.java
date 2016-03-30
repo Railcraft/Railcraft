@@ -253,4 +253,49 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     public boolean isUseableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
+
+    @Override
+    public ItemStack removeStackFromSlot(int i) {
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        if (mBlock != null)
+            return mBlock.inventory.removeStackFromSlot(i);
+        else
+            return inventory.removeStackFromSlot(i);
+    }
+
+    @Override
+    public int getField(int id) {
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        if (mBlock != null)
+            return mBlock.inventory.getField(id);
+        else
+            return inventory.getField(id);
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        if (mBlock != null)
+            mBlock.inventory.setField(id, value);
+        else
+            inventory.setField(id, value);
+    }
+
+    @Override
+    public int getFieldCount() {
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        if (mBlock != null)
+            return mBlock.inventory.getFieldCount();
+        else
+            return inventory.getFieldCount();
+    }
+
+    @Override
+    public void clear() {
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        if (mBlock != null)
+            mBlock.inventory.clear();
+        else
+            inventory.clear();
+    }
 }

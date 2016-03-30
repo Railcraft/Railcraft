@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -20,7 +18,7 @@ public class TileBoilerTankLow extends TileBoilerTank {
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineBeta getMachineType() {
         return EnumMachineBeta.BOILER_TANK_LOW_PRESSURE;
     }
 }

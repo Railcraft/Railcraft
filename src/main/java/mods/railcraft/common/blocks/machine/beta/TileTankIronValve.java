@@ -18,7 +18,10 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.misc.MiscTools;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -138,12 +141,12 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
             int compValue = masterTileTankBase.getComparatorValue();
             if (previousComparatorValue != compValue) {
                 previousComparatorValue = compValue;
-                getWorld().func_147453_f(getX(), getY(), getZ(), null);
+                getWorld().notifyNeighborsOfStateChange(getPos(), null);
             }
         }
 
         if (previousStructureValidity != isStructureValid())
-            getWorld().func_147453_f(getX(), getY(), getZ(), null);
+            getWorld().notifyNeighborsOfStateChange(getPos(), null);
         previousStructureValidity = isStructureValid();
     }
 
@@ -180,7 +183,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
 
     @Override
     public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        if (getPatternPosition() - getPattern().getMasterOffsetY() != 1)
+        if (getPatternPosition().getY() - getPattern().getMasterOffset().getY() != 1)
             return null;
         TankManager tMan = getTankManager();
         if (tMan != null)
@@ -201,12 +204,12 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
 
     @Override
     public boolean canFill(EnumFacing from, Fluid fluid) {
-        return getPatternPosition() - getPattern().getMasterOffsetY() > 0;
+        return getPatternPosition().getY() - getPattern().getMasterOffset().getY() > 0;
     }
 
     @Override
     public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return getPatternPosition() - getPattern().getMasterOffsetY() <= 1;
+        return getPatternPosition().getY() - getPattern().getMasterOffset().getY() <= 1;
     }
 
     @Override
@@ -218,8 +221,8 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
     }
 
     @Override
-    public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
-        TileMultiBlock masterBlock = getMasterBlock();
+    public int getComparatorInputOverride(World world, BlockPos pos, EnumFacing face) {
+        TileMultiBlock<?> masterBlock = getMasterBlock();
         if (masterBlock instanceof TileTankBase)
             return ((TileTankBase) masterBlock).getComparatorValue();
         return 0;
