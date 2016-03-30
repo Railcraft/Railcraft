@@ -165,7 +165,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     protected void determineRailDirection() {
-        EnumRailDirection dir = TrackTools.getTrackDirection(getWorld(), getPos());
+        EnumRailDirection dir = TrackTools.getTrackDirectionRaw(getWorld().getBlockState(getPos()));
         if (TrackTools.isRailBlockAt(getWorld(), getPos().east()) && TrackTools.isRailBlockAt(getWorld(), getPos().west())) {
             if (dir != EnumRailDirection.EAST_WEST)
                 TrackTools.setTrackDirection(getWorld(), getPos(), EnumRailDirection.EAST_WEST);
