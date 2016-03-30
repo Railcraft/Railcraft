@@ -10,7 +10,6 @@ package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
@@ -31,6 +30,8 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.steam.ISteamUser;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -39,6 +40,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -52,10 +54,8 @@ import java.io.IOException;
 import java.util.*;
 
 import static net.minecraft.util.EnumFacing.*;
-import static net.minecraftforge.common.util.EnumFacing.DOWN;
-import static net.minecraftforge.common.util.EnumFacing.UP;
 
-public class TileSteamOven extends TileMultiBlockInventory implements IFluidHandler, ISidedInventory, ISteamUser, IHasWork {
+public class TileSteamOven extends TileMultiBlockInventory<EnumMachineAlpha> implements IFluidHandler, ISidedInventory, ISteamUser, IHasWork {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -111,11 +111,11 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
         tankManager.add(tank);
     }
 
-    public static void placeSteamOven(World world, int x, int y, int z, List<ItemStack> input, List<ItemStack> output) {
+    public static void placeSteamOven(World world, BlockPos pos, List<ItemStack> input, List<ItemStack> output) {
         for (MultiBlockPattern pattern : TileSteamOven.patterns) {
             Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
             blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.ordinal());
-            TileEntity tile = pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
+            TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
             if (tile instanceof TileSteamOven) {
                 TileSteamOven master = (TileSteamOven) tile;
                 for (int slot = 0; slot < 9; slot++) {
@@ -130,7 +130,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.STEAM_OVEN;
     }
 
@@ -252,9 +252,9 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
-        facing = MiscTools.getHorizontalSideFacingPlayer(worldObj, getPos(), entityliving);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
+        facing = MiscTools.getHorizontalSideFacingPlayer(entityliving);
     }
 
     @Override
@@ -280,7 +280,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock masterBlock = getMasterBlock();
+        TileMultiBlock<?> masterBlock = getMasterBlock();
         if (masterBlock != null) {
             GuiHandler.openGui(EnumGui.STEAN_OVEN, player, worldObj, masterBlock.getPos());
             return true;
@@ -301,7 +301,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
         cookTime = data.getInteger("cookTime");
-        facing = getOrientation(data.getByte("facing"));
+        facing = EnumFacing.getFront(data.getByte("facing"));
     }
 
     @Override
@@ -317,7 +317,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
         byte f = data.readByte();
         finishedCycle = data.readBoolean();
         if (f != facing.ordinal()) {
-            facing = getOrientation(f);
+            facing = EnumFacing.getFront(f);
             markBlockForUpdate();
         }
     }

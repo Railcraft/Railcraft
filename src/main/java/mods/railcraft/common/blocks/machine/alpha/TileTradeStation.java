@@ -20,6 +20,8 @@ import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
@@ -41,7 +43,7 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TileTradeStation extends TileMachineItem implements IGuiReturnHandler, ISidedInventory {
+public class TileTradeStation extends TileMachineItem<EnumMachineAlpha> implements IGuiReturnHandler, ISidedInventory {
 
     public enum GuiPacketType {
 
@@ -63,7 +65,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.TRADE_STATION;
     }
 
@@ -86,7 +88,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.TRADE_STATION, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.TRADE_STATION, player, worldObj, getPos().getX(), getPos().getY(), getPos().getZ());
         return true;
     }
 
@@ -97,14 +99,20 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         if (clock % 256 == 0)
             modifyNearbyAI();
 
-        List<EntityVillager> villagers = MiscTools.getNearbyEntities(worldObj, EntityVillager.class, xCoord, yCoord - 1, yCoord + 3, zCoord, AREA);
+        float x = getPos().getX();
+        float y = getPos().getY();
+        float z = getPos().getZ();
+        List<EntityVillager> villagers = MiscTools.getNearbyEntities(worldObj, EntityVillager.class, x, y - 1, y + 3, z, AREA);
         attemptTrade(villagers, 0);
         attemptTrade(villagers, 1);
         attemptTrade(villagers, 2);
     }
 
     private void modifyNearbyAI() {
-        List<EntityVillager> villagers = MiscTools.getNearbyEntities(worldObj, EntityVillager.class, xCoord, yCoord - 1, yCoord + 3, zCoord, 20);
+        float x = getPos().getX();
+        float y = getPos().getY();
+        float z = getPos().getZ();
+        List<EntityVillager> villagers = MiscTools.getNearbyEntities(worldObj, EntityVillager.class, x, y - 1, y + 3, z, 20);
         for (EntityVillager villager : villagers) {
             AIPlugin.addAITask(villager, 9, new EntityAIWatchBlock(villager, getMachineType().getBlock(), getMachineType().ordinal(), 4, 0.08F));
             AIPlugin.addAITask(villager, 9, new EntityAIMoveToBlock(villager, getMachineType().getBlock(), getMachineType().ordinal(), 16, 0.002F));
@@ -155,8 +163,8 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
         direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
     }
 
@@ -185,7 +193,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         recipeSlots.readFromNBT("recipe", data);
 
         profession = data.getInteger("profession");
-        direction = EnumFacing.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getFront(data.getByte("direction"));
     }
 
     @Override
@@ -199,7 +207,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         profession = data.readInt();
-        EnumFacing f = EnumFacing.getOrientation(data.readByte());
+        EnumFacing f = EnumFacing.getFront(data.readByte());
         if (direction != f) {
             direction = f;
             markBlockForUpdate();
@@ -240,18 +248,17 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing face) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
+    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing face) {
         return isItemValidForSlot(slot, stack);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing face) {
         return slot >= 10;
     }
-
 }

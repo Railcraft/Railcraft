@@ -20,6 +20,7 @@ import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.items.RailcraftPartItems;
 import mods.railcraft.common.plugins.buildcraft.triggers.INeedsMaintenance;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -46,7 +47,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDelegate, IFluidHandler, INeedsMaintenance, ISteamUser, IElectricGrid {
+public class TileSteamTurbine extends TileMultiBlock<EnumMachineAlpha> implements IMultiEmitterDelegate, IFluidHandler, INeedsMaintenance, ISteamUser, IElectricGrid {
 
     enum Texture {
 
@@ -157,7 +158,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.TURBINE;
     }
 

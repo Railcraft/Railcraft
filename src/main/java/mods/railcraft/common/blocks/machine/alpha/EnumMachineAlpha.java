@@ -101,7 +101,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     }
 
     @Override
-    public Class getTileClass() {
+    public Class<? extends TileMachineBase<EnumMachineAlpha>> getTileClass() {
         return tile;
     }
 

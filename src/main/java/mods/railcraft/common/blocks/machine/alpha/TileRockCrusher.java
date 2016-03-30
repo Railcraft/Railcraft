@@ -11,6 +11,8 @@ package mods.railcraft.common.blocks.machine.alpha;
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
+
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -52,7 +54,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileRockCrusher extends TileMultiBlockInventory<EnumMachineAlpha> implements IEnergyHandler, IHasWork, ISidedInventory {
+public class TileRockCrusher extends TileMultiBlockInventory<EnumMachineAlpha> implements IEnergyReceiver, IHasWork, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -304,7 +306,7 @@ public class TileRockCrusher extends TileMultiBlockInventory<EnumMachineAlpha> i
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
+        TileMultiBlock<?> mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, worldObj, mBlock.getX(), mBlock.getY(), mBlock.getZ());
             return true;
@@ -415,11 +417,6 @@ public class TileRockCrusher extends TileMultiBlockInventory<EnumMachineAlpha> i
         if (getEnergyStorage() == null)
             return 0;
         return getEnergyStorage().receiveEnergy(maxReceive, simulate);
-    }
-
-    @Override
-    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return 0;
     }
 
     @Override

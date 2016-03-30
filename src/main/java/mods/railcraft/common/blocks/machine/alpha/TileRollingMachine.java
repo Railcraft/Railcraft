@@ -10,9 +10,9 @@ package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
+
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
@@ -38,7 +38,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TileRollingMachine extends TileMachineBase implements IEnergyHandler, ISidedInventory, IHasWork {
+public class TileRollingMachine extends TileMachineBase<EnumMachineAlpha> implements IEnergyReceiver, ISidedInventory, IHasWork {
 
     private final static int PROCESS_TIME = 100;
     private final static int ACTIVATION_POWER = 50;
@@ -72,7 +72,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.ROLLING_MACHINE;
     }
 
@@ -330,7 +330,33 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
     public int getInventoryStackLimit() {
         return 64;
     }
+    
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
 
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {}
+
+    @Override
+    public ItemStack removeStackFromSlot(int index) {
+        ItemStack stack = getStackInSlot(index);
+        setInventorySlotContents(index, null);
+        // If the set failed (perhaps the inventory was read-only) then don't return the removed itemstack
+        if (getStackInSlot(index) == null)
+            return stack;
+        return null;
+    }
+
+    @Override
+    public void clear() {}
+    
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
@@ -350,11 +376,6 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyHandle
         if (energyStorage == null)
             return 0;
         return energyStorage.receiveEnergy(maxReceive, simulate);
-    }
-
-    @Override
-    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return 0;
     }
 
     @Override
