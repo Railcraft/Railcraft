@@ -79,8 +79,8 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
     }
 
     private void notifyNeighbors() {
-        getWorld().notifyBlockOfStateChange(getPos(), RailcraftBlocks.getBlockTrack());
-        getWorld().notifyBlockOfStateChange(getPos().down(), RailcraftBlocks.getBlockTrack());
+        getWorld().notifyNeighborsOfStateChange(getPos(), RailcraftBlocks.getBlockTrack());
+        getWorld().notifyNeighborsOfStateChange(getPos().down(), RailcraftBlocks.getBlockTrack());
         sendUpdateToClient();
     }
 
