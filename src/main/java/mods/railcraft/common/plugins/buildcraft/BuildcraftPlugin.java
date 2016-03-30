@@ -40,7 +40,7 @@ public class BuildcraftPlugin {
     public static class EventHook {
         @SubscribeEvent
         @SideOnly(Side.CLIENT)
-        public static void textureStitchPre(TextureStitchEvent.Pre event) {
+        public void textureStitchPre(TextureStitchEvent.Pre event) {
             Actions.textureStitchPre(event.map);
             Triggers.textureStitchPre(event.map);
         }
