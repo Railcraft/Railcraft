@@ -10,9 +10,16 @@ package mods.railcraft.common.blocks.machine.alpha.ai;
 
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.pattern.BlockHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.util.BlockPos;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -25,22 +32,20 @@ public class EntityAIWatchBlock extends EntityAIBase {
      */
     private final int maxDist;
     private final float weight;
-    private final Block searchedBlock;
-    private final int searchedMeta;
+    private final IBlockState searchedState;
     /**
      * The closest entity which is being watched by this one.
      */
-    protected WorldCoordinate watchedBlock;
+    protected BlockPos watchedBlock;
     private int lookTime;
 
-    public EntityAIWatchBlock(EntityLiving entity, Block searchedBlock, int searchedMeta, int maxDist) {
-        this(entity, searchedBlock, searchedMeta, maxDist, 0.02F);
+    public EntityAIWatchBlock(EntityLiving entity, IBlockState searchedState, int maxDist) {
+        this(entity, searchedState, maxDist, 0.02F);
     }
 
-    public EntityAIWatchBlock(EntityLiving entity, Block searchedBlock, int searchedMeta, int maxDist, float weight) {
+    public EntityAIWatchBlock(EntityLiving entity, IBlockState searchedState, int maxDist, float weight) {
         this.theWatcher = entity;
-        this.searchedBlock = searchedBlock;
-        this.searchedMeta = searchedMeta;
+        this.searchedState = searchedState;
         this.maxDist = maxDist;
         this.weight = weight;
         this.setMutexBits(3);
@@ -59,15 +64,15 @@ public class EntityAIWatchBlock extends EntityAIBase {
 //                return false;
 
         if (watchedBlock == null || !isBlockValid())
-            watchedBlock = WorldPlugin.findBlock(theWatcher.worldObj, (int) theWatcher.posX, (int) theWatcher.posY, (int) theWatcher.posZ, maxDist, searchedBlock, searchedMeta);
+            watchedBlock = WorldPlugin.findBlock(theWatcher.worldObj, theWatcher.getPosition(), maxDist, Predicates.equalTo(searchedState));
 
         return watchedBlock != null;
     }
 
     private boolean isBlockValid() {
-        if (searchedBlock != WorldPlugin.getBlock(theWatcher.worldObj, watchedBlock))
+        if (searchedState != WorldPlugin.getBlockState(theWatcher.worldObj, watchedBlock))
             return false;
-        return WorldPlugin.getDistanceSq(watchedBlock, theWatcher.posX, theWatcher.posY, theWatcher.posZ) <= maxDist * maxDist;
+        return theWatcher.getDistanceSq(watchedBlock) <= maxDist * maxDist;
     }
 
     /**
@@ -103,7 +108,7 @@ public class EntityAIWatchBlock extends EntityAIBase {
      */
     @Override
     public void updateTask() {
-        this.theWatcher.getLookHelper().setLookPosition(watchedBlock.x + 0.5, watchedBlock.y + 0.5, watchedBlock.z + 0.5, 10.0F, (float) this.theWatcher.getVerticalFaceSpeed());
+        this.theWatcher.getLookHelper().setLookPosition(watchedBlock.getX() + 0.5, watchedBlock.getY() + 0.5, watchedBlock.getZ() + 0.5, 10.0F, this.theWatcher.getVerticalFaceSpeed());
         --this.lookTime;
     }
 }
