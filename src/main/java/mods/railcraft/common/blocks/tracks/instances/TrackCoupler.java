@@ -30,7 +30,7 @@ import java.util.Locale;
 
 public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
     private EntityMinecart taggedCart;
-    private boolean powered = false;
+    private boolean powered;
     private Mode mode = Mode.COUPLER;
 
     enum Mode {
@@ -99,13 +99,13 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
+            if (crowbar.canWhack(player, current, getPos())) {
                 Mode m;
                 if (player.isSneaking())
                     m = mode.previous();
                 else
                     m = mode.next();
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+                crowbar.onWhack(player, current, getPos());
                 if (Game.isHost(getWorld()))
                     setMode(m);
                 else

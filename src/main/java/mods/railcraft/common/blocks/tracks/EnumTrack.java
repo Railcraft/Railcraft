@@ -36,8 +36,8 @@ import java.util.*;
 
 public enum EnumTrack {
 
-    BOARDING(Module.TRACKS, 4, 1, "boarding", 8, TrackBoarding.class),
-    HOLDING(Module.TRACKS, 2, 1, "holding", 8, TrackHolding.class),
+//    BOARDING(Module.TRACKS, 4, 1, "boarding", 8, TrackBoarding.class),
+//    HOLDING(Module.TRACKS, 2, 1, "holding", 8, TrackHolding.class),
     ONEWAY(Module.TRACKS, 4, 1, "oneway", 8, TrackOneWay.class),
     CONTROL(Module.TRACKS, 2, 0, "control", 16, TrackControl.class),
     LAUNCHER(Module.EXTRAS, 2, 1, "launcher", 1, TrackLauncher.class),
@@ -56,8 +56,8 @@ public enum EnumTrack {
     SPEED_BOOST(Module.TRACKS_HIGHSPEED, 2, 1, "speed.boost", 8, TrackSpeedBoost.class),
     SPEED_TRANSITION(Module.TRACKS_HIGHSPEED, 4, 1, "speed.transition", 8, TrackSpeedTransition.class),
     SPEED_SWITCH(Module.SIGNALS, 4, 0, "speed.switch", 8, TrackSpeedSwitch.class),
-    BOARDING_TRAIN(Module.TRAIN, 4, 1, "boarding.train", 8, TrackBoardingTrain.class),
-    HOLDING_TRAIN(Module.TRAIN, 2, 1, "holding.train", 8, TrackHoldingTrain.class),
+//    BOARDING_TRAIN(Module.TRAIN, 4, 1, "boarding.train", 8, TrackBoardingTrain.class),
+//    HOLDING_TRAIN(Module.TRAIN, 2, 1, "holding.train", 8, TrackHoldingTrain.class),
     COUPLER(Module.TRACKS, 6, 1, "coupler", 8, TrackCoupler.class),
     DECOUPLER(Module.TRACKS, 0, 0, "decoupler", 8, TrackCoupler.class),
     REINFORCED(Module.TRACKS_REINFORCED, 2, 0, "reinforced", 16, TrackReinforced.class),
@@ -72,13 +72,13 @@ public enum EnumTrack {
     SLOW_WYE(Module.TRACKS_WOOD, 2, 0, "slow.wye", 8, TrackSlowWye.class),
     REINFORCED_WYE(Module.TRACKS_REINFORCED, 2, 0, "reinforced.wye", 8, TrackReinforcedWye.class),
     SPEED_WYE(Module.TRACKS_HIGHSPEED, 2, 0, "speed.wye", 8, TrackSpeedWye.class),
-    LOCKDOWN(Module.TRACKS, 2, 1, "lockdown", 8, TrackLockdown.class),
-    LOCKDOWN_TRAIN(Module.TRAIN, 2, 1, "lockdown.train", 8, TrackLockdownTrain.class),
+//    LOCKDOWN(Module.TRACKS, 2, 1, "lockdown", 8, TrackLockdown.class),
+//    LOCKDOWN_TRAIN(Module.TRAIN, 2, 1, "lockdown.train", 8, TrackLockdownTrain.class),
     WHISTLE(Module.LOCOMOTIVES, 2, 1, "whistle", 8, TrackWhistle.class),
     LOCOMOTIVE(Module.LOCOMOTIVES, 6, 3, "locomotive", 8, TrackLocomotive.class),
     LIMITER(Module.LOCOMOTIVES, 6, 5, "limiter", 8, TrackLimiter.class),
     ROUTING(Module.ROUTING, 2, 1, "routing", 8, TrackRouting.class),
-    LOCKING(Module.TRACKS, 16, 1, "locking", 8, TrackNextGenLocking.class),
+    LOCKING(Module.TRACKS, 16, 1, "locking", 8, TrackLocking.class),
     ELECTRIC(Module.TRACKS_ELECTRIC, 2, 0, "electric", 16, TrackElectric.class),
     ELECTRIC_JUNCTION(Module.TRACKS_ELECTRIC, 1, 0, "electric.junction", 8, TrackElectricJunction.class),
     ELECTRIC_SWITCH(Module.TRACKS_ELECTRIC, 4, 0, "electric.switch", 8, TrackElectricSwitch.class),
@@ -87,25 +87,10 @@ public enum EnumTrack {
     public static final EnumTrack[] VALUES = values();
     private static final List<EnumTrack> creativeList = new ArrayList<EnumTrack>(50);
     private static final Set<TrackSpec> trackSpecs = new HashSet<TrackSpec>(50);
-    private final Module module;
-    private final String tag;
-    public final int recipeOutput;
-    private final int numIcons;
-    private final int itemIconIndex;
-    private TrackSpec trackSpec;
-    private boolean depreciated;
-    private final Class<? extends TrackBaseRailcraft> trackInstance;
 
     static {
-        try {
-            TrackRegistry.registerIconLoader(TrackTextureLoader.INSTANCE);
-            TrackSpec defaultSpec = new TrackSpec((short) -1, "railcraft:default", null, TrackDefault.class);
-            TrackRegistry.registerTrackSpec(defaultSpec);
-            trackSpecs.add(defaultSpec);
-        } catch (Error error) {
-            Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackSpec.class);
-            throw error;
-        }
+        trackSpecs.add(TrackRegistry.getDefaultTrackSpec());
+
         creativeList.add(SWITCH);
         creativeList.add(WYE);
         creativeList.add(JUNCTION);
@@ -148,13 +133,22 @@ public enum EnumTrack {
         creativeList.add(LAUNCHER);
 
         DECOUPLER.depreciated = true;
-        LOCKDOWN.depreciated = true;
-        LOCKDOWN_TRAIN.depreciated = true;
-        BOARDING.depreciated = true;
-        BOARDING_TRAIN.depreciated = true;
-        HOLDING.depreciated = true;
-        HOLDING_TRAIN.depreciated = true;
+//        LOCKDOWN.depreciated = true;
+//        LOCKDOWN_TRAIN.depreciated = true;
+//        BOARDING.depreciated = true;
+//        BOARDING_TRAIN.depreciated = true;
+//        HOLDING.depreciated = true;
+//        HOLDING_TRAIN.depreciated = true;
     }
+
+    public final int recipeOutput;
+    private final Module module;
+    private final String tag;
+    private final int numIcons;
+    private final int itemIconIndex;
+    private final Class<? extends TrackBaseRailcraft> trackInstance;
+    private TrackSpec trackSpec;
+    private boolean depreciated;
 
     EnumTrack(Module module, int numIcons, int itemIconIndex, String tag, int recipeOutput, Class<? extends TrackBaseRailcraft> trackInstance) {
         this.module = module;
@@ -165,15 +159,24 @@ public enum EnumTrack {
         this.trackInstance = trackInstance;
     }
 
+    public static EnumTrack fromId(int id) {
+        if (id < 0 || id >= EnumTrack.values().length)
+            id = 0;
+        return EnumTrack.values()[id];
+    }
+
+    public static List<EnumTrack> getCreativeList() {
+        return creativeList;
+    }
+
+    public static Collection<TrackSpec> getRailcraftTrackSpecs() {
+        return trackSpecs;
+    }
+
     public void initialize() {
         ToolTip toolTip = ToolTip.buildToolTip("tile.railcraft." + MiscTools.cleanTag(getTag()) + ".tip");
         List<String> tips = toolTip != null ? toolTip.convertToStrings() : null;
-        try {
-            trackSpec = new TrackSpec((short) ordinal(), getTag(), TrackTextureLoader.INSTANCE, trackInstance, tips);
-        } catch (Error error) {
-            Game.logErrorAPI("Railcraft", error, TrackSpec.class);
-            trackSpec = new TrackSpec((short) ordinal(), getTag(), TrackTextureLoader.INSTANCE, trackInstance);
-        }
+        trackSpec = new TrackSpec((short) ordinal(), getTag(), /* TODO: create a ModelResourceLocation */ null, trackInstance, tips);
         try {
             TrackRegistry.registerTrackSpec(trackSpec);
             trackSpecs.add(trackSpec);
@@ -221,20 +224,6 @@ public enum EnumTrack {
         return itemIconIndex;
     }
 
-    public static EnumTrack fromId(int id) {
-        if (id < 0 || id >= EnumTrack.values().length)
-            id = 0;
-        return EnumTrack.values()[id];
-    }
-
-    public static List<EnumTrack> getCreativeList() {
-        return creativeList;
-    }
-
-    public static Collection<TrackSpec> getRailcraftTrackSpecs() {
-        return trackSpecs;
-    }
-
     private ItemStack registerRecipe() {
         if (getItem() == null)
             return null;
@@ -266,16 +255,6 @@ public enum EnumTrack {
                         'r', "dustRedstone",
                         'b', Blocks.stone_pressure_plate);
                 break;
-//            case BOARDING_TRAIN:
-//                CraftingPlugin.addShapedOreRecipe(output,
-//                        "IrI",
-//                        "IbI",
-//                        "IsI",
-//                        'I', railAdvanced,
-//                        's', woodRailbed,
-//                        'r', Items.repeater,
-//                        'b', Blocks.stone_pressure_plate);
-//                break;
             case ONEWAY:
                 CraftingPlugin.addShapedRecipe(output,
                         "IbI",
@@ -296,46 +275,6 @@ public enum EnumTrack {
                         's', woodRailbed,
                         'r', "dustRedstone");
                 break;
-//            case HOLDING:
-//                CraftingPlugin.addShapedOreRecipe(output,
-//                        "IsI",
-//                        "IbI",
-//                        "IrI",
-//                        'I', railAdvanced,
-//                        's', woodRailbed,
-//                        'r', "dustRedstone",
-//                        'b', Blocks.stone_pressure_plate);
-//                break;
-//            case HOLDING_TRAIN:
-//                CraftingPlugin.addShapedOreRecipe(output,
-//                        "IsI",
-//                        "IbI",
-//                        "IrI",
-//                        'I', railAdvanced,
-//                        's', woodRailbed,
-//                        'r', Items.repeater,
-//                        'b', Blocks.stone_pressure_plate);
-//                break;
-//            case LOCKDOWN:
-//                CraftingPlugin.addShapedOreRecipe(output,
-//                        "IbI",
-//                        "IrI",
-//                        "IsI",
-//                        'I', railAdvanced,
-//                        's', woodRailbed,
-//                        'r', "dustRedstone",
-//                        'b', Blocks.stone_pressure_plate);
-//                break;
-//            case LOCKDOWN_TRAIN:
-//                CraftingPlugin.addShapedOreRecipe(output,
-//                        "IbI",
-//                        "IrI",
-//                        "IsI",
-//                        'I', railAdvanced,
-//                        's', woodRailbed,
-//                        'r', Items.repeater,
-//                        'b', Blocks.stone_pressure_plate);
-//                break;
             case SPEED:
                 CraftingPlugin.addShapedRecipe(output,
                         "I I",

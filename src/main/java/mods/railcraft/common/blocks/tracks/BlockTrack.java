@@ -78,6 +78,16 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
+        if (tile instanceof TileTrack) {
+            ITrackInstance track = ((TileTrack) tile).getTrackInstance();
+            return track.getActualState(state);
+        }
+        return state;
+    }
+
+    @Override
     protected BlockState createBlockState() {
         return new BlockState(this, SHAPE);
     }

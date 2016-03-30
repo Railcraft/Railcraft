@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.tracks.locking;
 
-import mods.railcraft.common.blocks.tracks.instances.TrackNextGenLocking;
+import mods.railcraft.common.blocks.tracks.instances.TrackLocking;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -21,9 +21,9 @@ import java.io.IOException;
  */
 public abstract class LockingProfile {
 
-    protected final TrackNextGenLocking track;
+    protected final TrackLocking track;
 
-    public LockingProfile(TrackNextGenLocking track) {
+    public LockingProfile(TrackLocking track) {
         this.track = track;
     }
 

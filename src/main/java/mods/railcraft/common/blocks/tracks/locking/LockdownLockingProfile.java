@@ -8,14 +8,14 @@
  */
 package mods.railcraft.common.blocks.tracks.locking;
 
-import mods.railcraft.common.blocks.tracks.instances.TrackNextGenLocking;
+import mods.railcraft.common.blocks.tracks.instances.TrackLocking;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class LockdownLockingProfile extends LockingProfile {
 
-    public LockdownLockingProfile(TrackNextGenLocking track) {
+    public LockdownLockingProfile(TrackLocking track) {
         super(track);
     }
 }

@@ -25,12 +25,16 @@ import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.common.MinecraftForge;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -41,7 +45,9 @@ import java.util.UUID;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLockdown, ITrackPowered {
+public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, ITrackPowered {
+    public static final PropertyEnum<LockingProfileType> PROFILE = PropertyEnum.create("profile", LockingProfileType.class);
+
     public static double START_BOOST = 0.04;
     public static double BOOST_FACTOR = 0.06;
     private LockingProfileType profile = LockingProfileType.LOCKDOWN;
@@ -49,10 +55,10 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
     private EntityMinecart currentCart, prevCart;
     private Train currentTrain;
     private UUID uuid;
-    private boolean trainLeaving = false;
-    private boolean redstone = false;
-    private boolean locked = false;
-    private int trainDelay = 0;
+    private boolean trainLeaving;
+    private boolean redstone;
+    private boolean locked;
+    private int trainDelay;
     // Temporary variables to hold loaded data while we restore from NBT
     private UUID prevCartUUID;
     private UUID currentCartUUID;
@@ -64,17 +70,20 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
     }
 
     @Override
-    public IIcon getIcon() {
-        if (!locked)
-            return getIcon(profile.ordinal() * 2); // glowing
-        return getIcon(profile.ordinal() * 2 + 1); // not glowing
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state.withProperty(PROFILE, profile);
+        state.withProperty(ITrackPowered.POWERED, !locked);
+        return state;
     }
 
     public LockingProfileType getProfileType() {
         return profile;
     }
 
-    public void setProfile(LockingProfileType type) {
+    public void setProfile(@Nonnull LockingProfileType type) {
+        if (profile == type)
+            return;
         profile = type;
         profileInstance = profile.create(this);
         if (tileEntity != null && Game.isHost(getWorld()))
@@ -140,13 +149,13 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
+            if (crowbar.canWhack(player, current, getPos())) {
                 LockingProfileType p;
                 if (player.isSneaking())
                     p = profile.previous();
                 else
                     p = profile.next();
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+                crowbar.onWhack(player, current, getPos());
                 if (Game.isHost(getWorld()))
                     setProfile(p);
                 else
@@ -176,15 +185,15 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
                 currentTrain.removeLockingTrack(getUUID());
             currentTrain = train;
             currentTrain.addLockingTrack(getUUID());
-            MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Lock(currentCart, getX(), getY(), getZ()));
+            MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Lock(currentCart, getPos()));
             profileInstance.onLock(currentCart);
             currentCart.motionX = 0.0D;
             currentCart.motionZ = 0.0D;
             int meta = tileEntity.getBlockMetadata();
             if (meta == 0 || meta == 4 || meta == 5)
-                currentCart.posZ = tileEntity.zCoord + 0.5D;
+                currentCart.posZ = tileEntity.getPos().getZ() + 0.5D;
             else
-                currentCart.posX = tileEntity.xCoord + 0.5D;
+                currentCart.posX = tileEntity.getPos().getX() + 0.5D;
         }
     }
 
@@ -197,7 +206,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         if (currentTrain != null)
             currentTrain.removeLockingTrack(getUUID());
         if (currentCart != null) {
-            MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Release(currentCart, getX(), getY(), getZ()));
+            MinecraftForge.EVENT_BUS.post(new CartLockdownEvent.Release(currentCart, getPos()));
             profileInstance.onRelease(currentCart);
         }
     }
@@ -228,7 +237,7 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
                 else
                     trainDelay = 0; // We've encountered a new train, force the delay to 0 so we return false
             } else if (trainLeaving) {
-                List<EntityMinecart> carts = CartTools.getMinecartsAt(getWorld(), getX(), getY(), getZ(), 0.0f);
+                List<EntityMinecart> carts = CartTools.getMinecartsAt(getWorld(), getPos(), 0.0f);
                 for (EntityMinecart cart : carts) {
                     if (Train.areInSameTrain(cart, prevCart)) {
                         trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY;
@@ -389,12 +398,12 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         markBlockNeedsUpdate();
     }
 
-    public enum LockType {
+    private enum LockType {
 
         CART, TRAIN
     }
 
-    public enum LockingProfileType {
+    public enum LockingProfileType implements IStringSerializable {
 
         LOCKDOWN(LockdownLockingProfile.class, LockType.CART, "lockdown"),
         LOCKDOWN_TRAIN(LockdownLockingProfile.class, LockType.TRAIN, "lockdown.train"),
@@ -422,18 +431,16 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
         }
 
         public LockingProfileType next() {
-            LockingProfileType next = VALUES[(ordinal() + 1) % VALUES.length];
-            return next;
+            return VALUES[(ordinal() + 1) % VALUES.length];
         }
 
         public LockingProfileType previous() {
-            LockingProfileType next = VALUES[(ordinal() + VALUES.length - 1) % VALUES.length];
-            return next;
+            return VALUES[(ordinal() + VALUES.length - 1) % VALUES.length];
         }
 
-        public LockingProfile create(TrackNextGenLocking track) {
+        public LockingProfile create(TrackLocking track) {
             try {
-                Constructor<? extends LockingProfile> con = profileClass.getConstructor(TrackNextGenLocking.class);
+                Constructor<? extends LockingProfile> con = profileClass.getConstructor(TrackLocking.class);
                 return con.newInstance(track);
             } catch (Throwable ex) {
                 Game.logThrowable("Failed to create Locking Profile!", 10, ex);
@@ -441,5 +448,9 @@ public class TrackNextGenLocking extends TrackBaseRailcraft implements ITrackLoc
             }
         }
 
+        @Override
+        public String getName() {
+            return tag;
+        }
     }
 }

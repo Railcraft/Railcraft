@@ -10,7 +10,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.api.tracks.RailTools;
+import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import mods.railcraft.common.util.misc.Vec2D;
@@ -70,7 +70,7 @@ public class LinkageHandler {
             return false;
         if (cart1 instanceof ILinkableCart && !((ILinkableCart) cart1).canBeAdjusted(cart2))
             return false;
-        return !RailTools.isCartLockedDown(cart1);
+        return !TrackToolsAPI.isCartLockedDown(cart1);
     }
 
     /**

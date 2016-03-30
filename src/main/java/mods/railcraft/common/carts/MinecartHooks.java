@@ -10,7 +10,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkageManager;
-import mods.railcraft.api.tracks.RailTools;
+import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.instances.TrackSpeed;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -166,10 +166,10 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (other instanceof EntityMinecart) {
             EntityMinecart otherCart = (EntityMinecart) other;
             if (!cart.isPoweredCart() || otherCart.isPoweredCart())
-                if (!RailTools.isCartLockedDown(cart))
+                if (!TrackToolsAPI.isCartLockedDown(cart))
                     cart.addVelocity(forceX, 0, forceZ);
             if (!otherCart.isPoweredCart() || cart.isPoweredCart())
-                if (!RailTools.isCartLockedDown(otherCart))
+                if (!TrackToolsAPI.isCartLockedDown(otherCart))
                     other.addVelocity(-forceX, 0, -forceZ);
         } else {
 //            if(isPlayer) {
@@ -191,7 +191,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 //            System.out.printf("dampX=%f, dampZ=%f%n", dampX, dampZ);
             if (!isPlayer)
                 other.addVelocity(-forceX, 0.0D, -forceZ);
-            if (!RailTools.isCartLockedDown(cart))
+            if (!TrackToolsAPI.isCartLockedDown(cart))
                 cart.addVelocity(forceX, 0, forceZ);
         }
     }

@@ -9,9 +9,10 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IItemCart;
-import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartContainer;
@@ -33,8 +34,8 @@ import java.util.List;
  */
 public abstract class CartContainerBase extends EntityMinecartContainer implements IRailcraftCart, IItemCart {
     private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
-    protected EnumFacing travelDirection = null;
-    protected EnumFacing verticalTravelDirection = null;
+    protected EnumFacing travelDirection;
+    protected EnumFacing verticalTravelDirection;
 
     public CartContainerBase(World world) {
         super(world);
@@ -59,9 +60,7 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
 
     @Override
     public final boolean interactFirst(EntityPlayer player) {
-        if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player)))
-            return true;
-        return doInteract(player);
+        return MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player)) || doInteract(player);
     }
 
     public boolean doInteract(EntityPlayer player) {
@@ -108,22 +107,21 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
     }
 
     protected void updateTravelDirection(BlockPos pos, IBlockState state) {
-        TrackTools.getTrackMetaEnum()
-        EnumTrackMeta trackMeta = EnumTrackMeta.fromMeta(meta);
-        if (trackMeta != null) {
-            EnumFacing EnumFacing = determineTravelDirection(trackMeta);
+        BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirection(getEntityWorld(), pos, state);
+        if (shape != null) {
+            EnumFacing EnumFacing = determineTravelDirection(shape);
             EnumFacing previousEnumFacing = travelDirectionHistory[1];
             if (previousEnumFacing != null && travelDirectionHistory[0] == previousEnumFacing) {
                 travelDirection = EnumFacing;
-                verticalTravelDirection = determineVerticalTravelDirection(trackMeta);
+                verticalTravelDirection = determineVerticalTravelDirection(shape);
             }
             travelDirectionHistory[0] = previousEnumFacing;
             travelDirectionHistory[1] = EnumFacing;
         }
     }
 
-    private EnumFacing determineTravelDirection(EnumTrackMeta trackMeta) {
-        if (trackMeta.isStraightTrack()) {
+    private EnumFacing determineTravelDirection(BlockRailBase.EnumRailDirection shape) {
+        if (TrackShapeHelper.isStraight(shape)) {
             if (posX - prevPosX > 0)
                 return EnumFacing.EAST;
             if (posX - prevPosX < 0)
@@ -133,23 +131,23 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
             if (posZ - prevPosZ < 0)
                 return EnumFacing.NORTH;
         } else {
-            switch (trackMeta) {
-                case EAST_SOUTH_CORNER:
+            switch (shape) {
+                case SOUTH_EAST:
                     if (prevPosZ > posZ)
                         return EnumFacing.EAST;
                     else
                         return EnumFacing.SOUTH;
-                case WEST_SOUTH_CORNER:
+                case SOUTH_WEST:
                     if (prevPosZ > posZ)
                         return EnumFacing.WEST;
                     else
                         return EnumFacing.SOUTH;
-                case WEST_NORTH_CORNER:
+                case NORTH_WEST:
                     if (prevPosZ > posZ)
                         return EnumFacing.NORTH;
                     else
                         return EnumFacing.WEST;
-                case EAST_NORTH_CORNER:
+                case NORTH_EAST:
                     if (prevPosZ > posZ)
                         return EnumFacing.NORTH;
                     else
@@ -159,8 +157,8 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
         return null;
     }
 
-    private EnumFacing determineVerticalTravelDirection(EnumTrackMeta trackMeta) {
-        if (trackMeta.isSlopeTrack())
+    private EnumFacing determineVerticalTravelDirection(BlockRailBase.EnumRailDirection shape) {
+        if (shape.isAscending())
             return prevPosY < posY ? EnumFacing.UP : EnumFacing.DOWN;
         return null;
     }

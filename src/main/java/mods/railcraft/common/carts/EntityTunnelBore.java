@@ -12,7 +12,7 @@ import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.bore.IBoreHead;
 import mods.railcraft.api.carts.bore.IMineable;
-import mods.railcraft.api.tracks.RailTools;
+import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.Train.TrainState;
@@ -679,7 +679,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             for (int inv = 0; inv < invRails.getSizeInventory(); inv++) {
                 ItemStack stack = invRails.getStackInSlot(inv);
                 if (stack != null) {
-                    boolean placed = RailTools.placeRailAt(stack, worldObj, x, y, z);
+                    boolean placed = TrackToolsAPI.placeRailAt(stack, worldObj, x, y, z);
                     if (placed) {
                         worldObj.setBlockMetadataWithNotify(x, y, z, meta.ordinal(), 3);
                         invRails.decrStackSize(inv, 1);

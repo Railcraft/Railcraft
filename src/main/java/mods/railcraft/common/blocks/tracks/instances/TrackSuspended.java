@@ -6,11 +6,12 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.common.blocks.tracks;
+package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ITrackCustomPlaced;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.instances.TrackUnsupported;
+import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -51,20 +52,19 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
             breakRail();
     }
 
-    public void breakRail() {
+    private void breakRail() {
         if (Game.isHost(getWorld()))
             getWorld().destroyBlock(getPos(), true);
     }
 
-    public boolean isSupportedRail(World world, BlockPos pos, EnumRailDirection dir) {
+    @SuppressWarnings("SimplifiableIfStatement")
+    private boolean isSupportedRail(World world, BlockPos pos, EnumRailDirection dir) {
         if (!TrackTools.isRailBlockAt(world, pos))
             return false;
         if (isSupportedBelow(world, pos))
             return true;
         if (dir == EnumRailDirection.NORTH_SOUTH) {
-            if (isSupportedBelow(world, pos.north()))
-                return true;
-            return isSupportedBelow(world, pos.south());
+            return isSupportedBelow(world, pos.north()) || isSupportedBelow(world, pos.south());
         } else if (dir == EnumRailDirection.EAST_WEST) {
             if (isSupportedBelow(world, pos.east()))
                 return true;
@@ -73,7 +73,8 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
         return false;
     }
 
-    public boolean isSupportedBelow(World world, BlockPos pos) {
+    @SuppressWarnings("SimplifiableIfStatement")
+    private boolean isSupportedBelow(World world, BlockPos pos) {
         if (!WorldPlugin.isBlockLoaded(world, pos))
             return true;
         if (TrackTools.isRailBlockAt(world, pos))
@@ -81,11 +82,11 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
         return false;
     }
 
-    public boolean isSupported() {
+    private boolean isSupported() {
         return isSupported(getWorld(), getPos(), TrackTools.getTrackDirection(getWorld(), getPos()));
     }
 
-    public boolean isSupported(World world, BlockPos pos, EnumRailDirection dir) {
+    private boolean isSupported(World world, BlockPos pos, EnumRailDirection dir) {
         if (isSupportedRail(world, pos, dir))
             return true;
         if (dir == EnumRailDirection.NORTH_SOUTH)
@@ -95,6 +96,7 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
         return false;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean canPlaceRailAt(World world, BlockPos pos) {
 //        if(BlockRail.isRailBlockAt(world, i, j - 1, k)) {

@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.tracks.speedcontroller;
 
 import mods.railcraft.api.tracks.ITrackInstance;
-import mods.railcraft.common.blocks.tracks.TrackDirectionHelper;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -33,7 +33,7 @@ public class SpeedControllerReinforced extends SpeedController {
     @Override
     public float getMaxSpeed(ITrackInstance track, EntityMinecart cart) {
         BlockRailBase.EnumRailDirection dir = track.getRailDirection(WorldPlugin.getBlockState(track.getWorld(), track.getPos()), cart);
-        if (TrackDirectionHelper.isTurn(dir))
+        if (TrackShapeHelper.isTurn(dir))
             return CORNER_SPEED;
         return MAX_SPEED;
     }

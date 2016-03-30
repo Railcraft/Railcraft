@@ -9,11 +9,13 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.api.tracks.RailTools;
-import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
+import mods.railcraft.api.tracks.TrackToolsAPI;
+import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -94,14 +96,10 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
         return dataWatcher.getWatchableObjectByte(DATA_ID_BLINK) > 0;
     }
 
-    protected boolean placeNewTrack(BlockPos pos, int slotStock, EnumTrackMeta meta) {
+    protected boolean placeNewTrack(BlockPos pos, int slotStock, BlockRailBase.EnumRailDirection trackShape) {
         ItemStack trackStock = getStackInSlot(slotStock);
         if (trackStock != null)
-            if (RailTools.placeRailAt(trackStock, worldObj, x, y, z)) {
-                worldObj.setBlockMetadataWithNotify(x, y, z, meta, 0x02);
-                Block block = worldObj.getBlock(x, y, z);
-                block.onNeighborBlockChange(worldObj, x, y, z, block);
-                worldObj.markBlockForUpdate(x, y, z);
+            if (TrackToolsAPI.placeRailAt(trackStock, worldObj, pos)) {
                 decrStackSize(slotStock, 1);
                 blink();
                 return true;
@@ -109,17 +107,16 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
         return false;
     }
 
-    protected int removeOldTrack(int x, int y, int z, Block block) {
-        List<ItemStack> drops = block.getDrops(worldObj, x, y, z, 0, 0);
+    protected BlockRailBase.EnumRailDirection removeOldTrack(BlockPos pos, Block block) {
+        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
+        List<ItemStack> drops = block.getDrops(worldObj, pos, state, 0);
 
         for (ItemStack stack : drops) {
             CartTools.offerOrDropItem(this, stack);
         }
-        int meta = worldObj.getBlockMetadata(x, y, z);
-        if (((BlockRailBase) block).isPowered())
-            meta = meta & 7;
-        worldObj.setBlockToAir(x, y, z);
-        return meta;
+        BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirectionRaw(state);
+        worldObj.setBlockToAir(pos);
+        return trackShape;
     }
 
 }

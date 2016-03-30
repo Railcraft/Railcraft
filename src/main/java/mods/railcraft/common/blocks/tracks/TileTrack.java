@@ -56,10 +56,10 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
         if (data.hasKey("trackTag")) {
             TrackSpec spec = TrackRegistry.getTrackSpec(data.getString("trackTag"));
             track = spec.createInstanceFromSpec();
-        } else if (data.hasKey("trackId")) {
-            TrackSpec spec = TrackRegistry.getTrackSpec(data.getInteger("trackId"));
-            track = spec.createInstanceFromSpec();
         }
+        if (track == null)
+            track = TrackRegistry.getDefaultTrackSpec().createInstanceFromSpec();
+
         track.setTile(this);
 
         track.readFromNBT(data);

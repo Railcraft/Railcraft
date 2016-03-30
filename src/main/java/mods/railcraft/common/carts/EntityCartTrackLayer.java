@@ -1,13 +1,14 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
+
+import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
 public class EntityCartTrackLayer extends CartMaintenancePatternBase {
 
@@ -58,26 +61,26 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
     private void placeTrack(BlockPos pos) {
         pos = pos.offset(travelDirection);
 
-        EnumTrackMeta trackMeta = EnumTrackMeta.NORTH_SOUTH;
+        BlockRailBase.EnumRailDirection trackShape = NORTH_SOUTH;
         if (travelDirection == EnumFacing.EAST || travelDirection == EnumFacing.WEST)
-            trackMeta = EnumTrackMeta.EAST_WEST;
-        if (!isValidReplacementBlock(pos) && isValidReplacementBlock(pos.up()) && trackMeta.isStraightTrack())
+            trackShape = EAST_WEST;
+        if (!isValidReplacementBlock(pos) && isValidReplacementBlock(pos.up()) && TrackShapeHelper.isStraight(trackShape))
             pos = pos.up();
         if (isValidReplacementBlock(pos) && isValidReplacementBlock(pos.down())) {
             pos = pos.down();
             if (travelDirection == EnumFacing.NORTH)
-                trackMeta = EnumTrackMeta.SOUTH_SLOPE;
+                trackShape = ASCENDING_SOUTH;
             if (travelDirection == EnumFacing.SOUTH)
-                trackMeta = EnumTrackMeta.NORTH_SLOPE;
+                trackShape = ASCENDING_NORTH;
             if (travelDirection == EnumFacing.WEST)
-                trackMeta = EnumTrackMeta.EAST_SLOPE;
+                trackShape = ASCENDING_WEST;
             if (travelDirection == EnumFacing.EAST)
-                trackMeta = EnumTrackMeta.WEST_SLOPE;
+                trackShape = ASCENDING_EAST;
         }
 
         if (isValidNewTrackPosition(pos)) {
             IBlockState targetState = WorldPlugin.getBlockState(worldObj, pos);
-            if (placeNewTrack(pos, SLOT_STOCK, trackMeta)) {
+            if (placeNewTrack(pos, SLOT_STOCK, trackShape)) {
                 targetState.getBlock().dropBlockAsItem(worldObj, pos, targetState, 0);
             }
         }

@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.tracks.locking;
 
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.common.blocks.tracks.instances.TrackNextGenLocking;
+import mods.railcraft.common.blocks.tracks.instances.TrackLocking;
 import net.minecraft.entity.item.EntityMinecart;
 
 /**
@@ -17,7 +17,7 @@ import net.minecraft.entity.item.EntityMinecart;
  */
 public class BoardingLockingProfile extends LockingProfile {
 
-    public BoardingLockingProfile(TrackNextGenLocking track) {
+    public BoardingLockingProfile(TrackLocking track) {
         super(track);
     }
 
@@ -26,11 +26,11 @@ public class BoardingLockingProfile extends LockingProfile {
         super.onRelease(cart);
         int meta = track.tileEntity.getBlockMetadata();
         double speed = CartTools.getCartSpeedUncapped(cart);
-        double boostX = TrackNextGenLocking.START_BOOST;
-        double boostZ = TrackNextGenLocking.START_BOOST;
+        double boostX = TrackLocking.START_BOOST;
+        double boostZ = TrackLocking.START_BOOST;
         if (speed > 0.005D) {
-            boostX = (Math.abs(cart.motionX) / speed) * TrackNextGenLocking.BOOST_FACTOR;
-            boostZ = (Math.abs(cart.motionZ) / speed) * TrackNextGenLocking.BOOST_FACTOR;
+            boostX = (Math.abs(cart.motionX) / speed) * TrackLocking.BOOST_FACTOR;
+            boostZ = (Math.abs(cart.motionZ) / speed) * TrackLocking.BOOST_FACTOR;
         }
         if (meta == 0 || meta == 4 || meta == 5)
             if (isReversed())
@@ -45,6 +45,6 @@ public class BoardingLockingProfile extends LockingProfile {
     }
 
     private boolean isReversed() {
-        return track.getProfileType() == TrackNextGenLocking.LockingProfileType.BOARDING_B || track.getProfileType() == TrackNextGenLocking.LockingProfileType.BOARDING_B_TRAIN;
+        return track.getProfileType() == TrackLocking.LockingProfileType.BOARDING_B || track.getProfileType() == TrackLocking.LockingProfileType.BOARDING_B_TRAIN;
     }
 }

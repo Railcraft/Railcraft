@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -28,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class ItemTrack extends ItemBlock implements ITrackItem {
@@ -40,40 +42,18 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
     }
 
     @Override
-    public IIcon getIcon(ItemStack stack, int pass) {
-        return getIconIndex(stack);
+    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+        return getTrackSpec(stack).getItemModel();
     }
 
-    @Override
-    public IIcon getIconIndex(ItemStack stack) {
-        TrackSpec trackSpec = getTrackSpec(stack);
-        if (trackSpec == null)
-            return Blocks.rail.getIcon(0, 0);
-        return trackSpec.getItemIcon();
-    }
-
+    @Nonnull
     public TrackSpec getTrackSpec(ItemStack stack) {
         if (stack != null && stack.getItem() == this) {
             NBTTagCompound nbt = InvTools.getItemData(stack);
             if (nbt.hasKey("track"))
                 return TrackRegistry.getTrackSpec(nbt.getString("track"));
-            return TrackRegistry.getTrackSpec(-1);
         }
-        return null;
-    }
-
-    /**
-     * Returns 0 for /terrain.png, 1 for /gui/items.png
-     */
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int getSpriteNumber() {
-        return 0;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister par1IconRegister) {
+        return TrackRegistry.getTrackSpec("railcraft:default");
     }
 
     @Override
