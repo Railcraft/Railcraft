@@ -15,15 +15,16 @@ import mods.railcraft.api.tracks.ITrackCustomShape;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
+
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 
 import java.io.DataInputStream;
@@ -52,23 +53,29 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox() {
-        return AxisAlignedBB.fromBounds(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity.xCoord + 1, tileEntity.yCoord + 1, tileEntity.zCoord + 1);
+        double x = tileEntity.getPos().getX();
+        double y = tileEntity.getPos().getY();
+        double z = tileEntity.getPos().getZ();
+        return AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
     }
 
     @Override
     public MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1) {
-        return MiscTools.collisionRayTrace(vec3d, vec3d1, getX(), getY(), getZ());
+        return MiscTools.collisionRayTrace(vec3d, vec3d1, getPos());
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox() {
-        int meta = tileEntity.getBlockMetadata();
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state) {
+        EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
         if (isGateOpen())
             return null;
-        if (meta == 0)
-            return AxisAlignedBB.fromBounds(tileEntity.xCoord, tileEntity.yCoord, (float) tileEntity.zCoord + 0.375F, tileEntity.xCoord + 1, (float) tileEntity.yCoord + 1.5F, (float) tileEntity.zCoord + 0.625F);
+        double x = tileEntity.getPos().getX();
+        double y = tileEntity.getPos().getY();
+        double z = tileEntity.getPos().getZ();
+        if (dir == EnumRailDirection.NORTH_SOUTH)
+            return AxisAlignedBB.fromBounds(x, y, z + 0.375F, z + 1, y + 1.5F, z + 0.625F);
         else
-            return AxisAlignedBB.fromBounds((float) tileEntity.xCoord + 0.375F, tileEntity.yCoord, tileEntity.zCoord, (float) tileEntity.xCoord + 0.625F, (float) tileEntity.yCoord + 1.5F, tileEntity.zCoord + 1);
+            return AxisAlignedBB.fromBounds(x, y, z + 0.625F, z + 1, y + 1.5F, z + 0.375F);
     }
 
     @Override
@@ -152,7 +159,7 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
 
     private void playSound() {
         if (Game.isHost(getWorld()))
-            SoundHelper.playFX(getWorld(), null, 1003, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0);
+            SoundHelper.playFX(getWorld(), null, 1003, tileEntity.getPos(), 0);
     }
 
     public boolean isGateOpen() {
@@ -160,7 +167,7 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, EnumFacing side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
         switch (side) {
             case UP:
             case DOWN:

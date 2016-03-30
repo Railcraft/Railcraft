@@ -13,10 +13,15 @@ import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.CartUtils;
+
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -48,10 +53,12 @@ public class TrackDisembark extends TrackBaseRailcraft implements ITrackPowered 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
         if (powered && cart.canBeRidden() && cart.riddenByEntity != null) {
-            double x = getX();
-            double z = getZ();
+            double x = getPos().getX();
+            double z = getPos().getZ();
             double offset = 1.5;
-            if (EnumTrackMeta.fromMeta(getTile().getBlockMetadata()).isNorthSouthTrack())
+            IBlockState state = getWorld().getBlockState(getPos());
+            EnumRailDirection dir = state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
+            if (dir == EnumRailDirection.NORTH_SOUTH)
                 if (mirrored)
                     x += offset;
                 else
@@ -60,7 +67,7 @@ public class TrackDisembark extends TrackBaseRailcraft implements ITrackPowered 
                 z += offset;
             else
                 z -= offset;
-            CartUtils.dismount(cart, x + 0.5, getY() + 1, z + 0.5);
+            CartUtils.dismount(cart, x + 0.5, getPos().getY() + 1, z + 0.5);
             cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
         }
     }
@@ -70,9 +77,9 @@ public class TrackDisembark extends TrackBaseRailcraft implements ITrackPowered 
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
+            if (crowbar.canWhack(player, current, getPos())) {
                 mirror();
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+                crowbar.onWhack(player, current, getPos());
                 sendUpdateToClient();
                 return true;
             }

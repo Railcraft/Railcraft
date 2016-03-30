@@ -24,7 +24,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class TrackSecured extends TrackBaseRailcraft implements IGuiReturnHandler, ISecure<LockButtonState> {
-    private final MultiButtonController<LockButtonState> lockController = new MultiButtonController<LockButtonState>(0, LockButtonState.VALUES);
+    private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 
     @Override
     public void writeToNBT(NBTTagCompound data) {
