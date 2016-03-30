@@ -97,6 +97,18 @@ public class AABBFactory {
         return this;
     }
 
+    public AABBFactory expandZAxis(double grow) {
+        minZ -= grow;
+        maxZ += grow;
+        return this;
+    }
+
+    public AABBFactory expandXAxis(double grow) {
+        minX -= grow;
+        maxX += grow;
+        return this;
+    }
+
     public AABBFactory raiseFloor(double raise) {
         minY += raise;
         return this;

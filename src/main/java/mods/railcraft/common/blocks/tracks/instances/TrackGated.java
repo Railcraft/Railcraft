@@ -16,6 +16,7 @@ import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -35,6 +36,8 @@ import java.io.IOException;
 //            TileEntity, NBTTagCompound, World
 public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, ITrackPowered, ITrackCustomShape, IPostConnection, ITrackBlocksMovement {
 
+    private static final double AABB_SHRINK = -0.375;
+
     protected boolean powered;
     protected boolean open;
     protected boolean reversed;
@@ -53,10 +56,7 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox() {
-        double x = tileEntity.getPos().getX();
-        double y = tileEntity.getPos().getY();
-        double z = tileEntity.getPos().getZ();
-        return AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
+        return AABBFactory.make().createBoxForTileAt(getPos()).build();
     }
 
     @Override
@@ -69,13 +69,11 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
         EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
         if (isGateOpen())
             return null;
-        double x = tileEntity.getPos().getX();
-        double y = tileEntity.getPos().getY();
-        double z = tileEntity.getPos().getZ();
+        AABBFactory factory = AABBFactory.make().createBoxForTileAt(getPos()).raiseCeiling(0.5);
         if (dir == EnumRailDirection.NORTH_SOUTH)
-            return AxisAlignedBB.fromBounds(x, y, z + 0.375F, z + 1, y + 1.5F, z + 0.625F);
+            return factory.expandZAxis(AABB_SHRINK).build();
         else
-            return AxisAlignedBB.fromBounds(x, y, z + 0.625F, z + 1, y + 1.5F, z + 0.375F);
+            return factory.expandXAxis(AABB_SHRINK).build();
     }
 
     @Override
