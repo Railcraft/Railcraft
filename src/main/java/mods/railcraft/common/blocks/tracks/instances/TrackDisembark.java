@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartUtils;
 
 import net.minecraft.block.BlockRailBase;
@@ -57,7 +58,7 @@ public class TrackDisembark extends TrackBaseRailcraft implements ITrackPowered 
             double z = getPos().getZ();
             double offset = 1.5;
             IBlockState state = getWorld().getBlockState(getPos());
-            EnumRailDirection dir = state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
+            EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
             if (dir == EnumRailDirection.NORTH_SOUTH)
                 if (mirrored)
                     x += offset;

@@ -15,6 +15,7 @@ import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.EntityLivingBase;
@@ -86,10 +87,7 @@ public class TrackEmbarking extends TrackBaseRailcraft implements ITrackPowered,
     public void onMinecartPass(EntityMinecart cart) {
         if (powered && cart.canBeRidden() && cart.riddenByEntity == null && cart.getEntityData().getInteger("MountPrevention") <= 0) {
             int a = area;
-            double x = getPos().getX();
-            double y = getPos().getY();
-            double z = getPos().getZ();
-            AxisAlignedBB box = AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
+            AxisAlignedBB box = AABBFactory.make().createBoxForTileAt(getPos()).build();
             box = box.expand(a, a, a);
             List<EntityLivingBase> entities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, box);
 
