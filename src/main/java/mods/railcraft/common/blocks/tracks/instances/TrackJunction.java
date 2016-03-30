@@ -25,7 +25,7 @@ public class TrackJunction extends TrackBaseRailcraft {
     }
 
     @Override
-    public int getBasicRailMetadata(EntityMinecart cart) {
+    public int getRailDirection(EntityMinecart cart) {
         if (cart == null) {
             return EnumTrackMeta.NORTH_SOUTH.ordinal();
         }

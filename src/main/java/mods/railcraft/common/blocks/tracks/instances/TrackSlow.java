@@ -18,7 +18,7 @@ import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerSlow;
 public class TrackSlow extends TrackBaseRailcraft
 {
     public TrackSlow(){
-        speedController = SpeedControllerSlow.getInstance();
+        speedController = SpeedControllerSlow.instance();
     }
 
     @Override

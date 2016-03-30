@@ -17,7 +17,7 @@ public class TrackSlowJunction extends TrackJunction
 
     public TrackSlowJunction()
     {
-        speedController = SpeedControllerSlow.getInstance();
+        speedController = SpeedControllerSlow.instance();
     }
 
     @Override

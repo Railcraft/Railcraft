@@ -16,7 +16,7 @@ import net.minecraft.entity.item.EntityMinecart;
 public class TrackSpeedSwitch extends TrackSwitch {
 
     public TrackSpeedSwitch() {
-        speedController = SpeedControllerHighSpeed.getInstance();
+        speedController = SpeedControllerHighSpeed.instance();
     }
 
     @Override

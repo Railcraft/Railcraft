@@ -9,13 +9,12 @@
 package mods.railcraft.common.blocks.tracks.speedcontroller;
 
 import mods.railcraft.api.tracks.ITrackInstance;
-import mods.railcraft.common.blocks.tracks.instances.TrackSpeed;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.instances.TrackSpeed;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -28,7 +27,7 @@ public class SpeedControllerHighSpeed extends SpeedController {
     private static final float SPEED_SLOPE = 0.45f;
     private static SpeedController instance;
 
-    public static SpeedController getInstance() {
+    public static SpeedController instance() {
         if (instance == null)
             instance = new SpeedControllerHighSpeed();
         return instance;
@@ -40,54 +39,45 @@ public class SpeedControllerHighSpeed extends SpeedController {
         if (track instanceof TrackSpeed)
             speed = ((TrackSpeed) track).maxSpeed;
         if (speed == null)
-            speed = speedForCurrentTrack(track);
+            speed = speedForCurrentTrack(track, cart);
         if (track instanceof TrackSpeed)
             ((TrackSpeed) track).maxSpeed = speed;
         return speed;
     }
 
-    public static float speedForCurrentTrack(ITrackInstance track) {
+    public static float speedForCurrentTrack(ITrackInstance track, EntityMinecart cart) {
         World world = track.getWorld();
-        int x = track.getX();
-        int y = track.getY();
-        int z = track.getZ();
-        Block block = WorldPlugin.getBlock(world, x, y, z);
-        if (TrackTools.isRailBlock(block)) {
-            int meta = TrackTools.getTrackMeta(world, block, null, x, y, z);
-
-            if (meta > 1 && meta < 6)
-                return SPEED_SLOPE;
-        }
-        return speedForNextTrack(world, x, y, z, 0);
+        BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, track.getPos(), cart);
+        if (dir != null && dir.isAscending())
+            return SPEED_SLOPE;
+        return speedForNextTrack(world, track.getPos(), 0, cart);
     }
 
-    private static float speedForNextTrack(World world, int x, int y, int z, int dist) {
+    private static float speedForNextTrack(World world, BlockPos pos, int dist, EntityMinecart cart) {
         float maxSpeed = RailcraftConfig.getMaxHighSpeed();
         if (dist < LOOK_AHEAD_DIST)
-            for (EnumFacing dir: EnumFacing.HORIZONTALS) {
-                int xx = MiscTools.getXOnSide(x, dir);
-                int yy = y;
-                int zz = MiscTools.getZOnSide(z, dir);
-                Block block = WorldPlugin.getBlock(world, xx, yy, zz);
-                if (!TrackTools.isRailBlock(block)) {
-                    block = WorldPlugin.getBlock(world, xx, yy + 1, zz);
-                    if (TrackTools.isRailBlock(block))
-                        yy = yy + 1;
-                    else {
-                        block = WorldPlugin.getBlock(world, xx, yy - 1, zz);
-                        if (TrackTools.isRailBlock(block))
-                            yy = yy - 1;
+            for (EnumFacing side : EnumFacing.HORIZONTALS) {
+                BlockPos nextPos = pos.offset(side);
+                boolean foundTrack = TrackTools.isRailBlockAt(world, nextPos);
+                if (!foundTrack) {
+                    if (TrackTools.isRailBlockAt(world, nextPos.up())) {
+                        foundTrack = true;
+                        nextPos = nextPos.up();
+                    } else if (TrackTools.isRailBlockAt(world, nextPos.down())) {
+                        foundTrack = true;
+                        nextPos = nextPos.down();
                     }
                 }
-                if (TrackTools.isRailBlock(block)) {
-                    int meta = TrackTools.getTrackMeta(world, block, null, xx, yy, zz);
-                    if (meta > 1 && meta < 6)
+                if (foundTrack) {
+                    BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, nextPos, cart);
+                    if (dir != null && dir.isAscending())
                         return SPEED_SLOPE;
-                    maxSpeed = speedForNextTrack(world, xx, yy, zz, dist + 1);
+                    maxSpeed = speedForNextTrack(world, nextPos, dist + 1, cart);
                     if (maxSpeed == SPEED_SLOPE)
                         return SPEED_SLOPE;
                 }
             }
+
         return maxSpeed;
     }
 }

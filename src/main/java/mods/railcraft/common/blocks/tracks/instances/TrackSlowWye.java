@@ -17,7 +17,7 @@ public class TrackSlowWye extends TrackWye
 
     public TrackSlowWye()
     {
-        speedController = SpeedControllerSlow.getInstance();
+        speedController = SpeedControllerSlow.instance();
     }
 
     @Override

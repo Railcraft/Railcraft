@@ -28,7 +28,7 @@ public abstract class TrackBaseRailcraft extends TrackInstanceBase {
     @Override
     public float getRailMaxSpeed(EntityMinecart cart) {
         if (speedController == null) {
-            speedController = SpeedController.getInstance();
+            speedController = SpeedController.instance();
         }
         return speedController.getMaxSpeed(this, cart);
     }

@@ -18,7 +18,7 @@ public class SpeedController {
 
     private static SpeedController instance;
 
-    public static SpeedController getInstance() {
+    public static SpeedController instance() {
         if (instance == null) {
             instance = new SpeedController();
         }

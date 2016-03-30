@@ -19,7 +19,7 @@ public class SpeedControllerSlow extends SpeedController {
     private static final float MAX_SPEED = 0.12f;
     private static SpeedControllerSlow instance;
 
-    public static SpeedControllerSlow getInstance() {
+    public static SpeedControllerSlow instance() {
         if (instance == null)
             instance = new SpeedControllerSlow();
         return instance;

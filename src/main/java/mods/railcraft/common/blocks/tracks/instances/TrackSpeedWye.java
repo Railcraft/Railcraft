@@ -16,7 +16,7 @@ import net.minecraft.entity.item.EntityMinecart;
 public class TrackSpeedWye extends TrackWye {
 
     public TrackSpeedWye() {
-        speedController = SpeedControllerHighSpeed.getInstance();
+        speedController = SpeedControllerHighSpeed.instance();
     }
 
     @Override

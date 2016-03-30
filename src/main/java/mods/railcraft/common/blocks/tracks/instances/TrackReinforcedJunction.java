@@ -16,7 +16,7 @@ import net.minecraft.entity.Entity;
 public class TrackReinforcedJunction extends TrackJunction {
 
     public TrackReinforcedJunction() {
-        speedController = SpeedControllerReinforced.getInstance();
+        speedController = SpeedControllerReinforced.instance();
     }
 
     @Override

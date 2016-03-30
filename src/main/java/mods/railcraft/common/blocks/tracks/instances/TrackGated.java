@@ -51,7 +51,7 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool() {
+    public AxisAlignedBB getSelectedBoundingBox() {
         return AxisAlignedBB.fromBounds(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity.xCoord + 1, tileEntity.yCoord + 1, tileEntity.zCoord + 1);
     }
 
@@ -61,7 +61,7 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool() {
+    public AxisAlignedBB getCollisionBoundingBox() {
         int meta = tileEntity.getBlockMetadata();
         if (isGateOpen())
             return null;

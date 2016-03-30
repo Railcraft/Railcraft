@@ -318,7 +318,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         updateSet(decidingCarts, getCartsAtDecisionEntrance(), lockingCarts, springingCarts);
 
         // We only set sprung/locked when a cart enters our track, this is
-        // mainly for visual purposes as the subclass's getBasicRailMetadata()
+        // mainly for visual purposes as the subclass's getRailDirection()
         // determines which direction the carts actually take.
         List<UUID> cartsOnTrack = CartUtils.getMinecartUUIDsAt(
                 getWorld(), tileEntity.xCoord, tileEntity.yCoord,

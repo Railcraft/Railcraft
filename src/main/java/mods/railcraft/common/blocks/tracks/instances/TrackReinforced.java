@@ -19,7 +19,7 @@ public class TrackReinforced extends TrackBaseRailcraft {
     public static final float RESISTANCE = 80f;
 
     public TrackReinforced() {
-        speedController = SpeedControllerReinforced.getInstance();
+        speedController = SpeedControllerReinforced.instance();
     }
 
     @Override

@@ -16,7 +16,7 @@ import net.minecraft.entity.Entity;
 public class TrackReinforcedWye extends TrackWye {
 
     public TrackReinforcedWye() {
-        speedController = SpeedControllerReinforced.getInstance();
+        speedController = SpeedControllerReinforced.instance();
     }
 
     @Override

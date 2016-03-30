@@ -25,7 +25,7 @@ public class TrackSpeed extends TrackBaseRailcraft {
     public Float maxSpeed;
 
     public TrackSpeed() {
-        speedController = SpeedControllerHighSpeed.getInstance();
+        speedController = SpeedControllerHighSpeed.instance();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class TrackSpeed extends TrackBaseRailcraft {
     }
 
     protected static boolean isTrackSafeForHighSpeed(ITrackInstance track, EntityMinecart cart) {
-        EnumTrackMeta meta = EnumTrackMeta.fromMeta(track.getBasicRailMetadata(cart));
+        EnumTrackMeta meta = EnumTrackMeta.fromMeta(track.getRailDirection(cart));
         World world = track.getWorld();
         int x = track.getX();
         int y = track.getY();

@@ -43,7 +43,7 @@ public class TrackTools {
 
     public static boolean isStraightTrackAt(IBlockAccess world, BlockPos pos) {
         Block block = WorldPlugin.getBlock(world, pos);
-        return isRailBlock(block) && TrackDirectionHelper.isStraightTrack(getTrackDirection(world, pos, null));
+        return isRailBlock(block) && TrackDirectionHelper.isStraight(getTrackDirection(world, pos));
     }
 
     public static boolean isRailBlock(Block block) {
@@ -61,6 +61,16 @@ public class TrackTools {
 
     public static boolean isRailItem(Item item) {
         return item instanceof ITrackItem || (item instanceof ItemBlock && isRailBlock(((ItemBlock) item).getBlock()));
+    }
+
+    @Nullable
+    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state) {
+        return getTrackDirection(world, pos, state, null);
+    }
+
+    @Nullable
+    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos) {
+        return getTrackDirection(world, pos, (EntityMinecart) null);
     }
 
     @Nullable

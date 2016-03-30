@@ -17,7 +17,7 @@ public class TrackSlowSwitch extends TrackSwitch
 
     public TrackSlowSwitch()
     {
-        speedController = SpeedControllerSlow.getInstance();
+        speedController = SpeedControllerSlow.instance();
     }
 
     @Override

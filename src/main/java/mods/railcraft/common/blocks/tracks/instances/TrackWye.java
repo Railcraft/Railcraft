@@ -11,12 +11,17 @@ package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartUtils;
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.EnumFacing;
 
 import java.util.List;
 import java.util.UUID;
+
+import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
 public class TrackWye extends TrackSwitchBase {
     @Override
@@ -24,6 +29,7 @@ public class TrackWye extends TrackSwitchBase {
         return EnumTrack.WYE;
     }
 
+    //TODO: Replace with getActualState()?
     @Override
     public IIcon getIcon() {
         if (isVisuallySwitched()) {
@@ -33,40 +39,40 @@ public class TrackWye extends TrackSwitchBase {
     }
 
     @Override
-    public int getBasicRailMetadata(EntityMinecart cart) {
-        int meta = tileEntity.getBlockMetadata();
+    public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
+        BlockRailBase.EnumRailDirection dir = super.getRailDirection(state, cart);
         if (cart != null) {
-            if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
+            if (dir == NORTH_SOUTH) {
                 if (isMirrored()) {
                     if (shouldSwitchForCart(cart)) {
-                        meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
+                        dir = NORTH_WEST;
                     } else {
-                        meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
+                        dir = SOUTH_WEST;
                     }
                 } else {
                     if (shouldSwitchForCart(cart)) {
-                        meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
+                        dir = SOUTH_EAST;
                     } else {
-                        meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
+                        dir = NORTH_EAST;
                     }
                 }
-            } else if (meta == EnumTrackMeta.EAST_WEST.ordinal()) {
+            } else if (dir == EAST_WEST) {
                 if (isMirrored()) {
                     if (shouldSwitchForCart(cart)) {
-                        meta = EnumTrackMeta.EAST_NORTH_CORNER.ordinal();
+                        dir = NORTH_EAST;
                     } else {
-                        meta = EnumTrackMeta.WEST_NORTH_CORNER.ordinal();
+                        dir = NORTH_WEST;
                     }
                 } else {
                     if (shouldSwitchForCart(cart)) {
-                        meta = EnumTrackMeta.WEST_SOUTH_CORNER.ordinal();
+                        dir = SOUTH_WEST;
                     } else {
-                        meta = EnumTrackMeta.EAST_SOUTH_CORNER.ordinal();
+                        dir = SOUTH_EAST;
                     }
                 }
             }
         }
-        return meta;
+        return dir;
     }
 
     @Override

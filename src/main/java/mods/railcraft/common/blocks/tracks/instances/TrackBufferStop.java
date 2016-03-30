@@ -43,7 +43,7 @@ public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversi
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool() {
+    public AxisAlignedBB getSelectedBoundingBox() {
         return AxisAlignedBB.fromBounds(tileEntity.xCoord + SBOX, tileEntity.yCoord, tileEntity.zCoord + SBOX, tileEntity.xCoord + 1 - SBOX, tileEntity.yCoord + 1 - SBOXY, tileEntity.zCoord + 1 - SBOX);
     }
 
@@ -53,7 +53,7 @@ public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversi
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool() {
+    public AxisAlignedBB getCollisionBoundingBox() {
         return AxisAlignedBB.fromBounds(tileEntity.xCoord + CBOX, tileEntity.yCoord, tileEntity.zCoord + CBOX, tileEntity.xCoord + 1 - CBOX, tileEntity.yCoord + 1, tileEntity.zCoord + 1 - CBOX);
     }
 

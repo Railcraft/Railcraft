@@ -12,6 +12,8 @@ package mods.railcraft.common.blocks.tracks;
 
 import net.minecraft.block.BlockRailBase;
 
+import javax.annotation.Nullable;
+
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
 /**
@@ -20,19 +22,23 @@ import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TrackDirectionHelper {
-    public static boolean isStraightTrack(BlockRailBase.EnumRailDirection dir) {
-        return dir.ordinal() < 6;
+    public static boolean isStraight(@Nullable BlockRailBase.EnumRailDirection dir) {
+        return dir != null && dir.ordinal() < 6;
     }
 
-    public static boolean isEastWestTrack(BlockRailBase.EnumRailDirection dir) {
-        return dir == EAST_WEST || dir == ASCENDING_EAST || dir == ASCENDING_WEST;
+    public static boolean isEastWest(@Nullable BlockRailBase.EnumRailDirection dir) {
+        return dir != null && (dir == EAST_WEST || dir == ASCENDING_EAST || dir == ASCENDING_WEST);
     }
 
-    public static boolean isNorthSouthTrack(BlockRailBase.EnumRailDirection dir) {
-        return dir == NORTH_SOUTH || dir == ASCENDING_NORTH || dir == ASCENDING_SOUTH;
+    public static boolean isNorthSouth(@Nullable BlockRailBase.EnumRailDirection dir) {
+        return dir != null && (dir == NORTH_SOUTH || dir == ASCENDING_NORTH || dir == ASCENDING_SOUTH);
     }
 
-    public static boolean isSlopeTrack(BlockRailBase.EnumRailDirection dir) {
-        return dir.ordinal() > 1 && dir.ordinal() < 6;
+    public static boolean isAscending(@Nullable BlockRailBase.EnumRailDirection dir) {
+        return dir != null && dir.isAscending();
+    }
+
+    public static boolean isTurn(@Nullable BlockRailBase.EnumRailDirection dir) {
+        return dir != null && dir.ordinal() >= 6;
     }
 }

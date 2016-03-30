@@ -35,7 +35,7 @@ public class TrackLauncher extends TrackReinforced implements ITrackPowered, IGu
     private static final float LAUNCH_THRESHOLD = 0.01f;
 
     public TrackLauncher() {
-        speedController = SpeedControllerReinforced.getInstance();
+        speedController = SpeedControllerReinforced.instance();
     }
 
     @Override

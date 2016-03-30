@@ -44,7 +44,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
     }
 
     @Override
-    public int getBasicRailMetadata(EntityMinecart cart) {
+    public int getRailDirection(EntityMinecart cart) {
         int meta = tileEntity.getBlockMetadata();
         if (cart != null && shouldSwitchForCart(cart)) {
             if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {

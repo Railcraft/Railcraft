@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -86,7 +87,7 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
         return isSupported(getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, meta);
     }
 
-    public boolean isSupported(World world, int i, int j, int k, int meta) {
+    public boolean isSupported(World world, BlockPos pos, int meta) {
         if (isSupportedRail(world, i, j, k, meta))
             return true;
         if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal())
@@ -97,16 +98,16 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
     }
 
     @Override
-    public boolean canPlaceRailAt(World world, int i, int j, int k) {
+    public boolean canPlaceRailAt(World world, BlockPos pos) {
 //        if(BlockRail.isRailBlockAt(world, i, j - 1, k)) {
 //            return false;
 //        }
 //        if(BlockRail.isRailBlockAt(world, i, j + 1, k)) {
 //            return false;
 //        }
-        if (isSupported(world, i, j, k, 0) || isSupported(world, i, j, k, 1))
+        if (isSupported(world, pos, 0) || isSupported(world, pos, 1))
             return true;
-        return world.isSideSolid(i, j - 1, k, EnumFacing.UP);
+        return world.isSideSolid(pos.down(), EnumFacing.UP);
     }
 
 }
