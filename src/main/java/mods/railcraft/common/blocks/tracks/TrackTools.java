@@ -19,6 +19,8 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
@@ -95,9 +97,30 @@ public class TrackTools {
 
     @Nullable
     public static BlockRailBase.EnumRailDirection getTrackDirectionRaw(IBlockState state) {
-        if (state.getBlock() instanceof BlockRailBase)
-            return state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
+        IProperty<EnumRailDirection> prop = getRailDirectionProperty(state.getBlock());
+        if (prop != null)
+            return state.getValue(prop);
         return null;
+    }
+
+    @Nullable
+    public static IProperty<EnumRailDirection> getRailDirectionProperty(Block block) {
+        if (block instanceof BlockRailBase)
+            return ((BlockRailBase) block).getShapeProperty();
+        return null;
+    }
+
+    public static boolean setTrackDirection(World world, BlockPos pos, EnumRailDirection wanted) {
+        IBlockState state = world.getBlockState(pos);
+        IProperty<EnumRailDirection> prop = getRailDirectionProperty(state.getBlock());
+        if (prop != null) {
+            if (prop.getAllowedValues().contains(wanted)) {
+                state = state.withProperty(prop, wanted);
+                return world.setBlockState(pos, state);
+            }
+            return false;
+        }
+        return false;
     }
 
     public static ITrackInstance getTrackInstanceAt(IBlockAccess world, BlockPos pos) {

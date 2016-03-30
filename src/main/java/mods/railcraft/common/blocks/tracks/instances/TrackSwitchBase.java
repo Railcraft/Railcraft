@@ -31,6 +31,7 @@ import mods.railcraft.api.tracks.ISwitchDevice;
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.carts.LinkageManager;
@@ -164,23 +165,19 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     protected void determineRailDirection() {
-        IBlockState current = getWorld().getBlockState(getPos());
-        IProperty<EnumRailDirection> shapeProp = ((BlockRailBase) current.getBlock()).getShapeProperty();
-        EnumRailDirection dir = current.getValue(shapeProp);
+        EnumRailDirection dir = TrackTools.getTrackDirection(getWorld(), getPos());
         if (TrackTools.isRailBlockAt(getWorld(), getPos().east()) && TrackTools.isRailBlockAt(getWorld(), getPos().west())) {
             if (dir != EnumRailDirection.EAST_WEST)
-                getWorld().setBlockState(getPos(), current.withProperty(shapeProp, EnumRailDirection.EAST_WEST));
+                TrackTools.setTrackDirection(getWorld(), getPos(), EnumRailDirection.EAST_WEST);
 //        } else if (TrackTools.isRailBlockAt(getWorld(), getPos().north()) && TrackTools.isRailBlockAt(getWorld(), getPos().south())) {
 //            if (dir != EnumRailDirection.NORTH_SOUTH)
 //                getWorld().setBlockState(getPos(), current.withProperty(shapeProp, EnumRailDirection.NORTH_SOUTH));
         } else if (dir != EnumRailDirection.NORTH_SOUTH)
-            getWorld().setBlockState(getPos(), current.withProperty(shapeProp, EnumRailDirection.NORTH_SOUTH));
+            TrackTools.setTrackDirection(getWorld(), getPos(), EnumRailDirection.NORTH_SOUTH);
     }
 
     protected void determineMirror() {
-        IBlockState current = getWorld().getBlockState(getPos());
-        IProperty<EnumRailDirection> shapeProp = ((BlockRailBase) current.getBlock()).getShapeProperty();
-        EnumRailDirection dir = current.getValue(shapeProp);
+        EnumRailDirection dir = TrackTools.getTrackDirection(getWorld(), getPos());
         boolean prevValue = isMirrored();
         if (dir == EnumRailDirection.NORTH_SOUTH) {
             BlockPos offset = getPos();
@@ -192,11 +189,9 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
                 mirrored = false; // East
             }
             if (TrackTools.isRailBlockAt(getWorld(), offset)) {
-                IBlockState otherState = getWorld().getBlockState(getPos());
-                IProperty<EnumRailDirection> otherShapeProp = ((BlockRailBase) current.getBlock()).getShapeProperty();
-                EnumRailDirection otherDir = current.getValue(shapeProp);
+                EnumRailDirection otherDir = TrackTools.getTrackDirection(getWorld(), offset);
                 if (otherDir == EnumRailDirection.NORTH_SOUTH)
-                    getWorld().setBlockState(offset, otherState.withProperty(otherShapeProp, EnumRailDirection.EAST_WEST));
+                    TrackTools.setTrackDirection(getWorld(), offset, EnumRailDirection.EAST_WEST);
             }
         } else if (dir == EnumRailDirection.EAST_WEST)
             mirrored = TrackTools.isRailBlockAt(getWorld(), getPos().north());
