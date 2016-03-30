@@ -573,7 +573,7 @@ public enum EnumTrack {
                         "IgI",
                         'I', railStandard,
                         '#', woodRailbed,
-                        'g', Blocks.fence_gate);
+                        'g', Blocks.oak_fence_gate);
                 break;
             case GATED_ONEWAY:
                 CraftingPlugin.addShapedRecipe(output,
@@ -582,7 +582,7 @@ public enum EnumTrack {
                         "IgI",
                         'I', railStandard,
                         '#', woodRailbed,
-                        'g', Blocks.fence_gate,
+                        'g', Blocks.oak_fence_gate,
                         'G', railAdvanced);
                 break;
             case COUPLER:

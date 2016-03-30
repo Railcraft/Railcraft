@@ -13,13 +13,10 @@ import mods.railcraft.api.tracks.TrackInstanceBase;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.blocks.tracks.TrackTextureLoader;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedController;
 import net.minecraft.entity.item.EntityMinecart;
 
-
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TrackBaseRailcraft extends TrackInstanceBase {
@@ -39,15 +36,6 @@ public abstract class TrackBaseRailcraft extends TrackInstanceBase {
     @Override
     public TrackSpec getTrackSpec() {
         return TrackRegistry.getTrackSpec(getTrackType().getTag());
-    }
-    
-    @Override
-    public IIcon getIcon(){
-        return getIcon(0);
-    }
-
-    public IIcon getIcon(int index) {
-        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[index];
     }
 
     public int getPowerPropagation() {
