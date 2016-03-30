@@ -79,7 +79,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineBeta getMachineType() {
         return EnumMachineBeta.TANK_IRON_VALVE;
     }
 
@@ -126,13 +126,13 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
             }
         }
 
-        if (getPatternPositionY() - getPattern().getMasterOffsetY() == 0) {
+        if (getPatternPosition().getY() - getPattern().getMasterOffset().getY() == 0) {
             TankManager tMan = getTankManager();
             if (tMan != null)
                 tMan.outputLiquid(tileCache, FLUID_OUTPUT_FILTER, FLUID_OUTPUTS, 0, FLOW_RATE);
         }
 
-        TileMultiBlock masterBlock = getMasterBlock();
+        TileMultiBlock<?> masterBlock = getMasterBlock();
         if (masterBlock instanceof TileTankBase) {
             TileTankBase masterTileTankBase = (TileTankBase) masterBlock;
             int compValue = masterTileTankBase.getComparatorValue();
@@ -152,7 +152,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
         if (!isStructureValid() || getPattern() == null)
             return getMachineType().getTexture(side);
         EnumFacing s = EnumFacing.VALUES[side];
-        char markerSide = getPattern().getPatternMarkerChecked(MiscTools.getXOnSide(getPatternPositionX(), s), MiscTools.getYOnSide(getPatternPositionY(), s), MiscTools.getZOnSide(getPatternPositionZ(), s));
+        char markerSide = getPattern().getPatternMarkerChecked(MiscTools.getXOnSide(getPatternPositionX(), s), MiscTools.getYOnSide(getPatternPosition(), s), MiscTools.getZOnSide(getPatternPositionZ(), s));
 
         if (!isMapPositionOtherBlock(markerSide)) {
             if (side == EnumFacing.UP.ordinal() || side == EnumFacing.DOWN.ordinal())
@@ -180,7 +180,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
 
     @Override
     public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        if (getPatternPositionY() - getPattern().getMasterOffsetY() != 1)
+        if (getPatternPosition() - getPattern().getMasterOffsetY() != 1)
             return null;
         TankManager tMan = getTankManager();
         if (tMan != null)
@@ -201,12 +201,12 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
 
     @Override
     public boolean canFill(EnumFacing from, Fluid fluid) {
-        return getPatternPositionY() - getPattern().getMasterOffsetY() > 0;
+        return getPatternPosition() - getPattern().getMasterOffsetY() > 0;
     }
 
     @Override
     public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return getPatternPositionY() - getPattern().getMasterOffsetY() <= 1;
+        return getPatternPosition() - getPattern().getMasterOffsetY() <= 1;
     }
 
     @Override

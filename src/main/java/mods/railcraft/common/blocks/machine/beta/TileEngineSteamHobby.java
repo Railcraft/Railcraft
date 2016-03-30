@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
@@ -38,7 +37,7 @@ import net.minecraftforge.fluids.FluidStack;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileEngineSteamHobby extends TileEngineSteam implements IInventory, ISidedInventory, INeedsFuel, ITemperature {
+public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInventory, INeedsFuel, ITemperature {
 
     public static final byte SLOT_FUEL = 0;
     public static final byte SLOT_LIQUID_INPUT = 1;
@@ -72,7 +71,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineBeta getMachineType() {
         return EnumMachineBeta.ENGINE_STEAM_HOBBY;
     }
 
@@ -87,7 +86,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() != Items.bucket)
             if (Game.isHost(worldObj)) {
-                if (FluidHelper.handleRightClick(this, EnumFacing.VALUES[side], player, true, false))
+                if (FluidHelper.handleRightClick(this, side, player, true, false))
                     return true;
             } else if (FluidItemHelper.isContainer(current))
                 return true;
@@ -215,6 +214,33 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return index == SLOT_LIQUID_OUTPUT;
+    }
+
+    @Override
+    public ItemStack removeStackFromSlot(int index) {
+        ItemStack stack = getStackInSlot(index);
+        setInventorySlotContents(index, null);
+        return stack;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {}
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < this.getSizeInventory(); i++) {
+            setInventorySlotContents(i, null);
+        }
     }
 
     @Override

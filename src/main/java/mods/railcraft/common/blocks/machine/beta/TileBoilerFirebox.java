@@ -40,7 +40,7 @@ import static net.minecraft.util.EnumParticleTypes.FLAME;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoilerFirebox extends TileBoiler implements IInventory, ISidedInventory, ITemperature {
+public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInventory, ITemperature {
 
     protected static final int SLOT_LIQUID_INPUT = 0;
     protected static final int SLOT_LIQUID_OUTPUT = 1;
@@ -232,8 +232,8 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
         return inventory.getSizeInventory();
     }
 
-    protected boolean handleClick(EntityPlayer player, int side) {
-        return FluidHelper.handleRightClick(this, EnumFacing.VALUES[side], player, true, false);
+    protected boolean handleClick(EntityPlayer player, EnumFacing side) {
+        return FluidHelper.handleRightClick(this, side, player, true, false);
     }
 
     @Override

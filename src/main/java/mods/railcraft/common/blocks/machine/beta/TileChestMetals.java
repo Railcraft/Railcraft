@@ -9,10 +9,9 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.api.core.items.IStackFilter;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.items.Metal;
-import mods.railcraft.common.util.inventory.filters.ComplexStackFilter;
 import mods.railcraft.common.util.inventory.filters.ExclusionStackFilter;
+import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.IInventory;
@@ -32,9 +31,9 @@ public class TileChestMetals extends TileChestRailcraft {
 
     static {
         for (Metal m : Metal.VALUES) {
-            nuggetFilters.put(m, ComplexStackFilter.and(new ExclusionStackFilter(m.getNugget()), m.nuggetFilter));
-            ingotFilters.put(m, ComplexStackFilter.and(new ExclusionStackFilter(m.getIngot()), m.ingotFilter));
-            blockFilters.put(m, ComplexStackFilter.and(new ExclusionStackFilter(m.getBlock()), m.blockFilter));
+            nuggetFilters.put(m, new ExclusionStackFilter(m.getNugget()).and(m.nuggetFilter));
+            ingotFilters.put(m, new ExclusionStackFilter(m.getIngot()).and(m.ingotFilter));
+            blockFilters.put(m, new ExclusionStackFilter(m.getBlock()).and(m.blockFilter));
         }
     }
 
@@ -43,7 +42,7 @@ public class TileChestMetals extends TileChestRailcraft {
         NUGGET_CONDENSE {
             @Override
             public boolean evaluate(IInventory inv) {
-                InventoryManipulator im = InventoryManipulator.get(inv);
+                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     if (metal.getIngot() != null && im.canRemoveItems(metal.nuggetFilter, 9) && im.canAddStack(metal.getIngot())) {
                         im.removeItems(metal.nuggetFilter, 9);
@@ -58,7 +57,7 @@ public class TileChestMetals extends TileChestRailcraft {
         INGOT_CONDENSE {
             @Override
             public boolean evaluate(IInventory inv) {
-                InventoryManipulator im = InventoryManipulator.get(inv);
+                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     if (metal.getBlock() != null && im.canRemoveItems(metal.ingotFilter, 9) && im.canAddStack(metal.getBlock())) {
                         im.removeItems(metal.ingotFilter, 9);
@@ -73,7 +72,7 @@ public class TileChestMetals extends TileChestRailcraft {
         NUGGET_SWAP {
             @Override
             public boolean evaluate(IInventory inv) {
-                InventoryManipulator im = InventoryManipulator.get(inv);
+                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     IStackFilter filter = nuggetFilters.get(metal);
                     if (metal.getNugget() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getNugget())) {
@@ -89,7 +88,7 @@ public class TileChestMetals extends TileChestRailcraft {
         INGOT_SWAP {
             @Override
             public boolean evaluate(IInventory inv) {
-                InventoryManipulator im = InventoryManipulator.get(inv);
+                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     IStackFilter filter = ingotFilters.get(metal);
                     if (metal.getIngot() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getIngot())) {
@@ -105,7 +104,7 @@ public class TileChestMetals extends TileChestRailcraft {
         BLOCK_SWAP {
             @Override
             public boolean evaluate(IInventory inv) {
-                InventoryManipulator im = InventoryManipulator.get(inv);
+                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     IStackFilter filter = blockFilters.get(metal);
                     if (metal.getBlock() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getBlock())) {
@@ -133,7 +132,7 @@ public class TileChestMetals extends TileChestRailcraft {
     private Target target = Target.NUGGET_CONDENSE;
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineBeta getMachineType() {
         return EnumMachineBeta.METALS_CHEST;
     }
 

@@ -27,6 +27,7 @@ import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Timer;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -56,7 +57,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
+public abstract class TileTankBase extends TileMultiBlock<EnumMachineBeta> implements ITankTile {
 
     public final static int CAPACITY_PER_BLOCK_IRON = 16 * FluidHelper.BUCKET_VOLUME;
     public final static int CAPACITY_PER_BLOCK_STEEL = 32 * FluidHelper.BUCKET_VOLUME;
@@ -79,24 +80,24 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         tankManager.add(tank);
     }
 
-    public static void placeIronTank(World world, int x, int y, int z, int patternIndex, FluidStack fluid) {
+    public static void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
         MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
         Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
         blockMapping.put('B', EnumMachineBeta.TANK_IRON_WALL.ordinal());
         blockMapping.put('W', EnumMachineBeta.TANK_IRON_GAUGE.ordinal());
-        TileEntity tile = pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineBeta(), blockMapping);
+        TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineBeta(), blockMapping);
         if (tile instanceof TileTankBase) {
             TileTankBase master = (TileTankBase) tile;
             master.tank.setFluid(fluid);
         }
     }
 
-    public static void placeSteelTank(World world, int x, int y, int z, int patternIndex, FluidStack fluid) {
+    public static void placeSteelTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
         MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
         Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
         blockMapping.put('B', EnumMachineBeta.TANK_STEEL_WALL.ordinal());
         blockMapping.put('W', EnumMachineBeta.TANK_STEEL_GAUGE.ordinal());
-        TileEntity tile = pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineBeta(), blockMapping);
+        TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineBeta(), blockMapping);
         if (tile instanceof TileTankBase) {
             TileTankBase master = (TileTankBase) tile;
             master.tank.setFluid(fluid);
@@ -500,7 +501,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     @Override
     protected void onPatternLock(MultiBlockPattern pattern) {
         if (isMaster) {
-            int capacity = (pattern.getPatternWidthX() - 2) * (pattern.getPatternHeight() - (pattern.getMasterOffsetY() * 2)) * (pattern.getPatternWidthZ() - 2) * getCapacityPerBlock();
+            int capacity = (pattern.getPatternWidthX() - 2) * (pattern.getPatternHeight() - (pattern.getMasterOffset().getY() * 2)) * (pattern.getPatternWidthZ() - 2) * getCapacityPerBlock();
             tankManager.setCapacity(0, capacity);
         }
     }
@@ -514,12 +515,13 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
+        IBlockState state = WorldPlugin.getBlockState(worldObj, getPos());
+        Block block = state.getBlock();
+        int meta = block.getMetaFromState(state);
         switch (mapPos) {
             case 'O': // Other
             {
-                Block block = WorldPlugin.getBlock(worldObj, getPos());
                 if (block == getBlockType()) {
-                    int meta = worldObj.getBlockMetadata(x, y, z);
                     if (getTankType().isTankBlock(meta))
                         return false;
                 }
@@ -527,27 +529,21 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
             }
             case 'W': // Gauge or Valve
             {
-                Block block = WorldPlugin.getBlock(worldObj, getPos());
                 if (block != getBlockType())
                     return false;
-                int meta = worldObj.getBlockMetadata(x, y, z);
                 return getTankType().isTankBlock(meta);
             }
             case 'B': // Block
             {
-                Block block = WorldPlugin.getBlock(worldObj, getPos());
                 if (block != getBlockType())
                     return false;
-                int meta = worldObj.getBlockMetadata(x, y, z);
                 return getTankType().isWallBlock(meta);
             }
             case 'M': // Master
             case 'T': // Top Block
             {
-                Block block = WorldPlugin.getBlock(worldObj, getPos());
                 if (block != getBlockType())
                     return false;
-                int meta = worldObj.getBlockMetadata(x, y, z);
                 if (!getTankType().isTankBlock(meta))
                     return false;
                 TileEntity tile = worldObj.getTileEntity(getPos());
@@ -555,7 +551,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
                     worldObj.removeTileEntity(getPos());
                     return true;
                 }
-                return !((TileMultiBlock) tile).isStructureValid();
+                return !((TileMultiBlock<?>) tile).isStructureValid();
             }
             case 'A': // Air
             {
