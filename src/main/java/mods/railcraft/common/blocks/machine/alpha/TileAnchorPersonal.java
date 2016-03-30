@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -28,7 +27,7 @@ public class TileAnchorPersonal extends TileAnchorWorld {
     private long ticksSincePlayerLogged;
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.PERSONAL_ANCHOR;
     }
 

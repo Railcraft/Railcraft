@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine;
 
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -20,37 +21,37 @@ import java.util.Map;
 public class BoundingBoxManager {
 
     public static final BoundingBox DEFAULT = new BoundingBox();
-    private static final Map<IEnumMachine, BoundingBox> collisionBoxes = new HashMap<IEnumMachine, BoundingBox>();
-    private static final Map<IEnumMachine, BoundingBox> selectionBoxes = new HashMap<IEnumMachine, BoundingBox>();
+    private static final Map<IEnumMachine<?>, BoundingBox> collisionBoxes = new HashMap<IEnumMachine<?>, BoundingBox>();
+    private static final Map<IEnumMachine<?>, BoundingBox> selectionBoxes = new HashMap<IEnumMachine<?>, BoundingBox>();
 
     private BoundingBoxManager() {
 
     }
 
-    public static AxisAlignedBB getCollisionBox(World world, int x, int y, int z, IEnumMachine machine) {
+    public static AxisAlignedBB getCollisionBox(World world, BlockPos pos, IEnumMachine<?> machine) {
         BoundingBox box = collisionBoxes.get(machine);
         if (box == null)
             box = DEFAULT;
-        return box.getBox(world, x, y, z);
+        return box.getBox(pos);
     }
 
-    public static AxisAlignedBB getSelectionBox(World world, int x, int y, int z, IEnumMachine machine) {
+    public static AxisAlignedBB getSelectionBox(World world,  BlockPos pos, IEnumMachine<?> machine) {
         BoundingBox box = selectionBoxes.get(machine);
         if (box == null)
             box = DEFAULT;
-        return box.getBox(world, x, y, z);
+        return box.getBox(pos);
     }
 
-    public static void registerBoundingBox(IEnumMachine machine, BoundingBox box) {
+    public static void registerBoundingBox(IEnumMachine<?> machine, BoundingBox box) {
         registerCollisionBoundingBox(machine, box);
         registerSelectionBoundingBox(machine, box);
     }
 
-    public static void registerCollisionBoundingBox(IEnumMachine machine, BoundingBox box) {
+    public static void registerCollisionBoundingBox(IEnumMachine<?> machine, BoundingBox box) {
         collisionBoxes.put(machine, box);
     }
 
-    public static void registerSelectionBoundingBox(IEnumMachine machine, BoundingBox box) {
+    public static void registerSelectionBoundingBox(IEnumMachine<?> machine, BoundingBox box) {
         selectionBoxes.put(machine, box);
     }
 
@@ -66,6 +67,10 @@ public class BoundingBoxManager {
         public BoundingBox(double min, double max) {
             this.min = min;
             this.max = max;
+        }
+
+        public AxisAlignedBB getBox(BlockPos pos) {
+            return getBox(null, pos.getX(), pos.getY(), pos.getZ());
         }
 
         public AxisAlignedBB getBox(World world, int x, int y, int z) {

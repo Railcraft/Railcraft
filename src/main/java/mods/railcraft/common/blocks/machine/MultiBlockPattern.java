@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -82,8 +83,8 @@ public class MultiBlockPattern {
         return masterOffset.equals(posInPattern);
     }
 
-    public TileEntity placeStructure(World world, BlockPos pos, IBlockState blockState, Map<Character, Integer> blockMapping) {
-        if (blockState == null)
+    public TileEntity placeStructure(World world, BlockPos pos, Block block, Map<Character, Integer> blockMapping) {
+        if (block == null)
             return null;
 
         int xWidth = getPatternWidthX();
@@ -105,7 +106,7 @@ public class MultiBlockPattern {
                         continue;
 
                     BlockPos p = new BlockPos(px, py, pz).add(offset);
-                    world.setBlockState(p, blockState, 3);
+                    world.setBlockState(p, block.getStateFromMeta(metadata.intValue()), 3);
 
                     if (px == masterOffset.getX() && py == masterOffset.getY() && pz == masterOffset.getZ())
                         master = world.getTileEntity(pos);

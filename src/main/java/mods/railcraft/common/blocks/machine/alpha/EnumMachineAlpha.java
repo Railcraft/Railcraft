@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineAlpha implements IEnumMachine {
+public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
     WORLD_ANCHOR(Module.CHUNK_LOADING, "anchor.world", TileAnchorWorld.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
     TURBINE(Module.ELECTRICITY, "turbine", TileSteamTurbine.class, 3, 3, 2, 2, 2, 2, 6, 2, 0, 1, 3, 4, 5, 7),
@@ -48,7 +48,7 @@ public enum EnumMachineAlpha implements IEnumMachine {
     ROCK_CRUSHER(Module.FACTORY, "rock.crusher", TileRockCrusher.class, 4, 3, 3, 11, 3, 3, 7, 3, 7, 0, 1, 2, 4, 6, 8, 9, 10);
     private final Module module;
     private final String tag;
-    private final Class<? extends TileMachineBase> tile;
+    private final Class<? extends TileMachineBase<EnumMachineAlpha>> tile;
     private final int[] textureInfo;
     private static final List<EnumMachineAlpha> creativeList = new ArrayList<EnumMachineAlpha>();
     private static final EnumMachineAlpha[] VALUES = values();
@@ -73,7 +73,7 @@ public enum EnumMachineAlpha implements IEnumMachine {
         creativeList.add(STEAM_TRAP_AUTO);
     }
 
-    EnumMachineAlpha(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineAlpha(Module module, String tag, Class<? extends TileMachineBase<EnumMachineAlpha>> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -105,7 +105,8 @@ public enum EnumMachineAlpha implements IEnumMachine {
         return tile;
     }
 
-    public TileMachineBase getTileEntity() {
+    @Override
+    public TileMachineBase<EnumMachineAlpha> getTileEntity() {
         try {
             return tile.newInstance();
         } catch (Exception ex) {
@@ -154,6 +155,7 @@ public enum EnumMachineAlpha implements IEnumMachine {
         return getBlock() != null && isEnabled();
     }
 
+    @Override
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
         if (tip != null)
             return tip;
@@ -190,5 +192,10 @@ public enum EnumMachineAlpha implements IEnumMachine {
             return getBlock() != null;
         }
         return false;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

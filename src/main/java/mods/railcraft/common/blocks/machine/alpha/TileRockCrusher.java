@@ -33,6 +33,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,7 +52,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyHandler, IHasWork, ISidedInventory {
+public class TileRockCrusher extends TileMultiBlockInventory<EnumMachineAlpha> implements IEnergyHandler, IHasWork, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -142,7 +143,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
             energyStorage = new EnergyStorage(MAX_ENERGY, MAX_RECEIVE, KILLING_POWER_COST);
     }
 
-    public static void placeRockCrusher(World world, int x, int y, int z, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
+    public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
         MultiBlockPattern pattern = TileRockCrusher.patterns.get(patternIndex);
         Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
         blockMapping.put('B', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
@@ -154,7 +155,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
         blockMapping.put('e', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
         blockMapping.put('f', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
         blockMapping.put('h', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
-        TileEntity tile = pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
+        TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
         if (tile instanceof TileRockCrusher) {
             TileRockCrusher master = (TileRockCrusher) tile;
             for (int slot = 0; slot < 9; slot++) {
@@ -167,16 +168,18 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.ROCK_CRUSHER;
     }
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        Block block = WorldPlugin.getBlock(worldObj, pos);
+        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
+        Block block = state.getBlock();
+        int meta = block.getMetaFromState(state);
         switch (mapPos) {
             case 'O': // Other
-                if (block == getBlockType() && worldObj.getBlockMetadata(pos) == getBlockMetadata())
+                if (block == getBlockType() && meta == getBlockMetadata())
                     return false;
                 break;
             case 'D': // Window
@@ -189,7 +192,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
             case 'f': // Block
             case 'g': // Block
             case 'h': // Block
-                if (block != getBlockType() || worldObj.getBlockMetadata(pos) != getBlockMetadata())
+                if (block != getBlockType() || meta != getBlockMetadata())
                     return false;
                 break;
             case 'A': // Air
@@ -215,14 +218,20 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
         super.update();
 
         if (Game.isHost(getWorld())) {
+            BlockPos pos = getPos();
+            double x = pos.getX();
+            double y = pos.getZ();
+            double z = pos.getZ();
 
             if (isStructureValid()) {
-                EntityItem item = TileEntityHopper.func_145897_a(worldObj, getX(), getY() + 1, getZ());
-                if (item != null && useMasterEnergy(SUCKING_POWER_COST, false)) {
-                    ItemStack stack = item.getEntityItem().copy();
-                    if (InventoryManipulator.get(invInput).addStack(stack) != null)
-                        useMasterEnergy(SUCKING_POWER_COST, true);
-                    item.setDead();
+                // TileEntityHopper.getItemsAroundAPointOrSomethingLikeThat
+                for (EntityItem item : TileEntityHopper.func_181556_a(getWorld(), x, y + 1, z)) {
+                        if (item != null && useMasterEnergy(SUCKING_POWER_COST, false)) {
+                        ItemStack stack = item.getEntityItem().copy();
+                        if (InventoryManipulator.get(invInput).addStack(stack) != null)
+                            useMasterEnergy(SUCKING_POWER_COST, true);
+                        item.setDead();
+                    }
                 }
 
                 EntityLivingBase entity = MiscTools.getEntityAt(worldObj, EntityLivingBase.class, getX(), getY() + 1, getZ());
@@ -270,7 +279,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
                             InvTools.removeOneItem(invInput, input);
 
-                            SoundHelper.playSound(worldObj, getX(), getY(), getZ(), "mob.irongolem.death", 1.0f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                            SoundHelper.playSound(worldObj, getPos(), "mob.irongolem.death", 1.0f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
 
                             processTime = 0;
                         }
