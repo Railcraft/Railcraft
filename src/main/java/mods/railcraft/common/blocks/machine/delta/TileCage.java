@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileCage extends TileMachineBase {
+public class TileCage extends TileMachineBase<EnumMachineDelta> {
 
     private boolean isOpen = false;
     private EntityLiving entity;
@@ -41,7 +41,7 @@ public class TileCage extends TileMachineBase {
     private int lookCounter;
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineDelta getMachineType() {
         return EnumMachineDelta.CAGE;
     }
 
@@ -89,12 +89,12 @@ public class TileCage extends TileMachineBase {
                 }
 
                 lookHelper.onUpdateLook();
-                bodyHelper.func_75664_a();
+                bodyHelper.updateRenderAngles();
 
                 if (lookCounter <= 0) {
                     lookTarget = null;
                     if (entity.getRNG().nextDouble() < 0.1) {
-                        List<EntityPlayer> nearby = MiscTools.getNearbyEntities(worldObj, EntityPlayer.class, xCoord, yCoord - 1, yCoord + 3, zCoord, 5);
+                        List<EntityPlayer> nearby = MiscTools.getNearbyEntities(worldObj, EntityPlayer.class, getPos().getX(), getPos().getY() - 1, getPos().getY() + 3, getPos().getZ(), 5);
                         if (!nearby.isEmpty() && entity.getRNG().nextDouble() < 0.4) {
                             lookTarget = nearby.get(MiscTools.RANDOM.nextInt(nearby.size()));
                             lookCounter = 60 + entity.getRNG().nextInt(60);

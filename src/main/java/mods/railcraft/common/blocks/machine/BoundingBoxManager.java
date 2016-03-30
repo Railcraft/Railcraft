@@ -32,14 +32,14 @@ public class BoundingBoxManager {
         BoundingBox box = collisionBoxes.get(machine);
         if (box == null)
             box = DEFAULT;
-        return box.getBox(pos);
+        return box.getBox(world, pos);
     }
 
     public static AxisAlignedBB getSelectionBox(World world,  BlockPos pos, IEnumMachine<?> machine) {
         BoundingBox box = selectionBoxes.get(machine);
         if (box == null)
             box = DEFAULT;
-        return box.getBox(pos);
+        return box.getBox(world, pos);
     }
 
     public static void registerBoundingBox(IEnumMachine<?> machine, BoundingBox box) {
@@ -69,14 +69,12 @@ public class BoundingBoxManager {
             this.max = max;
         }
 
-        public AxisAlignedBB getBox(BlockPos pos) {
-            return getBox(null, pos.getX(), pos.getY(), pos.getZ());
-        }
-
-        public AxisAlignedBB getBox(World world, int x, int y, int z) {
+        public AxisAlignedBB getBox(World world, BlockPos pos) {
+            int x = pos.getX();
+            int y = pos.getY();
+            int z = pos.getZ();
             return AxisAlignedBB.fromBounds(x + min, y + min, z + min, x + max, y + max, z + max);
         }
-
     }
 
     public static class ReducedBoundingBox extends ScaledBoundingBox {
