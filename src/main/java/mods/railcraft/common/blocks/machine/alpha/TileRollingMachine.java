@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.machine.alpha;
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
-
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -21,7 +20,7 @@ import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import mods.railcraft.common.util.inventory.*;
-import mods.railcraft.common.util.inventory.filters.ArrayStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.misc.Game;
@@ -38,7 +37,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TileRollingMachine extends TileMachineBase<EnumMachineAlpha> implements IEnergyReceiver, ISidedInventory, IHasWork {
+public class TileRollingMachine extends TileMachineBase implements IEnergyReceiver, ISidedInventory, IHasWork {
 
     private final static int PROCESS_TIME = 100;
     private final static int ACTIVATION_POWER = 50;
@@ -49,22 +48,13 @@ public class TileRollingMachine extends TileMachineBase<EnumMachineAlpha> implem
     private final InventoryCrafting craftMatrix = new InventoryCrafting(new RollingContainer(), 3, 3);
     private final StandaloneInventory invResult = new StandaloneInventory(1, "invResult", (IInventory) this);
     private final IInventory inv = InventoryConcatenator.make().add(invResult).add(craftMatrix);
-    private EnergyStorage energyStorage;
+    private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
+    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
     public boolean useLast;
+    private EnergyStorage energyStorage;
     private boolean isWorking, paused;
     private ItemStack currentReceipe;
     private int progress;
-    private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
-    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
-
-    private static class RollingContainer extends Container {
-
-        @Override
-        public boolean canInteractWith(EntityPlayer entityplayer) {
-            return true;
-        }
-
-    }
 
     public TileRollingMachine() {
         if (RailcraftConfig.machinesRequirePower())
@@ -121,12 +111,12 @@ public class TileRollingMachine extends TileMachineBase<EnumMachineAlpha> implem
         InvTools.dropInventory(inv, worldObj, getPos());
     }
 
-    public void setProgress(int progress) {
-        this.progress = progress;
-    }
-
     public int getProgress() {
         return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 
     public int getProgressScaled(int i) {
@@ -218,7 +208,7 @@ public class TileRollingMachine extends TileMachineBase<EnumMachineAlpha> implem
         for (IInvSlot slot : InventoryIterator.getIterable(craftMatrix)) {
             ItemStack stack = slot.getStackInSlot();
             if (stack != null && stack.isStackable() && stack.stackSize == 1) {
-                ItemStack request = InvTools.removeOneItem(chests, new ArrayStackFilter(stack));
+                ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));
                 if (request != null) {
                     stack.stackSize++;
                     break;
@@ -330,7 +320,7 @@ public class TileRollingMachine extends TileMachineBase<EnumMachineAlpha> implem
     public int getInventoryStackLimit() {
         return 64;
     }
-    
+
     @Override
     public int getField(int id) {
         return 0;
@@ -342,7 +332,8 @@ public class TileRollingMachine extends TileMachineBase<EnumMachineAlpha> implem
     }
 
     @Override
-    public void setField(int id, int value) {}
+    public void setField(int id, int value) {
+    }
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
@@ -350,8 +341,9 @@ public class TileRollingMachine extends TileMachineBase<EnumMachineAlpha> implem
     }
 
     @Override
-    public void clear() {}
-    
+    public void clear() {
+    }
+
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
@@ -385,5 +377,14 @@ public class TileRollingMachine extends TileMachineBase<EnumMachineAlpha> implem
         if (energyStorage == null)
             return 0;
         return energyStorage.getMaxEnergyStored();
+    }
+
+    private static class RollingContainer extends Container {
+
+        @Override
+        public boolean canInteractWith(EntityPlayer entityplayer) {
+            return true;
+        }
+
     }
 }

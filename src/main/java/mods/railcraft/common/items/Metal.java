@@ -15,7 +15,7 @@ import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.items.ItemIngot.EnumIngot;
 import mods.railcraft.common.items.ItemNugget.EnumNugget;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
-import mods.railcraft.common.util.inventory.filters.OreStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -63,9 +63,9 @@ public enum Metal {
 
     Metal(String tag) {
         this.tag = tag;
-        nuggetFilter = new OreStackFilter(getNuggetTag());
-        ingotFilter = new OreStackFilter(getIngotTag());
-        blockFilter = new OreStackFilter(getBlockTag());
+        nuggetFilter = StackFilters.ofOreType(getNuggetTag());
+        ingotFilter = StackFilters.ofOreType(getIngotTag());
+        blockFilter = StackFilters.ofOreType(getBlockTag());
     }
 
     public String getNuggetTag() {

@@ -18,7 +18,7 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
-import mods.railcraft.common.util.inventory.filters.InventoryStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,10 +40,10 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
 
     protected static final int[] SLOTS = InvTools.buildSlotArray(0, 9);
     private final PhantomInventory invFilters = new PhantomInventory(9, this);
-    private final StackFilter filters = new InventoryStackFilter(invFilters);
+    private final StackFilter filters = StackFilters.containedIn(invFilters);
     private final MultiButtonController<EnumTransferMode> transferModeController = MultiButtonController.create(EnumTransferMode.ALL.ordinal(), EnumTransferMode.values());
     private final MultiButtonController<EnumRedstoneMode> redstoneModeController = MultiButtonController.create(0, getValidRedstoneModes());
-    protected boolean movedItemCart = false;
+    protected boolean movedItemCart;
 
     public MultiButtonController<EnumTransferMode> getTransferModeController() {
         return transferModeController;

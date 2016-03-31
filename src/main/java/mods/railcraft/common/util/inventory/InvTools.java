@@ -13,7 +13,7 @@ import com.google.common.base.Predicate;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.filters.ArrayStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
@@ -372,7 +372,7 @@ public abstract class InvTools {
      * @return the number of items in the inventory
      */
     public static int countItems(IInventory inv, ItemStack... filters) {
-        return countItems(inv, new ArrayStackFilter(filters));
+        return countItems(inv, StackFilters.anyOf(filters));
     }
 
     public static int countItems(Collection<IInventory> inventories, ItemStack... filter) {
@@ -453,7 +453,7 @@ public abstract class InvTools {
      * @return null if nothing was moved, the stack moved otherwise
      */
     public static ItemStack moveOneItem(IInventory source, IInventory dest, ItemStack... filters) {
-        return moveOneItem(source, dest, new ArrayStackFilter(filters));
+        return moveOneItem(source, dest, StackFilters.anyOf(filters));
     }
 
     /**
@@ -822,7 +822,7 @@ public abstract class InvTools {
      * @return An ItemStack
      */
     public static ItemStack removeOneItem(IInventory inv, ItemStack... filter) {
-        return removeOneItem(inv, new ArrayStackFilter(filter));
+        return removeOneItem(inv, StackFilters.anyOf(filter));
     }
 
     /**
@@ -867,7 +867,7 @@ public abstract class InvTools {
      * otherwise.
      */
     public static boolean removeItemsAbsolute(IInventory inv, int amount, ItemStack... filter) {
-        return removeItemsAbsolute(inv, amount, new ArrayStackFilter(filter));
+        return removeItemsAbsolute(inv, amount, StackFilters.anyOf(filter));
     }
 
     /**

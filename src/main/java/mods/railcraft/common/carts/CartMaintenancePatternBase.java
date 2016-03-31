@@ -9,9 +9,11 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.filters.ArrayStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -63,7 +65,7 @@ public abstract class CartMaintenancePatternBase extends CartMaintenanceBase imp
         stackStock = getStackInSlot(slotStock);
 
         if (stackStock == null)
-            setInventorySlotContents(slotStock, CartTools.transferHelper.pullStack(this, new ArrayStackFilter(stackReplace)));
+            setInventorySlotContents(slotStock, CartTools.transferHelper.pullStack(this, StackFilters.of(stackReplace)));
     }
 
     @Override

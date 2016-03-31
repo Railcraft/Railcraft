@@ -11,6 +11,7 @@
 package mods.railcraft.common.util.inventory.filters;
 
 import mods.railcraft.api.core.items.StackFilter;
+import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -28,6 +29,9 @@ public final class StackFilters {
     private StackFilters() {
     }
 
+    /**
+     * Matches against the provided ItemStack.
+     */
     public static StackFilter of(@Nonnull final ItemStack stack) {
         return new StackFilter() {
 
@@ -38,10 +42,20 @@ public final class StackFilters {
         };
     }
 
+    /**
+     * Matches against the provided ItemStacks.
+     *
+     * If no ItemStacks are provided to match against, it returns true.
+     */
     public static StackFilter anyOf(@Nonnull final ItemStack... stacks) {
         return anyOf(Arrays.asList(stacks));
     }
 
+    /**
+     * Matches against the provided ItemStacks.
+     *
+     * If no ItemStacks are provided to match against, it returns true.
+     */
     public static StackFilter anyOf(@Nonnull final Collection<ItemStack> stacks) {
         return new StackFilter() {
 
@@ -60,20 +74,54 @@ public final class StackFilters {
         };
     }
 
+    /**
+     * Matches only if the given ItemStack does not match any of the provided ItemStacks.
+     *
+     * Returns false if the ItemStack being matched is null and true if the stacks to match against is empty/nulled.
+     */
     public static StackFilter noneOf(@Nonnull final ItemStack... stacks) {
         return anyOf(Arrays.asList(stacks));
     }
 
+    /**
+     * Matches only if the given ItemStack does not match any of the provided ItemStacks.
+     *
+     * Returns false if the ItemStack being matched is null and true if the stacks to match against is empty/nulled.
+     */
     public static StackFilter noneOf(@Nonnull final Collection<ItemStack> stacks) {
         return new StackFilter() {
 
             @Override
             public boolean apply(final ItemStack stack) {
-                return stack != null && !InvTools.isItemEqual(stack, stacks);
+                if (stack == null)
+                    return false;
+                for (ItemStack filter : stacks) {
+                    if (filter == null)
+                        continue;
+                    if (InvTools.isItemEqual(stack, filter))
+                        return false;
+                }
+                return true;
             }
         };
     }
 
+    /**
+     * Matches if the given ItemStack is registered as a specific OreType in the Ore Dictionary.
+     */
+    public static StackFilter ofOreType(@Nonnull final String oreTag) {
+        return new StackFilter() {
+
+            @Override
+            public boolean apply(final ItemStack stack) {
+                return OreDictPlugin.isOreType(oreTag, stack);
+            }
+        };
+    }
+
+    /**
+     * Matches if the Inventory contains the given ItemStack.
+     */
     public static StackFilter containedIn(@Nonnull final IInventory inv) {
         return new StackFilter() {
 

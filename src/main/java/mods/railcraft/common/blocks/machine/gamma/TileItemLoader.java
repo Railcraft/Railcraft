@@ -9,12 +9,10 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.api.core.items.StackFilter;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.*;
-import mods.railcraft.common.util.inventory.filters.InventoryStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
@@ -174,7 +172,7 @@ public class TileItemLoader extends TileLoaderItemBase {
                     }
                 }
                 if (!movedItemCart) {
-                    movedItemCart = InvTools.moveOneItemExcept(chests, cartInv, new InventoryStackFilter(getItemFilters())) != null;
+                    movedItemCart = InvTools.moveOneItemExcept(chests, cartInv, StackFilters.containedIn(getItemFilters())) != null;
                 }
                 break;
             }
@@ -214,7 +212,6 @@ public class TileItemLoader extends TileLoaderItemBase {
             sendCart(cart);
         }
     }
-
 
     @Override
     protected boolean shouldSendCart(EntityMinecart cart) {

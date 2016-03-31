@@ -10,7 +10,7 @@ package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.common.items.Metal;
-import mods.railcraft.common.util.inventory.filters.ExclusionStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.misc.Game;
@@ -31,10 +31,26 @@ public class TileChestMetals extends TileChestRailcraft {
 
     static {
         for (Metal m : Metal.VALUES) {
-            nuggetFilters.put(m, new ExclusionStackFilter(m.getNugget()).and(m.nuggetFilter));
-            ingotFilters.put(m, new ExclusionStackFilter(m.getIngot()).and(m.ingotFilter));
-            blockFilters.put(m, new ExclusionStackFilter(m.getBlock()).and(m.blockFilter));
+            nuggetFilters.put(m, StackFilters.noneOf(m.getNugget()).and(m.nuggetFilter));
+            ingotFilters.put(m, StackFilters.noneOf(m.getIngot()).and(m.ingotFilter));
+            blockFilters.put(m, StackFilters.noneOf(m.getBlock()).and(m.blockFilter));
         }
+    }
+
+    private Target target = Target.NUGGET_CONDENSE;
+
+    @Override
+    public EnumMachineBeta getMachineType() {
+        return EnumMachineBeta.METALS_CHEST;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        if (clock % TICK_PER_CONDENSE == 0 && Game.isHost(worldObj))
+            if (!target.evaluate(this))
+                target = target.next();
     }
 
     enum Target {
@@ -127,21 +143,5 @@ public class TileChestMetals extends TileChestRailcraft {
             return next;
         }
 
-    }
-
-    private Target target = Target.NUGGET_CONDENSE;
-
-    @Override
-    public EnumMachineBeta getMachineType() {
-        return EnumMachineBeta.METALS_CHEST;
-    }
-
-    @Override
-    public void update() {
-        super.update();
-
-        if (clock % TICK_PER_CONDENSE == 0 && Game.isHost(worldObj))
-            if (!target.evaluate(this))
-                target = target.next();
     }
 }
