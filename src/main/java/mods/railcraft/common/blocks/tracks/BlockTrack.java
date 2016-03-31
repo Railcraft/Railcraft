@@ -398,11 +398,6 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
         }
     }
 
-    @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        super.onBlockAdded(worldIn, pos, state);
-    }
-
     //TODO: Move drop code here? We have a reference to the TileEntity now.
     @Override
     public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {

@@ -12,6 +12,7 @@ import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.bore.IBoreHead;
 import mods.railcraft.api.carts.bore.IMineable;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -21,7 +22,6 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.collections.BlockSet;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -766,7 +766,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             return false;
 
         // Start of Event Fire
-        BreakEvent breakEvent = new BreakEvent(x, y, z, worldObj, block, meta, PlayerPlugin.getFakePlayer((WorldServer) worldObj, posX, posY, posZ));
+        BreakEvent breakEvent = new BreakEvent(x, y, z, worldObj, block, meta, RailcraftFakePlayer.get((WorldServer) worldObj, posX, posY, posZ));
         MinecraftForge.EVENT_BUS.post(breakEvent);
 
         if (breakEvent.isCanceled())

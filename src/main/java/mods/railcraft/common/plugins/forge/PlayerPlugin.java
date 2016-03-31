@@ -16,8 +16,6 @@ import net.minecraft.network.play.server.S0BPacketAnimation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -27,14 +25,7 @@ import java.util.UUID;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class PlayerPlugin {
-
-    public static final GameProfile RAILCRAFT_USER_PROFILE = new GameProfile(UUID.nameUUIDFromBytes("[Railcraft]".getBytes()), "[Railcraft]");
-
-    public static EntityPlayer getFakePlayer(final WorldServer world, final double x, final double y, final double z) {
-        EntityPlayer player = FakePlayerFactory.get(world, RAILCRAFT_USER_PROFILE);
-        player.setPosition(x, y, z);
-        return player;
-    }
+    public static final String UNKNOWN_PLAYER_NAME = "[Unknown]";
 
     public static void writeOwnerToNBT(NBTTagCompound nbt, GameProfile owner) {
         if (owner.getName() != null)
@@ -44,7 +35,7 @@ public class PlayerPlugin {
     }
 
     public static GameProfile readOwnerFromNBT(NBTTagCompound nbt) {
-        String ownerName = "[Unknown]";
+        String ownerName = UNKNOWN_PLAYER_NAME;
         if (nbt.hasKey("owner"))
             ownerName = nbt.getString("owner");
         UUID ownerUUID = null;
@@ -63,7 +54,7 @@ public class PlayerPlugin {
         String username = gameProfile.getName();
         if (username != null && !username.equals(""))
             return username;
-        return "[Unknown]";
+        return UNKNOWN_PLAYER_NAME;
     }
 
     @SuppressWarnings("unused")
@@ -73,7 +64,7 @@ public class PlayerPlugin {
             if (player != null)
                 return player.getDisplayNameString();
         }
-        return "[Unknown]";
+        return UNKNOWN_PLAYER_NAME;
     }
 
     public static boolean isOwnerOrOp(GameProfile owner, EntityPlayer player) {
