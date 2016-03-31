@@ -13,6 +13,7 @@ import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -29,7 +30,7 @@ public class TrackReinforcedBooster extends TrackReinforced implements ITrackPow
     private static final double START_BOOST = 0.02;
     private static final double STALL_THRESHOLD = 0.03;
     private static final double BOOST_THRESHOLD = 0.01;
-    private boolean powered = false;
+    private boolean powered;
 
     @Override
     public EnumTrack getTrackType() {
@@ -42,11 +43,10 @@ public class TrackReinforcedBooster extends TrackReinforced implements ITrackPow
     }
 
     @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            return getIcon(1);
-        }
-        return getIcon(0);
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(POWERED, isPowered());
+        return state;
     }
 
     @Override

@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.carts.IExplosiveCart;
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -25,9 +24,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackPriming extends TrackReinforced implements ITrackPowered, IGuiReturnHandler {
+public class TrackPriming extends TrackPowered implements IGuiReturnHandler {
 
-    private boolean powered = false;
     private short fuse = 80;
     public static final short MAX_FUSE = 500;
     public static final short MIN_FUSE = 0;
@@ -40,14 +38,6 @@ public class TrackPriming extends TrackReinforced implements ITrackPowered, IGui
     @Override
     public boolean isFlexibleRail() {
         return false;
-    }
-
-    @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            return getIcon(1);
-        }
-        return getIcon(0);
     }
 
     @Override
@@ -76,28 +66,14 @@ public class TrackPriming extends TrackReinforced implements ITrackPowered, IGui
     }
 
     @Override
-    public boolean isPowered() {
-        return powered;
-    }
-
-    @Override
-    public void setPowered(boolean powered) {
-        this.powered = powered;
-    }
-
-    @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-
-        data.writeBoolean(powered);
         data.writeShort(fuse);
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-
-        powered = data.readBoolean();
         fuse = data.readShort();
 
         markBlockNeedsUpdate();
@@ -106,14 +82,12 @@ public class TrackPriming extends TrackReinforced implements ITrackPowered, IGui
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setBoolean("powered", powered);
         data.setShort("fuse", getFuse());
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        powered = data.getBoolean("powered");
         setFuse(data.getShort("fuse"));
     }
 

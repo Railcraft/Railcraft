@@ -9,12 +9,11 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.tracks.instances;
 
-import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
-
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -22,10 +21,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackOneWay extends TrackBaseRailcraft implements ITrackPowered, ITrackReversible {
+public class TrackOneWay extends TrackPowered implements ITrackReversible {
 
-    private boolean reversed = false;
-    private boolean powered = false;
+    private boolean reversed;
     private static final double LOSS_FACTOR = 0.49D;
 
     @Override
@@ -34,17 +32,10 @@ public class TrackOneWay extends TrackBaseRailcraft implements ITrackPowered, IT
     }
 
     @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            if (isReversed()) {
-                return getIcon(3);
-            }
-            return getIcon(1);
-        }
-        if (isReversed()) {
-            return getIcon(2);
-        }
-        return getIcon(0);
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(REVERSED, reversed);
+        return state;
     }
 
     @Override
@@ -96,42 +87,26 @@ public class TrackOneWay extends TrackBaseRailcraft implements ITrackPowered, IT
     }
 
     @Override
-    public boolean isPowered() {
-        return powered;
-    }
-
-    @Override
-    public void setPowered(boolean powered) {
-        this.powered = powered;
-    }
-
-    @Override
     public void writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("direction", reversed);
-        nbttagcompound.setBoolean("powered", powered);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         reversed = nbttagcompound.getBoolean("direction");
-        powered = nbttagcompound.getBoolean("powered");
     }
 
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-
-        data.writeBoolean(powered);
         data.writeBoolean(reversed);
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-
-        powered = data.readBoolean();
         reversed = data.readBoolean();
 
         markBlockNeedsUpdate();
