@@ -27,7 +27,7 @@ import net.minecraft.util.EnumFacing;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileLoaderBase extends TileMachineItem<EnumMachineGamma> implements IHasCart, IHasWork {
+public abstract class TileLoaderBase extends TileMachineItem implements IHasCart, IHasWork {
     public static final float STOP_VELOCITY = 0.02f;
     public static final int PAUSE_DELAY = 4;
     private final PhantomInventory invCarts = new PhantomInventory(2, this);

@@ -49,7 +49,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     ROCK_CRUSHER(Module.FACTORY, "rock.crusher", TileRockCrusher.class, 4, 3, 3, 11, 3, 3, 7, 3, 7, 0, 1, 2, 4, 6, 8, 9, 10);
     private final Module module;
     private final String tag;
-    private final Class<? extends TileMachineBase<EnumMachineAlpha>> tile;
+    private final Class<? extends TileMachineBase> tile;
     private final int[] textureInfo;
     private static final List<EnumMachineAlpha> creativeList = new ArrayList<EnumMachineAlpha>();
     private static final EnumMachineAlpha[] VALUES = values();
@@ -74,7 +74,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         creativeList.add(STEAM_TRAP_AUTO);
     }
 
-    EnumMachineAlpha(Module module, String tag, Class<? extends TileMachineBase<EnumMachineAlpha>> tile, int... textureInfo) {
+    EnumMachineAlpha(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -102,12 +102,12 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     }
 
     @Override
-    public Class<? extends TileMachineBase<EnumMachineAlpha>> getTileClass() {
+    public Class<? extends TileMachineBase> getTileClass() {
         return tile;
     }
 
     @Override
-    public TileMachineBase<EnumMachineAlpha> getTileEntity() {
+    public TileMachineBase getTileEntity() {
         try {
             return tile.newInstance();
         } catch (Exception ex) {

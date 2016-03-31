@@ -39,7 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class TileMultiBlock<M extends IEnumMachine<M>> extends TileMachineBase<M> {
+public abstract class TileMultiBlock extends TileMachineBase {
 
     private static final int UNKNOWN_STATE_RECHECK = 256;
     private static final int NETWORK_RECHECK = 64;
@@ -53,7 +53,7 @@ public abstract class TileMultiBlock<M extends IEnumMachine<M>> extends TileMach
     private boolean tested;
     private boolean requestPacket;
     private MultiBlockState state;
-    private TileMultiBlock<?> masterBlock;
+    private TileMultiBlock masterBlock;
     private MultiBlockPattern currentPattern;
     private UUID uuidMaster;
 
@@ -74,7 +74,7 @@ public abstract class TileMultiBlock<M extends IEnumMachine<M>> extends TileMach
     protected void onMasterChanged() {
     }
 
-    private void setMaster(TileMultiBlock<?> master) {
+    private void setMaster(TileMultiBlock master) {
         this.masterBlock = master;
 
         if (uuidMaster != null && !uuidMaster.equals(master.getUUID()))
@@ -170,7 +170,7 @@ public abstract class TileMultiBlock<M extends IEnumMachine<M>> extends TileMach
 
                         TileEntity tile = worldObj.getTileEntity(pos);
                         if (tile instanceof TileMultiBlock) {
-                            TileMultiBlock<?> multiBlock = (TileMultiBlock<?>) tile;
+                            TileMultiBlock multiBlock = (TileMultiBlock) tile;
                             if (multiBlock != this)
                                 multiBlock.components.clear();
                             components.add(multiBlock);

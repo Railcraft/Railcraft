@@ -44,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileCokeOven extends TileMultiBlockOven<EnumMachineAlpha> implements IFluidHandler, ISidedInventory {
+public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;

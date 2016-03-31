@@ -37,7 +37,7 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     ENGRAVING_BENCH(Module.EMBLEM, "engraving.bench", TileEngravingBench.class, 4, 1, 0, 1, 3, 3, 3, 3, 2);
     private final Module module;
     private final String tag;
-    private final Class<? extends TileMachineBase<EnumMachineEpsilon>> tile;
+    private final Class<? extends TileMachineBase> tile;
     private final int[] textureInfo;
     private static final List<EnumMachineEpsilon> creativeList = new ArrayList<EnumMachineEpsilon>();
     private static final EnumMachineEpsilon[] VALUES = values();
@@ -52,7 +52,7 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
         creativeList.add(ENGRAVING_BENCH);
     }
 
-    EnumMachineEpsilon(Module module, String tag, Class<? extends TileMachineBase<EnumMachineEpsilon>> tile, int... textureInfo) {
+    EnumMachineEpsilon(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -88,11 +88,11 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     }
 
     @Override
-    public Class<? extends TileMachineBase<EnumMachineEpsilon>> getTileClass() {
+    public Class<? extends TileMachineBase> getTileClass() {
         return tile;
     }
 
-    public TileMachineBase<EnumMachineEpsilon> getTileEntity() {
+    public TileMachineBase getTileEntity() {
         try {
             return tile.newInstance();
         } catch (Exception ex) {

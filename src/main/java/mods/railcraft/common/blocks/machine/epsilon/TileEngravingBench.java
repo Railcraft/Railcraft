@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TileEngravingBench extends TileMachineItem<EnumMachineEpsilon> implements IEnergyReceiver, ISidedInventory, IHasWork, IGuiReturnHandler {
+public class TileEngravingBench extends TileMachineItem implements IEnergyReceiver, ISidedInventory, IHasWork, IGuiReturnHandler {
 
     public enum GuiPacketType {
 

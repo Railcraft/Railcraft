@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.blocks.machine.alpha.ai.EntityAIMoveToBlock;
 import mods.railcraft.common.blocks.machine.alpha.ai.EntityAIWatchBlock;
@@ -20,7 +19,7 @@ import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
-
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IMerchant;
@@ -40,10 +39,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TileTradeStation extends TileMachineItem<EnumMachineAlpha> implements IGuiReturnHandler, ISidedInventory {
+public class TileTradeStation extends TileMachineItem implements IGuiReturnHandler, ISidedInventory {
+    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
 
     public enum GuiPacketType {
 
@@ -70,12 +69,10 @@ public class TileTradeStation extends TileMachineItem<EnumMachineAlpha> implemen
     }
 
     @Override
-    public IIcon getIcon(int side) {
-        if (side == direction.ordinal())
-            return getMachineType().getTexture(4);
-        if (side < 2)
-            return getMachineType().getTexture(0);
-        return getMachineType().getTexture(2);
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(FACING, direction);
+        return state;
     }
 
     public IInventory getRecipeSlots() {

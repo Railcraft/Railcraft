@@ -48,7 +48,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankWater extends TileTank<EnumMachineAlpha> implements ISidedInventory {
+public class TileTankWater extends TileTank implements ISidedInventory {
 
     private final static int OUTPUT_RATE = 40;
     private final static int TANK_CAPACITY = FluidHelper.BUCKET_VOLUME * 400;

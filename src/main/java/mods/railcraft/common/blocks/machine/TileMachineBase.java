@@ -33,11 +33,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class TileMachineBase<M extends IEnumMachine<M>> extends RailcraftTileEntity {
+public abstract class TileMachineBase extends RailcraftTileEntity {
 
-    private boolean checkedBlock = false;
+    private boolean checkedBlock;
 
-    public abstract M getMachineType();
+    public abstract IEnumMachine<?> getMachineType();
 
     @Override
     public String getLocalizationTag() {

@@ -66,9 +66,10 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         lightOpacity = opaque ? 255 : 0;
     }
 
+    //TODO: Only some blocks have TESRs
     @Override
     public int getRenderType() {
-        return renderId;
+        return 2;
     }
 
     @Override
@@ -88,8 +89,6 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
 
     /**
      * Returns the default ambient occlusion value based on block opacity
-     *
-     * @return
      */
     @SideOnly(Side.CLIENT)
     @Override
@@ -101,7 +100,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         return proxy;
     }
 
-    public M getMachineType(IBlockState state) {
+    public IEnumMachine<M> getMachineType(IBlockState state) {
         return state.getValue(proxy.getVariantProperty());
     }
 
@@ -116,9 +115,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     @Override
     public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).recolourBlock(color);
-        return false;
+        return tile instanceof TileMachineBase && ((TileMachineBase) tile).recolourBlock(color);
     }
 
     @Override
@@ -129,17 +126,13 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).blockActivated(playerIn, side);
-        return false;
+        return tile instanceof TileMachineBase && ((TileMachineBase) tile).blockActivated(playerIn, side);
     }
 
     @Override
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).rotateBlock(axis);
-        return false;
+        return tile instanceof TileMachineBase && ((TileMachineBase) tile).rotateBlock(axis);
     }
 
     @Override
@@ -166,9 +159,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     @Override
     public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).isSideSolid(side);
-        return true;
+        return !(tile instanceof TileMachineBase) || ((TileMachineBase) tile).isSideSolid(side);
     }
 
     @Override
@@ -199,7 +190,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         return super.getDrops(world, pos, state, fortune);
     }
 
-    public List<ItemStack> getBlockDroppedSilkTouch(World world, BlockPos pos, IBlockState state, int fortune) {
+    private List<ItemStack> getBlockDroppedSilkTouch(World world, BlockPos pos, IBlockState state, int fortune) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).getBlockDroppedSilkTouch(fortune);
@@ -209,9 +200,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     @Override
     public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).canSilkHarvest(player);
-        return false;
+        return tile instanceof TileMachineBase && ((TileMachineBase) tile).canSilkHarvest(player);
     }
 
     @Override
@@ -241,7 +230,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         return false;
     }
 
-    public void initFromItem(World world, BlockPos pos, ItemStack stack) {
+    void initFromItem(World world, BlockPos pos, ItemStack stack) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
             ((TileMachineBase) tile).initFromItem(stack);
@@ -314,7 +303,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (IEnumMachine type : proxy.getCreativeList()) {
             if (type.isAvailable())
                 list.add(type.getItem());

@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import mods.railcraft.api.electricity.IElectricGrid;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.ISinkDelegate;
@@ -24,7 +23,7 @@ import net.minecraft.util.EnumFacing;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileElectricFeeder extends TileMachineBase<EnumMachineEpsilon> implements IElectricGrid, ISinkDelegate {
+public class TileElectricFeeder extends TileMachineBase implements IElectricGrid, ISinkDelegate {
 
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 1);
     private TileEntity sinkDelegate;

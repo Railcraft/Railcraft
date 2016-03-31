@@ -42,7 +42,7 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     private final Module module;
     private final String tag;
     private final int extraIcons;
-    private final Class<? extends TileMachineBase<EnumMachineGamma>> tile;
+    private final Class<? extends TileMachineBase> tile;
     private static final List<EnumMachineGamma> creativeList = new ArrayList<EnumMachineGamma>();
     private static final EnumMachineGamma[] VALUES = values();
     private ToolTip tip;
@@ -60,7 +60,7 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
         creativeList.add(DISPENSER_TRAIN);
     }
 
-    EnumMachineGamma(Module module, String tag, int numTextures, Class<? extends TileMachineBase<EnumMachineGamma>> tile) {
+    EnumMachineGamma(Module module, String tag, int numTextures, Class<? extends TileMachineBase> tile) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -88,12 +88,12 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     }
 
     @Override
-    public Class<? extends TileMachineBase<EnumMachineGamma>> getTileClass() {
+    public Class<? extends TileMachineBase> getTileClass() {
         return tile;
     }
 
     @Override
-    public TileMachineBase<EnumMachineGamma> getTileEntity() {
+    public TileMachineBase getTileEntity() {
         try {
             return tile.newInstance();
         } catch (Exception ex) {

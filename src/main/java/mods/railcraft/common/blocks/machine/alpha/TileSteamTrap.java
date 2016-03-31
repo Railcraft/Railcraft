@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
@@ -41,7 +40,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class TileSteamTrap<M extends IEnumMachine<M>> extends TileMachineBase<M> implements IFluidHandler, ISteamUser {
+public abstract class TileSteamTrap extends TileMachineBase implements IFluidHandler, ISteamUser {
 
     private static final byte JET_TIME = 40;
     private static final byte DAMAGE = 8;

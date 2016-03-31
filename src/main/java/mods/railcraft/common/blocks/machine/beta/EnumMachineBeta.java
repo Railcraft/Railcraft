@@ -47,7 +47,7 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     TANK_STEEL_VALVE(Module.TRANSPORT, "tank.steel.valve", TileTankSteelValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3);
     private final Module module;
     private final String tag;
-    private final Class<? extends TileMachineBase<EnumMachineBeta>> tile;
+    private final Class<? extends TileMachineBase> tile;
     private final int[] textureInfo;
     private static final List<EnumMachineBeta> creativeList = new ArrayList<EnumMachineBeta>();
     private static final EnumMachineBeta[] VALUES = values();
@@ -72,7 +72,7 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
         creativeList.add(METALS_CHEST);
     }
 
-    EnumMachineBeta(Module module, String tag, Class<? extends TileMachineBase<EnumMachineBeta>> tile, int... textureInfo) {
+    EnumMachineBeta(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -108,12 +108,12 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     }
 
     @Override
-    public Class<? extends TileMachineBase<EnumMachineBeta>> getTileClass() {
+    public Class<? extends TileMachineBase> getTileClass() {
         return tile;
     }
 
     @Override
-    public TileMachineBase<EnumMachineBeta> getTileEntity() {
+    public TileMachineBase getTileEntity() {
         try {
             return tile.newInstance();
         } catch (Exception ex) {

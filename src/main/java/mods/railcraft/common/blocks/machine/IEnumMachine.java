@@ -15,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -28,9 +27,9 @@ public interface IEnumMachine<M extends IEnumMachine<M>> extends Comparable<M>, 
 
     ItemStack getItem(int qty);
 
-    Class<? extends TileMachineBase<M>> getTileClass();
+    Class<? extends TileMachineBase> getTileClass();
 
-    TileMachineBase<M> getTileEntity();
+    TileMachineBase getTileEntity();
 
     ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv);
 

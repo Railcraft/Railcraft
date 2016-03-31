@@ -28,7 +28,7 @@ import java.util.Set;
 
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 
-public abstract class TileMultiBlockOven<M extends IEnumMachine<M>> extends TileMultiBlockInventory<M> implements INeedsFuel, IHasWork {
+public abstract class TileMultiBlockOven extends TileMultiBlockInventory implements INeedsFuel, IHasWork {
 
     private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
     protected int cookTime;
@@ -118,7 +118,7 @@ public abstract class TileMultiBlockOven<M extends IEnumMachine<M>> extends Tile
     }
 
     public int getCookTime() {
-        TileMultiBlockOven<?> masterOven = (TileMultiBlockOven<?>) getMasterBlock();
+        TileMultiBlockOven masterOven = (TileMultiBlockOven) getMasterBlock();
         if (masterOven != null) {
             return masterOven.cookTime;
         }
@@ -130,7 +130,7 @@ public abstract class TileMultiBlockOven<M extends IEnumMachine<M>> extends Tile
     }
 
     public boolean isCooking() {
-        TileMultiBlockOven<?> masterOven = (TileMultiBlockOven<?>) getMasterBlock();
+        TileMultiBlockOven masterOven = (TileMultiBlockOven) getMasterBlock();
         if (masterOven != null) {
             return masterOven.cooking;
         }
@@ -187,7 +187,7 @@ public abstract class TileMultiBlockOven<M extends IEnumMachine<M>> extends Tile
 
     @Override
     public void actionActivated(IActionExternal action) {
-        TileMultiBlockOven<?> mBlock = (TileMultiBlockOven<?>) getMasterBlock();
+        TileMultiBlockOven mBlock = (TileMultiBlockOven) getMasterBlock();
         if (mBlock != null) {
             mBlock.actions.add(action);
         }

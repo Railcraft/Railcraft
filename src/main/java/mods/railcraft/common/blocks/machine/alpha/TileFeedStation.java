@@ -42,7 +42,7 @@ import java.util.Random;
 
 import static net.minecraft.util.EnumParticleTypes.HEART;
 
-public class TileFeedStation extends TileMachineItem<EnumMachineAlpha> implements ITileExtraDataHandler {
+public class TileFeedStation extends TileMachineItem implements ITileExtraDataHandler {
 
     private static final int AREA = 3;
     private static final int MIN_FEED_INTERVAL = 128;

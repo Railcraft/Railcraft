@@ -57,7 +57,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTankBase extends TileMultiBlock<EnumMachineBeta> implements ITankTile {
+public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     public final static int CAPACITY_PER_BLOCK_IRON = 16 * FluidHelper.BUCKET_VOLUME;
     public final static int CAPACITY_PER_BLOCK_STEEL = 32 * FluidHelper.BUCKET_VOLUME;
@@ -82,10 +82,10 @@ public abstract class TileTankBase extends TileMultiBlock<EnumMachineBeta> imple
 
     public static void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
         MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
-        Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
-        blockMapping.put('B', EnumMachineBeta.TANK_IRON_WALL.ordinal());
-        blockMapping.put('W', EnumMachineBeta.TANK_IRON_GAUGE.ordinal());
-        TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineBeta(), blockMapping);
+        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+        blockMapping.put('B', EnumMachineBeta.TANK_IRON_WALL.getState());
+        blockMapping.put('W', EnumMachineBeta.TANK_IRON_GAUGE.getState());
+        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileTankBase) {
             TileTankBase master = (TileTankBase) tile;
             master.tank.setFluid(fluid);
@@ -551,7 +551,7 @@ public abstract class TileTankBase extends TileMultiBlock<EnumMachineBeta> imple
                     worldObj.removeTileEntity(getPos());
                     return true;
                 }
-                return !((TileMultiBlock<?>) tile).isStructureValid();
+                return !((TileMultiBlock) tile).isStructureValid();
             }
             case 'A': // Air
             {

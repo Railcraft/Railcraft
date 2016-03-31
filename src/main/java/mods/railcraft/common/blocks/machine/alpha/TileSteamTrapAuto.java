@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.machine.alpha;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TileSteamTrapAuto extends TileSteamTrap<EnumMachineAlpha> {
+public class TileSteamTrapAuto extends TileSteamTrap {
 
     @Override
     public EnumMachineAlpha getMachineType() {

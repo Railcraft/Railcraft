@@ -50,6 +50,10 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     private UUID uuid;
     private String customName = "";
 
+    public IBlockState getActualState(IBlockState state) {
+        return state;
+    }
+
     public static boolean isUsableByPlayerHelper(TileEntity tile, EntityPlayer player) {
         return !tile.isInvalid() && tile.getWorld().getTileEntity(tile.getPos()) == tile && player.getDistanceSq(tile.getPos()) <= 64;
     }
@@ -70,7 +74,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     @Override
     public void update() {
-        if(!canUpdate())
+        if (!canUpdate())
             worldObj.tickabNOPEleTileEntities.remove(this); // Concurrency error
 
         clock++;

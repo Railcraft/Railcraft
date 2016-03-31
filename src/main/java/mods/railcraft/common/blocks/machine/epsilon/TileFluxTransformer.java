@@ -1,14 +1,11 @@
 package mods.railcraft.common.blocks.machine.epsilon;
 
-import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
-
 import mods.railcraft.api.electricity.IElectricGrid;
-import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -20,51 +17,52 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileFluxTransformer extends TileMultiBlock<EnumMachineEpsilon> implements IElectricGrid, IEnergyReceiver {
-
-    public static void placeFluxTransformer(World world, BlockPos pos) {
-        for (MultiBlockPattern pattern : TileFluxTransformer.patterns) {
-            Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
-            blockMapping.put('B', EnumMachineEpsilon.FLUX_TRANSFORMER.ordinal());
-            pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineEpsilon(), blockMapping);
-            return;
-        }
-    }
+public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid, IEnergyReceiver {
 
     public static final double EU_RF_RATIO = 4;
     public static final double EFFICIENCY = 0.8F;
     private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
-    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 0.25);
 
     static {
         char[][][] map = {
-            {
-                {'*', 'O', 'O', '*'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'*', 'O', 'O', '*'},},
-            {
-                {'*', 'O', 'O', '*'},
-                {'O', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'O'},
-                {'*', 'O', 'O', '*'}
-            },
-            {
-                {'*', 'O', 'O', '*'},
-                {'O', 'B', 'B', 'O'},
-                {'O', 'B', 'B', 'O'},
-                {'*', 'O', 'O', '*'}
-            },
-            {
-                {'*', 'O', 'O', '*'},
-                {'O', 'O', 'O', 'O'},
-                {'O', 'O', 'O', 'O'},
-                {'*', 'O', 'O', '*'},},};
+                {
+                        {'*', 'O', 'O', '*'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'*', 'O', 'O', '*'},},
+                {
+                        {'*', 'O', 'O', '*'},
+                        {'O', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'O'},
+                        {'*', 'O', 'O', '*'}
+                },
+                {
+                        {'*', 'O', 'O', '*'},
+                        {'O', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'O'},
+                        {'*', 'O', 'O', '*'}
+                },
+                {
+                        {'*', 'O', 'O', '*'},
+                        {'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O'},
+                        {'*', 'O', 'O', '*'},},};
         patterns.add(new MultiBlockPattern(map));
     }
 
+    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 0.25);
+
     public TileFluxTransformer() {
         super(patterns);
+    }
+
+    public static void placeFluxTransformer(World world, BlockPos pos) {
+        for (MultiBlockPattern pattern : TileFluxTransformer.patterns) {
+            Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+            blockMapping.put('B', EnumMachineEpsilon.FLUX_TRANSFORMER.getState());
+            pattern.placeStructure(world, pos, blockMapping);
+            return;
+        }
     }
 
     @Override

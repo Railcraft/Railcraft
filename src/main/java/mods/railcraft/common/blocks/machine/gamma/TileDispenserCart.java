@@ -38,7 +38,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TileDispenserCart extends TileMachineItem<EnumMachineGamma> {
+public class TileDispenserCart extends TileMachineItem {
 
     protected EnumFacing direction = EnumFacing.NORTH;
     protected boolean powered;

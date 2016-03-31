@@ -23,7 +23,7 @@ import net.minecraft.util.EnumFacing;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileSentinel extends TileMachineBase<EnumMachineBeta> {
+public class TileSentinel extends TileMachineBase {
 
     @Override
     public EnumMachineBeta getMachineType() {

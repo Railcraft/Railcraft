@@ -21,7 +21,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TileAdminSteamProducer extends TileMachineBase<EnumMachineEpsilon> implements IFluidHandler {
+public class TileAdminSteamProducer extends TileMachineBase implements IFluidHandler {
 
     private boolean powered;
 

@@ -22,7 +22,7 @@ import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventorySorter;
-import mods.railcraft.common.util.inventory.filters.ListStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
@@ -48,7 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileBlastFurnace extends TileMultiBlockOven<EnumMachineAlpha> implements ISidedInventory {
+public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
 
     public static final IStackFilter INPUT_FILTER = new StackFilter() {
         @Override
@@ -56,26 +56,13 @@ public class TileBlastFurnace extends TileMultiBlockOven<EnumMachineAlpha> imple
             return RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
         }
     };
-    public static final IStackFilter FUEL_FILTER = new ListStackFilter(RailcraftCraftingManager.blastFurnace.getFuels());
+    public static final IStackFilter FUEL_FILTER = StackFilters.anyOf(RailcraftCraftingManager.blastFurnace.getFuels());
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_OUTPUT = 2;
     private static final int FUEL_PER_TICK = 5;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
     private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
-    private final IInventory invFuel = new InventoryMapper(this, SLOT_FUEL, 1);
-    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
-    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, new ITileFilter() {
-        @Override
-        public boolean matches(TileEntity tile) {
-            if (tile instanceof TileBlastFurnace)
-                return false;
-            if (tile instanceof IInventory)
-                return ((IInventory) tile).getSizeInventory() >= 27;
-            return false;
-        }
-    }, InventorySorter.SIZE_DESCENDING);
 
     static {
         char[][][] map = {
@@ -125,16 +112,29 @@ public class TileBlastFurnace extends TileMultiBlockOven<EnumMachineAlpha> imple
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
 
+    private final IInventory invFuel = new InventoryMapper(this, SLOT_FUEL, 1);
+    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
+    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, new ITileFilter() {
+        @Override
+        public boolean matches(TileEntity tile) {
+            if (tile instanceof TileBlastFurnace)
+                return false;
+            if (tile instanceof IInventory)
+                return ((IInventory) tile).getSizeInventory() >= 27;
+            return false;
+        }
+    }, InventorySorter.SIZE_DESCENDING);
     /**
      * The number of ticks that the furnace will keep burning
      */
-    public int burnTime = 0;
+    public int burnTime;
     /**
      * The number of ticks that a fresh copy of the currently-burning item would
      * keep the furnace burning for
      */
-    public int currentItemBurnTime = 0;
-    public boolean clientBurning = false;
+    public int currentItemBurnTime;
+    public boolean clientBurning;
     private int finishedAt;
 
     public TileBlastFurnace() {
@@ -142,17 +142,16 @@ public class TileBlastFurnace extends TileMultiBlockOven<EnumMachineAlpha> imple
     }
 
     public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
-        for (MultiBlockPattern pattern : TileBlastFurnace.patterns) {
-            Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
-            blockMapping.put('B', EnumMachineAlpha.BLAST_FURNACE.ordinal());
-            blockMapping.put('W', EnumMachineAlpha.BLAST_FURNACE.ordinal());
-            TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
-            if (tile instanceof TileBlastFurnace) {
-                TileBlastFurnace master = (TileBlastFurnace) tile;
-                master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_INPUT, input);
-                master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_OUTPUT, output);
-            }
-            return;
+        MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
+        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+        blockMapping.put('B', EnumMachineAlpha.BLAST_FURNACE.getState());
+        blockMapping.put('W', EnumMachineAlpha.BLAST_FURNACE.getState());
+        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
+        if (tile instanceof TileBlastFurnace) {
+            TileBlastFurnace master = (TileBlastFurnace) tile;
+            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_INPUT, input);
+            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_OUTPUT, output);
+            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_FUEL, fuel);
         }
     }
 
@@ -308,7 +307,7 @@ public class TileBlastFurnace extends TileMultiBlockOven<EnumMachineAlpha> imple
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock<?> masterBlock = getMasterBlock();
+        TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock != null) {
             GuiHandler.openGui(EnumGui.BLAST_FURNACE, player, worldObj, masterBlock.getX(), masterBlock.getY(), masterBlock.getZ());
             return true;

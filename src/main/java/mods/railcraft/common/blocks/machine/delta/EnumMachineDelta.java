@@ -34,7 +34,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
     CAGE(Module.TRANSPORT, "cage", TileCage.class, 4, 1, 0, 1, 2, 2, 2, 2, 3);
     private final Module module;
     private final String tag;
-    private final Class<? extends TileMachineBase<EnumMachineDelta>> tile;
+    private final Class<? extends TileMachineBase> tile;
     private final int[] textureInfo;
     private static final List<EnumMachineDelta> creativeList = new ArrayList<EnumMachineDelta>();
     private static final EnumMachineDelta[] VALUES = values();
@@ -47,7 +47,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
         BoundingBoxManager.registerBoundingBox(WIRE, new TileWire.WireBoundingBox());
     }
 
-    EnumMachineDelta(Module module, String tag, Class<? extends TileMachineBase<EnumMachineDelta>> tile, int... textureInfo) {
+    EnumMachineDelta(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -83,7 +83,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
     }
 
     @Override
-    public Class getTileClass() {
+    public Class<? extends TileMachineBase> getTileClass() {
         return tile;
     }
 

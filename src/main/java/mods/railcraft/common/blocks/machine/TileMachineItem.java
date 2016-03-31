@@ -16,7 +16,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class TileMachineItem<M extends IEnumMachine<M>> extends TileMachineBase<M> implements IInventory {
+public abstract class TileMachineItem extends TileMachineBase implements IInventory {
 
     private StandaloneInventory inv;
 

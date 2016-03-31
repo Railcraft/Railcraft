@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.api.core.items.IStackFilter;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.alpha.TileCokeOven;
@@ -26,6 +25,7 @@ import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -43,36 +43,12 @@ import java.util.Map;
  */
 public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsFuel {
 
-    public static void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, List<ItemStack> fuel) {
-        for (MultiBlockPattern pattern : TileBoiler.patterns) {
-            if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
-                Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
-                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_SOLID.ordinal());
-                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.ordinal() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal());
-                TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineBeta(), blockMapping);
-                if (tile instanceof TileBoilerFireboxSolid) {
-                    TileBoilerFireboxSolid master = (TileBoilerFireboxSolid) tile;
-                    master.tankWater.setFluid(Fluids.WATER.get(water));
-                    IInventory invFuel = new InventoryMapper(master.inventory, SLOT_BURN, 4);
-                    for (ItemStack stack : fuel) {
-                        InvTools.moveItemStack(stack, invFuel);
-                    }
-                }
-                return;
-            }
-        }
-    }
-
     private static final int SLOT_BURN = 2;
     private static final int SLOT_FUEL_A = 3;
     private static final int SLOT_FUEL_B = 4;
     private static final int SLOT_FUEL_C = 5;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 6);
     private static final IStackFilter NOT_FUEL = StandardStackFilters.FUEL.negate();
-    private IInventory invBurn = new InventoryMapper(this, SLOT_BURN, 1);
-    private IInventory invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
-    private IInventory invFuel = new InventoryMapper(this, SLOT_BURN, 4);
-    private boolean needsFuel = false;
     private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, new ITileFilter() {
         @Override
         public boolean matches(TileEntity tile) {
@@ -88,10 +64,33 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
         }
 
     }, InventorySorter.SIZE_DESCENDING);
-
+    private IInventory invBurn = new InventoryMapper(this, SLOT_BURN, 1);
+    private IInventory invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
+    private IInventory invFuel = new InventoryMapper(this, SLOT_BURN, 4);
+    private boolean needsFuel = false;
     public TileBoilerFireboxSolid() {
         super(6);
         boiler.setFuelProvider(new SolidFuelProvider(this, SLOT_BURN));
+    }
+
+    public static void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, List<ItemStack> fuel) {
+        for (MultiBlockPattern pattern : TileBoiler.patterns) {
+            if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
+                Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+                blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_SOLID.getState());
+                blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.getState() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getState());
+                TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
+                if (tile instanceof TileBoilerFireboxSolid) {
+                    TileBoilerFireboxSolid master = (TileBoilerFireboxSolid) tile;
+                    master.tankWater.setFluid(Fluids.WATER.get(water));
+                    IInventory invFuel = new InventoryMapper(master.inventory, SLOT_BURN, 4);
+                    for (ItemStack stack : fuel) {
+                        InvTools.moveItemStack(stack, invFuel);
+                    }
+                }
+                return;
+            }
+        }
     }
 
     @Override

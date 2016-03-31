@@ -32,7 +32,7 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileChestRailcraft extends TileMachineItem<EnumMachineBeta> {
+public abstract class TileChestRailcraft extends TileMachineItem {
 
     private static final EnumFacing[] UP_DOWN_AXES = new EnumFacing[]{UP, DOWN};
     private static final int TICK_PER_SYNC = 64;

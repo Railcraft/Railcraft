@@ -54,7 +54,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileRockCrusher extends TileMultiBlockInventory<EnumMachineAlpha> implements IEnergyReceiver, IHasWork, ISidedInventory {
+public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyReceiver, IHasWork, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;

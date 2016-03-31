@@ -12,7 +12,6 @@ import com.google.common.collect.MapMaker;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.blocks.machine.beta.TileSentinel;
 import mods.railcraft.common.carts.ItemCartAnchor;
@@ -54,7 +53,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileAnchorWorld extends TileMachineItem<EnumMachineAlpha> implements IAnchor, ISidedInventory {
+public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedInventory {
 
     private static final Map<UUID, Ticket> tickets = new MapMaker().makeMap();
     private static final Map<EntityPlayer, WorldCoordinate> sentinelPairingMap = new MapMaker().weakKeys().makeMap();

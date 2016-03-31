@@ -30,7 +30,7 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileEngine extends TileMachineBase<EnumMachineBeta> implements IEnergyConnection {
+public abstract class TileEngine extends TileMachineBase implements IEnergyConnection {
 
     public float currentOutput = 0;
     public int energy;

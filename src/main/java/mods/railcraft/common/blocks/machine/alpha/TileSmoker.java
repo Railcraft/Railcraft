@@ -28,7 +28,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileSmoker extends TileMachineBase<EnumMachineAlpha> {
+public class TileSmoker extends TileMachineBase {
 
     private static final int SNOW_MELT_INTERVAL = 32;
     private static final Random rand = MiscTools.RANDOM;

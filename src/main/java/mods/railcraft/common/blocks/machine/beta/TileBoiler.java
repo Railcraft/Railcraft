@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -43,7 +42,7 @@ import java.util.Set;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoiler extends TileMultiBlock<EnumMachineBeta> implements IFluidHandler {
+public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler {
 
     public static final int TANK_WATER = 0;
     public static final int TANK_STEAM = 1;
@@ -201,7 +200,7 @@ public abstract class TileBoiler extends TileMultiBlock<EnumMachineBeta> impleme
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock<?> mBlock = getMasterBlock();
+        TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.openGui(player);
         return false;
