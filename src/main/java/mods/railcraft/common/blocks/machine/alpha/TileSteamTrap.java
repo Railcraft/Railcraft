@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
@@ -21,6 +22,7 @@ import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.steam.ISteamUser;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,7 +41,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class TileSteamTrap extends TileMachineBase implements IFluidHandler, ISteamUser {
+public abstract class TileSteamTrap<M extends IEnumMachine<M>> extends TileMachineBase<M> implements IFluidHandler, ISteamUser {
 
     private static final byte JET_TIME = 40;
     private static final byte DAMAGE = 8;
@@ -66,7 +68,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
             if (isJetting()) {
                 double speedFactor = 0.2;
                 for (int i = 0; i < 10; i++) {
-                    EffectManager.instance.steamJetEffect(worldObj, this, direction.offsetX * speedFactor, direction.offsetY * speedFactor, direction.offsetZ * speedFactor);
+                    EffectManager.instance.steamJetEffect(worldObj, this, direction.getFrontOffsetX() * speedFactor, direction.getFrontOffsetY() * speedFactor, direction.getFrontOffsetZ() * speedFactor);
                 }
             }
             return;
@@ -139,14 +141,14 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
         direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block block) {
+        super.onNeighborBlockChange(state, block);
         powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
     }
 
@@ -171,7 +173,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        direction = EnumFacing.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getFront(data.getByte("direction"));
         powered = data.getBoolean("powered");
         tankManager.readTanksFromNBT(data);
     }
@@ -187,7 +189,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         jet = data.readByte();
-        direction = EnumFacing.getOrientation(data.readByte());
+        direction = EnumFacing.getFront(data.readByte());
         markBlockForUpdate();
     }
 }

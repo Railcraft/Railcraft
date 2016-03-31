@@ -9,10 +9,12 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.*;
+import mods.railcraft.common.util.inventory.filters.InventoryStackFilter;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
@@ -49,7 +51,7 @@ public class TileItemLoader extends TileLoaderItemBase {
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineGamma getMachineType() {
         return EnumMachineGamma.ITEM_LOADER;
     }
 
@@ -172,7 +174,7 @@ public class TileItemLoader extends TileLoaderItemBase {
                     }
                 }
                 if (!movedItemCart) {
-                    movedItemCart = InvTools.moveOneItemExcept(chests, cartInv, getItemFilters().getContents()) != null;
+                    movedItemCart = InvTools.moveOneItemExcept(chests, cartInv, new InventoryStackFilter(getItemFilters())) != null;
                 }
                 break;
             }

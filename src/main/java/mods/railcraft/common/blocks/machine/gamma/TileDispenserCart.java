@@ -10,7 +10,6 @@ package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.IMinecartItem;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -22,6 +21,7 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
@@ -30,6 +30,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.WorldServer;
 
@@ -37,7 +38,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TileDispenserCart extends TileMachineItem {
+public class TileDispenserCart extends TileMachineItem<EnumMachineGamma> {
 
     protected EnumFacing direction = EnumFacing.NORTH;
     protected boolean powered;
@@ -48,7 +49,7 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineGamma getMachineType() {
         return EnumMachineGamma.DISPENSER_CART;
     }
 
@@ -69,8 +70,8 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)
             direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
@@ -90,9 +91,7 @@ public class TileDispenserCart extends TileMachineItem {
                 for (int ii = 0; ii < getSizeInventory(); ii++) {
                     ItemStack cartStack = getStackInSlot(ii);
                     if (cartStack != null) {
-                        int x = MiscTools.getXOnSide(getX(), direction);
-                        int y = MiscTools.getYOnSide(getY(), direction);
-                        int z = MiscTools.getZOnSide(getZ(), direction);
+                        BlockPos pos = getPos().offset(direction);
                         boolean minecartItem = cartStack.getItem() instanceof IMinecartItem;
                         if (cartStack.getItem() instanceof ItemMinecart || minecartItem) {
                             boolean canPlace = true;
@@ -100,7 +99,7 @@ public class TileDispenserCart extends TileMachineItem {
                                 canPlace = ((IMinecartItem) cartStack.getItem()).canBePlacedByNonPlayer(cartStack);
                             if (canPlace) {
                                 ItemStack placedStack = cartStack.copy();
-                                EntityMinecart placedCart = CartUtils.placeCart(getOwner(), placedStack, (WorldServer) worldObj, x, y, z);
+                                EntityMinecart placedCart = CartUtils.placeCart(getOwner(), placedStack, (WorldServer) worldObj, pos);
                                 if (placedCart != null) {
                                     decrStackSize(ii, 1);
                                     timeSinceLastSpawn = 0;
@@ -111,7 +110,7 @@ public class TileDispenserCart extends TileMachineItem {
                             float rx = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
                             float ry = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
                             float rz = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
-                            EntityItem item = new EntityItem(worldObj, x + rx, y + ry, z + rz, cartStack);
+                            EntityItem item = new EntityItem(worldObj, pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz, cartStack);
                             float factor = 0.05F;
                             item.motionX = (float) MiscTools.RANDOM.nextGaussian() * factor;
                             item.motionY = (float) MiscTools.RANDOM.nextGaussian() * factor + 0.2F;
@@ -137,8 +136,8 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block block) {
+        super.onNeighborBlockChange(state, block);
         if (Game.isNotHost(getWorld()))
             return;
         boolean newPower = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
@@ -164,7 +163,7 @@ public class TileDispenserCart extends TileMachineItem {
         super.readFromNBT(data);
 
         powered = data.getBoolean("powered");
-        direction = EnumFacing.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getFront(data.getByte("direction"));
 
         timeSinceLastSpawn = data.getInteger("time");
     }
@@ -181,7 +180,7 @@ public class TileDispenserCart extends TileMachineItem {
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = EnumFacing.getOrientation(data.readByte());
+        direction = EnumFacing.getFront(data.readByte());
 //        powered = data.readBoolean();
 
         markBlockForUpdate();

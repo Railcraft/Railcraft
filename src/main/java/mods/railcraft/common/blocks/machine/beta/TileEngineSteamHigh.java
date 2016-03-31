@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.steam.Steam;
 
 /**
@@ -22,7 +21,7 @@ public class TileEngineSteamHigh extends TileEngineSteam {
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineBeta getMachineType() {
         return EnumMachineBeta.ENGINE_STEAM_HIGH;
     }
 

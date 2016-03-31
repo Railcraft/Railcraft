@@ -10,7 +10,6 @@ package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
@@ -31,6 +30,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.steam.ISteamUser;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,7 +55,7 @@ import java.util.*;
 
 import static net.minecraft.util.EnumFacing.*;
 
-public class TileSteamOven extends TileMultiBlockInventory implements IFluidHandler, ISidedInventory, ISteamUser, IHasWork {
+public class TileSteamOven extends TileMultiBlockInventory<EnumMachineAlpha> implements IFluidHandler, ISidedInventory, ISteamUser, IHasWork {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -114,7 +114,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     public static void placeSteamOven(World world, BlockPos pos, List<ItemStack> input, List<ItemStack> output) {
         MultiBlockPattern pattern = TileSteamOven.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.ordinal());
+        blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.getState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileSteamOven) {
             TileSteamOven master = (TileSteamOven) tile;
@@ -128,7 +128,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.STEAM_OVEN;
     }
 
@@ -278,7 +278,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock masterBlock = getMasterBlock();
+        TileMultiBlock<?> masterBlock = getMasterBlock();
         if (masterBlock != null) {
             GuiHandler.openGui(EnumGui.STEAN_OVEN, player, worldObj, masterBlock.getPos());
             return true;

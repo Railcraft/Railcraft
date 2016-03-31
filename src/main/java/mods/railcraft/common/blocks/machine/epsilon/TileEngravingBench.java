@@ -10,8 +10,8 @@ package mods.railcraft.common.blocks.machine.epsilon;
 
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
+import cofh.api.energy.IEnergyReceiver;
+
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.emblems.EmblemToolsServer;
@@ -23,8 +23,9 @@ import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -42,7 +43,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TileEngravingBench extends TileMachineItem implements IEnergyHandler, ISidedInventory, IHasWork, IGuiReturnHandler {
+public class TileEngravingBench extends TileMachineItem<EnumMachineEpsilon> implements IEnergyReceiver, ISidedInventory, IHasWork, IGuiReturnHandler {
 
     public enum GuiPacketType {
 
@@ -70,7 +71,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineEpsilon getMachineType() {
         return EnumMachineEpsilon.ENGRAVING_BENCH;
     }
 
@@ -275,9 +276,9 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
-        EnumFacing facing = MiscTools.getHorizontalSideFacingPlayer(worldObj, getPos(), entityliving);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
+        EnumFacing facing = entityliving.getHorizontalFacing();
         if (facing == EnumFacing.EAST || facing == EnumFacing.WEST)
             flippedAxis = true;
     }
@@ -303,11 +304,6 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyHandle
         if (energyStorage == null)
             return 0;
         return energyStorage.receiveEnergy(maxReceive, simulate);
-    }
-
-    @Override
-    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return 0;
     }
 
     @Override

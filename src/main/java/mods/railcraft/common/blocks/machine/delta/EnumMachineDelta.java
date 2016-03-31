@@ -18,6 +18,7 @@ import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -27,13 +28,13 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineDelta implements IEnumMachine {
+public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
 
     WIRE(Module.ELECTRICITY, "wire", TileWire.class, 1, 1, 0, 0, 0, 0, 0, 0),
     CAGE(Module.TRANSPORT, "cage", TileCage.class, 4, 1, 0, 1, 2, 2, 2, 2, 3);
     private final Module module;
     private final String tag;
-    private final Class<? extends TileMachineBase> tile;
+    private final Class<? extends TileMachineBase<EnumMachineDelta>> tile;
     private final int[] textureInfo;
     private static final List<EnumMachineDelta> creativeList = new ArrayList<EnumMachineDelta>();
     private static final EnumMachineDelta[] VALUES = values();
@@ -46,7 +47,7 @@ public enum EnumMachineDelta implements IEnumMachine {
         BoundingBoxManager.registerBoundingBox(WIRE, new TileWire.WireBoundingBox());
     }
 
-    EnumMachineDelta(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineDelta(Module module, String tag, Class<? extends TileMachineBase<EnumMachineDelta>> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -116,6 +117,11 @@ public enum EnumMachineDelta implements IEnumMachine {
         return RailcraftBlocks.getBlockMachineDelta();
     }
 
+    @Override
+    public IBlockState getState() {
+        return getBlock().getDefaultState().withProperty(MachineProxyDelta.VARIANT, this);
+    }
+
     public boolean isEnabled() {
         return ModuleManager.isModuleLoaded(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
     }
@@ -132,5 +138,10 @@ public enum EnumMachineDelta implements IEnumMachine {
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

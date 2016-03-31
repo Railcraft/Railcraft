@@ -13,7 +13,6 @@ import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.BoundingBoxManager;
 import mods.railcraft.common.blocks.machine.BoundingBoxManager.ReducedBoundingBox;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -23,18 +22,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileWire extends TileMachineBase implements IElectricGrid {
+public class TileWire extends TileMachineBase<EnumMachineDelta> implements IElectricGrid {
 
     public enum AddonType {
 
@@ -53,7 +53,7 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
     private AddonType addon = AddonType.NONE;
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineDelta getMachineType() {
         return EnumMachineDelta.WIRE;
     }
 
@@ -70,8 +70,8 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
     }
 
     @Override
-    public  List<ItemStack> getDrops(int fortune) {
-        ArrayList<ItemStack> drops = super.getDrops(fortune);
+    public List<ItemStack> getDrops(int fortune) {
+        List<ItemStack> drops = super.getDrops(fortune);
         if (addon == AddonType.FRAME && BlockFrame.getBlock() != null)
             drops.add(BlockFrame.getItem());
         return drops;
@@ -160,15 +160,15 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
         }
 
         @Override
-        public AxisAlignedBB getBox(World world, int x, int y, int z) {
-            TileEntity tile = WorldPlugin.getBlockTile(world, x, y, z);
+        public AxisAlignedBB getBox(World world, BlockPos pos) {
+            TileEntity tile = WorldPlugin.getBlockTile(world, pos);
             if (tile instanceof TileWire) {
                 TileWire wire = (TileWire) tile;
                 AddonType type = wire.getAddon();
                 if (type == AddonType.NONE)
-                    return super.getBox(world, x, y, z);
+                    return super.getBox(world, pos);
             }
-            return BoundingBoxManager.DEFAULT.getBox(world, x, y, z);
+            return BoundingBoxManager.DEFAULT.getBox(world, pos);
         }
     }
 }

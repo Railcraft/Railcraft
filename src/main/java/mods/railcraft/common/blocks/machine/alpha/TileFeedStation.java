@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.blocks.machine.alpha.ai.EntityAIMateBreeding;
 import mods.railcraft.common.gui.EnumGui;
@@ -22,6 +21,7 @@ import mods.railcraft.common.util.network.ITileExtraDataHandler;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketTileExtraData;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,7 +42,7 @@ import java.util.Random;
 
 import static net.minecraft.util.EnumParticleTypes.HEART;
 
-public class TileFeedStation extends TileMachineItem implements ITileExtraDataHandler {
+public class TileFeedStation extends TileMachineItem<EnumMachineAlpha> implements ITileExtraDataHandler {
 
     private static final int AREA = 3;
     private static final int MIN_FEED_INTERVAL = 128;
@@ -58,7 +58,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.FEED_STATION;
     }
 
@@ -142,13 +142,13 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
                     EntityAIMateBreeding.modifyAI(animal);
                 }
 
-                animal.func_146082_f(null);
+                animal.setInLove(null);
 
                 for (int i = 0; i < 7; i++) {
                     double d = rand.nextGaussian() * 0.02D;
                     double d1 = rand.nextGaussian() * 0.02D;
                     double d2 = rand.nextGaussian() * 0.02D;
-                    worldObj.spawnParticle(HEART, (animal.posX + (double) (rand.nextFloat() * animal.width * 2.0F)) - animal.width, animal.posY + 0.5D + (double) (rand.nextFloat() * animal.height), (animal.posZ + (double) (rand.nextFloat() * animal.width * 2.0F)) - animal.width, d, d1, d2);
+                    worldObj.spawnParticle(HEART, (animal.posX + rand.nextFloat() * animal.width * 2.0F) - animal.width, animal.posY + 0.5D + rand.nextFloat() * animal.height, (animal.posZ + rand.nextFloat() * animal.width * 2.0F) - animal.width, d, d1, d2);
                 }
 
                 return true;
@@ -160,8 +160,8 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block block) {
+        super.onNeighborBlockChange(state, block);
         powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
     }
 

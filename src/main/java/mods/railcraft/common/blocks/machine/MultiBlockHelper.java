@@ -15,6 +15,7 @@ import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.epsilon.TileFluxTransformer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -26,52 +27,52 @@ import java.util.List;
 public class MultiBlockHelper implements StructureHelper {
 
     @Override
-    public void placeSolidBoiler(World world, int x, int y, int z, int width, int height, boolean highPressure, int water, List<ItemStack> fuel) {
-        TileBoilerFireboxSolid.placeSolidBoiler(world, x, y, z, width, height, highPressure, water, fuel);
+    public void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, List<ItemStack> fuel) {
+        TileBoilerFireboxSolid.placeSolidBoiler(world, pos, width, height, highPressure, water, fuel);
     }
 
     @Override
-    public void placeFluidBoiler(World world, int x, int y, int z, int width, int height, boolean highPressure, int water, FluidStack fuel) {
-        TileBoilerFireboxFluid.placeFluidBoiler(world, x, y, z, width, height, highPressure, water, fuel);
+    public void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, FluidStack fuel) {
+        TileBoilerFireboxFluid.placeFluidBoiler(world, pos, width, height, highPressure, water, fuel);
     }
 
     @Override
-    public void placeWaterTank(World world, int x, int y, int z, int water) {
-        TileTankWater.placeWaterTank(world, x, y, z, water);
+    public void placeWaterTank(World world, BlockPos pos, int water) {
+        TileTankWater.placeWaterTank(world, pos, water);
     }
 
     @Override
-    public void placeCokeOven(World world, int x, int y, int z, int creosote, ItemStack input, ItemStack output) {
-        TileCokeOven.placeCokeOven(world, x, y, z, creosote, input, output);
+    public void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output) {
+        TileCokeOven.placeCokeOven(world, pos, creosote, input, output);
     }
 
     @Override
-    public void placeBlastFurnace(World world, int x, int y, int z, ItemStack input, ItemStack output, ItemStack fuel) {
-        TileBlastFurnace.placeBlastFurnace(world, x, y, z, input, output, fuel);
+    public void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
+        TileBlastFurnace.placeBlastFurnace(world, pos, input, output, fuel);
     }
 
     @Override
-    public void placeSteamOven(World world, int x, int y, int z, List<ItemStack> input, List<ItemStack> output) {
-        TileSteamOven.placeSteamOven(world, x, y, z, input, output);
+    public void placeSteamOven(World world, BlockPos pos, List<ItemStack> input, List<ItemStack> output) {
+        TileSteamOven.placeSteamOven(world, pos, input, output);
     }
 
     @Override
-    public void placeRockCrusher(World world, int x, int y, int z, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
-        TileRockCrusher.placeRockCrusher(world, x, y, z, patternIndex, input, output);
+    public void placeRockCrusher(World world, BlockPos pos, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
+        TileRockCrusher.placeRockCrusher(world, pos, patternIndex, input, output);
     }
 
     @Override
-    public void placeIronTank(World world, int x, int y, int z, int patternIndex, FluidStack fluid) {
-        TileTankBase.placeIronTank(world, x, y, z, patternIndex, fluid);
+    public void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
+        TileTankBase.placeIronTank(world, pos, patternIndex, fluid);
     }
 
     @Override
-    public void placeSteelTank(World world, int x, int y, int z, int patternIndex, FluidStack fluid) {
-        TileTankBase.placeSteelTank(world, x, y, z, patternIndex, fluid);
+    public void placeSteelTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
+        TileTankBase.placeSteelTank(world, pos, patternIndex, fluid);
     }
 
     @Override
-    public void placeFluxTransformer(World world, int x, int y, int z) {
-        TileFluxTransformer.placeFluxTransformer(world, x, y, z);
+    public void placeFluxTransformer(World world, BlockPos pos) {
+        TileFluxTransformer.placeFluxTransformer(world, pos);
     }
 }

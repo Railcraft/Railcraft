@@ -10,7 +10,6 @@ package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IEnergyTransfer;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.ic2.ISinkDelegate;
@@ -35,7 +34,7 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
     private TileEntity sinkDelegate;
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineGamma getMachineType() {
         return EnumMachineGamma.ENERGY_LOADER;
     }
 

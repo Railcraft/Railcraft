@@ -40,7 +40,7 @@ import static net.minecraft.util.EnumParticleTypes.FLAME;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoilerFirebox extends TileBoiler implements IInventory, ISidedInventory, ITemperature {
+public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInventory, ITemperature {
 
     protected static final int SLOT_LIQUID_INPUT = 0;
     protected static final int SLOT_LIQUID_OUTPUT = 1;
@@ -232,8 +232,8 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
         return inventory.getSizeInventory();
     }
 
-    protected boolean handleClick(EntityPlayer player, int side) {
-        return FluidHelper.handleRightClick(this, EnumFacing.VALUES[side], player, true, false);
+    protected boolean handleClick(EntityPlayer player, EnumFacing side) {
+        return FluidHelper.handleRightClick(this, side, player, true, false);
     }
 
     @Override
@@ -252,5 +252,50 @@ public abstract class TileBoilerFirebox extends TileBoiler implements IInventory
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
+    }
+
+    @Override
+    public ItemStack removeStackFromSlot(int i) {
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        if (mBlock != null)
+            return mBlock.inventory.removeStackFromSlot(i);
+        else
+            return inventory.removeStackFromSlot(i);
+    }
+
+    @Override
+    public int getField(int id) {
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        if (mBlock != null)
+            return mBlock.inventory.getField(id);
+        else
+            return inventory.getField(id);
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        if (mBlock != null)
+            mBlock.inventory.setField(id, value);
+        else
+            inventory.setField(id, value);
+    }
+
+    @Override
+    public int getFieldCount() {
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        if (mBlock != null)
+            return mBlock.inventory.getFieldCount();
+        else
+            return inventory.getFieldCount();
+    }
+
+    @Override
+    public void clear() {
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
+        if (mBlock != null)
+            mBlock.inventory.clear();
+        else
+            inventory.clear();
     }
 }

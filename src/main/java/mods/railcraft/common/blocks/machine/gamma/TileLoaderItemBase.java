@@ -41,8 +41,8 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
     protected static final int[] SLOTS = InvTools.buildSlotArray(0, 9);
     private final PhantomInventory invFilters = new PhantomInventory(9, this);
     private final StackFilter filters = new InventoryStackFilter(invFilters);
-    private final MultiButtonController<EnumTransferMode> transferModeController = new MultiButtonController(EnumTransferMode.ALL.ordinal(), EnumTransferMode.values());
-    private final MultiButtonController<EnumRedstoneMode> redstoneModeController = new MultiButtonController(0, getValidRedstoneModes());
+    private final MultiButtonController<EnumTransferMode> transferModeController = MultiButtonController.create(EnumTransferMode.ALL.ordinal(), EnumTransferMode.values());
+    private final MultiButtonController<EnumRedstoneMode> redstoneModeController = MultiButtonController.create(0, getValidRedstoneModes());
     protected boolean movedItemCart = false;
 
     public MultiButtonController<EnumTransferMode> getTransferModeController() {

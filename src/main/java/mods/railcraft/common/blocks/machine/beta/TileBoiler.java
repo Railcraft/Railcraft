@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -22,6 +23,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.steam.Steam;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -41,7 +43,7 @@ import java.util.Set;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler {
+public abstract class TileBoiler extends TileMultiBlock<EnumMachineBeta> implements IFluidHandler {
 
     public static final int TANK_WATER = 0;
     public static final int TANK_STEAM = 1;
@@ -199,7 +201,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
+        TileMultiBlock<?> mBlock = getMasterBlock();
         if (mBlock != null)
             return mBlock.openGui(player);
         return false;
@@ -212,8 +214,9 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        Block block = WorldPlugin.getBlock(worldObj, pos);
-        int meta = worldObj.getBlockMetadata(pos);
+        IBlockState state = WorldPlugin.getBlockState(worldObj, getPos());
+        Block block = state.getBlock();
+        int meta = block.getMetaFromState(state);
 
         switch (mapPos) {
             case 'O': // Other

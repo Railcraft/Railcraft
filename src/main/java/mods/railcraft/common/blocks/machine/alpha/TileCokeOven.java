@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.machine.alpha;
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockOven;
@@ -32,6 +31,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -44,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, ISidedInventory {
+public class TileCokeOven extends TileMultiBlockOven<EnumMachineAlpha> implements IFluidHandler, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
@@ -108,12 +108,12 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
         tankManager.add(tank);
     }
 
-    public static void placeCokeOven(World world, int x, int y, int z, int creosote, ItemStack input, ItemStack output) {
+    public static void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output) {
         for (MultiBlockPattern pattern : TileCokeOven.patterns) {
             Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
             blockMapping.put('B', EnumMachineAlpha.COKE_OVEN.ordinal());
             blockMapping.put('W', EnumMachineAlpha.COKE_OVEN.ordinal());
-            TileEntity tile = pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
+            TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
             if (tile instanceof TileCokeOven) {
                 TileCokeOven master = (TileCokeOven) tile;
                 master.tank.setFluid(Fluids.CREOSOTE.get(creosote));
@@ -125,7 +125,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.COKE_OVEN;
     }
 
@@ -137,12 +137,12 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
-        if (isStructureValid() && FluidHelper.handleRightClick(this, EnumFacing.VALUES[side], player, false, true))
+    public boolean blockActivated(EntityPlayer player, EnumFacing face) {
+        if (isStructureValid() && FluidHelper.handleRightClick(this, face, player, false, true))
             return true;
         else if (FluidItemHelper.isContainer(player.inventory.getCurrentItem()))
             return true;
-        return super.blockActivated(player, side);
+        return super.blockActivated(player, face);
     }
 
     @Override

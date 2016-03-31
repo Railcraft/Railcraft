@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 
@@ -21,7 +20,7 @@ public class TileChestVoid extends TileChestRailcraft {
     private static final int TICK_PER_VOID = 8;
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineBeta getMachineType() {
         return EnumMachineBeta.VOID_CHEST;
     }
 

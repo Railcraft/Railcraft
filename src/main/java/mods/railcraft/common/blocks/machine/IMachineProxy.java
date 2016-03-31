@@ -11,13 +11,17 @@ package mods.railcraft.common.blocks.machine;
 
 import java.util.List;
 
+import net.minecraft.block.properties.IProperty;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IMachineProxy {
+public interface IMachineProxy<M extends IEnumMachine<M>> {
+    IProperty<M> getVariantProperty();
 
-    IEnumMachine getMachine(int meta);
+    M getMachine(int meta);
 
-    List<? extends IEnumMachine> getCreativeList();
+    int getMeta(M machine);
 
+    List<M> getCreativeList();
 }

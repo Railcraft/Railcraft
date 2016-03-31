@@ -8,16 +8,13 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
-
-
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TileSteamTrapAuto extends TileSteamTrap {
+public class TileSteamTrapAuto extends TileSteamTrap<EnumMachineAlpha> {
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.STEAM_TRAP_AUTO;
     }
 

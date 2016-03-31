@@ -11,7 +11,8 @@ package mods.railcraft.common.blocks.machine.beta;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,7 +32,7 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileChestRailcraft extends TileMachineItem {
+public abstract class TileChestRailcraft extends TileMachineItem<EnumMachineBeta> {
 
     private static final EnumFacing[] UP_DOWN_AXES = new EnumFacing[]{UP, DOWN};
     private static final int TICK_PER_SYNC = 64;
@@ -49,9 +50,9 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
-        facing = MiscTools.getHorizontalSideFacingPlayer(worldObj, getPos(), entityliving);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
+        facing = entityliving.getHorizontalFacing();
     }
 
     @Override
@@ -161,7 +162,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        facing = EnumFacing.getOrientation(data.getByte("facing"));
+        facing = EnumFacing.getFront(data.getByte("facing"));
     }
 
     @Override
@@ -173,6 +174,6 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        facing = EnumFacing.getOrientation(data.readByte());
+        facing = EnumFacing.getFront(data.readByte());
     }
 }

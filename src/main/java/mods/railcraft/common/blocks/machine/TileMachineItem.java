@@ -16,7 +16,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class TileMachineItem extends TileMachineBase implements IInventory {
+public abstract class TileMachineItem<M extends IEnumMachine<M>> extends TileMachineBase<M> implements IInventory {
 
     private StandaloneInventory inv;
 
@@ -98,5 +98,32 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
+    }
+
+    @Override
+    public ItemStack removeStackFromSlot(int index) {
+        ItemStack inSlot = getStackInSlot(index);
+        setInventorySlotContents(index, null);
+        return inSlot;
+    }
+
+    @Override
+    public int getField(int id) {
+        return inv.getField(id);
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        inv.setField(id, value);
+    }
+
+    @Override
+    public int getFieldCount() {
+        return inv.getFieldCount();
+    }
+
+    @Override
+    public void clear() {
+        inv.clear();
     }
 }
