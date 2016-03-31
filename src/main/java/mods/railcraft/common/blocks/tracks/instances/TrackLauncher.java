@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerReinforced;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -27,12 +26,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackLauncher extends TrackReinforced implements ITrackPowered, IGuiReturnHandler {
+public class TrackLauncher extends TrackPowered implements IGuiReturnHandler {
 
-    private boolean powered = false;
-    private byte launchForce = 5;
     public static final int MIN_LAUNCH_FORCE = 5;
     private static final float LAUNCH_THRESHOLD = 0.01f;
+    private byte launchForce = 5;
 
     public TrackLauncher() {
         speedController = SpeedControllerReinforced.instance();
@@ -46,14 +44,6 @@ public class TrackLauncher extends TrackReinforced implements ITrackPowered, IGu
     @Override
     public boolean isFlexibleRail() {
         return false;
-    }
-
-    @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            return getIcon(1);
-        }
-        return getIcon(0);
     }
 
     @Override
@@ -90,27 +80,14 @@ public class TrackLauncher extends TrackReinforced implements ITrackPowered, IGu
     }
 
     @Override
-    public boolean isPowered() {
-        return powered;
-    }
-
-    @Override
-    public void setPowered(boolean powered) {
-        this.powered = powered;
-    }
-
-    @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setBoolean("powered", powered);
         data.setByte("force", getLaunchForce());
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-
-        powered = data.getBoolean("powered");
 
         SafeNBTWrapper safe = new SafeNBTWrapper(data);
 
@@ -120,19 +97,13 @@ public class TrackLauncher extends TrackReinforced implements ITrackPowered, IGu
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-
-        data.writeBoolean(powered);
         data.writeByte(launchForce);
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-
-        powered = data.readBoolean();
         launchForce = data.readByte();
-
-        markBlockNeedsUpdate();
     }
 
     @Override

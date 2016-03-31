@@ -10,11 +10,13 @@
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ITrackEmitter;
+import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -24,8 +26,8 @@ import java.io.IOException;
 
 public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrackReversible, ITrackEmitter {
     private static final int POWER_DELAY = 10;
-    private boolean reversed = false;
-    private byte delay = 0;
+    private boolean reversed;
+    private byte delay;
 
     @Override
     public EnumTrack getTrackType() {
@@ -33,17 +35,11 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
     }
 
     @Override
-    public IIcon getIcon() {
-        if (getPowerOutput() != 0) {
-            if (isReversed()) {
-                return getIcon(3);
-            }
-            return getIcon(1);
-        }
-        if (isReversed()) {
-            return getIcon(2);
-        }
-        return getIcon(0);
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(ITrackPowered.POWERED, getPowerOutput() > 0);
+        state = state.withProperty(REVERSED, reversed);
+        return state;
     }
 
     @Override

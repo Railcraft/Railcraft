@@ -43,6 +43,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -54,6 +55,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -734,10 +736,23 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         public static final LocoMode[] VALUES = values();
     }
 
-    public enum LocoSpeed {
+    public enum LocoSpeed implements IStringSerializable {
 
         MAX, SLOW, SLOWER, SLOWEST, REVERSE;
         public static final LocoSpeed[] VALUES = values();
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
+
+        public static LocoSpeed fromName(String name) {
+            for (LocoSpeed speed : VALUES) {
+                if (speed.getName().equals(name))
+                    return speed;
+            }
+            return MAX;
+        }
     }
 
     public enum LocoLockButtonState implements IMultiButtonState {

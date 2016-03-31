@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -40,12 +39,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class TrackEmbarking extends TrackBaseRailcraft implements ITrackPowered, IGuiReturnHandler {
+public class TrackEmbarking extends TrackPowered implements IGuiReturnHandler {
 
     public static final Set<Class> excludedEntities = new HashSet<Class>();
     public static final byte MIN_AREA = 1;
     public static final byte MAX_AREA = 5;
-    private boolean powered = false;
     private byte area = 2;
 
     static {
@@ -64,14 +62,6 @@ public class TrackEmbarking extends TrackBaseRailcraft implements ITrackPowered,
     }
 
     @Override
-    public IIcon getIcon() {
-        if (isPowered()) {
-            return getIcon(0);
-        }
-        return getIcon(1);
-    }
-
-    @Override
     public boolean blockActivated(EntityPlayer player) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
@@ -85,7 +75,7 @@ public class TrackEmbarking extends TrackBaseRailcraft implements ITrackPowered,
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        if (powered && cart.canBeRidden() && cart.riddenByEntity == null && cart.getEntityData().getInteger("MountPrevention") <= 0) {
+        if (isPowered() && cart.canBeRidden() && cart.riddenByEntity == null && cart.getEntityData().getInteger("MountPrevention") <= 0) {
             int a = area;
             AxisAlignedBB box = AABBFactory.make().createBoxForTileAt(getPos()).build();
             box = box.expand(a, a, a);
@@ -121,48 +111,27 @@ public class TrackEmbarking extends TrackBaseRailcraft implements ITrackPowered,
     }
 
     @Override
-    public boolean isPowered() {
-        return powered;
-    }
-
-    @Override
-    public void setPowered(boolean powered) {
-        this.powered = powered;
-    }
-
-    @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setBoolean("powered", powered);
         data.setByte("area", area);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        powered = data.getBoolean("powered");
         area = data.getByte("area");
     }
 
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-
-        data.writeBoolean(powered);
         data.writeByte(area);
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-
-        boolean p = data.readBoolean();
         setArea(data.readByte());
-
-        if (p != powered) {
-            powered = p;
-            markBlockNeedsUpdate();
-        }
     }
 
     @Override

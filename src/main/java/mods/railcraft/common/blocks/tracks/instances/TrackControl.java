@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -20,9 +21,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TrackControl extends TrackBaseRailcraft implements ITrackPowered, ITrackReversible {
-
-    private boolean powered = false;
-    private boolean reversed = false;
+    private boolean powered;
+    private boolean reversed;
     private static final double BOOST_AMOUNT = 0.02;
     private static final double SLOW_AMOUNT = 0.02;
 
@@ -32,11 +32,10 @@ public class TrackControl extends TrackBaseRailcraft implements ITrackPowered, I
     }
 
     @Override
-    public IIcon getIcon() {
-        if (isPowered() ^ reversed) {
-            return getIcon(1);
-        }
-        return getIcon(0);
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(REVERSED, isPowered() ^ reversed);
+        return state;
     }
 
     @Override
