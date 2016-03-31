@@ -86,7 +86,6 @@ public enum StandardStackFilters implements IStackFilter {
 
     @Override
     public final StackFilter and(@Nonnull final Predicate<? super ItemStack>... other) {
-        Objects.requireNonNull(other);
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
@@ -101,7 +100,6 @@ public enum StandardStackFilters implements IStackFilter {
 
     @Override
     public final StackFilter or(@Nonnull final Predicate<? super ItemStack>... other) {
-        Objects.requireNonNull(other);
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
