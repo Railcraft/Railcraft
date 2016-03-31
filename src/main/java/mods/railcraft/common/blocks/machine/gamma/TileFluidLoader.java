@@ -10,10 +10,8 @@ package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IFluidCart;
-import mods.railcraft.api.carts.ILiquidTransfer;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackLockdown;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.tracks.TileTrack;
 import mods.railcraft.common.carts.EntityLocomotiveSteam;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -54,7 +52,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     private static final int TRANSFER_RATE = 20;
     private static final float MAX_PIPE_LENGTH = 16 * 0.0625f;
     private static final float PIPE_INCREMENT = 0.01f;
-    private final MultiButtonController<ButtonState> stateController = new MultiButtonController<ButtonState>(ButtonState.FORCE_FULL.ordinal(), ButtonState.values());
+    private final MultiButtonController<ButtonState> stateController = MultiButtonController.create(ButtonState.FORCE_FULL.ordinal(), ButtonState.values());
     private int waitForReset = 0;
     private float pipeLenght = 0;
 
@@ -64,7 +62,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineGamma getMachineType() {
         return EnumMachineGamma.FLUID_LOADER;
     }
 
@@ -168,8 +166,6 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
         if (cart != currentCart) {
             if (currentCart instanceof IFluidCart)
                 ((IFluidCart) currentCart).setFilling(false);
-            else if (currentCart instanceof ILiquidTransfer)
-                ((ILiquidTransfer) currentCart).setFilling(false);
             setPowered(false);
             currentCart = cart;
             cartWasSent();
@@ -232,8 +228,6 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
 
         if (cart instanceof IFluidCart)
             ((IFluidCart) cart).setFilling(flowed);
-        else if (cart instanceof ILiquidTransfer)
-            ((ILiquidTransfer) cart).setFilling(flowed);
 
         if (tankCart.isTankFull(loaderTank.getFluidType()))
             waitForReset = RESET_WAIT;

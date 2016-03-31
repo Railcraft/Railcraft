@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.machine.gamma;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.api.core.items.IStackFilter;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.carts.ItemCartAnchor;
 import mods.railcraft.common.carts.ItemLocomotive;
@@ -21,13 +21,13 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.WorldServer;
 
 import java.util.Map;
@@ -49,7 +49,7 @@ public class TileDispenserTrain extends TileDispenserCart {
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineGamma getMachineType() {
         return EnumMachineGamma.DISPENSER_TRAIN;
     }
 
@@ -76,7 +76,7 @@ public class TileDispenserTrain extends TileDispenserCart {
         return true;
     }
 
-    private static class MinecartItemType implements IStackFilter {
+    private static class MinecartItemType extends StackFilter {
 
         private final ItemStack original;
 
@@ -85,7 +85,7 @@ public class TileDispenserTrain extends TileDispenserCart {
         }
 
         @Override
-        public boolean matches(ItemStack stack) {
+        public boolean apply(ItemStack stack) {
             if (stack == null)
                 return false;
             if (InvTools.isItemEqual(stack, original))
@@ -108,14 +108,12 @@ public class TileDispenserTrain extends TileDispenserCart {
             resetSpawnSequence();
             return false;
         }
-        int x = MiscTools.getXOnSide(getX(), direction);
-        int y = MiscTools.getYOnSide(getY(), direction);
-        int z = MiscTools.getZOnSide(getZ(), direction);
+        BlockPos offset = getPos().offset(direction);
         if ((spawn.getItem() instanceof ItemMinecart || spawn.getItem() instanceof IMinecartItem)
                 && CartTools.getMinecartOnSide(worldObj, getPos(), 0, direction) == null) {
             ItemStack cartItem = InvTools.removeOneItem(invStock, filter);
             if (cartItem != null) {
-                EntityMinecart cartPlaced = CartUtils.placeCart(getOwner(), cartItem, (WorldServer) worldObj, x, y, z);
+                EntityMinecart cartPlaced = CartUtils.placeCart(getOwner(), cartItem, (WorldServer) worldObj, offset);
                 if (cartPlaced != null) {
                     CartTools.getLinkageManager(worldObj).createLink(cartPlaced, lastCart);
                     lastCart = cartPlaced;

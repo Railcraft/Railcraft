@@ -1,12 +1,12 @@
 package mods.railcraft.common.blocks.machine.epsilon;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,19 +21,19 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TileAdminSteamProducer extends TileMachineBase implements IFluidHandler {
+public class TileAdminSteamProducer extends TileMachineBase<EnumMachineEpsilon> implements IFluidHandler {
 
     private boolean powered;
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block block) {
+        super.onNeighborBlockChange(state, block);
         checkRedstone();
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
         checkRedstone();
     }
 
@@ -70,7 +70,7 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineEpsilon getMachineType() {
         return EnumMachineEpsilon.ADMIN_STEAM_PRODUCER;
     }
 

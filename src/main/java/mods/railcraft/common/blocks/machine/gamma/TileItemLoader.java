@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -49,7 +50,7 @@ public class TileItemLoader extends TileLoaderItemBase {
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineGamma getMachineType() {
         return EnumMachineGamma.ITEM_LOADER;
     }
 
@@ -172,7 +173,7 @@ public class TileItemLoader extends TileLoaderItemBase {
                     }
                 }
                 if (!movedItemCart) {
-                    movedItemCart = InvTools.moveOneItemExcept(chests, cartInv, getItemFilters().getContents()) != null;
+                    movedItemCart = InvTools.moveOneItemExcept(chests, cartInv, StackFilter.anyOf(getItemFilters().getContents())) != null;
                 }
                 break;
             }

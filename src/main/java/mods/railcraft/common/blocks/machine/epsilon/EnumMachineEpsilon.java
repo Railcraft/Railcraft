@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineEpsilon implements IEnumMachine {
+public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
 
     ELECTRIC_FEEDER(Module.ELECTRICITY, "electric.feeder", TileElectricFeeder.class, 1, 1, 0),
     ELECTRIC_FEEDER_ADMIN(Module.ELECTRICITY, "electric.feeder.admin", TileElectricFeederAdmin.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
@@ -36,7 +36,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     ENGRAVING_BENCH(Module.EMBLEM, "engraving.bench", TileEngravingBench.class, 4, 1, 0, 1, 3, 3, 3, 3, 2);
     private final Module module;
     private final String tag;
-    private final Class<? extends TileMachineBase> tile;
+    private final Class<? extends TileMachineBase<EnumMachineEpsilon>> tile;
     private final int[] textureInfo;
     private static final List<EnumMachineEpsilon> creativeList = new ArrayList<EnumMachineEpsilon>();
     private static final EnumMachineEpsilon[] VALUES = values();
@@ -51,7 +51,7 @@ public enum EnumMachineEpsilon implements IEnumMachine {
         creativeList.add(ENGRAVING_BENCH);
     }
 
-    EnumMachineEpsilon(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineEpsilon(Module module, String tag, Class<? extends TileMachineBase<EnumMachineEpsilon>> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -87,11 +87,11 @@ public enum EnumMachineEpsilon implements IEnumMachine {
     }
 
     @Override
-    public Class getTileClass() {
+    public Class<? extends TileMachineBase<EnumMachineEpsilon>> getTileClass() {
         return tile;
     }
 
-    public TileMachineBase getTileEntity() {
+    public TileMachineBase<EnumMachineEpsilon> getTileEntity() {
         try {
             return tile.newInstance();
         } catch (Exception ex) {
@@ -133,5 +133,10 @@ public enum EnumMachineEpsilon implements IEnumMachine {
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

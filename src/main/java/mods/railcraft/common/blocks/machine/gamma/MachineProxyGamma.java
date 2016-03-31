@@ -8,23 +8,36 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.IMachineProxy;
 
 import java.util.List;
 
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class MachineProxyGamma implements IMachineProxy {
+public class MachineProxyGamma implements IMachineProxy<EnumMachineGamma> {
+    public static final PropertyEnum<EnumMachineGamma> VARIANT = PropertyEnum.create("variant", EnumMachineGamma.class);
 
     @Override
-    public IEnumMachine getMachine(int meta) {
+    public IProperty<EnumMachineGamma> getVariantProperty() {
+        return VARIANT;
+    }
+
+    @Override
+    public EnumMachineGamma getMachine(int meta) {
         return EnumMachineGamma.fromId(meta);
     }
 
     @Override
-    public List<? extends IEnumMachine> getCreativeList() {
+    public int getMeta(EnumMachineGamma machine) {
+        return machine.ordinal();
+    }
+
+    @Override
+    public List<EnumMachineGamma> getCreativeList() {
         return EnumMachineGamma.getCreativeList();
     }
 }

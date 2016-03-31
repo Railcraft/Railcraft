@@ -1,6 +1,8 @@
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
+
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
@@ -9,6 +11,7 @@ import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -17,13 +20,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid, IEnergyHandler {
+public class TileFluxTransformer extends TileMultiBlock<EnumMachineEpsilon> implements IElectricGrid, IEnergyReceiver {
 
-    public static void placeFluxTransformer(World world, int x, int y, int z) {
+    public static void placeFluxTransformer(World world, BlockPos pos) {
         for (MultiBlockPattern pattern : TileFluxTransformer.patterns) {
             Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
             blockMapping.put('B', EnumMachineEpsilon.FLUX_TRANSFORMER.ordinal());
-            pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineEpsilon(), blockMapping);
+            pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineEpsilon(), blockMapping);
             return;
         }
     }
@@ -73,7 +76,7 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineEpsilon getMachineType() {
         return EnumMachineEpsilon.FLUX_TRANSFORMER;
     }
 
@@ -97,11 +100,6 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
                 chargeHandler.addCharge((maxReceive / EU_RF_RATIO) * EFFICIENCY);
             return maxReceive;
         }
-        return 0;
-    }
-
-    @Override
-    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         return 0;
     }
 

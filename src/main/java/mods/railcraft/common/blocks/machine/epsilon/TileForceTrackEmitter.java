@@ -22,10 +22,13 @@ import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import java.io.DataInputStream;
@@ -35,7 +38,7 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileForceTrackEmitter extends TileMachineBase implements IElectricGrid {
+public class TileForceTrackEmitter extends TileMachineBase<EnumMachineEpsilon> implements IElectricGrid {
 
     private static final double BASE_DRAW = 22;
     private static final double CHARGE_PER_TRACK = 2;
@@ -69,15 +72,15 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block block) {
+        super.onNeighborBlockChange(state, block);
         checkRedstone();
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
-        facing = MiscTools.getHorizontalSideFacingPlayer(worldObj, getPos(), entityliving);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
+        facing = entityliving.getHorizontalFacing();
         checkRedstone();
     }
 
@@ -95,10 +98,9 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     public void onBlockRemoval() {
         super.onBlockRemoval();
         while (numTracks > 0) {
-            int x = getPos() + numTracks * facing.getFrontOffsetX();
-            int y = getY() + 1;
-            int z = getZ() + numTracks * facing.getFrontOffsetZ();
-            removeTrack(x, y, z);
+            int x = numTracks * facing.getFrontOffsetX();
+            int z = numTracks * facing.getFrontOffsetZ();
+            removeTrack(getPos().add(x, 1, z));
         }
     }
 
@@ -130,8 +132,8 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         chargeHandler.tick();
     }
 
-    private void spawnParticles(int x, int y, int z) {
-        EffectManager.instance.forceTrackSpawnEffect(worldObj, x, y, z);
+    private void spawnParticles(BlockPos pos) {
+        EffectManager.instance.forceTrackSpawnEffect(worldObj, pos.getX(), pos.getY(), pos.getZ());
     }
 
     private void extended() {
@@ -150,27 +152,28 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         if (numTracks >= MAX_TRACKS)
             state = State.EXTENDED;
         else if (clock % TICKS_PER_ACTION == 0) {
-            int x = getX() + (numTracks + 1) * facing.getFrontOffsetX();
-            int y = getY() + 1;
-            int z = getZ() + (numTracks + 1) * facing.getFrontOffsetZ();
-            if (WorldPlugin.isBlockLoaded(worldObj, x, y, z)) {
-                Block block = WorldPlugin.getBlock(worldObj, x, y, z);
-                EnumTrackMeta meta;
+            int ox = (numTracks + 1) * facing.getFrontOffsetX();
+            int oy = 1;
+            int oz = (numTracks + 1) * facing.getFrontOffsetZ();
+            BlockPos offset = getPos().add(ox, oy, oz);
+            if (WorldPlugin.isBlockLoaded(worldObj, offset)) {
+                Block block = WorldPlugin.getBlock(worldObj, offset);
+                EnumRailDirection direction;
                 if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH)
-                    meta = EnumTrackMeta.NORTH_SOUTH;
+                    direction = EnumRailDirection.NORTH_SOUTH;
                 else
-                    meta = EnumTrackMeta.EAST_WEST;
-                if (!placeTrack(x, y, z, block, meta) && !claimTrack(x, y, z, block, meta))
+                    direction = EnumRailDirection.EAST_WEST;
+                if (!placeTrack(offset, block, direction) && !claimTrack(offset, block, direction))
                     state = State.EXTENDED;
             } else
                 state = State.HALTED;
         }
     }
 
-    private boolean placeTrack(int x, int y, int z, Block block, EnumTrackMeta meta) {
-        if (WorldPlugin.blockIsAir(worldObj, x, y, z, block)) {
-            spawnParticles(x, y, z);
-            TileTrack track = TrackTools.placeTrack(EnumTrack.FORCE.getTrackSpec(), worldObj, x, y, z, meta.ordinal());
+    private boolean placeTrack(BlockPos pos, Block block, EnumRailDirection direction) {
+        if (WorldPlugin.isBlockAir(worldObj, pos, block)) {
+            spawnParticles(pos);
+            TileTrack track = TrackTools.placeTrack(EnumTrack.FORCE.getTrackSpec(), worldObj, pos, direction);
             ((TrackForce) track.getTrackInstance()).setEmitter(this);
             numTracks++;
             return true;
@@ -178,12 +181,12 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         return false;
     }
 
-    private boolean claimTrack(int x, int y, int z, Block block, EnumTrackMeta meta) {
+    private boolean claimTrack(BlockPos pos, Block block, EnumRailDirection direction) {
         if (block != RailcraftBlocks.getBlockTrack())
             return false;
-        if (TrackTools.getTrackMetaEnum(worldObj, block, null, x, y, z) != meta)
+        if (TrackTools.getTrackDirection(worldObj, pos) != direction)
             return false;
-        TileEntity tile = WorldPlugin.getBlockTile(worldObj, x, y, z);
+        TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos);
         if (!TrackTools.isTrackSpec(tile, EnumTrack.FORCE.getTrackSpec()))
             return false;
         TrackForce track = (TrackForce) ((TileTrack) tile).getTrackInstance();
@@ -212,17 +215,16 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         if (numTracks <= 0)
             state = State.RETRACTED;
         else if (clock % TICKS_PER_ACTION == 0) {
-            int x = getX() + numTracks * facing.getFrontOffsetX();
-            int y = getY() + 1;
-            int z = getZ() + numTracks * facing.getFrontOffsetZ();
-            removeTrack(x, y, z);
+            int x = numTracks * facing.getFrontOffsetX();
+            int z = numTracks * facing.getFrontOffsetZ();
+            removeTrack(getPos().add(x, 1, z));
         }
     }
 
-    private void removeTrack(int x, int y, int z) {
-        if (WorldPlugin.isBlockLoaded(worldObj, x, y, z) && TrackTools.isTrackAt(worldObj, x, y, z, EnumTrack.FORCE)) {
-            spawnParticles(x, y, z);
-            WorldPlugin.setBlockToAir(worldObj, x, y, z);
+    private void removeTrack(BlockPos pos) {
+        if (WorldPlugin.isBlockLoaded(worldObj, pos) && TrackTools.isTrackAt(worldObj, pos, EnumTrack.FORCE)) {
+            spawnParticles(pos);
+            WorldPlugin.setBlockToAir(worldObj, pos);
         }
         numTracks--;
     }
@@ -238,7 +240,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineEpsilon getMachineType() {
         return EnumMachineEpsilon.FORCE_TRACK_EMITTER;
     }
 
@@ -275,7 +277,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
         powered = data.getBoolean("powered");
-        facing = EnumFacing.getOrientation(data.getByte("facing"));
+        facing = EnumFacing.getFront(data.getByte("facing"));
         numTracks = data.getInteger("numTracks");
         state = State.valueOf(data.getString("state"));
     }

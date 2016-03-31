@@ -24,14 +24,14 @@ import net.minecraft.util.EnumFacing;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileElectricFeeder extends TileMachineBase implements IElectricGrid, ISinkDelegate {
+public class TileElectricFeeder extends TileMachineBase<EnumMachineEpsilon> implements IElectricGrid, ISinkDelegate {
 
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 1);
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineEpsilon getMachineType() {
         return EnumMachineEpsilon.ELECTRIC_FEEDER;
     }
 
