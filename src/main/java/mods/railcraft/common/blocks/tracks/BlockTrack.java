@@ -32,7 +32,7 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -41,6 +41,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -279,7 +280,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, int side) {
+    public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrack) {
             ITrackInstance track = ((TileTrack) tile).getTrackInstance();
@@ -289,7 +290,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public int isProvidingWeakPower(IBlockAccess world, BlockPos pos, int side) {
+    public int getWeakPower(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrack) {
             ITrackInstance track = ((TileTrack) tile).getTrackInstance();
@@ -408,17 +409,17 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, BlockPos pos, boolean willHarvest) {
+    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
         player.addExhaustion(0.025F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
-            dropBlockAsItem(world, pos, 0, 0);
+            dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
         return world.setBlockToAir(pos);
     }
 
     @Override
-    public void breakBlock(World world, BlockPos pos, Block block, int meta) {
-        super.breakBlock(world, pos, block, meta);
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        super.breakBlock(world, pos, state);
 
         try {
             TileEntity tile = WorldPlugin.getBlockTile(world, pos);
@@ -465,11 +466,11 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public float getExplosionResistance(Entity exploder, World world, BlockPos pos, double srcX, double srcY, double srcZ) {
+    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrack)
             try {
-                return ((TileTrack) tile).getTrackInstance().getExplosionResistance(srcX, srcY, srcZ, exploder) * 3f / 5f;
+                return ((TileTrack) tile).getTrackInstance().getExplosionResistance(explosion, exploder) * 3f / 5f;
             } catch (Error error) {
                 Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackInstance.class
                 );
@@ -483,23 +484,22 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, BlockPos pos) {
+    public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, SpawnPlacementType type) {
         return false;
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {
             if (tile instanceof TileTrack) {
                 ITrackInstance track = ((TileTrack) tile).getTrackInstance();
                 if (track instanceof IPostConnection)
-                    return ((IPostConnection) track).connectsToPost(world, pos, side);
+                    return ((IPostConnection) track).connectsToPost(world, pos, state, side);
             }
         } catch (Error error) {
             Game.logErrorAPI(Railcraft.MOD_ID, error, IPostConnection.class, ITrackInstance.class);
         }
         return ConnectStyle.NONE;
     }
-
 }

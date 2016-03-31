@@ -15,15 +15,17 @@ import mods.railcraft.api.tracks.ITrackCustomShape;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
+
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 
 import java.io.DataInputStream;
@@ -33,6 +35,8 @@ import java.io.IOException;
 // Referenced classes of package net.minecraft.src:
 //            TileEntity, NBTTagCompound, World
 public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, ITrackPowered, ITrackCustomShape, IPostConnection, ITrackBlocksMovement {
+
+    private static final double AABB_SHRINK = -0.375;
 
     protected boolean powered;
     protected boolean open;
@@ -52,23 +56,24 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox() {
-        return AxisAlignedBB.fromBounds(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity.xCoord + 1, tileEntity.yCoord + 1, tileEntity.zCoord + 1);
+        return AABBFactory.make().createBoxForTileAt(getPos()).build();
     }
 
     @Override
     public MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1) {
-        return MiscTools.collisionRayTrace(vec3d, vec3d1, getX(), getY(), getZ());
+        return MiscTools.collisionRayTrace(vec3d, vec3d1, getPos());
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox() {
-        int meta = tileEntity.getBlockMetadata();
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state) {
+        EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
         if (isGateOpen())
             return null;
-        if (meta == 0)
-            return AxisAlignedBB.fromBounds(tileEntity.xCoord, tileEntity.yCoord, (float) tileEntity.zCoord + 0.375F, tileEntity.xCoord + 1, (float) tileEntity.yCoord + 1.5F, (float) tileEntity.zCoord + 0.625F);
+        AABBFactory factory = AABBFactory.make().createBoxForTileAt(getPos()).raiseCeiling(0.5);
+        if (dir == EnumRailDirection.NORTH_SOUTH)
+            return factory.expandZAxis(AABB_SHRINK).build();
         else
-            return AxisAlignedBB.fromBounds((float) tileEntity.xCoord + 0.375F, tileEntity.yCoord, tileEntity.zCoord, (float) tileEntity.xCoord + 0.625F, (float) tileEntity.yCoord + 1.5F, tileEntity.zCoord + 1);
+            return factory.expandXAxis(AABB_SHRINK).build();
     }
 
     @Override
@@ -152,7 +157,7 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
 
     private void playSound() {
         if (Game.isHost(getWorld()))
-            SoundHelper.playFX(getWorld(), null, 1003, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0);
+            SoundHelper.playFX(getWorld(), null, 1003, tileEntity.getPos(), 0);
     }
 
     public boolean isGateOpen() {
@@ -160,7 +165,7 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, EnumFacing side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
         switch (side) {
             case UP:
             case DOWN:
