@@ -17,6 +17,7 @@ import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineGamma implements IEnumMachine {
+public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
     ITEM_LOADER(Module.TRANSPORT, "loader.item", 0, TileItemLoader.class),
     ITEM_UNLOADER(Module.TRANSPORT, "unloader.item", 0, TileItemUnloader.class),
@@ -41,7 +42,7 @@ public enum EnumMachineGamma implements IEnumMachine {
     private final Module module;
     private final String tag;
     private final int extraIcons;
-    private final Class<? extends TileMachineBase> tile;
+    private final Class<? extends TileMachineBase<EnumMachineGamma>> tile;
     private static final List<EnumMachineGamma> creativeList = new ArrayList<EnumMachineGamma>();
     private static final EnumMachineGamma[] VALUES = values();
     private ToolTip tip;
@@ -59,7 +60,7 @@ public enum EnumMachineGamma implements IEnumMachine {
         creativeList.add(DISPENSER_TRAIN);
     }
 
-    EnumMachineGamma(Module module, String tag, int numTextures, Class<? extends TileMachineBase> tile) {
+    EnumMachineGamma(Module module, String tag, int numTextures, Class<? extends TileMachineBase<EnumMachineGamma>> tile) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -87,12 +88,12 @@ public enum EnumMachineGamma implements IEnumMachine {
     }
 
     @Override
-    public Class getTileClass() {
+    public Class<? extends TileMachineBase<EnumMachineGamma>> getTileClass() {
         return tile;
     }
 
     @Override
-    public TileMachineBase getTileEntity() {
+    public TileMachineBase<EnumMachineGamma> getTileEntity() {
         try {
             return tile.newInstance();
         } catch (Exception ex) {
@@ -122,6 +123,11 @@ public enum EnumMachineGamma implements IEnumMachine {
         return RailcraftBlocks.getBlockMachineGamma();
     }
 
+    @Override
+    public IBlockState getState() {
+        return getBlock().getDefaultState().withProperty(MachineProxyGamma.VARIANT, this);
+    }
+
     public boolean isEnabled() {
         return ModuleManager.isModuleLoaded(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
     }
@@ -147,5 +153,10 @@ public enum EnumMachineGamma implements IEnumMachine {
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

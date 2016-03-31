@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
@@ -21,7 +20,7 @@ import net.minecraftforge.common.ForgeChunkManager;
 public class TileAnchorPassive extends TileAnchorWorld {
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.PASSIVE_ANCHOR;
     }
 

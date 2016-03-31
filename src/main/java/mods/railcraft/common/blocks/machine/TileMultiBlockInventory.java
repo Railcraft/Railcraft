@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileMultiBlockInventory extends TileMultiBlock implements IInventory {
+public abstract class TileMultiBlockInventory<M extends IEnumMachine<M>> extends TileMultiBlock<M> implements IInventory {
 
     protected final StandaloneInventory inv;
     private final String guiTag;
@@ -39,7 +39,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
-        TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
+        TileMultiBlockInventory<?> mBlock = (TileMultiBlockInventory<?>) getMasterBlock();
         if (mBlock != null)
             return mBlock.inv.decrStackSize(i, j);
         return null;
@@ -47,7 +47,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
+        TileMultiBlockInventory<?> mBlock = (TileMultiBlockInventory<?>) getMasterBlock();
         if (mBlock != null)
             return mBlock.inv.getStackInSlot(i);
         return null;
@@ -55,7 +55,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
-        TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
+        TileMultiBlockInventory<?> mBlock = (TileMultiBlockInventory<?>) getMasterBlock();
         if (mBlock != null)
             mBlock.inv.setInventorySlotContents(i, itemstack);
     }
@@ -108,5 +108,32 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
+    }
+
+    @Override
+    public ItemStack removeStackFromSlot(int index) {
+        ItemStack inSlot = getStackInSlot(index);
+        setInventorySlotContents(index, null);
+        return inSlot;
+    }
+
+    @Override
+    public int getField(int id) {
+        return inv.getField(id);
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        inv.setField(id, value);
+    }
+
+    @Override
+    public int getFieldCount() {
+        return inv.getFieldCount();
+    }
+
+    @Override
+    public void clear() {
+        inv.clear();
     }
 }

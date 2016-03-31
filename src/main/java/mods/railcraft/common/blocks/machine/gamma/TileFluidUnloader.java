@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.*;
 import mods.railcraft.common.gui.EnumGui;
@@ -38,10 +37,10 @@ import java.io.IOException;
 public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturnHandler {
 
     private static final int TRANSFER_RATE = 80;
-    private final MultiButtonController<ButtonState> stateController = new MultiButtonController<ButtonState>(ButtonState.EMPTY_COMPLETELY.ordinal(), ButtonState.values());
+    private final MultiButtonController<ButtonState> stateController = MultiButtonController.create(ButtonState.EMPTY_COMPLETELY.ordinal(), ButtonState.values());
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineGamma getMachineType() {
         return EnumMachineGamma.FLUID_UNLOADER;
     }
 

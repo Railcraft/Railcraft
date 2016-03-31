@@ -216,6 +216,10 @@ public abstract class InvTools {
         return stack;
     }
 
+    public static void dropItem(ItemStack stack, World world, BlockPos pos) {
+        dropItem(stack, world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+    }
+
     public static void dropItem(ItemStack stack, World world, double x, double y, double z) {
         if (stack == null || stack.stackSize < 1)
             return;

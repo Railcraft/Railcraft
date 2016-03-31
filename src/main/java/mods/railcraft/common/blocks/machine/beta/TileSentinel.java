@@ -10,7 +10,6 @@ package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
@@ -24,10 +23,10 @@ import net.minecraft.util.EnumFacing;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileSentinel extends TileMachineBase {
+public class TileSentinel extends TileMachineBase<EnumMachineBeta> {
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineBeta getMachineType() {
         return EnumMachineBeta.SENTINEL;
     }
 
@@ -36,11 +35,11 @@ public class TileSentinel extends TileMachineBase {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
+            if (crowbar.canWhack(player, current, getPos())) {
                 WorldCoordinate target = TileAnchorWorld.getTarget(player);
                 if (target == null)
                     TileAnchorWorld.setTarget(this, player);
-                else if (worldObj.provider.getDimensionId() != target.dimension)
+                else if (worldObj.provider.getDimensionId() != target.getDim())
                     ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getLocalizationTag());
                 else if (new WorldCoordinate(this).equals(target)) {
                     TileAnchorWorld.removeTarget(player);
@@ -52,7 +51,7 @@ public class TileSentinel extends TileMachineBase {
                     else if (tile != null)
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.invalid", getLocalizationTag());
                 }
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+                crowbar.onWhack(player, current, getPos());
                 return true;
             }
         }

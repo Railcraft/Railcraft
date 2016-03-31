@@ -13,7 +13,6 @@ import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockOven;
@@ -29,6 +28,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -48,7 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
+public class TileBlastFurnace extends TileMultiBlockOven<EnumMachineAlpha> implements ISidedInventory {
 
     public static final IStackFilter INPUT_FILTER = new StackFilter() {
         @Override
@@ -141,12 +141,12 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         super("railcraft.gui.blast.furnace", 3, patterns);
     }
 
-    public static void placeBlastFurnace(World world, int x, int y, int z, ItemStack input, ItemStack output, ItemStack fuel) {
+    public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel) {
         for (MultiBlockPattern pattern : TileBlastFurnace.patterns) {
             Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
             blockMapping.put('B', EnumMachineAlpha.BLAST_FURNACE.ordinal());
             blockMapping.put('W', EnumMachineAlpha.BLAST_FURNACE.ordinal());
-            TileEntity tile = pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
+            TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
             if (tile instanceof TileBlastFurnace) {
                 TileBlastFurnace master = (TileBlastFurnace) tile;
                 master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_INPUT, input);
@@ -157,21 +157,23 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.BLAST_FURNACE;
     }
 
     @Override
     protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        Block block = worldObj.getBlockState(pos).getBlock();
+        IBlockState state = worldObj.getBlockState(pos);
+        Block block = state.getBlock();
+        int meta = block.getMetaFromState(state);
         switch (mapPos) {
             case 'O':
-                if (block != RailcraftBlocks.getBlockMachineAlpha() || worldObj.getBlockMetadata(i, j, k) != getBlockMetadata())
+                if (block != RailcraftBlocks.getBlockMachineAlpha() || meta != getBlockMetadata())
                     return true;
                 break;
             case 'B':
             case 'W':
-                if (block == RailcraftBlocks.getBlockMachineAlpha() && worldObj.getBlockMetadata(i, j, k) == getBlockMetadata())
+                if (block == RailcraftBlocks.getBlockMachineAlpha() && meta == getBlockMetadata())
                     return true;
                 break;
             case 'A':
@@ -204,16 +206,16 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     private void setLavaIdle() {
         BlockPos offsetPos = getPos().add(1, 1, 1);
         if (worldObj.isAirBlock(offsetPos))
-            worldObj.setBlockState(offsetPos, Blocks.lava, 7, 3);
+            worldObj.setBlockState(offsetPos, Blocks.lava.getStateFromMeta(7), 3);
     }
 
     private void setLavaBurn() {
         BlockPos offsetPos = getPos().add(1, 1, 1);
         if (worldObj.isAirBlock(offsetPos))
-            worldObj.setBlockState(offsetPos, Blocks.flowing_lava, 1, 3);
+            worldObj.setBlockState(offsetPos, Blocks.flowing_lava.getStateFromMeta(1), 3);
         offsetPos = offsetPos.up();
         if (worldObj.isAirBlock(offsetPos))
-            worldObj.setBlockState(offsetPos, Blocks.flowing_lava, 1, 3);
+            worldObj.setBlockState(offsetPos, Blocks.flowing_lava.getStateFromMeta(1), 3);
     }
 
     /*private void destroyLava() {
@@ -306,7 +308,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock masterBlock = getMasterBlock();
+        TileMultiBlock<?> masterBlock = getMasterBlock();
         if (masterBlock != null) {
             GuiHandler.openGui(EnumGui.BLAST_FURNACE, player, worldObj, masterBlock.getX(), masterBlock.getY(), masterBlock.getZ());
             return true;
@@ -367,9 +369,9 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
             case SLOT_OUTPUT:
                 return false;
             case SLOT_FUEL:
-                return FUEL_FILTER.matches(stack);
+                return FUEL_FILTER.apply(stack);
             case SLOT_INPUT:
-                return INPUT_FILTER.matches(stack);
+                return INPUT_FILTER.apply(stack);
         }
         return false;
     }

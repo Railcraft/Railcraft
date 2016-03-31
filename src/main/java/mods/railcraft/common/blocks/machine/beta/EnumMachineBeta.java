@@ -17,6 +17,7 @@ import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumMachineBeta implements IEnumMachine {
+public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
 
     TANK_IRON_WALL(Module.TRANSPORT, "tank.iron.wall", TileTankIronWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
     TANK_IRON_GAUGE(Module.TRANSPORT, "tank.iron.gauge", TileTankIronGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
@@ -46,7 +47,7 @@ public enum EnumMachineBeta implements IEnumMachine {
     TANK_STEEL_VALVE(Module.TRANSPORT, "tank.steel.valve", TileTankSteelValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3);
     private final Module module;
     private final String tag;
-    private final Class<? extends TileMachineBase> tile;
+    private final Class<? extends TileMachineBase<EnumMachineBeta>> tile;
     private final int[] textureInfo;
     private static final List<EnumMachineBeta> creativeList = new ArrayList<EnumMachineBeta>();
     private static final EnumMachineBeta[] VALUES = values();
@@ -71,7 +72,7 @@ public enum EnumMachineBeta implements IEnumMachine {
         creativeList.add(METALS_CHEST);
     }
 
-    EnumMachineBeta(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineBeta(Module module, String tag, Class<? extends TileMachineBase<EnumMachineBeta>> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -107,11 +108,12 @@ public enum EnumMachineBeta implements IEnumMachine {
     }
 
     @Override
-    public Class getTileClass() {
+    public Class<? extends TileMachineBase<EnumMachineBeta>> getTileClass() {
         return tile;
     }
 
-    public TileMachineBase getTileEntity() {
+    @Override
+    public TileMachineBase<EnumMachineBeta> getTileEntity() {
         try {
             return tile.newInstance();
         } catch (Exception ex) {
@@ -141,6 +143,11 @@ public enum EnumMachineBeta implements IEnumMachine {
         return RailcraftBlocks.getBlockMachineBeta();
     }
 
+    @Override
+    public IBlockState getState() {
+        return getBlock().getDefaultState().withProperty(MachineProxyBeta.VARIANT, this);
+    }
+
     public boolean isEnabled() {
         return ModuleManager.isModuleLoaded(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
     }
@@ -150,6 +157,7 @@ public enum EnumMachineBeta implements IEnumMachine {
         return getBlock() != null && isEnabled();
     }
 
+    @Override
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
         if (tip != null)
             return tip;
@@ -157,5 +165,10 @@ public enum EnumMachineBeta implements IEnumMachine {
         if (LocalizationPlugin.hasTag(tipTag))
             tip = ToolTip.buildToolTip(tipTag);
         return tip;
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }

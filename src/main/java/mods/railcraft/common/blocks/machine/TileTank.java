@@ -32,7 +32,7 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTank extends TileMultiBlockInventory implements IFluidHandler, ITankTile, ISidedInventory {
+public abstract class TileTank<M extends IEnumMachine<M>> extends TileMultiBlockInventory<M> implements IFluidHandler, ITankTile, ISidedInventory {
 
     protected final TankManager tankManager = new TankManager();
 
@@ -47,7 +47,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
 
     @Override
     public TankManager getTankManager() {
-        TileTank mBlock = (TileTank) getMasterBlock();
+        TileTank<?> mBlock = (TileTank<?>) getMasterBlock();
         if (mBlock != null) {
             return mBlock.tankManager;
         }
@@ -56,7 +56,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
 
     @Override
     public StandardTank getTank() {
-        TileTank mBlock = (TileTank) getMasterBlock();
+        TileTank<?> mBlock = (TileTank<?>) getMasterBlock();
         if (mBlock != null) {
             return mBlock.tankManager.get(0);
         }

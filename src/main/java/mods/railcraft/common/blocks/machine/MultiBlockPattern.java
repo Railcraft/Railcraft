@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;

@@ -8,12 +8,15 @@
  */
 package mods.railcraft.common.blocks.machine.alpha.ai;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import net.minecraft.block.Block;
+
+import com.google.common.base.Predicates;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 
 /**
@@ -27,21 +30,19 @@ public class EntityAIMoveToBlock extends EntityAIBase {
      */
     private final int maxDist;
     private final float weight;
-    private final Block searchedBlock;
-    private final int searchedMeta;
+    private final IBlockState searchedState;
     /**
      * The closest entity which is being watched by this one.
      */
-    protected WorldCoordinate watchedBlock;
+    protected BlockPos watchedBlock;
 
-    public EntityAIMoveToBlock(EntityCreature entity, Block searchedBlock, int searchedMeta, int maxDist) {
-        this(entity, searchedBlock, searchedMeta, maxDist, 0.001F);
+    public EntityAIMoveToBlock(EntityCreature entity, IBlockState searchedState, int maxDist) {
+        this(entity, searchedState, maxDist, 0.001F);
     }
 
-    public EntityAIMoveToBlock(EntityCreature entity, Block searchedBlock, int searchedMeta, int maxDist, float weight) {
+    public EntityAIMoveToBlock(EntityCreature entity, IBlockState searchedState, int maxDist, float weight) {
         this.entity = entity;
-        this.searchedBlock = searchedBlock;
-        this.searchedMeta = searchedMeta;
+        this.searchedState = searchedState;
         this.maxDist = maxDist;
         this.weight = weight;
         this.setMutexBits(1);
@@ -61,15 +62,15 @@ public class EntityAIMoveToBlock extends EntityAIBase {
             return false;
 
         if (watchedBlock == null || !isBlockValid())
-            watchedBlock = WorldPlugin.findBlock(entity.worldObj, (int) entity.posX, (int) entity.posY, (int) entity.posZ, maxDist, searchedBlock, searchedMeta);
+            watchedBlock = WorldPlugin.findBlock(entity.worldObj, entity.getPosition(), maxDist, Predicates.equalTo(searchedState));
 
         return watchedBlock != null;
     }
 
     private boolean isBlockValid() {
-        if (searchedBlock != WorldPlugin.getBlock(entity.worldObj, watchedBlock))
+        if (searchedState != WorldPlugin.getBlockState(entity.worldObj, watchedBlock))
             return false;
-        return WorldPlugin.getDistanceSq(watchedBlock, entity.posX, entity.posY, entity.posZ) <= maxDist * maxDist;
+        return entity.getDistanceSq(watchedBlock) <= maxDist * maxDist;
     }
 
     /**
@@ -87,12 +88,13 @@ public class EntityAIMoveToBlock extends EntityAIBase {
      */
     @Override
     public void startExecuting() {
-        if (entity.getDistanceSq(watchedBlock.x + 0.5D, watchedBlock.y + 0.5D, watchedBlock.z + 0.5D) > 256.0D) {
-            Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(entity, 14, 3, new Vec3(watchedBlock.x + 0.5D, watchedBlock.y + 0.5D, watchedBlock.z + 0.5D));
+        if (entity.getDistanceSq(watchedBlock.getX() + 0.5D, watchedBlock.getY() + 0.5D, watchedBlock.getZ() + 0.5D) > 256.0D) {
+            Vec3 vec1 = new Vec3(watchedBlock.getX() + 0.5, watchedBlock.getY() + 0.5, watchedBlock.getZ() + 0.5);
+            Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(entity, 14, 3, vec1);
             if (vec3 != null)
                 move(vec3.xCoord, vec3.yCoord, vec3.zCoord);
         } else
-            move(watchedBlock.x + 0.5D, watchedBlock.y + 0.5D, watchedBlock.z + 0.5D);
+            move(watchedBlock.getX() + 0.5D, watchedBlock.getY() + 0.5D, watchedBlock.getZ() + 0.5D);
     }
 
     private void move(double x, double y, double z) {

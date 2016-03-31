@@ -56,7 +56,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineGamma getMachineType() {
         return EnumMachineGamma.ITEM_UNLOADER;
     }
 

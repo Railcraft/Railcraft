@@ -14,6 +14,8 @@ import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.inventory.ISidedInventory;
@@ -74,8 +76,8 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)
             direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
@@ -201,7 +203,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         energy = data.getInteger("energy");
-        direction = EnumFacing.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getFront(data.getByte("direction"));
 
         countUpgrades();
     }
@@ -219,7 +221,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = EnumFacing.getOrientation(data.readByte());
+        direction = EnumFacing.getFront(data.readByte());
         storageUpgrades = data.readShort();
         lapotronUpgrades = data.readShort();
     }

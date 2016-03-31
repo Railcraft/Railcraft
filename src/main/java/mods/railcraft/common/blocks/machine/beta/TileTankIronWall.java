@@ -8,16 +8,13 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
-
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTankIronWall extends TileTankBase {
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineBeta getMachineType() {
         return EnumMachineBeta.TANK_IRON_WALL;
     }
 }

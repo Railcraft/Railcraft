@@ -15,6 +15,7 @@ import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -29,7 +30,7 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileEngine extends TileMachineBase implements IEnergyConnection {
+public abstract class TileEngine extends TileMachineBase<EnumMachineBeta> implements IEnergyConnection {
 
     public float currentOutput = 0;
     public int energy;
@@ -180,10 +181,10 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         if (current != null)
             if (current.getItem() instanceof IToolWrench) {
                 IToolWrench wrench = (IToolWrench) current.getItem();
-                if (wrench.canWrench(player, getX(), getY(), getZ()))
+                if (wrench.canWrench(player, getPos()))
                     if (Game.isHost(worldObj) && getEnergyStage() == EnergyStage.OVERHEAT) {
                         resetEnergyStage();
-                        wrench.wrenchUsed(player, getX(), getY(), getZ());
+                        wrench.wrenchUsed(player, getPos());
                         return true;
                     }
             }
@@ -198,15 +199,15 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
         switchOrientation();
         checkPower();
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block block) {
+        super.onNeighborBlockChange(state, block);
         if (Game.isNotHost(getWorld()))
             return;
         checkPower();
@@ -231,7 +232,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
     public boolean switchOrientation() {
         for (int i = direction.ordinal() + 1; i < direction.ordinal() + 6; ++i) {
-            EnumFacing dir = EnumFacing.getOrientation(i % 6);
+            EnumFacing dir = EnumFacing.getFront(i % 6);
 
             TileEntity tile = tileCache.getTileOnSide(dir);
 
@@ -381,7 +382,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        direction = EnumFacing.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getFront(data.getByte("direction"));
         powered = data.getBoolean("powered");
         energy = data.getInteger("energyRF");
         currentOutput = data.getFloat("currentOutput");
@@ -401,7 +402,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = EnumFacing.getOrientation(data.readByte());
+        direction = EnumFacing.getFront(data.readByte());
         energyStage = EnergyStage.fromOrdinal(data.readByte());
         isActive = data.readBoolean();
     }

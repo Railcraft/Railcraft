@@ -8,15 +8,13 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileAnchorAdmin extends TileAnchorWorld {
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.ADMIN_ANCHOR;
     }
 

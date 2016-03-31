@@ -28,7 +28,7 @@ import java.util.Set;
 
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 
-public abstract class TileMultiBlockOven extends TileMultiBlockInventory implements INeedsFuel, IHasWork {
+public abstract class TileMultiBlockOven<M extends IEnumMachine<M>> extends TileMultiBlockInventory<M> implements INeedsFuel, IHasWork {
 
     private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
     protected int cookTime;
@@ -73,15 +73,15 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     public void randomDisplayTick(Random random) {
         updateLighting();
         if (getPatternMarker() == 'W' && isStructureValid() && random.nextInt(100) < 20 && isBurning()) {
-            float f = (float) getX() + 0.5F;
-            float f1 = getY() + 0.4375F + (random.nextFloat() * 3F / 16F);
-            float f2 = (float) getZ() + 0.5F;
-            float f3 = 0.52F;
-            float f4 = random.nextFloat() * 0.6F - 0.3F;
-            worldObj.spawnParticle(FLAME, f - f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-            worldObj.spawnParticle(FLAME, f + f3, f1, f2 + f4, 0.0D, 0.0D, 0.0D);
-            worldObj.spawnParticle(FLAME, f + f4, f1, f2 - f3, 0.0D, 0.0D, 0.0D);
-            worldObj.spawnParticle(FLAME, f + f4, f1, f2 + f3, 0.0D, 0.0D, 0.0D);
+            float x = getPos().getX() + 0.5F;
+            float y = getPos().getY() + 0.4375F + (random.nextFloat() * 3F / 16F);
+            float z = getPos().getZ() + 0.5F;
+            float offset = 0.52F;
+            float randVal = random.nextFloat() * 0.6F - 0.3F;
+            worldObj.spawnParticle(FLAME, x - offset, y, z + randVal, 0.0D, 0.0D, 0.0D);
+            worldObj.spawnParticle(FLAME, x + offset, y, z + randVal, 0.0D, 0.0D, 0.0D);
+            worldObj.spawnParticle(FLAME, x + randVal, y, z - offset, 0.0D, 0.0D, 0.0D);
+            worldObj.spawnParticle(FLAME, x + randVal, y, z + offset, 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -118,7 +118,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     public int getCookTime() {
-        TileMultiBlockOven masterOven = (TileMultiBlockOven) getMasterBlock();
+        TileMultiBlockOven<?> masterOven = (TileMultiBlockOven<?>) getMasterBlock();
         if (masterOven != null) {
             return masterOven.cookTime;
         }
@@ -130,7 +130,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     public boolean isCooking() {
-        TileMultiBlockOven masterOven = (TileMultiBlockOven) getMasterBlock();
+        TileMultiBlockOven<?> masterOven = (TileMultiBlockOven<?>) getMasterBlock();
         if (masterOven != null) {
             return masterOven.cooking;
         }
@@ -187,7 +187,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
 
     @Override
     public void actionActivated(IActionExternal action) {
-        TileMultiBlockOven mBlock = (TileMultiBlockOven) getMasterBlock();
+        TileMultiBlockOven<?> mBlock = (TileMultiBlockOven<?>) getMasterBlock();
         if (mBlock != null) {
             mBlock.actions.add(action);
         }

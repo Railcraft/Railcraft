@@ -8,8 +8,9 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.misc.MiscTools;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,7 +25,7 @@ public class TileItemUnloaderAdvanced extends TileItemUnloader {
     private EnumFacing direction = EnumFacing.NORTH;
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineGamma getMachineType() {
         return EnumMachineGamma.ITEM_UNLOADER_ADVANCED;
     }
 
@@ -39,7 +40,7 @@ public class TileItemUnloaderAdvanced extends TileItemUnloader {
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        direction = EnumFacing.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getFront(data.getByte("direction"));
     }
 
     @Override
@@ -53,12 +54,12 @@ public class TileItemUnloaderAdvanced extends TileItemUnloader {
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = EnumFacing.getOrientation(data.readByte());
+        direction = EnumFacing.getFront(data.readByte());
     }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)
             direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);

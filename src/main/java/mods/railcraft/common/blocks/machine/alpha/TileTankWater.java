@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileTank;
@@ -49,7 +48,7 @@ import java.util.Map;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankWater extends TileTank implements ISidedInventory {
+public class TileTankWater extends TileTank<EnumMachineAlpha> implements ISidedInventory {
 
     private final static int OUTPUT_RATE = 40;
     private final static int TANK_CAPACITY = FluidHelper.BUCKET_VOLUME * 400;
@@ -125,11 +124,11 @@ public class TileTankWater extends TileTank implements ISidedInventory {
         tankManager.add(tank);
     }
 
-    public static void placeWaterTank(World world, int x, int y, int z, int water) {
+    public static void placeWaterTank(World world, BlockPos pos, int water) {
         for (MultiBlockPattern pattern : TileTankWater.patterns) {
             Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
             blockMapping.put('B', EnumMachineAlpha.TANK_WATER.ordinal());
-            TileEntity tile = pattern.placeStructure(world, x, y, z, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
+            TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
             if (tile instanceof TileTankWater) {
                 TileTankWater master = (TileTankWater) tile;
                 master.tank.setFluid(Fluids.WATER.get(water));
@@ -139,7 +138,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     }
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineAlpha getMachineType() {
         return EnumMachineAlpha.TANK_WATER;
     }
 
@@ -156,7 +155,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     @Override
     public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         if (Game.isHost(worldObj)) {
-            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), EnumFacing.VALUES[side], player, true, true))
+            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), side, player, true, true))
                 return true;
         } else if (FluidItemHelper.isContainer(player.inventory.getCurrentItem()))
             return true;
@@ -171,7 +170,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
             if (isMaster()) {
                 if (worldObj.provider.getDimensionId() != -1 && clock % REFILL_INTERVAL == 0) {
                     float rate = REFILL_RATE;
-                    BiomeGenBase biome = worldObj.getBiomeGenForCoords(getX(), getZ());
+                    BiomeGenBase biome = worldObj.getBiomeGenForCoords(getPos());
                     float humidity = biome.rainfall;
                     rate *= humidity;
 //                    String debug = "Biome=" + biome.biomeName + ", Humidity=" + humidity;
@@ -216,7 +215,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
+        TileMultiBlock<?> mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.TANK, player, worldObj, mBlock.getPos());
             return true;

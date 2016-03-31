@@ -34,7 +34,7 @@ public class TileEnergyUnloader extends TileLoaderEnergyBase implements IEmitter
     private TileEntity emitterDelegate;
 
     @Override
-    public IEnumMachine getMachineType() {
+    public EnumMachineGamma getMachineType() {
         return EnumMachineGamma.ENERGY_UNLOADER;
     }
 
