@@ -75,13 +75,13 @@ public class TrackTools {
     }
 
     @Nullable
-    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, EntityMinecart cart) {
+    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, @Nullable EntityMinecart cart) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         return getTrackDirection(world, pos, state, cart);
     }
 
     @Nullable
-    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state, EntityMinecart cart) {
+    public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
         if (state.getBlock() instanceof BlockRailBase)
             return ((BlockRailBase) state.getBlock()).getRailDirection(world, pos, state, cart);
         return null;
