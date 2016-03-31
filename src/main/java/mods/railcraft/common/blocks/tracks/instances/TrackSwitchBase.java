@@ -9,26 +9,35 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.tracks.instances;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.*;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+
 import mods.railcraft.api.tracks.ISwitchDevice;
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -140,8 +149,8 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     @Override
-    public void onBlockPlaced() {
-        determineTrackMeta();
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        determineRailDirection();
         determineMirror();
 
         // Notify any neighboring switches that we exist so they know to register themselves with us
@@ -155,55 +164,49 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         ((RailcraftTileEntity) tileEntity).notifyBlocksOfNeighborChange();
     }
 
-    protected void determineTrackMeta() {
-        int x = tileEntity.xCoord;
-        int y = tileEntity.yCoord;
-        int z = tileEntity.zCoord;
-        int meta = tileEntity.getBlockMetadata();
-        if (TrackTools.isRailBlockAt(getWorld(), x + 1, y, z) && TrackTools.isRailBlockAt(getWorld(), x - 1, y, z)) {
-            if (meta != EnumTrackMeta.EAST_WEST.ordinal())
-                getWorld().setBlockMetadataWithNotify(x, y, z, EnumTrackMeta.EAST_WEST.ordinal(), 3);
-        } else if (TrackTools.isRailBlockAt(getWorld(), x, y, z + 1) && TrackTools.isRailBlockAt(getWorld(), x, y, z - 1)) {
-            if (meta != EnumTrackMeta.NORTH_SOUTH.ordinal())
-                getWorld().setBlockMetadataWithNotify(x, y, z, EnumTrackMeta.NORTH_SOUTH.ordinal(), 3);
-        } else if (meta != EnumTrackMeta.NORTH_SOUTH.ordinal())
-            getWorld().setBlockMetadataWithNotify(x, y, z, EnumTrackMeta.NORTH_SOUTH.ordinal(), 3);
+    protected void determineRailDirection() {
+        EnumRailDirection dir = TrackTools.getTrackDirectionRaw(getWorld().getBlockState(getPos()));
+        if (TrackTools.isRailBlockAt(getWorld(), getPos().east()) && TrackTools.isRailBlockAt(getWorld(), getPos().west())) {
+            if (dir != EnumRailDirection.EAST_WEST)
+                TrackTools.setTrackDirection(getWorld(), getPos(), EnumRailDirection.EAST_WEST);
+//        } else if (TrackTools.isRailBlockAt(getWorld(), getPos().north()) && TrackTools.isRailBlockAt(getWorld(), getPos().south())) {
+//            if (dir != EnumRailDirection.NORTH_SOUTH)
+//                getWorld().setBlockState(getPos(), current.withProperty(shapeProp, EnumRailDirection.NORTH_SOUTH));
+        } else if (dir != EnumRailDirection.NORTH_SOUTH)
+            TrackTools.setTrackDirection(getWorld(), getPos(), EnumRailDirection.NORTH_SOUTH);
     }
 
     protected void determineMirror() {
-        int x = tileEntity.xCoord;
-        int y = tileEntity.yCoord;
-        int z = tileEntity.zCoord;
-        int meta = tileEntity.getBlockMetadata();
+        EnumRailDirection dir = TrackTools.getTrackDirection(getWorld(), getPos());
         boolean prevValue = isMirrored();
-        if (meta == EnumTrackMeta.NORTH_SOUTH.ordinal()) {
-            int ii = x;
-            if (TrackTools.isRailBlockAt(getWorld(), x - 1, y, z)) {
-                ii--;
+        if (dir == EnumRailDirection.NORTH_SOUTH) {
+            BlockPos offset = getPos();
+            if (TrackTools.isRailBlockAt(getWorld(), offset.west())) {
+                offset = offset.west();
                 mirrored = true; // West
             } else {
-                ii++;
+                offset = offset.east();
                 mirrored = false; // East
             }
-            if (TrackTools.isRailBlockAt(getWorld(), ii, y, z)) {
-                int otherMeta = getWorld().getBlockMetadata(ii, y, z);
-                if (otherMeta == EnumTrackMeta.NORTH_SOUTH.ordinal())
-                    getWorld().setBlockMetadataWithNotify(ii, y, z, EnumTrackMeta.EAST_WEST.ordinal(), 3);
+            if (TrackTools.isRailBlockAt(getWorld(), offset)) {
+                EnumRailDirection otherDir = TrackTools.getTrackDirection(getWorld(), offset);
+                if (otherDir == EnumRailDirection.NORTH_SOUTH)
+                    TrackTools.setTrackDirection(getWorld(), offset, EnumRailDirection.EAST_WEST);
             }
-        } else if (meta == EnumTrackMeta.EAST_WEST.ordinal())
-            mirrored = TrackTools.isRailBlockAt(getWorld(), x, y, z - 1);
+        } else if (dir == EnumRailDirection.EAST_WEST)
+            mirrored = TrackTools.isRailBlockAt(getWorld(), getPos().north());
 
         if (prevValue != isMirrored())
             sendUpdateToClient();
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
+    public void onNeighborBlockChange(IBlockState state, Block block) {
         if (Game.isHost(getWorld())) {
-            determineTrackMeta();
+            determineRailDirection();
             determineMirror();
         }
-        super.onNeighborBlockChange(block);
+        super.onNeighborBlockChange(state, block);
     }
 
     private void writeCartsToNBT(String key, Set<UUID> carts, NBTTagCompound data) {
@@ -320,9 +323,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         // We only set sprung/locked when a cart enters our track, this is
         // mainly for visual purposes as the subclass's getRailDirection()
         // determines which direction the carts actually take.
-        List<UUID> cartsOnTrack = CartUtils.getMinecartUUIDsAt(
-                getWorld(), tileEntity.xCoord, tileEntity.yCoord,
-                tileEntity.zCoord, 0.3f);
+        List<UUID> cartsOnTrack = CartUtils.getMinecartUUIDsAt(getWorld(), tileEntity.getPos(), 0.3f);
 
         EntityMinecart bestCart = getBestCartForVisualState(cartsOnTrack);
 
@@ -352,8 +353,8 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     private double crudeDistance(EntityMinecart cart) {
-        double cx = getX() + .5; // Why not calc this outside and cache it?
-        double cz = getZ() + .5; // b/c this is a rare occurance that we need to calc this
+        double cx = getPos().getX() + .5; // Why not calc this outside and cache it?
+        double cz = getPos().getZ() + .5; // b/c this is a rare occurance that we need to calc this
         return Math.abs(cart.posX - cx) + Math.abs(cart.posZ - cz); // not the real distance function but enough for us
     }
 

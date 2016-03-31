@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerReinforced;
 import net.minecraft.entity.Entity;
+import net.minecraft.world.Explosion;
 
 
 public class TrackReinforced extends TrackBaseRailcraft {
@@ -42,7 +43,7 @@ public class TrackReinforced extends TrackBaseRailcraft {
     }
 
     @Override
-    public float getExplosionResistance(double srcX, double srcY, double srcZ, Entity exploder) {
+    public float getExplosionResistance(Explosion explosion, Entity exploder) {
         return RESISTANCE;
     }
 }

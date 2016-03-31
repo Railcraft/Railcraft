@@ -47,10 +47,10 @@ public class TrackLimiter extends TrackBaseRailcraft implements ITrackPowered {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
+            if (crowbar.canWhack(player, current, getPos())) {
                 mode++;
                 mode %= NUM_MODES;
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+                crowbar.onWhack(player, current, getPos());
                 sendUpdateToClient();
                 return true;
             }

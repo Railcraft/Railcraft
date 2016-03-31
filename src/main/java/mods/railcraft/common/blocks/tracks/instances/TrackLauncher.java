@@ -61,9 +61,9 @@ public class TrackLauncher extends TrackReinforced implements ITrackPowered, IGu
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
-                GuiHandler.openGui(EnumGui.TRACK_LAUNCHER, player, getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
-                crowbar.onWhack(player, current, getX(), getY(), getZ());
+            if (crowbar.canWhack(player, current, getPos())) {
+                GuiHandler.openGui(EnumGui.TRACK_LAUNCHER, player, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+                crowbar.onWhack(player, current, getPos());
                 return true;
             }
         }

@@ -10,6 +10,9 @@
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.common.blocks.tracks.EnumTrack;
+
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 
 public class TrackJunction extends TrackBaseRailcraft {
@@ -25,9 +28,9 @@ public class TrackJunction extends TrackBaseRailcraft {
     }
 
     @Override
-    public int getRailDirection(EntityMinecart cart) {
+    public EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
         if (cart == null) {
-            return EnumTrackMeta.NORTH_SOUTH.ordinal();
+            return EnumRailDirection.NORTH_SOUTH;
         }
         float yaw = cart.prevRotationYaw;
         yaw = yaw % 180;
@@ -35,8 +38,8 @@ public class TrackJunction extends TrackBaseRailcraft {
             yaw += 180;
         }
         if ((yaw >= 45) && (yaw <= 135)) {
-            return EnumTrackMeta.NORTH_SOUTH.ordinal();
+            return EnumRailDirection.NORTH_SOUTH;
         }
-        return EnumTrackMeta.EAST_WEST.ordinal();
+        return  EnumRailDirection.EAST_WEST;
     }
 }
