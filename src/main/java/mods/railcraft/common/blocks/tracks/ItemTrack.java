@@ -17,6 +17,8 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -24,12 +26,15 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import java.util.List;
 
 public class ItemTrack extends ItemBlock implements ITrackItem {
@@ -67,7 +72,7 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean advanced) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advanced) {
         super.addInformation(stack, player, list, advanced);
         try {
             TrackSpec spec = getTrackSpec(stack);
@@ -95,36 +100,47 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
     }
 
     @Override
-    public boolean placeTrack(ItemStack stack, World world, int i, int j, int k) {
-        return placeTrack(stack, world, i, j, k, 1);
+    public boolean placeTrack(ItemStack stack, World world, BlockPos pos, @Nullable EnumRailDirection trackShape) {
+        return placeTrack(stack, world, pos, trackShape, EnumFacing.UP);
     }
 
-    private boolean placeTrack(ItemStack stack, World world, int i, int j, int k, int side) {
-        Block blockTrack = RailcraftBlocks.getBlockTrack();
+    private boolean placeTrack(ItemStack stack, World world, BlockPos pos, @Nullable EnumRailDirection trackShape, EnumFacing face) {
+        BlockTrack blockTrack = RailcraftBlocks.getBlockTrack();
         if (blockTrack == null)
             return false;
-        if (j >= world.getHeight() - 1)
+        if (pos.getY() >= world.getHeight() - 1)
             return false;
         if (stack == null || !(stack.getItem() instanceof ItemTrack))
             return false;
         TrackSpec spec = getTrackSpec(stack);
         ITrackInstance track = spec.createInstanceFromSpec();
-        boolean canPlace = world.canPlaceEntityOnSide(blockTrack, i, j, k, true, side, null, stack);
+        boolean canPlace = world.canBlockBePlaced(blockTrack, pos, true, face, null, stack);
         if (track instanceof ITrackCustomPlaced)
-            canPlace &= ((ITrackCustomPlaced) track).canPlaceRailAt(world, i, j, k);
+            canPlace &= ((ITrackCustomPlaced) track).canPlaceRailAt(world, pos);
         else
-            canPlace &= world.isSideSolid(i, j - 1, k, EnumFacing.UP);
+            canPlace &= world.isSideSolid(pos.down(), EnumFacing.UP);
         if (canPlace) {
-            boolean placed = world.setBlock(i, j, k, blockTrack);
+            IBlockState wantedState = blockTrack.getDefaultState();
+            EnumRailDirection dir = trackShape == null ? EnumRailDirection.NORTH_SOUTH : trackShape;
+            if (TrackShapeHelper.isTurn(dir) && !track.isFlexibleRail()) {
+                dir = EnumRailDirection.NORTH_SOUTH;
+            } else if (TrackShapeHelper.isAscending(dir) && !track.canMakeSlopes()) {
+                dir = EnumRailDirection.NORTH_SOUTH;
+            }
+            wantedState = wantedState.withProperty(BlockTrack.SHAPE, dir);
+            boolean placed = world.setBlockState(pos, wantedState);
             // System.out.println("Block placement attempted");
             if (placed) {
-                if (world.getBlock(i, j, k) == blockTrack) {
+                if (world.getBlockState(pos).getBlock() == blockTrack) {
                     TileTrack tile = TrackFactory.makeTrackTile(track);
-                    world.setTileEntity(i, j, k, tile);
-                    blockTrack.onPostBlockPlaced(world, i, j, k, 0);
-                    world.markBlockForUpdate(i, j, k);
+                    world.setTileEntity(pos, tile);
+                    blockTrack.onBlockAdded_But_We_Want_"onBlockAdded"_to_be_called_for_the_track_instance(world, pos, wantedState);
+                    world.markBlockForUpdate(pos);
                 }
-                world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, blockTrack.stepSound.getStepResourcePath(), (blockTrack.stepSound.getVolume() + 1.0F) / 2.0F, blockTrack.stepSound.getPitch() * 0.8F);
+                double x = pos.getX() + 0.5;
+                double y = pos.getY() + 0.5;
+                double z = pos.getZ() + 0.5;
+                world.playSoundEffect(x, y, z, blockTrack.stepSound.getPlaceSound(), (blockTrack.stepSound.getVolume() + 1.0F) / 2.0F, blockTrack.stepSound.getFrequency() * 0.8F);
             }
             return true;
         } else
@@ -132,39 +148,28 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (stack.stackSize <= 0)
             return false;
 
-        Block block = world.getBlock(x, y, z);
+        Block block = world.getBlockState(pos).getBlock();
         if (block == Blocks.snow_layer)
-            side = 1;
-        else if (block != Blocks.vine && block != Blocks.tallgrass && block != Blocks.deadbush && !block.isReplaceable(world, x, y, z)) {
-            if (side == 0)
-                y--;
-            if (side == 1)
-                y++;
-            if (side == 2)
-                z--;
-            if (side == 3)
-                z++;
-            if (side == 4)
-                x--;
-            if (side == 5)
-                x++;
+            side = EnumFacing.DOWN;
+        else if (block != Blocks.vine && block != Blocks.tallgrass && block != Blocks.deadbush && !block.isReplaceable(world, pos)) {
+            pos = pos.offset(side);
         }
 
-        if (player != null && !player.canPlayerEdit(x, y, z, side, stack))
+        if (player != null && !player.canPlayerEdit(pos, side, stack))
             return false;
 
-        boolean success = placeTrack(stack, world, x, y, z, side);
+        boolean success = placeTrack(stack, world, pos, null, side);
         if (success) {
             Block blockTrack = RailcraftBlocks.getBlockTrack();
+            IBlockState state = world.getBlockState(pos);
             if (player != null)
-                blockTrack.onBlockPlacedBy(world, x, y, z, player, stack);
+                blockTrack.onBlockPlacedBy(world, pos, state, player, stack);
             stack.stackSize--;
         }
         return success;
     }
-
 }
