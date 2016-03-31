@@ -9,27 +9,17 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.tracks.instances;
 
-import mods.railcraft.api.tracks.ITrackPowered;
-import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import net.minecraft.entity.item.EntityMinecart;
 
 
-public class TrackGatedOneWay extends TrackGated implements ITrackReversible, ITrackPowered {
+public class TrackGatedOneWay extends TrackGated {
 
     private static final double MOTION_MIN = 0.2;
 
     @Override
     public EnumTrack getTrackType() {
         return EnumTrack.GATED_ONEWAY;
-    }
-
-    @Override
-    public IIcon getIcon() {
-        if (isReversed()) {
-            return getIcon(1);
-        }
-        return getIcon(0);
     }
 
     @Override

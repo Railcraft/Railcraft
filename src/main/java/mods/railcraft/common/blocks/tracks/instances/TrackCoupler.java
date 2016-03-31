@@ -12,73 +12,27 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackInstance;
-import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IStringSerializable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Locale;
 
-public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
+public class TrackCoupler extends TrackPowered {
+    public static final PropertyEnum<Mode> MODE = PropertyEnum.create("mode", Mode.class);
     private EntityMinecart taggedCart;
-    private boolean powered;
     private Mode mode = Mode.COUPLER;
-
-    enum Mode {
-        COUPLER(8) {
-            @Override
-            public void onMinecartPass(TrackCoupler track, EntityMinecart cart) {
-                CartTools.getLinkageManager(cart.worldObj).createLink(track.taggedCart, cart);
-                track.taggedCart = cart;
-            }
-        },
-        DECOUPLER(0) {
-            @Override
-            public void onMinecartPass(TrackCoupler track, EntityMinecart cart) {
-                CartTools.getLinkageManager(cart.worldObj).breakLinks(cart);
-                LinkageManager.printDebug("Reason For Broken Link: Passed Decoupler Track.");
-            }
-        },
-        AUTO_COUPLER(0) {
-            @Override
-            public void onMinecartPass(TrackCoupler track, EntityMinecart cart) {
-                LinkageManager.instance().setAutoLink(cart, true);
-            }
-        };
-        public static Mode[] VALUES = values();
-        private int powerPropagation;
-
-        Mode(int powerPropagation) {
-            this.powerPropagation = powerPropagation;
-        }
-
-        public static Mode fromOrdinal(int ordinal) {
-            return VALUES[ordinal % VALUES.length];
-        }
-
-        public Mode next() {
-            return fromOrdinal(ordinal() + 1);
-        }
-
-        public Mode previous() {
-            return fromOrdinal(ordinal() + VALUES.length - 1);
-        }
-
-        public String getTag() {
-            return name().replace('_', '.').toLowerCase(Locale.ENGLISH);
-        }
-
-        public abstract void onMinecartPass(TrackCoupler track, EntityMinecart cart);
-    }
 
     @Override
     public EnumTrack getTrackType() {
@@ -86,12 +40,10 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
     }
 
     @Override
-    public IIcon getIcon() {
-        int iconIndex = 0;
-        if (!isPowered())
-            iconIndex++;
-        iconIndex += mode.ordinal() * 2;
-        return getIcon(iconIndex);
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(MODE, mode);
+        return state;
     }
 
     @Override
@@ -109,7 +61,7 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
                 if (Game.isHost(getWorld()))
                     setMode(m);
                 else
-                    ChatPlugin.sendLocalizedChat(player, "railcraft.gui.track.mode.change", "\u00A75" + LocalizationPlugin.translate("railcraft.gui.track.coupler.mode." + m.getTag()));
+                    ChatPlugin.sendLocalizedChat(player, "railcraft.gui.track.mode.change", "\u00A75" + LocalizationPlugin.translate("railcraft.gui.track.coupler.mode." + m.getName()));
                 return true;
             }
         }
@@ -131,16 +83,6 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
     }
 
     @Override
-    public boolean isPowered() {
-        return powered;
-    }
-
-    @Override
-    public void setPowered(boolean powered) {
-        this.powered = powered;
-    }
-
-    @Override
     public boolean canPropagatePowerTo(ITrackInstance track) {
         if (track instanceof TrackCoupler) {
             TrackCoupler c = (TrackCoupler) track;
@@ -157,14 +99,12 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setBoolean("powered", powered);
         data.setByte("mode", (byte) mode.ordinal());
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        powered = data.getBoolean("powered");
 
         mode = Mode.fromOrdinal(data.getByte("mode"));
 
@@ -178,30 +118,68 @@ public class TrackCoupler extends TrackBaseRailcraft implements ITrackPowered {
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-
-        data.writeBoolean(powered);
         data.writeByte(mode.ordinal());
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-
-        boolean p = data.readBoolean();
         byte m = data.readByte();
 
-        boolean needsUpdate = false;
-        if (p != powered) {
-            powered = p;
-            needsUpdate = true;
-        }
         if (m != mode.ordinal()) {
             mode = Mode.fromOrdinal(m);
-            needsUpdate = true;
+            markBlockNeedsUpdate();
+        }
+    }
+
+    public enum Mode implements IStringSerializable {
+        COUPLER("coupler", 8) {
+            @Override
+            public void onMinecartPass(TrackCoupler track, EntityMinecart cart) {
+                CartTools.getLinkageManager(cart.worldObj).createLink(track.taggedCart, cart);
+                track.taggedCart = cart;
+            }
+        },
+        DECOUPLER("decoupler", 0) {
+            @Override
+            public void onMinecartPass(TrackCoupler track, EntityMinecart cart) {
+                CartTools.getLinkageManager(cart.worldObj).breakLinks(cart);
+                LinkageManager.printDebug("Reason For Broken Link: Passed Decoupler Track.");
+            }
+        },
+        AUTO_COUPLER("auto.coupler", 0) {
+            @Override
+            public void onMinecartPass(TrackCoupler track, EntityMinecart cart) {
+                LinkageManager.instance().setAutoLink(cart, true);
+            }
+        };
+        public static Mode[] VALUES = values();
+        private final int powerPropagation;
+        private final String name;
+
+        Mode(String name, int powerPropagation) {
+            this.name = name;
+            this.powerPropagation = powerPropagation;
         }
 
-        if (needsUpdate)
-            markBlockNeedsUpdate();
+        public static Mode fromOrdinal(int ordinal) {
+            return VALUES[ordinal % VALUES.length];
+        }
+
+        public Mode next() {
+            return fromOrdinal(ordinal() + 1);
+        }
+
+        public Mode previous() {
+            return fromOrdinal(ordinal() + VALUES.length - 1);
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        public abstract void onMinecartPass(TrackCoupler track, EntityMinecart cart);
     }
 
 }

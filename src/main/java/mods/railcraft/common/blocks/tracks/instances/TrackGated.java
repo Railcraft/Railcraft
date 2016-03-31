@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.tracks.ITrackBlocksMovement;
 import mods.railcraft.api.tracks.ITrackCustomShape;
-import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -20,7 +19,6 @@ import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
-
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,15 +30,19 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-// Referenced classes of package net.minecraft.src:
-//            TileEntity, NBTTagCompound, World
-public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, ITrackPowered, ITrackCustomShape, IPostConnection, ITrackBlocksMovement {
+public class TrackGated extends TrackPowered implements ITrackReversible, ITrackCustomShape, IPostConnection, ITrackBlocksMovement {
 
     private static final double AABB_SHRINK = -0.375;
 
-    protected boolean powered;
     protected boolean open;
     protected boolean reversed;
+
+    @Override
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(REVERSED, reversed);
+        return state;
+    }
 
     @Override
     public EnumTrack getTrackType() {
@@ -97,7 +99,6 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
     @Override
     public void writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
-        nbttagcompound.setBoolean("powered", powered);
         nbttagcompound.setBoolean("open", open);
         nbttagcompound.setBoolean("reversed", reversed);
     }
@@ -105,7 +106,6 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
     @Override
     public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
-        powered = nbttagcompound.getBoolean("powered");
         open = nbttagcompound.getBoolean("open");
         reversed = nbttagcompound.getBoolean("reversed");
     }
@@ -113,8 +113,6 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-
-        data.writeBoolean(powered);
         data.writeBoolean(reversed);
         data.writeBoolean(open);
     }
@@ -122,8 +120,6 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-
-        setPowered(data.readBoolean());
         setReversed(data.readBoolean());
         setOpen(data.readBoolean());
 
@@ -141,14 +137,9 @@ public class TrackGated extends TrackBaseRailcraft implements ITrackReversible, 
     }
 
     @Override
-    public boolean isPowered() {
-        return powered;
-    }
-
-    @Override
     public void setPowered(boolean powered) {
         boolean state = isGateOpen();
-        this.powered = powered;
+        super.setPowered(powered);
         if (state != isGateOpen()) {
             playSound();
             sendUpdateToClient();

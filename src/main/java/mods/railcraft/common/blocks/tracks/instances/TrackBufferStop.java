@@ -12,7 +12,9 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.api.tracks.ITrackCustomShape;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -24,10 +26,10 @@ import java.io.IOException;
 
 public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversible, ITrackCustomShape {
 
-    private static final float CBOX = 0.0625f;
-    private static final float SBOX = 0.0625f * 3;
-    private static final float SBOXY = 0.0625f * 5;
-    private boolean reversed = false;
+    private static final float CBOX = -0.0625f;
+    private static final float SBOX = -0.0625f * 3;
+    private static final float SBOXY = -0.0625f * 5;
+    private boolean reversed;
 
     @Override
     public EnumTrack getTrackType() {
@@ -35,26 +37,25 @@ public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversi
     }
 
     @Override
-    public IIcon getIcon() {
-        if (reversed) {
-            return getIcon(1);
-        }
-        return getIcon(0);
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(REVERSED, reversed);
+        return state;
     }
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox() {
-        return AxisAlignedBB.fromBounds(tileEntity.xCoord + SBOX, tileEntity.yCoord, tileEntity.zCoord + SBOX, tileEntity.xCoord + 1 - SBOX, tileEntity.yCoord + 1 - SBOXY, tileEntity.zCoord + 1 - SBOX);
+        return AABBFactory.make().createBoxForTileAt(getPos()).expandHorizontally(SBOX).raiseCeiling(SBOXY).build();
     }
 
     @Override
     public MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1) {
-        return MiscTools.collisionRayTrace(vec3d, vec3d1, getX(), getY(), getZ());
+        return MiscTools.collisionRayTrace(vec3d, vec3d1, getPos());
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox() {
-        return AxisAlignedBB.fromBounds(tileEntity.xCoord + CBOX, tileEntity.yCoord, tileEntity.zCoord + CBOX, tileEntity.xCoord + 1 - CBOX, tileEntity.yCoord + 1, tileEntity.zCoord + 1 - CBOX);
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state) {
+        return AABBFactory.make().createBoxForTileAt(getPos()).expandHorizontally(CBOX).build();
     }
 
     @Override

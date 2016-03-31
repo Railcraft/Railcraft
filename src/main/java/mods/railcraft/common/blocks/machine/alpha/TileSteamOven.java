@@ -101,9 +101,9 @@ public class TileSteamOven extends TileMultiBlockInventory<EnumMachineAlpha> imp
     }
 
     public int cookTime;
-    public boolean finishedCycle = false;
+    private boolean finishedCycle;
     private EnumFacing facing = NORTH;
-    private boolean paused = false;
+    private boolean paused;
 
     public TileSteamOven() {
         super("railcraft.gui.steam.oven", 18, patterns);
@@ -112,20 +112,20 @@ public class TileSteamOven extends TileMultiBlockInventory<EnumMachineAlpha> imp
     }
 
     public static void placeSteamOven(World world, BlockPos pos, List<ItemStack> input, List<ItemStack> output) {
-        for (MultiBlockPattern pattern : TileSteamOven.patterns) {
-            Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
-            blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.ordinal());
-            TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
-            if (tile instanceof TileSteamOven) {
-                TileSteamOven master = (TileSteamOven) tile;
-                for (int slot = 0; slot < 9; slot++) {
-                    if (input != null && slot < input.size())
-                        master.inv.setInventorySlotContents(TileSteamOven.SLOT_INPUT + slot, input.get(slot));
-                    if (output != null && slot < output.size())
-                        master.inv.setInventorySlotContents(TileSteamOven.SLOT_OUTPUT + slot, output.get(slot));
-                }
+        MultiBlockPattern pattern = TileSteamOven.patterns.get(0);
+        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+        IBlockState base = RailcraftBlocks.getBlockMachineAlpha().getDefaultState();
+        IBlockState steamOven = base.withProperty(MachineProxyAlpha.VARIANT, EnumMachineAlpha.STEAM_OVEN);
+        blockMapping.put('B', steamOven);
+        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
+        if (tile instanceof TileSteamOven) {
+            TileSteamOven master = (TileSteamOven) tile;
+            for (int slot = 0; slot < 9; slot++) {
+                if (input != null && slot < input.size())
+                    master.inv.setInventorySlotContents(TileSteamOven.SLOT_INPUT + slot, input.get(slot));
+                if (output != null && slot < output.size())
+                    master.inv.setInventorySlotContents(TileSteamOven.SLOT_OUTPUT + slot, output.get(slot));
             }
-            return;
         }
     }
 
@@ -162,12 +162,12 @@ public class TileSteamOven extends TileMultiBlockInventory<EnumMachineAlpha> imp
         return facing;
     }
 
-    public boolean hasFinishedCycle() {
+    private boolean hasFinishedCycle() {
         TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
         return mBlock != null && mBlock.finishedCycle;
     }
 
-    public void setHasFinishedCycle(boolean finished) {
+    private void setHasFinishedCycle(boolean finished) {
         if (finishedCycle != finished) {
             finishedCycle = finished;
             sendUpdateToClient();
@@ -252,9 +252,9 @@ public class TileSteamOven extends TileMultiBlockInventory<EnumMachineAlpha> imp
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(state, entityliving, stack);
-        facing = MiscTools.getHorizontalSideFacingPlayer(entityliving);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(state, placer, stack);
+        facing = MiscTools.getHorizontalSideFacingPlayer(placer);
     }
 
     @Override
@@ -314,10 +314,10 @@ public class TileSteamOven extends TileMultiBlockInventory<EnumMachineAlpha> imp
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        byte f = data.readByte();
+        EnumFacing f = EnumFacing.getFront(data.readByte());
         finishedCycle = data.readBoolean();
-        if (f != facing.ordinal()) {
-            facing = EnumFacing.getFront(f);
+        if (facing != f) {
+            facing = f;
             markBlockForUpdate();
         }
     }
@@ -374,6 +374,7 @@ public class TileSteamOven extends TileMultiBlockInventory<EnumMachineAlpha> imp
         return index >= SLOT_OUTPUT;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
@@ -388,9 +389,7 @@ public class TileSteamOven extends TileMultiBlockInventory<EnumMachineAlpha> imp
     @Override
     public boolean hasWork() {
         TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
-        if (mBlock != null)
-            return mBlock.cookTime > 0;
-        return false;
+        return mBlock != null && mBlock.cookTime > 0;
     }
 
     private void processActions() {
