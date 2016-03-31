@@ -82,10 +82,7 @@ public class MultiBlockPattern {
         return masterOffset.equals(posInPattern);
     }
 
-    public TileEntity placeStructure(World world, BlockPos pos, IBlockState blockState, Map<Character, Integer> blockMapping) {
-        if (blockState == null)
-            return null;
-
+    public TileEntity placeStructure(World world, BlockPos pos, Map<Character, IBlockState> blockMapping) {
         int xWidth = getPatternWidthX();
         int zWidth = getPatternWidthZ();
         int height = getPatternHeight();
@@ -100,8 +97,8 @@ public class MultiBlockPattern {
 
                     char marker = getPatternMarker(px, py, pz);
 
-                    Integer metadata = blockMapping.get(marker);
-                    if (metadata == null)
+                    IBlockState blockState = blockMapping.get(marker);
+                    if (blockState == null)
                         continue;
 
                     BlockPos p = new BlockPos(px, py, pz).add(offset);
