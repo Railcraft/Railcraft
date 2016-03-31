@@ -17,6 +17,7 @@ import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -120,6 +121,11 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     @Override
     public Block getBlock() {
         return RailcraftBlocks.getBlockMachineGamma();
+    }
+
+    @Override
+    public IBlockState getState() {
+        return getBlock().getDefaultState().withProperty(MachineProxyGamma.VARIANT, this);
     }
 
     public boolean isEnabled() {

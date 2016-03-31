@@ -218,9 +218,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        ItemStack stack = getStackInSlot(index);
-        setInventorySlotContents(index, null);
-        return stack;
+        return inv.removeStackFromSlot(index);
     }
 
     @Override

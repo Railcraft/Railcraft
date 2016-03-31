@@ -10,6 +10,7 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
@@ -36,6 +37,8 @@ public interface IEnumMachine<M extends IEnumMachine<M>> extends Comparable<M>, 
     int ordinal();
 
     Block getBlock();
+
+    IBlockState getState();
 
     boolean isDepreciated();
 }

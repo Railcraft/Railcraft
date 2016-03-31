@@ -346,12 +346,7 @@ public class TileRollingMachine extends TileMachineBase<EnumMachineAlpha> implem
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        ItemStack stack = getStackInSlot(index);
-        setInventorySlotContents(index, null);
-        // If the set failed (perhaps the inventory was read-only) then don't return the removed itemstack
-        if (getStackInSlot(index) == null)
-            return stack;
-        return null;
+        return inv.removeStackFromSlot(index);
     }
 
     @Override

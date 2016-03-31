@@ -114,9 +114,7 @@ public class TileSteamOven extends TileMultiBlockInventory<EnumMachineAlpha> imp
     public static void placeSteamOven(World world, BlockPos pos, List<ItemStack> input, List<ItemStack> output) {
         MultiBlockPattern pattern = TileSteamOven.patterns.get(0);
         Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-        IBlockState base = RailcraftBlocks.getBlockMachineAlpha().getDefaultState();
-        IBlockState steamOven = base.withProperty(MachineProxyAlpha.VARIANT, EnumMachineAlpha.STEAM_OVEN);
-        blockMapping.put('B', steamOven);
+        blockMapping.put('B', EnumMachineAlpha.STEAM_OVEN.getState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileSteamOven) {
             TileSteamOven master = (TileSteamOven) tile;

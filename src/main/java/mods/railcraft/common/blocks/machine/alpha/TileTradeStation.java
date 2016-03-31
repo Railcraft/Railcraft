@@ -99,24 +99,25 @@ public class TileTradeStation extends TileMachineItem<EnumMachineAlpha> implemen
         if (clock % 256 == 0)
             modifyNearbyAI();
 
-        float x = getPos().getX();
-        float y = getPos().getY();
-        float z = getPos().getZ();
-        List<EntityVillager> villagers = MiscTools.getNearbyEntities(worldObj, EntityVillager.class, x, y - 1, y + 3, z, AREA);
+        List<EntityVillager> villagers = findNearbyVillagers(AREA);
         attemptTrade(villagers, 0);
         attemptTrade(villagers, 1);
         attemptTrade(villagers, 2);
     }
 
     private void modifyNearbyAI() {
+        for (EntityVillager villager : findNearbyVillagers(20)) {
+            AIPlugin.addAITask(villager, 9, new EntityAIWatchBlock(villager, getMachineType().getState(), 4, 0.08F));
+            AIPlugin.addAITask(villager, 9, new EntityAIMoveToBlock(villager, getMachineType().getState(), 16, 0.002F));
+        }
+    }
+
+    private List<EntityVillager> findNearbyVillagers(int range) {
         float x = getPos().getX();
         float y = getPos().getY();
         float z = getPos().getZ();
-        List<EntityVillager> villagers = MiscTools.getNearbyEntities(worldObj, EntityVillager.class, x, y - 1, y + 3, z, 20);
-        for (EntityVillager villager : villagers) {
-            AIPlugin.addAITask(villager, 9, new EntityAIWatchBlock(villager, getMachineType().getBlock(), getMachineType().ordinal(), 4, 0.08F));
-            AIPlugin.addAITask(villager, 9, new EntityAIMoveToBlock(villager, getMachineType().getBlock(), getMachineType().ordinal(), 16, 0.002F));
-        }
+        List<EntityVillager> villagers = MiscTools.getNearbyEntities(worldObj, EntityVillager.class, x, y - 1, y + 3, z, range);
+        return villagers;
     }
 
     private boolean attemptTrade(List<EntityVillager> villagers, int tradeSet) {

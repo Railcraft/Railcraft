@@ -126,9 +126,7 @@ public abstract class TileMachineBase<M extends IEnumMachine<M>> extends Railcra
 
             if (getBlockType() != getMachineType().getBlock()) {
                 Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getMachineType().getBlock(), getPos());
-                BlockMachine<M> machine = ((BlockMachine<M>) getBlockType());
-                IBlockState newState = getBlockType().getDefaultState().withProperty(machine.getMachineProxy().getVariantProperty(), getMachineType());
-                worldObj.setBlockState(getPos(), newState, 3);
+                worldObj.setBlockState(getPos(), getMachineType().getState(), 3);
                 validate();
                 worldObj.setTileEntity(getPos(), this);
                 updateContainingBlockInfo();
@@ -137,9 +135,7 @@ public abstract class TileMachineBase<M extends IEnumMachine<M>> extends Railcra
             IBlockState state = worldObj.getBlockState(getPos());
             int meta = state.getBlock().getMetaFromState(state);
             if (getBlockType() != null && getClass() != ((BlockMachine<?>) getBlockType()).getMachineProxy().getMachine(meta).getTileClass()) {
-                BlockMachine<M> machine = ((BlockMachine<M>) getBlockType());
-                IBlockState newState = getBlockType().getDefaultState().withProperty(machine.getMachineProxy().getVariantProperty(), getMachineType());
-                worldObj.setBlockState(getPos(), newState, 3);
+                worldObj.setBlockState(getPos(), getMachineType().getState(), 3);
                 validate();
                 worldObj.setTileEntity(getPos(), this);
                 Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), meta, getId(), getPos());

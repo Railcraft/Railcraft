@@ -121,7 +121,7 @@ public class BlockFrame extends Block implements IPostConnection {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack current = playerIn.getCurrentEquippedItem();
         if (current != null && InvTools.isItemEqualIgnoreNBT(current, EnumMachineDelta.WIRE.getItem()))
-            if (WorldPlugin.setBlock(worldIn, pos, EnumMachineDelta.WIRE.getBlock(), EnumMachineDelta.WIRE.ordinal(), 2)) {
+            if (WorldPlugin.setBlockState(worldIn, pos, EnumMachineDelta.WIRE.getState(), 2)) {
                 TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
                 if (tile instanceof TileWire) {
                     TileWire wire = (TileWire) tile;
@@ -135,7 +135,7 @@ public class BlockFrame extends Block implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing face) {
         return ConnectStyle.TWO_THIN;
     }
 
