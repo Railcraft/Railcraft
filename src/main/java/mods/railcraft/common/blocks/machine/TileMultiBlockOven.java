@@ -32,8 +32,8 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
 
     private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
     protected int cookTime;
-    protected boolean cooking;
-    protected boolean paused = false;
+    private boolean cooking;
+    protected boolean paused;
     private boolean wasBurning;
 
     public TileMultiBlockOven(String name, int invNum, List<? extends MultiBlockPattern> patterns) {
@@ -59,7 +59,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         }
     }
 
-    protected void updateLighting() {
+    private void updateLighting() {
         boolean b = isBurning();
         if (wasBurning != b) {
             wasBurning = b;
@@ -129,15 +129,13 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         cookTime = i;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean isCooking() {
         TileMultiBlockOven masterOven = (TileMultiBlockOven) getMasterBlock();
-        if (masterOven != null) {
-            return masterOven.cooking;
-        }
-        return false;
+        return masterOven != null && masterOven.cooking;
     }
 
-    public void setCooking(boolean c) {
+    protected void setCooking(boolean c) {
         if (cooking != c) {
             cooking = c;
             sendUpdateToClient();

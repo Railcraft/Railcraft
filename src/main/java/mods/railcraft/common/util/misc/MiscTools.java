@@ -97,7 +97,7 @@ public abstract class MiscTools {
         return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-    public static final Predicate<Entity> livingEntitySelector = new Predicate<Entity>() {
+    private static final Predicate<Entity> livingEntitySelector = new Predicate<Entity>() {
         public boolean apply(Entity entity) {
             return entity.isEntityAlive() && EntitySelectors.NOT_SPECTATING.apply(entity);
         }
@@ -106,16 +106,16 @@ public abstract class MiscTools {
     public static <T extends Entity> List<T> getNearbyEntities(World world, Class<T> entityClass, float x, float minY, float maxY, float z, float radius) {
         AxisAlignedBB box = AxisAlignedBB.fromBounds(x, minY, z, x + 1, maxY, z + 1);
         box = box.expand(radius, 0, radius);
-        return world.getEntitiesWithinAABB(entityClass, box);
-    }
-
-    public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass, int x, int y, int z) {
-        AxisAlignedBB box = AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
         return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
     }
 
-    public static <T extends Entity> T getEntityAt(World world, Class<T> entityClass, int x, int y, int z) {
-        AxisAlignedBB box = AxisAlignedBB.fromBounds(x, y, z, x + 1, y + 1, z + 1);
+    public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass,BlockPos pos) {
+        AxisAlignedBB box =  AABBFactory.make().createBoxForTileAt(pos).build();
+        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
+    }
+
+    public static <T extends Entity> T getEntityAt(World world, Class<T> entityClass, BlockPos pos) {
+        AxisAlignedBB box = AABBFactory.make().createBoxForTileAt(pos).build();
         List<T> entities = world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
         if (!entities.isEmpty())
             return entities.get(0);
@@ -293,7 +293,7 @@ public abstract class MiscTools {
         return start.offset(side).equals(end);
     }
 
-    public static boolean isKillabledEntity(Entity entity) {
+    public static boolean isKillableEntity(Entity entity) {
         return !(entity.ridingEntity instanceof EntityMinecart) && entity instanceof EntityLivingBase && ((EntityLivingBase) entity).getMaxHealth() < 100;
     }
 

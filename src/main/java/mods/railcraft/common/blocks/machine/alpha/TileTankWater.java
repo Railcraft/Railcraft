@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileTank;
@@ -25,6 +24,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -125,15 +125,13 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     }
 
     public static void placeWaterTank(World world, BlockPos pos, int water) {
-        for (MultiBlockPattern pattern : TileTankWater.patterns) {
-            Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
-            blockMapping.put('B', EnumMachineAlpha.TANK_WATER.ordinal());
-            TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
-            if (tile instanceof TileTankWater) {
-                TileTankWater master = (TileTankWater) tile;
-                master.tank.setFluid(Fluids.WATER.get(water));
-            }
-            return;
+        MultiBlockPattern pattern = TileTankWater.patterns.get(0);
+        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+        blockMapping.put('B', EnumMachineAlpha.TANK_WATER.getState());
+        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
+        if (tile instanceof TileTankWater) {
+            TileTankWater master = (TileTankWater) tile;
+            master.tank.setFluid(Fluids.WATER.get(water));
         }
     }
 
@@ -215,7 +213,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock<?> mBlock = getMasterBlock();
+        TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.TANK, player, worldObj, mBlock.getPos());
             return true;

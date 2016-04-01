@@ -241,7 +241,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
         if (Game.isNotHost(world))
             return;
 
-        if (!MiscTools.isKillabledEntity(entity))
+        if (!MiscTools.isKillableEntity(entity))
             return;
 
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);

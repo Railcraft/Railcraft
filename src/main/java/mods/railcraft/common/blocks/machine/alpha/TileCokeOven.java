@@ -10,7 +10,6 @@ package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockOven;
@@ -25,6 +24,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -109,18 +109,16 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     public static void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output) {
-        for (MultiBlockPattern pattern : TileCokeOven.patterns) {
-            Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
-            blockMapping.put('B', EnumMachineAlpha.COKE_OVEN.ordinal());
-            blockMapping.put('W', EnumMachineAlpha.COKE_OVEN.ordinal());
-            TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
-            if (tile instanceof TileCokeOven) {
-                TileCokeOven master = (TileCokeOven) tile;
-                master.tank.setFluid(Fluids.CREOSOTE.get(creosote));
-                master.inv.setInventorySlotContents(TileCokeOven.SLOT_INPUT, input);
-                master.inv.setInventorySlotContents(TileCokeOven.SLOT_OUTPUT, output);
-            }
-            return;
+        MultiBlockPattern pattern = TileCokeOven.patterns.get(0);
+        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+        blockMapping.put('B', EnumMachineAlpha.COKE_OVEN.getState());
+        blockMapping.put('W', EnumMachineAlpha.COKE_OVEN.getState());
+        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
+        if (tile instanceof TileCokeOven) {
+            TileCokeOven master = (TileCokeOven) tile;
+            master.tank.setFluid(Fluids.CREOSOTE.get(creosote));
+            master.inv.setInventorySlotContents(TileCokeOven.SLOT_INPUT, input);
+            master.inv.setInventorySlotContents(TileCokeOven.SLOT_OUTPUT, output);
         }
     }
 

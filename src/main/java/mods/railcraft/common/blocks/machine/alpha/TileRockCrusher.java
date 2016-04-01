@@ -10,13 +10,9 @@ package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
-
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockInventory;
@@ -135,8 +131,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     private int processTime;
     private EnergyStorage energyStorage;
-    private boolean isWorking = false;
-    private boolean paused = false;
+    private boolean isWorking;
+    private boolean paused;
 
     public TileRockCrusher() {
         super(EnumMachineAlpha.ROCK_CRUSHER.getTag() + ".name", 18, patterns);
@@ -147,17 +143,18 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, List<ItemStack> input, List<ItemStack> output) {
         MultiBlockPattern pattern = TileRockCrusher.patterns.get(patternIndex);
-        Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
-        blockMapping.put('B', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
-        blockMapping.put('D', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
-        blockMapping.put('a', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
-        blockMapping.put('b', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
-        blockMapping.put('c', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
-        blockMapping.put('d', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
-        blockMapping.put('e', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
-        blockMapping.put('f', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
-        blockMapping.put('h', EnumMachineAlpha.ROCK_CRUSHER.ordinal());
-        TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineAlpha(), blockMapping);
+        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+        IBlockState state = EnumMachineAlpha.ROCK_CRUSHER.getState();
+        blockMapping.put('B', state);
+        blockMapping.put('D', state);
+        blockMapping.put('a', state);
+        blockMapping.put('b', state);
+        blockMapping.put('c', state);
+        blockMapping.put('d', state);
+        blockMapping.put('e', state);
+        blockMapping.put('f', state);
+        blockMapping.put('h', state);
+        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileRockCrusher) {
             TileRockCrusher master = (TileRockCrusher) tile;
             for (int slot = 0; slot < 9; slot++) {
@@ -207,12 +204,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     private boolean useMasterEnergy(int amount, boolean doRemove) {
         TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-        if (mBlock != null)
-            if (mBlock.energyStorage == null)
-                return true;
-            else
-                return mBlock.energyStorage.extractEnergy(amount, !doRemove) == amount;
-        return false;
+        return mBlock != null && (mBlock.energyStorage == null || mBlock.energyStorage.extractEnergy(amount, !doRemove) == amount);
     }
 
     @Override
@@ -228,7 +220,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
             if (isStructureValid()) {
                 // TileEntityHopper.getItemsAroundAPointOrSomethingLikeThat
                 for (EntityItem item : TileEntityHopper.func_181556_a(getWorld(), x, y + 1, z)) {
-                        if (item != null && useMasterEnergy(SUCKING_POWER_COST, false)) {
+                    if (item != null && useMasterEnergy(SUCKING_POWER_COST, false)) {
                         ItemStack stack = item.getEntityItem().copy();
                         if (InventoryManipulator.get(invInput).addStack(stack) != null)
                             useMasterEnergy(SUCKING_POWER_COST, true);
@@ -236,7 +228,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                     }
                 }
 
-                EntityLivingBase entity = MiscTools.getEntityAt(worldObj, EntityLivingBase.class, getX(), getY() + 1, getZ());
+                EntityLivingBase entity = MiscTools.getEntityAt(worldObj, EntityLivingBase.class, getPos().up());
                 if (entity != null && useMasterEnergy(KILLING_POWER_COST, false))
                     if (entity.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
                         useMasterEnergy(KILLING_POWER_COST, true);
@@ -306,7 +298,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock<?> mBlock = getMasterBlock();
+        TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
             GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, worldObj, mBlock.getX(), mBlock.getY(), mBlock.getZ());
             return true;
@@ -352,9 +344,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     @Override
     public boolean hasWork() {
         TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-        if (mBlock != null)
-            return mBlock.isWorking;
-        return false;
+        return mBlock != null && mBlock.isWorking;
     }
 
     //    public void setPaused(boolean p) {
@@ -396,6 +386,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         return index >= 9;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))

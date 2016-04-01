@@ -486,7 +486,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         if (Game.isHost(worldObj)) {
             if (!entity.isEntityAlive())
                 return;
-            if (entity != this.riddenByEntity && (cartVelocityIsGreaterThan(0.2f) || getEntityData().getBoolean("HighSpeed")) && MiscTools.isKillabledEntity(entity)) {
+            if (entity != this.riddenByEntity && (cartVelocityIsGreaterThan(0.2f) || getEntityData().getBoolean("HighSpeed")) && MiscTools.isKillableEntity(entity)) {
                 EntityLivingBase living = (EntityLivingBase) entity;
                 if (RailcraftConfig.locomotiveDamageMobs())
                     living.attackEntityFrom(RailcraftDamageSource.TRAIN, getDamageToRoadKill(living));

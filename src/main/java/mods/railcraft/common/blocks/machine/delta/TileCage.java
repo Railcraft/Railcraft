@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.delta;
 
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -30,7 +29,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileCage extends TileMachineBase<EnumMachineDelta> {
+public class TileCage extends TileMachineBase {
 
     private boolean isOpen = false;
     private EntityLiving entity;

@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileWire extends TileMachineBase<EnumMachineDelta> implements IElectricGrid {
+public class TileWire extends TileMachineBase implements IElectricGrid {
 
     public enum AddonType {
 
@@ -129,7 +129,7 @@ public class TileWire extends TileMachineBase<EnumMachineDelta> implements IElec
         if (this.addon == addon)
             return false;
         if (this.addon != AddonType.NONE) {
-            //dropstuff
+            //dropStuff
         }
         this.addon = addon;
         sendUpdateToClient();
