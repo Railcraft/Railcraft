@@ -20,6 +20,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -32,8 +33,8 @@ import java.io.IOException;
 
 public class TrackRouting extends TrackSecured implements ITrackPowered, IRoutingTrack {
 
-    private StandaloneInventory inv = new StandaloneInventory(1);
-    private boolean powered = false;
+    private final StandaloneInventory inv = new StandaloneInventory(1);
+    private boolean powered;
 
     @Override
     public EnumTrack getTrackType() {
@@ -45,10 +46,10 @@ public class TrackRouting extends TrackSecured implements ITrackPowered, IRoutin
     }
 
     @Override
-    public IIcon getIcon() {
-        if (isPowered())
-            return getIcon(0);
-        return getIcon(1);
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(POWERED, isPowered());
+        return state;
     }
 
     @Override
@@ -129,7 +130,7 @@ public class TrackRouting extends TrackSecured implements ITrackPowered, IRoutin
     @Override
     public void onBlockRemoved() {
         super.onBlockRemoved();
-        InvTools.dropInventory(inv, tileEntity.getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+        InvTools.dropInventory(inv, tileEntity.getWorld(), getPos());
     }
 
 }

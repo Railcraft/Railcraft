@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.util.misc;
 
+import net.minecraft.block.Block;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 
@@ -64,6 +65,17 @@ public class AABBFactory {
         maxX = Math.max(x1, x2);
         maxY = Math.max(y1, y2);
         maxZ = Math.max(z1, z2);
+        return this;
+    }
+
+    public AABBFactory createBoxForBlock(Block block, BlockPos pos) {
+        fromBounds(
+                pos.getX() + block.getBlockBoundsMinX(),
+                pos.getY() + block.getBlockBoundsMinY(),
+                pos.getZ() + block.getBlockBoundsMinZ(),
+                pos.getX() + block.getBlockBoundsMaxX(),
+                pos.getY() + block.getBlockBoundsMaxY(),
+                pos.getZ() + block.getBlockBoundsMaxZ());
         return this;
     }
 

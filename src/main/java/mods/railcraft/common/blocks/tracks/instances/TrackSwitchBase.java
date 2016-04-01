@@ -9,15 +9,18 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.tracks.instances;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.*;
-
+import mods.railcraft.api.tracks.ISwitchDevice;
+import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
+import mods.railcraft.api.tracks.ITrackSwitch;
+import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.carts.CartUtils;
+import mods.railcraft.common.carts.LinkageManager;
+import mods.railcraft.common.carts.Train;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -27,17 +30,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
-import mods.railcraft.api.tracks.ISwitchDevice;
-import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
-import mods.railcraft.api.tracks.ITrackSwitch;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
-import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.carts.CartUtils;
-import mods.railcraft.common.carts.LinkageManager;
-import mods.railcraft.common.carts.Train;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -54,6 +50,13 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     private UUID currentCart = null;
     private ISwitchDevice switchDevice = null;
     private boolean clientSwitched;
+
+    @Override
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(SWITCHED, isVisuallySwitched());
+        return state;
+    }
 
     @Override
     public boolean canMakeSlopes() {
@@ -88,9 +91,6 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
      * responses for the clients to use.
      * Note: This method should not modify any variables except the cache, we leave
      * that to update().
-     *
-     * @param cart
-     * @return
      */
     protected boolean shouldSwitchForCart(EntityMinecart cart) {
         if (cart == null || Game.isNotHost(getWorld()))

@@ -15,6 +15,7 @@ import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.CartUtils;
 
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
+    private static final PropertyBool MIRRORED = PropertyBool.create("mirrored");
     private boolean reversed;
 
     @Override
@@ -36,17 +38,13 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
     }
 
     @Override
-    public IIcon getIcon() {
-        int index = 0;
-        if (reversed) {
-            index += 2;
-        }
-        if (isVisuallySwitched()) {
-            index += 1;
-        }
-        return getIcon(index);
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(MIRRORED, mirrored);
+        state = state.withProperty(REVERSED, reversed);
+        return state;
     }
-    
+
     @Override
     public EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
         EnumRailDirection current = super.getRailDirection(state, cart);
@@ -54,7 +52,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
             if (current == EnumRailDirection.NORTH_SOUTH) {
                 if (isMirrored()) {
                     if (reversed) {
-                       return EnumRailDirection.SOUTH_WEST;
+                        return EnumRailDirection.SOUTH_WEST;
                     } else {
                         return EnumRailDirection.NORTH_WEST;
                     }

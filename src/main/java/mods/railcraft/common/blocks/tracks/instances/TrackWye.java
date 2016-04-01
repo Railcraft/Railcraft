@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartUtils;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
@@ -29,15 +28,6 @@ public class TrackWye extends TrackSwitchBase {
     @Override
     public EnumTrack getTrackType() {
         return EnumTrack.WYE;
-    }
-
-    //TODO: Replace with getActualState()?
-    @Override
-    public IIcon getIcon() {
-        if (isVisuallySwitched()) {
-            return getIcon(1);
-        }
-        return getIcon(0);
     }
 
     @Override

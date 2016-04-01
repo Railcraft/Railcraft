@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
-import mods.railcraft.common.blocks.tracks.TrackTextureLoader;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerHighSpeed;
 import mods.railcraft.common.carts.CartUtils;
@@ -35,15 +34,6 @@ public class TrackSpeed extends TrackBaseRailcraft {
     @Override
     public EnumTrack getTrackType() {
         return EnumTrack.SPEED;
-    }
-
-    @Override
-    public IIcon getIcon() {
-        int meta = tileEntity.getBlockMetadata();
-        if (meta >= 6) {
-            return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[1];
-        }
-        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[0];
     }
 
     @Override

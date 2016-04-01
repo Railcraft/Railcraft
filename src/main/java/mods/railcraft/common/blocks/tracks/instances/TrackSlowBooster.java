@@ -11,9 +11,8 @@ package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.blocks.tracks.TrackTextureLoader;
-
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -43,11 +42,10 @@ public class TrackSlowBooster extends TrackSlow implements ITrackPowered {
     }
 
     @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[1];
-        }
-        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[0];
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(POWERED, isPowered());
+        return state;
     }
 
     @Override

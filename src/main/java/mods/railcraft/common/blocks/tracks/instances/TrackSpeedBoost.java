@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.blocks.tracks.TrackTextureLoader;
 import mods.railcraft.common.carts.EntityLocomotive;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -22,7 +22,7 @@ import java.io.IOException;
 
 public class TrackSpeedBoost extends TrackSpeed implements ITrackPowered {
 
-    private boolean powered = false;
+    private boolean powered;
     private static final double BOOST_AMOUNT = 0.06;
     private static final double SLOW_FACTOR = 0.65;
     private static final double BOOST_THRESHOLD = 0.01;
@@ -33,11 +33,10 @@ public class TrackSpeedBoost extends TrackSpeed implements ITrackPowered {
     }
 
     @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[1];
-        }
-        return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[0];
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(POWERED, isPowered());
+        return state;
     }
 
     @Override

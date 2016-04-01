@@ -18,6 +18,7 @@ import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IChatComponent;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -83,12 +84,17 @@ public abstract class TrackSecured extends TrackBaseRailcraft implements IGuiRet
 
     @Override
     public String getName() {
-        return ((TileTrack) getTile()).getName();
+        return ((TileTrack) tileEntity).getName();
     }
 
     @Override
-    public String getLocalizationTag() {
-        return ((TileTrack) getTile()).getLocalizationTag();
+    public boolean hasCustomName() {
+        return ((TileTrack) tileEntity).hasCustomName();
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return ((TileTrack) tileEntity).getDisplayName();
     }
 
     @Override

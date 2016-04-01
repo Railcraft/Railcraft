@@ -13,6 +13,7 @@ import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EntityLocomotive;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -22,8 +23,8 @@ import java.io.IOException;
 
 public class TrackSpeedTransition extends TrackSpeed implements ITrackPowered, ITrackReversible {
 
-    private boolean powered = false;
-    private boolean reversed = false;
+    private boolean powered;
+    private boolean reversed;
     private static final double BOOST_AMOUNT = 0.04;
     private static final double SLOW_FACTOR = 0.65;
     private static final double BOOST_THRESHOLD = 0.01;
@@ -34,17 +35,11 @@ public class TrackSpeedTransition extends TrackSpeed implements ITrackPowered, I
     }
 
     @Override
-    public IIcon getIcon() {
-        if (!isPowered()) {
-            if (isReversed()) {
-                return getIcon(3);
-            }
-            return getIcon(1);
-        }
-        if (isReversed()) {
-            return getIcon(2);
-        }
-        return getIcon(0);
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(POWERED, isPowered());
+        state = state.withProperty(REVERSED, isReversed());
+        return state;
     }
 
     @Override
