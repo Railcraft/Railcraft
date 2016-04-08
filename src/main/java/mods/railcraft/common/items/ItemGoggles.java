@@ -90,7 +90,7 @@ public class ItemGoggles extends ItemArmor implements IRailcraftItem {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapedRecipe(new ItemStack(this), true,
+        CraftingPlugin.addRecipe(new ItemStack(this), true,
                 "GCG",
                 "I I",
                 "LLL",

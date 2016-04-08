@@ -12,7 +12,6 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCrowbar;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
@@ -28,7 +27,7 @@ import thaumcraft.api.research.ResearchPage;
 public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
     public static final String RESEARCH_TAG = "RC_Crowbar";
     private static final String ITEM_TAG = "railcraft.tool.crowbar.magic";
-    private static Item item;
+    private static ItemCrowbarMagic item;
 
     public ItemCrowbarMagic() {
         super(ThaumcraftPlugin.getThaumiumToolMaterial());
@@ -39,6 +38,7 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
             item = new ItemCrowbarMagic();
             RailcraftRegistry.register(item);
+            item.initItem();
         }
     }
 

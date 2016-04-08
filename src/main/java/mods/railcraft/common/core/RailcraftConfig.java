@@ -27,8 +27,8 @@ import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.modules.ModuleManager;
-import mods.railcraft.common.modules.ModuleManager.Module;
+import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import mods.railcraft.common.util.collections.BlockItemListParser;
 import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.collections.ItemKey;
@@ -788,7 +788,7 @@ public class RailcraftConfig {
     }
 
     public static boolean deleteAnchors() {
-        return deleteAnchors || !ModuleManager.isModuleLoaded(Module.CHUNK_LOADING);
+        return deleteAnchors || !RailcraftModuleManager.isModuleEnabled(Module.CHUNK_LOADING);
     }
 
     public static boolean canCraftAnchors() {

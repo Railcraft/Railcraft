@@ -66,7 +66,7 @@ public class ItemOveralls extends ItemArmor implements IRailcraftItem {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapedRecipe(new ItemStack(this),
+        CraftingPlugin.addRecipe(new ItemStack(this),
                 "III",
                 "I I",
                 "I I",

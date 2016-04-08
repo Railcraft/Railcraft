@@ -19,7 +19,7 @@ public class ItemSignalLamp extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapedRecipe(new ItemStack(this),
+        CraftingPlugin.addRecipe(new ItemStack(this),
                 "PG ",
                 "PYT",
                 "PRS",

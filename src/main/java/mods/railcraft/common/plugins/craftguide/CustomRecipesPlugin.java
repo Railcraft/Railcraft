@@ -13,7 +13,7 @@ import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.ItemTicketGold;
 import mods.railcraft.common.items.RailcraftPartItems;
-import mods.railcraft.common.modules.ModuleManager.Module;
+import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

@@ -118,7 +118,7 @@ public class ForestryPlugin {
 
                     ItemStack output = new ItemStack(trackmanBackpackT1);
                     addBackpackTooltip(output);
-                    CraftingPlugin.addShapedRecipe(output,
+                    CraftingPlugin.addRecipe(output,
                             "X#X",
                             "VYV",
                             "X#X",
@@ -154,7 +154,7 @@ public class ForestryPlugin {
 
                     ItemStack output = new ItemStack(icemanBackpackT1);
                     addBackpackTooltip(output);
-                    CraftingPlugin.addShapedRecipe(output,
+                    CraftingPlugin.addRecipe(output,
                             "X#X",
                             "VYV",
                             "X#X",
@@ -194,7 +194,7 @@ public class ForestryPlugin {
                     ItemStack output = new ItemStack(apothecariesBackpackT1);
                     addBackpackTooltip(output);
 //                if (!ThaumcraftPlugin.isModInstalled()) {
-                    CraftingPlugin.addShapedRecipe(output,
+                    CraftingPlugin.addRecipe(output,
                             "X#X",
                             "VYV",
                             "X#X",
@@ -202,7 +202,7 @@ public class ForestryPlugin {
                             'V', new ItemStack(Items.potionitem, 1, 8197),
                             'X', Items.string,
                             'Y', "chestWood");
-                    CraftingPlugin.addShapedRecipe(output,
+                    CraftingPlugin.addRecipe(output,
                             "X#X",
                             "VYV",
                             "X#X",
@@ -210,7 +210,7 @@ public class ForestryPlugin {
                             'V', new ItemStack(Items.potionitem, 1, 8261),
                             'X', Items.string,
                             'Y', "chestWood");
-                    CraftingPlugin.addShapedRecipe(output,
+                    CraftingPlugin.addRecipe(output,
                             "X#X",
                             "VYV",
                             "X#X",

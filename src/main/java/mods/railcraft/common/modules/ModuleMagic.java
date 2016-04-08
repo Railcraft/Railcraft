@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
@@ -25,7 +26,7 @@ import net.minecraftforge.oredict.OreDictionary;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ModuleMagic extends RailcraftModule {
+public class ModuleMagic extends RailcraftModulePayload {
 
     @Override
     public void initFirst() {
@@ -45,7 +46,7 @@ public class ModuleMagic extends RailcraftModule {
             IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(EnumOre.FIRESTONE.getItem(), true, false);
             recipe.addOutput(ItemFirestoneRaw.getItem(), 1F);
 
-            CraftingPlugin.addShapedRecipe(ItemFirestoneCut.getItem(),
+            CraftingPlugin.addRecipe(ItemFirestoneCut.getItem(),
                     " P ",
                     "PFP",
                     " P ",
@@ -53,14 +54,14 @@ public class ModuleMagic extends RailcraftModule {
                     'F', ItemFirestoneRaw.item);
 
             for (ItemStack stack : FluidHelper.getContainersFilledWith(Fluids.LAVA.get(FluidHelper.BUCKET_VOLUME))) {
-                CraftingPlugin.addShapedRecipe(ItemFirestoneRefined.getItemEmpty(),
+                CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
                         "LRL",
                         "RFR",
                         "LRL",
                         'R', "blockRedstone",
                         'L', stack,
                         'F', ItemFirestoneCut.item);
-                CraftingPlugin.addShapedRecipe(ItemFirestoneRefined.getItemEmpty(),
+                CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
                         "LOL",
                         "RFR",
                         "LRL",

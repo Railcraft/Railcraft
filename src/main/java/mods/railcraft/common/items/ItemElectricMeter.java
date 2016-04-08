@@ -46,7 +46,7 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapedRecipe(new ItemStack(this),
+        CraftingPlugin.addRecipe(new ItemStack(this),
                 "T T",
                 "BGB",
                 " C ",

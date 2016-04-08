@@ -16,7 +16,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thaumcraft.api.ThaumcraftApi;
@@ -31,7 +30,7 @@ import thaumcraft.api.research.ResearchPage;
 public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpingGear {
     public static final String ITEM_TAG = "railcraft.tool.crowbar.void";
     public static final String RESEARCH_TAG = "RC_Crowbar_Void";
-    public static Item item;
+    public static ItemCrowbarVoid item;
 
     public ItemCrowbarVoid() {
         super(ThaumcraftPlugin.getVoidmetalToolMaterial());
@@ -42,6 +41,7 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
             item = new ItemCrowbarVoid();
             RailcraftRegistry.register(item);
+            item.initItem();
         }
     }
 

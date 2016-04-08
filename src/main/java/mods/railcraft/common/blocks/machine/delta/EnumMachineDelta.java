@@ -14,8 +14,8 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.modules.ModuleManager;
-import mods.railcraft.common.modules.ModuleManager.Module;
+import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -123,7 +123,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
     }
 
     public boolean isEnabled() {
-        return ModuleManager.isModuleLoaded(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
+        return RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
     @Override

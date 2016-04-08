@@ -8,12 +8,10 @@
  */
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.items.ItemSignalBlockSurveyor;
-import mods.railcraft.common.items.ItemSignalTuner;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.items.ItemCrowbar;
-import mods.railcraft.common.items.ItemCrowbarReinforced;
+import mods.railcraft.common.items.ItemCrowbarSteel;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.util.misc.Game;
@@ -63,12 +61,12 @@ public class VillagerTradeHandler implements IVillageTradeHandler {
         addTrade(recipeList, rand, 0.1F, new Offer(EnumCart.LOCO_STEAM_SOLID.getCartItem()), new Offer(Items.emerald, 32, 40));
 
         addTrade(recipeList, rand, 0.3F, new Offer(ItemCrowbar.getItem()), new Offer(Items.emerald, 7, 9));
-        addTrade(recipeList, rand, 0.1F, new Offer(ItemCrowbarReinforced.getItem()), new Offer(Items.emerald, 14, 18));
+        addTrade(recipeList, rand, 0.1F, new Offer(ItemCrowbarSteel.getItem()), new Offer(Items.emerald, 14, 18));
 
         addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItem.whistleTuner), new Offer(Items.emerald, 1, 2));
         addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItem.magGlass), new Offer(Items.emerald, 1, 2));
-        addTrade(recipeList, rand, 0.3F, new Offer(ItemSignalBlockSurveyor.getItem()), new Offer(Items.emerald, 6, 8));
-        addTrade(recipeList, rand, 0.3F, new Offer(ItemSignalTuner.getItem()), new Offer(Items.emerald, 6, 8));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItem.signalBlockSurveyor), new Offer(Items.emerald, 6, 8));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItem.signalTuner), new Offer(Items.emerald, 6, 8));
         addTrade(recipeList, rand, 0.4F, new Offer(RailcraftItem.goggles), new Offer(Items.emerald, 4, 8));
         addTrade(recipeList, rand, 0.5F, new Offer(RailcraftItem.overalls), new Offer(Items.emerald, 2, 4));
     }

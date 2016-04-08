@@ -46,7 +46,7 @@ public class RailcraftPartItems {
         RailcraftRegistry.register(item);
         ItemStack stack = new ItemStack(item);
 
-        CraftingPlugin.addShapedRecipe(stack,
+        CraftingPlugin.addRecipe(stack,
                 "I",
                 "I",
                 "I",
@@ -80,7 +80,7 @@ public class RailcraftPartItems {
 
         ItemStack blade = getTurbineBlade();
         if (blade != null)
-            CraftingPlugin.addShapedRecipe(stack,
+            CraftingPlugin.addRecipe(stack,
                     "BBB",
                     "BAB",
                     "BBB",
@@ -116,7 +116,7 @@ public class RailcraftPartItems {
 
         ItemStack disk = getTurbineDisk();
         if (disk != null)
-            CraftingPlugin.addShapedRecipe(stack,
+            CraftingPlugin.addRecipe(stack,
                     "DDD",
                     'D', disk);
 

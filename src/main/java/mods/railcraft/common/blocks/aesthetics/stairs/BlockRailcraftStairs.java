@@ -14,7 +14,8 @@ import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleManager;
+import mods.railcraft.common.modules.ModuleStructures;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -85,7 +86,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     }
 
     public static boolean isEnabled(BlockMaterial mat) {
-        return ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES) && RailcraftConfig.isSubBlockEnabled(getTag(mat)) && getBlock() != null;
+        return RailcraftModuleManager.isModuleEnabled(ModuleStructures.class) && RailcraftConfig.isSubBlockEnabled(getTag(mat)) && getBlock() != null;
     }
 
     protected BlockState createBlockState() {

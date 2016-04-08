@@ -10,8 +10,10 @@ package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleManager;
-import mods.railcraft.common.modules.ModuleManager.Module;
+import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.common.modules.ModuleRouting;
+import mods.railcraft.common.modules.ModuleSignals;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
@@ -22,21 +24,21 @@ import java.util.List;
 public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
 
     // Name (module, hardness, needsSupport, tag, tile)
-    BOX_INTERLOCK(Module.SIGNALS, 3, true, "box.interlock", TileBoxInterlock.class),
-    DUAL_HEAD_BLOCK_SIGNAL(Module.SIGNALS, 8, false, "block.signal.dual", TileSignalDualHeadBlockSignal.class),
-    SWITCH_MOTOR(Module.SIGNALS, 8, true, "switch.motor", TileSwitchMotor.class),
-    BLOCK_SIGNAL(Module.SIGNALS, 8, false, "block.signal", TileSignalBlockSignal.class),
-    SWITCH_LEVER(Module.SIGNALS, 8, true, "switch.lever", TileSwitchLever.class),
-    SWITCH_ROUTING(Module.ROUTING, 8, true, "switch.routing", TileSwitchRouting.class),
-    BOX_SEQUENCER(Module.SIGNALS, 3, true, "box.sequencer", TileBoxSequencer.class),
-    BOX_CAPACITOR(Module.SIGNALS, 3, true, "box.capacitor", TileBoxCapacitor.class),
-    BOX_RECEIVER(Module.SIGNALS, 3, true, "box.receiver", TileBoxReceiver.class),
-    BOX_CONTROLLER(Module.SIGNALS, 3, true, "box.controller", TileBoxController.class),
-    BOX_ANALOG_CONTROLLER(Module.SIGNALS, 3, true, "box.analog", TileBoxAnalogController.class),
-    DISTANT_SIGNAL(Module.SIGNALS, 8, false, "distant", TileSignalDistantSignal.class),
-    DUAL_HEAD_DISTANT_SIGNAL(Module.SIGNALS, 8, false, "distant.dual", TileSignalDualHeadDistantSignal.class),
-    BOX_BLOCK_RELAY(Module.SIGNALS, 3, true, "box.block.relay", TileBoxBlockRelay.class),;
-    private final Module module;
+    BOX_INTERLOCK(ModuleSignals.class, 3, true, "box.interlock", TileBoxInterlock.class),
+    DUAL_HEAD_BLOCK_SIGNAL(ModuleSignals.class, 8, false, "block.signal.dual", TileSignalDualHeadBlockSignal.class),
+    SWITCH_MOTOR(ModuleSignals.class, 8, true, "switch.motor", TileSwitchMotor.class),
+    BLOCK_SIGNAL(ModuleSignals.class, 8, false, "block.signal", TileSignalBlockSignal.class),
+    SWITCH_LEVER(ModuleSignals.class, 8, true, "switch.lever", TileSwitchLever.class),
+    SWITCH_ROUTING(ModuleRouting.class, 8, true, "switch.routing", TileSwitchRouting.class),
+    BOX_SEQUENCER(ModuleSignals.class, 3, true, "box.sequencer", TileBoxSequencer.class),
+    BOX_CAPACITOR(ModuleSignals.class, 3, true, "box.capacitor", TileBoxCapacitor.class),
+    BOX_RECEIVER(ModuleSignals.class, 3, true, "box.receiver", TileBoxReceiver.class),
+    BOX_CONTROLLER(ModuleSignals.class, 3, true, "box.controller", TileBoxController.class),
+    BOX_ANALOG_CONTROLLER(ModuleSignals.class, 3, true, "box.analog", TileBoxAnalogController.class),
+    DISTANT_SIGNAL(ModuleSignals.class, 8, false, "distant", TileSignalDistantSignal.class),
+    DUAL_HEAD_DISTANT_SIGNAL(ModuleSignals.class, 8, false, "distant.dual", TileSignalDualHeadDistantSignal.class),
+    BOX_BLOCK_RELAY(ModuleSignals.class, 3, true, "box.block.relay", TileBoxBlockRelay.class),;
+    private final Class<? extends IRailcraftModule> module;
     private final float hardness;
     private final boolean needsSupport;
     private final String tag;
@@ -61,7 +63,7 @@ public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
         creativeList.add(BOX_INTERLOCK);
     }
 
-    EnumSignal(Module module, float hardness, boolean needsSupport, String tag, Class<? extends TileSignalFoundation> tile) {
+    EnumSignal(Class<? extends IRailcraftModule> module, float hardness, boolean needsSupport, String tag, Class<? extends TileSignalFoundation> tile) {
         this.module = module;
         this.hardness = hardness;
         this.needsSupport = needsSupport;
@@ -82,7 +84,7 @@ public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
         return "tile.railcraft.signal." + tag;
     }
 
-    public Module getModule() {
+    public Class<? extends IRailcraftModule> getModule() {
         return module;
     }
 
@@ -96,7 +98,7 @@ public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
             return null;
         try {
             return tile.newInstance();
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
         return null;
     }
@@ -123,8 +125,7 @@ public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
 
     @Override
     public boolean isEnabled() {
-        if (module == null) return false;
-        return ModuleManager.isModuleLoaded(getModule()) && getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
+        return module != null && RailcraftModuleManager.isModuleEnabled(getModule()) && getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
     @Override

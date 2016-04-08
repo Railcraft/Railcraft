@@ -9,10 +9,10 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.cube;
 
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleManager;
-import mods.railcraft.common.modules.ModuleManager.Module;
+import mods.railcraft.common.modules.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -26,20 +26,20 @@ import java.util.List;
  */
 public enum EnumCube implements IStringSerializable, IVariantEnum<EnumCube> {
 
-    COKE_BLOCK(Module.FACTORY, "coke", new FlammableCube(5, 10), 2f, 10f),
-    CONCRETE_BLOCK(Module.STRUCTURES, "concrete", new SimpleCube(), 3f, 15f),
-    STEEL_BLOCK(Module.FACTORY, "steel", new SimpleCube(), 5f, 15f),
+    COKE_BLOCK(ModuleFactory.class, "coke", new FlammableCube(5, 10), 2f, 10f),
+    CONCRETE_BLOCK(ModuleStructures.class, "concrete", new SimpleCube(), 3f, 15f),
+    STEEL_BLOCK(ModuleFactory.class, "steel", new SimpleCube(), 5f, 15f),
     @Deprecated
-    INFERNAL_BRICK(Module.STRUCTURES, "brick.infernal", new ReplacerCube(), 3f, 15f),
-    CRUSHED_OBSIDIAN(Module.FACTORY, "crushed.obsidian", new CrushedObsidian(), 2f, 45f),
+    INFERNAL_BRICK(ModuleStructures.class, "brick.infernal", new ReplacerCube(), 3f, 15f),
+    CRUSHED_OBSIDIAN(ModuleFactory.class, "crushed.obsidian", new CrushedObsidian(), 2f, 45f),
     @Deprecated
-    SANDY_BRICK(Module.STRUCTURES, "brick.sandy", new ReplacerCube(), 2f, 10f),
-    ABYSSAL_STONE(Module.WORLD, "stone.abyssal", new SimpleCube(), 2f, 10f),
-    QUARRIED_STONE(Module.WORLD, "stone.quarried", new SimpleCube(), 2f, 10f),
-    CREOSOTE_BLOCK(Module.STRUCTURES, "creosote", new FlammableCube(5, 300), 3f, 10f),
-    COPPER_BLOCK(Module.FACTORY, "copper", new SimpleCube(), 3f, 10f),
-    TIN_BLOCK(Module.FACTORY, "tin", new SimpleCube(), 3f, 10f),
-    LEAD_BLOCK(Module.FACTORY, "lead", new SimpleCube(), 2f, 20f),;
+    SANDY_BRICK(ModuleStructures.class, "brick.sandy", new ReplacerCube(), 2f, 10f),
+    ABYSSAL_STONE(ModuleWorld.class, "stone.abyssal", new SimpleCube(), 2f, 10f),
+    QUARRIED_STONE(ModuleWorld.class, "stone.quarried", new SimpleCube(), 2f, 10f),
+    CREOSOTE_BLOCK(ModuleStructures.class, "creosote", new FlammableCube(5, 300), 3f, 10f),
+    COPPER_BLOCK(ModuleFactory.class, "copper", new SimpleCube(), 3f, 10f),
+    TIN_BLOCK(ModuleFactory.class, "tin", new SimpleCube(), 3f, 10f),
+    LEAD_BLOCK(ModuleFactory.class, "lead", new SimpleCube(), 2f, 20f),;
     public static final EnumCube[] VALUES = values();
     private static final List<EnumCube> creativeList = new ArrayList<EnumCube>();
 
@@ -56,13 +56,13 @@ public enum EnumCube implements IStringSerializable, IVariantEnum<EnumCube> {
         creativeList.add(QUARRIED_STONE);
     }
 
-    private final Module module;
+    private final Class<? extends IRailcraftModule> module;
     private final String tag;
     private final SimpleCube blockDef;
     private final float hardness;
     private final float resistance;
 
-    EnumCube(Module module, String tag, SimpleCube blockDef, float hardness, float resistance) {
+    EnumCube(Class<? extends IRailcraftModule> module, String tag, SimpleCube blockDef, float hardness, float resistance) {
         this.module = module;
         this.tag = tag;
         this.blockDef = blockDef;
@@ -80,7 +80,7 @@ public enum EnumCube implements IStringSerializable, IVariantEnum<EnumCube> {
         return VALUES[id];
     }
 
-    public Module getModule() {
+    public Class<? extends IRailcraftModule> getModule() {
         return module;
     }
 
@@ -110,7 +110,7 @@ public enum EnumCube implements IStringSerializable, IVariantEnum<EnumCube> {
     }
 
     public boolean isEnabled() {
-        return getModule() != null && ModuleManager.isModuleLoaded(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag()) && BlockCube.getBlock() != null;
+        return getModule() != null && RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag()) && BlockCube.getBlock() != null;
     }
 
     public ItemStack getItem() {

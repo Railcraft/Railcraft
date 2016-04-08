@@ -11,16 +11,24 @@ package mods.railcraft.common.plugins.forge;
 import com.google.common.collect.Lists;
 import mods.railcraft.common.items.IItemMetaEnum;
 import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,7 +36,7 @@ import java.util.List;
  */
 public class CraftingPlugin {
 
-    public static void addFurnaceRecipe(ItemStack input, ItemStack output, float xp) {
+    public static void addFurnaceRecipe(@Nullable ItemStack input, @Nullable ItemStack output, float xp) {
         if (input == null && output == null) {
             Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe, the input and output were both null. Skipping");
             return;
@@ -44,7 +52,11 @@ public class CraftingPlugin {
         FurnaceRecipes.instance().addSmeltingRecipe(input, output, xp);
     }
 
-    private static Object[] cleanRecipeArray(Object[] recipeArray) {
+    public enum RecipeType {
+        SHAPED, SHAPELESS
+    }
+
+    private static Object[] cleanRecipeArray(RecipeType recipeType, ItemStack result, Object... recipeArray) throws InvalidRecipeException {
         List<Object> recipeList = Lists.newArrayList(recipeArray);
         for (int i = 0; i < recipeList.size(); i++) {
             Object obj = recipeList.get(i);
@@ -56,60 +68,146 @@ public class CraftingPlugin {
                 } else {
                     recipeList.set(i, ((RailcraftItem) obj).getRecipeObject());
                 }
+            } else if (obj == null) {
+                throw new InvalidRecipeException("Tried to define invalid {0} recipe for {1}, a necessary item was probably disabled. Skipping", recipeType, result.getUnlocalizedName());
             }
         }
         return recipeList.toArray();
     }
 
-    public static void addShapedRecipe(ItemStack result, Object... recipeArray) {
-        if (result == null || result.stackSize <= 0) {
-            Game.logTrace(Level.WARN, "Tried to define invalid shaped recipe, the result was null or zero. Skipping");
-            return;
-        }
-        recipeArray = cleanRecipeArray(recipeArray);
-        boolean oreRecipe = false;
+    private static boolean isOreRecipe(RecipeType recipeType, ItemStack result, Object... recipeArray) throws InvalidRecipeException {
         for (Object obj : recipeArray) {
             if (obj instanceof String) {
-                if (((String) obj).length() > 3)
-                    oreRecipe = true;
-            } else if (obj instanceof Boolean)
-                oreRecipe = true;
+                if (recipeType == RecipeType.SHAPELESS || ((String) obj).length() > 3)
+                    return true;
+            } else if (recipeType == RecipeType.SHAPED && obj instanceof Boolean)
+                return true;
             else if (obj == null) {
-                Game.logTrace(Level.WARN, "Tried to define invalid shaped recipe for {0}, a necessary item was probably disabled. Skipping", result.getUnlocalizedName());
-                return;
+                throw new InvalidRecipeException("Tried to define invalid {0} recipe for {1}, a necessary item was probably disabled. Skipping", recipeType, result.getUnlocalizedName());
             }
         }
-        if (oreRecipe) {
-            IRecipe recipe = new ShapedOreRecipe(result, recipeArray);
-            addRecipe(recipe);
-        } else
-            GameRegistry.addRecipe(result, recipeArray);
+        return false;
     }
 
-    public static void addShapelessRecipe(ItemStack result, Object... recipeArray) {
+    public static class ProcessedRecipe {
+        public final ItemStack result;
+        public final Object[] recipeArray;
+        public final boolean isOreRecipe;
+
+        ProcessedRecipe(boolean isOreRecipe, ItemStack result, Object... recipeArray) {
+            this.isOreRecipe = isOreRecipe;
+            this.result = result;
+            this.recipeArray = recipeArray;
+        }
+    }
+
+    public static ProcessedRecipe processRecipe(RecipeType recipeType, @Nullable ItemStack result, Object... recipeArray) throws InvalidRecipeException {
         if (result == null || result.stackSize <= 0) {
-            Game.logTrace(Level.WARN, "Tried to define invalid shapeless recipe, the result was null or zero. Skipping");
+            throw new InvalidRecipeException("Tried to define invalid {0} recipe, the result was null or zero. Skipping", recipeType);
+        }
+        recipeArray = cleanRecipeArray(RecipeType.SHAPED, result, recipeArray);
+        boolean isOreRecipe = isOreRecipe(RecipeType.SHAPED, result, recipeArray);
+        return new ProcessedRecipe(isOreRecipe, result, recipeArray);
+    }
+
+    public static void addRecipe(@Nullable ItemStack result, Object... recipeArray) {
+        ProcessedRecipe processedRecipe;
+        try {
+            processedRecipe = processRecipe(RecipeType.SHAPED, result, recipeArray);
+        } catch (InvalidRecipeException ex) {
+            Game.logTrace(Level.WARN, ex.getRawMessage());
             return;
         }
-        recipeArray = cleanRecipeArray(recipeArray);
-        boolean oreRecipe = false;
-        for (Object obj : recipeArray) {
-            if (obj instanceof String)
-                oreRecipe = true;
-            else if (obj == null) {
-                Game.logTrace(Level.WARN, "Tried to define invalid shapeless recipe for {0}, a necessary item was probably disabled. Skipping", result.getUnlocalizedName());
-                return;
-            }
-        }
-        if (oreRecipe) {
-            IRecipe recipe = new ShapelessOreRecipe(result, recipeArray);
+        if (processedRecipe.isOreRecipe) {
+            IRecipe recipe = new ShapedOreRecipe(processedRecipe.result, processedRecipe.recipeArray);
             addRecipe(recipe);
         } else
-            GameRegistry.addShapelessRecipe(result, recipeArray);
+            GameRegistry.addRecipe(processedRecipe.result, processedRecipe.recipeArray);
+    }
+
+    public static void addShapelessRecipe(@Nullable ItemStack result, Object... recipeArray) {
+        ProcessedRecipe processedRecipe;
+        try {
+            processedRecipe = processRecipe(RecipeType.SHAPELESS, result, recipeArray);
+        } catch (InvalidRecipeException ex) {
+            Game.logTrace(Level.WARN, ex.getRawMessage());
+            return;
+        }
+        if (processedRecipe.isOreRecipe) {
+            IRecipe recipe = new ShapelessOreRecipe(processedRecipe.result, processedRecipe.recipeArray);
+            addRecipe(recipe);
+        } else
+            GameRegistry.addShapelessRecipe(processedRecipe.result, processedRecipe.recipeArray);
     }
 
     public static void addRecipe(IRecipe recipe) {
         GameRegistry.addRecipe(recipe);
+    }
+
+    public static IRecipe makeVanillaShapedRecipe(ItemStack output, Object... components) {
+        String s = "";
+        int index = 0;
+        int width = 0;
+        int height = 0;
+        if (components[index] instanceof String[]) {
+            String as[] = (String[]) components[index++];
+            for (String s2 : as) {
+                height++;
+                width = s2.length();
+                s = (new StringBuilder()).append(s).append(s2).toString();
+            }
+        } else {
+            while (components[index] instanceof String) {
+                String s1 = (String) components[index++];
+                height++;
+                width = s1.length();
+                s = (new StringBuilder()).append(s).append(s1).toString();
+            }
+        }
+        HashMap<Character, ItemStack> hashMap = new HashMap<Character, ItemStack>();
+        for (; index < components.length; index += 2) {
+            Character character = (Character) components[index];
+            ItemStack itemStack = null;
+            if (components[index + 1] instanceof Item) {
+                itemStack = new ItemStack((Item) components[index + 1]);
+            } else if (components[index + 1] instanceof Block) {
+                itemStack = new ItemStack((Block) components[index + 1], 1, -1);
+            } else if (components[index + 1] instanceof ItemStack) {
+                itemStack = (ItemStack) components[index + 1];
+            }
+            hashMap.put(character, itemStack);
+        }
+
+        ItemStack recipeArray[] = new ItemStack[width * height];
+        for (int i1 = 0; i1 < width * height; i1++) {
+            char c = s.charAt(i1);
+            if (hashMap.containsKey(c)) {
+                recipeArray[i1] = hashMap.get(c).copy();
+            } else {
+                recipeArray[i1] = null;
+            }
+        }
+
+        return new ShapedRecipes(width, height, recipeArray, output);
+    }
+
+    public static IRecipe makeVanillaShapelessRecipe(ItemStack output, Object... components) {
+        List<ItemStack> ingredients = new ArrayList<ItemStack>();
+        for (Object obj : components) {
+            if (obj instanceof ItemStack) {
+                ingredients.add(((ItemStack) obj).copy());
+                continue;
+            }
+            if (obj instanceof Item) {
+                ingredients.add(new ItemStack((Item) obj));
+                continue;
+            }
+            if (obj instanceof Block) {
+                ingredients.add(new ItemStack((Block) obj));
+            }
+        }
+
+        return new ShapelessRecipes(output, ingredients);
     }
 
     public static ItemStack[] emptyContainers(InventoryCrafting inv) {

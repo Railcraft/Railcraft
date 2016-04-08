@@ -20,14 +20,16 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public enum RailcraftItem {
 
-    goggles(ItemGoggles.class, "armor.goggles"),
     circuit(ItemCircuit.class, "part.circuit"),
+    crowbar_iron(ItemCrowbarIron.class, "tool.crowbar.iron"),
+    crowbar_steel(ItemCrowbarSteel.class, "tool.crowbar.steel"),
     dust(ItemDust.class, "dust"),
     electricMeter(ItemElectricMeter.class, "tool.electric.meter"),
     gear(ItemGear.class, "part.gear"),
+    goggles(ItemGoggles.class, "armor.goggles"),
     ingot(ItemIngot.class, "ingot"),
-    nugget(ItemNugget.class, "nugget"),
     magGlass(ItemMagnifyingGlass.class, "tool.magnifying.glass"),
+    nugget(ItemNugget.class, "nugget"),
     overalls(ItemOveralls.class, "armor.overalls"),
     plate(ItemPlate.class, "part.plate"),
     rail(ItemRail.class, "part.rail"),

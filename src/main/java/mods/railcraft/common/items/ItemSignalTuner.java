@@ -15,12 +15,10 @@ import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalController;
 import mods.railcraft.api.signals.SignalReceiver;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -49,7 +47,7 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapedRecipe(new ItemStack(this),
+        CraftingPlugin.addRecipe(new ItemStack(this),
                 " T ",
                 "BRB",
                 "   ",

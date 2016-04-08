@@ -13,8 +13,8 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleManager;
-import mods.railcraft.common.modules.ModuleManager.Module;
+import mods.railcraft.common.modules.ModuleStructures;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -90,9 +90,9 @@ public enum EnumWallAlpha implements WallInfo {
         for (EnumWallAlpha wall : VALUES) {
             if (wall.isEnabled() && wall.source != null)
                 if (wall == NETHER_BRICK)
-                    CraftingPlugin.addShapedRecipe(wall.getItem(5), "S S", "SSS", 'S', wall.getSourceItem());
+                    CraftingPlugin.addRecipe(wall.getItem(5), "S S", "SSS", 'S', wall.getSourceItem());
                 else
-                    CraftingPlugin.addShapedRecipe(wall.getItem(6), "SSS", "SSS", 'S', wall.getSourceItem());
+                    CraftingPlugin.addRecipe(wall.getItem(6), "SSS", "SSS", 'S', wall.getSourceItem());
         }
 
         creativeList.addAll(Arrays.asList(VALUES));
@@ -148,7 +148,7 @@ public enum EnumWallAlpha implements WallInfo {
 
     @Override
     public boolean isEnabled() {
-        return ModuleManager.isModuleLoaded(Module.STRUCTURES) && RailcraftConfig.isSubBlockEnabled(getTag()) && getBlock() != null;
+        return RailcraftModuleManager.isModuleEnabled(ModuleStructures.class) && RailcraftConfig.isSubBlockEnabled(getTag()) && getBlock() != null;
     }
 
     @Override

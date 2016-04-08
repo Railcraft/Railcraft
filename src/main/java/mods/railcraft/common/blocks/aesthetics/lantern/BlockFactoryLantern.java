@@ -14,7 +14,6 @@ import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
-import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -50,7 +49,7 @@ public class BlockFactoryLantern extends BlockFactory {
     }
 
     @Override
-    protected void doRecipeInit(ModuleManager.Module module) {
+    protected void doRecipeInit() {
         BlockMaterial.initialize();
         if (BlockLantern.stone != null) {
             for (BlockMaterial mat : BlockLantern.STONE_LANTERN.keySet()) {
@@ -64,7 +63,7 @@ public class BlockFactoryLantern extends BlockFactory {
                         slab = new ItemStack(Blocks.stone_slab, 1, 0);
                     if (slab == null)
                         slab = mat.getCraftingEquivalent();
-                    CraftingPlugin.addShapedRecipe(BlockLantern.stone.getItem(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.torch));
+                    CraftingPlugin.addRecipe(BlockLantern.stone.getItem(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.torch));
                 }
             }
         }
@@ -74,7 +73,7 @@ public class BlockFactoryLantern extends BlockFactory {
                     Object slab = BlockRailcraftSlab.getItem(mat);
                     if (slab == null)
                         slab = mat.getCraftingEquivalent();
-                    CraftingPlugin.addShapedRecipe(BlockLantern.stone.getItem(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.torch));
+                    CraftingPlugin.addRecipe(BlockLantern.stone.getItem(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.torch));
                 }
             }
         }

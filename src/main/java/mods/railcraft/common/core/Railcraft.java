@@ -21,7 +21,7 @@ import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.items.firestone.BlockFirestoneRecharge;
-import mods.railcraft.common.modules.ModuleManager;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.craftguide.CraftGuidePlugin;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.misc.BallastRegistry;
@@ -158,6 +158,8 @@ public final class Railcraft {
     public void preInit(FMLPreInitializationEvent event) {
 //        Game.log(Level.FINE, "Pre-Init Phase");
 
+        RailcraftModuleManager.loadModules(event.getAsmData());
+
         configFolder = new File(event.getModConfigurationDirectory(), "railcraft");
         RailcraftConfig.preInit();
 
@@ -167,7 +169,7 @@ public final class Railcraft {
 
         StandardStackFilters.initialize();
 
-        ModuleManager.preInit();
+        RailcraftModuleManager.preInit();
 
         proxy.preInitClient();
 
@@ -178,7 +180,7 @@ public final class Railcraft {
     public void init(FMLInitializationEvent event) {
 //        Game.log(Level.FINE, "Init Phase");
 
-        ModuleManager.init();
+        RailcraftModuleManager.init();
 
         MinecraftForge.EVENT_BUS.register(new BlinkTick());
     }
@@ -186,7 +188,7 @@ public final class Railcraft {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
 //        Game.log(Level.FINE, "Post-Init Phase");
-        ModuleManager.postInit();
+        RailcraftModuleManager.postInit();
 
         proxy.initClient();
 

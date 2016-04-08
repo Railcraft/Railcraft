@@ -55,7 +55,7 @@ public class BlockFrame extends Block implements IPostConnection {
 
                 ForestryPlugin.addBackpackItem("builder", instance);
 
-                CraftingPlugin.addShapedRecipe(getItem(6),
+                CraftingPlugin.addRecipe(getItem(6),
                         "PPP",
                         "I I",
                         "III",

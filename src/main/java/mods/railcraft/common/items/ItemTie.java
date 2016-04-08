@@ -57,7 +57,7 @@ public class ItemTie extends ItemRailcraft {
     @Override
     public void defineRecipes() {
         ItemStack tieStone = RailcraftItem.tie.getStack(1, EnumTie.STONE);
-        CraftingPlugin.addShapedRecipe(tieStone,
+        CraftingPlugin.addRecipe(tieStone,
                 " O ",
                 "###",
                 'O', RailcraftItem.rebar,
@@ -68,7 +68,7 @@ public class ItemTie extends ItemRailcraft {
     public void definePostRecipes() {
         ItemStack tieWood = RailcraftItem.tie.getStack(1, EnumTie.WOOD);
         for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.getB(1))) {
-            CraftingPlugin.addShapedRecipe(tieWood,
+            CraftingPlugin.addRecipe(tieWood,
                     " O ",
                     "###",
                     'O', container,

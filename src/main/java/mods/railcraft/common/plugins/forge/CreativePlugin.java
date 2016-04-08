@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.common.items.ItemCrowbarReinforced;
+import mods.railcraft.common.items.ItemCrowbarSteel;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,7 +28,7 @@ public class CreativePlugin {
 
         @Override
         public ItemStack getIconItemStack() {
-            return ItemCrowbarReinforced.getItem();
+            return ItemCrowbarSteel.getItem();
         }
 
         @Override
@@ -38,7 +38,7 @@ public class CreativePlugin {
 
         @Override
         public Item getTabIconItem() {
-            return ItemCrowbarReinforced.item;
+            return ItemCrowbarSteel.item;
         }
 
     }

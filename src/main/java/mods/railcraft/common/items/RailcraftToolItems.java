@@ -60,7 +60,7 @@ public class RailcraftToolItems {
                 item = itemSteelShears = new ItemSteelShears();
                 RailcraftRegistry.register(item);
 
-                CraftingPlugin.addShapedRecipe(new ItemStack(item), false,
+                CraftingPlugin.addRecipe(new ItemStack(item), false,
                         " I",
                         "I ",
                         'I', "ingotSteel");
@@ -84,7 +84,7 @@ public class RailcraftToolItems {
                 item = itemSteelSword = new ItemSteelSword();
                 RailcraftRegistry.register(item);
 
-                CraftingPlugin.addShapedRecipe(new ItemStack(item), false,
+                CraftingPlugin.addRecipe(new ItemStack(item), false,
                         " I ",
                         " I ",
                         " S ",
@@ -171,7 +171,7 @@ public class RailcraftToolItems {
                 RailcraftRegistry.register(item);
                 HarvestPlugin.setToolClass(item, "axe", 2);
 
-                CraftingPlugin.addShapedRecipe(new ItemStack(item), true,
+                CraftingPlugin.addRecipe(new ItemStack(item), true,
                         "II ",
                         "IS ",
                         " S ",
@@ -226,7 +226,7 @@ public class RailcraftToolItems {
                 item.setUnlocalizedName(tag);
                 RailcraftRegistry.register(item);
 
-                CraftingPlugin.addShapedRecipe(new ItemStack(item), true, new Object[]{
+                CraftingPlugin.addRecipe(new ItemStack(item), true, new Object[]{
                         "III",
                         "I I",
                         'I', "ingotSteel",});
@@ -252,7 +252,7 @@ public class RailcraftToolItems {
                 item.setUnlocalizedName(tag);
                 RailcraftRegistry.register(item);
 
-                CraftingPlugin.addShapedRecipe(new ItemStack(item), true, new Object[]{
+                CraftingPlugin.addRecipe(new ItemStack(item), true, new Object[]{
                         "I I",
                         "III",
                         "III",
@@ -279,7 +279,7 @@ public class RailcraftToolItems {
                 item.setUnlocalizedName(tag);
                 RailcraftRegistry.register(item);
 
-                CraftingPlugin.addShapedRecipe(new ItemStack(item), true, new Object[]{
+                CraftingPlugin.addRecipe(new ItemStack(item), true, new Object[]{
                         "III",
                         "I I",
                         "I I",
@@ -306,7 +306,7 @@ public class RailcraftToolItems {
                 item.setUnlocalizedName(tag);
                 RailcraftRegistry.register(item);
 
-                CraftingPlugin.addShapedRecipe(new ItemStack(item), true, new Object[]{
+                CraftingPlugin.addRecipe(new ItemStack(item), true, new Object[]{
                         "I I",
                         "I I",
                         'I', "ingotSteel",});
@@ -330,7 +330,7 @@ public class RailcraftToolItems {
                 RailcraftRegistry.register(itemCoalCoke);
 
                 if (RailcraftConfig.coalcokeTorchOutput() > 0) {
-                    CraftingPlugin.addShapedRecipe(new ItemStack(Blocks.torch, RailcraftConfig.coalcokeTorchOutput()),
+                    CraftingPlugin.addRecipe(new ItemStack(Blocks.torch, RailcraftConfig.coalcokeTorchOutput()),
                             "C",
                             "S",
                             'C', new ItemStack(itemCoalCoke),

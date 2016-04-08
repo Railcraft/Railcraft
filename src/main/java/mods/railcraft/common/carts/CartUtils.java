@@ -16,7 +16,6 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
@@ -37,7 +36,7 @@ import java.util.*;
 public class CartUtils {
 
     public static Map<Item, ICartType> vanillaCartItemMap = new HashMap<Item, ICartType>();
-    public static Map<Class<? extends EntityMinecart>, ICartType> classReplacements = new HashMap<Class<? extends EntityMinecart>, ICartType>();
+    public static Map<Class<? extends Entity>, ICartType> classReplacements = new HashMap<Class<? extends Entity>, ICartType>();
 
     /**
      * Spawns a new cart entity using the provided item.
@@ -51,9 +50,6 @@ public class CartUtils {
      * @param cart  An ItemStack containing a cart item, will not be changed by
      *              the function
      * @param world The World object
-     * @param x     x-Coord
-     * @param y     y-Coord
-     * @param z     z-Coord
      * @return the cart placed or null if failed
      * @see IMinecartItem , ItemMinecart
      */

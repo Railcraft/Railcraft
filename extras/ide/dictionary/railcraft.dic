@@ -1,5 +1,9 @@
 addon
+batbox
+biofuel
+buildcraft
 bukkit
+cesu
 concatenator
 coord
 coords
@@ -10,9 +14,12 @@ dest
 invs
 irongolem
 iterable
+killable
 knockback
 lapis
+lapotron
 lockdown
+mfsu
 minecart
 minecarts
 minecraft
@@ -25,6 +32,7 @@ ownable
 pickaxe
 printf
 purpur
+pyrotheum
 railbed
 railcraft
 randomizer
@@ -32,9 +40,12 @@ rebar
 recv
 redstone
 refuelable
+rideable
 routable
+slimeball
 spigotmc
 teleported
+thaumcraft
 uncrafted
 uncrafting
 unloader

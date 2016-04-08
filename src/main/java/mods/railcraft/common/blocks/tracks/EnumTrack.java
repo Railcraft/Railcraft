@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
+import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -15,7 +17,6 @@ import mods.railcraft.common.blocks.tracks.instances.*;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.items.ItemCrowbar;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
@@ -23,8 +24,7 @@ import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.ItemTicketGold;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.items.RailcraftItem;
-import mods.railcraft.common.modules.ModuleManager;
-import mods.railcraft.common.modules.ModuleManager.Module;
+import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -36,54 +36,54 @@ import java.util.*;
 
 public enum EnumTrack {
 
-//    BOARDING(Module.TRACKS, 4, 1, "boarding", 8, TrackBoarding.class),
-//    HOLDING(Module.TRACKS, 2, 1, "holding", 8, TrackHolding.class),
-    ONEWAY(Module.TRACKS, 4, 1, "oneway", 8, TrackOneWay.class),
-    CONTROL(Module.TRACKS, 2, 0, "control", 16, TrackControl.class),
-    LAUNCHER(Module.EXTRAS, 2, 1, "launcher", 1, TrackLauncher.class),
-    PRIMING(Module.EXTRAS, 2, 1, "priming", 8, TrackPriming.class),
-    JUNCTION(Module.TRACKS, 1, 0, "junction", 8, TrackJunction.class),
-    SWITCH(Module.SIGNALS, 4, 0, "switch", 8, TrackSwitch.class),
-    DISEMBARK(Module.TRACKS, 4, 1, "disembarking", 8, TrackDisembark.class),
-    SUSPENDED(Module.EXTRAS, 1, 0, "suspended", 8, TrackSuspended.class),
-    GATED_ONEWAY(Module.TRACKS, 2, 0, "gated.oneway", 4, TrackGatedOneWay.class),
-    GATED(Module.TRACKS, 1, 0, "gated", 4, TrackGated.class),
-    SLOW(Module.TRACKS_WOOD, 2, 0, "slow", 16, TrackSlow.class),
-    SLOW_BOOSTER(Module.TRACKS_WOOD, 2, 1, "slow.boost", 8, TrackSlowBooster.class),
-    SLOW_JUNCTION(Module.TRACKS_WOOD, 1, 0, "slow.junction", 8, TrackSlowJunction.class),
-    SLOW_SWITCH(Module.SIGNALS, 4, 0, "slow.switch", 8, TrackSlowSwitch.class),
-    SPEED(Module.TRACKS_HIGHSPEED, 2, 0, "speed", 16, TrackSpeed.class),
-    SPEED_BOOST(Module.TRACKS_HIGHSPEED, 2, 1, "speed.boost", 8, TrackSpeedBoost.class),
-    SPEED_TRANSITION(Module.TRACKS_HIGHSPEED, 4, 1, "speed.transition", 8, TrackSpeedTransition.class),
-    SPEED_SWITCH(Module.SIGNALS, 4, 0, "speed.switch", 8, TrackSpeedSwitch.class),
+//    BOARDING(ModuleTracks.class, 4, 1, "boarding", 8, TrackBoarding.class),
+//    HOLDING(ModuleTracks.class, 2, 1, "holding", 8, TrackHolding.class),
+    ONEWAY(ModuleTracks.class, 4, 1, "oneway", 8, TrackOneWay.class),
+    CONTROL(ModuleTracks.class, 2, 0, "control", 16, TrackControl.class),
+    LAUNCHER(ModuleExtras.class, 2, 1, "launcher", 1, TrackLauncher.class),
+    PRIMING(ModuleExtras.class, 2, 1, "priming", 8, TrackPriming.class),
+    JUNCTION(ModuleTracks.class, 1, 0, "junction", 8, TrackJunction.class),
+    SWITCH(ModuleSignals.class, 4, 0, "switch", 8, TrackSwitch.class),
+    DISEMBARK(ModuleTracks.class, 4, 1, "disembarking", 8, TrackDisembark.class),
+    SUSPENDED(ModuleExtras.class, 1, 0, "suspended", 8, TrackSuspended.class),
+    GATED_ONEWAY(ModuleTracks.class, 2, 0, "gated.oneway", 4, TrackGatedOneWay.class),
+    GATED(ModuleTracks.class, 1, 0, "gated", 4, TrackGated.class),
+    SLOW(ModuleTracksWood.class, 2, 0, "slow", 16, TrackSlow.class),
+    SLOW_BOOSTER(ModuleTracksWood.class, 2, 1, "slow.boost", 8, TrackSlowBooster.class),
+    SLOW_JUNCTION(ModuleTracksWood.class, 1, 0, "slow.junction", 8, TrackSlowJunction.class),
+    SLOW_SWITCH(ModuleSignals.class, 4, 0, "slow.switch", 8, TrackSlowSwitch.class),
+    SPEED(ModuleTracksHighSpeed.class, 2, 0, "speed", 16, TrackSpeed.class),
+    SPEED_BOOST(ModuleTracksHighSpeed.class, 2, 1, "speed.boost", 8, TrackSpeedBoost.class),
+    SPEED_TRANSITION(ModuleTracksHighSpeed.class, 4, 1, "speed.transition", 8, TrackSpeedTransition.class),
+    SPEED_SWITCH(ModuleSignals.class, 4, 0, "speed.switch", 8, TrackSpeedSwitch.class),
 //    BOARDING_TRAIN(Module.TRAIN, 4, 1, "boarding.train", 8, TrackBoardingTrain.class),
 //    HOLDING_TRAIN(Module.TRAIN, 2, 1, "holding.train", 8, TrackHoldingTrain.class),
-    COUPLER(Module.TRACKS, 6, 1, "coupler", 8, TrackCoupler.class),
-    DECOUPLER(Module.TRACKS, 0, 0, "decoupler", 8, TrackCoupler.class),
-    REINFORCED(Module.TRACKS_REINFORCED, 2, 0, "reinforced", 16, TrackReinforced.class),
-    REINFORCED_BOOSTER(Module.TRACKS_REINFORCED, 2, 1, "reinforced.boost", 8, TrackReinforcedBooster.class),
-    REINFORCED_JUNCTION(Module.TRACKS_REINFORCED, 1, 0, "reinforced.junction", 8, TrackReinforcedJunction.class),
-    REINFORCED_SWITCH(Module.TRACKS_REINFORCED, 4, 0, "reinforced.switch", 8, TrackReinforcedSwitch.class),
-    BUFFER_STOP(Module.TRACKS, 2, 0, "buffer.stop", 8, TrackBufferStop.class),
-    DISPOSAL(Module.TRACKS, 2, 0, "disposal", 8, TrackDisposal.class),
-    DETECTOR_DIRECTION(Module.TRACKS, 4, 0, "detector.direction", 8, TrackDetectorDirection.class),
-    EMBARKING(Module.TRACKS, 2, 1, "embarking", 8, TrackEmbarking.class),
-    WYE(Module.TRACKS, 2, 0, "wye", 8, TrackWye.class),
-    SLOW_WYE(Module.TRACKS_WOOD, 2, 0, "slow.wye", 8, TrackSlowWye.class),
-    REINFORCED_WYE(Module.TRACKS_REINFORCED, 2, 0, "reinforced.wye", 8, TrackReinforcedWye.class),
-    SPEED_WYE(Module.TRACKS_HIGHSPEED, 2, 0, "speed.wye", 8, TrackSpeedWye.class),
-//    LOCKDOWN(Module.TRACKS, 2, 1, "lockdown", 8, TrackLockdown.class),
+    COUPLER(ModuleTracks.class, 6, 1, "coupler", 8, TrackCoupler.class),
+    DECOUPLER(ModuleTracks.class, 0, 0, "decoupler", 8, TrackCoupler.class),
+    REINFORCED(ModuleTracksReinforced.class, 2, 0, "reinforced", 16, TrackReinforced.class),
+    REINFORCED_BOOSTER(ModuleTracksReinforced.class, 2, 1, "reinforced.boost", 8, TrackReinforcedBooster.class),
+    REINFORCED_JUNCTION(ModuleTracksReinforced.class, 1, 0, "reinforced.junction", 8, TrackReinforcedJunction.class),
+    REINFORCED_SWITCH(ModuleTracksReinforced.class, 4, 0, "reinforced.switch", 8, TrackReinforcedSwitch.class),
+    BUFFER_STOP(ModuleTracks.class, 2, 0, "buffer.stop", 8, TrackBufferStop.class),
+    DISPOSAL(ModuleTracks.class, 2, 0, "disposal", 8, TrackDisposal.class),
+    DETECTOR_DIRECTION(ModuleTracks.class, 4, 0, "detector.direction", 8, TrackDetectorDirection.class),
+    EMBARKING(ModuleTracks.class, 2, 1, "embarking", 8, TrackEmbarking.class),
+    WYE(ModuleTracks.class, 2, 0, "wye", 8, TrackWye.class),
+    SLOW_WYE(ModuleTracksWood.class, 2, 0, "slow.wye", 8, TrackSlowWye.class),
+    REINFORCED_WYE(ModuleTracksReinforced.class, 2, 0, "reinforced.wye", 8, TrackReinforcedWye.class),
+    SPEED_WYE(ModuleTracksHighSpeed.class, 2, 0, "speed.wye", 8, TrackSpeedWye.class),
+//    LOCKDOWN(ModuleTracks.class, 2, 1, "lockdown", 8, TrackLockdown.class),
 //    LOCKDOWN_TRAIN(Module.TRAIN, 2, 1, "lockdown.train", 8, TrackLockdownTrain.class),
-    WHISTLE(Module.LOCOMOTIVES, 2, 1, "whistle", 8, TrackWhistle.class),
-    LOCOMOTIVE(Module.LOCOMOTIVES, 6, 3, "locomotive", 8, TrackLocomotive.class),
-    LIMITER(Module.LOCOMOTIVES, 6, 5, "limiter", 8, TrackLimiter.class),
-    ROUTING(Module.ROUTING, 2, 1, "routing", 8, TrackRouting.class),
-    LOCKING(Module.TRACKS, 16, 1, "locking", 8, TrackLocking.class),
-    ELECTRIC(Module.TRACKS_ELECTRIC, 2, 0, "electric", 16, TrackElectric.class),
-    ELECTRIC_JUNCTION(Module.TRACKS_ELECTRIC, 1, 0, "electric.junction", 8, TrackElectricJunction.class),
-    ELECTRIC_SWITCH(Module.TRACKS_ELECTRIC, 4, 0, "electric.switch", 8, TrackElectricSwitch.class),
-    ELECTRIC_WYE(Module.TRACKS_ELECTRIC, 2, 0, "electric.wye", 8, TrackElectricWye.class),
-    FORCE(Module.ELECTRICITY, 1, 0, "force", 1, TrackForce.class);
+    WHISTLE(ModuleLocomotives.class, 2, 1, "whistle", 8, TrackWhistle.class),
+    LOCOMOTIVE(ModuleLocomotives.class, 6, 3, "locomotive", 8, TrackLocomotive.class),
+    LIMITER(ModuleLocomotives.class, 6, 5, "limiter", 8, TrackLimiter.class),
+    ROUTING(ModuleRouting.class, 2, 1, "routing", 8, TrackRouting.class),
+    LOCKING(ModuleTracks.class, 16, 1, "locking", 8, TrackLocking.class),
+    ELECTRIC(ModuleTracksElectric.class, 2, 0, "electric", 16, TrackElectric.class),
+    ELECTRIC_JUNCTION(ModuleTracksElectric.class, 1, 0, "electric.junction", 8, TrackElectricJunction.class),
+    ELECTRIC_SWITCH(ModuleTracksElectric.class, 4, 0, "electric.switch", 8, TrackElectricSwitch.class),
+    ELECTRIC_WYE(ModuleTracksElectric.class, 2, 0, "electric.wye", 8, TrackElectricWye.class),
+    FORCE(ModuleElectricity.class, 1, 0, "force", 1, TrackForce.class);
     public static final EnumTrack[] VALUES = values();
     private static final List<EnumTrack> creativeList = new ArrayList<EnumTrack>(50);
     private static final Set<TrackSpec> trackSpecs = new HashSet<TrackSpec>(50);
@@ -142,7 +142,7 @@ public enum EnumTrack {
     }
 
     public final int recipeOutput;
-    private final Module module;
+    private final Class<? extends IRailcraftModule> module;
     private final String tag;
     private final int numIcons;
     private final int itemIconIndex;
@@ -150,7 +150,7 @@ public enum EnumTrack {
     private TrackSpec trackSpec;
     private boolean depreciated;
 
-    EnumTrack(Module module, int numIcons, int itemIconIndex, String tag, int recipeOutput, Class<? extends TrackBaseRailcraft> trackInstance) {
+    EnumTrack(Class<? extends IRailcraftModule> module, int numIcons, int itemIconIndex, String tag, int recipeOutput, Class<? extends TrackBaseRailcraft> trackInstance) {
         this.module = module;
         this.numIcons = numIcons;
         this.itemIconIndex = itemIconIndex;
@@ -187,7 +187,7 @@ public enum EnumTrack {
     }
 
     public boolean isEnabled() {
-        return ModuleManager.isModuleLoaded(module) && RailcraftConfig.isBlockEnabled("track") && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDepreciated();
+        return RailcraftModuleManager.isModuleEnabled(module) && RailcraftConfig.isBlockEnabled("track") && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDepreciated();
     }
 
     public boolean isDepreciated() {
@@ -239,14 +239,11 @@ public enum EnumTrack {
         Object stoneRailbed = RailcraftConfig.useOldRecipes() ? Blocks.stone_slab : RailcraftItem.railbed.getRecipeObject(EnumRailbed.STONE);
         Object reinforcedRailbed = RailcraftConfig.useOldRecipes() || !RailcraftItem.rail.isEnabled() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? new ItemStack(Blocks.obsidian) : stoneRailbed;
 
-        ItemStack crowbar = ItemCrowbar.getItem();
-
-        if (crowbar != null)
-            crowbar.setItemDamage(-1);
+        Object crowbar = IToolCrowbar.ORE_TAG;
 
         switch (this) {
             case LOCKING:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IrI",
                         "IbI",
                         "IsI",
@@ -256,7 +253,7 @@ public enum EnumTrack {
                         'b', Blocks.stone_pressure_plate);
                 break;
             case ONEWAY:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IbI",
                         "IsI",
                         "IpI",
@@ -266,7 +263,7 @@ public enum EnumTrack {
                         'p', Blocks.piston);
                 break;
             case CONTROL:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IrI",
                         "GsG",
                         "IrI",
@@ -276,7 +273,7 @@ public enum EnumTrack {
                         'r', "dustRedstone");
                 break;
             case SPEED:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "I I",
                         "IsI",
                         "I I",
@@ -284,7 +281,7 @@ public enum EnumTrack {
                         's', stoneRailbed);
                 break;
             case SPEED_BOOST:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IrI",
                         "IsI",
                         "IrI",
@@ -293,14 +290,14 @@ public enum EnumTrack {
                         'r', "dustRedstone");
                 break;
             case SPEED_TRANSITION:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IrI",
                         "IrI",
                         "IsI",
                         'I', railSpeed,
                         's', stoneRailbed,
                         'r', "dustRedstone");
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IsI",
                         "IrI",
                         "IrI",
@@ -309,7 +306,7 @@ public enum EnumTrack {
                         'r', "dustRedstone");
                 break;
             case SPEED_SWITCH:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IsI",
                         "III",
                         "III",
@@ -317,7 +314,7 @@ public enum EnumTrack {
                         's', stoneRailbed);
                 break;
             case LAUNCHER:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IsI",
                         "BPB",
                         "IsI",
@@ -327,7 +324,7 @@ public enum EnumTrack {
                         'P', Blocks.piston);
                 break;
             case PRIMING:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IpI",
                         "IsI",
                         "IfI",
@@ -337,7 +334,7 @@ public enum EnumTrack {
                         'f', Items.flint_and_steel);
                 break;
             case JUNCTION:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "III",
                         "I#I",
                         "III",
@@ -345,7 +342,7 @@ public enum EnumTrack {
                         '#', woodRailbed);
                 break;
             case SLOW:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "I I",
                         "I#I",
                         "I I",
@@ -353,7 +350,7 @@ public enum EnumTrack {
                         '#', woodRailbed);
                 break;
             case SLOW_BOOSTER:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "I I",
                         "G#G",
                         "IrI",
@@ -363,7 +360,7 @@ public enum EnumTrack {
                         'r', "dustRedstone");
                 break;
             case SLOW_SWITCH:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "I#I",
                         "III",
                         "III",
@@ -371,7 +368,7 @@ public enum EnumTrack {
                         '#', woodRailbed);
                 break;
             case SLOW_JUNCTION:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "III",
                         "I#I",
                         "III",
@@ -379,7 +376,7 @@ public enum EnumTrack {
                         '#', woodRailbed);
                 break;
             case ELECTRIC:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "I I",
                         "I#I",
                         "I I",
@@ -387,7 +384,7 @@ public enum EnumTrack {
                         '#', stoneRailbed);
                 break;
             case ELECTRIC_SWITCH:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "I#I",
                         "III",
                         "III",
@@ -395,7 +392,7 @@ public enum EnumTrack {
                         '#', stoneRailbed);
                 break;
             case ELECTRIC_JUNCTION:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "III",
                         "I#I",
                         "III",
@@ -403,7 +400,7 @@ public enum EnumTrack {
                         '#', stoneRailbed);
                 break;
             case ELECTRIC_WYE:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "III",
                         "II#",
                         "III",
@@ -411,7 +408,7 @@ public enum EnumTrack {
                         '#', stoneRailbed);
                 break;
             case SWITCH:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "I#I",
                         "III",
                         "III",
@@ -419,7 +416,7 @@ public enum EnumTrack {
                         '#', woodRailbed);
                 break;
             case WYE:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "III",
                         "II#",
                         "III",
@@ -427,7 +424,7 @@ public enum EnumTrack {
                         '#', woodRailbed);
                 break;
             case SLOW_WYE:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "III",
                         "II#",
                         "III",
@@ -435,7 +432,7 @@ public enum EnumTrack {
                         '#', woodRailbed);
                 break;
             case REINFORCED_WYE:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "III",
                         "II#",
                         "III",
@@ -443,7 +440,7 @@ public enum EnumTrack {
                         '#', reinforcedRailbed);
                 break;
             case SPEED_WYE:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "III",
                         "II#",
                         "III",
@@ -451,7 +448,7 @@ public enum EnumTrack {
                         '#', stoneRailbed);
                 break;
             case DISEMBARK:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IpI",
                         "I#I",
                         "IrI",
@@ -461,7 +458,7 @@ public enum EnumTrack {
                         'p', Blocks.stone_pressure_plate);
                 break;
             case EMBARKING:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IpI",
                         "I#I",
                         "IpI",
@@ -470,7 +467,7 @@ public enum EnumTrack {
                         'p', Items.ender_pearl);
                 break;
             case SUSPENDED:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "ItI",
                         "ItI",
                         "ItI",
@@ -478,7 +475,7 @@ public enum EnumTrack {
                         't', woodTie);
                 break;
             case DISPOSAL:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "ItI",
                         "IPI",
                         "ItI",
@@ -487,7 +484,7 @@ public enum EnumTrack {
                         't', woodTie);
                 break;
             case BUFFER_STOP:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "I I",
                         "I#I",
                         "IbI",
@@ -496,7 +493,7 @@ public enum EnumTrack {
                         'b', "blockIron");
                 break;
             case DETECTOR_DIRECTION:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IrI",
                         "I#I",
                         "IsI",
@@ -506,7 +503,7 @@ public enum EnumTrack {
                         's', Blocks.stone_pressure_plate);
                 break;
             case GATED:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IgI",
                         "I#I",
                         "IgI",
@@ -515,7 +512,7 @@ public enum EnumTrack {
                         'g', Blocks.oak_fence_gate);
                 break;
             case GATED_ONEWAY:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IgI",
                         "G#G",
                         "IgI",
@@ -525,7 +522,7 @@ public enum EnumTrack {
                         'G', railAdvanced);
                 break;
             case COUPLER:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IcI",
                         "I#I",
                         "IcI",
@@ -534,7 +531,7 @@ public enum EnumTrack {
                         'c', crowbar);
                 break;
             case WHISTLE:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IyI",
                         "I#I",
                         "IbI",
@@ -544,7 +541,7 @@ public enum EnumTrack {
                         'b', "dyeBlack");
                 break;
             case LOCOMOTIVE:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "ILI",
                         "I#I",
                         "ILI",
@@ -553,7 +550,7 @@ public enum EnumTrack {
                         'L', RailcraftItem.signalLamp.getRecipeObject());
                 break;
             case LIMITER:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IlI",
                         "I#I",
                         "IlI",
@@ -562,7 +559,7 @@ public enum EnumTrack {
                         'l', Items.repeater);
                 break;
             case ROUTING:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IrI",
                         "I#I",
                         "ItI",
@@ -570,7 +567,7 @@ public enum EnumTrack {
                         '#', woodRailbed,
                         'r', "dustRedstone",
                         't', ItemTicket.getTicket());
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "IrI",
                         "I#I",
                         "ItI",
@@ -580,7 +577,7 @@ public enum EnumTrack {
                         't', ItemTicketGold.getTicket());
                 break;
             case REINFORCED:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "I I",
                         "I#I",
                         "I I",
@@ -588,7 +585,7 @@ public enum EnumTrack {
                         '#', reinforcedRailbed);
                 break;
             case REINFORCED_BOOSTER:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "I I",
                         "I#I",
                         "IrI",
@@ -597,7 +594,7 @@ public enum EnumTrack {
                         '#', reinforcedRailbed);
                 break;
             case REINFORCED_JUNCTION:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "III",
                         "I#I",
                         "III",
@@ -605,7 +602,7 @@ public enum EnumTrack {
                         '#', reinforcedRailbed);
                 break;
             case REINFORCED_SWITCH:
-                CraftingPlugin.addShapedRecipe(output,
+                CraftingPlugin.addRecipe(output,
                         "I#I",
                         "III",
                         "III",

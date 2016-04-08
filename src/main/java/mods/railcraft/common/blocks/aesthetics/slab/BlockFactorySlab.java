@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.aesthetics.slab;
 import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -52,17 +51,17 @@ public class BlockFactorySlab extends BlockFactory {
     }
 
     @Override
-    protected void doRecipeInit(ModuleManager.Module module) {
+    protected void doRecipeInit() {
         BlockMaterial.initialize();
         for (BlockMaterial mat : BlockMaterial.SLAB_MATS) {
             if (BlockRailcraftSlab.isEnabled(mat) && mat.getSourceItem() != null) {
                 switch (mat) {
                     case SNOW:
-                        CraftingPlugin.addShapedRecipe(BlockRailcraftSlab.getItem(mat, 3), "SSS", 'S', Blocks.snow_layer);
+                        CraftingPlugin.addRecipe(BlockRailcraftSlab.getItem(mat, 3), "SSS", 'S', Blocks.snow_layer);
                         break;
                     default:
-                        CraftingPlugin.addShapedRecipe(BlockRailcraftSlab.getItem(mat, 6), "SSS", 'S', mat.getSourceItem());
-                        CraftingPlugin.addShapedRecipe(mat.getSourceItem(), "S", "S", 'S', BlockRailcraftSlab.getItem(mat));
+                        CraftingPlugin.addRecipe(BlockRailcraftSlab.getItem(mat, 6), "SSS", 'S', mat.getSourceItem());
+                        CraftingPlugin.addRecipe(mat.getSourceItem(), "S", "S", 'S', BlockRailcraftSlab.getItem(mat));
                 }
             }
         }

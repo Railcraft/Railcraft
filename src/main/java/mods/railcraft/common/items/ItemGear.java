@@ -76,26 +76,26 @@ public class ItemGear extends ItemRailcraft {
 
         RailcraftItem gear = RailcraftItem.gear;
 
-        CraftingPlugin.addShapedRecipe(gear.getStack(2, EnumGear.BUSHING),
+        CraftingPlugin.addRecipe(gear.getStack(2, EnumGear.BUSHING),
                 "TT",
                 "TT",
                 'T', "ingotTin");
 
-        CraftingPlugin.addShapedRecipe(gear.getStack(EnumGear.GOLD_PLATE),
+        CraftingPlugin.addRecipe(gear.getStack(EnumGear.GOLD_PLATE),
                 " G ",
                 "GBG",
                 " G ",
                 'G', "nuggetGold",
                 'B', bushing);
 
-        CraftingPlugin.addShapedRecipe(gear.getStack(EnumGear.IRON),
+        CraftingPlugin.addRecipe(gear.getStack(EnumGear.IRON),
                 " I ",
                 "IBI",
                 " I ",
                 'I', "ingotIron",
                 'B', bushing);
 
-        CraftingPlugin.addShapedRecipe(gear.getStack(EnumGear.STEEL),
+        CraftingPlugin.addRecipe(gear.getStack(EnumGear.STEEL),
                 " I ",
                 "IBI",
                 " I ",

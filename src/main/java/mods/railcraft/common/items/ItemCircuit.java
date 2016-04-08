@@ -39,7 +39,7 @@ public class ItemCircuit extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.CONTROLLER.ordinal()),
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.CONTROLLER.ordinal()),
                 " #S",
                 "BGR",
                 "SRL",
@@ -49,7 +49,7 @@ public class ItemCircuit extends ItemRailcraft {
                 'S', new ItemStack(Blocks.wool, 1, 14),
                 'R', "dustRedstone",
                 'B', "slimeball");
-        CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.RECEIVER.ordinal()),
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.RECEIVER.ordinal()),
                 " #S",
                 "BGR",
                 "SRL",
@@ -59,7 +59,7 @@ public class ItemCircuit extends ItemRailcraft {
                 'S', new ItemStack(Blocks.wool, 1, 13),
                 'R', "dustRedstone",
                 'B', "slimeball");
-        CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.SIGNAL.ordinal()),
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.SIGNAL.ordinal()),
                 " #S",
                 "BGR",
                 "SRL",

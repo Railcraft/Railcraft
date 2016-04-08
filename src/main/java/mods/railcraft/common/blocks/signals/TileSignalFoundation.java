@@ -10,18 +10,16 @@ package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.Level;
 
 public abstract class TileSignalFoundation extends RailcraftTileEntity {
 
@@ -80,7 +78,7 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
     }
 
     public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-        RailcraftBlocks.getBlockSignal().setBlockBounds(0, 0, 0, 1, 1, 1);
+        getBlockType().setBlockBounds(0, 0, 0, 1, 1, 1);
     }
 
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, BlockPos pos) {

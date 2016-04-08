@@ -19,7 +19,7 @@ import mods.railcraft.common.items.ItemSignalTuner;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.fluids.FluidContainers;
 import mods.railcraft.common.items.ItemCrowbar;
-import mods.railcraft.common.items.ItemCrowbarReinforced;
+import mods.railcraft.common.items.ItemCrowbarSteel;
 import mods.railcraft.common.items.RailcraftItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -46,7 +46,7 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
 
     public void setup() {
         addItem(ItemCrowbar.getItem());
-        addItem(ItemCrowbarReinforced.getItem());
+        addItem(ItemCrowbarSteel.getItem());
         addItem(ItemSignalBlockSurveyor.getItem());
         addItem(ItemSignalTuner.getItem());
 

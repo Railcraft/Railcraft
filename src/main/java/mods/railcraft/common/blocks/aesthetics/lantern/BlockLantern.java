@@ -12,9 +12,9 @@ package mods.railcraft.common.blocks.aesthetics.lantern;
 import com.google.common.collect.BiMap;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleManager;
+import mods.railcraft.common.modules.ModuleStructures;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
@@ -118,7 +118,7 @@ public class BlockLantern extends Block {
     }
 
     public boolean isAvailable(BlockMaterial mat) {
-        return ModuleManager.isModuleLoaded(ModuleManager.Module.STRUCTURES) && RailcraftConfig.isSubBlockEnabled(getTag(mat)) && variantProperty.getAllowedValues().contains(mat);
+        return RailcraftModuleManager.isModuleEnabled(ModuleStructures.class) && RailcraftConfig.isSubBlockEnabled(getTag(mat)) && variantProperty.getAllowedValues().contains(mat);
     }
 
     public PropertyEnum<BlockMaterial> getVariantProperty() {

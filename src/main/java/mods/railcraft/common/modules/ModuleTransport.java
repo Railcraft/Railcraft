@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
@@ -20,7 +21,6 @@ import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.CartFilterRecipe;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -29,13 +29,13 @@ import net.minecraft.item.ItemStack;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ModuleTransport extends RailcraftModule {
+public class ModuleTransport extends RailcraftModulePayload {
 
     @Override
     public void initFirst() {
         EnumMachineAlpha alpha = EnumMachineAlpha.TANK_WATER;
         if (alpha.register())
-            CraftingPlugin.addShapedRecipe(alpha.getItem(6),
+            CraftingPlugin.addRecipe(alpha.getItem(6),
                     "WWW",
                     "ISI",
                     "WWW",
@@ -48,7 +48,7 @@ public class ModuleTransport extends RailcraftModule {
 
         EnumMachineBeta voidChest = EnumMachineBeta.VOID_CHEST;
         if (voidChest.register())
-            CraftingPlugin.addShapedRecipe(voidChest.getItem(),
+            CraftingPlugin.addRecipe(voidChest.getItem(),
                     "OOO",
                     "OPO",
                     "OOO",
@@ -61,7 +61,7 @@ public class ModuleTransport extends RailcraftModule {
             ItemStack detector = EnumDetector.ITEM.getItem();
             if (detector == null)
                 detector = new ItemStack(Blocks.stone_pressure_plate);
-            CraftingPlugin.addShapedRecipe(stack,
+            CraftingPlugin.addRecipe(stack,
                     "SSS",
                     "SLS",
                     "SDS",
@@ -71,7 +71,7 @@ public class ModuleTransport extends RailcraftModule {
 
             itemLoader = EnumMachineGamma.ITEM_LOADER_ADVANCED;
             if (itemLoader.register())
-                CraftingPlugin.addShapedRecipe(itemLoader.getItem(),
+                CraftingPlugin.addRecipe(itemLoader.getItem(),
                         "IRI",
                         "RLR",
                         "ISI",
@@ -87,7 +87,7 @@ public class ModuleTransport extends RailcraftModule {
             ItemStack detector = EnumDetector.ITEM.getItem();
             if (detector == null)
                 detector = new ItemStack(Blocks.stone_pressure_plate);
-            CraftingPlugin.addShapedRecipe(stack,
+            CraftingPlugin.addRecipe(stack,
                     "SSS",
                     "SDS",
                     "SLS",
@@ -97,7 +97,7 @@ public class ModuleTransport extends RailcraftModule {
 
             itemUnloader = EnumMachineGamma.ITEM_UNLOADER_ADVANCED;
             if (itemUnloader.register())
-                CraftingPlugin.addShapedRecipe(itemUnloader.getItem(),
+                CraftingPlugin.addRecipe(itemUnloader.getItem(),
                         "IRI",
                         "RLR",
                         "ISI",
@@ -113,7 +113,7 @@ public class ModuleTransport extends RailcraftModule {
             ItemStack detector = EnumDetector.TANK.getItem();
             if (detector == null)
                 detector = new ItemStack(Blocks.stone_pressure_plate);
-            CraftingPlugin.addShapedRecipe(liquidLoader.getItem(),
+            CraftingPlugin.addRecipe(liquidLoader.getItem(),
                     "GLG",
                     "G G",
                     "GDG",
@@ -127,7 +127,7 @@ public class ModuleTransport extends RailcraftModule {
             ItemStack detector = EnumDetector.TANK.getItem();
             if (detector == null)
                 detector = new ItemStack(Blocks.stone_pressure_plate);
-            CraftingPlugin.addShapedRecipe(liquidUnloader.getItem(),
+            CraftingPlugin.addRecipe(liquidUnloader.getItem(),
                     "GDG",
                     "G G",
                     "GLG",
@@ -149,14 +149,14 @@ public class ModuleTransport extends RailcraftModule {
 
         if (cart.setup()) {
             if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable()) {
-                CraftingPlugin.addShapedRecipe(cart.getCartItem(),
+                CraftingPlugin.addRecipe(cart.getCartItem(),
                         "T",
                         "M",
                         'T', EnumMachineBeta.TANK_IRON_GAUGE.getItem(),
                         'M', Items.minecart);
                 cart.setContents(getColorTank(EnumMachineBeta.TANK_IRON_GAUGE, EnumColor.WHITE, 1));
             } else {
-                CraftingPlugin.addShapedRecipe(cart.getCartItem(),
+                CraftingPlugin.addRecipe(cart.getCartItem(),
                         "GGG",
                         "GMG",
                         "GGG",
@@ -170,7 +170,7 @@ public class ModuleTransport extends RailcraftModule {
         cart = EnumCart.CARGO;
 
         if (cart.setup()) {
-            CraftingPlugin.addShapedRecipe(cart.getCartItem(),
+            CraftingPlugin.addRecipe(cart.getCartItem(),
                     "B",
                     "M",
                     'B', Blocks.trapped_chest,
@@ -183,7 +183,7 @@ public class ModuleTransport extends RailcraftModule {
     private void addColorRecipes(EnumMachineBeta type) {
         for (EnumColor color : EnumColor.VALUES) {
             ItemStack output = getColorTank(type, color, 8);
-            CraftingPlugin.addShapedRecipe(output,
+            CraftingPlugin.addRecipe(output,
                     "OOO",
                     "ODO",
                     "OOO",
@@ -194,13 +194,14 @@ public class ModuleTransport extends RailcraftModule {
 
     private ItemStack getColorTank(EnumMachineBeta type, EnumColor color, int qty) {
         ItemStack stack = type.getItem(qty);
-        return InvTools.setItemColor(stack, color);
+        color.setItemColor(stack);
+        return stack;
     }
 
     private boolean defineTank(EnumMachineBeta type, Object... recipe) {
         if (type.register()) {
             addColorRecipes(type);
-            CraftingPlugin.addShapedRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
+            CraftingPlugin.addRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
             return true;
         }
         return false;

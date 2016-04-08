@@ -54,7 +54,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapedRecipe(new ItemStack(this),
+        CraftingPlugin.addRecipe(new ItemStack(this),
                 " G",
                 "S ",
                 'S', "stickWood",

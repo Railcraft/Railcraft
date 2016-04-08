@@ -13,13 +13,11 @@ import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.ISignalBlockTile;
 import mods.railcraft.api.signals.SignalBlock;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -47,7 +45,7 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapedRecipe(new ItemStack(this),
+        CraftingPlugin.addRecipe(new ItemStack(this),
                 " C ",
                 "BGB",
                 " R ",

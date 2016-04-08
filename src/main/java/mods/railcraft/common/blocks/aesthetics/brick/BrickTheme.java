@@ -15,7 +15,6 @@ import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.aesthetics.cube.ReplacerCube;
 import mods.railcraft.common.items.ItemRailcraft;
-import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -72,7 +71,7 @@ public enum BrickTheme {
     FROSTBOUND(MapColor.blueColor) {
         @Override
         public void initRecipes() {
-            CraftingPlugin.addShapedRecipe(new ItemStack(getBlock(), 8, 2),
+            CraftingPlugin.addRecipe(new ItemStack(getBlock(), 8, 2),
                     "III",
                     "ILI",
                     "III",
@@ -84,7 +83,7 @@ public enum BrickTheme {
         @Override
         public void initRecipes() {
             ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
-            CraftingPlugin.addShapedRecipe(new ItemStack(getBlock(), 2, 2),
+            CraftingPlugin.addRecipe(new ItemStack(getBlock(), 2, 2),
                     "MB",
                     "BM",
                     'B', new ItemStack(Blocks.nether_brick),
@@ -105,7 +104,7 @@ public enum BrickTheme {
         @Override
         public void initRecipes() {
             ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
-            CraftingPlugin.addShapedRecipe(new ItemStack(getBlock(), 1, 2),
+            CraftingPlugin.addRecipe(new ItemStack(getBlock(), 1, 2),
                     "BM",
                     "MB",
                     'B', "ingotBrick",
@@ -193,10 +192,10 @@ public enum BrickTheme {
             }
 
             @Override
-            protected void doRecipeInit(ModuleManager.Module module) {
+            protected void doRecipeInit() {
                 CraftingPlugin.addShapelessRecipe(get(BRICK, 1), get(FITTED, 1));
                 CraftingPlugin.addShapelessRecipe(get(FITTED, 1), get(BLOCK, 1));
-                CraftingPlugin.addShapedRecipe(get(ORNATE, 8),
+                CraftingPlugin.addRecipe(get(ORNATE, 8),
                         "III",
                         "I I",
                         "III",

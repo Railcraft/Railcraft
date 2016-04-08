@@ -29,7 +29,7 @@ import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemTie;
 import mods.railcraft.common.items.RailcraftItem;
-import mods.railcraft.common.modules.ModuleManager.Module;
+import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
@@ -43,7 +43,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class ModuleStructures extends RailcraftModule {
+public class ModuleStructures extends RailcraftModulePayload {
     @Override
     public void preInit() {
         addBlockFactory(new BlockFactoryStairs());
@@ -69,11 +69,11 @@ public class ModuleStructures extends RailcraftModule {
             Block cube = BlockCube.getBlock();
             if (cube != null) {
                 ItemStack stack = cubeType.getItem();
-                if (ModuleManager.isModuleLoaded(Module.FACTORY)
+                if (RailcraftModuleManager.isModuleEnabled(Module.FACTORY)
                         && RailcraftBlocks.getBlockMachineAlpha() != null
                         && RailcraftConfig.isSubBlockEnabled(EnumMachineAlpha.ROLLING_MACHINE.getTag())) {
                     stack.stackSize = 8;
-                    CraftingPlugin.addShapedRecipe(stack,
+                    CraftingPlugin.addRecipe(stack,
                             "SIS",
                             "ISI",
                             "SIS",
@@ -81,7 +81,7 @@ public class ModuleStructures extends RailcraftModule {
                             'S', "stone");
                 } else {
                     stack.stackSize = 4;
-                    CraftingPlugin.addShapedRecipe(stack,
+                    CraftingPlugin.addRecipe(stack,
                             " S ",
                             "SIS",
                             " S ",
@@ -107,7 +107,7 @@ public class ModuleStructures extends RailcraftModule {
         EnumMachineAlpha alpha = EnumMachineAlpha.SMOKER;
         if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
             ItemStack stack = alpha.getItem();
-            CraftingPlugin.addShapedRecipe(stack,
+            CraftingPlugin.addRecipe(stack,
                     " N ",
                     "RCR",
                     'N', new ItemStack(Blocks.netherrack),
@@ -132,7 +132,7 @@ public class ModuleStructures extends RailcraftModule {
 //        }
         if (BlockStrengthGlass.getBlock() != null)
             for (EnumColor color : EnumColor.VALUES) {
-                CraftingPlugin.addShapedRecipe(BlockStrengthGlass.getItem(8, color.inverse().ordinal()),
+                CraftingPlugin.addRecipe(BlockStrengthGlass.getItem(8, color.inverse().ordinal()),
                         "GGG",
                         "GDG",
                         "GGG",
@@ -148,19 +148,19 @@ public class ModuleStructures extends RailcraftModule {
         Block blockPost = BlockPost.getBlock();
         if (blockPost != null) {
             CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getItem(4), RailcraftItem.tie.getRecipeObject(ItemTie.EnumTie.WOOD));
-            CraftingPlugin.addShapedRecipe(EnumPost.WOOD_PLATFORM.getItem(),
+            CraftingPlugin.addRecipe(EnumPost.WOOD_PLATFORM.getItem(),
                     " T ",
                     " I ",
                     'T', BlockRailcraftSlab.getItem(BlockMaterial.CREOSOTE),
                     'I', EnumPost.WOOD.getItem());
 
-            CraftingPlugin.addShapedRecipe(EnumPost.STONE.getItem(8),
+            CraftingPlugin.addRecipe(EnumPost.STONE.getItem(8),
                     "SIS",
                     "SIS",
                     "SIS",
                     'I', RailcraftItem.rebar.getRecipeObject(),
                     'S', "stone");
-            CraftingPlugin.addShapedRecipe(EnumPost.STONE_PLATFORM.getItem(),
+            CraftingPlugin.addRecipe(EnumPost.STONE_PLATFORM.getItem(),
                     " T ",
                     " I ",
                     'T', BlockRailcraftSlab.getItem(BlockMaterial.CONCRETE),
@@ -182,7 +182,7 @@ public class ModuleStructures extends RailcraftModule {
                     'I', "ingotIron");
             RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
-            CraftingPlugin.addShapedRecipe(EnumPost.METAL_PLATFORM_UNPAINTED.getItem(4),
+            CraftingPlugin.addRecipe(EnumPost.METAL_PLATFORM_UNPAINTED.getItem(4),
                     " T ",
                     " I ",
                     'T', BlockRailcraftSlab.getItem(BlockMaterial.IRON),
@@ -238,13 +238,13 @@ public class ModuleStructures extends RailcraftModule {
 
             for (EnumColor color : EnumColor.values()) {
                 ItemStack outputStack = new ItemStack(BlockPostMetal.post, 8, color.ordinal());
-                CraftingPlugin.addShapedRecipe(outputStack,
+                CraftingPlugin.addRecipe(outputStack,
                         "III",
                         "IDI",
                         "III",
                         'I', stackRaw,
                         'D', color.getDyeOreDictTag());
-                CraftingPlugin.addShapedRecipe(outputStack,
+                CraftingPlugin.addRecipe(outputStack,
                         "III",
                         "IDI",
                         "III",
@@ -259,13 +259,13 @@ public class ModuleStructures extends RailcraftModule {
 
             for (EnumColor color : EnumColor.values()) {
                 ItemStack outputStack = new ItemStack(BlockPostMetal.platform, 8, color.ordinal());
-                CraftingPlugin.addShapedRecipe(outputStack,
+                CraftingPlugin.addRecipe(outputStack,
                         "III",
                         "IDI",
                         "III",
                         'I', stackRaw,
                         'D', color.getDyeOreDictTag());
-                CraftingPlugin.addShapedRecipe(outputStack,
+                CraftingPlugin.addRecipe(outputStack,
                         "III",
                         "IDI",
                         "III",
@@ -282,7 +282,7 @@ public class ModuleStructures extends RailcraftModule {
             FluidStack water = Fluids.WATER.get(FluidHelper.BUCKET_VOLUME);
             for (ItemStack container : FluidHelper.getContainersFilledWith(water)) {
                 for (Object frame : frameTypes) {
-                    CraftingPlugin.addShapedRecipe(BlockStrengthGlass.getItem(6, 0),
+                    CraftingPlugin.addRecipe(BlockStrengthGlass.getItem(6, 0),
                             "GFG",
                             "GSG",
                             "GWG",

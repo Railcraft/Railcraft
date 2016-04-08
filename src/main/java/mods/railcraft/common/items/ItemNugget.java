@@ -50,7 +50,7 @@ public class ItemNugget extends ItemRailcraft {
         for (EnumNugget n : EnumNugget.VALUES) {
             Metal m = Metal.get(n);
             CraftingPlugin.addShapelessRecipe(m.getNugget(9), m.getIngot());
-            CraftingPlugin.addShapedRecipe(m.getIngot(),
+            CraftingPlugin.addRecipe(m.getIngot(),
                     "NNN",
                     "NNN",
                     "NNN",

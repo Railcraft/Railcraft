@@ -59,9 +59,13 @@ public class Game {
         return IS_OBFUSCATED;
     }
 
+    private static Message getMessage(String msg, Object... args) {
+        return new MessageFormatMessage(msg, args);
+    }
+
     public static void log(Level level, String msg, Object... args) {
         if (msg != null)
-            log(level, new MessageFormatMessage(msg, args));
+            log(level, getMessage(msg, args));
     }
 
     public static void log(Level level, Message msg) {
@@ -69,15 +73,23 @@ public class Game {
     }
 
     public static void logTrace(Level level, String msg, Object... args) {
-        Game.logTrace(level, 5, msg, args);
+        Game.logTrace(level, getMessage(msg, args));
+    }
+
+    public static void logTrace(Level level, Message message) {
+        Game.logTrace(level, 5, message);
     }
 
     public static void logTrace(Level level, int lines, String msg, Object... args) {
-        log(level, msg, args);
+        log(level, getMessage(msg, args));
+    }
+
+    public static void logTrace(Level level, int lines, Message message) {
+        log(level, message);
         logTrace(level, lines, 2, Thread.currentThread().getStackTrace());
     }
 
-    public static void logTrace(Level level, int lines, int skipLines, StackTraceElement[] stackTrace) {
+    private static void logTrace(Level level, int lines, int skipLines, StackTraceElement[] stackTrace) {
         for (int i = skipLines; i < stackTrace.length && i < skipLines + lines; i++) {
             log(level, stackTrace[i].toString());
         }

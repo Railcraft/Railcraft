@@ -11,7 +11,7 @@ package mods.railcraft.common.plugins.forge;
 import mods.railcraft.api.core.items.RailcraftItemRegistry;
 import mods.railcraft.api.core.items.TagList;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.modules.ModuleManager;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -104,13 +104,13 @@ public final class RailcraftRegistry {
      * @param item The item
      */
     public static void register(Item item) {
-        if (ModuleManager.getStage() != ModuleManager.Stage.PRE_INIT && ModuleManager.getStage() != ModuleManager.Stage.INIT_FIRST)
+        if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
             throw new RuntimeException("Items must be initialized in PreInit or InitFirst!");
         _register(item);
     }
 
     public static void registerInit(Item item) {
-        if (ModuleManager.getStage() != ModuleManager.Stage.INIT_SECOND)
+        if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.INIT)
             throw new RuntimeException("This item must be initialized in InitSecond!");
         _register(item);
     }
@@ -144,7 +144,7 @@ public final class RailcraftRegistry {
      * @param block The block
      */
     public static void register(Block block, Class<? extends ItemBlock> itemclass) {
-        if (ModuleManager.getStage() != ModuleManager.Stage.PRE_INIT && ModuleManager.getStage() != ModuleManager.Stage.INIT_FIRST)
+        if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
             throw new RuntimeException("Blocks must be initialized in PreInit or InitFirst!");
         String tag = block.getUnlocalizedName();
         tag = MiscTools.cleanTag(tag);

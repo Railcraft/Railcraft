@@ -10,8 +10,8 @@ package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.common.blocks.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleManager;
-import mods.railcraft.common.modules.ModuleManager.Module;
+import mods.railcraft.common.modules.ModuleWorld;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -73,7 +73,7 @@ public enum EnumOre implements IStringSerializable, IVariantEnum<EnumOre> {
     }
 
     public boolean isEnabled() {
-        return ModuleManager.isModuleLoaded(Module.WORLD) && BlockOre.getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
+        return RailcraftModuleManager.isModuleEnabled(ModuleWorld.class) && BlockOre.getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
     public boolean isDepreciated() {

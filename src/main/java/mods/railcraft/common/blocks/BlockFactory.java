@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleManager.Module;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -36,18 +35,18 @@ public abstract class BlockFactory {
 
     protected abstract void doBlockInit();
 
-    public final void initRecipes(Module module) {
+    public final void initRecipes() {
         if (!needsInit)
-            doRecipeInit(module);
+            doRecipeInit();
     }
 
-    protected abstract void doRecipeInit(Module module);
+    protected abstract void doRecipeInit();
 
-    public final void finalizeBlocks(Module module) {
+    public final void finalizeBlocks() {
         if (!needsInit)
-            doBlockFinalize(module);
+            doBlockFinalize();
     }
 
-    protected void doBlockFinalize(Module module) {
+    protected void doBlockFinalize() {
     }
 }

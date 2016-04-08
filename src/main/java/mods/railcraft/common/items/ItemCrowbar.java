@@ -13,61 +13,35 @@ import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench {
+public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftItem {
 
     private static final byte BOOST_DAMAGE = 3;
-    private static final String ITEM_TAG = "railcraft.tool.crowbar";
-    private static Item item;
     private final Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
     private final Set<Class<? extends Block>> bannedRotations = new HashSet<Class<? extends Block>>();
-
-    public static void registerItem() {
-        if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
-            item = new ItemCrowbar(ToolMaterial.IRON);
-            item.setUnlocalizedName(ITEM_TAG);
-            RailcraftRegistry.register(item);
-
-            CraftingPlugin.addShapedRecipe(new ItemStack(item),
-                    " RI",
-                    "RIR",
-                    "IR ",
-                    'I', "ingotIron",
-                    'R', "dyeRed");
-
-            LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.TOOL, ITEM_TAG);
-            LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.WORKSHOP, ITEM_TAG);
-        }
-    }
-
-    public static ItemStack getItem() {
-        if (item == null)
-            return null;
-        return new ItemStack(item);
-    }
 
     protected ItemCrowbar(ToolMaterial material) {
         super(3, material, new HashSet<Block>(Arrays.asList(new Block[]{
@@ -166,12 +140,23 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
     }
 
     @Override
-    public boolean canWrench(EntityPlayer player, int x, int y, int z) {
+    public boolean canWrench(EntityPlayer player, BlockPos pos) {
         return true;
     }
 
     @Override
-    public void wrenchUsed(EntityPlayer player, int x, int y, int z) {
+    public void wrenchUsed(EntityPlayer player, BlockPos pos) {
+        player.getCurrentEquippedItem().damageItem(1, player);
+        player.swingItem();
+    }
+
+    @Override
+    public boolean canWrench(EntityPlayer player, Entity entity) {
+        return true;
+    }
+
+    @Override
+    public void wrenchUsed(EntityPlayer player, Entity entity) {
         player.getCurrentEquippedItem().damageItem(1, player);
         player.swingItem();
     }
@@ -255,4 +240,21 @@ public class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, ITo
         checkBlock(world, level, pos.down());
     }
 
+    @Override
+    public Object getRecipeObject(IItemMetaEnum meta) {
+        return ORE_TAG;
+    }
+
+    @Override
+    public void defineRecipes() {
+    }
+
+    @Override
+    public void definePostRecipes() {
+    }
+
+    @Override
+    public void initItem() {
+        OreDictionary.registerOre(ORE_TAG, new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE));
+    }
 }

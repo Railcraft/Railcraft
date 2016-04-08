@@ -10,18 +10,19 @@ package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.api.crafting.IRollingMachineCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import net.minecraft.block.Block;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class RollingMachineCraftingManager implements IRollingMachineCraftingManager {
@@ -42,73 +43,34 @@ public class RollingMachineCraftingManager implements IRollingMachineCraftingMan
     }
 
     @Override
-    public void addRecipe(ItemStack output, Object... components) {
-        String s = "";
-        int i = 0;
-        int j = 0;
-        int k = 0;
-        if (components[i] instanceof String[]) {
-            String as[] = (String[]) components[i++];
-            for (String s2 : as) {
-                k++;
-                j = s2.length();
-                s = (new StringBuilder()).append(s).append(s2).toString();
-            }
-        } else {
-            while (components[i] instanceof String) {
-                String s1 = (String) components[i++];
-                k++;
-                j = s1.length();
-                s = (new StringBuilder()).append(s).append(s1).toString();
-            }
+    public void addRecipe(@Nullable ItemStack result, Object... recipeArray) {
+        CraftingPlugin.ProcessedRecipe processedRecipe;
+        try {
+            processedRecipe = CraftingPlugin.processRecipe(CraftingPlugin.RecipeType.SHAPED, result, recipeArray);
+        } catch (InvalidRecipeException ex) {
+            Game.logTrace(Level.WARN, ex.getRawMessage());
+            return;
         }
-        HashMap<Character, ItemStack> hashMap = new HashMap<Character, ItemStack>();
-        for (; i < components.length; i += 2) {
-            Character character = (Character) components[i];
-            ItemStack itemStack = null;
-            if (components[i + 1] instanceof Item) {
-                itemStack = new ItemStack((Item) components[i + 1]);
-            } else if (components[i + 1] instanceof Block) {
-                itemStack = new ItemStack((Block) components[i + 1], 1, -1);
-            } else if (components[i + 1] instanceof ItemStack) {
-                itemStack = (ItemStack) components[i + 1];
-            }
-            hashMap.put(character, itemStack);
-        }
-
-        ItemStack recipeArray[] = new ItemStack[j * k];
-        for (int i1 = 0; i1 < j * k; i1++) {
-            char c = s.charAt(i1);
-            if (hashMap.containsKey(c)) {
-                recipeArray[i1] = hashMap.get(c).copy();
-            } else {
-                recipeArray[i1] = null;
-            }
-        }
-
-        recipes.add(new ShapedRecipes(j, k, recipeArray, output));
+        if (processedRecipe.isOreRecipe) {
+            IRecipe recipe = new ShapedOreRecipe(processedRecipe.result, processedRecipe.recipeArray);
+            addRecipe(recipe);
+        } else
+            addRecipe(CraftingPlugin.makeVanillaShapedRecipe(processedRecipe.result, processedRecipe.recipeArray));
     }
 
     @Override
-    public void addShapelessRecipe(ItemStack output, Object... components) {
-        List<ItemStack> ingredients = new ArrayList<ItemStack>();
-        for (Object obj : components) {
-            if (obj instanceof ItemStack) {
-                ingredients.add(((ItemStack) obj).copy());
-                continue;
-            }
-            if (obj instanceof Item) {
-                ingredients.add(new ItemStack((Item) obj));
-                continue;
-            }
-            if (obj instanceof Block) {
-                ingredients.add(new ItemStack((Block) obj));
-            } else {
-                throw new RuntimeException("Invalid shapeless recipe!");
-            }
+    public void addShapelessRecipe(@Nullable ItemStack result, Object... recipeArray) {
+        CraftingPlugin.ProcessedRecipe processedRecipe;
+        try {
+            processedRecipe = CraftingPlugin.processRecipe(CraftingPlugin.RecipeType.SHAPELESS, result, recipeArray);
+        } catch (InvalidRecipeException ex) {
+            Game.logTrace(Level.WARN, ex.getRawMessage());
+            return;
         }
-
-        recipes.add(new ShapelessRecipes(output, ingredients));
+        if (processedRecipe.isOreRecipe) {
+            addRecipe(new ShapelessOreRecipe(processedRecipe.result, processedRecipe.recipeArray));
+        } else
+            addRecipe(CraftingPlugin.makeVanillaShapelessRecipe(processedRecipe.result, processedRecipe.recipeArray));
     }
 
     @Override
@@ -118,7 +80,6 @@ public class RollingMachineCraftingManager implements IRollingMachineCraftingMan
                 return irecipe.getCraftingResult(inv);
             }
         }
-
         return null;
     }
 

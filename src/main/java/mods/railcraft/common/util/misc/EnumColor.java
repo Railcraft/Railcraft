@@ -178,14 +178,15 @@ public enum EnumColor implements IStringSerializable {
         return names[0];
     }
 
-    public void setItemColor(ItemStack stack) {
-        setItemColor(stack, DEFAULT_COLOR_TAG);
+    public ItemStack setItemColor(ItemStack stack) {
+        return setItemColor(stack, DEFAULT_COLOR_TAG);
     }
 
-    public void setItemColor(ItemStack stack, String tag) {
+    public ItemStack setItemColor(ItemStack stack, String tag) {
         if (stack == null)
-            return;
+            return null;
         NBTTagCompound nbt = InvTools.getItemData(stack);
         writeToNBT(nbt, tag);
+        return stack;
     }
 }

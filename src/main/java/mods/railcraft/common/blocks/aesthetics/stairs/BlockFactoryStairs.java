@@ -16,7 +16,6 @@ import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -56,11 +55,11 @@ public class BlockFactoryStairs extends BlockFactory {
     }
 
     @Override
-    protected void doRecipeInit(ModuleManager.Module module) {
+    protected void doRecipeInit() {
         BlockMaterial.initialize();
         for (BlockMaterial mat : BlockMaterial.STAIR_MATS) {
             if (BlockRailcraftStairs.isEnabled(mat) && mat.getSourceItem() != null) {
-                CraftingPlugin.addShapedRecipe(BlockRailcraftStairs.getItem(mat, 4), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
+                CraftingPlugin.addRecipe(BlockRailcraftStairs.getItem(mat, 4), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
                 IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(BlockRailcraftStairs.getItem(mat), true, false);
                 recipe.addOutput(mat.getSourceItem(), 1.0f);
             }

@@ -9,8 +9,8 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.common.blocks.detector.types.*;
-import mods.railcraft.common.modules.ModuleManager;
-import mods.railcraft.common.modules.ModuleManager.Module;
+import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import net.minecraft.item.ItemStack;
 
 import java.util.Locale;
@@ -77,6 +77,6 @@ public enum EnumDetector {
     }
 
     public boolean isEnabled() {
-        return BlockDetector.getBlock() != null && ModuleManager.isModuleLoaded(module);
+        return BlockDetector.getBlock() != null && RailcraftModuleManager.isModuleEnabled(module);
     }
 }

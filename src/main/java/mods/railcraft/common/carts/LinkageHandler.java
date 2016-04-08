@@ -11,8 +11,8 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.TrackToolsAPI;
-import mods.railcraft.common.modules.ModuleManager;
-import mods.railcraft.common.modules.ModuleManager.Module;
+import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import mods.railcraft.common.util.misc.Vec2D;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -236,7 +236,7 @@ public class LinkageHandler {
             }
         }
 
-        if (linked && ModuleManager.isModuleLoaded(Module.LOCOMOTIVES)) {
+        if (linked && RailcraftModuleManager.isModuleEnabled(Module.LOCOMOTIVES)) {
             cart.motionX *= LINK_DRAG;
             cart.motionZ *= LINK_DRAG;
         }

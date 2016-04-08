@@ -11,19 +11,23 @@ package mods.railcraft.common.items;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.item.ItemStack;
 
-public class ItemWhistleTuner extends ItemRailcraft {
+/**
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public class ItemCrowbarSteel extends ItemCrowbar {
 
-    public ItemWhistleTuner() {
-        setMaxDamage(250);
+    public ItemCrowbarSteel() {
+        super(ItemMaterials.STEEL_TOOL);
     }
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this), true,
-                "N N",
-                "NNN",
-                " N ",
-                'N', "nuggetSteel");
+        CraftingPlugin.addRecipe(new ItemStack(this),
+                " RI",
+                "RIR",
+                "IR ",
+                'I', "ingotSteel",
+                'R', "dyeRed");
     }
 
 }

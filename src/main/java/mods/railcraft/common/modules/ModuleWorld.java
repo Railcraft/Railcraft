@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
@@ -32,7 +33,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ModuleWorld extends RailcraftModule {
+public class ModuleWorld extends RailcraftModulePayload {
 
     public static final ResourceLocation VILLAGER_TEXTURE = new ResourceLocation("railcraft:textures/entities/villager/trackman.png");
 
@@ -69,7 +70,7 @@ public class ModuleWorld extends RailcraftModule {
             MinecraftForge.ORE_GEN_BUS.register(new SaltpeterGenerator());
         if (RailcraftConfig.isWorldGenEnabled("sulfur") && EnumOre.SULFUR.isEnabled())
             MinecraftForge.ORE_GEN_BUS.register(new SulfurGenerator());
-        if (RailcraftConfig.isWorldGenEnabled("firestone") && EnumOre.FIRESTONE.isEnabled() && ModuleManager.isModuleLoaded(ModuleManager.Module.MAGIC))
+        if (RailcraftConfig.isWorldGenEnabled("firestone") && EnumOre.FIRESTONE.isEnabled() && RailcraftModuleManager.isModuleEnabled(RailcraftModuleManager.Module.MAGIC))
             MinecraftForge.EVENT_BUS.register(new FirestoneGenerator());
         if (RailcraftConfig.isWorldGenEnabled("abyssal") && EnumCube.ABYSSAL_STONE.isEnabled())
             MinecraftForge.EVENT_BUS.register(GeodePopulator.instance());

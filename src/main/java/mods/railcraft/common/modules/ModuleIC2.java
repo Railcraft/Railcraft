@@ -1,14 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.modules;
 
 import ic2.api.recipe.Recipes;
+import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.EnumDetector;
@@ -21,46 +23,53 @@ import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import org.apache.logging.log4j.Level;
 
-public class ModuleIC2 extends RailcraftModule {
+import javax.annotation.Nonnull;
+
+@RailcraftModule("ic2")
+public class ModuleIC2 extends RailcraftModulePayload {
 
     public static Item lapotronUpgrade;
 //    private static Item creosoteWood;
 
     @Override
-    public boolean canModuleLoad() {
-        return IC2Plugin.isModInstalled();
+    public void checkPrerequisites() throws MissingPrerequisiteException {
+        if (!IC2Plugin.isModInstalled())
+            throw new MissingPrerequisiteException("Reason: IC2 not detected");
     }
 
+    @Nonnull
     @Override
-    public void printLoadError() {
-        Game.log(Level.INFO, "Module disabled: {0}, IC2 not detected", this);
+    public ModuleEventHandler getModuleEventHandler(boolean enabled) {
+        if (enabled)
+            return enabledEventHandler;
+        return DEFAULT_DISABLED_EVENT_HANDLER;
     }
 
-    @Override
-    public void initFirst() {
-        BlockDetector.registerBlock();
-        RailcraftBlocks.registerBlockMachineGamma();
+    private final ModuleEventHandler enabledEventHandler = new BaseModuleEventHandler() {
+        @Override
+        public void preInit() {
+            super.preInit();
+            BlockDetector.registerBlock();
+            RailcraftBlocks.registerBlockMachineGamma();
 
-        if (RailcraftConfig.isItemEnabled("ic2.upgrade.lapotron")) {
-            lapotronUpgrade = new ItemRailcraft().setUnlocalizedName("railcraft.upgrade.lapotron").setMaxStackSize(9);
+            if (RailcraftConfig.isItemEnabled("ic2.upgrade.lapotron")) {
+                lapotronUpgrade = new ItemRailcraft().setUnlocalizedName("railcraft.upgrade.lapotron").setMaxStackSize(9);
 
-            RailcraftRegistry.register(lapotronUpgrade);
+                RailcraftRegistry.register(lapotronUpgrade);
 
-            RailcraftRegistry.register("ic2.upgrade.lapotron", new ItemStack(lapotronUpgrade));
-        }
+                RailcraftRegistry.register("ic2.upgrade.lapotron", new ItemStack(lapotronUpgrade));
+            }
 
-        EnumCart.ENERGY_BATBOX.setup();
-        EnumCart.ENERGY_MFE.setup();
-        if (IC2Plugin.isClassic()) EnumCart.ENERGY_MFSU.setup();
-        else EnumCart.ENERGY_CESU.setup();
+            EnumCart.ENERGY_BATBOX.setup();
+            EnumCart.ENERGY_MFE.setup();
+            if (IC2Plugin.isClassic()) EnumCart.ENERGY_MFSU.setup();
+            else EnumCart.ENERGY_CESU.setup();
 
 //        id = RailcraftConfig.getItemId("item.creosote.wood");
 //        if(id > 0){
@@ -77,12 +86,13 @@ public class ModuleIC2 extends RailcraftModule {
 //                CropCard.registerCrop(bush);
 //            }
 //        }
-    }
+        }
 
-    @Override
-    public void postInit() {
-        createRecipes();
-    }
+        @Override
+        public void postInit() {
+            createRecipes();
+        }
+    };
 
     private static void createRecipes() {
         Block blockDetector = BlockDetector.getBlock();
@@ -92,7 +102,7 @@ public class ModuleIC2 extends RailcraftModule {
             Object tin = RailcraftItem.plate.getRecipeObject(EnumPlate.TIN);
             if (tin == null)
                 tin = "ingotTin";
-            CraftingPlugin.addShapedRecipe(stack, false,
+            CraftingPlugin.addRecipe(stack, false,
                     "XXX",
                     "XPX",
                     "XXX",
@@ -106,7 +116,7 @@ public class ModuleIC2 extends RailcraftModule {
             cart.setContents(batbox);
             ItemStack stack = cart.getCartItem();
             if (stack != null) {
-                CraftingPlugin.addShapedRecipe(stack,
+                CraftingPlugin.addRecipe(stack,
                         "E",
                         "M",
                         'E', batbox,
@@ -122,7 +132,7 @@ public class ModuleIC2 extends RailcraftModule {
                 cart.setContents(cesu);
                 ItemStack stack = cart.getCartItem();
                 if (stack != null) {
-                    CraftingPlugin.addShapedRecipe(stack,
+                    CraftingPlugin.addRecipe(stack,
                             "E",
                             "M",
                             'E', cesu,
@@ -137,7 +147,7 @@ public class ModuleIC2 extends RailcraftModule {
                 cart.setContents(mfsu);
                 ItemStack stack = cart.getCartItem();
                 if (stack != null) {
-                    CraftingPlugin.addShapedRecipe(stack,
+                    CraftingPlugin.addRecipe(stack,
                             "E",
                             "M",
                             'E', mfsu,
@@ -154,7 +164,7 @@ public class ModuleIC2 extends RailcraftModule {
             ItemStack stack = cart.getCartItem();
             if (stack != null) {
 
-                CraftingPlugin.addShapedRecipe(stack,
+                CraftingPlugin.addRecipe(stack,
                         "E",
                         "M",
                         'E', mfe,
