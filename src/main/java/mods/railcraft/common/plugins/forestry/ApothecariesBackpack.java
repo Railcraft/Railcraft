@@ -42,8 +42,8 @@ public class ApothecariesBackpack extends BaseBackpack implements IBackpackDefin
     }
 
     public void setup() {
-        addItem(Items.potionitem);
-        addItem(Items.glass_bottle);
+        add(Items.potionitem);
+        add(Items.glass_bottle);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ApothecariesBackpack extends BaseBackpack implements IBackpackDefin
                     'Y', new ItemStack(Blocks.chest));
 
             AspectList aspects = new AspectList();
-            aspects.add(Aspect.VOID, 3).add(Aspect.CLOTH, 3).add(Aspect.TRAVEL, 2);
+            aspects.add(Aspect.VOID, 3).add(Aspect.CRAFT, 3).add(Aspect.MOTION, 2);
 
             ResearchItem backpack = new ResearchItemRC("RC_ApothecariesBackpack", ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 2, 0, 6, new ItemStack(ForestryPlugin.apothecariesBackpackT1));
             backpack.setPages(ThaumcraftPlugin.getResearchPage("RC_ApothecariesBackpack"), new ResearchPage(recipe)).setParentsHidden("ENCHFABRIC").registerResearchItem();

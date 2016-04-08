@@ -21,8 +21,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
@@ -38,7 +38,7 @@ public class ForestryPlugin {
     public static Item icemanBackpackT2;
     public static Item apothecariesBackpackT1;
     public static Item apothecariesBackpackT2;
-    public static Boolean modLoaded = null;
+    public static Boolean modLoaded;
     private static ForestryPlugin instance;
 
     public static ForestryPlugin instance() {
@@ -185,7 +185,7 @@ public class ForestryPlugin {
                 }
 
                 if (icemanBackpackT1 != null || icemanBackpackT2 != null)
-                    FMLCommonHandler.instance().bus().register(new IceManTickHandler());
+                    MinecraftForge.EVENT_BUS.register(new IceManTickHandler());
 
                 tag = "railcraft.backpack.apothecary.t1";
                 if (RailcraftConfig.isItemEnabled(tag)) {

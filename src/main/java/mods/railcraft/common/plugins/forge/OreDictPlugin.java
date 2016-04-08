@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,12 +25,17 @@ import java.util.Set;
 public class OreDictPlugin {
 
     public static boolean isOreType(String oreName, ItemStack stack) {
-        List<ItemStack> ores = OreDictionary.getOres(oreName);
-        for (ItemStack ore : ores) {
-            if (InvTools.isItemEqual(ore, stack))
-                return true;
-        }
-        return false;
+        if (!oreExists(oreName))
+            return false;
+        int id = OreDictionary.getOreID(oreName);
+        int[] stackIds = OreDictionary.getOreIDs(stack);
+        return ArrayUtils.contains(stackIds, id);
+//        List<ItemStack> ores = OreDictionary.getOres(oreName);
+//        for (ItemStack ore : ores) {
+//            if (InvTools.isItemEqual(ore, stack))
+//                return true;
+//        }
+//        return false;
     }
 
     public static ItemStack getOre(String name, int qty) {
@@ -45,7 +51,7 @@ public class OreDictPlugin {
     }
 
     public static boolean oreExists(String name) {
-        return !OreDictionary.getOres(name).isEmpty();
+        return OreDictionary.doesOreNameExist(name);
     }
 
     public static Set<Block> getOreBlocks() {

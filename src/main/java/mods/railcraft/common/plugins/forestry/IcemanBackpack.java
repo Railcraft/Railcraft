@@ -22,15 +22,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Optional;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = "Forestry")
 public class IcemanBackpack extends BaseBackpack implements IBackpackDefinition {
-
+    private static final BlockMaterial[] coldMaterials = {BlockMaterial.SNOW, BlockMaterial.ICE, BlockMaterial.PACKED_ICE};
     private static IcemanBackpack instance;
     private static final ItemStack SNOWBALL = new ItemStack(Items.snowball);
-    private static final ItemStack SNOWBLOCK = new ItemStack(Blocks.snow);
+    private static final ItemStack SNOW_BLOCK = new ItemStack(Blocks.snow);
     private static final String INV_TAG = "Items";
 
     public static IcemanBackpack getInstance() {
@@ -44,16 +43,17 @@ public class IcemanBackpack extends BaseBackpack implements IBackpackDefinition 
     }
 
     public void setup() {
-        addItem(Blocks.snow);
-        addItem(Blocks.snow_layer);
-        addItem(Blocks.ice);
-        addItem(EnumWallAlpha.SNOW.getItem());
-        addItem(EnumWallAlpha.ICE.getItem());
-        addItem(BlockRailcraftStairs.getItem(BlockMaterial.SNOW));
-        addItem(BlockRailcraftStairs.getItem(BlockMaterial.ICE));
-        addItem(BlockRailcraftSlab.getItem(BlockMaterial.SNOW));
-        addItem(BlockRailcraftSlab.getItem(BlockMaterial.ICE));
-        addItem(Items.snowball);
+        add(Blocks.snow);
+        add(Blocks.snow_layer);
+        add(Blocks.ice);
+        add(Blocks.packed_ice);
+        add(EnumWallAlpha.SNOW.getItem());
+        add(EnumWallAlpha.ICE.getItem());
+        for (BlockMaterial mat : coldMaterials) {
+            add(BlockRailcraftStairs.getItem(mat));
+            add(BlockRailcraftSlab.getItem(mat));
+        }
+        add(Items.snowball);
     }
 
     public void compactInventory(ItemStack backpack) {
@@ -69,7 +69,7 @@ public class IcemanBackpack extends BaseBackpack implements IBackpackDefinition 
             if (InvTools.moveItemStack(new ItemStack(Blocks.snow), inv) == null) {
                 InvTools.writeInvToNBT(inv, INV_TAG, data);
             }
-        } else if (numSnowballs < 8 && InvTools.removeOneItem(inv, SNOWBLOCK) != null) {
+        } else if (numSnowballs < 8 && InvTools.removeOneItem(inv, SNOW_BLOCK) != null) {
             if (InvTools.moveItemStack(new ItemStack(Items.snowball, 4), inv) == null) {
                 InvTools.writeInvToNBT(inv, INV_TAG, data);
             }

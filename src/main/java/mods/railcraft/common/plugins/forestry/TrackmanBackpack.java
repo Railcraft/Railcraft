@@ -10,16 +10,13 @@ package mods.railcraft.common.plugins.forestry;
 
 import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.items.ItemSignalBlockSurveyor;
-import mods.railcraft.common.items.ItemSignalTuner;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.fluids.FluidContainers;
-import mods.railcraft.common.items.ItemCrowbar;
-import mods.railcraft.common.items.ItemCrowbarSteel;
 import mods.railcraft.common.items.RailcraftItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -45,50 +42,54 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
     }
 
     public void setup() {
-        addItem(ItemCrowbar.getItem());
-        addItem(ItemCrowbarSteel.getItem());
-        addItem(ItemSignalBlockSurveyor.getItem());
-        addItem(ItemSignalTuner.getItem());
 
         for (ResourceLocation id : Block.blockRegistry.getKeys()) {
             Block block = Block.blockRegistry.getObject(id);
             if (block == null) continue;
             if (TrackTools.isRailBlock(block))
-                addItem(block);
+                add(block);
         }
 
         for (ResourceLocation id : Item.itemRegistry.getKeys()) {
             Item item = Item.itemRegistry.getObject(id);
             if (item instanceof ItemMinecart || item instanceof IMinecartItem)
-                addItem(item);
+                add(item);
         }
 
-        addItem(FluidContainers.getCreosoteOilBottle());
-        addItem(FluidContainers.getCreosoteOilBucket());
-        addItem(FluidContainers.getCreosoteOilCell());
-        addItem(FluidContainers.getCreosoteOilCan());
-        addItem(FluidContainers.getCreosoteOilRefactory());
-        addItem(FluidContainers.getCreosoteOilWax());
+        addOre(IToolCrowbar.ORE_TAG);
 
-        addItem(EnumMachineAlpha.WORLD_ANCHOR.getItem());
-        addItem(EnumMachineAlpha.PERSONAL_ANCHOR.getItem());
-        addItem(EnumMachineBeta.SENTINEL.getItem());
+        add(FluidContainers.getCreosoteOilBottle());
+        add(FluidContainers.getCreosoteOilBucket());
+        add(FluidContainers.getCreosoteOilCell());
+        add(FluidContainers.getCreosoteOilCan());
+        add(FluidContainers.getCreosoteOilRefactory());
+        add(FluidContainers.getCreosoteOilWax());
 
-        addItem(RailcraftItem.rail);
-        addItem(RailcraftItem.railbed);
-        addItem(RailcraftItem.tie);
-        addItem(RailcraftItem.signalLamp);
-        addItem(RailcraftItem.circuit);
-        addItem(RailcraftItem.signalLabel);
-        addItem(RailcraftItem.whistleTuner);
-        addItem(RailcraftItem.magGlass);
-        addItem(RailcraftItem.goggles);
-        addItem(RailcraftItem.overalls);
+        add(EnumMachineAlpha.WORLD_ANCHOR.getItem());
+        add(EnumMachineAlpha.PERSONAL_ANCHOR.getItem());
+        add(EnumMachineAlpha.ADMIN_ANCHOR.getItem());
+        add(EnumMachineAlpha.PASSIVE_ANCHOR.getItem());
+        add(EnumMachineBeta.SENTINEL.getItem());
 
-        addItem(RailcraftBlocks.getBlockMachineGamma());
-        addItem(RailcraftBlocks.getBlockElevator());
-        addItem(RailcraftBlocks.getBlockSignal());
-        addItem(BlockDetector.getBlock());
+        add(RailcraftItem.crowbar_iron);
+        add(RailcraftItem.crowbar_steel);
+        add(RailcraftItem.signalBlockSurveyor);
+        add(RailcraftItem.signalTuner);
+        add(RailcraftItem.rail);
+        add(RailcraftItem.railbed);
+        add(RailcraftItem.tie);
+        add(RailcraftItem.signalLamp);
+        add(RailcraftItem.circuit);
+        add(RailcraftItem.signalLabel);
+        add(RailcraftItem.whistleTuner);
+        add(RailcraftItem.magGlass);
+        add(RailcraftItem.goggles);
+        add(RailcraftItem.overalls);
+
+        add(RailcraftBlocks.getBlockMachineGamma());
+        add(RailcraftBlocks.getBlockElevator());
+        add(RailcraftBlocks.getBlockSignal());
+        add(BlockDetector.getBlock());
     }
 
     @Override
