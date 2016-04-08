@@ -17,7 +17,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 @RailcraftModule("tracks")
 public class ModuleTracks extends RailcraftModulePayload {
 
-    ModuleTracks() {
+    public ModuleTracks() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void preInit() {

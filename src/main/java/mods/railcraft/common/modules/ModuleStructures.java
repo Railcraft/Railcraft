@@ -9,6 +9,8 @@
  ******************************************************************************/
 package mods.railcraft.common.modules;
 
+import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
@@ -29,91 +31,91 @@ import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemTie;
 import mods.railcraft.common.items.RailcraftItem;
-import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
+@RailcraftModule("structures")
 public class ModuleStructures extends RailcraftModulePayload {
-    @Override
-    public void preInit() {
-        addBlockFactory(new BlockFactoryStairs());
-        addBlockFactory(new BlockFactorySlab());
-        addBlockFactory(new BlockFactoryLantern());
-        for (BrickTheme brick : BrickTheme.VALUES) {
-            addBlockFactory(brick.makeFactory());
-        }
-    }
 
-    @Override
-    public void initFirst() {
-        RailcraftBlocks.registerBlockSignal();
-        BlockPost.registerBlock();
-        BlockPostMetal.registerPost();
-        BlockPostMetal.registerPlatform();
-        BlockRailcraftWall.registerBlocks();
-        BlockStrengthGlass.registerBlock();
-
-        EnumCube cubeType = EnumCube.CONCRETE_BLOCK;
-        if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-            BlockCube.registerBlock();
-            Block cube = BlockCube.getBlock();
-            if (cube != null) {
-                ItemStack stack = cubeType.getItem();
-                if (RailcraftModuleManager.isModuleEnabled(Module.FACTORY)
-                        && RailcraftBlocks.getBlockMachineAlpha() != null
-                        && RailcraftConfig.isSubBlockEnabled(EnumMachineAlpha.ROLLING_MACHINE.getTag())) {
-                    stack.stackSize = 8;
-                    CraftingPlugin.addRecipe(stack,
-                            "SIS",
-                            "ISI",
-                            "SIS",
-                            'I', RailcraftItem.rebar.getRecipeObject(),
-                            'S', "stone");
-                } else {
-                    stack.stackSize = 4;
-                    CraftingPlugin.addRecipe(stack,
-                            " S ",
-                            "SIS",
-                            " S ",
-                            'I', "ingotIron",
-                            'S', "stone");
+    public ModuleStructures() {
+        setEnabledEventHandler(new ModuleEventHandler() {
+            @Override
+            public void construction() {
+                addBlockFactory(new BlockFactoryStairs());
+                addBlockFactory(new BlockFactorySlab());
+                addBlockFactory(new BlockFactoryLantern());
+                for (BrickTheme brick : BrickTheme.VALUES) {
+                    addBlockFactory(brick.makeFactory());
                 }
             }
-        }
 
-        cubeType = EnumCube.CREOSOTE_BLOCK;
-        if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-            BlockCube.registerBlock();
-            Block cube = BlockCube.getBlock();
-            if (cube != null) {
-                ItemStack stack = cubeType.getItem();
-                for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME))) {
-                    CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
+            @Override
+            public void preInit() {
+                RailcraftBlocks.registerBlockSignal();
+                BlockPost.registerBlock();
+                BlockPostMetal.registerPost();
+                BlockPostMetal.registerPlatform();
+                BlockRailcraftWall.registerBlocks();
+                BlockStrengthGlass.registerBlock();
+
+                EnumCube cubeType = EnumCube.CONCRETE_BLOCK;
+                if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
+                    BlockCube.registerBlock();
+                    Block cube = BlockCube.getBlock();
+                    if (cube != null) {
+                        ItemStack stack = cubeType.getItem();
+                        if (RailcraftModuleManager.isModuleEnabled(ModuleFactory.class)
+                                && RailcraftBlocks.getBlockMachineAlpha() != null
+                                && RailcraftConfig.isSubBlockEnabled(EnumMachineAlpha.ROLLING_MACHINE.getTag())) {
+                            stack.stackSize = 8;
+                            CraftingPlugin.addRecipe(stack,
+                                    "SIS",
+                                    "ISI",
+                                    "SIS",
+                                    'I', RailcraftItem.rebar.getRecipeObject(),
+                                    'S', "stone");
+                        } else {
+                            stack.stackSize = 4;
+                            CraftingPlugin.addRecipe(stack,
+                                    " S ",
+                                    "SIS",
+                                    " S ",
+                                    'I', "ingotIron",
+                                    'S', "stone");
+                        }
+                    }
                 }
-            }
-        }
 
-        RailcraftBlocks.registerBlockMachineAlpha();
-        EnumMachineAlpha alpha = EnumMachineAlpha.SMOKER;
-        if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
-            ItemStack stack = alpha.getItem();
-            CraftingPlugin.addRecipe(stack,
-                    " N ",
-                    "RCR",
-                    'N', new ItemStack(Blocks.netherrack),
-                    'C', new ItemStack(Items.cauldron),
-                    'R', "dustRedstone");
-        }
+                cubeType = EnumCube.CREOSOTE_BLOCK;
+                if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
+                    BlockCube.registerBlock();
+                    Block cube = BlockCube.getBlock();
+                    if (cube != null) {
+                        ItemStack stack = cubeType.getItem();
+                        for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME))) {
+                            CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
+                        }
+                    }
+                }
+
+                RailcraftBlocks.registerBlockMachineAlpha();
+                EnumMachineAlpha alpha = EnumMachineAlpha.SMOKER;
+                if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
+                    ItemStack stack = alpha.getItem();
+                    CraftingPlugin.addRecipe(stack,
+                            " N ",
+                            "RCR",
+                            'N', new ItemStack(Blocks.netherrack),
+                            'C', new ItemStack(Items.cauldron),
+                            'R', "dustRedstone");
+                }
 
 //        cubeType = EnumCube.BANDED_PLANKS;
 //        if(RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
@@ -130,177 +132,171 @@ public class ModuleStructures extends RailcraftModulePayload {
 //                        'W', Block.planks});
 //            }
 //        }
-        if (BlockStrengthGlass.getBlock() != null)
-            for (EnumColor color : EnumColor.VALUES) {
-                CraftingPlugin.addRecipe(BlockStrengthGlass.getItem(8, color.inverse().ordinal()),
-                        "GGG",
-                        "GDG",
-                        "GGG",
-                        'G', BlockStrengthGlass.getBlock(),
-                        'D', color.getDyeOreDictTag());
+                if (BlockStrengthGlass.getBlock() != null)
+                    for (EnumColor color : EnumColor.VALUES) {
+                        CraftingPlugin.addRecipe(BlockStrengthGlass.getItem(8, color.inverse().ordinal()),
+                                "GGG",
+                                "GDG",
+                                "GGG",
+                                'G', BlockStrengthGlass.getBlock(),
+                                'D', color.getDyeOreDictTag());
+                    }
             }
-    }
 
-    @Override
-    public void initSecond() {
-        BlockRailcraftWall.initialize();
+            @Override
+            public void init() {
+                BlockRailcraftWall.initialize();
 
-        Block blockPost = BlockPost.getBlock();
-        if (blockPost != null) {
-            CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getItem(4), RailcraftItem.tie.getRecipeObject(ItemTie.EnumTie.WOOD));
-            CraftingPlugin.addRecipe(EnumPost.WOOD_PLATFORM.getItem(),
-                    " T ",
-                    " I ",
-                    'T', BlockRailcraftSlab.getItem(BlockMaterial.CREOSOTE),
-                    'I', EnumPost.WOOD.getItem());
+                Block blockPost = BlockPost.getBlock();
+                if (blockPost != null) {
+                    CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getItem(4), RailcraftItem.tie.getRecipeObject(ItemTie.EnumTie.WOOD));
+                    CraftingPlugin.addRecipe(EnumPost.WOOD_PLATFORM.getItem(),
+                            " T ",
+                            " I ",
+                            'T', BlockRailcraftSlab.getItem(BlockMaterial.CREOSOTE),
+                            'I', EnumPost.WOOD.getItem());
 
-            CraftingPlugin.addRecipe(EnumPost.STONE.getItem(8),
-                    "SIS",
-                    "SIS",
-                    "SIS",
-                    'I', RailcraftItem.rebar.getRecipeObject(),
-                    'S', "stone");
-            CraftingPlugin.addRecipe(EnumPost.STONE_PLATFORM.getItem(),
-                    " T ",
-                    " I ",
-                    'T', BlockRailcraftSlab.getItem(BlockMaterial.CONCRETE),
-                    'I', EnumPost.STONE.getItem());
+                    CraftingPlugin.addRecipe(EnumPost.STONE.getItem(8),
+                            "SIS",
+                            "SIS",
+                            "SIS",
+                            'I', RailcraftItem.rebar.getRecipeObject(),
+                            'S', "stone");
+                    CraftingPlugin.addRecipe(EnumPost.STONE_PLATFORM.getItem(),
+                            " T ",
+                            " I ",
+                            'T', BlockRailcraftSlab.getItem(BlockMaterial.CONCRETE),
+                            'I', EnumPost.STONE.getItem());
 
-            ItemStack stack = EnumPost.METAL_UNPAINTED.getItem(16);
+                    ItemStack stack = EnumPost.METAL_UNPAINTED.getItem(16);
 
-            IRecipe recipe = new ShapedOreRecipe(stack,
-                    "III",
-                    " I ",
-                    "III",
-                    'I', "ingotIron");
-            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
+                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                            "III",
+                            " I ",
+                            "III",
+                            'I', "ingotIron");
 
-            recipe = new ShapedOreRecipe(stack,
-                    "I I",
-                    "III",
-                    "I I",
-                    'I', "ingotIron");
-            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
+                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                            "I I",
+                            "III",
+                            "I I",
+                            'I', "ingotIron");
 
-            CraftingPlugin.addRecipe(EnumPost.METAL_PLATFORM_UNPAINTED.getItem(4),
-                    " T ",
-                    " I ",
-                    'T', BlockRailcraftSlab.getItem(BlockMaterial.IRON),
-                    'I', EnumPost.METAL_UNPAINTED.getItem());
+                    CraftingPlugin.addRecipe(EnumPost.METAL_PLATFORM_UNPAINTED.getItem(4),
+                            " T ",
+                            " I ",
+                            'T', BlockRailcraftSlab.getItem(BlockMaterial.IRON),
+                            'I', EnumPost.METAL_UNPAINTED.getItem());
 
-            stack = EnumPost.METAL_UNPAINTED.getItem(32);
-            recipe = new ShapedOreRecipe(stack,
-                    "III",
-                    " I ",
-                    "III",
-                    'I', "ingotSteel");
-            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
+                    stack = EnumPost.METAL_UNPAINTED.getItem(32);
+                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                            "III",
+                            " I ",
+                            "III",
+                            'I', "ingotSteel");
 
-            recipe = new ShapedOreRecipe(stack,
-                    "I I",
-                    "III",
-                    "I I",
-                    'I', "ingotSteel");
-            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
+                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                            "I I",
+                            "III",
+                            "I I",
+                            'I', "ingotSteel");
 
-            stack = EnumPost.METAL_UNPAINTED.getItem(12);
-            recipe = new ShapedOreRecipe(stack,
-                    "III",
-                    " I ",
-                    "III",
-                    'I', "ingotBronze");
-            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
-            recipe = new ShapedOreRecipe(stack,
-                    "I I",
-                    "III",
-                    "I I",
-                    'I', "ingotBronze");
-            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
+                    stack = EnumPost.METAL_UNPAINTED.getItem(12);
+                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                            "III",
+                            " I ",
+                            "III",
+                            'I', "ingotBronze");
+                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                            "I I",
+                            "III",
+                            "I I",
+                            'I', "ingotBronze");
 
-            stack = EnumPost.METAL_UNPAINTED.getItem(20);
-            recipe = new ShapedOreRecipe(stack,
-                    "III",
-                    " I ",
-                    "III",
-                    'I', "ingotRefinedIron");
-            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
-            recipe = new ShapedOreRecipe(stack,
-                    "I I",
-                    "III",
-                    "I I",
-                    'I', "ingotRefinedIron");
-            RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
-        }
+                    stack = EnumPost.METAL_UNPAINTED.getItem(20);
+                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                            "III",
+                            " I ",
+                            "III",
+                            'I', "ingotRefinedIron");
+                    RailcraftCraftingManager.rollingMachine.addRecipe(stack,
+                            "I I",
+                            "III",
+                            "I I",
+                            'I', "ingotRefinedIron");
+                }
 
-        if (blockPost != null && BlockPostMetal.post != null) {
-            ItemStack stackColored = BlockPostMetal.post.getItem(1, OreDictionary.WILDCARD_VALUE);
-            ItemStack stackRaw = EnumPost.METAL_UNPAINTED.getItem();
+                if (blockPost != null && BlockPostMetal.post != null) {
+                    ItemStack stackColored = BlockPostMetal.post.getItem(1, OreDictionary.WILDCARD_VALUE);
+                    ItemStack stackRaw = EnumPost.METAL_UNPAINTED.getItem();
 
-            for (EnumColor color : EnumColor.values()) {
-                ItemStack outputStack = new ItemStack(BlockPostMetal.post, 8, color.ordinal());
-                CraftingPlugin.addRecipe(outputStack,
-                        "III",
-                        "IDI",
-                        "III",
-                        'I', stackRaw,
-                        'D', color.getDyeOreDictTag());
-                CraftingPlugin.addRecipe(outputStack,
-                        "III",
-                        "IDI",
-                        "III",
-                        'I', stackColored,
-                        'D', color.getDyeOreDictTag());
-            }
-        }
+                    for (EnumColor color : EnumColor.values()) {
+                        ItemStack outputStack = new ItemStack(BlockPostMetal.post, 8, color.ordinal());
+                        CraftingPlugin.addRecipe(outputStack,
+                                "III",
+                                "IDI",
+                                "III",
+                                'I', stackRaw,
+                                'D', color.getDyeOreDictTag());
+                        CraftingPlugin.addRecipe(outputStack,
+                                "III",
+                                "IDI",
+                                "III",
+                                'I', stackColored,
+                                'D', color.getDyeOreDictTag());
+                    }
+                }
 
-        if (BlockPostMetal.post != null && BlockPostMetal.platform != null) {
-            ItemStack stackColored = BlockPostMetal.platform.getItem(1, OreDictionary.WILDCARD_VALUE);
-            ItemStack stackRaw = EnumPost.METAL_PLATFORM_UNPAINTED.getItem();
+                if (BlockPostMetal.post != null && BlockPostMetal.platform != null) {
+                    ItemStack stackColored = BlockPostMetal.platform.getItem(1, OreDictionary.WILDCARD_VALUE);
+                    ItemStack stackRaw = EnumPost.METAL_PLATFORM_UNPAINTED.getItem();
 
-            for (EnumColor color : EnumColor.values()) {
-                ItemStack outputStack = new ItemStack(BlockPostMetal.platform, 8, color.ordinal());
-                CraftingPlugin.addRecipe(outputStack,
-                        "III",
-                        "IDI",
-                        "III",
-                        'I', stackRaw,
-                        'D', color.getDyeOreDictTag());
-                CraftingPlugin.addRecipe(outputStack,
-                        "III",
-                        "IDI",
-                        "III",
-                        'I', stackColored,
-                        'D', color.getDyeOreDictTag());
-            }
-        }
-    }
-
-    @Override
-    public void postInit() {
-        if (BlockStrengthGlass.getBlock() != null) {
-            Object[] frameTypes = new Object[]{"ingotTin", Items.iron_ingot};
-            FluidStack water = Fluids.WATER.get(FluidHelper.BUCKET_VOLUME);
-            for (ItemStack container : FluidHelper.getContainersFilledWith(water)) {
-                for (Object frame : frameTypes) {
-                    CraftingPlugin.addRecipe(BlockStrengthGlass.getItem(6, 0),
-                            "GFG",
-                            "GSG",
-                            "GWG",
-                            'G', "blockGlassColorless",
-                            'F', frame,
-                            'S', "dustSaltpeter",
-                            'W', container);
+                    for (EnumColor color : EnumColor.values()) {
+                        ItemStack outputStack = new ItemStack(BlockPostMetal.platform, 8, color.ordinal());
+                        CraftingPlugin.addRecipe(outputStack,
+                                "III",
+                                "IDI",
+                                "III",
+                                'I', stackRaw,
+                                'D', color.getDyeOreDictTag());
+                        CraftingPlugin.addRecipe(outputStack,
+                                "III",
+                                "IDI",
+                                "III",
+                                'I', stackColored,
+                                'D', color.getDyeOreDictTag());
+                    }
                 }
             }
-        }
 
-        EnumCube cubeType = EnumCube.CREOSOTE_BLOCK;
-        if (cubeType.isEnabled()) {
-            ItemStack stack = cubeType.getItem();
-            for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME))) {
-                CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
+            @Override
+            public void postInit() {
+                if (BlockStrengthGlass.getBlock() != null) {
+                    Object[] frameTypes = new Object[]{"ingotTin", Items.iron_ingot};
+                    FluidStack water = Fluids.WATER.get(FluidHelper.BUCKET_VOLUME);
+                    for (ItemStack container : FluidHelper.getContainersFilledWith(water)) {
+                        for (Object frame : frameTypes) {
+                            CraftingPlugin.addRecipe(BlockStrengthGlass.getItem(6, 0),
+                                    "GFG",
+                                    "GSG",
+                                    "GWG",
+                                    'G', "blockGlassColorless",
+                                    'F', frame,
+                                    'S', "dustSaltpeter",
+                                    'W', container);
+                        }
+                    }
+                }
+
+                EnumCube cubeType = EnumCube.CREOSOTE_BLOCK;
+                if (cubeType.isEnabled()) {
+                    ItemStack stack = cubeType.getItem();
+                    for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME))) {
+                        CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
+                    }
+                    ForestryPlugin.instance().addCarpenterRecipe("creosote.block", 40, Fluids.CREOSOTE.get(750), null, stack, "L", 'L', "logWood");
+                }
             }
-            ForestryPlugin.instance().addCarpenterRecipe("creosote.block", 40, Fluids.CREOSOTE.get(750), null, stack, "L", 'L', "logWood");
-        }
+        });
     }
 }

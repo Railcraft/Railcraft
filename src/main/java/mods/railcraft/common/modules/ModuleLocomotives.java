@@ -34,8 +34,7 @@ import net.minecraft.item.crafting.IRecipe;
  */
 @RailcraftModule("locomotives")
 public class ModuleLocomotives extends RailcraftModulePayload {
-
-    ModuleLocomotives() {
+    public ModuleLocomotives() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void preInit() {

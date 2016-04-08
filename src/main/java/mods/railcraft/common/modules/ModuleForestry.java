@@ -24,7 +24,7 @@ public class ModuleForestry extends RailcraftModulePayload {
             throw new MissingPrerequisiteException("Forestry not installed.");
     }
 
-    ModuleForestry() {
+    public ModuleForestry() {
         setEnabledEventHandler(new ModuleEventHandler() {
 
             @Override

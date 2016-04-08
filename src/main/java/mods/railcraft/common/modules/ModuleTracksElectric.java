@@ -20,7 +20,7 @@ import mods.railcraft.common.util.misc.MiscTools;
 @RailcraftModule(value = "tracks|electric", dependencyClasses = {ModuleLocomotives.class, ModuleElectricity.class})
 public class ModuleTracksElectric extends RailcraftModulePayload {
 
-    ModuleTracksElectric() {
+    public ModuleTracksElectric() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void preInit() {

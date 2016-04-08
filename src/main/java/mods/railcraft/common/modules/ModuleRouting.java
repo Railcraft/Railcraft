@@ -25,58 +25,49 @@ import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @RailcraftModule(value = "routing", dependencyClasses = {ModuleSignals.class})
 public class ModuleRouting extends RailcraftModulePayload {
+    public ModuleRouting() {
+        setEnabledEventHandler(new ModuleEventHandler() {
 
-    @Nonnull
-    @Override
-    public ModuleEventHandler getModuleEventHandler(boolean enabled) {
-        if (enabled)
-            return enabledEventHandler;
-        return DEFAULT_DISABLED_EVENT_HANDLER;
-    }
+            @Override
+            public void preInit() {
+                super.preInit();
+                BlockDetector.registerBlock();
+                ItemRoutingTable.registerItem();
+                ItemTicketGold.registerItem();
+                ItemTicket.registerItem();
 
-    private final ModuleEventHandler enabledEventHandler = new BaseModuleEventHandler() {
+                MiscTools.registerTrack(EnumTrack.ROUTING);
 
-        @Override
-        public void preInit() {
-            super.preInit();
-            BlockDetector.registerBlock();
-            ItemRoutingTable.registerItem();
-            ItemTicketGold.registerItem();
-            ItemTicket.registerItem();
+                if (ItemRoutingTable.item != null)
+                    CraftingPlugin.addRecipe(new RoutingTableCopyRecipe());
 
-            MiscTools.registerTrack(EnumTrack.ROUTING);
+                if (ItemTicket.item != null && ItemTicketGold.item != null)
+                    CraftingPlugin.addRecipe(new RoutingTicketCopyRecipe());
 
-            if (ItemRoutingTable.item != null)
-                CraftingPlugin.addRecipe(new RoutingTableCopyRecipe());
+                if (EnumDetector.ROUTING.isEnabled()) {
+                    CraftingPlugin.addRecipe(EnumDetector.ROUTING.getItem(),
+                            "XXX",
+                            "XPX",
+                            "XXX",
+                            'X', new ItemStack(Blocks.quartz_block, 1, 1),
+                            'P', Blocks.stone_pressure_plate);
 
-            if (ItemTicket.item != null && ItemTicketGold.item != null)
-                CraftingPlugin.addRecipe(new RoutingTicketCopyRecipe());
+                    RailcraftBlocks.registerBlockSignal();
+                    if (RailcraftBlocks.getBlockSignal() != null)
+                        // Define Switch Motor
+                        if (EnumSignal.SWITCH_ROUTING.isEnabled() && EnumSignal.SWITCH_MOTOR.isEnabled()) {
 
-            if (EnumDetector.ROUTING.isEnabled()) {
-                CraftingPlugin.addRecipe(EnumDetector.ROUTING.getItem(),
-                        "XXX",
-                        "XPX",
-                        "XXX",
-                        'X', new ItemStack(Blocks.quartz_block, 1, 1),
-                        'P', Blocks.stone_pressure_plate);
-
-                RailcraftBlocks.registerBlockSignal();
-                if (RailcraftBlocks.getBlockSignal() != null)
-                    // Define Switch Motor
-                    if (EnumSignal.SWITCH_ROUTING.isEnabled() && EnumSignal.SWITCH_MOTOR.isEnabled()) {
-
-                        ItemStack stack = EnumSignal.SWITCH_ROUTING.getItem();
-                        CraftingPlugin.addShapelessRecipe(stack, EnumSignal.SWITCH_MOTOR.getItem(), EnumDetector.ROUTING.getItem());
-                    }
+                            ItemStack stack = EnumSignal.SWITCH_ROUTING.getItem();
+                            CraftingPlugin.addShapelessRecipe(stack, EnumSignal.SWITCH_MOTOR.getItem(), EnumDetector.ROUTING.getItem());
+                        }
+                }
             }
-        }
-    };
+        });
+    }
 
 }

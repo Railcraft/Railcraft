@@ -20,57 +20,48 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.init.Blocks;
 
-import javax.annotation.Nonnull;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @RailcraftModule("tracks|wood")
 public class ModuleTrain extends RailcraftModulePayload {
 
-    @Nonnull
-    @Override
-    public ModuleEventHandler getModuleEventHandler(boolean enabled) {
-        if (enabled)
-            return enabledEventHandler;
-        return DEFAULT_DISABLED_EVENT_HANDLER;
+    public ModuleTrain() {
+        setEnabledEventHandler(new ModuleEventHandler() {
+            @Override
+            public void preInit() {
+                super.preInit();
+                BlockDetector.registerBlock();
+                RailcraftBlocks.registerBlockTrack();
+
+                MiscTools.registerTrack(EnumTrack.COUPLER);
+
+                if (BlockDetector.getBlock() != null) {
+                    CraftingPlugin.addRecipe(EnumDetector.TRAIN.getItem(),
+                            "XXX",
+                            "XPX",
+                            "XXX",
+                            'X', Blocks.nether_brick,
+                            'P', Blocks.stone_pressure_plate);
+                }
+
+                EnumMachineGamma.DISPENSER_TRAIN.register();
+            }
+
+            @Override
+            public void init() {
+                super.init();
+                EnumMachineGamma type = EnumMachineGamma.DISPENSER_TRAIN;
+                if (type.isAvailable() && EnumMachineGamma.DISPENSER_CART.isAvailable()) {
+                    CraftingPlugin.addRecipe(type.getItem(),
+                            "rcr",
+                            "cdc",
+                            "rcr",
+                            'd', EnumMachineGamma.DISPENSER_CART.getItem(),
+                            'c', IToolCrowbar.ORE_TAG,
+                            'r', "dustRedstone");
+                }
+            }
+        });
     }
-
-    private final ModuleEventHandler enabledEventHandler = new BaseModuleEventHandler() {
-        @Override
-        public void preInit() {
-            super.preInit();
-            BlockDetector.registerBlock();
-            RailcraftBlocks.registerBlockTrack();
-
-            MiscTools.registerTrack(EnumTrack.COUPLER);
-
-            if (BlockDetector.getBlock() != null) {
-                CraftingPlugin.addRecipe(EnumDetector.TRAIN.getItem(),
-                        "XXX",
-                        "XPX",
-                        "XXX",
-                        'X', Blocks.nether_brick,
-                        'P', Blocks.stone_pressure_plate);
-            }
-
-            EnumMachineGamma.DISPENSER_TRAIN.register();
-        }
-
-        @Override
-        public void init() {
-            super.init();
-            EnumMachineGamma type = EnumMachineGamma.DISPENSER_TRAIN;
-            if (type.isAvailable() && EnumMachineGamma.DISPENSER_CART.isAvailable()) {
-                CraftingPlugin.addRecipe(type.getItem(),
-                        "rcr",
-                        "cdc",
-                        "rcr",
-                        'd', EnumMachineGamma.DISPENSER_CART.getItem(),
-                        'c', IToolCrowbar.ORE_TAG,
-                        'r', "dustRedstone");
-            }
-        }
-    };
-
 }

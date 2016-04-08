@@ -31,7 +31,7 @@ import net.minecraftforge.common.MinecraftForge;
 @RailcraftModule("chunk_loading")
 public class ModuleChunkLoading extends RailcraftModulePayload {
 
-    ModuleChunkLoading() {
+    public ModuleChunkLoading() {
         setEnabledEventHandler(new ModuleEventHandler() {
 
             @Override

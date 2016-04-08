@@ -9,6 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.common.modules;
 
+import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.ore.BlockOre;
@@ -30,83 +31,86 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@RailcraftModule("world")
 public class ModuleWorld extends RailcraftModulePayload {
 
     public static final ResourceLocation VILLAGER_TEXTURE = new ResourceLocation("railcraft:textures/entities/villager/trackman.png");
 
-    @Override
-    public void preInit() {
-        if (RailcraftConfig.isWorldGenEnabled("workshop")) {
-            int id = RailcraftConfig.villagerID();
-            VillagerRegistry.instance().registerVillagerId(id);
-            VillagerRegistry.instance().registerVillageTradeHandler(id, new VillagerTradeHandler());
-            VillagerRegistry.instance().registerVillageCreationHandler(new WorkshopCreationHandeler());
-            try {
-                MapGenStructureIO.func_143031_a(ComponentWorkshop.class, "railcraft:workshop");
-            } catch (Throwable e) {
+    public ModuleWorld() {
+        setEnabledEventHandler(new ModuleEventHandler() {
+            @Override
+            public void construction() {
+                if (RailcraftConfig.isWorldGenEnabled("workshop")) {
+                    int id = RailcraftConfig.villagerID();
+                    VillagerRegistry.instance().registerVillagerId(id);
+                    VillagerRegistry.instance().registerVillageTradeHandler(id, new VillagerTradeHandler());
+                    VillagerRegistry.instance().registerVillageCreationHandler(new WorkshopCreationHandeler());
+                    try {
+                        MapGenStructureIO.func_143031_a(ComponentWorkshop.class, "railcraft:workshop");
+                    } catch (Throwable e) {
+                    }
+                }
             }
-        }
-    }
 
-    @Override
-    public void initFirst() {
-        BlockOre.registerBlock();
-        BlockWorldLogic.registerBlock();
+            @Override
+            public void preInit() {
+                BlockOre.registerBlock();
+                BlockWorldLogic.registerBlock();
 
-        EnumCube cubeType = EnumCube.ABYSSAL_STONE;
-        if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-            BlockCube.registerBlock();
-        }
+                EnumCube cubeType = EnumCube.ABYSSAL_STONE;
+                if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
+                    BlockCube.registerBlock();
+                }
 
-        cubeType = EnumCube.QUARRIED_STONE;
-        if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-            BlockCube.registerBlock();
-        }
+                cubeType = EnumCube.QUARRIED_STONE;
+                if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
+                    BlockCube.registerBlock();
+                }
 
-        if (RailcraftConfig.isWorldGenEnabled("saltpeter") && EnumOre.SALTPETER.isEnabled())
-            MinecraftForge.ORE_GEN_BUS.register(new SaltpeterGenerator());
-        if (RailcraftConfig.isWorldGenEnabled("sulfur") && EnumOre.SULFUR.isEnabled())
-            MinecraftForge.ORE_GEN_BUS.register(new SulfurGenerator());
-        if (RailcraftConfig.isWorldGenEnabled("firestone") && EnumOre.FIRESTONE.isEnabled() && RailcraftModuleManager.isModuleEnabled(RailcraftModuleManager.Module.MAGIC))
-            MinecraftForge.EVENT_BUS.register(new FirestoneGenerator());
-        if (RailcraftConfig.isWorldGenEnabled("abyssal") && EnumCube.ABYSSAL_STONE.isEnabled())
-            MinecraftForge.EVENT_BUS.register(GeodePopulator.instance());
-        if (RailcraftConfig.isWorldGenEnabled("quarried") && EnumCube.QUARRIED_STONE.isEnabled())
-            MinecraftForge.EVENT_BUS.register(QuarryPopulator.instance());
+                if (RailcraftConfig.isWorldGenEnabled("saltpeter") && EnumOre.SALTPETER.isEnabled())
+                    MinecraftForge.ORE_GEN_BUS.register(new SaltpeterGenerator());
+                if (RailcraftConfig.isWorldGenEnabled("sulfur") && EnumOre.SULFUR.isEnabled())
+                    MinecraftForge.ORE_GEN_BUS.register(new SulfurGenerator());
+                if (RailcraftConfig.isWorldGenEnabled("firestone") && EnumOre.FIRESTONE.isEnabled() && RailcraftModuleManager.isModuleEnabled(ModuleMagic.class))
+                    MinecraftForge.EVENT_BUS.register(new FirestoneGenerator());
+                if (RailcraftConfig.isWorldGenEnabled("abyssal") && EnumCube.ABYSSAL_STONE.isEnabled())
+                    MinecraftForge.EVENT_BUS.register(GeodePopulator.instance());
+                if (RailcraftConfig.isWorldGenEnabled("quarried") && EnumCube.QUARRIED_STONE.isEnabled())
+                    MinecraftForge.EVENT_BUS.register(QuarryPopulator.instance());
 
-        if (RailcraftConfig.isWorldGenEnabled("iron") && EnumOre.POOR_IRON.isEnabled())
-            MinecraftForge.ORE_GEN_BUS.register(new PoorIronGenerator());
-        if (RailcraftConfig.isWorldGenEnabled("gold") && EnumOre.POOR_GOLD.isEnabled())
-            MinecraftForge.ORE_GEN_BUS.register(new PoorGoldGenerator());
-        if (RailcraftConfig.isWorldGenEnabled("copper") && EnumOre.POOR_COPPER.isEnabled())
-            MinecraftForge.ORE_GEN_BUS.register(new PoorCopperGenerator());
-        if (RailcraftConfig.isWorldGenEnabled("tin") && EnumOre.POOR_TIN.isEnabled())
-            MinecraftForge.ORE_GEN_BUS.register(new PoorTinGenerator());
-        if (RailcraftConfig.isWorldGenEnabled("lead") && EnumOre.POOR_LEAD.isEnabled())
-            MinecraftForge.ORE_GEN_BUS.register(new PoorLeadGenerator());
+                if (RailcraftConfig.isWorldGenEnabled("iron") && EnumOre.POOR_IRON.isEnabled())
+                    MinecraftForge.ORE_GEN_BUS.register(new PoorIronGenerator());
+                if (RailcraftConfig.isWorldGenEnabled("gold") && EnumOre.POOR_GOLD.isEnabled())
+                    MinecraftForge.ORE_GEN_BUS.register(new PoorGoldGenerator());
+                if (RailcraftConfig.isWorldGenEnabled("copper") && EnumOre.POOR_COPPER.isEnabled())
+                    MinecraftForge.ORE_GEN_BUS.register(new PoorCopperGenerator());
+                if (RailcraftConfig.isWorldGenEnabled("tin") && EnumOre.POOR_TIN.isEnabled())
+                    MinecraftForge.ORE_GEN_BUS.register(new PoorTinGenerator());
+                if (RailcraftConfig.isWorldGenEnabled("lead") && EnumOre.POOR_LEAD.isEnabled())
+                    MinecraftForge.ORE_GEN_BUS.register(new PoorLeadGenerator());
 
-        if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {
-            IRecipe recipe = new ShapelessOreRecipe(new ItemStack(Items.gunpowder, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");
-            CraftingManager.getInstance().getRecipeList().add(recipe);
-        }
+                if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {
+                    IRecipe recipe = new ShapelessOreRecipe(new ItemStack(Items.gunpowder, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");
+                    CraftingManager.getInstance().getRecipeList().add(recipe);
+                }
 
-        if (RailcraftConfig.getRecipeConfig("forestry.misc.fertilizer")) {
-            ItemStack fert = ForestryPlugin.getItem("fertilizerCompound");
+                if (RailcraftConfig.getRecipeConfig("forestry.misc.fertilizer")) {
+                    ItemStack fertilizer = ForestryPlugin.getItem("fertilizerCompound");
 
-            if (fert != null) {
-                fert = fert.copy();
-                fert.stackSize = 2;
-                CraftingPlugin.addShapelessRecipe(fert,
-                        "dustSaltpeter",
-                        "sand",
-                        "sand",
-                        new ItemStack(Blocks.dirt),
-                        new ItemStack(Blocks.dirt));
+                    if (fertilizer != null) {
+                        fertilizer = fertilizer.copy();
+                        fertilizer.stackSize = 2;
+                        CraftingPlugin.addShapelessRecipe(fertilizer,
+                                "dustSaltpeter",
+                                "sand",
+                                "sand",
+                                new ItemStack(Blocks.dirt),
+                                new ItemStack(Blocks.dirt));
+                    }
+                }
             }
-        }
+        });
     }
-
 }

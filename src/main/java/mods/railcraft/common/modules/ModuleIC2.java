@@ -29,8 +29,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
-
 @RailcraftModule("ic2")
 public class ModuleIC2 extends RailcraftModulePayload {
 
@@ -43,33 +41,25 @@ public class ModuleIC2 extends RailcraftModulePayload {
             throw new MissingPrerequisiteException("Reason: IC2 not detected");
     }
 
-    @Nonnull
-    @Override
-    public ModuleEventHandler getModuleEventHandler(boolean enabled) {
-        if (enabled)
-            return enabledEventHandler;
-        return DEFAULT_DISABLED_EVENT_HANDLER;
-    }
+    ModuleIC2() {
+        setEnabledEventHandler(new ModuleEventHandler() {
+            @Override
+            public void preInit() {
+                BlockDetector.registerBlock();
+                RailcraftBlocks.registerBlockMachineGamma();
 
-    private final ModuleEventHandler enabledEventHandler = new BaseModuleEventHandler() {
-        @Override
-        public void preInit() {
-            super.preInit();
-            BlockDetector.registerBlock();
-            RailcraftBlocks.registerBlockMachineGamma();
+                if (RailcraftConfig.isItemEnabled("ic2.upgrade.lapotron")) {
+                    lapotronUpgrade = new ItemRailcraft().setUnlocalizedName("railcraft.upgrade.lapotron").setMaxStackSize(9);
 
-            if (RailcraftConfig.isItemEnabled("ic2.upgrade.lapotron")) {
-                lapotronUpgrade = new ItemRailcraft().setUnlocalizedName("railcraft.upgrade.lapotron").setMaxStackSize(9);
+                    RailcraftRegistry.register(lapotronUpgrade);
 
-                RailcraftRegistry.register(lapotronUpgrade);
+                    RailcraftRegistry.register("ic2.upgrade.lapotron", new ItemStack(lapotronUpgrade));
+                }
 
-                RailcraftRegistry.register("ic2.upgrade.lapotron", new ItemStack(lapotronUpgrade));
-            }
-
-            EnumCart.ENERGY_BATBOX.setup();
-            EnumCart.ENERGY_MFE.setup();
-            if (IC2Plugin.isClassic()) EnumCart.ENERGY_MFSU.setup();
-            else EnumCart.ENERGY_CESU.setup();
+                EnumCart.ENERGY_BATBOX.setup();
+                EnumCart.ENERGY_MFE.setup();
+                if (IC2Plugin.isClassic()) EnumCart.ENERGY_MFSU.setup();
+                else EnumCart.ENERGY_CESU.setup();
 
 //        id = RailcraftConfig.getItemId("item.creosote.wood");
 //        if(id > 0){
@@ -86,143 +76,140 @@ public class ModuleIC2 extends RailcraftModulePayload {
 //                CropCard.registerCrop(bush);
 //            }
 //        }
-        }
-
-        @Override
-        public void postInit() {
-            createRecipes();
-        }
-    };
-
-    private static void createRecipes() {
-        Block blockDetector = BlockDetector.getBlock();
-
-        if (blockDetector != null) {
-            ItemStack stack = EnumDetector.ENERGY.getItem();
-            Object tin = RailcraftItem.plate.getRecipeObject(EnumPlate.TIN);
-            if (tin == null)
-                tin = "ingotTin";
-            CraftingPlugin.addRecipe(stack, false,
-                    "XXX",
-                    "XPX",
-                    "XXX",
-                    'X', tin,
-                    'P', Blocks.stone_pressure_plate);
-        }
-
-        ItemStack batbox = IC2Plugin.getItem("batBox");
-        if (batbox != null) {
-            EnumCart cart = EnumCart.ENERGY_BATBOX;
-            cart.setContents(batbox);
-            ItemStack stack = cart.getCartItem();
-            if (stack != null) {
-                CraftingPlugin.addRecipe(stack,
-                        "E",
-                        "M",
-                        'E', batbox,
-                        'M', Items.minecart
-                );
             }
-        }
 
-        if (!IC2Plugin.isClassic()) {
-            ItemStack cesu = IC2Plugin.getItem("cesuUnit");
-            if (cesu != null) {
-                EnumCart cart = EnumCart.ENERGY_CESU;
-                cart.setContents(cesu);
-                ItemStack stack = cart.getCartItem();
-                if (stack != null) {
-                    CraftingPlugin.addRecipe(stack,
-                            "E",
-                            "M",
-                            'E', cesu,
-                            'M', Items.minecart
-                    );
+            @Override
+            public void postInit() {
+                Block blockDetector = BlockDetector.getBlock();
+
+                if (blockDetector != null) {
+                    ItemStack stack = EnumDetector.ENERGY.getItem();
+                    Object tin = RailcraftItem.plate.getRecipeObject(EnumPlate.TIN);
+                    if (tin == null)
+                        tin = "ingotTin";
+                    CraftingPlugin.addRecipe(stack, false,
+                            "XXX",
+                            "XPX",
+                            "XXX",
+                            'X', tin,
+                            'P', Blocks.stone_pressure_plate);
                 }
-            }
-        } else {
-            ItemStack mfsu = IC2Plugin.getItem("mfsUnit");
-            if (mfsu != null) {
-                EnumCart cart = EnumCart.ENERGY_MFSU;
-                cart.setContents(mfsu);
-                ItemStack stack = cart.getCartItem();
-                if (stack != null) {
-                    CraftingPlugin.addRecipe(stack,
-                            "E",
-                            "M",
-                            'E', mfsu,
-                            'M', Items.minecart
-                    );
+
+                ItemStack batbox = IC2Plugin.getItem("batBox");
+                if (batbox != null) {
+                    EnumCart cart = EnumCart.ENERGY_BATBOX;
+                    cart.setContents(batbox);
+                    ItemStack stack = cart.getCartItem();
+                    if (stack != null) {
+                        CraftingPlugin.addRecipe(stack,
+                                "E",
+                                "M",
+                                'E', batbox,
+                                'M', Items.minecart
+                        );
+                    }
                 }
-            }
-        }
 
-        ItemStack mfe = IC2Plugin.getItem("mfeUnit");
-        if (mfe != null) {
-            EnumCart cart = EnumCart.ENERGY_MFE;
-            cart.setContents(mfe);
-            ItemStack stack = cart.getCartItem();
-            if (stack != null) {
+                if (!IC2Plugin.isClassic()) {
+                    ItemStack cesu = IC2Plugin.getItem("cesuUnit");
+                    if (cesu != null) {
+                        EnumCart cart = EnumCart.ENERGY_CESU;
+                        cart.setContents(cesu);
+                        ItemStack stack = cart.getCartItem();
+                        if (stack != null) {
+                            CraftingPlugin.addRecipe(stack,
+                                    "E",
+                                    "M",
+                                    'E', cesu,
+                                    'M', Items.minecart
+                            );
+                        }
+                    }
+                } else {
+                    ItemStack mfsu = IC2Plugin.getItem("mfsUnit");
+                    if (mfsu != null) {
+                        EnumCart cart = EnumCart.ENERGY_MFSU;
+                        cart.setContents(mfsu);
+                        ItemStack stack = cart.getCartItem();
+                        if (stack != null) {
+                            CraftingPlugin.addRecipe(stack,
+                                    "E",
+                                    "M",
+                                    'E', mfsu,
+                                    'M', Items.minecart
+                            );
+                        }
+                    }
+                }
 
-                CraftingPlugin.addRecipe(stack,
-                        "E",
-                        "M",
-                        'E', mfe,
-                        'M', Items.minecart
-                );
-            }
-        }
+                ItemStack mfe = IC2Plugin.getItem("mfeUnit");
+                if (mfe != null) {
+                    EnumCart cart = EnumCart.ENERGY_MFE;
+                    cart.setContents(mfe);
+                    ItemStack stack = cart.getCartItem();
+                    if (stack != null) {
 
-        ItemStack battery = IC2Plugin.getItem("reBattery");
-        ItemStack machine = IC2Plugin.getItem("machine");
+                        CraftingPlugin.addRecipe(stack,
+                                "E",
+                                "M",
+                                'E', mfe,
+                                'M', Items.minecart
+                        );
+                    }
+                }
 
-        ItemStack detector;
-        if (blockDetector != null)
-            detector = EnumDetector.ENERGY.getItem();
-        else
-            detector = new ItemStack(Blocks.stone_pressure_plate);
+                ItemStack battery = IC2Plugin.getItem("reBattery");
+                ItemStack machine = IC2Plugin.getItem("machine");
 
-        if (battery != null && machine != null) {
-            if (EnumMachineGamma.ENERGY_LOADER.isAvailable())
-                Recipes.advRecipes.addRecipe(EnumMachineGamma.ENERGY_LOADER.getItem(),
-                        "BLB",
-                        "BIB",
-                        "BDB",
-                        'D', detector,
-                        'B', battery,
-                        'I', machine,
-                        'L', new ItemStack(Blocks.hopper));
+                ItemStack detector;
+                if (blockDetector != null)
+                    detector = EnumDetector.ENERGY.getItem();
+                else
+                    detector = new ItemStack(Blocks.stone_pressure_plate);
 
-            if (EnumMachineGamma.ENERGY_UNLOADER.isAvailable())
-                Recipes.advRecipes.addRecipe(EnumMachineGamma.ENERGY_UNLOADER.getItem(),
-                        "BDB",
-                        "BIB",
-                        "BLB",
-                        'D', detector,
-                        'B', battery,
-                        'I', machine,
-                        'L', new ItemStack(Blocks.hopper));
-        }
+                if (battery != null && machine != null) {
+                    if (EnumMachineGamma.ENERGY_LOADER.isAvailable())
+                        Recipes.advRecipes.addRecipe(EnumMachineGamma.ENERGY_LOADER.getItem(),
+                                "BLB",
+                                "BIB",
+                                "BDB",
+                                'D', detector,
+                                'B', battery,
+                                'I', machine,
+                                'L', new ItemStack(Blocks.hopper));
 
-        if (RailcraftConfig.isItemEnabled("ic2.upgrade.lapotron")) {
-            ItemStack lapotron = IC2Plugin.getItem("lapotronCrystal");
-            ItemStack glassCable = IC2Plugin.getItem("glassFiberCableItem");
-            ItemStack circuit = IC2Plugin.getItem("advancedCircuit");
+                    if (EnumMachineGamma.ENERGY_UNLOADER.isAvailable())
+                        Recipes.advRecipes.addRecipe(EnumMachineGamma.ENERGY_UNLOADER.getItem(),
+                                "BDB",
+                                "BIB",
+                                "BLB",
+                                'D', detector,
+                                'B', battery,
+                                'I', machine,
+                                'L', new ItemStack(Blocks.hopper));
+                }
 
-            if (lapotron != null && glassCable != null && circuit != null) {
-                lapotron.copy();
+                if (RailcraftConfig.isItemEnabled("ic2.upgrade.lapotron")) {
+                    ItemStack lapotron = IC2Plugin.getItem("lapotronCrystal");
+                    ItemStack glassCable = IC2Plugin.getItem("glassFiberCableItem");
+                    ItemStack circuit = IC2Plugin.getItem("advancedCircuit");
+
+                    if (lapotron != null && glassCable != null && circuit != null) {
+                        lapotron.copy();
 //                lapotron.setItemDamage(-1);
-                Recipes.advRecipes.addRecipe(new ItemStack(lapotronUpgrade),
-                        "GGG",
+                        Recipes.advRecipes.addRecipe(new ItemStack(lapotronUpgrade),
+                                "GGG",
 
-                        "wLw",
-                        "GCG",
-                        'G', new ItemStack(Blocks.glass, 1, 0),
-                        'w', glassCable,
-                        'C', circuit,
-                        'L', lapotron);
+                                "wLw",
+                                "GCG",
+                                'G', new ItemStack(Blocks.glass, 1, 0),
+                                'w', glassCable,
+                                'C', circuit,
+                                'L', lapotron);
+                    }
+                }
             }
-        }
+        });
     }
 
     public static ItemStack getLapotronUpgrade() {

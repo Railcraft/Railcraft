@@ -14,32 +14,23 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.util.misc.MiscTools;
 
-import javax.annotation.Nonnull;
-
 @RailcraftModule("tracks|reinforced")
 public class ModuleTracksReinforced extends RailcraftModulePayload {
 
-    @Nonnull
-    @Override
-    public ModuleEventHandler getModuleEventHandler(boolean enabled) {
-        if (enabled)
-            return enabledEventHandler;
-        return DEFAULT_DISABLED_EVENT_HANDLER;
-    }
+    public ModuleTracksReinforced() {
+        setEnabledEventHandler(new ModuleEventHandler() {
+            @Override
+            public void preInit() {
+                RailcraftBlocks.registerBlockTrack();
 
-    private final ModuleEventHandler enabledEventHandler = new BaseModuleEventHandler() {
-        @Override
-        public void preInit() {
-            super.preInit();
-            RailcraftBlocks.registerBlockTrack();
-
-            if (RailcraftBlocks.getBlockTrack() != null) {
-                MiscTools.registerTrack(EnumTrack.REINFORCED);
-                MiscTools.registerTrack(EnumTrack.REINFORCED_BOOSTER);
-                MiscTools.registerTrack(EnumTrack.REINFORCED_JUNCTION);
-                MiscTools.registerTrack(EnumTrack.REINFORCED_SWITCH);
-                MiscTools.registerTrack(EnumTrack.REINFORCED_WYE);
+                if (RailcraftBlocks.getBlockTrack() != null) {
+                    MiscTools.registerTrack(EnumTrack.REINFORCED);
+                    MiscTools.registerTrack(EnumTrack.REINFORCED_BOOSTER);
+                    MiscTools.registerTrack(EnumTrack.REINFORCED_JUNCTION);
+                    MiscTools.registerTrack(EnumTrack.REINFORCED_SWITCH);
+                    MiscTools.registerTrack(EnumTrack.REINFORCED_WYE);
+                }
             }
-        }
-    };
+        });
+    }
 }

@@ -62,7 +62,7 @@ public class RailcraftModuleManager {
 
     private static final Map<Class<? extends IRailcraftModule>, IRailcraftModule> classToInstanceMapping = new HashMap<Class<? extends IRailcraftModule>, IRailcraftModule>();
     private static final Map<String, Class<? extends IRailcraftModule>> nameToClassMapping = new HashMap<String, Class<? extends IRailcraftModule>>();
-    private static final Set<Class<? extends IRailcraftModule>> enabledModules = new HashSet<Class<? extends IRailcraftModule>>();
+    private static final LinkedHashSet<Class<? extends IRailcraftModule>> enabledModules = new LinkedHashSet<Class<? extends IRailcraftModule>>();
     private static Stage stage = Stage.LOADING;
 
     private RailcraftModuleManager() {
@@ -116,10 +116,11 @@ public class RailcraftModuleManager {
 
         Set<Class<? extends IRailcraftModule>> toEnable = Sets.newHashSet();
         toEnable.add(ModuleCore.class);
-        for (IRailcraftModule module : classToInstanceMapping.values()) {
-            String moduleName = getModuleName(module);
-            if (ModuleCore.NAME.equals(moduleName))
+        for (Map.Entry<Class<? extends IRailcraftModule>, IRailcraftModule> entry : classToInstanceMapping.entrySet()) {
+            if (ModuleCore.class.equals(entry.getKey()))
                 continue;
+            IRailcraftModule module = entry.getValue();
+            String moduleName = getModuleName(module);
             if (!isConfigured(config, module)) {
                 Game.log(Level.INFO, "Module disabled: {0}", module);
                 continue;
@@ -153,6 +154,7 @@ public class RailcraftModuleManager {
             }
         } while (changed);
 
+        enabledModules.add(ModuleCore.class);
         enabledModules.addAll(toEnable);
 
         if (config.hasChanged())

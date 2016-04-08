@@ -9,6 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.common.modules;
 
+import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.IRockCrusherRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.ore.BlockOre;
@@ -23,54 +24,58 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+@RailcraftModule("magic")
 public class ModuleMagic extends RailcraftModulePayload {
+    public ModuleMagic() {
+        setEnabledEventHandler(new ModuleEventHandler() {
+            @Override
+            public void preInit() {
+                BlockOre.registerBlock();
+                BlockFirestoneRecharge.registerBlock();
 
-    @Override
-    public void initFirst() {
-        BlockOre.registerBlock();
-        BlockFirestoneRecharge.registerBlock();
+                EntityItemFirestone.register();
 
-        EntityItemFirestone.register();
+                ItemFirestoneRaw.registerItem();
+                ItemFirestoneCut.registerItem();
+                ItemFirestoneRefined.registerItem();
+                ItemFirestoneCracked.registerItem();
 
-        ItemFirestoneRaw.registerItem();
-        ItemFirestoneCut.registerItem();
-        ItemFirestoneRefined.registerItem();
-        ItemFirestoneCracked.registerItem();
+                FMLCommonHandler.instance().bus().register(new FirestoneTickHandler());
 
-        FMLCommonHandler.instance().bus().register(new FirestoneTickHandler());
+                if (EnumOre.FIRESTONE.isEnabled() && ItemFirestoneRaw.item != null && ItemFirestoneCut.item != null) {
+                    IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(EnumOre.FIRESTONE.getItem(), true, false);
+                    recipe.addOutput(ItemFirestoneRaw.getItem(), 1F);
 
-        if (EnumOre.FIRESTONE.isEnabled() && ItemFirestoneRaw.item != null && ItemFirestoneCut.item != null) {
-            IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(EnumOre.FIRESTONE.getItem(), true, false);
-            recipe.addOutput(ItemFirestoneRaw.getItem(), 1F);
+                    CraftingPlugin.addRecipe(ItemFirestoneCut.getItem(),
+                            " P ",
+                            "PFP",
+                            " P ",
+                            'P', Items.diamond_pickaxe,
+                            'F', ItemFirestoneRaw.item);
 
-            CraftingPlugin.addRecipe(ItemFirestoneCut.getItem(),
-                    " P ",
-                    "PFP",
-                    " P ",
-                    'P', Items.diamond_pickaxe,
-                    'F', ItemFirestoneRaw.item);
-
-            for (ItemStack stack : FluidHelper.getContainersFilledWith(Fluids.LAVA.get(FluidHelper.BUCKET_VOLUME))) {
-                CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
-                        "LRL",
-                        "RFR",
-                        "LRL",
-                        'R', "blockRedstone",
-                        'L', stack,
-                        'F', ItemFirestoneCut.item);
-                CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
-                        "LOL",
-                        "RFR",
-                        "LRL",
-                        'R', "blockRedstone",
-                        'L', stack,
-                        'O', ItemFirestoneRaw.item,
-                        'F', new ItemStack(ItemFirestoneCracked.item, 1, OreDictionary.WILDCARD_VALUE));
+                    for (ItemStack stack : FluidHelper.getContainersFilledWith(Fluids.LAVA.get(FluidHelper.BUCKET_VOLUME))) {
+                        CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
+                                "LRL",
+                                "RFR",
+                                "LRL",
+                                'R', "blockRedstone",
+                                'L', stack,
+                                'F', ItemFirestoneCut.item);
+                        CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
+                                "LOL",
+                                "RFR",
+                                "LRL",
+                                'R', "blockRedstone",
+                                'L', stack,
+                                'O', ItemFirestoneRaw.item,
+                                'F', new ItemStack(ItemFirestoneCracked.item, 1, OreDictionary.WILDCARD_VALUE));
+                    }
+                }
             }
-        }
+
+        });
     }
 
 }
