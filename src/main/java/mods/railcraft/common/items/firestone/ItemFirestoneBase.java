@@ -52,7 +52,7 @@ public abstract class ItemFirestoneBase extends ItemRailcraft {
         entity.motionX = location.motionX;
         entity.motionY = location.motionY;
         entity.motionZ = location.motionZ;
-        entity.delayBeforeCanPickup = 10;
+        entity.setDefaultPickupDelay();
         return entity;
     }
 

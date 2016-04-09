@@ -10,16 +10,16 @@ package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.EntityItemFireproof;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.EntityIDs;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class EntityItemFirestone extends EntityItemFireproof {
@@ -46,15 +46,14 @@ public class EntityItemFirestone extends EntityItemFireproof {
             return;
         if (worldObj.isRemote)
             return;
-        int xHit = MathHelper.floor_double(posX);
-        int yHit = MathHelper.floor_double(posY);
-        int zHit = MathHelper.floor_double(posZ);
-        if (worldObj.getBlock(xHit, yHit, zHit).getMaterial() == Material.lava || worldObj.getBlock(xHit, yHit + 1, zHit).getMaterial() == Material.lava)
-            for (int y = yHit + 1; y <= yHit + 10; y++) {
-                if (worldObj.isAirBlock(xHit, y, zHit) && worldObj.getBlock(xHit, y - 1, zHit).getMaterial() == Material.lava) {
-                    int meta = (getEntityItem().getItem() instanceof ItemFirestoneCracked) ? 1 : 0;
-                    worldObj.setBlock(xHit, y, zHit, BlockFirestoneRecharge.getBlock(), meta, 3);
-                    TileEntity tile = worldObj.getTileEntity(xHit, y, zHit);
+        BlockPos surface = new BlockPos(posX, posY, posZ);
+        if (WorldPlugin.getBlockMaterial(worldObj, surface) == Material.lava || WorldPlugin.getBlockMaterial(worldObj, surface.up()) == Material.lava)
+            for (int i = 0; i < 10; i++) {
+                surface = surface.up();
+                if (WorldPlugin.isBlockAir(worldObj, surface) && WorldPlugin.getBlockMaterial(worldObj, surface.down()) == Material.lava) {
+                    boolean cracked = getEntityItem().getItem() instanceof ItemFirestoneCracked;
+                    WorldPlugin.setBlockState(worldObj, surface, BlockFirestoneRecharge.getBlock().getDefaultState().withProperty(BlockFirestoneRecharge.CRACKED, cracked));
+                    TileEntity tile = WorldPlugin.getBlockTile(worldObj, surface);
                     if (tile instanceof TileFirestoneRecharge) {
                         TileFirestoneRecharge fireTile = (TileFirestoneRecharge) tile;
                         ItemStack firestone = getEntityItem();

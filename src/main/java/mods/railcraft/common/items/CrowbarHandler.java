@@ -14,8 +14,8 @@ import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.carts.IDirectionalCart;
 import mods.railcraft.common.carts.LinkageManager;
+import mods.railcraft.common.modules.ModuleTrain;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
@@ -53,7 +53,7 @@ public class CrowbarHandler {
 
         if (Game.isNotHost(thePlayer.worldObj))
             return;
-        if (!RailcraftModuleManager.isModuleEnabled(Module.TRAIN))
+        if (!RailcraftModuleManager.isModuleEnabled(ModuleTrain.class))
             return;
 
         boolean used = false;

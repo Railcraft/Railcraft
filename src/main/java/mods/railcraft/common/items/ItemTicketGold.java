@@ -10,6 +10,7 @@ package mods.railcraft.common.items;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
@@ -22,17 +23,15 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemTicketGold extends ItemTicket implements IEditableItem {
 
-    public static final IStackFilter FILTER = new IStackFilter() {
+    public static final IStackFilter FILTER = new StackFilter() {
         @Override
-        public boolean matches(ItemStack stack) {
+        public boolean apply(ItemStack stack) {
             return stack != null && stack.getItem() instanceof ItemTicketGold;
         }
 
@@ -61,11 +60,6 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
     }
 
     @Override
-    public boolean doesContainerItemLeaveCraftingGrid(ItemStack stack) {
-        return false;
-    }
-
-    @Override
     public boolean hasContainerItem(ItemStack stack) {
         return true;
     }
@@ -75,12 +69,6 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
         stack = stack.copy();
         stack.stackSize = 1;
         return stack;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:ticket.gold");
     }
 
     @Override
@@ -96,7 +84,7 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
         boolean canEdit = PlayerPlugin.isPlayerOp(player.getGameProfile());
         if (!canEdit && !RailcraftConfig.isRoutingOpsOnly()) {
             GameProfile owner = getOwner(stack);
-            canEdit |= owner.getId() == null || owner.equals(player.getName());
+            canEdit = owner.getId() == null || PlayerPlugin.isOwnerOrOp(owner, player);
         }
         return canEdit;
     }

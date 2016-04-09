@@ -11,6 +11,7 @@ package mods.railcraft.common.fluids;
 import mods.railcraft.client.particles.EntityDropParticleFX;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -23,7 +24,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class BlockRailcraftFluidFinite extends BlockFluidFinite {
@@ -31,13 +31,11 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite {
     protected float particleRed;
     protected float particleGreen;
     protected float particleBlue;
-    @SideOnly(Side.CLIENT)
-    protected IIcon[] theIcon;
     protected boolean flammable;
     protected int flammability = 0;
     private boolean hasFlowIcon = true;
 
-    public BlockRailcraftFluidFinite( Fluid fluid, Material material) {
+    public BlockRailcraftFluidFinite(Fluid fluid, Material material) {
         super(fluid, material);
         setDensity(fluid.getDensity());
     }
@@ -73,22 +71,22 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite {
     }
 
     @Override
-    public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return flammable ? 300 : 0;
     }
 
     @Override
-    public int getFlammability(IBlockAccess world, int x, int y, int z,  EnumFacing face) {
+    public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return flammability;
     }
 
     @Override
-    public boolean isFlammable(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return flammable;
     }
 
     @Override
-    public boolean isFireSource(World world, int x, int y, int z,  EnumFacing side) {
+    public boolean isFireSource(World world, BlockPos pos, EnumFacing side) {
         return flammable && flammability == 0;
     }
 
@@ -101,7 +99,7 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+    public void randomDisplayTick(World world, BlockPos pos, Random rand) {
         super.randomDisplayTick(world, x, y, z, rand);
 
         if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) && !world.getBlock(x, y - 2, z).getMaterial().blocksMovement()) {

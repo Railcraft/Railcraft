@@ -13,12 +13,14 @@ import mods.railcraft.common.util.misc.EntityIDs;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class EntityItemFireproof extends EntityItem {
@@ -43,39 +45,46 @@ public class EntityItemFireproof extends EntityItem {
     }
 
     private void init() {
-
         isImmuneToFire = true;
     }
 
     @Override
     public void onUpdate() {
-        ItemStack stack = this.getDataWatcher().getWatchableObjectItemStack(10);
-        if (stack != null && stack.getItem() != null)
-            if (stack.getItem().onEntityItemUpdate(this))
-                return;
+        ItemStack stack = getDataWatcher().getWatchableObjectItemStack(10);
+        if (stack != null && stack.getItem() != null && stack.getItem().onEntityItemUpdate(this))
+            return;
+        if (getEntityItem() == null) {
+            setDead();
+        } else {
+            onEntityUpdate();
 
-        onEntityUpdate();
+            int delayBeforeCanPickup = ReflectionHelper.getPrivateValue(EntityItem.class, this, "field_145804_b", "delayBeforeCanPickup");
+            if (cannotPickup() && delayBeforeCanPickup != 32767) {
+                setPickupDelay(delayBeforeCanPickup - 1);
+            }
 
-        if (this.delayBeforeCanPickup > 0)
-            --this.delayBeforeCanPickup;
+            AxisAlignedBB bb = getEntityBoundingBox();
 
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
-        this.motionY -= 0.03999999910593033D;
-        this.noClip = this.func_145771_j(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
-        this.moveEntity(this.motionX, this.motionY, this.motionZ);
-        float f = 0.98F;
+            this.prevPosX = posX;
+            this.prevPosY = posY;
+            this.prevPosZ = posZ;
+            this.motionY -= 0.03999999910593033D;
+            this.noClip = pushOutOfBlocks(posX, (bb.minY + bb.maxY) / 2.0D, posZ);
+            moveEntity(motionX, motionY, motionZ);
+            float f = 0.98F;
 
-        if (this.onGround)
-            f = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ)).slipperiness * 0.98F;
+            if (onGround)
+                f = worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(bb.minY) - 1, MathHelper.floor_double(posZ))).getBlock().slipperiness * 0.98F;
 
-        this.motionX *= (double) f;
-        this.motionY *= 0.9800000190734863D;
-        this.motionZ *= (double) f;
+            this.motionX *= (double) f;
+            this.motionY *= 0.9800000190734863D;
+            this.motionZ *= (double) f;
 
-        if (this.onGround)
-            this.motionY *= -0.5D;
+            if (onGround)
+                this.motionY *= -0.5D;
+
+            handleWaterMovement();
+        }
     }
 
     @Override
@@ -87,8 +96,8 @@ public class EntityItemFireproof extends EntityItem {
     }
 
     @Override
-    public boolean handleLavaMovement() {
-        return this.worldObj.isMaterialInBB(boundingBox, Material.lava);
+    public boolean isInLava() {
+        return worldObj.isMaterialInBB(getEntityBoundingBox(), Material.lava);
     }
 
     @Override

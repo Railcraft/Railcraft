@@ -10,18 +10,22 @@ package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -32,11 +36,10 @@ import java.util.List;
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockFirestoneRecharge extends BlockContainer {
-
+    public static final PropertyBool CRACKED = PropertyBool.create("cracked");
     private static Block block;
 
     public static Block getBlock() {
@@ -60,14 +63,36 @@ public class BlockFirestoneRecharge extends BlockContainer {
         float f = 0.2F;
         setBlockBounds(0.5F - f, 0.4F, 0.5F - f, 0.5F + f, 0.9f, 0.5F + f);
         setLightLevel(1);
+        setDefaultState(blockState.getBaseState().withProperty(CRACKED, false));
 
         GameRegistry.registerTileEntity(TileFirestoneRecharge.class, "RCFirestoneRechargeTile");
     }
 
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
     @Override
-    public IIcon getIcon(int side, int meta) {
-        return Blocks.obsidian.getIcon(side, meta);
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(CRACKED, meta != 0);
     }
+
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(CRACKED) ? 1 : 0;
+    }
+
+    @Override
+    protected BlockState createBlockState() {
+        return new BlockState(this, CRACKED);
+    }
+
+//    @Override
+//    public IIcon getIcon(int side, int meta) {
+//        return Blocks.obsidian.getIcon(side, meta);
+//    }
 
     @Override
     public int quantityDropped(Random par1Random) {
@@ -75,18 +100,17 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
         return ItemFirestoneRefined.getItemCharged();
     }
 
     @Override
-    public List<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-        int meta = world.getBlockMetadata(x, y, z);
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileFirestoneRecharge) {
             TileFirestoneRecharge firestone = (TileFirestoneRecharge) tile;
-            Item item = meta == 0 ? ItemFirestoneRefined.item : ItemFirestoneCracked.item;
+            Item item = state.getValue(CRACKED) ? ItemFirestoneRefined.item : ItemFirestoneCracked.item;
             ItemStack drop = new ItemStack(item, 1, ItemFirestoneRefined.item.getMaxDamage() - firestone.charge);
             if (firestone.getItemName() != null)
                 drop.setStackDisplayName(firestone.getItemName());
@@ -97,16 +121,16 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     @Override
-    public void harvestBlock(World world, EntityPlayer entityplayer, int i, int j, int k, int l) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
     }
 
     @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
         player.addExhaustion(0.025F);
         if (Game.isHost(world))
-            dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-        return world.setBlockToAir(x, y, z);
+            dropBlockAsItem(world, pos, WorldPlugin.getBlockState(world, pos), 0);
+        return WorldPlugin.setBlockToAir(world, pos);
     }
 
     @Override
@@ -125,11 +149,11 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int s) {
+    public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
         return null;
     }
 
-//    @Override
+    //    @Override
 //    public void addCollisionBoxesToList(World par1World, int par2, int par3, int par4, AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity) {
 //    }
 //
@@ -152,12 +176,12 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean addDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
+    public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
         return true;
     }
 

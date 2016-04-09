@@ -10,6 +10,7 @@ package mods.railcraft.common.plugins.forge;
 
 import com.google.common.base.Predicate;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -33,6 +34,10 @@ public class WorldPlugin {
 
     public static TileEntity getBlockTile(IBlockAccess world, BlockPos pos) {
         return world.getTileEntity(pos);
+    }
+
+    public static Material getBlockMaterial(IBlockAccess world, BlockPos pos) {
+        return getBlock(world, pos).getMaterial();
     }
 
     @Deprecated

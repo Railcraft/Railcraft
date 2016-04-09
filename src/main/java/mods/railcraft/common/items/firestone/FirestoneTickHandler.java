@@ -12,11 +12,11 @@ import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,13 +26,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FirestoneTickHandler {
 
     private int clock;
 
+    @SuppressWarnings("SimplifiableIfStatement")
     private boolean shouldBurn(ItemStack stack) {
         if (stack == null || stack.getItem() == null) return false;
         if (stack.getItem() == ItemFirestoneRaw.item) return true;
@@ -73,20 +73,17 @@ public class FirestoneTickHandler {
         if (y > player.worldObj.getActualHeight())
             y = player.worldObj.getActualHeight() - 2;
 
-        if (canBurn(player.worldObj, x, y, z))
-            return player.worldObj.setBlock(x, y, z, Blocks.fire);
-        return false;
+        BlockPos pos = new BlockPos(x, y, z);
+        return canBurn(player.worldObj, pos) && player.worldObj.setBlockState(pos, Blocks.fire.getDefaultState());
     }
 
-    private boolean canBurn(World world, int x, int y, int z) {
-        if (world.getBlock(x, y, z) != Blocks.air)
+    private boolean canBurn(World world, BlockPos pos) {
+        if (!WorldPlugin.isBlockAir(world, pos))
             return false;
         for (EnumFacing side : EnumFacing.VALUES) {
-            int sx = MiscTools.getXOnSide(x, side);
-            int sy = MiscTools.getYOnSide(y, side);
-            int sz = MiscTools.getZOnSide(z, side);
-            if (!world.isAirBlock(sx, sy, sz)) {
-                Block block = WorldPlugin.getBlock(world, sx, sy, sz);
+            BlockPos offset = pos.offset(side);
+            if (!WorldPlugin.isBlockAir(world, offset)) {
+                Block block = WorldPlugin.getBlock(world, offset);
                 if (block != Blocks.fire)
                     return true;
             }

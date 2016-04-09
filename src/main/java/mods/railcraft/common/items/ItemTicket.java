@@ -10,6 +10,7 @@ package mods.railcraft.common.items;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
@@ -26,14 +27,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemTicket extends ItemRailcraft {
 
-    public static final IStackFilter FILTER = new IStackFilter() {
+    public static final IStackFilter FILTER = new StackFilter() {
         @Override
-        public boolean matches(ItemStack stack) {
+        public boolean apply(ItemStack stack) {
             return stack != null && stack.getItem() instanceof ItemTicket;
         }
 
@@ -65,10 +65,8 @@ public class ItemTicket extends ItemRailcraft {
             return false;
 
         NBTTagString dest = (NBTTagString) nbt.getTag("dest");
-        if (dest.func_150285_a_() == null)
-            return false;
+        return dest.getString() != null && dest.getString().length() <= LINE_LENGTH;
 
-        return dest.func_150285_a_().length() <= LINE_LENGTH;
     }
 
     public static ItemStack copyTicket(ItemStack source) {
@@ -79,7 +77,7 @@ public class ItemTicket extends ItemRailcraft {
         if (source.getItem() instanceof ItemTicket) {
             ItemStack ticket = getTicket();
             NBTTagCompound nbt = source.getTagCompound();
-            if (nbt != null)
+            if (ticket != null && nbt != null)
                 ticket.setTagCompound((NBTTagCompound) nbt.copy());
             return ticket;
         }
@@ -91,7 +89,7 @@ public class ItemTicket extends ItemRailcraft {
             return false;
         if (dest.length() > LINE_LENGTH)
             return false;
-        if (owner == null || owner.equals(""))
+        if (owner == null)
             return false;
         NBTTagCompound data = InvTools.getItemData(ticket);
         data.setString("dest", dest);
@@ -110,9 +108,7 @@ public class ItemTicket extends ItemRailcraft {
     }
 
     public static boolean matchesOwnerOrOp(ItemStack ticket, GameProfile player) {
-        if (!(item instanceof ItemTicket))
-            return false;
-        return PlayerPlugin.isOwnerOrOp(getOwner(ticket), player);
+        return ticket.getItem() instanceof ItemTicket && PlayerPlugin.isOwnerOrOp(getOwner(ticket), player);
     }
 
     public static GameProfile getOwner(ItemStack ticket) {
@@ -129,12 +125,6 @@ public class ItemTicket extends ItemRailcraft {
         return dest.length() < LINE_LENGTH;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:ticket");
-    }
-
 //    @Override
 //    public String getItemDisplayName(ItemStack stack) {
 //        String dest = getDestination(stack);
@@ -145,13 +135,14 @@ public class ItemTicket extends ItemRailcraft {
 //
 //        return super.getItemDisplayName(stack);
 //    }
+
     /**
-     * allows items to add custom lines of information to the mouseover
+     * allows items to add custom lines of information to the mouse over
      * description
      */
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean par4) {
         if (stack.hasTagCompound()) {
             GameProfile owner = getOwner(stack);
             if (owner.getId() != null) {

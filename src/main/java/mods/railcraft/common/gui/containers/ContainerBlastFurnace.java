@@ -15,7 +15,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,7 +31,7 @@ public class ContainerBlastFurnace extends RailcraftContainer {
         this.furnace = tile;
         this.addSlot(new SlotStackFilter(TileBlastFurnace.INPUT_FILTER, tile, 0, 56, 17));
         this.addSlot(new SlotStackFilter(TileBlastFurnace.FUEL_FILTER, tile, 1, 56, 53));
-        this.addSlot(new SlotFurnace(player.player, tile, 2, 116, 35));
+        this.addSlot(new SlotFurnaceOutput(player.player, tile, 2, 116, 35));
         int var3;
 
         for (var3 = 0; var3 < 3; ++var3) {

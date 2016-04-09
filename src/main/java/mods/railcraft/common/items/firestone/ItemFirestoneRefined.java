@@ -28,7 +28,6 @@ import net.minecraft.world.World;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ItemFirestoneRefined extends ItemFirestoneBase {
@@ -60,7 +59,7 @@ public class ItemFirestoneRefined extends ItemFirestoneBase {
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
+    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         list.add(new ItemStack(this, 1, getMaxDamage()));
         list.add(new ItemStack(this, 1, 0));
     }
@@ -153,10 +152,10 @@ public class ItemFirestoneRefined extends ItemFirestoneBase {
      * Returning null here will not kill the EntityItem and will leave it to
      * function normally. Called when the item it placed in a world.
      *
-     * @param world The world object
+     * @param world    The world object
      * @param location The EntityItem object, useful for getting the position of
-     * the entity
-     * @param stack The current item stack
+     *                 the entity
+     * @param stack    The current item stack
      * @return A new Entity object to spawn or null
      */
     @Override
@@ -165,7 +164,7 @@ public class ItemFirestoneRefined extends ItemFirestoneBase {
         entity.motionX = location.motionX;
         entity.motionY = location.motionY;
         entity.motionZ = location.motionZ;
-        entity.delayBeforeCanPickup = 10;
+        entity.setDefaultPickupDelay();
         return entity;
     }
 
