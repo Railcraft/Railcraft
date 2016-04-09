@@ -13,7 +13,8 @@ import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.ItemTicketGold;
 import mods.railcraft.common.items.RailcraftPartItems;
-import mods.railcraft.common.modules.RailcraftModuleManager.Module;
+import mods.railcraft.common.modules.ModuleRouting;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -21,7 +22,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import uristqwerty.CraftGuide.api.*;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CustomRecipesPlugin implements RecipeProvider {
@@ -56,7 +56,7 @@ public class CustomRecipesPlugin implements RecipeProvider {
         }
 
         // Ticket
-        if (Module.ROUTING.isEnabled()) {
+        if (RailcraftModuleManager.isModuleEnabled(ModuleRouting.class)) {
             ItemStack[] ticket = new ItemStack[10];
             ticket[0] = ItemTicket.getTicket();
             ticket[1] = ItemTicketGold.getTicket();
@@ -71,13 +71,15 @@ public class CustomRecipesPlugin implements RecipeProvider {
             // Routing Table
             ItemStack[] routingTable = new ItemStack[10];
             routingTable[0] = ItemRoutingTable.getItem();
-            routingTable[0].stackSize = 2;
-            InvTools.addItemToolTip(routingTable[0], "Edited");
-            routingTable[1] = ItemRoutingTable.getItem();
-            InvTools.addItemToolTip(routingTable[1], "Edited");
-            routingTable[2] = ItemRoutingTable.getItem();
-            InvTools.addItemToolTip(routingTable[2], "Blank");
-            generator.addRecipe(template, routingTable);
+            if (routingTable[0] != null) {
+                routingTable[0].stackSize = 2;
+                InvTools.addItemToolTip(routingTable[0], "Edited");
+                routingTable[1] = ItemRoutingTable.getItem();
+                InvTools.addItemToolTip(routingTable[1], "Edited");
+                routingTable[2] = ItemRoutingTable.getItem();
+                InvTools.addItemToolTip(routingTable[2], "Blank");
+                generator.addRecipe(template, routingTable);
+            }
         }
     }
 

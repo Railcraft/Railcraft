@@ -8,14 +8,16 @@
  */
 package mods.railcraft.common.blocks.machine.delta;
 
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.BoundingBoxManager;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.modules.ModuleElectricity;
+import mods.railcraft.common.modules.ModuleTransport;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -30,9 +32,9 @@ import java.util.List;
  */
 public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
 
-    WIRE(Module.ELECTRICITY, "wire", TileWire.class, 1, 1, 0, 0, 0, 0, 0, 0),
-    CAGE(Module.TRANSPORT, "cage", TileCage.class, 4, 1, 0, 1, 2, 2, 2, 2, 3);
-    private final Module module;
+    WIRE(ModuleElectricity.class, "wire", TileWire.class, 1, 1, 0, 0, 0, 0, 0, 0),
+    CAGE(ModuleTransport.class, "cage", TileCage.class, 4, 1, 0, 1, 2, 2, 2, 2, 3);
+    private final Class<? extends IRailcraftModule> module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
     private final int[] textureInfo;
@@ -47,7 +49,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
         BoundingBoxManager.registerBoundingBox(WIRE, new TileWire.WireBoundingBox());
     }
 
-    EnumMachineDelta(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineDelta(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -87,12 +89,13 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
         return tile;
     }
 
+    @Override
     public TileMachineBase getTileEntity() {
         try {
             return tile.newInstance();
         } catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
-        return null;
     }
 
     @Override
@@ -108,7 +111,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
         return new ItemStack(block, qty, ordinal());
     }
 
-    public Module getModule() {
+    public Class<? extends IRailcraftModule> getModule() {
         return module;
     }
 

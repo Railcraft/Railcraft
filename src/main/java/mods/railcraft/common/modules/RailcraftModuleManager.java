@@ -83,11 +83,15 @@ public class RailcraftModuleManager {
         }
     }
 
-    private static String getModuleName(IRailcraftModule module) {
+    public static Class<? extends IRailcraftModule> getModule(String moduleName) {
+        return nameToClassMapping.get(moduleName);
+    }
+
+    public static String getModuleName(IRailcraftModule module) {
         return getModuleName(module.getClass());
     }
 
-    private static String getModuleName(Class<? extends IRailcraftModule> moduleClass) {
+    public static String getModuleName(Class<? extends IRailcraftModule> moduleClass) {
         RailcraftModule annotation = moduleClass.getAnnotation(RailcraftModule.class);
         return annotation.value();
     }

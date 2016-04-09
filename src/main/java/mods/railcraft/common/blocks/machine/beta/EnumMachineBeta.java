@@ -8,13 +8,16 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.modules.ModuleChunkLoading;
+import mods.railcraft.common.modules.ModuleSteam;
+import mods.railcraft.common.modules.ModuleTransport;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -29,23 +32,23 @@ import java.util.List;
  */
 public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
 
-    TANK_IRON_WALL(Module.TRANSPORT, "tank.iron.wall", TileTankIronWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_IRON_GAUGE(Module.TRANSPORT, "tank.iron.gauge", TileTankIronGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_IRON_VALVE(Module.TRANSPORT, "tank.iron.valve", TileTankIronValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
-    BOILER_TANK_LOW_PRESSURE(Module.STEAM, "boiler.tank.pressure.low", TileBoilerTankLow.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    BOILER_TANK_HIGH_PRESSURE(Module.STEAM, "boiler.tank.pressure.high", TileBoilerTankHigh.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    BOILER_FIREBOX_SOLID(Module.STEAM, "boiler.firebox.solid", TileBoilerFireboxSolid.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
-    BOILER_FIREBOX_FLUID(Module.STEAM, "boiler.firebox.liquid", TileBoilerFireboxFluid.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
-    ENGINE_STEAM_HOBBY(Module.STEAM, "engine.steam.hobby", TileEngineSteamHobby.class, 1, 1, 0),
-    ENGINE_STEAM_LOW(Module.STEAM, "engine.steam.low", TileEngineSteamLow.class, 1, 1, 0),
-    ENGINE_STEAM_HIGH(Module.STEAM, "engine.steam.high", TileEngineSteamHigh.class, 1, 1, 0),
-    SENTINEL(Module.CHUNK_LOADING, "anchor.sentinel", TileSentinel.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    VOID_CHEST(Module.TRANSPORT, "chest.void", TileChestVoid.class, 1, 1, 0),
-    METALS_CHEST(Module.TRANSPORT, "chest.metals", TileChestMetals.class, 1, 1, 0),
-    TANK_STEEL_WALL(Module.TRANSPORT, "tank.steel.wall", TileTankSteelWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_STEEL_GAUGE(Module.TRANSPORT, "tank.steel.gauge", TileTankSteelGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_STEEL_VALVE(Module.TRANSPORT, "tank.steel.valve", TileTankSteelValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3);
-    private final Module module;
+    TANK_IRON_WALL(ModuleTransport.class, "tank.iron.wall", TileTankIronWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    TANK_IRON_GAUGE(ModuleTransport.class, "tank.iron.gauge", TileTankIronGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
+    TANK_IRON_VALVE(ModuleTransport.class, "tank.iron.valve", TileTankIronValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
+    BOILER_TANK_LOW_PRESSURE(ModuleSteam.class, "boiler.tank.pressure.low", TileBoilerTankLow.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    BOILER_TANK_HIGH_PRESSURE(ModuleSteam.class, "boiler.tank.pressure.high", TileBoilerTankHigh.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    BOILER_FIREBOX_SOLID(ModuleSteam.class, "boiler.firebox.solid", TileBoilerFireboxSolid.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
+    BOILER_FIREBOX_FLUID(ModuleSteam.class, "boiler.firebox.liquid", TileBoilerFireboxFluid.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
+    ENGINE_STEAM_HOBBY(ModuleSteam.class, "engine.steam.hobby", TileEngineSteamHobby.class, 1, 1, 0),
+    ENGINE_STEAM_LOW(ModuleSteam.class, "engine.steam.low", TileEngineSteamLow.class, 1, 1, 0),
+    ENGINE_STEAM_HIGH(ModuleSteam.class, "engine.steam.high", TileEngineSteamHigh.class, 1, 1, 0),
+    SENTINEL(ModuleChunkLoading.class, "anchor.sentinel", TileSentinel.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    VOID_CHEST(ModuleTransport.class, "chest.void", TileChestVoid.class, 1, 1, 0),
+    METALS_CHEST(ModuleTransport.class, "chest.metals", TileChestMetals.class, 1, 1, 0),
+    TANK_STEEL_WALL(ModuleTransport.class, "tank.steel.wall", TileTankSteelWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    TANK_STEEL_GAUGE(ModuleTransport.class, "tank.steel.gauge", TileTankSteelGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
+    TANK_STEEL_VALVE(ModuleTransport.class, "tank.steel.valve", TileTankSteelValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3);
+    private final Class<? extends IRailcraftModule> module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
     private final int[] textureInfo;
@@ -72,7 +75,7 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
         creativeList.add(METALS_CHEST);
     }
 
-    EnumMachineBeta(Module module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineBeta(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -117,8 +120,8 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
         try {
             return tile.newInstance();
         } catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
-        return null;
     }
 
     @Override
@@ -134,7 +137,7 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
         return new ItemStack(block, qty, ordinal());
     }
 
-    public Module getModule() {
+    public Class<? extends IRailcraftModule> getModule() {
         return module;
     }
 

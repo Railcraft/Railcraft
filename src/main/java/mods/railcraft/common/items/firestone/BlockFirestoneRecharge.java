@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -64,10 +65,6 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
-    }
-
-    @Override
     public IIcon getIcon(int side, int meta) {
         return Blocks.obsidian.getIcon(side, meta);
     }
@@ -83,7 +80,7 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     @Override
-    public  List<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+    public List<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
         int meta = world.getBlockMetadata(x, y, z);
         TileEntity tile = world.getTileEntity(x, y, z);

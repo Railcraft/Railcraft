@@ -8,13 +8,13 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.modules.RailcraftModuleManager.Module;
+import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -29,17 +29,17 @@ import java.util.List;
  */
 public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
-    ITEM_LOADER(Module.TRANSPORT, "loader.item", 0, TileItemLoader.class),
-    ITEM_UNLOADER(Module.TRANSPORT, "unloader.item", 0, TileItemUnloader.class),
-    ITEM_LOADER_ADVANCED(Module.TRANSPORT, "loader.item.advanced", 0, TileItemLoaderAdvanced.class),
-    ITEM_UNLOADER_ADVANCED(Module.TRANSPORT, "unloader.item.advanced", 0, TileItemUnloaderAdvanced.class),
-    FLUID_LOADER(Module.TRANSPORT, "loader.liquid", 2, TileFluidLoader.class),
-    FLUID_UNLOADER(Module.TRANSPORT, "unloader.liquid", 2, TileFluidUnloader.class),
-    ENERGY_LOADER(Module.IC2, "loader.energy", 0, TileEnergyLoader.class),
-    ENERGY_UNLOADER(Module.IC2, "unloader.energy", 0, TileEnergyUnloader.class),
-    DISPENSER_CART(Module.AUTOMATION, "dispenser.cart", 0, TileDispenserCart.class),
-    DISPENSER_TRAIN(Module.TRAIN, "dispenser.train", 0, TileDispenserTrain.class);
-    private final Module module;
+    ITEM_LOADER(ModuleTransport.class, "loader.item", 0, TileItemLoader.class),
+    ITEM_UNLOADER(ModuleTransport.class, "unloader.item", 0, TileItemUnloader.class),
+    ITEM_LOADER_ADVANCED(ModuleTransport.class, "loader.item.advanced", 0, TileItemLoaderAdvanced.class),
+    ITEM_UNLOADER_ADVANCED(ModuleTransport.class, "unloader.item.advanced", 0, TileItemUnloaderAdvanced.class),
+    FLUID_LOADER(ModuleTransport.class, "loader.liquid", 2, TileFluidLoader.class),
+    FLUID_UNLOADER(ModuleTransport.class, "unloader.liquid", 2, TileFluidUnloader.class),
+    ENERGY_LOADER(ModuleIC2.class, "loader.energy", 0, TileEnergyLoader.class),
+    ENERGY_UNLOADER(ModuleIC2.class, "unloader.energy", 0, TileEnergyUnloader.class),
+    DISPENSER_CART(ModuleAutomation.class, "dispenser.cart", 0, TileDispenserCart.class),
+    DISPENSER_TRAIN(ModuleTrain.class, "dispenser.train", 0, TileDispenserTrain.class);
+    private final Class<? extends IRailcraftModule> module;
     private final String tag;
     private final int extraIcons;
     private final Class<? extends TileMachineBase> tile;
@@ -60,7 +60,7 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
         creativeList.add(DISPENSER_TRAIN);
     }
 
-    EnumMachineGamma(Module module, String tag, int numTextures, Class<? extends TileMachineBase> tile) {
+    EnumMachineGamma(Class<? extends IRailcraftModule> module, String tag, int numTextures, Class<? extends TileMachineBase> tile) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -97,8 +97,8 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
         try {
             return tile.newInstance();
         } catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
-        return null;
     }
 
     @Override
@@ -114,7 +114,7 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
         return new ItemStack(block, qty, ordinal());
     }
 
-    public Module getModule() {
+    public Class<? extends IRailcraftModule> getModule() {
         return module;
     }
 
