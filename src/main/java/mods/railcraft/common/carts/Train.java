@@ -16,6 +16,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SuppressWarnings("unused")
 public class Train implements Iterable<EntityMinecart> {
     public static final String TRAIN_HIGH = "rcTrainHigh";
     public static final String TRAIN_LOW = "rcTrainLow";
@@ -23,7 +24,7 @@ public class Train implements Iterable<EntityMinecart> {
     private final UUID uuid;
     private final LinkedList<UUID> carts = new LinkedList<UUID>();
     private final List<UUID> safeCarts = Collections.unmodifiableList(carts);
-    private final Set<UUID> lockingTracks = new HashSet<UUID>();
+    private final Collection<UUID> lockingTracks = new HashSet<UUID>();
     private TrainState trainState = TrainState.NORMAL;
 
     public Train(EntityMinecart cart) {
@@ -148,13 +149,13 @@ public class Train implements Iterable<EntityMinecart> {
         };
     }
 
-    public Iterable<EntityMinecart> orderedIteratable(final EntityMinecart head) {
+    public Iterable<EntityMinecart> orderedIterable(final EntityMinecart head) {
         return new Iterable<EntityMinecart>() {
             @Override
             public Iterator<EntityMinecart> iterator() {
                 return new Iterator<EntityMinecart>() {
                     private final LinkageManager lm = LinkageManager.instance();
-                    private EntityMinecart last = null;
+                    private EntityMinecart last;
                     private EntityMinecart current = head;
 
                     @Override
@@ -290,6 +291,7 @@ public class Train implements Iterable<EntityMinecart> {
         addTrainTag(cartNew, this);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     private boolean _removeCart(EntityMinecart cart) {
         boolean removed = _removeCart(cart.getPersistentID());
         if (removed && uuid.equals(getTrainUUID(cart))) {
@@ -310,18 +312,14 @@ public class Train implements Iterable<EntityMinecart> {
     }
 
     public boolean containsCart(EntityMinecart cart) {
-        if (cart == null)
-            return false;
-        return carts.contains(cart.getPersistentID());
+        return cart != null && carts.contains(cart.getPersistentID());
     }
 
     public boolean isTrainEnd(EntityMinecart cart) {
-        if (cart == null)
-            return false;
-        return getEnds().contains(cart.getPersistentID());
+        return cart != null && getEnds().contains(cart.getPersistentID());
     }
 
-    public Set<UUID> getEnds() {
+    public Collection<UUID> getEnds() {
         Set<UUID> ends = new HashSet<UUID>();
         ends.add(carts.getFirst());
         ends.add(carts.getLast());
