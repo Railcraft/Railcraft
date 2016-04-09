@@ -11,9 +11,9 @@ package mods.railcraft.common.blocks.signals;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -27,14 +27,13 @@ import java.util.Set;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
-import static net.minecraftforge.common.util.EnumFacing.*;
 
 public class TileBoxSequencer extends TileBoxBase {
 
     private static final int MAX_ITERATIONS = 64;
     private EnumFacing sideOutput = EnumFacing.NORTH;
-    private boolean powerState = false;
-    private boolean neighborState = false;
+    private boolean powerState;
+    private boolean neighborState;
 
     public TileBoxSequencer() {
     }
@@ -45,13 +44,13 @@ public class TileBoxSequencer extends TileBoxBase {
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+        super.onNeighborBlockChange(state, neighborBlock);
         if (worldObj.isRemote)
             return;
         boolean p = PowerPlugin.isBlockBeingPoweredByRepeater(worldObj, getPos());
         if (!powerState && p) {
-            powerState = p;
+            powerState = true;
             incrementSequencer(true, new HashSet<TileEntity>(), 0);
         } else
             powerState = p;
@@ -67,7 +66,7 @@ public class TileBoxSequencer extends TileBoxBase {
             return;
         boolean p = neighbor.isEmittingRedstone(side);
         if (!neighborState && p) {
-            neighborState = p;
+            neighborState = true;
             incrementSequencer(true, new HashSet<TileEntity>(), 0);
         } else
             neighborState = p;
@@ -84,9 +83,9 @@ public class TileBoxSequencer extends TileBoxBase {
             }
         }
 
-        EnumFacing newSide = sideOutput.getRotation(UP);
+        EnumFacing newSide = sideOutput.rotateAround(EnumFacing.Axis.Y);
         while (newSide != sideOutput && !canOutputToSide(newSide)) {
-            newSide = newSide.getRotation(UP);
+            newSide = newSide.rotateAround(EnumFacing.Axis.Y);
         }
         sideOutput = newSide;
         updateNeighbors();
@@ -107,21 +106,14 @@ public class TileBoxSequencer extends TileBoxBase {
             return true;
         if (tile instanceof TileBoxBase)
             return ((TileBoxBase) tile).canReceiveAspect();
-        Block block = WorldPlugin.getBlockOnSide(worldObj, getPos(), side);
+        IBlockState state = WorldPlugin.getBlockState(worldObj, getPos().offset(side));
+        Block block = state.getBlock();
         if (block == Blocks.redstone_wire)
             return true;
         if (block == Blocks.unpowered_repeater || block == Blocks.powered_repeater) {
-            int facing = BlockDirectional.getDirection(WorldPlugin.getBlockMetadataOnSide(worldObj, xCoord, yCoord, zCoord, side));
-            switch (side) {
-                case NORTH:
-                    return facing == 0;
-                case SOUTH:
-                    return facing == 2;
-                case EAST:
-                    return facing == 1;
-                case WEST:
-                    return facing == 3;
-            }
+            EnumFacing inputSide = state.getValue(BlockDirectional.FACING);
+            // TODO: Test this!
+            return side == inputSide;
         }
         return false;
     }
@@ -179,6 +171,7 @@ public class TileBoxSequencer extends TileBoxBase {
         markBlockForUpdate();
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean isConnected(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);

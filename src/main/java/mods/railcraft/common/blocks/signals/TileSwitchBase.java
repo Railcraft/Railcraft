@@ -11,11 +11,13 @@ package mods.railcraft.common.blocks.signals;
 import mods.railcraft.api.tracks.ISwitchDevice;
 import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -25,6 +27,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class TileSwitchBase extends TileSignalFoundation implements ISwitchDevice {
+    private static final float BOUNDS = -0.2F;
 
     private byte facing = (byte) EnumFacing.NORTH.ordinal();
     private boolean powered;
@@ -41,22 +44,17 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
+    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
         getBlockType().setBlockBounds(0.2f, 0f, 0.2f, 0.8f, 0.8f, 0.8f);
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.fromBounds(i + 0.2f, j, k + 0.2f, i + 0.8f, j + 0.4F, k + 0.8f);
+    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
+        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(BOUNDS).raiseCeiling(-0.6F).build();
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.fromBounds(i + 0.2f, j, k + 0.2f, i + 0.8f, j + 0.8f, k + 0.8f);
-    }
-
-    @Override
-    public boolean blockActivated(int side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
         powered = !powered;
         sendUpdateToClient();
         return true;
@@ -70,9 +68,9 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
         if (lastSwitchState != isSwitched) {
             lastSwitchState = isSwitched;
             if (isSwitched)
-                SoundHelper.playSound(worldObj, getX(), getY(), getZ(), "tile.piston.in", 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                SoundHelper.playSound(worldObj, getPos(), "tile.piston.in", 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
             else
-                SoundHelper.playSound(worldObj, getX(), getY(), getZ(), "tile.piston.out", 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                SoundHelper.playSound(worldObj, getPos(), "tile.piston.out", 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
         }
     }
 

@@ -12,9 +12,11 @@ import mods.railcraft.api.signals.DualSignalReceiver;
 import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalController;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -24,7 +26,7 @@ import java.io.IOException;
 
 public class TileSignalDualHeadDistantSignal extends TileSignalBase implements IReceiverTile, IDualHeadSignal {
 
-    private static final float SIZE = 0.15f;
+    private static final float SIZE = -0.15f;
     private final DualSignalReceiver receiver = new DualSignalReceiver(getLocalizationTag(), this);
 
     @Override
@@ -65,18 +67,13 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
+    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
         getBlockType().setBlockBounds(0.15f, 0f, 0.15f, 0.85f, 1f, 0.85f);
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.fromBounds(i + 0.15f, j, k + 0.15f, i + 0.85f, j + 1f, k + 0.85f);
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.fromBounds(i + SIZE, j, k + SIZE, i + 1 - SIZE, j + 1, k + 1 - SIZE);
+    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
+        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(SIZE).build();
     }
 
     @Override

@@ -189,4 +189,8 @@ public enum EnumColor implements IStringSerializable {
         writeToNBT(nbt, tag);
         return stack;
     }
+
+    public boolean isEqual(EnumDyeColor dye) {
+        return dye != null && getDye() == dye;
+    }
 }

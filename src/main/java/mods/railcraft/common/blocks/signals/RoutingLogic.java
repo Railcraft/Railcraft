@@ -37,7 +37,7 @@ import java.util.regex.PatternSyntaxException;
  */
 public class RoutingLogic {
 
-    public static final String REGEX_SYMBOL = "\\?";
+    private static final String REGEX_SYMBOL = "\\?";
 
     private Deque<Condition> conditions;
     private RoutingLogicException error;
@@ -145,11 +145,11 @@ public class RoutingLogic {
         throw new RoutingLogicException("railcraft.gui.routing.logic.unrecognized.keyword", line);
     }
 
-    public class RoutingLogicException extends Exception {
+    private class RoutingLogicException extends Exception {
 
         private final ToolTip tips = new ToolTip();
 
-        public RoutingLogicException(String errorTag, String line) {
+        RoutingLogicException(String errorTag, String line) {
             tips.add(EnumChatFormatting.RED + LocalizationPlugin.translate(errorTag));
             if (line != null)
                 tips.add("\"" + line + "\"");
@@ -169,12 +169,10 @@ public class RoutingLogic {
 
     private abstract class ParsedCondition extends Condition {
 
-        public final String keyword, line, value;
-        public final boolean isRegex;
+        public final String value;
+        final boolean isRegex;
 
         private ParsedCondition(String keyword, boolean supportsRegex, String line) throws RoutingLogicException {
-            this.keyword = keyword;
-            this.line = line;
             String keywordMatch = keyword + REGEX_SYMBOL + "?=";
             if (!line.matches(keywordMatch + ".*"))
                 throw new RoutingLogicException("railcraft.gui.routing.logic.unrecognized.keyword", line);
@@ -184,6 +182,7 @@ public class RoutingLogic {
             this.value = line.replaceFirst(keywordMatch, "");
             if (isRegex)
                 try {
+                    //noinspection ResultOfMethodCallIgnored
                     Pattern.compile(value);
                 } catch (PatternSyntaxException ex) {
                     throw new RoutingLogicException("railcraft.gui.routing.logic.regex.invalid", line);
@@ -244,7 +243,7 @@ public class RoutingLogic {
 
     private class DestCondition extends ParsedCondition {
 
-        public DestCondition(String line) throws RoutingLogicException {
+        DestCondition(String line) throws RoutingLogicException {
             super("Dest", true, line);
         }
 
@@ -265,7 +264,7 @@ public class RoutingLogic {
 
     private class OwnerCondition extends ParsedCondition {
 
-        public OwnerCondition(String line) throws RoutingLogicException {
+        OwnerCondition(String line) throws RoutingLogicException {
             super("Owner", false, line);
         }
 
@@ -278,7 +277,7 @@ public class RoutingLogic {
 
     private class NameCondition extends ParsedCondition {
 
-        public NameCondition(String line) throws RoutingLogicException {
+        NameCondition(String line) throws RoutingLogicException {
             super("Name", true, line);
         }
 
@@ -296,7 +295,7 @@ public class RoutingLogic {
 
     private class TypeCondition extends ParsedCondition {
 
-        public TypeCondition(String line) throws RoutingLogicException {
+        TypeCondition(String line) throws RoutingLogicException {
             super("Type", false, line);
         }
 
@@ -319,7 +318,7 @@ public class RoutingLogic {
 
         private final boolean needsRefuel;
 
-        public RefuelCondition(String line) throws RoutingLogicException {
+        RefuelCondition(String line) throws RoutingLogicException {
             super("NeedsRefuel", false, line);
             this.needsRefuel = Boolean.parseBoolean(value);
         }
@@ -339,7 +338,7 @@ public class RoutingLogic {
 
         private final boolean ridden;
 
-        public RiddenCondition(String line) throws RoutingLogicException {
+        RiddenCondition(String line) throws RoutingLogicException {
             super("Ridden", false, line);
             this.ridden = Boolean.parseBoolean(value);
         }
@@ -357,7 +356,7 @@ public class RoutingLogic {
 
     private class RidingCondition extends ParsedCondition {
 
-        public RidingCondition(String line) throws RoutingLogicException {
+        RidingCondition(String line) throws RoutingLogicException {
             super("Riding", false, line);
         }
 
@@ -376,7 +375,7 @@ public class RoutingLogic {
 
         private final boolean powered;
 
-        public RedstoneCondition(String line) throws RoutingLogicException {
+        RedstoneCondition(String line) throws RoutingLogicException {
             super("Redstone", false, line);
             this.powered = Boolean.parseBoolean(value);
         }
@@ -392,7 +391,7 @@ public class RoutingLogic {
 
         private final EnumColor primary, secondary;
 
-        public ColorCondition(String line) throws RoutingLogicException {
+        ColorCondition(String line) throws RoutingLogicException {
             super("Color", false, line);
             String[] colors = value.split(",");
             if (colors[0].equals("Any") || colors[0].equals("*"))
@@ -415,34 +414,32 @@ public class RoutingLogic {
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
             if (cart instanceof IPaintedCart) {
                 IPaintedCart pCart = (IPaintedCart) cart;
-                return (primary == null || primary.ordinal() == pCart.getPrimaryColor()) && (secondary == null || secondary.ordinal() == pCart.getSecondaryColor());
+                return (primary == null || primary.isEqual(pCart.getPrimaryColor())) && (secondary == null || secondary.isEqual(pCart.getSecondaryColor()));
             }
             return false;
         }
     }
-    
+
     private class LocoCondition extends ParsedCondition {
 
-        public LocoCondition(String line) throws RoutingLogicException {
+        LocoCondition(String line) throws RoutingLogicException {
             super("Loco", false, line);
         }
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-        	if (cart instanceof EntityLocomotive) {
-        		EntityLocomotive loco = (EntityLocomotive)cart;
-	            if (value.equalsIgnoreCase("Electric"))
-	                return loco.getCartType() == EnumCart.LOCO_ELECTRIC;
-	            if (value.equalsIgnoreCase("Steam"))
-	            	return loco.getCartType() == EnumCart.LOCO_STEAM_SOLID;
-	            if (value.equalsIgnoreCase("Steam_Magic"))
-	            	return loco.getCartType() == EnumCart.LOCO_STEAM_MAGIC;
-	            if (value.equalsIgnoreCase("None"))
-	            	return false;
-        	}
-        	if (value.equalsIgnoreCase("None"))
-        		return true;
-            return false;
+            if (cart instanceof EntityLocomotive) {
+                EntityLocomotive loco = (EntityLocomotive) cart;
+                if (value.equalsIgnoreCase("Electric"))
+                    return loco.getCartType() == EnumCart.LOCO_ELECTRIC;
+                if (value.equalsIgnoreCase("Steam"))
+                    return loco.getCartType() == EnumCart.LOCO_STEAM_SOLID;
+                if (value.equalsIgnoreCase("Steam_Magic"))
+                    return loco.getCartType() == EnumCart.LOCO_STEAM_MAGIC;
+                if (value.equalsIgnoreCase("None"))
+                    return false;
+            }
+            return value.equalsIgnoreCase("None");
         }
 
     }

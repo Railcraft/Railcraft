@@ -24,11 +24,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 
 public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRoutingTile {
 
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
-    private final MultiButtonController<RoutingButtonState> routingController = new MultiButtonController<RoutingButtonState>(0, RoutingButtonState.values());
+    private final MultiButtonController<RoutingButtonState> routingController = MultiButtonController.create(0, RoutingButtonState.values());
     private RoutingLogic logic;
 
     @Override
@@ -42,7 +43,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     }
 
     @Override
-    public boolean blockActivated(int side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
         if (Game.isHost(worldObj)) {
             ItemStack current = player.inventory.getCurrentItem();
             if (current != null && current.getItem() instanceof ItemRoutingTable)
@@ -68,8 +69,8 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+        super.onNeighborBlockChange(state, neighborBlock);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power)
             setPowered(power);
@@ -127,9 +128,6 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     @Override
     public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart) {
         RoutingLogic logic = getLogic();
-        if (logic != null && logic.isValid())
-            return logic.matches(this, cart);
-        else
-            return false;
+        return logic != null && logic.isValid() && logic.matches(this, cart);
     }
 }

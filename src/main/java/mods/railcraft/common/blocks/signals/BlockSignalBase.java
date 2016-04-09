@@ -127,7 +127,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).getCollisionBoundingBoxFromPool(worldIn, pos);
+            return ((TileSignalFoundation) tile).getCollisionBoundingBox(worldIn, pos);
         setBlockBounds(0, 0, 0, 1, 1, 1);
         return super.getCollisionBoundingBox(worldIn, pos, state);
     }
@@ -136,7 +136,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).getSelectedBoundingBoxFromPool(worldIn, pos);
+            return ((TileSignalFoundation) tile).getSelectedBoundingBox(worldIn, pos);
         return AxisAlignedBB.fromBounds((double) pos.getX() + minX, (double) pos.getY() + minY, (double) pos.getZ() + minZ, (double) pos.getX() + maxX, (double) pos.getY() + maxY, (double) pos.getZ() + maxZ);
     }
 

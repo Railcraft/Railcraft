@@ -12,9 +12,11 @@ import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalController;
 import mods.railcraft.api.signals.SimpleSignalReceiver;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -31,14 +33,8 @@ public class TileSignalDualHeadBlockSignal extends TileSignalBlockSignal impleme
         return EnumSignal.DUAL_HEAD_BLOCK_SIGNAL;
     }
 
-    @Override
-    protected boolean isLit() {
-        return isLit(getTopAspect()) || isLit(getBottomAspect());
-    }
-
-    @Override
-    protected boolean isBlinking() {
-        return getTopAspect().isBlinkAspect() || getBottomAspect().isBlinkAspect();
+    public int getLightValue() {
+        return Math.max(getSignalAspect().getLightValue(), getBottomAspect().getLightValue());
     }
 
     @Override
@@ -66,18 +62,13 @@ public class TileSignalDualHeadBlockSignal extends TileSignalBlockSignal impleme
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
+    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
         getBlockType().setBlockBounds(BOUNDS, 0, BOUNDS, 1 - BOUNDS, 1f, 1 - BOUNDS);
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.fromBounds(i + BOUNDS, j, k + BOUNDS, i + 1 - BOUNDS, j + 1, k + 1 - BOUNDS);
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.fromBounds(i + BOUNDS, j, k + BOUNDS, i + 1 - BOUNDS, j + 1, k + 1 - BOUNDS);
+    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
+        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(-BOUNDS).build();
     }
 
     @Override

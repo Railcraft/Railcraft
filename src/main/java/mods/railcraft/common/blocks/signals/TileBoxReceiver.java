@@ -17,7 +17,6 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,7 +41,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     }
 
     @Override
-    public boolean blockActivated(int side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
         if (player.isSneaking())
             return false;
         if (Game.isHost(worldObj))
@@ -81,8 +80,8 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     }
 
     @Override
-    public int getPowerOutput(int side) {
-        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, getPos(), MiscTools.getOppositeSide(side));
+    public int getPowerOutput(EnumFacing side) {
+        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, getPos(), side.getOpposite());
         if (tile instanceof TileBoxBase)
             return NO_POWER;
         return doesActionOnAspect(receiver.getAspect()) ? FULL_POWER : NO_POWER;
@@ -122,9 +121,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     @Override
     public boolean isConnected(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);
-        if (tile instanceof TileBoxBase)
-            return ((TileBoxBase) tile).canReceiveAspect();
-        return false;
+        return tile instanceof TileBoxBase && ((TileBoxBase) tile).canReceiveAspect();
     }
 
     @Override

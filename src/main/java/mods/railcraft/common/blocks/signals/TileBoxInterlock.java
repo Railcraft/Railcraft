@@ -142,6 +142,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
         markBlockForUpdate();
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean isConnected(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);
@@ -192,7 +193,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     private static class TileComparator implements Comparator<TileBoxInterlock> {
-        public static TileComparator INSTANCE = new TileComparator();
+        public static final TileComparator INSTANCE = new TileComparator();
 
         @Override
         public int compare(TileBoxInterlock o1, TileBoxInterlock o2) {
@@ -208,8 +209,8 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
 
     private class Interlock {
         private static final int DELAY = 20 * 10;
-        private TreeSet<TileBoxInterlock> interlocks = new TreeSet<TileBoxInterlock>(TileComparator.INSTANCE);
-        private TreeSet<TileBoxInterlock> lockRequests = new TreeSet<TileBoxInterlock>(TileComparator.INSTANCE);
+        private final TreeSet<TileBoxInterlock> interlocks = new TreeSet<TileBoxInterlock>(TileComparator.INSTANCE);
+        private final TreeSet<TileBoxInterlock> lockRequests = new TreeSet<TileBoxInterlock>(TileComparator.INSTANCE);
         private TileBoxInterlock active;
         private int delay;
 
@@ -217,7 +218,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
             interlocks.add(tile);
         }
 
-        public void merge(Interlock interlock) {
+        void merge(Interlock interlock) {
             interlocks.addAll(interlock.interlocks);
             for (TileBoxInterlock box : interlocks) {
                 box.interlock = this;
@@ -244,7 +245,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
             }
         }
 
-        public void requestLock(TileBoxInterlock host, boolean request) {
+        void requestLock(TileBoxInterlock host, boolean request) {
             if (request)
                 lockRequests.add(host);
             else if (active == host)

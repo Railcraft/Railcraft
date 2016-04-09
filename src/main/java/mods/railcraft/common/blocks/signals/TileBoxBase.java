@@ -9,29 +9,31 @@
 package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public abstract class TileBoxBase extends TileSignalFoundation {
 
-    private static final float BOUND = 0.1f;
+    private static final float BOUND = -0.1f;
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
+    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
         getBlockType().setBlockBounds(BOUND, 0, BOUND, 1 - BOUND, 1 - BOUND / 2, 1 - BOUND);
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.fromBounds(i + BOUND, j, k + BOUND, i + 1 - BOUND, j + 1 - BOUND / 2, k + 1 - BOUND);
+    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
+        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(BOUND).raiseCeiling(BOUND / 2).build();
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-        return AxisAlignedBB.fromBounds(i + BOUND, j, k + BOUND, i + 1 - BOUND, j + 1 - BOUND / 2, k + 1 - BOUND);
+    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(BOUND).raiseCeiling(BOUND / 2).build();
     }
 
     @Override
@@ -74,12 +76,12 @@ public abstract class TileBoxBase extends TileSignalFoundation {
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int i, int j, int k, EnumFacing side) {
+    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
         return side == EnumFacing.UP;
     }
 
     @Override
-    public boolean canConnectRedstone(int dir) {
+    public boolean canConnectRedstone(EnumFacing dir) {
         return true;
     }
 }

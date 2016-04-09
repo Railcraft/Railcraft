@@ -22,7 +22,7 @@ import java.io.IOException;
 
 public abstract class TileSwitchSecured extends TileSwitchBase implements IGuiReturnHandler, ISecure<LockButtonState> {
 
-    private final MultiButtonController<LockButtonState> lockController = new MultiButtonController(0, LockButtonState.VALUES);
+    private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 
     @Override
     public MultiButtonController<LockButtonState> getLockController() {
@@ -42,6 +42,7 @@ public abstract class TileSwitchSecured extends TileSwitchBase implements IGuiRe
         return lockController.getButtonState() == LockButtonState.LOCKED;
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected boolean canAccess(GameProfile player) {
         return !isSecure() || PlayerPlugin.isOwnerOrOp(getOwner(), player);
     }

@@ -18,6 +18,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,7 +45,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     }
 
     @Override
-    public boolean blockActivated(int side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
         if (Game.isHost(worldObj))
             GuiHandler.openGui(EnumGui.SWITCH_MOTOR, player, worldObj, getPos());
         return true;
@@ -69,8 +70,8 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+        super.onNeighborBlockChange(state, neighborBlock);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power) {
             setPowered(power);

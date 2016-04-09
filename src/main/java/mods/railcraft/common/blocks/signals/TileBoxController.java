@@ -17,6 +17,7 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -41,7 +42,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public boolean blockActivated(int side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
         if (player.isSneaking())
             return false;
         GuiHandler.openGui(EnumGui.BOX_CONTROLLER, player, worldObj, getPos());
@@ -69,8 +70,8 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void onNeighborBlockChange(Block block) {
-        super.onNeighborBlockChange(block);
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+        super.onNeighborBlockChange(state, neighborBlock);
         if (Game.isNotHost(getWorld()))
             return;
         boolean p = isBeingPowered() || PowerPlugin.isRedstonePowered(worldObj, getPos());
