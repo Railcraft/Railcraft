@@ -11,6 +11,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -21,8 +22,8 @@ import net.minecraftforge.oredict.OreDictionary;
 public enum RailcraftItem {
 
     circuit(ItemCircuit.class, "part.circuit"),
-    crowbar_iron(ItemCrowbarIron.class, "tool.crowbar.iron"),
-    crowbar_steel(ItemCrowbarSteel.class, "tool.crowbar.steel"),
+    crowbarIron(ItemCrowbarIron.class, "tool.crowbar.iron"),
+    crowbarSteel(ItemCrowbarSteel.class, "tool.crowbar.steel"),
     dust(ItemDust.class, "dust"),
     electricMeter(ItemElectricMeter.class, "tool.electric.meter"),
     gear(ItemGear.class, "part.gear"),
@@ -35,10 +36,13 @@ public enum RailcraftItem {
     rail(ItemRail.class, "part.rail"),
     railbed(ItemRailbed.class, "part.railbed"),
     rebar(ItemRebar.class, "part.rebar", "ingotIron"),
+    routingTable(ItemRoutingTable.class, "routing.table", Items.writable_book),
     signalBlockSurveyor(ItemSignalBlockSurveyor.class, "tool.signal.surveyor"),
     signalLabel(ItemSignalLabel.class, "tool.signal.label"),
     signalLamp(ItemSignalLamp.class, "part.signal.lamp", Blocks.redstone_lamp),
     signalTuner(ItemSignalTuner.class, "tool.signal.tuner"),
+    ticket(ItemTicket.class, "routing.ticket", Items.paper),
+    ticketGold(ItemTicketGold.class, "routing.ticket.gold", Items.gold_nugget),
     tie(ItemTie.class, "part.tie"),
     whistleTuner(ItemWhistleTuner.class, "tool.whistle.tuner");
     public static final RailcraftItem[] VALUES = values();

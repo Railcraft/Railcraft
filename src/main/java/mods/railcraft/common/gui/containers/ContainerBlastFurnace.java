@@ -46,8 +46,8 @@ public class ContainerBlastFurnace extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting player) {
-        super.addCraftingToCrafters(player);
+    public void onCraftGuiOpened(ICrafting player) {
+        super.onCraftGuiOpened(player);
         player.sendProgressBarUpdate(this, 0, furnace.getCookTime());
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 1, furnace.burnTime);
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 2, furnace.currentItemBurnTime);

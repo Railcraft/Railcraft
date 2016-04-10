@@ -14,6 +14,7 @@ import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -38,6 +39,19 @@ public final class StackFilters {
             @Override
             public boolean apply(final ItemStack stack) {
                 return InvTools.isItemEqual(stack, stack);
+            }
+        };
+    }
+
+    /**
+     * Matches against the provided Item.
+     */
+    public static StackFilter of(@Nonnull final Class<? extends Item> itemClass) {
+        return new StackFilter() {
+
+            @Override
+            public boolean apply(final ItemStack stack) {
+                return stack != null && stack.getItem() != null && itemClass.isAssignableFrom(stack.getItem().getClass());
             }
         };
     }

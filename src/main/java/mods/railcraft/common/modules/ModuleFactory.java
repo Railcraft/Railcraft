@@ -114,7 +114,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                     RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.iron_hoe), true, false, burnTime * 2, RailcraftItem.ingot.getStack(2, steel));
                     RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.shears), true, false, burnTime * 2, RailcraftItem.ingot.getStack(2, steel));
 
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItem.crowbar_iron.getStack(), true, false, burnTime * 3, RailcraftItem.ingot.getStack(3, steel));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItem.crowbarIron.getStack(), true, false, burnTime * 3, RailcraftItem.ingot.getStack(3, steel));
 
                     RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.iron_door), false, false, burnTime * 6, RailcraftItem.ingot.getStack(6, steel));
 

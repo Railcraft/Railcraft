@@ -37,15 +37,15 @@ public abstract class RailcraftContainer extends Container {
     private final IInventory callback;
     private final List<Widget> widgets = new ArrayList<Widget>();
 
-    public RailcraftContainer(IInventory inv) {
+    protected RailcraftContainer(IInventory inv) {
         this.callback = inv;
     }
 
-    public RailcraftContainer() {
+    protected RailcraftContainer() {
         this.callback = null;
     }
 
-    public List<Widget> getElements() {
+    public Iterable<Widget> getElements() {
         return widgets;
     }
 
@@ -59,8 +59,8 @@ public abstract class RailcraftContainer extends Container {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting player) {
-        super.addCraftingToCrafters(player);
+    public void onCraftGuiOpened(ICrafting player) {
+        super.onCraftGuiOpened(player);
         for (Widget widget : widgets) {
             widget.initWidget(player);
         }
@@ -79,7 +79,6 @@ public abstract class RailcraftContainer extends Container {
         }
     }
 
-
     public void sendUpdateToClient() {
     }
 
@@ -97,13 +96,12 @@ public abstract class RailcraftContainer extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        if (callback == null) return true;
-        return callback.isUseableByPlayer(entityplayer);
+        return callback == null || callback.isUseableByPlayer(entityplayer);
     }
 
     @Override
     public ItemStack slotClick(int slotNum, int mouseButton, int modifier, EntityPlayer player) {
-        Slot slot = slotNum < 0 ? null : this.inventorySlots.get(slotNum);
+        Slot slot = slotNum < 0 ? null : inventorySlots.get(slotNum);
         if (slot instanceof SlotRailcraft && ((SlotRailcraft) slot).isPhantom())
             return slotClickPhantom((SlotRailcraft) slot, mouseButton, modifier, player);
         return super.slotClick(slotNum, mouseButton, modifier, player);
@@ -139,7 +137,7 @@ public abstract class RailcraftContainer extends Container {
         return stack;
     }
 
-    protected void adjustPhantomSlot(SlotRailcraft slot, int mouseButton, int modifier) {
+    private void adjustPhantomSlot(SlotRailcraft slot, int mouseButton, int modifier) {
         if (!slot.canAdjustPhantom())
             return;
         ItemStack stackSlot = slot.getStack();
@@ -158,7 +156,7 @@ public abstract class RailcraftContainer extends Container {
             slot.putStack(null);
     }
 
-    protected void fillPhantomSlot(SlotRailcraft slot, ItemStack stackHeld, int mouseButton, int modifier) {
+    private void fillPhantomSlot(SlotRailcraft slot, ItemStack stackHeld, int mouseButton, int modifier) {
         if (!slot.canAdjustPhantom())
             return;
         int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
@@ -170,7 +168,7 @@ public abstract class RailcraftContainer extends Container {
         slot.putStack(phantomStack);
     }
 
-    protected boolean shiftItemStack(ItemStack stackToShift, int start, int end) {
+    private boolean shiftItemStack(ItemStack stackToShift, int start, int end) {
         boolean changed = false;
         if (stackToShift.isStackable())
             for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
@@ -235,16 +233,16 @@ public abstract class RailcraftContainer extends Container {
         if (slot != null && slot.getHasStack()) {
             ItemStack stackInSlot = slot.getStack();
             originalStack = stackInSlot.copy();
-            if (slotIndex >= numSlots - 9 * 4 && tryShiftItem(stackInSlot, numSlots)) {
-                // NOOP
-            } else if (slotIndex >= numSlots - 9 * 4 && slotIndex < numSlots - 9) {
-                if (!shiftItemStack(stackInSlot, numSlots - 9, numSlots))
+            if (!(slotIndex >= numSlots - 9 * 4 && tryShiftItem(stackInSlot, numSlots))) {
+                if (slotIndex >= numSlots - 9 * 4 && slotIndex < numSlots - 9) {
+                    if (!shiftItemStack(stackInSlot, numSlots - 9, numSlots))
+                        return null;
+                } else if (slotIndex >= numSlots - 9 && slotIndex < numSlots) {
+                    if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots - 9))
+                        return null;
+                } else if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots))
                     return null;
-            } else if (slotIndex >= numSlots - 9 && slotIndex < numSlots) {
-                if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots - 9))
-                    return null;
-            } else if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots))
-                return null;
+            }
             slot.onSlotChange(stackInSlot, originalStack);
             if (stackInSlot.stackSize <= 0)
                 slot.putStack(null);

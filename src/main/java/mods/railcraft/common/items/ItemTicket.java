@@ -11,10 +11,8 @@ package mods.railcraft.common.items;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.api.core.items.StackFilter;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -39,24 +37,6 @@ public class ItemTicket extends ItemRailcraft {
 
     };
     public static final int LINE_LENGTH = 32;
-    public static ItemTicket item;
-
-    public static void registerItem() {
-        if (item == null) {
-            String tag = "railcraft.routing.ticket";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemTicket();
-                item.setUnlocalizedName(tag);
-                RailcraftRegistry.register(item);
-            }
-        }
-    }
-
-    public static ItemStack getTicket() {
-        if (item == null)
-            return null;
-        return new ItemStack(item);
-    }
 
     public static boolean isNBTValid(NBTTagCompound nbt) {
         if (nbt == null)
@@ -70,14 +50,14 @@ public class ItemTicket extends ItemRailcraft {
     }
 
     public static ItemStack copyTicket(ItemStack source) {
-        if (item == null)
-            return null;
         if (source == null)
             return null;
         if (source.getItem() instanceof ItemTicket) {
-            ItemStack ticket = getTicket();
+            ItemStack ticket = RailcraftItem.ticket.getStack();
+            if(ticket == null)
+                return null;
             NBTTagCompound nbt = source.getTagCompound();
-            if (ticket != null && nbt != null)
+            if (nbt != null)
                 ticket.setTagCompound((NBTTagCompound) nbt.copy());
             return ticket;
         }

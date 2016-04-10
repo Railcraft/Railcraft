@@ -16,8 +16,7 @@ import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.items.ItemRoutingTable;
-import mods.railcraft.common.items.ItemTicket;
-import mods.railcraft.common.items.ItemTicketGold;
+import mods.railcraft.common.items.RailcraftItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RoutingTableCopyRecipe;
 import mods.railcraft.common.util.crafting.RoutingTicketCopyRecipe;
@@ -32,21 +31,25 @@ import net.minecraft.item.ItemStack;
 public class ModuleRouting extends RailcraftModulePayload {
     public ModuleRouting() {
         setEnabledEventHandler(new ModuleEventHandler() {
+            @Override
+            public void construction() {
+                addItems(
+                        RailcraftItem.routingTable,
+                        RailcraftItem.ticket,
+                        RailcraftItem.ticketGold
+                );
+            }
 
             @Override
             public void preInit() {
-                super.preInit();
                 BlockDetector.registerBlock();
-                ItemRoutingTable.registerItem();
-                ItemTicketGold.registerItem();
-                ItemTicket.registerItem();
 
                 MiscTools.registerTrack(EnumTrack.ROUTING);
 
                 if (ItemRoutingTable.item != null)
                     CraftingPlugin.addRecipe(new RoutingTableCopyRecipe());
 
-                if (ItemTicket.item != null && ItemTicketGold.item != null)
+                if (RailcraftItem.ticket.isEnabled() && RailcraftItem.ticketGold.isEnabled())
                     CraftingPlugin.addRecipe(new RoutingTicketCopyRecipe());
 
                 if (EnumDetector.ROUTING.isEnabled()) {

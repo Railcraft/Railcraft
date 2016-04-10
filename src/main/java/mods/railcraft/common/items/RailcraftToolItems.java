@@ -329,8 +329,8 @@ public class RailcraftToolItems {
                 Item item = itemCoalCoke = new ItemRailcraft().setUnlocalizedName(tag);
                 RailcraftRegistry.register(itemCoalCoke);
 
-                if (RailcraftConfig.coalcokeTorchOutput() > 0) {
-                    CraftingPlugin.addRecipe(new ItemStack(Blocks.torch, RailcraftConfig.coalcokeTorchOutput()),
+                if (RailcraftConfig.coalCokeTorchOutput() > 0) {
+                    CraftingPlugin.addRecipe(new ItemStack(Blocks.torch, RailcraftConfig.coalCokeTorchOutput()),
                             "C",
                             "S",
                             'C', new ItemStack(itemCoalCoke),

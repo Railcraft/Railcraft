@@ -73,8 +73,8 @@ public class ContainerRollingMachine extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
         icrafting.sendProgressBarUpdate(this, 0, tile.getProgress());
         EnergyStorage storage = tile.getEnergyStorage();
         if (storage != null)
@@ -119,7 +119,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
 
     @Override
     public final void onCraftMatrixChanged(IInventory inv) {
-        ItemStack output = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, tile.getWorldObj());
+        ItemStack output = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, tile.getWorld());
         craftResult.setInventorySlotContents(0, output);
     }
 

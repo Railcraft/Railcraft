@@ -46,7 +46,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
     protected int clock = MiscTools.RANDOM.nextInt();
     private GameProfile owner = new GameProfile(null, "[Railcraft]");
-    private boolean sendClientUpdate = false;
+    private boolean sendClientUpdate;
     private UUID uuid;
     private String customName = "";
 

@@ -14,7 +14,6 @@ import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IEditableItem;
 import mods.railcraft.common.util.network.PacketBuilder;
@@ -36,27 +35,15 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
         }
 
     };
-    public static ItemTicketGold item;
 
-    public static void registerItem() {
-        if (item == null) {
-            String tag = "railcraft.routing.ticket.gold";
-
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemTicketGold();
-                item.setUnlocalizedName(tag);
-                item.setRarity(1);
-                RailcraftRegistry.register(item);
-
-                CraftingPlugin.addShapelessRecipe(new ItemStack(item), Items.paper, "nuggetGold");
-            }
-        }
+    @Override
+    public void initItem() {
+        setRarity(1);
     }
 
-    public static ItemStack getTicket() {
-        if (item == null)
-            return null;
-        return new ItemStack(item);
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addShapelessRecipe(new ItemStack(this), Items.paper, "nuggetGold");
     }
 
     @Override

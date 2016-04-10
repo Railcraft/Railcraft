@@ -11,8 +11,7 @@ package mods.railcraft.common.core;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternMetal;
-import mods.railcraft.common.blocks.aesthetics.lantern.EnumLanternStone;
+import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.wall.EnumWallAlpha;
@@ -27,8 +26,8 @@ import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.modules.ModuleChunkLoading;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import mods.railcraft.common.util.collections.BlockItemListParser;
 import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.collections.ItemKey;
@@ -63,7 +62,7 @@ public class RailcraftConfig {
     private static final String CAT_CARTS = "carts";
     private static final String CAT_ITEMS = "items";
     private static final String CAT_BLOCKS = "blocks";
-    private static final String CAT_SUBBLOCKS = "subblocks";
+    private static final String CAT_SUB_BLOCKS = "subblocks";
     private static final String CAT_TWEAKS = "tweaks";
     private static final String CAT_TWEAKS_CARTS = CAT_TWEAKS + ".carts";
     private static final String CAT_TWEAKS_TRACKS = CAT_TWEAKS + ".tracks";
@@ -497,7 +496,7 @@ public class RailcraftConfig {
 
         loadBlockProperty("worldlogic");
 
-        configBlock.addCustomCategoryComment(CAT_SUBBLOCKS, "Here is were you can enable/disable various sub-blocks.\n"
+        configBlock.addCustomCategoryComment(CAT_SUB_BLOCKS, "Here is were you can enable/disable various sub-blocks.\n"
                 + "Railcraft will attempt to compensate for any missing component by providing alternatives (usually).");
 
         for (EnumTrack type : EnumTrack.VALUES) {
@@ -526,12 +525,12 @@ public class RailcraftConfig {
             loadBlockFeature(BlockRailcraftSlab.getTag(mat));
         }
 
-        for (EnumLanternStone type : EnumLanternStone.VALUES) {
-            loadBlockFeature(type.getTag());
+        for (BlockMaterial mat : BlockLantern.STONE_LANTERN.keySet()) {
+            loadBlockFeature(BlockLantern.getTag(mat));
         }
 
-        for (EnumLanternMetal type : EnumLanternMetal.VALUES) {
-            loadBlockFeature(type.getTag());
+        for (BlockMaterial mat : BlockLantern.METAL_LANTERN.keySet()) {
+            loadBlockFeature(BlockLantern.getTag(mat));
         }
 
         for (EnumOre type : EnumOre.values()) {
@@ -572,7 +571,7 @@ public class RailcraftConfig {
 
     private static void loadBlockFeature(String tag) {
         tag = MiscTools.cleanTag(tag);
-        Property prop = configBlock.get(CAT_SUBBLOCKS, tag, true);
+        Property prop = configBlock.get(CAT_SUB_BLOCKS, tag, true);
         enabledSubBlocks.put(tag, prop.getBoolean(true));
     }
 
@@ -743,7 +742,7 @@ public class RailcraftConfig {
         return creosoteTorchOutput;
     }
 
-    public static int coalcokeTorchOutput() {
+    public static int coalCokeTorchOutput() {
         return coalcokeTorchOutput;
     }
 
@@ -788,7 +787,7 @@ public class RailcraftConfig {
     }
 
     public static boolean deleteAnchors() {
-        return deleteAnchors || !RailcraftModuleManager.isModuleEnabled(Module.CHUNK_LOADING);
+        return deleteAnchors || !RailcraftModuleManager.isModuleEnabled(ModuleChunkLoading.class);
     }
 
     public static boolean canCraftAnchors() {

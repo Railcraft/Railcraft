@@ -43,8 +43,8 @@ public class ContainerLocomotiveElectric extends ContainerLocomotive {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
 
         icrafting.sendProgressBarUpdate(this, 20, (int) Math.round(chargeHandler.getCharge()));
     }

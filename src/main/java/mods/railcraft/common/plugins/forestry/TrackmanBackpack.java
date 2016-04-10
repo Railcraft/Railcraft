@@ -71,8 +71,8 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
         add(EnumMachineAlpha.PASSIVE_ANCHOR.getItem());
         add(EnumMachineBeta.SENTINEL.getItem());
 
-        add(RailcraftItem.crowbar_iron);
-        add(RailcraftItem.crowbar_steel);
+        add(RailcraftItem.crowbarIron);
+        add(RailcraftItem.crowbarSteel);
         add(RailcraftItem.signalBlockSurveyor);
         add(RailcraftItem.signalTuner);
         add(RailcraftItem.rail);

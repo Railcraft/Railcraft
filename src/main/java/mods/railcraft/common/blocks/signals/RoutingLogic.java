@@ -42,7 +42,7 @@ public class RoutingLogic {
     private Deque<Condition> conditions;
     private RoutingLogicException error;
 
-    private RoutingLogic(LinkedList<String> data) {
+    private RoutingLogic(Deque<String> data) {
         try {
             if (data != null)
                 parseTable(data);
@@ -53,7 +53,7 @@ public class RoutingLogic {
         }
     }
 
-    public static RoutingLogic buildLogic(LinkedList<String> data) {
+    public static RoutingLogic buildLogic(Deque<String> data) {
         return new RoutingLogic(data);
     }
 
@@ -65,7 +65,7 @@ public class RoutingLogic {
         return conditions != null;
     }
 
-    private void parseTable(LinkedList<String> data) throws RoutingLogicException {
+    private void parseTable(Deque<String> data) throws RoutingLogicException {
         Deque<Condition> stack = new LinkedList<Condition>();
         Iterator<String> it = data.descendingIterator();
         while (it.hasNext()) {
@@ -145,7 +145,7 @@ public class RoutingLogic {
         throw new RoutingLogicException("railcraft.gui.routing.logic.unrecognized.keyword", line);
     }
 
-    private class RoutingLogicException extends Exception {
+    public class RoutingLogicException extends Exception {
 
         private final ToolTip tips = new ToolTip();
 

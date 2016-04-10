@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class ContainerLocomotive extends RailcraftContainer {
 
     private final EntityLocomotive loco;
-    protected final InventoryPlayer playerInv;
+    private final InventoryPlayer playerInv;
     private LocoSpeed lastSpeed;
     private LocoMode lastMode;
     private int lastLockState;
@@ -66,8 +66,8 @@ public abstract class ContainerLocomotive extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
 
         icrafting.sendProgressBarUpdate(this, 10, loco.getSpeed().ordinal());
         icrafting.sendProgressBarUpdate(this, 11, loco.getMode().ordinal());
@@ -83,20 +83,18 @@ public abstract class ContainerLocomotive extends RailcraftContainer {
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = this.crafters.get(var1);
-
+        for (ICrafting crafter : crafters) {
             LocoSpeed speed = loco.getSpeed();
-            if (this.lastSpeed != speed)
-                var2.sendProgressBarUpdate(this, 10, speed.ordinal());
+            if (lastSpeed != speed)
+                crafter.sendProgressBarUpdate(this, 10, speed.ordinal());
 
             LocoMode mode = loco.getMode();
-            if (this.lastMode != mode)
-                var2.sendProgressBarUpdate(this, 11, mode.ordinal());
+            if (lastMode != mode)
+                crafter.sendProgressBarUpdate(this, 11, mode.ordinal());
 
             int lock = loco.getLockController().getCurrentState();
-            if (this.lastLockState != lock)
-                var2.sendProgressBarUpdate(this, 12, lock);
+            if (lastLockState != lock)
+                crafter.sendProgressBarUpdate(this, 12, lock);
         }
 
         this.lastSpeed = loco.getSpeed();

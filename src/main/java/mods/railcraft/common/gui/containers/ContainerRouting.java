@@ -30,7 +30,7 @@ public class ContainerRouting extends RailcraftContainer {
     private int lastLockState;
     private int lastRoutingState;
     public String ownerName;
-    public boolean canLock = false;
+    public boolean canLock;
     private final SlotSecure slotTicket;
     public RoutingLogic logic;
     public Widget errorElement;
@@ -75,8 +75,8 @@ public class ContainerRouting extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
 
         icrafting.sendProgressBarUpdate(this, 0, router.getLockController().getCurrentState());
         icrafting.sendProgressBarUpdate(this, 1, router.getRoutingController().getCurrentState());
@@ -94,16 +94,14 @@ public class ContainerRouting extends RailcraftContainer {
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = this.crafters.get(var1);
-
+        for (ICrafting crafter : crafters) {
             int lock = router.getLockController().getCurrentState();
-            if (this.lastLockState != lock)
-                var2.sendProgressBarUpdate(this, 0, lock);
+            if (lastLockState != lock)
+                crafter.sendProgressBarUpdate(this, 0, lock);
 
             int railwayType = router.getRoutingController().getCurrentState();
-            if (this.lastRoutingState != railwayType)
-                var2.sendProgressBarUpdate(this, 1, railwayType);
+            if (lastRoutingState != railwayType)
+                crafter.sendProgressBarUpdate(this, 1, railwayType);
         }
 
         this.lastLockState = router.getLockController().getCurrentState();

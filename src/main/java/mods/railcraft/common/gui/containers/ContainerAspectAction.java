@@ -26,14 +26,13 @@ public class ContainerAspectAction extends RailcraftContainer {
     public String ownerName;
 
     public ContainerAspectAction(EntityPlayer player, IAspectActionManager actionManager) {
-        super();
         this.actionManager = actionManager;
         this.player = player;
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
 
         icrafting.sendProgressBarUpdate(this, 0, actionManager.getLockController().getCurrentState());
         icrafting.sendProgressBarUpdate(this, 1, PlayerPlugin.isOwnerOrOp(actionManager.getOwner(), player) ? 1 : 0);
@@ -47,12 +46,10 @@ public class ContainerAspectAction extends RailcraftContainer {
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = this.crafters.get(var1);
-
+        for (ICrafting crafter : crafters) {
             int lock = actionManager.getLockController().getCurrentState();
-            if (this.lastLockState != lock)
-                var2.sendProgressBarUpdate(this, 0, lock);
+            if (lastLockState != lock)
+                crafter.sendProgressBarUpdate(this, 0, lock);
         }
 
         this.lastLockState = actionManager.getLockController().getCurrentState();
@@ -78,7 +75,7 @@ public class ContainerAspectAction extends RailcraftContainer {
             case 0:
                 try {
                     ownerName = data;
-                } catch (IllegalArgumentException ex) {
+                } catch (IllegalArgumentException ignored) {
                 }
                 break;
         }

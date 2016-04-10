@@ -153,8 +153,8 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 RailcraftEnchantments.registerEnchantment();
 
-                RailcraftItem.crowbar_iron.registerItem();
-                RailcraftItem.crowbar_steel.registerItem();
+                RailcraftItem.crowbarIron.registerItem();
+                RailcraftItem.crowbarSteel.registerItem();
                 RailcraftItem.magGlass.registerItem();
                 RailcraftItem.goggles.registerItem();
                 RailcraftItem.overalls.registerItem();

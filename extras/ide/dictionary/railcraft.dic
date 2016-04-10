@@ -7,10 +7,12 @@ cesu
 concatenator
 coord
 coords
+crafter
 decoupler
 decr
 derped
 dest
+ender
 invs
 irongolem
 iterable
@@ -19,7 +21,9 @@ knockback
 lapis
 lapotron
 lockdown
+macerator
 mfsu
+mineable
 minecart
 minecarts
 minecraft
@@ -49,5 +53,7 @@ thaumcraft
 trackman
 uncrafted
 uncrafting
+undercutter
 unloader
 waterstone
+worldgen

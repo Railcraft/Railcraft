@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.util.misc.IAnchor;
@@ -21,16 +21,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerAnchor extends RailcraftContainer {
 
-    public final IAnchor anchor;
+    private final IAnchor anchor;
     public short minutesRemaining;
     private short prevMinutesRemaining;
 
     public ContainerAnchor(InventoryPlayer inventoryplayer, IAnchor a) {
         super(a);
         this.anchor = a;
-        addSlot(new SlotStackFilter(new IStackFilter() {
+        addSlot(new SlotStackFilter(new StackFilter() {
             @Override
-            public boolean matches(ItemStack stack) {
+            public boolean apply(ItemStack stack) {
                 return anchor.getFuelMap().containsKey(stack);
             }
 
@@ -49,8 +49,8 @@ public class ContainerAnchor extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
         icrafting.sendProgressBarUpdate(this, 0, getMinutesRemaining(anchor.getAnchorFuel()));
     }
 
@@ -64,16 +64,14 @@ public class ContainerAnchor extends RailcraftContainer {
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        short mins = getMinutesRemaining(anchor.getAnchorFuel());
+        short minutes = getMinutesRemaining(anchor.getAnchorFuel());
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = this.crafters.get(var1);
-
-            if (this.prevMinutesRemaining != mins)
-                var2.sendProgressBarUpdate(this, 0, mins);
+        for (ICrafting crafter : crafters) {
+            if (prevMinutesRemaining != minutes)
+                crafter.sendProgressBarUpdate(this, 0, minutes);
         }
 
-        this.prevMinutesRemaining = mins;
+        this.prevMinutesRemaining = minutes;
     }
 
     @Override

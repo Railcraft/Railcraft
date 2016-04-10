@@ -79,8 +79,8 @@ public class ContainerCokeOven extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
 
         TankManager tMan = tile.getTankManager();
         if (tMan != null)
