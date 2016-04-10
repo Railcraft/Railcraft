@@ -12,9 +12,10 @@ import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.instances.TrackSpeed;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.instances.TrackSpeed;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.Vec2D;
@@ -30,7 +31,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IMinecartCollisionHandler;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
@@ -83,7 +83,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
                 EntityMinecart placedCart = CartUtils.placeCart(
                         CartUtils.vanillaCartItemMap.get(item),
                         player.getGameProfile(), itemStack, world,
-                        event.x, event.y, event.z);
+                        event.pos);
                 if (placedCart != null && !player.capabilities.isCreativeMode)
                     itemStack.stackSize--;
             }
@@ -114,11 +114,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
                 other.mountEntity(cart);
         }
 
-        int i = MathHelper.floor_double(cart.posX);
-        int j = MathHelper.floor_double(cart.posY);
-        int k = MathHelper.floor_double(cart.posZ);
-        Block block = cart.worldObj.getBlock(i, j, k);
-        if (isLiving && RailcraftBlocks.getBlockElevator() != null && block == RailcraftBlocks.getBlockElevator())
+        if (isLiving && WorldPlugin.isBlockAt(cart.worldObj, cart.getPosition(), RailcraftBlocks.getBlockElevator()))
             return;
 
 //        System.out.println(cart.getClass().getSimpleName() + ": " + cart.entityId + " collided with " + other.getClass().getSimpleName() + ": " + other.entityId);
@@ -199,9 +195,9 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     @Override
     public AxisAlignedBB getCollisionBox(EntityMinecart cart, Entity other) {
         if (other instanceof EntityItem && RailcraftConfig.doCartsCollideWithItems())
-            return other.boundingBox;
+            return other.getEntityBoundingBox();
         if (other instanceof EntityPlayer)
-            return other.canBePushed() ? other.boundingBox : null; //            return other.boundingBox.contract(COLLISION_EXPANSION, 0, COLLISION_EXPANSION);
+            return other.canBePushed() ? other.getEntityBoundingBox() : null; //            return other.boundingBox.contract(COLLISION_EXPANSION, 0, COLLISION_EXPANSION);
         return null;
     }
 
@@ -211,7 +207,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         double diff = ((CART_LENGTH - CART_WIDTH) / 2.0) + MinecartHooks.COLLISION_EXPANSION;
         double x = diff * Math.abs(Math.cos(yaw));
         double z = diff * Math.abs(Math.sin(yaw));
-        return cart.boundingBox.expand(x, MinecartHooks.COLLISION_EXPANSION, z);
+        return cart.getEntityBoundingBox().expand(x, MinecartHooks.COLLISION_EXPANSION, z);
     }
 
     @Override
@@ -219,7 +215,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (cart == null || cart.isDead)
             return null;
         if (RailcraftConfig.areCartsSolid())
-            return cart.boundingBox;
+            return cart.getEntityBoundingBox();
         return null;
     }
 
@@ -249,10 +245,8 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 //            }
 //            return;
 //        }
-        int x = (int) event.x;
-        int y = (int) event.y;
-        int z = (int) event.z;
-        Block block = cart.worldObj.getBlock(x, y, z);
+
+        Block block = WorldPlugin.getBlock(cart.worldObj, event.pos);
         int launched = data.getInteger("Launched");
         if (TrackTools.isRailBlock(block)) {
             cart.fallDistance = 0;
@@ -286,7 +280,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (data.getBoolean("HighSpeed"))
             if (CartUtils.cartVelocityIsLessThan(cart, TrackSpeed.SPEED_CUTOFF))
                 data.setBoolean("HighSpeed", false);
-            else if (!TrackSpeed.isTrackHighSpeedCapable(cart.worldObj, x, y, z))
+            else if (!TrackSpeed.isTrackHighSpeedCapable(cart.worldObj, event.pos))
                 CartUtils.explodeCart(cart);
 
         cart.motionX = Math.copySign(Math.min(Math.abs(cart.motionX), 9.5), cart.motionX);
@@ -317,19 +311,15 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 
         testHighSpeedCollision(cart, other);
 
-        int i = MathHelper.floor_double(cart.posX);
-        int j = MathHelper.floor_double(cart.posY);
-        int k = MathHelper.floor_double(cart.posZ);
-
         if (EntityMinecart.getCollisionHandler() != this)
-            if (other instanceof EntityLivingBase && RailcraftBlocks.getBlockElevator() != null && cart.worldObj.getBlock(i, j, k) == RailcraftBlocks.getBlockElevator())
-                if (other.boundingBox.minY < cart.boundingBox.maxY) {
-                    other.moveEntity(0, cart.boundingBox.maxY - other.boundingBox.minY, 0);
+            if (other instanceof EntityLivingBase && WorldPlugin.isBlockAt(cart.worldObj, cart.getPosition(), RailcraftBlocks.getBlockElevator()))
+                if (other.getEntityBoundingBox().minY < cart.getEntityBoundingBox().maxY) {
+                    other.moveEntity(0, cart.getEntityBoundingBox().maxY - other.getEntityBoundingBox().minY, 0);
                     other.onGround = true;
                 }
 
         if (MiscTools.RANDOM.nextFloat() < 0.001f) {
-            List<EntityMinecart> carts = CartTools.getMinecartsAt(cart.worldObj, i, j, k, 0);
+            List<EntityMinecart> carts = CartTools.getMinecartsAt(cart.worldObj, cart.getPosition(), 0);
             if (carts.size() >= 12)
                 primeToExplode(cart);
         }

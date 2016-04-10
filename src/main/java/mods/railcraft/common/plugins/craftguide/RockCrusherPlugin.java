@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.plugins.craftguide;
 
-import mods.railcraft.api.crafting.IRockCrusherRecipe;
+import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -16,8 +16,6 @@ import net.minecraft.item.ItemStack;
 import uristqwerty.CraftGuide.api.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  *
@@ -32,7 +30,7 @@ public class RockCrusherPlugin implements RecipeProvider {
         slots[0] = new ItemSlot(4, 11, 16, 16);
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
-                slots[1 + y * 3 + x] = new FloatChanceSlot(24 + x * 18, 3 + y * 18, 16, 16, true).setSlotType(SlotType.OUTPUT_SLOT);
+                slots[1 + y * 3 + x] = new OutputEntrySlot(24 + x * 18, 3 + y * 18, 16, 16, true).setSlotType(SlotType.OUTPUT_SLOT);
             }
         }
 
@@ -45,16 +43,16 @@ public class RockCrusherPlugin implements RecipeProvider {
         if (crafter != null) {
             RecipeTemplate template = generator.createRecipeTemplate(slots, crafter, RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_craft_guide.png", 1, 61, 82, 61);
 
-            for (IRockCrusherRecipe recipe : RailcraftCraftingManager.rockCrusher.getRecipes()) {
+            for (ICrusherCraftingManager.ICrusherRecipe recipe : RailcraftCraftingManager.rockCrusher.recipes()) {
                 Object[] items = new Object[11];
-                items[0] = recipe.getInput();
-                List<Map.Entry<ItemStack, Float>> output = recipe.getOutputs();
+                items[0] = recipe.getInputMatcher().getDisplayStack();
+                List<ICrusherCraftingManager.IOutputEntry> output = recipe.getOutputs();
                 int i = 1;
-                for (Entry<ItemStack, Float> e : output) {
+                for (ICrusherCraftingManager.IOutputEntry entry : output) {
                     if (i > 9) {
                         break;
                     }
-                    items[i] = new Object[]{e.getKey(), e.getValue()};
+                    items[i] = entry;
                     i++;
                 }
 

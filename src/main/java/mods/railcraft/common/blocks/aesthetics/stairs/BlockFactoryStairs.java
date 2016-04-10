@@ -60,7 +60,7 @@ public class BlockFactoryStairs extends BlockFactory {
         for (BlockMaterial mat : BlockMaterial.STAIR_MATS) {
             if (BlockRailcraftStairs.isEnabled(mat) && mat.getSourceItem() != null) {
                 CraftingPlugin.addRecipe(BlockRailcraftStairs.getItem(mat, 4), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
-                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(BlockRailcraftStairs.getItem(mat), true, false);
+                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(BlockRailcraftStairs.getItem(mat), true, false);
                 recipe.addOutput(mat.getSourceItem(), 1.0f);
             }
         }
@@ -82,7 +82,7 @@ public class BlockFactoryStairs extends BlockFactory {
         for (BlockMaterial mat : types) {
             if (!BlockRailcraftStairs.isEnabled(mat))
                 continue;
-            IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(getItem(mat), true, false);
+            IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(getItem(mat), true, false);
             recipe.addOutput(output, 1.0F);
         }
     }

@@ -11,7 +11,7 @@ package mods.railcraft.common.core;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.primitives.Ints;
-import mods.railcraft.api.crafting.IRockCrusherRecipe;
+import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
@@ -125,7 +125,7 @@ public final class Railcraft {
             } else if (mess.key.equals("rock-crusher")) {
                 NBTTagCompound nbt = mess.getNBTValue();
                 ItemStack input = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("input"));
-                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(input, nbt.getBoolean("matchMeta"), nbt.getBoolean("matchNBT"));
+                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(input, nbt.getBoolean("matchMeta"), nbt.getBoolean("matchNBT"));
                 for (int i = 0; i < 9; i++) {
                     if (nbt.hasKey("output" + i)) {
                         NBTTagCompound outputNBT = nbt.getCompoundTag("output" + i);

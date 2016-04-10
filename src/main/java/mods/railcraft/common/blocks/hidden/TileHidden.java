@@ -16,7 +16,6 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.io.DataInputStream;
@@ -29,8 +28,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class TileHidden extends RailcraftTileEntity {
 
-    private static final int DURATION_MIINUTES = 15;
-    private static final long DURATION_MILLISECONDS = TimeUnit.MILLISECONDS.convert(DURATION_MIINUTES, TimeUnit.MINUTES);
+    private static final int DURATION_MINUTES = 15;
+    private static final long DURATION_MILLISECONDS = TimeUnit.MILLISECONDS.convert(DURATION_MINUTES, TimeUnit.MINUTES);
     public WorldCoordinate lastMarker;
     public long colorSeed;
     public long timestamp = -1;

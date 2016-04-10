@@ -9,7 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.brick;
 
-import mods.railcraft.api.crafting.IRockCrusherRecipe;
+import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
@@ -31,6 +31,7 @@ import java.util.Locale;
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
 
 /**
+ * The Brick Themes (clever, I know)
  * Created by CovertJaguar on 3/12/2015.
  */
 public enum BrickTheme {
@@ -39,7 +40,7 @@ public enum BrickTheme {
         public void initRecipes() {
             if (EnumCube.ABYSSAL_STONE.isEnabled()) {
                 CraftingPlugin.addFurnaceRecipe(EnumCube.ABYSSAL_STONE.getItem(), new ItemStack(getBlock(), 1, 2), 0.2F);
-                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(EnumCube.ABYSSAL_STONE.getItem(), true, false);
+                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumCube.ABYSSAL_STONE.getItem(), true, false);
                 recipe.addOutput(get(COBBLE, 1), 1.0F);
             }
         }
@@ -95,7 +96,7 @@ public enum BrickTheme {
         public void initRecipes() {
             if (EnumCube.QUARRIED_STONE.isEnabled()) {
                 CraftingPlugin.addFurnaceRecipe(EnumCube.QUARRIED_STONE.getItem(), new ItemStack(getBlock(), 1, 2), 0.2F);
-                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(EnumCube.QUARRIED_STONE.getItem(), true, false);
+                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumCube.QUARRIED_STONE.getItem(), true, false);
                 recipe.addOutput(get(COBBLE, 1), 1.0F);
             }
         }
@@ -185,7 +186,7 @@ public enum BrickTheme {
                 ForestryPlugin.addBackpackItem("builder", block);
 
                 for (BrickVariant variant : BrickVariant.VALUES) {
-                    BrickTheme.this.initVariant(variant);
+                    initVariant(variant);
                 }
 
                 BrickTheme.this.initBlock();
@@ -202,7 +203,7 @@ public enum BrickTheme {
                         'I', get(BLOCK, 1));
                 CraftingPlugin.addShapelessRecipe(get(ETCHED, 1), get(BLOCK, 1), new ItemStack(Items.gunpowder));
 
-                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(new ItemStack(block), false, false);
+                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(block), false, false);
                 recipe.addOutput(get(COBBLE, 1), 1.0F);
 
                 CraftingPlugin.addFurnaceRecipe(get(COBBLE, 1), get(BLOCK, 1), 0.0F);

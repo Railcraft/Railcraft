@@ -89,7 +89,7 @@ public class ParticleHelper {
      */
     @SideOnly(Side.CLIENT)
     public static boolean addDestroyEffects(World world, Block block, BlockPos pos, IBlockState state, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
-        if (block != WorldPlugin.getBlock(world, pos)) return true;
+        if (!WorldPlugin.isBlockAt(world, pos, block)) return true;
         byte its = 4;
         for (int i = 0; i < its; ++i) {
             for (int j = 0; j < its; ++j) {

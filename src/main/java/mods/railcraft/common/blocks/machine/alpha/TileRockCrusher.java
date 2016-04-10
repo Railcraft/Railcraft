@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.machine.alpha;
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
-import mods.railcraft.api.crafting.IRockCrusherRecipe;
+import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
@@ -54,18 +54,15 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
-    private final static int PROCESS_TIME = 100;
-    private final static int CRUSHING_POWER_COST_PER_TICK = 160;
-    private final static int SUCKING_POWER_COST = 5000;
-    private final static int KILLING_POWER_COST = 10000;
-    private final static int MAX_RECEIVE = 5000;
-    private final static int MAX_ENERGY = CRUSHING_POWER_COST_PER_TICK * PROCESS_TIME;
-    private final static int[] SLOTS_INPUT = InvTools.buildSlotArray(SLOT_INPUT, 9);
-    private final static int[] SLOTS_OUTPUT = InvTools.buildSlotArray(SLOT_OUTPUT, 9);
-    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
-    private final IInventory invInput = new InventoryMapper(this, 0, 9);
-    private final IInventory invOutput = new InventoryMapper(this, 9, 9, false);
-    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
+    private static final int PROCESS_TIME = 100;
+    private static final int CRUSHING_POWER_COST_PER_TICK = 160;
+    private static final int SUCKING_POWER_COST = 5000;
+    private static final int KILLING_POWER_COST = 10000;
+    private static final int MAX_RECEIVE = 5000;
+    private static final int MAX_ENERGY = CRUSHING_POWER_COST_PER_TICK * PROCESS_TIME;
+    private static final int[] SLOTS_INPUT = InvTools.buildSlotArray(SLOT_INPUT, 9);
+    private static final int[] SLOTS_OUTPUT = InvTools.buildSlotArray(SLOT_OUTPUT, 9);
+    private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
 
     static {
         char[][][] map1 = {
@@ -129,11 +126,15 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         patterns.add(new MultiBlockPattern(map2));
     }
 
+    private final IInventory invInput = new InventoryMapper(this, 0, 9);
+    private final IInventory invOutput = new InventoryMapper(this, 9, 9, false);
+    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
     private int processTime;
     private EnergyStorage energyStorage;
     private boolean isWorking;
     private boolean paused;
 
+    @SuppressWarnings("unused")
     public TileRockCrusher() {
         super(EnumMachineAlpha.ROCK_CRUSHER.getTag() + ".name", 18, patterns);
 
@@ -242,7 +243,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                     return;
 
                 ItemStack input = null;
-                IRockCrusherRecipe recipe = null;
+                ICrusherCraftingManager.ICrusherRecipe recipe = null;
                 for (int i = 0; i < 9; i++) {
                     input = invInput.getStackInSlot(i);
                     if (input != null) {
@@ -257,7 +258,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                         isWorking = false;
                         IInventory tempInv = new InventoryCopy(invOutput);
                         boolean hasRoom = true;
-                        List<ItemStack> outputs = recipe.getRandomizedOutputs();
+                        List<ItemStack> outputs = recipe.getProcessedOutputs();
                         for (ItemStack output : outputs) {
                             output = InvTools.moveItemStack(output, tempInv);
                             if (output != null) {
@@ -300,7 +301,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     public boolean openGui(EntityPlayer player) {
         TileMultiBlock mBlock = getMasterBlock();
         if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, worldObj, mBlock.getX(), mBlock.getY(), mBlock.getZ());
+            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, worldObj, mBlock.getPos().getX(), mBlock.getPos().getY(), mBlock.getPos().getZ());
             return true;
         }
         return false;
