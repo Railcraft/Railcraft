@@ -16,8 +16,12 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Vec3;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -32,12 +36,12 @@ import java.util.Set;
  */
 public class TileFirestoneRecharge extends RailcraftTileEntity {
     public static final int[] REBUILD_DELAY = new int[8];
-    private final Deque<WorldCoordinate> queue = new LinkedList<WorldCoordinate>();
-    private final Set<WorldCoordinate> visitedBlocks = new HashSet<WorldCoordinate>();
+    private final Deque<BlockPos> queue = new LinkedList<BlockPos>();
+    private final Set<BlockPos> visitedBlocks = new HashSet<BlockPos>();
     public int charge = 0;
     public long rotationYaw, preRotationYaw;
     public float yOffset = -2, preYOffset = -2;
-    private Deque<WorldCoordinate> lavaFound = new LinkedList<WorldCoordinate>();
+    private Deque<BlockPos> lavaFound = new LinkedList<BlockPos>();
     private int rebuildDelay;
     private String itemName;
 
@@ -78,22 +82,24 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
                 rebuildDelay = REBUILD_DELAY.length - 1;
             rebuildQueue();
         }
-        WorldCoordinate index = getNextLavaBlock(true);
+        BlockPos index = getNextLavaBlock(true);
 
-        if (index != null && coolLava(index.x, index.y, index.z)) {
+        if (index != null && coolLava(index)) {
             charge++;
             rebuildDelay = 0;
         }
 //        }
     }
 
-    private boolean coolLava(int x, int y, int z) {
-        Block block = WorldPlugin.getBlock(worldObj, x, y, z);
+    private boolean coolLava(BlockPos pos) {
+        Block block = WorldPlugin.getBlock(worldObj, pos);
         if (Fluids.LAVA.is(FluidHelper.getFluid(block))) {
-            boolean placed = WorldPlugin.setBlock(worldObj, x, y, z, Blocks.obsidian);
+            boolean placed = WorldPlugin.setBlockState(worldObj, pos, Blocks.obsidian.getDefaultState());
             if (placed) {
-                EffectManager.instance.fireSparkEffect(worldObj, x + 0.5, y + 0.5, z + 0.5, xCoord + 0.5, yCoord + 0.8, zCoord + 0.5);
-                queueAdjacent(x, y, z);
+                Vec3 startPosition = new Vec3(pos).addVector(0.5, 0.5, 0.5);
+                Vec3 endPosition = new Vec3(getPos()).addVector(0.5, 0.8, 0.5);
+                EffectManager.instance.fireSparkEffect(worldObj, startPosition, endPosition);
+                queueAdjacent(pos);
                 expandQueue();
                 return true;
             }
@@ -101,12 +107,12 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
         return false;
     }
 
-    private WorldCoordinate getNextLavaBlock(boolean remove) {
+    private BlockPos getNextLavaBlock(boolean remove) {
         if (queue.isEmpty())
             return null;
 
         if (remove) {
-            WorldCoordinate index = queue.pollFirst();
+            BlockPos index = queue.pollFirst();
             return index;
         }
         return queue.peekFirst();
@@ -120,41 +126,41 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
         visitedBlocks.clear();
         lavaFound.clear();
 
-        queueAdjacent(xCoord, yCoord, zCoord);
+        queueAdjacent(getPos());
 
         expandQueue();
     }
 
     private void expandQueue() {
         while (!lavaFound.isEmpty()) {
-            Deque<WorldCoordinate> blocksToExpand = lavaFound;
-            lavaFound = new LinkedList<WorldCoordinate>();
+            Deque<BlockPos> blocksToExpand = lavaFound;
+            lavaFound = new LinkedList<BlockPos>();
 
-            for (WorldCoordinate index : blocksToExpand) {
-                queueAdjacent(index.x, index.y, index.z);
+            for (BlockPos index : blocksToExpand) {
+                queueAdjacent(index);
             }
         }
     }
 
-    public void queueAdjacent(int x, int y, int z) {
-        queueForFilling(x + 1, y, z);
-        queueForFilling(x - 1, y, z);
-        queueForFilling(x, y, z + 1);
-        queueForFilling(x, y, z - 1);
-        queueForFilling(x, y + 1, z);
-        queueForFilling(x, y - 1, z);
+    public void queueAdjacent(BlockPos pos) {
+        // No idea if it matters which order these are added,
+        // but I figured it best to keep them in the same order.
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            queueForFilling(pos.offset(side));
+        }
+        queueForFilling(pos.up());
+        queueForFilling(pos.down());
     }
 
-    public void queueForFilling(int x, int y, int z) {
-        WorldCoordinate index = new WorldCoordinate(0, x, y, z);
+    public void queueForFilling(BlockPos index) {
         if (visitedBlocks.add(index)) {
             if ((x - xCoord) * (x - xCoord) + (z - zCoord) * (z - zCoord) > 64 * 64)
                 return;
 
-            Block block = WorldPlugin.getBlock(worldObj, x, y, z);
-            if (block == Blocks.obsidian || Fluids.LAVA.is(FluidHelper.getFluid(block))) {
+            IBlockState state = WorldPlugin.getBlockState(worldObj, index);
+            if (state.getBlock() == Blocks.obsidian || Fluids.LAVA.is(FluidHelper.getFluid(state))) {
                 lavaFound.add(index);
-                if (FluidHelper.isFullFluidBlock(block, worldObj, x, y, z))
+                if (FluidHelper.isFullFluidBlock(state, worldObj, index))
                     queue.addLast(index);
             }
         }

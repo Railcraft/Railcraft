@@ -62,6 +62,15 @@ public enum Fluids {
         return FluidRegistry.getFluidStack(tag, n * FluidContainerRegistry.BUCKET_VOLUME);
     }
 
+    /**
+     * Gets a FluidStack filled with one buckets worth of Fluid.
+     *
+     * @return
+     */
+    public FluidStack getBucket() {
+        return FluidRegistry.getFluidStack(tag, FluidContainerRegistry.BUCKET_VOLUME);
+    }
+
     public boolean is(Fluid fluid) {
         return get() == fluid;
     }

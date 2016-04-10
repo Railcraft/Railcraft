@@ -9,7 +9,6 @@
 package mods.railcraft.client.particles;
 
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Vec3;
@@ -25,33 +24,30 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityFireSparkFX extends EntityFX {
 
     private final float lavaParticleScale;
-    private final double endX, endY, endZ;
+    private final Vec3 end;
     private final double maxDist;
 
-    public EntityFireSparkFX(World world, double x, double y, double z, double endX, double endY, double endZ) {
-        super(world, x, y, z, 0, 0, 0);
-        this.endX = endX;
-        this.endY = endY;
-        this.endZ = endZ;
+    public EntityFireSparkFX(World world, Vec3 start, Vec3 end) {
+        super(world, start.xCoord, start.yCoord, start.zCoord, 0, 0, 0);
+        this.end = end;
 
-        maxDist = getDistanceSq(endX, endY, endZ);
+        maxDist = getPositionVector().squareDistanceTo(end);
         calculateVector(maxDist);
 
         multipleParticleScaleBy(0.5f);
 
         this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
-        this.particleScale *= this.rand.nextFloat() * 2.0F + 0.2F;
-        this.lavaParticleScale = this.particleScale;
+        this.particleScale *= rand.nextFloat() * 2.0F + 0.2F;
+        this.lavaParticleScale = particleScale;
         this.particleMaxAge = 2000;
         this.noClip = true;
-        this.setParticleTextureIndex(49);
+        setParticleTextureIndex(49);
     }
 
     private void calculateVector(double dist) {
-        Vec3 endPoint = new Vec3(endX, endY, endZ);
-        Vec3 vecParticle = new Vec3(posX, posY, posZ);
+        Vec3 vecParticle = getPositionVector();
 
-        Vec3 vel = vecParticle.subtract(endPoint);
+        Vec3 vel = vecParticle.subtract(end);
         vel = vel.normalize();
         
         float velScale = 0.1f;
@@ -78,8 +74,8 @@ public class EntityFireSparkFX extends EntityFX {
 
     @Override
     public void renderParticle(WorldRenderer world, Entity entity, float par2, float par3, float par4, float par5, float par6, float par7) {
-        float f6 = ((float) this.particleAge + par2) / (float) this.particleMaxAge;
-        this.particleScale = this.lavaParticleScale * (1.0F - f6 * f6);
+        float f6 = ((float) particleAge + par2) / (float) particleMaxAge;
+        this.particleScale = lavaParticleScale * (1.0F - f6 * f6);
         super.renderParticle(world, entity, par2, par3, par4, par5, par6, par7);
     }
 
@@ -88,24 +84,25 @@ public class EntityFireSparkFX extends EntityFX {
      */
     @Override
     public void onUpdate() {
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
+        this.prevPosX = posX;
+        this.prevPosY = posY;
+        this.prevPosZ = posZ;
 
-        if (this.particleAge++ >= this.particleMaxAge) {
-            this.setDead();
+        if (particleAge >= particleMaxAge) {
+            setDead();
             return;
         }
+        this.particleAge++;
 
-        double dist = getDistanceSq(endX, endY, endZ);
+        double dist = getPositionVector().squareDistanceTo(end);
         if (dist <= 0.1) {
-            this.setDead();
+            setDead();
             return;
         }
 
         calculateVector(dist);
 
-        this.moveEntity(this.motionX, this.motionY, this.motionZ);
+        moveEntity(motionX, motionY, motionZ);
     }
 
 }

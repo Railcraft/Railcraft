@@ -57,7 +57,7 @@ public class ContainerAnvil extends ContainerRepair {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        return WorldPlugin.getBlock(world, pos) instanceof BlockAnvil && player.getDistanceSq(pos) <= 64.0D;
+        return WorldPlugin.getBlock(world, pos) instanceof BlockAnvil && pos.distanceSqToCenter(player.posX, player.posY, player.posZ) <= 64.0D;
     }
 
     @Override

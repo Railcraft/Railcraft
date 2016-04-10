@@ -12,6 +12,7 @@ import mods.railcraft.api.signals.IPairEffectRenderer;
 import mods.railcraft.common.items.ItemGoggles;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 
@@ -39,7 +40,7 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     void trailEffect(int startX, int startY, int startZ, TileEntity dest, long colorSeed);
 
-    void fireSparkEffect(World world, double startX, double startY, double startZ, double endX, double endY, double endZ);
+    void fireSparkEffect(World world, Vec3 start, Vec3 end);
 
     void forceTrackSpawnEffect(World world, int x, int y, int z);
 }
