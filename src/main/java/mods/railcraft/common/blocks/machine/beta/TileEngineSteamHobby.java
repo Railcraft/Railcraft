@@ -21,6 +21,8 @@ import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import mods.railcraft.common.util.steam.Steam;
@@ -51,6 +53,8 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
     private static final int[] NO_SLOTS = new int[0];
     public final SteamBoiler boiler;
     private StandaloneInventory inv = new StandaloneInventory(3, (IInventory) this);
+    private InventoryMapper invFuel = new InventoryMapper(inv, SLOT_FUEL, 1);
+    private InventoryMapper invOutput = new InventoryMapper(inv, SLOT_LIQUID_OUTPUT, 1);
     private boolean explode = false;
 
     public TileEngineSteamHobby() {
@@ -120,6 +124,9 @@ public class TileEngineSteamHobby extends TileEngineSteam implements IInventory,
 
         if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
             FluidHelper.drainContainers(this, inv, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
+
+        if (StackFilter.EMPTY_BUCKET.matches(getStackInSlot(SLOT_FUEL)))
+            InvTools.moveOneItem(invFuel, invOutput, StackFilter.EMPTY_BUCKET);
 
         boiler.tick(1);
     }

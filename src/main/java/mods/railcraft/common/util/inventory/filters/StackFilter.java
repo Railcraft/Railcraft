@@ -8,11 +8,7 @@
  */
 package mods.railcraft.common.util.inventory.filters;
 
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemMinecart;
-import net.minecraft.item.ItemSeeds;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.api.core.items.ITrackItem;
@@ -62,6 +58,13 @@ public enum StackFilter implements IStackFilter {
         @Override
         public boolean matches(ItemStack stack) {
             return BallastRegistry.isItemBallast(stack);
+        }
+
+    },
+    EMPTY_BUCKET {
+        @Override
+        public boolean matches(ItemStack stack) {
+            return stack != null && stack.getItem() == Items.bucket;
         }
 
     },
