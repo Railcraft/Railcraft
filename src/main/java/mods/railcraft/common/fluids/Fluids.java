@@ -44,9 +44,6 @@ public enum Fluids {
 
     /**
      * Gets a FluidStack filled with qty milliBuckets worth of Fluid.
-     *
-     * @param qty
-     * @return
      */
     public FluidStack get(int qty) {
         return FluidRegistry.getFluidStack(tag, qty);
@@ -54,9 +51,6 @@ public enum Fluids {
 
     /**
      * Gets a FluidStack filled with n buckets worth of Fluid.
-     *
-     * @param n
-     * @return
      */
     public FluidStack getB(int n) {
         return FluidRegistry.getFluidStack(tag, n * FluidContainerRegistry.BUCKET_VOLUME);
@@ -64,8 +58,6 @@ public enum Fluids {
 
     /**
      * Gets a FluidStack filled with one buckets worth of Fluid.
-     *
-     * @return
      */
     public FluidStack getBucket() {
         return FluidRegistry.getFluidStack(tag, FluidContainerRegistry.BUCKET_VOLUME);

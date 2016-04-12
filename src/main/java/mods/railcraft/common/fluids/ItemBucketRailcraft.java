@@ -9,26 +9,24 @@
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBucketRailcraft extends Item {
 
     private final Fluid fluid;
-    private String iconName;
     private ItemStack container = new ItemStack(Items.bucket);
 
     public ItemBucketRailcraft(Fluid fluid) {
@@ -40,14 +38,7 @@ public class ItemBucketRailcraft extends Item {
 
     @Override
     public Item setUnlocalizedName(String name) {
-        iconName = MiscTools.cleanTag(name);
         return super.setUnlocalizedName(name);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister par1IconRegister) {
-        this.itemIcon = par1IconRegister.registerIcon("railcraft:" + iconName);
     }
 
     public ItemBucketRailcraft setContainerItemStack(ItemStack stack) {
@@ -62,46 +53,40 @@ public class ItemBucketRailcraft extends Item {
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        MovingObjectPosition mop = this.getMovingObjectPositionFromPlayer(world, player, false);
+        MovingObjectPosition mop = getMovingObjectPositionFromPlayer(world, player, false);
 
         if (mop != null && mop.typeOfHit == MovingObjectType.BLOCK) {
-            int x = mop.blockX;
-            int y = mop.blockY;
-            int z = mop.blockZ;
+            BlockPos pos = mop.getBlockPos();
 
-            if (!world.canMineBlock(player, x, y, z))
+            if (!world.isBlockModifiable(player, pos))
                 return stack;
 
-            EnumFacing sideHit = EnumFacing.getOrientation(mop.sideHit);
+            pos = pos.offset(mop.sideHit);
 
-            x += sideHit.offsetX;
-            y += sideHit.offsetY;
-            z += sideHit.offsetZ;
-
-            if (!player.canPlayerEdit(x, y, z, mop.sideHit, stack))
+            if (!player.canPlayerEdit(pos, mop.sideHit, stack))
                 return stack;
 
-            if (this.tryPlaceContainedLiquid(world, x, y, z) && !player.capabilities.isCreativeMode)
+            if (tryPlaceContainedLiquid(world, pos) && !player.capabilities.isCreativeMode)
                 return getContainerItem(stack);
         }
 
         return stack;
     }
 
-    private boolean tryPlaceContainedLiquid(World world, int x, int y, int z) {
+    private boolean tryPlaceContainedLiquid(World world, BlockPos pos) {
         if (fluid.getBlock() == null)
             return false;
 
-        Material material = world.getBlock(x, y, z).getMaterial();
+        Material material = WorldPlugin.getBlockMaterial(world, pos);
 
-        if (!world.isAirBlock(x, y, z) && material.isSolid())
+        if (!world.isAirBlock(pos) && material.isSolid())
             return false;
 
         if (!world.isRemote && !material.isSolid() && !material.isLiquid())
-            world.func_147480_a(x, y, z, true);
+            world.destroyBlock(pos, true);
 
         Block block = fluid.getBlock();
-        world.setBlock(x, y, z, block, block instanceof BlockFluidFinite ? 15 : 0, 3);
+        world.setBlockState(pos, block.getDefaultState().withProperty(BlockFluidBase.LEVEL, block instanceof BlockFluidFinite ? 15 : 0));
         return true;
     }
 

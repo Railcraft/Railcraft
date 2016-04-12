@@ -579,11 +579,15 @@ public abstract class InvTools {
         return damage == -1 || damage == OreDictionary.WILDCARD_VALUE;
     }
 
-    public static boolean isItem(ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
+    public static boolean isItem(ItemStack stack, Item item) {
+        return stack != null && item != null && stack.getItem() == item;
+    }
+
+    public static boolean isItemClass(ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
         return stack != null && stack.getItem().getClass() == itemClass;
     }
 
-    public static boolean extendsItem(ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
+    public static boolean extendsItemClass(ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
         return stack != null && itemClass.isAssignableFrom(stack.getItem().getClass());
     }
 

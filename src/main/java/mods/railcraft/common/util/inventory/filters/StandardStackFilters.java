@@ -75,10 +75,10 @@ public enum StandardStackFilters implements IStackFilter {
         public boolean apply(@Nullable ItemStack stack) {
             if (stack == null)
                 return false;
-            if (InvTools.isItemEqual(stack, FluidContainerRegistry.EMPTY_BUCKET))
+            if (InvTools.isItem(stack, Items.bucket) || InvTools.isItemEqual(stack, FluidContainerRegistry.EMPTY_BUCKET))
                 return true;
             UniversalBucket uBucket = ForgeModContainer.getInstance().universalBucket;
-            return uBucket != null && InvTools.extendsItem(stack, UniversalBucket.class) && uBucket.getFluid(stack).amount <= 0;
+            return uBucket != null && InvTools.extendsItemClass(stack, UniversalBucket.class) && uBucket.getFluid(stack).amount <= 0;
         }
 
     },
