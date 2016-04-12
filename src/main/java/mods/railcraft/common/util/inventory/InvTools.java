@@ -41,6 +41,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -576,6 +577,14 @@ public abstract class InvTools {
 
     public static boolean isWildcard(int damage) {
         return damage == -1 || damage == OreDictionary.WILDCARD_VALUE;
+    }
+
+    public static boolean isItem(ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
+        return stack != null && stack.getItem().getClass() == itemClass;
+    }
+
+    public static boolean extendsItem(ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
+        return stack != null && itemClass.isAssignableFrom(stack.getItem().getClass());
     }
 
     /**

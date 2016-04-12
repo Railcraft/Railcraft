@@ -19,9 +19,12 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
+import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.UniversalBucket;
 
 import javax.annotation.Nonnull;
-import java.util.Objects;
+import javax.annotation.Nullable;
 
 /**
  * This interface is used with several of the functions in IItemTransfer to
@@ -34,43 +37,55 @@ public enum StandardStackFilters implements IStackFilter {
 
     ALL {
         @Override
-        public boolean apply(ItemStack stack) {
+        public boolean apply(@Nullable ItemStack stack) {
             return true;
         }
 
     },
     FUEL {
         @Override
-        public boolean apply(ItemStack stack) {
+        public boolean apply(@Nullable ItemStack stack) {
             return FuelPlugin.getBurnTime(stack) > 0;
         }
 
     },
     TRACK {
         @Override
-        public boolean apply(ItemStack stack) {
-            return stack.getItem() instanceof ITrackItem || (stack.getItem() instanceof ItemBlock && TrackTools.isRailBlock(InvTools.getBlockFromStack(stack)));
+        public boolean apply(@Nullable ItemStack stack) {
+            return stack != null && (stack.getItem() instanceof ITrackItem || (stack.getItem() instanceof ItemBlock && TrackTools.isRailBlock(InvTools.getBlockFromStack(stack))));
         }
 
     },
     MINECART {
         @Override
-        public boolean apply(ItemStack stack) {
-            return stack.getItem() instanceof ItemMinecart || stack.getItem() instanceof IMinecartItem;
+        public boolean apply(@Nullable ItemStack stack) {
+            return stack != null && (stack.getItem() instanceof ItemMinecart || stack.getItem() instanceof IMinecartItem);
         }
 
     },
     BALLAST {
         @Override
-        public boolean apply(ItemStack stack) {
+        public boolean apply(@Nullable ItemStack stack) {
             return BallastRegistry.isItemBallast(stack);
+        }
+
+    },
+    EMPTY_BUCKET {
+        @Override
+        public boolean apply(@Nullable ItemStack stack) {
+            if (stack == null)
+                return false;
+            if (InvTools.isItemEqual(stack, FluidContainerRegistry.EMPTY_BUCKET))
+                return true;
+            UniversalBucket uBucket = ForgeModContainer.getInstance().universalBucket;
+            return uBucket != null && InvTools.extendsItem(stack, UniversalBucket.class) && uBucket.getFluid(stack).amount <= 0;
         }
 
     },
     FEED {
         @Override
-        public boolean apply(ItemStack stack) {
-            return stack.getItem() instanceof ItemFood || stack.getItem() == Items.wheat || stack.getItem() instanceof ItemSeeds;
+        public boolean apply(@Nullable ItemStack stack) {
+            return stack != null && (stack.getItem() instanceof ItemFood || stack.getItem() == Items.wheat || stack.getItem() instanceof ItemSeeds);
         }
 
     };
@@ -82,7 +97,7 @@ public enum StandardStackFilters implements IStackFilter {
     }
 
     @Override
-    public abstract boolean apply(ItemStack stack);
+    public abstract boolean apply(@Nullable ItemStack stack);
 
     @Override
     public final StackFilter and(@Nonnull final Predicate<? super ItemStack>... other) {

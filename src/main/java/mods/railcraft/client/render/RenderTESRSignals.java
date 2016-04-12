@@ -57,6 +57,8 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
             pair = ((IReceiverTile) tile).getReceiver();
         } else if (tile instanceof IControllerTile) {
             pair = ((IControllerTile) tile).getController();
+        } else if (tile instanceof ISignalBlockTile) {
+            pair = ((ISignalBlockTile) tile).getSignalBlock();
         }
         if (pair != null) {
             String name = pair.getName();

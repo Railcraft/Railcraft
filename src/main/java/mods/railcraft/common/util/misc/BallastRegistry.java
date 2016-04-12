@@ -39,9 +39,7 @@ public abstract class BallastRegistry {
     }
 
     public static boolean isItemBallast(ItemStack stack) {
-        if (stack.getItem() instanceof ItemBlock)
-            return ballastRegistry.contains(new BlockKey(InvTools.getBlockFromStack(stack), stack.getItemDamage()));
-        return false;
+        return stack != null && stack.getItem() instanceof ItemBlock && ballastRegistry.contains(new BlockKey(InvTools.getBlockFromStack(stack), stack.getItemDamage()));
     }
 
     public static Set<BlockKey> getRegisteredBallasts() {
