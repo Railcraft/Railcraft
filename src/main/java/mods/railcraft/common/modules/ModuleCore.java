@@ -199,7 +199,7 @@ public class ModuleCore extends RailcraftModulePayload {
                     testSet.add(Item.getItemFromBlock(Blocks.activator_rail));
                 }
 
-                if (RailcraftConfig.getRecipeConfig("railcraft.cart.furnace"))
+                if (!RailcraftConfig.getRecipeConfig("railcraft.cart.vanilla.furnace"))
                     testSet.add(Items.furnace_minecart);
 
 //        MiscTools.addShapelessRecipe(new ItemStack(Item.coal, 20), Block.dirt);
