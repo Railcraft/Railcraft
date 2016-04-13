@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
- * @deprecated Items are being migrated to the RailcraftItem enum
+ * @deprecated Items are being migrated to the RailcraftItems enum
  */
 @Deprecated
 public class RailcraftPartItems {
@@ -40,7 +40,7 @@ public class RailcraftPartItems {
 
         String tag = "railcraft.part.turbine.blade";
         if (!RailcraftConfig.isItemEnabled(tag))
-            return RailcraftItem.ingot.getStack(qty, ItemIngot.EnumIngot.STEEL);
+            return RailcraftItems.ingot.getStack(qty, ItemIngot.EnumIngot.STEEL);
 
         item = new ItemRailcraft().setUnlocalizedName(tag);
         RailcraftRegistry.register(item);

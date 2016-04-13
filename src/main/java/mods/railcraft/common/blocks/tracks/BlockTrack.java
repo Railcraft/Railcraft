@@ -12,7 +12,7 @@ import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.client.particles.ParticleHelper;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.ItemOveralls;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -343,14 +343,14 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     @SideOnly(Side.CLIENT)
     @Override
     public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
-        return ParticleHelper.addHitEffects(worldObj, RailcraftBlocks.getBlockTrack(), target, effectRenderer, null);
+        return ParticleHelper.addHitEffects(worldObj, RailcraftBlocksOld.getBlockTrack(), target, effectRenderer, null);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public boolean addDestroyEffects(World worldObj, BlockPos pos, EffectRenderer effectRenderer) {
         IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
-        return ParticleHelper.addDestroyEffects(worldObj, RailcraftBlocks.getBlockTrack(), pos, state, effectRenderer, null);
+        return ParticleHelper.addDestroyEffects(worldObj, RailcraftBlocksOld.getBlockTrack(), pos, state, effectRenderer, null);
     }
 
     @Override

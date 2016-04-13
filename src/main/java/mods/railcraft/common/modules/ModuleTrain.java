@@ -12,12 +12,10 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.init.Blocks;
 
 /**
@@ -29,14 +27,18 @@ public class ModuleTrain extends RailcraftModulePayload {
     public ModuleTrain() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
+            public void construction() {
+                add(
+                        RailcraftBlocks.detector,
+                        RailcraftBlocks.track
+                );
+            }
+
+            @Override
             public void preInit() {
-                super.preInit();
-                BlockDetector.registerBlock();
-                RailcraftBlocks.registerBlockTrack();
+                EnumTrack.COUPLER.register();
 
-                MiscTools.registerTrack(EnumTrack.COUPLER);
-
-                if (BlockDetector.getBlock() != null) {
+                if (RailcraftBlocks.detector.isLoaded()) {
                     CraftingPlugin.addRecipe(EnumDetector.TRAIN.getItem(),
                             "XXX",
                             "XPX",
@@ -50,7 +52,6 @@ public class ModuleTrain extends RailcraftModulePayload {
 
             @Override
             public void init() {
-                super.init();
                 EnumMachineGamma type = EnumMachineGamma.DISPENSER_TRAIN;
                 if (type.isAvailable() && EnumMachineGamma.DISPENSER_CART.isAvailable()) {
                     CraftingPlugin.addRecipe(type.getItem(),

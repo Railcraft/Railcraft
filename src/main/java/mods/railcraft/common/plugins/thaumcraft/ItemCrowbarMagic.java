@@ -38,7 +38,7 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
             item = new ItemCrowbarMagic();
             RailcraftRegistry.register(item);
-            item.initItem();
+            item.initializeDefinintion();
         }
     }
 

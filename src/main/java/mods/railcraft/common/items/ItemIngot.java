@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -16,7 +17,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -31,21 +34,21 @@ public class ItemIngot extends ItemRailcraft {
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         for (EnumIngot type : EnumIngot.VALUES) {
             ItemStack stack = new ItemStack(this, 1, type.ordinal());
             ForestryPlugin.addBackpackItem("miner", stack);
             RailcraftRegistry.register(stack);
             Metal m = Metal.get(type);
             OreDictionary.registerOre(m.getIngotTag(), m.getIngot());
-            LootPlugin.addLootUnique(RailcraftItem.ingot, type, 5, 9, LootPlugin.Type.TOOL);
+            LootPlugin.addLootUnique(RailcraftItems.ingot, type, 5, 9, LootPlugin.Type.TOOL);
         }
 
     }
 
     @Override
-    public String getOreTag(IItemMetaEnum meta) {
-        assertMeta(meta);
+    public String getOreTag(IVariantEnum meta) {
+        assertVariant(meta);
         return ((EnumIngot) meta).oreTag;
     }
 
@@ -75,7 +78,7 @@ public class ItemIngot extends ItemRailcraft {
         }
     }
 
-    public enum EnumIngot implements IItemMetaEnum {
+    public enum EnumIngot implements IVariantEnum {
 
         STEEL("ingotSteel"),
         COPPER("ingotCopper"),
@@ -93,11 +96,16 @@ public class ItemIngot extends ItemRailcraft {
             return oreTag;
         }
 
+        @Nonnull
         @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
+        public Class<? extends ItemRailcraft> getParentClass() {
             return ItemIngot.class;
         }
 
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
     }
 
 }

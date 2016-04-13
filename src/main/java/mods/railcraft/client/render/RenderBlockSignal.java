@@ -10,7 +10,7 @@ package mods.railcraft.client.render;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
@@ -21,7 +21,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 public class RenderBlockSignal extends BlockRenderer {
 
     public RenderBlockSignal() {
-        super(RailcraftBlocks.getBlockSignal());
+        super(RailcraftBlocksOld.getBlockSignal());
 
         addCombinedRenderer(EnumSignal.DUAL_HEAD_BLOCK_SIGNAL, new RenderSignalDual());
         addCombinedRenderer(EnumSignal.DUAL_HEAD_DISTANT_SIGNAL, new RenderSignalDual());

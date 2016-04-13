@@ -16,6 +16,7 @@ import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.sounds.SoundLimiterTicker;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MachineTileRegistery;
@@ -38,7 +39,7 @@ import mods.railcraft.common.items.CrowbarHandler;
 import mods.railcraft.common.items.EntityItemFireproof;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
@@ -153,12 +154,12 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 RailcraftEnchantments.registerEnchantment();
 
-                RailcraftItem.crowbarIron.registerItem();
-                RailcraftItem.crowbarSteel.registerItem();
-                RailcraftItem.magGlass.registerItem();
-                RailcraftItem.goggles.registerItem();
-                RailcraftItem.overalls.registerItem();
-                RailcraftItem.nugget.registerItem();
+                RailcraftItems.crowbarIron.register();
+                RailcraftItems.crowbarSteel.register();
+                RailcraftItems.magGlass.register();
+                RailcraftItems.goggles.register();
+                RailcraftItems.overalls.register();
+                RailcraftItems.nugget.register();
 
 
                 RailcraftToolItems.initializeToolsArmor();
@@ -261,25 +262,25 @@ public class ModuleCore extends RailcraftModulePayload {
                     ItemStack stackRailDetector = new ItemStack(Blocks.detector_rail, 16);
                     ItemStack stackRailActivator = new ItemStack(Blocks.activator_rail, 16);
 
-                    Object woodRailbed = RailcraftItem.railbed.getRecipeObject(EnumRailbed.WOOD);
+                    Object woodRailbed = RailcraftItems.railbed.getRecipeObject(EnumRailbed.WOOD);
                     CraftingPlugin.addRecipe(stackRailNormal,
                             "I I",
                             "I#I",
                             "I I",
-                            'I', RailcraftItem.rail.getRecipeObject(EnumRail.STANDARD),
+                            'I', RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD),
                             '#', woodRailbed);
                     CraftingPlugin.addRecipe(stackRailBooster,
                             "I I",
                             "I#I",
                             "IrI",
-                            'I', RailcraftItem.rail.getRecipeObject(EnumRail.ADVANCED),
+                            'I', RailcraftItems.rail.getRecipeObject(EnumRail.ADVANCED),
                             '#', woodRailbed,
                             'r', "dustRedstone");
                     CraftingPlugin.addRecipe(stackRailDetector,
                             "IsI",
                             "I#I",
                             "IrI",
-                            'I', RailcraftItem.rail.getRecipeObject(EnumRail.STANDARD),
+                            'I', RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD),
                             '#', Blocks.stone_pressure_plate,
                             'r', "dustRedstone",
                             's', woodRailbed);
@@ -287,11 +288,11 @@ public class ModuleCore extends RailcraftModulePayload {
                             "ItI",
                             "I#I",
                             "ItI",
-                            'I', RailcraftItem.rail.getRecipeObject(EnumRail.STANDARD),
+                            'I', RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD),
                             '#', woodRailbed,
                             't', new ItemStack(Blocks.redstone_torch));
 
-                    CraftingPlugin.addShapelessRecipe(RailcraftItem.rail.getStack(1, EnumRail.STANDARD),
+                    CraftingPlugin.addShapelessRecipe(RailcraftItems.rail.getStack(1, EnumRail.STANDARD),
                             Blocks.rail,
                             Blocks.rail,
                             Blocks.rail,
@@ -361,7 +362,8 @@ public class ModuleCore extends RailcraftModulePayload {
             @Override
             public void postInit() {
                 RailcraftFluids.postInitFluids();
-                RailcraftItem.definePostRecipes();
+                RailcraftBlocks.definePostRecipes();
+                RailcraftItems.definePostRecipes();
 
                 GameRegistry.registerFuelHandler(FuelPlugin.getFuelHandler());
 

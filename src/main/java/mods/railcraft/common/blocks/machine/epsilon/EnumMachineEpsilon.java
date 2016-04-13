@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -67,7 +67,7 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
 
     public boolean register() {
         if (RailcraftConfig.isSubBlockEnabled(getTag())) {
-            RailcraftBlocks.registerBlockMachineEpsilon();
+            RailcraftBlocksOld.registerBlockMachineEpsilon();
             return getBlock() != null;
         }
         return false;
@@ -126,7 +126,7 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
 
     @Override
     public Block getBlock() {
-        return RailcraftBlocks.getBlockMachineEpsilon();
+        return RailcraftBlocksOld.getBlockMachineEpsilon();
     }
 
     @Override

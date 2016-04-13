@@ -11,7 +11,7 @@ package mods.railcraft.client.render;
 import mods.railcraft.api.electricity.GridTools;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler.ConnectType;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.delta.TileWire;
@@ -36,7 +36,7 @@ import java.util.EnumSet;
 public class RenderBlockMachineDelta extends BlockRenderer {
 
     public RenderBlockMachineDelta() {
-        super(RailcraftBlocks.getBlockMachineDelta());
+        super(RailcraftBlocksOld.getBlockMachineDelta());
 
         addCombinedRenderer(EnumMachineDelta.WIRE.ordinal(), new WireRenderer());
         addBlockRenderer(EnumMachineDelta.CAGE.ordinal(), new CageRenderer());

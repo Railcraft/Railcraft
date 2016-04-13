@@ -12,7 +12,6 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.util.misc.MiscTools;
 
 @RailcraftModule("tracks")
 public class ModuleTracks extends RailcraftModulePayload {
@@ -20,27 +19,25 @@ public class ModuleTracks extends RailcraftModulePayload {
     public ModuleTracks() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
+            public void construction() {
+                add(RailcraftBlocks.track);
+            }
+
+            @Override
             public void preInit() {
-                RailcraftBlocks.registerBlockTrack();
-
-                if (RailcraftBlocks.getBlockTrack() != null) {
-                    MiscTools.registerTrack(EnumTrack.LOCKING);
-                    MiscTools.registerTrack(EnumTrack.ONEWAY);
-                    MiscTools.registerTrack(EnumTrack.CONTROL);
-                    MiscTools.registerTrack(EnumTrack.JUNCTION);
-                    MiscTools.registerTrack(EnumTrack.SWITCH);
-                    MiscTools.registerTrack(EnumTrack.WYE);
-                    MiscTools.registerTrack(EnumTrack.DISEMBARK);
-                    MiscTools.registerTrack(EnumTrack.EMBARKING);
-                    MiscTools.registerTrack(EnumTrack.BUFFER_STOP);
-                    MiscTools.registerTrack(EnumTrack.GATED);
-                    MiscTools.registerTrack(EnumTrack.GATED_ONEWAY);
-                    MiscTools.registerTrack(EnumTrack.DISPOSAL);
-                    MiscTools.registerTrack(EnumTrack.DETECTOR_DIRECTION);
-
-//            Block.blocksList[Block.fence.blockID] = null;
-//            Block fence = new BlockFenceReplacement(85);
-                }
+                EnumTrack.LOCKING.register();
+                EnumTrack.ONEWAY.register();
+                EnumTrack.CONTROL.register();
+                EnumTrack.JUNCTION.register();
+                EnumTrack.SWITCH.register();
+                EnumTrack.WYE.register();
+                EnumTrack.DISEMBARK.register();
+                EnumTrack.EMBARKING.register();
+                EnumTrack.BUFFER_STOP.register();
+                EnumTrack.GATED.register();
+                EnumTrack.GATED_ONEWAY.register();
+                EnumTrack.DISPOSAL.register();
+                EnumTrack.DETECTOR_DIRECTION.register();
             }
         });
     }

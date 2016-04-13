@@ -10,7 +10,7 @@ package mods.railcraft.client.render;
 
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackSwitch;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.tracks.TileTrack;
 import mods.railcraft.common.blocks.tracks.instances.TrackGated;
 import net.minecraft.block.Block;
@@ -35,7 +35,7 @@ public class RenderTrack implements ISimpleBlockRenderingHandler {
 
     @Override
     public int getRenderId() {
-        return RailcraftBlocks.getBlockTrack().getRenderType();
+        return RailcraftBlocksOld.getBlockTrack().getRenderType();
     }
 
     @Override

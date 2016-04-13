@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.ore;
 
-import mods.railcraft.common.blocks.IVariantEnum;
+import mods.railcraft.common.blocks.IBlockVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.modules.RailcraftModuleManager;
@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumOre implements IStringSerializable, IVariantEnum<EnumOre> {
+public enum EnumOre implements IStringSerializable, IBlockVariantEnum<EnumOre> {
 
     SULFUR("sulfur"),
     SALTPETER("saltpeter"),

@@ -24,8 +24,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  * items are registered depends on the user's settings in "railcraft.cfg", so
  * the available items may vary from one installation to the next.
  * <p/>
- * Initialization of the registry will occur during the pre-init and init
- * stages. It is strongly recommended you wait until the post-init stage to
+ * Initialization of the registry will occur during the pre-initializeDefinintion and initializeDefinintion
+ * stages. It is strongly recommended you wait until the post-initializeDefinintion stage to
  * reference the registry.
  *
  * @author CovertJaguar <http://www.railcraft.info>
@@ -61,7 +61,7 @@ public final class RailcraftRegistry {
      * Registers a new item with the GameRegistry.
      * <p/>
      * This should generally only be called by Railcraft itself while the mod is
-     * initializing during the pre-init and init stages.
+     * initializing during the pre-initializeDefinintion and initializeDefinintion stages.
      *
      * @param tag   The tag name
      * @param stack The item
@@ -85,7 +85,7 @@ public final class RailcraftRegistry {
      * Registers a new item with the GameRegistry.
      * <p/>
      * This should generally only be called by Railcraft itself while the mod is
-     * initializing during the pre-init and init stages.
+     * initializing during the pre-initializeDefinintion and initializeDefinintion stages.
      *
      * @param stack The item
      */
@@ -99,7 +99,7 @@ public final class RailcraftRegistry {
      * Registers a new item with the GameRegistry.
      * <p/>
      * This should generally only be called by Railcraft itself while the mod is
-     * initializing during the pre-init and init stages.
+     * initializing during the pre-initializeDefinintion and initializeDefinintion stages.
      *
      * @param item The item
      */
@@ -127,7 +127,7 @@ public final class RailcraftRegistry {
      * Registers a new block with the GameRegistry.
      * <p/>
      * This should generally only be called by Railcraft itself while the mod is
-     * initializing during the pre-init and init stages.
+     * initializing during the pre-initializeDefinintion and initializeDefinintion stages.
      *
      * @param block The block
      */
@@ -139,7 +139,7 @@ public final class RailcraftRegistry {
      * Registers a new block with the GameRegistry.
      * <p/>
      * This should generally only be called by Railcraft itself while the mod is
-     * initializing during the pre-init and init stages.
+     * initializing during the pre-initializeDefinintion and initializeDefinintion stages.
      *
      * @param block The block
      */

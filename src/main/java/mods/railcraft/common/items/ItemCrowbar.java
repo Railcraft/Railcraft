@@ -13,8 +13,12 @@ import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
-import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
@@ -37,7 +41,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftItem {
+public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftObject {
 
     private static final byte BOOST_DAMAGE = 3;
     private final Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
@@ -241,7 +245,7 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public Object getRecipeObject(IItemMetaEnum meta) {
+    public Object getRecipeObject(IVariantEnum meta) {
         return ORE_TAG;
     }
 
@@ -250,11 +254,11 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public void definePostRecipes() {
+    public void finalizeDefinition() {
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         OreDictionary.registerOre(ORE_TAG, new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE));
     }
 }

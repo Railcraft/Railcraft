@@ -40,8 +40,8 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
     }
 
     @Override
-    public void initItem() {
-        LootPlugin.addLoot(RailcraftItem.electricMeter, 1, 1, LootPlugin.Type.WORKSHOP);
+    public void initializeDefinintion() {
+        LootPlugin.addLoot(RailcraftItems.electricMeter, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override

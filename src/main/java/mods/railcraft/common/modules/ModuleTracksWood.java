@@ -12,7 +12,6 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.util.misc.MiscTools;
 
 @RailcraftModule("tracks|wood")
 public class ModuleTracksWood extends RailcraftModulePayload {
@@ -20,16 +19,17 @@ public class ModuleTracksWood extends RailcraftModulePayload {
     public ModuleTracksWood() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
-            public void preInit() {
-                RailcraftBlocks.registerBlockTrack();
+            public void construction() {
+                add(RailcraftBlocks.track);
+            }
 
-                if (RailcraftBlocks.getBlockTrack() != null) {
-                    MiscTools.registerTrack(EnumTrack.SLOW);
-                    MiscTools.registerTrack(EnumTrack.SLOW_BOOSTER);
-                    MiscTools.registerTrack(EnumTrack.SLOW_JUNCTION);
-                    MiscTools.registerTrack(EnumTrack.SLOW_SWITCH);
-                    MiscTools.registerTrack(EnumTrack.SLOW_WYE);
-                }
+            @Override
+            public void preInit() {
+                EnumTrack.SLOW.register();
+                EnumTrack.SLOW_BOOSTER.register();
+                EnumTrack.SLOW_JUNCTION.register();
+                EnumTrack.SLOW_SWITCH.register();
+                EnumTrack.SLOW_WYE.register();
             }
         });
     }

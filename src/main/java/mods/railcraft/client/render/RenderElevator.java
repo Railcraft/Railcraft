@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.render;
 
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -76,6 +76,6 @@ public class RenderElevator implements ISimpleBlockRenderingHandler {
 
     @Override
     public int getRenderId() {
-        return RailcraftBlocks.getBlockElevator().getRenderType();
+        return RailcraftBlocksOld.getBlockElevator().getRenderType();
     }
 }

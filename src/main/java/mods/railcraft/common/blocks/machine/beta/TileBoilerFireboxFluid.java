@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.api.fuel.FuelManager;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -53,7 +53,7 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
                 Map<Character, Integer> blockMapping = new HashMap<Character, Integer>();
                 blockMapping.put('F', EnumMachineBeta.BOILER_FIREBOX_FLUID.ordinal());
                 blockMapping.put('H', highPressure ? EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.ordinal() : EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal());
-                TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocks.getBlockMachineBeta(), blockMapping);
+                TileEntity tile = pattern.placeStructure(world, pos, RailcraftBlocksOld.getBlockMachineBeta(), blockMapping);
                 if (tile instanceof TileBoilerFireboxFluid) {
                     TileBoilerFireboxFluid master = (TileBoilerFireboxFluid) tile;
                     master.tankWater.setFluid(Fluids.WATER.get(water));

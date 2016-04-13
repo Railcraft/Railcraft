@@ -10,7 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.carts.EnumCart;
@@ -42,7 +42,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
                 EnumMachineAlpha alpha = EnumMachineAlpha.WORLD_ANCHOR;
                 if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
-                    Block block = RailcraftBlocks.registerBlockMachineAlpha();
+                    Block block = RailcraftBlocksOld.registerBlockMachineAlpha();
                     if (block != null && RailcraftConfig.canCraftAnchors()) {
                         CraftingPlugin.addRecipe(alpha.getItem(),
                                 "gog",
@@ -57,7 +57,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
                 alpha = EnumMachineAlpha.PERSONAL_ANCHOR;
                 if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
-                    Block block = RailcraftBlocks.registerBlockMachineAlpha();
+                    Block block = RailcraftBlocksOld.registerBlockMachineAlpha();
                     if (block != null && RailcraftConfig.canCraftPersonalAnchors()) {
                         CraftingPlugin.addRecipe(alpha.getItem(),
                                 "gog",
@@ -72,7 +72,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
                 alpha = EnumMachineAlpha.PASSIVE_ANCHOR;
                 if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
-                    Block block = RailcraftBlocks.registerBlockMachineAlpha();
+                    Block block = RailcraftBlocksOld.registerBlockMachineAlpha();
                     if (block != null && RailcraftConfig.canCraftPassiveAnchors()) {
                         CraftingPlugin.addRecipe(alpha.getItem(),
                                 "gog",
@@ -87,12 +87,12 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
                 alpha = EnumMachineAlpha.ADMIN_ANCHOR;
                 if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
-                    RailcraftBlocks.registerBlockMachineAlpha();
+                    RailcraftBlocksOld.registerBlockMachineAlpha();
                 }
 
                 EnumMachineBeta beta = EnumMachineBeta.SENTINEL;
                 if (RailcraftConfig.isSubBlockEnabled(beta.getTag())) {
-                    Block block = RailcraftBlocks.registerBlockMachineBeta();
+                    Block block = RailcraftBlocksOld.registerBlockMachineBeta();
                     if (block != null) {
                         ItemStack stack = beta.getItem();
                         if (RailcraftConfig.canCraftAnchors()) {

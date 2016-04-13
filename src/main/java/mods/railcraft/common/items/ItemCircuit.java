@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.creativetab.CreativeTabs;
@@ -16,7 +17,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -24,13 +27,12 @@ import java.util.List;
 public class ItemCircuit extends ItemRailcraft {
 
     public ItemCircuit() {
-        super();
         setHasSubtypes(true);
         setMaxDamage(0);
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         for (EnumCircuit circuit : EnumCircuit.VALUES) {
             ItemStack stack = new ItemStack(this, 1, circuit.ordinal());
             RailcraftRegistry.register(stack);
@@ -95,7 +97,7 @@ public class ItemCircuit extends ItemRailcraft {
         }
     }
 
-    public enum EnumCircuit implements IItemMetaEnum {
+    public enum EnumCircuit implements IVariantEnum {
 
         CONTROLLER(Items.comparator),
         RECEIVER(Blocks.redstone_torch),
@@ -112,11 +114,16 @@ public class ItemCircuit extends ItemRailcraft {
             return alternate;
         }
 
+        @Nonnull
         @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
+        public Class<? extends ItemRailcraft> getParentClass() {
             return ItemCircuit.class;
         }
 
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
     }
 
 }

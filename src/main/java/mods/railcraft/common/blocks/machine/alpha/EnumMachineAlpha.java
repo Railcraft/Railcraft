@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.carts.ItemCartAnchor;
@@ -134,7 +134,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
     @Override
     public Block getBlock() {
-        return RailcraftBlocks.getBlockMachineAlpha();
+        return RailcraftBlocksOld.getBlockMachineAlpha();
     }
 
     @Override
@@ -190,7 +190,7 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
     public boolean register() {
         if (RailcraftConfig.isSubBlockEnabled(getTag())) {
-            RailcraftBlocks.registerBlockMachineAlpha();
+            RailcraftBlocksOld.registerBlockMachineAlpha();
             return getBlock() != null;
         }
         return false;

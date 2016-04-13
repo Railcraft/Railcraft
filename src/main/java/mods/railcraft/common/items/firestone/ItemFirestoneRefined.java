@@ -29,8 +29,6 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-import static sun.audio.AudioPlayer.player;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */

@@ -14,7 +14,7 @@ import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid;
 import mods.railcraft.client.sounds.RCSoundHandler;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
@@ -32,8 +32,7 @@ import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.items.ItemGoggles;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.TileFirestoneRecharge;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.util.misc.Game;
@@ -86,7 +85,7 @@ public class ClientProxy extends CommonProxy {
 
         FMLCommonHandler.instance().bus().register(LocomotiveKeyHandler.INSTANCE);
 
-        if (!RailcraftItem.goggles.isEnabled())
+        if (!RailcraftItems.goggles.isEnabled())
             MinecraftForge.EVENT_BUS.register(AuraKeyHandler.INSTANCE);
 
         Game.log(Level.TRACE, "Init Start: Renderer");
@@ -141,10 +140,10 @@ public class ClientProxy extends CommonProxy {
         RenderTESRSignals controllerRenderer = new RenderTESRSignals();
         ClientRegistry.bindTileEntitySpecialRenderer(TileSignalFoundation.class, controllerRenderer);
 
-        if (RailcraftBlocks.getBlockTrack() != null)
+        if (RailcraftBlocksOld.getBlockTrack() != null)
             RenderingRegistry.registerBlockHandler(new RenderTrack());
 
-        if (RailcraftBlocks.getBlockElevator() != null)
+        if (RailcraftBlocksOld.getBlockElevator() != null)
             RenderingRegistry.registerBlockHandler(new RenderElevator());
 
         registerBlockRenderer(new RenderBlockMachineBeta());

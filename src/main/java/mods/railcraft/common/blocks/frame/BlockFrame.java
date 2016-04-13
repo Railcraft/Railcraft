@@ -16,7 +16,7 @@ import mods.railcraft.common.blocks.machine.delta.TileWire.AddonType;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -59,8 +59,8 @@ public class BlockFrame extends Block implements IPostConnection {
                         "PPP",
                         "I I",
                         "III",
-                        'P', RailcraftItem.plate, EnumPlate.IRON,
-                        'I', RailcraftItem.rebar);
+                        'P', RailcraftItems.plate, EnumPlate.IRON,
+                        'I', RailcraftItems.rebar);
             }
     }
 

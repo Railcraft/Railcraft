@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class ItemRailcraft extends Item implements IRailcraftItem {
+public class ItemRailcraft extends Item implements IRailcraftObject {
     private float smeltingExperience = -1;
     private int rarity = 0;
 
@@ -66,23 +68,23 @@ public class ItemRailcraft extends Item implements IRailcraftItem {
     }
 
     @Override
-    public Object getRecipeObject(IItemMetaEnum meta) {
-        assertMeta(meta);
-        String oreTag = getOreTag(meta);
+    public Object getRecipeObject(IVariantEnum variant) {
+        assertVariant(variant);
+        String oreTag = getOreTag(variant);
         if (oreTag != null)
             return oreTag;
-        if (meta != null && getHasSubtypes())
-            return new ItemStack(this, 1, meta.ordinal());
+        if (variant != null && getHasSubtypes())
+            return new ItemStack(this, 1, variant.ordinal());
         return this;
     }
 
-    public String getOreTag(IItemMetaEnum meta) {
+    public String getOreTag(IVariantEnum variant) {
         return null;
     }
 
-    protected void assertMeta(IItemMetaEnum meta) {
-        if (meta != null && meta.getItemClass() != getClass())
-            throw new RuntimeException("Incorrect Item Meta object used.");
+    protected void assertVariant(IVariantEnum variant) {
+        if (variant != null && variant.getParentClass() != getClass())
+            throw new RuntimeException("Incorrect Item Variant object used.");
     }
 
     @Override
@@ -90,10 +92,10 @@ public class ItemRailcraft extends Item implements IRailcraftItem {
     }
 
     @Override
-    public void definePostRecipes() {
+    public void finalizeDefinition() {
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
     }
 }

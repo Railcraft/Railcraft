@@ -12,17 +12,15 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.BlockFactory;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 public abstract class RailcraftModulePayload implements IRailcraftModule {
 
     private static final ModuleEventHandler BLANK_EVENT_HANDLER = new ModuleEventHandler();
-    private final EnumSet<RailcraftItem> items = EnumSet.noneOf(RailcraftItem.class);
+    private final Set<IRailcraftObjectContainer> objectContainers = new HashSet<IRailcraftObjectContainer>();
     private final List<BlockFactory> blockFactories = new ArrayList<BlockFactory>();
     private final ModuleEventHandler baseEventHandler = new BaseModuleEventHandler();
     private ModuleEventHandler enabledEventHandler = BLANK_EVENT_HANDLER;
@@ -36,16 +34,17 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
         this.disabledEventHandler = disabledEventHandler;
     }
 
+    @Deprecated
     public final void addBlockFactory(@Nonnull BlockFactory factory) {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION)
             throw new RuntimeException("You can only define Block Factories in Construction!");
         blockFactories.add(factory);
     }
 
-    public final void addItems(RailcraftItem first, RailcraftItem... rest) {
+    public final void add(IRailcraftObjectContainer... objects) {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION)
-            throw new RuntimeException("You can only associate Items with a Module in Construction!");
-        items.addAll(EnumSet.of(first, rest));
+            throw new RuntimeException("You can only associate Railcraft Objects with a Module during the Construction phase!");
+        objectContainers.addAll(Arrays.asList(objects));
     }
 
     @Nonnull
@@ -76,8 +75,8 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
             for (BlockFactory factory : blockFactories) {
                 factory.initBlock();
             }
-            for (RailcraftItem item : items) {
-                item.registerItem();
+            for (IRailcraftObjectContainer obj : objectContainers) {
+                obj.register();
             }
             enabledEventHandler.preInit();
         }

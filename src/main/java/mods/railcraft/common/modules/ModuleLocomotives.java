@@ -20,10 +20,9 @@ import mods.railcraft.common.carts.LocomotivePaintingRecipe;
 import mods.railcraft.common.items.ItemGear.EnumGear;
 import mods.railcraft.common.items.ItemIngot;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -38,11 +37,11 @@ public class ModuleLocomotives extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void preInit() {
-                MiscTools.registerTrack(EnumTrack.WHISTLE);
-                MiscTools.registerTrack(EnumTrack.LOCOMOTIVE);
-                MiscTools.registerTrack(EnumTrack.LIMITER);
+                EnumTrack.registerTrack(EnumTrack.WHISTLE);
+                EnumTrack.registerTrack(EnumTrack.LOCOMOTIVE);
+                EnumTrack.registerTrack(EnumTrack.LIMITER);
 
-                RailcraftItem.whistleTuner.registerItem();
+                RailcraftItems.whistleTuner.register();
 
                 EnumCart cart = EnumCart.LOCO_STEAM_SOLID;
                 if (cart.setup()) {
@@ -55,8 +54,8 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                         tank = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getItem();
                     else if (EnumMachineBeta.TANK_IRON_WALL.isAvailable())
                         tank = EnumMachineBeta.TANK_IRON_WALL.getItem();
-                    else if (RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL) != null)
-                        tank = RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL);
+                    else if (RailcraftItems.ingot.getStack(ItemIngot.EnumIngot.STEEL) != null)
+                        tank = RailcraftItems.ingot.getStack(ItemIngot.EnumIngot.STEEL);
                     else
                         tank = new ItemStack(Items.iron_ingot);
 
@@ -81,8 +80,8 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                 cart = EnumCart.LOCO_ELECTRIC;
                 if (cart.setup()) {
                     paintLocomotive(cart.getCartItem());
-                    RailcraftItem.gear.registerItem();
-                    RailcraftItem.plate.registerItem();
+                    RailcraftItems.gear.register();
+                    RailcraftItems.plate.register();
                 }
             }
 
@@ -99,8 +98,8 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                             'L', Blocks.redstone_lamp,
                             'U', feederUnit,
                             'M', Items.minecart,
-                            'G', RailcraftItem.gear.getRecipeObject(EnumGear.STEEL),
-                            'T', RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL));
+                            'G', RailcraftItems.gear.getRecipeObject(EnumGear.STEEL),
+                            'T', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL));
                 }
             }
 

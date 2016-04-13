@@ -37,7 +37,7 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
     };
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         setRarity(1);
     }
 

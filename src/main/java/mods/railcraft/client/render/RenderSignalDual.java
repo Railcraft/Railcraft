@@ -11,7 +11,7 @@ package mods.railcraft.client.render;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.aesthetics.post.PostConnectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
@@ -32,9 +32,9 @@ public class RenderSignalDual extends RenderTESRSignals implements ICombinedRend
 
     public RenderSignalDual() {
         info.texture = new IIcon[6];
-        info.template = RailcraftBlocks.getBlockSignal();
+        info.template = RailcraftBlocksOld.getBlockSignal();
         tesrInfo.texture = new IIcon[6];
-        tesrInfo.template = RailcraftBlocks.getBlockSignal();
+        tesrInfo.template = RailcraftBlocksOld.getBlockSignal();
     }
 
     @Override

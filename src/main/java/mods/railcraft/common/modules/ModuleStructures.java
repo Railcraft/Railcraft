@@ -11,7 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
@@ -30,7 +30,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemTie;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -58,7 +58,7 @@ public class ModuleStructures extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                RailcraftBlocks.registerBlockSignal();
+                RailcraftBlocksOld.registerBlockSignal();
                 BlockPost.registerBlock();
                 BlockPostMetal.registerPost();
                 BlockPostMetal.registerPlatform();
@@ -72,14 +72,14 @@ public class ModuleStructures extends RailcraftModulePayload {
                     if (cube != null) {
                         ItemStack stack = cubeType.getItem();
                         if (RailcraftModuleManager.isModuleEnabled(ModuleFactory.class)
-                                && RailcraftBlocks.getBlockMachineAlpha() != null
+                                && RailcraftBlocksOld.getBlockMachineAlpha() != null
                                 && RailcraftConfig.isSubBlockEnabled(EnumMachineAlpha.ROLLING_MACHINE.getTag())) {
                             stack.stackSize = 8;
                             CraftingPlugin.addRecipe(stack,
                                     "SIS",
                                     "ISI",
                                     "SIS",
-                                    'I', RailcraftItem.rebar.getRecipeObject(),
+                                    'I', RailcraftItems.rebar.getRecipeObject(),
                                     'S', "stone");
                         } else {
                             stack.stackSize = 4;
@@ -105,7 +105,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     }
                 }
 
-                RailcraftBlocks.registerBlockMachineAlpha();
+                RailcraftBlocksOld.registerBlockMachineAlpha();
                 EnumMachineAlpha alpha = EnumMachineAlpha.SMOKER;
                 if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
                     ItemStack stack = alpha.getItem();
@@ -119,8 +119,8 @@ public class ModuleStructures extends RailcraftModulePayload {
 
 //        cubeType = EnumCube.BANDED_PLANKS;
 //        if(RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-//            RailcraftBlocks.registerBlockCube();
-//            Block cube = RailcraftBlocks.getBlockCube();
+//            RailcraftBlocksOld.registerBlockCube();
+//            Block cube = RailcraftBlocksOld.getBlockCube();
 //            if(cube != null) {
 //                ItemStack stack = cubeType.getItem(8);
 //                RailcraftLanguage.instance().registerItemName(stack, cubeType.getTag());
@@ -149,7 +149,7 @@ public class ModuleStructures extends RailcraftModulePayload {
 
                 Block blockPost = BlockPost.getBlock();
                 if (blockPost != null) {
-                    CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getItem(4), RailcraftItem.tie.getRecipeObject(ItemTie.EnumTie.WOOD));
+                    CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getItem(4), RailcraftItems.tie.getRecipeObject(ItemTie.EnumTie.WOOD));
                     CraftingPlugin.addRecipe(EnumPost.WOOD_PLATFORM.getItem(),
                             " T ",
                             " I ",
@@ -160,7 +160,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                             "SIS",
                             "SIS",
                             "SIS",
-                            'I', RailcraftItem.rebar.getRecipeObject(),
+                            'I', RailcraftItems.rebar.getRecipeObject(),
                             'S', "stone");
                     CraftingPlugin.addRecipe(EnumPost.STONE_PLATFORM.getItem(),
                             " T ",

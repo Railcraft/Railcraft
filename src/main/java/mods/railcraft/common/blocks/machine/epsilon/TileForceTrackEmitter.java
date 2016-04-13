@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.machine.epsilon;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackLockdown;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TileTrack;
@@ -182,7 +182,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     private boolean claimTrack(BlockPos pos, Block block, EnumRailDirection direction) {
-        if (block != RailcraftBlocks.getBlockTrack())
+        if (block != RailcraftBlocksOld.getBlockTrack())
             return false;
         if (TrackTools.getTrackDirection(worldObj, pos) != direction)
             return false;

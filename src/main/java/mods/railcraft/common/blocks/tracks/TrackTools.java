@@ -12,7 +12,7 @@ import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.api.tracks.TrackToolsAPI;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.tracks.instances.TrackBaseRailcraft;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerHighSpeed;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -124,7 +124,7 @@ public class TrackTools {
     }
 
     public static ITrackInstance getTrackInstanceAt(IBlockAccess world, BlockPos pos) {
-        if (WorldPlugin.getBlock(world, pos) != RailcraftBlocks.getBlockTrack())
+        if (WorldPlugin.getBlock(world, pos) != RailcraftBlocksOld.getBlockTrack())
             return null;
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrack)
@@ -141,7 +141,7 @@ public class TrackTools {
     }
 
     public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, TrackSpec trackSpec, Block block) {
-        if (block != RailcraftBlocks.getBlockTrack())
+        if (block != RailcraftBlocksOld.getBlockTrack())
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         return isTrackSpec(tile, trackSpec);
@@ -161,7 +161,7 @@ public class TrackTools {
     }
 
     public static TileTrack placeTrack(TrackSpec track, World world, BlockPos pos, BlockRailBase.EnumRailDirection direction) {
-        WorldPlugin.setBlockState(world, pos, TrackToolsAPI.makeTrackState(RailcraftBlocks.getBlockTrack(), direction));
+        WorldPlugin.setBlockState(world, pos, TrackToolsAPI.makeTrackState(RailcraftBlocksOld.getBlockTrack(), direction));
         TileTrack tile = TrackFactory.makeTrackTile(track.createInstanceFromSpec());
         world.setTileEntity(pos, tile);
         return tile;

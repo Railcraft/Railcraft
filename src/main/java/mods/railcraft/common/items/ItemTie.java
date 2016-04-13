@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -18,7 +19,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemTie extends ItemRailcraft {
 
@@ -46,27 +49,27 @@ public class ItemTie extends ItemRailcraft {
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         for (EnumTie tie : EnumTie.VALUES) {
             RailcraftRegistry.register(new ItemStack(this, 1, tie.ordinal()));
         }
-        LootPlugin.addLootRailway(RailcraftItem.tie.getStack(1, EnumTie.WOOD), 4, 16, "tie.wood");
-        LootPlugin.addLootWorkshop(RailcraftItem.tie.getStack(1, EnumTie.STONE), 4, 16, "tie.stone");
+        LootPlugin.addLoot(RailcraftItems.tie.getStack(1, EnumTie.WOOD), 4, 16, LootPlugin.Type.RAILWAY, "tie.wood");
+        LootPlugin.addLoot(RailcraftItems.tie.getStack(1, EnumTie.STONE), 4, 16, LootPlugin.Type.WORKSHOP, "tie.stone");
     }
 
     @Override
     public void defineRecipes() {
-        ItemStack tieStone = RailcraftItem.tie.getStack(1, EnumTie.STONE);
+        ItemStack tieStone = RailcraftItems.tie.getStack(1, EnumTie.STONE);
         CraftingPlugin.addRecipe(tieStone,
                 " O ",
                 "###",
-                'O', RailcraftItem.rebar,
+                'O', RailcraftItems.rebar,
                 '#', new ItemStack(Blocks.stone_slab, 1, 0));
     }
 
     @Override
-    public void definePostRecipes() {
-        ItemStack tieWood = RailcraftItem.tie.getStack(1, EnumTie.WOOD);
+    public void finalizeDefinition() {
+        ItemStack tieWood = RailcraftItems.tie.getStack(1, EnumTie.WOOD);
         for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.getB(1))) {
             CraftingPlugin.addRecipe(tieWood,
                     " O ",
@@ -76,7 +79,7 @@ public class ItemTie extends ItemRailcraft {
         }
     }
 
-    public enum EnumTie implements IItemMetaEnum {
+    public enum EnumTie implements IVariantEnum {
         WOOD("slabWood"),
         STONE(Blocks.stone_slab);
         public static final EnumTie[] VALUES = values();
@@ -91,9 +94,15 @@ public class ItemTie extends ItemRailcraft {
             return alternate;
         }
 
+        @Nonnull
         @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
+        public Class<? extends ItemRailcraft> getParentClass() {
             return ItemTie.class;
+        }
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ENGLISH);
         }
 
     }

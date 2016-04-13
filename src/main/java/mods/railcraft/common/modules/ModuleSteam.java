@@ -11,7 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
@@ -19,7 +19,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemGear.EnumGear;
 import mods.railcraft.common.items.ItemIngot;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.block.Block;
@@ -40,8 +40,8 @@ public class ModuleSteam extends RailcraftModulePayload {
 //              LiquidItems.getSteamBottle(1);
                 EnumMachineBeta beta = EnumMachineBeta.ENGINE_STEAM_HOBBY;
                 if (RailcraftConfig.isSubBlockEnabled(beta.getTag())) {
-                    RailcraftBlocks.registerBlockMachineBeta();
-                    Block block = RailcraftBlocks.getBlockMachineBeta();
+                    RailcraftBlocksOld.registerBlockMachineBeta();
+                    Block block = RailcraftBlocksOld.getBlockMachineBeta();
                     if (block != null) {
                         CraftingPlugin.addRecipe(beta.getItem(),
                                 "NNN",
@@ -50,48 +50,48 @@ public class ModuleSteam extends RailcraftModulePayload {
                                 'P', new ItemStack(Blocks.piston),
                                 'N', "nuggetGold",
                                 'C', "blockGlassColorless",
-                                'G', RailcraftItem.gear.getRecipeObject(EnumGear.GOLD_PLATE));
+                                'G', RailcraftItems.gear.getRecipeObject(EnumGear.GOLD_PLATE));
                     }
                 }
 
                 beta = EnumMachineBeta.ENGINE_STEAM_LOW;
                 if (RailcraftConfig.isSubBlockEnabled(beta.getTag())) {
-                    RailcraftBlocks.registerBlockMachineBeta();
-                    Block block = RailcraftBlocks.getBlockMachineBeta();
+                    RailcraftBlocksOld.registerBlockMachineBeta();
+                    Block block = RailcraftBlocksOld.getBlockMachineBeta();
                     if (block != null) {
                         CraftingPlugin.addRecipe(beta.getItem(),
                                 "III",
                                 " C ",
                                 "GPG",
                                 'P', new ItemStack(Blocks.piston),
-                                'I', RailcraftItem.plate.getRecipeObject(EnumPlate.IRON),
+                                'I', RailcraftItems.plate.getRecipeObject(EnumPlate.IRON),
                                 'C', "blockGlassColorless",
                                 'G', "gearIron");
 
-                        RailcraftCraftingManager.blastFurnace.addRecipe(beta.getItem(), true, false, 15360, RailcraftItem.ingot.getStack(12, ItemIngot.EnumIngot.STEEL));
+                        RailcraftCraftingManager.blastFurnace.addRecipe(beta.getItem(), true, false, 15360, RailcraftItems.ingot.getStack(12, ItemIngot.EnumIngot.STEEL));
                     }
                 }
 
                 beta = EnumMachineBeta.ENGINE_STEAM_HIGH;
                 if (RailcraftConfig.isSubBlockEnabled(beta.getTag())) {
-                    RailcraftBlocks.registerBlockMachineBeta();
-                    Block block = RailcraftBlocks.getBlockMachineBeta();
+                    RailcraftBlocksOld.registerBlockMachineBeta();
+                    Block block = RailcraftBlocksOld.getBlockMachineBeta();
                     if (block != null) {
                         CraftingPlugin.addRecipe(beta.getItem(),
                                 "III",
                                 " C ",
                                 "GPG",
                                 'P', new ItemStack(Blocks.piston),
-                                'I', RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL),
+                                'I', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL),
                                 'C', "blockGlassColorless",
-                                'G', RailcraftItem.gear.getRecipeObject(EnumGear.STEEL));
+                                'G', RailcraftItems.gear.getRecipeObject(EnumGear.STEEL));
                     }
                 }
 
                 beta = EnumMachineBeta.BOILER_FIREBOX_SOLID;
                 if (RailcraftConfig.isSubBlockEnabled(beta.getTag())) {
-                    RailcraftBlocks.registerBlockMachineBeta();
-                    Block block = RailcraftBlocks.getBlockMachineBeta();
+                    RailcraftBlocksOld.registerBlockMachineBeta();
+                    Block block = RailcraftBlocksOld.getBlockMachineBeta();
                     if (block != null) {
                         CraftingPlugin.addRecipe(beta.getItem(),
                                 "BBB",
@@ -105,8 +105,8 @@ public class ModuleSteam extends RailcraftModulePayload {
 
                 beta = EnumMachineBeta.BOILER_FIREBOX_FLUID;
                 if (RailcraftConfig.isSubBlockEnabled(beta.getTag())) {
-                    RailcraftBlocks.registerBlockMachineBeta();
-                    Block block = RailcraftBlocks.getBlockMachineBeta();
+                    RailcraftBlocksOld.registerBlockMachineBeta();
+                    Block block = RailcraftBlocksOld.getBlockMachineBeta();
                     if (block != null) {
                         CraftingPlugin.addRecipe(beta.getItem(),
                                 "PBP",
@@ -115,34 +115,34 @@ public class ModuleSteam extends RailcraftModulePayload {
                                 'B', new ItemStack(Items.bucket),
                                 'G', new ItemStack(Blocks.iron_bars),
                                 'C', new ItemStack(Items.fire_charge),
-                                'P', RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL),
+                                'P', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL),
                                 'F', new ItemStack(Blocks.furnace));
                     }
                 }
 
                 beta = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE;
                 if (RailcraftConfig.isSubBlockEnabled(beta.getTag())) {
-                    RailcraftBlocks.registerBlockMachineBeta();
-                    Block block = RailcraftBlocks.getBlockMachineBeta();
+                    RailcraftBlocksOld.registerBlockMachineBeta();
+                    Block block = RailcraftBlocksOld.getBlockMachineBeta();
                     if (block != null) {
                         CraftingPlugin.addRecipe(beta.getItem(),
                                 "P",
                                 "P",
-                                'P', RailcraftItem.plate.getRecipeObject(EnumPlate.IRON));
+                                'P', RailcraftItems.plate.getRecipeObject(EnumPlate.IRON));
 
-                        RailcraftCraftingManager.blastFurnace.addRecipe(beta.getItem(), true, false, 2560, RailcraftItem.ingot.getStack(2, ItemIngot.EnumIngot.STEEL));
+                        RailcraftCraftingManager.blastFurnace.addRecipe(beta.getItem(), true, false, 2560, RailcraftItems.ingot.getStack(2, ItemIngot.EnumIngot.STEEL));
                     }
                 }
 
                 beta = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE;
                 if (RailcraftConfig.isSubBlockEnabled(beta.getTag())) {
-                    RailcraftBlocks.registerBlockMachineBeta();
-                    Block block = RailcraftBlocks.getBlockMachineBeta();
+                    RailcraftBlocksOld.registerBlockMachineBeta();
+                    Block block = RailcraftBlocksOld.getBlockMachineBeta();
                     if (block != null) {
                         CraftingPlugin.addRecipe(beta.getItem(),
                                 "P",
                                 "P",
-                                'P', RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL));
+                                'P', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL));
                     }
                 }
 
@@ -194,9 +194,9 @@ public class ModuleSteam extends RailcraftModulePayload {
                 else if (EnumMachineBeta.TANK_STEEL_WALL.isAvailable())
                     tank = EnumMachineBeta.TANK_STEEL_WALL.getItem();
                 else
-                    tank = RailcraftItem.plate.getStack(1, EnumPlate.STEEL);
+                    tank = RailcraftItems.plate.getStack(1, EnumPlate.STEEL);
                 if (tank == null)
-                    tank = RailcraftItem.ingot.getStack(1, ItemIngot.EnumIngot.STEEL);
+                    tank = RailcraftItems.ingot.getStack(1, ItemIngot.EnumIngot.STEEL);
                 if (tank == null)
                     tank = new ItemStack(Blocks.iron_block);
                 return tank;

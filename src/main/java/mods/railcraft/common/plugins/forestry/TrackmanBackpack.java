@@ -11,13 +11,13 @@ package mods.railcraft.common.plugins.forestry;
 import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.fluids.FluidContainers;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMinecart;
@@ -71,24 +71,24 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
         add(EnumMachineAlpha.PASSIVE_ANCHOR.getItem());
         add(EnumMachineBeta.SENTINEL.getItem());
 
-        add(RailcraftItem.crowbarIron);
-        add(RailcraftItem.crowbarSteel);
-        add(RailcraftItem.signalBlockSurveyor);
-        add(RailcraftItem.signalTuner);
-        add(RailcraftItem.rail);
-        add(RailcraftItem.railbed);
-        add(RailcraftItem.tie);
-        add(RailcraftItem.signalLamp);
-        add(RailcraftItem.circuit);
-        add(RailcraftItem.signalLabel);
-        add(RailcraftItem.whistleTuner);
-        add(RailcraftItem.magGlass);
-        add(RailcraftItem.goggles);
-        add(RailcraftItem.overalls);
+        add(RailcraftItems.crowbarIron);
+        add(RailcraftItems.crowbarSteel);
+        add(RailcraftItems.signalBlockSurveyor);
+        add(RailcraftItems.signalTuner);
+        add(RailcraftItems.rail);
+        add(RailcraftItems.railbed);
+        add(RailcraftItems.tie);
+        add(RailcraftItems.signalLamp);
+        add(RailcraftItems.circuit);
+        add(RailcraftItems.signalLabel);
+        add(RailcraftItems.whistleTuner);
+        add(RailcraftItems.magGlass);
+        add(RailcraftItems.goggles);
+        add(RailcraftItems.overalls);
 
-        add(RailcraftBlocks.getBlockMachineGamma());
-        add(RailcraftBlocks.getBlockElevator());
-        add(RailcraftBlocks.getBlockSignal());
+        add(RailcraftBlocksOld.getBlockMachineGamma());
+        add(RailcraftBlocksOld.getBlockElevator());
+        add(RailcraftBlocksOld.getBlockSignal());
         add(BlockDetector.getBlock());
     }
 

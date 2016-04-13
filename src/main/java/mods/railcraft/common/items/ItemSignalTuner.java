@@ -41,8 +41,8 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
     }
 
     @Override
-    public void initItem() {
-        LootPlugin.addLoot(RailcraftItem.signalTuner, 1, 1, LootPlugin.Type.WORKSHOP);
+    public void initializeDefinintion() {
+        LootPlugin.addLoot(RailcraftItems.signalTuner, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                 "BRB",
                 "   ",
                 'B', Blocks.stone_button,
-                'R', RailcraftItem.circuit, ItemCircuit.EnumCircuit.RECEIVER,
+                'R', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
                 'T', Blocks.redstone_torch);
     }
 

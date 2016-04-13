@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -120,7 +120,7 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
     @Override
     public Block getBlock() {
-        return RailcraftBlocks.getBlockMachineGamma();
+        return RailcraftBlocksOld.getBlockMachineGamma();
     }
 
     @Override
@@ -139,7 +139,7 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
     public boolean register() {
         if (RailcraftConfig.isSubBlockEnabled(getTag())) {
-            RailcraftBlocks.registerBlockMachineGamma();
+            RailcraftBlocksOld.registerBlockMachineGamma();
             return getBlock() != null;
         }
         return false;

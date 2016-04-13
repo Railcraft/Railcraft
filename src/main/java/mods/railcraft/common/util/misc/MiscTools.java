@@ -39,17 +39,6 @@ public abstract class MiscTools {
 
     public static final Random RANDOM = new Random();
 
-    public static void registerTrack(EnumTrack rail) {
-        RailcraftBlocks.registerBlockTrack();
-        if (RailcraftBlocks.getBlockTrack() != null)
-            if (RailcraftConfig.isSubBlockEnabled(rail.getTag())) {
-                rail.initialize();
-                ItemStack stack = rail.getTrackSpec().getItem();
-
-                RailcraftRegistry.register(stack);
-            }
-    }
-
     public static String cleanTag(String tag) {
         return tag.replaceAll("[Rr]ailcraft\\p{Punct}", "").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
     }
@@ -109,8 +98,8 @@ public abstract class MiscTools {
         return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
     }
 
-    public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass,BlockPos pos) {
-        AxisAlignedBB box =  AABBFactory.make().createBoxForTileAt(pos).build();
+    public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass, BlockPos pos) {
+        AxisAlignedBB box = AABBFactory.make().createBoxForTileAt(pos).build();
         return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
     }
 

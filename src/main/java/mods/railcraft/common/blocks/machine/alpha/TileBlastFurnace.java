@@ -12,7 +12,7 @@ import mods.railcraft.api.core.items.IStackFilter;
 import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockOven;
@@ -167,12 +167,12 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         int meta = block.getMetaFromState(state);
         switch (mapPos) {
             case 'O':
-                if (block != RailcraftBlocks.getBlockMachineAlpha() || meta != getBlockMetadata())
+                if (block != RailcraftBlocksOld.getBlockMachineAlpha() || meta != getBlockMetadata())
                     return true;
                 break;
             case 'B':
             case 'W':
-                if (block == RailcraftBlocks.getBlockMachineAlpha() && meta == getBlockMetadata())
+                if (block == RailcraftBlocksOld.getBlockMachineAlpha() && meta == getBlockMetadata())
                     return true;
                 break;
             case 'A':

@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -26,7 +28,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemOveralls extends ItemArmor implements IRailcraftItem {
+public class ItemOveralls extends ItemArmor implements IRailcraftObject {
 
     private static final ItemStack BLUE_CLOTH = new ItemStack(Blocks.wool, 1, 3);
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "overalls.png";
@@ -60,7 +62,7 @@ public class ItemOveralls extends ItemArmor implements IRailcraftItem {
     }
 
     @Override
-    public Object getRecipeObject(IItemMetaEnum meta) {
+    public Object getRecipeObject(IVariantEnum meta) {
         return this;
     }
 
@@ -74,12 +76,12 @@ public class ItemOveralls extends ItemArmor implements IRailcraftItem {
     }
 
     @Override
-    public void definePostRecipes() {
+    public void finalizeDefinition() {
 
     }
 
     @Override
-    public void initItem() {
-        LootPlugin.addLoot(RailcraftItem.overalls, 1, 1, LootPlugin.Type.WORKSHOP);
+    public void initializeDefinintion() {
+        LootPlugin.addLoot(RailcraftItems.overalls, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 }

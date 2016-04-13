@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ITrackCustomPlaced;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -42,7 +42,7 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
         World world = getWorld();
         BlockPos pos = tileEntity.getPos();
         if (isSupported()) {
-            Block myBlock = RailcraftBlocks.getBlockTrack();
+            Block myBlock = RailcraftBlocksOld.getBlockTrack();
             if (neighborBlock != myBlock) {
                 for (EnumFacing side : EnumFacing.HORIZONTALS) {
                     world.notifyBlockOfStateChange(pos.offset(side), myBlock);

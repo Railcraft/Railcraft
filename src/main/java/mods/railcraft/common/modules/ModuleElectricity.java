@@ -11,18 +11,17 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.RailcraftPartItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RotorRepairRecipe;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.init.Items;
 
 /**
@@ -35,7 +34,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
-                addItems(RailcraftItem.electricMeter);
+                add(RailcraftItems.electricMeter);
             }
 
             @Override
@@ -48,7 +47,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             "BPB",
                             "P P",
                             "BPB",
-                            'P', RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL),
+                            'P', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL),
                             'B', "blockSteel");
 
                     RailcraftPartItems.getTurbineRotor();
@@ -66,7 +65,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             "PCP",
                             "CCC",
                             "PCP",
-                            'P', RailcraftItem.plate.getRecipeObject(EnumPlate.TIN),
+                            'P', RailcraftItems.plate.getRecipeObject(EnumPlate.TIN),
                             'C', "ingotCopper");
 
                 epsilon = EnumMachineEpsilon.ELECTRIC_FEEDER_ADMIN;
@@ -74,13 +73,13 @@ public class ModuleElectricity extends RailcraftModulePayload {
 
                 epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;
                 if (epsilon.register()) {
-                    if (RailcraftBlocks.registerBlockTrack())
-                        MiscTools.registerTrack(EnumTrack.FORCE);
+                    if (RailcraftBlocksOld.registerBlockTrack())
+                        EnumTrack.registerTrack(EnumTrack.FORCE);
                     CraftingPlugin.addRecipe(epsilon.getItem(),
                             "PCP",
                             "CDC",
                             "PCP",
-                            'P', RailcraftItem.plate.getRecipeObject(EnumPlate.TIN),
+                            'P', RailcraftItems.plate.getRecipeObject(EnumPlate.TIN),
                             'D', "blockDiamond",
                             'C', "ingotCopper");
                 }
@@ -91,7 +90,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             "PGP",
                             "GRG",
                             "PGP",
-                            'P', RailcraftItem.plate.getRecipeObject(EnumPlate.COPPER),
+                            'P', RailcraftItems.plate.getRecipeObject(EnumPlate.COPPER),
                             'G', "ingotGold",
                             'R', "blockRedstone");
 

@@ -12,7 +12,7 @@ import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.items.ItemCrowbar;
 import mods.railcraft.common.items.ItemCrowbarSteel;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -63,12 +63,12 @@ public class VillagerTradeHandler implements IVillageTradeHandler {
         addTrade(recipeList, rand, 0.3F, new Offer(ItemCrowbar.getItem()), new Offer(Items.emerald, 7, 9));
         addTrade(recipeList, rand, 0.1F, new Offer(ItemCrowbarSteel.getItem()), new Offer(Items.emerald, 14, 18));
 
-        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItem.whistleTuner), new Offer(Items.emerald, 1, 2));
-        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItem.magGlass), new Offer(Items.emerald, 1, 2));
-        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItem.signalBlockSurveyor), new Offer(Items.emerald, 6, 8));
-        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItem.signalTuner), new Offer(Items.emerald, 6, 8));
-        addTrade(recipeList, rand, 0.4F, new Offer(RailcraftItem.goggles), new Offer(Items.emerald, 4, 8));
-        addTrade(recipeList, rand, 0.5F, new Offer(RailcraftItem.overalls), new Offer(Items.emerald, 2, 4));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.whistleTuner), new Offer(Items.emerald, 1, 2));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.magGlass), new Offer(Items.emerald, 1, 2));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.signalBlockSurveyor), new Offer(Items.emerald, 6, 8));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.signalTuner), new Offer(Items.emerald, 6, 8));
+        addTrade(recipeList, rand, 0.4F, new Offer(RailcraftItems.goggles), new Offer(Items.emerald, 4, 8));
+        addTrade(recipeList, rand, 0.5F, new Offer(RailcraftItems.overalls), new Offer(Items.emerald, 2, 4));
     }
 
     private class Offer {
@@ -114,8 +114,8 @@ public class VillagerTradeHandler implements IVillageTradeHandler {
     }
 
     private ItemStack prepareStack(Random rand, Offer offer) throws IllegalArgumentException {
-        if (offer.obj instanceof RailcraftItem) {
-            return ((RailcraftItem) offer.obj).getStack(stackSize(rand, offer));
+        if (offer.obj instanceof RailcraftItems) {
+            return ((RailcraftItems) offer.obj).getStack(stackSize(rand, offer));
         }
         if (offer.obj instanceof ItemStack) {
             ItemStack stack = (ItemStack) offer.obj;

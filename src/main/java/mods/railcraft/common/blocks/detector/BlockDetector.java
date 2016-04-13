@@ -8,22 +8,22 @@
  */
 package mods.railcraft.common.blocks.detector;
 
+import mods.railcraft.common.blocks.RailcraftBlockContainer;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IActivationBlockingItem;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -40,14 +40,11 @@ import java.util.List;
 
 import static net.minecraft.util.EnumFacing.*;
 
-public class BlockDetector extends BlockContainer {
+public class BlockDetector extends RailcraftBlockContainer {
 
-    private static BlockDetector block;
-
+    @SuppressWarnings("WeakerAccess")
     public BlockDetector() {
         super(Material.rock);
-
-        setUnlocalizedName("railcraft.detector");
         setResistance(4.5F);
         setHardness(2.0F);
         setStepSound(soundTypeStone);
@@ -57,23 +54,114 @@ public class BlockDetector extends BlockContainer {
         GameRegistry.registerTileEntity(TileDetector.class, "RCDetectorTile");
     }
 
-    public static void registerBlock() {
-        if (block == null && RailcraftConfig.isBlockEnabled("detector")) {
-            block = new BlockDetector();
-            RailcraftRegistry.register(block, ItemDetector.class);
+    @Override
+    public void initializeDefinintion() {
+        //            HarvestPlugin.setStateHarvestLevel(block, "pickaxe", 2);
+        HarvestPlugin.setBlockHarvestLevel("crowbar", 0, this);
 
-//            HarvestPlugin.setStateHarvestLevel(block, "pickaxe", 2);
-            HarvestPlugin.setBlockHarvestLevel("crowbar", 0, block);
-
-            for (EnumDetector d : EnumDetector.VALUES) {
-                ItemStack stack = new ItemStack(block, 1, d.ordinal());
-                RailcraftRegistry.register(stack);
-            }
+        for (EnumDetector d : EnumDetector.VALUES) {
+            ItemStack stack = new ItemStack(this, 1, d.ordinal());
+            RailcraftRegistry.register(stack);
         }
     }
 
-    public static BlockDetector getBlock() {
-        return block;
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.ITEM.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', "plankWood",
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.ANY.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', "stone",
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.EMPTY.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', new ItemStack(Blocks.stonebrick, 1, 0),
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.MOB.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', new ItemStack(Blocks.stonebrick, 1, 1),
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.MOB.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', Blocks.mossy_cobblestone,
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.POWERED.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', "cobblestone",
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.PLAYER.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', new ItemStack(Blocks.stone_slab, 1, 0),
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.EXPLOSIVE.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', "slabWood",
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.ANIMAL.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', new ItemStack(Blocks.log, 1, 0),
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.AGE.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', new ItemStack(Blocks.log, 1, 1),
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.ADVANCED.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', "ingotSteel",
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.TANK.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', "ingotBrick",
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.SHEEP.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', Blocks.wool,
+                'P', Blocks.stone_pressure_plate);
+        CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.VILLAGER.ordinal()),
+                "XXX",
+                "XPX",
+                "XXX",
+                'X', Items.leather,
+                'P', Blocks.stone_pressure_plate);
+    }
+
+    @Override
+    public void finalizeDefinition() {
+        if (BrickTheme.INFERNAL.getBlock() != null)
+            CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.LOCOMOTIVE.ordinal()),
+                    "XXX",
+                    "XPX",
+                    "XXX",
+                    'X', BrickTheme.INFERNAL.get(BrickVariant.BRICK, 1),
+                    'P', Blocks.stone_pressure_plate);
     }
 
     @Override
@@ -98,7 +186,7 @@ public class BlockDetector extends BlockContainer {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return meta;
+        return getMetaFromState(state);
     }
 
     @Override
@@ -110,6 +198,7 @@ public class BlockDetector extends BlockContainer {
         return items;
     }
 
+    //TODO: Move drop code here? We have a reference to the TileEntity now.
     @Override
     public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
     }
@@ -122,7 +211,7 @@ public class BlockDetector extends BlockContainer {
         if (tile instanceof TileDetector)
             ((TileDetector) tile).getDetector().onBlockRemoved();
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
-            dropBlockAsItem(world, pos, state, 0);
+            dropBlockAsItem(world, pos, WorldPlugin.getBlockState(world, pos), 0);
         return world.setBlockToAir(pos);
     }
 
@@ -141,7 +230,7 @@ public class BlockDetector extends BlockContainer {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileDetector) {
             ((TileDetector) tile).direction = MiscTools.getSideFacingPlayer(pos, placer);
-            ((TileDetector) tile).onBlockPlacedBy(placer, stack);
+            ((TileDetector) tile).onBlockPlacedBy(state, placer, stack);
         }
     }
 
@@ -158,9 +247,7 @@ public class BlockDetector extends BlockContainer {
                 return false;
         }
         TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileDetector)
-            return ((TileDetector) tile).blockActivated(playerIn);
-        return false;
+        return tile instanceof TileDetector && ((TileDetector) tile).blockActivated(playerIn);
     }
 
     @Override
@@ -273,7 +360,7 @@ public class BlockDetector extends BlockContainer {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumDetector detector : EnumDetector.VALUES) {
             if (detector.isEnabled())
                 list.add(detector.getItem());

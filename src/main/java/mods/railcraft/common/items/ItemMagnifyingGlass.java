@@ -47,9 +47,9 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         MinecraftForge.EVENT_BUS.register(this);
-        LootPlugin.addLoot(RailcraftItem.magGlass, 1, 1, LootPlugin.Type.WORKSHOP);
+        LootPlugin.addLoot(RailcraftItems.magGlass, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         boolean returnValue = false;
         if (t instanceof IOwnable) {
             IOwnable ownable = (IOwnable) t;
-            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.mag.glass.placedby", ownable.getLocalizationTag(), ownable.getOwner());
+            ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.mag.glass.placedby", ownable.getDisplayName(), ownable.getOwner());
             returnValue = true;
         }
         if (t instanceof TileMultiBlock) {

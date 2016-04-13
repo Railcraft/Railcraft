@@ -12,6 +12,7 @@ import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackSpec;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.tracks.instances.*;
 import mods.railcraft.common.core.Railcraft;
@@ -20,12 +21,11 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
-import mods.railcraft.common.items.ItemTicket;
-import mods.railcraft.common.items.ItemTicketGold;
 import mods.railcraft.common.items.ItemTie.EnumTie;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.init.Blocks;
@@ -36,7 +36,7 @@ import java.util.*;
 
 public enum EnumTrack {
 
-//    BOARDING(ModuleTracks.class, 4, 1, "boarding", 8, TrackBoarding.class),
+    //    BOARDING(ModuleTracks.class, 4, 1, "boarding", 8, TrackBoarding.class),
 //    HOLDING(ModuleTracks.class, 2, 1, "holding", 8, TrackHolding.class),
     ONEWAY(ModuleTracks.class, 4, 1, "oneway", 8, TrackOneWay.class),
     CONTROL(ModuleTracks.class, 2, 0, "control", 16, TrackControl.class),
@@ -56,7 +56,7 @@ public enum EnumTrack {
     SPEED_BOOST(ModuleTracksHighSpeed.class, 2, 1, "speed.boost", 8, TrackSpeedBoost.class),
     SPEED_TRANSITION(ModuleTracksHighSpeed.class, 4, 1, "speed.transition", 8, TrackSpeedTransition.class),
     SPEED_SWITCH(ModuleSignals.class, 4, 0, "speed.switch", 8, TrackSpeedSwitch.class),
-//    BOARDING_TRAIN(Module.TRAIN, 4, 1, "boarding.train", 8, TrackBoardingTrain.class),
+    //    BOARDING_TRAIN(Module.TRAIN, 4, 1, "boarding.train", 8, TrackBoardingTrain.class),
 //    HOLDING_TRAIN(Module.TRAIN, 2, 1, "holding.train", 8, TrackHoldingTrain.class),
     COUPLER(ModuleTracks.class, 6, 1, "coupler", 8, TrackCoupler.class),
     DECOUPLER(ModuleTracks.class, 0, 0, "decoupler", 8, TrackCoupler.class),
@@ -72,7 +72,7 @@ public enum EnumTrack {
     SLOW_WYE(ModuleTracksWood.class, 2, 0, "slow.wye", 8, TrackSlowWye.class),
     REINFORCED_WYE(ModuleTracksReinforced.class, 2, 0, "reinforced.wye", 8, TrackReinforcedWye.class),
     SPEED_WYE(ModuleTracksHighSpeed.class, 2, 0, "speed.wye", 8, TrackSpeedWye.class),
-//    LOCKDOWN(ModuleTracks.class, 2, 1, "lockdown", 8, TrackLockdown.class),
+    //    LOCKDOWN(ModuleTracks.class, 2, 1, "lockdown", 8, TrackLockdown.class),
 //    LOCKDOWN_TRAIN(Module.TRAIN, 2, 1, "lockdown.train", 8, TrackLockdownTrain.class),
     WHISTLE(ModuleLocomotives.class, 2, 1, "whistle", 8, TrackWhistle.class),
     LOCOMOTIVE(ModuleLocomotives.class, 6, 3, "locomotive", 8, TrackLocomotive.class),
@@ -173,16 +173,21 @@ public enum EnumTrack {
         return trackSpecs;
     }
 
-    public void initialize() {
-        ToolTip toolTip = ToolTip.buildToolTip("tile.railcraft." + MiscTools.cleanTag(getTag()) + ".tip");
-        List<String> tips = toolTip != null ? toolTip.convertToStrings() : null;
-        trackSpec = new TrackSpec((short) ordinal(), getTag(), /* TODO: create a ModelResourceLocation */ null, trackInstance, tips);
-        try {
-            TrackRegistry.registerTrackSpec(trackSpec);
-            trackSpecs.add(trackSpec);
-            registerRecipe();
-        } catch (Error error) {
-            Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackSpec.class);
+    public void register() {
+        if (RailcraftBlocks.track.isLoaded() && RailcraftConfig.isSubBlockEnabled(getTag())) {
+            ToolTip toolTip = ToolTip.buildToolTip("tile.railcraft." + MiscTools.cleanTag(getTag()) + ".tip");
+            List<String> tips = toolTip != null ? toolTip.convertToStrings() : null;
+            trackSpec = new TrackSpec((short) ordinal(), getTag(), /* TODO: create a ModelResourceLocation */ null, trackInstance, tips);
+            try {
+                TrackRegistry.registerTrackSpec(trackSpec);
+                trackSpecs.add(trackSpec);
+                registerRecipe();
+            } catch (Error error) {
+                Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackSpec.class);
+            }
+            ItemStack stack = getTrackSpec().getItem();
+
+            RailcraftRegistry.register(stack);
         }
     }
 
@@ -228,16 +233,16 @@ public enum EnumTrack {
         if (getItem() == null)
             return null;
         ItemStack output = getItem(recipeOutput * 2);
-        Object railWood = RailcraftConfig.useOldRecipes() ? "slabWood" : RailcraftItem.rail.getRecipeObject(EnumRail.WOOD);
-        Object railStandard = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.iron_ingot) : RailcraftItem.rail.getRecipeObject(EnumRail.STANDARD);
-        Object railAdvanced = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.gold_ingot) : RailcraftItem.rail.getRecipeObject(EnumRail.ADVANCED);
-        Object railSpeed = RailcraftConfig.useOldRecipes() ? "ingotSteel" : RailcraftItem.rail.getRecipeObject(EnumRail.SPEED);
-        Object railReinforced = RailcraftConfig.useOldRecipes() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? "ingotSteel" : RailcraftItem.rail.getRecipeObject(EnumRail.REINFORCED);
-        Object railElectric = RailcraftConfig.useOldRecipes() ? "ingotCopper" : RailcraftItem.rail.getRecipeObject(EnumRail.ELECTRIC);
-        Object woodTie = RailcraftItem.tie.getRecipeObject(EnumTie.WOOD);
-        Object woodRailbed = RailcraftConfig.useOldRecipes() ? "stickWood" : RailcraftItem.railbed.getRecipeObject(EnumRailbed.WOOD);
-        Object stoneRailbed = RailcraftConfig.useOldRecipes() ? Blocks.stone_slab : RailcraftItem.railbed.getRecipeObject(EnumRailbed.STONE);
-        Object reinforcedRailbed = RailcraftConfig.useOldRecipes() || !RailcraftItem.rail.isEnabled() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? new ItemStack(Blocks.obsidian) : stoneRailbed;
+        Object railWood = RailcraftConfig.useOldRecipes() ? "slabWood" : RailcraftItems.rail.getRecipeObject(EnumRail.WOOD);
+        Object railStandard = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.iron_ingot) : RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD);
+        Object railAdvanced = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.gold_ingot) : RailcraftItems.rail.getRecipeObject(EnumRail.ADVANCED);
+        Object railSpeed = RailcraftConfig.useOldRecipes() ? "ingotSteel" : RailcraftItems.rail.getRecipeObject(EnumRail.SPEED);
+        Object railReinforced = RailcraftConfig.useOldRecipes() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? "ingotSteel" : RailcraftItems.rail.getRecipeObject(EnumRail.REINFORCED);
+        Object railElectric = RailcraftConfig.useOldRecipes() ? "ingotCopper" : RailcraftItems.rail.getRecipeObject(EnumRail.ELECTRIC);
+        Object woodTie = RailcraftItems.tie.getRecipeObject(EnumTie.WOOD);
+        Object woodRailbed = RailcraftConfig.useOldRecipes() ? "stickWood" : RailcraftItems.railbed.getRecipeObject(EnumRailbed.WOOD);
+        Object stoneRailbed = RailcraftConfig.useOldRecipes() ? Blocks.stone_slab : RailcraftItems.railbed.getRecipeObject(EnumRailbed.STONE);
+        Object reinforcedRailbed = RailcraftConfig.useOldRecipes() || !RailcraftItems.rail.isEnabled() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? new ItemStack(Blocks.obsidian) : stoneRailbed;
 
         Object crowbar = IToolCrowbar.ORE_TAG;
 
@@ -480,7 +485,7 @@ public enum EnumTrack {
                         "IPI",
                         "ItI",
                         'I', railStandard,
-                        'P', RailcraftItem.plate, EnumPlate.STEEL,
+                        'P', RailcraftItems.plate, EnumPlate.STEEL,
                         't', woodTie);
                 break;
             case BUFFER_STOP:
@@ -547,7 +552,7 @@ public enum EnumTrack {
                         "ILI",
                         'I', railStandard,
                         '#', woodRailbed,
-                        'L', RailcraftItem.signalLamp.getRecipeObject());
+                        'L', RailcraftItems.signalLamp.getRecipeObject());
                 break;
             case LIMITER:
                 CraftingPlugin.addRecipe(output,
@@ -566,7 +571,7 @@ public enum EnumTrack {
                         'I', railStandard,
                         '#', woodRailbed,
                         'r', "dustRedstone",
-                        't', ItemTicket.getTicket());
+                        't', RailcraftItems.ticket);
                 CraftingPlugin.addRecipe(output,
                         "IrI",
                         "I#I",
@@ -574,7 +579,7 @@ public enum EnumTrack {
                         'I', railStandard,
                         '#', woodRailbed,
                         'r', "dustRedstone",
-                        't', ItemTicketGold.getTicket());
+                        't', RailcraftItems.ticketGold);
                 break;
             case REINFORCED:
                 CraftingPlugin.addRecipe(output,

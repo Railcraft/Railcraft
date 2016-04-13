@@ -41,7 +41,7 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
         if (item == null && RailcraftConfig.isItemEnabled(ITEM_TAG)) {
             item = new ItemCrowbarVoid();
             RailcraftRegistry.register(item);
-            item.initItem();
+            item.initializeDefinintion();
         }
     }
 

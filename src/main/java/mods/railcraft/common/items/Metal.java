@@ -81,7 +81,7 @@ public enum Metal {
             case GOLD:
                 return new ItemStack(Items.gold_nugget, qty);
             default: {
-                ItemStack stack = RailcraftItem.nugget.getStack(qty, nuggetMap.get(this));
+                ItemStack stack = RailcraftItems.nugget.getStack(qty, nuggetMap.get(this));
                 if (stack == null)
                     stack = OreDictPlugin.getOre(getNuggetTag(), qty);
                 return stack;
@@ -104,7 +104,7 @@ public enum Metal {
             case GOLD:
                 return new ItemStack(Items.gold_ingot, qty);
             default: {
-                ItemStack stack = RailcraftItem.ingot.getStack(qty, ingotMap.get(this));
+                ItemStack stack = RailcraftItems.ingot.getStack(qty, ingotMap.get(this));
                 if (stack == null || stack.getItem() == Items.iron_ingot)
                     stack = OreDictPlugin.getOre(getIngotTag(), qty);
                 return stack;

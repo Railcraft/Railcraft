@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.machine.delta;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.BoundingBoxManager;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
@@ -58,7 +58,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
 
     public boolean register() {
         if (RailcraftConfig.isSubBlockEnabled(getTag())) {
-            RailcraftBlocks.registerBlockMachineDelta();
+            RailcraftBlocksOld.registerBlockMachineDelta();
             return getBlock() != null;
         }
         return false;
@@ -117,7 +117,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
 
     @Override
     public Block getBlock() {
-        return RailcraftBlocks.getBlockMachineDelta();
+        return RailcraftBlocksOld.getBlockMachineDelta();
     }
 
     @Override

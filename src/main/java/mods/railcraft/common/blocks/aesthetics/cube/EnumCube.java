@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.cube;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.IVariantEnum;
+import mods.railcraft.common.blocks.IBlockVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.*;
 import net.minecraft.block.Block;
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumCube implements IStringSerializable, IVariantEnum<EnumCube> {
+public enum EnumCube implements IStringSerializable, IBlockVariantEnum<EnumCube> {
 
     COKE_BLOCK(ModuleFactory.class, "coke", new FlammableCube(5, 10), 2f, 10f),
     CONCRETE_BLOCK(ModuleStructures.class, "concrete", new SimpleCube(), 3f, 15f),

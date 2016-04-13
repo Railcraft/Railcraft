@@ -8,40 +8,45 @@
  */
 package mods.railcraft.common.blocks.detector;
 
+import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.types.*;
-import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.modules.RailcraftModuleManager.Module;
+import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.common.modules.*;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum EnumDetector {
+public enum EnumDetector implements IVariantEnum {
 
-    ITEM(Module.AUTOMATION, DetectorItem.class),
-    ANY(Module.AUTOMATION, Detector.class),
-    EMPTY(Module.AUTOMATION, DetectorEmpty.class),
-    MOB(Module.AUTOMATION, DetectorMob.class),
-    POWERED(Module.AUTOMATION, DetectorPowered.class),
-    PLAYER(Module.AUTOMATION, DetectorPlayer.class),
-    EXPLOSIVE(Module.AUTOMATION, DetectorExplosive.class),
-    ANIMAL(Module.AUTOMATION, DetectorAnimal.class),
-    TANK(Module.AUTOMATION, DetectorTank.class),
-    ADVANCED(Module.AUTOMATION, DetectorAdvanced.class),
-    ENERGY(Module.IC2, DetectorEnergy.class),
-    AGE(Module.AUTOMATION, DetectorAge.class),
-    TRAIN(Module.TRAIN, DetectorTrain.class),
-    SHEEP(Module.AUTOMATION, DetectorSheep.class),
-    VILLAGER(Module.AUTOMATION, DetectorVillager.class),
-    LOCOMOTIVE(Module.AUTOMATION, DetectorLocomotive.class),
-    ROUTING(Module.ROUTING, DetectorRouting.class);
+    ITEM(ModuleAutomation.class, DetectorItem.class),
+    ANY(ModuleAutomation.class, Detector.class),
+    EMPTY(ModuleAutomation.class, DetectorEmpty.class),
+    MOB(ModuleAutomation.class, DetectorMob.class),
+    POWERED(ModuleAutomation.class, DetectorPowered.class),
+    PLAYER(ModuleAutomation.class, DetectorPlayer.class),
+    EXPLOSIVE(ModuleAutomation.class, DetectorExplosive.class),
+    ANIMAL(ModuleAutomation.class, DetectorAnimal.class),
+    TANK(ModuleAutomation.class, DetectorTank.class),
+    ADVANCED(ModuleAutomation.class, DetectorAdvanced.class),
+    ENERGY(ModuleIC2.class, DetectorEnergy.class),
+    AGE(ModuleAutomation.class, DetectorAge.class),
+    TRAIN(ModuleTrain.class, DetectorTrain.class),
+    SHEEP(ModuleAutomation.class, DetectorSheep.class),
+    VILLAGER(ModuleAutomation.class, DetectorVillager.class),
+    LOCOMOTIVE(ModuleAutomation.class, DetectorLocomotive.class),
+    ROUTING(ModuleRouting.class, DetectorRouting.class);
     public static final EnumDetector[] VALUES = values();
     private final Class<? extends Detector> handler;
-    private final Module module;
+    private final Class<? extends IRailcraftModule> module;
 
-    EnumDetector(Module module, Class<? extends Detector> handler) {
+    EnumDetector(Class<? extends IRailcraftModule> module, Class<? extends Detector> handler) {
         this.handler = handler;
         this.module = module;
     }
@@ -56,13 +61,18 @@ public enum EnumDetector {
     public Detector buildHandler() {
         try {
             return handler.newInstance();
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
         throw new RuntimeException("Failed to create Detector!");
     }
 
     public String getTag() {
-        return "tile.railcraft.detector." + name().toLowerCase(Locale.ENGLISH);
+        return "tile.railcraft.detector." + getName();
+    }
+
+    @Override
+    public String getName() {
+        return name().toLowerCase(Locale.ENGLISH);
     }
 
     public ItemStack getItem() {
@@ -70,13 +80,26 @@ public enum EnumDetector {
     }
 
     public ItemStack getItem(int qty) {
-        if (BlockDetector.getBlock() == null) {
-            return null;
-        }
-        return new ItemStack(BlockDetector.getBlock(), qty, ordinal());
+        return RailcraftBlocks.detector.getStack(qty, this);
+    }
+
+    Block getBlock() {
+        return RailcraftBlocks.detector.block();
+    }
+
+    @Nullable
+    @Override
+    public Object getAlternate() {
+        return null;
+    }
+
+    @Nonnull
+    @Override
+    public Class<?> getParentClass() {
+        return BlockDetector.class;
     }
 
     public boolean isEnabled() {
-        return BlockDetector.getBlock() != null && RailcraftModuleManager.isModuleEnabled(module);
+        return getBlock() != null && RailcraftModuleManager.isModuleEnabled(module);
     }
 }

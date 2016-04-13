@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.render;
 
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -35,7 +35,7 @@ public class RenderSentinel implements ICombinedRenderer
     public void renderItem(RenderBlocks renderblocks, ItemStack item, ItemRenderType renderType) {
         float pix = RenderTools.PIXEL;
 
-        Block block = RailcraftBlocks.getBlockMachineBeta();
+        Block block = RailcraftBlocksOld.getBlockMachineBeta();
 
         block.setBlockBounds(4 * pix, 0, 4 * pix, 12 * pix, 1, 12 * pix);
         RenderTools.renderBlockOnInventory(renderblocks, block, EnumMachineBeta.SENTINEL.ordinal(), 1);

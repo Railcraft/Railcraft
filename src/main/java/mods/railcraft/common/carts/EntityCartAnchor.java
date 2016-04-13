@@ -11,7 +11,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ICartContentsTextureProvider;
 import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -295,7 +295,7 @@ public class EntityCartAnchor extends CartContainerBase implements ICartContents
 
     @Override
     public Block func_145820_n() {
-        return RailcraftBlocks.getBlockMachineAlpha();
+        return RailcraftBlocksOld.getBlockMachineAlpha();
     }
 
     @Override

@@ -35,8 +35,8 @@ public class ItemCrowbarIron extends ItemCrowbar {
     }
 
     @Override
-    public void initItem() {
-        super.initItem();
+    public void initializeDefinintion() {
+        super.initializeDefinintion();
         LootPlugin.addLoot(new ItemStack(this), 1, 1, LootPlugin.Type.TOOL, ITEM_TAG);
         LootPlugin.addLoot(new ItemStack(this), 1, 1, LootPlugin.Type.WORKSHOP, ITEM_TAG);
     }

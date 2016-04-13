@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -18,7 +19,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -31,7 +34,7 @@ public class ItemDust extends ItemRailcraft {
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         for (EnumDust d : EnumDust.VALUES) {
             ItemStack stack = new ItemStack(this, 1, d.ordinal());
             RailcraftRegistry.register(stack);
@@ -63,12 +66,12 @@ public class ItemDust extends ItemRailcraft {
     }
 
     @Override
-    public String getOreTag(IItemMetaEnum meta) {
-        assertMeta(meta);
+    public String getOreTag(IVariantEnum meta) {
+        assertVariant(meta);
         return ((EnumDust) meta).oreTag;
     }
 
-    public enum EnumDust implements IItemMetaEnum {
+    public enum EnumDust implements IVariantEnum {
 
         OBSIDIAN("dust.obsidian", "dustObsidian"),
         SULFUR("dust.sulfur", "dustSulfur"),
@@ -88,9 +91,15 @@ public class ItemDust extends ItemRailcraft {
             return oreTag;
         }
 
+        @Nonnull
         @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
+        public Class<? extends ItemRailcraft> getParentClass() {
             return ItemDust.class;
+        }
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ENGLISH);
         }
     }
 

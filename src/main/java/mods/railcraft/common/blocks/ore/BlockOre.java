@@ -15,7 +15,7 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.*;
 import net.minecraft.block.Block;
@@ -105,7 +105,7 @@ public class BlockOre extends Block {
                 }
             }
 
-            RailcraftItem.dust.registerItem();
+            RailcraftItems.dust.register();
 
             registerOre("oreSulfur", EnumOre.SULFUR);
             registerOre("oreSaltpeter", EnumOre.SALTPETER);
@@ -181,12 +181,12 @@ public class BlockOre extends Block {
         switch (getVariant(state)) {
             case SULFUR: {
                 int qty = 2 + rand.nextInt(4) + rand.nextInt(fortune + 1);
-                drops.add(RailcraftItem.dust.getStack(qty, ItemDust.EnumDust.SULFUR));
+                drops.add(RailcraftItems.dust.getStack(qty, ItemDust.EnumDust.SULFUR));
                 return drops;
             }
             case SALTPETER: {
                 int qty = 1 + rand.nextInt(2) + rand.nextInt(fortune + 1);
-                drops.add(RailcraftItem.dust.getStack(qty, ItemDust.EnumDust.SALTPETER));
+                drops.add(RailcraftItems.dust.getStack(qty, ItemDust.EnumDust.SALTPETER));
                 return drops;
             }
             case DARK_DIAMOND: {

@@ -8,7 +8,10 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -19,7 +22,7 @@ import net.minecraftforge.oredict.OreDictionary;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum RailcraftItem {
+public enum RailcraftItems implements IRailcraftObjectContainer {
 
     circuit(ItemCircuit.class, "part.circuit"),
     crowbarIron(ItemCrowbarIron.class, "tool.crowbar.iron"),
@@ -45,24 +48,32 @@ public enum RailcraftItem {
     ticketGold(ItemTicketGold.class, "routing.ticket.gold", Items.gold_nugget),
     tie(ItemTie.class, "part.tie"),
     whistleTuner(ItemWhistleTuner.class, "tool.whistle.tuner");
-    public static final RailcraftItem[] VALUES = values();
+    public static final RailcraftItems[] VALUES = values();
     private final Class<? extends Item> itemClass;
     private final String tag;
     private final Object altRecipeObject;
     private Item item;
-    private IRailcraftItem railcraftItem;
+    private IRailcraftObject railcraftObject;
 
-    RailcraftItem(Class<? extends Item> itemClass, String tag) {
+    RailcraftItems(Class<? extends Item> itemClass, String tag) {
         this(itemClass, tag, null);
     }
 
-    RailcraftItem(Class<? extends Item> itemClass, String tag, Object alt) {
+    RailcraftItems(Class<? extends Item> itemClass, String tag, Object alt) {
         this.itemClass = itemClass;
         this.tag = tag;
         this.altRecipeObject = alt;
     }
 
-    public void registerItem() {
+    public static void definePostRecipes() {
+        for (RailcraftItems type : VALUES) {
+            if (type.railcraftObject != null)
+                type.railcraftObject.finalizeDefinition();
+        }
+    }
+
+    @Override
+    public void register() {
         if (item != null)
             return;
 
@@ -74,81 +85,91 @@ public enum RailcraftItem {
             } catch (IllegalAccessException ex) {
                 throw new RuntimeException("Invalid Item Constructor");
             }
-            if (!(item instanceof IRailcraftItem))
-                throw new RuntimeException("Railcraft Items must implement IRailcraftItem");
-            railcraftItem = (IRailcraftItem) item;
+            if (!(item instanceof IRailcraftObject))
+                throw new RuntimeException("Railcraft Items must implement IRailcraftObject");
+            railcraftObject = (IRailcraftObject) item;
             item.setUnlocalizedName("railcraft." + tag);
             RailcraftRegistry.register(item);
-            railcraftItem.initItem();
-            railcraftItem.defineRecipes();
+            railcraftObject.initializeDefinintion();
+            railcraftObject.defineRecipes();
         }
     }
 
-    public boolean isItemEqual(ItemStack stack) {
-        return stack != null && this.item == stack.getItem();
+    @Override
+    public boolean isEqual(ItemStack stack) {
+        return stack != null && item == stack.getItem();
     }
 
-    public boolean isItemEqual(Item i) {
-        return i != null && this.item == i;
+    public boolean isEqual(Item item) {
+        return item != null && this.item == item;
     }
 
     public Item item() {
         return item;
     }
 
+    @Override
     public String getBaseTag() {
         return tag;
     }
 
+    @Override
     public ItemStack getWildcard() {
         return getStack(1, OreDictionary.WILDCARD_VALUE);
     }
 
+    @Override
     public ItemStack getStack() {
         return getStack(1, 0);
     }
 
+    @Override
     public ItemStack getStack(int qty) {
         return getStack(qty, 0);
     }
 
+    @Override
     public ItemStack getStack(int qty, int meta) {
-        registerItem();
+        register();
         if (item == null)
             return null;
         return new ItemStack(item, qty, meta);
     }
 
-    private void checkMetaObject(IItemMetaEnum meta) {
-        if (meta == null || meta.getItemClass() != itemClass)
-            throw new RuntimeException("Incorrect Item Meta object used.");
+    private void checkVariantObject(IVariantEnum variant) {
+        if (variant == null || variant.getParentClass() != itemClass)
+            throw new RuntimeException("Incorrect Variant object used.");
     }
 
-    public ItemStack getStack(IItemMetaEnum meta) {
-        return getStack(1, meta);
+    @Override
+    public ItemStack getStack(IVariantEnum variant) {
+        return getStack(1, variant);
     }
 
-    public ItemStack getStack(int qty, IItemMetaEnum meta) {
-        checkMetaObject(meta);
-        return getStack(qty, meta.ordinal());
+    @Override
+    public ItemStack getStack(int qty, IVariantEnum variant) {
+        checkVariantObject(variant);
+        return getStack(qty, variant.ordinal());
     }
 
+    @Override
     public Object getRecipeObject() {
-        registerItem();
-        if (railcraftItem != null)
-            return railcraftItem.getRecipeObject(null);
+        register();
+        if (railcraftObject != null)
+            return railcraftObject.getRecipeObject(null);
         Object obj = altRecipeObject;
         if (obj instanceof ItemStack)
             obj = ((ItemStack) obj).copy();
         return obj;
     }
 
-    public Object getRecipeObject(IItemMetaEnum meta) {
-        checkMetaObject(meta);
-        registerItem();
-        if (railcraftItem != null)
-            return railcraftItem.getRecipeObject(meta);
-        Object obj = meta.getAlternate();
+    @Override
+    public Object getRecipeObject(IVariantEnum variant) {
+        checkVariantObject(variant);
+        register();
+        if (railcraftObject != null)
+            return railcraftObject.getRecipeObject(variant);
+        Object obj = variant.getAlternate();
         if (obj == null)
             obj = altRecipeObject;
         if (obj instanceof ItemStack)
@@ -156,14 +177,18 @@ public enum RailcraftItem {
         return obj;
     }
 
+    @Override
+    public IRailcraftObject getObject() {
+        return railcraftObject;
+    }
+
+    @Override
     public boolean isEnabled() {
         return RailcraftConfig.isItemEnabled(tag);
     }
 
-    public static void definePostRecipes() {
-        for (RailcraftItem type : VALUES) {
-            if (type.railcraftItem != null)
-                type.railcraftItem.definePostRecipes();
-        }
+    @Override
+    public boolean isLoaded() {
+        return item != null;
     }
 }

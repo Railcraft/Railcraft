@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -16,34 +17,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemGear extends ItemRailcraft {
-
-    public enum EnumGear implements IItemMetaEnum {
-
-        GOLD_PLATE("ingotGold"),
-        IRON("blockIron"),
-        STEEL("blockSteel"),
-        BUSHING("ingotTin");
-        public static final EnumGear[] VALUES = values();
-        private Object alternate;
-
-        EnumGear(Object alt) {
-            this.alternate = alt;
-        }
-
-        @Override
-        public Object getAlternate() {
-            return alternate;
-        }
-
-        @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
-            return ItemGear.class;
-        }
-
-    }
 
     public ItemGear() {
         setHasSubtypes(true);
@@ -51,13 +29,13 @@ public class ItemGear extends ItemRailcraft {
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         for (EnumGear gear : EnumGear.values()) {
             ItemStack stack = new ItemStack(this, 1, gear.ordinal());
             RailcraftRegistry.register(stack);
         }
 
-        OreDictionary.registerOre("gearIron", RailcraftItem.gear.getStack(1, EnumGear.IRON));
+        OreDictionary.registerOre("gearIron", RailcraftItems.gear.getStack(1, EnumGear.IRON));
 
         ItemStack itemStack = new ItemStack(this, 1, EnumGear.BUSHING.ordinal());
         LootPlugin.addLoot(itemStack, 1, 8, LootPlugin.Type.RAILWAY, "gear.bushing");
@@ -72,9 +50,9 @@ public class ItemGear extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        ItemStack bushing = RailcraftItem.gear.getStack(EnumGear.BUSHING);
+        ItemStack bushing = RailcraftItems.gear.getStack(EnumGear.BUSHING);
 
-        RailcraftItem gear = RailcraftItem.gear;
+        RailcraftItems gear = RailcraftItems.gear;
 
         CraftingPlugin.addRecipe(gear.getStack(2, EnumGear.BUSHING),
                 "TT",
@@ -119,6 +97,36 @@ public class ItemGear extends ItemRailcraft {
                 return "item.railcraft.part.gear.bushing";
             default:
                 return "";
+        }
+    }
+
+    public enum EnumGear implements IVariantEnum {
+
+        GOLD_PLATE("ingotGold"),
+        IRON("blockIron"),
+        STEEL("blockSteel"),
+        BUSHING("ingotTin");
+        public static final EnumGear[] VALUES = values();
+        private Object alternate;
+
+        EnumGear(Object alt) {
+            this.alternate = alt;
+        }
+
+        @Override
+        public Object getAlternate() {
+            return alternate;
+        }
+
+        @Nonnull
+        @Override
+        public Class<? extends ItemRailcraft> getParentClass() {
+            return ItemGear.class;
+        }
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ENGLISH).replace('_', '.');
         }
     }
 

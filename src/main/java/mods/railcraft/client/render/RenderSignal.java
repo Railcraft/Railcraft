@@ -17,7 +17,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.aesthetics.post.PostConnectionHelper;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.TileSignalBase;
@@ -35,9 +35,9 @@ public class RenderSignal extends RenderTESRSignals implements ICombinedRenderer
 
     public RenderSignal(SignalAspect defaultAspect) {
         this.defaultAspect = defaultAspect;
-        info.template = RailcraftBlocks.getBlockSignal();
+        info.template = RailcraftBlocksOld.getBlockSignal();
         info.texture = new IIcon[6];
-        tesrInfo.template = RailcraftBlocks.getBlockSignal();
+        tesrInfo.template = RailcraftBlocksOld.getBlockSignal();
         tesrInfo.texture = new IIcon[6];
     }
 

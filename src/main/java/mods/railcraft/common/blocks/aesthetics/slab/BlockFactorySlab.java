@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.aesthetics.slab;
 
 import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -30,8 +29,7 @@ public class BlockFactorySlab extends BlockFactory {
 
     @Override
     protected void doBlockInit() {
-        int renderId = Railcraft.getProxy().getRenderId();
-        BlockRailcraftSlab.block = new BlockRailcraftSlab(renderId);
+        BlockRailcraftSlab.block = new BlockRailcraftSlab();
         BlockRailcraftSlab.block.setUnlocalizedName("railcraft.slab");
         RailcraftRegistry.register(BlockRailcraftSlab.block, ItemSlab.class);
         GameRegistry.registerTileEntity(TileSlab.class, "RCSlabTile");

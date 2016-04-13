@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.modules.ModuleRouting;
@@ -76,7 +76,7 @@ public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
     }
 
     public ItemStack getItem(int qty) {
-        return new ItemStack(RailcraftBlocks.getBlockSignal(), qty, ordinal());
+        return new ItemStack(RailcraftBlocksOld.getBlockSignal(), qty, ordinal());
     }
 
     @Override
@@ -130,7 +130,7 @@ public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
 
     @Override
     public Block getBlock() {
-        return RailcraftBlocks.getBlockSignal();
+        return RailcraftBlocksOld.getBlockSignal();
     }
 
     @Override

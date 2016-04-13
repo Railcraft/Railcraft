@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -84,7 +84,7 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
 
     public boolean register() {
         if (RailcraftConfig.isSubBlockEnabled(getTag())) {
-            RailcraftBlocks.registerBlockMachineBeta();
+            RailcraftBlocksOld.registerBlockMachineBeta();
             return getBlock() != null;
         }
         return false;
@@ -143,7 +143,7 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
 
     @Override
     public Block getBlock() {
-        return RailcraftBlocks.getBlockMachineBeta();
+        return RailcraftBlocksOld.getBlockMachineBeta();
     }
 
     @Override

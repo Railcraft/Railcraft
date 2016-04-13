@@ -9,8 +9,8 @@
 package mods.railcraft.common.plugins.forge;
 
 import com.google.common.collect.Lists;
-import mods.railcraft.common.items.IItemMetaEnum;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -60,13 +60,13 @@ public class CraftingPlugin {
         List<Object> recipeList = Lists.newArrayList(recipeArray);
         for (int i = 0; i < recipeList.size(); i++) {
             Object obj = recipeList.get(i);
-            if (obj instanceof RailcraftItem) {
+            if (obj instanceof IRailcraftObjectContainer) {
                 Object obj2 = i + 1 < recipeList.size() ? recipeList.get(i + 1) : null;
-                if (obj2 instanceof IItemMetaEnum) {
-                    recipeList.set(i, ((RailcraftItem) obj).getRecipeObject((IItemMetaEnum) obj2));
+                if (obj2 instanceof IVariantEnum) {
+                    recipeList.set(i, ((IRailcraftObjectContainer) obj).getRecipeObject((IVariantEnum) obj2));
                     recipeList.remove(i + 1);
                 } else {
-                    recipeList.set(i, ((RailcraftItem) obj).getRecipeObject());
+                    recipeList.set(i, ((IRailcraftObjectContainer) obj).getRecipeObject());
                 }
             } else if (obj == null) {
                 throw new InvalidRecipeException("Tried to define invalid {0} recipe for {1}, a necessary item was probably disabled. Skipping", recipeType, result.getUnlocalizedName());

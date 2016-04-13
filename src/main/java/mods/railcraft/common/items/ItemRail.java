@@ -9,6 +9,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
@@ -21,7 +22,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemRail extends ItemRailcraft {
 
@@ -31,11 +34,11 @@ public class ItemRail extends ItemRailcraft {
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         for (EnumRail rail : EnumRail.VALUES) {
             ItemStack stack = new ItemStack(this, 1, rail.ordinal());
             RailcraftRegistry.register(stack);
-            LootPlugin.addLoot(RailcraftItem.rail, rail, 6, 18, LootPlugin.Type.RAILWAY);
+            LootPlugin.addLoot(RailcraftItems.rail, rail, 6, 18, LootPlugin.Type.RAILWAY);
         }
     }
 
@@ -48,7 +51,7 @@ public class ItemRail extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        RailcraftItem item = RailcraftItem.rail;
+        RailcraftItems item = RailcraftItems.rail;
 
         // Standard
         RailcraftCraftingManager.rollingMachine.addRecipe(item.getStack(8, EnumRail.STANDARD),
@@ -81,7 +84,7 @@ public class ItemRail extends ItemRailcraft {
                 'G', new ItemStack(Items.gold_ingot));
 
         // Wooden
-        CraftingPlugin.addShapelessRecipe(item.getStack(6, EnumRail.WOOD), "ingotIron", RailcraftItem.tie.getRecipeObject(EnumTie.WOOD));
+        CraftingPlugin.addShapelessRecipe(item.getStack(6, EnumRail.WOOD), "ingotIron", RailcraftItems.tie.getRecipeObject(EnumTie.WOOD));
 
         // Speed
         recipe = new ShapedOreRecipe(item.getStack(8, EnumRail.SPEED),
@@ -135,7 +138,7 @@ public class ItemRail extends ItemRailcraft {
         }
     }
 
-    public enum EnumRail implements IItemMetaEnum {
+    public enum EnumRail implements IVariantEnum {
 
         STANDARD("ingotIron"), ADVANCED("ingotGold"), WOOD("slabWood"), SPEED("ingotSteel"), REINFORCED("ingotSteel"), ELECTRIC("ingotCopper");
         public static final EnumRail[] VALUES = values();
@@ -150,11 +153,16 @@ public class ItemRail extends ItemRailcraft {
             return alternate;
         }
 
+        @Nonnull
         @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
+        public Class<? extends ItemRailcraft> getParentClass() {
             return ItemRail.class;
         }
 
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
     }
 
 }

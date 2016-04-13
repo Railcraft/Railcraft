@@ -19,7 +19,7 @@ import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.fluids.RailcraftFluids;
-import mods.railcraft.common.items.RailcraftItem;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.BlockFirestoneRecharge;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.craftguide.CraftGuidePlugin;
@@ -231,8 +231,8 @@ public final class Railcraft {
                 Block block = GameRegistry.findBlock(MOD_ID, MiscTools.cleanTag(mapping.name));
                 if (block != null)
                     remap(Item.getItemFromBlock(block), mapping);
-                else if (mapping.name.equals("Railcraft:tool.mag.glass") && RailcraftItem.magGlass.item() != null)
-                    remap(RailcraftItem.magGlass.item(), mapping);
+                else if (mapping.name.equals("Railcraft:tool.mag.glass") && RailcraftItems.magGlass.item() != null)
+                    remap(RailcraftItems.magGlass.item(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
                     remap(Item.getItemFromBlock(RailcraftFluids.CREOSOTE.getBlock()), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam") && RailcraftFluids.STEAM.getBlock() != null)

@@ -39,8 +39,8 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
     }
 
     @Override
-    public void initItem() {
-        LootPlugin.addLoot(RailcraftItem.signalBlockSurveyor, 1, 1, LootPlugin.Type.WORKSHOP);
+    public void initializeDefinintion() {
+        LootPlugin.addLoot(RailcraftItems.signalBlockSurveyor, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override

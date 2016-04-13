@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.api.tracks.ITrackEmitter;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -75,8 +75,8 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
     }
 
     private void notifyNeighbors() {
-        getWorld().notifyNeighborsOfStateChange(getPos(), RailcraftBlocks.getBlockTrack());
-        getWorld().notifyNeighborsOfStateChange(getPos().down(), RailcraftBlocks.getBlockTrack());
+        getWorld().notifyNeighborsOfStateChange(getPos(), RailcraftBlocksOld.getBlockTrack());
+        getWorld().notifyNeighborsOfStateChange(getPos().down(), RailcraftBlocksOld.getBlockTrack());
         sendUpdateToClient();
     }
 

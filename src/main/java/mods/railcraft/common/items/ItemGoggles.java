@@ -10,6 +10,8 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.blocks.hidden.BlockHidden;
 import mods.railcraft.common.blocks.hidden.TrailTicker;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.*;
@@ -29,7 +31,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemGoggles extends ItemArmor implements IRailcraftItem {
+public class ItemGoggles extends ItemArmor implements IRailcraftObject {
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "goggles.png";
 
     public ItemGoggles() {
@@ -80,12 +82,12 @@ public class ItemGoggles extends ItemArmor implements IRailcraftItem {
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         BlockHidden.registerBlock();
         if (BlockHidden.getBlock() != null && RailcraftConfig.isTrackingAuraEnabled())
             MinecraftForge.EVENT_BUS.register(new TrailTicker());
 
-        LootPlugin.addLoot(RailcraftItem.goggles, 1, 1, LootPlugin.Type.WORKSHOP);
+        LootPlugin.addLoot(RailcraftItems.goggles, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override
@@ -94,7 +96,7 @@ public class ItemGoggles extends ItemArmor implements IRailcraftItem {
                 "GCG",
                 "I I",
                 "LLL",
-                'C', RailcraftItem.circuit, ItemCircuit.EnumCircuit.RECEIVER,
+                'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
                 'I', "ingotSteel",
                 'L', Items.leather,
                 'G', "paneGlassColorless");
@@ -132,12 +134,12 @@ public class ItemGoggles extends ItemArmor implements IRailcraftItem {
     }
 
     @Override
-    public Object getRecipeObject(IItemMetaEnum meta) {
+    public Object getRecipeObject(IVariantEnum meta) {
         return this;
     }
 
     @Override
-    public void definePostRecipes() {
+    public void finalizeDefinition() {
     }
 
     public enum GoggleAura {

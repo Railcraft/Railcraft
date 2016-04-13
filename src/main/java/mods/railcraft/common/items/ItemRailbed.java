@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -16,7 +17,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemRailbed extends ItemRailcraft {
 
@@ -27,7 +30,7 @@ public class ItemRailbed extends ItemRailcraft {
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         for (EnumRailbed railbed : EnumRailbed.VALUES) {
             RailcraftRegistry.register(new ItemStack(this, 1, railbed.ordinal()));
         }
@@ -52,18 +55,18 @@ public class ItemRailbed extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        RailcraftItem item = RailcraftItem.railbed;
+        RailcraftItems item = RailcraftItems.railbed;
 
-        Object tieWood = RailcraftItem.tie.getRecipeObject(EnumTie.WOOD);
+        Object tieWood = RailcraftItems.tie.getRecipeObject(EnumTie.WOOD);
         CraftingPlugin.addShapelessRecipe(item.getStack(1, EnumRailbed.WOOD),
                 tieWood, tieWood, tieWood, tieWood);
 
-        Object tieStone = RailcraftItem.tie.getRecipeObject(EnumTie.STONE);
+        Object tieStone = RailcraftItems.tie.getRecipeObject(EnumTie.STONE);
         CraftingPlugin.addShapelessRecipe(item.getStack(1, EnumRailbed.STONE),
                 tieStone, tieStone, tieStone, tieStone);
     }
 
-    public enum EnumRailbed implements IItemMetaEnum {
+    public enum EnumRailbed implements IVariantEnum {
         WOOD("stickWood"),
         STONE(Blocks.stone_slab);
         public static final EnumRailbed[] VALUES = values();
@@ -78,9 +81,15 @@ public class ItemRailbed extends ItemRailcraft {
             return alternate;
         }
 
+        @Nonnull
         @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
+        public Class<? extends ItemRailcraft> getParentClass() {
             return ItemRailbed.class;
+        }
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ENGLISH);
         }
     }
 

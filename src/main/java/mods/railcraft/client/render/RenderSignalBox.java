@@ -8,6 +8,7 @@
  */
 package mods.railcraft.client.render;
 
+import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -16,7 +17,6 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.TileBoxBase;
 import net.minecraft.util.IIcon;
@@ -32,9 +32,9 @@ public class RenderSignalBox extends RenderTESRSignals implements ICombinedRende
 
     public RenderSignalBox(IIconProvider iconProvider) {
         info.texture = new IIcon[6];
-        info.template = RailcraftBlocks.getBlockSignal();
+        info.template = RailcraftBlocksOld.getBlockSignal();
 		tesrInfo.texture = new IIcon[6];
-		tesrInfo.template = RailcraftBlocks.getBlockSignal();
+		tesrInfo.template = RailcraftBlocksOld.getBlockSignal();
         this.iconProvider = iconProvider;
     }
 

@@ -9,6 +9,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.creativetab.CreativeTabs;
@@ -17,7 +18,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemPlate extends ItemRailcraft {
 
@@ -27,12 +30,12 @@ public class ItemPlate extends ItemRailcraft {
     }
 
     @Override
-    public void initItem() {
+    public void initializeDefinintion() {
         for (EnumPlate p : EnumPlate.VALUES) {
             ItemStack stack = new ItemStack(this, 1, p.ordinal());
             RailcraftRegistry.register(stack);
 
-            LootPlugin.addLoot(RailcraftItem.plate, p, 6, 18, LootPlugin.Type.WORKSHOP);
+            LootPlugin.addLoot(RailcraftItems.plate, p, 6, 18, LootPlugin.Type.WORKSHOP);
         }
     }
 
@@ -45,7 +48,7 @@ public class ItemPlate extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        RailcraftItem plate = RailcraftItem.plate;
+        RailcraftItems plate = RailcraftItems.plate;
 
         // Iron Plate
         IRecipe recipe = new ShapedOreRecipe(plate.getStack(4, EnumPlate.IRON),
@@ -76,7 +79,7 @@ public class ItemPlate extends ItemRailcraft {
                 'I', "ingotCopper");
         RailcraftCraftingManager.rollingMachine.addRecipe(recipe);
 
-        RailcraftCraftingManager.blastFurnace.addRecipe(plate.getStack(EnumPlate.IRON), true, false, 1280, RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL));
+        RailcraftCraftingManager.blastFurnace.addRecipe(plate.getStack(EnumPlate.IRON), true, false, 1280, RailcraftItems.ingot.getStack(ItemIngot.EnumIngot.STEEL));
     }
 
     @Override
@@ -98,7 +101,7 @@ public class ItemPlate extends ItemRailcraft {
         }
     }
 
-    public enum EnumPlate implements IItemMetaEnum {
+    public enum EnumPlate implements IVariantEnum {
 
         IRON("ingotIron"), STEEL("ingotSteel"), TIN("ingotTin"), COPPER("ingotCopper");
         public static final EnumPlate[] VALUES = values();
@@ -113,11 +116,16 @@ public class ItemPlate extends ItemRailcraft {
             return alternate;
         }
 
+        @Nonnull
         @Override
-        public Class<? extends ItemRailcraft> getItemClass() {
+        public Class<? extends ItemRailcraft> getParentClass() {
             return ItemPlate.class;
         }
 
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
     }
 
 }
