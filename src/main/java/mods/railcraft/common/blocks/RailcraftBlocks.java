@@ -12,6 +12,8 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
+import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
+import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.core.IRailcraftObject;
@@ -25,6 +27,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by CovertJaguar on 4/13/2016 for Railcraft.
  *
@@ -32,6 +36,7 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public enum RailcraftBlocks implements IRailcraftObjectContainer {
     detector(BlockDetector.class, ItemDetector.class, "detector"),
+    signal(BlockSignalRailcraft.class, ItemSignal.class, "signal"),
     track(BlockTrack.class, ItemTrack.class, "track");
     public static final RailcraftBlocks[] VALUES = values();
     private final Class<? extends Block> blockClass;
@@ -124,41 +129,33 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     }
 
     private void checkVariantObject(IVariantEnum variant) {
-        if (variant == null || variant.getParentClass() != blockClass)
-            throw new RuntimeException("Incorrect Variant object used.");
+        IVariantEnum.tools.checkVariantObject(itemClass, variant);
     }
 
     @Override
-    public ItemStack getStack(IVariantEnum variant) {
+    public ItemStack getStack(@Nonnull IVariantEnum variant) {
         return getStack(1, variant);
     }
 
     @Override
-    public ItemStack getStack(int qty, IVariantEnum variant) {
+    public ItemStack getStack(int qty, @Nonnull IVariantEnum variant) {
         checkVariantObject(variant);
-        return getStack(qty, variant.ordinal());
+        return getStack(qty, variant.getItemMeta());
     }
 
     @Override
     public Object getRecipeObject() {
-//        register(); Blocks are not created lazily like items.
-        if (railcraftObject != null)
-            return railcraftObject.getRecipeObject(null);
-        Object obj = altRecipeObject;
-        if (obj instanceof ItemStack)
-            obj = ((ItemStack) obj).copy();
-        return obj;
+        return getRecipeObject(null);
     }
 
     @Override
     public Object getRecipeObject(IVariantEnum variant) {
-        if (variant != null)
-            checkVariantObject(variant);
+        checkVariantObject(variant);
 //        register(); Blocks are not created lazily like items.
-        if (railcraftObject != null)
-            return railcraftObject.getRecipeObject(variant);
         Object obj = null;
-        if (variant != null)
+        if (railcraftObject != null)
+            obj = railcraftObject.getRecipeObject(variant);
+        if (obj == null && variant != null)
             obj = variant.getAlternate();
         if (obj == null)
             obj = altRecipeObject;

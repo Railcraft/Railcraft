@@ -69,22 +69,17 @@ public class ItemRailcraft extends Item implements IRailcraftObject {
 
     @Override
     public Object getRecipeObject(IVariantEnum variant) {
-        assertVariant(variant);
+        IVariantEnum.tools.checkVariantObject(getClass(), variant);
         String oreTag = getOreTag(variant);
         if (oreTag != null)
             return oreTag;
         if (variant != null && getHasSubtypes())
-            return new ItemStack(this, 1, variant.ordinal());
+            return new ItemStack(this, 1, variant.getItemMeta());
         return this;
     }
 
     public String getOreTag(IVariantEnum variant) {
         return null;
-    }
-
-    protected void assertVariant(IVariantEnum variant) {
-        if (variant != null && variant.getParentClass() != getClass())
-            throw new RuntimeException("Incorrect Item Variant object used.");
     }
 
     @Override

@@ -47,7 +47,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
 
     private final IMachineProxy<M> proxy;
     private final int[] metaOpacity;
-    private final BlockState altBlockState;
+    private final BlockState blockstate;
 
     public BlockMachine(IMachineProxy<M> proxy, boolean opaque, int[] metaOpacity) {
         super(Material.rock);
@@ -56,8 +56,8 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         setStepSound(soundTypeStone);
         setTickRandomly(true);
         this.proxy = proxy;
-        this.altBlockState = new BlockState(this, proxy.getVariantProperty());
-        setDefaultState(altBlockState.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMachine(0)));
+        this.blockstate = new BlockState(this, proxy.getVariantProperty());
+        setDefaultState(blockstate.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMachine(0)));
         this.fullBlock = opaque;
 
         this.metaOpacity = metaOpacity;
@@ -74,7 +74,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
 
     @Override
     public BlockState getBlockState() {
-        return this.altBlockState;
+        return blockstate;
     }
 
     @Override
@@ -190,7 +190,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         return super.getDrops(world, pos, state, fortune);
     }
 
-    private List<ItemStack> getBlockDroppedSilkTouch(World world, BlockPos pos, IBlockState state, int fortune) {
+    private List<ItemStack> getBlockDroppedSilkTouch(World world, BlockPos pos, IBlockState state, @SuppressWarnings("SameParameterValue") int fortune) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).getBlockDroppedSilkTouch(fortune);

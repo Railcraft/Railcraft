@@ -43,9 +43,9 @@ public class ItemNugget extends ItemRailcraft {
     }
 
     @Override
-    public String getOreTag(IVariantEnum meta) {
-        assertVariant(meta);
-        return ((EnumNugget) meta).oreTag;
+    public String getOreTag(IVariantEnum variant) {
+        IVariantEnum.tools.checkVariantObject(getClass(), variant);
+        return ((EnumNugget) variant).oreTag;
     }
 
     @Override
@@ -117,6 +117,11 @@ public class ItemNugget extends ItemRailcraft {
         @Override
         public String getName() {
             return name().toLowerCase(Locale.ENGLISH);
+        }
+
+        @Override
+        public int getItemMeta() {
+            return ordinal();
         }
     }
 

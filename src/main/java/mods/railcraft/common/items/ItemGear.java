@@ -128,6 +128,11 @@ public class ItemGear extends ItemRailcraft {
         public String getName() {
             return name().toLowerCase(Locale.ENGLISH).replace('_', '.');
         }
+
+        @Override
+        public int getItemMeta() {
+            return ordinal();
+        }
     }
 
 }

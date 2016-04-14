@@ -18,8 +18,16 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IVariantEnum extends IStringSerializable {
+    Tools tools = new Tools();
 
-    int ordinal();
+    class Tools {
+        public void checkVariantObject(Class<?> clazz, @Nullable IVariantEnum variant) {
+            if (variant != null && variant.getParentClass() != clazz)
+                throw new RuntimeException("Incorrect Variant object used.");
+        }
+    }
+
+    int getItemMeta();
 
     @Nonnull
     Class<?> getParentClass();

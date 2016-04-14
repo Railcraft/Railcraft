@@ -8,20 +8,22 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleRouting;
 import mods.railcraft.common.modules.ModuleSignals;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IStringSerializable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
+public enum EnumSignal implements ISignalTileDefinition, IVariantEnum {
 
     // Name (module, hardness, needsSupport, tag, tile)
     BOX_INTERLOCK(ModuleSignals.class, 3, true, "box.interlock", TileBoxInterlock.class),
@@ -76,7 +78,7 @@ public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
     }
 
     public ItemStack getItem(int qty) {
-        return new ItemStack(RailcraftBlocksOld.getBlockSignal(), qty, ordinal());
+        return new ItemStack(getBlock(), qty, ordinal());
     }
 
     @Override
@@ -130,7 +132,7 @@ public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
 
     @Override
     public Block getBlock() {
-        return RailcraftBlocksOld.getBlockSignal();
+        return RailcraftBlocks.signal.block();
     }
 
     @Override
@@ -141,5 +143,22 @@ public enum EnumSignal implements ISignalTileDefinition, IStringSerializable {
     @Override
     public String getName() {
         return tag;
+    }
+
+    @Nonnull
+    @Override
+    public Class<?> getParentClass() {
+        return BlockSignalRailcraft.class;
+    }
+
+    @Nullable
+    @Override
+    public Object getAlternate() {
+        return null;
+    }
+
+    @Override
+    public int getItemMeta() {
+        return ordinal();
     }
 }

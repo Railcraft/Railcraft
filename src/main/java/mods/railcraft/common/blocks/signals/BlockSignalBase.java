@@ -32,11 +32,9 @@ import org.apache.logging.log4j.Level;
 
 public abstract class BlockSignalBase extends BlockContainer implements IPostConnection {
 
-    private final int renderType;
 
-    public BlockSignalBase(int renderType) {
+    protected BlockSignalBase() {
         super(new MaterialStructure());
-        this.renderType = renderType;
         setStepSound(Block.soundTypeMetal);
         setResistance(50);
         setCreativeTab(CreativeTabs.tabTransport);
@@ -182,7 +180,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
 
     @Override
     public int getRenderType() {
-        return renderType;
+        return 2;
     }
 
     @Override

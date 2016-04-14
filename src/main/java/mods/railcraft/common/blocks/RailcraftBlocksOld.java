@@ -20,10 +20,7 @@ import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.epsilon.MachineProxyEpsilon;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.blocks.machine.gamma.MachineProxyGamma;
-import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
-import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.RailcraftItems;
@@ -45,7 +42,6 @@ public class RailcraftBlocksOld {
     private static Block blockMachineDelta;
     private static Block blockMachineEpsilon;
     private static Block blockRailElevator;
-    private static Block blockSignal;
 
     public static void registerBlockRailElevator() {
         if (blockRailElevator == null && RailcraftConfig.isBlockEnabled("elevator")) {
@@ -213,15 +209,4 @@ public class RailcraftBlocksOld {
         return blockMachineEpsilon;
     }
 
-    public static void registerBlockSignal() {
-        if (blockSignal == null && RailcraftConfig.isBlockEnabled("signal")) {
-            int renderId = Railcraft.getProxy().getRenderId();
-            blockSignal = new BlockSignalRailcraft(renderId);
-            RailcraftRegistry.register(blockSignal, ItemSignal.class);
-        }
-    }
-
-    public static Block getBlockSignal() {
-        return blockSignal;
-    }
 }

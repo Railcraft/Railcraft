@@ -124,6 +124,11 @@ public class ItemCircuit extends ItemRailcraft {
         public String getName() {
             return name().toLowerCase(Locale.ENGLISH);
         }
+
+        @Override
+        public int getItemMeta() {
+            return ordinal();
+        }
     }
 
 }

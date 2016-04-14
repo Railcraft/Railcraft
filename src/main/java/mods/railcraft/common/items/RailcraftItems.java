@@ -19,6 +19,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -137,39 +140,34 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     }
 
     private void checkVariantObject(IVariantEnum variant) {
-        if (variant == null || variant.getParentClass() != itemClass)
-            throw new RuntimeException("Incorrect Variant object used.");
+        IVariantEnum.tools.checkVariantObject(itemClass, variant);
     }
 
     @Override
-    public ItemStack getStack(IVariantEnum variant) {
+    public ItemStack getStack(@Nonnull IVariantEnum variant) {
         return getStack(1, variant);
     }
 
     @Override
-    public ItemStack getStack(int qty, IVariantEnum variant) {
+    public ItemStack getStack(int qty, @Nonnull IVariantEnum variant) {
         checkVariantObject(variant);
-        return getStack(qty, variant.ordinal());
+        return getStack(qty, variant.getItemMeta());
     }
 
     @Override
     public Object getRecipeObject() {
-        register();
-        if (railcraftObject != null)
-            return railcraftObject.getRecipeObject(null);
-        Object obj = altRecipeObject;
-        if (obj instanceof ItemStack)
-            obj = ((ItemStack) obj).copy();
-        return obj;
+        return getRecipeObject(null);
     }
 
     @Override
-    public Object getRecipeObject(IVariantEnum variant) {
+    public Object getRecipeObject(@Nullable IVariantEnum variant) {
         checkVariantObject(variant);
         register();
+        Object obj = null;
         if (railcraftObject != null)
-            return railcraftObject.getRecipeObject(variant);
-        Object obj = variant.getAlternate();
+            obj = railcraftObject.getRecipeObject(variant);
+        if (obj == null && variant != null)
+            obj = variant.getAlternate();
         if (obj == null)
             obj = altRecipeObject;
         if (obj instanceof ItemStack)

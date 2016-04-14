@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
  * Created by CovertJaguar on 3/14/2016.
  */
 public interface IRailcraftObject {
-    Object getRecipeObject(@Nullable IVariantEnum meta);
+    Object getRecipeObject(@Nullable IVariantEnum variant);
 
     void defineRecipes();
 

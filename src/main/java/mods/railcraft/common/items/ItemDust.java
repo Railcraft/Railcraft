@@ -66,9 +66,9 @@ public class ItemDust extends ItemRailcraft {
     }
 
     @Override
-    public String getOreTag(IVariantEnum meta) {
-        assertVariant(meta);
-        return ((EnumDust) meta).oreTag;
+    public String getOreTag(IVariantEnum variant) {
+        IVariantEnum.tools.checkVariantObject(getClass(), variant);
+        return ((EnumDust) variant).oreTag;
     }
 
     public enum EnumDust implements IVariantEnum {
@@ -100,6 +100,11 @@ public class ItemDust extends ItemRailcraft {
         @Override
         public String getName() {
             return name().toLowerCase(Locale.ENGLISH);
+        }
+
+        @Override
+        public int getItemMeta() {
+            return ordinal();
         }
     }
 

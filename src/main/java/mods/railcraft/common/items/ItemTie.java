@@ -105,6 +105,11 @@ public class ItemTie extends ItemRailcraft {
             return name().toLowerCase(Locale.ENGLISH);
         }
 
+        @Override
+        public int getItemMeta() {
+            return ordinal();
+        }
+
     }
 
 }
