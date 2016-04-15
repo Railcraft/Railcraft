@@ -8,9 +8,9 @@
  */
 package mods.railcraft.common.blocks.machine;
 
+import mods.railcraft.common.blocks.IBlockContainer;
+import mods.railcraft.common.blocks.IStateContainer;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
@@ -18,7 +18,7 @@ import net.minecraft.util.IStringSerializable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IEnumMachine<M extends IEnumMachine<M>> extends Comparable<M>, IStringSerializable {
+public interface IEnumMachine<M extends IEnumMachine<M>> extends Comparable<M>, IStringSerializable, IBlockContainer, IStateContainer {
     String getTag();
 
     boolean isAvailable();
@@ -29,15 +29,15 @@ public interface IEnumMachine<M extends IEnumMachine<M>> extends Comparable<M>, 
 
     Class<? extends TileMachineBase> getTileClass();
 
+    String getToolClass();
+
+    boolean passesLight();
+
     TileMachineBase getTileEntity();
 
     ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv);
 
     int ordinal();
-
-    Block getBlock();
-
-    IBlockState getState();
 
     boolean isDepreciated();
 }

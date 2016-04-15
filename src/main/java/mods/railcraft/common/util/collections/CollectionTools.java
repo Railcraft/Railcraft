@@ -22,10 +22,10 @@ public class CollectionTools {
     private CollectionTools() {
     }
 
-    public static <T> BiMap<T, Integer> createIndexedLookupTable(T... elements) {
-        BiMap<T, Integer> biMap = HashBiMap.create();
+    public static <T> BiMap<Integer, T> createIndexedLookupTable(T... elements) {
+        BiMap<Integer, T> biMap = HashBiMap.create();
         for (int i = 0; i < elements.length; i++) {
-            biMap.put(elements[i], i);
+            biMap.put(i, elements[i]);
         }
         return biMap;
     }

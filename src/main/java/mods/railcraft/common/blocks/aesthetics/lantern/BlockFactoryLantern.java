@@ -35,12 +35,12 @@ public class BlockFactoryLantern extends BlockFactory {
         BlockLantern.metal = createLantern(BlockLantern.METAL_LANTERN);
     }
 
-    private BlockLantern createLantern(BiMap<BlockMaterial, Integer> variants) {
+    private BlockLantern createLantern(BiMap<Integer, BlockMaterial> variants) {
         BlockLantern block = new BlockLantern(variants);
         block.setUnlocalizedName("railcraft.lantern.metal");
         RailcraftRegistry.register(block, ItemLantern.class);
 
-        for (BlockMaterial mat : variants.keySet()) {
+        for (BlockMaterial mat : variants.values()) {
             RailcraftRegistry.register(block.getItem(mat));
 
             ForestryPlugin.addBackpackItem("builder", block.getItem(mat));
@@ -52,7 +52,7 @@ public class BlockFactoryLantern extends BlockFactory {
     protected void doRecipeInit() {
         BlockMaterial.initialize();
         if (BlockLantern.stone != null) {
-            for (BlockMaterial mat : BlockLantern.STONE_LANTERN.keySet()) {
+            for (BlockMaterial mat : BlockLantern.STONE_LANTERN.values()) {
                 if (BlockLantern.stone.isAvailable(mat) && mat.getState() != null) {
                     Object slab = null;
                     if (mat.getState().getBlock() instanceof BlockBrick)
@@ -68,7 +68,7 @@ public class BlockFactoryLantern extends BlockFactory {
             }
         }
         if (BlockLantern.metal != null) {
-            for (BlockMaterial mat : BlockLantern.METAL_LANTERN.keySet()) {
+            for (BlockMaterial mat : BlockLantern.METAL_LANTERN.values()) {
                 if (BlockLantern.metal.isAvailable(mat)) {
                     Object slab = BlockRailcraftSlab.getItem(mat);
                     if (slab == null)

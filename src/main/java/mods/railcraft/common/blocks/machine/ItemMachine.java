@@ -20,17 +20,21 @@ import net.minecraft.world.World;
 
 public class ItemMachine extends ItemBlockRailcraftMultiType {
 
-    private final BlockMachine machineBlock;
+    private final BlockMachine<? extends IEnumMachine<?>> machineBlock;
 
     public ItemMachine(Block block) {
         super(block);
-        this.machineBlock = (BlockMachine) block;
+        this.machineBlock = (BlockMachine<? extends IEnumMachine<?>>) block;
         setUnlocalizedName("railcraft.machine");
+    }
+
+    private IEnumMachine<?> getMachine(ItemStack stack) {
+        return machineBlock.getMachineProxy().getMetaMap().get(stack.getItemDamage());
     }
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return machineBlock.getMachineProxy().getMachine(stack.getItemDamage()).getTag();
+        return getMachine(stack).getTag();
     }
 
     @Override
@@ -48,6 +52,6 @@ public class ItemMachine extends ItemBlockRailcraftMultiType {
 
     @Override
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
-        return machineBlock.getMachineProxy().getMachine(stack.getItemDamage()).getToolTip(stack, player, adv);
+        return getMachine(stack).getToolTip(stack, player, adv);
     }
 }

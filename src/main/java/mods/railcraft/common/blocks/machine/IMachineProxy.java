@@ -8,10 +8,10 @@
  */
 package mods.railcraft.common.blocks.machine;
 
+import com.google.common.collect.BiMap;
+import net.minecraft.block.properties.IProperty;
 
 import java.util.List;
-
-import net.minecraft.block.properties.IProperty;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -19,9 +19,7 @@ import net.minecraft.block.properties.IProperty;
 public interface IMachineProxy<M extends IEnumMachine<M>> {
     IProperty<M> getVariantProperty();
 
-    M getMachine(int meta);
-
-    int getMeta(M machine);
+    BiMap<Integer, M> getMetaMap();
 
     List<M> getCreativeList();
 }

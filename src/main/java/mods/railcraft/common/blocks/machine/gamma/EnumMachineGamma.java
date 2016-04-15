@@ -88,6 +88,11 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     }
 
     @Override
+    public String getToolClass() {
+        return "pickaxe:2";
+    }
+
+    @Override
     public Class<? extends TileMachineBase> getTileClass() {
         return tile;
     }

@@ -19,6 +19,9 @@ import net.minecraft.item.Item;
  */
 public class HarvestPlugin {
 
+    private HarvestPlugin() {
+    }
+
     public static void setToolClass(Item item, String toolClass, int level) {
         item.setHarvestLevel(toolClass, level);
     }
@@ -31,6 +34,15 @@ public class HarvestPlugin {
 
     public static void setBlockHarvestLevel(String toolClass, int level, Block block) {
         block.setHarvestLevel(toolClass, level);
+    }
+
+    public static void setStateHarvestLevel(String toolClassLevel, IStateContainer stateContainer) {
+        String[] tokens = toolClassLevel.split(":");
+        if (tokens.length != 2)
+            throw new IllegalArgumentException("Tool class string must be of the format: <toolClass>:<level>");
+        String toolClass = tokens[0];
+        int level = Integer.parseInt(tokens[1]);
+        setStateHarvestLevel(toolClass, level, stateContainer);
     }
 
     public static void setStateHarvestLevel(String toolClass, int level, IStateContainer stateContainer) {

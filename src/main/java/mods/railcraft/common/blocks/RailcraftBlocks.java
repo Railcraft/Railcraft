@@ -12,6 +12,9 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
+import mods.railcraft.common.blocks.machine.BlockMachine;
+import mods.railcraft.common.blocks.machine.ItemMachine;
+import mods.railcraft.common.blocks.machine.epsilon.MachineProxyEpsilon;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
@@ -28,6 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.Constructor;
 
 /**
  * Created by CovertJaguar on 4/13/2016 for Railcraft.
@@ -36,25 +40,23 @@ import javax.annotation.Nonnull;
  */
 public enum RailcraftBlocks implements IRailcraftObjectContainer {
     detector(BlockDetector.class, ItemDetector.class, "detector"),
+    machine_epsilon(BlockMachine.class, ItemMachine.class, "machine.epsilon", new MachineProxyEpsilon(), true),
     signal(BlockSignalRailcraft.class, ItemSignal.class, "signal"),
     track(BlockTrack.class, ItemTrack.class, "track");
     public static final RailcraftBlocks[] VALUES = values();
     private final Class<? extends Block> blockClass;
     private final Class<? extends ItemBlock> itemClass;
     private final String tag;
-    private final Object altRecipeObject;
+    private final Object[] blockArgs;
+    protected Object altRecipeObject;
     private Block block;
     private IRailcraftObject railcraftObject;
 
-    RailcraftBlocks(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, String tag) {
-        this(blockClass, itemClass, tag, null);
-    }
-
-    RailcraftBlocks(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, String tag, Object alt) {
+    RailcraftBlocks(Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass, String tag, Object... blockArgs) {
         this.blockClass = blockClass;
         this.itemClass = itemClass;
         this.tag = tag;
-        this.altRecipeObject = alt;
+        this.blockArgs = blockArgs;
     }
 
     public static void definePostRecipes() {
@@ -64,19 +66,26 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
         }
     }
 
+    Block createBlock() {
+        try {
+            Class<?>[] classes = new Class<?>[blockArgs.length];
+            for (int i = 1; i < classes.length; i++) {
+                classes[i] = blockArgs[i].getClass();
+            }
+            Constructor<? extends Block> constructor = blockClass.getConstructor(classes);
+            return constructor.newInstance((Object[]) classes);
+        } catch (Exception ex) {
+            throw new RuntimeException("Invalid Block Constructor");
+        }
+    }
+
     @Override
     public void register() {
         if (block != null)
             return;
 
         if (isEnabled()) {
-            try {
-                block = blockClass.newInstance();
-            } catch (InstantiationException ex) {
-                throw new RuntimeException("Invalid Block Constructor");
-            } catch (IllegalAccessException ex) {
-                throw new RuntimeException("Invalid Block Constructor");
-            }
+            block = createBlock();
             if (!(block instanceof IRailcraftObject))
                 throw new RuntimeException("Railcraft Blocks must implement IRailcraftObject");
             railcraftObject = (IRailcraftObject) block;
@@ -85,6 +94,10 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
             railcraftObject.initializeDefinintion();
             railcraftObject.defineRecipes();
         }
+    }
+
+    protected void setAltRecipeObject(Object obj) {
+        altRecipeObject = obj;
     }
 
     @Override

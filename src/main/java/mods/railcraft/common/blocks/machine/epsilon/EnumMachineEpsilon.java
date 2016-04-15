@@ -94,6 +94,16 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     }
 
     @Override
+    public String getToolClass() {
+        return "pickaxe:2";
+    }
+
+    @Override
+    public boolean passesLight() {
+        return false;
+    }
+
+    @Override
     public Class<? extends TileMachineBase> getTileClass() {
         return tile;
     }

@@ -15,14 +15,14 @@ import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IStringSerializable;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumOre implements IStringSerializable, IBlockVariantEnum<EnumOre> {
+public enum EnumOre implements IBlockVariantEnum<EnumOre> {
 
     SULFUR("sulfur"),
     SALTPETER("saltpeter"),
@@ -54,6 +54,12 @@ public enum EnumOre implements IStringSerializable, IBlockVariantEnum<EnumOre> {
         return BlockOre.getBlock();
     }
 
+    @Nonnull
+    @Override
+    public Class<?> getParentClass() {
+        return BlockOre.class;
+    }
+
     @Nullable
     @Override
     public IBlockState getState() {
@@ -72,6 +78,7 @@ public enum EnumOre implements IStringSerializable, IBlockVariantEnum<EnumOre> {
         return new ItemStack(BlockOre.getBlock(), qty, ordinal());
     }
 
+    @Override
     public boolean isEnabled() {
         return RailcraftModuleManager.isModuleEnabled(ModuleWorld.class) && BlockOre.getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
     }
@@ -89,5 +96,16 @@ public enum EnumOre implements IStringSerializable, IBlockVariantEnum<EnumOre> {
     @Override
     public String getName() {
         return tag;
+    }
+
+    @Override
+    public int getItemMeta() {
+        return ordinal();
+    }
+
+    @Nullable
+    @Override
+    public Object getAlternate() {
+        return null;
     }
 }

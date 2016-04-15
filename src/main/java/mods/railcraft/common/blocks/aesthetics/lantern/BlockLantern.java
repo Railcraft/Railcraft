@@ -19,6 +19,7 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
 import mods.railcraft.common.util.misc.AABBFactory;
+import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -45,8 +46,8 @@ import static net.minecraft.util.EnumParticleTypes.FLAME;
 import static net.minecraft.util.EnumParticleTypes.SMOKE_NORMAL;
 
 public class BlockLantern extends Block {
-    public static final BiMap<BlockMaterial, Integer> STONE_LANTERN;
-    public static final BiMap<BlockMaterial, Integer> METAL_LANTERN;
+    public static final BiMap<Integer, BlockMaterial> STONE_LANTERN;
+    public static final BiMap<Integer, BlockMaterial> METAL_LANTERN;
     private static final float SELECT = 2 * 0.0625f;
     static BlockLantern stone;
     static BlockLantern metal;
@@ -75,12 +76,12 @@ public class BlockLantern extends Block {
     }
 
     private final PropertyEnum<BlockMaterial> variantProperty;
-    private final BiMap<BlockMaterial, Integer> variants;
+    private final BiMap<Integer, BlockMaterial> variants;
 
-    public BlockLantern(BiMap<BlockMaterial, Integer> variants) {
+    public BlockLantern(BiMap<Integer, BlockMaterial> variants) {
         super(Material.redstoneLight);
-        this.variantProperty = PropertyEnum.create("variant", BlockMaterial.class, variants.keySet());
-        setDefaultState(blockState.getBaseState().withProperty(variantProperty, variants.inverse().get(0)));
+        this.variantProperty = PropertyEnum.create("variant", BlockMaterial.class, variants.values());
+        setDefaultState(blockState.getBaseState().withProperty(variantProperty, variants.get(0)));
         setStepSound(Block.soundTypeStone);
         this.variants = variants;
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
@@ -110,9 +111,9 @@ public class BlockLantern extends Block {
     }
 
     public static ItemStack findItem(BlockMaterial mat, int qty) {
-        if (STONE_LANTERN.containsKey(mat))
+        if (STONE_LANTERN.containsValue(mat))
             return stone.getItem(mat, qty);
-        if (METAL_LANTERN.containsKey(mat))
+        if (METAL_LANTERN.containsValue(mat))
             return metal.getItem(mat, qty);
         return null;
     }
@@ -142,7 +143,7 @@ public class BlockLantern extends Block {
     }
 
     public ItemStack getItem(BlockMaterial mat, int qty) {
-        return new ItemStack(this, qty, variants.get(mat));
+        return new ItemStack(this, qty, variants.inverse().get(mat));
     }
 
     @Override
@@ -191,7 +192,7 @@ public class BlockLantern extends Block {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return variants.get(getVariant(state));
+        return variants.inverse().get(getVariant(state));
     }
 
     @Override
@@ -217,6 +218,8 @@ public class BlockLantern extends Block {
     @Override
     public MapColor getMapColor(IBlockState state) {
         IBlockState matState = getVariant(state).getState();
+        if (matState == null)
+            return EnumColor.YELLOW.getMapColor();
         return matState.getBlock().getMapColor(matState);
     }
 
@@ -225,7 +228,7 @@ public class BlockLantern extends Block {
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(getVariantProperty(), variants.inverse().get(meta));
+        return getDefaultState().withProperty(getVariantProperty(), variants.get(meta));
     }
 
     /**
@@ -233,7 +236,7 @@ public class BlockLantern extends Block {
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        return variants.get(getVariant(state));
+        return variants.inverse().get(getVariant(state));
     }
 
     @Override

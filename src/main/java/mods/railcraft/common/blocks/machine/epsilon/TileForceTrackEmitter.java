@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.machine.epsilon;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackLockdown;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TileTrack;
@@ -157,21 +157,21 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
             int oz = (numTracks + 1) * facing.getFrontOffsetZ();
             BlockPos offset = getPos().add(ox, oy, oz);
             if (WorldPlugin.isBlockLoaded(worldObj, offset)) {
-                Block block = WorldPlugin.getBlock(worldObj, offset);
+                IBlockState blockState = WorldPlugin.getBlockState(worldObj, offset);
                 EnumRailDirection direction;
                 if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH)
                     direction = EnumRailDirection.NORTH_SOUTH;
                 else
                     direction = EnumRailDirection.EAST_WEST;
-                if (!placeTrack(offset, block, direction) && !claimTrack(offset, block, direction))
+                if (!placeTrack(offset, blockState, direction) && !claimTrack(offset, blockState, direction))
                     state = State.EXTENDED;
             } else
                 state = State.HALTED;
         }
     }
 
-    private boolean placeTrack(BlockPos pos, Block block, EnumRailDirection direction) {
-        if (WorldPlugin.isBlockAir(worldObj, pos, block)) {
+    private boolean placeTrack(BlockPos pos, IBlockState blockState, EnumRailDirection direction) {
+        if (WorldPlugin.isBlockAir(worldObj, pos, blockState)) {
             spawnParticles(pos);
             TileTrack track = TrackTools.placeTrack(EnumTrack.FORCE.getTrackSpec(), worldObj, pos, direction);
             ((TrackForce) track.getTrackInstance()).setEmitter(this);
@@ -181,10 +181,10 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         return false;
     }
 
-    private boolean claimTrack(BlockPos pos, Block block, EnumRailDirection direction) {
-        if (block != RailcraftBlocksOld.getBlockTrack())
+    private boolean claimTrack(BlockPos pos, IBlockState state, EnumRailDirection direction) {
+        if (state.getBlock() != RailcraftBlocks.track.block())
             return false;
-        if (TrackTools.getTrackDirection(worldObj, pos) != direction)
+        if (TrackTools.getTrackDirectionRaw(state) != direction)
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos);
         if (!TrackTools.isTrackSpec(tile, EnumTrack.FORCE.getTrackSpec()))

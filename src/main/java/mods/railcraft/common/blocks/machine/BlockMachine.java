@@ -11,7 +11,9 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -46,10 +48,9 @@ import java.util.Random;
 public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer implements IPostConnection {
 
     private final IMachineProxy<M> proxy;
-    private final int[] metaOpacity;
     private final BlockState blockstate;
 
-    public BlockMachine(IMachineProxy<M> proxy, boolean opaque, int[] metaOpacity) {
+    public BlockMachine(IMachineProxy<M> proxy, boolean opaque) {
         super(Material.rock);
         setResistance(4.5F);
         setHardness(2.0F);
@@ -57,13 +58,15 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         setTickRandomly(true);
         this.proxy = proxy;
         this.blockstate = new BlockState(this, proxy.getVariantProperty());
-        setDefaultState(blockstate.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMachine(0)));
+        setDefaultState(blockstate.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMetaMap().get(0)));
         this.fullBlock = opaque;
-
-        this.metaOpacity = metaOpacity;
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         lightOpacity = opaque ? 255 : 0;
+
+        for (IEnumMachine<M> machine : proxy.getMetaMap().values()) {
+            HarvestPlugin.setStateHarvestLevel(machine.getToolClass(), machine);
+        }
     }
 
     //TODO: Only some blocks have TESRs
@@ -79,12 +82,12 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return proxy.getMeta(state.getValue(proxy.getVariantProperty()));
+        return proxy.getMetaMap().inverse().get(state.getValue(proxy.getVariantProperty()));
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(proxy.getVariantProperty(), proxy.getMachine(meta));
+        return getDefaultState().withProperty(proxy.getVariantProperty(), proxy.getMetaMap().get(meta));
     }
 
     /**
@@ -310,6 +313,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         }
     }
 
+    //TODO: is this necessary?
     @Override
     public final boolean isOpaqueCube() {
         return fullBlock;
@@ -317,8 +321,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
 
     @Override
     public int getLightOpacity(IBlockAccess world, BlockPos pos) {
-        int meta = getMetaFromState(world.getBlockState(pos));
-        return metaOpacity[meta];
+        return getMachineType(WorldPlugin.getBlockState(world, pos)).getLightOpacity();
     }
 
     @Override
