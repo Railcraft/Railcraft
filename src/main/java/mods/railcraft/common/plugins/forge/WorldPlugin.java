@@ -53,19 +53,19 @@ public class WorldPlugin {
         return world.isAreaLoaded(pos1, pos2);
     }
 
-    public static boolean isBlockAir(World world, BlockPos pos, Block block) {
+    public static boolean isBlockAir(IBlockAccess world, BlockPos pos, Block block) {
         return block.isAir(world, pos);
     }
 
-    public static boolean isBlockAir(World world, BlockPos pos) {
+    public static boolean isBlockAir(IBlockAccess world, BlockPos pos) {
         return world.isAirBlock(pos);
     }
 
-    public static boolean isBlockAir(World world, BlockPos pos, IBlockState state) {
+    public static boolean isBlockAir(IBlockAccess world, BlockPos pos, IBlockState state) {
         return isBlockAir(world, pos, state.getBlock());
     }
 
-    public static boolean isBlockAt(World world, BlockPos pos, Block block) {
+    public static boolean isBlockAt(IBlockAccess world, BlockPos pos, Block block) {
         return block != null && block == getBlock(world, pos);
     }
 

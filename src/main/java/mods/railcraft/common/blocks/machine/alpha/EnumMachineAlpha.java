@@ -9,16 +9,19 @@
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.carts.ItemCartAnchor;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.*;
+import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -31,11 +34,11 @@ import java.util.List;
  */
 public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
-    WORLD_ANCHOR(ModuleChunkLoading.class, "anchor.world", TileAnchorWorld.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
+    ANCHOR_WORLD(ModuleChunkLoading.class, "anchor.world", TileAnchorWorld.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
     TURBINE(ModuleElectricity.class, "turbine", TileSteamTurbine.class, 3, 3, 2, 2, 2, 2, 6, 2, 0, 1, 3, 4, 5, 7),
-    PERSONAL_ANCHOR(ModuleChunkLoading.class, "anchor.personal", TileAnchorPersonal.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
+    ANCHOR_PERSONAL(ModuleChunkLoading.class, "anchor.personal", TileAnchorPersonal.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
     STEAM_OVEN(ModuleFactory.class, "steam.oven", TileSteamOven.class, 4, 2, 2, 2, 3, 3, 6, 3, 0, 1, 4, 5),
-    ADMIN_ANCHOR(ModuleChunkLoading.class, "anchor.admin", TileAnchorAdmin.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
+    ANCHOR_ADMIN(ModuleChunkLoading.class, "anchor.admin", TileAnchorAdmin.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
     SMOKER(ModuleStructures.class, "smoker", TileSmoker.class, 3, 1, 0, 1, 2, 2, 2, 2),
     TRADE_STATION(ModuleAutomation.class, "trade.station", TileTradeStation.class, 3, 1, 0, 0, 1, 1, 2, 1),
     COKE_OVEN(ModuleFactory.class, "coke.oven", TileCokeOven.class, 3, 1, 0, 0, 0, 0, 1, 0, 1, 2),
@@ -44,18 +47,25 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     STEAM_TRAP_AUTO(ModuleExtras.class, "steam.trap.auto", TileSteamTrapAuto.class, 4, 1, 0, 2, 1, 1, 1, 1, 0, 1, 2, 3),
     FEED_STATION(ModuleAutomation.class, "feed.station", TileFeedStation.class, 2, 1, 0, 0, 1, 1, 1, 1),
     BLAST_FURNACE(ModuleFactory.class, "blast.furnace", TileBlastFurnace.class, 3, 1, 0, 0, 0, 0, 1, 0, 1, 2),
-    PASSIVE_ANCHOR(ModuleChunkLoading.class, "anchor.passive", TileAnchorPassive.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
+    ANCHOR_PASSIVE(ModuleChunkLoading.class, "anchor.passive", TileAnchorPassive.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
     TANK_WATER(ModuleTransport.class, "tank.water", TileTankWater.class, 2, 1, 0, 0, 1, 1, 1, 1),
     ROCK_CRUSHER(ModuleFactory.class, "rock.crusher", TileRockCrusher.class, 4, 3, 3, 11, 3, 3, 7, 3, 7, 0, 1, 2, 4, 6, 8, 9, 10);
-    private final Class<? extends IRailcraftModule> module;
-    private final String tag;
-    private final Class<? extends TileMachineBase> tile;
-    private final int[] textureInfo;
+    public static final PropertyEnum<EnumMachineAlpha> VARIANT = PropertyEnum.create("variant", EnumMachineAlpha.class);
+    public static final EnumMachineAlpha[] VALUES = values();
     private static final List<EnumMachineAlpha> creativeList = new ArrayList<EnumMachineAlpha>();
-    private static final EnumMachineAlpha[] VALUES = values();
-    private ToolTip tip;
+    public static final MachineProxy<EnumMachineAlpha> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
 
     static {
+        String pickaxe3 = HarvestPlugin.ToolClass.PICKAXE.getToolString(3);
+        ANCHOR_WORLD.toolClass = pickaxe3;
+        ANCHOR_PASSIVE.toolClass = pickaxe3;
+        ANCHOR_PERSONAL.toolClass = pickaxe3;
+        ANCHOR_ADMIN.toolClass = pickaxe3;
+
+        String axe1 = HarvestPlugin.ToolClass.AXE.getToolString(1);
+        TANK_WATER.toolClass = axe1;
+        FEED_STATION.toolClass = axe1;
+
         creativeList.add(COKE_OVEN);
         creativeList.add(BLAST_FURNACE);
         creativeList.add(STEAM_OVEN);
@@ -64,15 +74,22 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         creativeList.add(ROCK_CRUSHER);
         creativeList.add(FEED_STATION);
         creativeList.add(TRADE_STATION);
-        creativeList.add(WORLD_ANCHOR);
-        creativeList.add(PERSONAL_ANCHOR);
-        creativeList.add(PASSIVE_ANCHOR);
-        creativeList.add(ADMIN_ANCHOR);
+        creativeList.add(ANCHOR_WORLD);
+        creativeList.add(ANCHOR_PERSONAL);
+        creativeList.add(ANCHOR_PASSIVE);
+        creativeList.add(ANCHOR_ADMIN);
         creativeList.add(TURBINE);
         creativeList.add(SMOKER);
         creativeList.add(STEAM_TRAP_MANUAL);
         creativeList.add(STEAM_TRAP_AUTO);
     }
+
+    private final Class<? extends IRailcraftModule> module;
+    private final String tag;
+    private final Class<? extends TileMachineBase> tile;
+    private final int[] textureInfo;
+    private ToolTip tip;
+    private String toolClass = HarvestPlugin.ToolClass.PICKAXE.getToolString(2);
 
     EnumMachineAlpha(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
@@ -81,24 +98,30 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         this.textureInfo = textureInfo;
     }
 
-    @Override
-    public boolean isDepreciated() {
-        return module == null;
-    }
-
     public static EnumMachineAlpha fromId(int id) {
         if (id < 0 || id >= VALUES.length)
             id = 0;
         return VALUES[id];
     }
 
-    public static List<EnumMachineAlpha> getCreativeList() {
-        return creativeList;
+    @Override
+    public boolean isDepreciated() {
+        return module == null;
     }
 
     @Override
     public String getTag() {
         return "tile.railcraft.machine.alpha." + tag;
+    }
+
+    @Override
+    public String getToolClass() {
+        return toolClass;
+    }
+
+    @Override
+    public boolean passesLight() {
+        return false;
     }
 
     @Override
@@ -133,20 +156,26 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     }
 
     @Override
+    public RailcraftBlocks getBlockContainer() {
+        return RailcraftBlocks.machine_alpha;
+    }
+
+    @Override
     public Block getBlock() {
-        return RailcraftBlocksOld.getBlockMachineAlpha();
+        return getBlockContainer().block();
     }
 
     @Override
     public IBlockState getState() {
-        return getBlock().getDefaultState().withProperty(MachineProxyAlpha.VARIANT, this);
+        return getBlock().getDefaultState().withProperty(VARIANT, this);
     }
 
     /**
      * Block is enabled, but may not be defined yet.
      */
+    @Override
     public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
+        return RailcraftModuleManager.isModuleEnabled(getModule()) && getBlockContainer().isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
     /**
@@ -162,11 +191,11 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         if (tip != null)
             return tip;
         switch (this) {
-            case WORLD_ANCHOR:
+            case ANCHOR_WORLD:
                 if (!RailcraftConfig.anchorFuelWorld.isEmpty())
                     return addAnchorInfo(stack);
                 break;
-            case PERSONAL_ANCHOR:
+            case ANCHOR_PERSONAL:
                 if (!RailcraftConfig.anchorFuelPersonal.isEmpty())
                     return addAnchorInfo(stack);
                 break;
@@ -186,14 +215,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
         String format = LocalizationPlugin.translate("railcraft.gui.anchor.fuel.remaining");
         toolTip.add(String.format(format, hours));
         return toolTip;
-    }
-
-    public boolean register() {
-        if (RailcraftConfig.isSubBlockEnabled(getTag())) {
-            RailcraftBlocksOld.registerBlockMachineAlpha();
-            return getBlock() != null;
-        }
-        return false;
     }
 
     @Override

@@ -47,10 +47,10 @@ import java.util.Random;
 
 public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer implements IPostConnection {
 
-    private final IMachineProxy<M> proxy;
+    private final MachineProxy<M> proxy;
     private final BlockState blockstate;
 
-    public BlockMachine(IMachineProxy<M> proxy, boolean opaque) {
+    public BlockMachine(MachineProxy<M> proxy, boolean opaque) {
         super(Material.rock);
         setResistance(4.5F);
         setHardness(2.0F);
@@ -99,7 +99,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         return 1;
     }
 
-    public IMachineProxy<M> getMachineProxy() {
+    public MachineProxy<M> getMachineProxy() {
         return proxy;
     }
 
@@ -321,7 +321,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
 
     @Override
     public int getLightOpacity(IBlockAccess world, BlockPos pos) {
-        return getMachineType(WorldPlugin.getBlockState(world, pos)).getLightOpacity();
+        return getMachineType(WorldPlugin.getBlockState(world, pos)).passesLight() ? 0 : 255;
     }
 
     @Override

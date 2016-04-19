@@ -200,9 +200,9 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
                 String type = ticket.getModData().getString("type");
 
                 if (y >= 0) {
-                    if (type.equals(EnumMachineAlpha.ADMIN_ANCHOR.getTag()))
+                    if (type.equals(EnumMachineAlpha.ANCHOR_ADMIN.getTag()))
                         adminTickets.add(ticket);
-                    else if (type.equals(EnumMachineAlpha.WORLD_ANCHOR.getTag()))
+                    else if (type.equals(EnumMachineAlpha.ANCHOR_WORLD.getTag()))
                         worldTickets.add(ticket);
                     else if (type.isEmpty())
                         worldTickets.add(ticket);

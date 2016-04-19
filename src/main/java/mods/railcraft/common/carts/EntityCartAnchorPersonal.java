@@ -74,7 +74,7 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
 
     @Override
     public int getDisplayTileData() {
-        return EnumMachineAlpha.PERSONAL_ANCHOR.ordinal();
+        return EnumMachineAlpha.ANCHOR_PERSONAL.ordinal();
     }
 
     @Override
@@ -85,8 +85,8 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
     @Override
     public IIcon getBlockTextureOnSide(int side) {
         if (side < 2 && !getFlag(TICKET_FLAG))
-            return EnumMachineAlpha.PERSONAL_ANCHOR.getTexture(6);
-        return EnumMachineAlpha.PERSONAL_ANCHOR.getTexture(side);
+            return EnumMachineAlpha.ANCHOR_PERSONAL.getTexture(6);
+        return EnumMachineAlpha.ANCHOR_PERSONAL.getTexture(side);
     }
 
 }

@@ -180,20 +180,20 @@ public class ModuleFactory extends RailcraftModulePayload {
                         addOutput(recipe, new ItemStack(Items.blaze_powder), 0.05f);
                     }
 
-                    if (EnumMachineAlpha.WORLD_ANCHOR.isEnabled()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.WORLD_ANCHOR.getItem(), true, false);
+                    if (EnumMachineAlpha.ANCHOR_WORLD.isEnabled()) {
+                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.ANCHOR_WORLD.getItem(), true, false);
                         addOutput(recipe, new ItemStack(Items.diamond), 0.5f);
                         addAnchorOutputs(recipe);
                     }
 
-                    if (EnumMachineAlpha.PERSONAL_ANCHOR.isEnabled()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.PERSONAL_ANCHOR.getItem(), true, false);
+                    if (EnumMachineAlpha.ANCHOR_PERSONAL.isEnabled()) {
+                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.ANCHOR_PERSONAL.getItem(), true, false);
                         addOutput(recipe, new ItemStack(Items.emerald), 0.5f);
                         addAnchorOutputs(recipe);
                     }
 
-                    if (EnumMachineAlpha.PASSIVE_ANCHOR.isEnabled()) {
-                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.PASSIVE_ANCHOR.getItem(), true, false);
+                    if (EnumMachineAlpha.ANCHOR_PASSIVE.isEnabled()) {
+                        recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.ANCHOR_PASSIVE.getItem(), true, false);
 //                addOutput(recipe, new ItemStack(Items.emerald), 0.5f);
                         addAnchorOutputs(recipe);
                     }

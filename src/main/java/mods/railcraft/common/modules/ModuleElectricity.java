@@ -11,7 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
@@ -34,7 +34,13 @@ public class ModuleElectricity extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
-                add(RailcraftItems.electricMeter);
+                add(
+                        RailcraftItems.electricMeter,
+                        RailcraftBlocks.track,
+                        RailcraftBlocks.machine_alpha,
+                        RailcraftBlocks.machine_delta,
+                        RailcraftBlocks.machine_epsilon
+                );
             }
 
             @Override
@@ -42,7 +48,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                 BlockFrame.registerBlock();
 
                 EnumMachineAlpha alpha = EnumMachineAlpha.TURBINE;
-                if (alpha.register()) {
+                if (alpha.isEnabled()) {
                     CraftingPlugin.addRecipe(alpha.getItem(3),
                             "BPB",
                             "P P",
@@ -60,7 +66,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                 }
 
                 EnumMachineEpsilon epsilon = EnumMachineEpsilon.ELECTRIC_FEEDER;
-                if (epsilon.register())
+                if (epsilon.isEnabled())
                     CraftingPlugin.addRecipe(epsilon.getItem(),
                             "PCP",
                             "CCC",
@@ -68,13 +74,9 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             'P', RailcraftItems.plate.getRecipeObject(EnumPlate.TIN),
                             'C', "ingotCopper");
 
-                epsilon = EnumMachineEpsilon.ELECTRIC_FEEDER_ADMIN;
-                epsilon.register();
-
                 epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;
-                if (epsilon.register()) {
-                    if (RailcraftBlocksOld.registerBlockTrack())
-                        EnumTrack.registerTrack(EnumTrack.FORCE);
+                if (epsilon.isEnabled()) {
+                    EnumTrack.FORCE.register();
                     CraftingPlugin.addRecipe(epsilon.getItem(),
                             "PCP",
                             "CDC",
@@ -85,7 +87,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                 }
 
                 epsilon = EnumMachineEpsilon.FLUX_TRANSFORMER;
-                if (epsilon.register())
+                if (epsilon.isEnabled())
                     CraftingPlugin.addRecipe(epsilon.getItem(2),
                             "PGP",
                             "GRG",
@@ -95,7 +97,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             'R', "blockRedstone");
 
                 EnumMachineDelta delta = EnumMachineDelta.WIRE;
-                if (delta.register()) {
+                if (delta.isEnabled()) {
                     RailcraftCraftingManager.rollingMachine.addRecipe(
                             delta.getItem(8),
                             "LPL",

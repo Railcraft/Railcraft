@@ -15,7 +15,7 @@ public class TileAnchorAdmin extends TileAnchorWorld {
 
     @Override
     public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.ADMIN_ANCHOR;
+        return EnumMachineAlpha.ANCHOR_ADMIN;
     }
 
     @Override

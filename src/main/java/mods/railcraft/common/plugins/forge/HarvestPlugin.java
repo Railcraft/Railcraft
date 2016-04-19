@@ -19,6 +19,21 @@ import net.minecraft.item.Item;
  */
 public class HarvestPlugin {
 
+    public enum ToolClass {
+        PICKAXE("pickaxe"),
+        AXE("axe"),
+        SHOVEL("shovel");
+        public final String name;
+
+        ToolClass(String name) {
+            this.name = name;
+        }
+
+        public String getToolString(int level) {
+            return name + ":" + level;
+        }
+    }
+
     private HarvestPlugin() {
     }
 

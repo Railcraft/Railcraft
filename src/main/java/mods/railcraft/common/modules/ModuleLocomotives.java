@@ -10,6 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
@@ -35,13 +36,20 @@ import net.minecraft.item.crafting.IRecipe;
 public class ModuleLocomotives extends RailcraftModulePayload {
     public ModuleLocomotives() {
         setEnabledEventHandler(new ModuleEventHandler() {
+
+            @Override
+            public void construction() {
+                add(
+                        RailcraftItems.whistleTuner,
+                        RailcraftBlocks.track
+                );
+            }
+
             @Override
             public void preInit() {
-                EnumTrack.registerTrack(EnumTrack.WHISTLE);
-                EnumTrack.registerTrack(EnumTrack.LOCOMOTIVE);
-                EnumTrack.registerTrack(EnumTrack.LIMITER);
-
-                RailcraftItems.whistleTuner.register();
+                EnumTrack.WHISTLE.register();
+                EnumTrack.LOCOMOTIVE.register();
+                EnumTrack.LIMITER.register();
 
                 EnumCart cart = EnumCart.LOCO_STEAM_SOLID;
                 if (cart.setup()) {

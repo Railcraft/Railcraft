@@ -9,14 +9,16 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -33,19 +35,16 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     ITEM_UNLOADER(ModuleTransport.class, "unloader.item", 0, TileItemUnloader.class),
     ITEM_LOADER_ADVANCED(ModuleTransport.class, "loader.item.advanced", 0, TileItemLoaderAdvanced.class),
     ITEM_UNLOADER_ADVANCED(ModuleTransport.class, "unloader.item.advanced", 0, TileItemUnloaderAdvanced.class),
-    FLUID_LOADER(ModuleTransport.class, "loader.liquid", 2, TileFluidLoader.class),
-    FLUID_UNLOADER(ModuleTransport.class, "unloader.liquid", 2, TileFluidUnloader.class),
+    FLUID_LOADER(ModuleTransport.class, "loader.liquid", 2, TileFluidLoader.class, true),
+    FLUID_UNLOADER(ModuleTransport.class, "unloader.liquid", 2, TileFluidUnloader.class, true),
     ENERGY_LOADER(ModuleIC2.class, "loader.energy", 0, TileEnergyLoader.class),
     ENERGY_UNLOADER(ModuleIC2.class, "unloader.energy", 0, TileEnergyUnloader.class),
     DISPENSER_CART(ModuleAutomation.class, "dispenser.cart", 0, TileDispenserCart.class),
     DISPENSER_TRAIN(ModuleTrain.class, "dispenser.train", 0, TileDispenserTrain.class);
-    private final Class<? extends IRailcraftModule> module;
-    private final String tag;
-    private final int extraIcons;
-    private final Class<? extends TileMachineBase> tile;
+    public static final PropertyEnum<EnumMachineGamma> VARIANT = PropertyEnum.create("variant", EnumMachineGamma.class);
     private static final List<EnumMachineGamma> creativeList = new ArrayList<EnumMachineGamma>();
     private static final EnumMachineGamma[] VALUES = values();
-    private ToolTip tip;
+    public static final MachineProxy<EnumMachineGamma> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
 
     static {
         creativeList.add(ITEM_LOADER);
@@ -60,16 +59,23 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
         creativeList.add(DISPENSER_TRAIN);
     }
 
+    private final Class<? extends IRailcraftModule> module;
+    private final String tag;
+    private final int extraIcons;
+    private final Class<? extends TileMachineBase> tile;
+    private final boolean passesLight;
+    private ToolTip tip;
+
     EnumMachineGamma(Class<? extends IRailcraftModule> module, String tag, int numTextures, Class<? extends TileMachineBase> tile) {
+        this(module, tag, numTextures, tile, false);
+    }
+
+    EnumMachineGamma(Class<? extends IRailcraftModule> module, String tag, int numTextures, Class<? extends TileMachineBase> tile, boolean passesLight) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
         this.extraIcons = numTextures;
-    }
-
-    @Override
-    public boolean isDepreciated() {
-        return module == null;
+        this.passesLight = passesLight;
     }
 
     public static EnumMachineGamma fromId(int id) {
@@ -83,6 +89,11 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     }
 
     @Override
+    public boolean isDepreciated() {
+        return module == null;
+    }
+
+    @Override
     public String getTag() {
         return "tile.railcraft.machine.gamma." + tag;
     }
@@ -90,6 +101,11 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     @Override
     public String getToolClass() {
         return "pickaxe:2";
+    }
+
+    @Override
+    public boolean passesLight() {
+        return passesLight;
     }
 
     @Override
@@ -124,30 +140,28 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     }
 
     @Override
+    public RailcraftBlocks getBlockContainer() {
+        return RailcraftBlocks.machine_alpha;
+    }
+
+    @Override
     public Block getBlock() {
-        return RailcraftBlocksOld.getBlockMachineGamma();
+        return getBlockContainer().block();
     }
 
     @Override
     public IBlockState getState() {
-        return getBlock().getDefaultState().withProperty(MachineProxyGamma.VARIANT, this);
+        return getBlock().getDefaultState().withProperty(VARIANT, this);
     }
 
+    @Override
     public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
+        return RailcraftModuleManager.isModuleEnabled(getModule()) && getBlockContainer().isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
     @Override
     public boolean isAvailable() {
         return getBlock() != null && isEnabled();
-    }
-
-    public boolean register() {
-        if (RailcraftConfig.isSubBlockEnabled(getTag())) {
-            RailcraftBlocksOld.registerBlockMachineGamma();
-            return getBlock() != null;
-        }
-        return false;
     }
 
     @Override

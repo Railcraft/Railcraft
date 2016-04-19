@@ -300,14 +300,14 @@ public class EntityCartAnchor extends CartContainerBase implements ICartContents
 
     @Override
     public int getDisplayTileData() {
-        return EnumMachineAlpha.WORLD_ANCHOR.ordinal();
+        return EnumMachineAlpha.ANCHOR_WORLD.ordinal();
     }
 
     @Override
     public IIcon getBlockTextureOnSide(int side) {
         if (side < 2 && !getFlag(TICKET_FLAG))
-            return EnumMachineAlpha.WORLD_ANCHOR.getTexture(6);
-        return EnumMachineAlpha.WORLD_ANCHOR.getTexture(side);
+            return EnumMachineAlpha.ANCHOR_WORLD.getTexture(6);
+        return EnumMachineAlpha.ANCHOR_WORLD.getTexture(side);
     }
 
     @Override

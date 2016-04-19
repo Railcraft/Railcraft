@@ -28,7 +28,7 @@ public class TileAnchorPersonal extends TileAnchorWorld {
 
     @Override
     public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.PERSONAL_ANCHOR;
+        return EnumMachineAlpha.ANCHOR_PERSONAL;
     }
 
     @Override

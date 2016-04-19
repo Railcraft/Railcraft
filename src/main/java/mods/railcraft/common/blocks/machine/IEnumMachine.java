@@ -10,6 +10,7 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.IBlockContainer;
 import mods.railcraft.common.blocks.IStateContainer;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -21,11 +22,17 @@ import net.minecraft.util.IStringSerializable;
 public interface IEnumMachine<M extends IEnumMachine<M>> extends Comparable<M>, IStringSerializable, IBlockContainer, IStateContainer {
     String getTag();
 
+    boolean isEnabled();
+
     boolean isAvailable();
+
+    boolean isDepreciated();
 
     ItemStack getItem();
 
     ItemStack getItem(int qty);
+
+    RailcraftBlocks getBlockContainer();
 
     Class<? extends TileMachineBase> getTileClass();
 
@@ -38,6 +45,4 @@ public interface IEnumMachine<M extends IEnumMachine<M>> extends Comparable<M>, 
     ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv);
 
     int ordinal();
-
-    boolean isDepreciated();
 }

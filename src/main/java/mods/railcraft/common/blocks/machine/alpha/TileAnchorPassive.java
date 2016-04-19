@@ -21,7 +21,7 @@ public class TileAnchorPassive extends TileAnchorWorld {
 
     @Override
     public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.PASSIVE_ANCHOR;
+        return EnumMachineAlpha.ANCHOR_PASSIVE;
     }
 
     @Override

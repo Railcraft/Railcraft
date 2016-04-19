@@ -10,12 +10,10 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
-import mods.railcraft.common.blocks.detector.BlockDetector;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RoutingTableCopyRecipe;
@@ -35,17 +33,18 @@ public class ModuleRouting extends RailcraftModulePayload {
                 add(
                         RailcraftItems.routingTable,
                         RailcraftItems.ticket,
-                        RailcraftItems.ticketGold
+                        RailcraftItems.ticketGold,
+                        RailcraftBlocks.detector,
+                        RailcraftBlocks.track,
+                        RailcraftBlocks.signal
                 );
             }
 
             @Override
             public void preInit() {
-                BlockDetector.registerBlock();
+                EnumTrack.ROUTING.register();
 
-                EnumTrack.registerTrack(EnumTrack.ROUTING);
-
-                if (ItemRoutingTable.item != null)
+                if (RailcraftItems.routingTable.isEnabled())
                     CraftingPlugin.addRecipe(new RoutingTableCopyRecipe());
 
                 if (RailcraftItems.ticket.isEnabled() && RailcraftItems.ticketGold.isEnabled())
@@ -59,14 +58,13 @@ public class ModuleRouting extends RailcraftModulePayload {
                             'X', new ItemStack(Blocks.quartz_block, 1, 1),
                             'P', Blocks.stone_pressure_plate);
 
-                    RailcraftBlocksOld.registerBlockSignal();
-                    if (RailcraftBlocksOld.getBlockSignal() != null)
-                        // Define Switch Motor
-                        if (EnumSignal.SWITCH_ROUTING.isEnabled() && EnumSignal.SWITCH_MOTOR.isEnabled()) {
+                }
 
-                            ItemStack stack = EnumSignal.SWITCH_ROUTING.getItem();
-                            CraftingPlugin.addShapelessRecipe(stack, EnumSignal.SWITCH_MOTOR.getItem(), EnumDetector.ROUTING.getItem());
-                        }
+                if (RailcraftBlocks.signal.isEnabled()) {
+                    // Define Switch Motor
+                    if (EnumSignal.SWITCH_ROUTING.isEnabled() && EnumSignal.SWITCH_MOTOR.isEnabled()) {
+                        CraftingPlugin.addShapelessRecipe(EnumSignal.SWITCH_ROUTING.getItem(), EnumSignal.SWITCH_MOTOR.getItem(), EnumDetector.ROUTING.getItem());
+                    }
                 }
             }
         });

@@ -10,7 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.api.crafting.IRockCrusherRecipe;
+import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.EnumOre;
@@ -45,7 +45,7 @@ public class ModuleMagic extends RailcraftModulePayload {
                 FMLCommonHandler.instance().bus().register(new FirestoneTickHandler());
 
                 if (EnumOre.FIRESTONE.isEnabled() && ItemFirestoneRaw.item != null && ItemFirestoneCut.item != null) {
-                    IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumOre.FIRESTONE.getItem(), true, false);
+                    ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumOre.FIRESTONE.getItem(), true, false);
                     recipe.addOutput(ItemFirestoneRaw.getItem(), 1F);
 
                     CraftingPlugin.addRecipe(ItemFirestoneCut.getItem(),

@@ -40,7 +40,7 @@ public class EntityCartAnchorAdmin extends EntityCartAnchor {
 
     @Override
     public int getDisplayTileData() {
-        return EnumMachineAlpha.ADMIN_ANCHOR.ordinal();
+        return EnumMachineAlpha.ANCHOR_ADMIN.ordinal();
     }
 
     @Override
@@ -51,8 +51,8 @@ public class EntityCartAnchorAdmin extends EntityCartAnchor {
     @Override
     public IIcon getBlockTextureOnSide(int side) {
         if (side < 2 && !getFlag(TICKET_FLAG))
-            return EnumMachineAlpha.ADMIN_ANCHOR.getTexture(6);
-        return EnumMachineAlpha.ADMIN_ANCHOR.getTexture(side);
+            return EnumMachineAlpha.ANCHOR_ADMIN.getTexture(6);
+        return EnumMachineAlpha.ANCHOR_ADMIN.getTexture(side);
     }
 
 }

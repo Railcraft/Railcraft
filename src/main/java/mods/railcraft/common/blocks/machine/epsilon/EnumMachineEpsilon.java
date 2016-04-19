@@ -9,8 +9,9 @@
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -19,6 +20,7 @@ import mods.railcraft.common.modules.ModuleSteam;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -37,13 +39,10 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     FORCE_TRACK_EMITTER(ModuleElectricity.class, "force.track.emitter", TileForceTrackEmitter.class),
     FLUX_TRANSFORMER(ModuleElectricity.class, "flux.transformer", TileFluxTransformer.class),
     ENGRAVING_BENCH("emblem", "engraving.bench", TileEngravingBench.class, 4, 1, 0, 1, 3, 3, 3, 3, 2);
-    private final String moduleName;
-    private final String tag;
-    private final Class<? extends TileMachineBase> tile;
-    private final int[] textureInfo;
+    public static final PropertyEnum<EnumMachineEpsilon> VARIANT = PropertyEnum.create("variant", EnumMachineEpsilon.class);
+    public static final EnumMachineEpsilon[] VALUES = values();
     private static final List<EnumMachineEpsilon> creativeList = new ArrayList<EnumMachineEpsilon>();
-    private static final EnumMachineEpsilon[] VALUES = values();
-    private ToolTip tip;
+    public static final MachineProxy<EnumMachineEpsilon> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
 
     static {
         creativeList.add(ELECTRIC_FEEDER);
@@ -53,6 +52,12 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
         creativeList.add(ADMIN_STEAM_PRODUCER);
         creativeList.add(ENGRAVING_BENCH);
     }
+
+    private final String moduleName;
+    private final String tag;
+    private final Class<? extends TileMachineBase> tile;
+    private final int[] textureInfo;
+    private ToolTip tip;
 
     EnumMachineEpsilon(String moduleName, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.moduleName = moduleName;
@@ -65,27 +70,15 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
         this(RailcraftModuleManager.getModuleName(module), tag, tile, textureInfo);
     }
 
-    public boolean register() {
-        if (RailcraftConfig.isSubBlockEnabled(getTag())) {
-            RailcraftBlocksOld.registerBlockMachineEpsilon();
-            return getBlock() != null;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isDepreciated() {
-        return false;
-    }
-
     public static EnumMachineEpsilon fromId(int id) {
         if (id < 0 || id >= VALUES.length)
             id = 0;
         return VALUES[id];
     }
 
-    public static List<EnumMachineEpsilon> getCreativeList() {
-        return creativeList;
+    @Override
+    public boolean isDepreciated() {
+        return false;
     }
 
     @Override
@@ -135,20 +128,37 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     }
 
     @Override
+    public RailcraftBlocks getBlockContainer() {
+        return RailcraftBlocks.machine_alpha;
+    }
+
+    @Override
     public Block getBlock() {
-        return RailcraftBlocksOld.getBlockMachineEpsilon();
+        return getBlockContainer().block();
     }
 
     @Override
     public IBlockState getState() {
-        return getBlock().getDefaultState().withProperty(MachineProxyEpsilon.VARIANT, this);
+        return getBlock().getDefaultState().withProperty(VARIANT, this);
+    }
+
+    /**
+     * Block is enabled, but may not be defined yet.
+     */
+    @Override
+    public boolean isEnabled() {
+        return RailcraftModuleManager.isModuleEnabled(getModule()) && getBlockContainer().isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag());
+    }
+
+    /**
+     * Block is enabled and defined.
+     */
+    @Override
+    public boolean isAvailable() {
+        return getBlock() != null && isEnabled();
     }
 
     @Override
-    public boolean isAvailable() {
-        return RailcraftModuleManager.isModuleEnabled(getModule()) && getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
-    }
-
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
         if (tip != null)
             return tip;

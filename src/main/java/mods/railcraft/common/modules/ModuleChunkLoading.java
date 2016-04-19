@@ -10,7 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.carts.EnumCart;
@@ -18,7 +18,6 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.ChunkManager;
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -33,84 +32,73 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
     public ModuleChunkLoading() {
         setEnabledEventHandler(new ModuleEventHandler() {
+            @Override
+            public void construction() {
+                add(
+                        RailcraftBlocks.machine_alpha,
+                        RailcraftBlocks.machine_beta
+                );
+            }
 
             @Override
             public void preInit() {
-                super.preInit();
                 ForgeChunkManager.setForcedChunkLoadingCallback(Railcraft.getMod(), ChunkManager.getInstance());
                 MinecraftForge.EVENT_BUS.register(ChunkManager.getInstance());
 
-                EnumMachineAlpha alpha = EnumMachineAlpha.WORLD_ANCHOR;
-                if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
-                    Block block = RailcraftBlocksOld.registerBlockMachineAlpha();
-                    if (block != null && RailcraftConfig.canCraftAnchors()) {
-                        CraftingPlugin.addRecipe(alpha.getItem(),
-                                "gog",
-                                "dpd",
-                                "gog",
-                                'd', "gemDiamond",
-                                'g', "ingotGold",
-                                'p', Items.ender_pearl,
-                                'o', new ItemStack(Blocks.obsidian));
-                    }
+                EnumMachineAlpha alpha = EnumMachineAlpha.ANCHOR_WORLD;
+                if (alpha.isEnabled() && RailcraftConfig.canCraftAnchors()) {
+                    CraftingPlugin.addRecipe(alpha.getItem(),
+                            "gog",
+                            "dpd",
+                            "gog",
+                            'd', "gemDiamond",
+                            'g', "ingotGold",
+                            'p', Items.ender_pearl,
+                            'o', new ItemStack(Blocks.obsidian));
                 }
 
-                alpha = EnumMachineAlpha.PERSONAL_ANCHOR;
-                if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
-                    Block block = RailcraftBlocksOld.registerBlockMachineAlpha();
-                    if (block != null && RailcraftConfig.canCraftPersonalAnchors()) {
-                        CraftingPlugin.addRecipe(alpha.getItem(),
-                                "gog",
-                                "dpd",
-                                "gog",
-                                'd', "gemEmerald",
-                                'g', "ingotGold",
-                                'p', Items.ender_pearl,
-                                'o', new ItemStack(Blocks.obsidian));
-                    }
+                alpha = EnumMachineAlpha.ANCHOR_PERSONAL;
+                if (alpha.isEnabled() && RailcraftConfig.canCraftPersonalAnchors()) {
+                    CraftingPlugin.addRecipe(alpha.getItem(),
+                            "gog",
+                            "dpd",
+                            "gog",
+                            'd', "gemEmerald",
+                            'g', "ingotGold",
+                            'p', Items.ender_pearl,
+                            'o', new ItemStack(Blocks.obsidian));
                 }
 
-                alpha = EnumMachineAlpha.PASSIVE_ANCHOR;
-                if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
-                    Block block = RailcraftBlocksOld.registerBlockMachineAlpha();
-                    if (block != null && RailcraftConfig.canCraftPassiveAnchors()) {
-                        CraftingPlugin.addRecipe(alpha.getItem(),
-                                "gog",
-                                "dpd",
-                                "gog",
-                                'd', "dyeCyan",
-                                'g', "ingotGold",
-                                'p', Items.ender_pearl,
-                                'o', new ItemStack(Blocks.obsidian));
-                    }
-                }
-
-                alpha = EnumMachineAlpha.ADMIN_ANCHOR;
-                if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
-                    RailcraftBlocksOld.registerBlockMachineAlpha();
+                alpha = EnumMachineAlpha.ANCHOR_PASSIVE;
+                if (alpha.isEnabled() && RailcraftConfig.canCraftPassiveAnchors()) {
+                    CraftingPlugin.addRecipe(alpha.getItem(),
+                            "gog",
+                            "dpd",
+                            "gog",
+                            'd', "dyeCyan",
+                            'g', "ingotGold",
+                            'p', Items.ender_pearl,
+                            'o', new ItemStack(Blocks.obsidian));
                 }
 
                 EnumMachineBeta beta = EnumMachineBeta.SENTINEL;
-                if (RailcraftConfig.isSubBlockEnabled(beta.getTag())) {
-                    Block block = RailcraftBlocksOld.registerBlockMachineBeta();
-                    if (block != null) {
-                        ItemStack stack = beta.getItem();
-                        if (RailcraftConfig.canCraftAnchors()) {
-                            CraftingPlugin.addRecipe(stack,
-                                    " p ",
-                                    " o ",
-                                    "ogo",
-                                    'g', "ingotGold",
-                                    'p', Items.ender_pearl,
-                                    'o', new ItemStack(Blocks.obsidian));
-                        }
+                if (alpha.isEnabled()) {
+                    ItemStack stack = beta.getItem();
+                    if (RailcraftConfig.canCraftAnchors()) {
+                        CraftingPlugin.addRecipe(stack,
+                                " p ",
+                                " o ",
+                                "ogo",
+                                'g', "ingotGold",
+                                'p', Items.ender_pearl,
+                                'o', new ItemStack(Blocks.obsidian));
                     }
                 }
 
                 // Define Anchor Cart
                 EnumCart cart = EnumCart.ANCHOR;
-                if (EnumMachineAlpha.WORLD_ANCHOR.isAvailable() && cart.setup()) {
-                    ItemStack anchor = EnumMachineAlpha.WORLD_ANCHOR.getItem();
+                if (EnumMachineAlpha.ANCHOR_WORLD.isAvailable() && cart.setup()) {
+                    ItemStack anchor = EnumMachineAlpha.ANCHOR_WORLD.getItem();
                     if (RailcraftConfig.canCraftPersonalAnchors()) {
                         CraftingPlugin.addRecipe(cart.getCartItem(),
                                 "A",
@@ -124,8 +112,8 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
                 // Define Personal Anchor Cart
                 cart = EnumCart.ANCHOR_PERSONAL;
-                if (EnumMachineAlpha.PERSONAL_ANCHOR.isAvailable() && cart.setup()) {
-                    ItemStack anchor = EnumMachineAlpha.PERSONAL_ANCHOR.getItem();
+                if (EnumMachineAlpha.ANCHOR_PERSONAL.isAvailable() && cart.setup()) {
+                    ItemStack anchor = EnumMachineAlpha.ANCHOR_PERSONAL.getItem();
                     if (RailcraftConfig.canCraftPersonalAnchors()) {
                         CraftingPlugin.addRecipe(cart.getCartItem(),
                                 "A",
@@ -138,8 +126,8 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
                 // Define Admin Anchor Cart
                 cart = EnumCart.ANCHOR_ADMIN;
-                if (EnumMachineAlpha.ADMIN_ANCHOR.isAvailable() && cart.setup()) {
-                    ItemStack anchor = EnumMachineAlpha.ADMIN_ANCHOR.getItem();
+                if (EnumMachineAlpha.ANCHOR_ADMIN.isAvailable() && cart.setup()) {
+                    ItemStack anchor = EnumMachineAlpha.ANCHOR_ADMIN.getItem();
                     cart.setContents(anchor);
                 }
             }

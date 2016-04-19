@@ -192,7 +192,7 @@ public enum EnumTrack {
     }
 
     public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(module) && RailcraftConfig.isBlockEnabled("track") && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDepreciated();
+        return RailcraftModuleManager.isModuleEnabled(module) && RailcraftBlocks.track.isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag()) && !isDepreciated();
     }
 
     public boolean isDepreciated() {

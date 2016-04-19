@@ -85,7 +85,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     @Override
     public EnumMachineAlpha getMachineType() {
-        return EnumMachineAlpha.WORLD_ANCHOR;
+        return EnumMachineAlpha.ANCHOR_WORLD;
     }
 
     @Override

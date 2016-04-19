@@ -65,10 +65,10 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
         add(FluidContainers.getCreosoteOilRefactory());
         add(FluidContainers.getCreosoteOilWax());
 
-        add(EnumMachineAlpha.WORLD_ANCHOR.getItem());
-        add(EnumMachineAlpha.PERSONAL_ANCHOR.getItem());
-        add(EnumMachineAlpha.ADMIN_ANCHOR.getItem());
-        add(EnumMachineAlpha.PASSIVE_ANCHOR.getItem());
+        add(EnumMachineAlpha.ANCHOR_WORLD.getItem());
+        add(EnumMachineAlpha.ANCHOR_PERSONAL.getItem());
+        add(EnumMachineAlpha.ANCHOR_ADMIN.getItem());
+        add(EnumMachineAlpha.ANCHOR_PASSIVE.getItem());
         add(EnumMachineBeta.SENTINEL.getItem());
 
         add(RailcraftItems.crowbarIron);

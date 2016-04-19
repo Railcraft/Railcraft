@@ -9,10 +9,8 @@
 package mods.railcraft.common.blocks.machine.delta;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
-import mods.railcraft.common.blocks.machine.BoundingBoxManager;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.*;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleElectricity;
@@ -20,6 +18,7 @@ import mods.railcraft.common.modules.ModuleTransport;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,13 +33,10 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
 
     WIRE(ModuleElectricity.class, "wire", TileWire.class, 1, 1, 0, 0, 0, 0, 0, 0),
     CAGE(ModuleTransport.class, "cage", TileCage.class, 4, 1, 0, 1, 2, 2, 2, 2, 3);
-    private final Class<? extends IRailcraftModule> module;
-    private final String tag;
-    private final Class<? extends TileMachineBase> tile;
-    private final int[] textureInfo;
+    public static final PropertyEnum<EnumMachineDelta> VARIANT = PropertyEnum.create("variant", EnumMachineDelta.class);
     private static final List<EnumMachineDelta> creativeList = new ArrayList<EnumMachineDelta>();
     private static final EnumMachineDelta[] VALUES = values();
-    private ToolTip tip;
+    public static final MachineProxy<EnumMachineDelta> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
 
     static {
         creativeList.add(WIRE);
@@ -49,24 +45,17 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
         BoundingBoxManager.registerBoundingBox(WIRE, new TileWire.WireBoundingBox());
     }
 
+    private final Class<? extends IRailcraftModule> module;
+    private final String tag;
+    private final Class<? extends TileMachineBase> tile;
+    private final int[] textureInfo;
+    private ToolTip tip;
+
     EnumMachineDelta(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
         this.textureInfo = textureInfo;
-    }
-
-    public boolean register() {
-        if (RailcraftConfig.isSubBlockEnabled(getTag())) {
-            RailcraftBlocksOld.registerBlockMachineDelta();
-            return getBlock() != null;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isDepreciated() {
-        return module == null;
     }
 
     public static EnumMachineDelta fromId(int id) {
@@ -75,13 +64,24 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
         return VALUES[id];
     }
 
-    public static List<EnumMachineDelta> getCreativeList() {
-        return creativeList;
+    @Override
+    public boolean isDepreciated() {
+        return module == null;
     }
 
     @Override
     public String getTag() {
         return "tile.railcraft.machine.delta." + tag;
+    }
+
+    @Override
+    public String getToolClass() {
+        return "pickaxe:2";
+    }
+
+    @Override
+    public boolean passesLight() {
+        return true;
     }
 
     @Override
@@ -116,15 +116,21 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
     }
 
     @Override
+    public RailcraftBlocks getBlockContainer() {
+        return RailcraftBlocks.machine_delta;
+    }
+
+    @Override
     public Block getBlock() {
-        return RailcraftBlocksOld.getBlockMachineDelta();
+        return getBlockContainer().block();
     }
 
     @Override
     public IBlockState getState() {
-        return getBlock().getDefaultState().withProperty(MachineProxyDelta.VARIANT, this);
+        return getBlock().getDefaultState().withProperty(VARIANT, this);
     }
 
+    @Override
     public boolean isEnabled() {
         return RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
     }
@@ -134,6 +140,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
         return getBlock() != null && isEnabled();
     }
 
+    @Override
     public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
         if (tip != null)
             return tip;
