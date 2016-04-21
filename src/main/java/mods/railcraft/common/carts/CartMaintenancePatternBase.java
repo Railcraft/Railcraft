@@ -9,15 +9,14 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.api.core.items.StackFilter;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
-import mods.railcraft.common.util.inventory.filters.ArrayStackFilter;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
@@ -40,12 +39,12 @@ public abstract class CartMaintenancePatternBase extends CartMaintenanceBase imp
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
         return false;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
+    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
         return isItemValidForSlot(slot, stack);
     }
 

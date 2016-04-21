@@ -101,7 +101,7 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 

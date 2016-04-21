@@ -10,21 +10,24 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.blocks.aesthetics.post.ItemPost;
-import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -49,6 +52,7 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
         EXCLUDED_BLOCKS.add(Blocks.sand);
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     public static boolean isValidBallast(ItemStack stack) {
         if (stack == null)
             return false;
@@ -96,84 +100,81 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
         stockItems(SLOT_REPLACE_UNDER, SLOT_STOCK_UNDER);
         stockItems(SLOT_REPLACE_SIDE, SLOT_STOCK_SIDE);
 
-        int x = MathHelper.floor_double(this.posX);
-        int y = MathHelper.floor_double(this.posY);
-        int z = MathHelper.floor_double(this.posZ);
-        if (TrackTools.isRailBlockAt(this.worldObj, x, y - 1, z))
-            --y;
+        BlockPos pos = getPosition();
+        if (TrackTools.isRailBlockAt(worldObj, pos.down()))
+            pos = pos.down();
 
-        Block block = this.worldObj.getBlock(x, y, z);
+        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
 
-        if (TrackTools.isRailBlock(block)) {
-            EnumTrackMeta trackMeta = EnumTrackMeta.fromMeta(((BlockRailBase) block).getBasicRailMetadata(worldObj, this, x, y, z));
-            y--;
+        if (TrackTools.isRailBlock(state)) {
+            BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirection(worldObj, pos, state, this);
+            pos = pos.down();
 
             boolean slotANull = true;
             boolean slotBNull = true;
             if (patternInv.getStackInSlot(SLOT_EXIST_UNDER_A) != null) {
-                replaceUnder(x, y, z, SLOT_EXIST_UNDER_A);
+                replaceUnder(pos, SLOT_EXIST_UNDER_A);
                 slotANull = false;
             }
             if (patternInv.getStackInSlot(SLOT_EXIST_UNDER_B) != null) {
-                replaceUnder(x, y, z, SLOT_EXIST_UNDER_B);
+                replaceUnder(pos, SLOT_EXIST_UNDER_B);
                 slotBNull = false;
             }
 
             if (slotANull && slotBNull)
-                replaceUnder(x, y, z, SLOT_EXIST_UNDER_A);
+                replaceUnder(pos, SLOT_EXIST_UNDER_A);
 
             slotANull = true;
             slotBNull = true;
             if (patternInv.getStackInSlot(SLOT_EXIST_SIDE_A) != null) {
-                replaceSide(x, y, z, SLOT_EXIST_SIDE_A, trackMeta);
+                replaceSide(pos, SLOT_EXIST_SIDE_A, trackShape);
                 slotANull = false;
             }
             if (patternInv.getStackInSlot(SLOT_EXIST_SIDE_B) != null) {
-                replaceSide(x, y, z, SLOT_EXIST_SIDE_B, trackMeta);
+                replaceSide(pos, SLOT_EXIST_SIDE_B, trackShape);
                 slotBNull = false;
             }
 
             if (slotANull && slotBNull)
-                replaceSide(x, y, z, SLOT_EXIST_SIDE_A, trackMeta);
+                replaceSide(pos, SLOT_EXIST_SIDE_A, trackShape);
         }
     }
 
-    private void replaceUnder(int x, int y, int z, int slotExist) {
-        replaceWith(x, y, z, slotExist, SLOT_STOCK_UNDER);
+    private void replaceUnder(BlockPos pos, int slotExist) {
+        replaceWith(pos, slotExist, SLOT_STOCK_UNDER);
     }
 
-    private void replaceSide(int x, int y, int z, int slotExist, EnumTrackMeta trackMeta) {
-        if (trackMeta.isEastWestTrack()) {
-            replaceWith(x, y, z + 1, slotExist, SLOT_STOCK_SIDE);
-            replaceWith(x, y, z - 1, slotExist, SLOT_STOCK_SIDE);
-        } else if (trackMeta.isNorthSouthTrack()) {
-            replaceWith(x + 1, y, z, slotExist, SLOT_STOCK_SIDE);
-            replaceWith(x - 1, y, z, slotExist, SLOT_STOCK_SIDE);
+    private void replaceSide(BlockPos pos, int slotExist, BlockRailBase.EnumRailDirection trackShape) {
+        if (TrackShapeHelper.isEastWest(trackShape)) {
+            replaceWith(pos.north(), slotExist, SLOT_STOCK_SIDE);
+            replaceWith(pos.south(), slotExist, SLOT_STOCK_SIDE);
+        } else if (TrackShapeHelper.isNorthSouth(trackShape)) {
+            replaceWith(pos.east(), slotExist, SLOT_STOCK_SIDE);
+            replaceWith(pos.west(), slotExist, SLOT_STOCK_SIDE);
         }
     }
 
-    private void replaceWith(int x, int y, int z, int slotExist, int slotStock) {
+    private void replaceWith(BlockPos pos, int slotExist, int slotStock) {
         ItemStack exist = patternInv.getStackInSlot(slotExist);
         ItemStack stock = getStackInSlot(slotStock);
 
         if (!isValidBallast(stock))
             return;
 
-        Block blockToReplace = worldObj.getBlock(x, y, z);
-        int oldMeta = worldObj.getBlockMetadata(x, y, z);
+        IBlockState oldState = WorldPlugin.getBlockState(worldObj, pos);
 
-        if (blockToReplace == null || !blockMatches(blockToReplace, oldMeta, exist))
+        if (oldState == null || !blockMatches(oldState, exist))
             return;
 
-        if (safeToReplace(x, y, z)) {
+        if (safeToReplace(pos)) {
             Block stockBlock = InvTools.getBlockFromStack(stock);
-            List<ItemStack> drops = blockToReplace.getDrops(worldObj, x, y, z, oldMeta, 0);
+            List<ItemStack> drops = oldState.getBlock().getDrops(worldObj, pos, oldState, 0);
             ItemBlock item = (ItemBlock) stock.getItem();
             int newMeta = 0;
             if (item.getHasSubtypes())
                 newMeta = item.getMetadata(stock.getItemDamage());
-            if (worldObj.setBlock(x, y, z, stockBlock, newMeta, 3)) {
-                SoundHelper.playBlockSound(worldObj, x, y, z, stockBlock.stepSound.func_150496_b(), (1f + 1.0F) / 2.0F, 1f * 0.8F, stockBlock, newMeta);
+            if (stockBlock != null && WorldPlugin.setBlockState(worldObj, pos, stockBlock.getStateFromMeta(newMeta))) {
+                SoundHelper.playBlockSound(worldObj, pos, stockBlock.stepSound.getPlaceSound(), (1f + 1.0F) / 2.0F, 1f * 0.8F, stockBlock, newMeta);
                 decrStackSize(slotStock, 1);
                 for (ItemStack stack : drops) {
                     CartTools.offerOrDropItem(this, stack);
@@ -183,7 +184,7 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
         }
     }
 
-    private boolean blockMatches(Block block, int meta, ItemStack stack) {
+    private boolean blockMatches(IBlockState state, ItemStack stack) {
         if (stack == null)
             return true;
 
@@ -193,24 +194,25 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
             if (existItem.getHasSubtypes())
                 existMeta = existItem.getMetadata(stack.getItemDamage());
             Block stackBlock = InvTools.getBlockFromStack(stack);
-            return (stackBlock == block && (existMeta == OreDictionary.WILDCARD_VALUE || meta == existMeta)) || (stackBlock == Blocks.dirt && stackBlock == Blocks.grass);
+            return (stackBlock == state.getBlock() && (existMeta == OreDictionary.WILDCARD_VALUE || state.getBlock().getMetaFromState(state) == existMeta)) || (stackBlock == Blocks.dirt && stackBlock == Blocks.grass);
         }
         return false;
     }
 
-    private boolean safeToReplace(int x, int y, int z) {
-        if (worldObj.isAirBlock(x, y, z))
+    @SuppressWarnings("SimplifiableIfStatement")
+    private boolean safeToReplace(BlockPos pos) {
+        if (WorldPlugin.isBlockAir(worldObj, pos))
             return false;
 
-        Block block = worldObj.getBlock(x, y, z);
+        Block block = WorldPlugin.getBlock(worldObj, pos);
 
         if (block.getMaterial().isLiquid())
             return false;
 
-        if (block.getBlockHardness(worldObj, x, y, z) < 0)
+        if (block.getBlockHardness(worldObj, pos) < 0)
             return false;
 
-        return !block.isReplaceable(worldObj, x, y, z);
+        return !block.isReplaceable(worldObj, pos);
     }
 
     @Override
@@ -226,7 +228,7 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
