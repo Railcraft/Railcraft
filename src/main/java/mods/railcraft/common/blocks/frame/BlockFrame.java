@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.delta.TileWire;
 import mods.railcraft.common.blocks.machine.delta.TileWire.AddonType;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.RailcraftItems;
@@ -47,7 +46,7 @@ public class BlockFrame extends Block implements IPostConnection {
     public static void registerBlock() {
         if (instance == null)
             if (RailcraftConfig.isBlockEnabled("frame")) {
-                instance = new BlockFrame(Railcraft.proxy.getRenderId());
+                instance = new BlockFrame();
                 RailcraftRegistry.register(instance, ItemBlockRailcraft.class);
 
 //                HarvestPlugin.setStateHarvestLevel(instance, "crowbar", 0);
@@ -73,23 +72,16 @@ public class BlockFrame extends Block implements IPostConnection {
         return new ItemStack(instance, qty, 0);
     }
 
-    private final int renderId;
     public static boolean flipTextures;
     public static boolean poweredTexture;
 
-    public BlockFrame(int renderId) {
+    public BlockFrame() {
         super(Material.glass);
-        this.renderId = renderId;
         setResistance(10);
         setHardness(5);
         setStepSound(Block.soundTypeMetal);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setUnlocalizedName("railcraft.frame");
-    }
-
-    @Override
-    public int getRenderType() {
-        return renderId;
     }
 
     @Override

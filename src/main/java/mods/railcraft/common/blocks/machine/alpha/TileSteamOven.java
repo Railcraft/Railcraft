@@ -57,14 +57,14 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
-    private static final EnumFacing[] UP_DOWN_AXES = new EnumFacing[]{UP, DOWN};
+    private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
     private static final int STEAM_PER_BATCH = 8000;
     private static final int TOTAL_COOK_TIME = 256;
     private static final int COOK_STEP = 16;
     private static final int ITEMS_SMELTED = 9;
-    private static final int[] SLOTS = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
+    private static final int[] SLOTS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
     private static final int TANK_CAPACITY = 8 * FluidHelper.BUCKET_VOLUME;
-    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private final TankManager tankManager = new TankManager();
     private final StandardTank tank;
     private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 9);
