@@ -30,7 +30,8 @@ public class ModuleTrain extends RailcraftModulePayload {
             public void construction() {
                 add(
                         RailcraftBlocks.detector,
-                        RailcraftBlocks.track
+                        RailcraftBlocks.track,
+                        RailcraftBlocks.machine_gamma
                 );
             }
 
@@ -46,8 +47,6 @@ public class ModuleTrain extends RailcraftModulePayload {
                             'X', Blocks.nether_brick,
                             'P', Blocks.stone_pressure_plate);
                 }
-
-                EnumMachineGamma.DISPENSER_TRAIN.register();
             }
 
             @Override

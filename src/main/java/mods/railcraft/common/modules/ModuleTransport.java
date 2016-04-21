@@ -11,6 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
@@ -35,9 +36,18 @@ public class ModuleTransport extends RailcraftModulePayload {
     public ModuleTransport() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
+            public void construction() {
+                add(
+                        RailcraftBlocks.machine_alpha,
+                        RailcraftBlocks.machine_beta,
+                        RailcraftBlocks.machine_gamma
+                );
+            }
+
+            @Override
             public void preInit() {
                 EnumMachineAlpha alpha = EnumMachineAlpha.TANK_WATER;
-                if (alpha.register())
+                if (alpha.isAvailable())
                     CraftingPlugin.addRecipe(alpha.getItem(6),
                             "WWW",
                             "ISI",
@@ -50,7 +60,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                 initSteelTank();
 
                 EnumMachineBeta voidChest = EnumMachineBeta.VOID_CHEST;
-                if (voidChest.register())
+                if (voidChest.isAvailable())
                     CraftingPlugin.addRecipe(voidChest.getItem(),
                             "OOO",
                             "OPO",
@@ -59,7 +69,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                             'P', new ItemStack(Items.ender_pearl));
 
                 EnumMachineGamma itemLoader = EnumMachineGamma.ITEM_LOADER;
-                if (itemLoader.register()) {
+                if (itemLoader.isAvailable()) {
                     ItemStack stack = itemLoader.getItem();
                     ItemStack detector = EnumDetector.ITEM.getItem();
                     if (detector == null)
@@ -73,7 +83,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                             'L', new ItemStack(Blocks.hopper));
 
                     itemLoader = EnumMachineGamma.ITEM_LOADER_ADVANCED;
-                    if (itemLoader.register())
+                    if (itemLoader.isAvailable())
                         CraftingPlugin.addRecipe(itemLoader.getItem(),
                                 "IRI",
                                 "RLR",
@@ -85,7 +95,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                 }
 
                 EnumMachineGamma itemUnloader = EnumMachineGamma.ITEM_UNLOADER;
-                if (itemUnloader.register()) {
+                if (itemUnloader.isAvailable()) {
                     ItemStack stack = itemUnloader.getItem();
                     ItemStack detector = EnumDetector.ITEM.getItem();
                     if (detector == null)
@@ -99,7 +109,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                             'L', new ItemStack(Blocks.hopper));
 
                     itemUnloader = EnumMachineGamma.ITEM_UNLOADER_ADVANCED;
-                    if (itemUnloader.register())
+                    if (itemUnloader.isAvailable())
                         CraftingPlugin.addRecipe(itemUnloader.getItem(),
                                 "IRI",
                                 "RLR",
@@ -112,7 +122,7 @@ public class ModuleTransport extends RailcraftModulePayload {
 
                 EnumMachineGamma liquidLoader = EnumMachineGamma.FLUID_LOADER;
 
-                if (liquidLoader.register()) {
+                if (liquidLoader.isAvailable()) {
                     ItemStack detector = EnumDetector.TANK.getItem();
                     if (detector == null)
                         detector = new ItemStack(Blocks.stone_pressure_plate);
@@ -126,7 +136,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                 }
 
                 EnumMachineGamma liquidUnloader = EnumMachineGamma.FLUID_UNLOADER;
-                if (liquidUnloader.register()) {
+                if (liquidUnloader.isAvailable()) {
                     ItemStack detector = EnumDetector.TANK.getItem();
                     if (detector == null)
                         detector = new ItemStack(Blocks.stone_pressure_plate);
@@ -202,7 +212,7 @@ public class ModuleTransport extends RailcraftModulePayload {
             }
 
             private boolean defineTank(EnumMachineBeta type, Object... recipe) {
-                if (type.register()) {
+                if (type.isAvailable()) {
                     addColorRecipes(type);
                     CraftingPlugin.addRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
                     return true;

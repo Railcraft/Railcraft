@@ -40,7 +40,11 @@ public class ModuleAutomation extends RailcraftModulePayload {
             @Override
             public void construction() {
                 MinecraftForge.EVENT_BUS.register(new BoreOreHandler());
-                add(RailcraftBlocks.detector);
+                add(
+                        RailcraftBlocks.detector,
+                        RailcraftBlocks.machine_alpha,
+                        RailcraftBlocks.machine_gamma
+                );
             }
 
             @Override
@@ -48,14 +52,14 @@ public class ModuleAutomation extends RailcraftModulePayload {
                 BlockCube.registerBlock();
 
                 EnumMachineGamma gamma = EnumMachineGamma.DISPENSER_CART;
-                if (gamma.register())
+                if (gamma.isAvailable())
                     CraftingPlugin.addRecipe(gamma.getItem(),
                             "ML",
                             'M', Items.minecart,
                             'L', Blocks.dispenser);
 
                 EnumMachineAlpha alpha = EnumMachineAlpha.FEED_STATION;
-                if (alpha.register()) {
+                if (alpha.isAvailable()) {
                     ItemStack stack = alpha.getItem();
                     CraftingPlugin.addRecipe(stack,
                             "PCP",
@@ -69,7 +73,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                 }
 
                 alpha = EnumMachineAlpha.TRADE_STATION;
-                if (alpha.register()) {
+                if (alpha.isAvailable()) {
                     ItemStack stack = alpha.getItem();
                     CraftingPlugin.addRecipe(stack,
                             "SGS",

@@ -12,6 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
@@ -49,6 +50,14 @@ public class ModuleFactory extends RailcraftModulePayload {
     public ModuleFactory() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
+            public void construction() {
+                add(
+                        RailcraftBlocks.machine_alpha,
+                        RailcraftBlocks.machine_beta
+                );
+            }
+
+            @Override
             public void preInit() {
                 BlockCube.registerBlock();
                 RailcraftToolItems.registerCoalCoke();
@@ -63,7 +72,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                             'I', "ingotSteel");
 
                 EnumMachineAlpha alpha = EnumMachineAlpha.COKE_OVEN;
-                if (alpha.register()) {
+                if (alpha.isAvailable()) {
                     ItemStack stack = alpha.getItem();
                     CraftingPlugin.addRecipe(stack,
                             "MBM",
@@ -77,7 +86,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                 }
 
                 alpha = EnumMachineAlpha.STEAM_OVEN;
-                if (alpha.register())
+                if (alpha.isAvailable())
                     CraftingPlugin.addRecipe(alpha.getItem(4),
                             "SSS",
                             "SFS",
@@ -86,7 +95,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                             'S', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL));
 
                 alpha = EnumMachineAlpha.BLAST_FURNACE;
-                if (alpha.register()) {
+                if (alpha.isAvailable()) {
                     ItemStack stack = alpha.getItem(4);
                     CraftingPlugin.addRecipe(stack,
                             "MBM",
@@ -132,7 +141,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                 }
 
                 alpha = EnumMachineAlpha.ROCK_CRUSHER;
-                if (alpha.register()) {
+                if (alpha.isAvailable()) {
                     ItemStack stack = alpha.getItem(4);
                     CraftingPlugin.addRecipe(stack,
                             "PDP",
@@ -290,7 +299,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                 }
 
                 alpha = EnumMachineAlpha.ROLLING_MACHINE;
-                if (alpha.register()) {
+                if (alpha.isAvailable()) {
                     ItemStack stack = alpha.getItem();
                     CraftingPlugin.addRecipe(stack,
                             "IPI",
@@ -303,7 +312,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                     RollingMachineCraftingManager.copyRecipesToWorkbench();
 
                 EnumMachineBeta metalsChest = EnumMachineBeta.METALS_CHEST;
-                if (metalsChest.register())
+                if (metalsChest.isAvailable())
                     CraftingPlugin.addRecipe(metalsChest.getItem(),
                             "GPG",
                             "PAP",

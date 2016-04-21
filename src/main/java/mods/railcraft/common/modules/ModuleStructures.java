@@ -11,7 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
@@ -54,11 +54,14 @@ public class ModuleStructures extends RailcraftModulePayload {
                 for (BrickTheme brick : BrickTheme.VALUES) {
                     addBlockFactory(brick.makeFactory());
                 }
+                add(
+                        RailcraftBlocks.signal,
+                        RailcraftBlocks.machine_alpha
+                );
             }
 
             @Override
             public void preInit() {
-                RailcraftBlocksOld.registerBlockSignal();
                 BlockPost.registerBlock();
                 BlockPostMetal.registerPost();
                 BlockPostMetal.registerPlatform();
@@ -71,9 +74,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     Block cube = BlockCube.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getItem();
-                        if (RailcraftModuleManager.isModuleEnabled(ModuleFactory.class)
-                                && RailcraftBlocksOld.getBlockMachineAlpha() != null
-                                && RailcraftConfig.isSubBlockEnabled(EnumMachineAlpha.ROLLING_MACHINE.getTag())) {
+                        if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable() && RailcraftItems.rebar.isEnabled()) {
                             stack.stackSize = 8;
                             CraftingPlugin.addRecipe(stack,
                                     "SIS",
@@ -105,9 +106,8 @@ public class ModuleStructures extends RailcraftModulePayload {
                     }
                 }
 
-                RailcraftBlocksOld.registerBlockMachineAlpha();
                 EnumMachineAlpha alpha = EnumMachineAlpha.SMOKER;
-                if (RailcraftConfig.isSubBlockEnabled(alpha.getTag())) {
+                if (alpha.isAvailable()) {
                     ItemStack stack = alpha.getItem();
                     CraftingPlugin.addRecipe(stack,
                             " N ",
@@ -272,7 +272,7 @@ public class ModuleStructures extends RailcraftModulePayload {
             @Override
             public void postInit() {
                 if (BlockStrengthGlass.getBlock() != null) {
-                    Object[] frameTypes = new Object[]{"ingotTin", Items.iron_ingot};
+                    Object[] frameTypes = {"ingotTin", Items.iron_ingot};
                     FluidStack water = Fluids.WATER.get(FluidHelper.BUCKET_VOLUME);
                     for (ItemStack container : FluidHelper.getContainersFilledWith(water)) {
                         for (Object frame : frameTypes) {

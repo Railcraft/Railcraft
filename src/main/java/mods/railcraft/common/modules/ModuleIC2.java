@@ -11,8 +11,7 @@ package mods.railcraft.common.modules;
 
 import ic2.api.recipe.Recipes;
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
-import mods.railcraft.common.blocks.detector.BlockDetector;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.carts.EnumCart;
@@ -44,10 +43,15 @@ public class ModuleIC2 extends RailcraftModulePayload {
     ModuleIC2() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
-            public void preInit() {
-                BlockDetector.registerBlock();
-                RailcraftBlocksOld.registerBlockMachineGamma();
+            public void construction() {
+                add(
+                        RailcraftBlocks.detector,
+                        RailcraftBlocks.machine_gamma
+                );
+            }
 
+            @Override
+            public void preInit() {
                 if (RailcraftConfig.isItemEnabled("ic2.upgrade.lapotron")) {
                     lapotronUpgrade = new ItemRailcraft().setUnlocalizedName("railcraft.upgrade.lapotron").setMaxStackSize(9);
 
@@ -80,7 +84,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                Block blockDetector = BlockDetector.getBlock();
+                Block blockDetector = RailcraftBlocks.detector.block();
 
                 if (blockDetector != null) {
                     ItemStack stack = EnumDetector.ENERGY.getItem();

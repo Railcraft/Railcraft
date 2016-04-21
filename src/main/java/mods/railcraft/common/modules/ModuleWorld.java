@@ -48,8 +48,8 @@ public class ModuleWorld extends RailcraftModulePayload {
                     VillagerRegistry.instance().registerVillageTradeHandler(id, new VillagerTradeHandler());
                     VillagerRegistry.instance().registerVillageCreationHandler(new WorkshopCreationHandeler());
                     try {
-                        MapGenStructureIO.func_143031_a(ComponentWorkshop.class, "railcraft:workshop");
-                    } catch (Throwable e) {
+                        MapGenStructureIO.registerStructureComponent(ComponentWorkshop.class, "railcraft:workshop");
+                    } catch (Throwable ignored) {
                     }
                 }
             }
