@@ -17,8 +17,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -58,27 +58,19 @@ public class TrailTicker {
         if (username == null || username.startsWith("["))
             return;
 
-        int x = MathHelper.floor_double(player.posX);
-        int y = MathHelper.floor_double(player.posY);
-        int z = MathHelper.floor_double(player.posZ);
-
         World world = DimensionManager.getWorld(player.worldObj.provider.getDimensionId()); // Because Lava Boats
 
-        boolean success = trySetMarker(world, x, y, z, player);
+        boolean success = trySetMarker(world, player.getPosition(), player);
 
         for (int i = 0; i < 8 && !success; i++) {
-            EnumFacing dir = EnumFacing.getOrientation(MiscTools.RANDOM.nextInt(6));
-            int newX = MiscTools.getXOnSide(x, dir);
-            int newY = MiscTools.getYOnSide(y, dir);
-            int newZ = MiscTools.getZOnSide(z, dir);
-            success = trySetMarker(world, newX, newY, newZ, player);
+            success = trySetMarker(world, player.getPosition().offset(EnumFacing.random(MiscTools.RANDOM)), player);
         }
     }
 
-    private boolean trySetMarker(World world, int x, int y, int z, EntityPlayer player) {
-        Block block = WorldPlugin.getBlock(world, x, y, z);
+    private boolean trySetMarker(World world, BlockPos pos, EntityPlayer player) {
+        Block block = WorldPlugin.getBlock(world, pos);
         if (block == Blocks.air) {
-            world.setBlockState(pos, BlockHidden.getBlock(), 0, 6);
+            WorldPlugin.setBlockState(world, pos, BlockHidden.getBlock().getDefaultState(), 6);
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TileHidden) {
                 TileHidden hidden = (TileHidden) tile;
@@ -88,7 +80,7 @@ public class TrailTicker {
                 if (last != null)
                     hidden.lastMarker = last;
                 hidden.sendUpdateToClient();
-                lastPosition.put(player, new WorldCoordinate(world.provider.getDimensionId(), x, y, z));
+                lastPosition.put(player, new WorldCoordinate(world.provider.getDimensionId(), pos));
                 return true;
             }
         }

@@ -16,14 +16,15 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.APIErrorHandler;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -102,9 +103,6 @@ public abstract class EntityCartEnergy extends CartContainerBase implements IEne
     public int getSizeInventory() {
         return 2;
     }
-
-    @Override
-    public abstract String getInventoryName();
 
     @Override
     protected void readEntityFromNBT(NBTTagCompound nbt) {
@@ -190,19 +188,14 @@ public abstract class EntityCartEnergy extends CartContainerBase implements IEne
     public abstract ItemStack getIC2Item();
 
     @Override
-    public Block func_145820_n() {
+    public IBlockState getDefaultDisplayTile() {
         ItemStack stack = getIC2Item();
-        if (stack != null)
-            return ((ItemBlock) stack.getItem()).field_150939_a;
-        return super.func_145820_n();
-    }
-
-    @Override
-    public int getDisplayTileData() {
-        ItemStack stack = getIC2Item();
-        if (stack != null)
-            return stack.getItemDamage();
-        return 0;
+        if (stack != null) {
+            Block block = InvTools.getBlockFromStack(stack);
+            if (block != null)
+                return block.getStateFromMeta(stack.getItemDamage());
+        }
+        return super.getDefaultDisplayTile();
     }
 
     @Override

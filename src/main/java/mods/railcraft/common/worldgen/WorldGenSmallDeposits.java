@@ -8,57 +8,60 @@
  */
 package mods.railcraft.common.worldgen;
 
+import com.google.common.base.Predicate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class WorldGenSmallDeposits extends WorldGenerator {
+    public static final Predicate<IBlockState> STONE = new Predicate<IBlockState>() {
+        @Override
+        public boolean apply(@Nullable IBlockState input) {
+            return input != null && input.getBlock() == Blocks.stone;
+        }
+    };
 
-    private final Block ore, replace;
-    private final int meta, number;
+    private final IBlockState ore;
+    private final Predicate<IBlockState> replace;
+    private final int number;
 
-    public WorldGenSmallDeposits(Block ore, int meta, int number, Block replace) {
+    public WorldGenSmallDeposits(IBlockState ore, int number, Predicate<IBlockState> replace) {
         this.ore = ore;
-        this.meta = meta;
         this.number = number;
         this.replace = replace;
     }
 
     @Override
-    public boolean generate(World world, Random rand, int x, int y, int z) {
-        if (canGen(world, x, y, z)) {
-            placeOre(world, rand, x, y, z);
+    public boolean generate(World world, Random rand, BlockPos pos) {
+        if (canGen(world, pos)) {
+            placeOre(world, rand, pos);
             return true;
         }
         return false;
     }
 
-    protected boolean canGen(World world, int x, int y, int z) {
+    protected boolean canGen(World world, BlockPos pos) {
         return true;
     }
 
-    private void placeOre(World world, Random rand, int x, int y, int z) {
+    private void placeOre(World world, Random rand, BlockPos pos) {
         for (int num = 0; num < number; num++) {
-            Block block = WorldPlugin.getBlock(world, x, y, z);
-            if (block != null && block.isReplaceableOreGen(world, x, y, z, replace))
-                world.setBlock(x, y, z, ore, meta, 2);
+            IBlockState blockState = WorldPlugin.getBlockState(world, pos);
+            if (!WorldPlugin.isBlockAir(world, pos, blockState) && blockState.getBlock().isReplaceableOreGen(world, pos, replace))
+                WorldPlugin.setBlockState(world, pos, ore, 2);
 
-            EnumFacing dir = EnumFacing.getOrientation(rand.nextInt(6));
-
-            x = MiscTools.getXOnSide(x, dir);
-            y = MiscTools.getYOnSide(y, dir);
-            z = MiscTools.getZOnSide(z, dir);
-
-            if (!world.blockExists(x, y, z))
+            pos = pos.offset(EnumFacing.random(rand));
+            if (!WorldPlugin.isBlockLoaded(world, pos))
                 break;
         }
     }

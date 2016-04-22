@@ -15,7 +15,6 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -52,7 +51,7 @@ public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.addObject(SLOTS_FILLED_DATA_ID, new Integer(-1));
+        dataWatcher.addObject(SLOTS_FILLED_DATA_ID, -1);
     }
 
     public int getSlotsFilled() {
@@ -88,14 +87,6 @@ public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
         }
         return true;
     }
-
-    @Override
-    public Block func_145820_n() {
-        return null;
-    }
-//    public Block func_145820_n() {
-//        return Blocks.trapped_chest;
-//    }
 
     @Override
     public int getDefaultDisplayTileOffset() {

@@ -9,8 +9,8 @@
 package mods.railcraft.common.items;
 
 import com.mojang.authlib.GameProfile;
-import mods.railcraft.api.core.items.IStackFilter;
-import mods.railcraft.api.core.items.StackFilter;
+import mods.railcraft.api.core.IStackFilter;
+import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;

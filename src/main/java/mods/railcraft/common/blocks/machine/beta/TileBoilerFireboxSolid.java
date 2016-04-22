@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.alpha.TileCokeOven;

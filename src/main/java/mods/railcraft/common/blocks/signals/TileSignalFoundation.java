@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
@@ -107,7 +107,7 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
 
     @Override
     public Block getBlockType() {
-        return RailcraftBlocksOld.getBlockSignal();
+        return RailcraftBlocks.signal.block();
     }
 
     @Override

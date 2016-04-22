@@ -10,8 +10,8 @@ package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.IMinecartItem;
-import mods.railcraft.api.core.items.IStackFilter;
-import mods.railcraft.api.core.items.StackFilter;
+import mods.railcraft.api.core.IStackFilter;
+import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.carts.ItemCartAnchor;
 import mods.railcraft.common.carts.ItemLocomotive;

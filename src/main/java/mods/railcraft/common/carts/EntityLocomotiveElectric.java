@@ -17,17 +17,18 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class EntityLocomotiveElectric extends EntityLocomotive implements ISidedInventory, IElectricMinecart {
@@ -114,11 +115,11 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     }
 
     @Override
-    protected void func_145821_a(int trackX, int trackY, int trackZ, double maxSpeed, double slopeAdjustement, Block trackBlock, int trackMeta) {
-        super.func_145821_a(trackX, trackY, trackZ, maxSpeed, slopeAdjustement, trackBlock, trackMeta);
+    protected void func_180460_a(BlockPos pos, IBlockState state) {
+        super.func_180460_a(pos, state);
         if (Game.isNotHost(worldObj))
             return;
-        chargeHandler.tickOnTrack(trackX, trackY, trackZ);
+        chargeHandler.tickOnTrack(pos);
     }
 
     @Override
@@ -132,17 +133,17 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
+    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
         return isItemValidForSlot(slot, stack);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
         return slot == SLOT_TICKET;
     }
 
@@ -150,7 +151,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         switch (slot) {
             case SLOT_TICKET:
-                return ItemTicket.FILTER.matches(stack);
+                return ItemTicket.FILTER.apply(stack);
             default:
                 return false;
         }

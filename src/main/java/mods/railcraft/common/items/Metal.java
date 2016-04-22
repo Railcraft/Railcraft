@@ -9,7 +9,7 @@
 package mods.railcraft.common.items;
 
 import com.google.common.collect.EnumBiMap;
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.items.ItemIngot.EnumIngot;

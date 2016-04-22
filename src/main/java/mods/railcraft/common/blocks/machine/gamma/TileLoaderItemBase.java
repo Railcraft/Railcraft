@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine.gamma;
 
-import mods.railcraft.api.core.items.StackFilter;
+import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;

@@ -11,7 +11,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.api.carts.ITrainTransferHelper;
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.item.EntityMinecart;

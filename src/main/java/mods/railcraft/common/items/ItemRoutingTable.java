@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.items.StackFilter;
+import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.client.gui.GuiRoutingTable;
 import mods.railcraft.common.blocks.signals.RoutingLogic;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;

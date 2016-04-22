@@ -1,6 +1,5 @@
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;

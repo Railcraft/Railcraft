@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -147,17 +148,17 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
+    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
         return isItemValidForSlot(slot, stack);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
         return slot < SLOT_TICKET;
     }
 
@@ -172,7 +173,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
             case SLOT_LIQUID_INPUT:
                 return FluidItemHelper.containsFluid(stack, Fluids.WATER.get(1));
             case SLOT_TICKET:
-                return ItemTicket.FILTER.matches(stack);
+                return ItemTicket.FILTER.apply(stack);
             default:
                 return false;
         }

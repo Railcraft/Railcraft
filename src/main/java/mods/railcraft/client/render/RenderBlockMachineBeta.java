@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.render;
 
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileChestMetals;
 import mods.railcraft.common.blocks.machine.beta.TileChestVoid;
@@ -21,7 +21,7 @@ import mods.railcraft.common.core.RailcraftConstants;
 public class RenderBlockMachineBeta extends BlockRenderer {
 
     public RenderBlockMachineBeta() {
-        super(RailcraftBlocksOld.getBlockMachineBeta());
+        super(RailcraftBlocks.machine_beta.block());
 
         addBlockRenderer(EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.ordinal(), new RenderBoilerTank());
         addBlockRenderer(EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.ordinal(), new RenderBoilerTank());

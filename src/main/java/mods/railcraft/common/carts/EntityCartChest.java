@@ -12,13 +12,17 @@ import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -62,8 +66,8 @@ public class EntityCartChest extends CartContainerBase implements IItemCart {
     }
 
     @Override
-    public IBlockState getDisplayTile() {
-        return Blocks.chest.getDefaultState();
+    public IBlockState getDefaultDisplayTile() {
+        return Blocks.chest.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.NORTH);
     }
 
     @Override
@@ -82,15 +86,8 @@ public class EntityCartChest extends CartContainerBase implements IItemCart {
     }
 
     @Override
-    public String getInventoryName() {
-        return "Chest Cart";
-    }
-
-    @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if (!RailcraftConfig.chestAllowLiquids())
-            return getStackInSlot(slot) == null || !FluidItemHelper.isContainer(stack);
-        return true;
+        return RailcraftConfig.chestAllowLiquids() || getStackInSlot(slot) == null || !FluidItemHelper.isContainer(stack);
     }
 
     @Override
@@ -106,5 +103,15 @@ public class EntityCartChest extends CartContainerBase implements IItemCart {
     @Override
     public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
         return true;
+    }
+
+    @Override
+    public String getGuiID() {
+        return "minecraft:chest";
+    }
+
+    @Override
+    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+        return new ContainerChest(playerInventory, this, playerIn);
     }
 }

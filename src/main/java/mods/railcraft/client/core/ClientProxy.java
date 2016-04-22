@@ -79,11 +79,11 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void initClient() {
-        FMLCommonHandler.instance().bus().register(new LatestVersionMessage());
+        MinecraftForge.EVENT_BUS.register(new LatestVersionMessage());
 
         SoundRegistry.setupBlockSounds();
 
-        FMLCommonHandler.instance().bus().register(LocomotiveKeyHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(LocomotiveKeyHandler.INSTANCE);
 
         if (!RailcraftItems.goggles.isEnabled())
             MinecraftForge.EVENT_BUS.register(AuraKeyHandler.INSTANCE);

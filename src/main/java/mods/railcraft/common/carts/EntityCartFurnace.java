@@ -47,8 +47,8 @@ public class EntityCartFurnace extends EntityMinecartFurnace {
     public void killMinecart(DamageSource par1DamageSource) {
         setDead();
         List<ItemStack> drops = getItemsDropped();
-        if (this.func_95999_t() != null)
-            drops.get(0).setStackDisplayName(this.func_95999_t());
+        if (hasCustomName())
+            drops.get(0).setStackDisplayName(getName());
         for (ItemStack item : drops) {
             entityDropItem(item, 0.0F);
         }
@@ -57,7 +57,7 @@ public class EntityCartFurnace extends EntityMinecartFurnace {
     @Override
     public ItemStack getCartItem() {
         ItemStack stack = new ItemStack(Items.furnace_minecart);
-        if (hasCustomInventoryName())
+        if (hasCustomName())
             stack.setStackDisplayName(getName());
         return stack;
     }

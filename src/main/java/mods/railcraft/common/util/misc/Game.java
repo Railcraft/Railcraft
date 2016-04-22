@@ -73,7 +73,7 @@ public class Game {
     }
 
     public static void logTrace(Level level, String msg, Object... args) {
-        Game.logTrace(level, getMessage(msg, args));
+        logTrace(level, getMessage(msg, args));
     }
 
     public static void logTrace(Level level, Message message) {

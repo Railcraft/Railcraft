@@ -155,8 +155,8 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         if (tile == null)
             return false;
         if (tile instanceof TileSentinel) {
-            int xChunk = getX() >> 4;
-            int zChunk = getZ() >> 4;
+            int xChunk = getPos().getX() >> 4;
+            int zChunk = getPos().getZ() >> 4;
 
             int xSentinelChunk = tile.getPos().getX() >> 4;
             int zSentinelChunk = tile.getPos().getZ() >> 4;

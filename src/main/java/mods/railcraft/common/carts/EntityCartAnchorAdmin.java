@@ -9,7 +9,6 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
@@ -44,16 +43,12 @@ public class EntityCartAnchorAdmin extends EntityCartAnchor {
         return EnumMachineAlpha.ANCHOR_ADMIN.getState();
     }
 
-    @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.ANCHOR_ADMIN.getTag());
-    }
-
-    @Override
-    public IIcon getBlockTextureOnSide(int side) {
-        if (side < 2 && !getFlag(TICKET_FLAG))
-            return EnumMachineAlpha.ANCHOR_ADMIN.getTexture(6);
-        return EnumMachineAlpha.ANCHOR_ADMIN.getTexture(side);
-    }
+    //TODO: replace with models?
+//    @Override
+//    public IIcon getBlockTextureOnSide(int side) {
+//        if (side < 2 && !getFlag(TICKET_FLAG))
+//            return EnumMachineAlpha.ANCHOR_ADMIN.getTexture(6);
+//        return EnumMachineAlpha.ANCHOR_ADMIN.getTexture(side);
+//    }
 
 }

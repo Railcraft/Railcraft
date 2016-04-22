@@ -8,8 +8,7 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.api.core.items.RailcraftItemRegistry;
-import mods.railcraft.api.core.items.TagList;
+import mods.railcraft.api.core.RailcraftItemRegistry;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -70,7 +69,7 @@ public final class RailcraftRegistry {
         if (stack == null)
             throw new RuntimeException("Don't register null items!");
         tag = MiscTools.cleanTag(tag);
-        TagList.addTag(tag);
+//        TagList.addTag(tag);
 //        System.out.println(tag);
         Item existingItem = GameRegistry.findItem(Railcraft.MOD_ID, tag);
         Block existingBlock = GameRegistry.findBlock(Railcraft.MOD_ID, tag);
@@ -118,7 +117,7 @@ public final class RailcraftRegistry {
     private static void _register(Item item) {
         String tag = item.getUnlocalizedName();
         tag = MiscTools.cleanTag(tag);
-        TagList.addTag(tag);
+//        TagList.addTag(tag);
         GameRegistry.registerItem(item, tag);
         RailcraftItemRegistry.register(tag, new ItemStack(item));
     }
@@ -148,7 +147,7 @@ public final class RailcraftRegistry {
             throw new RuntimeException("Blocks must be initialized in PreInit or InitFirst!");
         String tag = block.getUnlocalizedName();
         tag = MiscTools.cleanTag(tag);
-        TagList.addTag(tag);
+//        TagList.addTag(tag);
         GameRegistry.registerBlock(block, itemclass, tag);
         RailcraftItemRegistry.register(tag, new ItemStack(block));
     }

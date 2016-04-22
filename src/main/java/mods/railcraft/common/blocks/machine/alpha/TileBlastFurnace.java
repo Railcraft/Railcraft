@@ -8,8 +8,8 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.api.core.items.IStackFilter;
-import mods.railcraft.api.core.items.StackFilter;
+import mods.railcraft.api.core.IStackFilter;
+import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;

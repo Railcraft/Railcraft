@@ -189,17 +189,14 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         customName = data.getString("customName");
     }
 
-    @Deprecated
     public final int getX() {
         return getPos().getX();
     }
 
-    @Deprecated
     public final int getY() {
         return getPos().getY();
     }
 
-    @Deprecated
     public final int getZ() {
         return getPos().getZ();
     }

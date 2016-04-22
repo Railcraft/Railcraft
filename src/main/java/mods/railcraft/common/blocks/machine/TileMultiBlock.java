@@ -96,7 +96,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
             return 'O';
         return currentPattern.getPatternMarker(posInPattern.getX(), posInPattern.getY(), posInPattern.getZ());
     }
-    
+
     public final BlockPos getPatternPosition() {
         return posInPattern;
     }
@@ -269,7 +269,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
             }
         }
 
-        AxisAlignedBB entityCheckBounds = map.getEntityCheckBounds(getX(), getY(), getZ());
+        AxisAlignedBB entityCheckBounds = map.getEntityCheckBounds(getPos());
 //                if(entityCheckBounds != null) {
 //                    System.out.println("test entities: " + entityCheckBounds.toString());
 //                }

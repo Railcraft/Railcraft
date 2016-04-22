@@ -14,7 +14,6 @@ import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -220,11 +219,6 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
         if (Game.isHost(worldObj))
             GuiHandler.openGui(EnumGui.CART_UNDERCUTTER, player, worldObj, this);
         return true;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.UNDERCUTTER.getTag());
     }
 
     @Override

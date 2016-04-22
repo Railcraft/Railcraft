@@ -45,6 +45,7 @@ recv
 redstone
 refactory
 refuelable
+relayer
 rideable
 routable
 slimeball
@@ -59,3 +60,4 @@ undercutter
 unloader
 waterstone
 worldgen
+worldlogic

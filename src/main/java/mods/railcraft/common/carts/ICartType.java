@@ -10,6 +10,8 @@ import net.minecraft.world.World;
 public interface ICartType {
     byte getId();
 
+    String getBaseTag();
+
     String getTag();
 
     Class<? extends EntityMinecart> getCartClass();

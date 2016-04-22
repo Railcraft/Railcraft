@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.api.core.items.StackFilter;
+import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.util.misc.IAnchor;

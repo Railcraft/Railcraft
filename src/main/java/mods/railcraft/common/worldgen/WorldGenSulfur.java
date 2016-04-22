@@ -8,17 +8,15 @@
  */
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class WorldGenSulfur extends WorldGenSmallDeposits {
@@ -26,25 +24,20 @@ public class WorldGenSulfur extends WorldGenSmallDeposits {
     private static final int AMOUNT = 10;
 
     public WorldGenSulfur() {
-        super(BlockOre.getBlock(), EnumOre.SULFUR.ordinal(), AMOUNT, Blocks.stone);
+        super(EnumOre.SULFUR.getState(), AMOUNT, STONE);
     }
 
     @Override
-    protected boolean canGen(World world, int x, int y, int z) {
-        for (int side = 2; side < 6; side++) {
-            EnumFacing s = EnumFacing.VALUES[side];
-            int i = MiscTools.getXOnSide(x, s);
-            int j = MiscTools.getYOnSide(y, s);
-            int k = MiscTools.getZOnSide(z, s);
-
-            if (world.blockExists(i, j, k)) {
-                Block block = WorldPlugin.getBlock(world, i, j, k);
+    protected boolean canGen(World world, BlockPos pos) {
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            if (WorldPlugin.isBlockLoaded(world, pos.offset(side))) {
+                Block block = WorldPlugin.getBlock(world, pos);
                 if (block == Blocks.lava || block == Blocks.flowing_lava)
                     return true;
             }
         }
         for (int j = 0; j < 4; j++) {
-            Block block = WorldPlugin.getBlock(world, x, y - j, z);
+            Block block = WorldPlugin.getBlock(world, pos.down(j));
 
             if (block == Blocks.lava || block == Blocks.flowing_lava)
                 return true;

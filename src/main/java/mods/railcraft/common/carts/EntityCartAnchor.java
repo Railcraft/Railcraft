@@ -9,9 +9,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.api.carts.ICartContentsTextureProvider;
 import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -19,7 +17,6 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -28,7 +25,6 @@ import mods.railcraft.common.util.misc.ChunkManager;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.IAnchor;
 import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -243,6 +239,7 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
         super.setDead();
     }
 
+    @Override
     public void travelToDimension(int dim) {
         teleported = true;
         releaseTicket();
@@ -290,21 +287,17 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
     }
 
     @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.ANCHOR.getTag());
-    }
-
-    @Override
     public IBlockState getDisplayTile() {
         return EnumMachineAlpha.ANCHOR_WORLD.getState();
     }
 
-    @Override
-    public IIcon getBlockTextureOnSide(int side) {
-        if (side < 2 && !getFlag(TICKET_FLAG))
-            return EnumMachineAlpha.ANCHOR_WORLD.getTexture(6);
-        return EnumMachineAlpha.ANCHOR_WORLD.getTexture(side);
-    }
+    //TODO: replace with models?
+//    @Override
+//    public IIcon getBlockTextureOnSide(int side) {
+//        if (side < 2 && !getFlag(TICKET_FLAG))
+//            return EnumMachineAlpha.ANCHOR_WORLD.getTexture(6);
+//        return EnumMachineAlpha.ANCHOR_WORLD.getTexture(side);
+//    }
 
     @Override
     public long getAnchorFuel() {

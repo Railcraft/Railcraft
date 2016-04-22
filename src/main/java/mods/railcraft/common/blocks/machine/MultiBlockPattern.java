@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -41,10 +40,10 @@ public class MultiBlockPattern {
         this.entityCheckBounds = entityCheckBounds;
     }
 
-    public AxisAlignedBB getEntityCheckBounds(int masterX, int masterY, int masterZ) {
+    public AxisAlignedBB getEntityCheckBounds(BlockPos masterPos) {
         if (entityCheckBounds == null)
             return null;
-        return entityCheckBounds.offset(masterX, masterY, masterZ);
+        return entityCheckBounds.offset(masterPos.getX(), masterPos.getY(), masterPos.getZ());
     }
 
     public char getPatternMarkerChecked(int x, int y, int z) {

@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
 import net.minecraft.block.state.IBlockState;
@@ -24,7 +23,6 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class EntityCartAnchorPersonal extends EntityCartAnchor {
@@ -73,22 +71,17 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
         return PlayerPlugin.isPlayerConnected(CartTools.getCartOwner(this)) && super.meetsTicketRequirements();
     }
 
-
     @Override
     public IBlockState getDisplayTile() {
         return EnumMachineAlpha.ANCHOR_PERSONAL.getState();
     }
 
-    @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.ANCHOR_PERSONAL.getTag());
-    }
-
-    @Override
-    public IIcon getBlockTextureOnSide(int side) {
-        if (side < 2 && !getFlag(TICKET_FLAG))
-            return EnumMachineAlpha.ANCHOR_PERSONAL.getTexture(6);
-        return EnumMachineAlpha.ANCHOR_PERSONAL.getTexture(side);
-    }
+    //TODO: replace with models?
+//    @Override
+//    public IIcon getBlockTextureOnSide(int side) {
+//        if (side < 2 && !getFlag(TICKET_FLAG))
+//            return EnumMachineAlpha.ANCHOR_PERSONAL.getTexture(6);
+//        return EnumMachineAlpha.ANCHOR_PERSONAL.getTexture(side);
+//    }
 
 }

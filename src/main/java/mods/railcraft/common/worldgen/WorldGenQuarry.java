@@ -33,7 +33,6 @@ public class WorldGenQuarry extends WorldGenerator {
     public final Set<Block> replaceable = new HashSet<Block>();
 
     public WorldGenQuarry(Block block, int meta) {
-        super();
         this.blockStone = block;
         this.meta = meta;
 

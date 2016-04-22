@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.slots;
 
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.IStackFilter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;

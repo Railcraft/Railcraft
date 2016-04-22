@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.util.inventory.filters;
 
-import mods.railcraft.api.core.items.StackFilter;
+import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;

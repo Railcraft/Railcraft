@@ -12,12 +12,11 @@ import mods.railcraft.common.core.StartupChecks;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class LatestVersionMessage {
@@ -33,7 +32,7 @@ public class LatestVersionMessage {
                 ChatPlugin.sendLocalizedChat(player, "railcraft.gui.update.message", StartupChecks.getLatestVersion());
 //                "Railcraft " + StartupChecks.getLatestVersion() + " is available from <http://railcraft.info>");
             }
-            FMLCommonHandler.instance().bus().unregister(this);
+            MinecraftForge.EVENT_BUS.unregister(this);
         }
     }
 

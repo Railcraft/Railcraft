@@ -8,10 +8,13 @@
  */
 package mods.railcraft.common.carts;
 
+import com.google.common.collect.Lists;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.crafting.CartUncraftingRecipe;
@@ -28,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 import java.util.Locale;
 
 public enum EnumCart implements ICartType {
@@ -47,9 +51,24 @@ public enum EnumCart implements ICartType {
     ANCHOR_PERSONAL(0, EntityCartAnchorPersonal.class, true),
     ANCHOR_ADMIN(3, EntityCartAnchorAdmin.class),
     TNT(0, EntityCartTNT.class, true, new ItemStack(Blocks.tnt)),
-    LOCO_STEAM_SOLID(1, EntityLocomotiveSteamSolid.class),
-    LOCO_STEAM_MAGIC(1, EntityLocomotiveSteamMagic.class),
-    LOCO_ELECTRIC(1, EntityLocomotiveElectric.class),
+    LOCO_STEAM_SOLID(1, EntityLocomotiveSteamSolid.class) {
+        {
+            addModule(ModuleLocomotives.class);
+            addModule(ModuleSteam.class);
+        }
+    },
+    LOCO_STEAM_MAGIC(1, EntityLocomotiveSteamMagic.class) {
+        {
+            addModule(ModuleLocomotives.class);
+            addModule(ModuleThaumcraft.class);
+        }
+    },
+    LOCO_ELECTRIC(1, EntityLocomotiveElectric.class) {
+        {
+            addModule(ModuleLocomotives.class);
+            addModule(ModuleElectricity.class);
+        }
+    },
     BORE(1, EntityTunnelBore.class),
     ENERGY_BATBOX(0, EntityCartEnergyBatBox.class, true),
     ENERGY_CESU(0, EntityCartEnergyCESU.class, true),
@@ -59,13 +78,16 @@ public enum EnumCart implements ICartType {
     TRACK_LAYER(1, EntityCartTrackLayer.class),
     TRACK_REMOVER(1, EntityCartTrackRemover.class),
     COMMAND_BLOCK(3, EntityCartCommand.class, true, new ItemStack(Blocks.command_block));
+    @SuppressWarnings("WeakerAccess")
     public static final EnumCart[] VALUES = values();
     private final Class<? extends EntityMinecart> type;
     private final byte id;
     private final byte rarity;
     private final boolean canBeUncrafted;
-    private ItemStack contents = null;
+    private final List<Class<? extends IRailcraftModule>> modules = Lists.newArrayList();
+    private ItemStack contents;
     private ItemStack cartItem;
+    private boolean isSetup;
 
     EnumCart(int rarity, Class<? extends EntityMinecart> type) {
         this(rarity, type, false, null);
@@ -76,7 +98,7 @@ public enum EnumCart implements ICartType {
     }
 
     EnumCart(int rarity, Class<? extends EntityMinecart> type, boolean canBeUncrafted, ItemStack contents) {
-        int entityId = -1;
+        int entityId;
         try {
             entityId = (byte) EntityIDs.class.getField("CART_" + name()).getInt(null);
         } catch (Exception ex) {
@@ -89,6 +111,12 @@ public enum EnumCart implements ICartType {
         this.contents = contents;
     }
 
+    @SuppressWarnings("WeakerAccess")
+    protected final void addModule(Class<? extends IRailcraftModule> module) {
+        modules.add(module);
+    }
+
+    @SuppressWarnings("WeakerAccess")
     public static ICartType fromClass(Class<? extends EntityMinecart> cls) {
         for (EnumCart cart : VALUES) {
             if (cls.equals(cart.type))
@@ -125,8 +153,13 @@ public enum EnumCart implements ICartType {
     }
 
     @Override
+    public String getBaseTag() {
+        return name().toLowerCase(Locale.ENGLISH).replace('_', '.');
+    }
+
+    @Override
     public String getTag() {
-        return "railcraft.cart." + name().toLowerCase(Locale.ENGLISH).replace('_', '.');
+        return "railcraft.cart." + getBaseTag();
     }
 
     @Override
@@ -215,8 +248,8 @@ public enum EnumCart implements ICartType {
 
     public boolean setup() {
         String tag = getTag();
-        boolean cartEnabled = RailcraftConfig.isCartEnabled(tag);
-        if (cartEnabled) {
+        if (!isSetup && isEnabled()) {
+            isSetup = true;
             registerEntity();
             ItemCart item = defineItem();
             item.setUnlocalizedName(tag);
@@ -228,13 +261,16 @@ public enum EnumCart implements ICartType {
                 CraftingPlugin.addRecipe(new CartUncraftingRecipe.EnumCartUncraftingRecipe(this));
             return true;
         }
-        return false;
+        return isSetup;
     }
 
     @Override
     public boolean isEnabled() {
-        String tag = getTag();
-        return RailcraftConfig.isCartEnabled(tag);
+        for (Class<? extends IRailcraftModule> module : modules) {
+            if (!RailcraftModuleManager.isModuleEnabled(module))
+                return false;
+        }
+        return RailcraftConfig.isCartEnabled(getTag());
     }
 
 }

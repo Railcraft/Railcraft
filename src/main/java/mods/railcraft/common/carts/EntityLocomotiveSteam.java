@@ -27,6 +27,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -37,26 +38,32 @@ import net.minecraftforge.fluids.IFluidHandler;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class EntityLocomotiveSteam extends EntityLocomotive implements IFluidHandler, IRefuelableCart, IFluidCart {
+    @SuppressWarnings("WeakerAccess")
     public static final int SLOT_LIQUID_INPUT = 0;
+    @SuppressWarnings("WeakerAccess")
     public static final int SLOT_LIQUID_OUTPUT = 1;
-    public static final byte SMOKE_FLAG = 6;
-    public static final byte STEAM_FLAG = 7;
+    private static final byte SMOKE_FLAG = 6;
+    private static final byte STEAM_FLAG = 7;
     private static final byte TICKS_PER_BOILER_CYCLE = 2;
     private static final int FUEL_PER_REQUEST = 3;
-    private static final int TANK_WATER = 0;
     public SteamBoiler boiler;
     protected StandardTank tankWater;
+    @SuppressWarnings("WeakerAccess")
     protected StandardTank tankSteam;
+    @SuppressWarnings("WeakerAccess")
     protected InventoryMapper invWaterInput;
+    @SuppressWarnings("WeakerAccess")
     protected IInventory invWaterOutput = new InventoryMapper(this, SLOT_LIQUID_OUTPUT, 1);
     private TankManager tankManager;
     private int update = rand.nextInt();
 
-    public EntityLocomotiveSteam(World world) {
+    @SuppressWarnings("WeakerAccess")
+    protected EntityLocomotiveSteam(World world) {
         super(world);
     }
 
-    public EntityLocomotiveSteam(World world, double x, double y, double z) {
+    @SuppressWarnings("WeakerAccess")
+    protected EntityLocomotiveSteam(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
@@ -120,13 +127,14 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
                 if (rand.nextInt(3) == 0) {
                     double rads = renderYaw * Math.PI / 180D;
                     float offset = 0.4f;
-                    worldObj.spawnParticle("largesmoke", posX - Math.cos(rads) * offset, posY + 1.2f, posZ - Math.sin(rads) * offset, 0, 0, 0);
+                    worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX - Math.cos(rads) * offset, posY + 1.2f, posZ - Math.sin(rads) * offset, 0, 0, 0);
                 }
             if (isSteaming())
-                EffectManager.instance.steamEffect(worldObj, this, boundingBox.minY - posY - 0.3);
+                EffectManager.instance.steamEffect(worldObj, this, getEntityBoundingBox().minY - posY - 0.3);
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean isSmoking() {
         return getFlag(SMOKE_FLAG);
     }
@@ -136,6 +144,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
             setFlag(SMOKE_FLAG, smoke);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean isSteaming() {
         return getFlag(STEAM_FLAG);
     }

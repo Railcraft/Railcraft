@@ -17,6 +17,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
@@ -176,5 +178,16 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
     @Override
     public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
         return false;
+    }
+
+    @Override
+    public String getGuiID() {
+        return "railcraft:" + getCartType().getBaseTag();
+    }
+
+    //TODO: Explode?
+    @Override
+    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+        return null;
     }
 }

@@ -12,7 +12,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -73,8 +73,8 @@ public class EntityCartWork extends CartBase {
     }
 
     @Override
-    public Block func_145820_n() {
-        return Blocks.crafting_table;
+    public IBlockState getDefaultDisplayTile() {
+        return Blocks.crafting_table.getDefaultState();
     }
 
     @Override

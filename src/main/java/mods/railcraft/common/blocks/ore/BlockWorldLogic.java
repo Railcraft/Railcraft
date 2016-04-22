@@ -42,7 +42,7 @@ public class BlockWorldLogic extends Block {
         }
     }
 
-    public BlockWorldLogic() {
+    private BlockWorldLogic() {
         super(Material.rock);
         setUnlocalizedName("railcraft.worldlogic");
         setResistance(6000000.0F);
@@ -73,22 +73,24 @@ public class BlockWorldLogic extends Block {
         if (surfaceY < 50 || surfaceY > 100)
             return;
 
-        Block block = WorldPlugin.getBlock(world, pos.getX(), surfaceY, pos.getZ());
+        BlockPos surfacePos = new BlockPos(pos.getX(), surfaceY, pos.getZ());
+
+        Block block = WorldPlugin.getBlock(world, surfacePos);
         if (block != Blocks.sand)
             return;
 
-        Block above = WorldPlugin.getBlock(world, pos.getX(), surfaceY + 1, pos.getZ());
+        Block above = WorldPlugin.getBlock(world, surfacePos.up());
         if (above != Blocks.sand)
             return;
 
-        Block below = WorldPlugin.getBlock(world, pos.getX(), surfaceY - 1, pos.getZ());
+        Block below = WorldPlugin.getBlock(world, surfacePos.down());
         if (below != Blocks.sand && below != Blocks.sandstone)
             return;
 
         int airCount = 0;
         Block ore = BlockOre.getBlock();
         for (EnumFacing side : EnumSet.of(EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.EAST, EnumFacing.WEST)) {
-            boolean isAir = world.isAirBlock(MiscTools.getXOnSide(pos.getX(), side), MiscTools.getYOnSide(surfaceY, side), MiscTools.getZOnSide(pos.getZ(), side));
+            boolean isAir = world.isAirBlock(surfacePos.offset(side));
             if (isAir)
                 airCount++;
 
@@ -98,12 +100,12 @@ public class BlockWorldLogic extends Block {
             if (isAir)
                 continue;
 
-            block = WorldPlugin.getBlockOnSide(world, pos.getX(), surfaceY, pos.getZ(), side);
+            block = WorldPlugin.getBlock(world, surfacePos.offset(side));
             if (block != Blocks.sand && block != Blocks.sandstone && block != ore)
                 return;
         }
 
-        world.setBlockState(new BlockPos(pos.getX(), surfaceY, pos.getZ()), newState/*ore, EnumOre.SALTPETER.ordinal()*/, 3);
+        world.setBlockState(surfacePos, EnumOre.SALTPETER.getState());
 //        System.out.println("saltpeter spawned");
     }
 

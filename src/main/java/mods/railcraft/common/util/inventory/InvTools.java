@@ -10,7 +10,7 @@
 package mods.railcraft.common.util.inventory;
 
 import com.google.common.base.Predicate;
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.filters.StackFilters;

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.util.network;
 
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackFactory;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -84,7 +84,7 @@ public class PacketTileEntity extends RailcraftPacket {
 
         if (tile == null) {
             Block block = WorldPlugin.getBlock(world, pos);
-            Block blockTrack = RailcraftBlocksOld.getBlockTrack();
+            Block blockTrack = RailcraftBlocks.track.block();
             if (blockTrack != null && blockTrack == block) {
                 tile = TrackFactory.makeTrackTile(id);
                 world.setTileEntity(pos, tile);

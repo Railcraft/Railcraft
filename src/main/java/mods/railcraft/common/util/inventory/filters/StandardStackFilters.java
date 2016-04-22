@@ -10,9 +10,9 @@ package mods.railcraft.common.util.inventory.filters;
 
 import com.google.common.base.Predicate;
 import mods.railcraft.api.core.items.IMinecartItem;
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.api.core.items.ITrackItem;
-import mods.railcraft.api.core.items.StackFilter;
+import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
