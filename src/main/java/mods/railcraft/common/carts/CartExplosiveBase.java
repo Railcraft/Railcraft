@@ -15,13 +15,14 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 import java.io.DataInputStream;
@@ -33,20 +34,20 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
     private static final byte FUSE_DATA_ID = 25;
     private static final byte BLAST_DATA_ID = 26;
     private static final byte PRIMED_DATA_ID = 27;
-    private final static float BLAST_RADIUS_BYTE_MULTIPLIER = 0.5f;
-    private final static float BLAST_RADIUS_MIN = 2;
-    private final static float BLAST_RADIUS_MAX = 6;
-    private final static float BLAST_RADIUS_MAX_BONUS = 5;
+    private static final float BLAST_RADIUS_BYTE_MULTIPLIER = 0.5f;
+    private static final float BLAST_RADIUS_MIN = 2;
+    private static final float BLAST_RADIUS_MAX = 6;
+    private static final float BLAST_RADIUS_MAX_BONUS = 5;
     public static final short MAX_FUSE = 500;
     public static final short MIN_FUSE = 0;
     private boolean isExploding;
 
-    public CartExplosiveBase(World world) {
+    protected CartExplosiveBase(World world) {
         super(world);
 
     }
 
-    public CartExplosiveBase(World world, double x, double y, double z) {
+    protected CartExplosiveBase(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
@@ -54,22 +55,22 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
     protected void entityInit() {
         super.entityInit();
 
-        dataWatcher.addObject(FUSE_DATA_ID, Short.valueOf((short) 80));
-        dataWatcher.addObject(BLAST_DATA_ID, Byte.valueOf((byte) 8));
-        dataWatcher.addObject(PRIMED_DATA_ID, Byte.valueOf((byte) 0));
+        dataWatcher.addObject(FUSE_DATA_ID, (short) 80);
+        dataWatcher.addObject(BLAST_DATA_ID, (byte) 8);
+        dataWatcher.addObject(PRIMED_DATA_ID, (byte) 0);
     }
 
     @Override
-    public Block func_145820_n() {
-        return Blocks.tnt;
+    public IBlockState getDisplayTile() {
+        return Blocks.tnt.getDefaultState();
     }
 
     @Override
     public void onUpdate() {
         super.onUpdate();
 
-        if (this.isCollidedHorizontally) {
-            double d0 = this.motionX * this.motionX + this.motionZ * this.motionZ;
+        if (isCollidedHorizontally) {
+            double d0 = motionX * motionX + motionZ * motionZ;
 
             if (d0 >= 0.01) {
                 explode(getBlastRadiusWithSpeedModifier());
@@ -81,7 +82,7 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
             if (getFuse() <= 0) {
                 explode();
             } else {
-                worldObj.spawnParticle("smoke", posX, posY + 0.8D, posZ, 0.0D, 0.0D, 0.0D);
+                worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY + 0.8D, posZ, 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -91,6 +92,7 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
         explode(getBlastRadius());
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected void explode(float blastRadius) {
         isExploding = true;
         if (Game.isHost(getWorld())) {
@@ -104,7 +106,7 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
         if (isDead || isExploding) {
             return;
         }
-        double speedSq = this.motionX * this.motionX + this.motionZ * this.motionZ;
+        double speedSq = motionX * motionX + motionZ * motionZ;
         if (damageSource.isFireDamage() || damageSource.isExplosion() || speedSq >= 0.01D) {
             explode(getBlastRadiusWithSpeedModifier());
         } else {
@@ -112,11 +114,13 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected float getBlastRadiusWithSpeedModifier() {
         double blast = Math.min(CartTools.getCartSpeedUncapped(this), getMaxBlastRadiusBonus());
         return (float) (getBlastRadius() + rand.nextDouble() * 1.5 * blast);
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected float getBlastRadiusWithFallModifier(float distance) {
         double blast = Math.min(distance / 10.0, getMaxBlastRadiusBonus());
         return (float) (getBlastRadius() + rand.nextDouble() * 1.5 * blast);
@@ -128,12 +132,11 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
     }
 
     @Override
-    protected void fall(float distance) {
+    public void fall(float distance, float damageMultiplier) {
         if (distance >= 3.0F) {
             explode(getBlastRadiusWithFallModifier(distance));
         }
-
-        super.fall(distance);
+        super.fall(distance, damageMultiplier);
     }
 
     @Override
@@ -195,6 +198,7 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
         return BLAST_RADIUS_MAX;
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected float getMaxBlastRadiusBonus() {
         return BLAST_RADIUS_MAX_BONUS;
     }
@@ -209,7 +213,7 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
         b = Math.max(b, getMinBlastRadius());
         b = Math.min(b, getMaxBlastRadius());
         b /= BLAST_RADIUS_BYTE_MULTIPLIER;
-        dataWatcher.updateObject(BLAST_DATA_ID, Byte.valueOf((byte) b));
+        dataWatcher.updateObject(BLAST_DATA_ID, (byte) b);
     }
 
     @Override

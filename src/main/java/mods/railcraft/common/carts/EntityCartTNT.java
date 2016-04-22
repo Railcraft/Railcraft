@@ -11,7 +11,6 @@ package mods.railcraft.common.carts;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class EntityCartTNT extends CartExplosiveBase {
@@ -22,5 +21,10 @@ public class EntityCartTNT extends CartExplosiveBase {
 
     public EntityCartTNT(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Override
+    public ICartType getCartType() {
+        return EnumCart.TNT;
     }
 }

@@ -14,14 +14,16 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,18 +36,13 @@ public class ItemCart extends ItemMinecart implements IMinecartItem {
     private int rarity = 0;
 
     public ItemCart(ICartType cart) {
-        super(0);
+        super(EntityMinecart.EnumMinecartType.RIDEABLE);
         maxStackSize = RailcraftConfig.getMinecartStackSize();
         this.type = cart;
         setUnlocalizedName(cart.getTag());
         setMaxDamage(0);
         setHasSubtypes(true);
-        BlockDispenser.dispenseBehaviorRegistry.putObject(this, null);
-    }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:" + MiscTools.cleanTag(getUnlocalizedName()));
+        BlockDispenser.dispenseBehaviorRegistry.putObject(this, new BehaviorDefaultDispenseItem());
     }
 
     public ItemCart setRarity(int rarity) {
@@ -60,10 +57,10 @@ public class ItemCart extends ItemMinecart implements IMinecartItem {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int i, int j, int k, int l, float par8, float par9, float par10) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isNotHost(world))
             return false;
-        EntityMinecart placedCart = placeCart(player.getGameProfile(), stack, world, i, j, k);
+        EntityMinecart placedCart = placeCart(player.getGameProfile(), stack, world, pos);
         if (placedCart != null) {
             stack.stackSize--;
             return true;
@@ -81,8 +78,8 @@ public class ItemCart extends ItemMinecart implements IMinecartItem {
     }
 
     @Override
-    public EntityMinecart placeCart(GameProfile owner, ItemStack cartStack, World world, int x, int y, int z) {
-        return CartUtils.placeCart(type, owner, cartStack, world, x, y, z);
+    public EntityMinecart placeCart(GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
+        return CartUtils.placeCart(type, owner, cartStack, world, pos);
     }
 
     @Override

@@ -79,7 +79,7 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
     @Override
     public ItemStack getCartItem() {
         ItemStack stack = getFilteredCartItem(getFilterItem());
-        if (hasCustomInventoryName())
+        if (hasCustomName())
             stack.setStackDisplayName(getName());
         return stack;
     }

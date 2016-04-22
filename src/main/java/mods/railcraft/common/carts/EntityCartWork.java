@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class EntityCartWork extends CartBase {
@@ -41,6 +40,11 @@ public class EntityCartWork extends CartBase {
         prevPosX = d;
         prevPosY = d1;
         prevPosZ = d2;
+    }
+
+    @Override
+    public ICartType getCartType() {
+        return EnumCart.WORK;
     }
 
     @Override

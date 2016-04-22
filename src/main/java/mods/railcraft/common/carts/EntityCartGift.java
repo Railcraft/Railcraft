@@ -9,19 +9,21 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.items.ItemCrowbar;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class EntityCartGift extends EntityCartTNTWood {
 
@@ -29,99 +31,89 @@ public class EntityCartGift extends EntityCartTNTWood {
     private static final List<Gift> gifts = new ArrayList<Gift>();
     private static final List<Integer> potions = new ArrayList<Integer>();
 
-    private static class Gift {
-
-        public final int chance;
-        public final ItemStack stack;
-
-        public Gift(ItemStack stack, int chance) {
-            this.stack = stack;
-            this.chance = chance;
-        }
-
-    }
-
     static {
-        gifts.add(new Gift(null /*potion*/, 100));
-        gifts.add(new Gift(null /*potion*/, 100));
-        gifts.add(new Gift(null /*potion*/, 100));
-        gifts.add(new Gift(null /*potion*/, 100));
-        gifts.add(new Gift(null /*potion*/, 100));
+        gifts.add(new GiftPotion());
+        gifts.add(new GiftPotion());
+        gifts.add(new GiftPotion());
+        gifts.add(new GiftPotion());
+        gifts.add(new GiftPotion());
 
-        gifts.add(new Gift(new ItemStack(Items.snowball, 16), 50));
+        addGift(Items.snowball, 16, 50);
 
-        gifts.add(new Gift(new ItemStack(Blocks.cake), 25));
-        gifts.add(new Gift(new ItemStack(Items.bowl), 25));
-        gifts.add(new Gift(new ItemStack(Items.cookie, 15), 75));
-        gifts.add(new Gift(new ItemStack(Items.cookie, 10), 75));
-        gifts.add(new Gift(new ItemStack(Items.cookie, 5), 75));
-        gifts.add(new Gift(new ItemStack(Items.pumpkin_pie), 20));
+        addGift(Blocks.cake, 25);
+        addGift(Items.bowl, 25);
+        addGift(Items.cookie, 15, 75);
+        addGift(Items.cookie, 10, 75);
+        addGift(Items.cookie, 5, 75);
+        addGift(Items.pumpkin_pie, 20);
 
-        gifts.add(new Gift(new ItemStack(Blocks.jukebox), 5));
-        gifts.add(new Gift(new ItemStack(Items.painting), 10));
-        gifts.add(new Gift(new ItemStack(Items.flower_pot), 25));
-        gifts.add(new Gift(new ItemStack(Items.compass), 25));
-        gifts.add(new Gift(new ItemStack(Items.clock), 25));
-        addGift(ItemCrowbar.getItem(), 20);
+        addGift(Blocks.jukebox, 5);
+        addGift(Items.painting, 10);
+        addGift(Items.flower_pot, 25);
+        addGift(Items.compass, 25);
+        addGift(Items.clock, 25);
+        addGift(RailcraftItems.crowbarIron, 20);
+        addGift(RailcraftItems.crowbarSteel, 10);
 
-        gifts.add(new Gift(new ItemStack(Items.experience_bottle, 32), 5));
-        gifts.add(new Gift(new ItemStack(Items.experience_bottle, 16), 10));
-        gifts.add(new Gift(new ItemStack(Items.experience_bottle, 8), 20));
-        gifts.add(new Gift(new ItemStack(Items.experience_bottle, 4), 40));
-        gifts.add(new Gift(new ItemStack(Items.experience_bottle, 2), 80));
+        addGift(Items.experience_bottle, 32, 5);
+        addGift(Items.experience_bottle, 16, 10);
+        addGift(Items.experience_bottle, 8, 20);
+        addGift(Items.experience_bottle, 4, 40);
+        addGift(Items.experience_bottle, 2, 80);
 
-        gifts.add(new Gift(new ItemStack(Blocks.diamond_block), 1));
-        gifts.add(new Gift(new ItemStack(Blocks.emerald_block), 2));
-        gifts.add(new Gift(new ItemStack(Items.emerald), 30));
-        gifts.add(new Gift(new ItemStack(Items.diamond), 20));
-        gifts.add(new Gift(new ItemStack(Items.gold_ingot), 30));
-        gifts.add(new Gift(new ItemStack(Items.gold_ingot, 2), 30));
+        addGift(Blocks.diamond_block, 1);
+        addGift(Blocks.emerald_block, 2);
+        addGift(Items.emerald, 30);
+        addGift(Items.diamond, 20);
 
-        gifts.add(new Gift(new ItemStack(Items.gold_nugget, 8), 80));
-        gifts.add(new Gift(new ItemStack(Items.gold_nugget, 16), 40));
-        gifts.add(new Gift(new ItemStack(Items.gold_nugget, 32), 20));
+        addGift(Items.gold_ingot, 30);
+        addGift(Items.gold_ingot, 2, 30);
 
-        gifts.add(new Gift(new ItemStack(Items.ender_pearl), 30));
-        gifts.add(new Gift(new ItemStack(Items.nether_star), 2));
+        addGift(Items.gold_nugget, 8, 80);
+        addGift(Items.gold_nugget, 16, 40);
+        addGift(Items.gold_nugget, 32, 20);
+
+        addGift(Items.ender_pearl, 30);
+        addGift(Items.nether_star, 2);
 
         int recordChance = 1;
 
-        gifts.add(new Gift(new ItemStack(Items.record_11), recordChance));
-        gifts.add(new Gift(new ItemStack(Items.record_13), recordChance));
-        gifts.add(new Gift(new ItemStack(Items.record_blocks), recordChance));
-        gifts.add(new Gift(new ItemStack(Items.record_cat), recordChance));
-        gifts.add(new Gift(new ItemStack(Items.record_chirp), recordChance));
-        gifts.add(new Gift(new ItemStack(Items.record_far), recordChance));
-        gifts.add(new Gift(new ItemStack(Items.record_mall), recordChance));
-        gifts.add(new Gift(new ItemStack(Items.record_mellohi), recordChance));
-        gifts.add(new Gift(new ItemStack(Items.record_stal), recordChance));
-        gifts.add(new Gift(new ItemStack(Items.record_strad), recordChance));
-        gifts.add(new Gift(new ItemStack(Items.record_ward), recordChance));
-        gifts.add(new Gift(new ItemStack(Items.record_wait), recordChance));
+        addGift(Items.record_11, recordChance);
+        addGift(Items.record_13, recordChance);
+        addGift(Items.record_blocks, recordChance);
+        addGift(Items.record_cat, recordChance);
+        addGift(Items.record_chirp, recordChance);
+        addGift(Items.record_far, recordChance);
+        addGift(Items.record_mall, recordChance);
+        addGift(Items.record_mellohi, recordChance);
+        addGift(Items.record_stal, recordChance);
+        addGift(Items.record_strad, recordChance);
+        addGift(Items.record_ward, recordChance);
+        addGift(Items.record_wait, recordChance);
 
         int toolChance = 10;
 
-        gifts.add(new Gift(new ItemStack(Items.fishing_rod), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.bow), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.shears), toolChance));
+        addGift(Items.fishing_rod, toolChance);
+        addGift(Items.bow, toolChance);
+        addGift(Items.shears, toolChance);
 
-        gifts.add(new Gift(new ItemStack(Items.diamond_axe), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.diamond_pickaxe), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.diamond_shovel), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.diamond_sword), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.diamond_hoe), toolChance));
+        addGift(Items.diamond_axe, toolChance);
+        addGift(Items.diamond_pickaxe, toolChance);
+        addGift(Items.diamond_shovel, toolChance);
+        addGift(Items.diamond_sword, toolChance);
+        addGift(Items.diamond_hoe, toolChance);
 
-        gifts.add(new Gift(new ItemStack(Items.golden_axe), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.golden_pickaxe), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.golden_shovel), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.golden_sword), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.golden_hoe), toolChance));
+        addGift(Items.golden_axe, toolChance);
+        addGift(Items.golden_pickaxe, toolChance);
+        addGift(Items.golden_shovel, toolChance);
+        addGift(Items.golden_sword, toolChance);
+        addGift(Items.golden_hoe, toolChance);
 
-        gifts.add(new Gift(new ItemStack(Items.iron_axe), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.iron_pickaxe), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.iron_shovel), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.iron_sword), toolChance));
-        gifts.add(new Gift(new ItemStack(Items.iron_hoe), toolChance));
+        addGift(Items.iron_axe, toolChance);
+        addGift(Items.iron_pickaxe, toolChance);
+        addGift(Items.iron_shovel, toolChance);
+        addGift(Items.iron_sword, toolChance);
+        addGift(Items.iron_hoe, toolChance);
 
         addGift(RailcraftToolItems.getSteelAxe(), toolChance);
         addGift(RailcraftToolItems.getSteelPickaxe(), toolChance);
@@ -131,25 +123,25 @@ public class EntityCartGift extends EntityCartTNTWood {
 
         int armorChance = 5;
 
-        gifts.add(new Gift(new ItemStack(Items.diamond_helmet), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.diamond_chestplate), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.diamond_leggings), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.diamond_boots), armorChance));
+        addGift(Items.diamond_helmet, armorChance);
+        addGift(Items.diamond_chestplate, armorChance);
+        addGift(Items.diamond_leggings, armorChance);
+        addGift(Items.diamond_boots, armorChance);
 
-        gifts.add(new Gift(new ItemStack(Items.golden_helmet), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.golden_chestplate), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.golden_leggings), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.golden_boots), armorChance));
+        addGift(Items.golden_helmet, armorChance);
+        addGift(Items.golden_chestplate, armorChance);
+        addGift(Items.golden_leggings, armorChance);
+        addGift(Items.golden_boots, armorChance);
 
-        gifts.add(new Gift(new ItemStack(Items.iron_helmet), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.iron_chestplate), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.iron_leggings), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.iron_boots), armorChance));
+        addGift(Items.iron_helmet, armorChance);
+        addGift(Items.iron_chestplate, armorChance);
+        addGift(Items.iron_leggings, armorChance);
+        addGift(Items.iron_boots, armorChance);
 
-        gifts.add(new Gift(new ItemStack(Items.leather_helmet), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.leather_chestplate), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.leather_leggings), armorChance));
-        gifts.add(new Gift(new ItemStack(Items.leather_boots), armorChance));
+        addGift(Items.leather_helmet, armorChance);
+        addGift(Items.leather_chestplate, armorChance);
+        addGift(Items.leather_leggings, armorChance);
+        addGift(Items.leather_boots, armorChance);
 
         addGift(RailcraftToolItems.getSteelHelm(), armorChance);
         addGift(RailcraftToolItems.getSteelArmor(), armorChance);
@@ -164,12 +156,7 @@ public class EntityCartGift extends EntityCartTNTWood {
         }
     }
 
-    public static void addGift(ItemStack gift, int chance) {
-        if (gift != null)
-            gifts.add(new Gift(gift, chance));
-    }
-
-    public EntityCartGift(World world) {
+    private EntityCartGift(World world) {
         super(world);
     }
 
@@ -183,6 +170,36 @@ public class EntityCartGift extends EntityCartTNTWood {
         prevPosY = d1;
         prevPosZ = d2;
         setBlastRadius(1.5f);
+    }
+
+    private static void addGift(ItemStack gift, int chance) {
+        if (gift != null)
+            gifts.add(new GiftItem(gift, chance));
+    }
+
+    private static void addGift(Item gift, int chance) {
+        if (gift != null)
+            gifts.add(new GiftItem(new ItemStack(gift), chance));
+    }
+
+    private static void addGift(Item gift, int stackSize, int chance) {
+        if (gift != null)
+            gifts.add(new GiftItem(new ItemStack(gift, stackSize), chance));
+    }
+
+    private static void addGift(Block gift, int chance) {
+        if (gift != null)
+            gifts.add(new GiftItem(new ItemStack(gift), chance));
+    }
+
+    private static void addGift(RailcraftItems gift, int chance) {
+        if (gift != null)
+            gifts.add(new GiftItem(gift.getStack(), chance));
+    }
+
+    @Override
+    public ICartType getCartType() {
+        return EnumCart.GIFT;
     }
 
     @Override
@@ -230,45 +247,74 @@ public class EntityCartGift extends EntityCartTNTWood {
         }
     }
 
-    private Gift getGift() {
+    private Gift generateGift() {
         while (true) {
             int index = rand.nextInt(gifts.size());
             Gift gift = gifts.get(index);
             int weight = rand.nextInt(100);
-            if (gift.chance >= weight)
+            if (gift.getChance() >= weight)
                 return gift;
         }
     }
 
     private void spawnGift() {
-        Gift gift = getGift();
-
-        if (gift.stack == null) {
-            spawnPotion();
-            return;
-        }
-
-        double x = posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
-        double y = posY + 1 + rand.nextInt(3) - 1;
-        double z = posZ + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
-        InvTools.dropItem(gift.stack.copy(), worldObj, x, y, z);
+        spawnItem(generateGift().getStack(rand));
     }
 
     private void spawnCoal() {
-        double x = posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
-        double y = posY + 1 + rand.nextInt(3) - 1;
-        double z = posZ + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
-        InvTools.dropItem(new ItemStack(Items.coal), worldObj, x, y, z);
+        spawnItem(new ItemStack(Items.coal));
     }
 
-    private void spawnPotion() {
-        int meta = potions.get(rand.nextInt(potions.size()));
-        ItemStack potion = new ItemStack(Items.potionitem, 1, meta);
-
+    private void spawnItem(ItemStack stack) {
         double x = posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
         double y = posY + 1 + rand.nextInt(3) - 1;
         double z = posZ + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
-        InvTools.dropItem(potion, worldObj, x, y, z);
+        InvTools.dropItem(stack, worldObj, x, y, z);
+    }
+
+    private interface Gift {
+
+        ItemStack getStack(Random rand);
+
+        int getChance();
+
+    }
+
+    private static class GiftItem implements Gift {
+
+        public final int chance;
+        public final ItemStack stack;
+
+        GiftItem(ItemStack stack, int chance) {
+            this.stack = stack;
+            this.chance = chance;
+        }
+
+        @Override
+        public ItemStack getStack(Random rand) {
+            return stack.copy();
+        }
+
+        @Override
+        public int getChance() {
+            return chance;
+        }
+
+    }
+
+    private static class GiftPotion implements Gift {
+
+        @Override
+        public ItemStack getStack(Random rand) {
+            int meta = potions.get(rand.nextInt(potions.size()));
+            return new ItemStack(Items.potionitem, 1, meta);
+        }
+
+        @Override
+        public int getChance() {
+            return 100;
+        }
+
     }
 
 }

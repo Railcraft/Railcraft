@@ -53,8 +53,7 @@ import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.dispenser.IBehaviorDispenseItem;
-import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
@@ -317,12 +316,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 EntityList.idToClassMapping.remove(entityId);
                 EntityList.addMapping(cartType.getCartClass(), entityTag, entityId);
 
-                BlockDispenser.dispenseBehaviorRegistry.putObject(original, new IBehaviorDispenseItem() {
-                    @Override
-                    public ItemStack dispense(IBlockSource source, ItemStack stack) {
-                        return stack;
-                    }
-                });
+                BlockDispenser.dispenseBehaviorRegistry.putObject(original, new BehaviorDefaultDispenseItem());
 
                 original.setMaxStackSize(RailcraftConfig.getMinecartStackSize());
                 cartType.setCartItem(new ItemStack(original));

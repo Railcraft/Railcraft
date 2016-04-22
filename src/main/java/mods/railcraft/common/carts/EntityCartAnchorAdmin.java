@@ -10,6 +10,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -39,8 +40,8 @@ public class EntityCartAnchorAdmin extends EntityCartAnchor {
     }
 
     @Override
-    public int getDisplayTileData() {
-        return EnumMachineAlpha.ANCHOR_ADMIN.ordinal();
+    public IBlockState getDisplayTile() {
+        return EnumMachineAlpha.ANCHOR_ADMIN.getState();
     }
 
     @Override

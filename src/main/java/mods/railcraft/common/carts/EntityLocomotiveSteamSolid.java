@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -136,17 +137,17 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int var1) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
+    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
         return isItemValidForSlot(slot, stack);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
         return slot < SLOT_TICKET;
     }
 
@@ -157,14 +158,14 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             case SLOT_FUEL_A:
             case SLOT_FUEL_B:
             case SLOT_FUEL_C:
-                return StandardStackFilters.FUEL.matches(stack);
+                return StandardStackFilters.FUEL.apply(stack);
             case SLOT_LIQUID_INPUT:
                 FluidStack fluidStack = FluidItemHelper.getFluidStackInContainer(stack);
                 if (fluidStack != null && fluidStack.amount > FluidHelper.BUCKET_VOLUME)
                     return false;
                 return FluidItemHelper.containsFluid(stack, Fluids.WATER.get(1));
             case SLOT_TICKET:
-                return ItemTicket.FILTER.matches(stack);
+                return ItemTicket.FILTER.apply(stack);
             default:
                 return false;
         }
@@ -177,7 +178,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
     @Override
     public boolean canAcceptPushedItem(EntityMinecart requester, ItemStack stack) {
-        return StandardStackFilters.FUEL.matches(stack);
+        return StandardStackFilters.FUEL.apply(stack);
     }
 
     @Override

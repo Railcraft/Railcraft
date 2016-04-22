@@ -13,6 +13,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -49,14 +50,6 @@ public class EntityCartChest extends CartContainerBase implements IItemCart {
     }
 
     @Override
-    public ItemStack getCartItem() {
-        ItemStack stack = new ItemStack(Items.chest_minecart);
-        if (hasCustomInventoryName())
-            stack.setStackDisplayName(getName());
-        return stack;
-    }
-
-    @Override
     public boolean doInteract(EntityPlayer player) {
         if (Game.isHost(worldObj))
             player.displayGUIChest(this);
@@ -64,13 +57,13 @@ public class EntityCartChest extends CartContainerBase implements IItemCart {
     }
 
     @Override
-    public int getMinecartType() {
-        return 1;
+    public EnumMinecartType getMinecartType() {
+        return EnumMinecartType.CHEST;
     }
 
     @Override
-    public Block func_145820_n() {
-        return Blocks.chest;
+    public IBlockState getDisplayTile() {
+        return Blocks.chest.getDefaultState();
     }
 
     @Override

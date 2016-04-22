@@ -14,7 +14,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class EntityCartTNTWood extends CartExplosiveBase implements IAlternateCartTexture {
@@ -34,4 +33,8 @@ public class EntityCartTNTWood extends CartExplosiveBase implements IAlternateCa
         return TEXTURE;
     }
 
+    @Override
+    public ICartType getCartType() {
+        return EnumCart.TNT_WOOD;
+    }
 }

@@ -29,6 +29,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.IAnchor;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -45,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class EntityCartAnchor extends CartContainerBase implements ICartContentsTextureProvider, IAnchor, IMinecart {
+public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMinecart {
     public static final byte TICKET_FLAG = 6;
     private static final byte ANCHOR_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
@@ -294,13 +295,8 @@ public class EntityCartAnchor extends CartContainerBase implements ICartContents
     }
 
     @Override
-    public Block func_145820_n() {
-        return RailcraftBlocksOld.getBlockMachineAlpha();
-    }
-
-    @Override
-    public int getDisplayTileData() {
-        return EnumMachineAlpha.ANCHOR_WORLD.ordinal();
+    public IBlockState getDisplayTile() {
+        return EnumMachineAlpha.ANCHOR_WORLD.getState();
     }
 
     @Override

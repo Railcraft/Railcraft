@@ -23,6 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionHelper;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -74,6 +75,11 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
 
     public EntityCartPumpkin(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Override
+    public ICartType getCartType() {
+        return EnumCart.PUMPKIN;
     }
 
     @Override
@@ -133,7 +139,7 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
         int numToSpawn = mobNumber.get(mobName);
 
         for (int i = 0; i < numToSpawn; i++) {
-            Entity mob = EntityList.createEntityByName(mobName, this.worldObj);
+            Entity mob = EntityList.createEntityByName(mobName, worldObj);
 
             if (mob == null)
                 return;
@@ -144,7 +150,7 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
             EntityLiving living = mob instanceof EntityLiving ? (EntityLiving) mob : null;
             mob.setLocationAndAngles(x, y, z, rand.nextFloat() * 360.0F, 0.0F);
 
-            if (worldObj.checkNoEntityCollision(mob.boundingBox) && worldObj.getCollidingBoundingBoxes(mob, mob.boundingBox).isEmpty() && !worldObj.isAnyLiquid(mob.boundingBox)) {
+            if (worldObj.checkNoEntityCollision(mob.getEntityBoundingBox()) && worldObj.getCollidingBoundingBoxes(mob, mob.getEntityBoundingBox()).isEmpty() && !worldObj.isAnyLiquid(mob.getEntityBoundingBox())) {
 
                 if (mob instanceof EntitySkeleton) {
                     EntitySkeleton skel = (EntitySkeleton) mob;
@@ -157,12 +163,12 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
                         skel.setCurrentItemOrArmor(0, new ItemStack(Items.bow));
                     }
 
-                    mob.setCurrentItemOrArmor(4, new ItemStack(this.rand.nextFloat() < 0.25F ? Blocks.lit_pumpkin : Blocks.pumpkin));
+                    mob.setCurrentItemOrArmor(4, new ItemStack(rand.nextFloat() < 0.25F ? Blocks.lit_pumpkin : Blocks.pumpkin));
                 } else if (living != null)
-                    living.onSpawnWithEgg(null);
+                    living.onInitialSpawn(worldObj.getDifficultyForLocation(new BlockPos(living)), null);
 
-                this.worldObj.spawnEntityInWorld(mob);
-                this.worldObj.playAuxSFX(2004, (int) x, (int) y, (int) z, 0);
+                worldObj.spawnEntityInWorld(mob);
+                worldObj.playAuxSFX(2004, new BlockPos(x, y, z), 0);
 
                 if (living != null)
                     living.spawnExplosionParticle();

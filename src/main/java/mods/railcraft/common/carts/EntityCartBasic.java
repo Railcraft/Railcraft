@@ -9,6 +9,8 @@
 package mods.railcraft.common.carts;
 
 import net.minecraft.entity.item.EntityMinecartEmpty;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityCartBasic extends EntityMinecartEmpty {
@@ -68,19 +70,21 @@ public class EntityCartBasic extends EntityMinecartEmpty {
 //
 //        super.onUpdate();
 //    }
+
     @Override
-    public void moveMinecartOnRail(int i, int j, int k, double maxSpeed) {
+    public void moveMinecartOnRail(BlockPos pos) {
         double mX = motionX;
         double mZ = motionZ;
-//        if(riddenByEntity != null)
+
+//        if (this.riddenByEntity != null)
 //        {
 //            mX *= 0.75D;
 //            mZ *= 0.75D;
 //        }
-        if (mX < -maxSpeed) mX = -maxSpeed;
-        if (mX > maxSpeed) mX = maxSpeed;
-        if (mZ < -maxSpeed) mZ = -maxSpeed;
-        if (mZ > maxSpeed) mZ = maxSpeed;
+
+        double max = getMaxSpeed();
+        mX = MathHelper.clamp_double(mX, -max, max);
+        mZ = MathHelper.clamp_double(mZ, -max, max);
         moveEntity(mX, 0.0D, mZ);
     }
 }

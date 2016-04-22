@@ -16,6 +16,7 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -72,9 +73,10 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
         return PlayerPlugin.isPlayerConnected(CartTools.getCartOwner(this)) && super.meetsTicketRequirements();
     }
 
+
     @Override
-    public int getDisplayTileData() {
-        return EnumMachineAlpha.ANCHOR_PERSONAL.ordinal();
+    public IBlockState getDisplayTile() {
+        return EnumMachineAlpha.ANCHOR_PERSONAL.getState();
     }
 
     @Override
