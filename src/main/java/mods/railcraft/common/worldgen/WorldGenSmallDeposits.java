@@ -11,25 +11,17 @@ package mods.railcraft.common.worldgen;
 import com.google.common.base.Predicate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class WorldGenSmallDeposits extends WorldGenerator {
-    public static final Predicate<IBlockState> STONE = new Predicate<IBlockState>() {
-        @Override
-        public boolean apply(@Nullable IBlockState input) {
-            return input != null && input.getBlock() == Blocks.stone;
-        }
-    };
 
     private final IBlockState ore;
     private final Predicate<IBlockState> replace;

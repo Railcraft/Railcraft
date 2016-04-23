@@ -24,7 +24,7 @@ public class WorldGenSulfur extends WorldGenSmallDeposits {
     private static final int AMOUNT = 10;
 
     public WorldGenSulfur() {
-        super(EnumOre.SULFUR.getState(), AMOUNT, STONE);
+        super(EnumOre.SULFUR.getState(), AMOUNT, GenTools.STONE);
     }
 
     @Override

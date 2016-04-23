@@ -9,10 +9,9 @@
 package mods.railcraft.common.worldgen;
 
 import com.google.common.collect.MapMaker;
-import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.worldgen.NoiseGen.NoiseGenSimplex;
-import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -25,7 +24,6 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class PoorOreGenerator {
@@ -37,11 +35,11 @@ public abstract class PoorOreGenerator {
 
     private final Map<World, NoiseGen> noiseMap = new MapMaker().weakKeys().makeMap();
 
-    public PoorOreGenerator(EventType eventType, EnumOre ore, int density, int yLevel, int yRange, int noiseSeed) {
+    protected PoorOreGenerator(EventType eventType, EnumOre ore, int density, int yLevel, int yRange, int noiseSeed) {
         this(eventType, ore, 0.0025, 0.85, 0.65, density, yLevel, yRange, noiseSeed);
     }
 
-    public PoorOreGenerator(EventType eventType, EnumOre ore, double scale, double denseArea, double fringeArea, int density, int yLevel, int yRange, int noiseSeed) {
+    protected PoorOreGenerator(EventType eventType, EnumOre ore, double scale, double denseArea, double fringeArea, int density, int yLevel, int yRange, int noiseSeed) {
         this.eventType = eventType;
         this.scale = scale;
         this.denseArea = denseArea;
@@ -50,9 +48,9 @@ public abstract class PoorOreGenerator {
         this.yRange = yRange;
         this.noiseSeed = noiseSeed;
         if (density >= 4)
-            oreGen = new WorldGenMinable(BlockOre.getBlock(), ore.ordinal(), density, Blocks.stone);
+            oreGen = new WorldGenMinable(ore.getState(), density, GenTools.STONE);
         else
-            oreGen = new WorldGenSmallDeposits(BlockOre.getBlock(), ore.ordinal(), density, Blocks.stone);
+            oreGen = new WorldGenSmallDeposits(ore.getState(), density, GenTools.STONE);
     }
 
     @SubscribeEvent
@@ -60,10 +58,10 @@ public abstract class PoorOreGenerator {
 
         World world = event.world;
         Random rand = event.rand;
-        int worldX = event.worldX;
-        int worldZ = event.worldZ;
+        int worldX = event.pos.getX();
+        int worldZ = event.pos.getZ();
 
-        if (!TerrainGen.generateOre(world, rand, oreGen, worldX, worldZ, eventType))
+        if (!TerrainGen.generateOre(world, rand, oreGen, event.pos, eventType))
             return;
 
         NoiseGen noise = noiseMap.get(world);
@@ -82,7 +80,7 @@ public abstract class PoorOreGenerator {
                 double strength = noise.noise(x, z);
                 if (strength > denseArea || (strength > fringeArea && rand.nextFloat() > 0.7)) {
                     int y = yLevel + Math.round((float) rand.nextGaussian() * yRange);
-                    oreGen.generate(world, rand, x, y, z);
+                    oreGen.generate(world, rand, new BlockPos(x, y, z));
                 }
             }
     }

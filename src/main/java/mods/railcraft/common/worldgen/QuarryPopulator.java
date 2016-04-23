@@ -12,6 +12,7 @@ import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
@@ -24,7 +25,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class QuarryPopulator {
@@ -52,18 +52,17 @@ public class QuarryPopulator {
     }
 
     public void generateQuarry(World world, Random rand, int chunkX, int chunkZ) {
-        int x = chunkX * 16 + 8;
-        int z = chunkZ * 16 + 8;
-        if (canGen(world, rand, x, z)) {
-            int y = world.getTopSolidOrLiquidBlock(x, z) - 3;
-            if (WorldPlugin.getBlock(world, x, y, z) == Blocks.dirt) {
-                quarry.generate(world, rand, x, y, z);
+        BlockPos chunkCenterPos = new BlockPos(chunkX * 16 + 8, 50, chunkZ * 16 + 8);
+        if (canGen(world, rand, chunkCenterPos)) {
+            BlockPos surfacePos = world.getTopSolidOrLiquidBlock(chunkCenterPos).down(3);
+            if (WorldPlugin.isBlockAt(world, surfacePos, Blocks.dirt)) {
+                quarry.generate(world, rand, surfacePos);
             }
         }
     }
 
-    private boolean canGen(World world, Random rand, int x, int z) {
-        BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+    private boolean canGen(World world, Random rand, BlockPos pos) {
+        BiomeGenBase biome = world.getBiomeGenForCoords(pos);
         if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.FOREST)) {
             return false;
         }
