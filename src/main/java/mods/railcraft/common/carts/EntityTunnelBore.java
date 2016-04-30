@@ -14,7 +14,6 @@ import mods.railcraft.api.carts.bore.IBoreHead;
 import mods.railcraft.api.carts.bore.IMineable;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.tracks.TrackToolsAPI;
-import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.Train.TrainState;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -22,6 +21,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.collections.BlockSet;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -32,6 +32,8 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -41,10 +43,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -55,6 +54,8 @@ import java.util.*;
 public class EntityTunnelBore extends CartContainerBase implements IInventory, ILinkableCart {
     public static final float SPEED = 0.03F;
     public static final float LENGTH = 6.2f;
+    public static final float WIDTH = 2.7f;
+    public static final float HEIGHT = 4f;
     public static final int MAX_FILL_DEPTH = 10;
     public static final int FAIL_DELAY = 200;
     public static final int STANDARD_DELAY = 5;
@@ -179,7 +180,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                 partTail2 = new EntityTunnelBorePart(this, "tail2", 1.6F, 1.4F, -2.2F),
         };
         hasInit = true;
-        setPosition(i, j + (double) yOffset, k);
+        setPosition(i, j + getYOffset(), k);
         motionX = 0.0D;
         motionY = 0.0D;
         motionZ = 0.0D;
@@ -188,7 +189,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         prevPosZ = k;
 //        cargoItems = new ItemStack[25];
         setFacing(f);
-        setSize(LENGTH, 4F);
+        setSize(LENGTH, HEIGHT);
     }
 
     public EntityTunnelBore(World world) {
@@ -203,7 +204,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         mineableBlocks.add(new BlockKey(block, meta));
     }
 
-    public static boolean canHeadHarvestBlock(ItemStack head, Block block, int meta) {
+    public static boolean canHeadHarvestBlock(ItemStack head, IBlockState targetState) {
         if (head == null)
             return false;
 
@@ -212,21 +213,21 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
             boolean mappingExists = false;
 
-            int blockHarvestLevel = HarvestPlugin.getHarvestLevel(block, meta, "pickaxe");
+            int blockHarvestLevel = HarvestPlugin.getHarvestLevel(targetState, "pickaxe");
             if (blockHarvestLevel > -1) {
                 if (boreHead.getHarvestLevel() >= blockHarvestLevel)
                     return true;
                 mappingExists = true;
             }
 
-            blockHarvestLevel = HarvestPlugin.getHarvestLevel(block, meta, "axe");
+            blockHarvestLevel = HarvestPlugin.getHarvestLevel(targetState, "axe");
             if (blockHarvestLevel > -1) {
                 if (boreHead.getHarvestLevel() >= blockHarvestLevel)
                     return true;
                 mappingExists = true;
             }
 
-            blockHarvestLevel = HarvestPlugin.getHarvestLevel(block, meta, "shovel");
+            blockHarvestLevel = HarvestPlugin.getHarvestLevel(targetState, "shovel");
             if (blockHarvestLevel > -1) {
                 if (boreHead.getHarvestLevel() >= blockHarvestLevel)
                     return true;
@@ -245,10 +246,8 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return EnumCart.BORE;
     }
 
-    private boolean isMinableBlock(Block block, int meta) {
-        if (RailcraftConfig.boreMinesAllBlocks())
-            return true;
-        return mineableBlocks.contains(block, meta);
+    private boolean isMineableBlock(Block block, int meta) {
+        return RailcraftConfig.boreMinesAllBlocks() || mineableBlocks.contains(block, meta);
     }
 
     @Override
@@ -271,24 +270,24 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (!this.worldObj.isRemote && !this.isDead)
-            if (this.isEntityInvulnerable())
+        if (!worldObj.isRemote && !isDead)
+            if (isEntityInvulnerable(source))
                 return false;
             else {
-                this.setRollingDirection(-this.getRollingDirection());
-                this.setRollingAmplitude(10);
-                this.setBeenAttacked();
-                this.setDamage(this.getDamage() + damage * 10);
+                setRollingDirection(-getRollingDirection());
+                setRollingAmplitude(10);
+                setBeenAttacked();
+                setDamage(getDamage() + damage * 10);
                 boolean flag = source.getEntity() instanceof EntityPlayer && ((EntityPlayer) source.getEntity()).capabilities.isCreativeMode;
 
-                if (flag || this.getDamage() > 120) {
-                    if (this.riddenByEntity != null)
-                        this.riddenByEntity.mountEntity(this);
+                if (flag || getDamage() > 120) {
+                    if (riddenByEntity != null)
+                        riddenByEntity.mountEntity(this);
 
-                    if (flag && !this.hasCustomInventoryName())
-                        this.setDead();
+                    if (flag && !hasCustomName())
+                        setDead();
                     else
-                        this.killMinecart(source);
+                        killMinecart(source);
                 }
 
                 return true;
@@ -327,35 +326,36 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     }
 
     @Override
-    public void setPosition(double i, double j, double k) {
+    public void setPosition(double x, double y, double z) {
         if (!hasInit) {
-            super.setPosition(i, j, k);
+            super.setPosition(x, y, z);
             return;
         }
 
-        posX = i;
-        posY = j;
-        posZ = k;
-        double w = 2.7 / 2.0;
-        double h = 2.7;
-        double l = LENGTH / 2.0;
-        double x1 = i;
-        double x2 = i;
-        double z1 = k;
-        double z2 = k;
+        posX = x;
+        posY = y;
+        posZ = z;
+        double halfWidth = WIDTH / 2.0;
+        double height = this.height;
+        double len = LENGTH / 2.0;
+        double minX = x;
+        double maxX = x;
+        double minZ = z;
+        double maxZ = z;
         if (getFacing() == EnumFacing.WEST || getFacing() == EnumFacing.EAST) {
-            x1 -= l;
-            x2 += l;
-            z1 -= w;
-            z2 += w;
+            minX -= len;
+            maxX += len;
+            minZ -= halfWidth;
+            maxZ += halfWidth;
         } else {
-            x1 -= w;
-            x2 += w;
-            z1 -= l;
-            z2 += l;
+            minX -= halfWidth;
+            maxX += halfWidth;
+            minZ -= len;
+            maxZ += len;
         }
 
-        boundingBox.setBounds(x1, (j - (double) yOffset) + (double) ySize, z1, x2, (j - (double) yOffset) + ySize + h, z2);
+        // TODO: Test this!
+        setEntityBoundingBox(new AxisAlignedBB(minX, y, minZ, maxX, y + height, maxZ));
     }
 
     @Override
@@ -390,20 +390,16 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                 setActive(true);
 //            System.out.println("Yaw = " + MathHelper.floor_double(rotationYaw));
 
-                int x;
-                int y = MathHelper.floor_double(posY);
-                int z;
-                EnumTrackMeta dir = EnumTrackMeta.NORTH_SOUTH;
+                BlockRailBase.EnumRailDirection dir = BlockRailBase.EnumRailDirection.NORTH_SOUTH;
                 if (getFacing() == EnumFacing.WEST || getFacing() == EnumFacing.EAST)
-                    dir = EnumTrackMeta.EAST_WEST;
+                    dir = BlockRailBase.EnumRailDirection.EAST_WEST;
 
                 if (getDelay() == 0) {
                     float offset = 1.5f;
-                    x = MathHelper.floor_double(getXAhead(posX, offset));
-                    z = MathHelper.floor_double(getZAhead(posZ, offset));
+                    BlockPos targetPos = new BlockPos(getPositionAhead(offset)).down();
 
                     if (placeBallast) {
-                        boolean placed = placeBallast(x, y - 1, z);
+                        boolean placed = placeBallast(targetPos);
                         if (placed)
                             setDelay(STANDARD_DELAY);
                         else {
@@ -411,7 +407,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                             setActive(false);
                         }
                         placeBallast = false;
-                    } else if (!worldObj.isSideSolid(x, y - 1, z, EnumFacing.UP)) {
+                    } else if (!worldObj.isSideSolid(targetPos, EnumFacing.UP)) {
                         placeBallast = true;
                         setDelay(BALLAST_DELAY);
                     }
@@ -419,11 +415,11 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
                 if (getDelay() == 0) {
                     float offset = 0.8f;
-                    x = MathHelper.floor_double(getXAhead(posX, offset));
-                    z = MathHelper.floor_double(getZAhead(posZ, offset));
+                    BlockPos targetPos = new BlockPos(getPositionAhead(offset));
+                    IBlockState existingState = WorldPlugin.getBlockState(worldObj, targetPos);
 
                     if (placeRail) {
-                        boolean placed = placeTrack(x, y, z, dir);
+                        boolean placed = placeTrack(targetPos, existingState, dir);
                         if (placed)
                             setDelay(STANDARD_DELAY);
                         else {
@@ -431,12 +427,12 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                             setActive(false);
                         }
                         placeRail = false;
-                    } else if (TrackTools.isRailBlockAt(worldObj, x, y, z)) {
-                        if (!dir.isEqual(TrackTools.getTrackMeta(worldObj, this, x, y, z))) {
-                            worldObj.setBlockMetadataWithNotify(x, y, z, dir.ordinal(), 3);
+                    } else if (TrackTools.isRailBlock(existingState)) {
+                        if (dir != TrackTools.getTrackDirection(worldObj, targetPos, this)) {
+                            TrackTools.setTrackDirection(worldObj, targetPos, dir);
                             setDelay(STANDARD_DELAY);
                         }
-                    } else if (worldObj.isAirBlock(x, y, z) || replaceableBlocks.contains(worldObj.getBlock(x, y, z))) {
+                    } else if (WorldPlugin.isBlockAir(worldObj, targetPos, existingState) || replaceableBlocks.contains(existingState.getBlock())) {
                         placeRail = true;
                         setDelay(STANDARD_DELAY);
                     } else {
@@ -447,11 +443,10 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
                 if (getDelay() == 0) {
                     float offset = 3.3f;
-                    x = MathHelper.floor_double(getXAhead(posX, offset));
-                    z = MathHelper.floor_double(getZAhead(posZ, offset));
+                    BlockPos targetPos = new BlockPos(getPositionAhead(offset));
 
                     if (boreLayer) {
-                        boolean bored = boreLayer(x, y, z, dir);
+                        boolean bored = boreLayer(targetPos, dir);
                         if (bored)
                             setDelay(LAYER_DELAY);
                         else {
@@ -459,11 +454,11 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                             setActive(false);
                         }
                         boreLayer = false;
-                    } else if (checkForLava(x, y, z, dir)) {
+                    } else if (checkForLava(targetPos, dir)) {
                         setDelay(FAIL_DELAY);
                         setActive(false);
                     } else {
-                        setDelay((int) Math.ceil(getLayerHardness(x, y, z, dir)));
+                        setDelay((int) Math.ceil(getLayerHardness(targetPos, dir)));
                         if (getDelay() != 0)
                             boreLayer = true;
                     }
@@ -521,24 +516,25 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         }
     }
 
-    protected double getXAhead(double x, double offset) {
+    protected Vec3 getPositionAhead(double offset) {
+        double x = posX;
+        double z = posZ;
+
         if (getFacing() == EnumFacing.EAST)
             x += offset;
         else if (getFacing() == EnumFacing.WEST)
             x -= offset;
-        return x;
-    }
 
-    protected double getZAhead(double z, double offset) {
         if (getFacing() == EnumFacing.NORTH)
             z -= offset;
         else if (getFacing() == EnumFacing.SOUTH)
             z += offset;
-        return z;
+
+        return new Vec3(x, posY, z);
     }
 
     protected double getOffsetX(double x, double forwardOffset, double sideOffset) {
-        switch(getFacing()){
+        switch (getFacing()) {
             case NORTH:
                 return x + sideOffset;
             case SOUTH:
@@ -552,7 +548,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     }
 
     protected double getOffsetZ(double z, double forwardOffset, double sideOffset) {
-        switch(getFacing()){
+        switch (getFacing()) {
             case NORTH:
                 return z - forwardOffset;
             case SOUTH:
@@ -626,12 +622,12 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             }
 
             if (rand.nextInt(4) == 0) {
-                worldObj.spawnParticle("largesmoke", smokeX1, posY + smokeYOffset, smokeZ1, 0.0D, 0.0D, 0.0D);
-                worldObj.spawnParticle("flame", flameX1, posY + flameYOffset + (rand.nextGaussian() * randomFactor), flameZ1, 0.0D, 0.0D, 0.0D);
+                worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, smokeX1, posY + smokeYOffset, smokeZ1, 0.0D, 0.0D, 0.0D);
+                worldObj.spawnParticle(EnumParticleTypes.FLAME, flameX1, posY + flameYOffset + (rand.nextGaussian() * randomFactor), flameZ1, 0.0D, 0.0D, 0.0D);
             }
             if (rand.nextInt(4) == 0) {
-                worldObj.spawnParticle("largesmoke", smokeX2, posY + smokeYOffset, smokeZ2, 0.0D, 0.0D, 0.0D);
-                worldObj.spawnParticle("flame", flameX2, posY + flameYOffset + (rand.nextGaussian() * randomFactor), flameZ2, 0.0D, 0.0D, 0.0D);
+                worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, smokeX2, posY + smokeYOffset, smokeZ2, 0.0D, 0.0D, 0.0D);
+                worldObj.spawnParticle(EnumParticleTypes.FLAME, flameX2, posY + flameYOffset + (rand.nextGaussian() * randomFactor), flameZ2, 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -644,15 +640,17 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         }
     }
 
-    protected boolean placeBallast(int i, int j, int k) {
-        if (!worldObj.isSideSolid(i, j, k, EnumFacing.UP))
+    protected boolean placeBallast(BlockPos targetPos) {
+        if (!worldObj.isSideSolid(targetPos, EnumFacing.UP))
             for (int inv = 0; inv < invBallast.getSizeInventory(); inv++) {
                 ItemStack stack = invBallast.getStackInSlot(inv);
                 if (stack != null && BallastRegistry.isItemBallast(stack)) {
-                    for (int y = j; y > j - MAX_FILL_DEPTH; y--) {
-                        if (worldObj.isSideSolid(i, y, k, EnumFacing.UP)) {
+                    BlockPos searchPos = targetPos;
+                    for (int i = 0; i < MAX_FILL_DEPTH; i--) {
+                        searchPos = searchPos.down();
+                        if (worldObj.isSideSolid(searchPos, EnumFacing.UP)) {
                             invBallast.decrStackSize(inv, 1);
-                            worldObj.setBlock(i, j, k, InvTools.getBlockFromStack(stack), stack.getItemDamage(), 3);
+                            WorldPlugin.setBlockState(worldObj, targetPos, InvTools.getBlockStateFromStack(stack, (WorldServer) worldObj, targetPos));
                             return true;
                         }
                     }
@@ -670,18 +668,16 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         }
     }
 
-    protected boolean placeTrack(int x, int y, int z, EnumTrackMeta meta) {
-        Block block = worldObj.getBlock(x, y, z);
-        if (replaceableBlocks.contains(block))
-            worldObj.func_147480_a(x, y, z, true);
+    protected boolean placeTrack(BlockPos targetPos, IBlockState oldState, BlockRailBase.EnumRailDirection shape) {
+        if (replaceableBlocks.contains(oldState.getBlock()))
+            worldObj.destroyBlock(targetPos, true);
 
-        if (worldObj.isAirBlock(x, y, z) && worldObj.isSideSolid(x, y - 1, z, EnumFacing.UP))
+        if (WorldPlugin.isBlockAir(worldObj, targetPos, oldState) && worldObj.isSideSolid(targetPos.down(), EnumFacing.UP))
             for (int inv = 0; inv < invRails.getSizeInventory(); inv++) {
                 ItemStack stack = invRails.getStackInSlot(inv);
                 if (stack != null) {
-                    boolean placed = TrackToolsAPI.placeRailAt(stack, worldObj, x, y, z);
+                    boolean placed = TrackToolsAPI.placeRailAt(stack, worldObj, targetPos, shape);
                     if (placed) {
-                        worldObj.setBlockMetadataWithNotify(x, y, z, meta.ordinal(), 3);
                         invRails.decrStackSize(inv, 1);
                     }
                     return placed;
@@ -690,23 +686,25 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return false;
     }
 
-    protected boolean checkForLava(int i, int j, int k, EnumTrackMeta dir) {
-        int xStart = i - 1;
-        int zStart = k - 1;
-        int xEnd = i + 1;
-        int zEnd = k + 1;
-        if (dir == EnumTrackMeta.NORTH_SOUTH) {
-            xStart = i - 2;
-            xEnd = i + 2;
+    protected boolean checkForLava(BlockPos pos, BlockRailBase.EnumRailDirection dir) {
+        int xStart = pos.getX() - 1;
+        int zStart = pos.getZ() - 1;
+        int xEnd = pos.getX() + 1;
+        int zEnd = pos.getZ() + 1;
+        if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
+            xStart--;
+            xEnd++;
         } else {
-            zStart = k - 2;
-            zEnd = k + 2;
+            zStart--;
+            zEnd++;
         }
 
-        for (int jj = j; jj < j + 4; jj++) {
-            for (int ii = xStart; ii <= xEnd; ii++) {
-                for (int kk = zStart; kk <= zEnd; kk++) {
-                    Block block = worldObj.getBlock(ii, jj, kk);
+        int y = pos.getY();
+
+        for (int yy = y; yy < y + 4; yy++) {
+            for (int xx = xStart; xx <= xEnd; xx++) {
+                for (int zz = zStart; zz <= zEnd; zz++) {
+                    Block block = WorldPlugin.getBlock(worldObj, new BlockPos(xx, yy, zz));
                     if (block == Blocks.lava || block == Blocks.flowing_lava)
                         return true;
                 }
@@ -716,7 +714,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return false;
     }
 
-    protected boolean boreLayer(int i, int j, int k, EnumTrackMeta dir) {
+    protected boolean boreLayer(int i, int j, int k, BlockRailBase.EnumRailDirection  dir) {
         boolean clear = true;
         int ii = i;
         int kk = k;
@@ -724,7 +722,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             clear = clear && mineBlock(ii, jj, kk, dir);
         }
 
-        if (dir == EnumTrackMeta.NORTH_SOUTH)
+        if (dir == BlockRailBase.EnumRailDirection .NORTH_SOUTH)
             ii--;
         else
             kk--;
@@ -734,7 +732,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
         ii = i;
         kk = k;
-        if (dir == EnumTrackMeta.NORTH_SOUTH)
+        if (dir == BlockRailBase.EnumRailDirection .NORTH_SOUTH)
             ii++;
         else
             kk++;
@@ -744,7 +742,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return clear;
     }
 
-    protected boolean mineBlock(int x, int y, int z, EnumTrackMeta dir) {
+    protected boolean mineBlock(int x, int y, int z, BlockRailBase.EnumRailDirection  dir) {
         if (worldObj.isAirBlock(x, y, z))
             return true;
 
@@ -812,10 +810,10 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         }
         if (block.getBlockHardness(worldObj, i, j, k) < 0)
             return false;
-        return isMinableBlock(block, meta) && canHeadHarvestBlock(head, block, meta);
+        return isMineableBlock(block, meta) && canHeadHarvestBlock(head, block, meta);
     }
 
-    protected float getLayerHardness(int i, int j, int k, EnumTrackMeta dir) {
+    protected float getLayerHardness(int i, int j, int k, BlockRailBase.EnumRailDirection  dir) {
         float hardness = 0;
         int ii = i;
         int kk = k;
@@ -823,7 +821,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             hardness += getBlockHardness(ii, jj, kk, dir);
         }
 
-        if (dir == EnumTrackMeta.NORTH_SOUTH)
+        if (dir == BlockRailBase.EnumRailDirection .NORTH_SOUTH)
             ii--;
         else
             kk--;
@@ -833,7 +831,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
         ii = i;
         kk = k;
-        if (dir == EnumTrackMeta.NORTH_SOUTH)
+        if (dir == BlockRailBase.EnumRailDirection .NORTH_SOUTH)
             ii++;
         else
             kk++;
@@ -855,7 +853,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return hardness;
     }
 
-    protected float getBlockHardness(int x, int y, int z, EnumTrackMeta dir) {
+    protected float getBlockHardness(int x, int y, int z, BlockRailBase.EnumRailDirection  dir) {
         if (worldObj.isAirBlock(x, y, z))
             return 0;
 
@@ -885,7 +883,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     @Override
     public AxisAlignedBB getCollisionBox(Entity other) {
         if (other instanceof EntityLivingBase)
-            return other.boundingBox;
+            return other.getEntityBoundingBox();
         return null;
     }
 
@@ -894,10 +892,6 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return null;
     }
 
-    @Override
-    public String getInventoryName() {
-        return "Tunnel Bore";
-    }
 
     public float getBoreRotationAngle() {
         return (float) Math.toRadians(boreRotationAngle);
@@ -917,7 +911,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     @Override
     protected void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
-        setFacing(EnumFacing.getOrientation(data.getByte("facing")));
+        setFacing(EnumFacing.getFront(data.getByte("facing")));
         setDelay(data.getInteger("delay"));
         setActive(data.getBoolean("active"));
         setBurnTime(data.getInteger("burnTime"));
@@ -1070,7 +1064,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     }
 
     public final EnumFacing getFacing() {
-        return EnumFacing.getOrientation(dataWatcher.getWatchableObjectByte(WATCHER_ID_FACING));
+        return EnumFacing.getFront(dataWatcher.getWatchableObjectByte(WATCHER_ID_FACING));
     }
 
     protected final void setFacing(EnumFacing facing) {

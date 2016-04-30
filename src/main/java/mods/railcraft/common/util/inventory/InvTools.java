@@ -11,6 +11,7 @@ package mods.railcraft.common.util.inventory;
 
 import com.google.common.base.Predicate;
 import mods.railcraft.api.core.IStackFilter;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
@@ -25,6 +26,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -39,6 +41,7 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
@@ -982,9 +985,21 @@ public abstract class InvTools {
     }
 
     @Nullable
-    public static Block getBlockFromStack(ItemStack stack) {
-        if (stack.getItem() instanceof ItemBlock)
+    public static Block getBlockFromStack(@Nullable ItemStack stack) {
+        if (stack != null && stack.getItem() instanceof ItemBlock)
             return ((ItemBlock) stack.getItem()).getBlock();
+        return null;
+    }
+
+    @Nullable
+    public static IBlockState getBlockStateFromStack(@Nullable ItemStack stack, WorldServer world, BlockPos pos) {
+        if (stack == null)
+            return null;
+        Item item = stack.getItem();
+        if (item instanceof ItemBlock) {
+            int meta = item.getMetadata(stack.getMetadata());
+            return ((ItemBlock) item).getBlock().onBlockPlaced(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, meta, RailcraftFakePlayer.get(world, pos.up()));
+        }
         return null;
     }
 }

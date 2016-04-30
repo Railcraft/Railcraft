@@ -70,7 +70,7 @@ public class HarvestPlugin {
         blockState.getBlock().setHarvestLevel(toolClass, level, blockState);
     }
 
-    public static int getHarvestLevel(Block block, IBlockState blockState, String toolClass) {
+    public static int getHarvestLevel(IBlockState blockState, String toolClass) {
 //        return block.getHarvestLevel(blockState, toolClass);
         return 0;
     }
