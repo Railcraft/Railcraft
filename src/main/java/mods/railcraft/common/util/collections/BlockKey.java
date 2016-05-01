@@ -8,42 +8,41 @@
  */
 package mods.railcraft.common.util.collections;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockKey {
 
-    public final Block block;
-    public final int metadata;
+    public final IBlockState blockState;
 
-    public BlockKey(Block block) {
-        this.block = block;
-        this.metadata = -1;
-    }
-
-    public BlockKey(Block block, int metadata) {
-        this.block = block;
-        this.metadata = metadata;
+    public BlockKey(IBlockState blockState) {
+        this.blockState = blockState;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 73 * hash + this.block.hashCode();
-        hash = 73 * hash + this.metadata;
+        hash = 73 * hash + blockState.hashCode();
+        hash = 73 * hash + blockState.getProperties().hashCode();
         return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        final BlockKey other = (BlockKey) obj;
-        if (this.block != other.block) return false;
-        return this.metadata == other.metadata;
+        if (obj instanceof BlockKey) {
+            final BlockKey other = (BlockKey) obj;
+            if (blockState != other.blockState)
+                return false;
+            if (blockState instanceof IExtendedBlockState) {
+                ((IExtendedBlockState) blockState).getUnlistedProperties().equals(((ExtendedBlockState) other.blockState).getUnlistedProperties());
+            }
+            return true;
+        }
+        return false;
     }
 
 }

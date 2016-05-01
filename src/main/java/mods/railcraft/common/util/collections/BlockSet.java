@@ -8,28 +8,21 @@
  */
 package mods.railcraft.common.util.collections;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 
 import java.util.HashSet;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class BlockSet extends HashSet<BlockKey> {
 
-    public boolean add(Block block, int meta) {
-        return add(new BlockKey(block, meta));
+    public boolean add(IBlockState blockState) {
+        return add(new BlockKey(blockState));
     }
 
-    public boolean add(Block block) {
-        return add(new BlockKey(block));
-    }
-
-    public boolean contains(Block block, int meta) {
-        if (contains(new BlockKey(block)))
-            return true;
-        return contains(new BlockKey(block, meta));
+    public boolean contains(IBlockState blockState) {
+        return contains(new BlockKey(blockState));
     }
 
 }

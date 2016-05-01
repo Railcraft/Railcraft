@@ -197,11 +197,11 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     }
 
     public static void addMineableBlock(Block block) {
-        addMineableBlock(block, -1);
+        addMineableBlock(block.getDefaultState());
     }
 
-    public static void addMineableBlock(Block block, int meta) {
-        mineableBlocks.add(new BlockKey(block, meta));
+    public static void addMineableBlock(IBlockState blockState) {
+        mineableBlocks.add(blockState);
     }
 
     public static boolean canHeadHarvestBlock(ItemStack head, IBlockState targetState) {
@@ -246,8 +246,8 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return EnumCart.BORE;
     }
 
-    private boolean isMineableBlock(Block block, int meta) {
-        return RailcraftConfig.boreMinesAllBlocks() || mineableBlocks.contains(block, meta);
+    private boolean isMineableBlock(IBlockState blockState) {
+        return RailcraftConfig.boreMinesAllBlocks() || mineableBlocks.contains(blockState);
     }
 
     @Override
@@ -714,15 +714,15 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return false;
     }
 
-    protected boolean boreLayer(int i, int j, int k, BlockRailBase.EnumRailDirection  dir) {
+    protected boolean boreLayer(BlockPos targetPos, BlockRailBase.EnumRailDirection dir) {
         boolean clear = true;
         int ii = i;
         int kk = k;
-        for (int jj = j; jj < j + 3; jj++) {
-            clear = clear && mineBlock(ii, jj, kk, dir);
+        for (int i = 0; i < 3; i++) {
+            clear = clear && mineBlock(targetPos.up(i), dir);
         }
 
-        if (dir == BlockRailBase.EnumRailDirection .NORTH_SOUTH)
+        if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH)
             ii--;
         else
             kk--;
@@ -732,7 +732,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
         ii = i;
         kk = k;
-        if (dir == BlockRailBase.EnumRailDirection .NORTH_SOUTH)
+        if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH)
             ii++;
         else
             kk++;
@@ -742,25 +742,26 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return clear;
     }
 
-    protected boolean mineBlock(int x, int y, int z, BlockRailBase.EnumRailDirection  dir) {
-        if (worldObj.isAirBlock(x, y, z))
+    /**
+     * @return true if the target block is clear
+     */
+    protected boolean mineBlock(BlockPos targetPos, BlockRailBase.EnumRailDirection preferredShape) {
+        if (WorldPlugin.isBlockAir(worldObj, targetPos))
             return true;
 
-        Block block = worldObj.getBlock(x, y, z);
-        if (TrackTools.isRailBlock(block)) {
-            int trackMeta = TrackTools.getTrackMeta(worldObj, block, this, x, y, z);
-            if (dir.isEqual(trackMeta))
+        IBlockState targetState = WorldPlugin.getBlockState(worldObj, targetPos);
+        if (TrackTools.isRailBlock(targetState)) {
+            BlockRailBase.EnumRailDirection targetShape = TrackTools.getTrackDirection(worldObj, targetPos, targetState, this);
+            if (preferredShape == targetShape)
                 return true;
-        } else if (block == Blocks.torch)
+        } else if (targetState.getBlock() == Blocks.torch)
             return true;
 
         ItemStack head = getStackInSlot(0);
         if (head == null)
             return false;
 
-        int meta = worldObj.getBlockMetadata(x, y, z);
-
-        if (!canMineBlock(x, y, z, block, meta))
+        if (!canMineBlock(targetPos, targetState))
             return false;
 
         // Start of Event Fire
@@ -801,19 +802,19 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return true;
     }
 
-    private boolean canMineBlock(int i, int j, int k, Block block, int meta) {
+    private boolean canMineBlock(BlockPos targetPos, IBlockState existingState) {
         ItemStack head = getStackInSlot(0);
-        if (block instanceof IMineable) {
+        if (existingState.getBlock() instanceof IMineable) {
             if (head == null)
                 return false;
-            return ((IMineable) block).canMineBlock(worldObj, i, j, k, this, head);
+            return ((IMineable) existingState.getBlock()).canMineBlock(worldObj, targetPos, this, head);
         }
-        if (block.getBlockHardness(worldObj, i, j, k) < 0)
+        if (existingState.getBlock().getBlockHardness(worldObj, targetPos) < 0)
             return false;
-        return isMineableBlock(block, meta) && canHeadHarvestBlock(head, block, meta);
+        return isMineableBlock(existingState) && canHeadHarvestBlock(head, existingState);
     }
 
-    protected float getLayerHardness(int i, int j, int k, BlockRailBase.EnumRailDirection  dir) {
+    protected float getLayerHardness(int i, int j, int k, BlockRailBase.EnumRailDirection dir) {
         float hardness = 0;
         int ii = i;
         int kk = k;
@@ -821,7 +822,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             hardness += getBlockHardness(ii, jj, kk, dir);
         }
 
-        if (dir == BlockRailBase.EnumRailDirection .NORTH_SOUTH)
+        if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH)
             ii--;
         else
             kk--;
@@ -831,7 +832,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
         ii = i;
         kk = k;
-        if (dir == BlockRailBase.EnumRailDirection .NORTH_SOUTH)
+        if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH)
             ii++;
         else
             kk++;
@@ -853,7 +854,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return hardness;
     }
 
-    protected float getBlockHardness(int x, int y, int z, BlockRailBase.EnumRailDirection  dir) {
+    protected float getBlockHardness(int x, int y, int z, BlockRailBase.EnumRailDirection dir) {
         if (worldObj.isAirBlock(x, y, z))
             return 0;
 
@@ -891,7 +892,6 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     public AxisAlignedBB getBoundingBox() {
         return null;
     }
-
 
     public float getBoreRotationAngle() {
         return (float) Math.toRadians(boreRotationAngle);
