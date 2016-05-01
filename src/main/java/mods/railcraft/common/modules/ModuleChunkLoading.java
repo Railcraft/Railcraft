@@ -75,7 +75,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                             "gog",
                             "dpd",
                             "gog",
-                            'd', "dyeCyan",
+                            'd', new ItemStack(Blocks.prismarine, 1, 1),
                             'g', "ingotGold",
                             'p', Items.ender_pearl,
                             'o', new ItemStack(Blocks.obsidian));
