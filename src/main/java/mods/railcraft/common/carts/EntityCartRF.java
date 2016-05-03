@@ -41,14 +41,18 @@ public final class EntityCartRF extends CartBase {
         prevPosZ = d2;
     }
 
-    public boolean addRF(int rf) {
+    public int addRF(int rf) {
         if (rf <= 0)
-            return false;
-        if (amountRF < RF_CAP) {
+            return 0;
+        if (amountRF >= RF_CAP)
+            return 0;
+        if (RF_CAP - amountRF >= rf) {
             amountRF += rf;
-            return true;
+            return rf;
         }
-        return false;
+        int used = RF_CAP - amountRF;
+        amountRF = RF_CAP;
+        return used;
     }
 
     public int removeRF(int request) {

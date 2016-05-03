@@ -54,6 +54,10 @@ public class FactoryContainer {
                     return new ContainerEnergyLoader(inv, (TileEnergyLoader) obj);
                 case UNLOADER_ENERGY:
                     return new ContainerEnergyLoader(inv, (TileEnergyUnloader) obj);
+                case LOADER_RF:
+                    return new ContainerLoaderRF((TileRFLoaderBase) obj);
+                case UNLOADER_RF:
+                    return new ContainerLoaderRF((TileRFLoaderBase) obj);
                 case DETECTOR_ITEM:
                     return new ContainerDetectorItem(inv, (TileDetector) obj);
                 case DETECTOR_TANK:

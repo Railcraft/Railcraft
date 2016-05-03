@@ -16,7 +16,7 @@ public class GuiCartRF extends EntityGui {
     private final EntityCartRF cart;
 
     public GuiCartRF(EntityCartRF cart) {
-        super(cart, new ContainerCartRF(cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_rf.png");
+        super(cart, new ContainerCartRF(cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_rf_device.png");
         ySize = 88;
         this.cart = cart;
     }

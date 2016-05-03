@@ -10,12 +10,7 @@ package mods.railcraft.common.blocks.machine.gamma;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.ArrayList;
-import java.util.List;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
@@ -24,11 +19,17 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- *
  * @author CovertJaguar
  */
 public enum EnumMachineGamma implements IEnumMachine {
@@ -42,7 +43,9 @@ public enum EnumMachineGamma implements IEnumMachine {
     ENERGY_LOADER(Module.IC2, "loader.energy", 0, TileEnergyLoader.class),
     ENERGY_UNLOADER(Module.IC2, "unloader.energy", 0, TileEnergyUnloader.class),
     DISPENSER_CART(Module.AUTOMATION, "dispenser.cart", 0, TileDispenserCart.class),
-    DISPENSER_TRAIN(Module.TRAIN, "dispenser.train", 0, TileDispenserTrain.class);
+    DISPENSER_TRAIN(Module.TRAIN, "dispenser.train", 0, TileDispenserTrain.class),
+    RF_LOADER(Module.REDSTONE_FLUX, "loader.rf", -1, TileRFLoader.class),
+    RF_UNLOADER(Module.REDSTONE_FLUX, "unloader.rf", 0, TileRFUnloader.class);
     private final Module module;
     private final String tag;
     private final int extraIcons;
@@ -62,15 +65,17 @@ public enum EnumMachineGamma implements IEnumMachine {
         creativeList.add(FLUID_UNLOADER);
         creativeList.add(ENERGY_LOADER);
         creativeList.add(ENERGY_UNLOADER);
+        creativeList.add(RF_LOADER);
+        creativeList.add(RF_UNLOADER);
         creativeList.add(DISPENSER_CART);
         creativeList.add(DISPENSER_TRAIN);
     }
 
-    private EnumMachineGamma(Module module, String tag, int numTextures, Class<? extends TileMachineBase> tile) {
+    EnumMachineGamma(Module module, String tag, int extraIcons, Class<? extends TileMachineBase> tile) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
-        this.extraIcons = numTextures;
+        this.extraIcons = extraIcons;
     }
 
     @Override
@@ -92,6 +97,8 @@ public enum EnumMachineGamma implements IEnumMachine {
     @SideOnly(Side.CLIENT)
     public static void registerIcons(IIconRegister iconRegister) {
         for (EnumMachineGamma machine : VALUES) {
+            if (machine.extraIcons == -1)
+                continue;
             machine.texture = new IIcon[machine.extraIcons + 6];
             IIcon[] icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:" + machine.tag, machine.extraIcons + 3);
             IIcon cap = icons[0];
@@ -120,6 +127,14 @@ public enum EnumMachineGamma implements IEnumMachine {
             if (machine.extraIcons > 0)
                 System.arraycopy(icons, 3, machine.texture, 6, machine.extraIcons);
         }
+
+        IIcon emitterSide = iconRegister.registerIcon("railcraft:" + RF_LOADER.tag + ".side");
+        RF_LOADER.texture = new IIcon[9];
+        Arrays.fill(RF_LOADER.texture, emitterSide);
+        RF_LOADER.texture[6] = iconRegister.registerIcon("railcraft:" + RF_LOADER.tag + ".side.unpowered");
+        RF_LOADER.texture[7] = iconRegister.registerIcon("railcraft:" + RF_LOADER.tag + ".facing");
+        RF_LOADER.texture[8] = iconRegister.registerIcon("railcraft:" + RF_LOADER.tag + ".facing.unpowered");
+        RF_UNLOADER.texture = RF_LOADER.texture;
 
         IIcon[] pipe = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:loader.pipe", 2);
         pipeTexture[0] = pipe[0];

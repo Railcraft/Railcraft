@@ -20,7 +20,6 @@ import mods.railcraft.common.blocks.machine.epsilon.*;
 import mods.railcraft.common.blocks.machine.gamma.*;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class MachineTileRegistery {
@@ -74,11 +73,13 @@ public class MachineTileRegistery {
         GameRegistry.registerTileEntity(TileItemUnloaderAdvanced.class, "RCUnloaderAdvancedTile");
         GameRegistry.registerTileEntity(TileFluidLoader.class, "RCLoaderTileLiquid");
         GameRegistry.registerTileEntity(TileFluidUnloader.class, "RCUnloaderTileLiquid");
+        GameRegistry.registerTileEntity(TileRFLoader.class, "RCLoaderTileRF");
+        GameRegistry.registerTileEntity(TileRFUnloader.class, "RCUnloaderTileRF");
 
         // Delta
         GameRegistry.registerTileEntity(TileCage.class, "RCCageTile");
         GameRegistry.registerTileEntity(TileWire.class, "RCWireTile");
-        
+
         // Epsilon
         GameRegistry.registerTileEntity(TileElectricFeeder.class, "RCElectricFeederTile");
         GameRegistry.registerTileEntity(TileElectricFeederAdmin.class, "RCElectricFeederAdminTile");

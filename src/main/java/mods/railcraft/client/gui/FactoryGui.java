@@ -60,6 +60,10 @@ public class FactoryGui {
                     return new GuiLoaderEnergy(inv, (TileEnergyLoader) obj);
                 case UNLOADER_ENERGY:
                     return new GuiUnloaderEnergy(inv, (TileEnergyUnloader) obj);
+                case LOADER_RF:
+                    return new GuiLoaderRF((TileRFLoader) obj);
+                case UNLOADER_RF:
+                    return new GuiUnloaderRF((TileRFUnloader) obj);
                 case DETECTOR_ITEM:
                     return new GuiDetectorItem(inv, (TileDetector) obj);
                 case DETECTOR_TANK:

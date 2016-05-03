@@ -8,16 +8,16 @@
  */
 package mods.railcraft.client.gui;
 
-import java.util.List;
-
-import net.minecraft.client.gui.FontRenderer;
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.passive.EntityVillager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import java.util.List;
 
 public class GuiTools {
 
@@ -50,6 +50,22 @@ public class GuiTools {
             buttonWidth += b.getWidth();
         }
         int remaining = xSize - buttonWidth;
+        int spacing = remaining / (buttons.size() + 1);
+        int pointer = 0;
+        for (GuiBetterButton b : buttons) {
+            pointer += spacing;
+            b.xPosition = xStart + pointer;
+            pointer += b.getWidth();
+            buttonList.add(b);
+        }
+    }
+
+    public static void newButtonRowBookended(List buttonList, int xStart, int xEnd, List<? extends GuiBetterButton> buttons) {
+        int buttonWidth = 0;
+        for (GuiBetterButton b : buttons) {
+            buttonWidth += b.getWidth();
+        }
+        int remaining = (xEnd - xStart) - buttonWidth;
         int spacing = remaining / (buttons.size() + 1);
         int pointer = 0;
         for (GuiBetterButton b : buttons) {

@@ -26,7 +26,7 @@ public class ItemPlate extends ItemRailcraft {
 
     public enum EnumPlate implements IItemMetaEnum {
 
-        IRON("ingotIron"), STEEL("ingotSteel"), TIN("ingotTin"), COPPER("ingotCopper");
+        IRON("ingotIron"), STEEL("ingotSteel"), TIN("ingotTin"), COPPER("ingotCopper"), LEAD("ingotLead");
         public static final EnumPlate[] VALUES = values();
         private IIcon icon;
         private final Object alternate;
@@ -114,6 +114,13 @@ public class ItemPlate extends ItemRailcraft {
                 'I', "ingotCopper");
         RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
 
+        // Lead Plate
+        recipe = new ShapedOreRecipe(plate.getStack(4, EnumPlate.LEAD),
+                "II",
+                "II",
+                'I', "ingotLead");
+        RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
+
         RailcraftCraftingManager.blastFurnace.addRecipe(plate.getStack(EnumPlate.IRON), true, false, 1280, RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL));
     }
 
@@ -131,6 +138,8 @@ public class ItemPlate extends ItemRailcraft {
                 return "item.railcraft.part.plate.tin";
             case COPPER:
                 return "item.railcraft.part.plate.copper";
+            case LEAD:
+                return "item.railcraft.part.plate.lead";
             default:
                 return "";
         }
