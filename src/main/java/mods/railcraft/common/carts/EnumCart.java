@@ -9,13 +9,7 @@
 package mods.railcraft.common.carts;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
-import java.lang.reflect.Constructor;
-import java.util.Locale;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityMinecartHopper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -24,8 +18,15 @@ import mods.railcraft.common.util.misc.EntityIDs;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartHopper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import java.lang.reflect.Constructor;
+import java.util.Locale;
 
 public enum EnumCart implements ICartType {
 
@@ -55,7 +56,8 @@ public enum EnumCart implements ICartType {
     HOPPER(0, EntityMinecartHopper.class, new ItemStack(Blocks.hopper)),
     TRACK_LAYER(1, EntityCartTrackLayer.class, null),
     TRACK_REMOVER(1, EntityCartTrackRemover.class, null),
-    COMMAND_BLOCK(3, EntityCartCommand.class, null);
+    COMMAND_BLOCK(3, EntityCartCommand.class, null),
+    REDSTONE_FLUX(0, EntityCartRF.class, null);
     public static final EnumCart[] VALUES = values();
     private final Class<? extends EntityMinecart> type;
     private final byte id;

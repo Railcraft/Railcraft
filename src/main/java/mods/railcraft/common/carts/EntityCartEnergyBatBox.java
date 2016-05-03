@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartEnergyBatBox extends EntityCartEnergy {
+class EntityCartEnergyBatBox extends EntityCartEnergy {
 
     public EntityCartEnergyBatBox(World world) {
         super(world);

@@ -8,23 +8,23 @@
  */
 package mods.railcraft.client.gui;
 
+import mods.railcraft.common.carts.IIC2EnergyCart;
 import net.minecraft.entity.player.InventoryPlayer;
-import mods.railcraft.common.carts.EntityCartEnergy;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCartEnergy;
 
 public class GuiCartEnergy extends EntityGui {
 
-    private final EntityCartEnergy device;
+    private final IIC2EnergyCart device;
 
-    public GuiCartEnergy(InventoryPlayer inv, EntityCartEnergy cart) {
-        super(cart, new ContainerCartEnergy(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_energy.png");
+    public GuiCartEnergy(InventoryPlayer inv, IIC2EnergyCart cart) {
+        super(cart.getEntity(), new ContainerCartEnergy(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_energy.png");
         this.device = cart;
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String entityName = device.getCommandSenderName();
+        String entityName = device.getName();
         int sWidth = fontRendererObj.getStringWidth(entityName);
         int sPos = xSize / 2 - sWidth / 2;
         fontRendererObj.drawString(entityName, sPos, 6, 0x404040);

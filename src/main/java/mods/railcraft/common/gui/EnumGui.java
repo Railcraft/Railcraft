@@ -51,6 +51,7 @@ public enum EnumGui {
     CART_CARGO(true),
     CART_WORK(true),
     CART_ENERGY(true),
+    CART_RF(true),
     CART_TANK(true),
     CART_ANCHOR(true),
     CART_TRACK_RELAYER(true),

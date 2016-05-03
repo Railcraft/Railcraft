@@ -37,7 +37,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FactoryGui {
@@ -126,7 +125,7 @@ public class FactoryGui {
                 case BOX_CONTROLLER:
                     return new GuiBoxController((TileBoxController) obj);
                 case BOX_ANALOG_CONTROLLER:
-                	return new GuiBoxAnalogController((TileBoxAnalogController) obj);
+                    return new GuiBoxAnalogController((TileBoxAnalogController) obj);
                 case BOX_CAPACITOR:
                     return new GuiBoxCapacitor((TileBoxCapacitor) obj);
                 case TRACK_LAUNCHER:
@@ -138,7 +137,9 @@ public class FactoryGui {
                 case CART_BORE:
                     return new GuiCartBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:
-                    return new GuiCartEnergy(inv, (EntityCartEnergy) obj);
+                    return new GuiCartEnergy(inv, (IIC2EnergyCart) obj);
+                case CART_RF:
+                    return new GuiCartRF((EntityCartRF) obj);
                 case CART_TANK:
                     return new GuiCartTank(inv, (EntityCartTank) obj);
                 case CART_CARGO:

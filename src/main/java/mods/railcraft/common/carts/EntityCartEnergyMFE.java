@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartEnergyMFE extends EntityCartEnergy {
+class EntityCartEnergyMFE extends EntityCartEnergy {
     private final int TIER = IC2Plugin.isClassic() ? 2 : 3;
     private final int CAPACITY = IC2Plugin.isClassic() ? 600000 : 4000000;
     private final int TRANSFER = IC2Plugin.isClassic() ? 128 : 512;

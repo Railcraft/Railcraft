@@ -428,6 +428,7 @@ public class RailcraftConfig {
         loadCartProperty("cart.energy.mfe");
         loadCartProperty("cart.energy.cesu");
         loadCartProperty("cart.energy.mfsu");
+        loadCartProperty("cart.redstone.flux");
         loadCartProperty("cart.anchor");
         loadCartProperty("cart.anchor.personal");
         loadCartProperty("cart.anchor.admin");

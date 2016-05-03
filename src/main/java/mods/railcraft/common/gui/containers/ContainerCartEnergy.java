@@ -10,21 +10,20 @@ package mods.railcraft.common.gui.containers;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import mods.railcraft.common.carts.EntityCartEnergy;
+import mods.railcraft.common.carts.IIC2EnergyCart;
 import mods.railcraft.common.gui.slots.SlotEnergy;
 import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.Slot;
 
 public class ContainerCartEnergy extends RailcraftContainer {
 
-    private EntityCartEnergy cart;
+    private IIC2EnergyCart cart;
     private int lastEnergy;
 
-    public ContainerCartEnergy(InventoryPlayer inventoryplayer, EntityCartEnergy device) {
+    public ContainerCartEnergy(InventoryPlayer inventoryplayer, IIC2EnergyCart device) {
         super(device);
         this.cart = device;
         addSlot(new SlotEnergy(device, 0, 56, 17));
@@ -44,7 +43,7 @@ public class ContainerCartEnergy extends RailcraftContainer {
     @Override
     public void addCraftingToCrafters(ICrafting player) {
         super.addCraftingToCrafters(player);
-        PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 0, (int)cart.getEnergy());
+        PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 0, (int) cart.getEnergy());
     }
 
     /**
@@ -58,17 +57,17 @@ public class ContainerCartEnergy extends RailcraftContainer {
             ICrafting player = (ICrafting) crafters.get(i);
 
             if (lastEnergy != cart.getEnergy())
-                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 0, (int)cart.getEnergy());
+                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 0, (int) cart.getEnergy());
         }
 
-        lastEnergy = (int)cart.getEnergy();
+        lastEnergy = (int) cart.getEnergy();
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data) {
         if (id == 0)
-            this.cart.setEnergy(data);
+            cart.setEnergy(data);
     }
 
 }

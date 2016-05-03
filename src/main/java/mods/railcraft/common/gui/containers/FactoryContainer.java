@@ -103,7 +103,9 @@ public class FactoryContainer {
                 case CART_BORE:
                     return new ContainerBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:
-                    return new ContainerCartEnergy(inv, (EntityCartEnergy) obj);
+                    return new ContainerCartEnergy(inv, (IIC2EnergyCart) obj);
+                case CART_RF:
+                    return new ContainerCartRF((EntityCartRF) obj);
                 case CART_TANK:
                     return new ContainerCartTank(inv, (EntityCartTank) obj);
                 case CART_CARGO:

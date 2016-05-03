@@ -8,15 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IEnergyTransfer;
 import mods.railcraft.api.carts.ILinkageManager;
@@ -28,10 +19,19 @@ import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.util.misc.APIErrorHandler;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
-public abstract class EntityCartEnergy extends CartContainerBase implements IEnergyTransfer, IElectricMinecart {
+import java.util.ArrayList;
+import java.util.List;
+
+abstract class EntityCartEnergy extends CartContainerBase implements IEnergyTransfer, IElectricMinecart, IIC2EnergyCart {
 
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.Type.STORAGE, getCapacity());
 
@@ -91,7 +91,7 @@ public abstract class EntityCartEnergy extends CartContainerBase implements IEne
     }
 
     @Override
-    public float getMaxCartSpeedOnRail() {
+    public final float getMaxCartSpeedOnRail() {
         int numLocomotives = Train.getTrain(this).getNumRunningLocomotives();
         if (numLocomotives == 0)
             return super.getMaxCartSpeedOnRail();
@@ -206,11 +206,6 @@ public abstract class EntityCartEnergy extends CartContainerBase implements IEne
     }
 
     @Override
-    public abstract int getCapacity();
-
-    @Override
-    public abstract int getTransferLimit();
-
     public int getEnergyBarScaled(int scale) {
         return ((int) getEnergy() * scale) / getCapacity();
     }
@@ -220,6 +215,7 @@ public abstract class EntityCartEnergy extends CartContainerBase implements IEne
         return chargeHandler.getCharge();
     }
 
+    @Override
     public void setEnergy(double energy) {
         chargeHandler.setCharge(energy);
     }
@@ -234,4 +230,13 @@ public abstract class EntityCartEnergy extends CartContainerBase implements IEne
         return true;
     }
 
+    @Override
+    public String getName() {
+        return getCommandSenderName();
+    }
+
+    @Override
+    public EntityMinecart getEntity() {
+        return this;
+    }
 }

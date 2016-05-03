@@ -10,12 +10,6 @@ package mods.railcraft.common.modules;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.io.File;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Set;
-import org.apache.logging.log4j.Level;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.misc.Game;
@@ -25,6 +19,13 @@ import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import org.apache.logging.log4j.Level;
+
+import java.io.File;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Set;
 
 public class ModuleManager {
 
@@ -62,7 +63,8 @@ public class ModuleManager {
         ROUTING(ModuleRouting.class),
         EMBLEM(getClass("mods.railcraft.common.modules.ModuleEmblem")),
         MAGIC(ModuleMagic.class),
-        ELECTRICITY(ModuleElectricity.class);
+        ELECTRICITY(ModuleElectricity.class),
+        REDSTONE_FLUX(ModuleRF.class);
         private final RailcraftModule instance;
 
         private Module(Class<? extends RailcraftModule> moduleClass) {
@@ -90,7 +92,9 @@ public class ModuleManager {
             return moduleClass;
         }
 
-    };
+    }
+
+    ;
     private static final Set<Module> loadedModules = EnumSet.noneOf(Module.class);
     private static final Set<Module> unloadedModules = EnumSet.allOf(Module.class);
     private static Stage stage = Stage.PRE_INIT;
