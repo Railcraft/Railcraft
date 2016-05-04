@@ -26,7 +26,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TileRFLoader extends TileRFLoaderBase implements IGuiReturnHandler, IEnergyReceiver {
-    private boolean waitTillFull;
+    private boolean waitTillFull = true;
     private boolean waitIfEmpty = true;
 
     @Override

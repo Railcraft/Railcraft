@@ -23,7 +23,7 @@ import java.util.List;
 
 public final class EntityCartRF extends CartBase {
 
-    private static final int RF_CAP = 1000000;
+    private static final int RF_CAP = 2000000;
     private int amountRF;
 
     public EntityCartRF(World world) {

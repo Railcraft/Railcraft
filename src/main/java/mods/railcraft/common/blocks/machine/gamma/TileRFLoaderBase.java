@@ -22,9 +22,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class TileRFLoaderBase extends TileLoaderBase {
-    protected static final int TRANSFER_RATE = 2500;
+    protected static final int TRANSFER_RATE = 8000;
     protected static final int TRANSFER_FADE = 20;
-    private static final int RF_CAP = 2000000;
+    private static final int RF_CAP = 4000000;
     protected int amountRF;
     protected ForgeDirection direction = ForgeDirection.NORTH;
     private int ticksSinceTransfer;
