@@ -45,7 +45,7 @@ public enum EnumMachineGamma implements IEnumMachine {
     DISPENSER_CART(Module.AUTOMATION, "dispenser.cart", 0, TileDispenserCart.class),
     DISPENSER_TRAIN(Module.TRAIN, "dispenser.train", 0, TileDispenserTrain.class),
     RF_LOADER(Module.REDSTONE_FLUX, "loader.rf", -1, TileRFLoader.class),
-    RF_UNLOADER(Module.REDSTONE_FLUX, "unloader.rf", 0, TileRFUnloader.class);
+    RF_UNLOADER(Module.REDSTONE_FLUX, "unloader.rf", -1, TileRFUnloader.class);
     private final Module module;
     private final String tag;
     private final int extraIcons;
@@ -132,9 +132,15 @@ public enum EnumMachineGamma implements IEnumMachine {
         RF_LOADER.texture = new IIcon[9];
         Arrays.fill(RF_LOADER.texture, emitterSide);
         RF_LOADER.texture[6] = iconRegister.registerIcon("railcraft:" + RF_LOADER.tag + ".side.unpowered");
-        RF_LOADER.texture[7] = iconRegister.registerIcon("railcraft:" + RF_LOADER.tag + ".facing");
+        RF_LOADER.texture[3] = RF_LOADER.texture[7] = iconRegister.registerIcon("railcraft:" + RF_LOADER.tag + ".facing");
         RF_LOADER.texture[8] = iconRegister.registerIcon("railcraft:" + RF_LOADER.tag + ".facing.unpowered");
-        RF_UNLOADER.texture = RF_LOADER.texture;
+
+        emitterSide = iconRegister.registerIcon("railcraft:" + RF_UNLOADER.tag + ".side");
+        RF_UNLOADER.texture = new IIcon[9];
+        Arrays.fill(RF_UNLOADER.texture, emitterSide);
+        RF_UNLOADER.texture[6] = RF_LOADER.texture[6];
+        RF_UNLOADER.texture[3] = RF_UNLOADER.texture[7] = iconRegister.registerIcon("railcraft:" + RF_UNLOADER.tag + ".facing");
+        RF_UNLOADER.texture[8] = RF_LOADER.texture[8];
 
         IIcon[] pipe = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:loader.pipe", 2);
         pipeTexture[0] = pipe[0];

@@ -70,7 +70,7 @@ public class ItemDust extends ItemRailcraft {
     }
 
     @Override
-    public void defineRecipes() {
+    public void definePostRecipes() {
         if (IC2Plugin.isModInstalled() && RailcraftConfig.getRecipeConfig("ic2.macerator.charcoal")) {
             IC2Plugin.addMaceratorRecipe(new ItemStack(Items.coal, 1, 1), new ItemStack(this, 1, EnumDust.CHARCOAL.ordinal()));
         }

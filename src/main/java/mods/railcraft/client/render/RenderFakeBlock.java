@@ -8,15 +8,16 @@
  */
 package mods.railcraft.client.render;
 
-import java.util.Arrays;
+import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import net.minecraft.block.Block;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
-import org.lwjgl.opengl.GL11;
-import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Arrays;
 
 public class RenderFakeBlock {
 
@@ -113,10 +114,10 @@ public class RenderFakeBlock {
     public static void renderAsBlock(RenderInfo info, RenderBlocks renderBlocks, IBlockAccess blockAccess, double x, double y, double z) {
         BlockCube block = BlockCube.getBlock();
         if (block != null) {
-            block.setTextureOveride(info);
+            block.setTextureOverride(info);
             renderBlocks.setRenderBounds(info.minX, info.minY, info.minZ, info.maxX, info.maxY, info.maxZ);
             renderBlocks.renderStandardBlock(block, (int) x, (int) y, (int) z);
-            block.setTextureOveride(null);
+            block.setTextureOverride(null);
         } else
             renderBlock(info, blockAccess, x, y, z, true, false);
     }

@@ -112,7 +112,7 @@ public class BlockCube extends Block {
     }
 
     @SideOnly(Side.CLIENT)
-    public void setTextureOveride(RenderInfo info) {
+    public void setTextureOverride(RenderInfo info) {
         override = info;
     }
 

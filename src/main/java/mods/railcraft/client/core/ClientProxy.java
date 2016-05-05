@@ -8,9 +8,11 @@
  */
 package mods.railcraft.client.core;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.signals.TileSignalFoundation;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import org.apache.logging.log4j.Level;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityMinecart;
@@ -61,6 +63,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.item.Item;
 
+@SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
     @Override
     public World getClientWorld() {
@@ -85,6 +88,17 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInitClient() {
         MinecraftForge.EVENT_BUS.register(RCSoundHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new TextureHook());
+    }
+
+    public static class TextureHook {
+        @SubscribeEvent
+        public void textureStitch(TextureStitchEvent.Pre event) {
+            if (event.map.getTextureType() == 0) {
+                CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.map.registerIcon("railcraft:cart.redstone.flux"));
+                CartContentRendererRedstoneFlux.instance().setFrameIcon(event.map.registerIcon("railcraft:cart.redstone.flux.frame"));
+            }
+        }
     }
 
     @Override

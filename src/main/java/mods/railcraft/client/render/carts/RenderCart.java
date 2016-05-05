@@ -8,24 +8,24 @@
  */
 package mods.railcraft.client.render.carts;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
 import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.api.carts.locomotive.IRenderer;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.*;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.MathHelper;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
-import net.minecraft.util.ResourceLocation;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class RenderCart extends Render implements IRenderer {
 
@@ -44,6 +44,7 @@ public class RenderCart extends Render implements IRenderer {
 
         renderersContent.put(EntityCartCargo.class, new CartContentRendererCargo());
         renderersContent.put(EntityCartTank.class, new CartContentRendererTank());
+        renderersContent.put(EntityCartRF.class, CartContentRendererRedstoneFlux.instance());
         renderersContent.put(CartExplosiveBase.class, new CartContentRendererTNT());
         renderersContent.put(CartMaintenanceBase.class, new CartContentRendererMaintance());
     }

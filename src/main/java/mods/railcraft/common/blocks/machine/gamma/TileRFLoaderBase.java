@@ -15,6 +15,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.io.DataInputStream;
@@ -31,6 +32,13 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
 
     public TileRFLoaderBase() {
         setInventorySize(0);
+    }
+
+    @Override
+    public IIcon getIcon(int side) {
+        if (side == direction.ordinal())
+            return getMachineType().getTexture(isProcessing() ? 7 : 8);
+        return getMachineType().getTexture(isProcessing() ? 0 : 6);
     }
 
     @Override

@@ -18,7 +18,6 @@ import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.io.DataInputStream;
@@ -32,13 +31,6 @@ public class TileRFLoader extends TileRFLoaderBase implements IGuiReturnHandler,
     @Override
     public IEnumMachine getMachineType() {
         return EnumMachineGamma.RF_LOADER;
-    }
-
-    @Override
-    public IIcon getIcon(int side) {
-        if (side == direction.ordinal())
-            return getMachineType().getTexture(isProcessing() ? 7 : 8);
-        return getMachineType().getTexture(isProcessing() ? 0 : 6);
     }
 
     @Override
