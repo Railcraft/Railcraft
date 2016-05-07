@@ -40,8 +40,8 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     protected Set<UUID> decidingCarts = new HashSet<UUID>();
     private byte sprung;
     private byte locked;
-    private UUID currentCart = null;
-    private ISwitchDevice switchDevice = null;
+    private UUID currentCart;
+    private ISwitchDevice switchDevice;
     private boolean clientSwitched;
 
     @Override
@@ -77,9 +77,6 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
      * responses for the clients to use.
      * Note: This method should not modify any variables except the cache, we leave
      * that to updateEntity().
-     *
-     * @param cart
-     * @return
      */
     protected boolean shouldSwitchForCart(EntityMinecart cart) {
         if (cart == null || Game.isNotHost(getWorld()))
@@ -273,8 +270,12 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
             changed = true;
         }
 
-        if (changed)
+        if (changed) {
+            switchDevice = getSwitchDevice();
+            if (switchDevice != null)
+                switchDevice.updateArrows();
             markBlockNeedsUpdate();
+        }
     }
 
     private void updateSet(Set<UUID> setToUpdate, List<UUID> potentialUpdates, Set<UUID> reject1, Set<UUID> reject2) {
@@ -287,13 +288,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
 
     @Override
     public void updateEntity() {
-        if (Game.isNotHost(getWorld())) {
-            switchDevice = getSwitchDevice();
-            if (switchDevice != null) {
-                switchDevice.setRenderState(getRedSignDirection(), getWhiteSignDirection());
-            }
-            return;
-        }
+        super.updateEntity();
 
         boolean wasSwitched = isVisuallySwitched();
 
