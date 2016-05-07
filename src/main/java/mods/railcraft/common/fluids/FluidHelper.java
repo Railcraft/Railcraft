@@ -8,25 +8,25 @@
  */
 package mods.railcraft.common.fluids;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import mods.railcraft.common.items.ModItems;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -55,14 +55,21 @@ public final class FluidHelper {
             FluidItemHelper.DrainReturn drainReturn = FluidItemHelper.drainContainer(current, PROCESS_VOLUME);
 
             if (fill && drainReturn.fluidDrained != null) {
-                int used = tank.fill(side, drainReturn.fluidDrained, true);
+                int used = tank.fill(side, drainReturn.fluidDrained, false);
 
                 if (used > 0) {
                     drainReturn = FluidItemHelper.drainContainer(current, used);
                     if (!player.capabilities.isCreativeMode) {
-                        player.inventory.setInventorySlotContents(player.inventory.currentItem, drainReturn.container);
+                        if (current.stackSize > 1) {
+                            if (drainReturn.container != null && !player.inventory.addItemStackToInventory(drainReturn.container))
+                                return false;
+                            player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
+                        } else {
+                            player.inventory.setInventorySlotContents(player.inventory.currentItem, drainReturn.container);
+                        }
                         player.inventory.markDirty();
                     }
+                    tank.fill(side, drainReturn.fluidDrained, true);
                     return true;
                 }
             } else if (drain) {
@@ -72,15 +79,13 @@ public final class FluidHelper {
                     FluidItemHelper.FillReturn fillReturn = FluidItemHelper.fillContainer(current, available);
                     if (fillReturn.amount > 0) {
                         if (current.stackSize > 1) {
-                            if (!player.inventory.addItemStackToInventory(fillReturn.container))
+                            if (fillReturn.container != null && !player.inventory.addItemStackToInventory(fillReturn.container))
                                 return false;
                             player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
-                            player.inventory.markDirty();
                         } else {
                             player.inventory.setInventorySlotContents(player.inventory.currentItem, fillReturn.container);
-                            player.inventory.markDirty();
                         }
-
+                        player.inventory.markDirty();
                         tank.drain(side, fillReturn.amount, true);
                         return true;
                     }
@@ -163,11 +168,6 @@ public final class FluidHelper {
     /**
      * We can assume that if null is passed for the container that the container
      * was consumed by the process and we should just remove the input container.
-     *
-     * @param inv
-     * @param inputSlot
-     * @param outputSlot
-     * @param container
      */
     private static void storeContainer(IInventory inv, int inputSlot, int outputSlot, ItemStack container) {
         if (container == null) {
