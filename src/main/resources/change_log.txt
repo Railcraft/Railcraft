@@ -1,3 +1,14 @@
+9.11.0.0:
+	NEW: Added Redstone Flux Cart + Loaders.
+	NEW: Fancy tooltips for the Signal blocks/boxes.
+	NEW: Added some new Admin commands for killing entities/carts.
+	NEW: You can now label Block Signals in addition to Boxes.
+	FIX: Fix right-click handling for fluid containers. (issue #776)
+	FIX: Fix NPE when looking at Signal Boxes. (issue #793)
+	FIX: Fixed excessive render refreshes when a Switch Controller touched two Switch Tracks. (issue #775)
+	FIX: Hobbyist Engine should move empty buckets to the fluid output slot. (issue #804)
+	
+
 9.10.0.0:
     INFO: Repackage for release.
 
