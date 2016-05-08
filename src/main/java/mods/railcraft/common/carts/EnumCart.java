@@ -273,4 +273,16 @@ public enum EnumCart implements ICartType {
         return RailcraftConfig.isCartEnabled(getTag());
     }
 
+    public boolean isVanillaCart() {
+        switch (this) {
+            case CHEST:
+            case HOPPER:
+            case COMMAND_BLOCK:
+            case BASIC:
+            case FURNACE:
+            case TNT:
+                return true;
+        }
+        return false;
+    }
 }

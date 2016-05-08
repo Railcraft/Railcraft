@@ -25,6 +25,7 @@ import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EntityTunnelBore;
+import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.modules.ModuleChunkLoading;
 import mods.railcraft.common.modules.RailcraftModuleManager;
@@ -422,27 +423,32 @@ public class RailcraftConfig {
     private static void loadCarts() {
         configMain.addCustomCategoryComment(CAT_CARTS, "Disable individual carts here.");
 
-        loadCartProperty("cart.tnt");
-        loadCartProperty("cart.tnt.wood");
-        loadCartProperty("cart.pumpkin");
-        loadCartProperty("cart.gift");
-        loadCartProperty("cart.tank");
-        loadCartProperty("cart.cargo");
-        loadCartProperty("cart.bore");
-        loadCartProperty("cart.energy.batbox");
-        loadCartProperty("cart.energy.mfe");
-        loadCartProperty("cart.energy.cesu");
-        loadCartProperty("cart.energy.mfsu");
-        loadCartProperty("cart.anchor");
-        loadCartProperty("cart.anchor.personal");
-        loadCartProperty("cart.anchor.admin");
-        loadCartProperty("cart.work");
-        loadCartProperty("cart.track.relayer");
-        loadCartProperty("cart.undercutter");
-        loadCartProperty("cart.loco.steam.solid");
-        loadCartProperty("cart.loco.electric");
-        loadCartProperty("cart.track.layer");
-        loadCartProperty("cart.track.remover");
+        for (EnumCart cart : EnumCart.VALUES) {
+            if (!cart.isVanillaCart())
+                loadCartProperty("cart." + cart.getBaseTag());
+        }
+
+//        loadCartProperty("cart.tnt");
+//        loadCartProperty("cart.tnt.wood");
+//        loadCartProperty("cart.pumpkin");
+//        loadCartProperty("cart.gift");
+//        loadCartProperty("cart.tank");
+//        loadCartProperty("cart.cargo");
+//        loadCartProperty("cart.bore");
+//        loadCartProperty("cart.energy.batbox");
+//        loadCartProperty("cart.energy.mfe");
+//        loadCartProperty("cart.energy.cesu");
+//        loadCartProperty("cart.energy.mfsu");
+//        loadCartProperty("cart.anchor");
+//        loadCartProperty("cart.anchor.personal");
+//        loadCartProperty("cart.anchor.admin");
+//        loadCartProperty("cart.work");
+//        loadCartProperty("cart.track.relayer");
+//        loadCartProperty("cart.undercutter");
+//        loadCartProperty("cart.loco.steam.solid");
+//        loadCartProperty("cart.loco.electric");
+//        loadCartProperty("cart.track.layer");
+//        loadCartProperty("cart.track.remover");
     }
 
     private static void loadBlocks() {
@@ -525,11 +531,11 @@ public class RailcraftConfig {
             loadBlockFeature(BlockRailcraftSlab.getTag(mat));
         }
 
-        for (BlockMaterial mat : BlockLantern.STONE_LANTERN.keySet()) {
+        for (BlockMaterial mat : BlockLantern.STONE_LANTERN.values()) {
             loadBlockFeature(BlockLantern.getTag(mat));
         }
 
-        for (BlockMaterial mat : BlockLantern.METAL_LANTERN.keySet()) {
+        for (BlockMaterial mat : BlockLantern.METAL_LANTERN.values()) {
             loadBlockFeature(BlockLantern.getTag(mat));
         }
 
