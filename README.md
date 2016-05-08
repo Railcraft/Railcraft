@@ -58,7 +58,11 @@ Initial Setup from the Command Line:
 gradlew setupDecompWorkspace eclipse
 ```
 
-The [API](https://github.com/CovertJaguar/Railcraft-API) and [Localization](https://github.com/CovertJaguar/Railcraft-Localization) files reside in their own repositories and are pulled automatically into the main repo as git submodules.
+The [API](https://github.com/CovertJaguar/Railcraft-API) and [Localization](https://github.com/CovertJaguar/Railcraft-Localization) files reside in their own repositories and are pulled automatically into the main repo as git submodules. You will however need to run the following commands:
+```
+git submodule init
+git submodule update
+```
 
 ## License
 
