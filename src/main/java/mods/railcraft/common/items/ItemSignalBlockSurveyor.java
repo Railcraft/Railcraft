@@ -55,6 +55,7 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
                 'R', "dustRedstone");
     }
 
+    //TODO: Add name highlighting
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 //        System.out.println("click");

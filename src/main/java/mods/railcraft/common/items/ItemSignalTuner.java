@@ -56,6 +56,7 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                 'T', Blocks.redstone_torch);
     }
 
+    //TODO: Add name highlighting
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isHost(worldIn) && stack.hasTagCompound() && playerIn.isSneaking()) {

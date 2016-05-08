@@ -18,18 +18,36 @@ import net.minecraftforge.items.IItemHandler;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryObject {
-    private Object inventory;
+public abstract class InventoryObject implements IInventoryObject {
+    private final Object inventory;
 
-    public InventoryObject(IInventory inventory) {
+    private InventoryObject(Object inventory) {
         this.inventory = inventory;
     }
 
-    public InventoryObject(IItemHandler inventory) {
-        this.inventory = inventory;
+    public static InventoryObject get(final IInventory inventory) {
+        return new InventoryObject(inventory) {
+
+            @Override
+            public int getNumSlots() {
+                return inventory.getSizeInventory();
+            }
+        };
     }
 
-    public Object getObject() {
+    public static InventoryObject get(final IItemHandler inventory) {
+        return new InventoryObject(inventory) {
+
+            @Override
+            public int getNumSlots() {
+                return inventory.getSlots();
+            }
+        };
+    }
+
+    @Override
+    public Object getInventoryObject() {
         return inventory;
     }
+
 }

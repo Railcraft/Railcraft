@@ -15,39 +15,44 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ChestWrapper implements IInventory {
+public class ChestWrapper extends InvWrapperBase {
 
     /**
      * Inventory object corresponding to double chest upper part
      */
-    private final TileEntityChest upperChest;
+    private final TileEntityChest firstChest;
     /**
      * Inventory object corresponding to double chest lower part
      */
-    private TileEntityChest lowerChest;
+    private TileEntityChest secondChest;
 
     public ChestWrapper(TileEntityChest tile) {
-        this.upperChest = tile;
-        checkChest();
+        super(tile, false);
+        this.firstChest = tile;
+        this.secondChest = findSecondChest();
     }
 
     private void checkChest() {
-        if (lowerChest == null || lowerChest.isInvalid()) {
-            if (upperChest.adjacentChestXNeg != null) {
-                lowerChest = upperChest.adjacentChestXNeg;
-            } else if (upperChest.adjacentChestXPos != null) {
-                lowerChest = upperChest.adjacentChestXPos;
-            } else if (upperChest.adjacentChestZNeg != null) {
-                lowerChest = upperChest.adjacentChestZNeg;
-            } else if (upperChest.adjacentChestZPos != null) {
-                lowerChest = upperChest.adjacentChestZPos;
+        this.secondChest = findSecondChest();
+    }
+
+    private TileEntityChest findSecondChest() {
+        if (secondChest == null || secondChest.isInvalid()) {
+            if (firstChest.adjacentChestXNeg != null) {
+                secondChest = firstChest.adjacentChestXNeg;
+            } else if (firstChest.adjacentChestXPos != null) {
+                secondChest = firstChest.adjacentChestXPos;
+            } else if (firstChest.adjacentChestZNeg != null) {
+                secondChest = firstChest.adjacentChestZNeg;
+            } else if (firstChest.adjacentChestZPos != null) {
+                secondChest = firstChest.adjacentChestZPos;
             } else {
-                lowerChest = null;
+                secondChest = null;
             }
         }
+        return secondChest;
     }
 
     /**
@@ -56,9 +61,9 @@ public class ChestWrapper implements IInventory {
     @Override
     public int getSizeInventory() {
         checkChest();
-        int size = upperChest.getSizeInventory();
-        if (lowerChest != null) {
-            size += lowerChest.getSizeInventory();
+        int size = firstChest.getSizeInventory();
+        if (secondChest != null) {
+            size += secondChest.getSizeInventory();
         }
         return size;
     }
@@ -67,25 +72,7 @@ public class ChestWrapper implements IInventory {
      * Return whether the given inventory is part of this large chest.
      */
     public boolean isPartOfLargeChest(IInventory inv) {
-        return this.upperChest == inv || this.lowerChest == inv;
-    }
-
-    /**
-     * Returns the name of the inventory.
-     */
-    @Override
-    public String getInventoryName() {
-        return "";
-    }
-
-    /**
-     * If this returns false, the inventory name will be used as an unlocalized
-     * name, and translated into the player's language. Otherwise it will be
-     * used directly.
-     */
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
+        return firstChest == inv || secondChest == inv;
     }
 
     /**
@@ -94,10 +81,10 @@ public class ChestWrapper implements IInventory {
     @Override
     public ItemStack getStackInSlot(int slot) {
         checkChest();
-        if (slot >= upperChest.getSizeInventory() && lowerChest != null) {
-            return lowerChest.getStackInSlot(slot - upperChest.getSizeInventory());
+        if (slot >= firstChest.getSizeInventory() && secondChest != null) {
+            return secondChest.getStackInSlot(slot - firstChest.getSizeInventory());
         }
-        return upperChest.getStackInSlot(slot);
+        return firstChest.getStackInSlot(slot);
     }
 
     /**
@@ -105,26 +92,12 @@ public class ChestWrapper implements IInventory {
      * (second arg) of items and returns them in a new stack.
      */
     @Override
-    public ItemStack decrStackSize(int slot, int amout) {
+    public ItemStack decrStackSize(int slot, int amount) {
         checkChest();
-        if (slot >= upperChest.getSizeInventory() && lowerChest != null) {
-            return lowerChest.decrStackSize(slot - upperChest.getSizeInventory(), amout);
+        if (slot >= firstChest.getSizeInventory() && secondChest != null) {
+            return secondChest.decrStackSize(slot - firstChest.getSizeInventory(), amount);
         }
-        return upperChest.decrStackSize(slot, amout);
-    }
-
-    /**
-     * When some containers are closed they call this on each slot, then drop
-     * whatever it returns as an EntityItem - like when you close a workbench
-     * GUI.
-     */
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-        checkChest();
-        if (slot >= upperChest.getSizeInventory() && lowerChest != null) {
-            return lowerChest.getStackInSlotOnClosing(slot - upperChest.getSizeInventory());
-        }
-        return upperChest.getStackInSlotOnClosing(slot);
+        return firstChest.decrStackSize(slot, amount);
     }
 
     /**
@@ -134,11 +107,18 @@ public class ChestWrapper implements IInventory {
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
         checkChest();
-        if (slot >= this.upperChest.getSizeInventory() && lowerChest != null) {
-            lowerChest.setInventorySlotContents(slot - upperChest.getSizeInventory(), stack);
+        if (slot >= firstChest.getSizeInventory() && secondChest != null) {
+            secondChest.setInventorySlotContents(slot - firstChest.getSizeInventory(), stack);
         } else {
-            upperChest.setInventorySlotContents(slot, stack);
+            firstChest.setInventorySlotContents(slot, stack);
         }
+    }
+
+    @Override
+    public ItemStack removeStackFromSlot(int slot) {
+        ItemStack stack = getStackInSlot(slot);
+        setInventorySlotContents(slot, null);
+        return stack;
     }
 
     /**
@@ -147,7 +127,7 @@ public class ChestWrapper implements IInventory {
      */
     @Override
     public int getInventoryStackLimit() {
-        return this.upperChest.getInventoryStackLimit();
+        return firstChest.getInventoryStackLimit();
     }
 
     /**
@@ -155,8 +135,8 @@ public class ChestWrapper implements IInventory {
      */
     @Override
     public void markDirty() {
-        this.upperChest.markDirty();
-        if (lowerChest != null) lowerChest.markDirty();
+        firstChest.markDirty();
+        if (secondChest != null) secondChest.markDirty();
     }
 
     /**
@@ -165,28 +145,19 @@ public class ChestWrapper implements IInventory {
      */
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return this.upperChest.isUseableByPlayer(player) && (lowerChest == null || lowerChest.isUseableByPlayer(player));
+        return firstChest.isUseableByPlayer(player) && (secondChest == null || secondChest.isUseableByPlayer(player));
     }
 
     @Override
-    public void openInventory() {
-        this.upperChest.openInventory();
-        if (lowerChest != null) lowerChest.openInventory();
+    public void openInventory(EntityPlayer player) {
+        firstChest.openInventory(player);
+        if (secondChest != null) secondChest.openInventory(player);
     }
 
     @Override
-    public void closeInventory() {
-        this.upperChest.closeInventory();
-        if (lowerChest != null) lowerChest.closeInventory();
-    }
-
-    /**
-     * Returns true if automation is allowed to insert the given stack (ignoring
-     * stack size) into the given slot.
-     */
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return true;
+    public void closeInventory(EntityPlayer player) {
+        firstChest.closeInventory(player);
+        if (secondChest != null) secondChest.closeInventory(player);
     }
 
 }

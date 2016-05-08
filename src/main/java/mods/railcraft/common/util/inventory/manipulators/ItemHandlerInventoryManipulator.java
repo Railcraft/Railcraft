@@ -35,6 +35,7 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
         return InventoryIterator.getIterable(inv).iterator();
     }
 
+    @Override
     protected ItemStack addStack(ItemStack stack, boolean doAdd) {
         if (stack == null || stack.stackSize <= 0)
             return null;
@@ -64,11 +65,12 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
             return injected;
         for (IInvSlot slot : slots) {
             ItemStack stackToInsert = stack.copy();
-            stackToInsert.stackSize = stack.stackSize - injected;
+            int amountToInsert = stack.stackSize - injected;
+            stackToInsert.stackSize = amountToInsert;
             ItemStack remainder = inv.insertItem(slot.getIndex(), stackToInsert, !doAdd);
             if (remainder == null)
-                return injected;
-            injected += remainder.stackSize;
+                return stack.stackSize;
+            injected += amountToInsert - remainder.stackSize;
             if (injected >= stack.stackSize)
                 return injected;
         }

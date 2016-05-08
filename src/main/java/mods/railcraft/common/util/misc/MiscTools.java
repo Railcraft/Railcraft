@@ -9,20 +9,16 @@
 package mods.railcraft.common.util.misc;
 
 import com.google.common.base.Predicate;
-import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -103,6 +99,7 @@ public abstract class MiscTools {
         return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
     }
 
+    @Nullable
     public static <T extends Entity> T getEntityAt(World world, Class<T> entityClass, BlockPos pos) {
         AxisAlignedBB box = AABBFactory.make().createBoxForTileAt(pos).build();
         List<T> entities = world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
@@ -111,7 +108,9 @@ public abstract class MiscTools {
         return null;
     }
 
-    public static MovingObjectPosition collisionRayTrace(Vec3 start, Vec3 end, BlockPos pos) {
+    //TODO: test
+    @Nullable
+    public static MovingObjectPosition rayTraceBlock(Vec3 start, Vec3 end, BlockPos pos) {
         start = start.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
         end = end.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
         Vec3 minX = start.getIntermediateWithXValue(end, 0);
@@ -147,20 +146,20 @@ public abstract class MiscTools {
             closest = maxZ;
         if (closest == null)
             return null;
-        EnumFacing enumfacing = null;
+        EnumFacing sideHit = null;
         if (closest == minX)
-            enumfacing = EnumFacing.WEST;
+            sideHit = EnumFacing.WEST;
         if (closest == maxX)
-            enumfacing = EnumFacing.EAST;
+            sideHit = EnumFacing.EAST;
         if (closest == minY)
-            enumfacing = EnumFacing.DOWN;
+            sideHit = EnumFacing.DOWN;
         if (closest == maxY)
-            enumfacing = EnumFacing.UP;
+            sideHit = EnumFacing.UP;
         if (closest == minZ)
-            enumfacing = EnumFacing.NORTH;
+            sideHit = EnumFacing.NORTH;
         if (closest == maxZ)
-            enumfacing = EnumFacing.SOUTH;
-        return new MovingObjectPosition(closest.addVector(pos.getX(), pos.getY(), pos.getZ()), enumfacing, pos);
+            sideHit = EnumFacing.SOUTH;
+        return new MovingObjectPosition(closest.addVector(pos.getX(), pos.getY(), pos.getZ()), sideHit, pos);
     }
 
     private static boolean isVecOutsideYZBounds(Vec3 vec3d) {
@@ -177,7 +176,7 @@ public abstract class MiscTools {
 
     public static MovingObjectPosition rayTracePlayerLook(EntityPlayer player) {
         double distance = player.capabilities.isCreativeMode ? 5.0F : 4.5F;
-        Vec3 posVec = new Vec3(player.posX, player.posY, player.posZ);
+        Vec3 posVec = player.getPositionVector();
         Vec3 lookVec = player.getLook(1);
         lookVec = lookVec.addVector(0, player.getEyeHeight(), 0);
         lookVec = posVec.addVector(lookVec.xCoord * distance, lookVec.yCoord * distance, lookVec.zCoord * distance);

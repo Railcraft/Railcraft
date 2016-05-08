@@ -9,7 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.common.util.inventory.iterators;
 
-import mods.railcraft.common.util.inventory.InventoryObject;
+import mods.railcraft.common.util.inventory.IInventoryObject;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraftforge.items.IItemHandler;
@@ -32,13 +32,13 @@ public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<
         return new ItemHandlerInventoryIterator(inv);
     }
 
-    public static InventoryIterator<? extends IInvSlot> getIterable(InventoryObject inv) {
-        if (inv.getObject() instanceof ISidedInventory)
-            return new SidedInventoryIterator((ISidedInventory) inv.getObject());
-        if (inv.getObject() instanceof IInventory)
-            return new StandardInventoryIterator((IInventory) inv.getObject());
-        if (inv.getObject() instanceof IItemHandler)
-            return new ItemHandlerInventoryIterator((IItemHandler) inv.getObject());
+    public static InventoryIterator<? extends IInvSlot> getIterable(IInventoryObject inv) {
+        if (inv.getInventoryObject() instanceof ISidedInventory)
+            return new SidedInventoryIterator((ISidedInventory) inv.getInventoryObject());
+        if (inv.getInventoryObject() instanceof IInventory)
+            return new StandardInventoryIterator((IInventory) inv.getInventoryObject());
+        if (inv.getInventoryObject() instanceof IItemHandler)
+            return new ItemHandlerInventoryIterator((IItemHandler) inv.getInventoryObject());
         throw new RuntimeException("Invalid Inventory Object");
     }
 

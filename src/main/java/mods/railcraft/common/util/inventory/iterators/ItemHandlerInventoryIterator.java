@@ -64,7 +64,8 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
 
         @Override
         public boolean canPutStackInSlot(ItemStack stack) {
-            return inv.insertItem(slot, stack, true) == null;
+            ItemStack remainder = inv.insertItem(slot, stack, true);
+            return remainder == null || remainder.stackSize < stack.stackSize;
         }
 
         @Override

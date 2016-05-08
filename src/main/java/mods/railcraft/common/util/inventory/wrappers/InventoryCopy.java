@@ -58,6 +58,7 @@ public class InventoryCopy extends InvWrapperBase {
         return copy.removeStackFromSlot(slot);
     }
 
+    @Override
     public void markDirty() {
     }
 }

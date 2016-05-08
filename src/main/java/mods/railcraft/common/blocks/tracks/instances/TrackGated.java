@@ -63,7 +63,7 @@ public class TrackGated extends TrackPowered implements ITrackReversible, ITrack
 
     @Override
     public MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1) {
-        return MiscTools.collisionRayTrace(vec3d, vec3d1, getPos());
+        return MiscTools.rayTraceBlock(vec3d, vec3d1, getPos());
     }
 
     @Override

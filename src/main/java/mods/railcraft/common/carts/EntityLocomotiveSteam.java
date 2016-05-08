@@ -23,7 +23,6 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.steam.Steam;
 import mods.railcraft.common.util.steam.SteamBoiler;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -53,7 +52,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     @SuppressWarnings("WeakerAccess")
     protected InventoryMapper invWaterInput;
     @SuppressWarnings("WeakerAccess")
-    protected IInventory invWaterOutput = new InventoryMapper(this, SLOT_LIQUID_OUTPUT, 1);
+    protected InventoryMapper invWaterOutput = new InventoryMapper(this, SLOT_LIQUID_OUTPUT, 1);
     private TankManager tankManager;
     private int update = rand.nextInt();
 

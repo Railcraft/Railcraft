@@ -10,7 +10,6 @@ package mods.railcraft.common.util.inventory;
 
 import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.misc.ITileFilter;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
@@ -22,9 +21,9 @@ import java.util.*;
 public final class AdjacentInventoryCache {
 
     private final AdjacentTileCache cache;
-    private final List<IInventory> sortedInvs = new LinkedList<IInventory>();
-    private final Map<EnumFacing, IInventory> invs = new EnumMap<EnumFacing, IInventory>(EnumFacing.class);
-    private final Comparator<IInventory> sorter;
+    private final List<IInventoryObject> sortedInvs = new LinkedList<IInventoryObject>();
+    private final Map<EnumFacing, IInventoryObject> invs = new EnumMap<EnumFacing, IInventoryObject>(EnumFacing.class);
+    private final Comparator<IInventoryObject> sorter;
     private final ITileFilter filter;
     private final EnumSet<EnumFacing> changedSides = EnumSet.allOf(EnumFacing.class);
 
@@ -32,7 +31,7 @@ public final class AdjacentInventoryCache {
         this(cache, null, null);
     }
 
-    public AdjacentInventoryCache(AdjacentTileCache cache, ITileFilter filter, Comparator<IInventory> sorter) {
+    public AdjacentInventoryCache(AdjacentTileCache cache, ITileFilter filter, Comparator<IInventoryObject> sorter) {
         this.cache = cache;
         cache.addListener(new AdjacentTileCache.ICacheListener() {
             @Override
@@ -51,14 +50,14 @@ public final class AdjacentInventoryCache {
         this.sorter = sorter;
     }
 
-    public Collection<IInventory> getAdjacentInventories() {
+    public Collection<IInventoryObject> getAdjacentInventories() {
         Map<EnumFacing, TileEntity> tiles = cache.refreshTiles();
         if (!changedSides.isEmpty()) {
             for (EnumFacing side : changedSides) {
                 invs.remove(side);
                 TileEntity tile = tiles.get(side);
                 if (tile != null && (filter == null || filter.matches(tile))) {
-                    IInventory inv = InvTools.getInventoryFromTile(tile, side.getOpposite());
+                    IInventoryObject inv = InvTools.getInventoryFromTile(tile, side.getOpposite());
                     if (inv != null)
                         invs.put(side, inv);
                 }

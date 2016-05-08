@@ -9,7 +9,7 @@
 package mods.railcraft.common.util.inventory.manipulators;
 
 import mods.railcraft.api.core.IStackFilter;
-import mods.railcraft.common.util.inventory.InventoryObject;
+import mods.railcraft.common.util.inventory.IInventoryObject;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import net.minecraft.inventory.IInventory;
@@ -31,11 +31,11 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
         return new ItemHandlerInventoryManipulator(inv);
     }
 
-    public static InventoryManipulator<? extends IInvSlot> get(InventoryObject inv) {
-        if (inv.getObject() instanceof IInventory)
-            return new StandardInventoryManipulator((IInventory) inv.getObject());
-        if (inv.getObject() instanceof IItemHandler)
-            return new ItemHandlerInventoryManipulator((IItemHandler) inv.getObject());
+    public static InventoryManipulator<? extends IInvSlot> get(IInventoryObject inv) {
+        if (inv.getInventoryObject() instanceof IInventory)
+            return new StandardInventoryManipulator((IInventory) inv.getInventoryObject());
+        if (inv.getInventoryObject() instanceof IItemHandler)
+            return new ItemHandlerInventoryManipulator((IItemHandler) inv.getInventoryObject());
         throw new RuntimeException("Invalid Inventory Object");
     }
 
@@ -112,11 +112,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
 
     protected abstract List<ItemStack> removeItem(IStackFilter filter, int maxAmount, boolean doRemove);
 
-    public ItemStack moveItem(IInventory dest, IStackFilter filter) {
-        return moveItem(new InventoryObject(dest), filter);
-    }
-
-    public ItemStack moveItem(InventoryObject dest, IStackFilter filter) {
+    public ItemStack moveItem(IInventoryObject dest, IStackFilter filter) {
         InventoryManipulator imDest = InventoryManipulator.get(dest);
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStackInSlot();

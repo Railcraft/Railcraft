@@ -51,10 +51,10 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 7);
     private static final byte FIRE_ASPECT_DATA_ID = 30;
     private static final byte WATER_ASPECT_DATA_ID = 31;
-    private final IInventory invBurn = new InventoryMapper(this, SLOT_BURN, 1);
-    private final IInventory invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
-    private final IInventory invFuel = new InventoryMapper(this, SLOT_BURN, 4);
-    private final IInventory invTicket = new InventoryMapper(this, SLOT_TICKET, 2, false);
+    private final InventoryMapper invBurn = new InventoryMapper(this, SLOT_BURN, 1);
+    private final InventoryMapper invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
+    private final InventoryMapper invFuel = new InventoryMapper(this, SLOT_BURN, 4);
+    private final InventoryMapper invTicket = new InventoryMapper(this, SLOT_TICKET, 2, false);
     private EssentiaTank fireAspect;
     private EssentiaTank waterAspect;
 

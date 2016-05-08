@@ -27,7 +27,7 @@ import java.util.Iterator;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
+public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IInventoryObject {
 
     private final String name;
     private final Callback callback;
@@ -65,6 +65,16 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack> {
 
     public StandaloneInventory(int size) {
         this(size, null, (RailcraftTileEntity) null);
+    }
+
+    @Override
+    public Object getInventoryObject() {
+        return this;
+    }
+
+    @Override
+    public int getNumSlots() {
+        return getSizeInventory();
     }
 
     @Override

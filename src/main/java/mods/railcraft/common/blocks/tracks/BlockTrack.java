@@ -197,18 +197,18 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 vec3d, Vec3 vec3d1) {
+    public MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 startVec, Vec3 endVec) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {
             if (tile instanceof TileTrack) {
                 ITrackInstance track = ((TileTrack) tile).getTrackInstance();
                 if (track instanceof ITrackCustomShape)
-                    return ((ITrackCustomShape) track).collisionRayTrace(vec3d, vec3d1);
+                    return ((ITrackCustomShape) track).collisionRayTrace(startVec, endVec);
             }
         } catch (Error error) {
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackInstance.class);
         }
-        return super.collisionRayTrace(world, pos, vec3d, vec3d1);
+        return super.collisionRayTrace(world, pos, startVec, endVec);
     }
 
     @Override

@@ -7,20 +7,14 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
+
 package mods.railcraft.common.util.inventory;
 
-import java.util.Comparator;
-
 /**
- * @author CovertJaguar <http://www.railcraft.info/>
+ * Created by CovertJaguar on 5/7/2016.
  */
-public enum InventorySorter implements Comparator<IInventoryObject> {
+public interface IInventoryObject {
+    Object getInventoryObject();
 
-    SIZE_DESCENDING {
-        @Override
-        public int compare(IInventoryObject inv1, IInventoryObject inv2) {
-            return inv2.getNumSlots() - inv1.getNumSlots();
-        }
-
-    }
+    int getNumSlots();
 }
