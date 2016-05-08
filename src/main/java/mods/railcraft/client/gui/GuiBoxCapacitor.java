@@ -41,7 +41,7 @@ public class GuiBoxCapacitor extends GuiBasic {
         buttonList.add(new GuiButton(1, w + 53, h + 38, 30, 20, "-1"));
         buttonList.add(new GuiButton(2, w + 93, h + 38, 30, 20, "+1"));
         buttonList.add(new GuiButton(3, w + 133, h + 38, 30, 20, "+10"));
-        buttonList.add(stateMode = new GuiMultiButton(4, w + 53, h + 65, 70, tile.getStateModeController().copy()));
+        buttonList.add(stateMode = new GuiMultiButton(4, w + 23, h + 65, 130, tile.getStateModeController().copy()));
     }
 
     @Override
