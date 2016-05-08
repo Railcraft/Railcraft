@@ -12,11 +12,14 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+
+import mods.railcraft.api.carts.ICartContentsTextureProvider;
 import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.client.render.RenderTools;
+import mods.railcraft.common.util.misc.AdjacentTileCache;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -37,18 +40,26 @@ public class ItemLocomotive extends ItemCart {
 
     private final LocomotiveRenderType renderType;
     private IIcon blankIcon;
+    private EnumColor defaultPrimary;
+    private EnumColor defaultSecondary;
 
-    public ItemLocomotive(ICartType cart, LocomotiveRenderType renderType) {
+    public ItemLocomotive(ICartType cart, LocomotiveRenderType renderType, EnumColor primary, EnumColor secondary) {
         super(cart);
         this.renderType = renderType;
         setMaxStackSize(1);
+        this.defaultPrimary = primary;
+        this.defaultSecondary = secondary;
+    }
+
+    public ItemLocomotive(ICartType cart, LocomotiveRenderType renderType) {
+        this(cart, renderType, EnumColor.LIGHT_GRAY, EnumColor.GRAY);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List list) {
         for (String skin : renderType.getRendererTags()) {
-            list.add(renderType.getItemWithRenderer(skin));
+            list.add(renderType.getItemWithRenderer(skin, new ItemStack(this)));
         }
     }
 
@@ -197,10 +208,7 @@ public class ItemLocomotive extends ItemCart {
     public static EnumColor getPrimaryColor(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null || !nbt.hasKey("primaryColor")) {
-            ItemLocomotive item = (ItemLocomotive) stack.getItem();
-            if (item.renderType == LocomotiveRenderType.ELECTRIC)
-                return EnumColor.YELLOW;
-            return EnumColor.LIGHT_GRAY;
+            return ((ItemLocomotive)stack.getItem()).getPrimaryColorF();
         }
         return EnumColor.fromId(nbt.getByte("primaryColor"));
     }
@@ -208,12 +216,17 @@ public class ItemLocomotive extends ItemCart {
     public static EnumColor getSecondaryColor(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null || !nbt.hasKey("secondaryColor")) {
-            ItemLocomotive item = (ItemLocomotive) stack.getItem();
-            if (item.renderType == LocomotiveRenderType.ELECTRIC)
-                return EnumColor.BLACK;
-            return EnumColor.GRAY;
+            return ((ItemLocomotive)stack.getItem()).getSecondaryColorF();
         }
         return EnumColor.fromId(nbt.getByte("secondaryColor"));
+    }
+
+    public EnumColor getPrimaryColorF() {
+        return this.defaultPrimary;
+    }
+
+    public EnumColor getSecondaryColorF() {
+        return this.defaultSecondary;
     }
 
 }

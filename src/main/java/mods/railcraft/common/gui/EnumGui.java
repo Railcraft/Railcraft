@@ -58,6 +58,7 @@ public enum EnumGui {
     CART_TRACK_LAYER(true),
     LOCO_STEAM(true),
     LOCO_ELECTRIC(true),
+    LOCO_CREATIVE(true),
     BOX_CONTROLLER(false),
     BOX_ANALOG_CONTROLLER(false),
     BOX_RECEIVER(true),

@@ -122,6 +122,8 @@ public class FactoryContainer {
                     return ContainerLocomotiveSteamSolid.make(inv, (EntityLocomotiveSteamSolid) obj);
                 case LOCO_ELECTRIC:
                     return ContainerLocomotiveElectric.make(inv, (EntityLocomotiveElectric) obj);
+                case LOCO_CREATIVE:
+                    return ContainerLocomotiveCreative.make(inv, (EntityLocomotiveCreative) obj);
                 case SWITCH_MOTOR:
                     return new ContainerAspectAction(inv.player, (IAspectActionManager) obj);
                 case BOX_RECEIVER:

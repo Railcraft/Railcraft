@@ -159,6 +159,8 @@ public class FactoryGui {
                     return new GuiLocomotiveSteamSolid(inv, (EntityLocomotiveSteamSolid) obj);
                 case LOCO_ELECTRIC:
                     return new GuiLocomotiveElectric(inv, (EntityLocomotiveElectric) obj);
+                case LOCO_CREATIVE:
+                    return new GuiLocomotiveCreative(inv, (EntityLocomotiveCreative) obj);
                 default:
                     return ModuleManager.getGuiScreen(gui, inv, obj, world, x, y, z);
             }

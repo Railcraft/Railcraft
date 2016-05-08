@@ -87,6 +87,11 @@ public class ModuleLocomotives extends RailcraftModule {
             RailcraftItem.gear.registerItem();
             RailcraftItem.plate.registerItem();
         }
+
+        cart = EnumCart.LOCO_CREATIVE;
+        if (cart.setup()) {
+            paintLocomotive(cart.getCartItem());
+        }
     }
 
     @Override
@@ -104,6 +109,11 @@ public class ModuleLocomotives extends RailcraftModule {
                     'M', Items.minecart,
                     'G', RailcraftItem.gear.getRecipeObject(EnumGear.STEEL),
                     'T', RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL));
+        }
+
+        if (EnumCart.LOCO_CREATIVE.isEnabled()) {
+            ItemStack cartStack = EnumCart.LOCO_CREATIVE.getCartItem();
+            ItemLocomotive.setItemColorData(cartStack, EnumColor.BLACK, EnumColor.MAGENTA);
         }
     }
 
