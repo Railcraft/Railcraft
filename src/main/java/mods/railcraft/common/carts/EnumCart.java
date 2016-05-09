@@ -15,6 +15,7 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.EntityIDs;
+import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityList;
@@ -48,6 +49,7 @@ public enum EnumCart implements ICartType {
     LOCO_STEAM_SOLID(1, EntityLocomotiveSteamSolid.class, null),
     LOCO_STEAM_MAGIC(1, EntityLocomotiveSteamMagic.class, null),
     LOCO_ELECTRIC(1, EntityLocomotiveElectric.class, null),
+    LOCO_CREATIVE(1, EntityLocomotiveCreative.class, null),
     BORE(1, EntityTunnelBore.class, null),
     ENERGY_BATBOX(0, EntityCartEnergyBatBox.class, null),
     ENERGY_CESU(0, EntityCartEnergyCESU.class, null),
@@ -62,7 +64,7 @@ public enum EnumCart implements ICartType {
     private final Class<? extends EntityMinecart> type;
     private final byte id;
     private final byte rarity;
-    private ItemStack contents = null;
+    private ItemStack contents;
     private ItemStack cartItem;
 
     EnumCart(int rarity, Class<? extends EntityMinecart> type, ItemStack contents) {
@@ -147,11 +149,13 @@ public enum EnumCart implements ICartType {
             case BORE:
                 return new ItemTunnelBore();
             case LOCO_STEAM_SOLID:
-                return new ItemLocomotive(this, LocomotiveRenderType.STEAM_SOLID);
+                return new ItemLocomotive(this, LocomotiveRenderType.STEAM_SOLID, EnumColor.LIGHT_GRAY, EnumColor.GRAY);
             case LOCO_STEAM_MAGIC:
-                return new ItemLocomotive(this, LocomotiveRenderType.STEAM_MAGIC);
+                return new ItemLocomotive(this, LocomotiveRenderType.STEAM_MAGIC, EnumColor.LIGHT_GRAY, EnumColor.GRAY);
             case LOCO_ELECTRIC:
-                return new ItemLocomotive(this, LocomotiveRenderType.ELECTRIC);
+                return new ItemLocomotive(this, LocomotiveRenderType.ELECTRIC, EnumColor.YELLOW, EnumColor.BLACK);
+            case LOCO_CREATIVE:
+                return new ItemLocomotive(this, LocomotiveRenderType.ELECTRIC, EnumColor.BLACK, EnumColor.MAGENTA);
             case ANCHOR:
             case ANCHOR_ADMIN:
             case ANCHOR_PERSONAL:
@@ -161,6 +165,7 @@ public enum EnumCart implements ICartType {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void registerEntity() {
         if (id < 0)
             return;

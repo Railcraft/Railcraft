@@ -36,6 +36,7 @@ public class EntityIDs {
     public static final int CART_LOCO_STEAM_SOLID = 30;
     public static final int CART_LOCO_STEAM_MAGIC = 31;
     public static final int CART_LOCO_ELECTRIC = 32;
+    public static final int CART_LOCO_CREATIVE = 33;
     public static final int CART_COMMAND_BLOCK = 40;
     public static final int CART_BORE = 50;
     public static final int CART_ENERGY_BATBOX = 87;

@@ -35,6 +35,7 @@ import net.minecraft.world.World;
  */
 public class FactoryContainer {
 
+    @SuppressWarnings("ConstantConditions")
     public static Container build(EnumGui gui, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
         if (gui != EnumGui.ANVIL && obj == null)
             return null;
@@ -128,6 +129,8 @@ public class FactoryContainer {
                     return ContainerLocomotiveSteamSolid.make(inv, (EntityLocomotiveSteamSolid) obj);
                 case LOCO_ELECTRIC:
                     return ContainerLocomotiveElectric.make(inv, (EntityLocomotiveElectric) obj);
+                case LOCO_CREATIVE:
+                    return ContainerLocomotive.make(inv, (EntityLocomotiveCreative) obj);
                 case SWITCH_MOTOR:
                     return new ContainerAspectAction(inv.player, (IAspectActionManager) obj);
                 case BOX_RECEIVER:

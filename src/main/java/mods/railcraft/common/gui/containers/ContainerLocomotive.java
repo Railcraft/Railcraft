@@ -23,7 +23,7 @@ import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public abstract class ContainerLocomotive extends RailcraftContainer {
+public class ContainerLocomotive extends RailcraftContainer {
 
     private final EntityLocomotive loco;
     protected final InventoryPlayer playerInv;
@@ -33,11 +33,17 @@ public abstract class ContainerLocomotive extends RailcraftContainer {
     private final int guiHeight;
     public String ownerName;
 
-    protected ContainerLocomotive(InventoryPlayer playerInv, EntityLocomotive loco, int guiHeight) {
+    ContainerLocomotive(InventoryPlayer playerInv, EntityLocomotive loco, int guiHeight) {
         super(loco);
         this.loco = loco;
         this.playerInv = playerInv;
         this.guiHeight = guiHeight;
+    }
+
+    public static ContainerLocomotive make(InventoryPlayer playerInv, EntityLocomotive loco) {
+        ContainerLocomotive con = new ContainerLocomotive(playerInv, loco, 161);
+        con.init();
+        return con;
     }
 
     public final void init() {
@@ -81,19 +87,19 @@ public abstract class ContainerLocomotive extends RailcraftContainer {
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = (ICrafting) this.crafters.get(var1);
+        for (Object crafter : crafters) {
+            ICrafting var2 = (ICrafting) crafter;
 
             LocoSpeed speed = loco.getSpeed();
-            if (this.lastSpeed != speed)
+            if (lastSpeed != speed)
                 var2.sendProgressBarUpdate(this, 10, speed.ordinal());
 
             LocoMode mode = loco.getMode();
-            if (this.lastMode != mode)
+            if (lastMode != mode)
                 var2.sendProgressBarUpdate(this, 11, mode.ordinal());
 
             int lock = loco.getLockController().getCurrentState();
-            if (this.lastLockState != lock)
+            if (lastLockState != lock)
                 var2.sendProgressBarUpdate(this, 12, lock);
         }
 
