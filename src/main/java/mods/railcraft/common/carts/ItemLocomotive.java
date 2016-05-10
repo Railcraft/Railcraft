@@ -31,7 +31,6 @@ import net.minecraft.util.IIcon;
 import java.util.List;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemLocomotive extends ItemCart {
@@ -100,6 +99,8 @@ public class ItemLocomotive extends ItemCart {
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+        super.addInformation(stack, player, info, adv);
+
         GameProfile owner = getOwner(stack);
         if (owner.getName() != null && !owner.getName().equals("[Unknown]")) {
             String format = LocalizationPlugin.translate("railcraft.gui.locomotive.tip.item.owner");
@@ -202,7 +203,7 @@ public class ItemLocomotive extends ItemCart {
     public static EnumColor getPrimaryColor(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null || !nbt.hasKey("primaryColor")) {
-            return ((ItemLocomotive)stack.getItem()).defaultPrimary;
+            return ((ItemLocomotive) stack.getItem()).defaultPrimary;
         }
         return EnumColor.fromId(nbt.getByte("primaryColor"));
     }
@@ -210,7 +211,7 @@ public class ItemLocomotive extends ItemCart {
     public static EnumColor getSecondaryColor(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null || !nbt.hasKey("secondaryColor")) {
-            return ((ItemLocomotive)stack.getItem()).defaultSecondary;
+            return ((ItemLocomotive) stack.getItem()).defaultSecondary;
         }
         return EnumColor.fromId(nbt.getByte("secondaryColor"));
     }
