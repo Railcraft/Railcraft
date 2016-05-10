@@ -49,7 +49,7 @@ public enum EnumCart implements ICartType {
     LOCO_STEAM_SOLID(1, EntityLocomotiveSteamSolid.class, null),
     LOCO_STEAM_MAGIC(1, EntityLocomotiveSteamMagic.class, null),
     LOCO_ELECTRIC(1, EntityLocomotiveElectric.class, null),
-    LOCO_CREATIVE(1, EntityLocomotiveCreative.class, null),
+    LOCO_CREATIVE(3, EntityLocomotiveCreative.class, null),
     BORE(1, EntityTunnelBore.class, null),
     ENERGY_BATBOX(0, EntityCartEnergyBatBox.class, null),
     ENERGY_CESU(0, EntityCartEnergyCESU.class, null),
