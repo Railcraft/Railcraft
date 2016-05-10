@@ -110,11 +110,6 @@ public class ModuleLocomotives extends RailcraftModule {
                     'G', RailcraftItem.gear.getRecipeObject(EnumGear.STEEL),
                     'T', RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL));
         }
-
-        if (EnumCart.LOCO_CREATIVE.isEnabled()) {
-            ItemStack cartStack = EnumCart.LOCO_CREATIVE.getCartItem();
-            ItemLocomotive.setItemColorData(cartStack, EnumColor.BLACK, EnumColor.MAGENTA);
-        }
     }
 
     private void paintLocomotive(ItemStack base) {
