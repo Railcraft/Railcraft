@@ -6,6 +6,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 
 /**
+ * Pseudo-Entity used to refine the Tunnel Bore collision boxes.
+ *
  * Created by CovertJaguar on 11/19/2015.
  */
 public class EntityTunnelBorePart extends Entity {
@@ -20,7 +22,7 @@ public class EntityTunnelBorePart extends Entity {
 
     public EntityTunnelBorePart(EntityTunnelBore parent, String partName, float width, float height, float forwardOffset, float sideOffset) {
         super(parent.worldObj);
-        this.setSize(width, height);
+        setSize(width, height);
         this.parent = parent;
         this.partName = partName;
         this.forwardOffset = forwardOffset;
@@ -37,28 +39,32 @@ public class EntityTunnelBorePart extends Entity {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox() {
-        return boundingBox;
+    public AxisAlignedBB getCollisionBoundingBox() {
+        return getEntityBoundingBox();
     }
 
+    @Override
     protected void entityInit() {
     }
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
+    @Override
     protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
     }
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
+    @Override
     protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
     }
 
     /**
      * Returns true if other Entities should be prevented from moving through this Entity.
      */
+    @Override
     public boolean canBeCollidedWith() {
         return true;
     }
@@ -66,14 +72,16 @@ public class EntityTunnelBorePart extends Entity {
     /**
      * Called when the entity is attacked.
      */
-    public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_) {
-        return !this.isEntityInvulnerable() && this.parent.attackEntityFromPart(this, p_70097_1_, p_70097_2_);
+    @Override
+    public boolean attackEntityFrom(DamageSource damageSource, float p_70097_2_) {
+        return !isEntityInvulnerable(damageSource) && parent.attackEntityFromPart(this, damageSource, p_70097_2_);
     }
 
     /**
      * Returns true if Entity argument is equal to this Entity
      */
+    @Override
     public boolean isEntityEqual(Entity entity) {
-        return this == entity || this.parent == entity;
+        return this == entity || parent == entity;
     }
 }
