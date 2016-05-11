@@ -199,6 +199,10 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
                 if (!RailcraftConfig.anchorFuelPersonal.isEmpty())
                     return addAnchorInfo(stack);
                 break;
+            case ANCHOR_PASSIVE:
+                if (!RailcraftConfig.anchorFuelPassive.isEmpty())
+                    return addAnchorInfo(stack);
+                break;
             default:
                 String tipTag = getTag() + ".tip";
                 if (LocalizationPlugin.hasTag(tipTag))

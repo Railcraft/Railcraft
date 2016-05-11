@@ -91,6 +91,11 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                     RailcraftItems.gear.register();
                     RailcraftItems.plate.register();
                 }
+
+                cart = EnumCart.LOCO_CREATIVE;
+                if (cart.setup()) {
+                    paintLocomotive(cart.getCartItem());
+                }
             }
 
             @Override

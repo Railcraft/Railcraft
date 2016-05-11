@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -16,7 +15,7 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartEnergyMFE extends EntityCartEnergy {
+class EntityCartEnergyMFE extends EntityCartEnergy {
     private final int TIER = IC2Plugin.isClassic() ? 2 : 3;
     private final int CAPACITY = IC2Plugin.isClassic() ? 600000 : 4000000;
     private final int TRANSFER = IC2Plugin.isClassic() ? 128 : 512;
@@ -54,11 +53,6 @@ public class EntityCartEnergyMFE extends EntityCartEnergy {
     @Override
     public int getTransferLimit() {
         return TRANSFER;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.ENERGY_MFE.getTag());
     }
 
     @Override

@@ -8,17 +8,17 @@
  */
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.carts.EntityCartEnergy;
+import mods.railcraft.common.carts.IIC2EnergyCart;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCartEnergy;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiCartEnergy extends EntityGui {
 
-    private final EntityCartEnergy device;
+    private final IIC2EnergyCart device;
 
-    public GuiCartEnergy(InventoryPlayer inv, EntityCartEnergy cart) {
-        super(cart, new ContainerCartEnergy(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_energy.png");
+    public GuiCartEnergy(InventoryPlayer inv, IIC2EnergyCart cart) {
+        super(cart.getEntity(), new ContainerCartEnergy(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_energy.png");
         this.device = cart;
     }
 

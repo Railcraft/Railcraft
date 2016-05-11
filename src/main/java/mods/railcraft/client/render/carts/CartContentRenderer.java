@@ -12,7 +12,7 @@ import mods.railcraft.api.carts.ICartContentsTextureProvider;
 import mods.railcraft.client.render.RenderFakeBlock;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.client.render.models.ModelTextured;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
@@ -47,9 +47,8 @@ public class CartContentRenderer {
             return;
         }
 
-        Block block = cart.func_145820_n();
-        if (block != null && block != Blocks.air) {
-            int blockMeta = cart.getDisplayTileData();
+        IBlockState blockState = cart.getDisplayTile();
+        if (blockState != null && blockState.getBlock() != Blocks.air) {
             renderer.bindTex(TextureMap.locationBlocksTexture);
             GL11.glPushMatrix();
             GL11.glTranslatef(0.0F, (float) blockOffset / 16.0F, 0.0F);

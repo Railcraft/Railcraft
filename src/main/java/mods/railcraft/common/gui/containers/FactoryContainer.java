@@ -36,6 +36,7 @@ import org.apache.logging.log4j.Level;
  */
 public class FactoryContainer {
 
+    @SuppressWarnings("ConstantConditions")
     public static Container build(EnumGui gui, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
         if (gui != EnumGui.ANVIL && obj == null)
             return null;
@@ -55,6 +56,10 @@ public class FactoryContainer {
                     return new ContainerEnergyLoader(inv, (TileEnergyLoader) obj);
                 case UNLOADER_ENERGY:
                     return new ContainerEnergyLoader(inv, (TileEnergyUnloader) obj);
+                case LOADER_RF:
+                    return new ContainerLoaderRF((TileRFLoaderBase) obj);
+                case UNLOADER_RF:
+                    return new ContainerLoaderRF((TileRFLoaderBase) obj);
                 case DETECTOR_ITEM:
                     return new ContainerDetectorItem(inv, (TileDetector) obj);
                 case DETECTOR_TANK:
@@ -104,7 +109,9 @@ public class FactoryContainer {
                 case CART_BORE:
                     return new ContainerBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:
-                    return new ContainerCartEnergy(inv, (EntityCartEnergy) obj);
+                    return new ContainerCartEnergy(inv, (IIC2EnergyCart) obj);
+                case CART_RF:
+                    return new ContainerCartRF((EntityCartRF) obj);
                 case CART_TANK:
                     return new ContainerCartTank(inv, (EntityCartTank) obj);
                 case CART_CARGO:
@@ -123,6 +130,8 @@ public class FactoryContainer {
                     return ContainerLocomotiveSteamSolid.make(inv, (EntityLocomotiveSteamSolid) obj);
                 case LOCO_ELECTRIC:
                     return ContainerLocomotiveElectric.make(inv, (EntityLocomotiveElectric) obj);
+                case LOCO_CREATIVE:
+                    return ContainerLocomotive.make(inv, (EntityLocomotiveCreative) obj);
                 case SWITCH_MOTOR:
                     return new ContainerAspectAction(inv.player, (IAspectActionManager) obj);
                 case BOX_RECEIVER:

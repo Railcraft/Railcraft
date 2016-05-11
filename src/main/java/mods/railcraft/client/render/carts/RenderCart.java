@@ -12,7 +12,6 @@ import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.api.carts.locomotive.IRenderer;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.*;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -26,16 +25,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class RenderCart extends Render implements IRenderer {
+public class RenderCart extends Render<EntityMinecart> implements IRenderer {
 
     private final Random rand = new Random();
     private final RenderInfo fakeBlock = new RenderInfo();
-    private final static Map<Class, CartModelRenderer> renderersCore = new HashMap<Class, CartModelRenderer>();
-    private final static Map<Class, CartContentRenderer> renderersContent = new HashMap<Class, CartContentRenderer>();
-    private final static CartModelRenderer defaultCoreRenderer = new CartModelRenderer();
-    private final static CartContentRenderer defaultContentRenderer = new CartContentRenderer();
+    private static final Map<Class, CartModelRenderer> renderersCore = new HashMap<Class, CartModelRenderer>();
+    private static final Map<Class, CartContentRenderer> renderersContent = new HashMap<Class, CartContentRenderer>();
+    private static final CartModelRenderer defaultCoreRenderer = new CartModelRenderer();
+    private static final CartContentRenderer defaultContentRenderer = new CartContentRenderer();
 
-    public RenderCart() {
+    public RenderCart(RenderManager renderManager) {
+        super(renderManager);
         shadowSize = 0.5F;
         fakeBlock.texture = new IIcon[6];
 
@@ -43,11 +43,13 @@ public class RenderCart extends Render implements IRenderer {
 
         renderersContent.put(EntityCartCargo.class, new CartContentRendererCargo());
         renderersContent.put(EntityCartTank.class, new CartContentRendererTank());
+        renderersContent.put(EntityCartRF.class, CartContentRendererRedstoneFlux.instance());
         renderersContent.put(CartExplosiveBase.class, new CartContentRendererTNT());
         renderersContent.put(CartMaintenanceBase.class, new CartContentRendererMaintance());
     }
 
-    public void renderCart(EntityMinecart cart, double x, double y, double z, float yaw, float time) {
+    @Override
+    public void doRender(EntityMinecart cart, double x, double y, double z, float yaw, float partialTicks) {
         GL11.glPushMatrix();
         long var10 = (long) cart.getEntityId() * 493286711L;
         var10 = var10 * var10 * 4392167121L + var10 * 98761L;
@@ -55,12 +57,12 @@ public class RenderCart extends Render implements IRenderer {
         float ty = (((float) (var10 >> 20 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
         float tz = (((float) (var10 >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
         GL11.glTranslatef(tx, ty, tz);
-        double mx = cart.lastTickPosX + (cart.posX - cart.lastTickPosX) * (double) time;
-        double my = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * (double) time;
-        double mz = cart.lastTickPosZ + (cart.posZ - cart.lastTickPosZ) * (double) time;
+        double mx = cart.lastTickPosX + (cart.posX - cart.lastTickPosX) * (double) partialTicks;
+        double my = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * (double) partialTicks;
+        double mz = cart.lastTickPosZ + (cart.posZ - cart.lastTickPosZ) * (double) partialTicks;
         double d6 = 0.3;
         Vec3 vec3d = cart.func_70489_a(mx, my, mz);
-        float pitch = cart.prevRotationPitch + (cart.rotationPitch - cart.prevRotationPitch) * time;
+        float pitch = cart.prevRotationPitch + (cart.rotationPitch - cart.prevRotationPitch) * partialTicks;
         if (vec3d != null) {
             Vec3 vec3d1 = cart.func_70495_a(mx, my, mz, d6);
             Vec3 vec3d2 = cart.func_70495_a(mx, my, mz, -d6);
@@ -101,7 +103,7 @@ public class RenderCart extends Render implements IRenderer {
         GL11.glTranslatef((float) x, (float) y, (float) z);
 
         boolean name = false;
-        if (cart.hasCustomInventoryName()) {
+        if (cart.hasCustomName()) {
             renderHaloText(cart, cart.getName(), 0, 0, 0, 64);
             name = true;
         }
@@ -115,8 +117,8 @@ public class RenderCart extends Render implements IRenderer {
         GL11.glRotatef(180F - yaw, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(-pitch, 0.0F, 0.0F, 1.0F);
 
-        float f3 = (float) cart.getRollingAmplitude() - time;
-        float f4 = cart.getDamage() - time;
+        float f3 = (float) cart.getRollingAmplitude() - partialTicks;
+        float f4 = cart.getDamage() - partialTicks;
         if (f4 < 0.0F)
             f4 = 0.0F;
         if (f3 > 0.0F) {
@@ -125,16 +127,16 @@ public class RenderCart extends Render implements IRenderer {
             angle = Math.copySign(angle, cart.getRollingDirection());
             GL11.glRotatef(angle, 1.0F, 0.0F, 0.0F);
         }
-        float light = cart.getBrightness(time);
+        float light = cart.getBrightness(partialTicks);
 //        light = light + ((1.0f - light) * 0.4f);
 
-        boolean renderContents = renderCore(cart, light, time);
+        boolean renderContents = renderCore(cart, light, partialTicks);
 
         if (renderContents) {
             float blockScale = 0.74F;
             GL11.glScalef(blockScale, blockScale, blockScale);
             GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-            renderContents(cart, light, time);
+            renderContents(cart, light, partialTicks);
             GL11.glPopAttrib();
         }
         GL11.glPopMatrix();
@@ -171,30 +173,22 @@ public class RenderCart extends Render implements IRenderer {
     }
 
     @Override
-    public void doRender(Entity entity, double x, double y, double d2, float yaw, float time) {
-        renderCart((EntityMinecart) entity, x, y, d2, yaw, time);
-    }
-
-    @Override
     public void bindTex(ResourceLocation texture) {
         super.bindTexture(texture);
     }
 
-    public RenderBlocks renderBlocks() {
-        return field_147909_c;
-    }
-
+    @Override
     public RenderManager getRenderManager() {
         return renderManager;
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(EntityMinecart entity) {
         return null;
     }
 
-    public void renderHaloText(Entity entity, String text, double xOffset, double yOffset, double zOffset, int viewDist) {
-        func_147906_a(entity, text, xOffset, yOffset, zOffset, viewDist);
+    public void renderHaloText(EntityMinecart entity, String text, double xOffset, double yOffset, double zOffset, int viewDist) {
+        renderLivingLabel(entity, text, xOffset, yOffset, zOffset, viewDist);
     }
 
 }

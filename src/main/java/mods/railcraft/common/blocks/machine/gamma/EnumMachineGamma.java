@@ -40,7 +40,9 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     ENERGY_LOADER(ModuleIC2.class, "loader.energy", 0, TileEnergyLoader.class),
     ENERGY_UNLOADER(ModuleIC2.class, "unloader.energy", 0, TileEnergyUnloader.class),
     DISPENSER_CART(ModuleAutomation.class, "dispenser.cart", 0, TileDispenserCart.class),
-    DISPENSER_TRAIN(ModuleTrain.class, "dispenser.train", 0, TileDispenserTrain.class);
+    DISPENSER_TRAIN(ModuleTrain.class, "dispenser.train", 0, TileDispenserTrain.class),
+    RF_LOADER(ModuleRF.class, "loader.rf", -1, TileRFLoader.class),
+    RF_UNLOADER(ModuleRF.class, "unloader.rf", -1, TileRFUnloader.class);
     public static final PropertyEnum<EnumMachineGamma> VARIANT = PropertyEnum.create("variant", EnumMachineGamma.class);
     private static final List<EnumMachineGamma> creativeList = new ArrayList<EnumMachineGamma>();
     private static final EnumMachineGamma[] VALUES = values();
@@ -55,6 +57,8 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
         creativeList.add(FLUID_UNLOADER);
         creativeList.add(ENERGY_LOADER);
         creativeList.add(ENERGY_UNLOADER);
+        creativeList.add(RF_LOADER);
+        creativeList.add(RF_UNLOADER);
         creativeList.add(DISPENSER_CART);
         creativeList.add(DISPENSER_TRAIN);
     }

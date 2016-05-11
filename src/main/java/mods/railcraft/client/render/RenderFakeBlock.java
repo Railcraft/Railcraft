@@ -10,7 +10,6 @@ package mods.railcraft.client.render;
 
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;

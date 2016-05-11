@@ -30,7 +30,7 @@ public class RFEnergyIndicator extends IndicatorController {
 
     @Override
     protected void refreshToolTip() {
-        tip.text = String.format("%d RF", energy);
+        tip.text = String.format("%,d / %,d RF", energy, maxEnergy);
     }
 
     @Override

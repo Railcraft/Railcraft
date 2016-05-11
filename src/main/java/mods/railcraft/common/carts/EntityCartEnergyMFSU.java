@@ -1,11 +1,10 @@
 package mods.railcraft.common.carts;
 
 import ic2.api.item.IC2Items;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class EntityCartEnergyMFSU extends EntityCartEnergy {
+class EntityCartEnergyMFSU extends EntityCartEnergy {
 
     public EntityCartEnergyMFSU(World world) {
         super(world);
@@ -25,11 +24,6 @@ public class EntityCartEnergyMFSU extends EntityCartEnergy {
     @Override
     public int getTier() {
         return 3;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.ENERGY_MFSU.getTag());
     }
 
     @Override

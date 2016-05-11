@@ -51,6 +51,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.Level;
 
+@SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
     @Override
     public World getClientWorld() {
@@ -75,6 +76,17 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInitClient() {
         MinecraftForge.EVENT_BUS.register(RCSoundHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new TextureHook());
+    }
+
+    public static class TextureHook {
+        @SubscribeEvent
+        public void textureStitch(TextureStitchEvent.Pre event) {
+            if (event.map.getTextureType() == 0) {
+                CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.map.registerIcon("railcraft:cart.redstone.flux"));
+                CartContentRendererRedstoneFlux.instance().setFrameIcon(event.map.registerIcon("railcraft:cart.redstone.flux.frame"));
+            }
+        }
     }
 
     @Override

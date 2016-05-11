@@ -232,7 +232,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                 defineIronTank(EnumMachineBeta.TANK_IRON_WALL,
                         "PP",
                         "PP",
-                        'P', RailcraftItems.plate.getRecipeObject(EnumPlate.IRON));
+                        'P', RailcraftItems.plate, EnumPlate.IRON);
 
                 defineIronTank(EnumMachineBeta.TANK_IRON_GAUGE,
                         "GPG",

@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -16,7 +15,7 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartEnergyBatBox extends EntityCartEnergy {
+class EntityCartEnergyBatBox extends EntityCartEnergy {
 
     public EntityCartEnergyBatBox(World world) {
         super(world);
@@ -51,11 +50,6 @@ public class EntityCartEnergyBatBox extends EntityCartEnergy {
     @Override
     public int getTransferLimit() {
         return 32;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.ENERGY_BATBOX.getTag());
     }
 
     @Override

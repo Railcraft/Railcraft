@@ -32,11 +32,11 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class EntityCartEnergy extends CartContainerBase implements IEnergyTransfer, IElectricMinecart {
+abstract class EntityCartEnergy extends CartContainerBase implements IEnergyTransfer, IElectricMinecart, IIC2EnergyCart {
 
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.Type.STORAGE, getCapacity());
 
-    public EntityCartEnergy(World world) {
+    protected EntityCartEnergy(World world) {
         super(world);
     }
 
@@ -92,7 +92,7 @@ public abstract class EntityCartEnergy extends CartContainerBase implements IEne
     }
 
     @Override
-    public float getMaxCartSpeedOnRail() {
+    public final float getMaxCartSpeedOnRail() {
         int numLocomotives = Train.getTrain(this).getNumRunningLocomotives();
         if (numLocomotives == 0)
             return super.getMaxCartSpeedOnRail();
@@ -199,11 +199,6 @@ public abstract class EntityCartEnergy extends CartContainerBase implements IEne
     }
 
     @Override
-    public abstract int getCapacity();
-
-    @Override
-    public abstract int getTransferLimit();
-
     public int getEnergyBarScaled(int scale) {
         return ((int) getEnergy() * scale) / getCapacity();
     }
@@ -213,6 +208,7 @@ public abstract class EntityCartEnergy extends CartContainerBase implements IEne
         return chargeHandler.getCharge();
     }
 
+    @Override
     public void setEnergy(double energy) {
         chargeHandler.setCharge(energy);
     }
@@ -227,4 +223,8 @@ public abstract class EntityCartEnergy extends CartContainerBase implements IEne
         return true;
     }
 
+    @Override
+    public EntityMinecart getEntity() {
+        return this;
+    }
 }

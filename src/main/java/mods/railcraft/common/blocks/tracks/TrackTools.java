@@ -13,7 +13,6 @@ import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.TrackSpec;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.tracks.instances.TrackBaseRailcraft;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerHighSpeed;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -32,6 +31,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -133,27 +133,52 @@ public class TrackTools {
         return null;
     }
 
-    public static boolean isTrackAt(IBlockAccess world, BlockPos pos, EnumTrack track, Block block) {
+    @Nullable
+    public static <T extends ITrackInstance> T getTrackInstance(@Nullable TileEntity tile, @Nonnull Class<T> instanceClass) {
+        if (tile instanceof TileTrack) {
+            ITrackInstance trackInstance = ((TileTrack) tile).getTrackInstance();
+            if (instanceClass.isAssignableFrom(trackInstance.getClass()))
+                return instanceClass.cast(trackInstance);
+        }
+        return null;
+    }
+
+    public static boolean isTrackAt(IBlockAccess world, BlockPos pos, @Nonnull EnumTrack track, Block block) {
         return isTrackSpecAt(world, pos, track.getTrackSpec(), block);
     }
 
-    public static boolean isTrackAt(IBlockAccess world, BlockPos pos, EnumTrack track) {
+    public static boolean isTrackAt(IBlockAccess world, BlockPos pos, @Nonnull EnumTrack track) {
         return isTrackSpecAt(world, pos, track.getTrackSpec());
     }
 
-    public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, TrackSpec trackSpec, Block block) {
+    public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, @Nonnull TrackSpec trackSpec, Block block) {
         if (block != RailcraftBlocks.track.block())
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         return isTrackSpec(tile, trackSpec);
     }
 
-    public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, TrackSpec trackSpec) {
+    public static boolean isTrackSpecAt(IBlockAccess world, BlockPos pos, @Nonnull TrackSpec trackSpec) {
         return isTrackSpecAt(world, pos, trackSpec, WorldPlugin.getBlock(world, pos));
     }
 
-    public static boolean isTrackSpec(TileEntity tile, TrackSpec trackSpec) {
+    public static boolean isTrackSpec(TileEntity tile, @Nonnull TrackSpec trackSpec) {
         return (tile instanceof TileTrack) && ((TileTrack) tile).getTrackInstance().getTrackSpec() == trackSpec;
+    }
+
+    public static boolean isTrackClassAt(IBlockAccess world, BlockPos pos, @Nonnull Class<? extends ITrackInstance> trackClass, Block block) {
+        if (block != RailcraftBlocks.track.block())
+            return false;
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+        return isTrackClass(tile, trackClass);
+    }
+
+    public static boolean isTrackClassAt(IBlockAccess world, BlockPos pos, @Nonnull Class<? extends ITrackInstance> trackClass) {
+        return isTrackClassAt(world, pos, trackClass, WorldPlugin.getBlock(world, pos));
+    }
+
+    public static boolean isTrackClass(TileEntity tile, @Nonnull Class<? extends ITrackInstance> trackClass) {
+        return (tile instanceof TileTrack) && trackClass.isAssignableFrom(((TileTrack) tile).getTrackInstance().getClass());
     }
 
     public static boolean isHighSpeedTrackAt(IBlockAccess world, BlockPos pos) {

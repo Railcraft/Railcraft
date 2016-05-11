@@ -25,7 +25,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class ContainerLocomotive extends RailcraftContainer {
+public class ContainerLocomotive extends RailcraftContainer {
 
     private final EntityLocomotive loco;
     private final InventoryPlayer playerInv;
@@ -35,11 +35,17 @@ public abstract class ContainerLocomotive extends RailcraftContainer {
     private final int guiHeight;
     public String ownerName;
 
-    protected ContainerLocomotive(InventoryPlayer playerInv, EntityLocomotive loco, int guiHeight) {
+    ContainerLocomotive(InventoryPlayer playerInv, EntityLocomotive loco, int guiHeight) {
         super(loco);
         this.loco = loco;
         this.playerInv = playerInv;
         this.guiHeight = guiHeight;
+    }
+
+    public static ContainerLocomotive make(InventoryPlayer playerInv, EntityLocomotive loco) {
+        ContainerLocomotive con = new ContainerLocomotive(playerInv, loco, 161);
+        con.init();
+        return con;
     }
 
     public final void init() {

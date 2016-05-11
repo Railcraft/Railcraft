@@ -10,8 +10,11 @@ package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.api.tracks.ISwitchDevice;
 import mods.railcraft.api.tracks.ITrackSwitch;
+import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.instances.TrackSwitchBase;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,6 +33,7 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     private static final float BOUNDS = -0.2F;
 
     private byte facing = (byte) EnumFacing.NORTH.ordinal();
+    private static final int ARROW_UPDATE_INTERVAL = 16;
     private boolean powered;
     private boolean lastSwitchState;
     private ArrowDirection redArrowRenderState = ArrowDirection.EAST_WEST;
@@ -64,6 +68,21 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     public abstract boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart);
 
     @Override
+    public boolean canUpdate() {
+        return true;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (Game.isHost(worldObj))
+            return;
+
+        if (clock % ARROW_UPDATE_INTERVAL == 0)
+            updateArrows();
+    }
+
+    @Override
     public void onSwitch(boolean isSwitched) {
         if (lastSwitchState != isSwitched) {
             lastSwitchState = isSwitched;
@@ -75,18 +94,45 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     }
 
     @Override
-    public void setRenderState(ArrowDirection redArrow, ArrowDirection whiteArrow) {
+    public void updateArrows() {
+        ArrowDirection redArrow = null;
+        ArrowDirection whiteArrow = null;
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            TrackSwitchBase trackSwitch = TrackTools.getTrackInstance(tileCache.getTileOnSide(side), TrackSwitchBase.class);
+            if (trackSwitch != null) {
+                redArrow = mergeArrowDirection(redArrow, trackSwitch.getRedSignDirection());
+                whiteArrow = mergeArrowDirection(whiteArrow, trackSwitch.getWhiteSignDirection());
+            }
+        }
         boolean changed = false;
-        if (this.redArrowRenderState != redArrow) {
-            this.redArrowRenderState = redArrow;
+        if (redArrow != null && redArrowRenderState != redArrow) {
+            redArrowRenderState = redArrow;
             changed = true;
         }
-        if (this.whiteArrowRenderState != whiteArrow) {
-            this.whiteArrowRenderState = whiteArrow;
+        if (whiteArrow != null && whiteArrowRenderState != whiteArrow) {
+            whiteArrowRenderState = whiteArrow;
             changed = true;
         }
         if (changed)
             markBlockForUpdate();
+    }
+
+    private ArrowDirection mergeArrowDirection(ArrowDirection arrow1, ArrowDirection arrow2) {
+        if (arrow1 == arrow2) return arrow1;
+        if (arrow1 == null) return arrow2;
+        if (arrow2 == null) return arrow1;
+        if (isEastOrWest(arrow1) && isEastOrWest(arrow2)) return ArrowDirection.EAST_WEST;
+        return ArrowDirection.NORTH_SOUTH;
+    }
+
+    private boolean isEastOrWest(ArrowDirection arrowDirection) {
+        switch (arrowDirection) {
+            case EAST:
+            case WEST:
+            case EAST_WEST:
+                return true;
+        }
+        return false;
     }
 
     @Override

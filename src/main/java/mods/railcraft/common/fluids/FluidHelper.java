@@ -58,14 +58,21 @@ public final class FluidHelper {
             FluidItemHelper.DrainReturn drainReturn = FluidItemHelper.drainContainer(current, PROCESS_VOLUME);
 
             if (fill && drainReturn.fluidDrained != null) {
-                int used = tank.fill(side, drainReturn.fluidDrained, true);
+                int used = tank.fill(side, drainReturn.fluidDrained, false);
 
                 if (used > 0) {
                     drainReturn = FluidItemHelper.drainContainer(current, used);
                     if (!player.capabilities.isCreativeMode) {
-                        player.inventory.setInventorySlotContents(player.inventory.currentItem, drainReturn.container);
+                        if (current.stackSize > 1) {
+                            if (drainReturn.container != null && !player.inventory.addItemStackToInventory(drainReturn.container))
+                                return false;
+                            player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
+                        } else {
+                            player.inventory.setInventorySlotContents(player.inventory.currentItem, drainReturn.container);
+                        }
                         player.inventory.markDirty();
                     }
+                    tank.fill(side, drainReturn.fluidDrained, true);
                     return true;
                 }
             } else if (drain) {
@@ -75,15 +82,13 @@ public final class FluidHelper {
                     FluidItemHelper.FillReturn fillReturn = FluidItemHelper.fillContainer(current, available);
                     if (fillReturn.amount > 0) {
                         if (current.stackSize > 1) {
-                            if (!player.inventory.addItemStackToInventory(fillReturn.container))
+                            if (fillReturn.container != null && !player.inventory.addItemStackToInventory(fillReturn.container))
                                 return false;
                             player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
-                            player.inventory.markDirty();
                         } else {
                             player.inventory.setInventorySlotContents(player.inventory.currentItem, fillReturn.container);
-                            player.inventory.markDirty();
                         }
-
+                        player.inventory.markDirty();
                         tank.drain(side, fillReturn.amount, true);
                         return true;
                     }

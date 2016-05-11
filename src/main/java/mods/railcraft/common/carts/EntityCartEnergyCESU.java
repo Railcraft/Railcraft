@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -16,7 +15,7 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartEnergyCESU extends EntityCartEnergy {
+class EntityCartEnergyCESU extends EntityCartEnergy {
 
     public EntityCartEnergyCESU(World world) {
         super(world);
@@ -51,11 +50,6 @@ public class EntityCartEnergyCESU extends EntityCartEnergy {
     @Override
     public int getTransferLimit() {
         return 128;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.ENERGY_CESU.getTag());
     }
 
     @Override

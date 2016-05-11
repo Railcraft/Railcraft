@@ -58,6 +58,10 @@ public class FactoryGui {
                     return new GuiLoaderEnergy(inv, (TileEnergyLoader) obj);
                 case UNLOADER_ENERGY:
                     return new GuiUnloaderEnergy(inv, (TileEnergyUnloader) obj);
+                case LOADER_RF:
+                    return new GuiLoaderRF((TileRFLoader) obj);
+                case UNLOADER_RF:
+                    return new GuiUnloaderRF((TileRFUnloader) obj);
                 case DETECTOR_ITEM:
                     return new GuiDetectorItem(inv, (TileDetector) obj);
                 case DETECTOR_TANK:
@@ -135,7 +139,9 @@ public class FactoryGui {
                 case CART_BORE:
                     return new GuiCartBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:
-                    return new GuiCartEnergy(inv, (EntityCartEnergy) obj);
+                    return new GuiCartEnergy(inv, (IIC2EnergyCart) obj);
+                case CART_RF:
+                    return new GuiCartRF((EntityCartRF) obj);
                 case CART_TANK:
                     return new GuiCartTank(inv, (EntityCartTank) obj);
                 case CART_CARGO:
@@ -156,6 +162,8 @@ public class FactoryGui {
                     return new GuiLocomotiveSteamSolid(inv, (EntityLocomotiveSteamSolid) obj);
                 case LOCO_ELECTRIC:
                     return new GuiLocomotiveElectric(inv, (EntityLocomotiveElectric) obj);
+                case LOCO_CREATIVE:
+                    return new GuiLocomotiveCreative(inv, (EntityLocomotiveCreative) obj);
                 default:
                     return RailcraftModuleManager.getGuiScreen(gui, inv, obj, world, x, y, z);
             }

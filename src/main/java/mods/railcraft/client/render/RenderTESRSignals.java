@@ -70,7 +70,7 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
 
                     if (dist <= (double) (viewDist * viewDist)) {
                         MovingObjectPosition mop = player.rayTrace(8, f);
-                        if (mop.typeOfHit == MovingObjectType.BLOCK && player.worldObj.getTileEntity(mop.blockX, mop.blockY, mop.blockZ) == tile) {
+                        if (mop != null && mop.typeOfHit == MovingObjectType.BLOCK && player.worldObj.getTileEntity(mop.blockX, mop.blockY, mop.blockZ) == tile) {
                             RenderTools.renderString(name, x + 0.5, y + 1.5, z + 0.5);
                         }
                     }

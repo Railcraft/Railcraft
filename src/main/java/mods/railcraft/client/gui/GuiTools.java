@@ -60,6 +60,22 @@ public class GuiTools {
         }
     }
 
+    public static void newButtonRowBookended(List buttonList, int xStart, int xEnd, List<? extends GuiBetterButton> buttons) {
+        int buttonWidth = 0;
+        for (GuiBetterButton b : buttons) {
+            buttonWidth += b.getWidth();
+        }
+        int remaining = (xEnd - xStart) - buttonWidth;
+        int spacing = remaining / (buttons.size() + 1);
+        int pointer = 0;
+        for (GuiBetterButton b : buttons) {
+            pointer += spacing;
+            b.xPosition = xStart + pointer;
+            pointer += b.getWidth();
+            buttonList.add(b);
+        }
+    }
+
     public static void newButtonRow(List buttonList, int xStart, int spacing, List<? extends GuiBetterButton> buttons) {
         int pointer = 0;
         for (GuiBetterButton b : buttons) {
