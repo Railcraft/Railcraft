@@ -49,7 +49,12 @@ public class ContainerLocomotive extends RailcraftContainer {
     public final void init() {
         defineSlotsAndWidgets();
 
-        SlotRailcraft slotTicket = new SlotStackFilter(ItemTicket.FILTER, loco, loco.getSizeInventory() - 2, 116, guiHeight - 111);
+        SlotRailcraft slotTicket = new SlotStackFilter(ItemTicket.FILTER, loco, loco.getSizeInventory() - 2, 116, guiHeight - 111) {
+            @Override
+            public int getSlotStackLimit() {
+                return 1;
+            }
+        };
         slotTicket.setToolTips(ToolTip.buildToolTip("gui.locomotive.tip.slot.ticket"));
         addSlot(slotTicket);
         addSlot(new SlotUntouchable(loco, loco.getSizeInventory() - 1, 134, guiHeight - 111));
