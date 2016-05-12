@@ -71,6 +71,10 @@ sourceSets {
 }
 
 repositories {
+    maven {
+        name = "forestry"
+        url = "http://maven.ic2.player.to/"
+    }
 	maven {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
@@ -83,6 +87,8 @@ configurations {
 }
 
 dependencies {
+    compile "net.sengir.forestry:forestry_${project.mcversion}:${project.version_forestry}:api"
+    runtime "net.sengir.forestry:forestry_${project.mcversion}:${project.version_forestry}:dev"
 	//api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
 }
 
@@ -157,30 +163,30 @@ jar {
 	}
 }
 
-task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
-	from (zipTree(jar.getArchivePath())) {
-		exclude '**/api/**'
-	}
+// task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
+	// from (zipTree(jar.getArchivePath())) {
+		// exclude '**/api/**'
+	// }
 
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	destinationDir = file("build/tmp")
-	archiveName = "signed.jar"
+	// duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	// destinationDir = file("build/tmp")
+	// archiveName = "signed.jar"
 
-	doLast {
-		if (project.hasProperty('signingKeystore')) {
-			ant.signjar(jar: getArchivePath(),
-				alias: signingAlias,
-				keystore: signingKeystore,
-				storepass: signingStorepass)
-		} else if (project.hasProperty('signingAlias')) {
-			ant.signjar(jar: getArchivePath(),
-				alias: signingAlias,
-				storepass: signingStorepass)
-		} else {
-			println 'Signing disabled, gradle.properties is missing.'
-		}
-	}
-}
+	// doLast {
+		// if (project.hasProperty('signingKeystore')) {
+			// ant.signjar(jar: getArchivePath(),
+				// alias: signingAlias,
+				// keystore: signingKeystore,
+				// storepass: signingStorepass)
+		// } else if (project.hasProperty('signingAlias')) {
+			// ant.signjar(jar: getArchivePath(),
+				// alias: signingAlias,
+				// storepass: signingStorepass)
+		// } else {
+			// println 'Signing disabled, gradle.properties is missing.'
+		// }
+	// }
+// }
 
 task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 	from (zipTree(mainJarSigned.getArchivePath())) {
@@ -199,29 +205,29 @@ task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 	extension = 'jar'
 }
 
-task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
-	from(sourceSets.main.output) {
-		exclude '**/api/**'
-	}
+// task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
+	// from(sourceSets.main.output) {
+		// exclude '**/api/**'
+	// }
 
-	destinationDir = file("build/tmp")
-	archiveName = "signed-dev.jar"
+	// destinationDir = file("build/tmp")
+	// archiveName = "signed-dev.jar"
 
-	doLast {
-		if (project.hasProperty('signingKeystore')) {
-			ant.signjar(jar: getArchivePath(),
-				alias: signingAlias,
-				keystore: signingKeystore,
-				storepass: signingStorepass)
-		} else if (project.hasProperty('signingAlias')) {
-			ant.signjar(jar: getArchivePath(),
-				alias: signingAlias,
-				storepass: signingStorepass)
-		} else {
-			println 'Signing disabled, gradle.properties is missing.'
-		}
-	}
-}
+	// doLast {
+		// if (project.hasProperty('signingKeystore')) {
+			// ant.signjar(jar: getArchivePath(),
+				// alias: signingAlias,
+				// keystore: signingKeystore,
+				// storepass: signingStorepass)
+		// } else if (project.hasProperty('signingAlias')) {
+			// ant.signjar(jar: getArchivePath(),
+				// alias: signingAlias,
+				// storepass: signingStorepass)
+		// } else {
+			// println 'Signing disabled, gradle.properties is missing.'
+		// }
+	// }
+// }
 
 task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	from (zipTree(devJarSigned.getArchivePath())) {
@@ -265,6 +271,29 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	classifier = 'dev'
 }
 
+class JarSigner extends net.minecraftforge.gradle.tasks.SignJar {
+    public JarSigner () {
+		onlyIf {
+			project.hasProperty('signingStorepass')
+		}
+
+		alias = 'CovertJaguar'
+		storePass = project.signingStorepass
+		keyPass = project.signingStorepass
+		keyStore = System.getProperty("user.home") + '/.keystore'
+	}
+}
+
+task signMainJar(type: JarSigner, dependsOn: 'jar') {
+	inputFile = jar.getArchivePath()
+	outputFile = jar.getArchivePath()
+}
+
+task signDevJar(type: JarSigner, dependsOn: 'devJar') {
+	inputFile = devJar.getArchivePath()
+	outputFile = devJar.getArchivePath()
+}
+
 task apiZip ( type: Zip ) {
 	from project.apiRailcraft
 	destinationDir = file(dirDest)
@@ -281,10 +310,9 @@ task releaseInit << {
 task release << {
 }
 
-release.dependsOn releaseInit, mainJar, devJar, apiZip
-mainJar.shouldRunAfter releaseInit
-devJar.shouldRunAfter releaseInit
-apiZip.shouldRunAfter releaseInit
+build.dependsOn signMainJar, signDevJar, apiZip
+release.dependsOn releaseInit, build
+build.shouldRunAfter releaseInit
 release.shouldRunAfter uploadArchives
 
 artifacts {
