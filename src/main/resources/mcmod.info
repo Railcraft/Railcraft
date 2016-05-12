@@ -5,7 +5,7 @@
     "name": "Railcraft",
     "description": "Redefine your rails",
     "version": "${version}",
-    "mcversion": "${mcversion}",
+    "mcversion": "${version_minecraft}",
     "url": "http://railcraft.info/",
     "updateUrl": "http://www.railcraft.info/releases/",
     "authorList": [ "CovertJaguar" ],

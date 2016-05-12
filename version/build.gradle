@@ -1,10 +1,11 @@
-rootProject.version = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
+rootProject.version = version_project_major + '.' + version_project_series + '.' + version_project_revision + '.' + version_project_build
 if(!rootProject.hasProperty('official')) {
 	rootProject.version = rootProject.version + "-unofficial"
 }
-rootProject.ext.mcversion = mcversion
-rootProject.ext.forgeversion = forgeversion
-rootProject.ext.mappingsversion = mappingsversion
+rootProject.ext.version_minecraft = version_minecraft
+rootProject.ext.version_forge = version_forge
+rootProject.ext.version_mcp = version_mcp
+rootProject.ext.version_forestry = version_forestry
 
 task echoVersion << {
 	printNextVersion()
@@ -13,12 +14,12 @@ task echoVersion << {
 def saveVersion() {
 	ant.propertyfile(
 		file: "gradle.properties") {
-		entry( key:"version_major", type:"int", value: version_major)
-		entry( key:"version_series", type:"int", value: version_series)
-		entry( key:"version_revision", type:"int", value: version_revision)
-		entry( key:"version_build", type:"int", value: version_build)
+		entry( key:"version_project_major", type:"int", value: version_project_major)
+		entry( key:"version_project_series", type:"int", value: version_project_series)
+		entry( key:"version_project_revision", type:"int", value: version_project_revision)
+		entry( key:"version_project_build", type:"int", value: version_project_build)
 	}
-	rootProject.version = version_major + '.' + version_series + '.' + version_revision + '.' + version_build
+	rootProject.version = version_project_major + '.' + version_project_series + '.' + version_project_revision + '.' + version_project_build
 	printNextVersion()
 }
 
@@ -29,35 +30,35 @@ def printNextVersion(){
 }
 
 task bumpMajor << {
-	project.version_major = Integer.parseInt(project.version_major) + 1
-	project.version_series = "0"
-	project.version_revision = "0"
-	project.version_build = "0"
+	project.version_project_major = Integer.parseInt(project.version_project_major) + 1
+	project.version_project_series = "0"
+	project.version_project_revision = "0"
+	project.version_project_build = "0"
 	saveVersion()
 }
 
 task bumpSeries << {
-	project.version_series = Integer.parseInt(project.version_series) + 1
-	project.version_revision = "0"
-	project.version_build = "0"
+	project.version_project_series = Integer.parseInt(project.version_project_series) + 1
+	project.version_project_revision = "0"
+	project.version_project_build = "0"
 	saveVersion()
 }
 
 task bumpRevision << {
-	project.version_revision = Integer.parseInt(project.version_revision) + 1
-	project.version_build = "0"
+	project.version_project_revision = Integer.parseInt(project.version_project_revision) + 1
+	project.version_project_build = "0"
 	saveVersion()
 }
 
 task bumpBuild << {
-	project.version_build = Integer.parseInt(project.version_build) + 1
+	project.version_project_build = Integer.parseInt(project.version_project_build) + 1
 	saveVersion()
 }
 
 task setBuild << {
 	def console = System.console()
 	if (console) {
-		project.version_build = console.readLine('> What should the build be? ')
+		project.version_project_build = console.readLine('> What should the build be? ')
 	} else {
 		logger.error "Cannot get console."
 	}
@@ -65,6 +66,6 @@ task setBuild << {
 }
 
 task release << {
-	project.version_build = Integer.parseInt(project.version_build) + 1
+	project.version_project_build = Integer.parseInt(project.version_project_build) + 1
 	saveVersion()
 }

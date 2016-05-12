@@ -1,14 +1,14 @@
 allprojects {
 	apply plugin: 'java'
-	sourceCompatibility = 1.6
-	targetCompatibility = 1.6
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
 }
 
 evaluationDependsOn(':version')
 
 buildscript {
 	repositories {
-		jcenter()
+		mavenCentral()
 		maven {
 			name = "forge"
 			url = "http://files.minecraftforge.net/maven"
@@ -27,10 +27,10 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 
 group = "com.covertjaguar.railcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Railcraft_" + project.mcversion
+archivesBaseName = "Railcraft_" + project.version_minecraft
 
 ext.apiRailcraft = "./api/railcraft"
-ext.apiForestry = "./api/forestry"
+// ext.apiForestry = "./api/forestry"
 ext.apiRedstoneFlux = "./api/redstoneflux"
 ext.apiThaumcraft = "./api/thaumcraft"
 ext.apiBuildcraft = "./api/buildcraft"
@@ -40,10 +40,10 @@ ext.dirLang = "./lang"
 ext.dirDest = './build/dist'
 
 minecraft {
-	version = project.mcversion + "-" + project.forgeversion
+	version = project.version_minecraft + "-" + project.version_forge
 	runDir = "run"
 	
-	mappings = project.mappingsversion
+	mappings = project.version_mcp
 
 	replace '@VERSION@', project.version
 }
@@ -52,7 +52,7 @@ sourceSets {
 	main {
 		java {
 			srcDir project.apiRailcraft
-			srcDir project.apiForestry
+			// srcDir project.apiForestry
 			srcDir project.apiRedstoneFlux + "/src/main/java"
 			srcDir project.apiThaumcraft
 		}
@@ -87,22 +87,22 @@ configurations {
 }
 
 dependencies {
-    compile "net.sengir.forestry:forestry_${project.mcversion}:${project.version_forestry}:api"
-    runtime "net.sengir.forestry:forestry_${project.mcversion}:${project.version_forestry}:dev"
+    compile "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
+    runtime "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:dev"
 	//api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
 }
 
 processResources {
 	// this will ensure that this task is redone when the versions change.
 	inputs.property "version", project.version
-	inputs.property "mcversion", project.minecraft.version
+	inputs.property "version_minecraft", project.minecraft.version
 
 	// replace stuff in mcmod.info, nothing else
 	from(sourceSets.main.resources.srcDirs) {
 		include 'mcmod.info'
 
-		// replace version and mcversion
-		expand 'version':project.version, 'mcversion':project.minecraft.version
+		// replace version and version_minecraft
+		expand 'version':project.version, 'version_minecraft':project.minecraft.version
 	}
 
 	// copy everything else, thats not the mcmod.info
@@ -152,9 +152,9 @@ jar {
 	into ('mods/railcraft/api') {
 		from project.apiRailcraft + "/LICENSE.md"
 	}
-	into ('forestry/api') {
-		from project.apiForestry + "/LICENSE.txt"
-	}
+	// into ('forestry/api') {
+		// from project.apiForestry + "/LICENSE.txt"
+	// }
 	into ('thaumcraft/api') {
 		from project.apiThaumcraft + "/LICENSE"
 	}
@@ -188,22 +188,22 @@ jar {
 	// }
 // }
 
-task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
-	from (zipTree(mainJarSigned.getArchivePath())) {
-		include '**'
-	}
+// task mainJar ( type: Zip, dependsOn: 'jar' ) {
+	// from (zipTree(mainJarSigned.getArchivePath())) {
+		// include '**'
+	// }
 
-	from (zipTree(jar.getArchivePath())) {
-		include '**'
-		exclude '**/forestry/api/**'
-		exclude '**/uristqwerty/**'
-	}
+	// from (zipTree(jar.getArchivePath())) {
+		// include '**'
+		// exclude '**/forestry/api/**'
+		// exclude '**/uristqwerty/**'
+	// }
 
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	destinationDir = file(dirDest)
-	includeEmptyDirs = false
-	extension = 'jar'
-}
+	// duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	// destinationDir = file(dirDest)
+	// includeEmptyDirs = false
+	// extension = 'jar'
+// }
 
 // task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
 	// from(sourceSets.main.output) {
@@ -229,10 +229,10 @@ task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 	// }
 // }
 
-task devJar ( type: Zip, dependsOn: devJarSigned ) {
-	from (zipTree(devJarSigned.getArchivePath())) {
-		include '**'
-	}
+task devJar ( type: Jar, dependsOn: 'classes' ) {
+	// from (zipTree(devJarSigned.getArchivePath())) {
+		// include '**'
+	// }
 
 	from(sourceSets.main.output) {
 		include '**'
@@ -278,9 +278,11 @@ class JarSigner extends net.minecraftforge.gradle.tasks.SignJar {
 		}
 
 		alias = 'CovertJaguar'
-		storePass = project.signingStorepass
-		keyPass = project.signingStorepass
-		keyStore = System.getProperty("user.home") + '/.keystore'
+		if(project.hasProperty('signingStorepass')) {
+			storePass = project.signingStorepass
+			keyPass = project.signingStorepass
+			keyStore = System.getProperty("user.home") + '/.keystore'
+		}
 	}
 }
 
@@ -316,7 +318,7 @@ build.shouldRunAfter releaseInit
 release.shouldRunAfter uploadArchives
 
 artifacts {
-	archives mainJar, devJar, apiZip
+	archives jar, devJar, apiZip
 }
 
 idea.module.inheritOutputDirs = true
