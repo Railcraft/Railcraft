@@ -14,7 +14,9 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +28,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 import java.util.List;
 
@@ -103,20 +106,23 @@ public class ItemFirestoneRefined extends ItemFirestoneBase {
             info.addAll(tip.convertToStrings());
     }
 
+    //TODO: test
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.canPlayerEdit(pos, side, stack)) {
             Block block = WorldPlugin.getBlock(world, pos);
             if (block != null && block != Blocks.stone) {
-                List<ItemStack> drops = block.getDrops(world, pos, world.getBlockMetadata(x, y, z), 0);
+                List<ItemStack> drops = block.getDrops(world, pos, WorldPlugin.getBlockState(world, pos), 0);
                 if (drops.size() == 1 && drops.get(0) != null && drops.get(0).getItem() instanceof ItemBlock) {
-                    ItemStack cooked = FurnaceRecipes.smelting().getSmeltingResult(drops.get(0));
+                    ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drops.get(0));
                     if (cooked != null && cooked.getItem() instanceof ItemBlock) {
-                        int meta = !cooked.getItem().getHasSubtypes() ? 0 : cooked.getItem().getMetadata(cooked.getItemDamage());
-                        world.setBlock(pos, InvTools.getBlockFromStack(cooked), meta, 3);
-                        world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-                        stack.damageItem(1, player);
-                        return true;
+                        IBlockState newState = InvTools.getBlockStateFromStack(cooked, (WorldServer) world, pos);
+                        if (newState != null) {
+                            WorldPlugin.setBlockState(world, pos, newState);
+                            SoundHelper.playSound(world, pos, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+                            stack.damageItem(1, player);
+                            return true;
+                        }
                     }
                 }
             }
@@ -125,7 +131,7 @@ public class ItemFirestoneRefined extends ItemFirestoneBase {
         pos = pos.offset(side);
 
         if (player.canPlayerEdit(pos, side, stack) && world.isAirBlock(pos)) {
-            world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+            SoundHelper.playSound(world, pos, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
             world.setBlockState(pos, Blocks.fire.getDefaultState());
             stack.damageItem(1, player);
             return true;

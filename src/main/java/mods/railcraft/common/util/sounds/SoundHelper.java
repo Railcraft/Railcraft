@@ -67,14 +67,14 @@ public class SoundHelper {
     public static void playSound(World world, BlockPos pos, String name, float volume, float pitch) {
         if (canPlaySound(name)) {
             incrementLimiter(name);
-            world.playSoundEffect(pos.getX(), pos.getY(), pos.getZ(), name, volume, pitch);
+            world.playSoundEffect(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, name, volume, pitch);
         }
     }
 
     public static void playSoundClient(World world, BlockPos pos, String name, float volume, float pitch) {
         if (canPlaySound(name)) {
             incrementLimiter(name);
-            world.playSound(pos.getX(), pos.getY(), pos.getZ(), name, volume, pitch, false);
+            world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, name, volume, pitch, false);
         }
     }
 

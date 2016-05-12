@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.items.firestone;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
@@ -38,7 +37,7 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
     public static final int[] REBUILD_DELAY = new int[8];
     private final Deque<BlockPos> queue = new LinkedList<BlockPos>();
     private final Set<BlockPos> visitedBlocks = new HashSet<BlockPos>();
-    public int charge = 0;
+    public int charge;
     public long rotationYaw, preRotationYaw;
     public float yOffset = -2, preYOffset = -2;
     private Deque<BlockPos> lavaFound = new LinkedList<BlockPos>();
@@ -111,10 +110,7 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
         if (queue.isEmpty())
             return null;
 
-        if (remove) {
-            BlockPos index = queue.pollFirst();
-            return index;
-        }
+        if (remove) return queue.pollFirst();
         return queue.peekFirst();
     }
 
@@ -152,9 +148,10 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
         queueForFilling(pos.down());
     }
 
+    //TODO: test
     public void queueForFilling(BlockPos index) {
         if (visitedBlocks.add(index)) {
-            if ((x - xCoord) * (x - xCoord) + (z - zCoord) * (z - zCoord) > 64 * 64)
+            if ((index.getX() - pos.getX()) * (index.getX() - pos.getX()) + (index.getZ() - pos.getZ()) * (index.getZ() - pos.getZ()) > 64 * 64)
                 return;
 
             IBlockState state = WorldPlugin.getBlockState(worldObj, index);
