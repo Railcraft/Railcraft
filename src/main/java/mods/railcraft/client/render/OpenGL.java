@@ -21,7 +21,7 @@ import java.nio.IntBuffer;
 /**
  * Created by CovertJaguar on 5/12/2016 for Railcraft.
  *
- * @author CovertJaguar <http://www.railcraft.info>
+ * @author CovertJaguar <http://www.railcraft.info>, inspired by some code posted by MamiyaOtaru (http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2231761-opengl-calls-glstatemanager)
  */
 public enum OpenGL {
     //GL11
@@ -324,8 +324,6 @@ public enum OpenGL {
             default:
                 GL11.glBindTexture(target.mask, texture);
         }
-        // I only seem to call this with GL_TEXTURE_2D as target, which is what bindTexture in GlStateManager does
-        // decide if I even need to specify the target in those instances.  If not, could dump this method
     }
 
     public static void glEnd() {
