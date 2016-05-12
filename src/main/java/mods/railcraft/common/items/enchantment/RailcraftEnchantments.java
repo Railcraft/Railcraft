@@ -12,10 +12,10 @@ public class RailcraftEnchantments {
     public static Enchantment destruction;
 
     public static void registerEnchantment() {
-        wrecking = new EnchantmentDamageRailcraft("wrecking", RailcraftConfig.wreckingID(), 10, 1, 11, 20, null, 1.5f);
-        implosion = new EnchantmentDamageRailcraft("implosion", RailcraftConfig.implosionID(), 5, 5, 8, 20, EntityCreeper.class, 3f);
+        wrecking = new EnchantmentDamageRailcraft("wrecking", RailcraftConfig.wreckingID(), 2, 1, 11, 20, null, 1.5f);
+        implosion = new EnchantmentDamageRailcraft("implosion", RailcraftConfig.implosionID(), 2, 5, 8, 20, EntityCreeper.class, 3f);
         MinecraftForge.EVENT_BUS.register(implosion);
-        destruction = new EnchantmentDestruction(RailcraftConfig.destructionID(), 5);
+        destruction = new EnchantmentDestruction(RailcraftConfig.destructionID(), 1);
     }
 
 }

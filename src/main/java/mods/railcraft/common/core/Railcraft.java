@@ -51,7 +51,7 @@ import java.io.File;
         version = Railcraft.VERSION,
         certificateFingerprint = "a0c255ac501b2749537d5824bb0f0588bf0320fa",
         acceptedMinecraftVersions = "[1.7.10,1.8)",
-        dependencies = "required-after:Forge@[10.13.0.1199,);"
+        dependencies = "required-after:Forge@[10.13.4.1448,);"
                 + "after:BuildCraft|Core[6.1.7,);"
                 + "after:BuildCraft|Energy;"
                 + "after:BuildCraft|Builders;"
