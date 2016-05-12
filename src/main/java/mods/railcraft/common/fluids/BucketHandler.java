@@ -9,8 +9,9 @@
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
@@ -42,9 +43,10 @@ public class BucketHandler {
         event.setResult(Result.ALLOW);
     }
 
-    private ItemStack fillCustomBucket(World world, MovingObjectPosition pos, ItemStack stack) {
-        Block block = WorldPlugin.getBlock(world, pos.blockX, pos.blockY, pos.blockZ);
-        FluidStack fluidStack = FluidHelper.drainBlock(block, world, pos.blockX, pos.blockY, pos.blockZ, false);
+    private ItemStack fillCustomBucket(World world, MovingObjectPosition mop, ItemStack stack) {
+        BlockPos blockPos = mop.getBlockPos();
+        IBlockState state = WorldPlugin.getBlockState(world, blockPos);
+        FluidStack fluidStack = FluidHelper.drainBlock(state, world, blockPos, false);
         if (fluidStack == null)
             return null;
 
@@ -53,7 +55,7 @@ public class BucketHandler {
 
         FluidItemHelper.FillReturn filled = FluidItemHelper.fillContainer(stack, fluidStack);
         if (filled.amount > 0)
-            FluidHelper.drainBlock(block, world, pos.blockX, pos.blockY, pos.blockZ, true);
+            FluidHelper.drainBlock(state, world, blockPos, true);
         return filled.container;
     }
 }

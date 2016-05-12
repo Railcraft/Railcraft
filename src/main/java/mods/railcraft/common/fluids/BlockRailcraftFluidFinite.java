@@ -8,16 +8,14 @@
  */
 package mods.railcraft.common.fluids;
 
-import mods.railcraft.client.particles.EntityDropParticleFX;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -45,20 +43,20 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite {
         return this;
     }
 
-    @Override
-    public IIcon getIcon(int side, int meta) {
-        return side != 0 && side != 1 ? this.theIcon[1] : this.theIcon[0];
-    }
+//    @Override
+//    public IIcon getIcon(int side, int meta) {
+//        return side != 0 && side != 1 ? this.theIcon[1] : this.theIcon[0];
+//    }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        IIcon still = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_still");
-        IIcon flowing = still;
-        if (hasFlowIcon)
-            flowing = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_flow");
-        this.theIcon = new IIcon[]{still, flowing};
-    }
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public void registerBlockIcons(IIconRegister iconRegister) {
+//        IIcon still = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_still");
+//        IIcon flowing = still;
+//        if (hasFlowIcon)
+//            flowing = iconRegister.registerIcon("railcraft:fluids/" + fluidName + "_flow");
+//        this.theIcon = new IIcon[]{still, flowing};
+//    }
 
     public BlockRailcraftFluidFinite setFlammable(boolean flammable) {
         this.flammable = flammable;
@@ -99,17 +97,9 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World world, BlockPos pos, Random rand) {
-        super.randomDisplayTick(world, x, y, z, rand);
-
-        if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) && !world.getBlock(x, y - 2, z).getMaterial().blocksMovement()) {
-            double px = (double) ((float) x + rand.nextFloat());
-            double py = (double) y - 1.05D;
-            double pz = (double) ((float) z + rand.nextFloat());
-
-            EntityFX fx = new EntityDropParticleFX(world, px, py, pz, particleRed, particleGreen, particleBlue);
-            FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
-        }
+    public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        super.randomDisplayTick(world, pos, state, rand);
+        FluidHelper.drip(world, pos, state, rand, particleRed, particleGreen, particleBlue);
     }
 
 }

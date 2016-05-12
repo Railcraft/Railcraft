@@ -9,8 +9,6 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IFluidCart;
-import mods.railcraft.api.carts.ILiquidTransfer;
-import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
@@ -32,7 +30,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 
-public class EntityCartTank extends EntityCartFiltered implements IFluidHandler, ILiquidTransfer, ISidedInventory, IMinecart, IFluidCart {
+public class EntityCartTank extends EntityCartFiltered implements IFluidHandler, ISidedInventory, IFluidCart {
     private static final byte FLUID_ID_DATA_ID = 25;
     private static final byte FLUID_QTY_DATA_ID = 26;
     private static final byte FLUID_COLOR_DATA_ID = 27;
@@ -42,9 +40,9 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private final TankManager tankManager = new TankManager();
     private final StandardTank tank = new StandardTank(RailcraftConfig.getTankCartCapacity());
-    private final IInventory invLiquids = new InventoryMapper(this, false);
-    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1, false);
-    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1, false);
+    private final InventoryMapper invLiquids = new InventoryMapper(this, false);
+    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1, false);
+    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1, false);
     private int update = MiscTools.RANDOM.nextInt();
 
     public EntityCartTank(World world) {
@@ -71,10 +69,10 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.addObject(FLUID_ID_DATA_ID, new Integer(-1));
-        dataWatcher.addObject(FLUID_QTY_DATA_ID, new Integer(0));
-        dataWatcher.addObject(FLUID_COLOR_DATA_ID, new Integer(StandardTank.DEFAULT_COLOR));
-        dataWatcher.addObject(FILLING_DATA_ID, Byte.valueOf((byte) 0));
+        dataWatcher.addObject(FLUID_ID_DATA_ID, -1);
+        dataWatcher.addObject(FLUID_QTY_DATA_ID, 0);
+        dataWatcher.addObject(FLUID_COLOR_DATA_ID, StandardTank.DEFAULT_COLOR);
+        dataWatcher.addObject(FILLING_DATA_ID, (byte) 0);
     }
 
     private int getFluidQty() {
@@ -108,7 +106,7 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     @Override
     public void setDead() {
         super.setDead();
-        InvTools.dropInventory(invLiquids, worldObj, (int) posX, (int) posY, (int) posZ);
+        InvTools.dropInventory(invLiquids, worldObj, getPosition());
     }
 
     @Override
@@ -234,14 +232,13 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
         return tankManager.getTankInfo();
     }
 
-    @Override
     public boolean isFilling() {
         return dataWatcher.getWatchableObjectByte(FILLING_DATA_ID) != 0;
     }
 
     @Override
     public void setFilling(boolean fill) {
-        dataWatcher.updateObject(FILLING_DATA_ID, Byte.valueOf(fill ? 1 : (byte) 0));
+        dataWatcher.updateObject(FILLING_DATA_ID, fill ? 1 : (byte) 0);
     }
 
     public Fluid getFilterFluid() {
@@ -261,78 +258,18 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side) {
+    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
         return isItemValidForSlot(slot, stack);
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side) {
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
         return slot == SLOT_OUTPUT;
-    }
-
-    @Override
-    @Deprecated
-    public int offerLiquid(Object source, FluidStack offer) {
-        int qty = offer.amount;
-        int used = fill(null, offer, true);
-
-        offer.amount = qty - used;
-        if (offer.amount <= 0)
-            return used;
-
-        LinkageManager lm = LinkageManager.instance();
-
-        EntityMinecart linkedCart = lm.getLinkedCartA(this);
-        if (linkedCart != source && linkedCart instanceof ILiquidTransfer)
-            used += ((ILiquidTransfer) linkedCart).offerLiquid(this, offer);
-
-        offer.amount = qty - used;
-        if (offer.amount <= 0)
-            return used;
-
-        linkedCart = lm.getLinkedCartB(this);
-        if (linkedCart != source && linkedCart instanceof ILiquidTransfer)
-            used += ((ILiquidTransfer) linkedCart).offerLiquid(this, offer);
-
-        return used;
-    }
-
-    @Override
-    @Deprecated
-    public int requestLiquid(Object source, FluidStack request) {
-        FluidStack acquired = drain(null, request.amount, false);
-        if (acquired == null || !request.isFluidEqual(acquired))
-            return 0;
-
-        drain(null, request.amount, true);
-
-        if (acquired.amount >= request.amount)
-            return acquired.amount;
-
-        FluidStack newRequest = request.copy();
-        newRequest.amount = request.amount - acquired.amount;
-
-        LinkageManager lm = LinkageManager.instance();
-
-        EntityMinecart linkedCart = lm.getLinkedCartA(this);
-        if (linkedCart != source && linkedCart instanceof ILiquidTransfer)
-            acquired.amount += ((ILiquidTransfer) linkedCart).requestLiquid(this, newRequest);
-
-        if (acquired.amount >= request.amount)
-            return acquired.amount;
-
-        newRequest.amount = request.amount - acquired.amount;
-
-        linkedCart = lm.getLinkedCartB(this);
-        if (linkedCart != source && linkedCart instanceof ILiquidTransfer)
-            acquired.amount += ((ILiquidTransfer) linkedCart).requestLiquid(this, newRequest);
-
-        return acquired.amount;
     }
 
     @Override

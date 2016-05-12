@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.plugins.forestry;
 
-import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
@@ -25,7 +24,7 @@ import net.minecraftforge.fml.common.Optional;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = "Forestry")
-public class IcemanBackpack extends BaseBackpack implements IBackpackDefinition {
+public class IcemanBackpack extends BaseBackpack {
     private static final BlockMaterial[] coldMaterials = {BlockMaterial.SNOW, BlockMaterial.ICE, BlockMaterial.PACKED_ICE};
     private static IcemanBackpack instance;
     private static final ItemStack SNOWBALL = new ItemStack(Items.snowball);

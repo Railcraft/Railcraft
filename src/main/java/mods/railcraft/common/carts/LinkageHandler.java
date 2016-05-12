@@ -11,8 +11,8 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.TrackToolsAPI;
+import mods.railcraft.common.modules.ModuleLocomotives;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.modules.RailcraftModuleManager.Module;
 import mods.railcraft.common.util.misc.Vec2D;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,7 +31,7 @@ public class LinkageHandler {
     private static final float DAMPING = 0.4f;
     private static final float HS_DAMPING = 0.3f;
     private static final float FORCE_LIMITER = 6f;
-    private static final int TICK_HISTORY = 200;
+//    private static final int TICK_HISTORY = 200;
     private static LinkageHandler instance;
 //    private static Map<EntityMinecart, CircularVec3Queue> history = new MapMaker().weakKeys().makeMap();
 
@@ -65,6 +65,7 @@ public class LinkageHandler {
         return dist;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     private boolean canCartBeAdjustedBy(EntityMinecart cart1, EntityMinecart cart2) {
         if (cart1 == cart2)
             return false;
@@ -236,7 +237,7 @@ public class LinkageHandler {
             }
         }
 
-        if (linked && RailcraftModuleManager.isModuleEnabled(Module.LOCOMOTIVES)) {
+        if (linked && RailcraftModuleManager.isModuleEnabled(ModuleLocomotives.class)) {
             cart.motionX *= LINK_DRAG;
             cart.motionZ *= LINK_DRAG;
         }
@@ -279,7 +280,7 @@ public class LinkageHandler {
 //        double currentDistance = linked.getDistanceSqToEntity(current);
 //
 //        // Search the history for the point closest to the optimal distance.
-//        // There may be some issues with it chosing the wrong side of the cart.
+//        // There may be some issues with it choosing the wrong side of the cart.
 //        // Probably needs some kind of logic to compare the distance from the
 //        // new position to the current position and determine if its a valid position.
 //        Vec3 closestPoint = null;

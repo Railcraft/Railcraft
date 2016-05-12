@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.fluids;
 
+import mods.railcraft.client.particles.EntityDropParticleFX;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -15,6 +16,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -25,10 +27,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -322,5 +326,17 @@ public final class FluidHelper {
         if (stack.getFluid() == null)
             return -1;
         return FluidRegistry.getFluidID(stack.getFluid().getName());
+    }
+
+    public static void drip(World world, BlockPos pos, IBlockState state, Random rand, float particleRed, float particleGreen, float particleBlue) {
+
+        if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, pos.down()) && !WorldPlugin.getBlockMaterial(world, pos.down(2)).blocksMovement()) {
+            double px = (double) ((float) pos.getX() + rand.nextFloat());
+            double py = (double) pos.getY() - 1.05D;
+            double pz = (double) ((float) pos.getZ() + rand.nextFloat());
+
+            EntityFX fx = new EntityDropParticleFX(world, px, py, pz, particleRed, particleGreen, particleBlue);
+            FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
+        }
     }
 }
