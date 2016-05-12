@@ -41,7 +41,7 @@ public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
     }
 
     @Override
-    public float func_152376_a(int lvl, EnumCreatureAttribute creatureType) {
+    public float calcDamageByCreature(int lvl, EnumCreatureAttribute creatureType) {
         float modifier = 0.0f;
         if (targetType == null || (target != null && targetType.isInstance(target.get())))
             modifier = lvl * damageBonusPerLevel;

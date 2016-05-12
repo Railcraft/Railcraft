@@ -13,7 +13,7 @@ public class EnchantmentDestruction extends EnchantmentCrowbar {
 
     @Override
     public int getMaxEnchantability(int level) {
-        return this.getMinEnchantability(level) + 10;
+        return getMinEnchantability(level) + 10;
     }
 
     @Override

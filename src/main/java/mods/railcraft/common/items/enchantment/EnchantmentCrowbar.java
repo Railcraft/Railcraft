@@ -1,14 +1,16 @@
 package mods.railcraft.common.items.enchantment;
 
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.ItemCrowbar;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class EnchantmentCrowbar extends Enchantment {
 
     public EnchantmentCrowbar(String tag, int id, int weight) {
-        super(id, weight, EnumEnchantmentType.digger);
+        super(id, new ResourceLocation(Railcraft.MOD_ID, "crowbar." + tag), weight, EnumEnchantmentType.DIGGER);
         setName("railcraft.crowbar." + tag);
     }
 
