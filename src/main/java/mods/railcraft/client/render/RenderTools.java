@@ -28,7 +28,7 @@ public class RenderTools {
         float red = (float) (color >> 16 & 255) / 255.0F;
         float green = (float) (color >> 8 & 255) / 255.0F;
         float blue = (float) (color & 255) / 255.0F;
-        GL11.glColor4f(red, green, blue, 1);
+        OpenGL.glColor4f(red, green, blue, 1);
     }
 
     public static boolean renderStandardBlock(RenderBlocks renderblocks, Block block, int x, int y, int z) {
@@ -94,11 +94,11 @@ public class RenderTools {
 //            float red = (float) (j >> 16 & 0xff) / 255F;
 //            float green = (float) (j >> 8 & 0xff) / 255F;
 //            float blue = (float) (j & 0xff) / 255F;
-//            GL11.glColor4f(red * light, green * light, blue * light, 1.0F);
+//            OpenGL.glColor4f(red * light, green * light, blue * light, 1.0F);
 //        }
         block.setBlockBoundsForItemRender();
         renderblocks.setRenderBoundsFromBlock(block);
-        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+        OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
         if (side == 0 || side == -1) {
             tessellator.startDrawingQuads();
             tessellator.setNormal(0.0F, -1F, 0.0F);
@@ -112,7 +112,7 @@ public class RenderTools {
 //            float f6 = (float) (k1 >> 16 & 0xff) / 255F;
 //            float f8 = (float) (k1 >> 8 & 0xff) / 255F;
 //            float f9 = (float) (k1 & 0xff) / 255F;
-//            GL11.glColor4f(f6 * light, f8 * light, f9 * light, 1.0F);
+//            OpenGL.glColor4f(f6 * light, f8 * light, f9 * light, 1.0F);
 //        }
         if (side == 1 || side == -1) {
             tessellator.startDrawingQuads();
@@ -123,7 +123,7 @@ public class RenderTools {
             tessellator.draw();
         }
 //        if (flag && renderblocks.useInventoryTint) {
-//            GL11.glColor4f(light, light, light, 1.0F);
+//            OpenGL.glColor4f(light, light, light, 1.0F);
 //        }
         if (side == 2 || side == -1) {
             tessellator.startDrawingQuads();
@@ -157,7 +157,7 @@ public class RenderTools {
                 renderblocks.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, icon);
             tessellator.draw();
         }
-        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+        OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
     }
 
     public static IIcon getSafeIcon(IIcon icon) {
@@ -175,20 +175,20 @@ public class RenderTools {
         FontRenderer fontrenderer = rm.getFontRenderer();
         float f = 1.6F;
         float f1 = 1 / 60F * f;
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float) xOffset, (float) yOffset, (float) zOffset);
-        GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-rm.playerViewY, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(rm.playerViewX, 1.0F, 0.0F, 0.0F);
-        GL11.glScalef(-f1, -f1, f1);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDepthMask(false);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
+        OpenGL.glPushMatrix();
+        OpenGL.glTranslatef((float) xOffset, (float) yOffset, (float) zOffset);
+        OpenGL.glNormal3f(0.0F, 1.0F, 0.0F);
+        OpenGL.glRotatef(-rm.playerViewY, 0.0F, 1.0F, 0.0F);
+        OpenGL.glRotatef(rm.playerViewX, 1.0F, 0.0F, 0.0F);
+        OpenGL.glScalef(-f1, -f1, f1);
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
+        OpenGL.glDepthMask(false);
+        OpenGL.glDisable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glEnable(OpenGL.GL_BLEND);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         Tessellator tessellator = Tessellator.getInstance();
 
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        OpenGL.glDisable(OpenGL.GL_TEXTURE_2D);
         tessellator.startDrawingQuads();
         int j = fontrenderer.getStringWidth(name) / 2;
         tessellator.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
@@ -197,15 +197,15 @@ public class RenderTools {
         tessellator.addVertex((double) (j + 1), (double) 8, 0.0D);
         tessellator.addVertex((double) (j + 1), (double) -1, 0.0D);
         tessellator.draw();
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        OpenGL.glEnable(OpenGL.GL_TEXTURE_2D);
         fontrenderer.drawString(name, -fontrenderer.getStringWidth(name) / 2, 0, 553648127);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthMask(true);
+        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glDepthMask(true);
         fontrenderer.drawString(name, -fontrenderer.getStringWidth(name) / 2, 0, -1);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glPopMatrix();
+        OpenGL.glEnable(OpenGL.GL_LIGHTING);
+        OpenGL.glDisable(OpenGL.GL_BLEND);
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        OpenGL.glPopMatrix();
     }
 
 }

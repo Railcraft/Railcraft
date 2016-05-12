@@ -40,20 +40,20 @@ public class CartContentRenderer {
             for (int side = 0; side < 6; side++) {
                 info.texture[side] = texInterface.getBlockTextureOnSide(side);
             }
-            GL11.glPushMatrix();
-            GL11.glTranslatef(0.0F, (float) blockOffset / 16.0F, 0.0F);
+            OpenGL.glPushMatrix();
+            OpenGL.glTranslatef(0.0F, (float) blockOffset / 16.0F, 0.0F);
             RenderFakeBlock.renderBlockOnInventory(renderer.renderBlocks(), info, 1);
-            GL11.glPopMatrix();
+            OpenGL.glPopMatrix();
             return;
         }
 
         IBlockState blockState = cart.getDisplayTile();
         if (blockState != null && blockState.getBlock() != Blocks.air) {
             renderer.bindTex(TextureMap.locationBlocksTexture);
-            GL11.glPushMatrix();
-            GL11.glTranslatef(0.0F, (float) blockOffset / 16.0F, 0.0F);
+            OpenGL.glPushMatrix();
+            OpenGL.glTranslatef(0.0F, (float) blockOffset / 16.0F, 0.0F);
             renderer.renderBlocks().renderBlockAsItem(block, blockMeta, 1);
-            GL11.glPopMatrix();
+            OpenGL.glPopMatrix();
             return;
         }
 
@@ -66,15 +66,15 @@ public class CartContentRenderer {
             return;
         renderer.bindTex(texture);
 
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
         if (!contents.cullBackFaces())
-            GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glPushMatrix();
-        GL11.glTranslatef(-0.5F, blockOffset / 16.0F - 0.5F, -0.5F);
+            OpenGL.glDisable(OpenGL.GL_CULL_FACE);
+        OpenGL.glPushMatrix();
+        OpenGL.glTranslatef(-0.5F, blockOffset / 16.0F - 0.5F, -0.5F);
         contents.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
+        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+        OpenGL.glPopMatrix();
+        OpenGL.glPopAttrib();
     }
 
 }

@@ -221,7 +221,7 @@ public class RenderBlockPost extends BlockRenderer {
                 if (section == 4)
                     block.setBlockBounds(0.0F, (16 - getPlatformThickness()) * RenderTools.PIXEL, 0.0F, 1.0F, 1.0F, 1.0F);
                 renderblocks.setRenderBoundsFromBlock(block);
-                GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+                OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
                 Tessellator tess = Tessellator.instance;
                 tess.startDrawingQuads();
                 tess.setNormal(0.0F, -1.0F, 0.0F);
@@ -247,7 +247,7 @@ public class RenderBlockPost extends BlockRenderer {
                 tess.setNormal(1.0F, 0.0F, 0.0F);
                 renderblocks.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, texture);
                 tess.draw();
-                GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+                OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
             }
             block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         }
@@ -331,7 +331,7 @@ public class RenderBlockPost extends BlockRenderer {
                 if (section == 3)
                     block.setBlockBounds(0.0F, (16 - getPlatformThickness()) * pix, 0.0F, 1.0F, 1.0F, 1.0F);
                 renderblocks.setRenderBoundsFromBlock(block);
-                GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+                OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
                 Tessellator tess = Tessellator.instance;
                 tess.startDrawingQuads();
                 tess.setNormal(0.0F, -1.0F, 0.0F);
@@ -357,7 +357,7 @@ public class RenderBlockPost extends BlockRenderer {
                 tess.setNormal(1.0F, 0.0F, 0.0F);
                 renderblocks.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, texture);
                 tess.draw();
-                GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+                OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
             }
             block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         }
@@ -425,11 +425,11 @@ public class RenderBlockPost extends BlockRenderer {
             if (block == null)
                 return;
 
-            GL11.glPushMatrix();
-//            GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+            OpenGL.glPushMatrix();
+//            OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
             switch (renderType) {
                 case EQUIPPED_FIRST_PERSON:
-                    GL11.glRotatef(270, 0, 1, 0);
+                    OpenGL.glRotatef(270, 0, 1, 0);
             }
 
             float pix = RenderTools.PIXEL;
@@ -446,34 +446,34 @@ public class RenderBlockPost extends BlockRenderer {
             RenderTools.renderBlockOnInventory(renderblocks, block, item.getItemDamage(), 1, -1, texture);
 
             renderEmblem(ItemPost.getEmblem(item));
-//            GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+//            OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
 
             block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glPopMatrix();
+            OpenGL.glPopMatrix();
         }
 
         private void renderEmblem(String emblem) {
             if (emblem == null || emblem.equals(""))
                 return;
 
-            GL11.glPushMatrix();
-            GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+            OpenGL.glPushMatrix();
+            OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
 
             float pix = RenderTools.PIXEL;
             float shift = 0.5F;
             float scale = 0.6F;
 
-            GL11.glTranslatef(-0.5F, -0.5F + pix, 0.09F);
+            OpenGL.glTranslatef(-0.5F, -0.5F + pix, 0.09F);
 
-            GL11.glTranslatef(shift, shift, shift);
-            GL11.glScalef(scale, scale, scale);
-            GL11.glTranslatef(-shift, -shift, -shift);
+            OpenGL.glTranslatef(shift, shift, shift);
+            OpenGL.glScalef(scale, scale, scale);
+            OpenGL.glTranslatef(-shift, -shift, -shift);
 
             if (EmblemToolsClient.renderer != null)
                 EmblemToolsClient.renderer.renderIn3D(emblem, false);
 
-            GL11.glPopAttrib();
-            GL11.glPopMatrix();
+            OpenGL.glPopAttrib();
+            OpenGL.glPopMatrix();
         }
     }
 
@@ -487,43 +487,43 @@ public class RenderBlockPost extends BlockRenderer {
             if (post.getEmblem() == null || post.getEmblem().equals(""))
                 return;
 
-            GL11.glPushMatrix();
-            GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-//            GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glDisable(GL11.GL_BLEND);
-//        GL11.glEnable(GL11.GL_CULL_FACE);
+            OpenGL.glPushMatrix();
+            OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+//            OpenGL.glDisable(OpenGL.GL_LIGHTING);
+            OpenGL.glDisable(OpenGL.GL_BLEND);
+//        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
 
             float pix = RenderTools.PIXEL;
             float shift = 0.5F;
             float scale = 0.6F;
 
-            GL11.glTranslatef((float) x, (float) y + pix, (float) z);
+            OpenGL.glTranslatef((float) x, (float) y + pix, (float) z);
 
-            GL11.glTranslatef(shift, 0, shift);
+            OpenGL.glTranslatef(shift, 0, shift);
             switch (post.getFacing()) {
                 case NORTH:
-                    GL11.glRotatef(180, 0, 1, 0);
+                    OpenGL.glRotatef(180, 0, 1, 0);
                     break;
                 case EAST:
-                    GL11.glRotatef(90, 0, 1, 0);
+                    OpenGL.glRotatef(90, 0, 1, 0);
                     break;
                 case WEST:
-                    GL11.glRotatef(-90, 0, 1, 0);
+                    OpenGL.glRotatef(-90, 0, 1, 0);
                     break;
             }
-            GL11.glTranslatef(-shift, 0, -shift);
+            OpenGL.glTranslatef(-shift, 0, -shift);
 
-            GL11.glTranslatef(shift, shift, shift);
-            GL11.glScalef(scale, scale, scale);
-            GL11.glTranslatef(-shift, -shift, -shift);
+            OpenGL.glTranslatef(shift, shift, shift);
+            OpenGL.glScalef(scale, scale, scale);
+            OpenGL.glTranslatef(-shift, -shift, -shift);
 
-            GL11.glTranslatef(0, 0, 1 - 0.02F);
+            OpenGL.glTranslatef(0, 0, 1 - 0.02F);
 
             if (EmblemToolsClient.renderer != null)
                 EmblemToolsClient.renderer.renderIn3D(post.getEmblem(), false);
 
-            GL11.glPopAttrib();
-            GL11.glPopMatrix();
+            OpenGL.glPopAttrib();
+            OpenGL.glPopMatrix();
         }
     }
 }

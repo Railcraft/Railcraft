@@ -24,15 +24,15 @@ public class CartModelRenderer {
     public static final ResourceLocation minecartTextures = new ResourceLocation("textures/entity/minecart.png");
 
     public boolean render(IRenderer renderer, EntityMinecart cart, float light, float time) {
-        GL11.glPushMatrix();
-        GL11.glScalef(-1F, -1F, 1.0F);
+        OpenGL.glPushMatrix();
+        OpenGL.glScalef(-1F, -1F, 1.0F);
 
 //        int j = 0xffffff;
 //        float c1 = (float) (j >> 16 & 0xff) / 255F;
 //        float c2 = (float) (j >> 8 & 0xff) / 255F;
 //        float c3 = (float) (j & 0xff) / 255F;
 //
-//        GL11.glColor4f(c1 * light, c2 * light, c3 * light, 1.0F);
+//        OpenGL.glColor4f(c1 * light, c2 * light, c3 * light, 1.0F);
 
         ResourceLocation texture = null;
         if (cart instanceof IAlternateCartTexture)
@@ -44,7 +44,7 @@ public class CartModelRenderer {
 
         ModelBase core = CartModelManager.getCoreModel(cart.getClass());
         core.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-        GL11.glPopMatrix();
+        OpenGL.glPopMatrix();
         return true;
     }
 

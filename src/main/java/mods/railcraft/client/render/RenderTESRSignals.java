@@ -10,23 +10,22 @@
 package mods.railcraft.client.render;
 
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.api.signals.AbstractPair;
-import mods.railcraft.api.signals.IControllerTile;
-import mods.railcraft.api.signals.IReceiverTile;
-import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.api.signals.ISignalBlockTile;
+import mods.railcraft.api.signals.*;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
@@ -34,22 +33,23 @@ import java.util.Arrays;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderTESRSignals extends TileEntitySpecialRenderer {
+public class RenderTESRSignals extends TileEntitySpecialRenderer<TileEntity> {
+    private static final Vec3 CENTER = new Vec3(0.5, 0.5, 0.5);
 
     @Override
-    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f) {
+    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage) {
         if (tile instanceof IControllerTile) {
             if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TUNING)) {
-                renderPairs(tile, x, y, z, f, ((IControllerTile) tile).getController(), ColorProfile.RAINBOW);
+                renderPairs(tile, x, y, z, partialTicks, ((IControllerTile) tile).getController(), ColorProfile.RAINBOW);
             } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
-                renderPairs(tile, x, y, z, f, ((IControllerTile) tile).getController(), ColorProfile.ASPECT);
+                renderPairs(tile, x, y, z, partialTicks, ((IControllerTile) tile).getController(), ColorProfile.ASPECT);
             }
         }
         if (tile instanceof ISignalBlockTile) {
             if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING)) {
-                renderPairs(tile, x, y, z, f, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.RAINBOW);
+                renderPairs(tile, x, y, z, partialTicks, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.RAINBOW);
             } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
-                renderPairs(tile, x, y, z, f, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.BLUE);
+                renderPairs(tile, x, y, z, partialTicks, ((ISignalBlockTile) tile).getSignalBlock(), ColorProfile.BLUE);
             }
         }
         AbstractPair pair = null;
@@ -63,14 +63,14 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
         if (pair != null) {
             String name = pair.getName();
             if (name != null) {
-                EntityLivingBase player = RenderManager.instance.livingPlayer;
+                Entity player = Minecraft.getMinecraft().getRenderManager().livingPlayer;
                 if (player != null) {
                     final float viewDist = 8f;
-                    double dist = player.getDistanceSq(tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5);
+                    double dist = player.getDistanceSq(tile.getPos());
 
                     if (dist <= (double) (viewDist * viewDist)) {
-                        MovingObjectPosition mop = player.rayTrace(8, f);
-                        if (mop != null && mop.typeOfHit == MovingObjectType.BLOCK && player.worldObj.getTileEntity(mop.blockX, mop.blockY, mop.blockZ) == tile) {
+                        MovingObjectPosition mop = player.rayTrace(8, partialTicks);
+                        if (mop != null && mop.typeOfHit == MovingObjectType.BLOCK && player.worldObj.getTileEntity(mop.getBlockPos()) == tile) {
                             RenderTools.renderString(name, x + 0.5, y + 1.5, z + 0.5);
                         }
                     }
@@ -79,39 +79,37 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
         }
     }
 
-    private void renderPairs(TileEntity tile, double x, double y, double z, float f, AbstractPair pair, ColorProfile colorProfile) {
+    private void renderPairs(TileEntity tile, double x, double y, double z, float partialTicks, AbstractPair pair, ColorProfile colorProfile) {
         if (pair.getPairs().isEmpty()) {
             return;
         }
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        OpenGL.glPushMatrix();
+        OpenGL.glPushAttrib();
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
+        OpenGL.glDisable(OpenGL.GL_BLEND);
+        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glDisable(OpenGL.GL_TEXTURE_2D);
 
-        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
-        GL11.glLineWidth(5F);
+        OpenGL.glEnable(OpenGL.GL_LINE_SMOOTH);
+        OpenGL.glHint(OpenGL.GL_LINE_SMOOTH_HINT, OpenGL.GL_NICEST);
+        OpenGL.glLineWidth(5F);
 
-        GL11.glBegin(GL11.GL_LINES);
+        OpenGL.glBegin(OpenGL.GL_LINES);
         for (WorldCoordinate target : pair.getPairs()) {
             int color = colorProfile.getColor(tile, pair.getCoords(), target);
             float c1 = (float) (color >> 16 & 255) / 255.0F;
             float c2 = (float) (color >> 8 & 255) / 255.0F;
             float c3 = (float) (color & 255) / 255.0F;
-            GL11.glColor3f(c1, c2, c3);
+            OpenGL.glColor3f(c1, c2, c3);
 
-            GL11.glVertex3f((float) x + 0.5f, (float) y + 0.5f, (float) z + 0.5f);
-            float tx = (float) x + target.x - tile.xCoord;
-            float ty = (float) y + target.y - tile.yCoord;
-            float tz = (float) z + target.z - tile.zCoord;
-            GL11.glVertex3f(tx + 0.5f, ty + 0.5f, tz + 0.5f);
+            OpenGL.glVertex3f((float) x + 0.5f, (float) y + 0.5f, (float) z + 0.5f);
+            Vec3 vec = new Vec3(x, y, z).add(CENTER).add(new Vec3(target)).subtract(new Vec3(tile.getPos()));
+            OpenGL.glVertex(vec);
         }
-        GL11.glEnd();
+        OpenGL.glEnd();
 
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();
+        OpenGL.glPopAttrib();
+        OpenGL.glPopMatrix();
     }
 
     public enum ColorProfile {
@@ -154,62 +152,67 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer {
         public abstract int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target);
     }
 
-    protected static void doRenderAspect(RenderFakeBlock.RenderInfo info, TileEntity tile, double x, double y, double z){
-        Tessellator tessellator = Tessellator.instance;
+    protected static void doRenderAspect(RenderFakeBlock.RenderInfo info, TileEntity tile, double x, double y, double z) {
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
         final float depth = 2 * RenderTools.PIXEL;
 
-        GL11.glPushMatrix();
-        GL11.glTranslated(x,y,z);
+        OpenGL.glPushMatrix();
+        OpenGL.glTranslated(x, y, z);
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
-        tessellator.startDrawingQuads();
 
-        if (info.brightness < 0) {
-            float light;
-            float lightBottom = 0.5F;
-            if (info.light < 0) {
-                light = 1;
-            } else {
-                light = info.light;
-            }
-            int br;
-            if (info.brightness < 0) {
-                br = info.template.getMixedBrightnessForBlock(tile.getWorld(), tile.xCoord, tile.yCoord, tile.zCoord);
-            } else {
-                br = info.brightness;
-            }
-            tessellator.setBrightness(br);
-            tessellator.setColorOpaque_F(lightBottom * light, lightBottom * light, lightBottom * light);
-        } else {
-            tessellator.setBrightness(info.brightness);
-        }
+//        if (info.brightness < 0) {
+//            float light;
+//            float lightBottom = 0.5F;
+//            if (info.light < 0) {
+//                light = 1;
+//            } else {
+//                light = info.light;
+//            }
+//            int br;
+//            if (info.brightness < 0) {
+//                br = info.template.getMixedBrightnessForBlock(tile.getWorld(), tile.getPos());
+//            } else {
+//                br = info.brightness;
+//            }
+//            worldRenderer.setBrightness(br);
+//            worldRenderer.putColorRGB_F(lightBottom * light, lightBottom * light, lightBottom * light, 0);
+//        } else {
+//            worldRenderer.setBrightness(info.brightness);
+//        }
 
-        if(info.renderSide[2]) {
-            tessellator.addVertexWithUV(0, 0, depth, info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(16));
-            tessellator.addVertexWithUV(0, 1, depth, info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(0));
-            tessellator.addVertexWithUV(1, 1, depth, info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(0));
-            tessellator.addVertexWithUV(1, 0, depth, info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(16));
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 210F, 210F);
+
+        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+        if (info.renderSide[2]) {
+            worldRenderer.pos(0, 0, depth).tex(info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(16)).endVertex();
+            worldRenderer.pos(0, 1, depth).tex(info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(0)).endVertex();
+            worldRenderer.pos(1, 1, depth).tex(info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(0)).endVertex();
+            worldRenderer.pos(1, 0, depth).tex(info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(16)).endVertex();
         }
-        if(info.renderSide[3]) {
-            tessellator.addVertexWithUV(0, 0, 1 - depth, info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(16));
-            tessellator.addVertexWithUV(1, 0, 1 - depth, info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(16));
-            tessellator.addVertexWithUV(1, 1, 1 - depth, info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(0));
-            tessellator.addVertexWithUV(0, 1, 1 - depth, info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(0));
+        if (info.renderSide[3]) {
+            worldRenderer.pos(0, 0, 1 - depth).tex(info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(16)).endVertex();
+            worldRenderer.pos(1, 0, 1 - depth).tex(info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(16)).endVertex();
+            worldRenderer.pos(1, 1, 1 - depth).tex(info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(0)).endVertex();
+            worldRenderer.pos(0, 1, 1 - depth).tex(info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(0)).endVertex();
         }
-        if(info.renderSide[4]) {
-            tessellator.addVertexWithUV(depth, 0, 0, info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(16));
-            tessellator.addVertexWithUV(depth, 0, 1, info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(16));
-            tessellator.addVertexWithUV(depth, 1, 1, info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(0));
-            tessellator.addVertexWithUV(depth, 1, 0, info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(0));
+        if (info.renderSide[4]) {
+            worldRenderer.pos(depth, 0, 0).tex(info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(16)).endVertex();
+            worldRenderer.pos(depth, 0, 1).tex(info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(16)).endVertex();
+            worldRenderer.pos(depth, 1, 1).tex(info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(0)).endVertex();
+            worldRenderer.pos(depth, 1, 0).tex(info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(0)).endVertex();
         }
-        if(info.renderSide[5]){
-            tessellator.addVertexWithUV(1 - depth, 0, 0, info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(16));
-            tessellator.addVertexWithUV(1 - depth, 1, 0, info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(0));
-            tessellator.addVertexWithUV(1 - depth, 1, 1, info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(0));
-            tessellator.addVertexWithUV(1 - depth, 0, 1, info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(16));
+        if (info.renderSide[5]) {
+            worldRenderer.pos(1 - depth, 0, 0).tex(info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(16)).endVertex();
+            worldRenderer.pos(1 - depth, 1, 0).tex(info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(0)).endVertex();
+            worldRenderer.pos(1 - depth, 1, 1).tex(info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(0)).endVertex();
+            worldRenderer.pos(1 - depth, 0, 1).tex(info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(16)).endVertex();
         }
 
         tessellator.draw();
 
-        GL11.glPopMatrix();
+
+        OpenGL.glPopMatrix();
     }
 }

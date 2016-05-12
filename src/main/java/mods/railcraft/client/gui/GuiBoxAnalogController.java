@@ -119,7 +119,7 @@ public class GuiBoxAnalogController extends GuiBasic {
     @Override
     public void drawScreen(int x, int y, float f) {
         super.drawScreen(x, y, f);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
         for (GuiTextField t : textBox.values()) {
             t.drawTextBox();
         }

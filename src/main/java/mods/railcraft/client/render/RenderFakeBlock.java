@@ -11,6 +11,7 @@ package mods.railcraft.client.render;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
@@ -24,8 +25,8 @@ public class RenderFakeBlock {
     public static class RenderInfo {
 
         public Block template = Blocks.stone;
-        public IIcon[] texture = null;
-        public IIcon override = null;
+        public TextureAtlasSprite[] texture;
+        public TextureAtlasSprite override;
         public float minX = 0;
         public float minY = 0;
         public float minZ = 0;
@@ -40,7 +41,7 @@ public class RenderFakeBlock {
             setRenderAllSides();
         }
 
-        public RenderInfo(Block template, IIcon[] texture) {
+        public RenderInfo(Block template, TextureAtlasSprite[] texture) {
             this();
             this.template = template;
             this.texture = texture;
@@ -91,7 +92,7 @@ public class RenderFakeBlock {
             maxZ = 1 - temp;
         }
 
-        public IIcon getBlockTextureFromSide(int i) {
+        public TextureAtlasSprite getBlockTextureFromSide(int i) {
             if (override != null)
                 return override;
             if (texture == null || texture.length == 0)
@@ -212,10 +213,10 @@ public class RenderFakeBlock {
             float red = (float) (j >> 16 & 0xff) / 255F;
             float green = (float) (j >> 8 & 0xff) / 255F;
             float blue = (float) (j & 0xff) / 255F;
-            GL11.glColor4f(red * light, green * light, blue * light, 1.0F);
+            OpenGL.glColor4f(red * light, green * light, blue * light, 1.0F);
         }
         renderer.setRenderBounds(info.minX, info.minY, info.minZ, info.maxX, info.maxY, info.maxZ);
-        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+        OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
         int s = 0;
         if (info.renderSide[s]) {
             tessellator.startDrawingQuads();
@@ -271,7 +272,7 @@ public class RenderFakeBlock {
             tessellator.draw();
         }
 
-        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+        OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
         if (side >= 0)
             info.setRenderAllSides();
     }

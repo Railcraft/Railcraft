@@ -51,7 +51,7 @@ public class ItemRenderer implements IItemRenderer {
         switch (type) {
             case EQUIPPED:
             case EQUIPPED_FIRST_PERSON:
-                GL11.glTranslatef(0.5f, 0.5f, 0.5f);
+                OpenGL.glTranslatef(0.5f, 0.5f, 0.5f);
                 renderer.renderItem((RenderBlocks) data[0], item, type);
                 break;
             case INVENTORY:
@@ -80,28 +80,28 @@ public class ItemRenderer implements IItemRenderer {
 
 //        float scale = 0.5F;
 //
-//        GL11.glScalef(scale, scale, scale);
+//        OpenGL.glScalef(scale, scale, scale);
 
         if (render.useInventoryTint) {
             int color = stack.getItem().getColorFromItemStack(stack, 0);
             float r = (float) (color >> 16 & 255) / 255.0F;
             float g = (float) (color >> 8 & 255) / 255.0F;
             float b = (float) (color & 255) / 255.0F;
-            GL11.glColor4f(r, g, b, 1.0F);
+            OpenGL.glColor4f(r, g, b, 1.0F);
         }
 
 //        for (int ii = 0; ii < num; ++ii) {
-//            GL11.glPushMatrix();
+//            OpenGL.glPushMatrix();
 //
 //            if (ii > 0) {
 //                float x = (rand.nextFloat() * 2.0F - 1.0F) * 0.2F / scale;
 //                float y = (rand.nextFloat() * 2.0F - 1.0F) * 0.2F / scale;
 //                float z = (rand.nextFloat() * 2.0F - 1.0F) * 0.2F / scale;
-//                GL11.glTranslatef(x, y, z);
+//                OpenGL.glTranslatef(x, y, z);
 //            }
 
         renderer.renderItem(render, stack, ItemRenderType.ENTITY);
-//            GL11.glPopMatrix();
+//            OpenGL.glPopMatrix();
 //        }
     }
 

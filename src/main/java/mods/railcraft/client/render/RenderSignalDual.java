@@ -158,9 +158,9 @@ public class RenderSignalDual extends RenderTESRSignals implements ICombinedRend
         float f = 3.0F * pix;
         float f1 = 13.0F * pix;
 
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glEnable(OpenGL.GL_BLEND);
 
         info.setBlockBounds(f, 0.0F, f, f1, 1.0F, f1);
         info.texture[0] = BlockSignalRailcraft.texturesSignalDual[0];
@@ -185,7 +185,7 @@ public class RenderSignalDual extends RenderTESRSignals implements ICombinedRend
             RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
         }
 
-        GL11.glPopAttrib();
+        OpenGL.glPopAttrib();
     }
 
     private static final RenderInfo tesrInfo = new RenderInfo();

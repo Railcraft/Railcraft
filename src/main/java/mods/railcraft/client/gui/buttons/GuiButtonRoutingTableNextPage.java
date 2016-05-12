@@ -36,7 +36,7 @@ public class GuiButtonRoutingTableNextPage extends GuiButton {
     public void drawButton(Minecraft par1Minecraft, int par2, int par3) {
         if (this.visible) {
             boolean flag = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             par1Minecraft.renderEngine.bindTexture(GuiRoutingTable.TEXTURE);
             int k = 0;
             int l = 192;

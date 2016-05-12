@@ -64,29 +64,29 @@ public class RenderItemLocomotive implements IItemRenderer, IRenderer {
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
-        GL11.glPushMatrix();
+        OpenGL.glPushMatrix();
         switch (type) {
             case EQUIPPED_FIRST_PERSON:
-                GL11.glTranslatef(0.5F, 0.4F, 0f);
-                GL11.glRotatef(20.0F, 0.0F, 0.0F, 1.0F);
-                GL11.glRotatef(-10.0F, 1.0F, 0.0F, 0.0F);
+                OpenGL.glTranslatef(0.5F, 0.4F, 0f);
+                OpenGL.glRotatef(20.0F, 0.0F, 0.0F, 1.0F);
+                OpenGL.glRotatef(-10.0F, 1.0F, 0.0F, 0.0F);
                 render(stack, 0.6F);
                 break;
             case EQUIPPED:
-                GL11.glTranslatef(0.5F, 0.5F, 0f);
-                GL11.glRotatef(-35.0F, 0.0F, 1.0F, 0.0F);
-                GL11.glRotatef(40.0F, 0.0F, 0.0F, 1.0F);
-                GL11.glRotatef(-45.0F, 1.0F, 0.0F, 0.0F);
+                OpenGL.glTranslatef(0.5F, 0.5F, 0f);
+                OpenGL.glRotatef(-35.0F, 0.0F, 1.0F, 0.0F);
+                OpenGL.glRotatef(40.0F, 0.0F, 0.0F, 1.0F);
+                OpenGL.glRotatef(-45.0F, 1.0F, 0.0F, 0.0F);
                 render(stack, 0.6F);
                 break;
             case ENTITY:
             case INVENTORY:
-                GL11.glTranslatef(0F, -0.1F, 0f);
-                GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+                OpenGL.glTranslatef(0F, -0.1F, 0f);
+                OpenGL.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
                 render(stack, 0.8F);
                 break;
         }
-        GL11.glPopMatrix();
+        OpenGL.glPopMatrix();
     }
 
     @Override
@@ -95,14 +95,14 @@ public class RenderItemLocomotive implements IItemRenderer, IRenderer {
     }
 
     private void render(ItemStack stack, float scale) {
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glEnable(OpenGL.GL_LIGHTING);
+        OpenGL.glEnable(OpenGL.GL_BLEND);
+        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
 
-        GL11.glScalef(scale, scale, scale);
+        OpenGL.glScalef(scale, scale, scale);
 
         entity.rotationYaw = 0;
         entity.rotationPitch = 0;
@@ -112,7 +112,7 @@ public class RenderItemLocomotive implements IItemRenderer, IRenderer {
 
         LocomotiveRenderer.INSTANCE.render(this, entity, 1.0F, 1.0F);
 
-        GL11.glPopAttrib();
+        OpenGL.glPopAttrib();
     }
 
 }

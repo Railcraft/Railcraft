@@ -50,7 +50,7 @@ public class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton
         }
         FontRenderer fontrenderer = minecraft.fontRendererObj;
         bindButtonTextures(minecraft);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         IMultiButtonState state = control.getButtonState();
         IButtonTextureSet tex = state.getTextureSet();
         int xOffset = tex.getX();

@@ -32,8 +32,8 @@ public class CartContentRendererMaintance extends CartContentRenderer {
     public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
         super.render(renderer, cart, light, time);
         int blockOffset = cart.getDisplayTileOffset();
-        GL11.glPushMatrix();
-        GL11.glTranslatef(-0.5F, blockOffset / 16.0F - 0.5F, -0.5F);
+        OpenGL.glPushMatrix();
+        OpenGL.glTranslatef(-0.5F, blockOffset / 16.0F - 0.5F, -0.5F);
         CartMaintenanceBase maint = (CartMaintenanceBase) cart;
         if (maint.isBlinking()) {
             renderer.bindTex(LAMP_ON_TEX);
@@ -42,7 +42,7 @@ public class CartContentRendererMaintance extends CartContentRenderer {
             renderer.bindTex(LAMP_OFF_TEX);
             LAMP_OFF.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         }
-        GL11.glPopMatrix();
+        OpenGL.glPopMatrix();
     }
 
 }

@@ -167,7 +167,7 @@ public class GuiTicket extends GuiScreen {
      */
     @Override
     public void drawScreen(int par1, int par2, float par3) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(TEXTURE);
         int xOffset = (this.width - this.imageWidth) / 2;
         byte yOffset = 18;
@@ -179,10 +179,10 @@ public class GuiTicket extends GuiScreen {
             String text = LocalizationPlugin.translate("railcraft.gui.routing.ticket.manual");
             this.fontRendererObj.drawSplitString(text, xOffset + 16, yOffset + 30, WRAP_WIDTH, 0);
         } else {
-            GL11.glPushMatrix();
-            GL11.glScalef(2F, 2F, 2F);
+            OpenGL.glPushMatrix();
+            OpenGL.glScalef(2F, 2F, 2F);
             GuiTools.drawCenteredString(fontRendererObj, EnumChatFormatting.BOLD + LocalizationPlugin.translate("railcraft.gui.routing.ticket.title"), yOffset - 2, width / 2, 0xFFFFFF, true);
-            GL11.glPopMatrix();
+            OpenGL.glPopMatrix();
 
 
             GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.routing.ticket.line1"), yOffset + 50, width);

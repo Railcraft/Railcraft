@@ -63,7 +63,7 @@ public class RenderStair extends BlockRenderer {
             if (k == 1)
                 renderBlocks.setRenderBounds(0.0D, 0.0D, 0.5D, 1.0D, 0.5D, 1.0D);
 
-            GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+            OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
             tess.startDrawingQuads();
             tess.setNormal(0.0F, -1.0F, 0.0F);
             renderBlocks.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderBlocks.getBlockIconFromSideAndMetadata(block, 0, meta));
@@ -88,7 +88,7 @@ public class RenderStair extends BlockRenderer {
             tess.setNormal(1.0F, 0.0F, 0.0F);
             renderBlocks.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderBlocks.getBlockIconFromSideAndMetadata(block, 5, meta));
             tess.draw();
-            GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+            OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
         }
 
         renderBlocks.setRenderBounds(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);

@@ -102,13 +102,13 @@ public class RenderTrackBuffer extends TileEntitySpecialRenderer {
 ////            }
 ////        }
 //
-//        GL11.glPushMatrix();
+//        OpenGL.glPushMatrix();
 //        Tessellator tess = Tessellator.instance;
 //        tess.draw();
 //        tess.startDrawingQuads();
-//        GL11.glTranslatef(-8, 0, -8);
-//        GL11.glRotatef(90, 0, 1, 0);
-//        GL11.glTranslatef(8, 0, (float) y % 16);
+//        OpenGL.glTranslatef(-8, 0, -8);
+//        OpenGL.glRotatef(90, 0, 1, 0);
+//        OpenGL.glTranslatef(8, 0, (float) y % 16);
 //        RenderFakeBlock.renderBlock(board, world, x, y, z, true, false);
 //        RenderFakeBlock.renderBlock(bumper1, world, x, y, z, true, false);
 //        RenderFakeBlock.renderBlock(bumper2, world, x, y, z, true, false);
@@ -116,7 +116,7 @@ public class RenderTrackBuffer extends TileEntitySpecialRenderer {
 //        RenderFakeBlock.renderBlock(baseSmall, world, x, y, z, true, false);
 //        tess.draw();
 //        tess.startDrawingQuads();
-//        GL11.glPopMatrix();
+//        OpenGL.glPopMatrix();
 //    }
     private static ModelSimple model = new ModelBufferStop();
     private static ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + "track_buffer_stop.png");
@@ -126,13 +126,13 @@ public class RenderTrackBuffer extends TileEntitySpecialRenderer {
         if (tile instanceof TileTrack) {
             if (((TileTrack) tile).getTrackInstance() instanceof TrackBufferStop) {
                 TrackBufferStop track = (TrackBufferStop) ((TileTrack) tile).getTrackInstance();
-                GL11.glPushMatrix();
-                GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-                GL11.glEnable(GL11.GL_LIGHTING);
-                GL11.glDisable(GL11.GL_BLEND);
-                GL11.glEnable(GL11.GL_CULL_FACE);
-                GL11.glColor3f(1, 1, 1);
-                GL11.glTranslatef((float) x, (float) y, (float) z);
+                OpenGL.glPushMatrix();
+                OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+                OpenGL.glEnable(OpenGL.GL_LIGHTING);
+                OpenGL.glDisable(OpenGL.GL_BLEND);
+                OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+                OpenGL.glColor3f(1, 1, 1);
+                OpenGL.glTranslatef((float) x, (float) y, (float) z);
 
                 model.resetRotation();
 
@@ -147,8 +147,8 @@ public class RenderTrackBuffer extends TileEntitySpecialRenderer {
 
                 bindTexture(TEXTURE);
                 model.render(1f / 16f);
-                GL11.glPopAttrib();
-                GL11.glPopMatrix();
+                OpenGL.glPopAttrib();
+                OpenGL.glPopMatrix();
             }
         }
     }

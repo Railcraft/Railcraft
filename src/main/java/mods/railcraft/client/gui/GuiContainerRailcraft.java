@@ -44,11 +44,11 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         int left = this.guiLeft;
         int top = this.guiTop;
 
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float) left, (float) top, 0.0F);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
+        OpenGL.glDisable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glPushMatrix();
+        OpenGL.glTranslatef((float) left, (float) top, 0.0F);
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderHelper.disableStandardItemLighting();
 
         InventoryPlayer playerInv = this.mc.thePlayer.inventory;
@@ -103,14 +103,14 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
             }
         }
 
-        GL11.glPopMatrix();
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        OpenGL.glPopMatrix();
+        OpenGL.glEnable(OpenGL.GL_LIGHTING);
+        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         bindTexture(texture);
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
@@ -276,7 +276,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
 //    public void drawTexture(int x, int y, int w, int h, float uMin, float vMin, float uMax, float vMax) {
 //        Tessellator tessellator = Tessellator.getInstance();
 //        WorldRenderer wr = tessellator.getWorldRenderer();
-//        wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+//        wr.begin(OpenGL.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 //        wr.pos(x + 0, y + h, zLevel).tex(uMin, vMax).endVertex();
 //        wr.pos(x + w, y + h, zLevel).tex(uMax, vMax).endVertex();
 //        wr.pos(x + w, y + 0, zLevel).tex(uMax, vMin).endVertex();

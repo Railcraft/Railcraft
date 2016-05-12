@@ -78,7 +78,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
      */
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        GL11.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
         this.fontRendererObj.drawString(I18n.format("container.repair"), 60, 6, 4210752);
 
         if (this.repairContainer.maximumCost > 0) {
@@ -112,7 +112,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
             }
         }
 
-        GL11.glEnable(GL11.GL_LIGHTING);
+        OpenGL.glEnable(OpenGL.GL_LIGHTING);
     }
 
     /**
@@ -153,7 +153,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
     @Override
     public void drawScreen(int par1, int par2, float par3) {
         super.drawScreen(par1, par2, par3);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
         this.itemNameField.drawTextBox();
     }
 
@@ -163,7 +163,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
      */
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(anvilGuiTextures);
         int k = (this.width - this.xSize) / 2;
         int l = (this.height - this.ySize) / 2;

@@ -62,7 +62,7 @@ public class RenderWall extends BlockRenderer {
             if (i == 1)
                 renderBlocks.setRenderBounds(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D);
 
-            GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+            OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
             tess.startDrawingQuads();
             tess.setNormal(0.0F, -1.0F, 0.0F);
             IIcon icon = block.getIcon(0, meta);
@@ -99,7 +99,7 @@ public class RenderWall extends BlockRenderer {
             if (icon != null)
                 renderBlocks.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, icon);
             tess.draw();
-            GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+            OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
         }
 
         renderBlocks.setRenderBounds(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);

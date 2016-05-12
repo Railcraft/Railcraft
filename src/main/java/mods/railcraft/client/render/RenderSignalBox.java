@@ -155,11 +155,11 @@ public class RenderSignalBox extends RenderTESRSignals implements ICombinedRende
 
     @Override
     public void renderItem(RenderBlocks renderblocks, ItemStack item, ItemRenderType renderType) {
-        GL11.glColor4f(1, 1, 1, 1);
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glColor4f(1, 1, 1, 1);
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glEnable(OpenGL.GL_BLEND);
+        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
 
         info.override = null;
         float pix = RenderTools.PIXEL;
@@ -181,7 +181,7 @@ public class RenderSignalBox extends RenderTESRSignals implements ICombinedRende
         RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
         info.setRenderAllSides();
 
-        GL11.glPopAttrib();
+        OpenGL.glPopAttrib();
     }
 
 	private static final RenderInfo tesrInfo = new RenderInfo();

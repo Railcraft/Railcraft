@@ -42,13 +42,13 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer {
     @Override
     public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
         super.render(renderer, cart, light, time);
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glTranslatef(0.0F, 0.3125F, 0.0F);
-        GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushMatrix();
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
+        OpenGL.glRotatef(90F, 0.0F, 1.0F, 0.0F);
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
+        OpenGL.glEnable(OpenGL.GL_BLEND);
+        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
 
         int x = (int) (Math.floor(cart.posX));
         int y = (int) (Math.floor(cart.posY));
@@ -57,20 +57,20 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer {
         EntityCartRF cartRF = (EntityCartRF) cart;
         renderer.bindTex(TextureMap.locationBlocksTexture);
 
-        GL11.glTranslatef(0, 0.0625f, 0);
+        OpenGL.glTranslatef(0, 0.0625f, 0);
 
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         RenderFakeBlock.renderBlockForEntity(leadFrame, cart.worldObj, x, y, z, false, true);
 
         float scale = 0.99F;
-        GL11.glScalef(scale, scale, scale);
+        OpenGL.glScalef(scale, scale, scale);
 
         float bright = 0.5F + 0.5F * (float) ((double) cartRF.getRF() / (double) cartRF.getMaxRF());
-        GL11.glColor4f(bright, bright, bright, 1.0f);
+        OpenGL.glColor4f(bright, bright, bright, 1.0f);
 
         RenderFakeBlock.renderBlockForEntity(redBlock, cart.worldObj, x, y, z, false, true);
 
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();
+        OpenGL.glPopAttrib();
+        OpenGL.glPopMatrix();
     }
 }

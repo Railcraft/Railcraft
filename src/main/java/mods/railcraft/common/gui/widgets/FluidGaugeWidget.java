@@ -55,7 +55,7 @@ public class FluidGaugeWidget extends Widget {
             }
         }
 
-        GL11.glColor4f(1, 1, 1, 1);
+        OpenGL.glColor4f(1, 1, 1, 1);
         gui.bindTexture(gui.texture);
 
         gui.drawTexturedModalRect(guiX + x, guiY + y - 1, x, y - 1, w, h - (int) Math.floor(h * scale) + 1);

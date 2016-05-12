@@ -69,8 +69,8 @@ public class RenderTurbineGauge extends TileEntitySpecialRenderer {
         int lmY = lmCoords / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lmX / 1.0F, lmY / 1.0F);
 
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(OpenGL.GL_TEXTURE_2D);
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
 
         Tessellator tessellator = Tessellator.instance;
 
@@ -103,8 +103,8 @@ public class RenderTurbineGauge extends TileEntitySpecialRenderer {
 
         // resetting
         tessellator.setTranslation(0, 0, 0);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        OpenGL.glEnable(OpenGL.GL_LIGHTING);
+        OpenGL.glEnable(OpenGL.GL_TEXTURE_2D);
     }
 
 }

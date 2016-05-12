@@ -50,13 +50,13 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
 
     @Override
     public void doRender(EntityMinecart cart, double x, double y, double z, float yaw, float partialTicks) {
-        GL11.glPushMatrix();
+        OpenGL.glPushMatrix();
         long var10 = (long) cart.getEntityId() * 493286711L;
         var10 = var10 * var10 * 4392167121L + var10 * 98761L;
         float tx = (((float) (var10 >> 16 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
         float ty = (((float) (var10 >> 20 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
         float tz = (((float) (var10 >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
-        GL11.glTranslatef(tx, ty, tz);
+        OpenGL.glTranslatef(tx, ty, tz);
         double mx = cart.lastTickPosX + (cart.posX - cart.lastTickPosX) * (double) partialTicks;
         double my = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * (double) partialTicks;
         double mz = cart.lastTickPosZ + (cart.posZ - cart.lastTickPosZ) * (double) partialTicks;
@@ -100,7 +100,7 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
 
             ((IDirectionalCart) cart).setRenderYaw(yaw);
         }
-        GL11.glTranslatef((float) x, (float) y, (float) z);
+        OpenGL.glTranslatef((float) x, (float) y, (float) z);
 
         boolean name = false;
         if (cart.hasCustomName()) {
@@ -114,8 +114,8 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
                 renderHaloText(cart, dest, 0, name ? 0.5 : 0, 0, 64);
         }
 
-        GL11.glRotatef(180F - yaw, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-pitch, 0.0F, 0.0F, 1.0F);
+        OpenGL.glRotatef(180F - yaw, 0.0F, 1.0F, 0.0F);
+        OpenGL.glRotatef(-pitch, 0.0F, 0.0F, 1.0F);
 
         float f3 = (float) cart.getRollingAmplitude() - partialTicks;
         float f4 = cart.getDamage() - partialTicks;
@@ -125,7 +125,7 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
             float angle = (MathHelper.sin(f3) * f3 * f4) / 10F;
             angle = Math.min(angle, 0.8f);
             angle = Math.copySign(angle, cart.getRollingDirection());
-            GL11.glRotatef(angle, 1.0F, 0.0F, 0.0F);
+            OpenGL.glRotatef(angle, 1.0F, 0.0F, 0.0F);
         }
         float light = cart.getBrightness(partialTicks);
 //        light = light + ((1.0f - light) * 0.4f);
@@ -134,12 +134,12 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
 
         if (renderContents) {
             float blockScale = 0.74F;
-            GL11.glScalef(blockScale, blockScale, blockScale);
-            GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
+            OpenGL.glScalef(blockScale, blockScale, blockScale);
+            OpenGL.glPushAttrib(OpenGL.GL_LIGHTING_BIT);
             renderContents(cart, light, partialTicks);
-            GL11.glPopAttrib();
+            OpenGL.glPopAttrib();
         }
-        GL11.glPopMatrix();
+        OpenGL.glPopMatrix();
     }
 
     private boolean renderCore(EntityMinecart cart, float light, float time) {

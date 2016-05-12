@@ -78,11 +78,11 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
 
     @Override
     public void renderLocomotive(IRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, ResourceLocation emblemTexture, float light, float time) {
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glScalef(-1F, -1F, 1.0F);
+        OpenGL.glPushMatrix();
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_BLEND);
+        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glScalef(-1F, -1F, 1.0F);
 
         color[0] = primaryColor;
         color[1] = secondaryColor;
@@ -96,10 +96,10 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
             float c1 = (float) (c >> 16 & 255) / 255.0F;
             float c2 = (float) (c >> 8 & 255) / 255.0F;
             float c3 = (float) (c & 255) / 255.0F;
-            GL11.glColor4f(c1 * dim, c2 * dim, c3 * dim, 1);
+            OpenGL.glColor4f(c1 * dim, c2 * dim, c3 * dim, 1);
             model.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         }
-        GL11.glPopAttrib();
+        OpenGL.glPopAttrib();
 
         if (emblemTexture != null) {
             renderer.bindTex(emblemTexture);
@@ -121,7 +121,7 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
             tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, -emblemOffsetZ, 1, 0);
             tess.draw();
         }
-        GL11.glPopMatrix();
+        OpenGL.glPopMatrix();
     }
 
 }

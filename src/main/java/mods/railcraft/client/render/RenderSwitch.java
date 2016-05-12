@@ -319,7 +319,7 @@ public class RenderSwitch implements ICombinedRenderer {
             case EQUIPPED_FIRST_PERSON:
             case ENTITY:
                 float scale = 1.5f;
-                GL11.glScalef(scale, scale, scale);
+                OpenGL.glScalef(scale, scale, scale);
         }
 
         // Core

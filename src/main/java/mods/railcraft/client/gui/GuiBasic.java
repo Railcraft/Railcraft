@@ -50,20 +50,20 @@ public abstract class GuiBasic extends GuiScreen {
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
         mc.renderEngine.bindTexture(texture);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         drawTexturedModalRect(w, h, 0, 0, xSize, ySize);
-        GL11.glPushMatrix();
-        GL11.glTranslatef(w, h, 0.0F);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        OpenGL.glPushMatrix();
+        OpenGL.glTranslatef(w, h, 0.0F);
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
+        OpenGL.glDisable(OpenGL.GL_DEPTH_TEST);
         GuiTools.drawCenteredString(fontRendererObj, label, 6, xSize);
         drawExtras(x, y, f);
-        GL11.glPopMatrix();
+        OpenGL.glPopMatrix();
         super.drawScreen(x, y, f);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glEnable(OpenGL.GL_LIGHTING);
     }
 
     protected void drawExtras(int x, int y, float f) {

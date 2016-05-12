@@ -54,17 +54,17 @@ public class ModelGift extends ModelTextured {
 
     @Override
     public void render(Entity entity, float x, float y, float z, float yaw, float pitch, float time) {
-        GL11.glPushMatrix();
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glTranslatef(0, 1, 1);
-        GL11.glScalef(1.0F, -1.0F, -1.0F);
-        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-        GL11.glRotatef(-90, 0.0F, 1.0F, 0.0F);
-        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+        OpenGL.glPushMatrix();
+        OpenGL.glEnable(GL12.GL_RESCALE_NORMAL);
+        OpenGL.glTranslatef(0, 1, 1);
+        OpenGL.glScalef(1.0F, -1.0F, -1.0F);
+        OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
+        OpenGL.glRotatef(-90, 0.0F, 1.0F, 0.0F);
+        OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
         this.chestKnob.rotateAngleX = this.chestLid.rotateAngleX;
         this.chestLid.render(0.0625F);
         this.chestKnob.render(0.0625F);
         this.chestBelow.render(0.0625F);
-        GL11.glPopMatrix();
+        OpenGL.glPopMatrix();
     }
 }

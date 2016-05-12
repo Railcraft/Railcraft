@@ -10,6 +10,7 @@ package mods.railcraft.client.render;
 
 import mods.railcraft.common.blocks.machine.beta.TileChestRailcraft;
 import net.minecraft.client.model.ModelChest;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -21,10 +22,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderChest extends TileEntitySpecialRenderer implements IInvRenderer {
+public class RenderChest extends TileEntitySpecialRenderer<TileChestRailcraft> implements IInvRenderer {
 
     /**
      * The Ender Chest Chest's model.
@@ -42,17 +42,28 @@ public class RenderChest extends TileEntitySpecialRenderer implements IInvRender
     /**
      * Helps to render Ender Chest.
      */
-    public void renderChest(TileChestRailcraft tile, double x, double y, double z, float time) {
+    @Override
+    public void renderTileEntityAt(TileChestRailcraft tile, double x, double y, double z, float partialTicks, int destroyStage) {
         int facing = tile.getFacing().ordinal();
 
-        bindTexture(texture);
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glTranslatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
-        GL11.glScalef(1.0F, -1.0F, -1.0F);
-        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+        if (destroyStage >= 0) {
+            bindTexture(DESTROY_STAGES[destroyStage]);
+            OpenGL.glMatrixMode(OpenGL.GL_TEXTURE);
+            OpenGL.glPushMatrix();
+            OpenGL.glScalef(4.0F, 4.0F, 1.0F);
+            OpenGL.glTranslatef(0.0625F, 0.0625F, 0.0625F);
+            OpenGL.glMatrixMode(OpenGL.GL_MODELVIEW);
+        } else {
+            bindTexture(texture);
+        }
+
+        OpenGL.glPushMatrix();
+        OpenGL.glPushAttrib();
+        OpenGL.glEnable(OpenGL.GL_RESCALE_NORMAL);
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        OpenGL.glTranslatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
+        OpenGL.glScalef(1.0F, -1.0F, -1.0F);
+        OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
         short rotation = 0;
 
         switch (facing) {
@@ -70,27 +81,27 @@ public class RenderChest extends TileEntitySpecialRenderer implements IInvRender
                 break;
         }
 
-        GL11.glRotatef((float) rotation, 0.0F, 1.0F, 0.0F);
-        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-        float lidAngle = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * time;
+        OpenGL.glRotatef((float) rotation, 0.0F, 1.0F, 0.0F);
+        OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
+        float lidAngle = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * partialTicks;
         lidAngle = 1.0F - lidAngle;
         lidAngle = 1.0F - lidAngle * lidAngle * lidAngle;
-        this.chestModel.chestLid.rotateAngleX = -(lidAngle * (float) Math.PI / 2.0F);
-        this.chestModel.renderAll();
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-    }
+        chestModel.chestLid.rotateAngleX = -(lidAngle * (float) Math.PI / 2.0F);
+        chestModel.renderAll();
+        OpenGL.glPopAttrib();
+        OpenGL.glPopMatrix();
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-    @Override
-    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float time) {
-        this.renderChest((TileChestRailcraft) tile, x, y, z, time);
+        if (destroyStage >= 0) {
+            OpenGL.glMatrixMode(OpenGL.GL_TEXTURE);
+            OpenGL.glPopMatrix();
+            OpenGL.glMatrixMode(OpenGL.GL_MODELVIEW);
+        }
     }
 
     @Override
     public void renderItem(RenderBlocks renderBlocks, ItemStack item, ItemRenderType renderType) {
-        TileEntityRendererDispatcher.instance.renderTileEntityAt(this.itemTile, 0.0D, 0.0D, 0.0D, 0.0F);
+        TileEntityRendererDispatcher.instance.renderTileEntityAt(itemTile, 0.0D, 0.0D, 0.0D, 0.0F);
     }
 
 }

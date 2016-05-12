@@ -86,33 +86,33 @@ public class GuiTools {
     }
 
     public static void drawVillager(EntityVillager villager, int x, int y, int scale, float yaw, float pitch) {
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float) x, (float) y, 50.0F);
-        GL11.glScalef((float) (-scale), (float) scale, (float) scale);
-        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-        GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_LIGHTING);
+        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glEnable(OpenGL.GL_COLOR_MATERIAL);
+        OpenGL.glPushMatrix();
+        OpenGL.glTranslatef((float) x, (float) y, 50.0F);
+        OpenGL.glScalef((float) (-scale), (float) scale, (float) scale);
+        OpenGL.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
+        OpenGL.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
         RenderHelper.enableStandardItemLighting();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-((float) Math.atan((double) (pitch / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        OpenGL.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
+        OpenGL.glRotatef(-((float) Math.atan((double) (pitch / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
         villager.renderYawOffset = (float) Math.atan((double) (yaw / 40.0F)) * 20.0F;
         villager.rotationYaw = (float) Math.atan((double) (yaw / 40.0F)) * 40.0F;
         villager.rotationPitch = -((float) Math.atan((double) (pitch / 40.0F))) * 20.0F;
         villager.rotationYawHead = villager.rotationYaw;
-        GL11.glTranslatef(0.0F, (float) villager.getYOffset(), 0.0F);
+        OpenGL.glTranslatef(0.0F, (float) villager.getYOffset(), 0.0F);
         Minecraft.getMinecraft().getRenderManager().playerViewY = 180.0F;
         Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(villager, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
-        GL11.glPopMatrix();
+        OpenGL.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+        OpenGL.glDisable(GL12.GL_RESCALE_NORMAL);
         OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        OpenGL.glDisable(OpenGL.GL_TEXTURE_2D);
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
-        GL11.glPopAttrib();
+        OpenGL.glPopAttrib();
     }
 
 }

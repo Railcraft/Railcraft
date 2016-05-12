@@ -112,8 +112,8 @@ public class GuiDetectorItem extends TileGui {
             Color color = new Color(0, 0, 0, 80);
             int displayY;
 
-            GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            OpenGL.glDisable(OpenGL.GL_LIGHTING);
+            OpenGL.glDisable(OpenGL.GL_DEPTH_TEST);
             for (int slotNum = 0; slotNum < 9; slotNum++) {
                 Slot slot = this.inventorySlots.inventorySlots.get(slotNum);
 
@@ -121,8 +121,8 @@ public class GuiDetectorItem extends TileGui {
                 displayY = slot.yDisplayPosition;
                 this.drawGradientRect(displayX, displayY, displayX + 16, displayY + 16, color.getRGB(), color.getRGB());
             }
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            OpenGL.glEnable(OpenGL.GL_LIGHTING);
+            OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
         } else
             GuiTools.drawCenteredString(fontRendererObj, detector.getFilterMode().toString(), 45);
     }

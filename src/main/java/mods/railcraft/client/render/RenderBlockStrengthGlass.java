@@ -54,7 +54,7 @@ public class RenderBlockStrengthGlass extends BlockRenderer {
         float r = (float) (color >> 16 & 0xff) / 255F;
         float g = (float) (color >> 8 & 0xff) / 255F;
         float b = (float) (color & 0xff) / 255F;
-        GL11.glColor4f(r, g, b, 1.0F);
+        OpenGL.glColor4f(r, g, b, 1.0F);
     }
 
 }

@@ -25,16 +25,16 @@ public class RenderCartItemFiltered implements IItemRenderer {
     public enum RendererType {
         Tank {
             public void setupRender() {
-                GL11.glTranslatef(-1F, 6.5F, 0F);
+                OpenGL.glTranslatef(-1F, 6.5F, 0F);
                 float scale = 0.6F;
-                GL11.glScalef(scale, scale, scale);
+                OpenGL.glScalef(scale, scale, scale);
             }
         },
         Cargo {
             public void setupRender() {
-                GL11.glTranslatef(4.5F, 2F, 0F);
+                OpenGL.glTranslatef(4.5F, 2F, 0F);
                 float scale = 0.5F;
-                GL11.glScalef(scale, scale, scale);
+                OpenGL.glScalef(scale, scale, scale);
             }
         };
 
@@ -59,11 +59,11 @@ public class RenderCartItemFiltered implements IItemRenderer {
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushMatrix();
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glEnable(OpenGL.GL_BLEND);
+        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
 
         IIcon cartTexture = stack.getIconIndex();
         renderItem.renderIcon(0, 0, cartTexture, 16, 16);
@@ -74,8 +74,8 @@ public class RenderCartItemFiltered implements IItemRenderer {
             RenderItem.getInstance().renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), filter, 0, 0);
         }
 
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();
+        OpenGL.glPopAttrib();
+        OpenGL.glPopMatrix();
     }
 
 }

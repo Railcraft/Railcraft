@@ -65,17 +65,17 @@ public class RenderIronTank extends TileEntitySpecialRenderer {
     }
 
     private void preGL() {
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushMatrix();
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
+        OpenGL.glEnable(OpenGL.GL_BLEND);
+        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     private void postGL() {
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();
+        OpenGL.glPopAttrib();
+        OpenGL.glPopMatrix();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class RenderIronTank extends TileEntitySpecialRenderer {
             TileTankIronValve valve = (TileTankIronValve) tile;
             StandardTank fillTank = valve.getFillTank();
             if (fillTank.renderData.fluid != null && fillTank.renderData.amount > 0) {
-                GL11.glPushMatrix();
+                OpenGL.glPushMatrix();
                 if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPositionX(), valve.getPatternPositionY() - 1, valve.getPatternPositionZ()) == 'A') {
 
                     prepFillTexture(fillTank);
@@ -95,8 +95,8 @@ public class RenderIronTank extends TileEntitySpecialRenderer {
                     int height = getTankHeight(valve);
                     float yOffset = height / 2f;
                     float vScale = height - 2f;
-                    GL11.glTranslatef((float) x + 0.5F, (float) y + yOffset - height + 1, (float) z + 0.5F);
-                    GL11.glScalef(1f, vScale, 1f);
+                    OpenGL.glTranslatef((float) x + 0.5F, (float) y + yOffset - height + 1, (float) z + 0.5F);
+                    OpenGL.glScalef(1f, vScale, 1f);
 
                     draw(fillTank);
                 } else if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPositionX() - 1, valve.getPatternPositionY(), valve.getPatternPositionZ()) == 'A') {
@@ -105,8 +105,8 @@ public class RenderIronTank extends TileEntitySpecialRenderer {
 
                     float vScale = getVerticalScaleSide(valve);
                     float yOffset = 0.5f - vScale / 2f + RenderTools.PIXEL * 3;
-                    GL11.glTranslatef((float) x - 0.5F + RenderTools.PIXEL * 5, (float) y + yOffset, (float) z + 0.5F);
-                    GL11.glScalef(1f, vScale, 1f);
+                    OpenGL.glTranslatef((float) x - 0.5F + RenderTools.PIXEL * 5, (float) y + yOffset, (float) z + 0.5F);
+                    OpenGL.glScalef(1f, vScale, 1f);
 
                     draw(fillTank);
                 } else if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPositionX() + 1, valve.getPatternPositionY(), valve.getPatternPositionZ()) == 'A') {
@@ -115,8 +115,8 @@ public class RenderIronTank extends TileEntitySpecialRenderer {
 
                     float vScale = getVerticalScaleSide(valve);
                     float yOffset = 0.5f - vScale / 2f + RenderTools.PIXEL * 3;
-                    GL11.glTranslatef((float) x + 1.5F - RenderTools.PIXEL * 5, (float) y + yOffset, (float) z + 0.5F);
-                    GL11.glScalef(1f, vScale, 1f);
+                    OpenGL.glTranslatef((float) x + 1.5F - RenderTools.PIXEL * 5, (float) y + yOffset, (float) z + 0.5F);
+                    OpenGL.glScalef(1f, vScale, 1f);
 
                     draw(fillTank);
                 } else if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPositionX(), valve.getPatternPositionY(), valve.getPatternPositionZ() - 1) == 'A') {
@@ -125,8 +125,8 @@ public class RenderIronTank extends TileEntitySpecialRenderer {
 
                     float vScale = getVerticalScaleSide(valve);
                     float yOffset = 0.5f - vScale / 2f + RenderTools.PIXEL * 3;
-                    GL11.glTranslatef((float) x + 0.5F, (float) y + yOffset, (float) z - 0.5F + RenderTools.PIXEL * 5);
-                    GL11.glScalef(1f, vScale, 1f);
+                    OpenGL.glTranslatef((float) x + 0.5F, (float) y + yOffset, (float) z - 0.5F + RenderTools.PIXEL * 5);
+                    OpenGL.glScalef(1f, vScale, 1f);
 
                     draw(fillTank);
                 } else if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPositionX(), valve.getPatternPositionY(), valve.getPatternPositionZ() + 1) == 'A') {
@@ -135,12 +135,12 @@ public class RenderIronTank extends TileEntitySpecialRenderer {
 
                     float vScale = getVerticalScaleSide(valve);
                     float yOffset = 0.5f - vScale / 2f + RenderTools.PIXEL * 3;
-                    GL11.glTranslatef((float) x + 0.5F, (float) y + yOffset, (float) z + 1.5F - RenderTools.PIXEL * 5);
-                    GL11.glScalef(1f, vScale, 1f);
+                    OpenGL.glTranslatef((float) x + 0.5F, (float) y + yOffset, (float) z + 1.5F - RenderTools.PIXEL * 5);
+                    OpenGL.glScalef(1f, vScale, 1f);
 
                     draw(fillTank);
                 }
-                GL11.glPopMatrix();
+                OpenGL.glPopMatrix();
             }
         }
 
@@ -161,22 +161,22 @@ public class RenderIronTank extends TileEntitySpecialRenderer {
 
         if (tank.renderData.fluid != null && tank.renderData.amount > 0) {
             preGL();
-            GL11.glTranslatef((float) x + 0.5F, (float) y + yOffset + 0.01f, (float) z + 0.5F);
-            GL11.glScalef(hScale, vScale, hScale);
+            OpenGL.glTranslatef((float) x + 0.5F, (float) y + yOffset + 0.01f, (float) z + 0.5F);
+            OpenGL.glScalef(hScale, vScale, hScale);
 
-//        GL11.glScalef(0.999f, 1, 0.999f);
+//        OpenGL.glScalef(0.999f, 1, 0.999f);
             int[] displayLists = FluidRenderer.getLiquidDisplayLists(tank.renderData.fluid);
             if (displayLists != null) {
-                GL11.glPushMatrix();
+                OpenGL.glPushMatrix();
 
                 float cap = tank.getCapacity();
                 float level = Math.min(tank.renderData.amount, cap) / cap;
 
                 bindTexture(FluidRenderer.getFluidSheet(tank.renderData.fluid));
                 FluidRenderer.setColorForTank(tank);
-                GL11.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
+                OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
 
-                GL11.glPopMatrix();
+                OpenGL.glPopMatrix();
             }
 
             postGL();

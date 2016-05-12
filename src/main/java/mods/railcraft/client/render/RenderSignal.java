@@ -164,10 +164,10 @@ public class RenderSignal extends RenderTESRSignals implements ICombinedRenderer
         float min = 6 * pix;
         float max = 10 * pix;
 
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glEnable(OpenGL.GL_BLEND);
+        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
 
         info.texture[0] = BlockSignalRailcraft.texturesSignalSingle[3];
         info.texture[1] = BlockSignalRailcraft.texturesSignalSingle[3];
@@ -198,7 +198,7 @@ public class RenderSignal extends RenderTESRSignals implements ICombinedRenderer
         info.setBlockBounds(10 * pix, 10 * pix, size, 11 * pix, 14 * pix, size + 2 * pix);
         RenderFakeBlock.renderBlockOnInventory(renderblocks, info, 1);
 
-        GL11.glPopAttrib();
+        OpenGL.glPopAttrib();
     }
 
     private final RenderInfo tesrInfo = new RenderInfo();

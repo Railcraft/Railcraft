@@ -67,14 +67,14 @@ public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements 
     }
 
     private void render(EnergyStage energy, float progress, EnumFacing orientation, double x, double y, double z) {
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glColor3f(1, 1, 1);
+        OpenGL.glPushMatrix();
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_LIGHTING);
+        OpenGL.glDisable(OpenGL.GL_BLEND);
+        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+        OpenGL.glColor3f(1, 1, 1);
 
-        GL11.glTranslatef((float) x, (float) y, (float) z);
+        OpenGL.glTranslatef((float) x, (float) y, (float) z);
 
         float[] angle = {0, 0, 0};
         float[] translate = {orientation.offsetX, orientation.offsetY, orientation.offsetZ};
@@ -109,23 +109,23 @@ public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements 
             step = progress * 2F * 7.99F;
         }
         float frameTrans = step / 16;
-        GL11.glTranslatef(translate[0] * frameTrans, translate[1] * frameTrans, translate[2] * frameTrans);
+        OpenGL.glTranslatef(translate[0] * frameTrans, translate[1] * frameTrans, translate[2] * frameTrans);
         frame.render(factor);
-        GL11.glTranslatef(-translate[0] * frameTrans, -translate[1] * frameTrans, -translate[2] * frameTrans);
+        OpenGL.glTranslatef(-translate[0] * frameTrans, -translate[1] * frameTrans, -translate[2] * frameTrans);
 
         float pistonPrep = 0.01f;
-        GL11.glTranslatef(-translate[0] * pistonPrep, -translate[1] * pistonPrep, -translate[2] * pistonPrep);
+        OpenGL.glTranslatef(-translate[0] * pistonPrep, -translate[1] * pistonPrep, -translate[2] * pistonPrep);
 
         float pistonTrans = 2F / 16F;
 
-        GL11.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
         for (int i = 0; i <= step + 2; i += 2) {
             piston.render(factor);
-            GL11.glTranslatef(translate[0] * pistonTrans, translate[1] * pistonTrans, translate[2] * pistonTrans);
+            OpenGL.glTranslatef(translate[0] * pistonTrans, translate[1] * pistonTrans, translate[2] * pistonTrans);
         }
 
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();
+        OpenGL.glPopAttrib();
+        OpenGL.glPopMatrix();
     }
 
 }

@@ -44,17 +44,17 @@ public class RenderBlockOre extends BlockRenderer {
 
     @Override
     public void renderItem(RenderBlocks renderBlocks, ItemStack item, ItemRenderType renderType) {
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glEnable(OpenGL.GL_BLEND);
+        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
         
         BlockOre.renderPass = 0;
         renderItem(renderBlocks, item, getBlock().getIcon(0, item.getItemDamage()));
         BlockOre.renderPass = 1;
         renderItem(renderBlocks, item, getBlock().getIcon(0, item.getItemDamage()));
         
-        GL11.glPopAttrib();
+        OpenGL.glPopAttrib();
 
     }
 
@@ -72,10 +72,10 @@ public class RenderBlockOre extends BlockRenderer {
             float r = (float) (color >> 16 & 255) / 255.0F;
             float g = (float) (color >> 8 & 255) / 255.0F;
             float b = (float) (color & 255) / 255.0F;
-            GL11.glColor4f(r, g, b, 1.0F);
+            OpenGL.glColor4f(r, g, b, 1.0F);
         }
 
-        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+        OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
         Tessellator tess = Tessellator.instance;
         tess.startDrawingQuads();
         tess.setNormal(0.0F, -1.0F, 0.0F);
@@ -101,7 +101,7 @@ public class RenderBlockOre extends BlockRenderer {
         tess.setNormal(1.0F, 0.0F, 0.0F);
         renderBlocks.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, texture);
         tess.draw();
-        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+        OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
     }
 
 }

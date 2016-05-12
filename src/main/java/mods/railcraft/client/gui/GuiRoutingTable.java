@@ -427,7 +427,7 @@ public class GuiRoutingTable extends GuiScreen {
      */
     @Override
     public void drawScreen(int par1, int par2, float par3) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(TEXTURE);
         int xOffset = (this.width - this.bookImageWidth) / 2;
         byte yOffset = 2;

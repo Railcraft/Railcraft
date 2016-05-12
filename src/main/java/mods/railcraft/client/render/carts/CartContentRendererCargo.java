@@ -42,10 +42,10 @@ public class CartContentRendererCargo extends CartContentRenderer {
         if (!cart.hasFilter())
             return;
 
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
+        OpenGL.glPushMatrix();
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_LIGHTING);
+        OpenGL.glDisable(OpenGL.GL_BLEND);
 
         EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
         item.getEntityItem().stackSize = 1;
@@ -57,27 +57,27 @@ public class CartContentRendererCargo extends CartContentRenderer {
 
         if (!renderIn3D) {
             if (!RenderManager.instance.options.fancyGraphics)
-                GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glTranslatef(0.0F, -0.44F, 0.0F);
+                OpenGL.glDisable(OpenGL.GL_CULL_FACE);
+            OpenGL.glTranslatef(0.0F, -0.44F, 0.0F);
             float scale = 1.5F;
-            GL11.glScalef(scale, scale, scale);
-            GL11.glRotatef(90.F, 0.0F, 1.0F, 0.0F);
+            OpenGL.glScalef(scale, scale, scale);
+            OpenGL.glRotatef(90.F, 0.0F, 1.0F, 0.0F);
             int numIterations = cart.getSlotsFilled();
             rand.setSeed(738);
             for (int i = 0; i < numIterations; i++) {
-                GL11.glPushMatrix();
+                OpenGL.glPushMatrix();
                 float tx = (float) rand.nextGaussian() * 0.1F;
                 float ty = (float) rand.nextGaussian() * 0.01F;
                 float tz = (float) rand.nextGaussian() * 0.2F;
-                GL11.glTranslatef(tx, ty, tz);
+                OpenGL.glTranslatef(tx, ty, tz);
                 renderEntityItem(item);
-                GL11.glPopMatrix();
+                OpenGL.glPopMatrix();
             }
         } else {
-            GL11.glTranslatef(-0.08F, -0.44F, -0.18F);
+            OpenGL.glTranslatef(-0.08F, -0.44F, -0.18F);
             float scale = 1.8F;
-            GL11.glScalef(scale, scale, scale);
-            GL11.glRotatef(90.F, 0.0F, 1.0F, 0.0F);
+            OpenGL.glScalef(scale, scale, scale);
+            OpenGL.glRotatef(90.F, 0.0F, 1.0F, 0.0F);
             int slotsFilled = cart.getSlotsFilled();
             int numIterations;
             if (slotsFilled <= 0) {
@@ -88,21 +88,21 @@ public class CartContentRendererCargo extends CartContentRenderer {
             }
             rand.setSeed(1983);
             for (int i = 0; i < numIterations; i++) {
-                GL11.glPushMatrix();
+                OpenGL.glPushMatrix();
                 float tx = (float) rand.nextGaussian() * 0.2F;
                 float ty = (float) rand.nextGaussian() * 0.06F;
                 float tz = (float) rand.nextGaussian() * 0.15F;
-                GL11.glTranslatef(tx, ty, tz);
+                OpenGL.glTranslatef(tx, ty, tz);
                 renderEntityItem(item);
-                GL11.glPopMatrix();
+                OpenGL.glPopMatrix();
             }
         }
 
         RenderItem.renderInFrame = false;
 
 
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();
+        OpenGL.glPopAttrib();
+        OpenGL.glPopMatrix();
     }
 
     private void renderEntityItem(EntityItem item) {
@@ -115,12 +115,12 @@ public class CartContentRendererCargo extends CartContentRenderer {
     @Override
     public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
         super.render(renderer, cart, light, time);
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glTranslatef(0.0F, 0.3125F, 0.0F);
-        GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushMatrix();
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
+        OpenGL.glRotatef(90F, 0.0F, 1.0F, 0.0F);
+        OpenGL.glDisable(OpenGL.GL_LIGHTING);
+        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
 
         int x = (int) (Math.floor(cart.posX));
         int y = (int) (Math.floor(cart.posY));
@@ -129,7 +129,7 @@ public class CartContentRendererCargo extends CartContentRenderer {
         EntityCartCargo cartCargo = (EntityCartCargo) cart;
         renderCargo(renderer, cartCargo, light, time, x, y, z);
 
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();
+        OpenGL.glPopAttrib();
+        OpenGL.glPopMatrix();
     }
 }

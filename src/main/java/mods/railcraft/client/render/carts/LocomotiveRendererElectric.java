@@ -43,12 +43,12 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
     @Override
     public void renderLocomotive(IRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, ResourceLocation emblemTexture, float light, float time) {
         super.renderLocomotive(renderer, cart, primaryColor, secondaryColor, emblemTexture, light, time);
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glScalef(-1F, -1F, 1.0F);
-        GL11.glTranslatef(0.05F, 0.0F, 0.0F);
+        OpenGL.glPushMatrix();
+        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glEnable(OpenGL.GL_BLEND);
+        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glScalef(-1F, -1F, 1.0F);
+        OpenGL.glTranslatef(0.05F, 0.0F, 0.0F);
 
         if (((EntityLocomotive) cart).getMode() == EntityLocomotive.LocoMode.RUNNING) {
             renderer.bindTex(LAMP_TEX_ON);
@@ -58,8 +58,8 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
             LAMP_OFF.render(cart, -0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         }
 
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();
+        OpenGL.glPopAttrib();
+        OpenGL.glPopMatrix();
     }
 
     private static class ModelLampOff extends ModelSimple {
