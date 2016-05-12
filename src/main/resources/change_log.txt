@@ -1,5 +1,6 @@
 9.12.1.0:
 	FIX: Crash when creating EnergyCart. (issue #820)
+	FIX: Rebalance Enchantment weights. (issue #819)
 
 9.12.0.0:
 	NEW: Added Perpetuum Locomotive, a Creative only Locomotive that doesn't require fuel of any kind. (contribution by Forecaster)
