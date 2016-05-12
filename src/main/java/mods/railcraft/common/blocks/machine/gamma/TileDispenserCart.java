@@ -26,7 +26,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -121,7 +120,7 @@ public class TileDispenserCart extends TileMachineItem {
                     }
                 }
         } else if (!cart.isDead && cart.getCartItem() != null) {
-            IInventory testInv = new InventoryCopy(this);
+            InventoryCopy testInv = new InventoryCopy(this);
             ItemStack cartStack = cart.getCartItem();
             if (cart.hasCustomName())
                 cartStack.setStackDisplayName(cart.getName());
@@ -142,7 +141,7 @@ public class TileDispenserCart extends TileMachineItem {
             return;
         boolean newPower = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         if (!powered && newPower) {
-            powered = newPower;
+            powered = true;
             onPulse();
         } else
             powered = newPower;

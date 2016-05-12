@@ -13,7 +13,9 @@ import mods.railcraft.common.blocks.machine.alpha.ai.EntityAIMateBreeding;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.InventoryObject;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -25,7 +27,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -52,6 +53,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     private int feedTime;
     private byte feedCounter;
     private boolean powered;
+    private IInventoryObject feedInv = InventoryObject.get(this);
 
     public TileFeedStation() {
         super(1);
@@ -79,10 +81,10 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
         ItemStack feed = getStackInSlot(0);
 
         if (clock % (MIN_FEED_INTERVAL / 4) == 0 && (feed == null || feed.stackSize < feed.getMaxStackSize())) {
-            List<IInventory> chests = InvTools.getAdjacentInventories(worldObj, getPos());
+            List<IInventoryObject> chests = InvTools.getAdjacentInventories(worldObj, getPos());
 
-            for (IInventory inv : chests) {
-                if (InvTools.moveOneItem(inv, this, StandardStackFilters.FEED) != null) {
+            for (IInventoryObject inv : chests) {
+                if (InvTools.moveOneItem(inv, feedInv, StandardStackFilters.FEED) != null) {
                     break;
                 }
             }

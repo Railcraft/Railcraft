@@ -11,12 +11,13 @@ package mods.railcraft.common.blocks.machine;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class TileMachineItem extends TileMachineBase implements IInventory {
+public abstract class TileMachineItem extends TileMachineBase implements IInventory, IInventoryObject {
 
     private StandaloneInventory inv;
 
@@ -125,5 +126,15 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     @Override
     public void clear() {
         inv.clear();
+    }
+
+    @Override
+    public Object getInventoryObject() {
+        return this;
+    }
+
+    @Override
+    public int getNumSlots() {
+        return getSizeInventory();
     }
 }

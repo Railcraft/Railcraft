@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
@@ -203,6 +204,7 @@ public abstract class MiscTools {
      *
      * @return a side
      */
+    @Nonnull
     public static EnumFacing getSideFacingPlayer(BlockPos pos, EntityLivingBase player) {
         if (MathHelper.abs((float) player.posX - pos.getX()) < 2.0F && MathHelper.abs((float) player.posZ - pos.getZ()) < 2.0F) {
             double d = (player.posY + 1.82D) - player.getYOffset();
@@ -229,6 +231,7 @@ public abstract class MiscTools {
      *
      * @return a side
      */
+    @Nonnull
     public static EnumFacing getHorizontalSideFacingPlayer(EntityLivingBase player) {
         int dir = MathHelper.floor_double((double) ((player.rotationYaw * 4.0F) / 360.0F) + 0.5) & 3;
         switch (dir) {
@@ -244,6 +247,7 @@ public abstract class MiscTools {
         return EnumFacing.NORTH;
     }
 
+    @Nullable
     public static EnumFacing getSideFacingTrack(World world, BlockPos pos) {
         for (EnumFacing dir : EnumFacing.VALUES) {
             if (TrackTools.isRailBlockAt(world, pos.offset(dir)))

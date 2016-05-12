@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.machine.IComparatorValueProvider;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.TankManager;
@@ -17,9 +16,6 @@ import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
-import mods.railcraft.common.util.misc.MiscTools;
-
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -35,7 +31,7 @@ import net.minecraftforge.fluids.IFluidHandler;
  */
 public class TileTankIronValve extends TileTankBase implements IFluidHandler, IComparatorValueProvider {
 
-    private final static ITileFilter FLUID_OUTPUT_FILTER = new ITileFilter() {
+    private static final ITileFilter FLUID_OUTPUT_FILTER = new ITileFilter() {
         @Override
         public boolean matches(TileEntity tile) {
             if (tile instanceof TileTankBase)
@@ -46,7 +42,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
         }
 
     };
-    private final static EnumFacing[] FLUID_OUTPUTS = {EnumFacing.DOWN};
+    private static final EnumFacing[] FLUID_OUTPUTS = {EnumFacing.DOWN};
     private static final int FLOW_RATE = FluidHelper.BUCKET_VOLUME;
     private static final byte FILL_INCREMENT = 1;
     private final StandardTank fillTank = new StandardTank(20);
@@ -135,7 +131,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
                 tMan.outputLiquid(tileCache, FLUID_OUTPUT_FILTER, FLUID_OUTPUTS, 0, FLOW_RATE);
         }
 
-        TileMultiBlock<?> masterBlock = getMasterBlock();
+        TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock instanceof TileTankBase) {
             TileTankBase masterTileTankBase = (TileTankBase) masterBlock;
             int compValue = masterTileTankBase.getComparatorValue();
@@ -150,20 +146,20 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
         previousStructureValidity = isStructureValid();
     }
 
-    @Override
-    public IIcon getIcon(int side) {
-        if (!isStructureValid() || getPattern() == null)
-            return getMachineType().getTexture(side);
-        EnumFacing s = EnumFacing.VALUES[side];
-        char markerSide = getPattern().getPatternMarkerChecked(MiscTools.getXOnSide(getPatternPositionX(), s), MiscTools.getYOnSide(getPatternPosition(), s), MiscTools.getZOnSide(getPatternPositionZ(), s));
-
-        if (!isMapPositionOtherBlock(markerSide)) {
-            if (side == EnumFacing.UP.ordinal() || side == EnumFacing.DOWN.ordinal())
-                return getMachineType().getTexture(6);
-            return getMachineType().getTexture(7);
-        }
-        return getMachineType().getTexture(side);
-    }
+//    @Override
+//    public IIcon getIcon(int side) {
+//        if (!isStructureValid() || getPattern() == null)
+//            return getMachineType().getTexture(side);
+//        EnumFacing s = EnumFacing.VALUES[side];
+//        char markerSide = getPattern().getPatternMarkerChecked(MiscTools.getXOnSide(getPatternPositionX(), s), MiscTools.getYOnSide(getPatternPosition(), s), MiscTools.getZOnSide(getPatternPositionZ(), s));
+//
+//        if (!isMapPositionOtherBlock(markerSide)) {
+//            if (side == EnumFacing.UP.ordinal() || side == EnumFacing.DOWN.ordinal())
+//                return getMachineType().getTexture(6);
+//            return getMachineType().getTexture(7);
+//        }
+//        return getMachineType().getTexture(side);
+//    }
 
     @Override
     public int fill(EnumFacing from, FluidStack resource, boolean doFill) {

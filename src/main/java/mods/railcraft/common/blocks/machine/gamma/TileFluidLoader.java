@@ -53,11 +53,10 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     private static final float MAX_PIPE_LENGTH = 16 * 0.0625f;
     private static final float PIPE_INCREMENT = 0.01f;
     private final MultiButtonController<ButtonState> stateController = MultiButtonController.create(ButtonState.FORCE_FULL.ordinal(), ButtonState.values());
-    private int waitForReset = 0;
-    private float pipeLenght = 0;
+    private int waitForReset;
+    private float pipeLength;
 
     public TileFluidLoader() {
-        super();
         tankManager.add(loaderTank);
     }
 
@@ -75,38 +74,38 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     }
 
     private void resetPipe() {
-        pipeLenght = 0;
+        pipeLength = 0;
     }
 
-    public float getPipeLenght() {
-        return pipeLenght;
+    public float getPipeLength() {
+        return pipeLength;
     }
 
     private void setPipeLength(float y) {
-        pipeLenght = y;
+        pipeLength = y;
         sendUpdateToClient();
     }
 
     private void extendPipe() {
-        float y = pipeLenght + PIPE_INCREMENT;
+        float y = pipeLength + PIPE_INCREMENT;
         if (pipeIsExtended())
             y = MAX_PIPE_LENGTH;
         setPipeLength(y);
     }
 
     private void retractPipe() {
-        float y = pipeLenght - PIPE_INCREMENT;
+        float y = pipeLength - PIPE_INCREMENT;
         if (pipeIsRetracted())
             y = 0;
         setPipeLength(y);
     }
 
     private boolean pipeIsExtended() {
-        return pipeLenght >= MAX_PIPE_LENGTH;
+        return pipeLength >= MAX_PIPE_LENGTH;
     }
 
     private boolean pipeIsRetracted() {
-        return pipeLenght <= 0;
+        return pipeLength <= 0;
     }
 
     @Override
@@ -331,7 +330,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
 
         stateController.writeToNBT(data, "state");
 
-        data.setFloat("pipeLenght", pipeLenght);
+        data.setFloat("pipeLength", pipeLength);
     }
 
     @Override
@@ -341,7 +340,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
         stateController.readFromNBT(data, "state");
 
         SafeNBTWrapper safe = new SafeNBTWrapper(data);
-        pipeLenght = safe.getFloat("pipeLenght");
+        pipeLength = safe.getFloat("pipeLength");
 
         // Legacy code
         boolean waitIfEmpty = data.getBoolean("WaitIfEmpty");
@@ -356,7 +355,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(stateController.getCurrentState());
-        data.writeFloat(pipeLenght);
+        data.writeFloat(pipeLength);
     }
 
     @Override

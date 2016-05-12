@@ -48,8 +48,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     protected boolean transferredEnergy;
     private boolean addedToIC2EnergyNet;
 
-    public TileLoaderEnergyBase() {
-        super();
+    protected TileLoaderEnergyBase() {
         setInventorySize(6);
     }
 

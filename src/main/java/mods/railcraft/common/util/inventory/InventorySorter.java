@@ -9,6 +9,8 @@
  ******************************************************************************/
 package mods.railcraft.common.util.inventory;
 
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+
 import java.util.Comparator;
 
 /**

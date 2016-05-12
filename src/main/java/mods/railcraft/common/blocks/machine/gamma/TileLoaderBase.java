@@ -33,8 +33,8 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
     private final PhantomInventory invCarts = new PhantomInventory(2, this);
     protected EntityMinecart currentCart;
     private boolean powered;
-    private boolean sendCartGateAction = false;
-    private int pause = 0;
+    private boolean sendCartGateAction;
+    private int pause;
 
     @Override
     public boolean hasMinecart() {

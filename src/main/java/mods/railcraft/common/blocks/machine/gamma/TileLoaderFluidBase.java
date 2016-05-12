@@ -44,10 +44,9 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
     protected final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
     protected final TankManager tankManager = new TankManager();
     protected final StandardTank loaderTank = new StandardTank(CAPACITY, this);
-    protected int flow = 0;
+    protected int flow;
 
     protected TileLoaderFluidBase() {
-        super();
         setInventorySize(2);
         tankManager.add(loaderTank);
     }
@@ -80,6 +79,7 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
         return flow > 0;
     }
 
+    @Override
     protected void sendCart(EntityMinecart cart) {
         if (cart == null)
             return;

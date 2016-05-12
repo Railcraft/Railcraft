@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.util.inventory.wrappers;
 
-import mods.railcraft.common.util.inventory.IInventoryObject;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;

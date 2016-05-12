@@ -18,7 +18,7 @@ import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -34,7 +34,7 @@ public class TileRFUnloader extends TileRFLoaderBase implements IEnergyProvider,
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.UNLOADER_RF, player, worldObj, xCoord, yCoord, zCoord);
+        GuiHandler.openGui(EnumGui.UNLOADER_RF, player, worldObj, getX(), getY(), getZ());
         return true;
     }
 
@@ -42,7 +42,7 @@ public class TileRFUnloader extends TileRFLoaderBase implements IEnergyProvider,
     protected boolean processCart() {
         boolean transferred = false;
 
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, xCoord, yCoord, zCoord, 0.1f, direction);
+        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0.1f, direction);
 
         if (cart != currentCart) {
             setPowered(false);
@@ -138,22 +138,22 @@ public class TileRFUnloader extends TileRFLoaderBase implements IEnergyProvider,
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         return removeRF(maxExtract, simulate);
     }
 
     @Override
-    public int getEnergyStored(ForgeDirection from) {
+    public int getEnergyStored(EnumFacing from) {
         return getRF();
     }
 
     @Override
-    public int getMaxEnergyStored(ForgeDirection from) {
+    public int getMaxEnergyStored(EnumFacing from) {
         return getMaxRF();
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection from) {
+    public boolean canConnectEnergy(EnumFacing from) {
         return true;
     }
 }

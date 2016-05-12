@@ -32,7 +32,6 @@ import mods.railcraft.common.util.steam.ISteamUser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -67,8 +66,8 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private final TankManager tankManager = new TankManager();
     private final StandardTank tank;
-    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 9);
-    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9, false);
+    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 9);
+    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9, false);
     private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
 
     static {

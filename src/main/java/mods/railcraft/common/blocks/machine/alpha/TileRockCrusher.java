@@ -126,8 +126,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         patterns.add(new MultiBlockPattern(map2));
     }
 
-    private final IInventory invInput = new InventoryMapper(this, 0, 9);
-    private final IInventory invOutput = new InventoryMapper(this, 9, 9, false);
+    private final InventoryMapper invInput = new InventoryMapper(this, 0, 9);
+    private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9, false);
     private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
     private int processTime;
     private EnergyStorage energyStorage;
@@ -223,7 +223,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                 for (EntityItem item : TileEntityHopper.func_181556_a(getWorld(), x, y + 1, z)) {
                     if (item != null && useMasterEnergy(SUCKING_POWER_COST, false)) {
                         ItemStack stack = item.getEntityItem().copy();
-                        if (InventoryManipulator.get(invInput).addStack(stack) != null)
+                        if (InventoryManipulator.get((IInventory) invInput).addStack(stack) != null)
                             useMasterEnergy(SUCKING_POWER_COST, true);
                         item.setDead();
                     }
@@ -256,7 +256,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                 if (recipe != null)
                     if (processTime >= PROCESS_TIME) {
                         isWorking = false;
-                        IInventory tempInv = new InventoryCopy(invOutput);
+                        InventoryCopy tempInv = new InventoryCopy(invOutput);
                         boolean hasRoom = true;
                         List<ItemStack> outputs = recipe.getProcessedOutputs();
                         for (ItemStack output : outputs) {

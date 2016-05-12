@@ -93,7 +93,7 @@ public class RenderFluidLoader extends TileEntitySpecialRenderer {
         if (tile.getClass() == TileFluidLoader.class) {
             TileFluidLoader loader = (TileFluidLoader) tile;
 
-            pipe.minY = RenderTools.PIXEL - loader.getPipeLenght();
+            pipe.minY = RenderTools.PIXEL - loader.getPipeLength();
 
             RenderFakeBlock.renderBlock(pipe, loader.getWorld(), x, y, z, false, true);
         }

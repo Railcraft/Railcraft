@@ -9,7 +9,7 @@
 package mods.railcraft.common.util.inventory.manipulators;
 
 import mods.railcraft.api.core.IStackFilter;
-import mods.railcraft.common.util.inventory.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import net.minecraft.inventory.IInventory;

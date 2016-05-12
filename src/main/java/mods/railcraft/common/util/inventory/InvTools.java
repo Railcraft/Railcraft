@@ -21,6 +21,8 @@ import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.inventory.wrappers.ChestWrapper;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.InventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.SidedInventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
@@ -42,6 +44,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
@@ -76,7 +80,7 @@ public abstract class InvTools {
         return getAdjacentInventories(world, pos, null);
     }
 
-    public static List<IInventoryObject> getAdjacentInventories(World world, BlockPos pos, Class<? extends IInventory> type) {
+    public static List<IInventoryObject> getAdjacentInventories(World world, BlockPos pos, Class<? extends TileEntity> type) {
         List<IInventoryObject> list = new ArrayList<IInventoryObject>(6);
         for (EnumFacing side : EnumFacing.VALUES) {
             IInventoryObject inv = getInventoryFromSide(world, pos, side, type, null);
@@ -100,7 +104,7 @@ public abstract class InvTools {
 //        return map;
 //    }
 
-    public static IInventoryObject getInventoryFromSide(World world, BlockPos pos, EnumFacing side, final Class<? extends IInventory> type, final Class<? extends IInventory> exclude) {
+    public static IInventoryObject getInventoryFromSide(World world, BlockPos pos, EnumFacing side, final Class<? extends TileEntity> type, final Class<? extends TileEntity> exclude) {
         return getInventoryFromSide(world, pos, side, new ITileFilter() {
             @SuppressWarnings("SimplifiableIfStatement")
             @Override
@@ -116,35 +120,54 @@ public abstract class InvTools {
         TileEntity tile = WorldPlugin.getTileEntityOnSide(world, pos, side);
         if (tile == null || !(tile instanceof IInventory) || !filter.matches(tile))
             return null;
-        return getInventoryFromTile(tile, side.getOpposite());
+        return getInventory(tile, side.getOpposite());
     }
 
-    // TODO: IItemHandler
-    public static IInventoryObject getInventoryFromTile(TileEntity tile, EnumFacing side) {
-        if (tile == null || !(tile instanceof IInventory))
+    @Nullable
+    public static IInventoryObject getInventory(Object obj, EnumFacing side) {
+        if (obj == null)
             return null;
 
-//        if (!PipeManager.canExtractItems(null, tile.getWorld(), tile.xCoord, tile.yCoord, tile.zCoord))
-//            return null;
-
-        if (tile instanceof TileEntityChest) {
-            TileEntityChest chest = (TileEntityChest) tile;
+        if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
+            return InventoryObject.get(((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side));
+        } else if (obj instanceof TileEntityChest) {
+            TileEntityChest chest = (TileEntityChest) obj;
             return new ChestWrapper(chest);
+        } else if (obj instanceof ISidedInventory) {
+            return new SidedInventoryMapper((ISidedInventory) obj, side);
+        } else if (obj instanceof IInventory) {
+            return InventoryObject.get((IInventory) obj);
         }
-        return getInventory(InventoryObject.get((IInventory) tile), side);
+        return null;
+    }
+
+    @Nullable
+    public static IInventoryObject getInventory(Object obj) {
+        if (obj == null)
+            return null;
+
+        if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+            return InventoryObject.get(((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
+        } else if (obj instanceof TileEntityChest) {
+            TileEntityChest chest = (TileEntityChest) obj;
+            return new ChestWrapper(chest);
+        } else if (obj instanceof IInventory) {
+            return InventoryObject.get((IInventory) obj);
+        }
+        return null;
     }
 
     //TODO: Wrap IItemHandler
-    public static IInventoryObject getInventory(IInventoryObject inv, EnumFacing side) {
-        if (inv == null)
-            return null;
-
-//        if (inv instanceof ISpecialInventory)
-//            inv = new SpecialInventoryMapper((ISpecialInventory) inv, side);
-        else if (inv instanceof ISidedInventory)
-            inv = new SidedInventoryMapper((ISidedInventory) inv, side);
-        return inv;
-    }
+//    public static IInventoryObject getInventory(IInventoryObject inv, EnumFacing side) {
+//        if (inv == null)
+//            return null;
+//
+////        if (inv instanceof ISpecialInventory)
+////            inv = new SpecialInventoryMapper((ISpecialInventory) inv, side);
+//        else if (inv.getInventoryObject() instanceof ISidedInventory)
+//            inv = new SidedInventoryMapper((ISidedInventory) inv, side);
+//        return inv;
+//    }
 
     public static int[] buildSlotArray(int start, int size) {
         int[] slots = new int[size];

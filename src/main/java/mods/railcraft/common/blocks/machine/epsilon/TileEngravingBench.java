@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.machine.epsilon;
 import buildcraft.api.statements.IActionExternal;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
-
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.emblems.EmblemToolsServer;
@@ -24,13 +23,11 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,7 +54,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     private final static int SLOT_INPUT = 0;
     private final static int SLOT_RESULT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
-    private final IInventory invResult = new InventoryMapper(this, SLOT_RESULT, 1, false);
+    private final InventoryMapper invResult = new InventoryMapper(this, SLOT_RESULT, 1, false);
     private EnergyStorage energyStorage;
     private int progress;
     public boolean paused, startCrafting, isCrafting, flippedAxis;

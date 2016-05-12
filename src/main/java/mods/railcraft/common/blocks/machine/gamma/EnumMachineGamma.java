@@ -31,18 +31,18 @@ import java.util.List;
  */
 public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
-    ITEM_LOADER(ModuleTransport.class, "loader.item", 0, TileItemLoader.class),
-    ITEM_UNLOADER(ModuleTransport.class, "unloader.item", 0, TileItemUnloader.class),
-    ITEM_LOADER_ADVANCED(ModuleTransport.class, "loader.item.advanced", 0, TileItemLoaderAdvanced.class),
-    ITEM_UNLOADER_ADVANCED(ModuleTransport.class, "unloader.item.advanced", 0, TileItemUnloaderAdvanced.class),
-    FLUID_LOADER(ModuleTransport.class, "loader.liquid", 2, TileFluidLoader.class, true),
-    FLUID_UNLOADER(ModuleTransport.class, "unloader.liquid", 2, TileFluidUnloader.class, true),
-    ENERGY_LOADER(ModuleIC2.class, "loader.energy", 0, TileEnergyLoader.class),
-    ENERGY_UNLOADER(ModuleIC2.class, "unloader.energy", 0, TileEnergyUnloader.class),
-    DISPENSER_CART(ModuleAutomation.class, "dispenser.cart", 0, TileDispenserCart.class),
-    DISPENSER_TRAIN(ModuleTrain.class, "dispenser.train", 0, TileDispenserTrain.class),
-    RF_LOADER(ModuleRF.class, "loader.rf", -1, TileRFLoader.class),
-    RF_UNLOADER(ModuleRF.class, "unloader.rf", -1, TileRFUnloader.class);
+    ITEM_LOADER(ModuleTransport.class, "loader.item", TileItemLoader.class),
+    ITEM_UNLOADER(ModuleTransport.class, "unloader.item", TileItemUnloader.class),
+    ITEM_LOADER_ADVANCED(ModuleTransport.class, "loader.item.advanced", TileItemLoaderAdvanced.class),
+    ITEM_UNLOADER_ADVANCED(ModuleTransport.class, "unloader.item.advanced", TileItemUnloaderAdvanced.class),
+    FLUID_LOADER(ModuleTransport.class, "loader.liquid", TileFluidLoader.class, true),
+    FLUID_UNLOADER(ModuleTransport.class, "unloader.liquid", TileFluidUnloader.class, true),
+    ENERGY_LOADER(ModuleIC2.class, "loader.energy", TileEnergyLoader.class),
+    ENERGY_UNLOADER(ModuleIC2.class, "unloader.energy", TileEnergyUnloader.class),
+    DISPENSER_CART(ModuleAutomation.class, "dispenser.cart", TileDispenserCart.class),
+    DISPENSER_TRAIN(ModuleTrain.class, "dispenser.train", TileDispenserTrain.class),
+    RF_LOADER(ModuleRF.class, "loader.rf", TileRFLoader.class),
+    RF_UNLOADER(ModuleRF.class, "unloader.rf", TileRFUnloader.class);
     public static final PropertyEnum<EnumMachineGamma> VARIANT = PropertyEnum.create("variant", EnumMachineGamma.class);
     private static final List<EnumMachineGamma> creativeList = new ArrayList<EnumMachineGamma>();
     private static final EnumMachineGamma[] VALUES = values();
@@ -65,20 +65,18 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
     private final Class<? extends IRailcraftModule> module;
     private final String tag;
-    private final int extraIcons;
     private final Class<? extends TileMachineBase> tile;
     private final boolean passesLight;
     private ToolTip tip;
 
-    EnumMachineGamma(Class<? extends IRailcraftModule> module, String tag, int numTextures, Class<? extends TileMachineBase> tile) {
-        this(module, tag, numTextures, tile, false);
+    EnumMachineGamma(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile) {
+        this(module, tag, tile, false);
     }
 
-    EnumMachineGamma(Class<? extends IRailcraftModule> module, String tag, int numTextures, Class<? extends TileMachineBase> tile, boolean passesLight) {
+    EnumMachineGamma(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, boolean passesLight) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
-        this.extraIcons = numTextures;
         this.passesLight = passesLight;
     }
 

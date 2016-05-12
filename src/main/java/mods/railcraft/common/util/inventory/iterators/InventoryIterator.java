@@ -9,7 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.common.util.inventory.iterators;
 
-import mods.railcraft.common.util.inventory.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraftforge.items.IItemHandler;

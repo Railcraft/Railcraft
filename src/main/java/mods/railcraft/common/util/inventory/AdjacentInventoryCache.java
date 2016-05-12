@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.util.inventory;
 
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.tileentity.TileEntity;
@@ -57,7 +58,7 @@ public final class AdjacentInventoryCache {
                 invs.remove(side);
                 TileEntity tile = tiles.get(side);
                 if (tile != null && (filter == null || filter.matches(tile))) {
-                    IInventoryObject inv = InvTools.getInventoryFromTile(tile, side.getOpposite());
+                    IInventoryObject inv = InvTools.getInventory(tile, side.getOpposite());
                     if (inv != null)
                         invs.put(side, inv);
                 }

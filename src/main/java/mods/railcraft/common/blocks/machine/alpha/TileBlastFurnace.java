@@ -12,7 +12,7 @@ import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlockOven;
@@ -112,9 +112,9 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
 
-    private final IInventory invFuel = new InventoryMapper(this, SLOT_FUEL, 1);
-    private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private final IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
+    private final InventoryMapper invFuel = new InventoryMapper(this, SLOT_FUEL, 1);
+    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
     private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, new ITileFilter() {
         @Override
         public boolean matches(TileEntity tile) {
@@ -167,12 +167,12 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         int meta = block.getMetaFromState(state);
         switch (mapPos) {
             case 'O':
-                if (block != RailcraftBlocksOld.getBlockMachineAlpha() || meta != getBlockMetadata())
+                if (block != RailcraftBlocks.machine_alpha.block() || meta != getBlockMetadata())
                     return true;
                 break;
             case 'B':
             case 'W':
-                if (block == RailcraftBlocksOld.getBlockMachineAlpha() && meta == getBlockMetadata())
+                if (block == RailcraftBlocks.machine_alpha.block() && meta == getBlockMetadata())
                     return true;
                 break;
             case 'A':

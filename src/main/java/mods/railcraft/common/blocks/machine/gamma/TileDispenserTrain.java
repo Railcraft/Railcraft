@@ -9,9 +9,9 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.api.core.StackFilter;
+import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.carts.ItemCartAnchor;
 import mods.railcraft.common.carts.ItemLocomotive;
@@ -23,7 +23,6 @@ import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,13 +33,13 @@ import java.util.Map;
 
 public class TileDispenserTrain extends TileDispenserCart {
 
-    public final static int PATTERN_SIZE = 9;
-    public final static int BUFFER_SIZE = 18;
+    public static final int PATTERN_SIZE = 9;
+    public static final int BUFFER_SIZE = 18;
     private byte patternIndex;
     private boolean spawningTrain = false;
     private EntityMinecart lastCart;
     private final PhantomInventory invPattern = new PhantomInventory(PATTERN_SIZE, this);
-    private final IInventory invStock;
+    private final InventoryMapper invStock;
 
     public TileDispenserTrain() {
         super();

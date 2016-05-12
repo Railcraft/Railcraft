@@ -8,7 +8,7 @@
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 
-package mods.railcraft.common.util.inventory;
+package mods.railcraft.common.util.inventory.wrappers;
 
 /**
  * Created by CovertJaguar on 5/7/2016.

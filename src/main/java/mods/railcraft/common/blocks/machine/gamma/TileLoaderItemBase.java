@@ -19,10 +19,10 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -90,10 +90,10 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
     public boolean canHandleCart(EntityMinecart cart) {
         if (isSendCartGateAction())
             return false;
-        if (!(cart instanceof IInventory))
+        IInventoryObject cartInv = InvTools.getInventory(cart, getOrientation().getOpposite());
+        if (cartInv == null)
             return false;
-        IInventory cartInv = (IInventory) cart;
-        if (cartInv.getSizeInventory() <= 0)
+        if (cartInv.getNumSlots() <= 0)
             return false;
         ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
         ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
@@ -116,6 +116,8 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
     public final EnumTransferMode getMode() {
         return transferModeController.getButtonState();
     }
+
+    public abstract EnumFacing getOrientation();
 
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {

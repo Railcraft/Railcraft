@@ -9,12 +9,13 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.util.inventory.*;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.wrappers.InventoryObject;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.entity.item.EntityMinecart;
@@ -32,11 +33,11 @@ import java.util.Set;
 
 public class TileItemUnloader extends TileLoaderItemBase {
 
-    private static final EnumRedstoneMode[] REDSTONE_MODES = new EnumRedstoneMode[]{EnumRedstoneMode.IMMEDIATE, EnumRedstoneMode.COMPLETE, EnumRedstoneMode.MANUAL};
-    private final IInventory invBuffer;
-    private final Map<ItemStack, Short> transferedItems = new ItemStackMap<Short>();
+    private static final EnumRedstoneMode[] REDSTONE_MODES = {EnumRedstoneMode.IMMEDIATE, EnumRedstoneMode.COMPLETE, EnumRedstoneMode.MANUAL};
+    private final InventoryMapper invBuffer;
+    private final Map<ItemStack, Short> transferredItems = new ItemStackMap<Short>();
     private final Set<ItemStack> checkedItems = new ItemStackSet();
-    private final LinkedList<IInventory> chests = new LinkedList<IInventory>();
+    private final LinkedList<IInventoryObject> chests = new LinkedList<IInventoryObject>();
     private AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, new ITileFilter() {
         @Override
         public boolean matches(TileEntity tile) {
@@ -89,7 +90,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
         if (cart != currentCart) {
             setPowered(false);
             currentCart = cart;
-            transferedItems.clear();
+            transferredItems.clear();
             cartWasSent();
         }
 
@@ -107,7 +108,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
 
         checkedItems.clear();
 
-        IInventory cartInv = (IInventory) cart;
+        IInventoryObject cartInv = InvTools.getInventory(cart, getOrientation().getOpposite());
 
         switch (getMode()) {
             case TRANSFER: {
@@ -120,7 +121,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                         continue;
                     }
                     hasFilter = true;
-                    Short numMoved = transferedItems.get(filter);
+                    Short numMoved = transferredItems.get(filter);
                     if (numMoved == null) {
                         numMoved = 0;
                     }
@@ -129,7 +130,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                         if (moved != null) {
                             movedItemCart = true;
                             numMoved++;
-                            transferedItems.put(moved, numMoved);
+                            transferredItems.put(moved, numMoved);
                             break;
                         }
                     }
@@ -219,16 +220,14 @@ public class TileItemUnloader extends TileLoaderItemBase {
 
     @Override
     public boolean canHandleCart(EntityMinecart cart) {
-        if (!super.canHandleCart(cart))
-            return false;
-        return !InvTools.isInventoryEmpty((IInventory) cart);
+        return super.canHandleCart(cart) && !InvTools.isInventoryEmpty(InventoryObject.get((IInventory) cart));
     }
 
     @Override
     protected boolean shouldSendCart(EntityMinecart cart) {
-        if (!(cart instanceof IInventory))
+        IInventoryObject cartInv = InvTools.getInventory(cart, getOrientation().getOpposite());
+        if(cartInv == null)
             return true;
-        IInventory cartInv = (IInventory) cart;
         EnumRedstoneMode state = getRedstoneModeController().getButtonState();
         if (!movedItemCart && state != EnumRedstoneMode.COMPLETE) {
             return true;
@@ -240,7 +239,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
             return true;
         } else if (getMode() == EnumTransferMode.ALL && isAllComplete(chests, getItemFilters().getContents())) {
             return true;
-        } else if (!movedItemCart && InvTools.isAccessibleInventoryEmpty(cartInv, getOrientation().getOpposite())) {
+        } else if (!movedItemCart && InvTools.isAccessibleInventoryEmpty(cartInv)) {
             return true;
         }
         return false;
@@ -257,7 +256,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
                 continue;
             }
             hasFilter = true;
-            Short numMoved = transferedItems.get(filter);
+            Short numMoved = transferredItems.get(filter);
             if (numMoved == null || numMoved < InvTools.countItems(getItemFilters(), filter)) {
                 return false;
             }
@@ -265,7 +264,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
         return hasFilter;
     }
 
-    private boolean isStockComplete(List<IInventory> chests, ItemStack[] filters) {
+    private boolean isStockComplete(List<IInventoryObject> chests, ItemStack[] filters) {
         checkedItems.clear();
         for (ItemStack filter : filters) {
             if (filter == null) {
@@ -282,7 +281,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
         return true;
     }
 
-    private boolean isExcessComplete(IInventory cartInv, ItemStack[] filters) {
+    private boolean isExcessComplete(IInventoryObject cartInv, ItemStack[] filters) {
         checkedItems.clear();
         int max = 0;
         for (ItemStack filter : filters) {
@@ -301,7 +300,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
         return InvTools.countItems(cartInv) <= max;
     }
 
-    private boolean isAllComplete(List<IInventory> chests, ItemStack[] filters) {
+    private boolean isAllComplete(List<IInventoryObject> chests, ItemStack[] filters) {
         checkedItems.clear();
         boolean hasFilter = false;
         for (ItemStack filter : filters) {

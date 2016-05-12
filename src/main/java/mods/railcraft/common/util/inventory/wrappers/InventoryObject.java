@@ -8,7 +8,7 @@
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 
-package mods.railcraft.common.util.inventory;
+package mods.railcraft.common.util.inventory.wrappers;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraftforge.items.IItemHandler;

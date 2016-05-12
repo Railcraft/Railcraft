@@ -11,12 +11,12 @@ package mods.railcraft.common.blocks.machine.gamma;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -27,26 +27,26 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
     protected static final int TRANSFER_FADE = 20;
     private static final int RF_CAP = 4000000;
     protected int amountRF;
-    protected ForgeDirection direction = ForgeDirection.NORTH;
+    protected EnumFacing direction = EnumFacing.NORTH;
     private int ticksSinceTransfer;
 
     public TileRFLoaderBase() {
         setInventorySize(0);
     }
 
-    @Override
-    public IIcon getIcon(int side) {
-        if (side == direction.ordinal())
-            return getMachineType().getTexture(isProcessing() ? 7 : 8);
-        return getMachineType().getTexture(isProcessing() ? 0 : 6);
-    }
+//    @Override
+//    public IIcon getIcon(int side) {
+//        if (side == direction.ordinal())
+//            return getMachineType().getTexture(isProcessing() ? 7 : 8);
+//        return getMachineType().getTexture(isProcessing() ? 0 : 6);
+//    }
 
     @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(entityliving, stack);
-        direction = MiscTools.getSideFacingTrack(worldObj, xCoord, yCoord, zCoord);
-        if (direction == ForgeDirection.UNKNOWN)
-            direction = MiscTools.getSideClosestToPlayer(worldObj, xCoord, yCoord, zCoord, entityliving);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(state, placer, stack);
+        direction = MiscTools.getSideFacingTrack(worldObj, getPos());
+        if (direction == null)
+            direction = MiscTools.getSideFacingPlayer(getPos(), placer);
     }
 
     @Override
@@ -65,8 +65,8 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (Game.isNotHost(getWorld()))
             return;
@@ -98,7 +98,7 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         amountRF = data.getInteger("rf");
-        direction = ForgeDirection.getOrientation(data.getByte("direction"));
+        direction = EnumFacing.getFront(data.getByte("direction"));
     }
 
     @Override
@@ -113,7 +113,7 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = ForgeDirection.getOrientation(data.readByte());
+        direction = EnumFacing.getFront(data.readByte());
 
         boolean transfer = data.readBoolean();
         if (isProcessing() != transfer) {
@@ -123,7 +123,7 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
     }
 
     @Override
-    public boolean rotateBlock(ForgeDirection axis) {
+    public boolean rotateBlock(EnumFacing axis) {
         if (direction == axis)
             direction = axis.getOpposite();
         else

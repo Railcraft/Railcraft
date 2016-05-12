@@ -22,12 +22,12 @@ import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -58,16 +58,18 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
                 return true;
             if (tile instanceof TileBoiler)
                 return false;
-            if (tile instanceof IInventory)
-                return ((IInventory) tile).getSizeInventory() >= 27;
+            IInventoryObject inventoryObject = InvTools.getInventory(tile);
+            if (inventoryObject != null)
+                return inventoryObject.getNumSlots() >= 27;
             return false;
         }
 
     }, InventorySorter.SIZE_DESCENDING);
-    private IInventory invBurn = new InventoryMapper(this, SLOT_BURN, 1);
-    private IInventory invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
-    private IInventory invFuel = new InventoryMapper(this, SLOT_BURN, 4);
-    private boolean needsFuel = false;
+    private InventoryMapper invBurn = new InventoryMapper(this, SLOT_BURN, 1);
+    private InventoryMapper invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
+    private InventoryMapper invFuel = new InventoryMapper(this, SLOT_BURN, 4);
+    private boolean needsFuel;
+
     public TileBoilerFireboxSolid() {
         super(6);
         boiler.setFuelProvider(new SolidFuelProvider(this, SLOT_BURN));
@@ -83,9 +85,9 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
                 if (tile instanceof TileBoilerFireboxSolid) {
                     TileBoilerFireboxSolid master = (TileBoilerFireboxSolid) tile;
                     master.tankWater.setFluid(Fluids.WATER.get(water));
-                    IInventory invFuel = new InventoryMapper(master.inventory, SLOT_BURN, 4);
+                    InventoryMapper masterFuel = new InventoryMapper(master.inventory, SLOT_BURN, 4);
                     for (ItemStack stack : fuel) {
-                        InvTools.moveItemStack(stack, invFuel);
+                        InvTools.moveItemStack(stack, masterFuel);
                     }
                 }
                 return;
