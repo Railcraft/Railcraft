@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-class EntityCartEnergyCESU extends EntityCartEnergy {
+public final class EntityCartEnergyCESU extends EntityCartEnergy {
 
     public EntityCartEnergyCESU(World world) {
         super(world);

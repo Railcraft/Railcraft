@@ -5,7 +5,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-class EntityCartEnergyMFSU extends EntityCartEnergy {
+public final class EntityCartEnergyMFSU extends EntityCartEnergy {
 
     public EntityCartEnergyMFSU(World world) {
         super(world);
