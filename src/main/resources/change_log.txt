@@ -1,5 +1,5 @@
 9.12.2.0:
-	FIX: The RF Unloader should now push RF to surrounding block instead of hoarding it for itself. (issue #821)
+	FIX: The RF Unloader should now push RF to surrounding blocks instead of hoarding it for itself. (issue #821)
 
 9.12.1.0:
 	FIX: Crash when creating EnergyCart. (issue #820)
