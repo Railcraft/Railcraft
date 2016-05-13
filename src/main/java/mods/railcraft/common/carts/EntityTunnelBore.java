@@ -22,7 +22,6 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.collections.BlockSet;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
@@ -50,6 +49,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class EntityTunnelBore extends CartContainerBase implements IInventory, ILinkableCart {
     public static final float SPEED = 0.03F;
@@ -143,9 +144,9 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         replaceableBlocks.addAll(Arrays.asList(replaceable));
     }
 
-    protected final IInventory invFuel = new InventoryMapper(this, 1, 6);
-    protected final IInventory invBallast = new InventoryMapper(this, 7, 9);
-    protected final IInventory invRails = new InventoryMapper(this, 16, 9);
+    protected final InventoryMapper invFuel = new InventoryMapper(this, 1, 6);
+    protected final InventoryMapper invBallast = new InventoryMapper(this, 7, 9);
+    protected final InventoryMapper invRails = new InventoryMapper(this, 16, 9);
     //    protected static final int WATCHER_ID_BURN_TIME = 22;
     protected boolean degreeCalc = false;
     protected int delay = 0;
@@ -686,11 +687,11 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return false;
     }
 
-    protected boolean checkForLava(BlockPos pos, BlockRailBase.EnumRailDirection dir) {
-        int xStart = pos.getX() - 1;
-        int zStart = pos.getZ() - 1;
-        int xEnd = pos.getX() + 1;
-        int zEnd = pos.getZ() + 1;
+    protected boolean checkForLava(BlockPos targetPos, BlockRailBase.EnumRailDirection dir) {
+        int xStart = targetPos.getX() - 1;
+        int zStart = targetPos.getZ() - 1;
+        int xEnd = targetPos.getX() + 1;
+        int zEnd = targetPos.getZ() + 1;
         if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
             xStart--;
             xEnd++;
@@ -699,7 +700,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             zEnd++;
         }
 
-        int y = pos.getY();
+        int y = targetPos.getY();
 
         for (int yy = y; yy < y + 4; yy++) {
             for (int xx = xStart; xx <= xEnd; xx++) {
@@ -714,32 +715,38 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return false;
     }
 
+    private <T> T layerAction(BlockPos targetPos, BlockRailBase.EnumRailDirection trackShape, T initialValue, BiFunction<BlockPos, BlockRailBase.EnumRailDirection, T> action, BiFunction<T, T, T> sum) {
+        T returnValue = initialValue;
+
+        int x = targetPos.getX();
+        int y = targetPos.getY();
+        int z = targetPos.getZ();
+        for (int jj = y; jj < y + 3; jj++) {
+            returnValue = sum.apply(returnValue, action.apply(new BlockPos(x, jj, z), trackShape));
+        }
+
+        if (trackShape == BlockRailBase.EnumRailDirection.NORTH_SOUTH)
+            x--;
+        else
+            z--;
+        for (int jj = y; jj < y + 3; jj++) {
+            returnValue = sum.apply(returnValue, action.apply(new BlockPos(x, jj, z), trackShape));
+        }
+
+        x = targetPos.getX();
+        z = targetPos.getZ();
+        if (trackShape == BlockRailBase.EnumRailDirection.NORTH_SOUTH)
+            x++;
+        else
+            z++;
+        for (int jj = y; jj < y + 3; jj++) {
+            returnValue = sum.apply(returnValue, action.apply(new BlockPos(x, jj, z), trackShape));
+        }
+        return returnValue;
+    }
+
     protected boolean boreLayer(BlockPos targetPos, BlockRailBase.EnumRailDirection dir) {
-        boolean clear = true;
-        int ii = i;
-        int kk = k;
-        for (int i = 0; i < 3; i++) {
-            clear = clear && mineBlock(targetPos.up(i), dir);
-        }
-
-        if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH)
-            ii--;
-        else
-            kk--;
-        for (int jj = j; jj < j + 3; jj++) {
-            clear = clear && mineBlock(ii, jj, kk, dir);
-        }
-
-        ii = i;
-        kk = k;
-        if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH)
-            ii++;
-        else
-            kk++;
-        for (int jj = j; jj < j + 3; jj++) {
-            clear = clear && mineBlock(ii, jj, kk, dir);
-        }
-        return clear;
+        return layerAction(targetPos, dir, true, this::mineBlock, (s, r) -> s && r);
     }
 
     /**
@@ -814,32 +821,8 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return isMineableBlock(existingState) && canHeadHarvestBlock(head, existingState);
     }
 
-    protected float getLayerHardness(int i, int j, int k, BlockRailBase.EnumRailDirection dir) {
-        float hardness = 0;
-        int ii = i;
-        int kk = k;
-        for (int jj = j; jj < j + 3; jj++) {
-            hardness += getBlockHardness(ii, jj, kk, dir);
-        }
-
-        if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH)
-            ii--;
-        else
-            kk--;
-        for (int jj = j; jj < j + 3; jj++) {
-            hardness += getBlockHardness(ii, jj, kk, dir);
-        }
-
-        ii = i;
-        kk = k;
-        if (dir == BlockRailBase.EnumRailDirection.NORTH_SOUTH)
-            ii++;
-        else
-            kk++;
-        for (int jj = j; jj < j + 3; jj++) {
-            hardness += getBlockHardness(ii, jj, kk, dir);
-        }
-
+    protected float getLayerHardness(BlockPos targetPos, BlockRailBase.EnumRailDirection dir) {
+        float hardness = layerAction(targetPos, dir, 0F, this::getBlockHardness, (s, r) -> s + r);
         hardness *= HARDNESS_MULTIPLER;
 
         ItemStack boreSlot = getStackInSlot(0);
@@ -854,28 +837,27 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return hardness;
     }
 
-    protected float getBlockHardness(int x, int y, int z, BlockRailBase.EnumRailDirection dir) {
-        if (worldObj.isAirBlock(x, y, z))
+    protected float getBlockHardness(BlockPos pos, BlockRailBase.EnumRailDirection dir) {
+        if (WorldPlugin.isBlockAir(worldObj, pos))
             return 0;
 
-        Block block = worldObj.getBlock(x, y, z);
-        if (TrackTools.isRailBlock(block)) {
-            int trackMeta = TrackTools.getTrackMeta(worldObj, block, this, x, y, z);
-            if (dir.isEqual(trackMeta))
+        IBlockState blockState = WorldPlugin.getBlockState(worldObj, pos);
+        if (TrackTools.isRailBlock(blockState)) {
+            BlockRailBase.EnumRailDirection trackMeta = TrackTools.getTrackDirection(worldObj, pos, blockState, this);
+            if (dir == trackMeta)
                 return 0;
         }
 
-        if (block == Blocks.torch)
+        if (blockState == Blocks.torch)
             return 0;
 
-        if (block == Blocks.obsidian)
+        if (blockState == Blocks.obsidian)
             return 15;
 
-        int meta = worldObj.getBlockMetadata(x, y, z);
-        if (!canMineBlock(x, y, z, block, meta))
+        if (!canMineBlock(pos, blockState))
             return 0.1f;
 
-        float hardness = block.getBlockHardness(worldObj, x, y, z);
+        float hardness = blockState.getBlock().getBlockHardness(worldObj, pos);
         if (hardness <= 0)
             hardness = 0.1f;
         return hardness;
@@ -889,7 +871,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox() {
+    public AxisAlignedBB getCollisionBoundingBox() {
         return null;
     }
 
@@ -1080,10 +1062,10 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     @Override
     public boolean canLinkWithCart(EntityMinecart cart) {
-        double x = getXAhead(posX, -LENGTH / 2);
-        double z = getZAhead(posZ, -LENGTH / 2);
-
-        return cart.getDistance(x, posY, z) < LinkageManager.LINKAGE_DISTANCE * 2;
+        Vec3 pos = getPositionAhead(-LENGTH / 2.0);
+        float dist = LinkageManager.LINKAGE_DISTANCE * 2;
+        dist = dist * dist;
+        return cart.getDistanceSq(pos.xCoord, pos.yCoord, pos.zCoord) < dist;
     }
 
     @Override
@@ -1119,20 +1101,21 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return false;
     }
 
-    public IInventory getInventoryFuel() {
+    public InventoryMapper getInventoryFuel() {
         return invFuel;
     }
 
-    public IInventory getInventoryGravel() {
+    public InventoryMapper getInventoryGravel() {
         return invBallast;
     }
 
-    public IInventory getInventoryRails() {
+    public InventoryMapper getInventoryRails() {
         return invRails;
     }
 
+    @Override
     public Entity[] getParts() {
-        return this.partArray;
+        return partArray;
     }
 
     public boolean attackEntityFromPart(EntityTunnelBorePart part, DamageSource damageSource, float damage) {
