@@ -594,6 +594,8 @@ public class RailcraftConfig {
 
         loadItemProperty("tool.whistle.tuner");
 
+        loadItemProperty("tool.template.tool");
+
         loadItemProperty("backpack.trackman.t1");
         loadItemProperty("backpack.trackman.t2");
         loadItemProperty("backpack.iceman.t1");
