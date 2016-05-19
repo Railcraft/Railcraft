@@ -14,6 +14,7 @@ import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid;
 import mods.railcraft.client.sounds.RCSoundHandler;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
@@ -38,15 +39,21 @@ import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.Level;
 
@@ -68,11 +75,6 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public int getRenderId() {
-        return RenderingRegistry.getNextAvailableRenderId();
-    }
-
-    @Override
     public void preInitClient() {
         MinecraftForge.EVENT_BUS.register(RCSoundHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new TextureHook());
@@ -81,10 +83,8 @@ public class ClientProxy extends CommonProxy {
     public static class TextureHook {
         @SubscribeEvent
         public void textureStitch(TextureStitchEvent.Pre event) {
-            if (event.map.getTextureType() == 0) {
-                CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.map.registerIcon("railcraft:cart.redstone.flux"));
-                CartContentRendererRedstoneFlux.instance().setFrameIcon(event.map.registerIcon("railcraft:cart.redstone.flux.frame"));
-            }
+            CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.map.registerSprite(new ResourceLocation("railcraft:cart.redstone.flux")));
+            CartContentRendererRedstoneFlux.instance().setFrameIcon(event.map.registerSprite(new ResourceLocation("railcraft:cart.redstone.flux.frame")));
         }
     }
 
@@ -139,8 +139,8 @@ public class ClientProxy extends CommonProxy {
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileTrackTESR.class, new RenderTrackBuffer());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileChestVoid.class, new RenderChest(RailcraftConstants.TESR_TEXTURE_FOLDER + "chest_void.png", new TileChestVoid()));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileChestMetals.class, new RenderChest(RailcraftConstants.TESR_TEXTURE_FOLDER + "chest_metals.png", new TileChestMetals()));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileChestVoid.class, new RenderChest(RailcraftConstants.TESR_TEXTURE_FOLDER + "chest_void.png", EnumMachineBeta.VOID_CHEST));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileChestMetals.class, new RenderChest(RailcraftConstants.TESR_TEXTURE_FOLDER + "chest_metals.png", EnumMachineBeta.METALS_CHEST));
 
         ClientRegistry.bindTileEntitySpecialRenderer(TilePostEmblem.class, new RenderBlockPost.EmblemPostTESR());
 
@@ -151,7 +151,7 @@ public class ClientProxy extends CommonProxy {
         RenderTESRSignals controllerRenderer = new RenderTESRSignals();
         ClientRegistry.bindTileEntitySpecialRenderer(TileSignalFoundation.class, controllerRenderer);
 
-        if (RailcraftBlocksOld.getBlockTrack() != null)
+        if (RailcraftBlocks.track.block() != null)
             RenderingRegistry.registerBlockHandler(new RenderTrack());
 
         if (RailcraftBlocksOld.getBlockElevator() != null)
@@ -174,7 +174,12 @@ public class ClientProxy extends CommonProxy {
         registerBlockRenderer(new RenderSlab());
 
         RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, new RenderTunnelBore());
-        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, new RenderCart());
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, new IRenderFactory<EntityMinecart>() {
+            @Override
+            public Render<? super EntityMinecart> createRenderFor(RenderManager manager) {
+                return new RenderCart(manager);
+            }
+        });
 
         stack = EnumCart.TANK.getCartItem();
         if (stack != null)

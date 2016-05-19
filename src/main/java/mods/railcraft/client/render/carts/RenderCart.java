@@ -10,11 +10,12 @@ package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.api.carts.locomotive.IRenderer;
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.*;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -34,11 +35,7 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
     private static final CartModelRenderer defaultCoreRenderer = new CartModelRenderer();
     private static final CartContentRenderer defaultContentRenderer = new CartContentRenderer();
 
-    public RenderCart(RenderManager renderManager) {
-        super(renderManager);
-        shadowSize = 0.5F;
-        fakeBlock.texture = new IIcon[6];
-
+    static {
         renderersCore.put(EntityLocomotive.class, LocomotiveRenderer.INSTANCE);
 
         renderersContent.put(EntityCartCargo.class, new CartContentRendererCargo());
@@ -46,6 +43,12 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
         renderersContent.put(EntityCartRF.class, CartContentRendererRedstoneFlux.instance());
         renderersContent.put(CartExplosiveBase.class, new CartContentRendererTNT());
         renderersContent.put(CartMaintenanceBase.class, new CartContentRendererMaintance());
+    }
+
+    public RenderCart(RenderManager renderManager) {
+        super(renderManager);
+        shadowSize = 0.5F;
+        fakeBlock.texture = new TextureAtlasSprite[6];
     }
 
     @Override
@@ -135,7 +138,7 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
         if (renderContents) {
             float blockScale = 0.74F;
             OpenGL.glScalef(blockScale, blockScale, blockScale);
-            OpenGL.glPushAttrib(OpenGL.GL_LIGHTING_BIT);
+            OpenGL.glPushAttrib(GL11.GL_LIGHTING_BIT);
             renderContents(cart, light, partialTicks);
             OpenGL.glPopAttrib();
         }

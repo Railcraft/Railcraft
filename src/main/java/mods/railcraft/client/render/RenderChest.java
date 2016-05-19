@@ -8,35 +8,28 @@
  */
 package mods.railcraft.client.render;
 
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.beta.TileChestRailcraft;
 import net.minecraft.client.model.ModelChest;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+import net.minecraftforge.client.ForgeHooksClient;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderChest extends TileEntitySpecialRenderer<TileChestRailcraft> implements IInvRenderer {
+public class RenderChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
 
     /**
      * The Ender Chest Chest's model.
      */
     private final ModelChest chestModel = new ModelChest();
-    private final TileChestRailcraft itemTile;
 
     private final ResourceLocation texture;
 
-    public RenderChest(String texture, TileChestRailcraft itemTile) {
+    public RenderChest(String texture, IEnumMachine<?> machineType) {
         this.texture = new ResourceLocation(texture);
-        this.itemTile = itemTile;
+        ForgeHooksClient.renderTileItem(machineType.getItem().getItem(), machineType.ordinal());
     }
 
     /**
@@ -97,11 +90,6 @@ public class RenderChest extends TileEntitySpecialRenderer<TileChestRailcraft> i
             OpenGL.glPopMatrix();
             OpenGL.glMatrixMode(OpenGL.GL_MODELVIEW);
         }
-    }
-
-    @Override
-    public void renderItem(RenderBlocks renderBlocks, ItemStack item, ItemRenderType renderType) {
-        TileEntityRendererDispatcher.instance.renderTileEntityAt(itemTile, 0.0D, 0.0D, 0.0D, 0.0F);
     }
 
 }

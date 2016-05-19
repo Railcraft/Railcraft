@@ -8,12 +8,13 @@
  */
 package mods.railcraft.client.render.carts;
 
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.client.render.RenderFakeBlock;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.EntityCartRF;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.IIcon;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -31,11 +32,11 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer {
         return instance;
     }
 
-    public void setRedstoneIcon(IIcon icon) {
+    public void setRedstoneIcon(TextureAtlasSprite icon) {
         redBlock.override = icon;
     }
 
-    public void setFrameIcon(IIcon icon) {
+    public void setFrameIcon(TextureAtlasSprite icon) {
         leadFrame.override = icon;
     }
 
@@ -43,7 +44,7 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer {
     public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
         super.render(renderer, cart, light, time);
         OpenGL.glPushMatrix();
-        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
         OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
         OpenGL.glRotatef(90F, 0.0F, 1.0F, 0.0F);
         OpenGL.glDisable(OpenGL.GL_LIGHTING);
