@@ -58,7 +58,7 @@ public class TrackGated extends TrackPowered implements ITrackReversible, ITrack
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox() {
-        return AABBFactory.make().createBoxForTileAt(getPos()).build();
+        return AABBFactory.start().createBoxForTileAt(getPos()).build();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class TrackGated extends TrackPowered implements ITrackReversible, ITrack
         EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
         if (isGateOpen())
             return null;
-        AABBFactory factory = AABBFactory.make().createBoxForTileAt(getPos()).raiseCeiling(0.5);
+        AABBFactory factory = AABBFactory.start().createBoxForTileAt(getPos()).raiseCeiling(0.5);
         if (dir == EnumRailDirection.NORTH_SOUTH)
             return factory.expandZAxis(AABB_SHRINK).build();
         else

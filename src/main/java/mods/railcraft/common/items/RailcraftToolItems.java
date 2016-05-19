@@ -91,7 +91,7 @@ public class RailcraftToolItems {
                         'I', "ingotSteel",
                         'S', "stickWood");
 
-                LootPlugin.addLootWarrior(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.WARRIOR, tag);
             }
         }
     }
@@ -120,7 +120,7 @@ public class RailcraftToolItems {
                 });
                 CraftingManager.getInstance().getRecipeList().add(recipe);
 
-                LootPlugin.addLootTool(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.TOOL, tag);
             }
         }
     }
@@ -150,7 +150,7 @@ public class RailcraftToolItems {
                 });
                 CraftingManager.getInstance().getRecipeList().add(recipe);
 
-                LootPlugin.addLootTool(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.TOOL, tag);
             }
         }
     }
@@ -178,7 +178,7 @@ public class RailcraftToolItems {
                         'I', "ingotSteel",
                         'S', "stickWood");
 
-                LootPlugin.addLootTool(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.TOOL, tag);
             }
         }
     }
@@ -231,7 +231,7 @@ public class RailcraftToolItems {
                         "I I",
                         'I', "ingotSteel",});
 
-                LootPlugin.addLootWarrior(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.WARRIOR, tag);
             }
         }
     }
@@ -258,7 +258,7 @@ public class RailcraftToolItems {
                         "III",
                         'I', "ingotSteel",});
 
-                LootPlugin.addLootWarrior(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.WARRIOR, tag);
             }
         }
     }
@@ -285,7 +285,7 @@ public class RailcraftToolItems {
                         "I I",
                         'I', "ingotSteel",});
 
-                LootPlugin.addLootWarrior(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.WARRIOR, tag);
             }
         }
     }
@@ -311,7 +311,7 @@ public class RailcraftToolItems {
                         "I I",
                         'I', "ingotSteel",});
 
-                LootPlugin.addLootWarrior(new ItemStack(item), 1, 1, tag);
+                LootPlugin.addLoot(new ItemStack(item), 1, 1, LootPlugin.Type.WARRIOR, tag);
             }
         }
     }
@@ -337,8 +337,8 @@ public class RailcraftToolItems {
                             'S', "stickWood");
                 }
 
-                LootPlugin.addLootTool(new ItemStack(item), 4, 16, tag);
-                LootPlugin.addLootWorkshop(new ItemStack(item), 4, 16, tag);
+                LootPlugin.addLoot(new ItemStack(item), 4, 16, LootPlugin.Type.TOOL, tag);
+                LootPlugin.addLoot(new ItemStack(item), 4, 16, LootPlugin.Type.WORKSHOP, tag);
 
                 OreDictionary.registerOre("fuelCoke", new ItemStack(itemCoalCoke));
             }

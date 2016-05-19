@@ -77,7 +77,7 @@ public class TrackEmbarking extends TrackPowered implements IGuiReturnHandler {
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered() && cart.canBeRidden() && cart.riddenByEntity == null && cart.getEntityData().getInteger("MountPrevention") <= 0) {
             int a = area;
-            AxisAlignedBB box = AABBFactory.make().createBoxForTileAt(getPos()).build();
+            AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(getPos()).build();
             box = box.expand(a, a, a);
             List<EntityLivingBase> entities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, box);
 

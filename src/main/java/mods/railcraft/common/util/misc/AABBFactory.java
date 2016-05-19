@@ -13,6 +13,7 @@ package mods.railcraft.common.util.misc;
 import net.minecraft.block.Block;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3;
 
 /**
  * Created by CovertJaguar on 3/9/2016 for Railcraft.
@@ -46,11 +47,11 @@ public class AABBFactory {
         maxZ = Math.max(z1, z2);
     }
 
-    public static AABBFactory make() {
+    public static AABBFactory start() {
         return new AABBFactory();
     }
 
-    public static AABBFactory make(AxisAlignedBB box) {
+    public static AABBFactory start(AxisAlignedBB box) {
         return new AABBFactory(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
     }
 
@@ -58,7 +59,7 @@ public class AABBFactory {
         return AxisAlignedBB.fromBounds(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-    public AABBFactory fromBounds(double x1, double y1, double z1, double x2, double y2, double z2) {
+    public AABBFactory setBounds(double x1, double y1, double z1, double x2, double y2, double z2) {
         minX = Math.min(x1, x2);
         minY = Math.min(y1, y2);
         minZ = Math.min(z1, z2);
@@ -68,8 +69,18 @@ public class AABBFactory {
         return this;
     }
 
-    public AABBFactory createBoxForBlock(Block block, BlockPos pos) {
-        fromBounds(
+    public AABBFactory setBoundsToPoint(Vec3 vector) {
+        minX = vector.xCoord;
+        minY = vector.yCoord;
+        minZ = vector.zCoord;
+        maxX = vector.xCoord;
+        maxY = vector.yCoord;
+        maxZ = vector.zCoord;
+        return this;
+    }
+
+    public AABBFactory setBoundsFromBlock(Block block, BlockPos pos) {
+        setBounds(
                 pos.getX() + block.getBlockBoundsMinX(),
                 pos.getY() + block.getBlockBoundsMinY(),
                 pos.getZ() + block.getBlockBoundsMinZ(),
@@ -80,7 +91,7 @@ public class AABBFactory {
     }
 
     public AABBFactory createBoxForTileAt(BlockPos pos) {
-        fromBounds(
+        setBounds(
                 pos.getX(),
                 pos.getY(),
                 pos.getZ(),
@@ -91,7 +102,7 @@ public class AABBFactory {
     }
 
     public AABBFactory createBoxForTileAt(BlockPos pos, double grow) {
-        fromBounds(
+        setBounds(
                 pos.getX() - grow,
                 pos.getY() - grow,
                 pos.getZ() - grow,

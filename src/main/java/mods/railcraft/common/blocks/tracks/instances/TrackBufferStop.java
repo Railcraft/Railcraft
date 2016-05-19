@@ -45,7 +45,7 @@ public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversi
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox() {
-        return AABBFactory.make().createBoxForTileAt(getPos()).expandHorizontally(SBOX).raiseCeiling(SBOXY).build();
+        return AABBFactory.start().createBoxForTileAt(getPos()).expandHorizontally(SBOX).raiseCeiling(SBOXY).build();
     }
 
     @Override
@@ -55,7 +55,7 @@ public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversi
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state) {
-        return AABBFactory.make().createBoxForTileAt(getPos()).expandHorizontally(CBOX).build();
+        return AABBFactory.start().createBoxForTileAt(getPos()).expandHorizontally(CBOX).build();
     }
 
     @Override

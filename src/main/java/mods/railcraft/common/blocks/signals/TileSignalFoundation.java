@@ -82,7 +82,7 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
     }
 
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.make().createBoxForTileAt(pos).build();
+        return AABBFactory.start().createBoxForTileAt(pos).build();
     }
 
     public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {

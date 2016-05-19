@@ -96,13 +96,13 @@ public abstract class MiscTools {
     }
 
     public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass, BlockPos pos) {
-        AxisAlignedBB box = AABBFactory.make().createBoxForTileAt(pos).build();
+        AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(pos).build();
         return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
     }
 
     @Nullable
     public static <T extends Entity> T getEntityAt(World world, Class<T> entityClass, BlockPos pos) {
-        AxisAlignedBB box = AABBFactory.make().createBoxForTileAt(pos).build();
+        AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(pos).build();
         List<T> entities = world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
         if (!entities.isEmpty())
             return entities.get(0);

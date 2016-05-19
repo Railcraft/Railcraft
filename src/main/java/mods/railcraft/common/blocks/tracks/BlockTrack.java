@@ -188,7 +188,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
         } catch (Error error) {
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackInstance.class);
         }
-        return AABBFactory.make().fromBounds(pos.getX() + minX, pos.getY() + minY, pos.getZ() + minZ, pos.getX() + maxX, pos.getY() + maxY, pos.getZ()).build();
+        return AABBFactory.start().setBounds(pos.getX() + minX, pos.getY() + minY, pos.getZ() + minZ, pos.getX() + maxX, pos.getY() + maxY, pos.getZ()).build();
     }
 
     @Override

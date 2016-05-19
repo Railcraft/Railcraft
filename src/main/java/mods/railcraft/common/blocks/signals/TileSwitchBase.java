@@ -54,7 +54,7 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(BOUNDS).raiseCeiling(-0.6F).build();
+        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(BOUNDS).raiseCeiling(-0.6F).build();
     }
 
     @Override

@@ -28,12 +28,12 @@ public abstract class TileBoxBase extends TileSignalFoundation {
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(BOUND).raiseCeiling(BOUND / 2).build();
+        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(BOUND).raiseCeiling(BOUND / 2).build();
     }
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(BOUND).raiseCeiling(BOUND / 2).build();
+        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(BOUND).raiseCeiling(BOUND / 2).build();
     }
 
     @Override

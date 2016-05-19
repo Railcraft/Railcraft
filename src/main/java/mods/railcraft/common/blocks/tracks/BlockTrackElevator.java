@@ -107,7 +107,7 @@ public class BlockTrackElevator extends Block {
     @Override
     public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
         setBlockBoundsBasedOnState(world, pos);
-        return AABBFactory.make().createBoxForBlock(this, pos).build();
+        return AABBFactory.start().setBoundsFromBlock(this, pos).build();
     }
 
     @Override

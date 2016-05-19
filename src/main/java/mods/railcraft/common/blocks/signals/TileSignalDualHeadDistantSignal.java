@@ -73,7 +73,7 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(SIZE).build();
+        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(SIZE).build();
     }
 
     @Override

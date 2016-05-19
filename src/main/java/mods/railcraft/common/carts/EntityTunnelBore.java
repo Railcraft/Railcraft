@@ -26,10 +26,7 @@ import mods.railcraft.common.util.collections.BlockSet;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.BallastRegistry;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.misc.RailcraftDamageSource;
+import mods.railcraft.common.util.misc.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -39,7 +36,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
@@ -50,9 +46,8 @@ import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
-public class EntityTunnelBore extends CartContainerBase implements IInventory, ILinkableCart {
+public class EntityTunnelBore extends CartContainerBase implements ILinkableCart {
     public static final float SPEED = 0.03F;
     public static final float LENGTH = 6.2f;
     public static final float WIDTH = 2.7f;
@@ -63,7 +58,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     public static final int LAYER_DELAY = 40;
     public static final int BALLAST_DELAY = 10;
     public static final int FUEL_CONSUMPTION = 12;
-    public static final float HARDNESS_MULTIPLER = 8;
+    public static final float HARDNESS_MULTIPLIER = 8;
     public static final BlockSet mineableBlocks = new BlockSet();
     public static final Set<Block> replaceableBlocks = new HashSet<Block>();
     protected static final int WATCHER_ID_FUEL = 16;
@@ -144,27 +139,21 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         replaceableBlocks.addAll(Arrays.asList(replaceable));
     }
 
-    protected final InventoryMapper invFuel = new InventoryMapper(this, 1, 6);
-    protected final InventoryMapper invBallast = new InventoryMapper(this, 7, 9);
-    protected final InventoryMapper invRails = new InventoryMapper(this, 16, 9);
+    public final InventoryMapper invFuel = new InventoryMapper(this, 1, 6);
+    public final InventoryMapper invBallast = new InventoryMapper(this, 7, 9);
+    public final InventoryMapper invRails = new InventoryMapper(this, 16, 9);
     //    protected static final int WATCHER_ID_BURN_TIME = 22;
-    protected boolean degreeCalc = false;
-    protected int delay = 0;
-    protected boolean placeRail = false;
-    protected boolean placeBallast = false;
-    protected boolean boreLayer = false;
-    protected int boreRotationAngle = 0;
+    protected int delay;
+    protected boolean placeRail;
+    protected boolean placeBallast;
+    protected boolean boreLayer;
+    protected int boreRotationAngle;
     private boolean active;
     private int clock = MiscTools.RANDOM.nextInt();
     private int burnTime;
     private int fuel;
-    private boolean hasInit;
-    private EntityTunnelBorePart[] partArray;
-    private EntityTunnelBorePart partHead1;
-    private EntityTunnelBorePart partHead2;
-    private EntityTunnelBorePart partBody;
-    private EntityTunnelBorePart partTail1;
-    private EntityTunnelBorePart partTail2;
+    private final boolean hasInit;
+    private final EntityTunnelBorePart[] partArray;
 
     public EntityTunnelBore(World world, double i, double j, double k) {
         this(world, i, j, k, EnumFacing.SOUTH);
@@ -173,12 +162,12 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
     public EntityTunnelBore(World world, double i, double j, double k, EnumFacing f) {
         super(world);
         partArray = new EntityTunnelBorePart[]{
-                // ------------------------------------- width, height, forwardOffset, sideOffset
-                partHead1 = new EntityTunnelBorePart(this, "head1", 1.9F, 2.6F, 2F, -0.6F),
-                partHead2 = new EntityTunnelBorePart(this, "head2", 1.9F, 2.6F, 2F, 0.6F),
-                partBody = new EntityTunnelBorePart(this, "body", 2.0F, 1.9F, 0.6F),
-                partTail1 = new EntityTunnelBorePart(this, "tail1", 1.6F, 1.4F, -1F),
-                partTail2 = new EntityTunnelBorePart(this, "tail2", 1.6F, 1.4F, -2.2F),
+                // ------------------------------------- name, width, height, forwardOffset, sideOffset
+                new EntityTunnelBorePart(this, "head1", 1.9F, 2.6F, 2F, -0.6F),
+                new EntityTunnelBorePart(this, "head2", 1.9F, 2.6F, 2F, 0.6F),
+                new EntityTunnelBorePart(this, "body", 2.0F, 1.9F, 0.6F),
+                new EntityTunnelBorePart(this, "tail1", 1.6F, 1.4F, -1F),
+                new EntityTunnelBorePart(this, "tail2", 1.6F, 1.4F, -2.2F),
         };
         hasInit = true;
         setPosition(i, j + getYOffset(), k);
@@ -467,10 +456,10 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             }
 
             if (isMinecartPowered()) {
-                double i = getXAhead(posX, 3.3);
-                double k = getZAhead(posZ, 3.3);
+                Vec3 headPos = getPositionAhead(3.3);
                 double size = 0.8;
-                List entities = worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.fromBounds(i - size, posY, k - size, i + size, posY + 2, k + size));
+                AxisAlignedBB entitySearchBox = AABBFactory.start().setBoundsToPoint(headPos).expandHorizontally(size).raiseCeiling(2).build();
+                List entities = worldObj.getEntitiesWithinAABBExcludingEntity(this, entitySearchBox);
                 for (Object e : entities) {
                     if (e instanceof EntityLivingBase) {
                         EntityLivingBase ent = (EntityLivingBase) e;
@@ -772,17 +761,17 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
             return false;
 
         // Start of Event Fire
-        BreakEvent breakEvent = new BreakEvent(x, y, z, worldObj, block, meta, RailcraftFakePlayer.get((WorldServer) worldObj, posX, posY, posZ));
+        BreakEvent breakEvent = new BreakEvent(worldObj, targetPos, targetState, RailcraftFakePlayer.get((WorldServer) worldObj, posX, posY, posZ));
         MinecraftForge.EVENT_BUS.post(breakEvent);
 
         if (breakEvent.isCanceled())
             return false;
         // End of Event Fire
 
-        ArrayList<ItemStack> items = block.getDrops(worldObj, x, y, z, meta, 0);
+        List<ItemStack> items = targetState.getBlock().getDrops(worldObj, targetPos, targetState, 0);
 
         for (ItemStack stack : items) {
-            if (StandardStackFilters.FUEL.matches(stack))
+            if (StandardStackFilters.FUEL.apply(stack))
                 stack = InvTools.moveItemStack(stack, invFuel);
 
             if (stack != null && stack.stackSize > 0 && InvTools.isStackEqualToBlock(stack, Blocks.gravel))
@@ -796,12 +785,14 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
                 double xr = (worldObj.rand.nextFloat() - 0.5D) * f;
                 double yr = (worldObj.rand.nextFloat() - 0.5D) * f;
                 double zr = (worldObj.rand.nextFloat() - 0.5D) * f;
-                EntityItem entityitem = new EntityItem(worldObj, getXAhead(posX, -3.2) + xr, posY + 0.3 + yr, getZAhead(posZ, -3.2) + zr, stack);
+                Vec3 spewPos = getPositionAhead(-3.2);
+                spewPos.addVector(xr, 0.3 + yr, zr);
+                EntityItem entityitem = new EntityItem(worldObj, spewPos.xCoord, spewPos.yCoord, spewPos.zCoord, stack);
                 worldObj.spawnEntityInWorld(entityitem);
             }
         }
 
-        worldObj.setBlockToAir(x, y, z);
+        WorldPlugin.setBlockToAir(worldObj, targetPos);
 
         head.setItemDamage(head.getItemDamage() + 1);
         if (head.getItemDamage() > head.getMaxDamage())
@@ -809,12 +800,11 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return true;
     }
 
+    @SuppressWarnings({"SimplifiableIfStatement", "BooleanMethodIsAlwaysInverted"})
     private boolean canMineBlock(BlockPos targetPos, IBlockState existingState) {
         ItemStack head = getStackInSlot(0);
         if (existingState.getBlock() instanceof IMineable) {
-            if (head == null)
-                return false;
-            return ((IMineable) existingState.getBlock()).canMineBlock(worldObj, targetPos, this, head);
+            return head != null && ((IMineable) existingState.getBlock()).canMineBlock(worldObj, targetPos, this, head);
         }
         if (existingState.getBlock().getBlockHardness(worldObj, targetPos) < 0)
             return false;
@@ -823,7 +813,7 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
 
     protected float getLayerHardness(BlockPos targetPos, BlockRailBase.EnumRailDirection dir) {
         float hardness = layerAction(targetPos, dir, 0F, this::getBlockHardness, (s, r) -> s + r);
-        hardness *= HARDNESS_MULTIPLER;
+        hardness *= HARDNESS_MULTIPLIER;
 
         ItemStack boreSlot = getStackInSlot(0);
         if (boreSlot != null && boreSlot.getItem() instanceof IBoreHead) {
@@ -1101,23 +1091,12 @@ public class EntityTunnelBore extends CartContainerBase implements IInventory, I
         return false;
     }
 
-    public InventoryMapper getInventoryFuel() {
-        return invFuel;
-    }
-
-    public InventoryMapper getInventoryGravel() {
-        return invBallast;
-    }
-
-    public InventoryMapper getInventoryRails() {
-        return invRails;
-    }
-
     @Override
     public Entity[] getParts() {
         return partArray;
     }
 
+    @SuppressWarnings("UnusedParameters")
     public boolean attackEntityFromPart(EntityTunnelBorePart part, DamageSource damageSource, float damage) {
         return attackEntityFrom(damageSource, damage);
     }

@@ -64,7 +64,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements IAs
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(-BOUNDS).raiseFloor(0.35).build();
+        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-BOUNDS).raiseFloor(0.35).build();
     }
 
     @Override

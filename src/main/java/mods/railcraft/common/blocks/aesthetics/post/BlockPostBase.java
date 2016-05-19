@@ -63,19 +63,19 @@ public abstract class BlockPostBase extends Block {
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
         if (isPlatform(state))
-            return AABBFactory.make().createBoxForTileAt(pos).build();
+            return AABBFactory.start().createBoxForTileAt(pos).build();
         if (!worldIn.isAirBlock(pos.down())
                 && !(state.getBlock() instanceof BlockPostBase)
                 && !TrackTools.isRailBlockAt(worldIn, pos.up()))
-            return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(-SIZE).raiseCeiling(0.5).build();
-        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(-SIZE).build();
+            return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SIZE).raiseCeiling(0.5).build();
+        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SIZE).build();
     }
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
         if (isPlatform(WorldPlugin.getBlockState(worldIn, pos)))
-            return AABBFactory.make().createBoxForTileAt(pos).build();
-        return AABBFactory.make().createBoxForTileAt(pos).expandHorizontally(-SELECT).build();
+            return AABBFactory.start().createBoxForTileAt(pos).build();
+        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SELECT).build();
     }
 
     @Override
