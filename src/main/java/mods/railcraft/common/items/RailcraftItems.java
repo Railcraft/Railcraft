@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -50,6 +51,24 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     ticket(ItemTicket.class, "routing.ticket", Items.paper),
     ticketGold(ItemTicketGold.class, "routing.ticket.gold", Items.gold_nugget),
     tie(ItemTie.class, "part.tie"),
+    turbineBlade(ItemTurbineBlade.class, "part.turbine.blade", "ingotSteel") {
+        @Override
+        public boolean isEnabled() {
+            return super.isEnabled() && EnumMachineAlpha.TURBINE.isAvailable();
+        }
+    },
+    turbineDisk(ItemTurbineDisk.class, "part.turbine.disk", "blockSteel") {
+        @Override
+        public boolean isEnabled() {
+            return super.isEnabled() && EnumMachineAlpha.TURBINE.isAvailable();
+        }
+    },
+    turbineRotor(ItemTurbineRotor.class, "part.turbine.rotor") {
+        @Override
+        public boolean isEnabled() {
+            return super.isEnabled() && EnumMachineAlpha.TURBINE.isAvailable();
+        }
+    },
     whistleTuner(ItemWhistleTuner.class, "tool.whistle.tuner");
     public static final RailcraftItems[] VALUES = values();
     private final Class<? extends Item> itemClass;

@@ -9,10 +9,7 @@
 package mods.railcraft.common.plugins.craftguide;
 
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.items.ItemRoutingTable;
-import mods.railcraft.common.items.ItemTicket;
-import mods.railcraft.common.items.ItemTicketGold;
-import mods.railcraft.common.items.RailcraftPartItems;
+import mods.railcraft.common.items.*;
 import mods.railcraft.common.modules.ModuleRouting;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -45,12 +42,12 @@ public class CustomRecipesPlugin implements RecipeProvider {
         // Rotor Repair
         if (EnumMachineAlpha.TURBINE.isAvailable()) {
             ItemStack[] rotorRepair = new ItemStack[10];
-            rotorRepair[0] = RailcraftPartItems.getTurbineRotor();
+            rotorRepair[0] = RailcraftItems.turbineRotor.getStack();
             rotorRepair[0].setItemDamage(1);
             for (int i = 0; i < 9; i++) {
-                rotorRepair[i + 1] = RailcraftPartItems.getTurbineBlade();
+                rotorRepair[i + 1] = RailcraftItems.turbineBlade.getStack();
             }
-            rotorRepair[5] = RailcraftPartItems.getTurbineRotor();
+            rotorRepair[5] = RailcraftItems.turbineRotor.getStack();
             rotorRepair[5].setItemDamage(25000);
             generator.addRecipe(template, rotorRepair);
         }
@@ -58,8 +55,8 @@ public class CustomRecipesPlugin implements RecipeProvider {
         // Ticket
         if (RailcraftModuleManager.isModuleEnabled(ModuleRouting.class)) {
             ItemStack[] ticket = new ItemStack[10];
-            ticket[0] = ItemTicket.getTicket();
-            ticket[1] = ItemTicketGold.getTicket();
+            ticket[0] = RailcraftItems.ticket.getStack();
+            ticket[1] = RailcraftItems.ticketGold.getStack();
             ticket[2] = new ItemStack(Items.paper);
             NBTTagCompound nbt = InvTools.getItemData(ticket[0]);
             nbt.setString("owner", "CovertJaguar");
@@ -70,13 +67,13 @@ public class CustomRecipesPlugin implements RecipeProvider {
 
             // Routing Table
             ItemStack[] routingTable = new ItemStack[10];
-            routingTable[0] = ItemRoutingTable.getItem();
+            routingTable[0] = RailcraftItems.routingTable.getStack();
             if (routingTable[0] != null) {
                 routingTable[0].stackSize = 2;
                 InvTools.addItemToolTip(routingTable[0], "Edited");
-                routingTable[1] = ItemRoutingTable.getItem();
+                routingTable[1] = RailcraftItems.routingTable.getStack();
                 InvTools.addItemToolTip(routingTable[1], "Edited");
-                routingTable[2] = ItemRoutingTable.getItem();
+                routingTable[2] = RailcraftItems.routingTable.getStack();
                 InvTools.addItemToolTip(routingTable[2], "Blank");
                 generator.addRecipe(template, routingTable);
             }

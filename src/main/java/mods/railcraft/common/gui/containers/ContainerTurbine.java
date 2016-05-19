@@ -10,7 +10,7 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.machine.alpha.TileSteamTurbine;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
-import mods.railcraft.common.items.RailcraftPartItems;
+import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
@@ -75,7 +75,7 @@ public class ContainerTurbine extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return stack != null && stack.getItem() == RailcraftPartItems.itemTurbineRotor;
+            return RailcraftItems.turbineRotor.isEqual(stack);
         }
 
     }

@@ -19,7 +19,8 @@ import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.items.RailcraftPartItems;
+import mods.railcraft.common.items.ItemTurbineRotor;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.buildcraft.triggers.INeedsMaintenance;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
@@ -57,7 +58,6 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         }
     }
 
-    private static final int DAMAGE_CHANCE = 200;
     private static final int IC2_OUTPUT = 200;
     private static final int BC_OUTPUT = 64;
     private static final int STEAM_USAGE = 320;
@@ -67,7 +67,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
     public static ItemStack getSampleRotor() {
         if (sampleRotor == null)
-            sampleRotor = RailcraftPartItems.getTurbineRotor();
+            sampleRotor = RailcraftItems.turbineRotor.getStack();
         return sampleRotor;
     }
 
@@ -202,8 +202,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
                             if (worldObj.rand.nextInt(4) != 0)
                                 tankWater.fill(waterFilter, true);
 
-                            if (worldObj.rand.nextInt(DAMAGE_CHANCE) == 0)
-                                inv.setInventorySlotContents(0, InvTools.damageItem(rotor, 1));
+                            inv.setInventorySlotContents(0, ((ItemTurbineRotor) rotor.getItem()).useRotor(rotor));
                         }
                     }
                 }

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.util.crafting;
 
-import mods.railcraft.common.items.RailcraftPartItems;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.InventoryCrafting;
@@ -22,8 +22,8 @@ import net.minecraft.world.World;
 public class RotorRepairRecipe implements IRecipe {
 
     private static final int REPAIR_PER_BLADE = 2500;
-    private final ItemStack ROTOR = RailcraftPartItems.getTurbineRotor();
-    private final ItemStack BLADE = RailcraftPartItems.getTurbineBlade();
+    private final ItemStack ROTOR = RailcraftItems.turbineRotor.getStack();
+    private final ItemStack BLADE = RailcraftItems.turbineBlade.getStack();
 
     @Override
     public boolean matches(InventoryCrafting grid, World world) {

@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ItemRailcraft extends Item implements IRailcraftObject {
     private float smeltingExperience = -1;
-    private int rarity = 0;
+    private int rarity;
 
     public ItemRailcraft() {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);

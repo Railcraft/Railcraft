@@ -52,10 +52,6 @@ public class CraftingPlugin {
         FurnaceRecipes.instance().addSmeltingRecipe(input, output, xp);
     }
 
-    public enum RecipeType {
-        SHAPED, SHAPELESS
-    }
-
     private static Object[] cleanRecipeArray(RecipeType recipeType, ItemStack result, Object... recipeArray) throws InvalidRecipeException {
         List<Object> recipeList = Lists.newArrayList(recipeArray);
         for (int i = 0; i < recipeList.size(); i++) {
@@ -68,8 +64,10 @@ public class CraftingPlugin {
                 } else {
                     recipeList.set(i, ((IRailcraftObjectContainer) obj).getRecipeObject());
                 }
+                if (recipeList.get(i) == null)
+                    throw new MissingIngredientException(recipeType, result);
             } else if (obj == null) {
-                throw new InvalidRecipeException("Tried to define invalid {0} recipe for {1}, a necessary item was probably disabled. Skipping", recipeType, result.getUnlocalizedName());
+                throw new MissingIngredientException(recipeType, result);
             }
         }
         return recipeList.toArray();
@@ -83,22 +81,10 @@ public class CraftingPlugin {
             } else if (recipeType == RecipeType.SHAPED && obj instanceof Boolean)
                 return true;
             else if (obj == null) {
-                throw new InvalidRecipeException("Tried to define invalid {0} recipe for {1}, a necessary item was probably disabled. Skipping", recipeType, result.getUnlocalizedName());
+                throw new MissingIngredientException(recipeType, result);
             }
         }
         return false;
-    }
-
-    public static class ProcessedRecipe {
-        public final ItemStack result;
-        public final Object[] recipeArray;
-        public final boolean isOreRecipe;
-
-        ProcessedRecipe(boolean isOreRecipe, ItemStack result, Object... recipeArray) {
-            this.isOreRecipe = isOreRecipe;
-            this.result = result;
-            this.recipeArray = recipeArray;
-        }
     }
 
     public static ProcessedRecipe processRecipe(RecipeType recipeType, @Nullable ItemStack result, Object... recipeArray) throws InvalidRecipeException {
@@ -219,6 +205,28 @@ public class CraftingPlugin {
         }
 
         return grid;
+    }
+
+    public enum RecipeType {
+        SHAPED, SHAPELESS
+    }
+
+    private static class MissingIngredientException extends InvalidRecipeException {
+        public MissingIngredientException(RecipeType recipeType, ItemStack result) {
+            super("Tried to define invalid {0} recipe for {1}, a necessary item was probably disabled. Skipping", recipeType, result.getUnlocalizedName());
+        }
+    }
+
+    public static class ProcessedRecipe {
+        public final ItemStack result;
+        public final Object[] recipeArray;
+        public final boolean isOreRecipe;
+
+        ProcessedRecipe(boolean isOreRecipe, ItemStack result, Object... recipeArray) {
+            this.isOreRecipe = isOreRecipe;
+            this.result = result;
+            this.recipeArray = recipeArray;
+        }
     }
 
 }

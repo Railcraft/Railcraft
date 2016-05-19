@@ -19,7 +19,6 @@ import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.items.RailcraftPartItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RotorRepairRecipe;
 import net.minecraft.init.Items;
@@ -56,7 +55,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             'P', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL),
                             'B', "blockSteel");
 
-                    RailcraftPartItems.getTurbineRotor();
+                    RailcraftItems.turbineRotor.register();
 
                     CraftingPlugin.addRecipe(new RotorRepairRecipe());
 
