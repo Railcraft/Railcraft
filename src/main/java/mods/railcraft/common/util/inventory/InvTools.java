@@ -80,6 +80,7 @@ public abstract class InvTools {
         return getAdjacentInventories(world, pos, null);
     }
 
+    @Nonnull
     public static List<IInventoryObject> getAdjacentInventories(World world, BlockPos pos, Class<? extends TileEntity> type) {
         List<IInventoryObject> list = new ArrayList<IInventoryObject>(6);
         for (EnumFacing side : EnumFacing.VALUES) {
@@ -104,6 +105,7 @@ public abstract class InvTools {
 //        return map;
 //    }
 
+    @Nullable
     public static IInventoryObject getInventoryFromSide(World world, BlockPos pos, EnumFacing side, final Class<? extends TileEntity> type, final Class<? extends TileEntity> exclude) {
         return getInventoryFromSide(world, pos, side, new ITileFilter() {
             @SuppressWarnings("SimplifiableIfStatement")
@@ -116,6 +118,7 @@ public abstract class InvTools {
         });
     }
 
+    @Nullable
     public static IInventoryObject getInventoryFromSide(World world, BlockPos pos, EnumFacing side, ITileFilter filter) {
         TileEntity tile = WorldPlugin.getTileEntityOnSide(world, pos, side);
         if (tile == null || !(tile instanceof IInventory) || !filter.matches(tile))
@@ -222,6 +225,7 @@ public abstract class InvTools {
         nbt.setInteger(key, value);
     }
 
+    @Nullable
     public static ItemStack depleteItem(ItemStack stack) {
         if (stack.stackSize == 1)
             return stack.getItem().getContainerItem(stack);
@@ -231,6 +235,7 @@ public abstract class InvTools {
         }
     }
 
+    @Nullable
     public static ItemStack damageItem(ItemStack stack, int damage) {
         if (!stack.isItemStackDamageable()) return stack;
         int curDamage = stack.getItemDamage();
@@ -434,6 +439,7 @@ public abstract class InvTools {
      * the <code>IInventory</code>
      * @see ItemStackMap
      */
+    @Nonnull
     public static Map<ItemStack, Integer> getManifest(IInventory inv) {
         Map<ItemStack, Integer> manifest = new ItemStackMap<Integer>();
         for (int i = 0; i < inv.getSizeInventory(); i++) {
@@ -456,6 +462,7 @@ public abstract class InvTools {
      * @param dest   the destination inventory
      * @return null if nothing was moved, the stack moved otherwise
      */
+    @Nullable
     public static ItemStack moveOneItem(IInventoryObject source, IInventoryObject dest) {
         return moveOneItem(source, dest, StandardStackFilters.ALL);
     }
@@ -468,6 +475,7 @@ public abstract class InvTools {
      * @param filters ItemStack to match against
      * @return null if nothing was moved, the stack moved otherwise
      */
+    @Nullable
     public static ItemStack moveOneItem(IInventoryObject source, IInventoryObject dest, ItemStack... filters) {
         return moveOneItem(source, dest, StackFilters.anyOf(filters));
     }
@@ -480,6 +488,7 @@ public abstract class InvTools {
      * @param filter an StandardStackFilters to match against
      * @return null if nothing was moved, the stack moved otherwise
      */
+    @Nullable
     public static ItemStack moveOneItem(IInventoryObject source, IInventoryObject dest, IStackFilter filter) {
         InventoryManipulator imSource = InventoryManipulator.get(source);
         return imSource.moveItem(dest, filter);
@@ -493,6 +502,7 @@ public abstract class InvTools {
      * @param filters ItemStack to match against
      * @return null if nothing was moved, the stack moved otherwise
      */
+    @Nullable
     public static ItemStack moveOneItem(Collection<IInventoryObject> sources, IInventoryObject dest, ItemStack... filters) {
         for (IInventoryObject inv : sources) {
             ItemStack moved = InvTools.moveOneItem(inv, dest, filters);
@@ -510,6 +520,7 @@ public abstract class InvTools {
      * @param filter  an StandardStackFilters to match against
      * @return null if nothing was moved, the stack moved otherwise
      */
+    @Nullable
     public static ItemStack moveOneItem(Collection<IInventoryObject> sources, IInventoryObject dest, IStackFilter filter) {
         for (IInventoryObject inv : sources) {
             ItemStack moved = InvTools.moveOneItem(inv, dest, filter);
@@ -527,6 +538,7 @@ public abstract class InvTools {
      * @param filters      ItemStack to match against
      * @return null if nothing was moved, the stack moved otherwise
      */
+    @Nullable
     public static ItemStack moveOneItem(IInventoryObject source, Collection<IInventoryObject> destinations, ItemStack... filters) {
         for (IInventoryObject dest : destinations) {
             ItemStack moved = InvTools.moveOneItem(source, dest, filters);
@@ -546,6 +558,7 @@ public abstract class InvTools {
      * @param filter an ItemStack[] to exclude
      * @return null if nothing was moved, the stack moved otherwise
      */
+    @Nullable
     public static ItemStack moveOneItemExcept(IInventoryObject source, IInventoryObject dest, IStackFilter filter) {
         return moveOneItem(source, dest, filter.negate());
     }
@@ -559,6 +572,7 @@ public abstract class InvTools {
      * @return null if nothing was moved, the stack moved otherwise
      */
     @SuppressWarnings("unused")
+    @Nullable
     public static ItemStack moveOneItemExcept(Collection<IInventoryObject> sources, IInventoryObject dest, IStackFilter filter) {
         for (IInventoryObject inv : sources) {
             ItemStack moved = InvTools.moveOneItemExcept(inv, dest, filter);
@@ -577,6 +591,7 @@ public abstract class InvTools {
      * @return null if nothing was moved, the stack moved otherwise
      */
     @SuppressWarnings("unused")
+    @Nullable
     public static ItemStack moveOneItemExcept(IInventoryObject source, Collection<IInventoryObject> destinations, IStackFilter filter) {
         for (IInventoryObject dest : destinations) {
             ItemStack moved = InvTools.moveOneItemExcept(source, dest, filter);
@@ -756,6 +771,7 @@ public abstract class InvTools {
      * @return Null if itemStack was completely moved, a new itemStack with
      * remaining stackSize if part or none of the stack was moved.
      */
+    @Nullable
     public static ItemStack moveItemStack(ItemStack stack, IInventoryObject dest) {
         InventoryManipulator im = InventoryManipulator.get(dest);
         return im.addStack(stack);
@@ -771,6 +787,7 @@ public abstract class InvTools {
      * remaining stackSize if part or none of the stack was moved.
      */
     @SuppressWarnings("unused")
+    @Nullable
     public static ItemStack moveItemStack(ItemStack stack, Collection<IInventoryObject> dest) {
         for (IInventoryObject inv : dest) {
             stack = moveItemStack(stack, inv);
@@ -837,6 +854,7 @@ public abstract class InvTools {
      * @return An ItemStack
      */
     @SuppressWarnings("unused")
+    @Nullable
     public static ItemStack removeOneItem(IInventoryObject inv) {
         return removeOneItem(inv, StandardStackFilters.ALL);
     }
@@ -849,6 +867,7 @@ public abstract class InvTools {
      * @param filter the filter to match against
      * @return An ItemStack
      */
+    @Nullable
     public static ItemStack removeOneItem(IInventoryObject inv, ItemStack... filter) {
         return removeOneItem(inv, StackFilters.anyOf(filter));
     }
@@ -861,6 +880,7 @@ public abstract class InvTools {
      * @param filter the filter to match against
      * @return An ItemStack
      */
+    @Nullable
     public static ItemStack removeOneItem(IInventoryObject inv, IStackFilter filter) {
         InventoryManipulator im = InventoryManipulator.get(inv);
         return im.removeItem(filter);
@@ -874,6 +894,7 @@ public abstract class InvTools {
      * @param filter the filter to match against
      * @return An ItemStack
      */
+    @Nullable
     public static ItemStack removeOneItem(Collection<IInventoryObject> invs, IStackFilter filter) {
         for (IInventoryObject inv : invs) {
             ItemStack stack = removeOneItem(inv, filter);
@@ -927,6 +948,7 @@ public abstract class InvTools {
      * @return An ItemStack
      */
     @SuppressWarnings("unused")
+    @Nullable
     public static ItemStack findMatchingItem(IInventoryObject inv, IStackFilter filter) {
         InventoryManipulator im = InventoryManipulator.get(inv);
         return im.tryRemoveItem(filter);
@@ -941,6 +963,7 @@ public abstract class InvTools {
      * @param filter EnumItemType to match against
      * @return A Set of ItemStacks
      */
+    @Nonnull
     public static Set<ItemStack> findMatchingItems(IInventoryObject inv, IStackFilter filter) {
         Set<ItemStack> items = new ItemStackSet();
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
@@ -988,6 +1011,7 @@ public abstract class InvTools {
         stack.writeToNBT(data);
     }
 
+    @Nullable
     public static ItemStack readItemFromNBT(NBTTagCompound data) {
         return ItemStack.loadItemStackFromNBT(data);
     }

@@ -16,21 +16,25 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class InventoryManipulator<T extends IInvSlot> implements Iterable<T> {
-
+    @Nonnull
     public static InventoryManipulator<IExtInvSlot> get(IInventory inv) {
         return new StandardInventoryManipulator(inv);
     }
 
+    @Nonnull
     public static InventoryManipulator<IInvSlot> get(IItemHandler inv) {
         return new ItemHandlerInventoryManipulator(inv);
     }
 
+    @Nonnull
     public static InventoryManipulator<? extends IInvSlot> get(IInventoryObject inv) {
         if (inv.getInventoryObject() instanceof IInventory)
             return new StandardInventoryManipulator((IInventory) inv.getInventoryObject());
@@ -46,6 +50,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
         return tryAddStack(stack) == null;
     }
 
+    @Nullable
     public ItemStack tryAddStack(ItemStack stack) {
         return addStack(stack, false);
     }
@@ -55,10 +60,12 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
      *
      * @return The remainder
      */
+    @Nullable
     public ItemStack addStack(ItemStack stack) {
         return addStack(stack, true);
     }
 
+    @Nullable
     protected abstract ItemStack addStack(ItemStack stack, boolean doAdd);
 
     /**
@@ -73,6 +80,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
      * Returns the item that would be returned if an item matching the filter
      * was removed. Does not modify the inventory.
      */
+    @Nullable
     public ItemStack tryRemoveItem(IStackFilter filter) {
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStackInSlot();
@@ -88,6 +96,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
     /**
      * Removed an item matching the filter.
      */
+    @Nullable
     public ItemStack removeItem(IStackFilter filter) {
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStackInSlot();
@@ -106,12 +115,15 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
         return found == maxAmount;
     }
 
+    @Nonnull
     public List<ItemStack> removeItems(IStackFilter filter, int maxAmount) {
         return removeItem(filter, maxAmount, true);
     }
 
+    @Nonnull
     protected abstract List<ItemStack> removeItem(IStackFilter filter, int maxAmount, boolean doRemove);
 
+    @Nullable
     public ItemStack moveItem(IInventoryObject dest, IStackFilter filter) {
         InventoryManipulator imDest = InventoryManipulator.get(dest);
         for (IInvSlot slot : this) {
