@@ -74,7 +74,8 @@ public class ItemTemplateTool extends ItemRailcraft
             default: pasteModeString = null;
         }
         List<String> tooltip = ToolTip.buildToolTip("item.railcraft.tool.template.tool.tip").convertToStrings();
-        info.addAll(tooltip);
+        if (tooltip != null)
+            info.addAll(tooltip);
         info.add(LocalizationPlugin.translate(storedFilters));
         if (pasteModeString != null)
             info.add(LocalizationPlugin.translate(pasteModeString));
