@@ -85,16 +85,16 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer<TileEntity> {
         }
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib();
-        OpenGL.glDisable(OpenGL.GL_LIGHTING);
-        OpenGL.glDisable(OpenGL.GL_BLEND);
-        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
-        OpenGL.glDisable(OpenGL.GL_TEXTURE_2D);
+        OpenGL.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_BLEND);
+        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glDisable(GL11.GL_TEXTURE_2D);
 
-        OpenGL.glEnable(OpenGL.GL_LINE_SMOOTH);
-        OpenGL.glHint(OpenGL.GL_LINE_SMOOTH_HINT, OpenGL.GL_NICEST);
+        OpenGL.glEnable(GL11.GL_LINE_SMOOTH);
+        OpenGL.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
         OpenGL.glLineWidth(5F);
 
-        OpenGL.glBegin(OpenGL.GL_LINES);
+        OpenGL.glBegin(GL11.GL_LINES);
         for (WorldCoordinate target : pair.getPairs()) {
             int color = colorProfile.getColor(tile, pair.getCoords(), target);
             float c1 = (float) (color >> 16 & 255) / 255.0F;

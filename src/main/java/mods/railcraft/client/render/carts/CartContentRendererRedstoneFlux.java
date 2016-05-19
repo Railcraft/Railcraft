@@ -47,9 +47,9 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer {
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
         OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
         OpenGL.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-        OpenGL.glDisable(OpenGL.GL_LIGHTING);
-        OpenGL.glEnable(OpenGL.GL_BLEND);
-        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glEnable(GL11.GL_BLEND);
+        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         int x = (int) (Math.floor(cart.posX));
         int y = (int) (Math.floor(cart.posY));

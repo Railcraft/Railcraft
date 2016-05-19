@@ -93,9 +93,9 @@ public class FluidRenderer {
             liquidBlock.texture[0] = getFluidTexture(fluid, flowing);
         }
 
-        OpenGL.glDisable(OpenGL.GL_LIGHTING);
-        OpenGL.glDisable(OpenGL.GL_BLEND);
-        OpenGL.glDisable(OpenGL.GL_CULL_FACE);
+        OpenGL.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_BLEND);
+        OpenGL.glDisable(GL11.GL_CULL_FACE);
         for (int s = 0; s < DISPLAY_STAGES; ++s) {
             diplayLists[s] = GLAllocation.generateDisplayLists(1);
             OpenGL.glNewList(diplayLists[s], 4864 /*GL_COMPILE*/);
@@ -114,9 +114,9 @@ public class FluidRenderer {
         }
 
         OpenGL.glColor4f(1, 1, 1, 1);
-        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
-        OpenGL.glEnable(OpenGL.GL_BLEND);
-        OpenGL.glEnable(OpenGL.GL_LIGHTING);
+        OpenGL.glEnable(GL11.GL_CULL_FACE);
+        OpenGL.glEnable(GL11.GL_BLEND);
+        OpenGL.glEnable(GL11.GL_LIGHTING);
 
         cache.put(fluid, diplayLists);
 

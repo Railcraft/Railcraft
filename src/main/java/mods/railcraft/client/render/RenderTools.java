@@ -181,14 +181,14 @@ public class RenderTools {
         OpenGL.glRotatef(-rm.playerViewY, 0.0F, 1.0F, 0.0F);
         OpenGL.glRotatef(rm.playerViewX, 1.0F, 0.0F, 0.0F);
         OpenGL.glScalef(-f1, -f1, f1);
-        OpenGL.glDisable(OpenGL.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_LIGHTING);
         OpenGL.glDepthMask(false);
-        OpenGL.glDisable(OpenGL.GL_DEPTH_TEST);
-        OpenGL.glEnable(OpenGL.GL_BLEND);
+        OpenGL.glDisable(GL11.GL_DEPTH_TEST);
+        OpenGL.glEnable(GL11.GL_BLEND);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         Tessellator tessellator = Tessellator.getInstance();
 
-        OpenGL.glDisable(OpenGL.GL_TEXTURE_2D);
+        OpenGL.glDisable(GL11.GL_TEXTURE_2D);
         tessellator.startDrawingQuads();
         int j = fontrenderer.getStringWidth(name) / 2;
         tessellator.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
@@ -197,13 +197,13 @@ public class RenderTools {
         tessellator.addVertex((double) (j + 1), (double) 8, 0.0D);
         tessellator.addVertex((double) (j + 1), (double) -1, 0.0D);
         tessellator.draw();
-        OpenGL.glEnable(OpenGL.GL_TEXTURE_2D);
+        OpenGL.glEnable(GL11.GL_TEXTURE_2D);
         fontrenderer.drawString(name, -fontrenderer.getStringWidth(name) / 2, 0, 553648127);
-        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glEnable(GL11.GL_DEPTH_TEST);
         OpenGL.glDepthMask(true);
         fontrenderer.drawString(name, -fontrenderer.getStringWidth(name) / 2, 0, -1);
-        OpenGL.glEnable(OpenGL.GL_LIGHTING);
-        OpenGL.glDisable(OpenGL.GL_BLEND);
+        OpenGL.glEnable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_BLEND);
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         OpenGL.glPopMatrix();
     }

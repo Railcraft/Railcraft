@@ -41,18 +41,18 @@ public class RenderChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
 
         if (destroyStage >= 0) {
             bindTexture(DESTROY_STAGES[destroyStage]);
-            OpenGL.glMatrixMode(OpenGL.GL_TEXTURE);
+            OpenGL.glMatrixMode(GL11.GL_TEXTURE);
             OpenGL.glPushMatrix();
             OpenGL.glScalef(4.0F, 4.0F, 1.0F);
             OpenGL.glTranslatef(0.0625F, 0.0625F, 0.0625F);
-            OpenGL.glMatrixMode(OpenGL.GL_MODELVIEW);
+            OpenGL.glMatrixMode(GL11.GL_MODELVIEW);
         } else {
             bindTexture(texture);
         }
 
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib();
-        OpenGL.glEnable(OpenGL.GL_RESCALE_NORMAL);
+        OpenGL.glEnable(GL11.GL_RESCALE_NORMAL);
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         OpenGL.glTranslatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
         OpenGL.glScalef(1.0F, -1.0F, -1.0F);
@@ -86,9 +86,9 @@ public class RenderChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (destroyStage >= 0) {
-            OpenGL.glMatrixMode(OpenGL.GL_TEXTURE);
+            OpenGL.glMatrixMode(GL11.GL_TEXTURE);
             OpenGL.glPopMatrix();
-            OpenGL.glMatrixMode(OpenGL.GL_MODELVIEW);
+            OpenGL.glMatrixMode(GL11.GL_MODELVIEW);
         }
     }
 

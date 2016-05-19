@@ -53,9 +53,9 @@ public class RenderTESRFluidLoader extends TileEntitySpecialRenderer<TileLoaderF
     public void renderTileEntityAt(TileLoaderFluidBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib();
-        OpenGL.glDisable(OpenGL.GL_LIGHTING);
-        OpenGL.glDisable(OpenGL.GL_BLEND);
-//        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+        OpenGL.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_BLEND);
+//        OpenGL.glEnable(GL11.GL_CULL_FACE);
 
         backDrop.texture[0] = tile.getMachineType().getTexture(7);
         bindTexture(TextureMap.locationBlocksTexture);

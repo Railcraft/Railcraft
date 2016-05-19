@@ -127,10 +127,10 @@ public class RenderTrackBuffer extends TileEntitySpecialRenderer {
             if (((TileTrack) tile).getTrackInstance() instanceof TrackBufferStop) {
                 TrackBufferStop track = (TrackBufferStop) ((TileTrack) tile).getTrackInstance();
                 OpenGL.glPushMatrix();
-                OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
-                OpenGL.glEnable(OpenGL.GL_LIGHTING);
-                OpenGL.glDisable(OpenGL.GL_BLEND);
-                OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+                OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+                OpenGL.glEnable(GL11.GL_LIGHTING);
+                OpenGL.glDisable(GL11.GL_BLEND);
+                OpenGL.glEnable(GL11.GL_CULL_FACE);
                 OpenGL.glColor3f(1, 1, 1);
                 OpenGL.glTranslatef((float) x, (float) y, (float) z);
 

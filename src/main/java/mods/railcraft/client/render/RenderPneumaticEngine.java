@@ -68,10 +68,10 @@ public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements 
 
     private void render(EnergyStage energy, float progress, EnumFacing orientation, double x, double y, double z) {
         OpenGL.glPushMatrix();
-        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
-        OpenGL.glEnable(OpenGL.GL_LIGHTING);
-        OpenGL.glDisable(OpenGL.GL_BLEND);
-        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+        OpenGL.glEnable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_BLEND);
+        OpenGL.glEnable(GL11.GL_CULL_FACE);
         OpenGL.glColor3f(1, 1, 1);
 
         OpenGL.glTranslatef((float) x, (float) y, (float) z);
@@ -118,7 +118,7 @@ public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements 
 
         float pistonTrans = 2F / 16F;
 
-        OpenGL.glDisable(OpenGL.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_LIGHTING);
         for (int i = 0; i <= step + 2; i += 2) {
             piston.render(factor);
             OpenGL.glTranslatef(translate[0] * pistonTrans, translate[1] * pistonTrans, translate[2] * pistonTrans);

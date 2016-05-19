@@ -41,12 +41,12 @@ public class RenderTunnelBore extends Render {
         OpenGL.glTranslatef(tx, ty, tz);
 
         if (RenderManager.debugBoundingBox) {
-            OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+            OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
 //            OpenGL.glDepthMask(false);
-            OpenGL.glDisable(OpenGL.GL_TEXTURE_2D);
-            OpenGL.glDisable(OpenGL.GL_LIGHTING);
-            OpenGL.glDisable(OpenGL.GL_CULL_FACE);
-            OpenGL.glDisable(OpenGL.GL_BLEND);
+            OpenGL.glDisable(GL11.GL_TEXTURE_2D);
+            OpenGL.glDisable(GL11.GL_LIGHTING);
+            OpenGL.glDisable(GL11.GL_CULL_FACE);
+            OpenGL.glDisable(GL11.GL_BLEND);
             for (Entity part : bore.getParts()) {
                 OpenGL.glPushMatrix();
                 double posX = part.lastTickPosX + (part.posX - part.lastTickPosX) * (double) time - RenderManager.renderPosX;

@@ -39,10 +39,10 @@ public class RenderBlockFrame extends BlockRenderer {
 
     @Override
     public void renderItem(RenderBlocks renderBlocks, ItemStack item, ItemRenderType renderType) {
-        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
-        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
-        OpenGL.glEnable(OpenGL.GL_BLEND);
-        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+        OpenGL.glEnable(GL11.GL_DEPTH_TEST);
+        OpenGL.glEnable(GL11.GL_BLEND);
+        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         BlockFrame.flipTextures = true;
         getBlock().setBlockBounds(1, 1, 1, 0, 0, 0);

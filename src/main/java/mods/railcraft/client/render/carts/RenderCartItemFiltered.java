@@ -60,10 +60,10 @@ public class RenderCartItemFiltered implements IItemRenderer {
     @Override
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         OpenGL.glPushMatrix();
-        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
-        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
-        OpenGL.glEnable(OpenGL.GL_BLEND);
-        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+        OpenGL.glEnable(GL11.GL_DEPTH_TEST);
+        OpenGL.glEnable(GL11.GL_BLEND);
+        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         IIcon cartTexture = stack.getIconIndex();
         renderItem.renderIcon(0, 0, cartTexture, 16, 16);

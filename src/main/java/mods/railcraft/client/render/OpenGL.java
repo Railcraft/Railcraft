@@ -23,157 +23,103 @@ import java.nio.IntBuffer;
  *
  * @author CovertJaguar <http://www.railcraft.info>, inspired by some code posted by MamiyaOtaru (http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/modification-development/2231761-opengl-calls-glstatemanager)
  */
-public enum OpenGL {
-    //GL11
-    GL_ALPHA_TEST(GL11.GL_ALPHA_TEST),
-    GL_BLEND(GL11.GL_BLEND),
-    GL_CLAMP(GL11.GL_CLAMP),
-    GL_COLOR_BUFFER_BIT(GL11.GL_COLOR_BUFFER_BIT),
-    GL_COLOR_CLEAR_VALUE(GL11.GL_COLOR_CLEAR_VALUE),
-    GL_CULL_FACE(GL11.GL_CULL_FACE),
-    GL_DEPTH_BUFFER_BIT(GL11.GL_DEPTH_BUFFER_BIT),
-    GL_DST_ALPHA(GL11.GL_DST_ALPHA),
-    GL_DST_COLOR(GL11.GL_DST_COLOR),
-    GL_FOG(GL11.GL_FOG),
-    GL_DEPTH_TEST(GL11.GL_DEPTH_TEST),
-    GL_FLAT(GL11.GL_FLAT),
-    GL_FOG_DENSITY(GL11.GL_FOG_DENSITY),
-    GL_FOG_END(GL11.GL_FOG_END),
-    GL_FOG_MODE(GL11.GL_FOG_MODE),
-    GL_FOG_START(GL11.GL_FOG_START),
-    GL_GREATER(GL11.GL_GREATER),
-    GL_LIGHTING(GL11.GL_LIGHTING),
-    GL_LINEAR(GL11.GL_LINEAR),
-    GL_LINE_SMOOTH(GL11.GL_LINE_SMOOTH),
-    GL_LINE_SMOOTH_HINT(GL11.GL_LINE_SMOOTH_HINT),
-    GL_LINES(GL11.GL_LINES),
-    GL_MODELVIEW(GL11.GL_MODELVIEW),
-    GL_NEAREST(GL11.GL_NEAREST),
-    GL_NICEST(GL11.GL_NICEST),
-    GL_NORMALIZE(GL11.GL_NORMALIZE),
-    GL_ONE(GL11.GL_ONE),
-    GL_ONE_MINUS_DST_ALPHA(GL11.GL_ONE_MINUS_DST_ALPHA),
-    GL_ONE_MINUS_SRC_ALPHA(GL11.GL_ONE_MINUS_SRC_ALPHA),
-    GL_POLYGON_OFFSET_FILL(GL11.GL_POLYGON_OFFSET_FILL),
-    GL_PROJECTION(GL11.GL_PROJECTION),
-    GL_QUADS(GL11.GL_QUADS),
-    GL_SMOOTH(GL11.GL_SMOOTH),
-    GL_SRC_ALPHA(GL11.GL_SRC_ALPHA),
-    GL_TEXTURE(GL11.GL_TEXTURE),
-    GL_TEXTURE_2D(GL11.GL_TEXTURE_2D),
-    GL_TEXTURE_HEIGHT(GL11.GL_TEXTURE_HEIGHT),
-    GL_TEXTURE_MAG_FILTER(GL11.GL_TEXTURE_MAG_FILTER),
-    GL_TEXTURE_MIN_FILTER(GL11.GL_TEXTURE_MIN_FILTER),
-    GL_TEXTURE_WIDTH(GL11.GL_TEXTURE_WIDTH),
-    GL_TEXTURE_WRAP_S(GL11.GL_TEXTURE_WRAP_S),
-    GL_TEXTURE_WRAP_T(GL11.GL_TEXTURE_WRAP_T),
-    GL_TRANSFORM_BIT(GL11.GL_TRANSFORM_BIT),
-    GL_VIEWPORT_BIT(GL11.GL_VIEWPORT_BIT),
-    GL_ZERO(GL11.GL_ZERO),
+public class OpenGL {
 
-    //GL12
-    GL_RESCALE_NORMAL(GL12.GL_RESCALE_NORMAL);
-    private int mask;
-
-    OpenGL(int mask) {
-        this.mask = mask;
-    }
-
-    public static void glEnable(OpenGL attrib) {
+    public static void glEnable(int attrib) {
         switch (attrib) {
-            case GL_ALPHA_TEST:
+            case GL11.GL_ALPHA_TEST:
                 GlStateManager.enableAlpha();
                 break;
-            case GL_BLEND:
+            case GL11.GL_BLEND:
                 GlStateManager.enableBlend();
                 break;
-            case GL_CULL_FACE:
+            case GL11.GL_CULL_FACE:
                 GlStateManager.enableCull();
                 break;
-            case GL_DEPTH_TEST:
+            case GL11.GL_DEPTH_TEST:
                 GlStateManager.enableDepth();
                 break;
-            case GL_FOG:
+            case GL11.GL_FOG:
                 GlStateManager.enableFog();
                 break;
-            case GL_LIGHTING:
+            case GL11.GL_LIGHTING:
                 GlStateManager.enableLighting();
                 break;
-            case GL_NORMALIZE:
+            case GL11.GL_NORMALIZE:
                 GlStateManager.enableNormalize();
                 break;
-            case GL_POLYGON_OFFSET_FILL:
+            case GL11.GL_POLYGON_OFFSET_FILL:
                 GlStateManager.enablePolygonOffset();
                 break;
-            case GL_RESCALE_NORMAL:
+            case GL12.GL_RESCALE_NORMAL:
                 GlStateManager.enableRescaleNormal();
                 break;
-            case GL_TEXTURE_2D:
+            case GL11.GL_TEXTURE_2D:
                 GlStateManager.enableTexture2D();
                 break;
             default:
-                GL11.glEnable(attrib.mask);
+                GL11.glEnable(attrib);
         }
     }
 
-    public static void glDisable(OpenGL attrib) {
+    public static void glDisable(int attrib) {
         switch (attrib) {
-            case GL_ALPHA_TEST:
+            case GL11.GL_ALPHA_TEST:
                 GlStateManager.disableAlpha();
                 break;
-            case GL_BLEND:
+            case GL11.GL_BLEND:
                 GlStateManager.disableBlend();
                 break;
-            case GL_CULL_FACE:
+            case GL11.GL_CULL_FACE:
                 GlStateManager.disableCull();
                 break;
-            case GL_DEPTH_TEST:
+            case GL11.GL_DEPTH_TEST:
                 GlStateManager.disableDepth();
                 break;
-            case GL_FOG:
+            case GL11.GL_FOG:
                 GlStateManager.disableFog();
                 break;
-            case GL_LIGHTING:
+            case GL11.GL_LIGHTING:
                 GlStateManager.disableLighting();
                 break;
-            case GL_NORMALIZE:
+            case GL11.GL_NORMALIZE:
                 GlStateManager.disableNormalize();
                 break;
-            case GL_POLYGON_OFFSET_FILL:
+            case GL11.GL_POLYGON_OFFSET_FILL:
                 GlStateManager.disablePolygonOffset();
                 break;
-            case GL_RESCALE_NORMAL:
+            case GL12.GL_RESCALE_NORMAL:
                 GlStateManager.disableRescaleNormal();
                 break;
-            case GL_TEXTURE_2D:
+            case GL11.GL_TEXTURE_2D:
                 GlStateManager.disableTexture2D();
                 break;
             default:
-                GL11.glDisable(attrib.mask);
+                GL11.glDisable(attrib);
         }
     }
 
-    public static void glHint(OpenGL target, OpenGL mode) {
-        GL11.glHint(target.mask, mode.mask);
+    public static void glHint(int target, int mode) {
+        GL11.glHint(target, mode);
     }
 
-    public static void glFogi(OpenGL pname, int param) {
+    public static void glFogi(int pname, int param) {
         switch (pname) {
-            case GL_FOG_MODE:
+            case GL11.GL_FOG_MODE:
                 GlStateManager.setFog(param);
                 break;
         }
     }
 
-    public static void glFogf(OpenGL pname, float param) {
+    public static void glFogf(int pname, float param) {
         switch (pname) {
-            case GL_FOG_DENSITY:
+            case GL11.GL_FOG_DENSITY:
                 GlStateManager.setFogDensity(param);
                 break;
-            case GL_FOG_END:
+            case GL11.GL_FOG_END:
                 GlStateManager.setFogEnd(param);
                 break;
-            case GL_FOG_START:
+            case GL11.GL_FOG_START:
                 GlStateManager.setFogStart(param);
                 break;
         }
@@ -183,8 +129,8 @@ public enum OpenGL {
         GlStateManager.alphaFunc(func, ref);
     }
 
-    public static void glBlendFunc(OpenGL sfactor, OpenGL dfactor) {
-        GlStateManager.blendFunc(sfactor.mask, dfactor.mask);
+    public static void glBlendFunc(int sfactor, int dfactor) {
+        GlStateManager.blendFunc(sfactor, dfactor);
     }
 
     public static void glBlendFuncSeparate(int sfactorRGB, int dfactorRGB, int sfactorAlpha, int dfactorAlpha) {
@@ -248,8 +194,8 @@ public enum OpenGL {
         GlStateManager.colorLogicOp(opcode);
     }
 
-    public static void glMatrixMode(OpenGL mode) {
-        GlStateManager.matrixMode(mode.mask);
+    public static void glMatrixMode(int mode) {
+        GlStateManager.matrixMode(mode);
     }
 
     public static void glMultMatrix(FloatBuffer m) {
@@ -312,17 +258,17 @@ public enum OpenGL {
         GlStateManager.viewport(x, y, width, height);
     }
 
-    public static void glBegin(OpenGL mode) {
-        GL11.glBegin(mode.mask);
+    public static void glBegin(int mode) {
+        GL11.glBegin(mode);
     }
 
-    public static void glBindTexture(OpenGL target, int texture) {
+    public static void glBindTexture(int target, int texture) {
         switch (target) {
-            case GL_TEXTURE_2D:
+            case GL11.GL_TEXTURE_2D:
                 GlStateManager.bindTexture(texture);
                 break;
             default:
-                GL11.glBindTexture(target.mask, texture);
+                GL11.glBindTexture(target, texture);
         }
     }
 

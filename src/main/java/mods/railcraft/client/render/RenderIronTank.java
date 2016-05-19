@@ -66,11 +66,11 @@ public class RenderIronTank extends TileEntitySpecialRenderer {
 
     private void preGL() {
         OpenGL.glPushMatrix();
-        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
-        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
-        OpenGL.glDisable(OpenGL.GL_LIGHTING);
-        OpenGL.glEnable(OpenGL.GL_BLEND);
-        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+        OpenGL.glEnable(GL11.GL_CULL_FACE);
+        OpenGL.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glEnable(GL11.GL_BLEND);
+        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     private void postGL() {

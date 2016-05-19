@@ -39,10 +39,10 @@ public class CartContentRendererTNT extends CartContentRenderer {
         }
         super.render(renderer, cart, light, time);
         if (tnt.isPrimed() && (tnt.getFuse() / 5) % 2 == 0) {
-            OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
-            OpenGL.glDisable(OpenGL.GL_TEXTURE_2D);
-            OpenGL.glDisable(OpenGL.GL_LIGHTING);
-            OpenGL.glEnable(OpenGL.GL_BLEND);
+            OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+            OpenGL.glDisable(GL11.GL_TEXTURE_2D);
+            OpenGL.glDisable(GL11.GL_LIGHTING);
+            OpenGL.glEnable(GL11.GL_BLEND);
             OpenGL.glBlendFunc(770, 772);
             float alpha = (1.0F - (((float) tnt.getFuse() - time) + 1.0F) / 100F) * 0.8F;
             OpenGL.glColor4f(1.0F, 1.0F, 1.0F, alpha);

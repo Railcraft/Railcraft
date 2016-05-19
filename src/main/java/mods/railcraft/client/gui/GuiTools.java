@@ -86,10 +86,10 @@ public class GuiTools {
     }
 
     public static void drawVillager(EntityVillager villager, int x, int y, int scale, float yaw, float pitch) {
-        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
-        OpenGL.glEnable(OpenGL.GL_LIGHTING);
-        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
-        OpenGL.glEnable(OpenGL.GL_COLOR_MATERIAL);
+        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+        OpenGL.glEnable(GL11.GL_LIGHTING);
+        OpenGL.glEnable(GL11.GL_DEPTH_TEST);
+        OpenGL.glEnable(GL11.GL_COLOR_MATERIAL);
         OpenGL.glPushMatrix();
         OpenGL.glTranslatef((float) x, (float) y, 50.0F);
         OpenGL.glScalef((float) (-scale), (float) scale, (float) scale);
@@ -110,7 +110,7 @@ public class GuiTools {
         RenderHelper.disableStandardItemLighting();
         OpenGL.glDisable(GL12.GL_RESCALE_NORMAL);
         OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        OpenGL.glDisable(OpenGL.GL_TEXTURE_2D);
+        OpenGL.glDisable(GL11.GL_TEXTURE_2D);
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
         OpenGL.glPopAttrib();
     }

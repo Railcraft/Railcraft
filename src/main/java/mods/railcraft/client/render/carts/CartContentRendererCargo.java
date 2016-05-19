@@ -43,9 +43,9 @@ public class CartContentRendererCargo extends CartContentRenderer {
             return;
 
         OpenGL.glPushMatrix();
-        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
-        OpenGL.glEnable(OpenGL.GL_LIGHTING);
-        OpenGL.glDisable(OpenGL.GL_BLEND);
+        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+        OpenGL.glEnable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_BLEND);
 
         EntityItem item = new EntityItem(null, 0.0D, 0.0D, 0.0D, cart.getFilterItem().copy());
         item.getEntityItem().stackSize = 1;
@@ -57,7 +57,7 @@ public class CartContentRendererCargo extends CartContentRenderer {
 
         if (!renderIn3D) {
             if (!RenderManager.instance.options.fancyGraphics)
-                OpenGL.glDisable(OpenGL.GL_CULL_FACE);
+                OpenGL.glDisable(GL11.GL_CULL_FACE);
             OpenGL.glTranslatef(0.0F, -0.44F, 0.0F);
             float scale = 1.5F;
             OpenGL.glScalef(scale, scale, scale);
@@ -116,11 +116,11 @@ public class CartContentRendererCargo extends CartContentRenderer {
     public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
         super.render(renderer, cart, light, time);
         OpenGL.glPushMatrix();
-        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
         OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
         OpenGL.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-        OpenGL.glDisable(OpenGL.GL_LIGHTING);
-        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         int x = (int) (Math.floor(cart.posX));
         int y = (int) (Math.floor(cart.posY));

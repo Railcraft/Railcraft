@@ -26,9 +26,9 @@ public class RenderTESRFirestone extends TileEntitySpecialRenderer<TileFirestone
 
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib();
-//            OpenGL.glDisable(OpenGL.GL_LIGHTING);
-        OpenGL.glDisable(OpenGL.GL_BLEND);
-//        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+//            OpenGL.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_BLEND);
+//        OpenGL.glEnable(GL11.GL_CULL_FACE);
 
 //        float pix = RenderTools.PIXEL;
 //        float shift = 0.5F;

@@ -9,6 +9,7 @@
 package mods.railcraft.client.gui;
 
 import io.netty.buffer.Unpooled;
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.common.gui.containers.ContainerAnvil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
@@ -78,7 +79,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
      */
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        OpenGL.glDisable(OpenGL.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_LIGHTING);
         this.fontRendererObj.drawString(I18n.format("container.repair"), 60, 6, 4210752);
 
         if (this.repairContainer.maximumCost > 0) {
@@ -112,7 +113,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
             }
         }
 
-        OpenGL.glEnable(OpenGL.GL_LIGHTING);
+        OpenGL.glEnable(GL11.GL_LIGHTING);
     }
 
     /**
@@ -153,7 +154,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
     @Override
     public void drawScreen(int par1, int par2, float par3) {
         super.drawScreen(par1, par2, par3);
-        OpenGL.glDisable(OpenGL.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_LIGHTING);
         this.itemNameField.drawTextBox();
     }
 

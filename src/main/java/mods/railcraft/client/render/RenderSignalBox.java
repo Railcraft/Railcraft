@@ -156,10 +156,10 @@ public class RenderSignalBox extends RenderTESRSignals implements ICombinedRende
     @Override
     public void renderItem(RenderBlocks renderblocks, ItemStack item, ItemRenderType renderType) {
         OpenGL.glColor4f(1, 1, 1, 1);
-        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
-        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
-        OpenGL.glEnable(OpenGL.GL_BLEND);
-        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+        OpenGL.glEnable(GL11.GL_DEPTH_TEST);
+        OpenGL.glEnable(GL11.GL_BLEND);
+        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         info.override = null;
         float pix = RenderTools.PIXEL;

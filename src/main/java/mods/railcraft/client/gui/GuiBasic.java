@@ -56,14 +56,14 @@ public abstract class GuiBasic extends GuiScreen {
         OpenGL.glTranslatef(w, h, 0.0F);
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderHelper.disableStandardItemLighting();
-        OpenGL.glDisable(OpenGL.GL_LIGHTING);
-        OpenGL.glDisable(OpenGL.GL_DEPTH_TEST);
+        OpenGL.glDisable(GL11.GL_LIGHTING);
+        OpenGL.glDisable(GL11.GL_DEPTH_TEST);
         GuiTools.drawCenteredString(fontRendererObj, label, 6, xSize);
         drawExtras(x, y, f);
         OpenGL.glPopMatrix();
         super.drawScreen(x, y, f);
-        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
-        OpenGL.glEnable(OpenGL.GL_LIGHTING);
+        OpenGL.glEnable(GL11.GL_DEPTH_TEST);
+        OpenGL.glEnable(GL11.GL_LIGHTING);
     }
 
     protected void drawExtras(int x, int y, float f) {

@@ -66,13 +66,13 @@ public class CartContentRenderer {
             return;
         renderer.bindTex(texture);
 
-        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
         if (!contents.cullBackFaces())
-            OpenGL.glDisable(OpenGL.GL_CULL_FACE);
+            OpenGL.glDisable(GL11.GL_CULL_FACE);
         OpenGL.glPushMatrix();
         OpenGL.glTranslatef(-0.5F, blockOffset / 16.0F - 0.5F, -0.5F);
         contents.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+        OpenGL.glEnable(GL11.GL_CULL_FACE);
         OpenGL.glPopMatrix();
         OpenGL.glPopAttrib();
     }

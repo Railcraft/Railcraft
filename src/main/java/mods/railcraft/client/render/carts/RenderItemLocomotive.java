@@ -95,12 +95,12 @@ public class RenderItemLocomotive implements IItemRenderer, IRenderer {
     }
 
     private void render(ItemStack stack, float scale) {
-        OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
-        OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
-        OpenGL.glEnable(OpenGL.GL_LIGHTING);
-        OpenGL.glEnable(OpenGL.GL_BLEND);
-        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
-        OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+        OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+        OpenGL.glEnable(GL11.GL_DEPTH_TEST);
+        OpenGL.glEnable(GL11.GL_LIGHTING);
+        OpenGL.glEnable(GL11.GL_BLEND);
+        OpenGL.glEnable(GL11.GL_CULL_FACE);
+        OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         OpenGL.glScalef(scale, scale, scale);
 

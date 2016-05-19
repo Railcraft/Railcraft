@@ -457,7 +457,7 @@ public class RenderBlockPost extends BlockRenderer {
                 return;
 
             OpenGL.glPushMatrix();
-            OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
+            OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
 
             float pix = RenderTools.PIXEL;
             float shift = 0.5F;
@@ -488,10 +488,10 @@ public class RenderBlockPost extends BlockRenderer {
                 return;
 
             OpenGL.glPushMatrix();
-            OpenGL.glPushAttrib(OpenGL.GL_ENABLE_BIT);
-//            OpenGL.glDisable(OpenGL.GL_LIGHTING);
-            OpenGL.glDisable(OpenGL.GL_BLEND);
-//        OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+            OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+//            OpenGL.glDisable(GL11.GL_LIGHTING);
+            OpenGL.glDisable(GL11.GL_BLEND);
+//        OpenGL.glEnable(GL11.GL_CULL_FACE);
 
             float pix = RenderTools.PIXEL;
             float shift = 0.5F;
