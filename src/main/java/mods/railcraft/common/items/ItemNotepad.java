@@ -31,11 +31,11 @@ import java.util.List;
  *
  * Created by Forecaster on 09/05/2016 for the Railcraft project.
  */
-public class ItemTemplateTool extends ItemRailcraft {
-    public static ItemTemplateTool item;
+public class ItemNotepad extends ItemRailcraft {
+    public static ItemNotepad item;
     private static IIcon itemIcon2;
 
-    public ItemTemplateTool() {
+    public ItemNotepad() {
         setMaxStackSize(1);
         setMaxDamage(50);
     }
@@ -44,7 +44,7 @@ public class ItemTemplateTool extends ItemRailcraft {
         if (item == null) {
             String tag = "railcraft.tool.notepad";
             if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemTemplateTool();
+                item = new ItemNotepad();
                 item.setUnlocalizedName(tag);
                 RailcraftRegistry.register(item);
             }
@@ -52,14 +52,14 @@ public class ItemTemplateTool extends ItemRailcraft {
     }
 
     private static void setPasteMode(ItemStack stack, PasteMode mode) {
-        if (stack != null && stack.getItem() instanceof ItemTemplateTool) {
+        if (stack != null && stack.getItem() instanceof ItemNotepad) {
             NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack);
             nbt.setByte("pasteMode", (byte) mode.ordinal());
         }
     }
 
     private static PasteMode getPasteMode(ItemStack stack) {
-        if (stack != null && stack.getItem() instanceof ItemTemplateTool) {
+        if (stack != null && stack.getItem() instanceof ItemNotepad) {
             NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack);
             return PasteMode.fromOrdinal(nbt.getByte("pasteMode"));
         }
@@ -67,7 +67,7 @@ public class ItemTemplateTool extends ItemRailcraft {
     }
 
     private static PasteMode nextPasteMode(ItemStack stack) {
-        if (stack != null && stack.getItem() instanceof ItemTemplateTool) {
+        if (stack != null && stack.getItem() instanceof ItemNotepad) {
             PasteMode pasteMode = getPasteMode(stack);
             pasteMode = pasteMode.next();
             setPasteMode(stack, pasteMode);

@@ -31,10 +31,10 @@ public class ModuleTransport extends RailcraftModule {
 
     @Override
     public void initFirst() {
-        ItemTemplateTool.registerItem();
-        if (ItemTemplateTool.item != null) {
+        ItemNotepad.registerItem();
+        if (ItemNotepad.item != null) {
             ItemStack magGlass = ItemMagnifyingGlass.getItem();
-            CraftingPlugin.addShapedRecipe(new ItemStack(ItemTemplateTool.item),
+            CraftingPlugin.addShapedRecipe(new ItemStack(ItemNotepad.item),
                     "IF",
                     "XP",
                     'I', new ItemStack(Items.dye, 1, 0),
