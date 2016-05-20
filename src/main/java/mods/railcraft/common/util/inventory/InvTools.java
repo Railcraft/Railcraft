@@ -8,13 +8,30 @@
  */
 package mods.railcraft.common.util.inventory;
 
-import buildcraft.api.transport.PipeManager;
-
-import java.util.*;
-
+import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.filters.ArrayStackFilter;
+import mods.railcraft.common.util.inventory.filters.InvertedStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilter;
+import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
+import mods.railcraft.common.util.inventory.wrappers.ChestWrapper;
+import mods.railcraft.common.util.inventory.wrappers.IInvSlot;
+import mods.railcraft.common.util.inventory.wrappers.InventoryIterator;
+import mods.railcraft.common.util.inventory.wrappers.SidedInventoryMapper;
+import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.ITileFilter;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -24,23 +41,9 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
-import mods.railcraft.api.core.items.IStackFilter;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.filters.ArrayStackFilter;
-import mods.railcraft.common.util.inventory.filters.StackFilter;
-import mods.railcraft.common.util.inventory.filters.InvertedStackFilter;
-import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
-import mods.railcraft.common.util.inventory.wrappers.*;
-import mods.railcraft.common.util.misc.EnumColor;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.ITileFilter;
-import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 public abstract class InvTools {
     private static final String TAG_SLOT = "Slot";
@@ -180,6 +183,7 @@ public abstract class InvTools {
         lore.appendTag(new NBTTagString(msg));
     }
 
+    @Nonnull
     public static NBTTagCompound getItemData(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null) {
@@ -187,6 +191,19 @@ public abstract class InvTools {
             stack.setTagCompound(nbt);
         }
         return nbt;
+    }
+
+    @Nonnull
+    public static NBTTagCompound getItemDataRailcraft(ItemStack stack) {
+        NBTTagCompound nbt = getItemData(stack);
+        NBTTagCompound railcraftTag;
+        if (nbt.hasKey(Railcraft.getModId()))
+            railcraftTag = nbt.getCompoundTag(Railcraft.getModId());
+        else {
+            railcraftTag = new NBTTagCompound();
+            nbt.setTag(Railcraft.getModId(), railcraftTag);
+        }
+        return railcraftTag;
     }
 
     public static void addNBTTag(ItemStack stack, String key, String value) {
@@ -319,9 +336,6 @@ public abstract class InvTools {
 
     /**
      * Counts the number of items.
-     *
-     * @param inv
-     * @return
      */
     public static int countItems(IInventory inv) {
         int count = 0;
@@ -367,10 +381,6 @@ public abstract class InvTools {
 
     /**
      * Counts the number of items that match the filter.
-     *
-     * @param inv
-     * @param filters
-     * @return
      */
     public static int countItems(IInventory inv, ItemStack... filters) {
         return countItems(inv, new ArrayStackFilter(filters));
@@ -432,8 +442,6 @@ public abstract class InvTools {
     /**
      * Attempts to move a single item from one inventory to another.
      *
-     * @param source
-     * @param dest
      * @return null if nothing was moved, the stack moved otherwise
      */
     public static ItemStack moveOneItem(IInventory source, IInventory dest) {
@@ -443,8 +451,6 @@ public abstract class InvTools {
     /**
      * Attempts to move a single item from one inventory to another.
      *
-     * @param source
-     * @param dest
      * @param filters ItemStack to match against
      * @return null if nothing was moved, the stack moved otherwise
      */
@@ -455,8 +461,6 @@ public abstract class InvTools {
     /**
      * Attempts to move a single item from one inventory to another.
      *
-     * @param source
-     * @param dest
      * @param filter an IStackFilter to match against
      * @return null if nothing was moved, the stack moved otherwise
      */
@@ -468,10 +472,7 @@ public abstract class InvTools {
     /**
      * Attempts to move one item from a collection of inventories.
      *
-     * @param sources
-     * @param dest
      * @param filters ItemStack to match against
-     * @return
      */
     public static ItemStack moveOneItem(Collection<IInventory> sources, IInventory dest, ItemStack... filters) {
         for (IInventory inv : sources) {
@@ -485,10 +486,7 @@ public abstract class InvTools {
     /**
      * Attempts to move one item from a collection of inventories.
      *
-     * @param sources
-     * @param dest
-     * @param filter  an IStackFilter to match against
-     * @return
+     * @param filter an IStackFilter to match against
      */
     public static ItemStack moveOneItem(Collection<IInventory> sources, IInventory dest, IStackFilter filter) {
         for (IInventory inv : sources) {
@@ -502,10 +500,7 @@ public abstract class InvTools {
     /**
      * Attempts to move one item to a collection of inventories.
      *
-     * @param source
-     * @param destinations
-     * @param filters      ItemStack to match against
-     * @return
+     * @param filters ItemStack to match against
      */
     public static ItemStack moveOneItem(IInventory source, Collection<IInventory> destinations, ItemStack... filters) {
         for (IInventory dest : destinations) {
@@ -521,8 +516,6 @@ public abstract class InvTools {
      * <p/>
      * Will not move any items in the filter.
      *
-     * @param source
-     * @param dest
      * @param filters an ItemStack[] to exclude
      * @return null if nothing was moved, the stack moved otherwise
      */
@@ -532,11 +525,6 @@ public abstract class InvTools {
 
     /**
      * Attempts to move one item from a collection of inventories.
-     *
-     * @param sources
-     * @param dest
-     * @param filters
-     * @return
      */
     public static ItemStack moveOneItemExcept(Collection<IInventory> sources, IInventory dest, ItemStack... filters) {
         for (IInventory inv : sources) {
@@ -549,11 +537,6 @@ public abstract class InvTools {
 
     /**
      * Attempts to move one item to a collection of inventories.
-     *
-     * @param source
-     * @param destinations
-     * @param filters
-     * @return
      */
     public static ItemStack moveOneItemExcept(IInventory source, Collection<IInventory> destinations, ItemStack... filters) {
         for (IInventory dest : destinations) {
@@ -676,10 +659,6 @@ public abstract class InvTools {
 
     /**
      * Returns true if the item is equal to any one of several possible matches.
-     *
-     * @param stack
-     * @param matches
-     * @return
      */
     public static boolean isItemEqual(ItemStack stack, ItemStack... matches) {
         for (ItemStack match : matches) {
@@ -691,10 +670,6 @@ public abstract class InvTools {
 
     /**
      * Returns true if the item is equal to any one of several possible matches.
-     *
-     * @param stack
-     * @param matches
-     * @return
      */
     public static boolean isItemEqual(ItemStack stack, Collection<ItemStack> matches) {
         for (ItemStack match : matches) {
@@ -765,10 +740,6 @@ public abstract class InvTools {
     /**
      * Removes a up to numItems worth of items from the inventory, not caring
      * about what the items are.
-     *
-     * @param inv
-     * @param numItems
-     * @return
      */
     public static ItemStack[] removeItems(IInventory inv, int numItems) {
 //        if (inv instanceof ISpecialInventory)
@@ -855,9 +826,6 @@ public abstract class InvTools {
      * operation can be completed. If the function returns false, the inventory
      * will not be modified.
      *
-     * @param inv
-     * @param amount
-     * @param filter
      * @return true if there are enough items that can be removed, false
      * otherwise.
      */
@@ -870,9 +838,6 @@ public abstract class InvTools {
      * operation can be completed. If the function returns false, the inventory
      * will not be modified.
      *
-     * @param inv
-     * @param amount
-     * @param filter
      * @return true if there are enough items that can be removed, false
      * otherwise.
      */

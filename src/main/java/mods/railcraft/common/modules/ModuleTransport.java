@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.modules;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -36,9 +35,12 @@ public class ModuleTransport extends RailcraftModule {
         if (ItemTemplateTool.item != null) {
             ItemStack magGlass = ItemMagnifyingGlass.getItem();
             CraftingPlugin.addShapedRecipe(new ItemStack(ItemTemplateTool.item),
-              "XP",
-              'X', magGlass,
-              'P', Items.paper);
+                    "IF",
+                    "XP",
+                    'I', new ItemStack(Items.dye, 1, 0),
+                    'F', Items.feather,
+                    'X', magGlass,
+                    'P', Items.paper);
         }
 
         EnumMachineAlpha alpha = EnumMachineAlpha.TANK_WATER;

@@ -18,6 +18,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 /**
+ * Chat Plugin for sending chat messages.
+ *
+ * Don't use the LocalizationPlugin in conjunction with this class,
+ * it will result in everything being translated to English only.
+ *
+ * This is because the server only knows about English, only the client can do proper translations.
+ *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ChatPlugin {
@@ -29,6 +36,9 @@ public class ChatPlugin {
         return new ChatComponentTranslation(msg, args);
     }
 
+    /**
+     * Don't use this from the server thread! It will not translate stuff correctly!
+     */
     public static void sendLocalizedChat(EntityPlayer player, String msg, Object... args) {
         player.addChatMessage(getMessage(String.format(LocalizationPlugin.translate(msg), args)));
     }
