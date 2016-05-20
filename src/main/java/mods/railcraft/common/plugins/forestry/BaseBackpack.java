@@ -10,6 +10,7 @@ package mods.railcraft.common.plugins.forestry;
 
 import com.google.common.base.Predicate;
 import forestry.api.storage.IBackpackDefinition;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
@@ -49,9 +50,9 @@ public abstract class BaseBackpack implements IBackpackDefinition {
         items.add(stack);
     }
 
-    public void add(RailcraftItems item) {
-        if (item == null) return;
-        items.add(item.getWildcard());
+    public void add(IRailcraftObjectContainer objectContainer) {
+        if (objectContainer == null) return;
+        items.add(objectContainer.getWildcard());
     }
 
     public void add(Item item) {

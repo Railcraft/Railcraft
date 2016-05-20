@@ -8,12 +8,14 @@
  */
 package mods.railcraft.client.render.carts;
 
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.EntityCartCargo;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
@@ -31,7 +33,7 @@ public class CartContentRendererCargo extends CartContentRenderer {
 
     public CartContentRendererCargo() {
         filterSign.template = Blocks.glass;
-        filterSign.texture = new IIcon[1];
+        filterSign.texture = new TextureAtlasSprite[1];
         filterSign.renderSide[0] = false;
         filterSign.renderSide[1] = false;
         filterSign.renderSide[2] = false;
@@ -56,7 +58,7 @@ public class CartContentRendererCargo extends CartContentRenderer {
         RenderItem.renderInFrame = true;
 
         if (!renderIn3D) {
-            if (!RenderManager.instance.options.fancyGraphics)
+            if (!renderer.getRenderManager().options.fancyGraphics)
                 OpenGL.glDisable(GL11.GL_CULL_FACE);
             OpenGL.glTranslatef(0.0F, -0.44F, 0.0F);
             float scale = 1.5F;
@@ -70,7 +72,7 @@ public class CartContentRendererCargo extends CartContentRenderer {
                 float ty = (float) rand.nextGaussian() * 0.01F;
                 float tz = (float) rand.nextGaussian() * 0.2F;
                 OpenGL.glTranslatef(tx, ty, tz);
-                renderEntityItem(item);
+                renderEntityItem(renderer.getRenderManager(), item);
                 OpenGL.glPopMatrix();
             }
         } else {
@@ -93,7 +95,7 @@ public class CartContentRendererCargo extends CartContentRenderer {
                 float ty = (float) rand.nextGaussian() * 0.06F;
                 float tz = (float) rand.nextGaussian() * 0.15F;
                 OpenGL.glTranslatef(tx, ty, tz);
-                renderEntityItem(item);
+                renderEntityItem(renderer.getRenderManager(), item);
                 OpenGL.glPopMatrix();
             }
         }
@@ -105,10 +107,10 @@ public class CartContentRendererCargo extends CartContentRenderer {
         OpenGL.glPopMatrix();
     }
 
-    private void renderEntityItem(EntityItem item) {
+    private void renderEntityItem(RenderManager renderManager, EntityItem item) {
         try {
-            RenderManager.instance.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
-        } catch (Exception ex) {
+            renderManager.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+        } catch (Exception ignored) {
         }
     }
 

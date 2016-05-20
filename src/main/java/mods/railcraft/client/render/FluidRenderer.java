@@ -11,6 +11,7 @@ package mods.railcraft.client.render;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -33,13 +34,13 @@ public class FluidRenderer {
     private static final RenderInfo liquidBlock = new RenderInfo();
 
     static {
-        liquidBlock.texture = new IIcon[1];
+        liquidBlock.texture = new TextureAtlasSprite[1];
     }
 
-    public static IIcon getFluidTexture(Fluid fluid, boolean flowing) {
+    public static TextureAtlasSprite getFluidTexture(Fluid fluid, boolean flowing) {
         if (fluid == null)
             return RenderTools.getMissingIcon();
-        IIcon icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
+        TextureAtlasSprite icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
         icon = RenderTools.getSafeIcon(icon);
         return icon;
     }
@@ -48,11 +49,11 @@ public class FluidRenderer {
         return BLOCK_TEXTURE;
     }
 
-    public static ResourceLocation setupFlowingLiquidTexture(Fluid fluid, IIcon[] texArray) {
+    public static ResourceLocation setupFlowingLiquidTexture(Fluid fluid, TextureAtlasSprite[] texArray) {
         if (fluid == null)
             return null;
-        IIcon top = RenderTools.getSafeIcon(fluid.getStillIcon());
-        IIcon side = RenderTools.getSafeIcon(fluid.getFlowingIcon());
+        TextureAtlasSprite top = RenderTools.getSafeIcon(fluid.getStillIcon());
+        TextureAtlasSprite side = RenderTools.getSafeIcon(fluid.getFlowingIcon());
         texArray[0] = top;
         texArray[1] = top;
         texArray[2] = side;
@@ -77,11 +78,11 @@ public class FluidRenderer {
         if (fluid == null)
             return null;
         Map<Fluid, int[]> cache = flowing ? flowingRenderCache : stillRenderCache;
-        int[] diplayLists = cache.get(fluid);
-        if (diplayLists != null)
-            return diplayLists;
+        int[] displayLists = cache.get(fluid);
+        if (displayLists != null)
+            return displayLists;
 
-        diplayLists = new int[DISPLAY_STAGES];
+        displayLists = new int[DISPLAY_STAGES];
 
         liquidBlock.texture[0] = null;
 
@@ -97,8 +98,8 @@ public class FluidRenderer {
         OpenGL.glDisable(GL11.GL_BLEND);
         OpenGL.glDisable(GL11.GL_CULL_FACE);
         for (int s = 0; s < DISPLAY_STAGES; ++s) {
-            diplayLists[s] = GLAllocation.generateDisplayLists(1);
-            OpenGL.glNewList(diplayLists[s], 4864 /*GL_COMPILE*/);
+            displayLists[s] = GLAllocation.generateDisplayLists(1);
+            GL11.glNewList(displayLists[s], 4864 /*GL_COMPILE*/);
 
             liquidBlock.minX = 0.01f;
             liquidBlock.minY = 0;
@@ -110,7 +111,7 @@ public class FluidRenderer {
 
             RenderFakeBlock.renderBlockForEntity(liquidBlock, null, 0, 0, 0, false, true);
 
-            OpenGL.glEndList();
+            GL11.glEndList();
         }
 
         OpenGL.glColor4f(1, 1, 1, 1);
@@ -118,9 +119,9 @@ public class FluidRenderer {
         OpenGL.glEnable(GL11.GL_BLEND);
         OpenGL.glEnable(GL11.GL_LIGHTING);
 
-        cache.put(fluid, diplayLists);
+        cache.put(fluid, displayLists);
 
-        return diplayLists;
+        return displayLists;
     }
 
 }

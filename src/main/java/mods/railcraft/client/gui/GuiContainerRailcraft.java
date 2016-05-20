@@ -9,6 +9,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -29,7 +30,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     public final RailcraftContainer container;
     public final ResourceLocation texture;
 
-    public GuiContainerRailcraft(RailcraftContainer container, String texture) {
+    protected GuiContainerRailcraft(RailcraftContainer container, String texture) {
         super(container);
         this.container = container;
         this.texture = new ResourceLocation(texture);
@@ -41,8 +42,8 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     @Override
     public void drawScreen(int mouseX, int mouseY, float par3) {
         super.drawScreen(mouseX, mouseY, par3);
-        int left = this.guiLeft;
-        int top = this.guiTop;
+        int left = guiLeft;
+        int top = guiTop;
 
         OpenGL.glDisable(GL11.GL_LIGHTING);
         OpenGL.glDisable(GL11.GL_DEPTH_TEST);
@@ -51,7 +52,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderHelper.disableStandardItemLighting();
 
-        InventoryPlayer playerInv = this.mc.thePlayer.inventory;
+        InventoryPlayer playerInv = mc.thePlayer.inventory;
 
         if (playerInv.getItemStack() == null) {
             int mX = mouseX - left;
@@ -167,10 +168,10 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
 //        }
 //    }
     private Slot getSlotAtPosition(int par1, int par2) {
-        for (int var3 = 0; var3 < this.inventorySlots.inventorySlots.size(); ++var3) {
-            Slot var4 = this.inventorySlots.inventorySlots.get(var3);
+        for (int var3 = 0; var3 < inventorySlots.inventorySlots.size(); ++var3) {
+            Slot var4 = inventorySlots.inventorySlots.get(var3);
 
-            if (this.isMouseOverSlot(var4, par1, par2))
+            if (isMouseOverSlot(var4, par1, par2))
                 return var4;
         }
         return null;
@@ -180,8 +181,8 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
      * Returns if the passed mouse position is over the specified slot.
      */
     private boolean isMouseOverSlot(Slot par1Slot, int par2, int par3) {
-        int var4 = this.guiLeft;
-        int var5 = this.guiTop;
+        int var4 = guiLeft;
+        int var5 = guiTop;
         par2 -= var4;
         par3 -= var5;
         return par2 >= par1Slot.xDisplayPosition - 1 && par2 < par1Slot.xDisplayPosition + 16 + 1 && par3 >= par1Slot.yDisplayPosition - 1 && par3 < par1Slot.yDisplayPosition + 16 + 1;
@@ -214,17 +215,17 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
 
     private void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {
         if (toolTips.size() > 0) {
-            int left = this.guiLeft;
-            int top = this.guiTop;
-            int lenght = 0;
+            int left = guiLeft;
+            int top = guiTop;
+            int length = 0;
             int x;
             int y;
 
             for (ToolTipLine tip : toolTips) {
-                y = this.fontRendererObj.getStringWidth(tip.text);
+                y = fontRendererObj.getStringWidth(tip.text);
 
-                if (y > lenght)
-                    lenght = y;
+                if (y > length)
+                    length = y;
             }
 
             x = mouseX - left + 12;
@@ -237,17 +238,17 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
             this.zLevel = 300.0F;
             itemRender.zLevel = 300.0F;
             int var15 = -267386864;
-            this.drawGradientRect(x - 3, y - 4, x + lenght + 3, y - 3, var15, var15);
-            this.drawGradientRect(x - 3, y + var14 + 3, x + lenght + 3, y + var14 + 4, var15, var15);
-            this.drawGradientRect(x - 3, y - 3, x + lenght + 3, y + var14 + 3, var15, var15);
-            this.drawGradientRect(x - 4, y - 3, x - 3, y + var14 + 3, var15, var15);
-            this.drawGradientRect(x + lenght + 3, y - 3, x + lenght + 4, y + var14 + 3, var15, var15);
+            drawGradientRect(x - 3, y - 4, x + length + 3, y - 3, var15, var15);
+            drawGradientRect(x - 3, y + var14 + 3, x + length + 3, y + var14 + 4, var15, var15);
+            drawGradientRect(x - 3, y - 3, x + length + 3, y + var14 + 3, var15, var15);
+            drawGradientRect(x - 4, y - 3, x - 3, y + var14 + 3, var15, var15);
+            drawGradientRect(x + length + 3, y - 3, x + length + 4, y + var14 + 3, var15, var15);
             int var16 = 1347420415;
             int var17 = (var16 & 16711422) >> 1 | var16 & -16777216;
-            this.drawGradientRect(x - 3, y - 3 + 1, x - 3 + 1, y + var14 + 3 - 1, var16, var17);
-            this.drawGradientRect(x + lenght + 2, y - 3 + 1, x + lenght + 3, y + var14 + 3 - 1, var16, var17);
-            this.drawGradientRect(x - 3, y - 3, x + lenght + 3, y - 3 + 1, var16, var16);
-            this.drawGradientRect(x - 3, y + var14 + 2, x + lenght + 3, y + var14 + 3, var17, var17);
+            drawGradientRect(x - 3, y - 3 + 1, x - 3 + 1, y + var14 + 3 - 1, var16, var17);
+            drawGradientRect(x + length + 2, y - 3 + 1, x + length + 3, y + var14 + 3 - 1, var16, var17);
+            drawGradientRect(x - 3, y - 3, x + length + 3, y - 3 + 1, var16, var16);
+            drawGradientRect(x - 3, y + var14 + 2, x + length + 3, y + var14 + 3, var17, var17);
 
             for (ToolTipLine tip : toolTips) {
                 String line = tip.text;
@@ -257,9 +258,9 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
                 if (tip.format == null)
                     line = "\u00a77" + line;
                 else
-                    line = tip.format.toString() + line;
+                    line = tip.format + line;
 
-                this.fontRendererObj.drawStringWithShadow(line, x, y, -1);
+                fontRendererObj.drawStringWithShadow(line, x, y, -1);
 
                 y += 10 + tip.getSpacing();
             }

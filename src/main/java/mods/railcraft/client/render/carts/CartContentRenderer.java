@@ -9,6 +9,7 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.ICartContentsTextureProvider;
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.client.render.RenderFakeBlock;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.client.render.models.ModelTextured;

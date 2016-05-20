@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
@@ -160,13 +161,14 @@ public class RenderTools {
         OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
     }
 
-    public static IIcon getSafeIcon(IIcon icon) {
+    public static TextureAtlasSprite getSafeIcon(TextureAtlasSprite icon) {
         if (icon == null)
             return getMissingIcon();
         return icon;
     }
 
-    public static IIcon getMissingIcon() {
+    //TODO: This is probably wrong now!
+    public static TextureAtlasSprite getMissingIcon() {
         return ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationBlocksTexture)).getAtlasSprite("missingno");
     }
 

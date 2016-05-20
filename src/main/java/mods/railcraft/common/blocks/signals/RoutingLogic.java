@@ -22,8 +22,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier;
 
 import java.util.Deque;
 import java.util.Iterator;
@@ -304,12 +302,8 @@ public class RoutingLogic {
             ItemStack stack = cart.getCartItem();
             if (stack == null || stack.getItem() == null)
                 return false;
-            UniqueIdentifier itemName = GameRegistry.findUniqueIdentifierFor(stack.getItem());
-            if (itemName != null) {
-                String nameString = itemName.modId + ":" + itemName.name;
-                return nameString.equalsIgnoreCase(value);
-            }
-            return false;
+            String itemName = stack.getItem().getRegistryName();
+            return itemName != null && itemName.equalsIgnoreCase(value);
         }
 
     }

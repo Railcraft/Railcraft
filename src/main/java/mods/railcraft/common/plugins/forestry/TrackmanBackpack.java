@@ -11,6 +11,7 @@ package mods.railcraft.common.plugins.forestry;
 import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -86,10 +87,10 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
         add(RailcraftItems.goggles);
         add(RailcraftItems.overalls);
 
-        add(RailcraftBlocksOld.getBlockMachineGamma());
+        add(RailcraftBlocks.machine_gamma);
         add(RailcraftBlocksOld.getBlockElevator());
-        add(RailcraftBlocksOld.getBlockSignal());
-        add(BlockDetector.getBlock());
+        add(RailcraftBlocks.signal);
+        add(RailcraftBlocks.detector);
     }
 
     @Override

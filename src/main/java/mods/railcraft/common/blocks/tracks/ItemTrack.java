@@ -10,7 +10,7 @@ package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.*;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -79,8 +79,8 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
     }
 
     @Override
-    public Block getPlacedBlock() {
-        return RailcraftBlocksOld.getBlockTrack();
+    public BlockTrack getPlacedBlock() {
+        return (BlockTrack) RailcraftBlocks.track.block();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
     }
 
     private boolean placeTrack(ItemStack stack, @Nullable EntityPlayer player, World world, BlockPos pos, @Nullable EnumRailDirection trackShape, EnumFacing face) {
-        BlockTrack blockTrack = RailcraftBlocksOld.getBlockTrack();
+        BlockTrack blockTrack = getPlacedBlock();
         if (blockTrack == null)
             return false;
         if (pos.getY() >= world.getHeight() - 1)
