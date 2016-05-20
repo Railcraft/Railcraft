@@ -156,7 +156,7 @@ public class ItemNotepad extends ItemRailcraft {
                             nbt.removeTag("itemFilters");
                     }
                     ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.copy", ((RailcraftTileEntity) tileEntity).getLocalizationTag());
-//                    player.getCurrentEquippedItem().damageItem(1, player);
+                    player.getCurrentEquippedItem().damageItem(1, player);
                 } else // PASTE
                 {
                     PasteMode pasteMode = getPasteMode(stack);
@@ -175,7 +175,7 @@ public class ItemNotepad extends ItemRailcraft {
                         }
                     }
                     if (pasted) {
-                        player.getCurrentEquippedItem().damageItem(1, player);
+//                        player.getCurrentEquippedItem().damageItem(1, player);
                         ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.paste", ((RailcraftTileEntity) tileEntity).getLocalizationTag());
                     } else
                         ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.empty");
