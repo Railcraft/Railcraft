@@ -93,6 +93,10 @@ public class WorldPlugin {
         return world.setBlockToAir(pos);
     }
 
+    public static boolean destroyBlock(World world, BlockPos pos, boolean dropBlock) {
+        return world.destroyBlock(pos, dropBlock);
+    }
+
     public static void notifyBlocksOfNeighborChange(World world, BlockPos pos, Block block) {
         if (world != null && block != null)
             world.notifyNeighborsOfStateChange(pos, block);

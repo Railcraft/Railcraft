@@ -9,13 +9,14 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -35,26 +36,22 @@ import net.minecraft.world.World;
  */
 public class BlockTrackElevator extends Block {
 
-    /**
-     * The upward velocity of an entity climbing the ladder.
-     */
-    public static double CLIMB_UP_VELOCITY = 0.2;
-    /**
-     * The downward velocity of an entity climbing the ladder
-     */
-    public static double CLIMB_DOWN_VELOCITY = -0.3;
+    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
+    public static final PropertyBool POWERED = PropertyBool.create("powered");
+
+//    /**
+//     * The upward velocity of an entity climbing the ladder.
+//     */
+//    public static double CLIMB_UP_VELOCITY = 0.2;
+//    /**
+//     * The downward velocity of an entity climbing the ladder
+//     */
+//    public static double CLIMB_DOWN_VELOCITY = -0.3;
     /**
      * The inverse of the downward motion an entity gets within a single update
      * of the game engine due to gravity.
      */
-    public static double FALL_DOWN_CORRECTION = 0.039999999105930328D;
-    /**
-     * Metadata values for the direction the ladder is facing.
-     */
-    public static final int FACING_EAST_METADATA_VALUE = 2,
-            FACING_WEST_METADATA_VALUE = 3,
-            FACING_NORTH_METADATA_VALUE = 4,
-            FACING_SOUTH_METADATA_VALUE = 5;
+    public static final double FALL_DOWN_CORRECTION = 0.039999999105930328D;
     /**
      * Velocity at which a minecart travels up on the rail when activated
      */
@@ -63,40 +60,52 @@ public class BlockTrackElevator extends Block {
      * Velocity at which a minecart travels down on the rail when not activated
      */
     public static final double RIDE_DOWN_VELOCITY = -0.4;
-    /**
-     * The bits of the metadata that are used for storing the direction of the
-     * ladder. Use the bitwise-and operator (&) on the metadata to discard all
-     * other data from a metadata value.
-     */
-    public static final int BLOCK_FACING_DATA_METADATA_MASK = 0x0007;
 
     public BlockTrackElevator() {
         super(new MaterialElevator());
-//		  setUnlocalizedName(name);
         setHardness(1.05F);
         setStepSound(soundTypeMetal);
 
         setCreativeTab(CreativeTabs.tabTransport);
+        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWERED, false));
+    }
+
+    public EnumFacing getFacing(IBlockAccess world, BlockPos pos) {
+        return getFacing(WorldPlugin.getBlockState(world, pos));
+    }
+
+    public EnumFacing getFacing(IBlockState state) {
+        return state.getValue(FACING);
+    }
+
+    public boolean getPowered(IBlockAccess world, BlockPos pos) {
+        return getPowered(WorldPlugin.getBlockState(world, pos));
+    }
+
+    public boolean getPowered(IBlockState state) {
+        return state.getValue(POWERED);
     }
 
     @Override
-    public MovingObjectPosition collisionRayTrace(World world, int i, int j, int k, Vec3 vec3d, Vec3 vec3d1) {
-        setBlockBoundsBasedOnState(world, i, j, k);
-        return super.collisionRayTrace(world, i, j, k, vec3d, vec3d1);
+    public MovingObjectPosition collisionRayTrace(World worldIn, BlockPos pos, Vec3 start, Vec3 end) {
+        setBlockBoundsBasedOnState(worldIn, pos);
+        return super.collisionRayTrace(worldIn, pos, start, end);
     }
 
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-        int meta = getLadderFacingMetadata(world, i, j, k);
+        EnumFacing facing = getFacing(world, pos);
         float f = 0.125F;
-        if (meta == 2)
-            setBlockBounds(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
-        if (meta == 3)
-            setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
-        if (meta == 4)
-            setBlockBounds(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        if (meta == 5)
-            setBlockBounds(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
+        switch (facing) {
+            case NORTH:
+                setBlockBounds(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
+            case SOUTH:
+                setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
+            case WEST:
+                setBlockBounds(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+            case EAST:
+                setBlockBounds(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
+        }
     }
 
     @Override
@@ -111,7 +120,7 @@ public class BlockTrackElevator extends Block {
     }
 
     @Override
-    public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
+    public boolean isLadder(IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
         return true;
     }
 
@@ -125,45 +134,50 @@ public class BlockTrackElevator extends Block {
         return false;
     }
 
-    public boolean isACube() {
+//    @Override
+//    public IIcon getIcon(int side, int meta) {
+//        boolean powered = (meta & 8) != 0;
+//        if (powered)
+//            return texture[0];
+//        return texture[1];
+//    }
+//
+//    @Override
+//    public void registerBlockIcons(IIconRegister iconRegister) {
+//        texture = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:tracks/track.elevator", 2);
+//    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    @Override
+    public boolean canPlaceBlockAt(World world, BlockPos pos) {
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            if (isSideFacingSolid(world, pos, side))
+                return true;
+        }
         return false;
     }
 
+    //TODO: Test, this is probably completely wrong
     @Override
-    public IIcon getIcon(int side, int meta) {
-        boolean powered = (meta & 8) != 0;
-        if (powered)
-            return texture[0];
-        return texture[1];
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+//        if ((meta == 0 || facing == 2) && worldIn.isSideSolid(x, y, z + 1, EnumFacing.NORTH))
+//            meta = 2;
+//        if ((meta == 0 || facing == 3) && worldIn.isSideSolid(x, y, z - 1, EnumFacing.SOUTH))
+//            meta = 3;
+//        if ((meta == 0 || facing == 4) && worldIn.isSideSolid(x + 1, y, z, EnumFacing.WEST))
+//            meta = 4;
+//        if ((meta == 0 || facing == 5) && worldIn.isSideSolid(x - 1, y, z, EnumFacing.EAST))
+//            meta = 5;
+        EnumFacing placement = null;
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            if ((placement == null || facing == side) && isSideFacingSolid(worldIn, pos, side))
+                placement = side;
+        }
+        return getDefaultState().withProperty(FACING, placement);
     }
 
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        texture = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:tracks/track.elevator", 2);
-    }
-
-    @Override
-    public boolean canPlaceBlockAt(World world, int i, int j, int k) {
-        if (world.isSideSolid(i - 1, j, k, EnumFacing.EAST))
-            return true;
-        if (world.isSideSolid(i + 1, j, k, EnumFacing.WEST))
-            return true;
-        if (world.isSideSolid(i, j, k - 1, EnumFacing.SOUTH))
-            return true;
-        return world.isSideSolid(i, j, k + 1, EnumFacing.NORTH);
-    }
-
-    @Override
-    public int onBlockPlaced(World world, int x, int y, int z, int side, float par6, float par7, float par8, int meta) {
-        if ((meta == 0 || side == 2) && world.isSideSolid(x, y, z + 1, EnumFacing.NORTH))
-            meta = 2;
-        if ((meta == 0 || side == 3) && world.isSideSolid(x, y, z - 1, EnumFacing.SOUTH))
-            meta = 3;
-        if ((meta == 0 || side == 4) && world.isSideSolid(x + 1, y, z, EnumFacing.WEST))
-            meta = 4;
-        if ((meta == 0 || side == 5) && world.isSideSolid(x - 1, y, z, EnumFacing.EAST))
-            meta = 5;
-        return meta;
+    private boolean isSideFacingSolid(World world, BlockPos pos, EnumFacing side) {
+        return world.isSideSolid(pos.offset(side.getOpposite()), side);
     }
 
     @Override
@@ -202,200 +216,146 @@ public class BlockTrackElevator extends Block {
     }
 
     @Override
-    public void dropBlockAsItemWithChance(World world, int i, int j, int k, int l, float f, int i1) {
-//        System.out.println("dropping item");
-        super.dropBlockAsItemWithChance(world, i, j, k, l, f, i1);
-    }
-
-    @Override
-    public void onNeighborBlockChange(World world, int i, int j, int k, Block block) {
-        int meta = world.getBlockMetadata(i, j, k);
-        int ladderMeta = getLadderFacingMetadata(world, i, j, k);
+    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
+        super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
+        EnumFacing facing = getFacing(state);
         boolean valid = false;
-        if (ladderMeta == 2 && world.isSideSolid(i, j, k + 1, EnumFacing.NORTH))
+
+        if (isSideFacingSolid(worldIn, pos, facing))
             valid = true;
-        if (ladderMeta == 3 && world.isSideSolid(i, j, k - 1, EnumFacing.SOUTH))
-            valid = true;
-        if (ladderMeta == 4 && world.isSideSolid(i + 1, j, k, EnumFacing.WEST))
-            valid = true;
-        if (ladderMeta == 5 && world.isSideSolid(i - 1, j, k, EnumFacing.EAST))
-            valid = true;
+
         if (!valid) {
-            dropBlockAsItem(world, i, j, k, ladderMeta, 0);
-            world.setBlockToAir(i, j, k);
-        } else {
-            boolean powered = (meta & 8) != 0;
-            if (powered ^ isPowered(world, i, j, k)) {
-//					 System.out.println("Power change");
-                world.setBlockMetadataWithNotify(i, j, k, meta ^ 8, 3);
-                world.markBlockForUpdate(i, j, k);
-            }
+            WorldPlugin.destroyBlock(worldIn, pos, true);
+            return;
         }
+
+        boolean powered = getPowered(state);
+        if (powered != isPowered(worldIn, pos, state))
+            WorldPlugin.setBlockState(worldIn, pos, state.withProperty(POWERED, !powered));
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity) {
-        entity.fallDistance = 0;
-        if (Game.isNotHost(world) || !(entity instanceof EntityMinecart))
+    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entityIn) {
+        entityIn.fallDistance = 0;
+        if (Game.isNotHost(worldIn) || !(entityIn instanceof EntityMinecart))
             return;
-        minecartInteraction(world, (EntityMinecart) entity, i, j, k);
-    }
-
-    public int getLadderFacingMetadata(IBlockAccess world, int i, int j, int k) {
-        return world.getBlockMetadata(i, j, k) & BLOCK_FACING_DATA_METADATA_MASK;
-    }
-
-    public boolean getPoweredBit(World world, int i, int j, int k) {
-        return (world.getBlockMetadata(i, j, k) & 8) != 0;
+        minecartInteraction(worldIn, (EntityMinecart) entityIn, pos);
     }
 
     ////////////////////////////////////////////////////////////////////////////
     // PROTECTED                                                                //
     ////////////////////////////////////////////////////////////////////////////
-    protected boolean isPowered(World world, int x, int y, int z) {
-        int meta = getLadderFacingMetadata(world, x, y, z);
-        if (world.getBlock(x, y - 1, z) == this && meta == getLadderFacingMetadata(world, x, y - 1, z))
-            if (PowerPlugin.isBlockBeingPowered(world, x, y - 1, z))
-                return true;
-        if (PowerPlugin.isBlockBeingPowered(world, x, y, z))
+    @SuppressWarnings("SimplifiableIfStatement")
+    protected boolean isPowered(World world, BlockPos pos, IBlockState state) {
+        EnumFacing facing = getFacing(state);
+        BlockPos posDown = pos.down();
+        IBlockState stateDown = WorldPlugin.getBlockState(world, posDown);
+        if (stateDown.getBlock() == this && facing == getFacing(stateDown) && PowerPlugin.isBlockBeingPowered(world, posDown))
             return true;
-        return world.getBlock(x, y + 1, z) == this && meta == getLadderFacingMetadata(world, x, y + 1, z) && isPowered(world, x, y + 1, z);
+        if (PowerPlugin.isBlockBeingPowered(world, pos))
+            return true;
+        BlockPos posUp = pos.up();
+        IBlockState stateUp = WorldPlugin.getBlockState(world, posUp);
+        return stateUp.getBlock() == this && facing == getFacing(stateUp) && isPowered(world, posUp, stateUp);
     }
 
     /**
-     * Updates the state of a single minecart that is whithin the block's area
+     * Updates the state of a single minecart that is within the block's area
      * of effect according to the state of the block.
      *
      * @param world the world in which the block resides
-     * @param i     the x-coordinate of the block
-     * @param j     the y-coordinate of the block
-     * @param k     the z-coordinate of the block
      * @param cart  the minecart for which the state will be updated. It is
      *              assumed that the minecart is whithin the area of effect of the block
      */
-    protected void minecartInteraction(World world, EntityMinecart cart, int i, int j, int k) {
+    protected void minecartInteraction(World world, EntityMinecart cart, BlockPos pos) {
         cart.getEntityData().setByte("elevator", (byte) 20);
-
-        boolean powered = getPoweredBit(world, i, j, k);
-        if (powered)
-            if (world.getBlock(i, j + 1, k) == this || isOffloadRail(world, i, j + 1, k)) {
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        boolean powered = getPowered(state);
+        BlockPos posDown = pos.down();
+        if (powered) {
+            BlockPos posUp = pos.up();
+            boolean nextIsOffload = isOffloadRail(world, posUp, state);
+            if (nextIsOffload || WorldPlugin.isBlockAt(world, posUp, this)) {
                 boolean empty = true;
-                for (EntityMinecart c : CartTools.getMinecartsAt(world, i, j + 1, k, 0.2f)) {
+                for (EntityMinecart c : CartTools.getMinecartsAt(world, posUp, 0.2f)) {
                     if (c != cart)
                         empty = false;
                 }
-                if ((getPoweredBit(world, i, j + 1, k) || isOffloadRail(world, i, j + 1, k)) && empty)
+                if ((nextIsOffload || getPowered(world, posUp)) && empty)
                     cart.motionY = RIDE_UP_VELOCITY + FALL_DOWN_CORRECTION;
-                else if (pushMinecartOntoRail(world, i, j, k, cart))
+                else if (pushMinecartOntoRail(world, pos, state, cart))
                     return;
                 else {
-                    cart.setPosition(cart.posX, j + 0.5f, cart.posZ);
+                    cart.setPosition(cart.posX, pos.getY() + 0.5f, cart.posZ);
                     cart.motionY = FALL_DOWN_CORRECTION;
                 }
             } else
-                cart.setPosition(cart.posX, j + 0.5f, cart.posZ);
-        else if (world.getBlock(i, j - 1, k) != this) {
-            pushMinecartOntoRail(world, i, j, k, cart);
+                cart.setPosition(cart.posX, pos.getY() + 0.5f, cart.posZ);
+        } else if (WorldPlugin.isBlockAt(world, posDown, this)) {
+            pushMinecartOntoRail(world, pos, state, cart);
             return;
         } else {
             boolean empty = true;
-            for (EntityMinecart c : CartTools.getMinecartsAt(world, i, j - 1, k, 0.2f)) {
+            for (EntityMinecart c : CartTools.getMinecartsAt(world, posDown, 0.2f)) {
                 if (c != cart)
                     empty = false;
             }
             if (empty)
                 cart.motionY = RIDE_DOWN_VELOCITY + FALL_DOWN_CORRECTION;
             else {
-                cart.setPosition(cart.posX, j + 0.5f, cart.posZ);
+                cart.setPosition(cart.posX, pos.getY() + 0.5f, cart.posZ);
                 cart.motionY = FALL_DOWN_CORRECTION;
             }
         }
 
-        if (powered || !TrackTools.isRailBlockAt(world, i, j - 1, k)) {
-            if (TrackTools.isRailBlockAt(world, i, j - 1, k) || TrackTools.isRailBlockAt(world, i, j - 2, k))
+        if (powered || !TrackTools.isRailBlockAt(world, posDown)) {
+            if (TrackTools.isRailBlockAt(world, posDown) || TrackTools.isRailBlockAt(world, pos.down(2)))
                 cart.setCanUseRail(false);
             else
                 cart.setCanUseRail(true);
-            keepMinecartConnected(world, i, j, k, cart);
+            keepMinecartConnected(pos, state, cart);
         } else
             cart.setCanUseRail(true);
 
 //        RailcraftUtils.resetFallDistance(cart);
         if (powered)
-            pushMinecartOnSupportingBlockIfPossible(world, i, j, k, cart);
+            pushMinecartOnSupportingBlockIfPossible(world, pos, state, cart);
     }
 
     /**
-     * Adjusts the motion and rotationyaw of a minecart so that it stays in
-     * position and alligned to the iron ladder.
+     * Adjusts the motion and rotation yaw of a minecart so that it stays in
+     * position and aligned to the iron ladder.
      *
-     * @param world    the world in which the block resides
-     * @param x        the x-coordinate of the block
-     * @param y        the y-coordinate of the block
-     * @param z        the z-coordinate of the block
      * @param minecart the minecart for which motion and rotation will be
      *                 adjusted
      */
-    protected void keepMinecartConnected(World world, int x, int y, int z, EntityMinecart minecart) {
-        minecart.motionX = (x + 0.5) - minecart.posX;
-        minecart.motionZ = (z + 0.5) - minecart.posZ;
+    protected void keepMinecartConnected(BlockPos pos, IBlockState state, EntityMinecart minecart) {
+        minecart.motionX = (pos.getX() + 0.5) - minecart.posX;
+        minecart.motionZ = (pos.getZ() + 0.5) - minecart.posZ;
 
-        allignMinecart(world, x, y, z, minecart);
+        alignMinecart(state, minecart);
     }
 
     /**
      * Alligns the minecart to the ladder to the ladder
      *
-     * @param world    the world in which the block resides
-     * @param x        the x-coordinate of the block
-     * @param y        the y-coordinate of the block
-     * @param z        the z-coordinate of the block
      * @param minecart the minecart for which motion and rotation will be
      *                 adjusted
      */
-    protected void allignMinecart(World world, int x, int y, int z, EntityMinecart minecart) {
-        switch (getLadderFacingMetadata(world, x, y, z)) {
-            case FACING_NORTH_METADATA_VALUE:
-            case FACING_SOUTH_METADATA_VALUE:
-                if (minecart.rotationYaw <= 90.0f || minecart.rotationYaw > 270.0f)
-                    minecart.rotationYaw = 0.0f;
-                else
-                    minecart.rotationYaw = 180.0f;
-                return;
-
-            case FACING_EAST_METADATA_VALUE:
-            case FACING_WEST_METADATA_VALUE:
-                if (minecart.rotationYaw > 180.0f)
-                    minecart.rotationYaw = 270.0f;
-                else
-                    minecart.rotationYaw = 90.0f;
+    protected void alignMinecart(IBlockState state, EntityMinecart minecart) {
+        if (getFacing(state).getAxis() == EnumFacing.Axis.X) {
+            minecart.rotationYaw = minecart.rotationYaw <= 90.0F || minecart.rotationYaw > 270.0F ? 0.0F : 180.0F;
+        } else {
+            minecart.rotationYaw = minecart.rotationYaw > 180.0F ? 270.0F : 90F;
         }
     }
 
-    private boolean isOffloadRail(World world, int x, int y, int z) {
-        if (world.getBlock(x, y, z) != this)
-            switch (world.getBlockMetadata(x, y - 1, z) & BLOCK_FACING_DATA_METADATA_MASK) {
-                case FACING_EAST_METADATA_VALUE:
-                    if (TrackTools.isRailBlockAt(world, x, y, z + 1))
-                        return true;
-
-                case FACING_WEST_METADATA_VALUE:
-                    if (TrackTools.isRailBlockAt(world, x, y, z - 1))
-                        return true;
-
-                case FACING_NORTH_METADATA_VALUE:
-                    if (TrackTools.isRailBlockAt(world, x + 1, y, z))
-                        return true;
-
-                case FACING_SOUTH_METADATA_VALUE:
-                    if (TrackTools.isRailBlockAt(world, x - 1, y, z))
-                        return true;
-
-                default:
-                    return false;
-            }
-        else
-            return false;
+    private boolean isOffloadRail(World world, BlockPos nextPos, IBlockState state) {
+        if (WorldPlugin.isBlockAir(world, nextPos)) {
+            EnumFacing lastElevatorFacing = getFacing(state);
+            return TrackTools.isRailBlockAt(world, nextPos.offset(lastElevatorFacing.getOpposite()));
+        }
+        return false;
     }
 
     /**
@@ -405,96 +365,50 @@ public class BlockTrackElevator extends Block {
      * supporting block is a rail.
      *
      * @param world    the world in which the block resides
-     * @param i        the x-coordinate of the ladder block
-     * @param j        the y-coordinate of the ladder block
-     * @param k        the z-coordinate of the ladder block
-     * @param minecart the minecart that is pushed which onto the block if
+     * @param cart the minecart that is pushed which onto the block if
      *                 possible
      * @return true if the minecart can be pushed onto the supporting block,
      * otherwise false
      */
-    private boolean pushMinecartOnSupportingBlockIfPossible(World world, int i, int j, int k, EntityMinecart minecart) {
-        if (!world.getBlock(i, j, k).getMaterial().isSolid())
-            switch (world.getBlockMetadata(i, j, k) & BLOCK_FACING_DATA_METADATA_MASK) {
-                case FACING_EAST_METADATA_VALUE:
-                    if (TrackTools.isRailBlockAt(world, i, j + 1, k + 1)) {
-                        minecart.motionY = RIDE_UP_VELOCITY;
-                        minecart.motionZ = RIDE_UP_VELOCITY;
-                    }
-                    return true;
-
-                case FACING_WEST_METADATA_VALUE:
-                    if (TrackTools.isRailBlockAt(world, i, j + 1, k - 1)) {
-                        minecart.motionY = RIDE_UP_VELOCITY;
-                        minecart.motionZ = -RIDE_UP_VELOCITY;
-                    }
-                    return true;
-
-                case FACING_NORTH_METADATA_VALUE:
-                    if (TrackTools.isRailBlockAt(world, i + 1, j + 1, k)) {
-                        minecart.motionY = RIDE_UP_VELOCITY;
-                        minecart.motionX = RIDE_UP_VELOCITY;
-                    }
-                    return true;
-
-                case FACING_SOUTH_METADATA_VALUE:
-                    if (TrackTools.isRailBlockAt(world, i - 1, j + 1, k)) {
-                        minecart.motionY = RIDE_UP_VELOCITY;
-                        minecart.motionX = -RIDE_UP_VELOCITY;
-                    }
-                    return true;
-
-                default:
-                    return false;
+    //TODO: test
+    private boolean pushMinecartOnSupportingBlockIfPossible(World world, BlockPos pos, IBlockState state, EntityMinecart cart) {
+        if (!state.getBlock().getMaterial().isSolid()) {
+            EnumFacing facing = getFacing(state);
+            if (TrackTools.isRailBlockAt(world, pos.up().offset(facing.getOpposite()))) {
+                cart.motionY = RIDE_UP_VELOCITY;
+                double vel = facing.getAxisDirection().getOffset() * RIDE_UP_VELOCITY;
+                if (facing.getAxis() == EnumFacing.Axis.Z)
+                    cart.motionZ = vel;
+                else
+                    cart.motionX = vel;
             }
-        else
-            return false;
+            return true;
+        }
+        return false;
     }
 
-    private boolean pushMinecartOntoRail(World world, int i, int j, int k, EntityMinecart cart) {
+    /**
+     * Pushes a Minecart onto a Railcraft block opposite the elevator if possible.
+     */
+    //TODO: test
+    private boolean pushMinecartOntoRail(World world, BlockPos pos, IBlockState state, EntityMinecart cart) {
         cart.setCanUseRail(true);
-        switch (world.getBlockMetadata(i, j, k) & BLOCK_FACING_DATA_METADATA_MASK) {
-            case FACING_EAST_METADATA_VALUE:
-                if (TrackTools.isRailBlockAt(world, i, j, k - 1)) {
-                    cart.setPosition(cart.posX, j + 0.6f, cart.posZ);
-                    cart.motionY = FALL_DOWN_CORRECTION;
-                    cart.motionZ = -RIDE_UP_VELOCITY;
-                    return true;
-                }
-                break;
-            case FACING_WEST_METADATA_VALUE:
-                if (TrackTools.isRailBlockAt(world, i, j, k + 1)) {
-                    cart.setPosition(cart.posX, j + 0.6f, cart.posZ);
-                    cart.motionY = FALL_DOWN_CORRECTION;
-                    cart.motionZ = RIDE_UP_VELOCITY;
-                    return true;
-                }
-                break;
-            case FACING_NORTH_METADATA_VALUE:
-                if (TrackTools.isRailBlockAt(world, i - 1, j, k)) {
-                    cart.setPosition(cart.posX, j + 0.6f, cart.posZ);
-                    cart.motionY = FALL_DOWN_CORRECTION;
-                    cart.motionX = -RIDE_UP_VELOCITY;
-                    return true;
-                }
-                break;
-            case FACING_SOUTH_METADATA_VALUE:
-                if (TrackTools.isRailBlockAt(world, i + 1, j, k)) {
-                    cart.setPosition(cart.posX, j + 0.6f, cart.posZ);
-                    cart.motionY = FALL_DOWN_CORRECTION;
-                    cart.motionX = RIDE_UP_VELOCITY;
-                    return true;
-                }
-                break;
-            default:
-                return false;
+        EnumFacing facing = getFacing(state);
+        if (TrackTools.isRailBlockAt(world, pos.offset(facing))) {
+            cart.setPosition(cart.posX, pos.getY() + 0.6f, cart.posZ);
+            cart.motionY = FALL_DOWN_CORRECTION;
+            double vel = facing.getAxisDirection().getOffset() * RIDE_UP_VELOCITY;
+            if (facing.getAxis() == EnumFacing.Axis.Z)
+                cart.motionZ = vel;
+            else
+                cart.motionX = vel;
+            return true;
         }
         return false;
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
         return false;
     }
-
 }
