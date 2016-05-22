@@ -11,7 +11,6 @@ package mods.railcraft.client.util.textures;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -32,22 +31,22 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
     private final int rows;
     private final int columns;
 
-    public static IIcon[] unstitchIcons(IIconRegister iconRegister, String name, int numIcons) {
-        return unstitchIcons(iconRegister, name, numIcons, 1);
-    }
-
-    public static IIcon[] unstitchIcons(IIconRegister iconRegister, String name, int columns, int rows) {
-        TextureMap textureMap = (TextureMap) iconRegister;
-        int numIcons = rows * columns;
-        IIcon[] icons = new IIcon[numIcons];
-        for (int i = 0; i < numIcons; i++) {
-            String texName = name + "." + i;
-            TextureAtlasSheet texture = new TextureAtlasSheet(texName, i, rows, columns);
-            textureMap.setTextureEntry(texName, texture);
-            icons[i] = texture;
-        }
-        return icons;
-    }
+//    public static TextureAtlasSprite[] unstitchIcons(IIconRegister iconRegister, String name, int numIcons) {
+//        return unstitchIcons(iconRegister, name, numIcons, 1);
+//    }
+//
+//    public static TextureAtlasSprite[] unstitchIcons(IIconRegister iconRegister, String name, int columns, int rows) {
+//        TextureMap textureMap = (TextureMap) iconRegister;
+//        int numIcons = rows * columns;
+//        TextureAtlasSprite[] icons = new TextureAtlasSprite[numIcons];
+//        for (int i = 0; i < numIcons; i++) {
+//            String texName = name + "." + i;
+//            TextureAtlasSheet texture = new TextureAtlasSheet(texName, i, rows, columns);
+//            textureMap.setTextureEntry(texName, texture);
+//            icons[i] = texture;
+//        }
+//        return icons;
+//    }
 
     private TextureAtlasSheet(String name, int index, int rows, int columns) {
         super(name);
@@ -81,7 +80,7 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
             if (resource != null)
                 try {
                     resource.getInputStream().close();
-                } catch (IOException e) {
+                } catch (IOException ignored) {
                 }
         }
 
@@ -100,8 +99,8 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
         }
         this.height = subImage.getHeight();
         this.width = subImage.getWidth();
-        int[] rgbaData = new int[this.height * this.width];
-        subImage.getRGB(0, 0, this.width, this.height, rgbaData, 0, this.width);
+        int[] rgbaData = new int[height * width];
+        subImage.getRGB(0, 0, width, height, rgbaData, 0, width);
         int[][] imageData = new int[1 + mipmapLevels][];
         imageData[0] = rgbaData;
         framesTextureData.add(imageData);
