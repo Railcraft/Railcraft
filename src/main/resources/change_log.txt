@@ -1,3 +1,7 @@
+9.12.2.1
+	NEW: Added Trackman's Notepad, a tool for copying settings from one block to another. (contribution by Forecaster)
+	INFO: Notepad currently only supports Item and Fluid Loaders/Unloaders.
+
 9.12.2.0:
 	FIX: The RF Unloader should now push RF to surrounding blocks instead of hoarding it for itself. (issue #821)
 
