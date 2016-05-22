@@ -1,8 +1,5 @@
 package mods.railcraft.common.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderItemBase;
@@ -13,13 +10,15 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,7 +35,6 @@ import java.util.*;
  */
 public class ItemNotepad extends ItemRailcraft {
     public static ItemNotepad item;
-    private static IIcon itemIconFull;
 
     public ItemNotepad() {
         setMaxStackSize(1);
@@ -110,14 +108,7 @@ public class ItemNotepad extends ItemRailcraft {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon("railcraft:tool.notepad.empty");
-        itemIconFull = iconRegister.registerIcon("railcraft:tool.notepad.filled");
-    }
-
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean adv) {
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         String contentString;
         EnumMap<Contents, NBTTagCompound> contents = getContents(stack);
         if (contents.isEmpty()) {
@@ -152,14 +143,14 @@ public class ItemNotepad extends ItemRailcraft {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         //Dunno why this is needed, but without this override it stops working properly.
         return true;
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+        TileEntity tileEntity = world.getTileEntity(pos);
         if (Game.isHost(world)) {
             if (player.isSneaking()) // COPY
             {
@@ -174,9 +165,8 @@ public class ItemNotepad extends ItemRailcraft {
                     ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.copy.fail");
                 } else {
                     setContents(stack, contents);
-                    //TODO: Fix in 1.8 to use getDisplayName
-                    if (tileEntity instanceof RailcraftTileEntity)
-                        ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.copy", ((RailcraftTileEntity) tileEntity).getLocalizationTag());
+                    if (tileEntity instanceof IWorldNameable)
+                        ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.copy", ((IWorldNameable) tileEntity).getDisplayName());
                     player.getCurrentEquippedItem().damageItem(1, player);
                 }
             } else // PASTE
@@ -192,9 +182,8 @@ public class ItemNotepad extends ItemRailcraft {
                             pasted |= entry.getKey().paste(tileEntity, entry.getValue());
                     }
                     if (pasted) {
-                        //TODO: Fix in 1.8 to use getDisplayName
-                        if (tileEntity instanceof RailcraftTileEntity)
-                            ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.paste", ((RailcraftTileEntity) tileEntity).getLocalizationTag());
+                        if (tileEntity instanceof IWorldNameable)
+                            ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.paste", ((IWorldNameable) tileEntity).getDisplayName());
                     } else
                         //TODO: Fix in 1.8 to use getDisplayName
                         ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.paste.fail");
@@ -205,27 +194,23 @@ public class ItemNotepad extends ItemRailcraft {
     }
 
     @Override
-    public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
+    public boolean doesSneakBypassUse(World world, BlockPos pos, EntityPlayer player) {
         return true;
     }
 
-    @Override
-    public IIcon getIconIndex(ItemStack stack) {
-        NBTTagCompound tag = InvTools.getItemDataRailcraft(stack);
-        if (tag.hasKey("contents")) {
-            return itemIconFull;
-        }
-        return itemIcon;
-    }
+    //    @Override
+//    public IIcon getIconIndex(ItemStack stack) {
+//        NBTTagCompound tag = InvTools.getItemDataRailcraft(stack);
+//        if (tag.hasKey("contents")) {
+//            return itemIconFull;
+//        }
+//        return itemIcon;
+//    }
 
+    //TODO: Make this do something interesting
     @Override
-    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-        return getIcon(stack, renderPass);
-    }
-
-    @Override
-    public IIcon getIcon(ItemStack stack, int renderPass) {
-        return getIconIndex(stack);
+    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+        return super.getModel(stack, player, useRemaining);
     }
 
     private enum Contents {
