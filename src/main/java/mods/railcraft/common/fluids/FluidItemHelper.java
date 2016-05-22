@@ -59,13 +59,8 @@ public class FluidItemHelper {
             container.stackSize = 1;
             IFluidContainerItem fluidCon = (IFluidContainerItem) item;
             FluidStack drained = fluidCon.drain(container, maxDrain, true);
-            boolean overridesGetContainerItem = false;
-            try {
-                overridesGetContainerItem = item.getClass().getMethod("getContainerItem").getDeclaringClass() != Item.class;
-            } catch (Exception ex) {
-            }
             ItemStack returnStack;
-            if (overridesGetContainerItem) {
+            if (container.getItem().hasContainerItem(container)) {
                 returnStack = container.getItem().getContainerItem(container);
             } else {
                 returnStack = container;
