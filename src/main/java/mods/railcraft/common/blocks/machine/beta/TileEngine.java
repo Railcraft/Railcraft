@@ -10,9 +10,9 @@ package mods.railcraft.common.blocks.machine.beta;
 
 import buildcraft.api.tools.IToolWrench;
 import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyReceiver;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.plugins.rf.RedstoneFluxPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -99,12 +99,8 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
                 TileEntity tile = tileCache.getTileOnSide(direction);
 
-                if (canTileReceivePower(tile, direction.getOpposite())) {
-                    IEnergyReceiver handler = (IEnergyReceiver) tile;
-                    int powerToTransfer = extractEnergy();
-//                    outputDebug += powerToTransfer;
-                    if (powerToTransfer > 0)
-                        handler.receiveEnergy(direction.getOpposite(), powerToTransfer, false);
+                if (RedstoneFluxPlugin.canTileReceivePower(tile, direction.getOpposite())) {
+                    RedstoneFluxPlugin.pushToTile(tile, direction.getOpposite(), extractEnergy());
                 }
             } else if (pistonProgress >= 1) {
                 pistonProgress = 0;
@@ -117,7 +113,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         } else if (powered) {
             TileEntity tile = tileCache.getTileOnSide(direction);
 
-            if (canTileReceivePower(tile, direction.getOpposite()))
+            if (RedstoneFluxPlugin.canTileReceivePower(tile, direction.getOpposite()))
                 if (energy > 0) {
                     pistonStage = 1;
                     setActive(true);
@@ -129,14 +125,6 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
             setActive(false);
 
         burn();
-    }
-
-    private boolean canTileReceivePower(TileEntity tile, EnumFacing side) {
-        if (tile instanceof IEnergyReceiver) {
-            IEnergyReceiver handler = (IEnergyReceiver) tile;
-            return handler.canConnectEnergy(side);
-        }
-        return false;
     }
 
     protected void overheat() {
@@ -236,7 +224,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
             TileEntity tile = tileCache.getTileOnSide(dir);
 
-            if (canTileReceivePower(tile, dir.getOpposite())) {
+            if (RedstoneFluxPlugin.canTileReceivePower(tile, dir.getOpposite())) {
                 direction = dir;
                 notifyBlocksOfNeighborChange();
                 sendUpdateToClient();

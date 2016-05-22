@@ -14,6 +14,8 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.rf.RedstoneFluxPlugin;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +28,7 @@ import java.io.IOException;
 
 public class TileRFUnloader extends TileRFLoaderBase implements IEnergyProvider, IGuiReturnHandler {
     private boolean waitTillEmpty = true;
+    private static final int AMOUNT_TO_PUSH_TO_TILES = 2000;
 
     @Override
     public IEnumMachine getMachineType() {
@@ -36,6 +39,15 @@ public class TileRFUnloader extends TileRFLoaderBase implements IEnergyProvider,
     public boolean openGui(EntityPlayer player) {
         GuiHandler.openGui(EnumGui.UNLOADER_RF, player, worldObj, getX(), getY(), getZ());
         return true;
+    }
+
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        if (Game.isNotHost(worldObj))
+            return;
+
+        RedstoneFluxPlugin.pushToTiles(this, tileCache, AMOUNT_TO_PUSH_TO_TILES);
     }
 
     @Override

@@ -17,7 +17,7 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.carts.EnumCart;
-import mods.railcraft.common.items.ItemNugget;
+import mods.railcraft.common.items.*;
 import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.RailcraftToolItems;
@@ -46,6 +46,17 @@ public class ModuleTransport extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
+                ItemNotepad.registerItem();
+                if (ItemNotepad.item != null) {
+                    CraftingPlugin.addRecipe(new ItemStack(ItemNotepad.item),
+                            "IF",
+                            "XP",
+                            'I', new ItemStack(Items.dye, 1, 0),
+                            'F', Items.feather,
+                            'X', RailcraftItems.magGlass,
+                            'P', Items.paper);
+                }
+
                 EnumMachineAlpha alpha = EnumMachineAlpha.TANK_WATER;
                 if (alpha.isAvailable())
                     CraftingPlugin.addRecipe(alpha.getItem(6),

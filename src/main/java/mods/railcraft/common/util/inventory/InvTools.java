@@ -12,6 +12,7 @@ package mods.railcraft.common.util.inventory;
 import com.google.common.base.Predicate;
 import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.api.core.RailcraftFakePlayer;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
@@ -160,18 +161,6 @@ public abstract class InvTools {
         return null;
     }
 
-    //TODO: Wrap IItemHandler
-//    public static IInventoryObject getInventory(IInventoryObject inv, EnumFacing side) {
-//        if (inv == null)
-//            return null;
-//
-////        if (inv instanceof ISpecialInventory)
-////            inv = new SpecialInventoryMapper((ISpecialInventory) inv, side);
-//        else if (inv.getInventoryObject() instanceof ISidedInventory)
-//            inv = new SidedInventoryMapper((ISidedInventory) inv, side);
-//        return inv;
-//    }
-
     public static int[] buildSlotArray(int start, int size) {
         int[] slots = new int[size];
         for (int i = 0; i < size; i++) {
@@ -205,6 +194,7 @@ public abstract class InvTools {
         lore.appendTag(new NBTTagString(msg));
     }
 
+    @Nonnull
     public static NBTTagCompound getItemData(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null) {
@@ -212,6 +202,19 @@ public abstract class InvTools {
             stack.setTagCompound(nbt);
         }
         return nbt;
+    }
+
+    @Nonnull
+    public static NBTTagCompound getItemDataRailcraft(ItemStack stack) {
+        NBTTagCompound nbt = getItemData(stack);
+        NBTTagCompound railcraftTag;
+        if (nbt.hasKey(Railcraft.MOD_ID))
+            railcraftTag = nbt.getCompoundTag(Railcraft.MOD_ID);
+        else {
+            railcraftTag = new NBTTagCompound();
+            nbt.setTag(Railcraft.MOD_ID, railcraftTag);
+        }
+        return railcraftTag;
     }
 
     public static void addNBTTag(ItemStack stack, String key, String value) {
@@ -485,7 +488,7 @@ public abstract class InvTools {
      *
      * @param source the source inventory
      * @param dest   the destination inventory
-     * @param filter an StandardStackFilters to match against
+     * @param filter an IStackFilter to match against
      * @return null if nothing was moved, the stack moved otherwise
      */
     @Nullable
@@ -517,7 +520,7 @@ public abstract class InvTools {
      *
      * @param sources the source inventories
      * @param dest    the destination inventory
-     * @param filter  an StandardStackFilters to match against
+     * @param filter  an IStackFilter to match against
      * @return null if nothing was moved, the stack moved otherwise
      */
     @Nullable
@@ -535,7 +538,7 @@ public abstract class InvTools {
      *
      * @param source       the source inventory
      * @param destinations the destination inventories
-     * @param filters      ItemStack to match against
+     * @param filters      ItemStacks to match against
      * @return null if nothing was moved, the stack moved otherwise
      */
     @Nullable
@@ -555,7 +558,7 @@ public abstract class InvTools {
      *
      * @param source the source inventory
      * @param dest   the destination inventory
-     * @param filter an ItemStack[] to exclude
+     * @param filter ItemStacks to exclude
      * @return null if nothing was moved, the stack moved otherwise
      */
     @Nullable
