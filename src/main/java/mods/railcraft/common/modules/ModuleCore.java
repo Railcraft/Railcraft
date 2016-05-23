@@ -143,6 +143,16 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 OreDictionary.registerOre("chestWood", Blocks.chest);
                 OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
+
+                add(
+                        RailcraftItems.crowbarIron,
+                        RailcraftItems.crowbarSteel,
+                        RailcraftItems.magGlass,
+                        RailcraftItems.goggles,
+                        RailcraftItems.overalls,
+                        RailcraftItems.nugget,
+                        RailcraftItems.notepad
+                );
             }
 
             @Override
@@ -152,14 +162,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 LootPlugin.init();
 
                 RailcraftEnchantments.registerEnchantment();
-
-                RailcraftItems.crowbarIron.register();
-                RailcraftItems.crowbarSteel.register();
-                RailcraftItems.magGlass.register();
-                RailcraftItems.goggles.register();
-                RailcraftItems.overalls.register();
-                RailcraftItems.nugget.register();
-
 
                 RailcraftToolItems.initializeToolsArmor();
 

@@ -3,15 +3,15 @@ package mods.railcraft.common.items;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderItemBase;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -34,22 +34,20 @@ import java.util.*;
  * Created by Forecaster on 09/05/2016 for the Railcraft project.
  */
 public class ItemNotepad extends ItemRailcraft {
-    public static ItemNotepad item;
-
     public ItemNotepad() {
         setMaxStackSize(1);
         setMaxDamage(50);
     }
 
-    public static void registerItem() {
-        if (item == null) {
-            String tag = "railcraft.tool.notepad";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemNotepad();
-                item.setUnlocalizedName(tag);
-                RailcraftRegistry.register(item);
-            }
-        }
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this),
+                "IF",
+                "XP",
+                'I', new ItemStack(Items.dye, 1, 0),
+                'F', Items.feather,
+                'X', RailcraftItems.magGlass,
+                'P', Items.paper);
     }
 
     private static void setPasteMode(ItemStack stack, PasteMode mode) {

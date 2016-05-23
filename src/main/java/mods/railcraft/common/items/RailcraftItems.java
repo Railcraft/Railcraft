@@ -37,6 +37,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     goggles(ItemGoggles.class, "armor.goggles"),
     ingot(ItemIngot.class, "ingot"),
     magGlass(ItemMagnifyingGlass.class, "tool.magnifying.glass"),
+    notepad(ItemNotepad.class, "tool.notepad"),
     nugget(ItemNugget.class, "nugget"),
     overalls(ItemOveralls.class, "armor.overalls"),
     plate(ItemPlate.class, "part.plate"),

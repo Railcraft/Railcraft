@@ -104,13 +104,13 @@ public final class RailcraftRegistry {
      */
     public static void register(Item item) {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
-            throw new RuntimeException("Items must be initialized in PreInit or InitFirst!");
+            throw new RuntimeException("Items must be initialized in Construction or PreInit!");
         _register(item);
     }
 
     public static void registerInit(Item item) {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.INIT)
-            throw new RuntimeException("This item must be initialized in InitSecond!");
+            throw new RuntimeException("This item must be initialized in Init!");
         _register(item);
     }
 
