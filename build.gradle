@@ -8,7 +8,7 @@ evaluationDependsOn(':version')
 
 buildscript {
 	repositories {
-		mavenCentral()
+		jcenter()
 		maven {
 			name = "forge"
 			url = "http://files.minecraftforge.net/maven"
@@ -19,7 +19,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
 	}
 }
 
@@ -50,24 +50,29 @@ minecraft {
 
 sourceSets {
 	main {
-		java {
-			srcDir project.apiRailcraft
-			// srcDir project.apiForestry
-			srcDir project.apiRedstoneFlux + "/src/main/java"
-			srcDir project.apiThaumcraft
-		}
 		resources {
 			srcDir project.dirLang
             exclude '**/Thumbs.db'
 		}
 	}
-    // Do bc seperatly because it includes the RF api itself
-    bc_api {
-        java {
+	api {
+		java {
+			srcDir project.apiRailcraft
+			srcDir project.apiRedstoneFlux + "/src/main/java"
+			srcDir project.apiThaumcraft
+		}
+		java {
             srcDir project.apiBuildcraft + "/api"
             exclude 'cofh/**'
         }
-    }
+	}
+    // Do bc separately because it includes the RF api itself
+    // bc_api {
+        // java {
+            // srcDir project.apiBuildcraft + "/api"
+            // exclude 'cofh/**'
+        // }
+    // }
 }
 
 repositories {
