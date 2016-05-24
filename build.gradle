@@ -52,7 +52,7 @@ sourceSets {
 	main {
 		resources {
 			srcDir project.dirLang
-            exclude '**/Thumbs.db'
+			exclude '**/Thumbs.db'
 		}
 	}
 	api {
@@ -62,24 +62,24 @@ sourceSets {
 			srcDir project.apiThaumcraft
 		}
 		java {
-            srcDir project.apiBuildcraft + "/api"
-            exclude 'cofh/**'
-        }
+			srcDir project.apiBuildcraft + "/api"
+			exclude 'cofh/**'
+		}
 	}
-    // Do bc separately because it includes the RF api itself
-    // bc_api {
-        // java {
-            // srcDir project.apiBuildcraft + "/api"
-            // exclude 'cofh/**'
-        // }
-    // }
+	// Do bc separately because it includes the RF api itself
+	// bc_api {
+		// java {
+			// srcDir project.apiBuildcraft + "/api"
+			// exclude 'cofh/**'
+		// }
+	// }
 }
 
 repositories {
-    maven {
-        name = "forestry"
-        url = "http://maven.ic2.player.to/"
-    }
+	maven {
+		name = "forestry"
+		url = "http://maven.ic2.player.to/"
+	}
 	maven {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
@@ -92,8 +92,8 @@ configurations {
 }
 
 dependencies {
-    api "net.sengir.forestry:forestry_${1.9}:${project.version_forestry}:api"
-    // runtime "net.sengir.forestry:forestry_${1.9}:${project.version_forestry}:dev"
+	api "net.sengir.forestry:forestry_${1.9}:${project.version_forestry}:api"
+	// runtime "net.sengir.forestry:forestry_${1.9}:${project.version_forestry}:dev"
 	//api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
 }
 
@@ -128,8 +128,8 @@ jar {
 	destinationDir = file("build/tmp")
 	archiveName = "main.jar"
 
-    exclude '**/Thumbs.db'
-    
+	exclude '**/Thumbs.db'
+	
 	from {
 		configurations.api.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
@@ -277,7 +277,7 @@ task devJar ( type: Jar, dependsOn: 'classes' ) {
 }
 
 class JarSigner extends net.minecraftforge.gradle.tasks.SignJar {
-    public JarSigner () {
+	public JarSigner () {
 		onlyIf {
 			project.hasProperty('signingStorepass')
 		}
