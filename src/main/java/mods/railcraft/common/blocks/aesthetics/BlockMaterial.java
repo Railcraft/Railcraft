@@ -16,18 +16,19 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import net.minecraft.block.*;
-import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -117,7 +118,7 @@ public enum BlockMaterial implements IStringSerializable {
     public static final EnumSet<BlockMaterial> VANILLA_SLABS;
     public static final BiMap<BlockMaterial, Integer> OLD_ORDINALS;
     private static boolean needsInit = true;
-    private SoundType sound = Block.soundTypeStone;
+    private SoundType sound = SoundType.STONE;
     @Nullable
     private IBlockState state;
     private String oreTag;
@@ -348,23 +349,23 @@ public enum BlockMaterial implements IStringSerializable {
             NAMES.put(mat.name, mat);
             switch (mat) {
                 case CONCRETE:
-                    mat.sound = Block.soundTypeStone;
+                    mat.sound = SoundType.STONE;
                     break;
                 case CREOSOTE:
-                    mat.sound = Block.soundTypeWood;
+                    mat.sound = SoundType.WOOD;
                     break;
                 case OBSIDIAN_CRUSHED:
-                    mat.sound = Block.soundTypeGravel;
+                    mat.sound = SoundType.GROUND;
                     break;
                 case COPPER:
                 case TIN:
                 case LEAD:
                 case STEEL:
-                    mat.sound = Block.soundTypeMetal;
+                    mat.sound = SoundType.METAL;
                     break;
                 default:
                     if (mat.state != null)
-                        mat.sound = mat.state.getBlock().stepSound;
+                        mat.sound = mat.state.getBlock().getSoundType();
             }
             if (mat.sound == RailcraftSound.getInstance())
                 throw new RuntimeException("Invalid Sound Defined!");
@@ -391,6 +392,7 @@ public enum BlockMaterial implements IStringSerializable {
         return state;
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return name;
@@ -450,8 +452,8 @@ public enum BlockMaterial implements IStringSerializable {
             default:
                 IBlockState state = getState();
                 if (state == null)
-                    return Blocks.BRICK_BLOCK.getBlockHardness(world, pos);
-                return state.getBlock().getBlockHardness(world, pos);
+                    return Blocks.BRICK_BLOCK.getDefaultState().getBlockHardness(world, pos);
+                return state.getBlockHardness(world, pos);
         }
     }
 

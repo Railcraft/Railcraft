@@ -151,10 +151,10 @@ public class BlockCube extends Block {
     }
 
     @Override
-    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-        getVariant(world, pos).getBlockDef().onNeighborBlockChange(world, pos, state, neighborBlock);
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
+        getVariant(worldIn, pos).getBlockDef().onNeighborBlockChange(worldIn, pos, state, neighborBlock);
     }
-
+    
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
         getVariant(world, pos).getBlockDef().updateTick(world, pos, rand);

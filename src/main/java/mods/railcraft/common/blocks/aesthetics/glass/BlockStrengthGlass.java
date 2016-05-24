@@ -9,7 +9,6 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.glass;
 
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -17,19 +16,20 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockGlass;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -43,14 +43,12 @@ public class BlockStrengthGlass extends BlockGlass {
     public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
     public static boolean renderingHighlight;
     private static BlockStrengthGlass instance;
-    private final int renderId;
 
-    public BlockStrengthGlass(int renderId) {
-        super(Material.glass, false);
-        this.renderId = renderId;
+    public BlockStrengthGlass() {
+        super(Material.GLASS, false);
         setResistance(5);
         setHardness(1);
-        setStepSound(Block.soundTypeGlass);
+        setSoundType(SoundType.GLASS);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setUnlocalizedName("railcraft.glass");
         this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
@@ -63,7 +61,7 @@ public class BlockStrengthGlass extends BlockGlass {
     public static void registerBlock() {
         if (instance == null)
             if (RailcraftConfig.isBlockEnabled("glass")) {
-                instance = new BlockStrengthGlass(Railcraft.proxy.getRenderId());
+                instance = new BlockStrengthGlass();
                 RailcraftRegistry.register(instance, ItemStrengthGlass.class);
 
                 ForestryPlugin.addBackpackItem("builder", instance);
@@ -85,11 +83,6 @@ public class BlockStrengthGlass extends BlockGlass {
     public static ItemStack getItem(int qty, int meta) {
         if (instance == null) return null;
         return new ItemStack(instance, qty, meta);
-    }
-
-    @Override
-    public int getRenderType() {
-        return renderId;
     }
 
     @Override
@@ -151,7 +144,7 @@ public class BlockStrengthGlass extends BlockGlass {
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 

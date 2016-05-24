@@ -82,32 +82,6 @@ import java.util.Set;
 
 @RailcraftModule("core")
 public class ModuleCore extends RailcraftModulePayload {
-    private static void addLiquidFuels() {
-        int bioHeat = (int) (16000 * RailcraftConfig.boilerBiofuelMultiplier());
-        Fluid ethanol = Fluids.BIOETHANOL.get();
-        if (ethanol != null)
-            FuelManager.addBoilerFuel(ethanol, bioHeat); // Biofuel
-
-        Fluid biofuel = Fluids.BIOFUEL.get();
-        if (biofuel != null)
-            FuelManager.addBoilerFuel(biofuel, bioHeat); // Biofuel
-
-        Fluid fuel = Fluids.FUEL.get();
-        if (fuel != null)
-            FuelManager.addBoilerFuel(fuel, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())); // Fuel
-
-        Fluid coal = Fluids.COAL.get();
-        if (coal != null)
-            FuelManager.addBoilerFuel(coal, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())); // Liquefaction Coal
-
-        Fluid pyrotheum = Fluids.PYROTHEUM.get();
-        if (pyrotheum != null)
-            FuelManager.addBoilerFuel(pyrotheum, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())); // Blazing Pyrotheum
-
-        Fluid creosote = Fluids.CREOSOTE.get();
-        if (creosote != null)
-            FuelManager.addBoilerFuel(creosote, 4800); // Creosote
-    }
 
     public ModuleCore() {
         setEnabledEventHandler(new ModuleEventHandler() {
@@ -178,9 +152,9 @@ public class ModuleCore extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(new Object() {
                     @SubscribeEvent
                     public void logout(PlayerEvent.PlayerLoggedOutEvent event) {
-                        if (event.player.ridingEntity instanceof EntityMinecart) {
+                        if (event.player.getRidingEntity() instanceof EntityMinecart) {
                             Entity p = event.player;
-                            EntityMinecart cart = (EntityMinecart) event.player.ridingEntity;
+                            EntityMinecart cart = (EntityMinecart) event.player.getRidingEntity();
                             if (Train.getTrain(cart).size() > 1)
                                 CartUtils.dismount(cart, p.posX, p.posY + 1, p.posZ);
                         }
@@ -188,6 +162,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 });
 
                 if (RailcraftConfig.useCollisionHandler()) {
+                    //noinspection ConstantConditions
                     if (EntityMinecart.getCollisionHandler() != null)
                         Game.log(Level.WARN, "Existing Minecart Collision Handler detected, overwriting. Please check your configs to ensure this is desired behavior.");
                     EntityMinecart.setCollisionHandler(MinecartHooks.getInstance());
@@ -220,7 +195,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 // Items
                 replaceVanillaCart(EnumCart.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, "MinecartCommandBlock", 40);
-                Items.COMMAND_BLOCK_MINECART.setCreativeTab(CreativeTabs.tabTransport);
+                Items.COMMAND_BLOCK_MINECART.setCreativeTab(CreativeTabs.TRANSPORTATION);
                 replaceVanillaCart(EnumCart.BASIC, Items.MINECART, "MinecartRideable", 42);
                 replaceVanillaCart(EnumCart.CHEST, Items.CHEST_MINECART, "MinecartChest", 43);
                 replaceVanillaCart(EnumCart.FURNACE, Items.FURNACE_MINECART, "MinecartFurnace", 44);
@@ -310,15 +285,15 @@ public class ModuleCore extends RailcraftModulePayload {
             private void replaceVanillaCart(EnumCart cartType, Item original, String entityTag, int entityId) {
                 cartType.registerEntity();
 
-                Class<? extends Entity> minecartClass = EntityList.stringToClassMapping.remove(entityTag);
+                Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(entityTag);
 
                 CartUtils.classReplacements.put(minecartClass, cartType);
                 CartUtils.vanillaCartItemMap.put(original, cartType);
 
-                EntityList.idToClassMapping.remove(entityId);
+                EntityList.ID_TO_CLASS.remove(entityId);
                 EntityList.addMapping(cartType.getCartClass(), entityTag, entityId);
 
-                BlockDispenser.dispenseBehaviorRegistry.putObject(original, new BehaviorDefaultDispenseItem());
+                BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());
 
                 original.setMaxStackSize(RailcraftConfig.getMinecartStackSize());
                 cartType.setCartItem(new ItemStack(original));
@@ -403,6 +378,33 @@ public class ModuleCore extends RailcraftModulePayload {
 //        System.out.printf("Ran for %d ticks.%n", ticks);
 //        System.out.printf("Steam Produced=%s%n", tankSteam.getFluidAmount());
 //        System.exit(0);
+            }
+
+            private void addLiquidFuels() {
+                int bioHeat = (int) (16000 * RailcraftConfig.boilerBiofuelMultiplier());
+                Fluid ethanol = Fluids.BIOETHANOL.get();
+                if (ethanol != null)
+                    FuelManager.addBoilerFuel(ethanol, bioHeat); // Biofuel
+
+                Fluid biofuel = Fluids.BIOFUEL.get();
+                if (biofuel != null)
+                    FuelManager.addBoilerFuel(biofuel, bioHeat); // Biofuel
+
+                Fluid fuel = Fluids.FUEL.get();
+                if (fuel != null)
+                    FuelManager.addBoilerFuel(fuel, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())); // Fuel
+
+                Fluid coal = Fluids.COAL.get();
+                if (coal != null)
+                    FuelManager.addBoilerFuel(coal, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())); // Liquefaction Coal
+
+                Fluid pyrotheum = Fluids.PYROTHEUM.get();
+                if (pyrotheum != null)
+                    FuelManager.addBoilerFuel(pyrotheum, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())); // Blazing Pyrotheum
+
+                Fluid creosote = Fluids.CREOSOTE.get();
+                if (creosote != null)
+                    FuelManager.addBoilerFuel(creosote, 4800); // Creosote
             }
         });
     }

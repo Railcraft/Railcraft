@@ -35,7 +35,7 @@ import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
  * Created by CovertJaguar on 3/12/2015.
  */
 public enum BrickTheme {
-    ABYSSAL(MapColor.blackColor) {
+    ABYSSAL(MapColor.BLACK) {
         @Override
         public void initRecipes() {
             if (EnumCube.ABYSSAL_STONE.isEnabled()) {
@@ -45,7 +45,7 @@ public enum BrickTheme {
             }
         }
     },
-    BLEACHEDBONE(MapColor.adobeColor) {
+    BLEACHEDBONE(MapColor.ADOBE) {
         Item bleachedClay;
 
         @Override
@@ -62,14 +62,14 @@ public enum BrickTheme {
             }
         }
     },
-    BLOODSTAINED(MapColor.redColor) {
+    BLOODSTAINED(MapColor.RED) {
         @Override
         public void initRecipes() {
-            CraftingPlugin.addShapelessRecipe(new ItemStack(getBlock(), 1, 2), new ItemStack(Blocks.SANDSTONE, 1, 2), new ItemStack(Items.rotten_flesh));
-            CraftingPlugin.addShapelessRecipe(new ItemStack(getBlock(), 1, 2), new ItemStack(Blocks.SANDSTONE, 1, 2), new ItemStack(Items.beef));
+            CraftingPlugin.addShapelessRecipe(new ItemStack(getBlock(), 1, 2), new ItemStack(Blocks.SANDSTONE, 1, 2), new ItemStack(Items.ROTTEN_FLESH));
+            CraftingPlugin.addShapelessRecipe(new ItemStack(getBlock(), 1, 2), new ItemStack(Blocks.SANDSTONE, 1, 2), new ItemStack(Items.BEEF));
         }
     },
-    FROSTBOUND(MapColor.blueColor) {
+    FROSTBOUND(MapColor.BLUE) {
         @Override
         public void initRecipes() {
             CraftingPlugin.addRecipe(new ItemStack(getBlock(), 8, 2),
@@ -80,7 +80,7 @@ public enum BrickTheme {
                     'L', "gemLapis");
         }
     },
-    INFERNAL(MapColor.grayColor) {
+    INFERNAL(MapColor.GRAY) {
         @Override
         public void initRecipes() {
             ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
@@ -91,7 +91,7 @@ public enum BrickTheme {
                     'M', new ItemStack(Blocks.SOUL_SAND));
         }
     },
-    QUARRIED(MapColor.snowColor) {
+    QUARRIED(MapColor.SNOW) {
         @Override
         public void initRecipes() {
             if (EnumCube.QUARRIED_STONE.isEnabled()) {
@@ -101,7 +101,7 @@ public enum BrickTheme {
             }
         }
     },
-    SANDY(MapColor.sandColor) {
+    SANDY(MapColor.SAND) {
         @Override
         public void initRecipes() {
             ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
@@ -112,7 +112,7 @@ public enum BrickTheme {
                     'M', new ItemStack(Blocks.SAND));
         }
     },
-    NETHER(MapColor.netherrackColor) {
+    NETHER(MapColor.NETHERRACK) {
         @Override
         public ItemStack get(BrickVariant variant, int qty) {
             if (variant == BrickVariant.BRICK)
@@ -201,7 +201,7 @@ public enum BrickTheme {
                         "I I",
                         "III",
                         'I', get(BLOCK, 1));
-                CraftingPlugin.addShapelessRecipe(get(ETCHED, 1), get(BLOCK, 1), new ItemStack(Items.gunpowder));
+                CraftingPlugin.addShapelessRecipe(get(ETCHED, 1), get(BLOCK, 1), new ItemStack(Items.GUNPOWDER));
 
                 ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(block), false, false);
                 recipe.addOutput(get(COBBLE, 1), 1.0F);
