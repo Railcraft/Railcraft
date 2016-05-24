@@ -12,11 +12,14 @@ package mods.railcraft.common.blocks.aesthetics.slab;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -48,24 +51,24 @@ public class ItemSlab extends ItemBlock {
      * false if it don't. This is for ITEMS, not BLOCKS
      */
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (stack.stackSize == 0) {
-            return false;
+            return EnumActionResult.PASS;
         }
 
-        if (!playerIn.canPlayerEdit(pos, side, stack)) {
-            return false;
+        if (!playerIn.canPlayerEdit(pos, facing, stack)) {
+            return EnumActionResult.PASS;
         } else {
-            if (isSingleSlab(worldIn, pos, side)) {
+            if (isSingleSlab(worldIn, pos, facing)) {
                 tryAddSlab(worldIn, pos, stack);
-                return true;
+                return EnumActionResult.SUCCESS;
             }
-            if (isSingleSlabShifted(worldIn, pos, side)) {
-                tryAddSlab(worldIn, pos.offset(side), stack);
-                return true;
+            if (isSingleSlabShifted(worldIn, pos, facing)) {
+                tryAddSlab(worldIn, pos.offset(facing), stack);
+                return EnumActionResult.SUCCESS;
             }
 
-            return super.onItemUse(stack, playerIn, worldIn, pos, side, hitX, hitY, hitZ);
+            return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 
         }
     }
@@ -104,8 +107,8 @@ public class ItemSlab extends ItemBlock {
         if (state.getBlock() == block) {
             TileSlab slab = BlockRailcraftSlab.getSlabTile(world, pos);
             if (slab != null) {
-                if (world.checkNoEntityCollision(block.getCollisionBoundingBox(world, pos, state)) && slab.addSlab(getMat(stack))) {
-                    world.playSoundEffect(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F);
+                if (world.checkNoEntityCollision(block.getCollisionBoundingBox(state, world, pos)) && slab.addSlab(getMat(stack))) {
+                    SoundHelper.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F);
                     --stack.stackSize;
                 }
             }
@@ -135,7 +138,7 @@ public class ItemSlab extends ItemBlock {
      */
     @Override
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
-        if (!world.checkNoEntityCollision(block.getCollisionBoundingBox(world, pos, newState))) {
+        if (!world.checkNoEntityCollision(block.getCollisionBoundingBox(newState, world, pos))) {
             return false;
         }
 

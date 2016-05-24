@@ -13,14 +13,13 @@ import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.signals.MaterialStructure;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -54,11 +53,11 @@ public abstract class BlockPostBase extends Block {
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
-        if (isPlatform(WorldPlugin.getBlockState(worldIn, pos)))
-            setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 1.0F, 1F);
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        if (isPlatform(state))
+            return FULL_BLOCK_AABB;
         else
-            setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1.0F, 0.8F);
+            return AABBFactory.start().box().expandHorizontally(-0.2F).build();
     }
 
     @Nullable

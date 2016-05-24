@@ -13,6 +13,7 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
+import javax.annotation.Nonnull;
 import java.util.Locale;
 
 /**
@@ -20,13 +21,13 @@ import java.util.Locale;
  */
 public enum EnumPost implements IStringSerializable {
 
-    WOOD(MapColor.brownColor),
-    STONE(MapColor.stoneColor),
-    METAL_UNPAINTED(MapColor.netherrackColor),
-    EMBLEM(MapColor.ironColor),
-    WOOD_PLATFORM(MapColor.brownColor),
-    STONE_PLATFORM(MapColor.stoneColor),
-    METAL_PLATFORM_UNPAINTED(MapColor.netherrackColor);
+    WOOD(MapColor.BROWN),
+    STONE(MapColor.STONE),
+    METAL_UNPAINTED(MapColor.NETHERRACK),
+    EMBLEM(MapColor.IRON),
+    WOOD_PLATFORM(MapColor.BROWN),
+    STONE_PLATFORM(MapColor.STONE),
+    METAL_PLATFORM_UNPAINTED(MapColor.NETHERRACK);
     public static final EnumPost[] VALUES = values();
     private final MapColor mapColor;
 
@@ -66,6 +67,7 @@ public enum EnumPost implements IStringSerializable {
         return "tile.railcraft.post." + getName();
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return name().toLowerCase(Locale.ENGLISH).replace("_", ".");

@@ -9,14 +9,13 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
-import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -26,11 +25,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,11 +44,10 @@ public class BlockPostMetal extends BlockPostBase {
     public static BlockPostMetal platform;
     public final boolean isPlatform;
 
-    private BlockPostMetal(int renderType, boolean isPlatform) {
-        super(renderType);
-        setStepSound(Block.soundTypeMetal);
+    private BlockPostMetal(boolean isPlatform) {
+        setSoundType(SoundType.METAL);
         this.isPlatform = isPlatform;
-        this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
+        setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
     }
 
     public static void registerPost() {
@@ -62,7 +61,7 @@ public class BlockPostMetal extends BlockPostBase {
     }
 
     private static BlockPostMetal make(String tag, boolean isPlatform) {
-        BlockPostMetal block = new BlockPostMetal(Railcraft.getProxy().getRenderId(), isPlatform);
+        BlockPostMetal block = new BlockPostMetal(isPlatform);
         block.setUnlocalizedName("railcraft." + tag);
         RailcraftRegistry.register(block, ItemPostMetal.class);
 
@@ -105,19 +104,20 @@ public class BlockPostMetal extends BlockPostBase {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumColor color : EnumColor.VALUES) {
             list.add(getItem(1, color.ordinal()));
         }
     }
 
     @Override
-    public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+    public boolean canSilkHarvest(World world, BlockPos pos, @Nonnull IBlockState state, EntityPlayer player) {
         return true;
     }
 
+    @Nonnull
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
         List<ItemStack> list = new ArrayList<ItemStack>();
         if (isPlatform)
             list.add(EnumPost.METAL_PLATFORM_UNPAINTED.getItem());
@@ -127,7 +127,7 @@ public class BlockPostMetal extends BlockPostBase {
     }
 
     @Override
-    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
+    public boolean recolorBlock(World world, @Nonnull BlockPos pos, EnumFacing side, @Nonnull EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (getColor(state).getDye() != color) {
             world.setBlockState(pos, getDefaultState().withProperty(COLOR, EnumColor.fromDye(color)));
@@ -139,6 +139,8 @@ public class BlockPostMetal extends BlockPostBase {
     /**
      * Get the MapColor for this Block and the given BlockState
      */
+    @Override
+    @Nonnull
     public MapColor getMapColor(IBlockState state) {
         return getColor(state).getMapColor();
     }
@@ -146,17 +148,22 @@ public class BlockPostMetal extends BlockPostBase {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Override
+    @Nonnull
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta));
+        return getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta));
     }
 
     /**
      * Convert the BlockState into the correct metadata value
      */
+    @Override
     public int getMetaFromState(IBlockState state) {
         return getColor(state).ordinal();
     }
 
+    @Override
+    @Nonnull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, COLOR);
     }

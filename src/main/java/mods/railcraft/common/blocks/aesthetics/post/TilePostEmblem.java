@@ -29,7 +29,7 @@ import java.io.IOException;
 public class TilePostEmblem extends RailcraftTileEntity {
     private EnumFacing facing = EnumFacing.NORTH;
     private String emblem = "";
-    private EnumColor color = null;
+    private EnumColor color;
 
     @Override
     public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
@@ -86,13 +86,14 @@ public class TilePostEmblem extends RailcraftTileEntity {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setString("emblem", emblem);
         data.setByte("facing", (byte) facing.ordinal());
 
         if (color != null)
             data.setByte("color", (byte) color.ordinal());
+        return data;
     }
 
     @Override

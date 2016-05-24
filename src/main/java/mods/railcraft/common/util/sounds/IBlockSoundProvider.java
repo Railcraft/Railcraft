@@ -8,14 +8,13 @@
  */
 package mods.railcraft.common.util.sounds;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IBlockSoundProvider {
-    Block.SoundType getSound(World world, BlockPos pos);
+    SoundType getSound(World world, BlockPos pos);
 }

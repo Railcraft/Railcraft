@@ -10,10 +10,11 @@
 
 package mods.railcraft.common.util.misc;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 
 /**
  * Created by CovertJaguar on 3/9/2016 for Railcraft.
@@ -30,33 +31,22 @@ public class AABBFactory {
     public double maxZ;
 
     private AABBFactory() {
-        minX = 0;
-        minY = 0;
-        minZ = 0;
-        maxX = 0;
-        maxY = 0;
-        maxZ = 0;
-    }
-
-    private AABBFactory(double x1, double y1, double z1, double x2, double y2, double z2) {
-        minX = Math.min(x1, x2);
-        minY = Math.min(y1, y2);
-        minZ = Math.min(z1, z2);
-        maxX = Math.max(x1, x2);
-        maxY = Math.max(y1, y2);
-        maxZ = Math.max(z1, z2);
     }
 
     public static AABBFactory start() {
         return new AABBFactory();
     }
 
-    public static AABBFactory start(AxisAlignedBB box) {
-        return new AABBFactory(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
+    public AxisAlignedBB build() {
+        return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-    public AxisAlignedBB build() {
-        return AxisAlignedBB.fromBounds(minX, minY, minZ, maxX, maxY, maxZ);
+    public AABBFactory fromAABB(AxisAlignedBB box) {
+        return setBounds(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
+    }
+
+    public AABBFactory box() {
+        return setBounds(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
     }
 
     public AABBFactory setBounds(double x1, double y1, double z1, double x2, double y2, double z2) {
@@ -79,14 +69,15 @@ public class AABBFactory {
         return this;
     }
 
-    public AABBFactory setBoundsFromBlock(Block block, BlockPos pos) {
+    public AABBFactory setBoundsFromBlock(IBlockState state, IBlockAccess world, BlockPos pos) {
+        AxisAlignedBB bb = state.getBoundingBox(world, pos);
         setBounds(
-                pos.getX() + block.getBlockBoundsMinX(),
-                pos.getY() + block.getBlockBoundsMinY(),
-                pos.getZ() + block.getBlockBoundsMinZ(),
-                pos.getX() + block.getBlockBoundsMaxX(),
-                pos.getY() + block.getBlockBoundsMaxY(),
-                pos.getZ() + block.getBlockBoundsMaxZ());
+                pos.getX() + bb.minX,
+                pos.getY() + bb.minY,
+                pos.getZ() + bb.minZ,
+                pos.getX() + bb.maxX,
+                pos.getY() + bb.maxY,
+                pos.getZ() + bb.maxZ);
         return this;
     }
 
