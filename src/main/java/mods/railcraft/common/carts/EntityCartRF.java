@@ -139,7 +139,7 @@ public final class EntityCartRF extends CartBase {
 
 //    @Override
 //    public Block func_145820_n() {
-//        return Blocks.redstone_block;
+//        return Blocks.REDSTONE_BLOCK;
 //    }
 
     @Override

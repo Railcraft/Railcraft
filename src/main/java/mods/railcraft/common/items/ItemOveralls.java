@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class ItemOveralls extends ItemArmor implements IRailcraftObject {
 
-    private static final ItemStack BLUE_CLOTH = new ItemStack(Blocks.wool, 1, 3);
+    private static final ItemStack BLUE_CLOTH = new ItemStack(Blocks.WOOL, 1, 3);
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "overalls.png";
 
     public ItemOveralls() {
@@ -72,7 +72,7 @@ public class ItemOveralls extends ItemArmor implements IRailcraftObject {
                 "III",
                 "I I",
                 "I I",
-                'I', new ItemStack(Blocks.wool, 1, 3));
+                'I', new ItemStack(Blocks.WOOL, 1, 3));
     }
 
     @Override

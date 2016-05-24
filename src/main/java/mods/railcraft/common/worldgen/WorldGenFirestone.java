@@ -37,19 +37,19 @@ public class WorldGenFirestone extends WorldGenerator {
         for (int yy = y; yy > y - 6; yy--) {
             if (!world.blockExists(x, yy, z)) return false;
             Block block = WorldPlugin.getBlock(world, x, yy, z);
-            if (block != Blocks.lava && block != Blocks.flowing_lava)
+            if (block != Blocks.LAVA && block != Blocks.FLOWING_LAVA)
                 return false;
         }
         int yy = y - 6;
         while (yy > 1) {
             if (!world.blockExists(x, yy, z)) return false;
             Block block = WorldPlugin.getBlock(world, x, yy, z);
-            if (block != Blocks.lava && block != Blocks.flowing_lava)
+            if (block != Blocks.LAVA && block != Blocks.FLOWING_LAVA)
                 break;
             yy--;
         }
         Block block = WorldPlugin.getBlock(world, x, yy, z);
-        if (block.isReplaceableOreGen(world, x, yy, z, Blocks.netherrack))
+        if (block.isReplaceableOreGen(world, x, yy, z, Blocks.NETHERRACK))
             return world.setBlock(x, yy, z, firestone, firestoneMeta, 2);
         return false;
     }

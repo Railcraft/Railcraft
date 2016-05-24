@@ -49,7 +49,7 @@ public class CartContentRenderer {
         }
 
         IBlockState blockState = cart.getDisplayTile();
-        if (blockState != null && blockState.getBlock() != Blocks.air) {
+        if (blockState != null && blockState.getBlock() != Blocks.AIR) {
             renderer.bindTex(TextureMap.locationBlocksTexture);
             OpenGL.glPushMatrix();
             OpenGL.glTranslatef(0.0F, (float) blockOffset / 16.0F, 0.0F);

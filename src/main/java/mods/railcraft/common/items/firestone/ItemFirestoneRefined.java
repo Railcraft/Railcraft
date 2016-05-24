@@ -111,7 +111,7 @@ public class ItemFirestoneRefined extends ItemFirestoneBase {
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.canPlayerEdit(pos, side, stack)) {
             Block block = WorldPlugin.getBlock(world, pos);
-            if (block != null && block != Blocks.stone) {
+            if (block != null && block != Blocks.STONE) {
                 List<ItemStack> drops = block.getDrops(world, pos, WorldPlugin.getBlockState(world, pos), 0);
                 if (drops.size() == 1 && drops.get(0) != null && drops.get(0).getItem() instanceof ItemBlock) {
                     ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drops.get(0));
@@ -132,7 +132,7 @@ public class ItemFirestoneRefined extends ItemFirestoneBase {
 
         if (player.canPlayerEdit(pos, side, stack) && world.isAirBlock(pos)) {
             SoundHelper.playSound(world, pos, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-            world.setBlockState(pos, Blocks.fire.getDefaultState());
+            world.setBlockState(pos, Blocks.FIRE.getDefaultState());
             stack.damageItem(1, player);
             return true;
         }

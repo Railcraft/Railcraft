@@ -98,7 +98,7 @@ public enum EnumColor implements IStringSerializable {
     public static boolean isColored(ItemStack stack) {
         if (stack == null)
             return false;
-        if (InvTools.isStackEqualToBlock(stack, Blocks.wool))
+        if (InvTools.isStackEqualToBlock(stack, Blocks.WOOL))
             return true;
         if (stack.getItem() == Items.DYE)
             return true;
@@ -110,7 +110,7 @@ public enum EnumColor implements IStringSerializable {
     public static EnumColor fromItemStack(ItemStack stack) {
         if (stack == null)
             return EnumColor.WHITE;
-        if (InvTools.isStackEqualToBlock(stack, Blocks.wool))
+        if (InvTools.isStackEqualToBlock(stack, Blocks.WOOL))
             return EnumColor.fromOrdinal(15 - stack.getItemDamage());
         if (stack.getItem() == Items.DYE)
             return EnumColor.fromOrdinal(stack.getItemDamage());

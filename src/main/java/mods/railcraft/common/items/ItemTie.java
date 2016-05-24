@@ -64,7 +64,7 @@ public class ItemTie extends ItemRailcraft {
                 " O ",
                 "###",
                 'O', RailcraftItems.rebar,
-                '#', new ItemStack(Blocks.stone_slab, 1, 0));
+                '#', new ItemStack(Blocks.STONE_SLAB, 1, 0));
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ItemTie extends ItemRailcraft {
 
     public enum EnumTie implements IVariantEnum {
         WOOD("slabWood"),
-        STONE(Blocks.stone_slab);
+        STONE(Blocks.STONE_SLAB);
         public static final EnumTie[] VALUES = values();
         private Object alternate;
 

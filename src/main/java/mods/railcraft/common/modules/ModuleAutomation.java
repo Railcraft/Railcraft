@@ -56,7 +56,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(gamma.getItem(),
                             "ML",
                             'M', Items.MINECART,
-                            'L', Blocks.dispenser);
+                            'L', Blocks.DISPENSER);
 
                 EnumMachineAlpha alpha = EnumMachineAlpha.FEED_STATION;
                 if (alpha.isAvailable()) {
@@ -79,7 +79,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             "SGS",
                             "EDE",
                             "SGS",
-                            'D', new ItemStack(Blocks.dispenser),
+                            'D', new ItemStack(Blocks.DISPENSER),
                             'G', "paneGlass",
                             'E', "gemEmerald",
                             'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL) : "blockIron");
@@ -94,7 +94,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             " S ",
                             'I', "blockSteel",
                             'S', Items.CHEST_MINECART,
-                            'F', Blocks.furnace,
+                            'F', Blocks.FURNACE,
                             'C', Items.MINECART);
 
                     String tag = "tool.bore.head.diamond";
@@ -141,7 +141,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             "YLY",
                             "RSR",
                             "DMD",
-                            'L', new ItemStack(Blocks.redstone_lamp),
+                            'L', new ItemStack(Blocks.REDSTONE_LAMP),
                             'Y', "dyeYellow",
                             'R', new ItemStack(Items.BLAZE_ROD),
                             'D', new ItemStack(Items.DIAMOND_PICKAXE),
@@ -155,9 +155,9 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             "YLY",
                             "RSR",
                             "DMD",
-                            'L', new ItemStack(Blocks.redstone_lamp),
+                            'L', new ItemStack(Blocks.REDSTONE_LAMP),
                             'Y', "dyeYellow",
-                            'R', new ItemStack(Blocks.piston),
+                            'R', new ItemStack(Blocks.PISTON),
                             'D', new ItemStack(Items.DIAMOND_SHOVEL),
                             'S', "blockSteel",
                             'M', new ItemStack(Items.MINECART));
@@ -169,10 +169,10 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             "ESE",
                             "DMD",
                             'Y', "dyeYellow",
-                            'L', new ItemStack(Blocks.redstone_lamp),
-                            'E', new ItemStack(Blocks.anvil),
+                            'L', new ItemStack(Blocks.REDSTONE_LAMP),
+                            'E', new ItemStack(Blocks.ANVIL),
                             'S', "blockSteel",
-                            'D', new ItemStack(Blocks.dispenser),
+                            'D', new ItemStack(Blocks.DISPENSER),
                             'M', new ItemStack(Items.MINECART));
 
                 cart = EnumCart.TRACK_REMOVER;
@@ -182,8 +182,8 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             "PSP",
                             "CMC",
                             'Y', "dyeYellow",
-                            'L', new ItemStack(Blocks.redstone_lamp),
-                            'P', new ItemStack(Blocks.sticky_piston),
+                            'L', new ItemStack(Blocks.REDSTONE_LAMP),
+                            'P', new ItemStack(Blocks.STICKY_PISTON),
                             'S', "blockSteel",
                             'C', IToolCrowbar.ORE_TAG,
                             'M', new ItemStack(Items.MINECART));

@@ -109,9 +109,9 @@ public class TileBoxSequencer extends TileBoxBase {
             return ((TileBoxBase) tile).canReceiveAspect();
         IBlockState state = WorldPlugin.getBlockState(worldObj, getPos().offset(side));
         Block block = state.getBlock();
-        if (block == Blocks.redstone_wire)
+        if (block == Blocks.REDSTONE_WIRE)
             return true;
-        if (block == Blocks.unpowered_repeater || block == Blocks.powered_repeater) {
+        if (block == Blocks.UNPOWERED_REPEATER || block == Blocks.POWERED_REPEATER) {
             EnumFacing inputSide = state.getValue(BlockDirectional.FACING);
             // TODO: Test this!
             return side == inputSide;

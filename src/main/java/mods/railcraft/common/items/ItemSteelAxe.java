@@ -30,7 +30,7 @@ public class ItemSteelAxe extends ItemAxe {
 
     @Override
     public float getDigSpeed(ItemStack stack, net.minecraft.block.state.IBlockState state) {
-        if (state.getBlock() == Blocks.melon_block)
+        if (state.getBlock() == Blocks.MELON_BLOCK)
             return efficiencyOnProperMaterial;
         if (state.getBlock().getMaterial() == Material.leaves)
             return efficiencyOnProperMaterial;

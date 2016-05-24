@@ -54,7 +54,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                             'd', "gemDiamond",
                             'g', "ingotGold",
                             'p', Items.ENDER_PEARL,
-                            'o', new ItemStack(Blocks.obsidian));
+                            'o', new ItemStack(Blocks.OBSIDIAN));
                 }
 
                 alpha = EnumMachineAlpha.ANCHOR_PERSONAL;
@@ -66,7 +66,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                             'd', "gemEmerald",
                             'g', "ingotGold",
                             'p', Items.ENDER_PEARL,
-                            'o', new ItemStack(Blocks.obsidian));
+                            'o', new ItemStack(Blocks.OBSIDIAN));
                 }
 
                 alpha = EnumMachineAlpha.ANCHOR_PASSIVE;
@@ -75,10 +75,10 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                             "gog",
                             "dpd",
                             "gog",
-                            'd', new ItemStack(Blocks.prismarine, 1, 1),
+                            'd', new ItemStack(Blocks.PRISMARINE, 1, 1),
                             'g', "ingotGold",
                             'p', Items.ENDER_PEARL,
-                            'o', new ItemStack(Blocks.obsidian));
+                            'o', new ItemStack(Blocks.OBSIDIAN));
                 }
 
                 EnumMachineBeta beta = EnumMachineBeta.SENTINEL;
@@ -91,7 +91,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                                 "ogo",
                                 'g', "ingotGold",
                                 'p', Items.ENDER_PEARL,
-                                'o', new ItemStack(Blocks.obsidian));
+                                'o', new ItemStack(Blocks.OBSIDIAN));
                     }
                 }
 

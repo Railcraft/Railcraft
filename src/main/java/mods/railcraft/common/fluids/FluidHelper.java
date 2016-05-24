@@ -259,9 +259,9 @@ public final class FluidHelper {
         FluidStack fluid;
         if ((fluid = drainForgeFluid(state, world, pos, doDrain)) != null)
             return fluid;
-        else if ((fluid = drainVanillaFluid(state, world, pos, doDrain, Fluids.WATER, Blocks.water, Blocks.flowing_water)) != null)
+        else if ((fluid = drainVanillaFluid(state, world, pos, doDrain, Fluids.WATER, Blocks.WATER, Blocks.FLOWING_WATER)) != null)
             return fluid;
-        else if ((fluid = drainVanillaFluid(state, world, pos, doDrain, Fluids.LAVA, Blocks.lava, Blocks.flowing_lava)) != null)
+        else if ((fluid = drainVanillaFluid(state, world, pos, doDrain, Fluids.LAVA, Blocks.LAVA, Blocks.FLOWING_LAVA)) != null)
             return fluid;
         return null;
     }
@@ -309,9 +309,9 @@ public final class FluidHelper {
     public static Fluid getFluid(Block block) {
         if (block instanceof IFluidBlock)
             return ((IFluidBlock) block).getFluid();
-        else if (block == Blocks.water || block == Blocks.flowing_water)
+        else if (block == Blocks.WATER || block == Blocks.FLOWING_WATER)
             return FluidRegistry.WATER;
-        else if (block == Blocks.lava || block == Blocks.flowing_lava)
+        else if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA)
             return FluidRegistry.LAVA;
         return null;
     }

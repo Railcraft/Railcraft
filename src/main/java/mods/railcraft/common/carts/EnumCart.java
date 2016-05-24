@@ -38,20 +38,20 @@ import java.util.Locale;
 public enum EnumCart implements ICartType {
 
     BASIC(0, EntityCartBasic.class),
-    CHEST(0, EntityCartChest.class, true, new ItemStack(Blocks.chest)),
-    FURNACE(0, EntityCartFurnace.class, true, new ItemStack(Blocks.furnace)),
-    TNT_WOOD(0, EntityCartTNTWood.class, false, new ItemStack(Blocks.tnt)),
+    CHEST(0, EntityCartChest.class, true, new ItemStack(Blocks.CHEST)),
+    FURNACE(0, EntityCartFurnace.class, true, new ItemStack(Blocks.FURNACE)),
+    TNT_WOOD(0, EntityCartTNTWood.class, false, new ItemStack(Blocks.TNT)),
     TANK(0, EntityCartTank.class, true),
-    CARGO(0, EntityCartCargo.class, true, new ItemStack(Blocks.trapped_chest)),
+    CARGO(0, EntityCartCargo.class, true, new ItemStack(Blocks.TRAPPED_CHEST)),
     ANCHOR(0, EntityCartAnchor.class, true),
-    WORK(0, EntityCartWork.class, true, new ItemStack(Blocks.crafting_table)),
+    WORK(0, EntityCartWork.class, true, new ItemStack(Blocks.CRAFTING_TABLE)),
     TRACK_RELAYER(1, EntityCartTrackRelayer.class),
     UNDERCUTTER(1, EntityCartUndercutter.class),
-    PUMPKIN(3, EntityCartPumpkin.class, false, new ItemStack(Blocks.pumpkin)),
+    PUMPKIN(3, EntityCartPumpkin.class, false, new ItemStack(Blocks.PUMPKIN)),
     GIFT(3, EntityCartGift.class),
     ANCHOR_PERSONAL(0, EntityCartAnchorPersonal.class, true),
     ANCHOR_ADMIN(3, EntityCartAnchorAdmin.class),
-    TNT(0, EntityCartTNT.class, true, new ItemStack(Blocks.tnt)),
+    TNT(0, EntityCartTNT.class, true, new ItemStack(Blocks.TNT)),
     LOCO_STEAM_SOLID(1, EntityLocomotiveSteamSolid.class) {
         {
             addModule(ModuleLocomotives.class);
@@ -80,10 +80,10 @@ public enum EnumCart implements ICartType {
     ENERGY_CESU(0, EntityCartEnergyCESU.class, true),
     ENERGY_MFE(0, EntityCartEnergyMFE.class, true),
     ENERGY_MFSU(1, EntityCartEnergyMFSU.class, true),
-    HOPPER(0, EntityMinecartHopper.class, true, new ItemStack(Blocks.hopper)),
+    HOPPER(0, EntityMinecartHopper.class, true, new ItemStack(Blocks.HOPPER)),
     TRACK_LAYER(1, EntityCartTrackLayer.class),
     TRACK_REMOVER(1, EntityCartTrackRemover.class),
-    COMMAND_BLOCK(3, EntityCartCommand.class, true, new ItemStack(Blocks.command_block)),
+    COMMAND_BLOCK(3, EntityCartCommand.class, true, new ItemStack(Blocks.COMMAND_BLOCK)),
     REDSTONE_FLUX(0, EntityCartRF.class);
     @SuppressWarnings("WeakerAccess")
     public static final EnumCart[] VALUES = values();

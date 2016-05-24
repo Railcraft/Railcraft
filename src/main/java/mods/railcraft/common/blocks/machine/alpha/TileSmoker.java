@@ -47,7 +47,7 @@ public class TileSmoker extends TileMachineBase {
             if (Game.isHost(worldObj)) {
                 if (clock % SNOW_MELT_INTERVAL == 0) {
                     Block blockAbove = WorldPlugin.getBlock(worldObj, getPos().up());
-                    if (blockAbove == Blocks.snow_layer)
+                    if (blockAbove == Blocks.SNOW_LAYER)
                         WorldPlugin.setBlockToAir(worldObj, getPos().up());
                 }
             } else {

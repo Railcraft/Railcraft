@@ -48,7 +48,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                             "NNN",
                             " C ",
                             "GPG",
-                            'P', new ItemStack(Blocks.piston),
+                            'P', new ItemStack(Blocks.PISTON),
                             'N', "nuggetGold",
                             'C', "blockGlassColorless",
                             'G', RailcraftItems.gear.getRecipeObject(EnumGear.GOLD_PLATE));
@@ -60,7 +60,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                             "III",
                             " C ",
                             "GPG",
-                            'P', new ItemStack(Blocks.piston),
+                            'P', new ItemStack(Blocks.PISTON),
                             'I', RailcraftItems.plate.getRecipeObject(EnumPlate.IRON),
                             'C', "blockGlassColorless",
                             'G', "gearIron");
@@ -74,7 +74,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                             "III",
                             " C ",
                             "GPG",
-                            'P', new ItemStack(Blocks.piston),
+                            'P', new ItemStack(Blocks.PISTON),
                             'I', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL),
                             'C', "blockGlassColorless",
                             'G', RailcraftItems.gear.getRecipeObject(EnumGear.STEEL));
@@ -88,7 +88,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                             "BFB",
                             'B', "ingotBrick",
                             'C', new ItemStack(Items.FIRE_CHARGE),
-                            'F', new ItemStack(Blocks.furnace));
+                            'F', new ItemStack(Blocks.FURNACE));
                 }
 
                 beta = EnumMachineBeta.BOILER_FIREBOX_FLUID;
@@ -98,10 +98,10 @@ public class ModuleSteam extends RailcraftModulePayload {
                             "GCG",
                             "PFP",
                             'B', new ItemStack(Items.BUCKET),
-                            'G', new ItemStack(Blocks.iron_bars),
+                            'G', new ItemStack(Blocks.IRON_BARS),
                             'C', new ItemStack(Items.FIRE_CHARGE),
                             'P', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL),
-                            'F', new ItemStack(Blocks.furnace));
+                            'F', new ItemStack(Blocks.FURNACE));
                 }
 
                 beta = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE;
@@ -131,9 +131,9 @@ public class ModuleSteam extends RailcraftModulePayload {
                             " G ",
                             " T ",
                             " D ",
-                            'G', new ItemStack(Blocks.iron_bars),
+                            'G', new ItemStack(Blocks.IRON_BARS),
                             'T', getTankItem(),
-                            'D', new ItemStack(Blocks.dispenser));
+                            'D', new ItemStack(Blocks.DISPENSER));
                 }
 
                 alpha = EnumMachineAlpha.STEAM_TRAP_AUTO;
@@ -142,10 +142,10 @@ public class ModuleSteam extends RailcraftModulePayload {
                             " G ",
                             "RTR",
                             " D ",
-                            'G', new ItemStack(Blocks.iron_bars),
+                            'G', new ItemStack(Blocks.IRON_BARS),
                             'T', getTankItem(),
                             'R', "dustRedstone",
-                            'D', new ItemStack(Blocks.dispenser));
+                            'D', new ItemStack(Blocks.DISPENSER));
                     if (EnumMachineAlpha.STEAM_TRAP_MANUAL.isAvailable()) {
                         CraftingPlugin.addRecipe(alpha.getItem(),
                                 "RTR",
@@ -167,7 +167,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                 if (tank == null)
                     tank = RailcraftItems.ingot.getStack(1, ItemIngot.EnumIngot.STEEL);
                 if (tank == null)
-                    tank = new ItemStack(Blocks.iron_block);
+                    tank = new ItemStack(Blocks.IRON_BLOCK);
                 return tank;
             }
 

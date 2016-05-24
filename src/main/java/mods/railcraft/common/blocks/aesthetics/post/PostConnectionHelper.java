@@ -34,36 +34,36 @@ public class PostConnectionHelper {
     private static final Set<Block> noConnect = new HashSet<Block>();
 
     static {
-        canConnect.add(Blocks.glowstone);
-        canConnect.add(Blocks.redstone_lamp);
-        canConnect.add(Blocks.lit_redstone_lamp);
-        canConnect.add(Blocks.glass);
-        canConnect.add(Blocks.mob_spawner);
-        canConnect.add(Blocks.piston);
+        canConnect.add(Blocks.GLOWSTONE);
+        canConnect.add(Blocks.REDSTONE_LAMP);
+        canConnect.add(Blocks.LIT_REDSTONE_LAMP);
+        canConnect.add(Blocks.GLASS);
+        canConnect.add(Blocks.MOB_SPAWNER);
+        canConnect.add(Blocks.PISTON);
 
-        noConnect.add(Blocks.dirt);
-        noConnect.add(Blocks.stone);
-        noConnect.add(Blocks.gravel);
-        noConnect.add(Blocks.grass);
-        noConnect.add(Blocks.sand);
-        noConnect.add(Blocks.bedrock);
-        noConnect.add(Blocks.coal_ore);
-        noConnect.add(Blocks.diamond_ore);
-        noConnect.add(Blocks.emerald_ore);
-        noConnect.add(Blocks.gold_ore);
-        noConnect.add(Blocks.iron_ore);
-        noConnect.add(Blocks.lapis_ore);
-        noConnect.add(Blocks.redstone_ore);
-        noConnect.add(Blocks.lit_redstone_ore);
-        noConnect.add(Blocks.clay);
-        noConnect.add(Blocks.snow);
-        noConnect.add(Blocks.snow_layer);
-        noConnect.add(Blocks.melon_block);
-        noConnect.add(Blocks.pumpkin);
-        noConnect.add(Blocks.tnt);
-        noConnect.add(Blocks.soul_sand);
-        noConnect.add(Blocks.netherrack);
-        noConnect.add(Blocks.sponge);
+        noConnect.add(Blocks.DIRT);
+        noConnect.add(Blocks.STONE);
+        noConnect.add(Blocks.GRAVEL);
+        noConnect.add(Blocks.GRASS);
+        noConnect.add(Blocks.SAND);
+        noConnect.add(Blocks.BEDROCK);
+        noConnect.add(Blocks.COAL_ORE);
+        noConnect.add(Blocks.DIAMOND_ORE);
+        noConnect.add(Blocks.EMERALD_ORE);
+        noConnect.add(Blocks.GOLD_ORE);
+        noConnect.add(Blocks.IRON_ORE);
+        noConnect.add(Blocks.LAPIS_ORE);
+        noConnect.add(Blocks.REDSTONE_ORE);
+        noConnect.add(Blocks.LIT_REDSTONE_ORE);
+        noConnect.add(Blocks.CLAY);
+        noConnect.add(Blocks.SNOW);
+        noConnect.add(Blocks.SNOW_LAYER);
+        noConnect.add(Blocks.MELON_BLOCK);
+        noConnect.add(Blocks.PUMPKIN);
+        noConnect.add(Blocks.TNT);
+        noConnect.add(Blocks.SOUL_SAND);
+        noConnect.add(Blocks.NETHERRACK);
+        noConnect.add(Blocks.SPONGE);
     }
 
     public static ConnectStyle connect(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
@@ -113,7 +113,7 @@ public class PostConnectionHelper {
             return ConnectStyle.TWO_THIN;
 
         // RedPower 2 compatibility
-//        if (Blocks.blocksList[id] != null && Blocks.blocksList[id].getClass().getSimpleName().equals("BlockShapedLamp")) {
+//        if (Blocks.BLOCKSLIST[id] != null && Blocks.BLOCKSLIST[id].getClass().getSimpleName().equals("BlockShapedLamp")) {
 //            return true;
 //        }
 

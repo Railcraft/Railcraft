@@ -91,7 +91,7 @@ public class BlockFirestoneRecharge extends BlockContainer {
 
 //    @Override
 //    public IIcon getIcon(int side, int meta) {
-//        return Blocks.obsidian.getIcon(side, meta);
+//        return Blocks.OBSIDIAN.getIcon(side, meta);
 //    }
 
     @Override

@@ -68,10 +68,10 @@ public class ApothecariesBackpack extends BaseBackpack implements IBackpackDefin
                     "X#X",
                     "VYV",
                     "X#X",
-                    '#', Blocks.wool,
+                    '#', Blocks.WOOL,
                     'V', new ItemStack(Items.POTIONITEM, 1, 8197),
                     'X', Items.STRING,
-                    'Y', new ItemStack(Blocks.chest));
+                    'Y', new ItemStack(Blocks.CHEST));
 
             AspectList aspects = new AspectList();
             aspects.add(Aspect.VOID, 3).add(Aspect.CRAFT, 3).add(Aspect.MOTION, 2);

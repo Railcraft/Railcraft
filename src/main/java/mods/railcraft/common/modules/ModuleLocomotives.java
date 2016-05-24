@@ -73,7 +73,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                     else if (EnumMachineAlpha.BLAST_FURNACE.isAvailable())
                         firebox = EnumMachineAlpha.BLAST_FURNACE.getItem();
                     else
-                        firebox = new ItemStack(Blocks.furnace);
+                        firebox = new ItemStack(Blocks.FURNACE);
 
                     CraftingPlugin.addRecipe(cart.getCartItem(),
                             "TTF",
@@ -82,7 +82,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                             'T', tank,
                             'F', firebox,
                             'M', Items.MINECART,
-                            'B', new ItemStack(Blocks.iron_bars));
+                            'B', new ItemStack(Blocks.IRON_BARS));
                 }
 
                 cart = EnumCart.LOCO_ELECTRIC;
@@ -108,7 +108,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                             "LT ",
                             "TUT",
                             "GMG",
-                            'L', Blocks.redstone_lamp,
+                            'L', Blocks.REDSTONE_LAMP,
                             'U', feederUnit,
                             'M', Items.MINECART,
                             'G', RailcraftItems.gear.getRecipeObject(EnumGear.STEEL),

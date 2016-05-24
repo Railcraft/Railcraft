@@ -70,71 +70,71 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
     protected static final int WATCHER_ID_BORE_HEAD = 26;
     protected static final int WATCHER_ID_FACING = 5;
     private static final Block[] mineable = {
-            Blocks.clay,
-            Blocks.snow_layer,
-            Blocks.cactus,
-            Blocks.carrots,
-            Blocks.cobblestone,
-            Blocks.mossy_cobblestone,
-            Blocks.cocoa,
-            Blocks.wheat,
-            Blocks.deadbush,
-            Blocks.dirt,
-            Blocks.fire,
-            Blocks.glowstone,
-            Blocks.grass,
-            Blocks.gravel,
-            Blocks.ice,
-            Blocks.leaves,
-            Blocks.melon_block,
-            Blocks.melon_stem,
-            Blocks.brown_mushroom,
-            Blocks.brown_mushroom_block,
-            Blocks.red_mushroom,
-            Blocks.red_mushroom_block,
-            Blocks.mycelium,
-            Blocks.nether_wart,
-            Blocks.netherrack,
-            Blocks.obsidian,
-            Blocks.coal_ore,
-            Blocks.diamond_ore,
-            Blocks.emerald_ore,
-            Blocks.gold_ore,
-            Blocks.iron_ore,
-            Blocks.lapis_ore,
-            Blocks.redstone_ore,
-            Blocks.lit_redstone_ore,
-            Blocks.red_flower,
-            Blocks.yellow_flower,
-            Blocks.potatoes,
-            Blocks.pumpkin,
-            Blocks.pumpkin_stem,
-            Blocks.reeds,
-            Blocks.sand,
-            Blocks.sandstone,
-            Blocks.sapling,
-            Blocks.soul_sand,
-            Blocks.snow,
-            Blocks.stone,
-            Blocks.tallgrass,
-            Blocks.farmland,
-            Blocks.torch,
-            Blocks.vine,
-            Blocks.waterlily,
-            Blocks.web,
-            Blocks.end_stone,
-            Blocks.log,
-            Blocks.log2,};
+            Blocks.CLAY,
+            Blocks.SNOW_LAYER,
+            Blocks.CACTUS,
+            Blocks.CARROTS,
+            Blocks.COBBLESTONE,
+            Blocks.MOSSY_COBBLESTONE,
+            Blocks.COCOA,
+            Blocks.WHEAT,
+            Blocks.DEADBUSH,
+            Blocks.DIRT,
+            Blocks.FIRE,
+            Blocks.GLOWSTONE,
+            Blocks.GRASS,
+            Blocks.GRAVEL,
+            Blocks.ICE,
+            Blocks.LEAVES,
+            Blocks.MELON_BLOCK,
+            Blocks.MELON_STEM,
+            Blocks.BROWN_MUSHROOM,
+            Blocks.BROWN_MUSHROOM_BLOCK,
+            Blocks.RED_MUSHROOM,
+            Blocks.RED_MUSHROOM_BLOCK,
+            Blocks.MYCELIUM,
+            Blocks.NETHER_WART,
+            Blocks.NETHERRACK,
+            Blocks.OBSIDIAN,
+            Blocks.COAL_ORE,
+            Blocks.DIAMOND_ORE,
+            Blocks.EMERALD_ORE,
+            Blocks.GOLD_ORE,
+            Blocks.IRON_ORE,
+            Blocks.LAPIS_ORE,
+            Blocks.REDSTONE_ORE,
+            Blocks.LIT_REDSTONE_ORE,
+            Blocks.RED_FLOWER,
+            Blocks.YELLOW_FLOWER,
+            Blocks.POTATOES,
+            Blocks.PUMPKIN,
+            Blocks.PUMPKIN_STEM,
+            Blocks.REEDS,
+            Blocks.SAND,
+            Blocks.SANDSTONE,
+            Blocks.SAPLING,
+            Blocks.SOUL_SAND,
+            Blocks.SNOW,
+            Blocks.STONE,
+            Blocks.TALLGRASS,
+            Blocks.FARMLAND,
+            Blocks.TORCH,
+            Blocks.VINE,
+            Blocks.WATERLILY,
+            Blocks.WEB,
+            Blocks.END_STONE,
+            Blocks.LOG,
+            Blocks.LOG2,};
     private static final Block[] replaceable = {
-            Blocks.torch,
-            Blocks.tallgrass,
-            Blocks.deadbush,
-            Blocks.vine,
-            Blocks.brown_mushroom,
-            Blocks.red_mushroom,
-            Blocks.yellow_flower,
-            Blocks.red_flower,
-            Blocks.double_plant};
+            Blocks.TORCH,
+            Blocks.TALLGRASS,
+            Blocks.DEADBUSH,
+            Blocks.VINE,
+            Blocks.BROWN_MUSHROOM,
+            Blocks.RED_MUSHROOM,
+            Blocks.YELLOW_FLOWER,
+            Blocks.RED_FLOWER,
+            Blocks.DOUBLE_PLANT};
 
     static {
         for (Block block : mineable) {
@@ -699,7 +699,7 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
             for (int xx = xStart; xx <= xEnd; xx++) {
                 for (int zz = zStart; zz <= zEnd; zz++) {
                     Block block = WorldPlugin.getBlock(worldObj, new BlockPos(xx, yy, zz));
-                    if (block == Blocks.lava || block == Blocks.flowing_lava)
+                    if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA)
                         return true;
                 }
             }
@@ -754,7 +754,7 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
             BlockRailBase.EnumRailDirection targetShape = TrackTools.getTrackDirection(worldObj, targetPos, targetState, this);
             if (preferredShape == targetShape)
                 return true;
-        } else if (targetState.getBlock() == Blocks.torch)
+        } else if (targetState.getBlock() == Blocks.TORCH)
             return true;
 
         ItemStack head = getStackInSlot(0);
@@ -778,7 +778,7 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
             if (StandardStackFilters.FUEL.apply(stack))
                 stack = InvTools.moveItemStack(stack, invFuel);
 
-            if (stack != null && stack.stackSize > 0 && InvTools.isStackEqualToBlock(stack, Blocks.gravel))
+            if (stack != null && stack.stackSize > 0 && InvTools.isStackEqualToBlock(stack, Blocks.GRAVEL))
                 stack = InvTools.moveItemStack(stack, invBallast);
 
             if (stack != null && stack.stackSize > 0)
@@ -842,10 +842,10 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
                 return 0;
         }
 
-        if (blockState == Blocks.torch)
+        if (blockState == Blocks.TORCH)
             return 0;
 
-        if (blockState == Blocks.obsidian)
+        if (blockState == Blocks.OBSIDIAN)
             return 15;
 
         if (!canMineBlock(pos, blockState))

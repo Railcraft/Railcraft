@@ -25,7 +25,7 @@ public class GenTools {
     public static final Predicate<IBlockState> STONE = new Predicate<IBlockState>() {
         @Override
         public boolean apply(@Nullable IBlockState input) {
-            return input != null && input.getBlock() == Blocks.stone;
+            return input != null && input.getBlock() == Blocks.STONE;
         }
     };
 }

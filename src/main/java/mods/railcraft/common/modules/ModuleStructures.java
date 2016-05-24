@@ -112,7 +112,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(stack,
                             " N ",
                             "RCR",
-                            'N', new ItemStack(Blocks.netherrack),
+                            'N', new ItemStack(Blocks.NETHERRACK),
                             'C', new ItemStack(Items.CAULDRON),
                             'R', "dustRedstone");
                 }

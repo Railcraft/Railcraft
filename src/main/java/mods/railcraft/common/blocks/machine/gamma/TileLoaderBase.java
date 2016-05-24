@@ -122,7 +122,7 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
         if (!isPowered())
             return false;
         Block block = WorldPlugin.getBlock(worldObj, getPos().offset(side.getOpposite()));
-        return TrackTools.isRailBlock(block) || block == Blocks.redstone_wire || block == Blocks.powered_repeater || block == Blocks.unpowered_repeater;
+        return TrackTools.isRailBlock(block) || block == Blocks.REDSTONE_WIRE || block == Blocks.POWERED_REPEATER || block == Blocks.UNPOWERED_REPEATER;
     }
 
     @Nonnull

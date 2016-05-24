@@ -71,7 +71,7 @@ public class WorldPlugin {
 
     public static TileEntity getTileEntityOnSide(World world, BlockPos pos, EnumFacing side) {
         pos = pos.offset(side);
-        if (isBlockLoaded(world, pos) && getBlock(world, pos) != Blocks.air)
+        if (isBlockLoaded(world, pos) && getBlock(world, pos) != Blocks.AIR)
             return getBlockTile(world, pos);
         return null;
     }

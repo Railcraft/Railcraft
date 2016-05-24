@@ -141,8 +141,8 @@ public class ModuleCore extends RailcraftModulePayload {
                 RecipeSorter.register("railcraft:routing.ticket.copy", RoutingTicketCopyRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
                 RecipeSorter.register("railcraft:cart.filter", CartFilterRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
-                OreDictionary.registerOre("chestWood", Blocks.chest);
-                OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
+                OreDictionary.registerOre("chestWood", Blocks.CHEST);
+                OreDictionary.registerOre("craftingTableWood", Blocks.CRAFTING_TABLE);
 
                 add(
                         RailcraftItems.crowbarIron,
@@ -165,7 +165,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 RailcraftToolItems.initializeToolsArmor();
 
-                EntityEnderman.setCarriable(Blocks.gravel, false);
+                EntityEnderman.setCarriable(Blocks.GRAVEL, false);
 
                 BuildcraftPlugin.init();
 
@@ -195,10 +195,10 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 Set<Item> testSet = new HashSet<Item>();
                 if (!RailcraftConfig.useOldRecipes()) {
-                    testSet.add(Item.getItemFromBlock(Blocks.rail));
-                    testSet.add(Item.getItemFromBlock(Blocks.golden_rail));
-                    testSet.add(Item.getItemFromBlock(Blocks.detector_rail));
-                    testSet.add(Item.getItemFromBlock(Blocks.activator_rail));
+                    testSet.add(Item.getItemFromBlock(Blocks.RAIL));
+                    testSet.add(Item.getItemFromBlock(Blocks.GOLDEN_RAIL));
+                    testSet.add(Item.getItemFromBlock(Blocks.DETECTOR_RAIL));
+                    testSet.add(Item.getItemFromBlock(Blocks.ACTIVATOR_RAIL));
                 }
 
                 if (!RailcraftConfig.getRecipeConfig("railcraft.cart.vanilla.furnace"))
@@ -230,14 +230,14 @@ public class ModuleCore extends RailcraftModulePayload {
                 LootPlugin.addLoot(EnumCart.BASIC.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.basic");
                 LootPlugin.addLoot(EnumCart.CHEST.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.chest");
                 LootPlugin.addLoot(EnumCart.TNT.getCartItem(), 1, 3, LootPlugin.Type.RAILWAY, "cart.tnt");
-                LootPlugin.addLoot(new ItemStack(Blocks.rail), 8, 32, LootPlugin.Type.RAILWAY, "track.basic");
+                LootPlugin.addLoot(new ItemStack(Blocks.RAIL), 8, 32, LootPlugin.Type.RAILWAY, "track.basic");
                 LootPlugin.addLoot(EnumCart.HOPPER.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.hopper");
 
                 float h = BlockTrack.HARDNESS;
-                Blocks.rail.setHardness(h).setHarvestLevel("crowbar", 0);
-                Blocks.golden_rail.setHardness(h).setHarvestLevel("crowbar", 0);
-                Blocks.detector_rail.setHardness(h).setHarvestLevel("crowbar", 0);
-                Blocks.activator_rail.setHardness(h).setHarvestLevel("crowbar", 0);
+                Blocks.RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
+                Blocks.GOLDEN_RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
+                Blocks.DETECTOR_RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
+                Blocks.ACTIVATOR_RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
 
                 // Define Recipes
                 if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
@@ -258,10 +258,10 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 // Old rails
                 if (!RailcraftConfig.useOldRecipes()) {
-                    ItemStack stackRailNormal = new ItemStack(Blocks.rail, 32);
-                    ItemStack stackRailBooster = new ItemStack(Blocks.golden_rail, 16);
-                    ItemStack stackRailDetector = new ItemStack(Blocks.detector_rail, 16);
-                    ItemStack stackRailActivator = new ItemStack(Blocks.activator_rail, 16);
+                    ItemStack stackRailNormal = new ItemStack(Blocks.RAIL, 32);
+                    ItemStack stackRailBooster = new ItemStack(Blocks.GOLDEN_RAIL, 16);
+                    ItemStack stackRailDetector = new ItemStack(Blocks.DETECTOR_RAIL, 16);
+                    ItemStack stackRailActivator = new ItemStack(Blocks.ACTIVATOR_RAIL, 16);
 
                     Object woodRailbed = RailcraftItems.railbed.getRecipeObject(EnumRailbed.WOOD);
                     CraftingPlugin.addRecipe(stackRailNormal,
@@ -282,7 +282,7 @@ public class ModuleCore extends RailcraftModulePayload {
                             "I#I",
                             "IrI",
                             'I', RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD),
-                            '#', Blocks.stone_pressure_plate,
+                            '#', Blocks.STONE_PRESSURE_PLATE,
                             'r', "dustRedstone",
                             's', woodRailbed);
                     CraftingPlugin.addRecipe(stackRailActivator,
@@ -291,17 +291,17 @@ public class ModuleCore extends RailcraftModulePayload {
                             "ItI",
                             'I', RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD),
                             '#', woodRailbed,
-                            't', new ItemStack(Blocks.redstone_torch));
+                            't', new ItemStack(Blocks.REDSTONE_TORCH));
 
                     CraftingPlugin.addShapelessRecipe(RailcraftItems.rail.getStack(1, EnumRail.STANDARD),
-                            Blocks.rail,
-                            Blocks.rail,
-                            Blocks.rail,
-                            Blocks.rail,
-                            Blocks.rail,
-                            Blocks.rail,
-                            Blocks.rail,
-                            Blocks.rail);
+                            Blocks.RAIL,
+                            Blocks.RAIL,
+                            Blocks.RAIL,
+                            Blocks.RAIL,
+                            Blocks.RAIL,
+                            Blocks.RAIL,
+                            Blocks.RAIL,
+                            Blocks.RAIL);
                 }
 
                 MachineTileRegistery.registerTileEntities();

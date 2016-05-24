@@ -206,16 +206,16 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     private void setLavaIdle() {
         BlockPos offsetPos = getPos().add(1, 1, 1);
         if (worldObj.isAirBlock(offsetPos))
-            worldObj.setBlockState(offsetPos, Blocks.lava.getStateFromMeta(7), 3);
+            worldObj.setBlockState(offsetPos, Blocks.LAVA.getStateFromMeta(7), 3);
     }
 
     private void setLavaBurn() {
         BlockPos offsetPos = getPos().add(1, 1, 1);
         if (worldObj.isAirBlock(offsetPos))
-            worldObj.setBlockState(offsetPos, Blocks.flowing_lava.getStateFromMeta(1), 3);
+            worldObj.setBlockState(offsetPos, Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
         offsetPos = offsetPos.up();
         if (worldObj.isAirBlock(offsetPos))
-            worldObj.setBlockState(offsetPos, Blocks.flowing_lava.getStateFromMeta(1), 3);
+            worldObj.setBlockState(offsetPos, Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
     }
 
     /*private void destroyLava() {

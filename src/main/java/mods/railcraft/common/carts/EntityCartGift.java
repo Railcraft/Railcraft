@@ -40,14 +40,14 @@ public class EntityCartGift extends EntityCartTNTWood {
 
         addGift(Items.SNOWBALL, 16, 50);
 
-        addGift(Blocks.cake, 25);
+        addGift(Blocks.CAKE, 25);
         addGift(Items.BOWL, 25);
         addGift(Items.COOKIE, 15, 75);
         addGift(Items.COOKIE, 10, 75);
         addGift(Items.COOKIE, 5, 75);
         addGift(Items.PUMPKIN_PIE, 20);
 
-        addGift(Blocks.jukebox, 5);
+        addGift(Blocks.JUKEBOX, 5);
         addGift(Items.PAINTING, 10);
         addGift(Items.FLOWER_POT, 25);
         addGift(Items.COMPASS, 25);
@@ -61,8 +61,8 @@ public class EntityCartGift extends EntityCartTNTWood {
         addGift(Items.EXPERIENCE_BOTTLE, 4, 40);
         addGift(Items.EXPERIENCE_BOTTLE, 2, 80);
 
-        addGift(Blocks.diamond_block, 1);
-        addGift(Blocks.emerald_block, 2);
+        addGift(Blocks.DIAMOND_BLOCK, 1);
+        addGift(Blocks.EMERALD_BLOCK, 2);
         addGift(Items.EMERALD, 30);
         addGift(Items.DIAMOND, 20);
 
@@ -207,7 +207,7 @@ public class EntityCartGift extends EntityCartTNTWood {
         List<ItemStack> items = new ArrayList<ItemStack>();
         if (RailcraftConfig.doCartsBreakOnDrop()) {
             items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.pumpkin));
+            items.add(new ItemStack(Blocks.PUMPKIN));
         } else
             items.add(getCartItem());
         return items;

@@ -49,7 +49,7 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
 
     protected ItemCrowbar(ToolMaterial material) {
         super(3, material, new HashSet<Block>(Arrays.asList(new Block[]{
-                Blocks.rail, Blocks.detector_rail, Blocks.golden_rail, Blocks.activator_rail
+                Blocks.RAIL, Blocks.DETECTOR_RAIL, Blocks.GOLDEN_RAIL, Blocks.ACTIVATOR_RAIL
         })));
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         shiftRotations.add(BlockLever.class);

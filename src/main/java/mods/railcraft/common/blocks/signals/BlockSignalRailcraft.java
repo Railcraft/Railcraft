@@ -119,8 +119,8 @@ public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftO
                     "PLI",
                     'W', "dyeWhite",
                     'I', "ingotIron",
-                    'L', Blocks.lever,
-                    'P', Blocks.piston,
+                    'L', Blocks.LEVER,
+                    'P', Blocks.PISTON,
                     'B', "dyeBlack",
                     'R', "dyeRed");
             CraftingPlugin.addRecipe(stack,
@@ -128,8 +128,8 @@ public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftO
                     "ILP",
                     'W', "dyeWhite",
                     'I', "ingotIron",
-                    'L', Blocks.lever,
-                    'P', Blocks.piston,
+                    'L', Blocks.LEVER,
+                    'P', Blocks.PISTON,
                     'B', "dyeBlack",
                     'R', "dyeRed");
         }
@@ -143,7 +143,7 @@ public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftO
                     "PCI",
                     'W', "dyeWhite",
                     'I', "ingotIron",
-                    'P', Blocks.piston,
+                    'P', Blocks.PISTON,
                     'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
                     'B', "dyeBlack",
                     'R', "dyeRed");
@@ -152,7 +152,7 @@ public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftO
                     "ICP",
                     'W', "dyeWhite",
                     'I', "ingotIron",
-                    'P', Blocks.piston,
+                    'P', Blocks.PISTON,
                     'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
                     'B', "dyeBlack",
                     'R', "dyeRed");

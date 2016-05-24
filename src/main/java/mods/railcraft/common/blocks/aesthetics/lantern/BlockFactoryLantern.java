@@ -58,12 +58,12 @@ public class BlockFactoryLantern extends BlockFactory {
                     if (mat.getState().getBlock() instanceof BlockBrick)
                         slab = BlockRailcraftSlab.getItem(mat);
                     else if (mat == BlockMaterial.SANDSTONE)
-                        slab = new ItemStack(Blocks.stone_slab, 1, 1);
+                        slab = new ItemStack(Blocks.STONE_SLAB, 1, 1);
                     else if (mat == BlockMaterial.STONE_BRICK)
-                        slab = new ItemStack(Blocks.stone_slab, 1, 0);
+                        slab = new ItemStack(Blocks.STONE_SLAB, 1, 0);
                     if (slab == null)
                         slab = mat.getCraftingEquivalent();
-                    CraftingPlugin.addRecipe(BlockLantern.stone.getItem(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.torch));
+                    CraftingPlugin.addRecipe(BlockLantern.stone.getItem(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.TORCH));
                 }
             }
         }
@@ -73,7 +73,7 @@ public class BlockFactoryLantern extends BlockFactory {
                     Object slab = BlockRailcraftSlab.getItem(mat);
                     if (slab == null)
                         slab = mat.getCraftingEquivalent();
-                    CraftingPlugin.addRecipe(BlockLantern.stone.getItem(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.torch));
+                    CraftingPlugin.addRecipe(BlockLantern.stone.getItem(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.TORCH));
                 }
             }
         }

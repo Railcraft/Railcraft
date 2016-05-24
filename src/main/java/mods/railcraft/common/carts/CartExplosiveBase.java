@@ -62,7 +62,7 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
 
     @Override
     public IBlockState getDisplayTile() {
-        return Blocks.tnt.getDefaultState();
+        return Blocks.TNT.getDefaultState();
     }
 
     @Override

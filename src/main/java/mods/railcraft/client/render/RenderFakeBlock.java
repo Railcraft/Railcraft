@@ -24,7 +24,7 @@ public class RenderFakeBlock {
 
     public static class RenderInfo {
 
-        public Block template = Blocks.stone;
+        public Block template = Blocks.STONE;
         public TextureAtlasSprite[] texture;
         public TextureAtlasSprite override;
         public float minX = 0;

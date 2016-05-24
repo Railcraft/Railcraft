@@ -61,30 +61,30 @@ public enum EnumWallAlpha implements WallInfo {
         CONCRETE.source = BlockCube.getBlock();
         CONCRETE.sourceMeta = EnumCube.CONCRETE_BLOCK.ordinal();
 
-        SNOW.source = Blocks.snow;
-        ICE.source = Blocks.ice;
+        SNOW.source = Blocks.SNOW;
+        ICE.source = Blocks.ICE;
 
-        STONE_BRICK.source = Blocks.stonebrick;
+        STONE_BRICK.source = Blocks.STONEBRICK;
         STONE_BRICK.sourceMeta = 0;
-        STONE_BRICK_MOSSY.source = Blocks.stonebrick;
+        STONE_BRICK_MOSSY.source = Blocks.STONEBRICK;
         STONE_BRICK_MOSSY.sourceMeta = 1;
-        STONE_BRICK_CRACKED.source = Blocks.stonebrick;
+        STONE_BRICK_CRACKED.source = Blocks.STONEBRICK;
         STONE_BRICK_CRACKED.sourceMeta = 2;
-        STONE_BRICK_CHISELED.source = Blocks.stonebrick;
+        STONE_BRICK_CHISELED.source = Blocks.STONEBRICK;
         STONE_BRICK_CHISELED.sourceMeta = 3;
 
-        NETHER_BRICK.source = Blocks.nether_brick;
+        NETHER_BRICK.source = Blocks.NETHER_BRICK;
 
-        BRICK.source = Blocks.brick_block;
+        BRICK.source = Blocks.BRICK_BLOCK;
 
-        SANDSTONE.source = Blocks.sandstone;
+        SANDSTONE.source = Blocks.SANDSTONE;
         SANDSTONE.sourceMeta = 0;
-        SANDSTONE_CHISELED.source = Blocks.sandstone;
+        SANDSTONE_CHISELED.source = Blocks.SANDSTONE;
         SANDSTONE_CHISELED.sourceMeta = 1;
-        SANDSTONE_SMOOTH.source = Blocks.sandstone;
+        SANDSTONE_SMOOTH.source = Blocks.SANDSTONE;
         SANDSTONE_SMOOTH.sourceMeta = 2;
 
-        OBSIDIAN.source = Blocks.obsidian;
+        OBSIDIAN.source = Blocks.OBSIDIAN;
 
 //        QUARTZ.source = Block.blockNetherQuartz;
         for (EnumWallAlpha wall : VALUES) {
@@ -159,7 +159,7 @@ public enum EnumWallAlpha implements WallInfo {
             default:
                 Block block = getSource();
                 if (block == null)
-                    return Blocks.brick_block.getBlockHardness(world, pos);
+                    return Blocks.BRICK_BLOCK.getBlockHardness(world, pos);
                 return block.getBlockHardness(world, pos);
         }
     }
@@ -172,7 +172,7 @@ public enum EnumWallAlpha implements WallInfo {
             default:
                 Block block = getSource();
                 if (block == null)
-                    return Blocks.brick_block.getExplosionResistance(entity);
+                    return Blocks.BRICK_BLOCK.getExplosionResistance(entity);
                 return block.getExplosionResistance(entity);
         }
     }

@@ -330,7 +330,7 @@ public class RailcraftToolItems {
                 RailcraftRegistry.register(itemCoalCoke);
 
                 if (RailcraftConfig.coalCokeTorchOutput() > 0) {
-                    CraftingPlugin.addRecipe(new ItemStack(Blocks.torch, RailcraftConfig.coalCokeTorchOutput()),
+                    CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.coalCokeTorchOutput()),
                             "C",
                             "S",
                             'C', new ItemStack(itemCoalCoke),

@@ -29,9 +29,9 @@ public class ItemSteelShears extends ItemShears {
 
     @Override
     public float getStrVsBlock(ItemStack stack, Block block) {
-        if (block == Blocks.web || block instanceof IShearable)
+        if (block == Blocks.WEB || block instanceof IShearable)
             return 15;
-        if (block == Blocks.wool)
+        if (block == Blocks.WOOL)
             return 5;
         return super.getStrVsBlock(stack, block);
     }

@@ -99,7 +99,7 @@ public class EntityCartCommand extends CartBase {
 
     @Override
     public Block func_145820_n() {
-        return Blocks.command_block;
+        return Blocks.COMMAND_BLOCK;
     }
 
     @Override

@@ -90,7 +90,7 @@ public class FluidRenderer {
             liquidBlock.template = fluid.getBlock();
             liquidBlock.texture[0] = getFluidTexture(fluid, flowing);
         } else {
-            liquidBlock.template = Blocks.water;
+            liquidBlock.template = Blocks.WATER;
             liquidBlock.texture[0] = getFluidTexture(fluid, flowing);
         }
 

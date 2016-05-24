@@ -69,7 +69,7 @@ public class TrailTicker {
 
     private boolean trySetMarker(World world, BlockPos pos, EntityPlayer player) {
         Block block = WorldPlugin.getBlock(world, pos);
-        if (block == Blocks.air) {
+        if (block == Blocks.AIR) {
             WorldPlugin.setBlockState(world, pos, BlockHidden.getBlock().getDefaultState(), 6);
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TileHidden) {

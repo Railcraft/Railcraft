@@ -41,15 +41,15 @@ public class WorldGenGeode extends WorldGenerator {
         this.blockStone = block;
         this.meta = meta;
 
-        ores.add(Blocks.coal_ore);
-        ores.add(Blocks.iron_ore);
-        ores.add(Blocks.gold_ore);
-        ores.add(Blocks.diamond_ore);
-        ores.add(Blocks.emerald_ore);
-        ores.add(Blocks.lapis_ore);
-        ores.add(Blocks.quartz_ore);
-        ores.add(Blocks.redstone_ore);
-        ores.add(Blocks.lit_redstone_ore);
+        ores.add(Blocks.COAL_ORE);
+        ores.add(Blocks.IRON_ORE);
+        ores.add(Blocks.GOLD_ORE);
+        ores.add(Blocks.DIAMOND_ORE);
+        ores.add(Blocks.EMERALD_ORE);
+        ores.add(Blocks.LAPIS_ORE);
+        ores.add(Blocks.QUARTZ_ORE);
+        ores.add(Blocks.REDSTONE_ORE);
+        ores.add(Blocks.LIT_REDSTONE_ORE);
 
         ores.addAll(OreDictPlugin.getOreBlocks());
 
@@ -79,7 +79,7 @@ public class WorldGenGeode extends WorldGenerator {
 //            return;
 //        }
         if (isReplaceable(world, x, y, z))
-            world.setBlock(x, y, z, Blocks.air, 0, 2);
+            world.setBlock(x, y, z, Blocks.AIR, 0, 2);
     }
 
     private void placeStone(World world, Random rand, int x, int y, int z) {
@@ -109,13 +109,13 @@ public class WorldGenGeode extends WorldGenerator {
         Block existing = WorldPlugin.getBlock(world, x, y, z);
         if (existing == null)
             return false;
-        if (existing.isReplaceableOreGen(world, x, y, z, Blocks.stone))
+        if (existing.isReplaceableOreGen(world, x, y, z, Blocks.STONE))
             return true;
-        if (existing.isReplaceableOreGen(world, x, y, z, Blocks.dirt))
+        if (existing.isReplaceableOreGen(world, x, y, z, Blocks.DIRT))
             return true;
-        if (existing.isReplaceableOreGen(world, x, y, z, Blocks.gravel))
+        if (existing.isReplaceableOreGen(world, x, y, z, Blocks.GRAVEL))
             return true;
-        if (existing.isReplaceableOreGen(world, x, y, z, Blocks.sand))
+        if (existing.isReplaceableOreGen(world, x, y, z, Blocks.SAND))
             return true;
         if (existing.getMaterial() == Material.water)
             return true;

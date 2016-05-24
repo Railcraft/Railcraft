@@ -32,16 +32,16 @@ public class WorldGenSulfur extends WorldGenSmallDeposits {
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
             if (WorldPlugin.isBlockLoaded(world, pos.offset(side))) {
                 Block block = WorldPlugin.getBlock(world, pos);
-                if (block == Blocks.lava || block == Blocks.flowing_lava)
+                if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA)
                     return true;
             }
         }
         for (int j = 0; j < 4; j++) {
             Block block = WorldPlugin.getBlock(world, pos.down(j));
 
-            if (block == Blocks.lava || block == Blocks.flowing_lava)
+            if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA)
                 return true;
-            else if (block != Blocks.air)
+            else if (block != Blocks.AIR)
                 return false;
         }
         return false;

@@ -122,8 +122,8 @@ public class ForestryPlugin {
                             "X#X",
                             "VYV",
                             "X#X",
-                            '#', Blocks.wool,
-                            'V', new ItemStack(Blocks.rail),
+                            '#', Blocks.WOOL,
+                            'V', new ItemStack(Blocks.RAIL),
                             'X', Items.STRING,
                             'Y', "chestWood");
                 }
@@ -158,8 +158,8 @@ public class ForestryPlugin {
                             "X#X",
                             "VYV",
                             "X#X",
-                            '#', Blocks.wool,
-                            'V', new ItemStack(Blocks.snow),
+                            '#', Blocks.WOOL,
+                            'V', new ItemStack(Blocks.SNOW),
                             'X', Items.STRING,
                             'Y', "chestWood");
                 }
@@ -198,7 +198,7 @@ public class ForestryPlugin {
                             "X#X",
                             "VYV",
                             "X#X",
-                            '#', Blocks.wool,
+                            '#', Blocks.WOOL,
                             'V', new ItemStack(Items.POTIONITEM, 1, 8197),
                             'X', Items.STRING,
                             'Y', "chestWood");
@@ -206,7 +206,7 @@ public class ForestryPlugin {
                             "X#X",
                             "VYV",
                             "X#X",
-                            '#', Blocks.wool,
+                            '#', Blocks.WOOL,
                             'V', new ItemStack(Items.POTIONITEM, 1, 8261),
                             'X', Items.STRING,
                             'Y', "chestWood");
@@ -214,7 +214,7 @@ public class ForestryPlugin {
                             "X#X",
                             "VYV",
                             "X#X",
-                            '#', Blocks.wool,
+                            '#', Blocks.WOOL,
                             'V', new ItemStack(Items.POTIONITEM, 1, 8229),
                             'X', Items.STRING,
                             'Y', "chestWood");

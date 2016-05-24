@@ -76,15 +76,15 @@ public class BlockWorldLogic extends Block {
         BlockPos surfacePos = new BlockPos(pos.getX(), surfaceY, pos.getZ());
 
         Block block = WorldPlugin.getBlock(world, surfacePos);
-        if (block != Blocks.sand)
+        if (block != Blocks.SAND)
             return;
 
         Block above = WorldPlugin.getBlock(world, surfacePos.up());
-        if (above != Blocks.sand)
+        if (above != Blocks.SAND)
             return;
 
         Block below = WorldPlugin.getBlock(world, surfacePos.down());
-        if (below != Blocks.sand && below != Blocks.sandstone)
+        if (below != Blocks.SAND && below != Blocks.SANDSTONE)
             return;
 
         int airCount = 0;
@@ -101,7 +101,7 @@ public class BlockWorldLogic extends Block {
                 continue;
 
             block = WorldPlugin.getBlock(world, surfacePos.offset(side));
-            if (block != Blocks.sand && block != Blocks.sandstone && block != ore)
+            if (block != Blocks.SAND && block != Blocks.SANDSTONE && block != ore)
                 return;
         }
 

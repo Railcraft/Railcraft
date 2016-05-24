@@ -35,7 +35,7 @@ public class ModuleRF extends RailcraftModulePayload {
                             "LRL",
                             "RMR",
                             "LRL",
-                            'R', new ItemStack(Blocks.redstone_block),
+                            'R', new ItemStack(Blocks.REDSTONE_BLOCK),
                             'L', RailcraftItems.ingot, ItemIngot.EnumIngot.LEAD,
                             'M', Items.MINECART
                     );
@@ -45,7 +45,7 @@ public class ModuleRF extends RailcraftModulePayload {
                 if (gamma.isAvailable()) {
                     ItemStack detector = EnumDetector.ADVANCED.getItem();
                     if (detector == null)
-                        detector = new ItemStack(Blocks.stone_pressure_plate);
+                        detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
                     CraftingPlugin.addRecipe(gamma.getItem(),
                             "RLR",
                             "LRL",
@@ -59,7 +59,7 @@ public class ModuleRF extends RailcraftModulePayload {
                 if (gamma.isAvailable()) {
                     ItemStack detector = EnumDetector.ADVANCED.getItem();
                     if (detector == null)
-                        detector = new ItemStack(Blocks.stone_pressure_plate);
+                        detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
                     CraftingPlugin.addRecipe(gamma.getItem(),
                             "RDR",
                             "LRL",

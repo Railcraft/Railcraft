@@ -31,7 +31,7 @@ public abstract class BallastRegistry {
     private static final Set<BlockKey> ballastRegistry = new HashSet<BlockKey>();
 
     static {
-        registerBallast(Blocks.gravel, 0);
+        registerBallast(Blocks.GRAVEL, 0);
     }
 
     public static void registerBallast(Block block, int metadata) {

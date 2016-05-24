@@ -266,33 +266,33 @@ public enum BlockMaterial implements IStringSerializable {
             return;
         needsInit = false;
 
-        SNOW.state = Blocks.snow.getDefaultState();
-        ICE.state = Blocks.ice.getDefaultState();
-        PACKED_ICE.state = Blocks.packed_ice.getDefaultState();
-        IRON.state = Blocks.iron_block.getDefaultState();
+        SNOW.state = Blocks.SNOW.getDefaultState();
+        ICE.state = Blocks.ICE.getDefaultState();
+        PACKED_ICE.state = Blocks.PACKED_ICE.getDefaultState();
+        IRON.state = Blocks.IRON_BLOCK.getDefaultState();
         IRON.oreTag = "blockIron";
-        GOLD.state = Blocks.gold_block.getDefaultState();
+        GOLD.state = Blocks.GOLD_BLOCK.getDefaultState();
         GOLD.oreTag = "blockGold";
-        DIAMOND.state = Blocks.diamond_block.getDefaultState();
+        DIAMOND.state = Blocks.DIAMOND_BLOCK.getDefaultState();
         DIAMOND.oreTag = "blockDiamond";
-        OBSIDIAN.state = Blocks.obsidian.getDefaultState();
-        BRICK.state = Blocks.brick_block.getDefaultState();
+        OBSIDIAN.state = Blocks.OBSIDIAN.getDefaultState();
+        BRICK.state = Blocks.BRICK_BLOCK.getDefaultState();
 
-        STONE_BRICK.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT);
-        STONE_BRICK_CHISELED.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
-        STONE_BRICK_CRACKED.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CRACKED);
-        STONE_BRICK_MOSSY.state = Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY);
+        STONE_BRICK.state = Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT);
+        STONE_BRICK_CHISELED.state = Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+        STONE_BRICK_CRACKED.state = Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CRACKED);
+        STONE_BRICK_MOSSY.state = Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY);
 
-        SANDSTONE.state = Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.DEFAULT);
-        SANDSTONE_CHISELED.state = Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
-        SANDSTONE_SMOOTH.state = Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH);
+        SANDSTONE.state = Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.DEFAULT);
+        SANDSTONE_CHISELED.state = Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
+        SANDSTONE_SMOOTH.state = Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH);
 
-        RED_SANDSTONE.state = Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.DEFAULT);
-        RED_SANDSTONE_CHISELED.state = Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED);
-        RED_SANDSTONE_SMOOTH.state = Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH);
+        RED_SANDSTONE.state = Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.DEFAULT);
+        RED_SANDSTONE_CHISELED.state = Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED);
+        RED_SANDSTONE_SMOOTH.state = Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH);
 
-        QUARTZ.state = Blocks.quartz_block.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.DEFAULT);
-        QUARTZ_CHISELED.state = Blocks.quartz_block.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.CHISELED);
+        QUARTZ.state = Blocks.QUARTZ_BLOCK.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.DEFAULT);
+        QUARTZ_CHISELED.state = Blocks.QUARTZ_BLOCK.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.CHISELED);
 
         INFERNAL_BRICK.state = BrickTheme.INFERNAL.getState(BrickVariant.BRICK);
         SANDY_BRICK.state = BrickTheme.SANDY.getState(BrickVariant.BRICK);
@@ -301,7 +301,7 @@ public enum BlockMaterial implements IStringSerializable {
         BLEACHEDBONE_BRICK.state = BrickTheme.BLEACHEDBONE.getState(BrickVariant.BRICK);
         BLOODSTAINED_BRICK.state = BrickTheme.BLOODSTAINED.getState(BrickVariant.BRICK);
         ABYSSAL_BRICK.state = BrickTheme.ABYSSAL.getState(BrickVariant.BRICK);
-        NETHER_BRICK.state = Blocks.nether_brick.getDefaultState();
+        NETHER_BRICK.state = Blocks.NETHER_BRICK.getDefaultState();
 
         SANDY_FITTED.state = BrickTheme.SANDY.getState(BrickVariant.FITTED);
         INFERNAL_FITTED.state = BrickTheme.INFERNAL.getState(BrickVariant.FITTED);
@@ -450,7 +450,7 @@ public enum BlockMaterial implements IStringSerializable {
             default:
                 IBlockState state = getState();
                 if (state == null)
-                    return Blocks.brick_block.getBlockHardness(world, pos);
+                    return Blocks.BRICK_BLOCK.getBlockHardness(world, pos);
                 return state.getBlock().getBlockHardness(world, pos);
         }
     }
@@ -474,11 +474,11 @@ public enum BlockMaterial implements IStringSerializable {
             default:
                 IBlockState state = getState();
                 if (state == null)
-                    return Blocks.brick_block.getExplosionResistance(entity);
+                    return Blocks.BRICK_BLOCK.getExplosionResistance(entity);
                 try {
                     return state.getBlock().getExplosionResistance(entity);
                 } catch (RuntimeException ex) {
-                    return Blocks.brick_block.getExplosionResistance(entity);
+                    return Blocks.BRICK_BLOCK.getExplosionResistance(entity);
                 }
         }
     }

@@ -123,9 +123,9 @@ public enum Metal {
     public ItemStack getBlock(int qty) {
         switch (this) {
             case IRON:
-                return new ItemStack(Blocks.iron_block, qty);
+                return new ItemStack(Blocks.IRON_BLOCK, qty);
             case GOLD:
-                return new ItemStack(Blocks.gold_block, qty);
+                return new ItemStack(Blocks.GOLD_BLOCK, qty);
             default: {
                 ItemStack stack = blockMap.get(this).getItem(qty);
                 if (stack == null)

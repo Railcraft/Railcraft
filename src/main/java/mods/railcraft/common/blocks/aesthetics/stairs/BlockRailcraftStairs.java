@@ -57,7 +57,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     private final int renderId;
 
     BlockRailcraftStairs(int renderId) {
-        super(Blocks.stonebrick.getDefaultState());
+        super(Blocks.STONEBRICK.getDefaultState());
         this.renderId = renderId;
         this.setStepSound(RailcraftSound.getInstance());
         setDefaultState(getDefaultState().withProperty(MATERIAL, BlockMaterial.SANDY_BRICK));

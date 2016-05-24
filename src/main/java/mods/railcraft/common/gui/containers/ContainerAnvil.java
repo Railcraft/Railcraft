@@ -326,7 +326,7 @@ public class ContainerAnvil extends ContainerRepair {
             repairContainer.maximumCost = 0;
             IBlockState iblockstate = worldIn.getBlockState(blockPosIn);
 
-            if (!playerIn.capabilities.isCreativeMode && !worldIn.isRemote && iblockstate.getBlock() == Blocks.anvil && playerIn.getRNG().nextFloat() < breakChance) {
+            if (!playerIn.capabilities.isCreativeMode && !worldIn.isRemote && iblockstate.getBlock() == Blocks.ANVIL && playerIn.getRNG().nextFloat() < breakChance) {
                 int l = iblockstate.getValue(BlockAnvil.DAMAGE);
                 ++l;
 

@@ -65,8 +65,8 @@ public enum BrickTheme {
     BLOODSTAINED(MapColor.redColor) {
         @Override
         public void initRecipes() {
-            CraftingPlugin.addShapelessRecipe(new ItemStack(getBlock(), 1, 2), new ItemStack(Blocks.sandstone, 1, 2), new ItemStack(Items.rotten_flesh));
-            CraftingPlugin.addShapelessRecipe(new ItemStack(getBlock(), 1, 2), new ItemStack(Blocks.sandstone, 1, 2), new ItemStack(Items.beef));
+            CraftingPlugin.addShapelessRecipe(new ItemStack(getBlock(), 1, 2), new ItemStack(Blocks.SANDSTONE, 1, 2), new ItemStack(Items.rotten_flesh));
+            CraftingPlugin.addShapelessRecipe(new ItemStack(getBlock(), 1, 2), new ItemStack(Blocks.SANDSTONE, 1, 2), new ItemStack(Items.beef));
         }
     },
     FROSTBOUND(MapColor.blueColor) {
@@ -76,7 +76,7 @@ public enum BrickTheme {
                     "III",
                     "ILI",
                     "III",
-                    'I', new ItemStack(Blocks.ice),
+                    'I', new ItemStack(Blocks.ICE),
                     'L', "gemLapis");
         }
     },
@@ -87,8 +87,8 @@ public enum BrickTheme {
             CraftingPlugin.addRecipe(new ItemStack(getBlock(), 2, 2),
                     "MB",
                     "BM",
-                    'B', new ItemStack(Blocks.nether_brick),
-                    'M', new ItemStack(Blocks.soul_sand));
+                    'B', new ItemStack(Blocks.NETHER_BRICK),
+                    'M', new ItemStack(Blocks.SOUL_SAND));
         }
     },
     QUARRIED(MapColor.snowColor) {
@@ -109,20 +109,20 @@ public enum BrickTheme {
                     "BM",
                     "MB",
                     'B', "ingotBrick",
-                    'M', new ItemStack(Blocks.sand));
+                    'M', new ItemStack(Blocks.SAND));
         }
     },
     NETHER(MapColor.netherrackColor) {
         @Override
         public ItemStack get(BrickVariant variant, int qty) {
             if (variant == BrickVariant.BRICK)
-                return new ItemStack(Blocks.nether_brick, qty);
+                return new ItemStack(Blocks.NETHER_BRICK, qty);
             return super.get(variant, qty);
         }
 
         @Override
         public void initRecipes() {
-            CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.nether_brick), get(BLOCK, 1), 0);
+            CraftingPlugin.addFurnaceRecipe(new ItemStack(Blocks.NETHER_BRICK), get(BLOCK, 1), 0);
         }
 
         @Override

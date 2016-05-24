@@ -55,8 +55,8 @@ public class ModuleRouting extends RailcraftModulePayload {
                             "XXX",
                             "XPX",
                             "XXX",
-                            'X', new ItemStack(Blocks.quartz_block, 1, 1),
-                            'P', Blocks.stone_pressure_plate);
+                            'X', new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1),
+                            'P', Blocks.STONE_PRESSURE_PLATE);
 
                 }
 

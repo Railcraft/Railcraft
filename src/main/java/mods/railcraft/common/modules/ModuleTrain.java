@@ -44,8 +44,8 @@ public class ModuleTrain extends RailcraftModulePayload {
                             "XXX",
                             "XPX",
                             "XXX",
-                            'X', Blocks.nether_brick,
-                            'P', Blocks.stone_pressure_plate);
+                            'X', Blocks.NETHER_BRICK,
+                            'P', Blocks.STONE_PRESSURE_PLATE);
                 }
             }
 

@@ -48,7 +48,7 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
 
     static {
-        EXCLUDED_BLOCKS.add(Blocks.sand);
+        EXCLUDED_BLOCKS.add(Blocks.SAND);
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
@@ -193,7 +193,7 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
             if (existItem.getHasSubtypes())
                 existMeta = existItem.getMetadata(stack.getItemDamage());
             Block stackBlock = InvTools.getBlockFromStack(stack);
-            return (stackBlock == state.getBlock() && (existMeta == OreDictionary.WILDCARD_VALUE || state.getBlock().getMetaFromState(state) == existMeta)) || (stackBlock == Blocks.dirt && stackBlock == Blocks.grass);
+            return (stackBlock == state.getBlock() && (existMeta == OreDictionary.WILDCARD_VALUE || state.getBlock().getMetaFromState(state) == existMeta)) || (stackBlock == Blocks.DIRT && stackBlock == Blocks.GRASS);
         }
         return false;
     }

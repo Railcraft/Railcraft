@@ -36,7 +36,7 @@ public class PowerPlugin {
 
     public static boolean isBlockBeingPoweredByRepeater(World world, BlockPos pos, EnumFacing from) {
         Block block = WorldPlugin.getBlock(world, pos.offset(from));
-        return block == Blocks.powered_repeater && isBlockBeingPowered(world, pos, from);
+        return block == Blocks.POWERED_REPEATER && isBlockBeingPowered(world, pos, from);
     }
 
     public static boolean isBlockBeingPoweredByRepeater(World world, BlockPos pos) {
@@ -60,7 +60,7 @@ public class PowerPlugin {
     private static boolean isRedstonePowering(World world, BlockPos pos, int yOffset, EnumFacing side) {
         BlockPos wirePos = pos.up(yOffset).offset(side);
         Block block = WorldPlugin.getBlock(world, wirePos);
-        if (block == Blocks.redstone_wire) {
+        if (block == Blocks.REDSTONE_WIRE) {
             return block.getWeakPower(world, wirePos, WorldPlugin.getBlockState(world, wirePos), side) > 0;
         }
         return false;

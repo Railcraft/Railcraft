@@ -39,7 +39,7 @@ public class ModuleSeasonal extends RailcraftModulePayload {
                                 "WPW",
                                 "WWW",
                                 'G', new ItemStack(Items.GUNPOWDER),
-                                'P', new ItemStack(Blocks.pumpkin),
+                                'P', new ItemStack(Blocks.PUMPKIN),
                                 'W', "slabWood");
                     }
                 }

@@ -118,13 +118,13 @@ public class ThaumcraftPlugin {
 
             addItemAspect(EnumCube.ABYSSAL_STONE.getItem(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.DARKNESS, 2));
             addItemAspect(EnumCube.QUARRIED_STONE.getItem(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.LIGHT, 2));
-            addItemAspect(EnumCube.CRUSHED_OBSIDIAN.getItem(), copyAspects(Blocks.obsidian).remove(Aspect.EARTH, 1).add(Aspect.ENTROPY, 1).add(Aspect.ELDRITCH, 1));
+            addItemAspect(EnumCube.CRUSHED_OBSIDIAN.getItem(), copyAspects(Blocks.OBSIDIAN).remove(Aspect.EARTH, 1).add(Aspect.ENTROPY, 1).add(Aspect.ELDRITCH, 1));
             addItemAspect(EnumCube.CONCRETE_BLOCK.getItem(), new AspectList().remove(Aspect.EARTH, 3).add(Aspect.METAL, 1));
             addItemAspect(EnumCube.CREOSOTE_BLOCK.getItem(), new AspectList().remove(Aspect.TREE, 3).add(Aspect.ORDER, 1));
 
-            addItemAspect(EnumOre.DARK_DIAMOND.getItem(), copyAspects(Blocks.diamond_ore).add(Aspect.DARKNESS, 1));
-            addItemAspect(EnumOre.DARK_EMERALD.getItem(), copyAspects(Blocks.emerald_ore).add(Aspect.DARKNESS, 1));
-            addItemAspect(EnumOre.DARK_LAPIS.getItem(), copyAspects(Blocks.lapis_ore).add(Aspect.DARKNESS, 1));
+            addItemAspect(EnumOre.DARK_DIAMOND.getItem(), copyAspects(Blocks.DIAMOND_ORE).add(Aspect.DARKNESS, 1));
+            addItemAspect(EnumOre.DARK_EMERALD.getItem(), copyAspects(Blocks.EMERALD_ORE).add(Aspect.DARKNESS, 1));
+            addItemAspect(EnumOre.DARK_LAPIS.getItem(), copyAspects(Blocks.LAPIS_ORE).add(Aspect.DARKNESS, 1));
 
             addItemAspect(EnumOre.SULFUR.getItem(), new AspectList().add(Aspect.EARTH, 1).add(Aspect.FIRE, 3));
             addItemAspect(EnumOre.SALTPETER.getItem(), new AspectList().add(Aspect.EARTH, 1).add(Aspect.AIR, 3));
@@ -133,7 +133,7 @@ public class ThaumcraftPlugin {
             addItemAspect(RailcraftItems.dust.getStack(ItemDust.EnumDust.SULFUR), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.FIRE, 3));
             addItemAspect(RailcraftItems.dust.getStack(ItemDust.EnumDust.SALTPETER), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.AIR, 3));
             addItemAspect(RailcraftItems.dust.getStack(ItemDust.EnumDust.CHARCOAL), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.FIRE, 2));
-            addItemAspect(RailcraftItems.dust.getStack(ItemDust.EnumDust.OBSIDIAN), copyAspects(Blocks.obsidian).remove(Aspect.EARTH, 2).add(Aspect.ENTROPY, 1));
+            addItemAspect(RailcraftItems.dust.getStack(ItemDust.EnumDust.OBSIDIAN), copyAspects(Blocks.OBSIDIAN).remove(Aspect.EARTH, 2).add(Aspect.ENTROPY, 1));
 
             addItemAspect(RailcraftItems.rebar.getStack(), new AspectList().add(Aspect.METAL, 1));
             addItemAspect(RailcraftItems.rail.getStack(1, EnumRail.STANDARD), new AspectList().add(Aspect.METAL, 1));
@@ -202,7 +202,7 @@ public class ThaumcraftPlugin {
             addItemAspect(BlockRCAnvil.getBlock(), new AspectList().add(Aspect.CRAFT, 4).add(Aspect.MAGIC, 2).add(Aspect.METAL, 4).add(Aspect.ORDER, 2));
 
             addCartAspect(EnumCart.LOCO_STEAM_SOLID, steamAspects.copy().add(Aspect.MOTION, 2).add(Aspect.TRAVEL, 4));
-            addCartAspect(EnumCart.PUMPKIN, new AspectList(new ItemStack(Blocks.pumpkin)).add(Aspect.MOTION, 2).add(Aspect.ENTROPY, 6));
+            addCartAspect(EnumCart.PUMPKIN, new AspectList(new ItemStack(Blocks.PUMPKIN)).add(Aspect.MOTION, 2).add(Aspect.ENTROPY, 6));
             addCartAspect(EnumCart.ANCHOR, anchorAspects.copy().add(Aspect.MOTION, 2).add(Aspect.TRAVEL, 2));
             addCartAspect(EnumCart.ANCHOR_ADMIN, anchorAspects.copy().add(Aspect.MOTION, 2).add(Aspect.TRAVEL, 2));
             addCartAspect(EnumCart.ANCHOR_PERSONAL, anchorAspects.copy().add(Aspect.MOTION, 2).add(Aspect.TRAVEL, 2));

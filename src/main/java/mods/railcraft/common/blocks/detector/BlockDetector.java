@@ -72,85 +72,85 @@ public class BlockDetector extends RailcraftBlockContainer {
                 "XPX",
                 "XXX",
                 'X', "plankWood",
-                'P', Blocks.stone_pressure_plate);
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.ANY.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
                 'X', "stone",
-                'P', Blocks.stone_pressure_plate);
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.EMPTY.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
-                'X', new ItemStack(Blocks.stonebrick, 1, 0),
-                'P', Blocks.stone_pressure_plate);
+                'X', new ItemStack(Blocks.STONEBRICK, 1, 0),
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.MOB.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
-                'X', new ItemStack(Blocks.stonebrick, 1, 1),
-                'P', Blocks.stone_pressure_plate);
+                'X', new ItemStack(Blocks.STONEBRICK, 1, 1),
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.MOB.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
-                'X', Blocks.mossy_cobblestone,
-                'P', Blocks.stone_pressure_plate);
+                'X', Blocks.MOSSY_COBBLESTONE,
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.POWERED.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
                 'X', "cobblestone",
-                'P', Blocks.stone_pressure_plate);
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.PLAYER.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
-                'X', new ItemStack(Blocks.stone_slab, 1, 0),
-                'P', Blocks.stone_pressure_plate);
+                'X', new ItemStack(Blocks.STONE_SLAB, 1, 0),
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.EXPLOSIVE.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
                 'X', "slabWood",
-                'P', Blocks.stone_pressure_plate);
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.ANIMAL.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
-                'X', new ItemStack(Blocks.log, 1, 0),
-                'P', Blocks.stone_pressure_plate);
+                'X', new ItemStack(Blocks.LOG, 1, 0),
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.AGE.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
-                'X', new ItemStack(Blocks.log, 1, 1),
-                'P', Blocks.stone_pressure_plate);
+                'X', new ItemStack(Blocks.LOG, 1, 1),
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.ADVANCED.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
                 'X', "ingotSteel",
-                'P', Blocks.stone_pressure_plate);
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.TANK.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
                 'X', "ingotBrick",
-                'P', Blocks.stone_pressure_plate);
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.SHEEP.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
-                'X', Blocks.wool,
-                'P', Blocks.stone_pressure_plate);
+                'X', Blocks.WOOL,
+                'P', Blocks.STONE_PRESSURE_PLATE);
         CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.VILLAGER.ordinal()),
                 "XXX",
                 "XPX",
                 "XXX",
                 'X', Items.LEATHER,
-                'P', Blocks.stone_pressure_plate);
+                'P', Blocks.STONE_PRESSURE_PLATE);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class BlockDetector extends RailcraftBlockContainer {
                     "XPX",
                     "XXX",
                     'X', BrickTheme.INFERNAL.get(BrickVariant.BRICK, 1),
-                    'P', Blocks.stone_pressure_plate);
+                    'P', Blocks.STONE_PRESSURE_PLATE);
     }
 
     @Override

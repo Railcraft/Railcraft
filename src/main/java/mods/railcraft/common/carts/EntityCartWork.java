@@ -52,7 +52,7 @@ public class EntityCartWork extends CartBase {
         List<ItemStack> items = new ArrayList<ItemStack>();
         if (RailcraftConfig.doCartsBreakOnDrop()) {
             items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.crafting_table));
+            items.add(new ItemStack(Blocks.CRAFTING_TABLE));
         } else {
             items.add(getCartItem());
         }
@@ -74,7 +74,7 @@ public class EntityCartWork extends CartBase {
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return Blocks.crafting_table.getDefaultState();
+        return Blocks.CRAFTING_TABLE.getDefaultState();
     }
 
     @Override

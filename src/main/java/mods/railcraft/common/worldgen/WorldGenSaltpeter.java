@@ -46,7 +46,7 @@ public class WorldGenSaltpeter extends WorldGenerator {
 
     private boolean isReplaceable(World world, BlockPos pos) {
         Block block = WorldPlugin.getBlock(world, pos);
-        if (block != Blocks.sand) {
+        if (block != Blocks.SAND) {
             return false;
         }
         if (SimplexNoise.noise(pos.getX() * 0.01, pos.getZ() * 0.01) < 0.75) {

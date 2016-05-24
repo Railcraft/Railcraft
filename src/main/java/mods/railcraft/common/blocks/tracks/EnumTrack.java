@@ -241,8 +241,8 @@ public enum EnumTrack {
         Object railElectric = RailcraftConfig.useOldRecipes() ? "ingotCopper" : RailcraftItems.rail.getRecipeObject(EnumRail.ELECTRIC);
         Object woodTie = RailcraftItems.tie.getRecipeObject(EnumTie.WOOD);
         Object woodRailbed = RailcraftConfig.useOldRecipes() ? "stickWood" : RailcraftItems.railbed.getRecipeObject(EnumRailbed.WOOD);
-        Object stoneRailbed = RailcraftConfig.useOldRecipes() ? Blocks.stone_slab : RailcraftItems.railbed.getRecipeObject(EnumRailbed.STONE);
-        Object reinforcedRailbed = RailcraftConfig.useOldRecipes() || !RailcraftItems.rail.isEnabled() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? new ItemStack(Blocks.obsidian) : stoneRailbed;
+        Object stoneRailbed = RailcraftConfig.useOldRecipes() ? Blocks.STONE_SLAB : RailcraftItems.railbed.getRecipeObject(EnumRailbed.STONE);
+        Object reinforcedRailbed = RailcraftConfig.useOldRecipes() || !RailcraftItems.rail.isEnabled() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? new ItemStack(Blocks.OBSIDIAN) : stoneRailbed;
 
         Object crowbar = IToolCrowbar.ORE_TAG;
 
@@ -255,7 +255,7 @@ public enum EnumTrack {
                         'I', railAdvanced,
                         's', woodRailbed,
                         'r', "dustRedstone",
-                        'b', Blocks.stone_pressure_plate);
+                        'b', Blocks.STONE_PRESSURE_PLATE);
                 break;
             case ONEWAY:
                 CraftingPlugin.addRecipe(output,
@@ -264,8 +264,8 @@ public enum EnumTrack {
                         "IpI",
                         'I', railStandard,
                         's', woodRailbed,
-                        'b', Blocks.stone_pressure_plate,
-                        'p', Blocks.piston);
+                        'b', Blocks.STONE_PRESSURE_PLATE,
+                        'p', Blocks.PISTON);
                 break;
             case CONTROL:
                 CraftingPlugin.addRecipe(output,
@@ -326,7 +326,7 @@ public enum EnumTrack {
                         'I', railReinforced,
                         'B', "blockSteel",
                         's', stoneRailbed,
-                        'P', Blocks.piston);
+                        'P', Blocks.PISTON);
                 break;
             case PRIMING:
                 CraftingPlugin.addRecipe(output,
@@ -335,7 +335,7 @@ public enum EnumTrack {
                         "IfI",
                         'I', railReinforced,
                         's', stoneRailbed,
-                        'p', Blocks.stone_pressure_plate,
+                        'p', Blocks.STONE_PRESSURE_PLATE,
                         'f', Items.FLINT_AND_STEEL);
                 break;
             case JUNCTION:
@@ -460,7 +460,7 @@ public enum EnumTrack {
                         'I', railAdvanced,
                         '#', woodRailbed,
                         'r', "dustRedstone",
-                        'p', Blocks.stone_pressure_plate);
+                        'p', Blocks.STONE_PRESSURE_PLATE);
                 break;
             case EMBARKING:
                 CraftingPlugin.addRecipe(output,
@@ -505,7 +505,7 @@ public enum EnumTrack {
                         'I', railStandard,
                         '#', woodRailbed,
                         'r', "dustRedstone",
-                        's', Blocks.stone_pressure_plate);
+                        's', Blocks.STONE_PRESSURE_PLATE);
                 break;
             case GATED:
                 CraftingPlugin.addRecipe(output,
@@ -514,7 +514,7 @@ public enum EnumTrack {
                         "IgI",
                         'I', railStandard,
                         '#', woodRailbed,
-                        'g', Blocks.oak_fence_gate);
+                        'g', Blocks.OAK_FENCE_GATE);
                 break;
             case GATED_ONEWAY:
                 CraftingPlugin.addRecipe(output,
@@ -523,7 +523,7 @@ public enum EnumTrack {
                         "IgI",
                         'I', railStandard,
                         '#', woodRailbed,
-                        'g', Blocks.oak_fence_gate,
+                        'g', Blocks.OAK_FENCE_GATE,
                         'G', railAdvanced);
                 break;
             case COUPLER:

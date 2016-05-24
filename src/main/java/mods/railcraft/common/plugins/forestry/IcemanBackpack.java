@@ -28,7 +28,7 @@ public class IcemanBackpack extends BaseBackpack {
     private static final BlockMaterial[] coldMaterials = {BlockMaterial.SNOW, BlockMaterial.ICE, BlockMaterial.PACKED_ICE};
     private static IcemanBackpack instance;
     private static final ItemStack SNOWBALL = new ItemStack(Items.SNOWBALL);
-    private static final ItemStack SNOW_BLOCK = new ItemStack(Blocks.snow);
+    private static final ItemStack SNOW_BLOCK = new ItemStack(Blocks.SNOW);
     private static final String INV_TAG = "Items";
 
     public static IcemanBackpack getInstance() {
@@ -42,10 +42,10 @@ public class IcemanBackpack extends BaseBackpack {
     }
 
     public void setup() {
-        add(Blocks.snow);
-        add(Blocks.snow_layer);
-        add(Blocks.ice);
-        add(Blocks.packed_ice);
+        add(Blocks.SNOW);
+        add(Blocks.SNOW_LAYER);
+        add(Blocks.ICE);
+        add(Blocks.PACKED_ICE);
         add(EnumWallAlpha.SNOW.getItem());
         add(EnumWallAlpha.ICE.getItem());
         for (BlockMaterial mat : coldMaterials) {
@@ -65,7 +65,7 @@ public class IcemanBackpack extends BaseBackpack {
             for (int i = 0; i < 4; i++) {
                 InvTools.removeOneItem(inv, SNOWBALL);
             }
-            if (InvTools.moveItemStack(new ItemStack(Blocks.snow), inv) == null) {
+            if (InvTools.moveItemStack(new ItemStack(Blocks.SNOW), inv) == null) {
                 InvTools.writeInvToNBT(inv, INV_TAG, data);
             }
         } else if (numSnowballs < 8 && InvTools.removeOneItem(inv, SNOW_BLOCK) != null) {

@@ -26,7 +26,7 @@ public class SlotColorFilter extends SlotRailcraft {
     public boolean isItemValid(ItemStack itemstack) {
         if (itemstack == null)
             return false;
-        if (InvTools.isStackEqualToBlock(itemstack, Blocks.wool))
+        if (InvTools.isStackEqualToBlock(itemstack, Blocks.WOOL))
             return true;
         return itemstack.getItem() == Items.DYE;
     }

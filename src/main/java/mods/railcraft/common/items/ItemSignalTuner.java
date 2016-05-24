@@ -51,9 +51,9 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                 " T ",
                 "BRB",
                 "   ",
-                'B', Blocks.stone_button,
+                'B', Blocks.STONE_BUTTON,
                 'R', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
-                'T', Blocks.redstone_torch);
+                'T', Blocks.REDSTONE_TORCH);
     }
 
     //TODO: Add name highlighting

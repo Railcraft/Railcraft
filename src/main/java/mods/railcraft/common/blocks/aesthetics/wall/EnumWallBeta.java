@@ -48,13 +48,13 @@ public enum EnumWallBeta implements WallInfo {
 
     public static void initialize() {
         QUARTZ.sourceMeta = 0;
-        QUARTZ.source = Blocks.quartz_block;
+        QUARTZ.source = Blocks.QUARTZ_BLOCK;
         QUARTZ_CHISELED.sourceMeta = 1;
-        QUARTZ_CHISELED.source = Blocks.quartz_block;
+        QUARTZ_CHISELED.source = Blocks.QUARTZ_BLOCK;
 
-        IRON.source = Blocks.iron_block;
-        GOLD.source = Blocks.gold_block;
-        DIAMOND.source = Blocks.diamond_block;
+        IRON.source = Blocks.IRON_BLOCK;
+        GOLD.source = Blocks.GOLD_BLOCK;
+        DIAMOND.source = Blocks.DIAMOND_BLOCK;
 
         ABYSSAL_BRICK.source = BrickTheme.ABYSSAL.getBlock();
         QUARRIED_BRICK.source = BrickTheme.QUARRIED.getBlock();
@@ -126,7 +126,7 @@ public enum EnumWallBeta implements WallInfo {
     public float getBlockHardness(World world, BlockPos pos) {
         Block block = getSource();
         if (block == null)
-            return Blocks.brick_block.getBlockHardness(world, pos);
+            return Blocks.BRICK_BLOCK.getBlockHardness(world, pos);
         return block.getBlockHardness(world, pos);
     }
 
@@ -134,7 +134,7 @@ public enum EnumWallBeta implements WallInfo {
     public float getExplosionResistance(Entity entity) {
         Block block = getSource();
         if (block == null)
-            return Blocks.brick_block.getExplosionResistance(entity);
+            return Blocks.BRICK_BLOCK.getExplosionResistance(entity);
         return block.getExplosionResistance(entity);
     }
 

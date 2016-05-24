@@ -36,19 +36,19 @@ public class WorldGenQuarry extends WorldGenerator {
         this.blockStone = block;
         this.meta = meta;
 
-        replaceable.add(Blocks.coal_ore);
-        replaceable.add(Blocks.iron_ore);
-        replaceable.add(Blocks.gold_ore);
-        replaceable.add(Blocks.diamond_ore);
-        replaceable.add(Blocks.emerald_ore);
-        replaceable.add(Blocks.lapis_ore);
-        replaceable.add(Blocks.quartz_ore);
-        replaceable.add(Blocks.redstone_ore);
-        replaceable.add(Blocks.lit_redstone_ore);
-        replaceable.add(Blocks.dirt);
-        replaceable.add(Blocks.gravel);
-        replaceable.add(Blocks.grass);
-        replaceable.add(Blocks.clay);
+        replaceable.add(Blocks.COAL_ORE);
+        replaceable.add(Blocks.IRON_ORE);
+        replaceable.add(Blocks.GOLD_ORE);
+        replaceable.add(Blocks.DIAMOND_ORE);
+        replaceable.add(Blocks.EMERALD_ORE);
+        replaceable.add(Blocks.LAPIS_ORE);
+        replaceable.add(Blocks.QUARTZ_ORE);
+        replaceable.add(Blocks.REDSTONE_ORE);
+        replaceable.add(Blocks.LIT_REDSTONE_ORE);
+        replaceable.add(Blocks.DIRT);
+        replaceable.add(Blocks.GRAVEL);
+        replaceable.add(Blocks.GRASS);
+        replaceable.add(Blocks.CLAY);
 
         replaceable.addAll(OreDictPlugin.getOreBlocks());
     }
@@ -102,21 +102,21 @@ public class WorldGenQuarry extends WorldGenerator {
 //        if (!world.isBlockLoaded(x, y, z)) {
 //            return false;
 //        }
-        if (WorldPlugin.getBlock(world, x, y + 1, z) != Blocks.air)
+        if (WorldPlugin.getBlock(world, x, y + 1, z) != Blocks.AIR)
             return false;
         if (isLiquid(world, x, y, z))
             return false;
         
-        if (WorldPlugin.getBlock(world, x + 1, y + 1, z) != Blocks.air)
+        if (WorldPlugin.getBlock(world, x + 1, y + 1, z) != Blocks.AIR)
             return false;
-        if (WorldPlugin.getBlock(world, x - 1, y + 1, z) != Blocks.air)
+        if (WorldPlugin.getBlock(world, x - 1, y + 1, z) != Blocks.AIR)
             return false;
-        if (WorldPlugin.getBlock(world, x, y + 1, z + 1) != Blocks.air)
+        if (WorldPlugin.getBlock(world, x, y + 1, z + 1) != Blocks.AIR)
             return false;
-        if (WorldPlugin.getBlock(world, x, y + 1, z - 1) != Blocks.air)
+        if (WorldPlugin.getBlock(world, x, y + 1, z - 1) != Blocks.AIR)
             return false;
         
-        world.setBlock(x, y, z, Blocks.air, 0, 2);
+        world.setBlock(x, y, z, Blocks.AIR, 0, 2);
         return true;
     }
 
@@ -125,8 +125,8 @@ public class WorldGenQuarry extends WorldGenerator {
 //            return;
 //        }
         //Removes tallgrass
-        if (WorldPlugin.getBlock(world, x, y + 1, z) == Blocks.tallgrass)
-            world.setBlock(x, y + 1, z, Blocks.air, 0, 2);
+        if (WorldPlugin.getBlock(world, x, y + 1, z) == Blocks.TALLGRASS)
+            world.setBlock(x, y + 1, z, Blocks.AIR, 0, 2);
         
         if (isReplaceable(world, x, y, z))
             world.setBlock(x, y, z, blockStone, meta, 2);
@@ -136,7 +136,7 @@ public class WorldGenQuarry extends WorldGenerator {
         Block existing = WorldPlugin.getBlock(world, x, y, z);
         if (existing == null)
             return false;
-        if (existing.isReplaceableOreGen(world, x, y, z, Blocks.stone))
+        if (existing.isReplaceableOreGen(world, x, y, z, Blocks.STONE))
             return true;
         return replaceable.contains(existing);
     }

@@ -25,7 +25,7 @@ public class SlotWoolFilter extends SlotRailcraft {
     public boolean isItemValid(ItemStack itemstack) {
         if (itemstack == null)
             return false;
-        return InvTools.isStackEqualToBlock(itemstack, Blocks.wool);
+        return InvTools.isStackEqualToBlock(itemstack, Blocks.WOOL);
     }
 
 }

@@ -55,7 +55,7 @@ public class QuarryPopulator {
         BlockPos chunkCenterPos = new BlockPos(chunkX * 16 + 8, 50, chunkZ * 16 + 8);
         if (canGen(world, rand, chunkCenterPos)) {
             BlockPos surfacePos = world.getTopSolidOrLiquidBlock(chunkCenterPos).down(3);
-            if (WorldPlugin.isBlockAt(world, surfacePos, Blocks.dirt)) {
+            if (WorldPlugin.isBlockAt(world, surfacePos, Blocks.DIRT)) {
                 quarry.generate(world, rand, surfacePos);
             }
         }

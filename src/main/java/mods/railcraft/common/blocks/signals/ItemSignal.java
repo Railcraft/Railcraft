@@ -37,9 +37,9 @@ public class ItemSignal extends ItemBlockRailcraftMultiType {
     public boolean func_150936_a(World world, int x, int y, int z, int side, EntityPlayer player, ItemStack stack) {
         Block oldBlock = world.getBlock(x, y, z);
 
-        if (oldBlock == Blocks.snow_layer)
+        if (oldBlock == Blocks.SNOW_LAYER)
             side = 1;
-        else if (oldBlock != Blocks.vine && oldBlock != Blocks.tallgrass && oldBlock != Blocks.deadbush && !oldBlock.isReplaceable(world, x, y, z)) {
+        else if (oldBlock != Blocks.VINE && oldBlock != Blocks.TALLGRASS && oldBlock != Blocks.DEADBUSH && !oldBlock.isReplaceable(world, x, y, z)) {
             if (side == 0)
                 --y;
 

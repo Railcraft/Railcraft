@@ -68,7 +68,7 @@ public class ItemRailbed extends ItemRailcraft {
 
     public enum EnumRailbed implements IVariantEnum {
         WOOD("stickWood"),
-        STONE(Blocks.stone_slab);
+        STONE(Blocks.STONE_SLAB);
         public static final EnumRailbed[] VALUES = values();
         private Object alternate;
 

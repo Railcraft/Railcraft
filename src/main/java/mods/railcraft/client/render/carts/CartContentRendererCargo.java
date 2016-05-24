@@ -32,7 +32,7 @@ public class CartContentRendererCargo extends CartContentRenderer {
     private Random rand = new Random();
 
     public CartContentRendererCargo() {
-        filterSign.template = Blocks.glass;
+        filterSign.template = Blocks.GLASS;
         filterSign.texture = new TextureAtlasSprite[1];
         filterSign.renderSide[0] = false;
         filterSign.renderSide[1] = false;

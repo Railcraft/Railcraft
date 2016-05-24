@@ -47,7 +47,7 @@ public class EntityCartChest extends CartContainerBase implements IItemCart {
         List<ItemStack> items = new ArrayList<ItemStack>();
         if (RailcraftConfig.doCartsBreakOnDrop()) {
             items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.chest));
+            items.add(new ItemStack(Blocks.CHEST));
         } else
             items.add(getCartItem());
         return items;
@@ -67,7 +67,7 @@ public class EntityCartChest extends CartContainerBase implements IItemCart {
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return Blocks.chest.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.NORTH);
+        return Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.NORTH);
     }
 
     @Override

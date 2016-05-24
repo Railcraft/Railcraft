@@ -37,7 +37,7 @@ public class EntityCartFurnace extends EntityMinecartFurnace {
         List<ItemStack> items = new ArrayList<ItemStack>();
         if (RailcraftConfig.doCartsBreakOnDrop()) {
             items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.furnace));
+            items.add(new ItemStack(Blocks.FURNACE));
         } else
             items.add(getCartItem());
         return items;

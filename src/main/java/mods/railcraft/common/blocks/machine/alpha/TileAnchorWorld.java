@@ -238,7 +238,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
         if (RailcraftConfig.deleteAnchors()) {
             releaseTicket();
-            worldObj.setBlockState(getPos(), Blocks.obsidian.getDefaultState());
+            worldObj.setBlockState(getPos(), Blocks.OBSIDIAN.getDefaultState());
             return;
         }
 

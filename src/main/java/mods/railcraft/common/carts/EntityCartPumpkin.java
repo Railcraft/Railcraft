@@ -90,7 +90,7 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
 
     @Override
     public Block func_145820_n() {
-        return Blocks.pumpkin;
+        return Blocks.PUMPKIN;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
         List<ItemStack> items = new ArrayList<ItemStack>();
         if (RailcraftConfig.doCartsBreakOnDrop()) {
             items.add(new ItemStack(Items.MINECART));
-            items.add(new ItemStack(Blocks.pumpkin));
+            items.add(new ItemStack(Blocks.PUMPKIN));
         } else
             items.add(getCartItem());
         return items;
@@ -163,7 +163,7 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
                         skel.setCurrentItemOrArmor(0, new ItemStack(Items.BOW));
                     }
 
-                    mob.setCurrentItemOrArmor(4, new ItemStack(rand.nextFloat() < 0.25F ? Blocks.lit_pumpkin : Blocks.pumpkin));
+                    mob.setCurrentItemOrArmor(4, new ItemStack(rand.nextFloat() < 0.25F ? Blocks.LIT_PUMPKIN : Blocks.PUMPKIN));
                 } else if (living != null)
                     living.onInitialSpawn(worldObj.getDifficultyForLocation(new BlockPos(living)), null);
 

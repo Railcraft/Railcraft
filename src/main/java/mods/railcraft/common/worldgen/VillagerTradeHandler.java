@@ -45,10 +45,10 @@ public class VillagerTradeHandler implements IVillageTradeHandler {
         addTrade(recipeList, rand, 0.4F, new Offer(RailcraftToolItems.getCoalCoke(), 8, 12), new Offer(Items.EMERALD));
         addTrade(recipeList, rand, 0.4F, new Offer(Items.EMERALD), new Offer(RailcraftToolItems.getCoalCoke(), 12, 16));
 
-        addTrade(recipeList, rand, 0.7F, new Offer(Blocks.rail, 30, 34), new Offer(Items.EMERALD, 2, 3));
-        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.activator_rail, 14, 18), new Offer(Items.EMERALD, 2, 3));
-        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.golden_rail, 14, 18), new Offer(Items.EMERALD, 2, 3));
-        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.detector_rail, 14, 18), new Offer(Items.EMERALD, 2, 3));
+        addTrade(recipeList, rand, 0.7F, new Offer(Blocks.RAIL, 30, 34), new Offer(Items.EMERALD, 2, 3));
+        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.ACTIVATOR_RAIL, 14, 18), new Offer(Items.EMERALD, 2, 3));
+        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.GOLDEN_RAIL, 14, 18), new Offer(Items.EMERALD, 2, 3));
+        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.DETECTOR_RAIL, 14, 18), new Offer(Items.EMERALD, 2, 3));
 
         for (EnumTrack track : EnumTrack.VALUES) {
             if (track.isEnabled())

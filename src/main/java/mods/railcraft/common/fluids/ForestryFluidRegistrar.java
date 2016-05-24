@@ -43,7 +43,7 @@ public class ForestryFluidRegistrar extends FluidRegistrar {
             recycle = ModItems.refractoryWax.get();
             chance = 10;
         } else if (container.emptyContainer.getItem() == Items.GLASS_BOTTLE) {
-            recycle = new ItemStack(Blocks.glass);
+            recycle = new ItemStack(Blocks.GLASS);
             chance = 10;
         } else
             return;

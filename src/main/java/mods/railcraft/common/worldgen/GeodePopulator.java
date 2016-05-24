@@ -88,7 +88,7 @@ public class GeodePopulator {
         int depth = 0;
         for (; y > 0; --y) {
             Block block = chunk.getBlock(trimmedX, y, trimmedZ);
-            if (block == null || block == Blocks.air)
+            if (block == null || block == Blocks.AIR)
                 continue;
             else if (block.getMaterial() == Material.water)
                 depth++;

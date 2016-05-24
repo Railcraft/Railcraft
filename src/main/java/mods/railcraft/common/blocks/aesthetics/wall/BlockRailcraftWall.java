@@ -44,7 +44,7 @@ public class BlockRailcraftWall extends BlockWall {
     private final boolean alphaBlend;
 
     public BlockRailcraftWall(int renderId, boolean alphaBlend, WallProxy proxy) {
-        super(Blocks.stonebrick);
+        super(Blocks.STONEBRICK);
 
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
             this.renderId = 32;

@@ -47,7 +47,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     routingTable(ItemRoutingTable.class, "routing.table", Items.WRITABLE_BOOK),
     signalBlockSurveyor(ItemSignalBlockSurveyor.class, "tool.signal.surveyor"),
     signalLabel(ItemSignalLabel.class, "tool.signal.label"),
-    signalLamp(ItemSignalLamp.class, "part.signal.lamp", Blocks.redstone_lamp),
+    signalLamp(ItemSignalLamp.class, "part.signal.lamp", Blocks.REDSTONE_LAMP),
     signalTuner(ItemSignalTuner.class, "tool.signal.tuner"),
     ticket(ItemTicket.class, "routing.ticket", Items.PAPER),
     ticketGold(ItemTicketGold.class, "routing.ticket.gold", Items.GOLD_NUGGET),

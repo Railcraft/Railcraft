@@ -367,7 +367,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
                     items.addAll(drops);
             } else {
                 Game.log(Level.WARN, "Rail Tile was invalid when harvesting rail");
-                items.add(new ItemStack(Blocks.rail));
+                items.add(new ItemStack(Blocks.RAIL));
             }
         } catch (Error error) {
             Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackInstance.class, TrackInstanceBase.class);
@@ -383,7 +383,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 //    @Override
 //    public int idDropped(int i, Random random, int j) {
 //        Game.log(Level.WARN, "Wrong function called when harvesting rail");
-//        return Blocks.rail.idDropped(i, random, j);
+//        return Blocks.RAIL.idDropped(i, random, j);
 //    }
 //
 

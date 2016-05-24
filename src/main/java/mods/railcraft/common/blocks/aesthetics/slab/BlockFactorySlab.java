@@ -55,7 +55,7 @@ public class BlockFactorySlab extends BlockFactory {
             if (BlockRailcraftSlab.isEnabled(mat) && mat.getSourceItem() != null) {
                 switch (mat) {
                     case SNOW:
-                        CraftingPlugin.addRecipe(BlockRailcraftSlab.getItem(mat, 3), "SSS", 'S', Blocks.snow_layer);
+                        CraftingPlugin.addRecipe(BlockRailcraftSlab.getItem(mat, 3), "SSS", 'S', Blocks.SNOW_LAYER);
                         break;
                     default:
                         CraftingPlugin.addRecipe(BlockRailcraftSlab.getItem(mat, 6), "SSS", 'S', mat.getSourceItem());

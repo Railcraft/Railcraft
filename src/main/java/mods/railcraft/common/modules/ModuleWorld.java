@@ -106,8 +106,8 @@ public class ModuleWorld extends RailcraftModulePayload {
                                 "dustSaltpeter",
                                 "sand",
                                 "sand",
-                                new ItemStack(Blocks.dirt),
-                                new ItemStack(Blocks.dirt));
+                                new ItemStack(Blocks.DIRT),
+                                new ItemStack(Blocks.DIRT));
                     }
                 }
             }

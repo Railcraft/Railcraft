@@ -74,7 +74,7 @@ public class FirestoneTickHandler {
             y = player.worldObj.getActualHeight() - 2;
 
         BlockPos pos = new BlockPos(x, y, z);
-        return canBurn(player.worldObj, pos) && player.worldObj.setBlockState(pos, Blocks.fire.getDefaultState());
+        return canBurn(player.worldObj, pos) && player.worldObj.setBlockState(pos, Blocks.FIRE.getDefaultState());
     }
 
     private boolean canBurn(World world, BlockPos pos) {
@@ -84,7 +84,7 @@ public class FirestoneTickHandler {
             BlockPos offset = pos.offset(side);
             if (!WorldPlugin.isBlockAir(world, offset)) {
                 Block block = WorldPlugin.getBlock(world, offset);
-                if (block != Blocks.fire)
+                if (block != Blocks.FIRE)
                     return true;
             }
         }

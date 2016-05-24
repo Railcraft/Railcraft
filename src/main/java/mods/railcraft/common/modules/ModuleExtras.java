@@ -44,7 +44,7 @@ public class ModuleExtras extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(cart.getCartItem(),
                             "WTW",
                             "WWW",
-                            'T', Blocks.tnt,
+                            'T', Blocks.TNT,
                             'W', "slabWood");
                     LootPlugin.addLoot(cart.getCartItem(), 1, 3, LootPlugin.Type.RAILWAY, cart.getTag());
                 }

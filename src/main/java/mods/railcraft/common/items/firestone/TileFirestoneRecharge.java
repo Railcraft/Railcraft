@@ -94,7 +94,7 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
     private boolean coolLava(BlockPos pos) {
         Block block = WorldPlugin.getBlock(worldObj, pos);
         if (Fluids.LAVA.is(FluidHelper.getFluid(block))) {
-            boolean placed = WorldPlugin.setBlockState(worldObj, pos, Blocks.obsidian.getDefaultState());
+            boolean placed = WorldPlugin.setBlockState(worldObj, pos, Blocks.OBSIDIAN.getDefaultState());
             if (placed) {
                 Vec3d startPosition = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
                 Vec3d endPosition = new Vec3d(getPos()).addVector(0.5, 0.8, 0.5);
@@ -156,7 +156,7 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
                 return;
 
             IBlockState state = WorldPlugin.getBlockState(worldObj, index);
-            if (state.getBlock() == Blocks.obsidian || Fluids.LAVA.is(FluidHelper.getFluid(state))) {
+            if (state.getBlock() == Blocks.OBSIDIAN || Fluids.LAVA.is(FluidHelper.getFluid(state))) {
                 lavaFound.add(index);
                 if (FluidHelper.isFullFluidBlock(state, worldObj, index))
                     queue.addLast(index);

@@ -72,107 +72,107 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         int z = this.boundingBox.minZ;
 
         //Clear area
-        fillWithBlocks(world, sbb, 1, 1, 2, 3, 3, 4, Blocks.air, Blocks.air, false);
-        fillWithBlocks(world, sbb, 5, 1, 0, 9, 4, 10, Blocks.air, Blocks.air, false);
+        fillWithBlocks(world, sbb, 1, 1, 2, 3, 3, 4, Blocks.AIR, Blocks.AIR, false);
+        fillWithBlocks(world, sbb, 5, 1, 0, 9, 4, 10, Blocks.AIR, Blocks.AIR, false);
         // floor
-//        fillWithBlocks(world, sbb, 0, 0, 0, 11, 0, 11, Blocks.gravel, Blocks.gravel, false);
-        fillWithBlocks(world, sbb, 4, 0, 0, 10, 0, 10, Blocks.double_stone_slab, Blocks.double_stone_slab, false);
-        fillWithBlocks(world, sbb, 0, 0, 1, 3, 0, 5, Blocks.double_stone_slab, Blocks.double_stone_slab, false);
+//        fillWithBlocks(world, sbb, 0, 0, 0, 11, 0, 11, Blocks.GRAVEL, Blocks.GRAVEL, false);
+        fillWithBlocks(world, sbb, 4, 0, 0, 10, 0, 10, Blocks.DOUBLE_STONE_SLAB, Blocks.DOUBLE_STONE_SLAB, false);
+        fillWithBlocks(world, sbb, 0, 0, 1, 3, 0, 5, Blocks.DOUBLE_STONE_SLAB, Blocks.DOUBLE_STONE_SLAB, false);
 
         // track
-        fillWithBlocks(world, sbb, 7, 1, 2, 7, 1, 8, Blocks.rail, Blocks.rail, false);
+        fillWithBlocks(world, sbb, 7, 1, 2, 7, 1, 8, Blocks.RAIL, Blocks.RAIL, false);
         placeTrack(EnumTrack.BUFFER_STOP, world, 7, 1, 1, sbb, EnumTrackMeta.NORTH_SOUTH.ordinal(), false);
         placeTrack(EnumTrack.BUFFER_STOP, world, 7, 1, 9, sbb, EnumTrackMeta.NORTH_SOUTH.ordinal(), true);
 
         // hall walls
-        fillWithBlocks(world, sbb, 4, 0, 0, 4, 3, 10, Blocks.brick_block, Blocks.brick_block, false);
-        fillWithBlocks(world, sbb, 10, 0, 0, 10, 3, 10, Blocks.brick_block, Blocks.brick_block, false);
+        fillWithBlocks(world, sbb, 4, 0, 0, 4, 3, 10, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
+        fillWithBlocks(world, sbb, 10, 0, 0, 10, 3, 10, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
 
-        fillWithBlocks(world, sbb, 5, 0, 0, 5, 4, 0, Blocks.brick_block, Blocks.brick_block, false);
-        fillWithBlocks(world, sbb, 9, 0, 0, 9, 4, 0, Blocks.brick_block, Blocks.brick_block, false);
+        fillWithBlocks(world, sbb, 5, 0, 0, 5, 4, 0, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
+        fillWithBlocks(world, sbb, 9, 0, 0, 9, 4, 0, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
 
-        fillWithBlocks(world, sbb, 5, 0, 10, 5, 4, 10, Blocks.brick_block, Blocks.brick_block, false);
-        fillWithBlocks(world, sbb, 9, 0, 10, 9, 4, 10, Blocks.brick_block, Blocks.brick_block, false);
+        fillWithBlocks(world, sbb, 5, 0, 10, 5, 4, 10, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
+        fillWithBlocks(world, sbb, 9, 0, 10, 9, 4, 10, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
 
-        int metaRoofSupportA = getMetadataWithOffset(Blocks.stone_stairs, 1) | 0x4;
-        int metaRoofSupportB = getMetadataWithOffset(Blocks.stone_stairs, 0) | 0x4;
+        int metaRoofSupportA = getMetadataWithOffset(Blocks.STONE_STAIRS, 1) | 0x4;
+        int metaRoofSupportB = getMetadataWithOffset(Blocks.STONE_STAIRS, 0) | 0x4;
         for (int rz = 1; rz <= 9; rz++) {
-            placeBlockAtCurrentPosition(world, Blocks.brick_stairs, metaRoofSupportA, 5, 4, rz, sbb);
-            placeBlockAtCurrentPosition(world, Blocks.brick_stairs, metaRoofSupportB, 9, 4, rz, sbb);
+            placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportA, 5, 4, rz, sbb);
+            placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportB, 9, 4, rz, sbb);
         }
-        placeBlockAtCurrentPosition(world, Blocks.brick_stairs, metaRoofSupportA, 6, 4, 0, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.brick_stairs, metaRoofSupportB, 8, 4, 0, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.brick_stairs, metaRoofSupportA, 6, 4, 10, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.brick_stairs, metaRoofSupportB, 8, 4, 10, sbb);
+        placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportA, 6, 4, 0, sbb);
+        placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportB, 8, 4, 0, sbb);
+        placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportA, 6, 4, 10, sbb);
+        placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportB, 8, 4, 10, sbb);
 
         // hall windows
-        fillWithBlocks(world, sbb, 10, 2, 2, 10, 2, 3, Blocks.glass_pane, Blocks.glass_pane, false);
-        fillWithBlocks(world, sbb, 10, 2, 7, 10, 2, 8, Blocks.glass_pane, Blocks.glass_pane, false);
-        fillWithBlocks(world, sbb, 4, 2, 7, 4, 2, 8, Blocks.glass_pane, Blocks.glass_pane, false);
+        fillWithBlocks(world, sbb, 10, 2, 2, 10, 2, 3, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
+        fillWithBlocks(world, sbb, 10, 2, 7, 10, 2, 8, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
+        fillWithBlocks(world, sbb, 4, 2, 7, 4, 2, 8, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
 
         // hall roof
-        int metaHallRoofA = getMetadataWithOffset(Blocks.stone_stairs, 0);
-        int metaHallRoofB = getMetadataWithOffset(Blocks.stone_stairs, 1);
+        int metaHallRoofA = getMetadataWithOffset(Blocks.STONE_STAIRS, 0);
+        int metaHallRoofB = getMetadataWithOffset(Blocks.STONE_STAIRS, 1);
         for (int rz = 0; rz <= 10; rz++) {
-            placeBlockAtCurrentPosition(world, Blocks.stone_brick_stairs, metaHallRoofA, 4, 4, rz, sbb);
-            placeBlockAtCurrentPosition(world, Blocks.stone_brick_stairs, metaHallRoofB, 10, 4, rz, sbb);
+            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHallRoofA, 4, 4, rz, sbb);
+            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHallRoofB, 10, 4, rz, sbb);
 
-            placeBlockAtCurrentPosition(world, Blocks.stone_brick_stairs, metaHallRoofA, 5, 5, rz, sbb);
-            placeBlockAtCurrentPosition(world, Blocks.stone_brick_stairs, metaHallRoofB, 9, 5, rz, sbb);
+            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHallRoofA, 5, 5, rz, sbb);
+            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHallRoofB, 9, 5, rz, sbb);
         }
 
-        fillWithBlocks(world, sbb, 6, 5, 0, 8, 5, 10, Blocks.stonebrick, Blocks.stonebrick, false);
-        fillWithMetadataBlocks(world, sbb, 6, 5, 1, 8, 5, 9, Blocks.stonebrick, 2, Blocks.stonebrick, 2, false);
-        fillWithMetadataBlocks(world, sbb, 7, 5, 2, 7, 5, 8, Blocks.stonebrick, 1, Blocks.stonebrick, 1, false);
-        placeBlockAtCurrentPosition(world, Blocks.stained_glass, 9, 7, 5, 2, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.stained_glass, 9, 7, 5, 5, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.stained_glass, 9, 7, 5, 8, sbb);
+        fillWithBlocks(world, sbb, 6, 5, 0, 8, 5, 10, Blocks.STONEBRICK, Blocks.STONEBRICK, false);
+        fillWithMetadataBlocks(world, sbb, 6, 5, 1, 8, 5, 9, Blocks.STONEBRICK, 2, Blocks.STONEBRICK, 2, false);
+        fillWithMetadataBlocks(world, sbb, 7, 5, 2, 7, 5, 8, Blocks.STONEBRICK, 1, Blocks.STONEBRICK, 1, false);
+        placeBlockAtCurrentPosition(world, Blocks.STAINED_GLASS, 9, 7, 5, 2, sbb);
+        placeBlockAtCurrentPosition(world, Blocks.STAINED_GLASS, 9, 7, 5, 5, sbb);
+        placeBlockAtCurrentPosition(world, Blocks.STAINED_GLASS, 9, 7, 5, 8, sbb);
 
         // hall torches
-//        int meta = getMetadataWithOffset(Blocks.torch, 4);
-        placeBlockAtCurrentPosition(world, Blocks.torch, 0, 9, 3, 1, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.torch, 0, 9, 3, 5, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.torch, 0, 9, 3, 9, sbb);
+//        int meta = getMetadataWithOffset(Blocks.TORCH, 4);
+        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 9, 3, 1, sbb);
+        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 9, 3, 5, sbb);
+        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 9, 3, 9, sbb);
 
-//        meta = getMetadataWithOffset(Blocks.torch, 3);
-        placeBlockAtCurrentPosition(world, Blocks.torch, 0, 5, 3, 1, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.torch, 0, 5, 3, 5, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.torch, 0, 5, 3, 9, sbb);
+//        meta = getMetadataWithOffset(Blocks.TORCH, 3);
+        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 5, 3, 1, sbb);
+        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 5, 3, 5, sbb);
+        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 5, 3, 9, sbb);
 
         // hut walls
-        fillWithBlocks(world, sbb, 0, 0, 1, 0, 3, 5, Blocks.brick_block, Blocks.brick_block, false);
-        fillWithBlocks(world, sbb, 1, 0, 1, 3, 3, 1, Blocks.brick_block, Blocks.brick_block, false);
-        fillWithBlocks(world, sbb, 1, 0, 5, 3, 3, 5, Blocks.brick_block, Blocks.brick_block, false);
+        fillWithBlocks(world, sbb, 0, 0, 1, 0, 3, 5, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
+        fillWithBlocks(world, sbb, 1, 0, 1, 3, 3, 1, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
+        fillWithBlocks(world, sbb, 1, 0, 5, 3, 3, 5, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
 
         // hut roof
-        fillWithBlocks(world, sbb, 1, 4, 2, 4, 4, 4, Blocks.stonebrick, Blocks.stonebrick, false);
-        int metaHutRoofA = getMetadataWithOffset(Blocks.stone_stairs, 0);
+        fillWithBlocks(world, sbb, 1, 4, 2, 4, 4, 4, Blocks.STONEBRICK, Blocks.STONEBRICK, false);
+        int metaHutRoofA = getMetadataWithOffset(Blocks.STONE_STAIRS, 0);
         for (int rz = 1; rz <= 5; rz++) {
-            placeBlockAtCurrentPosition(world, Blocks.stone_brick_stairs, metaHutRoofA, 0, 4, rz, sbb);
+            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHutRoofA, 0, 4, rz, sbb);
         }
-        int metaHutRoofB = getMetadataWithOffset(Blocks.stone_stairs, 3);
-        int metaHutRoofC = getMetadataWithOffset(Blocks.stone_stairs, 2);
+        int metaHutRoofB = getMetadataWithOffset(Blocks.STONE_STAIRS, 3);
+        int metaHutRoofC = getMetadataWithOffset(Blocks.STONE_STAIRS, 2);
         for (int rx = 1; rx <= 3; rx++) {
-            placeBlockAtCurrentPosition(world, Blocks.stone_brick_stairs, metaHutRoofB, rx, 4, 1, sbb);
-            placeBlockAtCurrentPosition(world, Blocks.stone_brick_stairs, metaHutRoofC, rx, 4, 5, sbb);
+            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHutRoofB, rx, 4, 1, sbb);
+            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHutRoofC, rx, 4, 5, sbb);
         }
 
         // hut door
-        fillWithBlocks(world, sbb, 4, 1, 3, 4, 2, 3, Blocks.air, Blocks.air, false);
-        fillWithBlocks(world, sbb, 4, 1, 3, 4, 2, 3, Blocks.air, Blocks.air, false);
-        placeBlockAtCurrentPosition(world, Blocks.double_stone_slab, 0, 4, 0, 3, sbb);
+        fillWithBlocks(world, sbb, 4, 1, 3, 4, 2, 3, Blocks.AIR, Blocks.AIR, false);
+        fillWithBlocks(world, sbb, 4, 1, 3, 4, 2, 3, Blocks.AIR, Blocks.AIR, false);
+        placeBlockAtCurrentPosition(world, Blocks.DOUBLE_STONE_SLAB, 0, 4, 0, 3, sbb);
         placeDoorAtCurrentPosition(world, boundingBox, random, 4, 1, 3, 2);
 
         // hut windows
-        fillWithBlocks(world, sbb, 2, 2, 1, 2, 2, 1, Blocks.glass_pane, Blocks.glass_pane, false);
-        fillWithBlocks(world, sbb, 2, 2, 5, 2, 2, 5, Blocks.glass_pane, Blocks.glass_pane, false);
-        fillWithBlocks(world, sbb, 0, 2, 3, 0, 2, 3, Blocks.glass_pane, Blocks.glass_pane, false);
+        fillWithBlocks(world, sbb, 2, 2, 1, 2, 2, 1, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
+        fillWithBlocks(world, sbb, 2, 2, 5, 2, 2, 5, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
+        fillWithBlocks(world, sbb, 0, 2, 3, 0, 2, 3, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
 
         // hut torches
-//        meta = getMetadataWithOffset(Blocks.torch, 1);
-        placeBlockAtCurrentPosition(world, Blocks.torch, 0, 2, 3, 2, sbb);
-//        meta = getMetadataWithOffset(Blocks.torch, 2);
-        placeBlockAtCurrentPosition(world, Blocks.torch, 0, 2, 3, 4, sbb);
+//        meta = getMetadataWithOffset(Blocks.TORCH, 1);
+        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 2, 3, 2, sbb);
+//        meta = getMetadataWithOffset(Blocks.TORCH, 2);
+        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 2, 3, 4, sbb);
 
         // machines
         if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable()) {
@@ -186,13 +186,13 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         for (int k = 0; k < 11; ++k) {
             for (int l = 4; l < 11; ++l) {
                 this.clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
-                this.func_151554_b(world, Blocks.cobblestone, 0, l, -1, k, sbb);
+                this.func_151554_b(world, Blocks.COBBLESTONE, 0, l, -1, k, sbb);
             }
         }
         for (int k = 1; k < 6; ++k) {
             for (int l = 0; l < 4; ++l) {
                 this.clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
-                this.func_151554_b(world, Blocks.cobblestone, 0, l, -1, k, sbb);
+                this.func_151554_b(world, Blocks.COBBLESTONE, 0, l, -1, k, sbb);
             }
         }
 
@@ -209,7 +209,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
 
     private void placeTrack(EnumTrack track, World world, int x, int y, int z, StructureBoundingBox sbb, int meta, boolean reversed) {
         if (!track.isEnabled()) {
-            placeBlockAtCurrentPosition(world, Blocks.rail, 0, x, y, z, sbb);
+            placeBlockAtCurrentPosition(world, Blocks.RAIL, 0, x, y, z, sbb);
             return;
         }
         int xx = this.getXWithOffset(x, z);
@@ -273,8 +273,8 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
 
         if (!hasMadeChest && sbb.isVecInside(xx, yy, zz)) {
             hasMadeChest = true;
-            if (world.getBlock(xx, yy, zz) != Blocks.chest) {
-                world.setBlock(xx, yy, zz, Blocks.chest, getMetadataWithOffset(Blocks.chest, meta), 2);
+            if (world.getBlock(xx, yy, zz) != Blocks.CHEST) {
+                world.setBlock(xx, yy, zz, Blocks.CHEST, getMetadataWithOffset(Blocks.CHEST, meta), 2);
                 TileEntityChest chest = (TileEntityChest) world.getTileEntity(xx, yy, zz);
 
                 if (chest != null)

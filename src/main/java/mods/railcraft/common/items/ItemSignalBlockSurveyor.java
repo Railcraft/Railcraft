@@ -51,7 +51,7 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
                 " R ",
                 'G', "paneGlassColorless",
                 'C', Items.COMPASS,
-                'B', Blocks.stone_button,
+                'B', Blocks.STONE_BUTTON,
                 'R', "dustRedstone");
     }
 

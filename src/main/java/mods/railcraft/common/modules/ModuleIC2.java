@@ -96,7 +96,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                             "XPX",
                             "XXX",
                             'X', tin,
-                            'P', Blocks.stone_pressure_plate);
+                            'P', Blocks.STONE_PRESSURE_PLATE);
                 }
 
                 ItemStack batbox = IC2Plugin.getItem("batBox");
@@ -169,7 +169,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                 if (blockDetector != null)
                     detector = EnumDetector.ENERGY.getItem();
                 else
-                    detector = new ItemStack(Blocks.stone_pressure_plate);
+                    detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
 
                 if (battery != null && machine != null) {
                     if (EnumMachineGamma.ENERGY_LOADER.isAvailable())
@@ -180,7 +180,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                                 'D', detector,
                                 'B', battery,
                                 'I', machine,
-                                'L', new ItemStack(Blocks.hopper));
+                                'L', new ItemStack(Blocks.HOPPER));
 
                     if (EnumMachineGamma.ENERGY_UNLOADER.isAvailable())
                         Recipes.advRecipes.addRecipe(EnumMachineGamma.ENERGY_UNLOADER.getItem(),
@@ -190,7 +190,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                                 'D', detector,
                                 'B', battery,
                                 'I', machine,
-                                'L', new ItemStack(Blocks.hopper));
+                                'L', new ItemStack(Blocks.HOPPER));
                 }
 
                 if (RailcraftConfig.isItemEnabled("ic2.upgrade.lapotron")) {
@@ -206,7 +206,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
                                 "wLw",
                                 "GCG",
-                                'G', new ItemStack(Blocks.glass, 1, 0),
+                                'G', new ItemStack(Blocks.GLASS, 1, 0),
                                 'w', glassCable,
                                 'C', circuit,
                                 'L', lapotron);

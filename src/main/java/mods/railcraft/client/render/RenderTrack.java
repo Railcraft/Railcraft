@@ -49,7 +49,7 @@ public class RenderTrack implements ISimpleBlockRenderingHandler {
             track = ((TileTrack) tile).getTrackInstance();
             icon = renderblocks.getIconSafe(track.getIcon());
         } else {
-            icon = Blocks.rail.getIcon(0, 0);
+            icon = Blocks.RAIL.getIcon(0, 0);
         }
 
         if (renderblocks.hasOverrideBlockTexture()) {
@@ -135,7 +135,7 @@ public class RenderTrack implements ISimpleBlockRenderingHandler {
 
     private static void renderGatedTrack(RenderBlocks render, TrackGated track, int i, int j, int k, int meta) {
         boolean open = track.isGateOpen();
-        Block gate = Blocks.fence_gate;
+        Block gate = Blocks.FENCE_GATE;
         if (meta == 0) {
             float f = 0.0F;
             float f8 = 0.125F;
