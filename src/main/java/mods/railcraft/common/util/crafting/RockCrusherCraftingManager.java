@@ -15,8 +15,8 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.ITextComponent;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
@@ -140,7 +140,7 @@ public class RockCrusherCraftingManager implements ICrusherCraftingManager {
         private final float randomChance;
         private final int maxItems;
         private final String[] groupNames;
-        private List<IChatComponent> toolTip;
+        private List<ITextComponent> toolTip;
 
         GenRule(final float randomChance, final int maxItems, final String... groupNames) {
             this.randomChance = randomChance;
@@ -170,12 +170,12 @@ public class RockCrusherCraftingManager implements ICrusherCraftingManager {
 
         //TODO: test this!
         @Override
-        public List<IChatComponent> getToolTip() {
+        public List<ITextComponent> getToolTip() {
             if (toolTip == null) {
-                toolTip = new ArrayList<IChatComponent>();
-                toolTip.add(new ChatComponentText(new DecimalFormat("(###.###% chance)").format(randomChance)));
-                toolTip.add(new ChatComponentText("Max Items: " + maxItems));
-                toolTip.add(new ChatComponentText("Groups: " + Arrays.toString(groupNames)));
+                toolTip = new ArrayList<ITextComponent>();
+                toolTip.add(new TextComponentString(new DecimalFormat("(###.###% chance)").format(randomChance)));
+                toolTip.add(new TextComponentString("Max Items: " + maxItems));
+                toolTip.add(new TextComponentString("Groups: " + Arrays.toString(groupNames)));
             }
             return toolTip;
         }

@@ -27,6 +27,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -166,6 +167,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
         return ticksPowered > 0 ? FULL_POWER : NO_POWER;
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

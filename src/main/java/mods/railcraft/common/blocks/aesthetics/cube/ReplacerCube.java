@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.cube;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ReplacerCube extends SimpleCube {

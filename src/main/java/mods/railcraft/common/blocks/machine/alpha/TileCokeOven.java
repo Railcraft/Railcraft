@@ -31,7 +31,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -39,6 +39,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -245,6 +246,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
         tankManager.readTanksFromNBT(data);
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

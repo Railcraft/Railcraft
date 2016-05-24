@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.util.network;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import java.io.DataInputStream;
 import java.io.IOException;

@@ -13,6 +13,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -56,6 +57,7 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
         return controller.getAspect();
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         try {

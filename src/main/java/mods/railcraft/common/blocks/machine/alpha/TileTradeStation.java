@@ -33,6 +33,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -176,6 +177,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         return true;
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.tracks.instances.TrackSpeed;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 

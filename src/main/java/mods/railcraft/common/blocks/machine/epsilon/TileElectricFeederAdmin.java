@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -83,6 +84,7 @@ public class TileElectricFeederAdmin extends TileMachineBase implements IElectri
         powered = data.getBoolean("powered");
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

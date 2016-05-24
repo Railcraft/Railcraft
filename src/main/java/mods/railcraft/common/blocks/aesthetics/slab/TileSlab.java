@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -84,6 +85,7 @@ public class TileSlab extends RailcraftTileEntity {
         return BlockRailcraftSlab.getTag(getUpmostSlab());
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

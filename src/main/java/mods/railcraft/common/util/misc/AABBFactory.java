@@ -12,7 +12,7 @@ package mods.railcraft.common.util.misc;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.Vec3;
 
 /**

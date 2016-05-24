@@ -11,7 +11,7 @@ package mods.railcraft.common.worldgen;
 import com.google.common.collect.MapMaker;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.worldgen.NoiseGen.NoiseGenSimplex;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;

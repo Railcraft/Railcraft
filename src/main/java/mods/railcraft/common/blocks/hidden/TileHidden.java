@@ -18,6 +18,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -63,6 +64,7 @@ public class TileHidden extends RailcraftTileEntity {
         }
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
@@ -119,6 +121,7 @@ public class TileHidden extends RailcraftTileEntity {
         }
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return "";

@@ -17,9 +17,10 @@ import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -40,6 +41,7 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
         return "tile." + track.getTrackSpec().getTrackTag().replace(':', '.') + ".name";
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

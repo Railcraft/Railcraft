@@ -27,7 +27,7 @@ import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 

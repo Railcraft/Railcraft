@@ -16,6 +16,7 @@ import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -47,6 +48,7 @@ public abstract class TileSwitchSecured extends TileSwitchBase implements IGuiRe
         return !isSecure() || PlayerPlugin.isOwnerOrOp(getOwner(), player);
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

@@ -9,7 +9,7 @@
 package mods.railcraft.common.plugins.craftguide;
 
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import uristqwerty.CraftGuide.api.ItemFilter;
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.Renderer;
@@ -52,7 +52,7 @@ public class OutputEntrySlot extends ItemSlot {
 
         List<String> tooltip = implementation.getTooltip(this, stack(data, dataIndex));
         ICrusherCraftingManager.IOutputEntry outputEntry = (ICrusherCraftingManager.IOutputEntry) data[dataIndex];
-        for (IChatComponent line : outputEntry.getGenRule().getToolTip())
+        for (ITextComponent line : outputEntry.getGenRule().getToolTip())
             tooltip.add(line.getFormattedText());
         return tooltip;
     }

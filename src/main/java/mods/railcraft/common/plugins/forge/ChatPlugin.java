@@ -11,9 +11,9 @@ package mods.railcraft.common.plugins.forge;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -28,12 +28,12 @@ import net.minecraft.world.WorldServer;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ChatPlugin {
-    public static IChatComponent getMessage(String msg) {
-        return new ChatComponentText(msg);
+    public static ITextComponent getMessage(String msg) {
+        return new TextComponentString(msg);
     }
 
-    public static IChatComponent chatComp(String msg, Object... args) {
-        return new ChatComponentTranslation(msg, args);
+    public static ITextComponent chatComp(String msg, Object... args) {
+        return new TextComponentTranslation(msg, args);
     }
 
     /**

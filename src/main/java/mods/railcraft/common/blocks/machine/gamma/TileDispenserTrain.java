@@ -26,9 +26,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 
 public class TileDispenserTrain extends TileDispenserCart {
@@ -161,6 +162,7 @@ public class TileDispenserTrain extends TileDispenserCart {
         return 64;
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

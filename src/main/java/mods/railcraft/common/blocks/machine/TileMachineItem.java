@@ -17,6 +17,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
+
 public abstract class TileMachineItem extends TileMachineBase implements IInventory, IInventoryObject {
 
     private StandaloneInventory inv;
@@ -75,6 +77,7 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
         inv.readFromNBT("Items", data);
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

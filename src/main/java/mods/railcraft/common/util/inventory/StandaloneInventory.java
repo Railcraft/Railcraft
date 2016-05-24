@@ -16,8 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.ITextComponent;
 
 import java.util.Iterator;
 
@@ -142,8 +142,8 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
     }
 
     @Override
-    public IChatComponent getDisplayName() {
-        return new ChatComponentText(getName());
+    public ITextComponent getDisplayName() {
+        return new TextComponentString(getName());
     }
 
     protected String invTypeName() {

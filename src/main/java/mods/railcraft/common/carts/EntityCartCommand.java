@@ -16,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,7 +35,7 @@ public class EntityCartCommand extends CartBase {
         @Override
         public void func_145756_e() {
             EntityCartCommand.this.getDataWatcher().updateObject(23, this.func_145753_i());
-            EntityCartCommand.this.getDataWatcher().updateObject(24, IChatComponent.Serializer.func_150696_a(this.func_145749_h()));
+            EntityCartCommand.this.getDataWatcher().updateObject(24, ITextComponent.Serializer.func_150696_a(this.func_145749_h()));
         }
 
         @SideOnly(Side.CLIENT)
@@ -87,7 +87,7 @@ public class EntityCartCommand extends CartBase {
         super.readEntityFromNBT(p_70037_1_);
         this.commandLogic.func_145759_b(p_70037_1_);
         this.getDataWatcher().updateObject(23, this.commandLogic.func_145753_i());
-        this.getDataWatcher().updateObject(24, IChatComponent.Serializer.func_150696_a(this.commandLogic.func_145749_h()));
+        this.getDataWatcher().updateObject(24, ITextComponent.Serializer.func_150696_a(this.commandLogic.func_145749_h()));
     }
     
     @Override
@@ -134,7 +134,7 @@ public class EntityCartCommand extends CartBase {
 
         if (dataValueId == 24) {
             try {
-                this.commandLogic.func_145750_b(IChatComponent.Serializer.func_150699_a(this.getDataWatcher().getWatchableObjectString(24)));
+                this.commandLogic.func_145750_b(ITextComponent.Serializer.func_150699_a(this.getDataWatcher().getWatchableObjectString(24)));
             } catch (Throwable ignored) {
                 
             }

@@ -36,6 +36,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -190,6 +192,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
         return (float) boiler.getHeat();
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

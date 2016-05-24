@@ -10,7 +10,7 @@ package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import java.util.*;

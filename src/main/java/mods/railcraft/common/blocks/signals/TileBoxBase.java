@@ -12,7 +12,7 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;

@@ -18,7 +18,7 @@ import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -93,7 +93,7 @@ public abstract class TrackSecured extends TrackBaseRailcraft implements IGuiRet
     }
 
     @Override
-    public IChatComponent getDisplayName() {
+    public ITextComponent getDisplayName() {
         return ((TileTrack) tileEntity).getDisplayName();
     }
 

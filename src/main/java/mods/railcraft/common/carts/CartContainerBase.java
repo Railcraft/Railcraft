@@ -20,13 +20,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -39,18 +42,19 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
     protected EnumFacing travelDirection;
     protected EnumFacing verticalTravelDirection;
 
-    public CartContainerBase(World world) {
+    protected CartContainerBase(World world) {
         super(world);
-        renderDistanceWeight = CartConstants.RENDER_DIST_MULTIPLIER;
+        setRenderDistanceWeight(CartConstants.RENDER_DIST_MULTIPLIER);
     }
 
-    public CartContainerBase(World world, double x, double y, double z) {
+    protected CartContainerBase(World world, double x, double y, double z) {
         super(world, x, y, z);
-        renderDistanceWeight = CartConstants.RENDER_DIST_MULTIPLIER;
+        setRenderDistanceWeight(CartConstants.RENDER_DIST_MULTIPLIER);
     }
 
     public abstract ICartType getCartType();
 
+    @Nonnull
     @Override
     public String getName() {
         return hasCustomName() ? getCustomNameTag() : getCartType().getTag();
@@ -61,8 +65,8 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
     }
 
     @Override
-    public final boolean interactFirst(EntityPlayer player) {
-        return MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player)) || doInteract(player);
+    public boolean processInitialInteract(@Nonnull EntityPlayer player, @Nullable ItemStack stack, @Nonnull EnumHand hand) {
+        return MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, stack, hand)) || doInteract(player);
     }
 
     public boolean doInteract(EntityPlayer player) {
@@ -73,6 +77,7 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
         return CartConstants.STANDARD_DRAG;
     }
 
+    @Nonnull
     @Override
     public ItemStack getCartItem() {
         ItemStack stack = EnumCart.fromCart(this).getCartItem();
@@ -103,8 +108,9 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
         }
     }
 
+    @Nonnull
     @Override
-    public EntityMinecart.EnumMinecartType getMinecartType() {
+    public EntityMinecart.Type getType() {
         return null;
     }
 
@@ -180,14 +186,16 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
         return false;
     }
 
+    @Nonnull
     @Override
     public String getGuiID() {
         return "railcraft:" + getCartType().getBaseTag();
     }
 
     //TODO: Explode?
+    @Nonnull
     @Override
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+    public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn) {
         return null;
     }
 }

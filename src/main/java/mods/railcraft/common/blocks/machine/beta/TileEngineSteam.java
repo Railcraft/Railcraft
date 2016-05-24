@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 /**
@@ -144,6 +145,7 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
 
     public abstract int steamUsedPerTick();
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

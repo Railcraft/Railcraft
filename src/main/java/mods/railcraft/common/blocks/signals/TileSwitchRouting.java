@@ -26,6 +26,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
+
 public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRoutingTile {
 
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
@@ -106,6 +108,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
             logic = ItemRoutingTable.getLogic(inv.getStackInSlot(0));
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

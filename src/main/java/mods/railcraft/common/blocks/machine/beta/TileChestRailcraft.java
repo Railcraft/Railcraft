@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -153,6 +154,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
         WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, numUsingPlayers);
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

@@ -14,7 +14,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -48,7 +48,7 @@ public class RailcraftDamageSource extends DamageSource {
     }
 
     @Override
-    public IChatComponent func_151519_b(EntityLivingBase entity) {
+    public ITextComponent func_151519_b(EntityLivingBase entity) {
         String locTag = "death.railcraft." + damageType + "." + (MiscTools.RANDOM.nextInt(numMessages) + 1);
         return ChatPlugin.chatComp(locTag, entity.getName());
     }

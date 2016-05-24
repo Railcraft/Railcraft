@@ -17,6 +17,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -65,6 +66,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
         return isStructureValid();
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
@@ -82,6 +84,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
         return inv.getSizeInventory();
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return LocalizationPlugin.translate(guiTag);

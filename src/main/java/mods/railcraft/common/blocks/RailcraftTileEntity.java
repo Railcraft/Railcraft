@@ -26,14 +26,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.ITickable;
-import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable, ITickable, IWorldNameable {
+public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable, ITickable {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
     protected int clock = MiscTools.RANDOM.nextInt();
@@ -144,7 +144,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     public final int getDimension() {
         if (worldObj == null)
             return 0;
-        return worldObj.provider.getDimensionId();
+        return worldObj.provider.getDimension();
     }
 
     @Override
@@ -168,8 +168,9 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return debug;
     }
 
+    @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         if (owner.getName() != null)
             data.setString("owner", owner.getName());
@@ -179,6 +180,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         MiscTools.writeUUID(data, "uuid", uuid);
         if (!customName.isEmpty())
             data.setString("customName", customName);
+        return data;
     }
 
     @Override
@@ -201,6 +203,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return getPos().getZ();
     }
 
+    @Nonnull
     @Override
     public final World getWorld() {
         return worldObj;
@@ -218,14 +221,16 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
             customName = name;
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return hasCustomName() ? customName : getLocalizationTag();
     }
 
+    @Nonnull
     @Override
-    public IChatComponent getDisplayName() {
-        return hasCustomName() ? new ChatComponentText(customName) : new ChatComponentTranslation(getLocalizationTag());
+    public ITextComponent getDisplayName() {
+        return hasCustomName() ? new TextComponentString(customName) : new TextComponentTranslation(getLocalizationTag());
     }
 
 }

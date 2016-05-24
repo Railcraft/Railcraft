@@ -13,10 +13,13 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,18 +29,20 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class CartBase extends EntityMinecart implements IRailcraftCart, IItemCart {
-    public CartBase(World world) {
+    protected CartBase(World world) {
         super(world);
-        renderDistanceWeight = CartConstants.RENDER_DIST_MULTIPLIER;
+        //TODO: Is this the best way?
+        setRenderDistanceWeight(CartConstants.RENDER_DIST_MULTIPLIER);
     }
 
-    public CartBase(World world, double x, double y, double z) {
+    protected CartBase(World world, double x, double y, double z) {
         super(world, x, y, z);
-        renderDistanceWeight = CartConstants.RENDER_DIST_MULTIPLIER;
+        setRenderDistanceWeight(CartConstants.RENDER_DIST_MULTIPLIER);
     }
 
     public abstract ICartType getCartType();
 
+    @Nonnull
     @Override
     public String getName() {
         return hasCustomName() ? getCustomNameTag() : getCartType().getTag();
@@ -48,10 +53,8 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     }
 
     @Override
-    public final boolean interactFirst(EntityPlayer player) {
-        if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player)))
-            return true;
-        return doInteract(player);
+    public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
+        return MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, stack, hand)) || doInteract(player);
     }
 
     public boolean doInteract(EntityPlayer player) {
@@ -60,6 +63,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
 
     public abstract double getDrag();
 
+    @Nonnull
     @Override
     public ItemStack getCartItem() {
         ItemStack stack = EnumCart.fromCart(this).getCartItem();
@@ -86,7 +90,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     }
 
     @Override
-    public EntityMinecart.EnumMinecartType getMinecartType() {
+    public EntityMinecart.Type getType() {
         return null;
     }
 

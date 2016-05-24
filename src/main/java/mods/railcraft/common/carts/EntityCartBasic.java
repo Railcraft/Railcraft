@@ -9,7 +9,7 @@
 package mods.railcraft.common.carts;
 
 import net.minecraft.entity.item.EntityMinecartEmpty;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 

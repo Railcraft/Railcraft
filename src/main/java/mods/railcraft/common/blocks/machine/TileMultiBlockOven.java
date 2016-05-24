@@ -18,6 +18,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -85,6 +86,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         }
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

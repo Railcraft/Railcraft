@@ -15,7 +15,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.*;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 /**
@@ -50,11 +51,11 @@ public class CommandHelpers {
     }
 
     public static void sendLocalizedChatMessage(ICommandSender sender, String locTag, Object... args) {
-        sender.addChatMessage(new ChatComponentTranslation(locTag, args));
+        sender.addChatMessage(new TextComponentTranslation(locTag, args));
     }
 
     public static void sendLocalizedChatMessage(ICommandSender sender, ChatStyle chatStyle, String locTag, Object... args) {
-        ChatComponentTranslation chat = new ChatComponentTranslation(locTag, args);
+        TextComponentTranslation chat = new TextComponentTranslation(locTag, args);
         chat.setChatStyle(chatStyle);
         sender.addChatMessage(chat);
     }
@@ -67,7 +68,7 @@ public class CommandHelpers {
      * Messages will not be localized properly if you use StringUtil.localize().
      */
     public static void sendChatMessage(ICommandSender sender, String message) {
-        sender.addChatMessage(new ChatComponentText(message));
+        sender.addChatMessage(new TextComponentString(message));
     }
 
     public static void throwWrongUsage(ICommandSender sender, IModCommand command) throws WrongUsageException {

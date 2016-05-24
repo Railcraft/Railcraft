@@ -34,6 +34,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -67,6 +68,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
         return EnumMachineAlpha.ROLLING_MACHINE;
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

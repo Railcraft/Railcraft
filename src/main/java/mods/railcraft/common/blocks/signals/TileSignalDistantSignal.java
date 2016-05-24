@@ -12,6 +12,7 @@ import mods.railcraft.api.signals.*;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -49,6 +50,7 @@ public class TileSignalDistantSignal extends TileSignalBase implements IReceiver
         sendUpdateToClient();
     }
 
+    @Nonnull
     @Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);

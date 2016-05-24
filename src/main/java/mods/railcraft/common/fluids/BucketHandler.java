@@ -11,7 +11,7 @@ package mods.railcraft.common.fluids;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
