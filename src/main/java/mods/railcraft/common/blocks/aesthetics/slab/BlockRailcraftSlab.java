@@ -32,10 +32,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -118,7 +118,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab) {
             BlockMaterial slab = ((TileSlab) tile).getUpmostSlab();
@@ -214,7 +214,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+    public boolean addHitEffects(World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
         return ParticleHelper.addHitEffects(worldObj, block, target, effectRenderer, null);
     }
 

@@ -9,9 +9,9 @@
 package mods.railcraft.client.particles;
 
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,10 +24,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityFireSparkFX extends EntityFX {
 
     private final float lavaParticleScale;
-    private final Vec3 end;
+    private final Vec3d end;
     private final double maxDist;
 
-    public EntityFireSparkFX(World world, Vec3 start, Vec3 end) {
+    public EntityFireSparkFX(World world, Vec3d start, Vec3d end) {
         super(world, start.xCoord, start.yCoord, start.zCoord, 0, 0, 0);
         this.end = end;
 
@@ -45,9 +45,9 @@ public class EntityFireSparkFX extends EntityFX {
     }
 
     private void calculateVector(double dist) {
-        Vec3 vecParticle = getPositionVector();
+        Vec3d vecParticle = getPositionVector();
 
-        Vec3 vel = vecParticle.subtract(end);
+        Vec3d vel = vecParticle.subtract(end);
         vel = vel.normalize();
         
         float velScale = 0.1f;
@@ -73,7 +73,7 @@ public class EntityFireSparkFX extends EntityFX {
     }
 
     @Override
-    public void renderParticle(WorldRenderer world, Entity entity, float par2, float par3, float par4, float par5, float par6, float par7) {
+    public void renderParticle(VertexBuffer world, Entity entity, float par2, float par3, float par4, float par5, float par6, float par7) {
         float f6 = ((float) particleAge + par2) / (float) particleMaxAge;
         this.particleScale = lavaParticleScale * (1.0F - f6 * f6);
         super.renderParticle(world, entity, par2, par3, par4, par5, par6, par7);

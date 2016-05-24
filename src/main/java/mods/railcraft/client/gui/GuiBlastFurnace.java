@@ -11,7 +11,7 @@ package mods.railcraft.client.gui;
 import mods.railcraft.common.blocks.machine.alpha.TileBlastFurnace;
 import mods.railcraft.common.gui.containers.ContainerBlastFurnace;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 public class GuiBlastFurnace extends TileGui {
 
@@ -29,7 +29,7 @@ public class GuiBlastFurnace extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         GuiTools.drawCenteredString(fontRendererObj, tile.getName(), 6);
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
     /**

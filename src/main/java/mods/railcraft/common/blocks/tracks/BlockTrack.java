@@ -25,7 +25,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -40,7 +40,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -89,8 +92,8 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, SHAPE);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, SHAPE);
     }
 
     @Override
@@ -129,7 +132,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {
             if (tile instanceof TileTrack) {
@@ -198,7 +201,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 startVec, Vec3 endVec) {
+    public RayTraceResult collisionRayTrace(World world, BlockPos pos, Vec3d startVec, Vec3d endVec) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {
             if (tile instanceof TileTrack) {
@@ -342,7 +345,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+    public boolean addHitEffects(World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
         return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, null);
     }
 

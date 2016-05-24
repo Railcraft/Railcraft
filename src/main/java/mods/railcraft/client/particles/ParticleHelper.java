@@ -15,7 +15,7 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,7 +33,7 @@ public class ParticleHelper {
     private static final Random rand = new Random();
 
     @SideOnly(Side.CLIENT)
-    public static boolean addHitEffects(World world, Block block, MovingObjectPosition target, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
+    public static boolean addHitEffects(World world, Block block, RayTraceResult target, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
         BlockPos pos = target.getBlockPos();
         int x = pos.getX();
         int y = pos.getY();

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine;
 
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -35,7 +35,7 @@ public class BoundingBoxManager {
         return box.getBox(world, pos);
     }
 
-    public static AxisAlignedBB getSelectionBox(World world,  BlockPos pos, IEnumMachine<?> machine) {
+    public static AxisAlignedBB getSelectionBox(World world, BlockPos pos, IEnumMachine<?> machine) {
         BoundingBox box = selectionBoxes.get(machine);
         if (box == null)
             box = DEFAULT;

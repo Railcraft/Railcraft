@@ -11,7 +11,7 @@
 package mods.railcraft.client.render;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -308,7 +308,7 @@ public class OpenGL {
         GL11.glVertex3f(x, y, z);
     }
 
-    public static void glVertex(Vec3 vertex) {
+    public static void glVertex(Vec3d vertex) {
         GL11.glVertex3f((float) vertex.xCoord, (float) vertex.yCoord, (float) vertex.zCoord);
     }
 

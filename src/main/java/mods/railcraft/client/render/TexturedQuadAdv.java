@@ -11,7 +11,7 @@ package mods.railcraft.client.render;
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 /**
  *
@@ -43,9 +43,9 @@ public class TexturedQuadAdv extends TexturedQuad {
 
     @Override
     public void draw(Tessellator tess, float par2) {
-        Vec3 vec3 = this.vertexPositions[1].vector3D.subtract(this.vertexPositions[0].vector3D);
-        Vec3 vec31 = this.vertexPositions[1].vector3D.subtract(this.vertexPositions[2].vector3D);
-        Vec3 vec32 = vec31.crossProduct(vec3).normalize();
+        Vec3d vec3 = this.vertexPositions[1].vector3D.subtract(this.vertexPositions[0].vector3D);
+        Vec3d vec31 = this.vertexPositions[1].vector3D.subtract(this.vertexPositions[2].vector3D);
+        Vec3d vec32 = vec31.crossProduct(vec3).normalize();
         if (doTesselating) {
             tess.startDrawingQuads();
         }

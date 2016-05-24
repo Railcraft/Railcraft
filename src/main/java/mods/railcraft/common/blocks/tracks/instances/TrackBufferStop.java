@@ -16,9 +16,9 @@ import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -49,7 +49,7 @@ public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversi
     }
 
     @Override
-    public MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1) {
+    public RayTraceResult collisionRayTrace(Vec3d vec3d, Vec3d vec3d1) {
         return MiscTools.rayTraceBlock(vec3d, vec3d1, getPos());
     }
 

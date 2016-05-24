@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.gui.tooltips;
 
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  *
@@ -17,10 +17,10 @@ import net.minecraft.util.EnumChatFormatting;
 public class ToolTipLine {
 
     public String text;
-    public EnumChatFormatting format;
+    public TextFormatting format;
     public int spacing;
 
-    public ToolTipLine(String text, EnumChatFormatting format) {
+    public ToolTipLine(String text, TextFormatting format) {
         this.text = text;
         this.format = format;
     }

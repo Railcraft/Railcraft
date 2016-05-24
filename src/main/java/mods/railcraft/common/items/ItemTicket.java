@@ -18,7 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -126,14 +126,14 @@ public class ItemTicket extends ItemRailcraft {
         if (stack.hasTagCompound()) {
             GameProfile owner = getOwner(stack);
             if (owner.getId() != null) {
-                list.add(EnumChatFormatting.WHITE + LocalizationPlugin.translate("railcraft.gui.routing.ticket.tip.issuer"));
-                list.add(EnumChatFormatting.GRAY + PlayerPlugin.getUsername(player.worldObj, owner));
+                list.add(TextFormatting.WHITE + LocalizationPlugin.translate("railcraft.gui.routing.ticket.tip.issuer"));
+                list.add(TextFormatting.GRAY + PlayerPlugin.getUsername(player.worldObj, owner));
             }
 
             String dest = getDestination(stack);
             if (!dest.equals("")) {
-                list.add(EnumChatFormatting.WHITE + LocalizationPlugin.translate("railcraft.gui.routing.ticket.tip.dest"));
-                list.add(EnumChatFormatting.GRAY + dest);
+                list.add(TextFormatting.WHITE + LocalizationPlugin.translate("railcraft.gui.routing.ticket.tip.dest"));
+                list.add(TextFormatting.GRAY + dest);
             }
         } else
             list.add(LocalizationPlugin.translate("railcraft.gui.routing.ticket.tip.blank"));

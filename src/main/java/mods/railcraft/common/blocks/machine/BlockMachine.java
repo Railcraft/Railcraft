@@ -18,7 +18,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -31,10 +31,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -48,7 +48,7 @@ import java.util.Random;
 public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer implements IPostConnection {
 
     private final MachineProxy<M> proxy;
-    private final BlockState blockstate;
+    private final BlockStateContainer blockstate;
 
     public BlockMachine(MachineProxy<M> proxy, boolean opaque) {
         super(Material.rock);
@@ -57,7 +57,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         setStepSound(soundTypeStone);
         setTickRandomly(true);
         this.proxy = proxy;
-        this.blockstate = new BlockState(this, proxy.getVariantProperty());
+        this.blockstate = new BlockStateContainer(this, proxy.getVariantProperty());
         setDefaultState(blockstate.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMetaMap().get(0)));
         this.fullBlock = opaque;
 
@@ -76,7 +76,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public BlockState getBlockState() {
+    public BlockStateContainer getBlockState() {
         return blockstate;
     }
 
@@ -207,7 +207,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, world.getBlockState(pos), 0);
         return drops.get(0);
     }

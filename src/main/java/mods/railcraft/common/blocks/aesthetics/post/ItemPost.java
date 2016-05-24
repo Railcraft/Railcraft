@@ -18,7 +18,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class ItemPost extends ItemBlock {
 
             Emblem emblem = EmblemToolsClient.packageManager.getEmblem(emblemIdent.getString());
             if (emblem != null)
-                info.add(EnumChatFormatting.GRAY + emblem.displayName);
+                info.add(TextFormatting.GRAY + emblem.displayName);
         }
     }
 }

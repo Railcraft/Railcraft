@@ -21,7 +21,7 @@ import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.Deque;
 import java.util.Iterator;
@@ -148,7 +148,7 @@ public class RoutingLogic {
         private final ToolTip tips = new ToolTip();
 
         RoutingLogicException(String errorTag, String line) {
-            tips.add(EnumChatFormatting.RED + LocalizationPlugin.translate(errorTag));
+            tips.add(TextFormatting.RED + LocalizationPlugin.translate(errorTag));
             if (line != null)
                 tips.add("\"" + line + "\"");
         }

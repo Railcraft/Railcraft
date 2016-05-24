@@ -17,9 +17,9 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -64,11 +64,11 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
         double my = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * (double) partialTicks;
         double mz = cart.lastTickPosZ + (cart.posZ - cart.lastTickPosZ) * (double) partialTicks;
         double d6 = 0.3;
-        Vec3 vec3d = cart.func_70489_a(mx, my, mz);
+        Vec3d vec3d = cart.func_70489_a(mx, my, mz);
         float pitch = cart.prevRotationPitch + (cart.rotationPitch - cart.prevRotationPitch) * partialTicks;
         if (vec3d != null) {
-            Vec3 vec3d1 = cart.func_70495_a(mx, my, mz, d6);
-            Vec3 vec3d2 = cart.func_70495_a(mx, my, mz, -d6);
+            Vec3d vec3d1 = cart.func_70495_a(mx, my, mz, d6);
+            Vec3d vec3d2 = cart.func_70495_a(mx, my, mz, -d6);
             if (vec3d1 == null)
                 vec3d1 = vec3d;
             if (vec3d2 == null)
@@ -76,7 +76,7 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
             x += vec3d.xCoord - mx;
             y += (vec3d1.yCoord + vec3d2.yCoord) / 2D - my;
             z += vec3d.zCoord - mz;
-            Vec3 vec3d3 = vec3d2.addVector(-vec3d1.xCoord, -vec3d1.yCoord, -vec3d1.zCoord);
+            Vec3d vec3d3 = vec3d2.addVector(-vec3d1.xCoord, -vec3d1.yCoord, -vec3d1.zCoord);
             if (vec3d3.lengthVector() != 0.0D) {
                 vec3d3 = vec3d3.normalize();
                 yaw = (float) (Math.atan2(vec3d3.zCoord, vec3d3.xCoord) / Math.PI) * 180;

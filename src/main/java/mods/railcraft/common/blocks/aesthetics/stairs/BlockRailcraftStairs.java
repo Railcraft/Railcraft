@@ -22,7 +22,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.IBlockSoundProvider;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -35,7 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -89,8 +89,8 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         return RailcraftModuleManager.isModuleEnabled(ModuleStructures.class) && RailcraftConfig.isSubBlockEnabled(getTag(mat)) && getBlock() != null;
     }
 
-    protected BlockState createBlockState() {
-        return new BlockState(this, FACING, HALF, SHAPE, MATERIAL);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING, HALF, SHAPE, MATERIAL);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileStair) {
             return getItem(((TileStair) tile).getMaterial());
@@ -200,7 +200,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+    public boolean addHitEffects(World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
         return ParticleHelper.addHitEffects(worldObj, block, target, effectRenderer, null);
     }
 

@@ -22,7 +22,7 @@ import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,7 +176,7 @@ public abstract class GuiLocomotive extends EntityGui {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String name = loco.getName();
         GuiTools.drawCenteredString(fontRendererObj, name, 6);
-        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
 }

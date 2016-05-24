@@ -22,13 +22,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,9 +80,9 @@ public class GuiTicket extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
 
         List<GuiBetterButton> buttons = new ArrayList<GuiBetterButton>();
-        buttons.add(buttonDone = new GuiBetterButton(0, 0, imageHeight + 25, 65, StatCollector.translateToLocal("gui.done")));
+        buttons.add(buttonDone = new GuiBetterButton(0, 0, imageHeight + 25, 65, I18n.translateToLocal("gui.done")));
         buttons.add(buttonHelp = new GuiBetterButton(1, 0, imageHeight + 25, 65, LocalizationPlugin.translate("railcraft.gui.help")));
-        buttons.add(buttonCancel = new GuiBetterButton(2, 0, imageHeight + 25, 65, StatCollector.translateToLocal("gui.cancel")));
+        buttons.add(buttonCancel = new GuiBetterButton(2, 0, imageHeight + 25, 65, I18n.translateToLocal("gui.cancel")));
         GuiTools.newButtonRowAuto(buttonList, width / 2 - 100, 200, buttons);
         updateButtons();
     }
@@ -98,7 +97,7 @@ public class GuiTicket extends GuiScreen {
     }
 
     private void updateButtons() {
-        buttonHelp.displayString = readingManual ? StatCollector.translateToLocal("gui.back") : LocalizationPlugin.translate("railcraft.gui.help");
+        buttonHelp.displayString = readingManual ? I18n.translateToLocal("gui.back") : LocalizationPlugin.translate("railcraft.gui.help");
     }
 
     private void sendToServer() {
@@ -181,19 +180,19 @@ public class GuiTicket extends GuiScreen {
         } else {
             OpenGL.glPushMatrix();
             OpenGL.glScalef(2F, 2F, 2F);
-            GuiTools.drawCenteredString(fontRendererObj, EnumChatFormatting.BOLD + LocalizationPlugin.translate("railcraft.gui.routing.ticket.title"), yOffset - 2, width / 2, 0xFFFFFF, true);
+            GuiTools.drawCenteredString(fontRendererObj, TextFormatting.BOLD + LocalizationPlugin.translate("railcraft.gui.routing.ticket.title"), yOffset - 2, width / 2, 0xFFFFFF, true);
             OpenGL.glPopMatrix();
 
 
             GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.routing.ticket.line1"), yOffset + 50, width);
             GuiTools.drawCenteredString(fontRendererObj, LocalizationPlugin.translate("railcraft.gui.routing.ticket.line2"), yOffset + 65, width);
-            String text = EnumChatFormatting.BLACK + "Dest=" + dest;
+            String text = TextFormatting.BLACK + "Dest=" + dest;
             if (fontRendererObj.getBidiFlag()) {
                 text = text + "_";
             } else if (updateCount / 6 % 2 == 0) {
-                text = text + "" + EnumChatFormatting.BLACK + "_";
+                text = text + "" + TextFormatting.BLACK + "_";
             } else {
-                text = text + "" + EnumChatFormatting.GRAY + "_";
+                text = text + "" + TextFormatting.GRAY + "_";
             }
             this.fontRendererObj.drawSplitString(text, xOffset + 16, yOffset + 98, WRAP_WIDTH, 0);
         }

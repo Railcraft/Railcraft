@@ -24,7 +24,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 
 import java.io.DataInputStream;
@@ -63,7 +66,7 @@ public class TrackGated extends TrackPowered implements ITrackReversible, ITrack
     }
 
     @Override
-    public MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1) {
+    public RayTraceResult collisionRayTrace(Vec3d vec3d, Vec3d vec3d1) {
         return MiscTools.rayTraceBlock(vec3d, vec3d1, getPos());
     }
 

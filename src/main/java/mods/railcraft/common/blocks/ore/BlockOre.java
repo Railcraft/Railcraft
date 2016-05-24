@@ -21,7 +21,7 @@ import mods.railcraft.common.plugins.forge.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
@@ -31,8 +31,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -154,7 +154,7 @@ public class BlockOre extends Block {
     }
 
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         return getVariant(state).getItem();
     }
@@ -235,7 +235,7 @@ public class BlockOre extends Block {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+    public boolean addHitEffects(World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
         return ParticleHelper.addHitEffects(worldObj, instance, target, effectRenderer, callback);
     }
 
@@ -270,8 +270,8 @@ public class BlockOre extends Block {
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, VARIANT);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, VARIANT);
     }
 
     @Override

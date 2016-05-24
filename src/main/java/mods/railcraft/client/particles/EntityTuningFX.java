@@ -12,7 +12,7 @@ import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.effects.EffectManager.EffectSourceEntity;
 import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -47,10 +47,10 @@ public class EntityTuningFX extends EntityFX {
     }
 
     private void calculateVector() {
-        Vec3 endPoint = new Vec3(source.getX(), source.getY(), source.getZ());
-        Vec3 vecParticle = new Vec3(posX, posY, posZ);
+        Vec3d endPoint = new Vec3d(source.getX(), source.getY(), source.getZ());
+        Vec3d vecParticle = new Vec3d(posX, posY, posZ);
 
-        Vec3 vel = vecParticle.subtract(endPoint);
+        Vec3d vel = vecParticle.subtract(endPoint);
         vel = vel.normalize();
 
         float velScale = 0.1f;

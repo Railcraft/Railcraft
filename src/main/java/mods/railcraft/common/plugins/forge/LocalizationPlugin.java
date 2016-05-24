@@ -10,7 +10,7 @@ package mods.railcraft.common.plugins.forge;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 import java.util.IllegalFormatException;
 
@@ -21,7 +21,7 @@ public class LocalizationPlugin {
     public static final String ENGLISH = "en_US";
 
     public static String translate(String tag) {
-        return StatCollector.translateToLocal(tag).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
+        return I18n.translateToLocal(tag).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
     }
 
     public static String translate(String tag, Object... args) {
@@ -35,7 +35,7 @@ public class LocalizationPlugin {
     }
 
     public static boolean hasTag(String tag) {
-        return StatCollector.canTranslate(tag);
+        return I18n.canTranslate(tag);
     }
 
     public static String getEntityLocalizationTag(Entity entity) {

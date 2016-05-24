@@ -19,7 +19,7 @@ import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -157,7 +157,7 @@ public class BlockPostMetal extends BlockPostBase {
         return getColor(state).ordinal();
     }
 
-    protected BlockState createBlockState() {
-        return new BlockState(this, COLOR);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, COLOR);
     }
 }

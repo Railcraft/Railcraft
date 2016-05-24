@@ -23,13 +23,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -130,10 +129,10 @@ public class GuiRoutingTable extends GuiScreen {
             List<GuiBetterButton> buttons = new ArrayList<GuiBetterButton>();
             buttons.add(buttonSign = new GuiBetterButton(3, 0, 4 + bookImageHeight, 65, LocalizationPlugin.translate(TABLE_LOC_TAG + "name")));
             buttons.add(buttonHelp = new GuiBetterButton(4, 0, 4 + bookImageHeight, 65, LocalizationPlugin.translate("railcraft.gui.help")));
-            buttons.add(buttonDone = new GuiBetterButton(0, 0, 4 + bookImageHeight, 65, StatCollector.translateToLocal("gui.done")));
+            buttons.add(buttonDone = new GuiBetterButton(0, 0, 4 + bookImageHeight, 65, I18n.translateToLocal("gui.done")));
             GuiTools.newButtonRowAuto(buttonList, width / 2 - 100, 200, buttons);
         } else
-            buttonList.add(buttonDone = new GuiBetterButton(0, width / 2 - 100, 4 + bookImageHeight, 200, StatCollector.translateToLocal("gui.done")));
+            buttonList.add(buttonDone = new GuiBetterButton(0, width / 2 - 100, 4 + bookImageHeight, 200, I18n.translateToLocal("gui.done")));
 
         int xOffset = (width - bookImageWidth) / 2;
         byte yOffset = 2;
@@ -163,10 +162,10 @@ public class GuiRoutingTable extends GuiScreen {
         buttonNextPage.visible = !editingTitle && (currPage < getMaxPages() - 1);
         buttonPreviousPage.visible = !editingTitle && currPage > 0;
 
-        buttonHelp.displayString = readingManual ? StatCollector.translateToLocal("gui.back") : LocalizationPlugin.translate("railcraft.gui.help");
+        buttonHelp.displayString = readingManual ? I18n.translateToLocal("gui.back") : LocalizationPlugin.translate("railcraft.gui.help");
 
         if (editable)
-            buttonSign.displayString = editingTitle ? StatCollector.translateToLocal("gui.back") : LocalizationPlugin.translate(TABLE_LOC_TAG + "name");
+            buttonSign.displayString = editingTitle ? I18n.translateToLocal("gui.back") : LocalizationPlugin.translate(TABLE_LOC_TAG + "name");
     }
 
     private void sendBookToServer() {
@@ -438,25 +437,25 @@ public class GuiRoutingTable extends GuiScreen {
 
             if (this.editable)
                 if (this.updateCount / 6 % 2 == 0)
-                    title = title + "" + EnumChatFormatting.BLACK + "_";
+                    title = title + "" + TextFormatting.BLACK + "_";
                 else
-                    title = title + "" + EnumChatFormatting.GRAY + "_";
+                    title = title + "" + TextFormatting.GRAY + "_";
 
-            String s1 = StatCollector.translateToLocal("book.editTitle");
+            String s1 = I18n.translateToLocal("book.editTitle");
             int l = this.fontRendererObj.getStringWidth(s1);
             this.fontRendererObj.drawString(s1, xOffset + 36 + (116 - l) / 2, yOffset + 16 + 16, 0);
             int i1 = this.fontRendererObj.getStringWidth(title);
             this.fontRendererObj.drawString(title, xOffset + 36 + (116 - i1) / 2, yOffset + 48, 0);
-            String s2 = String.format(StatCollector.translateToLocal("book.byAuthor"), Railcraft.proxy.getPlayerUsername(player));
+            String s2 = String.format(I18n.translateToLocal("book.byAuthor"), Railcraft.proxy.getPlayerUsername(player));
             int j1 = this.fontRendererObj.getStringWidth(s2);
-            this.fontRendererObj.drawString(EnumChatFormatting.DARK_GRAY + s2, xOffset + 36 + (116 - j1) / 2, yOffset + 48 + 10, 0);
+            this.fontRendererObj.drawString(TextFormatting.DARK_GRAY + s2, xOffset + 36 + (116 - j1) / 2, yOffset + 48 + 10, 0);
 //            String s3 = StatCollector.translateToLocal("book.finalizeWarning");
 //            this.fontRendererObj.drawSplitString(s3, xOffset + 36, yOffset + 80, 116, 0);
         } else if (readingManual) {
 //            GuiTools.drawCenteredString(fontRendererObj, RailcraftLanguage.translate("routing.table.manual.title"), yOffset + 16, width);
             fontRendererObj.drawString(LocalizationPlugin.translate(TABLE_MANUAL_LOC_TAG + "title"), xOffset + 45, yOffset + 16, 0);
 
-            String pageNumString = String.format(StatCollector.translateToLocal("book.pageIndicator"), currPage + 1, numManualPages);
+            String pageNumString = String.format(I18n.translateToLocal("book.pageIndicator"), currPage + 1, numManualPages);
             int pageNumStringWidth = this.fontRendererObj.getStringWidth(pageNumString);
             this.fontRendererObj.drawString(pageNumString, xOffset - pageNumStringWidth + this.bookImageWidth - 44, yOffset + 16, 0);
 
@@ -470,7 +469,7 @@ public class GuiRoutingTable extends GuiScreen {
                 this.fontRendererObj.drawSplitString(text, xOffset + 16, yOffset + 16 + 16, WRAP_WIDTH, 0);
             }
         } else {
-            String pageNumString = String.format(StatCollector.translateToLocal("book.pageIndicator"), currPage + 1, bookPages.size());
+            String pageNumString = String.format(I18n.translateToLocal("book.pageIndicator"), currPage + 1, bookPages.size());
             int pageNumStringWidth = this.fontRendererObj.getStringWidth(pageNumString);
             this.fontRendererObj.drawString(pageNumString, xOffset - pageNumStringWidth + this.bookImageWidth - 44, yOffset + 16, 0);
 
@@ -483,14 +482,14 @@ public class GuiRoutingTable extends GuiScreen {
             ListIterator<String> it = page.listIterator();
             while (it.hasNext()) {
                 String line = it.next();
-                text.append(EnumChatFormatting.BLACK);
+                text.append(TextFormatting.BLACK);
                 int start = text.length();
                 text.append(line).append(" ");
 
                 if (editable && it.previousIndex() == currLine)
                     if (updateCount / 6 % 2 == 0) {
-                        text.insert(start + currChar, EnumChatFormatting.UNDERLINE.toString());
-                        text.insert(start + currChar + 3, EnumChatFormatting.BLACK.toString());
+                        text.insert(start + currChar, TextFormatting.UNDERLINE.toString());
+                        text.insert(start + currChar + 3, TextFormatting.BLACK.toString());
                     }
 
                 text.append("\n");

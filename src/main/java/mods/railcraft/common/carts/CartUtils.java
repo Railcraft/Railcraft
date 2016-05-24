@@ -22,8 +22,8 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.S1BPacketEntityAttach;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.network.play.server.SPacketEntityAttach;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -151,7 +151,7 @@ public class CartUtils {
         cart.riddenByEntity = null;
         if (rider instanceof EntityPlayerMP) {
             EntityPlayerMP player = ((EntityPlayerMP) rider);
-            player.playerNetServerHandler.sendPacket(new S1BPacketEntityAttach(0, rider, null));
+            player.playerNetServerHandler.sendPacket(new SPacketEntityAttach(0, rider, null));
             player.setPositionAndUpdate(x, y, z);
         } else
             rider.setLocationAndAngles(x, y, z, rider.rotationYaw, rider.rotationPitch);

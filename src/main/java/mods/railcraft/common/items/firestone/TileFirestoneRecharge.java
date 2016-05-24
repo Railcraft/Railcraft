@@ -20,7 +20,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nonnull;
 import java.io.DataInputStream;
@@ -96,8 +96,8 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
         if (Fluids.LAVA.is(FluidHelper.getFluid(block))) {
             boolean placed = WorldPlugin.setBlockState(worldObj, pos, Blocks.obsidian.getDefaultState());
             if (placed) {
-                Vec3 startPosition = new Vec3(pos).addVector(0.5, 0.5, 0.5);
-                Vec3 endPosition = new Vec3(getPos()).addVector(0.5, 0.8, 0.5);
+                Vec3d startPosition = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
+                Vec3d endPosition = new Vec3d(getPos()).addVector(0.5, 0.8, 0.5);
                 EffectManager.instance.fireSparkEffect(worldObj, startPosition, endPosition);
                 queueAdjacent(pos);
                 expandQueue();

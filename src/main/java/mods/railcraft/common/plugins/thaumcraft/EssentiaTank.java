@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.plugins.thaumcraft;
 
-import net.minecraft.entity.DataWatcher;
+import net.minecraft.network.datasync.EntityDataManager;
 import thaumcraft.api.aspects.Aspect;
 
 /**
@@ -18,10 +18,10 @@ import thaumcraft.api.aspects.Aspect;
 public class EssentiaTank {
 
     private final Aspect aspect;
-    private final DataWatcher dataWatcher;
+    private final EntityDataManager dataWatcher;
     private final int capacity, dataId;
 
-    public EssentiaTank(Aspect aspect, int capacity, DataWatcher dataWatcher, int dataId) {
+    public EssentiaTank(Aspect aspect, int capacity, EntityDataManager dataWatcher, int dataId) {
         this.aspect = aspect;
         this.dataWatcher = dataWatcher;
         this.dataId = dataId;

@@ -20,7 +20,7 @@ import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.io.ByteArrayOutputStream;
@@ -70,7 +70,7 @@ public class GuiTradeStation extends TileGui {
         GuiBetterButton[] dice = new GuiBetterButton[3];
 
         ToolTip tip = ToolTip.buildToolTip("railcraft.gui.trade.station.dice.tip");
-        tip.get(0).format = EnumChatFormatting.YELLOW;
+        tip.get(0).format = TextFormatting.YELLOW;
 
         for (int b = 0; b < 3; b++) {
             dice[b] = new GuiBetterButton(2 + b, w + 93, h + 24 + 21 * b, 16, StandardButtonTextureSets.DICE_BUTTON, "");

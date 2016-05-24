@@ -27,7 +27,7 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -150,7 +150,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
     }
 
     @Override
-    public void fireSparkEffect(World world, Vec3 start, Vec3 end) {
+    public void fireSparkEffect(World world, Vec3d start, Vec3d end) {
         if (!shouldSpawnParticle(false))
             return;
 

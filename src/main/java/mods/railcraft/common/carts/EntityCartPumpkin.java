@@ -15,8 +15,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIArrowAttack;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -155,11 +155,11 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
                 if (mob instanceof EntitySkeleton) {
                     EntitySkeleton skel = (EntitySkeleton) mob;
                     if (rand.nextInt(4) == 0) {
-                        skel.tasks.addTask(4, new EntityAIAttackOnCollide(skel, EntityPlayer.class, 0.25F, false));
+                        skel.tasks.addTask(4, new EntityAIAttackMelee(skel, EntityPlayer.class, 0.25F, false));
                         skel.setSkeletonType(1);
                         skel.setCurrentItemOrArmor(0, new ItemStack(Items.stone_sword));
                     } else {
-                        skel.tasks.addTask(4, new EntityAIArrowAttack(skel, 0.25F, 60, 10.0F));
+                        skel.tasks.addTask(4, new EntityAIAttackRanged(skel, 0.25F, 60, 10.0F));
                         skel.setCurrentItemOrArmor(0, new ItemStack(Items.bow));
                     }
 

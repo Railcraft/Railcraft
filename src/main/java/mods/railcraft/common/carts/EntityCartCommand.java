@@ -11,13 +11,13 @@ package mods.railcraft.common.carts;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
-import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.CommandBlockBaseLogic;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -30,7 +30,7 @@ public class EntityCartCommand extends CartBase {
 
     private int timeExisted = 0;
 
-    private final CommandBlockLogic commandLogic = new CommandBlockLogic() {
+    private final CommandBlockBaseLogic commandLogic = new CommandBlockBaseLogic() {
 
         @Override
         public void func_145756_e() {

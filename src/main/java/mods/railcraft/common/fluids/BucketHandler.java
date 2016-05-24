@@ -12,7 +12,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.fluids.Fluid;
@@ -43,7 +43,7 @@ public class BucketHandler {
         event.setResult(Result.ALLOW);
     }
 
-    private ItemStack fillCustomBucket(World world, MovingObjectPosition mop, ItemStack stack) {
+    private ItemStack fillCustomBucket(World world, RayTraceResult mop, ItemStack stack) {
         BlockPos blockPos = mop.getBlockPos();
         IBlockState state = WorldPlugin.getBlockState(world, blockPos);
         FluidStack fluidStack = FluidHelper.drainBlock(state, world, blockPos, false);

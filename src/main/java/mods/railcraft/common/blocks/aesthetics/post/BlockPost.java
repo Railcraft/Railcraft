@@ -20,7 +20,7 @@ import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -289,8 +289,8 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         return getVariant(state).ordinal();
     }
 
-    protected BlockState createBlockState() {
-        return new BlockState(this, VARIANT);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, VARIANT);
     }
 
 }

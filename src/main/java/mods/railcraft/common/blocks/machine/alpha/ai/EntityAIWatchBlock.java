@@ -13,7 +13,6 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import com.google.common.base.Predicates;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.state.pattern.BlockHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;

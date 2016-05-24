@@ -12,7 +12,7 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.S0BPacketAnimation;
+import net.minecraft.network.play.server.SPacketAnimation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.world.World;
@@ -103,7 +103,7 @@ public class PlayerPlugin {
     public static void swingItem(EntityPlayer player) {
         player.swingItem();
         if (player instanceof EntityPlayerMP && ((EntityPlayerMP) player).playerNetServerHandler != null) {
-            ((EntityPlayerMP) player).playerNetServerHandler.sendPacket(new S0BPacketAnimation(player, 0));
+            ((EntityPlayerMP) player).playerNetServerHandler.sendPacket(new SPacketAnimation(player, 0));
         }
     }
 

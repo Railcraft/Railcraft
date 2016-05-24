@@ -11,9 +11,9 @@
 package mods.railcraft.common.util.misc;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * Created by CovertJaguar on 3/9/2016 for Railcraft.
@@ -69,7 +69,7 @@ public class AABBFactory {
         return this;
     }
 
-    public AABBFactory setBoundsToPoint(Vec3 vector) {
+    public AABBFactory setBoundsToPoint(Vec3d vector) {
         minX = vector.xCoord;
         minY = vector.yCoord;
         minZ = vector.zCoord;

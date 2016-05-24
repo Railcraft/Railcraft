@@ -22,7 +22,7 @@ import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -113,8 +113,8 @@ public class BlockCube extends Block {
         return state.getValue(VARIANT).ordinal();
     }
 
-    protected BlockState createBlockState() {
-        return new BlockState(this, VARIANT);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, VARIANT);
     }
 
     private EnumCube getVariant(IBlockAccess world, BlockPos pos) {

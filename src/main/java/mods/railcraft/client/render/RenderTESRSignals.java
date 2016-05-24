@@ -17,15 +17,15 @@ import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.MovingObjectType;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
@@ -34,7 +34,7 @@ import java.util.Arrays;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class RenderTESRSignals extends TileEntitySpecialRenderer<TileEntity> {
-    private static final Vec3 CENTER = new Vec3(0.5, 0.5, 0.5);
+    private static final Vec3d CENTER = new Vec3d(0.5, 0.5, 0.5);
 
     @Override
     public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage) {
@@ -69,7 +69,7 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer<TileEntity> {
                     double dist = player.getDistanceSq(tile.getPos());
 
                     if (dist <= (double) (viewDist * viewDist)) {
-                        MovingObjectPosition mop = player.rayTrace(8, partialTicks);
+                        RayTraceResult mop = player.rayTrace(8, partialTicks);
                         if (mop != null && mop.typeOfHit == MovingObjectType.BLOCK && player.worldObj.getTileEntity(mop.getBlockPos()) == tile) {
                             RenderTools.renderString(name, x + 0.5, y + 1.5, z + 0.5);
                         }
@@ -103,7 +103,7 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer<TileEntity> {
             OpenGL.glColor3f(c1, c2, c3);
 
             OpenGL.glVertex3f((float) x + 0.5f, (float) y + 0.5f, (float) z + 0.5f);
-            Vec3 vec = new Vec3(x, y, z).add(CENTER).add(new Vec3(target)).subtract(new Vec3(tile.getPos()));
+            Vec3d vec = new Vec3d(x, y, z).add(CENTER).add(new Vec3d(target)).subtract(new Vec3d(tile.getPos()));
             OpenGL.glVertex(vec);
         }
         OpenGL.glEnd();
@@ -154,7 +154,7 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer<TileEntity> {
 
     protected static void doRenderAspect(RenderFakeBlock.RenderInfo info, TileEntity tile, double x, double y, double z) {
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        VertexBuffer worldRenderer = tessellator.getWorldRenderer();
         final float depth = 2 * RenderTools.PIXEL;
 
         OpenGL.glPushMatrix();

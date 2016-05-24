@@ -11,14 +11,13 @@ package mods.railcraft.common.plugins.forestry;
 import com.google.common.base.Predicate;
 import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
-import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -89,7 +88,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
     @Override
     public String getName(ItemStack backpack) {
         Item item = backpack.getItem();
-        String name = ("" + StatCollector.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name")).trim();
+        String name = ("" + I18n.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name")).trim();
 
         if (backpack.getTagCompound() != null && backpack.getTagCompound().hasKey("display", 10)) {
             NBTTagCompound nbt = backpack.getTagCompound().getCompoundTag("display");

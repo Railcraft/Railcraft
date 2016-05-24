@@ -12,7 +12,7 @@ import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerEngineSteam;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 public class GuiEngineSteam extends TileGui {
 
@@ -28,7 +28,7 @@ public class GuiEngineSteam extends TileGui {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         GuiTools.drawCenteredString(fontRendererObj, tile.getName(), 6);
         fontRendererObj.drawString(String.format(OUTPUT, Math.round(tile.getCurrentOutput())), 120, 40, 0x404040);
-        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
 }

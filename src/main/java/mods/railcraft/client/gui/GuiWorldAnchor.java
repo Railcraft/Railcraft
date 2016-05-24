@@ -13,7 +13,7 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerAnchor;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 public class GuiWorldAnchor extends TileGui {
 
@@ -36,7 +36,7 @@ public class GuiWorldAnchor extends TileGui {
         fontRendererObj.drawString(label, sPos, 6, 0x404040);
         fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.anchor.fuel"), 85, 24, 0x404040);
         fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.anchor.fuel.remaining", (double) container.minutesRemaining / 60), 85, 35, 0x404040);
-        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
 }

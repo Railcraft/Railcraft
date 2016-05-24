@@ -15,7 +15,7 @@ import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -273,8 +273,8 @@ public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftO
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, TYPE);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, TYPE);
     }
 
     @Override

@@ -39,7 +39,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -457,7 +460,7 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
             }
 
             if (isMinecartPowered()) {
-                Vec3 headPos = getPositionAhead(3.3);
+                Vec3d headPos = getPositionAhead(3.3);
                 double size = 0.8;
                 AxisAlignedBB entitySearchBox = AABBFactory.start().setBoundsToPoint(headPos).expandHorizontally(size).raiseCeiling(2).build();
                 List entities = worldObj.getEntitiesWithinAABBExcludingEntity(this, entitySearchBox);
@@ -507,7 +510,7 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
         }
     }
 
-    protected Vec3 getPositionAhead(double offset) {
+    protected Vec3d getPositionAhead(double offset) {
         double x = posX;
         double z = posZ;
 
@@ -521,7 +524,7 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
         else if (getFacing() == EnumFacing.SOUTH)
             z += offset;
 
-        return new Vec3(x, posY, z);
+        return new Vec3d(x, posY, z);
     }
 
     protected double getOffsetX(double x, double forwardOffset, double sideOffset) {
@@ -786,7 +789,7 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
                 double xr = (worldObj.rand.nextFloat() - 0.5D) * f;
                 double yr = (worldObj.rand.nextFloat() - 0.5D) * f;
                 double zr = (worldObj.rand.nextFloat() - 0.5D) * f;
-                Vec3 spewPos = getPositionAhead(-3.2);
+                Vec3d spewPos = getPositionAhead(-3.2);
                 spewPos.addVector(xr, 0.3 + yr, zr);
                 EntityItem entityitem = new EntityItem(worldObj, spewPos.xCoord, spewPos.yCoord, spewPos.zCoord, stack);
                 worldObj.spawnEntityInWorld(entityitem);
@@ -1053,7 +1056,7 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
 
     @Override
     public boolean canLinkWithCart(EntityMinecart cart) {
-        Vec3 pos = getPositionAhead(-LENGTH / 2.0);
+        Vec3d pos = getPositionAhead(-LENGTH / 2.0);
         float dist = LinkageManager.LINKAGE_DISTANCE * 2;
         dist = dist * dist;
         return cart.getDistanceSq(pos.xCoord, pos.yCoord, pos.zCoord) < dist;

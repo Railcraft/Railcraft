@@ -15,8 +15,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 /**
@@ -85,10 +87,10 @@ public class CommandHelpers {
 
     public static void printHelp(ICommandSender sender, IModCommand command) {
         ChatStyle header = new ChatStyle();
-        header.setColor(EnumChatFormatting.BLUE);
+        header.setColor(TextFormatting.BLUE);
         sendLocalizedChatMessage(sender, header, "command.railcraft." + command.getFullCommandString().replace(" ", ".") + ".format", command.getFullCommandString());
         ChatStyle body = new ChatStyle();
-        body.setColor(EnumChatFormatting.GRAY);
+        body.setColor(TextFormatting.GRAY);
         sendLocalizedChatMessage(sender, body, "command.railcraft.aliases", command.getCommandAliases().toString().replace("[", "").replace("]", ""));
         sendLocalizedChatMessage(sender, body, "command.railcraft.permlevel", command.getRequiredPermissionLevel());
         sendLocalizedChatMessage(sender, body, "command.railcraft." + command.getFullCommandString().replace(" ", ".") + ".help");

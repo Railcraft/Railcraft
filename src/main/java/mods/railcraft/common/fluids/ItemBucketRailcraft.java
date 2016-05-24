@@ -17,8 +17,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.MovingObjectType;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.BlockFluidFinite;
@@ -53,7 +53,7 @@ public class ItemBucketRailcraft extends Item {
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        MovingObjectPosition mop = getMovingObjectPositionFromPlayer(world, player, false);
+        RayTraceResult mop = getMovingObjectPositionFromPlayer(world, player, false);
 
         if (mop != null && mop.typeOfHit == MovingObjectType.BLOCK) {
             BlockPos pos = mop.getBlockPos();

@@ -10,7 +10,7 @@ package mods.railcraft.client.render.carts;
 
 import mods.railcraft.common.carts.EntityCartFiltered;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;

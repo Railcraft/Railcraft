@@ -203,7 +203,6 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return getPos().getZ();
     }
 
-    @Nonnull
     @Override
     public final World getWorld() {
         return worldObj;

@@ -17,7 +17,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -89,8 +89,8 @@ public class EntityAIMoveToBlock extends EntityAIBase {
     @Override
     public void startExecuting() {
         if (entity.getDistanceSq(watchedBlock.getX() + 0.5D, watchedBlock.getY() + 0.5D, watchedBlock.getZ() + 0.5D) > 256.0D) {
-            Vec3 vec1 = new Vec3(watchedBlock.getX() + 0.5, watchedBlock.getY() + 0.5, watchedBlock.getZ() + 0.5);
-            Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(entity, 14, 3, vec1);
+            Vec3d vec1 = new Vec3d(watchedBlock.getX() + 0.5, watchedBlock.getY() + 0.5, watchedBlock.getZ() + 0.5);
+            Vec3d vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(entity, 14, 3, vec1);
             if (vec3 != null)
                 move(vec3.xCoord, vec3.yCoord, vec3.zCoord);
         } else

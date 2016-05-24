@@ -16,7 +16,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -112,15 +112,15 @@ public abstract class MiscTools {
 
     //TODO: test
     @Nullable
-    public static MovingObjectPosition rayTraceBlock(Vec3 start, Vec3 end, BlockPos pos) {
+    public static RayTraceResult rayTraceBlock(Vec3d start, Vec3d end, BlockPos pos) {
         start = start.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
         end = end.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
-        Vec3 minX = start.getIntermediateWithXValue(end, 0);
-        Vec3 maxX = start.getIntermediateWithXValue(end, 1);
-        Vec3 minY = start.getIntermediateWithYValue(end, 0);
-        Vec3 maxY = start.getIntermediateWithYValue(end, 1);
-        Vec3 minZ = start.getIntermediateWithZValue(end, 0);
-        Vec3 maxZ = start.getIntermediateWithZValue(end, 1);
+        Vec3d minX = start.getIntermediateWithXValue(end, 0);
+        Vec3d maxX = start.getIntermediateWithXValue(end, 1);
+        Vec3d minY = start.getIntermediateWithYValue(end, 0);
+        Vec3d maxY = start.getIntermediateWithYValue(end, 1);
+        Vec3d minZ = start.getIntermediateWithZValue(end, 0);
+        Vec3d maxZ = start.getIntermediateWithZValue(end, 1);
         if (isVecOutsideYZBounds(minX))
             minX = null;
         if (isVecOutsideYZBounds(maxX))
@@ -133,7 +133,7 @@ public abstract class MiscTools {
             minZ = null;
         if (isVecOutsideXYBounds(maxZ))
             maxZ = null;
-        Vec3 closest = null;
+        Vec3d closest = null;
         if (minX != null)
             closest = minX;
         if (maxX != null && (closest == null || start.distanceTo(maxX) < start.distanceTo(closest)))
@@ -161,25 +161,25 @@ public abstract class MiscTools {
             sideHit = EnumFacing.NORTH;
         if (closest == maxZ)
             sideHit = EnumFacing.SOUTH;
-        return new MovingObjectPosition(closest.addVector(pos.getX(), pos.getY(), pos.getZ()), sideHit, pos);
+        return new RayTraceResult(closest.addVector(pos.getX(), pos.getY(), pos.getZ()), sideHit, pos);
     }
 
-    private static boolean isVecOutsideYZBounds(Vec3 vec3d) {
+    private static boolean isVecOutsideYZBounds(Vec3d vec3d) {
         return vec3d == null || vec3d.yCoord < 0 || vec3d.yCoord > 1 || vec3d.zCoord < 0 || vec3d.zCoord > 1;
     }
 
-    private static boolean isVecOutsideXZBounds(Vec3 vec3d) {
+    private static boolean isVecOutsideXZBounds(Vec3d vec3d) {
         return vec3d == null || vec3d.xCoord < 0 || vec3d.xCoord > 1 || vec3d.zCoord < 0 || vec3d.zCoord > 1;
     }
 
-    private static boolean isVecOutsideXYBounds(Vec3 vec3d) {
+    private static boolean isVecOutsideXYBounds(Vec3d vec3d) {
         return vec3d == null || vec3d.xCoord < 0 || vec3d.xCoord > 1 || vec3d.yCoord < 0 || vec3d.yCoord > 1;
     }
 
-    public static MovingObjectPosition rayTracePlayerLook(EntityPlayer player) {
+    public static RayTraceResult rayTracePlayerLook(EntityPlayer player) {
         double distance = player.capabilities.isCreativeMode ? 5.0F : 4.5F;
-        Vec3 posVec = player.getPositionVector();
-        Vec3 lookVec = player.getLook(1);
+        Vec3d posVec = player.getPositionVector();
+        Vec3d lookVec = player.getLook(1);
         lookVec = lookVec.addVector(0, player.getEyeHeight(), 0);
         lookVec = posVec.addVector(lookVec.xCoord * distance, lookVec.yCoord * distance, lookVec.zCoord * distance);
         return player.worldObj.rayTraceBlocks(posVec, lookVec);
@@ -193,7 +193,7 @@ public abstract class MiscTools {
      * @return a side value 0-5
      */
     public static EnumFacing getCurrentMousedOverSide(EntityPlayer player) {
-        MovingObjectPosition mouseOver = rayTracePlayerLook(player);
+        RayTraceResult mouseOver = rayTracePlayerLook(player);
         if (mouseOver != null)
             return mouseOver.sideHit;
         return null;

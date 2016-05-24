@@ -17,10 +17,9 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import org.lwjgl.opengl.GL11;
 
 public class RenderSwitch implements ICombinedRenderer {
 
@@ -137,18 +136,18 @@ public class RenderSwitch implements ICombinedRenderer {
         IIcon icon = BlockSignalRailcraft.texturesSwitchLever;
         float pix = RenderTools.PIXEL;
         Tessellator tess = Tessellator.instance;
-        Vec3[] vertices = new Vec3[8];
+        Vec3d[] vertices = new Vec3d[8];
         float vx = pix;
         float vz = pix;
         float vy = pix * LEVER_HEIGHT;
-        vertices[0] = new Vec3((double) (-vx), 0.0D, (double) (-vz));
-        vertices[1] = new Vec3((double) vx, 0.0D, (double) (-vz));
-        vertices[2] = new Vec3((double) vx, 0.0D, (double) vz);
-        vertices[3] = new Vec3((double) (-vx), 0.0D, (double) vz);
-        vertices[4] = new Vec3((double) (-vx), (double) vy, (double) (-vz));
-        vertices[5] = new Vec3((double) vx, (double) vy, (double) (-vz));
-        vertices[6] = new Vec3((double) vx, (double) vy, (double) vz);
-        vertices[7] = new Vec3((double) (-vx), (double) vy, (double) vz);
+        vertices[0] = new Vec3d((double) (-vx), 0.0D, (double) (-vz));
+        vertices[1] = new Vec3d((double) vx, 0.0D, (double) (-vz));
+        vertices[2] = new Vec3d((double) vx, 0.0D, (double) vz);
+        vertices[3] = new Vec3d((double) (-vx), 0.0D, (double) vz);
+        vertices[4] = new Vec3d((double) (-vx), (double) vy, (double) (-vz));
+        vertices[5] = new Vec3d((double) vx, (double) vy, (double) (-vz));
+        vertices[6] = new Vec3d((double) vx, (double) vy, (double) vz);
+        vertices[7] = new Vec3d((double) (-vx), (double) vy, (double) vz);
 
         for (int i = 0; i < 8; ++i) {
             if (thrown) {
@@ -173,7 +172,7 @@ public class RenderSwitch implements ICombinedRenderer {
             vertices[i].zCoord += z + 0.5;
         }
 
-        Vec3 vertex1, vertex2, vertex3, vertex4;
+        Vec3d vertex1, vertex2, vertex3, vertex4;
 
         double minU = icon.getInterpolatedU(7.0D);
         double minV = icon.getInterpolatedV(6.0D);

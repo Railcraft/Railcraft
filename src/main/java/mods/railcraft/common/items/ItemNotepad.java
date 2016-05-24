@@ -9,14 +9,14 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
@@ -121,7 +121,7 @@ public class ItemNotepad extends ItemRailcraft {
         info.add(LocalizationPlugin.translate("item.railcraft.tool.notepad.tip.contents", contentString));
 
         PasteMode pasteMode = getPasteMode(stack);
-        info.add(LocalizationPlugin.translate("item.railcraft.tool.notepad.tip.mode", EnumChatFormatting.DARK_PURPLE + pasteMode.toString()));
+        info.add(LocalizationPlugin.translate("item.railcraft.tool.notepad.tip.mode", TextFormatting.DARK_PURPLE + pasteMode.toString()));
 
         super.addInformation(stack, player, info, adv);
     }
@@ -135,7 +135,7 @@ public class ItemNotepad extends ItemRailcraft {
         } else {
             PasteMode pasteMode = nextPasteMode(stack);
             if (Game.isNotHost(world))
-                ChatPlugin.sendLocalizedChatFromClient(player, "item.railcraft.tool.notepad.tip.mode", EnumChatFormatting.DARK_PURPLE + pasteMode.toString());
+                ChatPlugin.sendLocalizedChatFromClient(player, "item.railcraft.tool.notepad.tip.mode", TextFormatting.DARK_PURPLE + pasteMode.toString());
         }
         return stack;
     }
