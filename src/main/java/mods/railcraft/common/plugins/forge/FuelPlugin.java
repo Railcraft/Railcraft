@@ -95,7 +95,7 @@ public class FuelPlugin {
 //            if (itemID == Item.coal.itemID && stack.getItemDamage() == 0)
 //                return 1600;
 
-            if (item == Items.blaze_rod)
+            if (item == Items.BLAZE_ROD)
                 return 1000;
 
             FluidStack liquid = FluidItemHelper.getFluidStackInContainer(stack);

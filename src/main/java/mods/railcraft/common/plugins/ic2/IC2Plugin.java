@@ -212,7 +212,7 @@ public class IC2Plugin {
             try {
                 ItemStack output = recipe.getRecipeOutput();
                 if (output != null)
-                    if (output.getItem() == Items.coal && output.stackSize == 20)
+                    if (output.getItem() == Items.COAL && output.stackSize == 20)
                         output.stackSize = 5;
             } catch (Throwable error) {
             }

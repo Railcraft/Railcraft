@@ -31,7 +31,7 @@ public class RoutingTicketCopyRecipe implements IRecipe {
             if (stack != null) {
                 if (stack.getItem() == ItemTicketGold.item) {
                     numTickets++;
-                } else if (stack.getItem() == Items.paper || stack.getItem() == ItemTicket.item) {
+                } else if (stack.getItem() == Items.PAPER || stack.getItem() == ItemTicket.item) {
                     numPaper++;
                 } else {
                     return false;

@@ -43,7 +43,7 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapelessRecipe(new ItemStack(this), Items.paper, "nuggetGold");
+        CraftingPlugin.addShapelessRecipe(new ItemStack(this), Items.PAPER, "nuggetGold");
     }
 
     @Override

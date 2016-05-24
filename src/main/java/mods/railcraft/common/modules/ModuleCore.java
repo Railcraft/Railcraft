@@ -202,7 +202,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 if (!RailcraftConfig.getRecipeConfig("railcraft.cart.vanilla.furnace"))
-                    testSet.add(Items.furnace_minecart);
+                    testSet.add(Items.FURNACE_MINECART);
 
 //        MiscTools.addShapelessRecipe(new ItemStack(Item.coal, 20), Block.dirt);
                 Iterator it = CraftingManager.getInstance().getRecipeList().iterator();
@@ -219,13 +219,13 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 // Items
-                replaceVanillaCart(EnumCart.COMMAND_BLOCK, Items.command_block_minecart, "MinecartCommandBlock", 40);
-                Items.command_block_minecart.setCreativeTab(CreativeTabs.tabTransport);
-                replaceVanillaCart(EnumCart.BASIC, Items.minecart, "MinecartRideable", 42);
-                replaceVanillaCart(EnumCart.CHEST, Items.chest_minecart, "MinecartChest", 43);
-                replaceVanillaCart(EnumCart.FURNACE, Items.furnace_minecart, "MinecartFurnace", 44);
-                replaceVanillaCart(EnumCart.TNT, Items.tnt_minecart, "MinecartTNT", 45);
-                replaceVanillaCart(EnumCart.HOPPER, Items.hopper_minecart, "MinecartHopper", 46);
+                replaceVanillaCart(EnumCart.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, "MinecartCommandBlock", 40);
+                Items.COMMAND_BLOCK_MINECART.setCreativeTab(CreativeTabs.tabTransport);
+                replaceVanillaCart(EnumCart.BASIC, Items.MINECART, "MinecartRideable", 42);
+                replaceVanillaCart(EnumCart.CHEST, Items.CHEST_MINECART, "MinecartChest", 43);
+                replaceVanillaCart(EnumCart.FURNACE, Items.FURNACE_MINECART, "MinecartFurnace", 44);
+                replaceVanillaCart(EnumCart.TNT, Items.TNT_MINECART, "MinecartTNT", 45);
+                replaceVanillaCart(EnumCart.HOPPER, Items.HOPPER_MINECART, "MinecartHopper", 46);
 
                 LootPlugin.addLoot(EnumCart.BASIC.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.basic");
                 LootPlugin.addLoot(EnumCart.CHEST.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.chest");
@@ -241,7 +241,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 // Define Recipes
                 if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
-                    IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.minecart), false,
+                    IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.MINECART), false,
                             "I I",
                             "III",
                             'I', "ingotBronze");
@@ -249,7 +249,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.cart.steel")) {
-                    IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.minecart, 2), false,
+                    IRecipe recipe = new ShapedOreRecipe(new ItemStack(Items.MINECART, 2), false,
                             "I I",
                             "III",
                             'I', "ingotSteel");
@@ -327,8 +327,8 @@ public class ModuleCore extends RailcraftModulePayload {
             @Override
             public void init() {
                 if (RailcraftConfig.useCreosoteFurnaceRecipes() || !EnumMachineAlpha.COKE_OVEN.isAvailable()) {
-                    CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.coal, 1, 0), FluidContainers.getCreosoteOilBottle(2), 0.0F);
-                    CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.coal, 1, 1), FluidContainers.getCreosoteOilBottle(1), 0.0F);
+                    CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 0), FluidContainers.getCreosoteOilBottle(2), 0.0F);
+                    CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 1), FluidContainers.getCreosoteOilBottle(1), 0.0F);
                 }
 
                 // Finish initializing ItemRegistry

@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.Optional;
 public class IcemanBackpack extends BaseBackpack {
     private static final BlockMaterial[] coldMaterials = {BlockMaterial.SNOW, BlockMaterial.ICE, BlockMaterial.PACKED_ICE};
     private static IcemanBackpack instance;
-    private static final ItemStack SNOWBALL = new ItemStack(Items.snowball);
+    private static final ItemStack SNOWBALL = new ItemStack(Items.SNOWBALL);
     private static final ItemStack SNOW_BLOCK = new ItemStack(Blocks.snow);
     private static final String INV_TAG = "Items";
 
@@ -52,7 +52,7 @@ public class IcemanBackpack extends BaseBackpack {
             add(BlockRailcraftStairs.getItem(mat));
             add(BlockRailcraftSlab.getItem(mat));
         }
-        add(Items.snowball);
+        add(Items.SNOWBALL);
     }
 
     public void compactInventory(ItemStack backpack) {
@@ -69,7 +69,7 @@ public class IcemanBackpack extends BaseBackpack {
                 InvTools.writeInvToNBT(inv, INV_TAG, data);
             }
         } else if (numSnowballs < 8 && InvTools.removeOneItem(inv, SNOW_BLOCK) != null) {
-            if (InvTools.moveItemStack(new ItemStack(Items.snowball, 4), inv) == null) {
+            if (InvTools.moveItemStack(new ItemStack(Items.SNOWBALL, 4), inv) == null) {
                 InvTools.writeInvToNBT(inv, INV_TAG, data);
             }
         }

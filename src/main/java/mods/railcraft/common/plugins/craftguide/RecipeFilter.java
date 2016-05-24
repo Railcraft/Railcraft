@@ -22,7 +22,7 @@ public class RecipeFilter implements BasicRecipeFilter
 {
 
     ItemStack stackTankCart = RailcraftRegistry.getItem("cart.tank", 1);
-    ItemStack stackCart = new ItemStack(Items.minecart);
+    ItemStack stackCart = new ItemStack(Items.MINECART);
 
     @Override
     public boolean shouldKeepRecipe(CraftGuideRecipe recipe, ItemStack recipeType) {

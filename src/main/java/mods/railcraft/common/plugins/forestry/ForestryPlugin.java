@@ -124,7 +124,7 @@ public class ForestryPlugin {
                             "X#X",
                             '#', Blocks.wool,
                             'V', new ItemStack(Blocks.rail),
-                            'X', Items.string,
+                            'X', Items.STRING,
                             'Y', "chestWood");
                 }
 
@@ -160,7 +160,7 @@ public class ForestryPlugin {
                             "X#X",
                             '#', Blocks.wool,
                             'V', new ItemStack(Blocks.snow),
-                            'X', Items.string,
+                            'X', Items.STRING,
                             'Y', "chestWood");
                 }
 
@@ -199,24 +199,24 @@ public class ForestryPlugin {
                             "VYV",
                             "X#X",
                             '#', Blocks.wool,
-                            'V', new ItemStack(Items.potionitem, 1, 8197),
-                            'X', Items.string,
+                            'V', new ItemStack(Items.POTIONITEM, 1, 8197),
+                            'X', Items.STRING,
                             'Y', "chestWood");
                     CraftingPlugin.addRecipe(output,
                             "X#X",
                             "VYV",
                             "X#X",
                             '#', Blocks.wool,
-                            'V', new ItemStack(Items.potionitem, 1, 8261),
-                            'X', Items.string,
+                            'V', new ItemStack(Items.POTIONITEM, 1, 8261),
+                            'X', Items.STRING,
                             'Y', "chestWood");
                     CraftingPlugin.addRecipe(output,
                             "X#X",
                             "VYV",
                             "X#X",
                             '#', Blocks.wool,
-                            'V', new ItemStack(Items.potionitem, 1, 8229),
-                            'X', Items.string,
+                            'V', new ItemStack(Items.POTIONITEM, 1, 8229),
+                            'X', Items.STRING,
                             'Y', "chestWood");
 //                } else
 //                    ApothecariesBackpack.registerThaumcraftResearch();

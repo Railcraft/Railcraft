@@ -42,8 +42,8 @@ public class ApothecariesBackpack extends BaseBackpack implements IBackpackDefin
     }
 
     public void setup() {
-        add(Items.potionitem);
-        add(Items.glass_bottle);
+        add(Items.POTIONITEM);
+        add(Items.GLASS_BOTTLE);
     }
 
     @Override
@@ -69,8 +69,8 @@ public class ApothecariesBackpack extends BaseBackpack implements IBackpackDefin
                     "VYV",
                     "X#X",
                     '#', Blocks.wool,
-                    'V', new ItemStack(Items.potionitem, 1, 8197),
-                    'X', Items.string,
+                    'V', new ItemStack(Items.POTIONITEM, 1, 8197),
+                    'X', Items.STRING,
                     'Y', new ItemStack(Blocks.chest));
 
             AspectList aspects = new AspectList();

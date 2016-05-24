@@ -234,8 +234,8 @@ public enum EnumTrack {
             return null;
         ItemStack output = getItem(recipeOutput * 2);
         Object railWood = RailcraftConfig.useOldRecipes() ? "slabWood" : RailcraftItems.rail.getRecipeObject(EnumRail.WOOD);
-        Object railStandard = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.iron_ingot) : RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD);
-        Object railAdvanced = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.gold_ingot) : RailcraftItems.rail.getRecipeObject(EnumRail.ADVANCED);
+        Object railStandard = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.IRON_INGOT) : RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD);
+        Object railAdvanced = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.GOLD_INGOT) : RailcraftItems.rail.getRecipeObject(EnumRail.ADVANCED);
         Object railSpeed = RailcraftConfig.useOldRecipes() ? "ingotSteel" : RailcraftItems.rail.getRecipeObject(EnumRail.SPEED);
         Object railReinforced = RailcraftConfig.useOldRecipes() || !EnumMachineAlpha.ROCK_CRUSHER.isEnabled() ? "ingotSteel" : RailcraftItems.rail.getRecipeObject(EnumRail.REINFORCED);
         Object railElectric = RailcraftConfig.useOldRecipes() ? "ingotCopper" : RailcraftItems.rail.getRecipeObject(EnumRail.ELECTRIC);
@@ -336,7 +336,7 @@ public enum EnumTrack {
                         'I', railReinforced,
                         's', stoneRailbed,
                         'p', Blocks.stone_pressure_plate,
-                        'f', Items.flint_and_steel);
+                        'f', Items.FLINT_AND_STEEL);
                 break;
             case JUNCTION:
                 CraftingPlugin.addRecipe(output,
@@ -359,7 +359,7 @@ public enum EnumTrack {
                         "I I",
                         "G#G",
                         "IrI",
-                        'G', Items.gold_ingot,
+                        'G', Items.GOLD_INGOT,
                         'I', railWood,
                         '#', woodRailbed,
                         'r', "dustRedstone");
@@ -469,7 +469,7 @@ public enum EnumTrack {
                         "IpI",
                         'I', railAdvanced,
                         '#', woodRailbed,
-                        'p', Items.ender_pearl);
+                        'p', Items.ENDER_PEARL);
                 break;
             case SUSPENDED:
                 CraftingPlugin.addRecipe(output,
@@ -561,7 +561,7 @@ public enum EnumTrack {
                         "IlI",
                         'I', railStandard,
                         '#', woodRailbed,
-                        'l', Items.repeater);
+                        'l', Items.REPEATER);
                 break;
             case ROUTING:
                 CraftingPlugin.addRecipe(output,

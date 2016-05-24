@@ -52,7 +52,7 @@ public class ModuleMagic extends RailcraftModulePayload {
                             " P ",
                             "PFP",
                             " P ",
-                            'P', Items.diamond_pickaxe,
+                            'P', Items.DIAMOND_PICKAXE,
                             'F', ItemFirestoneRaw.item);
 
                     for (ItemStack stack : FluidHelper.getContainersFilledWith(Fluids.LAVA.get(FluidHelper.BUCKET_VOLUME))) {

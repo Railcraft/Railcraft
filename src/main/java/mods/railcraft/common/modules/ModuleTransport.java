@@ -66,7 +66,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                             "OPO",
                             "OOO",
                             'O', new ItemStack(Blocks.obsidian),
-                            'P', new ItemStack(Items.ender_pearl));
+                            'P', new ItemStack(Items.ENDER_PEARL));
 
                 EnumMachineGamma itemLoader = EnumMachineGamma.ITEM_LOADER;
                 if (itemLoader.isAvailable()) {
@@ -166,7 +166,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                                 "T",
                                 "M",
                                 'T', EnumMachineBeta.TANK_IRON_GAUGE.getItem(),
-                                'M', Items.minecart);
+                                'M', Items.MINECART);
                         cart.setContents(getColorTank(EnumMachineBeta.TANK_IRON_GAUGE, EnumColor.WHITE, 1));
                     } else {
                         CraftingPlugin.addRecipe(cart.getCartItem(),
@@ -174,7 +174,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                                 "GMG",
                                 "GGG",
                                 'G', "blockGlassColorless",
-                                'M', Items.minecart);
+                                'M', Items.MINECART);
                         cart.setContents(new ItemStack(Blocks.glass, 8));
                     }
                     CraftingPlugin.addRecipe(new CartFilterRecipe());
@@ -187,7 +187,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                             "B",
                             "M",
                             'B', Blocks.trapped_chest,
-                            'M', Items.minecart);
+                            'M', Items.MINECART);
                     CraftingPlugin.addRecipe(new CartFilterRecipe());
                 }
 

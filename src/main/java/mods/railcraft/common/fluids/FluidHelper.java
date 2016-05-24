@@ -188,12 +188,12 @@ public final class FluidHelper {
     }
 
     public static boolean registerBucket(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = new ItemStack(Items.bucket);
+        ItemStack empty = new ItemStack(Items.BUCKET);
         return registerContainer(liquid, filled, empty);
     }
 
     public static boolean registerBottle(FluidStack liquid, ItemStack filled) {
-        ItemStack empty = new ItemStack(Items.glass_bottle);
+        ItemStack empty = new ItemStack(Items.GLASS_BOTTLE);
         return registerContainer(liquid, filled, empty);
     }
 
@@ -244,7 +244,7 @@ public final class FluidHelper {
 
     public static void nerfWaterBottle() {
         for (FluidContainerData data : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-            if (data.filledContainer.getItem() == Items.potionitem && data.emptyContainer.getItem() == Items.glass_bottle && Fluids.WATER.is(data.fluid)) {
+            if (data.filledContainer.getItem() == Items.POTIONITEM && data.emptyContainer.getItem() == Items.GLASS_BOTTLE && Fluids.WATER.is(data.fluid)) {
                 data.fluid.amount = 333;
                 return;
             }

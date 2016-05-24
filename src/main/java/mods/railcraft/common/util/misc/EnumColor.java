@@ -100,7 +100,7 @@ public enum EnumColor implements IStringSerializable {
             return false;
         if (InvTools.isStackEqualToBlock(stack, Blocks.wool))
             return true;
-        if (stack.getItem() == Items.dye)
+        if (stack.getItem() == Items.DYE)
             return true;
         NBTTagCompound nbt = stack.getTagCompound();
         return nbt.hasKey(DEFAULT_COLOR_TAG);
@@ -112,7 +112,7 @@ public enum EnumColor implements IStringSerializable {
             return EnumColor.WHITE;
         if (InvTools.isStackEqualToBlock(stack, Blocks.wool))
             return EnumColor.fromOrdinal(15 - stack.getItemDamage());
-        if (stack.getItem() == Items.dye)
+        if (stack.getItem() == Items.DYE)
             return EnumColor.fromOrdinal(stack.getItemDamage());
         NBTTagCompound nbt = stack.getTagCompound();
         return EnumColor.readFromNBT(nbt, DEFAULT_COLOR_TAG);

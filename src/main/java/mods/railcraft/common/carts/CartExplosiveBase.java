@@ -143,14 +143,14 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
     public boolean doInteract(EntityPlayer player) {
         ItemStack stack = player.inventory.getCurrentItem();
         if (stack != null) {
-            if (stack.getItem() == Items.flint_and_steel
+            if (stack.getItem() == Items.FLINT_AND_STEEL
                     || stack.getItem() instanceof ItemFirestoneRefined) {
                 setPrimed(true);
                 stack.damageItem(1, player);
-            } else if (stack.getItem() == Items.string) {
+            } else if (stack.getItem() == Items.STRING) {
                 player.inventory.decrStackSize(player.inventory.currentItem, 1);
                 GuiHandler.openGui(EnumGui.CART_TNT_FUSE, player, worldObj, this);
-            } else if (stack.getItem() == Items.gunpowder) {
+            } else if (stack.getItem() == Items.GUNPOWDER) {
                 player.inventory.decrStackSize(player.inventory.currentItem, 1);
                 GuiHandler.openGui(EnumGui.CART_TNT_BLAST, player, worldObj, this);
             }

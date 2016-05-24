@@ -92,7 +92,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                     MinecraftForge.ORE_GEN_BUS.register(new PoorLeadGenerator());
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {
-                    IRecipe recipe = new ShapelessOreRecipe(new ItemStack(Items.gunpowder, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");
+                    IRecipe recipe = new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");
                     CraftingManager.getInstance().getRecipeList().add(recipe);
                 }
 

@@ -149,7 +149,7 @@ public class BlockDetector extends RailcraftBlockContainer {
                 "XXX",
                 "XPX",
                 "XXX",
-                'X', Items.leather,
+                'X', Items.LEATHER,
                 'P', Blocks.stone_pressure_plate);
     }
 

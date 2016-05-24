@@ -98,7 +98,7 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
                 "LLL",
                 'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.RECEIVER,
                 'I', "ingotSteel",
-                'L', Items.leather,
+                'L', Items.LEATHER,
                 'G', "paneGlassColorless");
     }
 

@@ -271,7 +271,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
             return true;
         if (OreDictPlugin.isOreType("ingotBronze", stack))
             return true;
-        return Items.gold_ingot == stack.getItem();
+        return Items.GOLD_INGOT == stack.getItem();
     }
 
     @Override

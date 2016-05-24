@@ -38,82 +38,82 @@ public class EntityCartGift extends EntityCartTNTWood {
         gifts.add(new GiftPotion());
         gifts.add(new GiftPotion());
 
-        addGift(Items.snowball, 16, 50);
+        addGift(Items.SNOWBALL, 16, 50);
 
         addGift(Blocks.cake, 25);
-        addGift(Items.bowl, 25);
-        addGift(Items.cookie, 15, 75);
-        addGift(Items.cookie, 10, 75);
-        addGift(Items.cookie, 5, 75);
-        addGift(Items.pumpkin_pie, 20);
+        addGift(Items.BOWL, 25);
+        addGift(Items.COOKIE, 15, 75);
+        addGift(Items.COOKIE, 10, 75);
+        addGift(Items.COOKIE, 5, 75);
+        addGift(Items.PUMPKIN_PIE, 20);
 
         addGift(Blocks.jukebox, 5);
-        addGift(Items.painting, 10);
-        addGift(Items.flower_pot, 25);
-        addGift(Items.compass, 25);
-        addGift(Items.clock, 25);
+        addGift(Items.PAINTING, 10);
+        addGift(Items.FLOWER_POT, 25);
+        addGift(Items.COMPASS, 25);
+        addGift(Items.CLOCK, 25);
         addGift(RailcraftItems.crowbarIron, 20);
         addGift(RailcraftItems.crowbarSteel, 10);
 
-        addGift(Items.experience_bottle, 32, 5);
-        addGift(Items.experience_bottle, 16, 10);
-        addGift(Items.experience_bottle, 8, 20);
-        addGift(Items.experience_bottle, 4, 40);
-        addGift(Items.experience_bottle, 2, 80);
+        addGift(Items.EXPERIENCE_BOTTLE, 32, 5);
+        addGift(Items.EXPERIENCE_BOTTLE, 16, 10);
+        addGift(Items.EXPERIENCE_BOTTLE, 8, 20);
+        addGift(Items.EXPERIENCE_BOTTLE, 4, 40);
+        addGift(Items.EXPERIENCE_BOTTLE, 2, 80);
 
         addGift(Blocks.diamond_block, 1);
         addGift(Blocks.emerald_block, 2);
-        addGift(Items.emerald, 30);
-        addGift(Items.diamond, 20);
+        addGift(Items.EMERALD, 30);
+        addGift(Items.DIAMOND, 20);
 
-        addGift(Items.gold_ingot, 30);
-        addGift(Items.gold_ingot, 2, 30);
+        addGift(Items.GOLD_INGOT, 30);
+        addGift(Items.GOLD_INGOT, 2, 30);
 
-        addGift(Items.gold_nugget, 8, 80);
-        addGift(Items.gold_nugget, 16, 40);
-        addGift(Items.gold_nugget, 32, 20);
+        addGift(Items.GOLD_NUGGET, 8, 80);
+        addGift(Items.GOLD_NUGGET, 16, 40);
+        addGift(Items.GOLD_NUGGET, 32, 20);
 
-        addGift(Items.ender_pearl, 30);
-        addGift(Items.nether_star, 2);
+        addGift(Items.ENDER_PEARL, 30);
+        addGift(Items.NETHER_STAR, 2);
 
         int recordChance = 1;
 
-        addGift(Items.record_11, recordChance);
-        addGift(Items.record_13, recordChance);
-        addGift(Items.record_blocks, recordChance);
-        addGift(Items.record_cat, recordChance);
-        addGift(Items.record_chirp, recordChance);
-        addGift(Items.record_far, recordChance);
-        addGift(Items.record_mall, recordChance);
-        addGift(Items.record_mellohi, recordChance);
-        addGift(Items.record_stal, recordChance);
-        addGift(Items.record_strad, recordChance);
-        addGift(Items.record_ward, recordChance);
-        addGift(Items.record_wait, recordChance);
+        addGift(Items.RECORD_11, recordChance);
+        addGift(Items.RECORD_13, recordChance);
+        addGift(Items.RECORD_BLOCKS, recordChance);
+        addGift(Items.RECORD_CAT, recordChance);
+        addGift(Items.RECORD_CHIRP, recordChance);
+        addGift(Items.RECORD_FAR, recordChance);
+        addGift(Items.RECORD_MALL, recordChance);
+        addGift(Items.RECORD_MELLOHI, recordChance);
+        addGift(Items.RECORD_STAL, recordChance);
+        addGift(Items.RECORD_STRAD, recordChance);
+        addGift(Items.RECORD_WARD, recordChance);
+        addGift(Items.RECORD_WAIT, recordChance);
 
         int toolChance = 10;
 
-        addGift(Items.fishing_rod, toolChance);
-        addGift(Items.bow, toolChance);
-        addGift(Items.shears, toolChance);
+        addGift(Items.FISHING_ROD, toolChance);
+        addGift(Items.BOW, toolChance);
+        addGift(Items.SHEARS, toolChance);
 
-        addGift(Items.diamond_axe, toolChance);
-        addGift(Items.diamond_pickaxe, toolChance);
-        addGift(Items.diamond_shovel, toolChance);
-        addGift(Items.diamond_sword, toolChance);
-        addGift(Items.diamond_hoe, toolChance);
+        addGift(Items.DIAMOND_AXE, toolChance);
+        addGift(Items.DIAMOND_PICKAXE, toolChance);
+        addGift(Items.DIAMOND_SHOVEL, toolChance);
+        addGift(Items.DIAMOND_SWORD, toolChance);
+        addGift(Items.DIAMOND_HOE, toolChance);
 
-        addGift(Items.golden_axe, toolChance);
-        addGift(Items.golden_pickaxe, toolChance);
-        addGift(Items.golden_shovel, toolChance);
-        addGift(Items.golden_sword, toolChance);
-        addGift(Items.golden_hoe, toolChance);
+        addGift(Items.GOLDEN_AXE, toolChance);
+        addGift(Items.GOLDEN_PICKAXE, toolChance);
+        addGift(Items.GOLDEN_SHOVEL, toolChance);
+        addGift(Items.GOLDEN_SWORD, toolChance);
+        addGift(Items.GOLDEN_HOE, toolChance);
 
-        addGift(Items.iron_axe, toolChance);
-        addGift(Items.iron_pickaxe, toolChance);
-        addGift(Items.iron_shovel, toolChance);
-        addGift(Items.iron_sword, toolChance);
-        addGift(Items.iron_hoe, toolChance);
+        addGift(Items.IRON_AXE, toolChance);
+        addGift(Items.IRON_PICKAXE, toolChance);
+        addGift(Items.IRON_SHOVEL, toolChance);
+        addGift(Items.IRON_SWORD, toolChance);
+        addGift(Items.IRON_HOE, toolChance);
 
         addGift(RailcraftToolItems.getSteelAxe(), toolChance);
         addGift(RailcraftToolItems.getSteelPickaxe(), toolChance);
@@ -123,25 +123,25 @@ public class EntityCartGift extends EntityCartTNTWood {
 
         int armorChance = 5;
 
-        addGift(Items.diamond_helmet, armorChance);
-        addGift(Items.diamond_chestplate, armorChance);
-        addGift(Items.diamond_leggings, armorChance);
-        addGift(Items.diamond_boots, armorChance);
+        addGift(Items.DIAMOND_HELMET, armorChance);
+        addGift(Items.DIAMOND_CHESTPLATE, armorChance);
+        addGift(Items.DIAMOND_LEGGINGS, armorChance);
+        addGift(Items.DIAMOND_BOOTS, armorChance);
 
-        addGift(Items.golden_helmet, armorChance);
-        addGift(Items.golden_chestplate, armorChance);
-        addGift(Items.golden_leggings, armorChance);
-        addGift(Items.golden_boots, armorChance);
+        addGift(Items.GOLDEN_HELMET, armorChance);
+        addGift(Items.GOLDEN_CHESTPLATE, armorChance);
+        addGift(Items.GOLDEN_LEGGINGS, armorChance);
+        addGift(Items.GOLDEN_BOOTS, armorChance);
 
-        addGift(Items.iron_helmet, armorChance);
-        addGift(Items.iron_chestplate, armorChance);
-        addGift(Items.iron_leggings, armorChance);
-        addGift(Items.iron_boots, armorChance);
+        addGift(Items.IRON_HELMET, armorChance);
+        addGift(Items.IRON_CHESTPLATE, armorChance);
+        addGift(Items.IRON_LEGGINGS, armorChance);
+        addGift(Items.IRON_BOOTS, armorChance);
 
-        addGift(Items.leather_helmet, armorChance);
-        addGift(Items.leather_chestplate, armorChance);
-        addGift(Items.leather_leggings, armorChance);
-        addGift(Items.leather_boots, armorChance);
+        addGift(Items.LEATHER_HELMET, armorChance);
+        addGift(Items.LEATHER_CHESTPLATE, armorChance);
+        addGift(Items.LEATHER_LEGGINGS, armorChance);
+        addGift(Items.LEATHER_BOOTS, armorChance);
 
         addGift(RailcraftToolItems.getSteelHelm(), armorChance);
         addGift(RailcraftToolItems.getSteelArmor(), armorChance);
@@ -206,7 +206,7 @@ public class EntityCartGift extends EntityCartTNTWood {
     public List<ItemStack> getItemsDropped() {
         List<ItemStack> items = new ArrayList<ItemStack>();
         if (RailcraftConfig.doCartsBreakOnDrop()) {
-            items.add(new ItemStack(Items.minecart));
+            items.add(new ItemStack(Items.MINECART));
             items.add(new ItemStack(Blocks.pumpkin));
         } else
             items.add(getCartItem());
@@ -262,7 +262,7 @@ public class EntityCartGift extends EntityCartTNTWood {
     }
 
     private void spawnCoal() {
-        spawnItem(new ItemStack(Items.coal));
+        spawnItem(new ItemStack(Items.COAL));
     }
 
     private void spawnItem(ItemStack stack) {
@@ -307,7 +307,7 @@ public class EntityCartGift extends EntityCartTNTWood {
         @Override
         public ItemStack getStack(Random rand) {
             int meta = potions.get(rand.nextInt(potions.size()));
-            return new ItemStack(Items.potionitem, 1, meta);
+            return new ItemStack(Items.POTIONITEM, 1, meta);
         }
 
         @Override

@@ -27,12 +27,12 @@ import net.minecraftforge.fluids.Fluid;
 public class ItemBucketRailcraft extends Item {
 
     private final Fluid fluid;
-    private ItemStack container = new ItemStack(Items.bucket);
+    private ItemStack container = new ItemStack(Items.BUCKET);
 
     public ItemBucketRailcraft(Fluid fluid) {
         this.fluid = fluid;
         setMaxStackSize(1);
-        setContainerItem(Items.bucket);
+        setContainerItem(Items.BUCKET);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 

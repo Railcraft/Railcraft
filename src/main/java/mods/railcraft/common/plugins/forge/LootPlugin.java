@@ -29,7 +29,7 @@ public class LootPlugin {
                 ChestGenHooks.MINESHAFT_CORRIDOR,
                 ChestGenHooks.VILLAGE_BLACKSMITH);
         LootPlugin.increaseLootGen(10, 16, WORKSHOP);
-        addLoot(new ItemStack(Items.coal), 8, 16, Type.WORKSHOP, "fuel.coal");
+        addLoot(new ItemStack(Items.COAL), 8, 16, Type.WORKSHOP, "fuel.coal");
     }
 
     public static void increaseLootGen(int min, int max, String... locations) {

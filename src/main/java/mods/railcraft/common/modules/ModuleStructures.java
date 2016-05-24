@@ -113,7 +113,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                             " N ",
                             "RCR",
                             'N', new ItemStack(Blocks.netherrack),
-                            'C', new ItemStack(Items.cauldron),
+                            'C', new ItemStack(Items.CAULDRON),
                             'R', "dustRedstone");
                 }
 
@@ -128,7 +128,7 @@ public class ModuleStructures extends RailcraftModulePayload {
 //                        "WWW",
 //                        "III",
 //                        "WWW",
-//                        'I', new ItemStack(Items.iron_ingot),
+//                        'I', new ItemStack(Items.IRON_INGOT),
 //                        'W', Block.planks});
 //            }
 //        }
@@ -272,7 +272,7 @@ public class ModuleStructures extends RailcraftModulePayload {
             @Override
             public void postInit() {
                 if (BlockStrengthGlass.getBlock() != null) {
-                    Object[] frameTypes = {"ingotTin", Items.iron_ingot};
+                    Object[] frameTypes = {"ingotTin", Items.IRON_INGOT};
                     FluidStack water = Fluids.WATER.get(FluidHelper.BUCKET_VOLUME);
                     for (ItemStack container : FluidHelper.getContainersFilledWith(water)) {
                         for (Object frame : frameTypes) {

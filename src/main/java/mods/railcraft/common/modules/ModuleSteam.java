@@ -87,7 +87,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                             "BCB",
                             "BFB",
                             'B', "ingotBrick",
-                            'C', new ItemStack(Items.fire_charge),
+                            'C', new ItemStack(Items.FIRE_CHARGE),
                             'F', new ItemStack(Blocks.furnace));
                 }
 
@@ -97,9 +97,9 @@ public class ModuleSteam extends RailcraftModulePayload {
                             "PBP",
                             "GCG",
                             "PFP",
-                            'B', new ItemStack(Items.bucket),
+                            'B', new ItemStack(Items.BUCKET),
                             'G', new ItemStack(Blocks.iron_bars),
-                            'C', new ItemStack(Items.fire_charge),
+                            'C', new ItemStack(Items.FIRE_CHARGE),
                             'P', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL),
                             'F', new ItemStack(Blocks.furnace));
                 }

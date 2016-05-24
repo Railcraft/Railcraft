@@ -58,7 +58,7 @@ public class ItemRail extends ItemRailcraft {
                 "I I",
                 "I I",
                 "I I",
-                'I', Items.iron_ingot);
+                'I', Items.IRON_INGOT);
 
         IRecipe recipe = new ShapedOreRecipe(item.getStack(6, EnumRail.STANDARD),
                 "I I",
@@ -80,8 +80,8 @@ public class ItemRail extends ItemRailcraft {
                 "IRG",
                 "IRG",
                 'I', item.getRecipeObject(EnumRail.STANDARD),
-                'R', new ItemStack(Items.redstone),
-                'G', new ItemStack(Items.gold_ingot));
+                'R', new ItemStack(Items.REDSTONE),
+                'G', new ItemStack(Items.GOLD_INGOT));
 
         // Wooden
         CraftingPlugin.addShapelessRecipe(item.getStack(6, EnumRail.WOOD), "ingotIron", RailcraftItems.tie.getRecipeObject(EnumTie.WOOD));
@@ -92,8 +92,8 @@ public class ItemRail extends ItemRailcraft {
                 "IBG",
                 "IBG",
                 'I', "ingotSteel",
-                'B', Items.blaze_powder,
-                'G', Items.gold_ingot);
+                'B', Items.BLAZE_POWDER,
+                'G', Items.GOLD_INGOT);
         RollingMachineCraftingManager.instance().getRecipeList().add(recipe);
 
         // Reinforced

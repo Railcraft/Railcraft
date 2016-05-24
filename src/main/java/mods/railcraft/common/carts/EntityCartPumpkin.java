@@ -97,7 +97,7 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
     public List<ItemStack> getItemsDropped() {
         List<ItemStack> items = new ArrayList<ItemStack>();
         if (RailcraftConfig.doCartsBreakOnDrop()) {
-            items.add(new ItemStack(Items.minecart));
+            items.add(new ItemStack(Items.MINECART));
             items.add(new ItemStack(Blocks.pumpkin));
         } else
             items.add(getCartItem());
@@ -157,10 +157,10 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
                     if (rand.nextInt(4) == 0) {
                         skel.tasks.addTask(4, new EntityAIAttackMelee(skel, EntityPlayer.class, 0.25F, false));
                         skel.setSkeletonType(1);
-                        skel.setCurrentItemOrArmor(0, new ItemStack(Items.stone_sword));
+                        skel.setCurrentItemOrArmor(0, new ItemStack(Items.STONE_SWORD));
                     } else {
                         skel.tasks.addTask(4, new EntityAIAttackRanged(skel, 0.25F, 60, 10.0F));
-                        skel.setCurrentItemOrArmor(0, new ItemStack(Items.bow));
+                        skel.setCurrentItemOrArmor(0, new ItemStack(Items.BOW));
                     }
 
                     mob.setCurrentItemOrArmor(4, new ItemStack(rand.nextFloat() < 0.25F ? Blocks.lit_pumpkin : Blocks.pumpkin));
@@ -178,7 +178,7 @@ public class EntityCartPumpkin extends EntityCartTNTWood {
 
     private void spawnPotion() {
         int meta = potions.get(rand.nextInt(potions.size()));
-        ItemStack potion = new ItemStack(Items.potionitem, 1, meta);
+        ItemStack potion = new ItemStack(Items.POTIONITEM, 1, meta);
 
         double x = posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
         double y = posY + 1 + rand.nextInt(3) - 1;

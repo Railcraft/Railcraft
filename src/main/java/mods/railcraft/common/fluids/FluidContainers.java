@@ -179,7 +179,7 @@ public class FluidContainers {
         if (item == null) {
             String tag = "railcraft.fluid.steam.bottle";
 
-            item = new ItemBucketRailcraft(Fluids.STEAM.get()).setContainerItemStack(new ItemStack(Items.glass_bottle));
+            item = new ItemBucketRailcraft(Fluids.STEAM.get()).setContainerItemStack(new ItemStack(Items.GLASS_BOTTLE));
             item.setUnlocalizedName(tag);
             RailcraftRegistry.register(item);
 

@@ -82,7 +82,7 @@ public class ContainerAnvil extends ContainerRepair {
             if (input2 != null) {
                 if (!net.minecraftforge.common.ForgeHooks.onAnvilChange(this, input1original, input2, outputSlot, repairedItemName, baseCost))
                     return;
-                isEnchantedBook = input2.getItem() == Items.enchanted_book && Items.enchanted_book.getEnchantments(input2).tagCount() > 0;
+                isEnchantedBook = input2.getItem() == Items.ENCHANTED_BOOK && Items.ENCHANTED_BOOK.getEnchantments(input2).tagCount() > 0;
 
                 if (input1.isItemStackDamageable() && input1.getItem().getIsRepairable(input1original, input2)) {
                     int j4 = Math.min(input1.getItemDamage(), input1.getMaxDamage() / 4);
@@ -147,7 +147,7 @@ public class ContainerAnvil extends ContainerRepair {
                             l3 = i6;
                             boolean canApplyEnchants = enchantment.canApply(input1original);
 
-                            if (thePlayer.capabilities.isCreativeMode || input1original.getItem() == Items.enchanted_book) {
+                            if (thePlayer.capabilities.isCreativeMode || input1original.getItem() == Items.ENCHANTED_BOOK) {
                                 canApplyEnchants = true;
                             }
 

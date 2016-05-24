@@ -56,7 +56,7 @@ public class ModuleExtras extends RailcraftModulePayload {
                             "B",
                             "M",
                             'B', "craftingTableWood",
-                            'M', Items.minecart);
+                            'M', Items.MINECART);
                     LootPlugin.addLoot(cart.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, cart.getTag());
                 }
 

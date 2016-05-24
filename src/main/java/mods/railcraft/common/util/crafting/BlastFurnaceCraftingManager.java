@@ -49,7 +49,7 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
             fuel.add(ThaumcraftPlugin.getItem("itemResource", 0));
             fuel.add(RailcraftToolItems.getCoalCoke());
             fuel.add(EnumCube.COKE_BLOCK.getItem());
-            fuel.add(new ItemStack(Items.coal, 1, 1));
+            fuel.add(new ItemStack(Items.COAL, 1, 1));
             fuel.add(InvTools.makeStack(ItemFirestoneRefined.item, 1, OreDictionary.WILDCARD_VALUE));
             fuel.add(InvTools.makeStack(ItemFirestoneCracked.item, 1, OreDictionary.WILDCARD_VALUE));
             fuels = Collections.unmodifiableList(fuel);

@@ -28,7 +28,7 @@ public class SlotColorFilter extends SlotRailcraft {
             return false;
         if (InvTools.isStackEqualToBlock(itemstack, Blocks.wool))
             return true;
-        return itemstack.getItem() == Items.dye;
+        return itemstack.getItem() == Items.DYE;
     }
 
 }

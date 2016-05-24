@@ -44,10 +44,10 @@ public class ItemNotepad extends ItemRailcraft {
         CraftingPlugin.addRecipe(new ItemStack(this),
                 "IF",
                 "XP",
-                'I', new ItemStack(Items.dye, 1, 0),
-                'F', Items.feather,
+                'I', new ItemStack(Items.DYE, 1, 0),
+                'F', Items.FEATHER,
                 'X', RailcraftItems.magGlass,
-                'P', Items.paper);
+                'P', Items.PAPER);
     }
 
     private static void setPasteMode(ItemStack stack, PasteMode mode) {

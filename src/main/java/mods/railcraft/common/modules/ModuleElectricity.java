@@ -103,7 +103,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             "PCP",
                             "LPL",
                             'C', "blockCopper",
-                            'P', Items.paper,
+                            'P', Items.PAPER,
                             'L', "ingotLead");
                 }
 

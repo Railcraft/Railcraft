@@ -139,15 +139,15 @@ public enum EnumCart implements ICartType {
     public static ICartType getCartType(ItemStack cart) {
         if (cart == null)
             return null;
-        if (cart.getItem() == Items.minecart)
+        if (cart.getItem() == Items.MINECART)
             return EnumCart.BASIC;
-        if (cart.getItem() == Items.chest_minecart)
+        if (cart.getItem() == Items.CHEST_MINECART)
             return EnumCart.CHEST;
-        if (cart.getItem() == Items.tnt_minecart)
+        if (cart.getItem() == Items.TNT_MINECART)
             return EnumCart.TNT;
-        if (cart.getItem() == Items.furnace_minecart)
+        if (cart.getItem() == Items.FURNACE_MINECART)
             return EnumCart.FURNACE;
-        if (cart.getItem() == Items.hopper_minecart)
+        if (cart.getItem() == Items.HOPPER_MINECART)
             return EnumCart.HOPPER;
         if (cart.getItem() instanceof ItemCart)
             return ((ItemCart) cart.getItem()).getCartType();

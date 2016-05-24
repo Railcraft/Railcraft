@@ -78,7 +78,7 @@ public class CartUncraftingRecipe implements IRecipe {
         private final EnumCart cart;
 
         public EnumCartUncraftingRecipe(EnumCart cart) {
-            super(cart.getContents(), cart.getCartItem(), new ItemStack(Items.minecart));
+            super(cart.getContents(), cart.getCartItem(), new ItemStack(Items.MINECART));
             this.cart = cart;
         }
 

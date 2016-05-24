@@ -194,7 +194,7 @@ public class BlockOre extends Block {
                 if (bonus < 0)
                     bonus = 0;
                 int qty = bonus + 1;
-                drops.add(new ItemStack(Items.diamond, qty));
+                drops.add(new ItemStack(Items.DIAMOND, qty));
                 return drops;
             }
             case DARK_EMERALD: {
@@ -202,7 +202,7 @@ public class BlockOre extends Block {
                 if (bonus < 0)
                     bonus = 0;
                 int qty = bonus + 1;
-                drops.add(new ItemStack(Items.emerald, qty));
+                drops.add(new ItemStack(Items.EMERALD, qty));
                 return drops;
             }
             case DARK_LAPIS: {
@@ -210,7 +210,7 @@ public class BlockOre extends Block {
                 if (bonus < 0)
                     bonus = 0;
                 int qty = (4 + rand.nextInt(5)) * (bonus + 1);
-                drops.add(new ItemStack(Items.dye, qty, 4));
+                drops.add(new ItemStack(Items.DYE, qty, 4));
                 return drops;
             }
             default:

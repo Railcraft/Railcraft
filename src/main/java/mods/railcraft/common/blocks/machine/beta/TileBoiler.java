@@ -135,7 +135,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     @Override
     public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() != Items.bucket)
+        if (current != null && current.getItem() != Items.BUCKET)
             if (Game.isHost(worldObj)) {
                 TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
                 if (mBlock != null)

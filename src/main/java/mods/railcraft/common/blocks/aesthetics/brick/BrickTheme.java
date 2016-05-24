@@ -57,7 +57,7 @@ public enum BrickTheme {
         @Override
         public void initRecipes() {
             if (bleachedClay != null) {
-                CraftingPlugin.addShapelessRecipe(new ItemStack(bleachedClay), new ItemStack(Items.clay_ball), new ItemStack(Items.dye, 1, 15), new ItemStack(Items.dye, 1, 15), new ItemStack(Items.dye, 1, 15));
+                CraftingPlugin.addShapelessRecipe(new ItemStack(bleachedClay), new ItemStack(Items.CLAY_BALL), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15));
                 CraftingPlugin.addFurnaceRecipe(new ItemStack(bleachedClay), new ItemStack(getBlock(), 1, 2), 0.3F);
             }
         }

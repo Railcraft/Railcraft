@@ -25,7 +25,7 @@ public class ItemSignalLabel extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapelessRecipe(new ItemStack(this), Items.paper, "nuggetSteel");
+        CraftingPlugin.addShapelessRecipe(new ItemStack(this), Items.PAPER, "nuggetSteel");
     }
 
     @Override

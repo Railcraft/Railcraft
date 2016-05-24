@@ -65,7 +65,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                     else if (RailcraftItems.ingot.getStack(ItemIngot.EnumIngot.STEEL) != null)
                         tank = RailcraftItems.ingot.getStack(ItemIngot.EnumIngot.STEEL);
                     else
-                        tank = new ItemStack(Items.iron_ingot);
+                        tank = new ItemStack(Items.IRON_INGOT);
 
                     ItemStack firebox;
                     if (EnumMachineBeta.BOILER_FIREBOX_SOLID.isAvailable())
@@ -81,7 +81,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                             "BMM",
                             'T', tank,
                             'F', firebox,
-                            'M', Items.minecart,
+                            'M', Items.MINECART,
                             'B', new ItemStack(Blocks.iron_bars));
                 }
 
@@ -110,7 +110,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                             "GMG",
                             'L', Blocks.redstone_lamp,
                             'U', feederUnit,
-                            'M', Items.minecart,
+                            'M', Items.MINECART,
                             'G', RailcraftItems.gear.getRecipeObject(EnumGear.STEEL),
                             'T', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL));
                 }

@@ -109,7 +109,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                                 "E",
                                 "M",
                                 'E', batbox,
-                                'M', Items.minecart
+                                'M', Items.MINECART
                         );
                     }
                 }
@@ -125,7 +125,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                                     "E",
                                     "M",
                                     'E', cesu,
-                                    'M', Items.minecart
+                                    'M', Items.MINECART
                             );
                         }
                     }
@@ -140,7 +140,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                                     "E",
                                     "M",
                                     'E', mfsu,
-                                    'M', Items.minecart
+                                    'M', Items.MINECART
                             );
                         }
                     }
@@ -157,7 +157,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                                 "E",
                                 "M",
                                 'E', mfe,
-                                'M', Items.minecart
+                                'M', Items.MINECART
                         );
                     }
                 }

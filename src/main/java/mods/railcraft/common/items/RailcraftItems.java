@@ -44,13 +44,13 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     rail(ItemRail.class, "part.rail"),
     railbed(ItemRailbed.class, "part.railbed"),
     rebar(ItemRebar.class, "part.rebar", "ingotIron"),
-    routingTable(ItemRoutingTable.class, "routing.table", Items.writable_book),
+    routingTable(ItemRoutingTable.class, "routing.table", Items.WRITABLE_BOOK),
     signalBlockSurveyor(ItemSignalBlockSurveyor.class, "tool.signal.surveyor"),
     signalLabel(ItemSignalLabel.class, "tool.signal.label"),
     signalLamp(ItemSignalLamp.class, "part.signal.lamp", Blocks.redstone_lamp),
     signalTuner(ItemSignalTuner.class, "tool.signal.tuner"),
-    ticket(ItemTicket.class, "routing.ticket", Items.paper),
-    ticketGold(ItemTicketGold.class, "routing.ticket.gold", Items.gold_nugget),
+    ticket(ItemTicket.class, "routing.ticket", Items.PAPER),
+    ticketGold(ItemTicketGold.class, "routing.ticket.gold", Items.GOLD_NUGGET),
     tie(ItemTie.class, "part.tie"),
     turbineBlade(ItemTurbineBlade.class, "part.turbine.blade", "ingotSteel") {
         @Override

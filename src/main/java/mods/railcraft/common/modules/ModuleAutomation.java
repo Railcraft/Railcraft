@@ -55,7 +55,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                 if (gamma.isAvailable())
                     CraftingPlugin.addRecipe(gamma.getItem(),
                             "ML",
-                            'M', Items.minecart,
+                            'M', Items.MINECART,
                             'L', Blocks.dispenser);
 
                 EnumMachineAlpha alpha = EnumMachineAlpha.FEED_STATION;
@@ -67,7 +67,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             "PCP",
                             'P', "plankWood",
                             'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL) : "blockIron",
-                            'C', new ItemStack(Items.golden_carrot));
+                            'C', new ItemStack(Items.GOLDEN_CARROT));
 
                     MinecraftForge.EVENT_BUS.register(new TamingInteractHandler());
                 }
@@ -93,9 +93,9 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             "FCF",
                             " S ",
                             'I', "blockSteel",
-                            'S', Items.chest_minecart,
+                            'S', Items.CHEST_MINECART,
                             'F', Blocks.furnace,
-                            'C', Items.minecart);
+                            'C', Items.MINECART);
 
                     String tag = "tool.bore.head.diamond";
                     if (RailcraftConfig.isItemEnabled(tag)) {
@@ -143,10 +143,10 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             "DMD",
                             'L', new ItemStack(Blocks.redstone_lamp),
                             'Y', "dyeYellow",
-                            'R', new ItemStack(Items.blaze_rod),
-                            'D', new ItemStack(Items.diamond_pickaxe),
+                            'R', new ItemStack(Items.BLAZE_ROD),
+                            'D', new ItemStack(Items.DIAMOND_PICKAXE),
                             'S', "blockSteel",
-                            'M', new ItemStack(Items.minecart));
+                            'M', new ItemStack(Items.MINECART));
 
                 // Define Undercutter Cart
                 cart = EnumCart.UNDERCUTTER;
@@ -158,9 +158,9 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'L', new ItemStack(Blocks.redstone_lamp),
                             'Y', "dyeYellow",
                             'R', new ItemStack(Blocks.piston),
-                            'D', new ItemStack(Items.diamond_shovel),
+                            'D', new ItemStack(Items.DIAMOND_SHOVEL),
                             'S', "blockSteel",
-                            'M', new ItemStack(Items.minecart));
+                            'M', new ItemStack(Items.MINECART));
 
                 cart = EnumCart.TRACK_LAYER;
                 if (cart.setup())
@@ -173,7 +173,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'E', new ItemStack(Blocks.anvil),
                             'S', "blockSteel",
                             'D', new ItemStack(Blocks.dispenser),
-                            'M', new ItemStack(Items.minecart));
+                            'M', new ItemStack(Items.MINECART));
 
                 cart = EnumCart.TRACK_REMOVER;
                 if (cart.setup())
@@ -186,7 +186,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'P', new ItemStack(Blocks.sticky_piston),
                             'S', "blockSteel",
                             'C', IToolCrowbar.ORE_TAG,
-                            'M', new ItemStack(Items.minecart));
+                            'M', new ItemStack(Items.MINECART));
             }
         });
     }

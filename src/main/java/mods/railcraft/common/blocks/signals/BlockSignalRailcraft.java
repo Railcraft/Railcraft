@@ -187,7 +187,7 @@ public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftO
                     "ICI",
                     "IQI",
                     'I', "ingotIron",
-                    'Q', Items.comparator,
+                    'Q', Items.COMPARATOR,
                     'C', RailcraftItems.circuit, ItemCircuit.EnumCircuit.CONTROLLER);
         }
 
@@ -199,7 +199,7 @@ public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftO
                     "IRI",
                     'I', "ingotIron",
                     'R', "dustRedstone",
-                    'C', Items.repeater);
+                    'C', Items.REPEATER);
         }
 
         // Define Signal Block Box
@@ -222,7 +222,7 @@ public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftO
                     "IRI",
                     'I', "ingotIron",
                     'R', "dustRedstone",
-                    'C', Items.comparator);
+                    'C', Items.COMPARATOR);
         }
         // Define Signal Interlock Box
         structure = EnumSignal.BOX_INTERLOCK;

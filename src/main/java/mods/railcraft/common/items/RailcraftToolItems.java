@@ -72,7 +72,7 @@ public class RailcraftToolItems {
 
     public static ItemStack getSteelShears() {
         if (itemSteelShears == null)
-            return new ItemStack(Items.shears);
+            return new ItemStack(Items.SHEARS);
         return new ItemStack(itemSteelShears);
     }
 
@@ -98,7 +98,7 @@ public class RailcraftToolItems {
 
     public static ItemStack getSteelSword() {
         if (itemSteelSword == null)
-            return new ItemStack(Items.iron_sword);
+            return new ItemStack(Items.IRON_SWORD);
         return new ItemStack(itemSteelSword);
     }
 
@@ -127,7 +127,7 @@ public class RailcraftToolItems {
 
     public static ItemStack getSteelShovel() {
         if (itemSteelShovel == null)
-            return new ItemStack(Items.iron_shovel);
+            return new ItemStack(Items.IRON_SHOVEL);
         return new ItemStack(itemSteelShovel);
     }
 
@@ -157,7 +157,7 @@ public class RailcraftToolItems {
 
     public static ItemStack getSteelPickaxe() {
         if (itemSteelPickaxe == null)
-            return new ItemStack(Items.iron_pickaxe);
+            return new ItemStack(Items.IRON_PICKAXE);
         return new ItemStack(itemSteelPickaxe);
     }
 
@@ -185,7 +185,7 @@ public class RailcraftToolItems {
 
     public static ItemStack getSteelAxe() {
         if (itemSteelAxe == null)
-            return new ItemStack(Items.iron_axe);
+            return new ItemStack(Items.IRON_AXE);
         return new ItemStack(itemSteelAxe);
     }
 
@@ -212,7 +212,7 @@ public class RailcraftToolItems {
 
     public static ItemStack getSteelHoe() {
         if (itemSteelHoe == null)
-            return new ItemStack(Items.iron_hoe);
+            return new ItemStack(Items.IRON_HOE);
         return new ItemStack(itemSteelHoe);
     }
 

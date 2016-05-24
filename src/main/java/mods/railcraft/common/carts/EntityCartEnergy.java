@@ -50,7 +50,7 @@ abstract class EntityCartEnergy extends CartContainerBase implements IEnergyTran
         List<ItemStack> items = new ArrayList<ItemStack>();
         ItemStack stack = getIC2Item();
         if (RailcraftConfig.doCartsBreakOnDrop() && stack != null) {
-            items.add(new ItemStack(Items.minecart));
+            items.add(new ItemStack(Items.MINECART));
             items.add(stack);
         } else
             items.add(getCartItem());

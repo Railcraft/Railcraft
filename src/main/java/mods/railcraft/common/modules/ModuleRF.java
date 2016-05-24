@@ -37,7 +37,7 @@ public class ModuleRF extends RailcraftModulePayload {
                             "LRL",
                             'R', new ItemStack(Blocks.redstone_block),
                             'L', RailcraftItems.ingot, ItemIngot.EnumIngot.LEAD,
-                            'M', Items.minecart
+                            'M', Items.MINECART
                     );
                 }
 

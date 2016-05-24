@@ -39,36 +39,36 @@ public class VillagerTradeHandler implements IVillageTradeHandler {
         //this is where the custom villager trades are specified        
         baseChance = ObfuscationReflectionHelper.<Float, EntityVillager>getPrivateValue(EntityVillager.class, villager, "field_82191_bN");
 
-        addTrade(recipeList, rand, 0.7F, new Offer(Items.coal, 16, 24), new Offer(Items.emerald));
-        addTrade(recipeList, rand, 0.7F, new Offer(Items.emerald), new Offer(Items.coal, 24, 32));
+        addTrade(recipeList, rand, 0.7F, new Offer(Items.COAL, 16, 24), new Offer(Items.EMERALD));
+        addTrade(recipeList, rand, 0.7F, new Offer(Items.EMERALD), new Offer(Items.COAL, 24, 32));
 
-        addTrade(recipeList, rand, 0.4F, new Offer(RailcraftToolItems.getCoalCoke(), 8, 12), new Offer(Items.emerald));
-        addTrade(recipeList, rand, 0.4F, new Offer(Items.emerald), new Offer(RailcraftToolItems.getCoalCoke(), 12, 16));
+        addTrade(recipeList, rand, 0.4F, new Offer(RailcraftToolItems.getCoalCoke(), 8, 12), new Offer(Items.EMERALD));
+        addTrade(recipeList, rand, 0.4F, new Offer(Items.EMERALD), new Offer(RailcraftToolItems.getCoalCoke(), 12, 16));
 
-        addTrade(recipeList, rand, 0.7F, new Offer(Blocks.rail, 30, 34), new Offer(Items.emerald, 2, 3));
-        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.activator_rail, 14, 18), new Offer(Items.emerald, 2, 3));
-        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.golden_rail, 14, 18), new Offer(Items.emerald, 2, 3));
-        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.detector_rail, 14, 18), new Offer(Items.emerald, 2, 3));
+        addTrade(recipeList, rand, 0.7F, new Offer(Blocks.rail, 30, 34), new Offer(Items.EMERALD, 2, 3));
+        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.activator_rail, 14, 18), new Offer(Items.EMERALD, 2, 3));
+        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.golden_rail, 14, 18), new Offer(Items.EMERALD, 2, 3));
+        addTrade(recipeList, rand, 0.1F, new Offer(Blocks.detector_rail, 14, 18), new Offer(Items.EMERALD, 2, 3));
 
         for (EnumTrack track : EnumTrack.VALUES) {
             if (track.isEnabled())
-                addTrade(recipeList, rand, 0.1F, new Offer(track.getItem(), track.recipeOutput - 2, track.recipeOutput + 2), new Offer(Items.emerald, 2, 3));
+                addTrade(recipeList, rand, 0.1F, new Offer(track.getItem(), track.recipeOutput - 2, track.recipeOutput + 2), new Offer(Items.EMERALD, 2, 3));
         }
 
-        addTrade(recipeList, rand, 0.3F, new Offer(Items.minecart), new Offer(Items.emerald, 8, 10));
-        addTrade(recipeList, rand, 0.3F, new Offer(Items.emerald, 6, 8), new Offer(Items.minecart));
+        addTrade(recipeList, rand, 0.3F, new Offer(Items.MINECART), new Offer(Items.EMERALD, 8, 10));
+        addTrade(recipeList, rand, 0.3F, new Offer(Items.EMERALD, 6, 8), new Offer(Items.MINECART));
 
-        addTrade(recipeList, rand, 0.1F, new Offer(EnumCart.LOCO_STEAM_SOLID.getCartItem()), new Offer(Items.emerald, 32, 40));
+        addTrade(recipeList, rand, 0.1F, new Offer(EnumCart.LOCO_STEAM_SOLID.getCartItem()), new Offer(Items.EMERALD, 32, 40));
 
-        addTrade(recipeList, rand, 0.3F, new Offer(ItemCrowbar.getItem()), new Offer(Items.emerald, 7, 9));
-        addTrade(recipeList, rand, 0.1F, new Offer(ItemCrowbarSteel.getItem()), new Offer(Items.emerald, 14, 18));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.crowbarIron), new Offer(Items.EMERALD, 7, 9));
+        addTrade(recipeList, rand, 0.1F, new Offer(RailcraftItems.crowbarSteel), new Offer(Items.EMERALD, 14, 18));
 
-        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.whistleTuner), new Offer(Items.emerald, 1, 2));
-        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.magGlass), new Offer(Items.emerald, 1, 2));
-        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.signalBlockSurveyor), new Offer(Items.emerald, 6, 8));
-        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.signalTuner), new Offer(Items.emerald, 6, 8));
-        addTrade(recipeList, rand, 0.4F, new Offer(RailcraftItems.goggles), new Offer(Items.emerald, 4, 8));
-        addTrade(recipeList, rand, 0.5F, new Offer(RailcraftItems.overalls), new Offer(Items.emerald, 2, 4));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.whistleTuner), new Offer(Items.EMERALD, 1, 2));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.magGlass), new Offer(Items.EMERALD, 1, 2));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.signalBlockSurveyor), new Offer(Items.EMERALD, 6, 8));
+        addTrade(recipeList, rand, 0.3F, new Offer(RailcraftItems.signalTuner), new Offer(Items.EMERALD, 6, 8));
+        addTrade(recipeList, rand, 0.4F, new Offer(RailcraftItems.goggles), new Offer(Items.EMERALD, 4, 8));
+        addTrade(recipeList, rand, 0.5F, new Offer(RailcraftItems.overalls), new Offer(Items.EMERALD, 2, 4));
     }
 
     private class Offer {

@@ -26,7 +26,7 @@ public class ItemRebar extends ItemRailcraft {
                 "  I",
                 " I ",
                 "I  ",
-                'I', new ItemStack(Items.iron_ingot));
+                'I', new ItemStack(Items.IRON_INGOT));
 
         IRecipe recipe = new ShapedOreRecipe(new ItemStack(this, 4), true,
                 "  I",

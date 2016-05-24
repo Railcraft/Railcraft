@@ -468,7 +468,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
             return true;
 
         // Prevents players from getting inside tanks using boats
-        if (current != null && current.getItem() == Items.boat)
+        if (current != null && current.getItem() == Items.BOAT)
             return true;
         return super.blockActivated(player, side);
     }

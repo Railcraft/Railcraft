@@ -73,7 +73,7 @@ public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
     public List<ItemStack> getItemsDropped() {
         List<ItemStack> items = new ArrayList<ItemStack>();
         if (RailcraftConfig.doCartsBreakOnDrop()) {
-            items.add(new ItemStack(Items.minecart));
+            items.add(new ItemStack(Items.MINECART));
             items.add(new ItemStack(Blocks.trapped_chest));
         } else
             items.add(getCartItem());

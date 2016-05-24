@@ -42,13 +42,13 @@ public class ForestryFluidRegistrar extends FluidRegistrar {
         } else if (InvTools.isItemEqual(container.emptyContainer, ModItems.refractoryEmpty.get())) {
             recycle = ModItems.refractoryWax.get();
             chance = 10;
-        } else if (container.emptyContainer.getItem() == Items.glass_bottle) {
+        } else if (container.emptyContainer.getItem() == Items.GLASS_BOTTLE) {
             recycle = new ItemStack(Blocks.glass);
             chance = 10;
         } else
             return;
 
-        if (forestry.api.recipes.RecipeManagers.squeezerManager != null && container.emptyContainer.getItem() != Items.bucket)
+        if (forestry.api.recipes.RecipeManagers.squeezerManager != null && container.emptyContainer.getItem() != Items.BUCKET)
             if (recycle != null)
                 forestry.api.recipes.RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{container.filledContainer}, container.fluid, recycle, chance);
             else

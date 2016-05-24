@@ -57,7 +57,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapelessRecipe(new ItemStack(this), Items.writable_book, "dyeBlue");
+        CraftingPlugin.addShapelessRecipe(new ItemStack(this), Items.WRITABLE_BOOK, "dyeBlue");
     }
 
     public static boolean validBookTagContents(NBTTagCompound nbt) {

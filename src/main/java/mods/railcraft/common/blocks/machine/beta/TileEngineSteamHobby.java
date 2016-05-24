@@ -90,7 +90,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public boolean blockActivated(EntityPlayer player, EnumFacing side) {
         ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() != Items.bucket)
+        if (current != null && current.getItem() != Items.BUCKET)
             if (Game.isHost(worldObj)) {
                 if (FluidHelper.handleRightClick(this, side, player, true, false))
                     return true;

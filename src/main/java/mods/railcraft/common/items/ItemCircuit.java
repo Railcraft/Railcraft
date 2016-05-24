@@ -46,7 +46,7 @@ public class ItemCircuit extends ItemRailcraft {
                 "BGR",
                 "SRL",
                 'L', "gemLapis",
-                '#', Items.repeater,
+                '#', Items.REPEATER,
                 'G', "ingotGold",
                 'S', new ItemStack(Blocks.wool, 1, 14),
                 'R', "dustRedstone",
@@ -56,7 +56,7 @@ public class ItemCircuit extends ItemRailcraft {
                 "BGR",
                 "SRL",
                 'L', "gemLapis",
-                '#', Items.repeater,
+                '#', Items.REPEATER,
                 'G', "ingotGold",
                 'S', new ItemStack(Blocks.wool, 1, 13),
                 'R', "dustRedstone",
@@ -66,7 +66,7 @@ public class ItemCircuit extends ItemRailcraft {
                 "BGR",
                 "SRL",
                 'L', "gemLapis",
-                '#', Items.repeater,
+                '#', Items.REPEATER,
                 'G', "ingotGold",
                 'S', new ItemStack(Blocks.wool, 1, 4),
                 'R', "dustRedstone",
@@ -99,9 +99,9 @@ public class ItemCircuit extends ItemRailcraft {
 
     public enum EnumCircuit implements IVariantEnum {
 
-        CONTROLLER(Items.comparator),
+        CONTROLLER(Items.COMPARATOR),
         RECEIVER(Blocks.redstone_torch),
-        SIGNAL(Items.repeater);
+        SIGNAL(Items.REPEATER);
         public static EnumCircuit[] VALUES = values();
         private Object alternate;
 

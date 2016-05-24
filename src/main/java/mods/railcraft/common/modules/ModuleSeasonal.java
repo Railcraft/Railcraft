@@ -38,7 +38,7 @@ public class ModuleSeasonal extends RailcraftModulePayload {
                         CraftingPlugin.addRecipe(cart.getCartItem(), "GGG",
                                 "WPW",
                                 "WWW",
-                                'G', new ItemStack(Items.gunpowder),
+                                'G', new ItemStack(Items.GUNPOWDER),
                                 'P', new ItemStack(Blocks.pumpkin),
                                 'W', "slabWood");
                     }
@@ -54,7 +54,7 @@ public class ModuleSeasonal extends RailcraftModulePayload {
                         CraftingPlugin.addRecipe(cart.getCartItem(), "GGG",
                                 "WEW",
                                 "WWW",
-                                'G', new ItemStack(Items.gunpowder),
+                                'G', new ItemStack(Items.GUNPOWDER),
                                 'E', "gemEmerald",
                                 'W', "slabWood");
                     }

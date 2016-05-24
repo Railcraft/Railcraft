@@ -53,7 +53,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                             "gog",
                             'd', "gemDiamond",
                             'g', "ingotGold",
-                            'p', Items.ender_pearl,
+                            'p', Items.ENDER_PEARL,
                             'o', new ItemStack(Blocks.obsidian));
                 }
 
@@ -65,7 +65,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                             "gog",
                             'd', "gemEmerald",
                             'g', "ingotGold",
-                            'p', Items.ender_pearl,
+                            'p', Items.ENDER_PEARL,
                             'o', new ItemStack(Blocks.obsidian));
                 }
 
@@ -77,7 +77,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                             "gog",
                             'd', new ItemStack(Blocks.prismarine, 1, 1),
                             'g', "ingotGold",
-                            'p', Items.ender_pearl,
+                            'p', Items.ENDER_PEARL,
                             'o', new ItemStack(Blocks.obsidian));
                 }
 
@@ -90,7 +90,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                                 " o ",
                                 "ogo",
                                 'g', "ingotGold",
-                                'p', Items.ender_pearl,
+                                'p', Items.ENDER_PEARL,
                                 'o', new ItemStack(Blocks.obsidian));
                     }
                 }
@@ -104,7 +104,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                                 "A",
                                 "M",
                                 'A', anchor,
-                                'M', Items.minecart);
+                                'M', Items.MINECART);
                     }
                     cart.setContents(anchor);
                 }
@@ -119,7 +119,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                                 "A",
                                 "M",
                                 'A', anchor,
-                                'M', Items.minecart);
+                                'M', Items.MINECART);
                     }
                     cart.setContents(anchor);
                 }

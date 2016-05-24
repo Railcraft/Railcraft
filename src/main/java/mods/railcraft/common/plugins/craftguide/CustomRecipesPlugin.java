@@ -57,7 +57,7 @@ public class CustomRecipesPlugin implements RecipeProvider {
             ItemStack[] ticket = new ItemStack[10];
             ticket[0] = RailcraftItems.ticket.getStack();
             ticket[1] = RailcraftItems.ticketGold.getStack();
-            ticket[2] = new ItemStack(Items.paper);
+            ticket[2] = new ItemStack(Items.PAPER);
             NBTTagCompound nbt = InvTools.getItemData(ticket[0]);
             nbt.setString("owner", "CovertJaguar");
             nbt.setString("dest", "TheFarLands/Milliways");

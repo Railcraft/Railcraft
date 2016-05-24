@@ -250,7 +250,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
             TileEngineSteamHobby engine = (TileEngineSteamHobby) tile;
             engine.switchOrientation();
             engine.fill(EnumFacing.UP, Fluids.WATER.getB(4), true);
-//            engine.setInventorySlotContents(TileEngineSteamHobby.SLOT_FUEL, new ItemStack(Items.coal, 16));
+//            engine.setInventorySlotContents(TileEngineSteamHobby.SLOT_FUEL, new ItemStack(Items.COAL, 16));
         }
     }
 
