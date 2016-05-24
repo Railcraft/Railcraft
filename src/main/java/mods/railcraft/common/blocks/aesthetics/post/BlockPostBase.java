@@ -24,6 +24,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
@@ -31,12 +34,10 @@ public abstract class BlockPostBase extends Block {
 
     private static final float SIZE = 0.15f;
     private static final float SELECT = 4F / 16F;
-    private final int renderType;
 
-    public BlockPostBase(int renderType) {
+    protected BlockPostBase() {
         super(new MaterialStructure());
-        this.renderType = renderType;
-        setStepSound(RailcraftSound.getInstance());
+        setSoundType(RailcraftSound.getInstance());
         setResistance(15);
         setHardness(3);
 
@@ -60,20 +61,22 @@ public abstract class BlockPostBase extends Block {
             setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 1.0F, 0.8F);
     }
 
+    @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
-        if (isPlatform(state))
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @Nonnull World worldIn, @Nonnull BlockPos pos) {
+        if (isPlatform(blockState))
             return AABBFactory.start().createBoxForTileAt(pos).build();
         if (!worldIn.isAirBlock(pos.down())
-                && !(state.getBlock() instanceof BlockPostBase)
+                && !(blockState.getBlock() instanceof BlockPostBase)
                 && !TrackTools.isRailBlockAt(worldIn, pos.up()))
             return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SIZE).raiseCeiling(0.5).build();
         return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SIZE).build();
     }
 
+    @Nonnull
     @Override
-    public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
-        if (isPlatform(WorldPlugin.getBlockState(worldIn, pos)))
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos) {
+        if (isPlatform(state))
             return AABBFactory.start().createBoxForTileAt(pos).build();
         return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SELECT).build();
     }
@@ -84,37 +87,32 @@ public abstract class BlockPostBase extends Block {
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
         return side == DOWN || side == UP;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isFullCube() {
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public int getRenderType() {
-        return renderType;
-    }
-
-    @Override
-    public boolean isBlockNormalCube() {
+    public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }
 }

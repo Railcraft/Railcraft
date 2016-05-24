@@ -21,12 +21,13 @@ import mods.railcraft.common.util.collections.CollectionTools;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -38,6 +39,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
@@ -79,10 +81,10 @@ public class BlockLantern extends Block {
     private final BiMap<Integer, BlockMaterial> variants;
 
     public BlockLantern(BiMap<Integer, BlockMaterial> variants) {
-        super(Material.redstoneLight);
+        super(Material.REDSTONE_LIGHT);
         this.variantProperty = PropertyEnum.create("variant", BlockMaterial.class, variants.values());
         setDefaultState(blockState.getBaseState().withProperty(variantProperty, variants.get(0)));
-        setStepSound(Block.soundTypeStone);
+        setSoundType(SoundType.STONE);
         this.variants = variants;
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setHardness(5);
@@ -146,14 +148,14 @@ public class BlockLantern extends Block {
         return new ItemStack(this, qty, variants.inverse().get(mat));
     }
 
+    @Nonnull
     @Override
-    public ItemStack getPickBlock(RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        IBlockState state = WorldPlugin.getBlockState(world, pos);
+    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
         return getItem(state);
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (BlockMaterial mat : BlockMaterial.CREATIVE_LIST) {
             if (isAvailable(mat))
                 list.add(getItem(mat));
@@ -161,12 +163,12 @@ public class BlockLantern extends Block {
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
         return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SELECT).raiseFloor(2 * 0.0625f).raiseCeiling(-0.0625f).build();
     }
 
     @Override
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         double dx = pos.getX() + 0.5F;
         double dy = pos.getY() + 0.65F;
         double dz = pos.getZ() + 0.5F;
@@ -176,17 +178,17 @@ public class BlockLantern extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isFullCube() {
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isBlockNormalCube() {
+    public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
 
@@ -196,25 +198,26 @@ public class BlockLantern extends Block {
     }
 
     @Override
-    public int quantityDropped(IBlockState state, int fortune, Random random) {
+    public int quantityDropped(IBlockState state, int fortune, @Nonnull Random random) {
         return 1;
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean addHitEffects(World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
-        return ParticleHelper.addHitEffects(worldObj, this, target, effectRenderer, null);
+    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
+        return ParticleHelper.addHitEffects(worldObj, this, target, manager, null);
     }
 
     @Override
-    public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
-        return ParticleHelper.addDestroyEffects(world, this, pos, state, effectRenderer, null);
+        return ParticleHelper.addDestroyEffects(world, this, pos, state, manager, null);
     }
 
     /**
      * Get the MapColor for this Block and the given BlockState
      */
+    @Nonnull
     @Override
     public MapColor getMapColor(IBlockState state) {
         IBlockState matState = getVariant(state).getState();
@@ -226,6 +229,7 @@ public class BlockLantern extends Block {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Nonnull
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(getVariantProperty(), variants.get(meta));
@@ -239,6 +243,7 @@ public class BlockLantern extends Block {
         return variants.inverse().get(getVariant(state));
     }
 
+    @Nonnull
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, getVariantProperty());

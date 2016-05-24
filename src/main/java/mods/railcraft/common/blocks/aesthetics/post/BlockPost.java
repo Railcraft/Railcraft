@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
@@ -36,6 +35,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class BlockPost extends BlockPostBase implements IPostConnection {
@@ -43,10 +44,9 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     public static final PropertyEnum<EnumPost> VARIANT = PropertyEnum.create("variant", EnumPost.class);
     private static BlockPost block;
 
-    private BlockPost(int renderType) {
-        super(renderType);
+    private BlockPost() {
         setUnlocalizedName("railcraft.post");
-        this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumPost.WOOD));
+        setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumPost.WOOD));
     }
 
     public static void registerBlock() {
@@ -54,7 +54,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
             return;
 
         if (RailcraftConfig.isBlockEnabled("post")) {
-            block = new BlockPost(Railcraft.getProxy().getRenderId());
+            block = new BlockPost();
 
             GameRegistry.registerTileEntity(TilePostEmblem.class, "RCPostEmblemTile");
 
@@ -98,7 +98,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumPost post : EnumPost.values()) {
             if (post == EnumPost.EMBLEM) continue;
             list.add(post.getItem());
@@ -140,8 +140,9 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
 //        return super.getIcon(world, x, y, z, side);
 //    }
 
+    @Nonnull
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
         if (state.getValue(VARIANT) == EnumPost.EMBLEM) {
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TilePostEmblem) {
@@ -156,12 +157,12 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
+    public void harvestBlock(@Nonnull World worldIn, EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
+    public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+        player.addStat(StatList.getBlockStats(this));
         player.addExhaustion(0.025F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
             dropBlockAsItem(world, pos, WorldPlugin.getBlockState(world, pos), 0);
@@ -169,12 +170,12 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return !isVariant(world, pos, EnumPost.EMBLEM) && (side == EnumFacing.DOWN || side == EnumFacing.UP);
     }
 
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
         if (isVariant(state, EnumPost.EMBLEM))
             return new TilePostEmblem();
         return null;
@@ -217,12 +218,12 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public boolean isFlammable(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EnumFacing face) {
         return getVariant(world, pos).canBurn();
     }
 
     @Override
-    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
+    public boolean recolorBlock(World world, @Nonnull BlockPos pos, EnumFacing side, @Nonnull EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (isVariant(state, EnumPost.METAL_UNPAINTED))
             if (BlockPostMetal.post != null) {
@@ -271,6 +272,8 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     /**
      * Get the MapColor for this Block and the given BlockState
      */
+    @Override
+    @Nonnull
     public MapColor getMapColor(IBlockState state) {
         return getVariant(state).getMapColor();
     }
@@ -278,17 +281,22 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Override
+    @Nonnull
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(VARIANT, EnumPost.fromId(meta));
+        return getDefaultState().withProperty(VARIANT, EnumPost.fromId(meta));
     }
 
     /**
      * Convert the BlockState into the correct metadata value
      */
+    @Override
     public int getMetaFromState(IBlockState state) {
         return getVariant(state).ordinal();
     }
 
+    @Override
+    @Nonnull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, VARIANT);
     }

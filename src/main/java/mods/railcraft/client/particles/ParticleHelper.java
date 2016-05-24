@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
@@ -33,7 +34,7 @@ public class ParticleHelper {
     private static final Random rand = new Random();
 
     @SideOnly(Side.CLIENT)
-    public static boolean addHitEffects(World world, Block block, RayTraceResult target, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
+    public static boolean addHitEffects(World world, Block block, RayTraceResult target, ParticleManager manager, ParticleHelperCallback callback) {
         BlockPos pos = target.getBlockPos();
         int x = pos.getX();
         int y = pos.getY();
@@ -70,7 +71,7 @@ public class ParticleHelper {
         fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
         if (callback != null)
             callback.addHitEffects(fx, world, x, y, z, meta);
-        effectRenderer.addEffect(fx.applyColourMultiplier(x, y, z).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+        manager.addEffect(fx.applyColourMultiplier(x, y, z).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 
         return true;
     }
@@ -83,12 +84,12 @@ public class ParticleHelper {
      *
      * @param world The current world
      * @param block
-     * @param effectRenderer A reference to the current effect renderer.
+     * @param manager A reference to the current effect renderer.
      * @param callback
      * @return True to prevent vanilla break particles from spawning.
      */
     @SideOnly(Side.CLIENT)
-    public static boolean addDestroyEffects(World world, Block block, BlockPos pos, IBlockState state, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
+    public static boolean addDestroyEffects(World world, Block block, BlockPos pos, IBlockState state, ParticleManager manager, ParticleHelperCallback callback) {
         if (!WorldPlugin.isBlockAt(world, pos, block)) return true;
         byte its = 4;
         for (int i = 0; i < its; ++i) {
@@ -102,7 +103,7 @@ public class ParticleHelper {
                     fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
                     if (callback != null)
                         callback.addDestroyEffects(fx, world, pos, state);
-                    effectRenderer.addEffect(fx.func_174845_l());
+                    manager.addEffect(fx.func_174845_l());
                 }
             }
         }
