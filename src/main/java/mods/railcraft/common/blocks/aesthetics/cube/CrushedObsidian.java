@@ -34,8 +34,8 @@ public class CrushedObsidian extends SimpleCube {
         if (WorldPlugin.isBlockAir(world, pos))
             return true;
 
-        Block block = WorldPlugin.getBlock(world, pos);
-        return block == Blocks.fire || block.getMaterial().isLiquid();
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        return state == Blocks.FIRE || state.getMaterial().isLiquid();
 
     }
 
@@ -46,17 +46,17 @@ public class CrushedObsidian extends SimpleCube {
 
     @Override
     public void onBlockAdded(World world, BlockPos pos) {
-        world.scheduleBlockUpdate(pos, BlockCube.getBlock(), this.tickRate(), 0);
+        world.scheduleBlockUpdate(pos, BlockCube.getBlock(), tickRate(), 0);
     }
 
     @Override
     public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-        world.scheduleBlockUpdate(pos, BlockCube.getBlock(), this.tickRate(), 0);
+        world.scheduleBlockUpdate(pos, BlockCube.getBlock(), tickRate(), 0);
     }
 
     @Override
     public void updateTick(World world, BlockPos pos, Random rand) {
-        this.tryToFall(world, pos);
+        tryToFall(world, pos);
     }
 
     /**
@@ -84,7 +84,7 @@ public class CrushedObsidian extends SimpleCube {
 
                 //noinspection StatementWithEmptyBody
                 for (blockPos = pos.down(); canFallInto(world, blockPos) && blockPos.getY() > 0; blockPos = blockPos.down()) {
-                    ; // NOOP
+                    // NOOP
                 }
 
                 if (blockPos.getY() > 0)

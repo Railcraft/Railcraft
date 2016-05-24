@@ -12,19 +12,23 @@ package mods.railcraft.common.blocks.aesthetics.cube;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IBlockVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.*;
+import mods.railcraft.common.modules.ModuleFactory;
+import mods.railcraft.common.modules.ModuleStructures;
+import mods.railcraft.common.modules.ModuleWorld;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IStringSerializable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author CovertJaguar
  */
-public enum EnumCube implements IStringSerializable, IBlockVariantEnum<EnumCube> {
+public enum EnumCube implements IBlockVariantEnum<EnumCube> {
 
     COKE_BLOCK(ModuleFactory.class, "coke", new FlammableCube(5, 10), 2f, 10f),
     CONCRETE_BLOCK(ModuleStructures.class, "concrete", new SimpleCube(), 3f, 15f),
@@ -80,6 +84,23 @@ public enum EnumCube implements IStringSerializable, IBlockVariantEnum<EnumCube>
         return VALUES[id];
     }
 
+    @Nonnull
+    @Override
+    public Class<?> getParentClass() {
+        return BlockCube.class;
+    }
+
+    @Nullable
+    @Override
+    public Object getAlternate() {
+        return null;
+    }
+
+    @Override
+    public int getItemMeta() {
+        return ordinal();
+    }
+
     public Class<? extends IRailcraftModule> getModule() {
         return module;
     }
@@ -92,10 +113,12 @@ public enum EnumCube implements IStringSerializable, IBlockVariantEnum<EnumCube>
         return blockDef;
     }
 
+    @Override
     public Block getBlock() {
         return BlockCube.getBlock();
     }
 
+    @Override
     public IBlockState getState() {
         if (BlockCube.getBlock() == null) return null;
         return BlockCube.getBlock().getState(this);
@@ -109,6 +132,7 @@ public enum EnumCube implements IStringSerializable, IBlockVariantEnum<EnumCube>
         return resistance;
     }
 
+    @Override
     public boolean isEnabled() {
         return getModule() != null && RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag()) && BlockCube.getBlock() != null;
     }
@@ -123,6 +147,7 @@ public enum EnumCube implements IStringSerializable, IBlockVariantEnum<EnumCube>
         return new ItemStack(BlockCube.getBlock(), qty, ordinal());
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return tag;

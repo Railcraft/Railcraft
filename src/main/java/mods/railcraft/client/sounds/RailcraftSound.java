@@ -8,7 +8,8 @@
  */
 package mods.railcraft.client.sounds;
 
-import net.minecraft.block.Block.SoundType;
+import net.minecraft.block.SoundType;
+import net.minecraft.util.SoundEvent;
 
 /**
  *
@@ -27,10 +28,5 @@ public class RailcraftSound extends SoundType {
 
     private RailcraftSound() {
         super("railcraft", 1, 1);
-    }
-
-    @Override
-    public String getPlaceSound() {
-        return "place." + this.soundName;
     }
 }
