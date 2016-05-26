@@ -72,7 +72,7 @@ public class CartFilterRecipe implements IRecipe {
         int filterCartCount = 0;
         for (IInvSlot slot : InventoryIterator.getIterable(grid).notNull()) {
             itemCount++;
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             FilterType type = FilterType.fromCartType(EnumCart.getCartType(stack));
             if (type != null) {
                 cartSlot = slot.getIndex();
@@ -86,7 +86,7 @@ public class CartFilterRecipe implements IRecipe {
         for (IInvSlot slot : InventoryIterator.getIterable(grid).notNull()) {
             if (slot.getIndex() == cartSlot)
                 continue;
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (filterType.isAllowedFilterItem(stack)) {
                 filterItem = stack.copy();
                 break;
@@ -114,7 +114,7 @@ public class CartFilterRecipe implements IRecipe {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
 
         for (IInvSlot slot : InventoryIterator.getIterable(inv).notNull()) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (FilterType.fromCartType(EnumCart.getCartType(stack)) == null) {
                 grid[slot.getIndex()] = stack.copy();
             }

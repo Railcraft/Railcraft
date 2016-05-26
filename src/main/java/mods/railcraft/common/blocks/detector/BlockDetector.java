@@ -17,6 +17,7 @@ import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,6 +29,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
@@ -35,6 +37,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,10 +48,10 @@ public class BlockDetector extends RailcraftBlockContainer {
 
     @SuppressWarnings("WeakerAccess")
     public BlockDetector() {
-        super(Material.rock);
+        super(Material.ROCK);
         setResistance(4.5F);
         setHardness(2.0F);
-        setStepSound(soundTypeStone);
+        setSoundType(SoundType.STONE);
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
 
@@ -164,23 +168,24 @@ public class BlockDetector extends RailcraftBlockContainer {
                     'P', Blocks.STONE_PRESSURE_PLATE);
     }
 
+    @Nonnull
     @Override
-    public ItemStack getPickBlock(RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileDetector) {
             TileDetector detector = (TileDetector) tile;
             return detector.getDetector().getType().getItem();
         }
-        return super.getPickBlock(target, world, pos, player);
+        return super.getPickBlock(state, target, world, pos, player);
     }
 
     @Override
-    public boolean isBlockNormalCube() {
+    public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
         return true;
     }
 
@@ -189,8 +194,9 @@ public class BlockDetector extends RailcraftBlockContainer {
         return getMetaFromState(state);
     }
 
+    @Nonnull
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
         TileEntity tile = world.getTileEntity(pos);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if (tile instanceof TileDetector)
@@ -200,12 +206,13 @@ public class BlockDetector extends RailcraftBlockContainer {
 
     //TODO: Move drop code here? We have a reference to the TileEntity now.
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
+    public void harvestBlock(@Nonnull World worldIn, EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
+    public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+        //noinspection ConstantConditions
+        player.addStat(StatList.getBlockStats(this));
         player.addExhaustion(0.025F);
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileDetector)
@@ -215,13 +222,9 @@ public class BlockDetector extends RailcraftBlockContainer {
         return world.setBlockToAir(pos);
     }
 
+    @Nonnull
     @Override
-    public TileEntity createNewTileEntity(World var1, int meta) {
-        return null;
-    }
-
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileEntity createNewTileEntity(@Nonnull World var1, int meta) {
         return new TileDetector();
     }
 
@@ -235,7 +238,7 @@ public class BlockDetector extends RailcraftBlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (playerIn.isSneaking())
             return false;
         ItemStack current = playerIn.getCurrentEquippedItem();
@@ -261,7 +264,7 @@ public class BlockDetector extends RailcraftBlockContainer {
     }
 
     @Override
-    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+    public boolean rotateBlock(World world, @Nonnull BlockPos pos, EnumFacing axis) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileDetector) {
             TileDetector detector = (TileDetector) tile;
@@ -275,21 +278,22 @@ public class BlockDetector extends RailcraftBlockContainer {
         return false;
     }
 
+    @Nonnull
     @Override
-    public EnumFacing[] getValidRotations(World world, BlockPos pos) {
+    public EnumFacing[] getValidRotations(World world, @Nonnull BlockPos pos) {
         return EnumFacing.VALUES;
     }
 
     @Override
-    public float getBlockHardness(World worldIn, BlockPos pos) {
+    public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileDetector)
             return ((TileDetector) tile).getDetector().getHardness();
-        return super.getBlockHardness(worldIn, pos);
+        return super.getBlockHardness(state, worldIn, pos);
     }
 
     @Override
-    public boolean canProvidePower() {
+    public boolean canProvidePower(IBlockState state) {
         return true;
     }
 
@@ -301,7 +305,7 @@ public class BlockDetector extends RailcraftBlockContainer {
      * when checking the bottom of the block.
      */
     @Override
-    public int getWeakPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side) {
+    public int getWeakPower(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
         TileEntity t = worldIn.getTileEntity(pos);
         if (t instanceof TileDetector) {
             TileDetector tile = (TileDetector) t;
@@ -317,8 +321,8 @@ public class BlockDetector extends RailcraftBlockContainer {
      * reversed - eg it is 1 (up) when checking the bottom of the block.
      */
     @Override
-    public int getStrongPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side) {
-        return getWeakPower(worldIn, pos, state, side);
+    public int getStrongPower(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+        return getWeakPower(state, worldIn, pos, side);
     }
 
     @Override
@@ -333,7 +337,7 @@ public class BlockDetector extends RailcraftBlockContainer {
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void breakBlock(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         super.breakBlock(worldIn, pos, state);
         if (Game.isNotHost(worldIn))
             return;
@@ -343,7 +347,7 @@ public class BlockDetector extends RailcraftBlockContainer {
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileEntity t = world.getTileEntity(pos);
         if (t instanceof TileDetector) {
             TileDetector tile = (TileDetector) t;
@@ -360,7 +364,7 @@ public class BlockDetector extends RailcraftBlockContainer {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumDetector detector : EnumDetector.VALUES) {
             if (detector.isEnabled())
                 list.add(detector.getItem());

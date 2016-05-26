@@ -39,7 +39,7 @@ public class CartUncraftingRecipe implements IRecipe {
         int itemCount = 0;
         boolean foundCart = false;
         for (IInvSlot slot : InventoryIterator.getIterable(grid).notNull()) {
-            if (InvTools.isItemEqual(slot.getStackInSlot(), fullCart))
+            if (InvTools.isItemEqual(slot.getStack(), fullCart))
                 foundCart = true;
             itemCount++;
         }
@@ -66,7 +66,7 @@ public class CartUncraftingRecipe implements IRecipe {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
 
         for (IInvSlot slot : InventoryIterator.getIterable(inv).notNull()) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (InvTools.isItemEqual(stack, fullCart))
                 grid[slot.getIndex()] = emptyCart.copy();
         }

@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -29,12 +30,12 @@ public class BlockBrick extends Block {
     private final BrickTheme theme;
 
     public BlockBrick(BrickTheme theme) {
-        super(Material.rock);
+        super(Material.ROCK);
         this.theme = theme;
         setDefaultState(blockState.getBaseState().withProperty(VARIANT, BrickVariant.BRICK));
         setResistance(15);
         setHardness(5);
-        setStepSound(Block.soundTypeStone);
+        setSoundType(SoundType.STONE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setHarvestLevel("pickaxe", 0);
     }
@@ -85,7 +86,7 @@ public class BlockBrick extends Block {
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 }

@@ -42,7 +42,7 @@ public class PacketBuilder implements ISignalPacketBuilder {
     @Override
     public void sendPairPacketUpdate(AbstractPair pairing) {
         PacketPairUpdate pkt = new PacketPairUpdate(pairing);
-        PacketDispatcher.sendToDimension(pkt, pairing.getTile().getWorld().provider.getDimensionId());
+        PacketDispatcher.sendToDimension(pkt, pairing.getTile().getWorld().provider.getDimension());
     }
 
     @Override

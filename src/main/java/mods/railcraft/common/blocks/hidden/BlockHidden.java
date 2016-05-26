@@ -51,7 +51,7 @@ public class BlockHidden extends BlockContainer {
         super(Material.air);
         setUnlocalizedName("railcraft.residual.heat");
         disableStats();
-        setStepSound(new SoundType("null", 0, 0));
+        setSoundType(new SoundType("null", 0, 0));
 
         GameRegistry.registerTileEntity(TileHidden.class, "RCHiddenTile");
     }

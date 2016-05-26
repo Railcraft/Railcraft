@@ -35,7 +35,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
 
     protected BlockSignalBase() {
         super(new MaterialStructure());
-        setStepSound(Block.soundTypeMetal);
+        setSoundType(Block.soundTypeMetal);
         setResistance(50);
         setCreativeTab(CreativeTabs.tabTransport);
 //        setStateHarvestLevel("pickaxe", 2);

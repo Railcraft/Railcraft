@@ -53,7 +53,7 @@ public class BlockRailcraftWall extends BlockWall {
 
         this.alphaBlend = alphaBlend;
         this.proxy = proxy;
-        this.setStepSound(RailcraftSound.instance());
+        this.setSoundType(RailcraftSound.instance());
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 

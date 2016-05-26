@@ -83,7 +83,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
     @Nullable
     public ItemStack tryRemoveItem(IStackFilter filter) {
         for (IInvSlot slot : this) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack)) {
                 ItemStack output = stack.copy();
                 output.stackSize = 1;
@@ -99,9 +99,9 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
     @Nullable
     public ItemStack removeItem(IStackFilter filter) {
         for (IInvSlot slot : this) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack))
-                return slot.decreaseStackInSlot();
+                return slot.decreaseStack();
         }
         return null;
     }
@@ -127,13 +127,13 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
     public ItemStack moveItem(IInventoryObject dest, IStackFilter filter) {
         InventoryManipulator imDest = InventoryManipulator.get(dest);
         for (IInvSlot slot : this) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack)) {
                 stack = stack.copy();
                 stack.stackSize = 1;
                 stack = imDest.addStack(stack);
                 if (stack == null)
-                    return slot.decreaseStackInSlot();
+                    return slot.decreaseStack();
             }
         }
         return null;

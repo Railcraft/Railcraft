@@ -68,7 +68,7 @@ public class BlockTrackElevator extends Block {
     public BlockTrackElevator() {
         super(new MaterialElevator());
         setHardness(1.05F);
-        setStepSound(soundTypeMetal);
+        setSoundType(soundTypeMetal);
 
         setCreativeTab(CreativeTabs.tabTransport);
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWERED, false));

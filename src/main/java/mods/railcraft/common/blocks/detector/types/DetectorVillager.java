@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.detector.types;
 
 import mods.railcraft.common.blocks.detector.Detector;
@@ -36,19 +37,17 @@ public class DetectorVillager extends Detector {
 
     private boolean cartHasVillager(List<EntityMinecart> carts) {
         for (EntityMinecart cart : carts) {
-            if (cart.riddenByEntity instanceof EntityVillager)
+            if (cart.getPassengers().stream().anyMatch(entity -> entity instanceof EntityVillager))
                 return true;
         }
         return false;
     }
 
-    private boolean cartHasProfesion(List<EntityMinecart> carts) {
+    private boolean cartHasProfession(List<EntityMinecart> carts) {
         for (EntityMinecart cart : carts) {
-            if (cart.riddenByEntity instanceof EntityVillager) {
-                EntityVillager villager = (EntityVillager) cart.riddenByEntity;
-                if (villager.getProfession() == profession)
-                    return true;
-            }
+            if (cart.getPassengers().stream().filter(e -> e instanceof EntityVillager).map(entity -> (EntityVillager) entity)
+                    .anyMatch(villager -> villager.getProfession() == profession))
+                return true;
         }
         return false;
     }
@@ -61,9 +60,9 @@ public class DetectorVillager extends Detector {
             case NONE:
                 return !cartHasVillager(carts) ? FULL_POWER : NO_POWER;
             case EQUALS:
-                return cartHasProfesion(carts) ? FULL_POWER : NO_POWER;
+                return cartHasProfession(carts) ? FULL_POWER : NO_POWER;
             case NOT:
-                return !cartHasProfesion(carts) ? FULL_POWER : NO_POWER;
+                return !cartHasProfession(carts) ? FULL_POWER : NO_POWER;
             default:
                 return NO_POWER;
         }

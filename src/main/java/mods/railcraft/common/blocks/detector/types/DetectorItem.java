@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.detector.types;
 
 import mods.railcraft.common.blocks.detector.DetectorFilter;
@@ -14,9 +15,9 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.slots.ISlotController;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,10 +46,10 @@ public class DetectorItem extends DetectorFilter {
     @Override
     public int testCarts(List<EntityMinecart> carts) {
         for (EntityMinecart cart : carts) {
-            IInventory cartInv = null;
+            IInventoryObject cartInv = null;
             if (cart instanceof IInventory)
-                cartInv = (IInventory) cart;
-            if (cartInv != null && cartInv.getSizeInventory() > 0)
+                cartInv = InvTools.getInventory(cart);
+            if (cartInv != null && cartInv.getNumSlots() > 0)
                 switch (primaryMode) {
                     case ANYTHING:
                         return FULL_POWER;
@@ -69,13 +70,13 @@ public class DetectorItem extends DetectorFilter {
                             return FULL_POWER;
                         continue;
                     case ANALOG:
-                        return Container.calcRedstoneFromInventory(cartInv);
+                        return InvTools.calcRedstoneFromInventory(cartInv);
                 }
         }
         return NO_POWER;
     }
 
-    private boolean matchesFilter(IInventory cartInv) {
+    private boolean matchesFilter(IInventoryObject cartInv) {
         for (int i = 0; i < getFilters().getSizeInventory(); i++) {
             ItemStack filter = getFilters().getStackInSlot(i);
             if (filter == null)

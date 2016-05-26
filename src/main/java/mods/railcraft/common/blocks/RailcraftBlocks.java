@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
 import mods.railcraft.common.blocks.machine.BlockMachine;
@@ -30,6 +31,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemAnvilBlock;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -43,6 +45,7 @@ import java.lang.reflect.Constructor;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum RailcraftBlocks implements IRailcraftObjectContainer {
+    anvil_steel(BlockRCAnvil.class, ItemAnvilBlock.class, "anvil"),
     detector(BlockDetector.class, ItemDetector.class, "detector"),
     machine_alpha(BlockMachine.class, ItemMachine.class, "machine.alpha",  EnumMachineAlpha.PROXY, true),
     machine_beta(BlockMachine.class, ItemMachine.class, "machine.beta",  EnumMachineBeta.PROXY, false),

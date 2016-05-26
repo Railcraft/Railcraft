@@ -60,12 +60,12 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
         }
 
         @Override
-        public ItemStack getStackInSlot() {
+        public ItemStack getStack() {
             return inv.getStackInSlot(slot);
         }
 
         @Override
-        public void setStackInSlot(ItemStack stack) {
+        public void setStack(ItemStack stack) {
             inv.setInventorySlotContents(slot, stack);
         }
 
@@ -80,7 +80,7 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
         }
 
         @Override
-        public ItemStack decreaseStackInSlot() {
+        public ItemStack decreaseStack() {
             return inv.decrStackSize(slot, 1);
         }
 
@@ -91,8 +91,8 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
 
         @Override
         public String toString() {
-            ItemStack stack = getStackInSlot();
-            return "SlotNum = " + slot + " Stack = " + (stack == null ? "null" : getStackInSlot().toString());
+            ItemStack stack = getStack();
+            return "SlotNum = " + slot + " Stack = " + (stack == null ? "null" : getStack().toString());
         }
 
     }

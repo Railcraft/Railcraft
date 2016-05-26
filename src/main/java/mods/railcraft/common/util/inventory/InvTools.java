@@ -43,6 +43,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -268,8 +269,8 @@ public abstract class InvTools {
     public static void dropInventory(IInventory inv, World world, BlockPos pos) {
         if (Game.isNotHost(world)) return;
         for (IExtInvSlot slot : InventoryIterator.getIterable(inv)) {
-            spewItem(slot.getStackInSlot(), world, pos);
-            slot.setStackInSlot(null);
+            spewItem(slot.getStack(), world, pos);
+            slot.setStack(null);
         }
     }
 
@@ -305,7 +306,7 @@ public abstract class InvTools {
     public static boolean isInventoryEmpty(IInventoryObject inv) {
         ItemStack stack = null;
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            stack = slot.getStackInSlot();
+            stack = slot.getStack();
             if (stack != null)
                 break;
         }
@@ -314,7 +315,7 @@ public abstract class InvTools {
 
     public static boolean isAccessibleInventoryEmpty(IInventoryObject inv) {
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null && slot.canTakeStackFromSlot(stack))
                 return false;
         }
@@ -324,7 +325,7 @@ public abstract class InvTools {
     public static boolean isInventoryFull(IInventoryObject inv) {
         ItemStack stack = null;
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            stack = slot.getStackInSlot();
+            stack = slot.getStack();
             if (stack == null)
                 break;
         }
@@ -333,7 +334,7 @@ public abstract class InvTools {
 
     public static boolean isEmptySlot(IInventoryObject inv) {
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack == null)
                 return true;
         }
@@ -349,7 +350,7 @@ public abstract class InvTools {
     public static int countItems(IInventoryObject inv) {
         int count = 0;
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null)
                 count += stack.stackSize;
         }
@@ -359,7 +360,7 @@ public abstract class InvTools {
     public static int countMaxItemStackSize(IInventoryObject inv) {
         int count = 0;
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null)
                 count += stack.getMaxStackSize();
         }
@@ -369,7 +370,7 @@ public abstract class InvTools {
     public static int countItems(IInventoryObject inv, Predicate<ItemStack> filter) {
         int count = 0;
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null && filter.apply(stack))
                 count += stack.stackSize;
         }
@@ -379,7 +380,7 @@ public abstract class InvTools {
     public static boolean numItemsMoreThan(IInventoryObject inv, int amount) {
         int count = 0;
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null)
                 count += stack.stackSize;
             if (count >= amount)
@@ -410,7 +411,7 @@ public abstract class InvTools {
     public static int countStacks(IInventoryObject inv) {
         int count = 0;
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null)
                 count++;
         }
@@ -426,7 +427,7 @@ public abstract class InvTools {
      */
     public static boolean containsItem(IInventoryObject inv, ItemStack item) {
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null && isItemEqual(stack, item))
                 return true;
         }
@@ -970,7 +971,7 @@ public abstract class InvTools {
     public static Set<ItemStack> findMatchingItems(IInventoryObject inv, IStackFilter filter) {
         Set<ItemStack> items = new ItemStackSet();
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null && stack.stackSize > 0 && filter.apply(stack)) {
                 stack = stack.copy();
                 stack.stackSize = 1;
@@ -1040,5 +1041,27 @@ public abstract class InvTools {
             return ((ItemBlock) item).getBlock().onBlockPlaced(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, meta, RailcraftFakePlayer.get(world, pos.up()));
         }
         return null;
+    }
+
+    /**
+     * @see net.minecraft.inventory.Container#calcRedstoneFromInventory(IInventory)
+     */
+    public static int calcRedstoneFromInventory(@Nullable IInventoryObject inv) {
+        if (inv == null)
+            return 0;
+        int stackLimit = inv.getInventoryObject() instanceof IInventory ? ((IInventory) inv.getInventoryObject()).getInventoryStackLimit() : 64;
+        int numStacks = 0;
+        float average = 0.0F;
+
+        for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+            ItemStack stack = slot.getStack();
+            if (stack != null) {
+                average += (float) stack.stackSize / (float) Math.min(stackLimit, stack.getMaxStackSize());
+                numStacks++;
+            }
+        }
+
+        average = average / (float) inv.getNumSlots();
+        return MathHelper.floor_float(average * 14.0F) + (numStacks > 0 ? 1 : 0);
     }
 }

@@ -8,61 +8,68 @@
  */
 package mods.railcraft.common.blocks.anvil;
 
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockAnvil;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class BlockRCAnvil extends BlockAnvil {
+public class BlockRCAnvil extends BlockAnvil implements IRailcraftObject {
 
-    private static final String[] anvilIconNames = new String[]{"anvil_top_damaged_0", "anvil_top_damaged_1", "anvil_top_damaged_2"};
-    private static Block block;
 
     public BlockRCAnvil() {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setHardness(5.0F);
-        setStepSound(Block.soundTypeAnvil);
+        setSoundType(SoundType.ANVIL);
         setResistance(2000.0F);
     }
 
-    public static Block getBlock() {
-        return block;
-    }
-
-    public static void registerBlock() {
-        if (block == null) {
-            String tag = "railcraft.anvil";
-            if (RailcraftConfig.isBlockEnabled(tag)) {
-                block = new BlockRCAnvil().setUnlocalizedName(tag);
-                RailcraftRegistry.register(block, ItemAnvilBlock.class);
-
-                ForestryPlugin.addBackpackItem("builder", block);
-
-                HarvestPlugin.setBlockHarvestLevel("pickaxe", 2, block);
-            }
-        }
-    }
-
-    public static ItemStack getStack() {
-        return new ItemStack(block);
+    @Override
+    public Object getRecipeObject(@Nullable IVariantEnum variant) {
+        return this;
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this),
+                "BBB",
+                " I ",
+                "III",
+                'B', "blockSteel",
+                'I', "ingotSteel");
+    }
+
+    @Override
+    public void initializeDefinintion() {
+        ForestryPlugin.addBackpackItem("builder", this);
+
+        HarvestPlugin.setBlockHarvestLevel("pickaxe", 2, this);
+    }
+
+    @Override
+    public void finalizeDefinition() {
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, @Nonnull BlockPos pos, IBlockState state, @Nonnull EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote)
             return true;
         else {

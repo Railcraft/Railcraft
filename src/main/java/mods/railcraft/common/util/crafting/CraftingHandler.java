@@ -47,7 +47,7 @@ public class CraftingHandler {
 //                        if (InvTools.isItemEqual(stack, filterItem)) {
 //                            if (!player.inventory.addItemStackToInventory(stack))
 //                                player.dropPlayerItemWithRandomChoice(stack, false);
-//                            slot.setStackInSlot(null);
+//                            slot.setStack(null);
 //                        }
 //                    }
 //                return;

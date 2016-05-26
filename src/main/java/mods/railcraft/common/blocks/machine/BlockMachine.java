@@ -51,10 +51,10 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     private final BlockStateContainer blockstate;
 
     public BlockMachine(MachineProxy<M> proxy, boolean opaque) {
-        super(Material.rock);
+        super(Material.ROCK);
         setResistance(4.5F);
         setHardness(2.0F);
-        setStepSound(soundTypeStone);
+        setSoundType(soundTypeStone);
         setTickRandomly(true);
         this.proxy = proxy;
         this.blockstate = new BlockStateContainer(this, proxy.getVariantProperty());

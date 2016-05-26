@@ -44,7 +44,7 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
         List<IInvSlot> emptySlots = new ArrayList<IInvSlot>(inv.getSlots());
         for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
             if (slot.canPutStackInSlot(stack)) {
-                if (slot.getStackInSlot() == null)
+                if (slot.getStack() == null)
                     emptySlots.add(slot);
                 else
                     filledSlots.add(slot);
@@ -84,7 +84,7 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
         for (IInvSlot slot : this) {
             if (amountNeeded <= 0)
                 break;
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack)) {
                 ItemStack removed = inv.extractItem(slot.getIndex(), amountNeeded, !doRemove);
                 if (removed != null) {

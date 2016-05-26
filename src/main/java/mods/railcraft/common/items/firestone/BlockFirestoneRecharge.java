@@ -57,9 +57,9 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     public BlockFirestoneRecharge() {
-        super(Material.rock);
+        super(Material.ROCK);
         disableStats();
-        setStepSound(new SoundType("null", 0, 0));
+        setSoundType(new SoundType("null", 0, 0));
         float f = 0.2F;
         setBlockBounds(0.5F - f, 0.4F, 0.5F - f, 0.5F + f, 0.9f, 0.5F + f);
         setLightLevel(1);

@@ -187,13 +187,13 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
      */
     private void balanceSlots() {
         for (IInvSlot slotA : InventoryIterator.getIterable(craftMatrix)) {
-            ItemStack stackA = slotA.getStackInSlot();
+            ItemStack stackA = slotA.getStack();
             if (stackA == null)
                 continue;
             for (IInvSlot slotB : InventoryIterator.getIterable(craftMatrix)) {
                 if (slotA.getIndex() == slotB.getIndex())
                     continue;
-                ItemStack stackB = slotB.getStackInSlot();
+                ItemStack stackB = slotB.getStack();
                 if (stackB == null)
                     continue;
                 if (InvTools.isItemEqual(stackA, stackB))
@@ -209,7 +209,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     private void findMoreStuff() {
         Collection<IInventoryObject> chests = cache.getAdjacentInventories();
         for (IInvSlot slot : InventoryIterator.getIterable(craftMatrix)) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack != null && stack.isStackable() && stack.stackSize == 1) {
                 ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));
                 if (request != null) {

@@ -100,6 +100,11 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     @Override
+    public NBTTagCompound getUpdateTag() {
+        return super.getUpdateTag();
+    }
+
+    @Override
     public void writePacketData(DataOutputStream data) throws IOException {
 //        data.writeUTF(owner);
     }

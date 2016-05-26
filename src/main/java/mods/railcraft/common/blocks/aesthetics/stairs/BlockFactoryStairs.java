@@ -9,13 +9,12 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.stairs;
 
-import mods.railcraft.api.crafting.IRockCrusherRecipe;
+import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -35,8 +34,7 @@ public class BlockFactoryStairs extends BlockFactory {
 
     @Override
     protected void doBlockInit() {
-        int renderId = Railcraft.getProxy().getRenderId();
-        BlockRailcraftStairs.block = new BlockRailcraftStairs(renderId);
+        BlockRailcraftStairs.block = new BlockRailcraftStairs();
         BlockRailcraftStairs.block.setUnlocalizedName("railcraft.stair");
         RailcraftRegistry.register(BlockRailcraftStairs.block, ItemStair.class);
         GameRegistry.registerTileEntity(TileStair.class, "RCStairTile");
@@ -60,7 +58,7 @@ public class BlockFactoryStairs extends BlockFactory {
         for (BlockMaterial mat : BlockMaterial.STAIR_MATS) {
             if (BlockRailcraftStairs.isEnabled(mat) && mat.getSourceItem() != null) {
                 CraftingPlugin.addRecipe(BlockRailcraftStairs.getItem(mat, 4), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
-                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(BlockRailcraftStairs.getItem(mat), true, false);
+                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(BlockRailcraftStairs.getItem(mat), true, false);
                 recipe.addOutput(mat.getSourceItem(), 1.0f);
             }
         }
@@ -82,7 +80,7 @@ public class BlockFactoryStairs extends BlockFactory {
         for (BlockMaterial mat : types) {
             if (!BlockRailcraftStairs.isEnabled(mat))
                 continue;
-            IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(getItem(mat), true, false);
+            ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(getItem(mat), true, false);
             recipe.addOutput(output, 1.0F);
         }
     }

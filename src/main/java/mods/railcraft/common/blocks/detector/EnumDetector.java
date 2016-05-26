@@ -28,7 +28,7 @@ public enum EnumDetector implements IVariantEnum {
     ITEM(ModuleAutomation.class, DetectorItem.class),
     ANY(ModuleAutomation.class, Detector.class),
     EMPTY(ModuleAutomation.class, DetectorEmpty.class),
-    MOB(ModuleAutomation.class, DetectorMob.class),
+    MOB(ModuleAutomation.class, DetectorEnemy.class),
     POWERED(ModuleAutomation.class, DetectorPowered.class),
     PLAYER(ModuleAutomation.class, DetectorPlayer.class),
     EXPLOSIVE(ModuleAutomation.class, DetectorExplosive.class),

@@ -66,7 +66,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
         setResistance(3.5F);
         setHardness(HARDNESS);
-        setStepSound(soundTypeMetal);
+        setSoundType(soundTypeMetal);
         setCreativeTab(CreativeTabs.tabTransport);
         setHarvestLevel("crowbar", 0);
 

@@ -19,6 +19,7 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.*;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -57,13 +58,13 @@ public class BlockOre extends Block {
     private final Random rand = new Random();
 
     public BlockOre(int renderId) {
-        super(Material.rock);
+        super(Material.ROCK);
         setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumOre.SULFUR));
         renderType = renderId;
         setUnlocalizedName("railcraft.ore");
         setResistance(5);
         setHardness(3);
-        setStepSound(Block.soundTypeStone);
+        setSoundType(SoundType.STONE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 

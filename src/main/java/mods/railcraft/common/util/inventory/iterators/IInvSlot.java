@@ -22,14 +22,14 @@ public interface IInvSlot {
 
     boolean canTakeStackFromSlot(ItemStack stack);
 
-    ItemStack decreaseStackInSlot();
+    ItemStack decreaseStack();
 
     /**
      * It is not legal to edit the stack returned from this function.
      */
-    ItemStack getStackInSlot();
+    ItemStack getStack();
 
-//    void setStackInSlot(ItemStack stack);
+//    void setStack(ItemStack stack);
 
     int getIndex();
 

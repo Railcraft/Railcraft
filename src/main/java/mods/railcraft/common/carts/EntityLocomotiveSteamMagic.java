@@ -122,7 +122,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
         if (InvTools.countItems(invFuel) < 16)
             return true;
         for (IInvSlot slot : InventoryIterator.getIterable(invFuel)) {
-            ItemStack stack = slot.getStackInSlot();
+            ItemStack stack = slot.getStack();
             if (stack == null || stack.stackSize < stack.getMaxStackSize() / 4)
                 return true;
         }

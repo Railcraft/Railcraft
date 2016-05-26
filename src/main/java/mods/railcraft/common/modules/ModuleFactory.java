@@ -17,7 +17,6 @@ import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -52,6 +51,7 @@ public class ModuleFactory extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
+                        RailcraftBlocks.anvil_steel,
                         RailcraftBlocks.machine_alpha,
                         RailcraftBlocks.machine_beta
                 );
@@ -61,15 +61,6 @@ public class ModuleFactory extends RailcraftModulePayload {
             public void preInit() {
                 BlockCube.registerBlock();
                 RailcraftToolItems.registerCoalCoke();
-                BlockRCAnvil.registerBlock();
-
-                if (BlockRCAnvil.getBlock() != null)
-                    CraftingPlugin.addRecipe(new ItemStack(BlockRCAnvil.getBlock(), 1, 0),
-                            "BBB",
-                            " I ",
-                            "III",
-                            'B', "blockSteel",
-                            'I', "ingotSteel");
 
                 EnumMachineAlpha alpha = EnumMachineAlpha.COKE_OVEN;
                 if (alpha.isAvailable()) {

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
+ ******************************************************************************/
 package mods.railcraft.common.blocks.detector.types;
 
 import mods.railcraft.api.carts.CartTools;
@@ -27,7 +28,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.ITextComponent;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
@@ -38,7 +41,7 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
  */
 public class DetectorRouting extends DetectorSecured implements IRouter, IRoutingTile {
 
-    private final MultiButtonController<RoutingButtonState> routingController = new MultiButtonController<RoutingButtonState>(0, RoutingButtonState.values());
+    private final MultiButtonController<RoutingButtonState> routingController = MultiButtonController.create(0, RoutingButtonState.values());
     private RoutingLogic logic;
     private final StandaloneInventory inv = new StandaloneInventory(1, null, new StandaloneInventory.Callback() {
         @Override
@@ -48,7 +51,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
         }
 
         @Override
-        public String getInventoryName() {
+        public String getName() {
             return tile.getName();
         }
 
@@ -164,5 +167,16 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
     @Override
     public IInventory getInventory() {
         return inv;
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return tile.hasCustomName();
+    }
+
+    @Nonnull
+    @Override
+    public ITextComponent getDisplayName() {
+        return tile.getDisplayName();
     }
 }

@@ -9,34 +9,22 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.detector.types;
 
-import mods.railcraft.api.carts.IEnergyTransfer;
-import mods.railcraft.common.blocks.detector.Detector;
 import mods.railcraft.common.blocks.detector.EnumDetector;
-import net.minecraft.entity.item.EntityMinecart;
-
-import java.util.List;
-
-import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
-import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntityZombie;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class DetectorEnergy extends Detector {
+public class DetectorEnemy extends DetectorEntity<EntityMob> {
 
-    @Override
-    public int testCarts(List<EntityMinecart> carts) {
-        for (EntityMinecart cart : carts) {
-            if (cart instanceof IEnergyTransfer) {
-                return FULL_POWER;
-            }
-        }
-        return NO_POWER;
+    public DetectorEnemy() {
+        super(EntityMob.class, EntityZombie.class);
     }
 
     @Override
     public EnumDetector getType() {
-        return EnumDetector.ENERGY;
+        return EnumDetector.MOB;
     }
 
 }

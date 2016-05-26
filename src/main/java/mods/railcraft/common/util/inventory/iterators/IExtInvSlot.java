@@ -25,5 +25,5 @@ public interface IExtInvSlot extends IInvSlot {
     /**
      * Sets the current ItemStack in the slot.
      */
-    void setStackInSlot(ItemStack stack);
+    void setStack(ItemStack stack);
 }
