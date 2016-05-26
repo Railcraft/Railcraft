@@ -9,7 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import mods.railcraft.client.sounds.RailcraftSound;
+import mods.railcraft.common.util.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.signals.MaterialStructure;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -36,7 +36,7 @@ public abstract class BlockPostBase extends Block {
 
     protected BlockPostBase() {
         super(new MaterialStructure());
-        setSoundType(RailcraftSound.getInstance());
+        setSoundType(RailcraftSound.instance());
         setResistance(15);
         setHardness(3);
 

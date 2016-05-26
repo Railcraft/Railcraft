@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.stairs;
 
 import mods.railcraft.client.particles.ParticleHelper;
-import mods.railcraft.client.sounds.RailcraftSound;
+import mods.railcraft.common.util.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -59,7 +59,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     BlockRailcraftStairs(int renderId) {
         super(Blocks.STONEBRICK.getDefaultState());
         this.renderId = renderId;
-        this.setStepSound(RailcraftSound.getInstance());
+        this.setStepSound(RailcraftSound.instance());
         setDefaultState(getDefaultState().withProperty(MATERIAL, BlockMaterial.SANDY_BRICK));
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         useNeighborBrightness = true;

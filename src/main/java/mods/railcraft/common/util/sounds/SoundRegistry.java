@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.util.sounds;
 
+import com.google.common.base.Strings;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPost;
@@ -16,76 +17,97 @@ import mods.railcraft.common.blocks.aesthetics.wall.BlockRailcraftWall;
 import mods.railcraft.common.blocks.aesthetics.wall.EnumWallAlpha;
 import mods.railcraft.common.blocks.aesthetics.wall.EnumWallBeta;
 import net.minecraft.block.Block;
-import net.minecraft.block.Block.SoundType;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SoundRegistry {
 
-    private final static Map<Block, Map<Integer, SoundType>> customSounds = new HashMap<Block, Map<Integer, SoundType>>();
+    private static final Map<IBlockState, SoundType> customSounds = new HashMap<>();
 
-    public static SoundType getSound(Block block, int meta) {
-        Map<Integer, SoundType> blockSounds = customSounds.get(block);
-        if (blockSounds != null) {
-            return blockSounds.get(meta);
+    public static SoundType getBlockSound(World world, BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        return getBlockSound(state, world, pos);
+    }
+
+    public static SoundType getBlockSound(IBlockState blockState, World world, BlockPos pos) {
+        Block block = blockState.getBlock();
+        if (block instanceof IBlockSoundProvider)
+            return ((IBlockSoundProvider) block).getSound(world, pos);
+        else {
+            return customSounds.get(blockState);
         }
-        return null;
+    }
+
+    public static SoundEvent matchSoundType(String soundPath, SoundType soundType) {
+        String typeString = soundPath.substring(soundPath.lastIndexOf(".") + 1);
+        switch (typeString) {
+            case "break":
+                return soundType.getBreakSound();
+            case "fall":
+                return soundType.getFallSound();
+            case "hit":
+                return soundType.getHitSound();
+            case "place":
+                return soundType.getPlaceSound();
+            case "step":
+                return soundType.getStepSound();
+        }
+        return soundType.getStepSound();
     }
 
     public static void setupBlockSounds() {
         Block block = BlockPost.getBlock();
         if (block != null) {
-            registerCustomStepSound(block, EnumPost.WOOD.ordinal(), Block.soundTypeWood);
-            registerCustomStepSound(block, EnumPost.STONE.ordinal(), Block.soundTypeStone);
-            registerCustomStepSound(block, EnumPost.METAL_UNPAINTED.ordinal(), Block.soundTypeMetal);
-            registerCustomStepSound(block, EnumPost.WOOD_PLATFORM.ordinal(), Block.soundTypeWood);
-            registerCustomStepSound(block, EnumPost.STONE_PLATFORM.ordinal(), Block.soundTypeStone);
-            registerCustomStepSound(block, EnumPost.METAL_PLATFORM_UNPAINTED.ordinal(), Block.soundTypeMetal);
+            registerBlockSound(EnumPost.WOOD.getState(), SoundType.WOOD);
+            registerBlockSound(EnumPost.STONE.getState(), SoundType.STONE);
+            registerBlockSound(EnumPost.METAL_UNPAINTED.getState(), SoundType.METAL);
+            registerBlockSound(EnumPost.WOOD_PLATFORM.getState(), SoundType.WOOD);
+            registerBlockSound(EnumPost.STONE_PLATFORM.getState(), SoundType.STONE);
+            registerBlockSound(EnumPost.METAL_PLATFORM_UNPAINTED.getState(), SoundType.METAL);
         }
 
         block = BlockCube.getBlock();
         if (block != null) {
 
             for (EnumCube cube : EnumCube.VALUES) {
-                registerCustomStepSound(block, cube.ordinal(), Block.soundTypeStone);
+                registerBlockSound(cube.getState(), SoundType.STONE);
             }
 
-            registerCustomStepSound(block, EnumCube.STEEL_BLOCK.ordinal(), Block.soundTypeMetal);
-            registerCustomStepSound(block, EnumCube.CRUSHED_OBSIDIAN.ordinal(), Block.soundTypeGravel);
-            registerCustomStepSound(block, EnumCube.CREOSOTE_BLOCK.ordinal(), Block.soundTypeWood);
+            registerBlockSound(EnumCube.STEEL_BLOCK.getState(), SoundType.METAL);
+            registerBlockSound(EnumCube.CRUSHED_OBSIDIAN.getState(), SoundType.GROUND);
+            registerBlockSound(EnumCube.CREOSOTE_BLOCK.getState(), SoundType.WOOD);
         }
 
         block = BlockRailcraftWall.getBlockAlpha();
         if (block != null) {
 
             for (EnumWallAlpha wall : EnumWallAlpha.VALUES) {
-                registerCustomStepSound(block, wall.ordinal(), Block.soundTypeStone);
+                registerBlockSound(wall.ordinal(), SoundType.STONE);
             }
 
-            registerCustomStepSound(block, EnumWallAlpha.ICE.ordinal(), Block.soundTypeGlass);
-            registerCustomStepSound(block, EnumWallAlpha.SNOW.ordinal(), Block.soundTypeSnow);
+            registerBlockSound(EnumWallAlpha.ICE.ordinal(), Block.soundTypeGlass);
+            registerBlockSound(EnumWallAlpha.SNOW.ordinal(), Block.soundTypeSnow);
         }
 
         block = BlockRailcraftWall.getBlockBeta();
         if (block != null) {
 
             for (EnumWallBeta wall : EnumWallBeta.VALUES) {
-                registerCustomStepSound(block, wall.ordinal(), Block.soundTypeStone);
+                registerBlockSound(wall.ordinal(), SoundType.STONE);
             }
         }
     }
 
-    private static void registerCustomStepSound(Block block, int metadata, SoundType sound) {
-        Map<Integer, SoundType> blockSounds = customSounds.get(block);
-        if (blockSounds == null) {
-            blockSounds = new HashMap<Integer, SoundType>();
-            customSounds.put(block, blockSounds);
-        }
-        blockSounds.put(metadata, sound);
+    private static void registerBlockSound(IBlockState blockState, SoundType sound) {
+        customSounds.put(blockState, sound);
     }
 }

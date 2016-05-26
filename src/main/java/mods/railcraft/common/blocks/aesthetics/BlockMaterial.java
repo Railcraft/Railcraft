@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.aesthetics;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import mods.railcraft.client.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
@@ -367,7 +366,6 @@ public enum BlockMaterial implements IStringSerializable {
                     if (mat.state != null)
                         mat.sound = mat.state.getBlock().getSoundType();
             }
-            if (mat.sound == RailcraftSound.getInstance())
                 throw new RuntimeException("Invalid Sound Defined!");
         }
     }

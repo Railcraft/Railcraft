@@ -58,6 +58,7 @@ public abstract class MiscTools {
         return null;
     }
 
+    @Deprecated
     public static AxisAlignedBB expandAABBToCoordinate(AxisAlignedBB box, double x, double y, double z) {
         double minX = box.minX;
         double maxX = box.maxX;

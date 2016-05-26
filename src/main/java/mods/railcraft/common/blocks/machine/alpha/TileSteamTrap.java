@@ -15,9 +15,11 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
+import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.steam.ISteamUser;
 import net.minecraft.block.Block;
@@ -25,12 +27,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.io.DataInputStream;
@@ -41,7 +44,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class TileSteamTrap extends TileMachineBase implements IFluidHandler, ISteamUser {
+public abstract class TileSteamTrap extends TileMachineBase implements ISteamUser {
 
     private static final byte JET_TIME = 40;
     private static final byte DAMAGE = 8;
@@ -52,7 +55,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     private final TankManager tankManager = new TankManager();
     private final FilteredTank tank = new FilteredTank(FluidHelper.BUCKET_VOLUME * 32, Fluids.STEAM.get());
 
-    public TileSteamTrap() {
+    protected TileSteamTrap() {
         tankManager.add(tank);
     }
 
@@ -80,13 +83,11 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
             }
     }
 
-    @SuppressWarnings("unchecked")
+    //TODO: test
     public List<EntityLivingBase> getEntitiesInSteamArea() {
-        AxisAlignedBB area = AxisAlignedBB.fromBounds(-0.5D, -0.5D, -0.5D, 0.5D, 0.5D, 0.5D);
-        MiscTools.expandAABBToCoordinate(area, direction.getFrontOffsetX() * RANGE, direction.getFrontOffsetY() * RANGE, direction.getFrontOffsetZ() * RANGE);
-        area.offset(getX() + 0.5, getY() + 0.5, getZ() + 0.5);
-        List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, area);
-        return entities;
+        Vec3d jetVector = new Vec3d(direction.getDirectionVec()).scale(RANGE).addVector(0.5D, 0.5D, 0.5D);
+        AxisAlignedBB area = AABBFactory.start().box().expandToCoordinate(jetVector).offset(getPos()).build();
+        return worldObj.getEntitiesWithinAABB(EntityLivingBase.class, area);
     }
 
     @Override
@@ -125,7 +126,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
         if (!canJet()) return;
         jet = JET_TIME;
         tank.setFluid(null);
-        SoundHelper.playSound(worldObj, getPos(), SoundHelper.SOUND_STEAM_HISS, 1, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
+        SoundHelper.playSound(worldObj, null, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_HISS, SoundCategory.BLOCKS, 1, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
         sendUpdateToClient();
     }
 
@@ -141,9 +142,9 @@ public abstract class TileSteamTrap extends TileMachineBase implements IFluidHan
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(state, entityliving, stack);
-        direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityLiving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityLiving, stack);
+        direction = MiscTools.getSideFacingPlayer(getPos(), entityLiving);
     }
 
     @Override

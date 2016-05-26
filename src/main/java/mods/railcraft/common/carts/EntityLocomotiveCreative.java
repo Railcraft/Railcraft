@@ -14,13 +14,14 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.sounds.SoundHelper;
+import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 /**
@@ -48,8 +49,8 @@ public class EntityLocomotiveCreative extends EntityLocomotive implements ISided
     }
 
     @Override
-    public String getWhistle() {
-        return SoundHelper.SOUND_LOCOMOTIVE_ELECTRIC_WHISTLE;
+    public SoundEvent getWhistle() {
+        return RailcraftSoundEvents.ENTITY_LOCOMOTIVE_ELECTRIC_WHISTLE.getSoundEvent();
     }
 
     @Override

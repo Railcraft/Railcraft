@@ -19,7 +19,7 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.sounds.SoundHelper;
+import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
 import mods.railcraft.common.util.steam.Steam;
 import mods.railcraft.common.util.steam.SteamBoiler;
 import net.minecraft.entity.item.EntityMinecart;
@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -86,8 +87,8 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     }
 
     @Override
-    public String getWhistle() {
-        return SoundHelper.SOUND_LOCOMOTIVE_STEAM_WHISTLE;
+    public SoundEvent getWhistle() {
+        return RailcraftSoundEvents.ENTITY_LOCOMOTIVE_STEAM_WHISTLE.getSoundEvent();
     }
 
     @Override

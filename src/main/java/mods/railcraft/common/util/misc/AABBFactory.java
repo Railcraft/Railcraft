@@ -14,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -103,6 +104,16 @@ public class AABBFactory {
         return this;
     }
 
+    public AABBFactory grow(double grow) {
+        minX -= grow;
+        minY -= grow;
+        minZ -= grow;
+        maxX += grow;
+        maxY += grow;
+        maxZ += grow;
+        return this;
+    }
+
     public AABBFactory expandHorizontally(double grow) {
         minX -= grow;
         minZ -= grow;
@@ -130,6 +141,39 @@ public class AABBFactory {
 
     public AABBFactory raiseCeiling(double raise) {
         maxY += raise;
+        return this;
+    }
+
+    public AABBFactory expandToCoordinate(Vec3d point) {
+        return expandToCoordinate(point.xCoord, point.yCoord, point.zCoord);
+    }
+
+    public AABBFactory expandToCoordinate(double x, double y, double z) {
+        if (x < minX)
+            minX = x;
+        else if (x > maxX)
+            maxX = x;
+
+        if (y < minY)
+            minY = y;
+        else if (y > maxY)
+            maxY = y;
+
+        if (z < minZ)
+            minZ = z;
+        else if (z > maxZ)
+            maxZ = z;
+
+        return this;
+    }
+
+    public AABBFactory offset(Vec3i pos) {
+        minX += pos.getX();
+        minY += pos.getY();
+        minZ += pos.getZ();
+        maxX += pos.getX();
+        maxY += pos.getY();
+        maxZ += pos.getZ();
         return this;
     }
 }

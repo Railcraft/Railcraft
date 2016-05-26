@@ -44,6 +44,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -311,11 +313,12 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         renderYaw = yaw;
     }
 
-    public abstract String getWhistle();
+    public abstract SoundEvent getWhistle();
 
     public final void whistle() {
         if (whistleDelay <= 0) {
-            SoundHelper.playSoundAtEntity(this, getWhistle(), 1, whistlePitch);
+            //TODO: Make moving sound
+            SoundHelper.playSoundForEntity(this, getWhistle(), 1, whistlePitch);
             whistleDelay = WHISTLE_DELAY;
         }
     }

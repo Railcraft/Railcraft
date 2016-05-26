@@ -9,17 +9,20 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
+import mods.railcraft.common.blocks.IBlockVariantEnum;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IStringSerializable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumPost implements IStringSerializable {
+public enum EnumPost implements IBlockVariantEnum<EnumPost> {
 
     WOOD(MapColor.BROWN),
     STONE(MapColor.STONE),
@@ -55,6 +58,7 @@ public enum EnumPost implements IStringSerializable {
         return new ItemStack(BlockPost.getBlock(), qty, ordinal());
     }
 
+    @Override
     public boolean isEnabled() {
         return BlockPost.getBlock() != null;
     }
@@ -71,5 +75,35 @@ public enum EnumPost implements IStringSerializable {
     @Override
     public String getName() {
         return name().toLowerCase(Locale.ENGLISH).replace("_", ".");
+    }
+
+    @Override
+    public int getItemMeta() {
+        return ordinal();
+    }
+
+    @Nonnull
+    @Override
+    public Class<?> getParentClass() {
+        return BlockPost.class;
+    }
+
+    @Nullable
+    @Override
+    public Object getAlternate() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Block getBlock() {
+        return BlockPost.getBlock();
+    }
+
+    @Nullable
+    @Override
+    public IBlockState getState() {
+        if (getBlock() == null) return null;
+        return getBlock().getDefaultState().withProperty(BlockPost.VARIANT, this);
     }
 }

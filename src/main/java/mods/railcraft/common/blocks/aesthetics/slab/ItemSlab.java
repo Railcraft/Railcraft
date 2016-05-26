@@ -20,6 +20,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -59,7 +60,9 @@ public class ItemSlab extends ItemBlock {
         if (!playerIn.canPlayerEdit(pos, facing, stack)) {
             return EnumActionResult.PASS;
         } else {
-            if (isSingleSlab(worldIn, pos, facing)) {
+            TileSlab slab = BlockRailcraftSlab.getSlabTile(worldIn, pos);
+            boolean isTop = slab.isTopSlab();
+            if ((facing == UP && !isTop || facing == DOWN && isTop) && !slab.isDoubleSlab()) {
                 tryAddSlab(worldIn, pos, stack);
                 return EnumActionResult.SUCCESS;
             }
@@ -90,10 +93,8 @@ public class ItemSlab extends ItemBlock {
         return false;
     }
 
-    private boolean isSingleSlabShifted(World world, BlockPos pos, EnumFacing side) {
-        pos = pos.offset(side);
-
-        if (WorldPlugin.getBlock(world, pos) == block) {
+    private boolean isSingleSlabShifted(IBlockState state, World world, BlockPos pos) {
+        if (state.getBlock() == block) {
             TileSlab slab = BlockRailcraftSlab.getSlabTile(world, pos);
             if (slab != null && !slab.isDoubleSlab()) {
                 return true;
@@ -102,16 +103,11 @@ public class ItemSlab extends ItemBlock {
         return false;
     }
 
-    private void tryAddSlab(World world, BlockPos pos, ItemStack stack) {
-        IBlockState state = WorldPlugin.getBlockState(world, pos);
-        if (state.getBlock() == block) {
-            TileSlab slab = BlockRailcraftSlab.getSlabTile(world, pos);
-            if (slab != null) {
-                if (world.checkNoEntityCollision(block.getCollisionBoundingBox(state, world, pos)) && slab.addSlab(getMat(stack))) {
-                    SoundHelper.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F);
-                    --stack.stackSize;
-                }
-            }
+    private void tryAddSlab(IBlockState state, TileSlab slab, World world, BlockPos pos, ItemStack stack) {
+        AxisAlignedBB box = state.getCollisionBoundingBox(world, pos);
+        if ((box == null || world.checkNoEntityCollision(box)) && slab.addSlab(getMat(stack))) {
+            SoundHelper.playSound(world, pos, block.getSoundType().getPlaceSound(), (block.getSoundType().getVolume() + 1.0F) / 2.0F, block.getSoundType().getPitch() * 0.8F);
+            --stack.stackSize;
         }
     }
 

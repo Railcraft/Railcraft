@@ -9,67 +9,51 @@
 package mods.railcraft.client.sounds;
 
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.util.sounds.IBlockSoundProvider;
 import mods.railcraft.common.util.sounds.SoundRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.Block.SoundType;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class RCSoundHandler {
 
-    public final static RCSoundHandler INSTANCE = new RCSoundHandler();
+    public static final RCSoundHandler INSTANCE = new RCSoundHandler();
 
     private RCSoundHandler() {
     }
 
+    //TODO: test, catch PlaySoundAtEntityEvent?
     @SubscribeEvent
     public void onPlaySound(PlaySoundEvent event) {
-        String soundName = event.name;
-        if (soundName != null && event.sound instanceof PositionedSoundRecord && soundName.contains("railcraft")) {
+        ISound soundEvent = event.getSound();
+        if (soundEvent != null && soundEvent.getSoundLocation().getResourcePath().contains("railcraft")) {
             World world = Railcraft.getProxy().getClientWorld();
             if (world != null) {
-                float x = event.sound.getXPosF();
-                float y = event.sound.getYPosF();
-                float z = event.sound.getZPosF();
+                float x = soundEvent.getXPosF();
+                float y = soundEvent.getYPosF();
+                float z = soundEvent.getZPosF();
                 BlockPos pos = new BlockPos(x, y, z);
-                SoundType sound = getBlockSound(world, pos);
-                if (sound == null) {
-                    if (soundName.contains("place")) {
-                        event.manager.playDelayedSound(event.sound, 3); //Play sound later to adjust for the block not being there yet.
-                    } else if (soundName.contains("step")) {
-                        sound = getBlockSound(world, pos.down());
-	                }
+                String soundPath = soundEvent.getSoundLocation().getResourcePath();
+                SoundType blockSound = SoundRegistry.getBlockSound(world, pos);
+                if (blockSound == null) {
+                    if (soundPath.contains("place")) {
+                        event.getManager().playDelayedSound(event.getSound(), 3); //Play sound later to adjust for the block not being there yet.
+                    } else if (soundPath.contains("step")) {
+                        blockSound = SoundRegistry.getBlockSound(world, pos.down());
+                    }
                 }
-                if (sound != null) {
-                    String newName = sound.getStepSound();
-                    if (soundName.contains("dig"))
-                        newName = sound.getBreakSound();
-                    else if (soundName.contains("place"))
-                        newName = sound.getPlaceSound();
-                    event.result = new PositionedSoundRecord(new ResourceLocation(newName), event.sound.getVolume(), event.sound.getPitch() * sound.getFrequency(), x, y, z);
+                if (blockSound != null) {
+                    SoundEvent newSound = SoundRegistry.matchSoundType(soundPath, blockSound);
+                    event.setResultSound(new PositionedSoundRecord(newSound, soundEvent.getCategory(), soundEvent.getVolume(), soundEvent.getPitch() * blockSound.getPitch(), x, y, z));
                 }
             }
-        }
-    }
-
-    private SoundType getBlockSound(World world, BlockPos pos) {
-        IBlockState state = world.getBlockState(pos);
-        Block block = state.getBlock();
-        if (block instanceof IBlockSoundProvider)
-            return ((IBlockSoundProvider) block).getSound(world, pos);
-        else {
-            int meta = block.getMetaFromState(state);
-            return SoundRegistry.getSound(block, meta);
         }
     }
 

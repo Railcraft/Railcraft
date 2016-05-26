@@ -9,7 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.wall;
 
-import mods.railcraft.client.sounds.RailcraftSound;
+import mods.railcraft.common.util.sounds.RailcraftSound;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -53,7 +53,7 @@ public class BlockRailcraftWall extends BlockWall {
 
         this.alphaBlend = alphaBlend;
         this.proxy = proxy;
-        this.setStepSound(RailcraftSound.getInstance());
+        this.setStepSound(RailcraftSound.instance());
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 

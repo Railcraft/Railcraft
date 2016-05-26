@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.cube;
 
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
-import mods.railcraft.client.sounds.RailcraftSound;
+import mods.railcraft.common.util.sounds.RailcraftSound;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -57,7 +57,7 @@ public class BlockCube extends Block {
         setUnlocalizedName("railcraft.cube");
         setResistance(20);
         setHardness(5);
-        setSoundType(RailcraftSound.getInstance());
+        setSoundType(RailcraftSound.instance());
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }

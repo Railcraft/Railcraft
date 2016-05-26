@@ -16,16 +16,17 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.steam.ISteamUser;
 import mods.railcraft.common.util.steam.Steam;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,27 +36,27 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileEngineSteam extends TileEngine implements IFluidHandler, ISteamUser {
+public abstract class TileEngineSteam extends TileEngine implements ISteamUser {
 
-    private final static int TANK_CAPACITY = 8 * FluidHelper.BUCKET_VOLUME;
-    public final static int TANK_STEAM = 0;
+    private static final int TANK_CAPACITY = 8 * FluidHelper.BUCKET_VOLUME;
+    public static final int TANK_STEAM = 0;
     private final FilteredTank steamTank;
     private final TankManager tankManager = new TankManager();
     private int steamUsed;
 
-    public TileEngineSteam() {
+    protected TileEngineSteam() {
         steamTank = new FilteredTank(TANK_CAPACITY, Fluids.STEAM.get(), this);
         tankManager.add(steamTank);
     }
 
     @Override
     protected void playSoundOut() {
-        SoundHelper.playSoundClient(worldObj, getPos(), SoundHelper.SOUND_STEAM_BURST, 0.15F, (float) (0.5F + MiscTools.RANDOM.nextGaussian() * 0.1));
+        SoundHelper.playSoundClient(worldObj, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_BURST, SoundCategory.BLOCKS, 0.15F, (float) (0.5F + MiscTools.RANDOM.nextGaussian() * 0.1));
     }
 
     @Override
     protected void playSoundIn() {
-        SoundHelper.playSoundClient(worldObj, getPos(), SoundHelper.SOUND_STEAM_BURST, 0.15F, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
+        SoundHelper.playSoundClient(worldObj, getPos(), RailcraftSoundEvents.MECHANICAL_STEAM_BURST, SoundCategory.BLOCKS, 0.15F, (float) (1 + MiscTools.RANDOM.nextGaussian() * 0.1));
     }
 
     private int getParticleRate() {
@@ -184,9 +185,7 @@ public abstract class TileEngineSteam extends TileEngine implements IFluidHandle
 
     @Override
     public boolean canFill(EnumFacing from, Fluid fluid) {
-        if (getOrientation() == from)
-            return false;
-        return Fluids.STEAM.is(fluid);
+        return getOrientation() != from && Fluids.STEAM.is(fluid);
     }
 
     @Override
