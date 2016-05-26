@@ -83,9 +83,9 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
 
     @Override
     public void initializeDefinintion() {
-        BlockHidden.registerBlock();
-        if (BlockHidden.getBlock() != null && RailcraftConfig.isTrackingAuraEnabled())
-            MinecraftForge.EVENT_BUS.register(new TrailTicker());
+//        BlockHidden.registerBlock();
+//        if (BlockHidden.getBlock() != null && RailcraftConfig.isTrackingAuraEnabled())
+//            MinecraftForge.EVENT_BUS.register(new TrailTicker());
 
         LootPlugin.addLoot(RailcraftItems.goggles, 1, 1, LootPlugin.Type.WORKSHOP);
     }
