@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
+import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -47,10 +48,11 @@ import java.lang.reflect.Constructor;
 public enum RailcraftBlocks implements IRailcraftObjectContainer {
     anvil_steel(BlockRCAnvil.class, ItemAnvilBlock.class, "anvil"),
     detector(BlockDetector.class, ItemDetector.class, "detector"),
-    machine_alpha(BlockMachine.class, ItemMachine.class, "machine.alpha",  EnumMachineAlpha.PROXY, true),
-    machine_beta(BlockMachine.class, ItemMachine.class, "machine.beta",  EnumMachineBeta.PROXY, false),
-    machine_gamma(BlockMachine.class, ItemMachine.class, "machine.gamma",  EnumMachineGamma.PROXY, false),
-    machine_delta(BlockMachine.class, ItemMachine.class, "machine.delta",  EnumMachineDelta.PROXY, false),
+    frame(BlockFrame.class, ItemBlockRailcraft.class, "frame"),
+    machine_alpha(BlockMachine.class, ItemMachine.class, "machine.alpha", EnumMachineAlpha.PROXY, true),
+    machine_beta(BlockMachine.class, ItemMachine.class, "machine.beta", EnumMachineBeta.PROXY, false),
+    machine_gamma(BlockMachine.class, ItemMachine.class, "machine.gamma", EnumMachineGamma.PROXY, false),
+    machine_delta(BlockMachine.class, ItemMachine.class, "machine.delta", EnumMachineDelta.PROXY, false),
     machine_epsilon(BlockMachine.class, ItemMachine.class, "machine.epsilon", EnumMachineEpsilon.PROXY, true),
     signal(BlockSignalRailcraft.class, ItemSignal.class, "signal"),
     track(BlockTrack.class, ItemTrack.class, "track");
