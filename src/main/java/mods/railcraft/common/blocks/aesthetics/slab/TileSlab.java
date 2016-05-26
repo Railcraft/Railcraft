@@ -87,7 +87,7 @@ public class TileSlab extends RailcraftTileEntity {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         if (top != null) {
             data.setString("top", top.getRegistryName());
@@ -95,6 +95,7 @@ public class TileSlab extends RailcraftTileEntity {
         if (bottom != null) {
             data.setString("bottom", bottom.getRegistryName());
         }
+        return data;
     }
 
     @Override

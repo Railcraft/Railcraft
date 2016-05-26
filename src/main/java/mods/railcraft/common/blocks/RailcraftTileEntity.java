@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.realmsclient.dto.RealmsServer;
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
@@ -25,6 +26,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -34,6 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -64,6 +67,10 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return uuid;
     }
 
+    public IBlockState getBlockState() {
+        return WorldPlugin.getBlockState(worldObj, pos);
+    }
+
     public AdjacentTileCache getTileCache() {
         return tileCache;
     }
@@ -85,11 +92,11 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         }
     }
 
+    @Nullable
     @Override
-    public FMLProxyPacket getDescriptionPacket() {
-//        System.out.println("Sending Tile Packet");
-        RailcraftPacket packet = new PacketTileEntity(this);
-        return packet.getPacket();
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        PacketBuilder.instance().sendTileEntityPacket(this);
+        return null;
     }
 
     @Override
@@ -104,8 +111,10 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     public void markBlockForUpdate() {
 //        System.out.println("updating");
-        if (worldObj != null)
-            worldObj.markBlockForUpdate(getPos());
+        if (worldObj != null) {
+            IBlockState state = getBlockState();
+            worldObj.notifyBlockUpdate(getPos(), state, state, 3);
+        }
     }
 
     public void notifyBlocksOfNeighborChange() {
@@ -159,10 +168,10 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     public abstract String getLocalizationTag();
 
     public List<String> getDebugOutput() {
-        List<String> debug = new ArrayList<String>();
+        List<String> debug = new ArrayList<>();
         debug.add("Railcraft Tile Entity Data Dump");
         debug.add("Object: " + this);
-        debug.add(String.format("Coordinates: d=%d, %s", worldObj.provider.getDimensionId(), getPos()));
+        debug.add(String.format("Coordinates: d=%d, %s", worldObj.provider.getDimension(), getPos()));
         debug.add("Owner: " + (owner == null ? "null" : owner.getName()));
         debug.addAll(tileCache.getDebugOutput());
         return debug;
