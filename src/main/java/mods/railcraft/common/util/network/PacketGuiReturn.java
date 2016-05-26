@@ -41,7 +41,7 @@ public class PacketGuiReturn extends RailcraftPacket {
 
     @Override
     public void writeData(DataOutputStream data) throws IOException {
-        data.writeInt(obj.getWorld().provider.getDimensionId());
+        data.writeInt(obj.getWorld().provider.getDimension());
         if (obj instanceof TileEntity) {
             TileEntity tile = (TileEntity) obj;
             data.writeBoolean(true);

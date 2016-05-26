@@ -130,7 +130,7 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
 
     private void setSignalData(ItemStack item, TileEntity tile) {
         NBTTagCompound data = new NBTTagCompound();
-        data.setInteger("signalDim", tile.getWorld().provider.getDimensionId());
+        data.setInteger("signalDim", tile.getWorld().provider.getDimension());
         data.setInteger("signalX", tile.getPos().getX());
         data.setInteger("signalY", tile.getPos().getY());
         data.setInteger("signalZ", tile.getPos().getZ());

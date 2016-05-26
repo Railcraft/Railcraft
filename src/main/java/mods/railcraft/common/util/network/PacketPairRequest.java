@@ -39,7 +39,7 @@ public class PacketPairRequest extends RailcraftPacket {
     @Override
     public void writeData(DataOutputStream data) throws IOException {
         TileEntity tile = pairing.getTile();
-        data.writeInt(tile.getWorld().provider.getDimensionId());
+        data.writeInt(tile.getWorld().provider.getDimension());
         BlockPos pos = tile.getPos();
         data.writeInt(pos.getX());
         data.writeInt(pos.getY());

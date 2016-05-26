@@ -67,7 +67,7 @@ public abstract class PoorOreGenerator {
         NoiseGen noise = noiseMap.get(world);
         if (noise == null) {
             long seed = world.getSeed();
-            seed += world.provider.getDimensionId();
+            seed += world.provider.getDimension();
             seed += noiseSeed;
             noise = new NoiseGenSimplex(new Random(seed), scale);
             noiseMap.put(world, noise);

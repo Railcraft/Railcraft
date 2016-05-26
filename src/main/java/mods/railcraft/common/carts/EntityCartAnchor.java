@@ -120,8 +120,8 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
         if (RailcraftConfig.printAnchorDebug() && ticket != null) {
             clock++;
             if (clock % 64 == 0) {
-                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has a ticket and is ticking at <%.0f,%.0f,%.0f> in dim:%d - logged on tick %d", getName(), posX, posY, posZ, worldObj.provider.getDimensionId(), worldObj.getWorldTime());
-                Game.log(Level.DEBUG, "{0} has a ticket and is ticking at <{1},{2},{3}> in dim:{4} - logged on tick {5}", getName(), posX, posY, posZ, worldObj.provider.getDimensionId(), worldObj.getWorldTime());
+                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has a ticket and is ticking at <%.0f,%.0f,%.0f> in dim:%d - logged on tick %d", getName(), posX, posY, posZ, worldObj.provider.getDimension(), worldObj.getWorldTime());
+                Game.log(Level.DEBUG, "{0} has a ticket and is ticking at <{1},{2},{3}> in dim:{4} - logged on tick {5}", getName(), posX, posY, posZ, worldObj.provider.getDimension(), worldObj.getWorldTime());
             }
         }
     }

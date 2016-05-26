@@ -132,7 +132,7 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
 
     private void setControllerData(ItemStack item, TileEntity tile) {
         NBTTagCompound data = new NBTTagCompound();
-        data.setInteger("controllerDim", tile.getWorld().provider.getDimensionId());
+        data.setInteger("controllerDim", tile.getWorld().provider.getDimension());
         data.setInteger("controllerX", tile.getPos().getX());
         data.setInteger("controllerY", tile.getPos().getY());
         data.setInteger("controllerZ", tile.getPos().getZ());

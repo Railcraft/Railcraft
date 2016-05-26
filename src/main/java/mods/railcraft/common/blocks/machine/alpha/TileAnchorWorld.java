@@ -99,7 +99,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                     WorldCoordinate target = sentinelPairingMap.get(player);
                     if (target == null)
                         setTarget(this, player);
-                    else if (worldObj.provider.getDimensionId() != target.getDim())
+                    else if (worldObj.provider.getDimension() != target.getDim())
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.dimension", getLocalizationTag());
                     else if (new WorldCoordinate(this).equals(target)) {
                         removeTarget(player);
@@ -283,8 +283,8 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         if (RailcraftConfig.printAnchorDebug() && hasActiveTicket())
             if (clock % 64 == 0) {
                 int numChunks = chunks == null ? 0 : chunks.size();
-                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has loaded %d chunks and is ticking at <%d> in dim:%d - logged on tick %d", getName(), numChunks, getPos(), worldObj.provider.getDimensionId(), worldObj.getWorldTime());
-                Game.log(Level.DEBUG, "{0} has loaded {1} chunks and is ticking at <{2}> in dim:{3} - logged on tick {4}", getName(), numChunks, getPos(), worldObj.provider.getDimensionId(), worldObj.getWorldTime());
+                ChatPlugin.sendLocalizedChatToAllFromServer(worldObj, "%s has loaded %d chunks and is ticking at <%d> in dim:%d - logged on tick %d", getName(), numChunks, getPos(), worldObj.provider.getDimension(), worldObj.getWorldTime());
+                Game.log(Level.DEBUG, "{0} has loaded {1} chunks and is ticking at <{2}> in dim:{3} - logged on tick {4}", getName(), numChunks, getPos(), worldObj.provider.getDimension(), worldObj.getWorldTime());
             }
     }
 

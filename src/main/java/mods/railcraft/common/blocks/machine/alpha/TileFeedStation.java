@@ -121,7 +121,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
             DataOutputStream data = pkt.getDataStream();
             data.writeInt(animal.getEntityId());
 
-            PacketDispatcher.sendToAllAround(pkt, new NetworkRegistry.TargetPoint(worldObj.provider.getDimensionId(), getX(), getY(), getZ(), 80));
+            PacketDispatcher.sendToAllAround(pkt, new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), getX(), getY(), getZ(), 80));
         } catch (IOException ex) {
         }
     }

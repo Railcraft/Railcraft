@@ -80,7 +80,7 @@ public class BlockRailcraftFluid extends BlockFluidClassic {
     @Override
     public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
         super.onNeighborBlockChange(world, pos, state, neighborBlock);
-        if (flammable && world.provider.getDimensionId() == -1) {
+        if (flammable && world.provider.getDimension() == -1) {
             world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 4F, true, true);
             world.setBlockToAir(pos);
         }

@@ -166,7 +166,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
 
         if (Game.isHost(getWorld())) {
             if (isMaster()) {
-                if (worldObj.provider.getDimensionId() != -1 && clock % REFILL_INTERVAL == 0) {
+                if (worldObj.provider.getDimension() != -1 && clock % REFILL_INTERVAL == 0) {
                     float rate = REFILL_RATE;
                     BiomeGenBase biome = worldObj.getBiomeGenForCoords(getPos());
                     float humidity = biome.rainfall;

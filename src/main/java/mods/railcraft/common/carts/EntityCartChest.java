@@ -61,8 +61,8 @@ public class EntityCartChest extends CartContainerBase implements IItemCart {
     }
 
     @Override
-    public EnumMinecartType getMinecartType() {
-        return EnumMinecartType.CHEST;
+    public EntityMinecart.Type getType() {
+        return EntityMinecart.Type.CHEST;
     }
 
     @Override
