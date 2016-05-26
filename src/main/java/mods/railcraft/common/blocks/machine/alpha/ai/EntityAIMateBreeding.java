@@ -27,15 +27,15 @@ public class EntityAIMateBreeding extends EntityAIBase {
 
     private static final int MAX_ANIMALS = 6;
     private final EntityAnimal theAnimal;
-    World theWorld;
+    final World theWorld;
     /**
      * Delay preventing a baby from spawning immediately when two mate-able animals find each other.
      */
-    int spawnBabyDelay = 0;
+    int spawnBabyDelay;
     /**
      * The speed the creature moves at during mating behavior.
      */
-    float moveSpeed;
+    final float moveSpeed;
     private EntityAnimal targetMate;
 
     public EntityAIMateBreeding(EntityAnimal animal, float moveSpeed) {
@@ -87,17 +87,15 @@ public class EntityAIMateBreeding extends EntityAIBase {
 
     /**
      * Returns whether the EntityAIBase should begin execution.
-     *
-     * @return
      */
     @Override
     public boolean shouldExecute() {
-        if (!this.theAnimal.isInLove()) {
+        if (!theAnimal.isInLove()) {
             return false;
         }
 
-        List nearbyEntites = theAnimal.worldObj.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.getEntityBoundingBox().expand(1, 1, 1));
-        if (nearbyEntites.size() > MAX_ANIMALS) {
+        List nearbyEntities = theAnimal.worldObj.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.getEntityBoundingBox().expand(1, 1, 1));
+        if (nearbyEntities.size() > MAX_ANIMALS) {
             return false;
         }
 
@@ -107,12 +105,10 @@ public class EntityAIMateBreeding extends EntityAIBase {
 
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
-     *
-     * @return
      */
     @Override
     public boolean continueExecuting() {
-        return this.targetMate.isEntityAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
+        return targetMate.isEntityAlive() && targetMate.isInLove() && spawnBabyDelay < 60;
     }
 
     /**
@@ -129,11 +125,11 @@ public class EntityAIMateBreeding extends EntityAIBase {
      */
     @Override
     public void updateTask() {
-        this.theAnimal.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.theAnimal.getVerticalFaceSpeed());
-        this.theAnimal.getNavigator().tryMoveToEntityLiving(this.targetMate, this.moveSpeed);
+        theAnimal.getLookHelper().setLookPositionWithEntity(targetMate, 10.0F, (float) theAnimal.getVerticalFaceSpeed());
+        theAnimal.getNavigator().tryMoveToEntityLiving(targetMate, moveSpeed);
         ++this.spawnBabyDelay;
 
-        if (this.spawnBabyDelay == 60) {
+        if (spawnBabyDelay == 60) {
             double litterSize = 1.75;
             if (theAnimal instanceof EntityCow || theAnimal instanceof EntitySheep) {
                 litterSize = 0;
@@ -154,7 +150,7 @@ public class EntityAIMateBreeding extends EntityAIBase {
      */
     private EntityAnimal getNearbyMate() {
         float var1 = 8.0F;
-        List var2 = this.theWorld.getEntitiesWithinAABB(this.theAnimal.getClass(), this.theAnimal.getEntityBoundingBox().expand((double) var1, (double) var1, (double) var1));
+        List var2 = theWorld.getEntitiesWithinAABB(theAnimal.getClass(), theAnimal.getEntityBoundingBox().expand((double) var1, (double) var1, (double) var1));
         Iterator entity = var2.iterator();
         EntityAnimal target;
 
@@ -186,18 +182,18 @@ public class EntityAIMateBreeding extends EntityAIBase {
      * Spawns a baby animal of the same type.
      */
     private void spawnBaby() {
-        EntityAgeable baby = this.theAnimal.createChild(this.targetMate);
+        EntityAgeable baby = theAnimal.createChild(targetMate);
 
         if (baby instanceof EntityAnimal) {
-            this.theAnimal.setGrowingAge(3600); // 6000
-            this.targetMate.setGrowingAge(3600); // 6000
-            this.theAnimal.resetInLove();
-            this.targetMate.resetInLove();
+            theAnimal.setGrowingAge(3600); // 6000
+            targetMate.setGrowingAge(3600); // 6000
+            theAnimal.resetInLove();
+            targetMate.resetInLove();
             baby.setGrowingAge(-12000); // -24000
 
             modifyAI((EntityAnimal) baby);
 
-            Random rand = this.theAnimal.getRNG();
+            Random rand = theAnimal.getRNG();
             if (baby instanceof EntityOcelot) {
                 EntityOcelot cat = (EntityOcelot) baby;
                 if (rand.nextInt(10) == 0) {
@@ -207,14 +203,14 @@ public class EntityAIMateBreeding extends EntityAIBase {
 
             double x = rand.nextGaussian() * 0.2D;
             double z = rand.nextGaussian() * 0.2D;
-            baby.setLocationAndAngles(this.theAnimal.posX + x, this.theAnimal.posY, this.theAnimal.posZ + z, 0.0F, 0.0F);
-            this.theWorld.spawnEntityInWorld(baby);
+            baby.setLocationAndAngles(theAnimal.posX + x, theAnimal.posY, theAnimal.posZ + z, 0.0F, 0.0F);
+            theWorld.spawnEntityInWorld(baby);
 
             for (int i = 0; i < 7; ++i) {
                 double px = rand.nextGaussian() * 0.02D;
                 double py = rand.nextGaussian() * 0.02D;
                 double pz = rand.nextGaussian() * 0.02D;
-                this.theWorld.spawnParticle(HEART, this.theAnimal.posX + (double) (rand.nextFloat() * this.theAnimal.width * 2.0F) - (double) this.theAnimal.width, this.theAnimal.posY + 0.5D + (double) (rand.nextFloat() * this.theAnimal.height), this.theAnimal.posZ + (double) (rand.nextFloat() * this.theAnimal.width * 2.0F) - (double) this.theAnimal.width, px, py, pz);
+                theWorld.spawnParticle(HEART, theAnimal.posX + (double) (rand.nextFloat() * theAnimal.width * 2.0F) - (double) theAnimal.width, theAnimal.posY + 0.5D + (double) (rand.nextFloat() * theAnimal.height), theAnimal.posZ + (double) (rand.nextFloat() * theAnimal.width * 2.0F) - (double) theAnimal.width, px, py, pz);
             }
         }
     }

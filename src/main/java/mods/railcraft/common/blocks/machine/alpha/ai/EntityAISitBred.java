@@ -13,10 +13,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.entity.passive.EntityTameable;
 
+import java.util.UUID;
+
 public class EntityAISitBred extends EntityAISit {
 
     private final EntityTameable theEntity;
-    private boolean isSitting = false;
+    private boolean isSitting;
 
     public EntityAISitBred(EntityTameable animal) {
         super(animal);
@@ -26,21 +28,23 @@ public class EntityAISitBred extends EntityAISit {
     /**
      * Returns whether the EntityAIBase should begin execution.
      */
+    //TODO: test
     @Override
     public boolean shouldExecute() {
-        if (!this.theEntity.isTamed())
+        if (!theEntity.isTamed())
             return false;
-        else if (this.theEntity.isInWater())
+        else if (theEntity.isInWater())
             return false;
-        else if (!this.theEntity.onGround)
+        else if (!theEntity.onGround)
             return false;
         else {
             Entity owner = theEntity.getOwner();
-            String ownerId = theEntity.getOwnerId();
-            if ((ownerId != null && ownerId.trim().length() > 0) && owner == null)
+            UUID ownerId = theEntity.getOwnerId();
+            if (ownerId != null && owner == null)
                 return true;
 
-            if (owner instanceof EntityLivingBase && theEntity.getDistanceSqToEntity(owner) > 144.0D && ((EntityLivingBase) owner).getAITarget() != null)
+            //noinspection ConstantConditions
+            if (owner != null && theEntity.getDistanceSqToEntity(owner) > 144.0D && ((EntityLivingBase) owner).getAITarget() != null)
                 return false;
 
             return isSitting;

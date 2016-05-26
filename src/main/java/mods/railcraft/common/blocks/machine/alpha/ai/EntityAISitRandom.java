@@ -19,15 +19,15 @@ public class EntityAISitRandom extends EntityAIBase {
     /**
      * Tracks for how long the task has been executing
      */
-    private int currentTick = 0;
+    private int currentTick;
     /**
      * For how long the Ocelot should be sitting
      */
-    private int maxSittingTicks = 0;
+    private int maxSittingTicks;
 
     public EntityAISitRandom(EntityTameable par1EntityOcelot) {
         this.theAnimal = par1EntityOcelot;
-        this.setMutexBits(5);
+        setMutexBits(5);
     }
 
     /**
@@ -35,7 +35,7 @@ public class EntityAISitRandom extends EntityAIBase {
      */
     @Override
     public boolean shouldExecute() {
-        return this.theAnimal.isTamed() && !theAnimal.isInLove() && !this.theAnimal.isSitting() && this.theAnimal.getRNG().nextDouble() <= 0.015D;
+        return theAnimal.isTamed() && !theAnimal.isInLove() && !theAnimal.isSitting() && theAnimal.getRNG().nextDouble() <= 0.015D;
     }
 
     /**
@@ -43,7 +43,7 @@ public class EntityAISitRandom extends EntityAIBase {
      */
     @Override
     public boolean continueExecuting() {
-        return this.currentTick <= this.maxSittingTicks && !theAnimal.isInLove();
+        return currentTick <= maxSittingTicks && !theAnimal.isInLove();
     }
 
     /**
@@ -52,8 +52,8 @@ public class EntityAISitRandom extends EntityAIBase {
     @Override
     public void startExecuting() {
         this.currentTick = 0;
-        this.maxSittingTicks = this.theAnimal.getRNG().nextInt(this.theAnimal.getRNG().nextInt(SIT_TICKS) + SIT_TICKS) + SIT_TICKS;
-        this.theAnimal.getAISit().setSitting(false);
+        this.maxSittingTicks = theAnimal.getRNG().nextInt(theAnimal.getRNG().nextInt(SIT_TICKS) + SIT_TICKS) + SIT_TICKS;
+        theAnimal.getAISit().setSitting(false);
     }
 
     /**
@@ -61,7 +61,7 @@ public class EntityAISitRandom extends EntityAIBase {
      */
     @Override
     public void resetTask() {
-        this.theAnimal.setSitting(false);
+        theAnimal.setSitting(false);
     }
 
     /**
@@ -70,10 +70,10 @@ public class EntityAISitRandom extends EntityAIBase {
     @Override
     public void updateTask() {
         this.currentTick++;
-        this.theAnimal.getAISit().setSitting(false);
+        theAnimal.getAISit().setSitting(false);
 
-        if (!this.theAnimal.isSitting()) {
-            this.theAnimal.setSitting(true);
+        if (!theAnimal.isSitting()) {
+            theAnimal.setSitting(true);
         }
     }
 }

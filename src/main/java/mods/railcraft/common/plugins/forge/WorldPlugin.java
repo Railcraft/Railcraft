@@ -8,16 +8,17 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import com.google.common.base.Predicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -120,7 +121,7 @@ public class WorldPlugin {
             for (int xx = x - distance; xx < x + distance; xx++) {
                 for (int zz = z - distance; zz < z + distance; zz++) {
                     BlockPos test = new BlockPos(xx, yy, zz);
-                    if (matcher.apply(getBlockState(world, test)))
+                    if (matcher.test(getBlockState(world, test)))
                         return test;
                 }
             }

@@ -34,8 +34,8 @@ public class EntityAIDespawn extends EntityAIBase {
         double chance = ADULT_DESPAWN_CHANCE;
         if (theAnimal.isChild()) chance = CHILD_DESPAWN_CHANCE;
         if (theAnimal.getRNG().nextDouble() > chance) return false;
-        List nearbyEntites = theAnimal.worldObj.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.getEntityBoundingBox().expand(1, 1, 1));
-        return nearbyEntites.size() > MAX_ANIMALS;
+        List nearbyEntities = theAnimal.worldObj.getEntitiesWithinAABB(EntityAnimal.class, theAnimal.getEntityBoundingBox().expand(1, 1, 1));
+        return nearbyEntities.size() > MAX_ANIMALS;
     }
 
     /**

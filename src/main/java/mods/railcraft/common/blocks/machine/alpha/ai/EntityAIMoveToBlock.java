@@ -9,15 +9,14 @@
 package mods.railcraft.common.blocks.machine.alpha.ai;
 
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-
-import com.google.common.base.Predicates;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.Objects;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -45,38 +44,32 @@ public class EntityAIMoveToBlock extends EntityAIBase {
         this.searchedState = searchedState;
         this.maxDist = maxDist;
         this.weight = weight;
-        this.setMutexBits(1);
+        setMutexBits(1);
     }
 
     /**
      * Returns whether the EntityAIBase should begin execution.
-     *
-     * @return
      */
     @Override
     public boolean shouldExecute() {
-        if (entity.getRNG().nextFloat() >= this.weight)
+        if (entity.getRNG().nextFloat() >= weight)
             return false;
 
         if (!entity.worldObj.isDaytime())
             return false;
 
         if (watchedBlock == null || !isBlockValid())
-            watchedBlock = WorldPlugin.findBlock(entity.worldObj, entity.getPosition(), maxDist, Predicates.equalTo(searchedState));
+            watchedBlock = WorldPlugin.findBlock(entity.worldObj, entity.getPosition(), maxDist, t -> Objects.equals(t, searchedState));
 
         return watchedBlock != null;
     }
 
     private boolean isBlockValid() {
-        if (searchedState != WorldPlugin.getBlockState(entity.worldObj, watchedBlock))
-            return false;
-        return entity.getDistanceSq(watchedBlock) <= maxDist * maxDist;
+        return searchedState == WorldPlugin.getBlockState(entity.worldObj, watchedBlock) && entity.getDistanceSq(watchedBlock) <= maxDist * maxDist;
     }
 
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
-     *
-     * @return
      */
     @Override
     public boolean continueExecuting() {
