@@ -9,11 +9,12 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.common.blocks.IBlockVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.types.*;
-import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.modules.*;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -23,7 +24,7 @@ import java.util.Locale;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum EnumDetector implements IVariantEnum {
+public enum EnumDetector implements IBlockVariantEnum<EnumDetector> {
 
     ITEM(ModuleAutomation.class, DetectorItem.class),
     ANY(ModuleAutomation.class, Detector.class),
@@ -83,7 +84,8 @@ public enum EnumDetector implements IVariantEnum {
         return RailcraftBlocks.detector.getStack(qty, this);
     }
 
-    Block getBlock() {
+    @Override
+    public Block getBlock() {
         return RailcraftBlocks.detector.block();
     }
 
@@ -93,13 +95,29 @@ public enum EnumDetector implements IVariantEnum {
         return null;
     }
 
+    @Override
+    public int getItemMeta() {
+        return ordinal();
+    }
+
     @Nonnull
     @Override
     public Class<?> getParentClass() {
         return BlockDetector.class;
     }
 
+    @Override
     public boolean isEnabled() {
         return getBlock() != null && RailcraftModuleManager.isModuleEnabled(module);
+    }
+
+    /**
+     * Careful with this one, Detectors store the type and facing in the Tile Entity.
+     */
+    @Nullable
+    @Override
+    public IBlockState getState() {
+        if (getBlock() == null) return null;
+        return getBlock().getDefaultState();
     }
 }

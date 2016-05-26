@@ -12,10 +12,14 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -51,5 +55,18 @@ public abstract class RailcraftBlockContainer extends BlockContainer implements 
     @Override
     public Object getRecipeObject(@Nullable IVariantEnum meta) {
         return new ItemStack(this);
+    }
+
+    public void markBlockForUpdate(World world, BlockPos pos) {
+        if (world != null) {
+            IBlockState state = WorldPlugin.getBlockState(world, pos);
+            markBlockForUpdate(state, world, pos);
+        }
+    }
+
+    public void markBlockForUpdate(IBlockState state, World world, BlockPos pos) {
+        if (world != null) {
+            world.notifyBlockUpdate(pos, state, state, 3);
+        }
     }
 }

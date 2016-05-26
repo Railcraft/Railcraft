@@ -7,9 +7,8 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.detector.types;
+package mods.railcraft.common.blocks.detector;
 
-import mods.railcraft.common.blocks.detector.Detector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
@@ -31,7 +30,7 @@ public abstract class DetectorEntity<T> extends Detector {
     private Class<? extends T> currentEntity;
     private final Class<? extends T> defaultEntity;
 
-    DetectorEntity(Class<? extends T> classObject, Class<? extends T> defaultEntity) {
+    protected DetectorEntity(Class<? extends T> classObject, Class<? extends T> defaultEntity) {
         this.defaultEntity = defaultEntity;
         Set<Class<? extends Entity>> entities = EntityList.CLASS_TO_NAME.keySet();
         this.entities = entities.stream()

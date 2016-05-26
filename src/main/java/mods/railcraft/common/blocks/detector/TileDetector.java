@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -32,10 +33,10 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     public static final float SENSITIVITY = 0.2f;
     private static final int POWER_DELAY = 10;
     public EnumFacing direction = EnumFacing.UP;
-    public int powerState = 0;
+    public int powerState;
     public Detector detector = Detector.DUMMY;
-    private boolean tested;
-    private int powerDelay = 0;
+    //    private boolean tested;
+    private int powerDelay;
 
     public Detector getDetector() {
         return detector;
@@ -69,7 +70,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setByte("type", (byte) detector.getType().ordinal());
@@ -77,6 +78,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
         data.setByte("direction", (byte) direction.ordinal());
         data.setByte("powerState", (byte) powerState);
         data.setByte("powerDelay", (byte) powerDelay);
+        return data;
     }
 
     @Override
@@ -120,16 +122,18 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
         super.update();
         if (Game.isNotHost(getWorld()))
             return;
-        if (!tested) {
-            tested = true;
-            int meta = worldObj.getBlockMetadata(getPos());
-            if (meta != 0) {
-                worldObj.removeTileEntity(getPos());
-                Block block = BlockDetector.getBlock();
-                if (block != null)
-                    worldObj.setBlockState(getPos(), newState, 3);
-            }
-        }
+        // Legacy stuff?
+//        if (!tested) {
+//            tested = true;
+//            int meta = worldObj.getBlockMetadata(getPos());
+//            IBlockState state = WorldPlugin.getBlockState(worldObj, getPos());
+//            if (meta != 0) {
+//                worldObj.removeTileEntity(getPos());
+//                Block block = RailcraftBlocks.detector.block();
+//                if (block != null)
+//                    worldObj.setBlockState(getPos(), newState, 3);
+//            }
+//        }
         if (powerDelay > 0)
             powerDelay--;
         else if (detector.updateInterval() == 0 || clock % detector.updateInterval() == 0) {
@@ -139,8 +143,8 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
                 if (powerState > PowerPlugin.NO_POWER)
                     powerDelay = POWER_DELAY;
                 sendUpdateToClient();
-                worldObj.notifyNeighborsOfStateChange(getPos(), BlockDetector.getBlock());
-                WorldPlugin.notifyBlocksOfNeighborChangeOnSide(worldObj, getPos(), BlockDetector.getBlock(), direction);
+                worldObj.notifyNeighborsOfStateChange(getPos(), RailcraftBlocks.detector.block());
+                WorldPlugin.notifyBlocksOfNeighborChangeOnSide(worldObj, getPos(), RailcraftBlocks.detector.block(), direction);
             }
         }
     }

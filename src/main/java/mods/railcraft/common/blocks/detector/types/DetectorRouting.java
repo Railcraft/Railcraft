@@ -28,9 +28,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.ITextComponent;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
@@ -167,16 +165,5 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
     @Override
     public IInventory getInventory() {
         return inv;
-    }
-
-    @Override
-    public boolean hasCustomName() {
-        return tile.hasCustomName();
-    }
-
-    @Nonnull
-    @Override
-    public ITextComponent getDisplayName() {
-        return tile.getDisplayName();
     }
 }

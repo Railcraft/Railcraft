@@ -9,6 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.detector.types;
 
+import mods.railcraft.common.blocks.detector.DetectorEntity;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;

@@ -241,9 +241,8 @@ public class BlockDetector extends RailcraftBlockContainer {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (playerIn.isSneaking())
             return false;
-        ItemStack current = playerIn.getCurrentEquippedItem();
-        if (current != null) {
-            Item item = current.getItem();
+        if (heldItem != null) {
+            Item item = heldItem.getItem();
             if (item instanceof IActivationBlockingItem)
                 return false;
             else if (TrackTools.isRailItem(item))
@@ -254,12 +253,11 @@ public class BlockDetector extends RailcraftBlockContainer {
     }
 
     @Override
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-        super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileDetector) {
             TileDetector detector = (TileDetector) tile;
-            detector.onNeighborBlockChange(neighborBlock);
+            detector.onNeighborBlockChange(blockIn);
         }
     }
 
@@ -272,7 +270,7 @@ public class BlockDetector extends RailcraftBlockContainer {
                 detector.direction = axis.getOpposite();
             else
                 detector.direction = axis;
-            world.markBlockForUpdate(pos);
+            markBlockForUpdate(world, pos);
             return true;
         }
         return false;
@@ -328,7 +326,7 @@ public class BlockDetector extends RailcraftBlockContainer {
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
-        worldIn.markBlockForUpdate(pos);
+        markBlockForUpdate(state, worldIn, pos);
         if (Game.isNotHost(worldIn))
             return;
         for (EnumFacing side : EnumFacing.VALUES) {
