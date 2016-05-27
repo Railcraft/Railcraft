@@ -356,13 +356,14 @@ public abstract class TileMultiBlock extends TileMachineBase {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("master", isMaster);
         data.setByte("pattern", getPatternIndex());
 
         MiscTools.writeUUID(data, "uuidMaster", uuidMaster);
+        return data;
     }
 
     @Override

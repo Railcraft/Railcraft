@@ -80,10 +80,11 @@ public class TileSmoker extends TileMachineBase {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("powered", powered);
+        return data;
     }
 
     @Override

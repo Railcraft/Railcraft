@@ -37,15 +37,17 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -62,13 +64,13 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     private static final byte MAX_CHUNKS = 25;
     private static final byte FUEL_CYCLE = 9;
     private static final byte ANCHOR_RADIUS = 1;
-    private static final int[] SLOTS = new int[]{0};
-    private static final int[] SLOTS_NO_ACCESS = new int[]{};
+    private static final int[] SLOTS = {0};
+    private static final int[] SLOTS_NO_ACCESS = {};
     private int xSentinel = -1;
     private int ySentinel = -1;
     private int zSentinel = -1;
     private int prevX, prevY, prevZ;
-    private Set<ChunkCoordIntPair> chunks;
+    private Set<ChunkPos> chunks;
     private long fuel;
     private int fuelCycle;
     private boolean hasTicket;
@@ -90,11 +92,10 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
-        ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getPos())) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
+            if (crowbar.canWhack(player, heldItem, getPos())) {
                 if (Game.isHost(worldObj)) {
                     WorldCoordinate target = sentinelPairingMap.get(player);
                     if (target == null)
@@ -106,12 +107,12 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getLocalizationTag());
                     } else
                         setSentinel(player, target);
-                    crowbar.onWhack(player, current, getPos());
+                    crowbar.onWhack(player, heldItem, getPos());
                 }
                 return true;
             }
         }
-        return super.blockActivated(player, side);
+        return super.blockActivated(player, hand, heldItem, side);
     }
 
     public static WorldCoordinate getTarget(EntityPlayer player) {
@@ -359,7 +360,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         if (ticket != t) {
             if (ticket != null) {
                 if (ticket.world == worldObj) {
-                    for (ChunkCoordIntPair chunk : ticket.getChunkList()) {
+                    for (ChunkPos chunk : ticket.getChunkList()) {
                         if (ForgeChunkManager.getPersistentChunksFor(worldObj).keys().contains(chunk))
                             ForgeChunkManager.unforceChunk(ticket, chunk);
                     }
@@ -382,7 +383,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         setupChunks();
 
         if (chunks != null)
-            for (ChunkCoordIntPair chunk : chunks) {
+            for (ChunkPos chunk : chunks) {
                 ForgeChunkManager.forceChunk(ticket, chunk);
             }
     }
@@ -444,7 +445,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setLong("fuel", fuel);
@@ -458,6 +459,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         data.setInteger("prevX", prevX);
         data.setInteger("prevY", prevY);
         data.setInteger("prevZ", prevZ);
+        return data;
     }
 
     @Override
@@ -493,20 +495,21 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         return fuel;
     }
 
+    @Nonnull
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
         if (RailcraftConfig.anchorsCanInteractWithPipes())
             return SLOTS;
         return SLOTS_NO_ACCESS;
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, @Nonnull EnumFacing direction) {
         return RailcraftConfig.anchorsCanInteractWithPipes();
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, @Nonnull ItemStack stack, @Nonnull EnumFacing direction) {
         return false;
     }
 }

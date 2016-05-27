@@ -14,7 +14,7 @@ import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.alpha.TamingInteractHandler;
+import mods.railcraft.common.blocks.machine.alpha.ai.TamingInteractHandler;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.ItemBoreHeadDiamond;

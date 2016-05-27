@@ -25,10 +25,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -81,16 +83,15 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
             InvTools.dropInventory(new InventoryMapper((IInventory) this), worldObj, getPos());
     }
 
-    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
         if (player.isSneaking())
             return false;
-        ItemStack stack = player.getCurrentEquippedItem();
-        if (stack != null) {
-            if (stack.getItem() instanceof IActivationBlockingItem)
+        if (heldItem != null) {
+            if (heldItem.getItem() instanceof IActivationBlockingItem)
                 return false;
-            if (stack.getItem() instanceof ITrackItem)
+            if (heldItem.getItem() instanceof ITrackItem)
                 return false;
-            if (TrackTools.isRailItem(stack.getItem()))
+            if (TrackTools.isRailItem(heldItem.getItem()))
                 return false;
         }
         return openGui(player);

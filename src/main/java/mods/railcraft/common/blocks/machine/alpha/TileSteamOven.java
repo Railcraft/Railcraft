@@ -288,11 +288,12 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
         data.setInteger("cookTime", cookTime);
         data.setByte("facing", (byte) facing.ordinal());
+        return data;
     }
 
     @Override

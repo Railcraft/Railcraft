@@ -8,15 +8,17 @@
  */
 package mods.railcraft.common.blocks.machine.alpha;
 
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.blocks.machine.alpha.ai.EntityAIMateBreeding;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryObject;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.InventoryObject;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.ITileExtraDataHandler;
@@ -30,6 +32,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -97,8 +100,8 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
         if (!powered && feed != null && feed.stackSize > 0 && feedTime <= 0) {
             feedTime = MIN_FEED_INTERVAL + rand.nextInt(FEED_VARIANCE);
 
-            AxisAlignedBB box = AxisAlignedBB.fromBounds(getX(), getY() - 1, getZ(), getX() + 1, getY() + 3, getZ() + 1);
-            box = box.expand(AREA, 0, AREA);
+            //TODO: test (maybe we can draw this somehow?)
+            AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(getPos()).raiseFloor(-1).raiseCeiling(2).expandHorizontally(AREA).build();
             List<EntityAnimal> animals = worldObj.getEntitiesWithinAABB(EntityAnimal.class, box);
 
             for (EntityAnimal target : animals) {
@@ -122,7 +125,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
             data.writeInt(animal.getEntityId());
 
             PacketDispatcher.sendToAllAround(pkt, new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), getX(), getY(), getZ(), 80));
-        } catch (IOException ex) {
+        } catch (IOException ignored) {
         }
     }
 
@@ -141,11 +144,16 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
         }
         try {
             if (animal.getGrowingAge() == 0 && !animal.isInLove()) {
+                EntityPlayer player;
                 if (Game.isHost(worldObj)) {
                     EntityAIMateBreeding.modifyAI(animal);
+                    player = RailcraftFakePlayer.get((WorldServer) worldObj, getPos());
+                } else {
+                    player = null;
                 }
 
-                animal.setInLove(null);
+                //noinspection ConstantConditions
+                animal.setInLove(player);
 
                 for (int i = 0; i < 7; i++) {
                     double d = rand.nextGaussian() * 0.02D;
@@ -177,10 +185,11 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("powered", powered);
         data.setByte("feedCounter", feedCounter);
+        return data;
     }
 }

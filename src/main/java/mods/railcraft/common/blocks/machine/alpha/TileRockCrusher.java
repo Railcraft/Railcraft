@@ -35,14 +35,16 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityHopper;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -221,7 +223,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
             if (isStructureValid()) {
                 // TileEntityHopper.getItemsAroundAPointOrSomethingLikeThat
-                for (EntityItem item : TileEntityHopper.func_181556_a(getWorld(), x, y + 1, z)) {
+                for (EntityItem item : TileEntityHopper.getCaptureItems(getWorld(), x, y + 1, z)) {
                     if (item != null && useMasterEnergy(SUCKING_POWER_COST, false)) {
                         ItemStack stack = item.getEntityItem().copy();
                         if (InventoryManipulator.get((IInventory) invInput).addStack(stack) != null)
@@ -275,7 +277,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
                             InvTools.removeOneItem(invInput, input);
 
-                            SoundHelper.playSound(worldObj, getPos(), "mob.irongolem.death", 1.0f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                            SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH, SoundCategory.BLOCKS, 1.0f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
 
                             processTime = 0;
                         }
@@ -310,12 +312,13 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("processTime", processTime);
 
         if (energyStorage != null)
             energyStorage.writeToNBT(data);
+        return data;
     }
 
     @Override
@@ -357,11 +360,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 //        }
 //    }
     private void processActions() {
-        paused = false;
-        for (IActionExternal action : actions) {
-            if (action == Actions.PAUSE)
-                paused = true;
-        }
+        paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
         actions.clear();
     }
 
@@ -372,26 +371,27 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
             mBlock.actions.add(action);
     }
 
+    @Nonnull
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
         if (side == EnumFacing.UP)
             return SLOTS_INPUT;
         return SLOTS_OUTPUT;
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, @Nonnull EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, @Nonnull ItemStack stack, @Nonnull EnumFacing direction) {
         return index >= 9;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nonnull ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         if (slot < 9)

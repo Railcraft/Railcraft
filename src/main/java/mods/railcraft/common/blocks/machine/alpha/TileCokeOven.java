@@ -31,6 +31,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -40,6 +41,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +56,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     private static final int COOK_STEP_LENGTH = 50;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 4);
     private static final int TANK_CAPACITY = 64 * FluidHelper.BUCKET_VOLUME;
-    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private final TankManager tankManager = new TankManager();
     private final StandardTank tank;
     private final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
@@ -136,12 +138,12 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumFacing face) {
-        if (isStructureValid() && FluidHelper.handleRightClick(this, face, player, false, true))
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+        if (isStructureValid() && FluidHelper.handleRightClick(this, side, player, false, true))
             return true;
         else if (FluidItemHelper.isContainer(player.inventory.getCurrentItem()))
             return true;
-        return super.blockActivated(player, face);
+        return super.blockActivated(player, hand, heldItem, side);
     }
 
     @Override
@@ -248,9 +250,10 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
+        return data;
     }
 
     @Override
@@ -294,7 +297,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nonnull ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         switch (slot) {
@@ -307,18 +310,19 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
         }
     }
 
+    @Nonnull
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, @Nonnull EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, @Nonnull ItemStack stack, @Nonnull EnumFacing direction) {
         return index == SLOT_OUTPUT || index == SLOT_LIQUID_OUTPUT;
     }
 }

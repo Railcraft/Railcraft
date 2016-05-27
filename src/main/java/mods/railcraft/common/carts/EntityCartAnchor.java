@@ -31,7 +31,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
@@ -48,7 +48,7 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
     private static final byte MAX_CHUNKS = 25;
     private final IInventory invWrapper = new InventoryMapper(this);
     protected Ticket ticket;
-    private Set<ChunkCoordIntPair> chunks;
+    private Set<ChunkPos> chunks;
     private long anchorFuel;
     private boolean teleported = false;
     private int disabled = 0;
@@ -193,20 +193,20 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
 
         setupChunks(xChunk, zChunk);
 
-        Set<ChunkCoordIntPair> innerChunks = ChunkManager.getInstance().getChunksAround(xChunk, zChunk, 1);
+        Set<ChunkPos> innerChunks = ChunkManager.getInstance().getChunksAround(xChunk, zChunk, 1);
 
 //        System.out.println("Chunks Loaded = " + Arrays.toString(chunks.toArray()));
-        for (ChunkCoordIntPair chunk : chunks) {
+        for (ChunkPos chunk : chunks) {
             ForgeChunkManager.forceChunk(ticket, chunk);
             ForgeChunkManager.reorderChunk(ticket, chunk);
         }
-        for (ChunkCoordIntPair chunk : innerChunks) {
+        for (ChunkPos chunk : innerChunks) {
             ForgeChunkManager.forceChunk(ticket, chunk);
             ForgeChunkManager.reorderChunk(ticket, chunk);
         }
 
 
-        ChunkCoordIntPair myChunk = new ChunkCoordIntPair(xChunk, zChunk);
+        ChunkPos myChunk = new ChunkPos(xChunk, zChunk);
         ForgeChunkManager.forceChunk(ticket, myChunk);
         ForgeChunkManager.reorderChunk(ticket, myChunk);
     }

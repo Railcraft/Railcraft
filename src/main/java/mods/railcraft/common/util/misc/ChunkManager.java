@@ -18,7 +18,8 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
@@ -82,8 +83,8 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
      * @param max     Max number of chunks to return
      * @return A set of chunks.
      */
-    public Set<ChunkCoordIntPair> getChunksBetween(int xChunkA, int zChunkA, int xChunkB, int zChunkB, int max) {
-        Set<ChunkCoordIntPair> chunkList = new HashSet<ChunkCoordIntPair>();
+    public Set<ChunkPos> getChunksBetween(int xChunkA, int zChunkA, int xChunkB, int zChunkB, int max) {
+        Set<ChunkPos> chunkList = new HashSet<ChunkPos>();
 
         if (xChunkA != xChunkB && zChunkA != zChunkB) {
             return chunkList;
@@ -97,7 +98,7 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
 
         for (int xx = xStart; xx <= xEnd; xx++) {
             for (int zz = zStart; zz <= zEnd; zz++) {
-                chunkList.add(new ChunkCoordIntPair(xx, zz));
+                chunkList.add(new ChunkPos(xx, zz));
                 if (chunkList.size() >= max) {
                     return chunkList;
                 }
@@ -115,11 +116,11 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
      * @param radius Distance from [x, z] to include, in number of chunks.
      * @return A set of chunks.
      */
-    public Set<ChunkCoordIntPair> getChunksAround(int xChunk, int zChunk, int radius) {
-        Set<ChunkCoordIntPair> chunkList = new HashSet<ChunkCoordIntPair>();
+    public Set<ChunkPos> getChunksAround(int xChunk, int zChunk, int radius) {
+        Set<ChunkPos> chunkList = new HashSet<ChunkPos>();
         for (int xx = xChunk - radius; xx <= xChunk + radius; xx++) {
             for (int zz = zChunk - radius; zz <= zChunk + radius; zz++) {
-                chunkList.add(new ChunkCoordIntPair(xx, zz));
+                chunkList.add(new ChunkPos(xx, zz));
             }
         }
         return chunkList;
@@ -134,16 +135,16 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
      * @param radius Distance from [x, z] to include, in blocks.
      * @return A set of chunks.
      */
-    public Set<ChunkCoordIntPair> getBufferAround(int xWorld, int zWorld, int radius) {
+    public Set<ChunkPos> getBufferAround(int xWorld, int zWorld, int radius) {
         int minX = (xWorld - radius) >> 4;
         int maxX = (xWorld + radius) >> 4;
         int minZ = (zWorld - radius) >> 4;
         int maxZ = (zWorld + radius) >> 4;
 
-        Set<ChunkCoordIntPair> chunkList = new HashSet<ChunkCoordIntPair>();
+        Set<ChunkPos> chunkList = new HashSet<ChunkPos>();
         for (int xx = minX; xx <= maxX; xx++) {
             for (int zz = minZ; zz <= maxZ; zz++) {
-                chunkList.add(new ChunkCoordIntPair(xx, zz));
+                chunkList.add(new ChunkPos(xx, zz));
             }
         }
         return chunkList;

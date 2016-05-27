@@ -16,7 +16,7 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.ChunkPos;
 import net.minecraft.world.World;
 
 import java.io.DataInputStream;
@@ -108,7 +108,7 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public void chunkLoaderEffect(World world, Object source, Set<ChunkCoordIntPair> chunks) {
+    public void chunkLoaderEffect(World world, Object source, Set<ChunkPos> chunks) {
     }
 
     @Override

@@ -27,8 +27,8 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
@@ -190,14 +190,14 @@ public class ClientEffectProxy extends CommonEffectProxy {
     }
 
     @Override
-    public void chunkLoaderEffect(World world, Object source, Set<ChunkCoordIntPair> chunks) {
+    public void chunkLoaderEffect(World world, Object source, Set<ChunkPos> chunks) {
         if (!isGoggleAuraActive(GoggleAura.ANCHOR))
             return;
         IEffectSource es = EffectManager.getEffectSource(source);
         if (FMLClientHandler.instance().getClient().thePlayer.getDistanceSq(es.getX(), es.getY(), es.getZ()) > 25600)
             return;
 
-        for (ChunkCoordIntPair chunk : chunks) {
+        for (ChunkPos chunk : chunks) {
             int xCorner = chunk.chunkXPos * 16;
             int zCorner = chunk.chunkZPos * 16;
             double yCorner = es.getY() - 8;

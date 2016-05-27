@@ -12,8 +12,8 @@ import mods.railcraft.api.signals.IPairEffectRenderer;
 import mods.railcraft.common.items.ItemGoggles;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 
 import java.io.DataInputStream;
@@ -24,7 +24,7 @@ import java.util.Set;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IEffectManager extends IPairEffectRenderer {
-    void chunkLoaderEffect(World world, Object source, Set<ChunkCoordIntPair> chunks);
+    void chunkLoaderEffect(World world, Object source, Set<ChunkPos> chunks);
 
     boolean isGoggleAuraActive(ItemGoggles.GoggleAura aura);
 

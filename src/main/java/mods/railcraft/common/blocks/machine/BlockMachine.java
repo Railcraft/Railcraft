@@ -31,6 +31,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -42,6 +43,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -127,9 +129,9 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity tile = worldIn.getTileEntity(pos);
-        return tile instanceof TileMachineBase && ((TileMachineBase) tile).blockActivated(playerIn, side);
+        return tile instanceof TileMachineBase && ((TileMachineBase) tile).blockActivated(playerIn, hand, heldItem, side);
     }
 
     @Override

@@ -1,20 +1,22 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.common.blocks.machine.alpha;
+ ******************************************************************************/
+package mods.railcraft.common.blocks.machine.alpha.ai;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -23,16 +25,17 @@ public class TamingInteractHandler {
 
     private Random rand = new Random();
 
+    //TODO: test
     @SubscribeEvent
-    public void interact(EntityInteractEvent event) {
-        Entity entity = event.target;
+    public void interact(PlayerInteractEvent.EntityInteract event) {
+        Entity entity = event.getTarget();
 
         if (entity instanceof EntityTameable) {
             EntityTameable tamable = (EntityTameable) entity;
-            String ownerId = tamable.getOwnerId();
-            if (tamable.isTamed() && (ownerId == null || ownerId.trim().length() == 0)) {
+            UUID ownerId = tamable.getOwnerId();
+            if (tamable.isTamed() && ownerId == null) {
                 if (rand.nextInt(3) == 0) {
-                    tamable.setOwnerId(event.entityPlayer.getUniqueID().toString());
+                    tamable.setOwnerId(event.getEntityPlayer().getUniqueID());
                     playTameEffect(tamable, true);
                     tamable.getAISit().setSitting(true);
                     tamable.worldObj.setEntityState(tamable, (byte) 7);

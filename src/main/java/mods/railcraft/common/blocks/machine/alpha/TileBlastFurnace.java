@@ -23,21 +23,20 @@ import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -63,7 +62,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     public static final int SLOT_OUTPUT = 2;
     private static final int FUEL_PER_TICK = 5;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
-    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
 
     static {
         char[][][] map = {
@@ -114,17 +113,13 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     private final InventoryMapper invFuel = new InventoryMapper(this, SLOT_FUEL, 1);
-    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
-    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, new ITileFilter() {
-        @Override
-        public boolean matches(TileEntity tile) {
-            if (tile instanceof TileBlastFurnace)
-                return false;
-            if (tile instanceof IInventory)
-                return ((IInventory) tile).getSizeInventory() >= 27;
+    //    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+    //    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
+    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> {
+        if (tile instanceof TileBlastFurnace)
             return false;
-        }
+        IInventoryObject tileInv = InvTools.getInventory(tile);
+        return tileInv != null && tileInv.getNumSlots() >= 27;
     }, InventorySorter.SIZE_DESCENDING);
     /**
      * The number of ticks that the furnace will keep burning
@@ -177,7 +172,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
                     return true;
                 break;
             case 'A':
-                if (block.isAir(worldObj, pos) || block.getMaterial() == Material.lava)
+                if (block.isAir(state, worldObj, pos) || state.getMaterial() == Material.LAVA)
                     return true;
                 break;
         }
@@ -318,11 +313,12 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setInteger("burnTime", burnTime);
         data.setInteger("currentItemBurnTime", currentItemBurnTime);
+        return data;
     }
 
     @Override
@@ -363,7 +359,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nonnull ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         switch (slot) {
@@ -377,18 +373,19 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         return false;
     }
 
+    @Nonnull
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, @Nonnull EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, @Nonnull ItemStack stack, @Nonnull EnumFacing direction) {
         return index == SLOT_OUTPUT;
     }
 }

@@ -88,11 +88,12 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setInteger("cookTime", cookTime);
         data.setBoolean("cooking", cooking);
+        return data;
     }
 
     @Override

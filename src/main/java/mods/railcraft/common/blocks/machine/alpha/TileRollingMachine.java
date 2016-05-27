@@ -35,17 +35,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 public class TileRollingMachine extends TileMachineBase implements IEnergyReceiver, ISidedInventory, IHasWork {
 
-    private final static int PROCESS_TIME = 100;
-    private final static int ACTIVATION_POWER = 50;
-    private final static int MAX_RECEIVE = 1000;
-    private final static int MAX_ENERGY = ACTIVATION_POWER * PROCESS_TIME;
-    private final static int SLOT_RESULT = 0;
+    private static final int PROCESS_TIME = 100;
+    private static final int ACTIVATION_POWER = 50;
+    private static final int MAX_RECEIVE = 1000;
+    private static final int MAX_ENERGY = ACTIVATION_POWER * PROCESS_TIME;
+    private static final int SLOT_RESULT = 0;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 10);
     private final InventoryCrafting craftMatrix = new InventoryCrafting(new RollingContainer(), 3, 3);
     private final StandaloneInventory invResult = new StandaloneInventory(1, "invResult", (IInventory) this);
@@ -55,7 +56,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     public boolean useLast;
     private EnergyStorage energyStorage;
     private boolean isWorking, paused;
-    private ItemStack currentReceipe;
+    private ItemStack currentRecipe;
     private int progress;
 
     public TileRollingMachine() {
@@ -70,7 +71,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setInteger("progress", progress);
@@ -80,6 +81,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
 
         invResult.writeToNBT("invResult", data);
         InvTools.writeInvToNBT(craftMatrix, "Crafting", data);
+        return data;
     }
 
     @Override
@@ -146,21 +148,21 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
             return;
 
         if (clock % 8 == 0) {
-            currentReceipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj);
-            if (currentReceipe != null)
+            currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj);
+            if (currentRecipe != null)
                 findMoreStuff();
         }
 
-        if (currentReceipe != null && canMakeMore())
+        if (currentRecipe != null && canMakeMore())
             if (progress >= PROCESS_TIME) {
                 isWorking = false;
-                if (InvTools.isRoomForStack(currentReceipe, invResult)) {
-                    currentReceipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj);
-                    if (currentReceipe != null) {
+                if (InvTools.isRoomForStack(currentRecipe, invResult)) {
+                    currentRecipe = RollingMachineCraftingManager.instance().findMatchingRecipe(craftMatrix, worldObj);
+                    if (currentRecipe != null) {
                         for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
                             craftMatrix.decrStackSize(i, 1);
                         }
-                        InvTools.moveItemStack(currentReceipe, invResult);
+                        InvTools.moveItemStack(currentRecipe, invResult);
                     }
                     useLast = false;
                     progress = 0;
@@ -232,11 +234,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     private void processActions() {
-        paused = false;
-        for (IActionExternal action : actions) {
-            if (action == Actions.PAUSE)
-                paused = true;
-        }
+        paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
         actions.clear();
     }
 
@@ -258,23 +256,25 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
         return true;
     }
 
+    @Nonnull
     @Override
-    public int[] getSlotsForFace(EnumFacing side) {
+    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+    public boolean canInsertItem(int index, @Nullable ItemStack itemStackIn, @Nonnull EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, @Nullable ItemStack stack, @Nonnull EnumFacing direction) {
         return index == SLOT_RESULT;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         if (slot == SLOT_RESULT)
             return false;
         if (stack == null)
@@ -307,11 +307,11 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(@Nonnull EntityPlayer player) {
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(@Nonnull EntityPlayer player) {
     }
 
     @Override
@@ -348,7 +348,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUseableByPlayer(@Nonnull EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 
@@ -385,7 +385,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     private static class RollingContainer extends Container {
 
         @Override
-        public boolean canInteractWith(EntityPlayer entityplayer) {
+        public boolean canInteractWith(@Nonnull EntityPlayer entityplayer) {
             return true;
         }
 
