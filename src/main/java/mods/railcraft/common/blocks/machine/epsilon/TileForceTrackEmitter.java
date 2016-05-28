@@ -73,13 +73,13 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
         super.onNeighborBlockChange(state, block);
         checkRedstone();
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
         super.onBlockPlacedBy(state, entityliving, stack);
         facing = entityliving.getHorizontalFacing();
         checkRedstone();
@@ -265,7 +265,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         chargeHandler.writeToNBT(data);
         data.setBoolean("powered", powered);
@@ -275,7 +275,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
         powered = data.getBoolean("powered");
@@ -285,14 +285,14 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(powered);
         data.writeByte((byte) facing.ordinal());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         boolean update = false;

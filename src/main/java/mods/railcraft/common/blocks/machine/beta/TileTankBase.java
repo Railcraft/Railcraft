@@ -598,7 +598,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
         inv.writeToNBT("inv", data);
@@ -606,7 +606,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
         inv.readFromNBT("inv", data);
@@ -614,14 +614,14 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(color.ordinal());
         tankManager.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         EnumColor c = EnumColor.fromOrdinal(data.readByte());
         tankManager.readPacketData(data);

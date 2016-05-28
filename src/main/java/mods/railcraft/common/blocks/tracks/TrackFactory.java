@@ -8,33 +8,32 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.tracks.ITrackInstance;
+import mcp.MethodsReturnNonnullByDefault;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackSpec;
-import mods.railcraft.common.blocks.tracks.instances.TrackBufferStop;
-import mods.railcraft.common.util.misc.Game;
-import org.apache.logging.log4j.Level;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class TrackFactory {
 
     public static TileTrack makeTrackTile(int trackID) {
         TrackSpec spec = TrackRegistry.getTrackSpec(trackID);
-        if (spec == null) {
-            Game.log(Level.ERROR, "Attempted to create Track Tile with invalid Track ID {0}", trackID);
-            return null;
-        }
-        return makeTrackTile(spec.createInstanceFromSpec());
+        return makeTrackTile(spec);
     }
 
-    public static TileTrack makeTrackTile(ITrackInstance track) {
-        if (track instanceof TrackBufferStop) {
-            return new TileTrackTESR(track);
-        }
-        return new TileTrack(track);
+    public static TileTrack makeTrackTile(TrackSpec trackSpec) {
+        TileTrack tileTrack;
+        if (trackSpec == EnumTrack.BUFFER_STOP.getTrackSpec())
+            tileTrack = new TileTrackTESR();
+        else
+            tileTrack = new TileTrack();
+        tileTrack.makeTrackInstance(trackSpec);
+        return tileTrack;
     }
 
 }

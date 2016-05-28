@@ -97,27 +97,27 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         chargeHandler.writeToNBT(data);
         data.setString("addonType", addon.name());
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
         addon = AddonType.valueOf(data.getString("addonType"));
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(addon.ordinal());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         setAddon(AddonType.fromOrdinal(data.readByte()));
         markBlockForUpdate();

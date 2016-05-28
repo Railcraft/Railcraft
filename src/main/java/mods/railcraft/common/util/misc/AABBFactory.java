@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.util.misc;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -17,11 +18,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
  * Created by CovertJaguar on 3/9/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class AABBFactory {
 
     public double minX;

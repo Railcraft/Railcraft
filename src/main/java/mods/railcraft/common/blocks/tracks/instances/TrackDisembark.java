@@ -18,6 +18,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,15 +33,16 @@ public class TrackDisembark extends TrackPowered implements ITrackReversible {
         return EnumTrack.DISEMBARK;
     }
 
+    @Nonnull
     @Override
-    public IBlockState getActualState(IBlockState state) {
+    public IBlockState getActualState(@Nonnull IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(REVERSED, mirrored);
         return state;
     }
 
     @Override
-    public void onMinecartPass(EntityMinecart cart) {
+    public void onMinecartPass(@Nonnull EntityMinecart cart) {
         if (isPowered() && cart.canBeRidden() && cart.riddenByEntity != null) {
             double x = getPos().getX();
             double z = getPos().getZ();
@@ -72,25 +74,25 @@ public class TrackDisembark extends TrackPowered implements ITrackReversible {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("mirrored", mirrored);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
+    public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         mirrored = nbttagcompound.getBoolean("mirrored");
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(mirrored);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         boolean m = data.readBoolean();
         if (mirrored != m) {

@@ -142,36 +142,36 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         stateController.writeToNBT(data, "state");
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         stateController.readFromNBT(data, "state");
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(stateController.getCurrentState());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         stateController.setCurrentState(data.readByte());
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         data.writeByte(stateController.getCurrentState());
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         stateController.setCurrentState(data.readByte());
     }
 

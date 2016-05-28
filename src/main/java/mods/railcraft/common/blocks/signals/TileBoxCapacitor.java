@@ -130,7 +130,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
         if (worldObj.isRemote)
             return;
@@ -169,7 +169,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setShort("ticksPowered", ticksPowered);
@@ -179,7 +179,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         ticksPowered = data.getShort("ticksPowered");
@@ -193,7 +193,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeBoolean(ticksPowered > 0);
@@ -203,7 +203,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         ticksPowered = (short) (data.readBoolean() ? 1 : 0);
@@ -215,14 +215,14 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         data.writeShort(ticksToPower);
         data.writeByte(stateModeController.getCurrentState());
 
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         ticksToPower = data.readShort();
         stateModeController.setCurrentState(data.readByte());
     }

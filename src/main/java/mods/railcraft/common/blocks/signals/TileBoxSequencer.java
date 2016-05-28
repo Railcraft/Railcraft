@@ -45,7 +45,7 @@ public class TileBoxSequencer extends TileBoxBase {
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
         if (worldObj.isRemote)
             return;
@@ -145,7 +145,7 @@ public class TileBoxSequencer extends TileBoxBase {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("sideOutput", (byte) sideOutput.ordinal());
         data.setBoolean("powerState", powerState);
@@ -153,7 +153,7 @@ public class TileBoxSequencer extends TileBoxBase {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         sideOutput = EnumFacing.getFront(data.getByte("sideOutput"));
         powerState = data.getBoolean("powerState");
@@ -161,13 +161,13 @@ public class TileBoxSequencer extends TileBoxBase {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(sideOutput.ordinal());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         sideOutput = EnumFacing.getFront(data.readByte());
         markBlockForUpdate();

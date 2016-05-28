@@ -17,6 +17,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -83,12 +84,12 @@ public class DetectorTrain extends Detector {
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         data.writeShort(getTrainSize());
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         setTrainSize(data.readShort());
     }
 

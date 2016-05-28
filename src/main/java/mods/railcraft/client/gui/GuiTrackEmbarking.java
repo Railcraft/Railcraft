@@ -61,7 +61,7 @@ public class GuiTrackEmbarking extends GuiBasic {
     public void onGuiClosed() {
         track.setArea(radius);
         if (Game.isNotHost(track.getWorld())) {
-            PacketGuiReturn pkt = new PacketGuiReturn((IGuiReturnHandler) track.tileEntity);
+            PacketGuiReturn pkt = new PacketGuiReturn((IGuiReturnHandler) track.getTile());
             pkt.sendPacket();
         }
     }

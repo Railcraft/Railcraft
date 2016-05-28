@@ -19,6 +19,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class TrackWye extends TrackSwitchBase {
     }
 
     @Override
-    public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
+    public BlockRailBase.EnumRailDirection getRailDirection(@Nonnull IBlockState state, EntityMinecart cart) {
         BlockRailBase.EnumRailDirection dir = super.getRailDirection(state, cart);
         if (cart != null) {
             if (dir == NORTH_SOUTH) {

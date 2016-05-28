@@ -70,7 +70,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setByte("type", (byte) detector.getType().ordinal());
@@ -82,7 +82,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         SafeNBTWrapper safe = new SafeNBTWrapper(data);
@@ -97,7 +97,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(detector.getType().ordinal());
         data.writeByte(powerState);
@@ -106,7 +106,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         int type = data.readByte();
         if (detector == Detector.DUMMY || detector.getType().ordinal() != type)
@@ -155,12 +155,12 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         detector.writeGuiData(data);
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         detector.readGuiData(data, sender);
     }
 }

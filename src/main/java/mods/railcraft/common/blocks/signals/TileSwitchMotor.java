@@ -71,7 +71,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power) {
@@ -90,7 +90,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         byte[] array = new byte[switchOnAspects.length];
@@ -107,7 +107,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         if (data.hasKey("PowerOnAspect")) {
@@ -126,7 +126,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         receiver.writePacketData(data);
 
@@ -134,7 +134,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         receiver.readPacketData(data);
 
@@ -144,7 +144,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         super.writeGuiData(data);
         byte bits = 0;
         for (int i = 0; i < switchOnAspects.length; i++) {
@@ -155,7 +155,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         super.readGuiData(data, sender);
         byte bits = data.readByte();
         for (int bit = 0; bit < switchOnAspects.length; bit++) {

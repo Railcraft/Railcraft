@@ -51,7 +51,7 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
         super.onBlockPlacedBy(state, entityliving, stack);
         facing = entityliving.getHorizontalFacing();
     }
@@ -156,25 +156,25 @@ public abstract class TileChestRailcraft extends TileMachineItem {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("facing", (byte) facing.ordinal());
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         facing = EnumFacing.getFront(data.getByte("facing"));
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte((byte) facing.ordinal());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         facing = EnumFacing.getFront(data.readByte());
     }

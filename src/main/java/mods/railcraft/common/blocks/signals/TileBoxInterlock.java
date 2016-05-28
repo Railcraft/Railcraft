@@ -114,7 +114,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         controller.writeToNBT(data);
@@ -122,7 +122,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         controller.readFromNBT(data);
@@ -130,14 +130,14 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         controller.writePacketData(data);
         receiver.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         controller.readPacketData(data);
         receiver.readPacketData(data);

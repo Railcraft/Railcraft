@@ -326,7 +326,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         inv.writeToNBT("rotor", data);
         tankManager.writeTanksToNBT(data);
@@ -336,7 +336,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         inv.readFromNBT("rotor", data);
         tankManager.readTanksFromNBT(data);

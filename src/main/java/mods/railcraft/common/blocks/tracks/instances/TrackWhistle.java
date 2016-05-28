@@ -13,6 +13,8 @@ import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.entity.item.EntityMinecart;
 
+import javax.annotation.Nonnull;
+
 public class TrackWhistle extends TrackPowered {
 
     @Override
@@ -21,7 +23,7 @@ public class TrackWhistle extends TrackPowered {
     }
 
     @Override
-    public void onMinecartPass(EntityMinecart cart) {
+    public void onMinecartPass(@Nonnull EntityMinecart cart) {
         if (isPowered()) {
             if (cart instanceof EntityLocomotive) {
                 ((EntityLocomotive) cart).whistle();

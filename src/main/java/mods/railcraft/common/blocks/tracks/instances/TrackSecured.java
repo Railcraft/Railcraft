@@ -20,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,36 +29,36 @@ public abstract class TrackSecured extends TrackBaseRailcraft implements IGuiRet
     private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         lockController.writeToNBT(data, "lock");
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         lockController.readFromNBT(data, "lock");
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(lockController.getCurrentState());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         lockController.setCurrentState(data.readByte());
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         data.writeByte(lockController.getCurrentState());
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         byte lock = data.readByte();
         if (sender == null || canAccess(sender.getGameProfile()))
             lockController.setCurrentState(lock);
@@ -84,17 +85,17 @@ public abstract class TrackSecured extends TrackBaseRailcraft implements IGuiRet
 
     @Override
     public String getName() {
-        return ((TileTrack) tileEntity).getName();
+        return ((TileTrack) getTile()).getName();
     }
 
     @Override
     public boolean hasCustomName() {
-        return ((TileTrack) tileEntity).hasCustomName();
+        return ((TileTrack) getTile()).hasCustomName();
     }
 
     @Override
     public ITextComponent getDisplayName() {
-        return ((TileTrack) tileEntity).getDisplayName();
+        return ((TileTrack) getTile()).getDisplayName();
     }
 
     @Override

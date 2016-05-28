@@ -8,10 +8,7 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.tracks.ITrackInstance;
-import mods.railcraft.api.tracks.ITrackTile;
-import mods.railcraft.api.tracks.TrackRegistry;
-import mods.railcraft.api.tracks.TrackSpec;
+import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import net.minecraft.block.state.IBlockState;
@@ -26,14 +23,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiReturnHandler {
-    public ITrackInstance track;
+    @Nonnull
+    public ITrackInstance track = new TrackInstanceDefault(false);
 
     public TileTrack() {
     }
 
-    public TileTrack(ITrackInstance t) {
-        track = t;
-        track.setTile(this);
+    public void makeTrackInstance(@Nonnull TrackSpec trackSpec) {
+        this.track = trackSpec.createInstanceFromSpec(this);
     }
 
     @Override
@@ -43,44 +40,39 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setString("trackTag", getTrackInstance().getTrackSpec().getTrackTag());
 
         track.writeToNBT(data);
+        return data;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
+        ITrackInstance trackInstance;
         if (data.hasKey("trackTag")) {
             TrackSpec spec = TrackRegistry.getTrackSpec(data.getString("trackTag"));
-            track = spec.createInstanceFromSpec();
-        }
-        if (track == null)
-            track = TrackRegistry.getDefaultTrackSpec().createInstanceFromSpec();
-
-        track.setTile(this);
+            track = spec.createInstanceFromSpec(this);
+        } else
+            track = TrackRegistry.getDefaultTrackSpec().createInstanceFromSpec(this);
 
         track.readFromNBT(data);
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
-
-        if (track != null)
-            track.writePacketData(data);
+        track.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
-
-        if (track != null)
-            track.readPacketData(data);
+        track.readPacketData(data);
     }
 
     @Override
@@ -101,24 +93,23 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
 
     @Override
     public ITrackInstance getTrackInstance() {
-        track.setTile(this);
         return track;
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         if (track instanceof IGuiReturnHandler)
             ((IGuiReturnHandler) track).writeGuiData(data);
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         if (track instanceof IGuiReturnHandler)
             ((IGuiReturnHandler) track).readGuiData(data, sender);
     }
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+    public boolean shouldRefresh(World world, BlockPos pos, @Nonnull IBlockState oldState, @Nonnull IBlockState newSate) {
         return oldState.getBlock() != newSate.getBlock();
     }
 }

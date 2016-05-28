@@ -22,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -37,8 +38,9 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
         return EnumTrack.SWITCH;
     }
 
+    @Nonnull
     @Override
-    public IBlockState getActualState(IBlockState state) {
+    public IBlockState getActualState(@Nonnull IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(MIRRORED, mirrored);
         state = state.withProperty(REVERSED, reversed);
@@ -46,7 +48,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
     }
 
     @Override
-    public EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
+    public EnumRailDirection getRailDirection(@Nonnull IBlockState state, EntityMinecart cart) {
         EnumRailDirection current = super.getRailDirection(state, cart);
         if (cart != null && shouldSwitchForCart(cart)) {
             if (current == EnumRailDirection.NORTH_SOUTH) {
@@ -143,25 +145,25 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("Reversed", reversed);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         reversed = data.getBoolean("Reversed");
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(reversed);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         reversed = data.readBoolean();
     }
@@ -178,7 +180,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
 
     @Override
     public ArrowDirection getRedSignDirection() {
-        if (tileEntity.getBlockMetadata() == 1) {
+        if (getTile().getBlockMetadata() == 1) {
             if (isVisuallySwitched()) {
                 if (isMirrored()) {
                     return ArrowDirection.NORTH;
@@ -204,7 +206,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
 
     @Override
     public ArrowDirection getWhiteSignDirection() {
-        if (tileEntity.getBlockMetadata() == 1) {
+        if (getTile().getBlockMetadata() == 1) {
             if (isVisuallySwitched()) {
                 return ArrowDirection.EAST_WEST;
             }

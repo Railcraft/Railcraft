@@ -70,7 +70,7 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
         super.onBlockPlacedBy(state, entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)
@@ -136,7 +136,7 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
         super.onNeighborBlockChange(state, block);
         if (Game.isNotHost(getWorld()))
             return;
@@ -150,7 +150,7 @@ public class TileDispenserCart extends TileMachineItem {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("powered", powered);
@@ -160,7 +160,7 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         powered = data.getBoolean("powered");
@@ -170,7 +170,7 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(direction.ordinal());
@@ -178,7 +178,7 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         direction = EnumFacing.getFront(data.readByte());

@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 /**
@@ -27,14 +28,15 @@ import java.util.UUID;
 public class PlayerPlugin {
     public static final String UNKNOWN_PLAYER_NAME = "[Unknown]";
 
-    public static void writeOwnerToNBT(NBTTagCompound nbt, GameProfile owner) {
+    public static void writeOwnerToNBT(@Nonnull NBTTagCompound nbt, @Nonnull GameProfile owner) {
         if (owner.getName() != null)
             nbt.setString("owner", owner.getName());
         if (owner.getId() != null)
             nbt.setString("ownerId", owner.getId().toString());
     }
 
-    public static GameProfile readOwnerFromNBT(NBTTagCompound nbt) {
+    @Nonnull
+    public static GameProfile readOwnerFromNBT(@Nonnull NBTTagCompound nbt) {
         String ownerName = UNKNOWN_PLAYER_NAME;
         if (nbt.hasKey("owner"))
             ownerName = nbt.getString("owner");
@@ -44,7 +46,7 @@ public class PlayerPlugin {
         return new GameProfile(ownerUUID, ownerName);
     }
 
-    public static String getUsername(World world, GameProfile gameProfile) {
+    public static String getUsername(@Nonnull World world, @Nonnull GameProfile gameProfile) {
         UUID playerId = gameProfile.getId();
         if (playerId != null) {
             EntityPlayer player = world.getPlayerEntityByUUID(playerId);

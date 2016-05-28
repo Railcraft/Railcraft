@@ -142,13 +142,13 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityLiving, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityLiving, @Nonnull ItemStack stack) {
         super.onBlockPlacedBy(state, entityLiving, stack);
         direction = MiscTools.getSideFacingPlayer(getPos(), entityLiving);
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
         super.onNeighborBlockChange(state, block);
         powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
     }
@@ -165,7 +165,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("direction", (byte) direction.ordinal());
         data.setBoolean("powered", powered);
@@ -173,7 +173,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         direction = EnumFacing.getFront(data.getByte("direction"));
         powered = data.getBoolean("powered");
@@ -181,14 +181,14 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(jet);
         data.writeByte(direction.ordinal());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         jet = data.readByte();
         direction = EnumFacing.getFront(data.readByte());

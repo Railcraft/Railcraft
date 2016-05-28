@@ -26,7 +26,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -45,15 +47,16 @@ public class TrackRouting extends TrackSecured implements ITrackPowered, IRoutin
         return inv;
     }
 
+    @Nonnull
     @Override
-    public IBlockState getActualState(IBlockState state) {
+    public IBlockState getActualState(@Nonnull IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(POWERED, isPowered());
         return state;
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player) {
+    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
@@ -67,7 +70,7 @@ public class TrackRouting extends TrackSecured implements ITrackPowered, IRoutin
     }
 
     @Override
-    public void onMinecartPass(EntityMinecart cart) {
+    public void onMinecartPass(@Nonnull EntityMinecart cart) {
         if (!isPowered())
             return;
         if (inv.getStackInSlot(0) == null)
@@ -87,27 +90,27 @@ public class TrackRouting extends TrackSecured implements ITrackPowered, IRoutin
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("powered", powered);
         inv.writeToNBT("inv", data);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         powered = data.getBoolean("powered");
         inv.readFromNBT("inv", data);
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(powered);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         boolean p = data.readBoolean();
         if (p != powered) {
@@ -130,7 +133,7 @@ public class TrackRouting extends TrackSecured implements ITrackPowered, IRoutin
     @Override
     public void onBlockRemoved() {
         super.onBlockRemoved();
-        InvTools.dropInventory(inv, tileEntity.getWorld(), getPos());
+        InvTools.dropInventory(inv, getTile().getWorld(), getPos());
     }
 
 }

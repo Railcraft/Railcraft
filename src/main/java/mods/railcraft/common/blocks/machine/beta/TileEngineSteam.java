@@ -148,14 +148,14 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         tankManager.writeTanksToNBT(data);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         tankManager.readTanksFromNBT(data);

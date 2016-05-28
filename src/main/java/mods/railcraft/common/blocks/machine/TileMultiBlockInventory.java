@@ -68,14 +68,14 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         inv.writeToNBT("invStructure", data);
         return data;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         inv.readFromNBT("invStructure", data);
     }

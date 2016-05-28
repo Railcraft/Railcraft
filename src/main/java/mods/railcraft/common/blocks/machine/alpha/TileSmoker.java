@@ -61,7 +61,7 @@ public class TileSmoker extends TileMachineBase {
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
         super.onNeighborBlockChange(state, block);
         powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         sendUpdateToClient();
@@ -73,14 +73,14 @@ public class TileSmoker extends TileMachineBase {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         powered = data.getBoolean("powered");
     }
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("powered", powered);
@@ -88,13 +88,13 @@ public class TileSmoker extends TileMachineBase {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(powered);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         powered = data.readBoolean();
     }

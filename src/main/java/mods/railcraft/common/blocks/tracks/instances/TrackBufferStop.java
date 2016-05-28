@@ -20,6 +20,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -36,8 +37,9 @@ public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversi
         return EnumTrack.BUFFER_STOP;
     }
 
+    @Nonnull
     @Override
-    public IBlockState getActualState(IBlockState state) {
+    public IBlockState getActualState(@Nonnull IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(REVERSED, reversed);
         return state;
@@ -74,26 +76,26 @@ public class TrackBufferStop extends TrackBaseRailcraft implements ITrackReversi
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("direction", reversed);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
+    public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         reversed = nbttagcompound.getBoolean("direction");
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeBoolean(reversed);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         boolean r = data.readBoolean();

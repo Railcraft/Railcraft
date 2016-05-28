@@ -171,13 +171,13 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
         super.onNeighborBlockChange(state, block);
         powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         powered = data.getBoolean("powered");
         feedCounter = data.getByte("feedCounter");
@@ -185,7 +185,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("powered", powered);

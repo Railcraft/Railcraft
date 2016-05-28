@@ -13,6 +13,8 @@ import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerHighSpeed;
 import net.minecraft.entity.item.EntityMinecart;
 
+import javax.annotation.Nonnull;
+
 public class TrackSpeedWye extends TrackWye {
 
     public TrackSpeedWye() {
@@ -20,7 +22,7 @@ public class TrackSpeedWye extends TrackWye {
     }
 
     @Override
-    public void onMinecartPass(EntityMinecart cart) {
+    public void onMinecartPass(@Nonnull EntityMinecart cart) {
         TrackSpeed.testCartSpeedForBasic(this, cart);
     }
 

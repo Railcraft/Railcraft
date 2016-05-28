@@ -43,14 +43,14 @@ public class TileStair extends RailcraftTileEntity {
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setString("stair", material.getRegistryName());
         return data;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.getTag("stair") instanceof NBTTagString) {
             material = MaterialRegistry.get(data.getString("stair"));
@@ -60,13 +60,13 @@ public class TileStair extends RailcraftTileEntity {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeUTF(material.getRegistryName());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         material = MaterialRegistry.get(data.readUTF());
     }

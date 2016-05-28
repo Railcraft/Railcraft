@@ -15,6 +15,8 @@ import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 
+import javax.annotation.Nonnull;
+
 public class TrackJunction extends TrackBaseRailcraft {
 
     @Override
@@ -28,7 +30,7 @@ public class TrackJunction extends TrackBaseRailcraft {
     }
 
     @Override
-    public EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
+    public EnumRailDirection getRailDirection(@Nonnull IBlockState state, EntityMinecart cart) {
         if (cart == null) {
             return EnumRailDirection.NORTH_SOUTH;
         }

@@ -20,6 +20,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -34,8 +35,9 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
         return EnumTrack.DETECTOR_DIRECTION;
     }
 
+    @Nonnull
     @Override
-    public IBlockState getActualState(IBlockState state) {
+    public IBlockState getActualState(@Nonnull IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(ITrackPowered.POWERED, getPowerOutput() > 0);
         state = state.withProperty(REVERSED, reversed);
@@ -61,8 +63,8 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
     }
 
     @Override
-    public void onMinecartPass(EntityMinecart cart) {
-        int meta = tileEntity.getBlockMetadata();
+    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+        int meta = getTile().getBlockMetadata();
         if (meta == 1 || meta == 2 || meta == 3) {
             if ((isReversed() && cart.motionX < 0.0D) || (!isReversed() && cart.motionX > 0.0D)) {
                 setTrackPowering();
@@ -104,21 +106,21 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("direction", reversed);
         nbttagcompound.setByte("delay", delay);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
+    public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         reversed = nbttagcompound.getBoolean("direction");
         delay = nbttagcompound.getByte("delay");
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(delay);
@@ -126,7 +128,7 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         delay = data.readByte();

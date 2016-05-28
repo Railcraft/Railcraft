@@ -23,9 +23,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
+ * Utility class for simplifying moving items and fluids through a train.
+ *
  * Created by CovertJaguar on 5/9/2015.
  */
 public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTransferHelper {
@@ -52,6 +55,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return stack;
     }
 
+    @Nullable
     private ItemStack _pushStack(EntityMinecart requester, Iterable<EntityMinecart> carts, ItemStack stack) {
         for (EntityMinecart cart : carts) {
             if (canAcceptPushedItem(requester, cart, stack))
@@ -72,6 +76,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return _pullStack(requester, carts, filter);
     }
 
+    @Nullable
     private ItemStack _pullStack(EntityMinecart requester, Iterable<EntityMinecart> carts, IStackFilter filter) {
         for (EntityMinecart cart : carts) {
             if (cart instanceof IInventory) {
@@ -130,9 +135,8 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return fluidStack;
     }
 
+    @Nullable
     private FluidStack _pushFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
-        if (fluidStack == null)
-            return null;
         for (EntityMinecart cart : carts) {
             if (canAcceptPushedFluid(requester, cart, fluidStack.getFluid())) {
                 fluidStack.amount -= ((IFluidHandler) cart).fill(EnumFacing.UP, fluidStack, true);
@@ -155,6 +159,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
         return _pullFluid(requester, carts, fluidStack);
     }
 
+    @Nullable
     private FluidStack _pullFluid(EntityMinecart requester, Iterable<EntityMinecart> carts, FluidStack fluidStack) {
         for (EntityMinecart cart : carts) {
             if (canProvidePulledFluid(requester, cart, fluidStack.getFluid())) {

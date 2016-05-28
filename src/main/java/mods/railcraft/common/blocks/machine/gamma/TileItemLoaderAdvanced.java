@@ -36,28 +36,28 @@ public class TileItemLoaderAdvanced extends TileItemLoader {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
 
         nbttagcompound.setByte("direction", (byte) direction.ordinal());
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         direction = EnumFacing.getFront(data.getByte("direction"));
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(direction.ordinal());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         direction = EnumFacing.getFront(data.readByte());
@@ -66,7 +66,7 @@ public class TileItemLoaderAdvanced extends TileItemLoader {
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
         super.onBlockPlacedBy(state, entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)

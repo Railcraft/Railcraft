@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.realmsclient.dto.RealmsServer;
+import mcp.MethodsReturnNonnullByDefault;
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
@@ -18,8 +18,6 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketBuilder;
-import mods.railcraft.common.util.network.PacketTileEntity;
-import mods.railcraft.common.util.network.RailcraftPacket;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,10 +31,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -44,13 +42,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable, ITickable {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
     protected int clock = MiscTools.RANDOM.nextInt();
+    @Nonnull
     private GameProfile owner = new GameProfile(null, "[Railcraft]");
     private boolean sendClientUpdate;
     private UUID uuid;
+    @Nonnull
     private String customName = "";
 
     public IBlockState getActualState(IBlockState state) {
@@ -68,7 +70,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     public IBlockState getBlockState() {
-        return WorldPlugin.getBlockState(worldObj, pos);
+        return WorldPlugin.getBlockState(getWorld(), getPos());
     }
 
     public AdjacentTileCache getTileCache() {
@@ -134,7 +136,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
             PacketBuilder.instance().sendTileEntityPacket(this);
     }
 
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         if (placer instanceof EntityPlayer)
             owner = ((EntityPlayer) placer).getGameProfile();
     }
@@ -156,7 +158,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     public final int getDimension() {
-        if (worldObj == null)
+        if (worldObj == null || worldObj.provider == null)
             return 0;
         return worldObj.provider.getDimension();
     }
@@ -176,13 +178,12 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         List<String> debug = new ArrayList<>();
         debug.add("Railcraft Tile Entity Data Dump");
         debug.add("Object: " + this);
-        debug.add(String.format("Coordinates: d=%d, %s", worldObj.provider.getDimension(), getPos()));
-        debug.add("Owner: " + (owner == null ? "null" : owner.getName()));
+        debug.add(String.format("Coordinates: d=%d, %s", getDimension(), getPos()));
+        debug.add("Owner: " + owner.getName());
         debug.addAll(tileCache.getDebugOutput());
         return debug;
     }
 
-    @Nonnull
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
@@ -217,8 +218,9 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return getPos().getZ();
     }
 
+    @Nullable
     @Override
-    public final World getWorld() {
+    public final World theWorld() {
         return worldObj;
     }
 
@@ -229,18 +231,16 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return !customName.isEmpty();
     }
 
-    public void setCustomName(String name) {
+    public void setCustomName(@Nullable String name) {
         if (name != null)
             customName = name;
     }
 
-    @Nonnull
     @Override
     public String getName() {
         return hasCustomName() ? customName : getLocalizationTag();
     }
 
-    @Nonnull
     @Override
     public ITextComponent getDisplayName() {
         return hasCustomName() ? new TextComponentString(customName) : new TextComponentTranslation(getLocalizationTag());

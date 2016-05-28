@@ -119,21 +119,21 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("WaitIfEmpty", waitIfEmpty());
         nbttagcompound.setBoolean("WaitTillFull", waitTillFull());
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
+    public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         setWaitIfEmpty(nbttagcompound.getBoolean("WaitIfEmpty"));
         setWaitTillFull(nbttagcompound.getBoolean("WaitTillFull"));
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         byte bits = 0;
@@ -143,7 +143,7 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         byte bits = data.readByte();
@@ -152,13 +152,13 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         data.writeBoolean(waitIfEmpty);
         data.writeBoolean(waitTillFull);
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         waitIfEmpty = data.readBoolean();
         waitTillFull = data.readBoolean();
     }

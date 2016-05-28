@@ -164,7 +164,7 @@ public class TileDispenserTrain extends TileDispenserCart {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("spawningTrain", spawningTrain);
@@ -174,7 +174,7 @@ public class TileDispenserTrain extends TileDispenserCart {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         spawningTrain = data.getBoolean("spawningTrain");

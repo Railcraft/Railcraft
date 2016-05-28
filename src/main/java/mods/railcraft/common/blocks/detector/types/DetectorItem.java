@@ -22,6 +22,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -143,13 +144,13 @@ public class DetectorItem extends DetectorFilter {
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         data.writeByte((byte) primaryMode.ordinal());
         data.writeByte((byte) filterMode.ordinal());
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         primaryMode = PrimaryMode.values()[data.readByte()];
         filterMode = FilterMode.values()[data.readByte()];
     }

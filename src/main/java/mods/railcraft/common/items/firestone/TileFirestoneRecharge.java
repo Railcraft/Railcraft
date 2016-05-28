@@ -174,7 +174,7 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setShort("charge", (short) charge);
         data.setByte("rebuildDelay", (byte) rebuildDelay);
@@ -183,7 +183,7 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         charge = data.getShort("charge");
         rebuildDelay = data.getByte("rebuildDelay");
@@ -192,12 +192,12 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
     }
 

@@ -17,6 +17,8 @@ import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedController;
 import net.minecraft.entity.item.EntityMinecart;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -27,13 +29,14 @@ public abstract class TrackBaseRailcraft extends TrackInstanceBase {
     public abstract EnumTrack getTrackType();
 
     @Override
-    public float getRailMaxSpeed(EntityMinecart cart) {
+    public float getRailMaxSpeed(@Nonnull EntityMinecart cart) {
         if (speedController == null) {
             speedController = SpeedController.instance();
         }
         return speedController.getMaxSpeed(this, cart);
     }
 
+    @Nonnull
     @Override
     public TrackSpec getTrackSpec() {
         return TrackRegistry.getTrackSpec(getTrackType().getTag());

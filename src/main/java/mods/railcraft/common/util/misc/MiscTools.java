@@ -8,23 +8,28 @@
  */
 package mods.railcraft.common.util.misc;
 
-import com.google.common.base.Predicate;
+import mcp.MethodsReturnNonnullByDefault;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Predicate;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public abstract class MiscTools {
 
     public enum ArmorSlots {
@@ -37,11 +42,12 @@ public abstract class MiscTools {
 
     public static final Random RANDOM = new Random();
 
+    @SuppressWarnings("ConstantConditions")
     public static String cleanTag(String tag) {
         return tag.replaceAll("[Rr]ailcraft\\p{Punct}", "").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
     }
 
-    public static void writeUUID(NBTTagCompound data, String tag, UUID uuid) {
+    public static void writeUUID(NBTTagCompound data, String tag, @Nullable UUID uuid) {
         if (uuid == null)
             return;
         NBTTagCompound nbtTag = new NBTTagCompound();
@@ -50,6 +56,7 @@ public abstract class MiscTools {
         data.setTag(tag, nbtTag);
     }
 
+    @Nullable
     public static UUID readUUID(NBTTagCompound data, String tag) {
         if (data.hasKey(tag)) {
             NBTTagCompound nbtTag = data.getCompoundTag(tag);
@@ -58,54 +65,23 @@ public abstract class MiscTools {
         return null;
     }
 
-    @Deprecated
-    public static AxisAlignedBB expandAABBToCoordinate(AxisAlignedBB box, double x, double y, double z) {
-        double minX = box.minX;
-        double maxX = box.maxX;
-        double minY = box.minY;
-        double maxY = box.maxY;
-        double minZ = box.minZ;
-        double maxZ = box.maxZ;
-
-        if (x < box.minX)
-            minX = x;
-        else if (x > box.maxX)
-            maxX = x;
-
-        if (y < box.minY)
-            minY = y;
-        else if (y > box.maxY)
-            maxY = y;
-
-        if (z < box.minZ)
-            minZ = z;
-        else if (z > box.maxZ)
-            maxZ = z;
-
-        return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
-    }
-
-    private static final Predicate<Entity> livingEntitySelector = new Predicate<Entity>() {
-        public boolean apply(Entity entity) {
-            return entity.isEntityAlive() && EntitySelectors.NOT_SPECTATING.apply(entity);
-        }
-    };
+    @Nonnull
+    private static final Predicate<Entity> livingEntitySelector = entity -> entity.isEntityAlive() && EntitySelectors.NOT_SPECTATING.apply(entity);
 
     public static <T extends Entity> List<T> getNearbyEntities(World world, Class<T> entityClass, float x, float minY, float maxY, float z, float radius) {
-        AxisAlignedBB box = AxisAlignedBB.fromBounds(x, minY, z, x + 1, maxY, z + 1);
-        box = box.expand(radius, 0, radius);
-        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
+        AxisAlignedBB box = AABBFactory.start().setBounds(x, minY, z, x + 1, maxY, z + 1).expandHorizontally(radius).build();
+        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector::test);
     }
 
     public static <T extends Entity> List<T> getEntitiesAt(World world, Class<T> entityClass, BlockPos pos) {
         AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(pos).build();
-        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
+        return world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector::test);
     }
 
     @Nullable
     public static <T extends Entity> T getEntityAt(World world, Class<T> entityClass, BlockPos pos) {
         AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(pos).build();
-        List<T> entities = world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector);
+        List<T> entities = world.getEntitiesWithinAABB(entityClass, box, livingEntitySelector::test);
         if (!entities.isEmpty())
             return entities.get(0);
         return null;
@@ -165,20 +141,22 @@ public abstract class MiscTools {
         return new RayTraceResult(closest.addVector(pos.getX(), pos.getY(), pos.getZ()), sideHit, pos);
     }
 
-    private static boolean isVecOutsideYZBounds(Vec3d vec3d) {
+    private static boolean isVecOutsideYZBounds(@Nullable Vec3d vec3d) {
         return vec3d == null || vec3d.yCoord < 0 || vec3d.yCoord > 1 || vec3d.zCoord < 0 || vec3d.zCoord > 1;
     }
 
-    private static boolean isVecOutsideXZBounds(Vec3d vec3d) {
+    private static boolean isVecOutsideXZBounds(@Nullable Vec3d vec3d) {
         return vec3d == null || vec3d.xCoord < 0 || vec3d.xCoord > 1 || vec3d.zCoord < 0 || vec3d.zCoord > 1;
     }
 
-    private static boolean isVecOutsideXYBounds(Vec3d vec3d) {
+    private static boolean isVecOutsideXYBounds(@Nullable Vec3d vec3d) {
         return vec3d == null || vec3d.xCoord < 0 || vec3d.xCoord > 1 || vec3d.yCoord < 0 || vec3d.yCoord > 1;
     }
 
+    @Nullable
     public static RayTraceResult rayTracePlayerLook(EntityPlayer player) {
-        double distance = player.capabilities.isCreativeMode ? 5.0F : 4.5F;
+        if (player.worldObj == null) return null;
+        double distance = player.capabilities != null && player.capabilities.isCreativeMode ? 5.0F : 4.5F;
         Vec3d posVec = player.getPositionVector();
         Vec3d lookVec = player.getLook(1);
         lookVec = lookVec.addVector(0, player.getEyeHeight(), 0);
@@ -193,6 +171,7 @@ public abstract class MiscTools {
      * @param player EntityPlayer
      * @return a side value 0-5
      */
+    @Nullable
     public static EnumFacing getCurrentMousedOverSide(EntityPlayer player) {
         RayTraceResult mouseOver = rayTracePlayerLook(player);
         if (mouseOver != null)
@@ -258,37 +237,12 @@ public abstract class MiscTools {
         return null;
     }
 
-    /**
-     * @deprecated use {@link EnumFacing#getOpposite()}
-     */
-    @Deprecated
-    public static EnumFacing getOppositeSide(int side) {
-        int s = side;
-        s = s % 2 == 0 ? s + 1 : s - 1;
-        return EnumFacing.VALUES[s];
-    }
-
-    @Deprecated
-    public static int getXOnSide(int x, EnumFacing side) {
-        return x + side.getFrontOffsetX();
-    }
-
-    @Deprecated
-    public static int getYOnSide(int y, EnumFacing side) {
-        return y + side.getFrontOffsetY();
-    }
-
-    @Deprecated
-    public static int getZOnSide(int z, EnumFacing side) {
-        return z + side.getFrontOffsetZ();
-    }
-
     public static boolean areCoordinatesOnSide(BlockPos start, BlockPos end, EnumFacing side) {
         return start.offset(side).equals(end);
     }
 
     public static boolean isKillableEntity(Entity entity) {
-        return !(entity.ridingEntity instanceof EntityMinecart) && entity instanceof EntityLivingBase && ((EntityLivingBase) entity).getMaxHealth() < 100;
+        return !(entity.getRidingEntity() instanceof EntityMinecart) && entity instanceof EntityLivingBase && ((EntityLivingBase) entity).getMaxHealth() < 100;
     }
 
 }

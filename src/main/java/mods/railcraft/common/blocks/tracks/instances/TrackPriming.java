@@ -19,7 +19,9 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -41,7 +43,7 @@ public class TrackPriming extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player) {
+    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
@@ -55,7 +57,7 @@ public class TrackPriming extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public void onMinecartPass(EntityMinecart cart) {
+    public void onMinecartPass(@Nonnull EntityMinecart cart) {
         if (isPowered()) {
             if (cart instanceof IExplosiveCart) {
                 IExplosiveCart tnt = (IExplosiveCart) cart;
@@ -66,13 +68,13 @@ public class TrackPriming extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeShort(fuse);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         fuse = data.readShort();
 
@@ -80,24 +82,24 @@ public class TrackPriming extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setShort("fuse", getFuse());
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         setFuse(data.getShort("fuse"));
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         data.writeShort(fuse);
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         fuse = data.readShort();
     }
 

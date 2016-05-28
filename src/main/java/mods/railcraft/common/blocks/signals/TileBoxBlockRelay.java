@@ -104,7 +104,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         signalBlock.writeToNBT(data);
@@ -112,7 +112,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         signalBlock.readFromNBT(data);
@@ -120,14 +120,14 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         controller.writePacketData(data);
         signalBlock.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         controller.readPacketData(data);
         signalBlock.readPacketData(data);
@@ -135,7 +135,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         super.readGuiData(data, sender);
         updateNeighbors();
     }

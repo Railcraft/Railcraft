@@ -52,6 +52,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -326,9 +327,9 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
-        return tile instanceof TileTrack && ((TileTrack) tile).getTrackInstance().blockActivated(playerIn);
+        return tile instanceof TileTrack && ((TileTrack) tile).getTrackInstance().blockActivated(playerIn, hand, heldItem);
     }
 
     @Override
@@ -487,7 +488,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
+    public ConnectStyle connectsToPost(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EnumFacing side) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         try {
             if (tile instanceof TileTrack) {

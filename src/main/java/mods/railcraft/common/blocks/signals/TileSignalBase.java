@@ -103,33 +103,33 @@ public abstract class TileSignalBase extends TileSignalFoundation implements IAs
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityLiving, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityLiving, @Nonnull ItemStack stack) {
         super.onBlockPlacedBy(state, entityLiving, stack);
         facing = MiscTools.getHorizontalSideFacingPlayer(entityLiving);
     }
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("Facing", (byte) facing.ordinal());
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         facing = EnumFacing.getFront(data.getByte("Facing"));
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte((byte) facing.ordinal());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         facing = EnumFacing.getFront(data.readByte());

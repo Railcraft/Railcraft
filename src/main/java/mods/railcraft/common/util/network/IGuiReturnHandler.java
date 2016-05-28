@@ -11,19 +11,20 @@ package mods.railcraft.common.util.network;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IGuiReturnHandler
-{
-    World getWorld();
+public interface IGuiReturnHandler {
+    @Nullable
+    World theWorld();
 
-    void writeGuiData(DataOutputStream data) throws IOException;
+    void writeGuiData(@Nonnull DataOutputStream data) throws IOException;
 
-    void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException;
+    void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException;
 }

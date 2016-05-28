@@ -72,14 +72,14 @@ public abstract class TileMachineItem extends TileMachineBase implements IInvent
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         inv.readFromNBT("Items", data);
     }
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         inv.writeToNBT("Items", data);
         return data;

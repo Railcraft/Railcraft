@@ -118,14 +118,14 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
     }
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         chargeHandler.writeToNBT(data);
     }

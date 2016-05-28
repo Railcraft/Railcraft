@@ -36,6 +36,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -166,34 +167,34 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public boolean canWhack(EntityPlayer player, ItemStack crowbar, BlockPos pos) {
+    public boolean canWhack(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, BlockPos pos) {
         return true;
     }
 
     @Override
-    public void onWhack(EntityPlayer player, ItemStack crowbar, BlockPos pos) {
+    public void onWhack(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, BlockPos pos) {
         crowbar.damageItem(1, player);
         player.swingItem();
     }
 
     @Override
-    public boolean canLink(EntityPlayer player, ItemStack crowbar, EntityMinecart cart) {
+    public boolean canLink(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, @Nonnull EntityMinecart cart) {
         return player.isSneaking();
     }
 
     @Override
-    public void onLink(EntityPlayer player, ItemStack crowbar, EntityMinecart cart) {
+    public void onLink(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, @Nonnull EntityMinecart cart) {
         crowbar.damageItem(1, player);
         player.swingItem();
     }
 
     @Override
-    public boolean canBoost(EntityPlayer player, ItemStack crowbar, EntityMinecart cart) {
+    public boolean canBoost(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, @Nonnull EntityMinecart cart) {
         return !player.isSneaking();
     }
 
     @Override
-    public void onBoost(EntityPlayer player, ItemStack crowbar, EntityMinecart cart) {
+    public void onBoost(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, @Nonnull EntityMinecart cart) {
         crowbar.damageItem(BOOST_DAMAGE, player);
         player.swingItem();
     }

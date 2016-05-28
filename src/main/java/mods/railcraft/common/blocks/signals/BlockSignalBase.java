@@ -30,6 +30,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nonnull;
+
 public abstract class BlockSignalBase extends BlockContainer implements IPostConnection {
 
 
@@ -236,7 +238,7 @@ public abstract class BlockSignalBase extends BlockContainer implements IPostCon
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
+    public ConnectStyle connectsToPost(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EnumFacing side) {
         TileEntity t = WorldPlugin.getBlockTile(world, pos);
         if (t instanceof TileSignalBase)
             return ConnectStyle.TWO_THIN;

@@ -43,6 +43,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
@@ -372,7 +373,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing face) {
+    public ConnectStyle connectsToPost(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EnumFacing face) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).connectsToPost(face);

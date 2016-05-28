@@ -87,7 +87,7 @@ public class TileSlab extends RailcraftTileEntity {
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         if (top != null) {
             data.setString("top", top.getRegistryName());
@@ -99,7 +99,7 @@ public class TileSlab extends RailcraftTileEntity {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.hasKey("top")) {
             top = MaterialRegistry.get(data.getString("top"));
@@ -110,14 +110,14 @@ public class TileSlab extends RailcraftTileEntity {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeUTF(top != null ? top.getRegistryName() : "");
         data.writeUTF(bottom != null ? bottom.getRegistryName() : "");
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         String t = data.readUTF();
         if (!t.isEmpty()) {

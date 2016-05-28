@@ -19,7 +19,9 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -33,8 +35,9 @@ public class TrackLimiter extends TrackPowered {
         return EnumTrack.LIMITER;
     }
 
+    @Nonnull
     @Override
-    public IBlockState getActualState(IBlockState state) {
+    public IBlockState getActualState(@Nonnull IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(MODE, getMode());
         return state;
@@ -49,7 +52,7 @@ public class TrackLimiter extends TrackPowered {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player) {
+    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
@@ -64,7 +67,7 @@ public class TrackLimiter extends TrackPowered {
     }
 
     @Override
-    public void onMinecartPass(EntityMinecart cart) {
+    public void onMinecartPass(@Nonnull EntityMinecart cart) {
         if (isPowered()) {
             if (cart instanceof EntityLocomotive) {
                 ((EntityLocomotive) cart).setSpeed(getMode());
@@ -78,13 +81,13 @@ public class TrackLimiter extends TrackPowered {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setString("locoSpeed", mode.getName());
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         if (data.hasKey("locoSpeed")) {
@@ -97,13 +100,13 @@ public class TrackLimiter extends TrackPowered {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte((byte) mode.ordinal());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         int m = data.readByte();
         if (mode.ordinal() != m) {

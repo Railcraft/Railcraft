@@ -71,7 +71,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power)
@@ -79,7 +79,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityLivingBase, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityLivingBase, @Nonnull ItemStack stack) {
         super.onBlockPlacedBy(state, entityLivingBase, stack);
         boolean power = isBeingPoweredByRedstone();
         if (isPowered() != power)
@@ -110,14 +110,14 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         inv.writeToNBT("inv", data);
         routingController.writeToNBT(data, "railwayType");
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         inv.readFromNBT("inv", data);
         routingController.readFromNBT(data, "railwayType");

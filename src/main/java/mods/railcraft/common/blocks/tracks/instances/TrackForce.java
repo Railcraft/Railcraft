@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.Explosion;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class TrackForce extends TrackUnsupported {
@@ -41,7 +42,7 @@ public class TrackForce extends TrackUnsupported {
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
         super.onNeighborBlockChange(state, block);
         if (Game.isHost(getWorld()))
             checkForEmitter();
@@ -123,7 +124,7 @@ public class TrackForce extends TrackUnsupported {
     }
 
     @Override
-    public float getExplosionResistance(Explosion explosion, Entity exploder) {
+    public float getExplosionResistance(@Nonnull Explosion explosion, @Nonnull Entity exploder) {
         return 6000000.0F;
     }
 

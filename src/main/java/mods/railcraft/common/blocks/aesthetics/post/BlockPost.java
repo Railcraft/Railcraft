@@ -247,7 +247,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
+    public ConnectStyle connectsToPost(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EnumFacing side) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TilePostEmblem) {
             TilePostEmblem tileEmblem = (TilePostEmblem) tile;

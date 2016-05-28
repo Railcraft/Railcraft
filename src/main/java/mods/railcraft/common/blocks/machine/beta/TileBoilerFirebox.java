@@ -158,7 +158,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
         inventory.writeToNBT("inv", data);
@@ -167,7 +167,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
         inventory.readFromNBT("inv", data);
@@ -176,14 +176,14 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         tankManager.writePacketData(data);
         data.writeBoolean(boiler.isBurning());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         tankManager.readPacketData(data);
         boiler.setBurning(data.readBoolean());

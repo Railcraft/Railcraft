@@ -88,7 +88,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setInteger("cookTime", cookTime);
@@ -97,7 +97,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         cookTime = data.getInteger("cookTime");
@@ -105,7 +105,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeInt(cookTime);
@@ -113,7 +113,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         cookTime = data.readInt();

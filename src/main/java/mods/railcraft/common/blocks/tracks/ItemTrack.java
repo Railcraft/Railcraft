@@ -108,6 +108,7 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
             return false;
 
         TrackSpec spec = getTrackSpec(stack);
+        TileTrack tile = TrackFactory.makeTrackTile(spec);
         ITrackInstance track = spec.createInstanceFromSpec();
 
         boolean canPlace = world.canBlockBePlaced(blockTrack, pos, true, face, null, stack);

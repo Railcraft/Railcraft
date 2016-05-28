@@ -312,7 +312,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("processTime", processTime);
 
@@ -322,7 +322,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         processTime = data.getInteger("processTime");
 

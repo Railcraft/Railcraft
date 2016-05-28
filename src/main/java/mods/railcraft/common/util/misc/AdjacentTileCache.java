@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -122,6 +123,7 @@ public final class AdjacentTileCache {
             delay[side] = DELAY_MAX;
     }
 
+    @Nonnull
     public List<String> getDebugOutput() {
         List<String> debug = new ArrayList<String>();
         debug.add("Neighbor Cache: " + Arrays.toString(cache));

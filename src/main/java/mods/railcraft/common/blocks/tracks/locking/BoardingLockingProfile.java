@@ -24,7 +24,7 @@ public class BoardingLockingProfile extends LockingProfile {
     @Override
     public void onRelease(EntityMinecart cart) {
         super.onRelease(cart);
-        int meta = track.tileEntity.getBlockMetadata();
+        int meta = track.getTile().getBlockMetadata();
         double speed = CartTools.getCartSpeedUncapped(cart);
         double boostX = TrackLocking.START_BOOST;
         double boostZ = TrackLocking.START_BOOST;

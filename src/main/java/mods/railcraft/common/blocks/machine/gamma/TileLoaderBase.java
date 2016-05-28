@@ -127,7 +127,7 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("powered", powered);
 
@@ -135,7 +135,7 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         setPowered(data.getBoolean("powered"));
 

@@ -71,7 +71,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
         if (Game.isNotHost(getWorld()))
             return;
@@ -110,7 +110,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("Powered", powered);
 
@@ -121,7 +121,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         powered = data.getBoolean("Powered");
 
@@ -139,7 +139,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(defaultAspect.ordinal());
@@ -149,7 +149,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         defaultAspect = SignalAspect.values()[data.readByte()];
@@ -160,13 +160,13 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         data.writeByte(defaultAspect.ordinal());
         data.writeByte(poweredAspect.ordinal());
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         defaultAspect = SignalAspect.values()[data.readByte()];
         poweredAspect = SignalAspect.values()[data.readByte()];
     }

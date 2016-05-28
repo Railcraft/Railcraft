@@ -30,6 +30,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -51,8 +52,9 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     private ISwitchDevice switchDevice;
     private boolean clientSwitched;
 
+    @Nonnull
     @Override
-    public IBlockState getActualState(IBlockState state) {
+    public IBlockState getActualState(@Nonnull IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(SWITCHED, isVisuallySwitched());
         return state;
@@ -149,19 +151,19 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
         determineRailDirection();
         determineMirror();
 
         // Notify any neighboring switches that we exist so they know to register themselves with us
-        ((RailcraftTileEntity) tileEntity).notifyBlocksOfNeighborChange();
+        ((RailcraftTileEntity) getTile()).notifyBlocksOfNeighborChange();
     }
 
     @Override
     public void onBlockRemoved() {
         super.onBlockRemoved();
         // Notify any neighboring switches that we exist so they know to register themselves with us
-        ((RailcraftTileEntity) tileEntity).notifyBlocksOfNeighborChange();
+        ((RailcraftTileEntity) getTile()).notifyBlocksOfNeighborChange();
     }
 
     protected void determineRailDirection() {
@@ -201,7 +203,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block block) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
         if (Game.isHost(getWorld())) {
             determineRailDirection();
             determineMirror();
@@ -231,7 +233,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("Direction", mirrored);
         data.setBoolean("Switched", shouldSwitch);
@@ -244,7 +246,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         mirrored = data.getBoolean("Direction");
         shouldSwitch = data.getBoolean("Switched");
@@ -257,14 +259,14 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(mirrored);
         data.writeBoolean(isVisuallySwitched());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         boolean changed = false;
         boolean m = data.readBoolean();
@@ -321,7 +323,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         // We only set sprung/locked when a cart enters our track, this is
         // mainly for visual purposes as the subclass's getRailDirection()
         // determines which direction the carts actually take.
-        List<UUID> cartsOnTrack = CartUtils.getMinecartUUIDsAt(getWorld(), tileEntity.getPos(), 0.3f);
+        List<UUID> cartsOnTrack = CartUtils.getMinecartUUIDsAt(getWorld(), getTile().getPos(), 0.3f);
 
         EntityMinecart bestCart = getBestCartForVisualState(cartsOnTrack);
 
@@ -400,7 +402,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     public abstract ArrowDirection getWhiteSignDirection();
 
     public ISwitchDevice getSwitchDevice() {
-        TileEntity entity = ((RailcraftTileEntity) this.tileEntity).getTileCache().getTileOnSide(getActuatorLocation());
+        TileEntity entity = ((RailcraftTileEntity) this.getTile()).getTileCache().getTileOnSide(getActuatorLocation());
         if (entity instanceof ISwitchDevice) {
             return (ISwitchDevice) entity;
         }

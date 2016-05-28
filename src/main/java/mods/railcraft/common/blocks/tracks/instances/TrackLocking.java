@@ -31,6 +31,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -69,8 +70,9 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
         return EnumTrack.LOCKING;
     }
 
+    @Nonnull
     @Override
-    public IBlockState getActualState(IBlockState state) {
+    public IBlockState getActualState(@Nonnull IBlockState state) {
         state = super.getActualState(state);
         state.withProperty(PROFILE, profile);
         state.withProperty(ITrackPowered.POWERED, !locked);
@@ -86,7 +88,7 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
             return;
         profile = type;
         profileInstance = profile.create(this);
-        if (tileEntity != null && Game.isHost(getWorld()))
+        if (getTile() != null && Game.isHost(getWorld()))
             sendUpdateToClient();
     }
 
@@ -145,7 +147,7 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player) {
+    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
@@ -189,16 +191,16 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
             profileInstance.onLock(currentCart);
             currentCart.motionX = 0.0D;
             currentCart.motionZ = 0.0D;
-            int meta = tileEntity.getBlockMetadata();
+            int meta = getTile().getBlockMetadata();
             if (meta == 0 || meta == 4 || meta == 5)
-                currentCart.posZ = tileEntity.getPos().getZ() + 0.5D;
+                currentCart.posZ = getTile().getPos().getZ() + 0.5D;
             else
-                currentCart.posX = tileEntity.getPos().getX() + 0.5D;
+                currentCart.posX = getTile().getPos().getX() + 0.5D;
         }
     }
 
     @Override
-    public void onMinecartPass(EntityMinecart cart) {
+    public void onMinecartPass(@Nonnull EntityMinecart cart) {
         currentCart = cart;
     }
 
@@ -329,7 +331,7 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("profile", (byte) profile.ordinal());
         profileInstance.writeToNBT(data);
@@ -346,7 +348,7 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.hasKey("profile"))
             profile = LockingProfileType.fromOrdinal(data.getByte("profile"));
@@ -372,7 +374,7 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(profile.ordinal());
@@ -383,7 +385,7 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         LockingProfileType p = LockingProfileType.fromOrdinal(data.readByte());

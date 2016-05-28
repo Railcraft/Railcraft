@@ -75,7 +75,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("flippedAxis", flippedAxis);
@@ -88,7 +88,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         flippedAxis = data.getBoolean("flippedAxis");
@@ -101,24 +101,24 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(flippedAxis);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         flippedAxis = data.readBoolean();
         markBlockForUpdate();
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         GuiPacketType type = GuiPacketType.values()[data.readByte()];
         switch (type) {
             case START_CRAFTING:
@@ -275,7 +275,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
         super.onBlockPlacedBy(state, entityliving, stack);
         EnumFacing facing = entityliving.getHorizontalFacing();
         if (facing == EnumFacing.EAST || facing == EnumFacing.WEST)

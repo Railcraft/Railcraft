@@ -22,6 +22,7 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -30,6 +31,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -41,8 +43,9 @@ public class TrackGated extends TrackPowered implements ITrackReversible, ITrack
     protected boolean open;
     protected boolean reversed;
 
+    @Nonnull
     @Override
-    public IBlockState getActualState(IBlockState state) {
+    public IBlockState getActualState(@Nonnull IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(REVERSED, reversed);
         return state;
@@ -54,8 +57,8 @@ public class TrackGated extends TrackPowered implements ITrackReversible, ITrack
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player) {
-        if (!super.blockActivated(player))
+    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
+        if (!super.blockActivated(player, hand, heldItem))
             setOpen(!open);
         return true;
     }
@@ -101,28 +104,28 @@ public class TrackGated extends TrackPowered implements ITrackReversible, ITrack
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("open", open);
         nbttagcompound.setBoolean("reversed", reversed);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
+    public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         open = nbttagcompound.getBoolean("open");
         reversed = nbttagcompound.getBoolean("reversed");
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(reversed);
         data.writeBoolean(open);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
         setReversed(data.readBoolean());
         setOpen(data.readBoolean());
@@ -152,7 +155,7 @@ public class TrackGated extends TrackPowered implements ITrackReversible, ITrack
 
     private void playSound() {
         if (Game.isHost(getWorld()))
-            SoundHelper.playFX(getWorld(), null, 1003, tileEntity.getPos(), 0);
+            SoundHelper.playFX(getWorld(), null, 1003, getTile().getPos(), 0);
     }
 
     public boolean isGateOpen() {
@@ -160,7 +163,7 @@ public class TrackGated extends TrackPowered implements ITrackReversible, ITrack
     }
 
     @Override
-    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
+    public ConnectStyle connectsToPost(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EnumFacing side) {
         switch (side) {
             case UP:
             case DOWN:

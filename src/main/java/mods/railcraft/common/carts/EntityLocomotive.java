@@ -52,6 +52,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -600,14 +601,14 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         data.writeByte(clientMode.ordinal());
         data.writeByte(clientSpeed.ordinal());
         data.writeByte(lockController.getCurrentState());
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         setMode(LocoMode.VALUES[data.readByte()]);
         setSpeed(LocoSpeed.VALUES[data.readByte()]);
         byte lock = data.readByte();

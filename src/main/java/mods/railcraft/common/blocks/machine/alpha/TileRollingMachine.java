@@ -71,7 +71,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setInteger("progress", progress);
@@ -85,7 +85,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         progress = data.getInteger("progress");

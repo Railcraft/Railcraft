@@ -15,6 +15,8 @@ import mods.railcraft.common.util.network.PacketKeyPress.EnumKeyBinding;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -22,6 +24,7 @@ public class PacketBuilder implements ISignalPacketBuilder {
 
     private static PacketBuilder instance;
 
+    @Nonnull
     public static PacketBuilder instance() {
         if (instance == null)
             instance = new PacketBuilder();

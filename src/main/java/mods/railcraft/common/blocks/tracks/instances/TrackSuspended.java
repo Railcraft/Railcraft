@@ -23,6 +23,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlaced {
 
     @Override
@@ -31,16 +33,16 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
         if (!isSupported())
             breakRail();
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
         World world = getWorld();
-        BlockPos pos = tileEntity.getPos();
+        BlockPos pos = getTile().getPos();
         if (isSupported()) {
             Block myBlock = RailcraftBlocksOld.getBlockTrack();
             if (neighborBlock != myBlock) {

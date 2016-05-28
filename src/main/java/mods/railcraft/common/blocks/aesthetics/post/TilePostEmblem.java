@@ -32,7 +32,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     private EnumColor color;
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
         setFacing(MiscTools.getHorizontalSideFacingPlayer(placer));
         NBTTagCompound nbt = stack.getTagCompound();
@@ -86,7 +86,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setString("emblem", emblem);
         data.setByte("facing", (byte) facing.ordinal());
@@ -97,7 +97,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         emblem = data.getString("emblem");
         facing = EnumFacing.getFront(data.getByte("facing"));
@@ -107,7 +107,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte((byte) facing.ordinal());
         data.writeByte((byte) (color != null ? color.ordinal() : -1));
@@ -115,7 +115,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         boolean needsUpdate = false;

@@ -70,7 +70,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
         if (Game.isNotHost(getWorld()))
             return;
@@ -108,7 +108,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
 
     @Nonnull
     @Override
-    public void writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("strongestSignal", strongestSignal);
 
@@ -123,7 +123,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
         strongestSignal = data.getInteger("strongestSignal");
 
@@ -151,7 +151,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         writeGuiData(data);
@@ -160,7 +160,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         readGuiData(data, null);
@@ -170,7 +170,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
         for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
             byte[] bytes = new byte[2];
             DataTools.bitSet2ByteArray(entry.getValue(), bytes);
@@ -179,7 +179,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
         for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
             byte[] bytes = new byte[2];
             //noinspection ResultOfMethodCallIgnored

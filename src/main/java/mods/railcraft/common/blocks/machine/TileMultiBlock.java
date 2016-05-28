@@ -356,7 +356,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
 
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("master", isMaster);
@@ -367,7 +367,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
         isMaster = data.getBoolean("master");
@@ -381,7 +381,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
         boolean hasMaster = getMasterBlock() != null;
         data.writeBoolean(hasMaster);
@@ -396,7 +396,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         requestPacket = false;
