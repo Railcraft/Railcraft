@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class ModelTextured extends ModelSimple {
 
-    private ResourceLocation texture = null;
+    private ResourceLocation texture;
     private boolean backFaceCulling = true;
 
     public ModelTextured(String name) {

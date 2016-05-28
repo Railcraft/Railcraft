@@ -8,7 +8,8 @@
  */
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.locomotive.IRenderer;
+import mods.railcraft.api.carts.locomotive.ICartRenderer;
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.client.render.TexturedQuadAdv;
 import mods.railcraft.client.render.models.ModelSimple;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveElectric;
@@ -22,8 +23,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
@@ -41,7 +43,7 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
     }
 
     @Override
-    public void renderLocomotive(IRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, ResourceLocation emblemTexture, float light, float time) {
+    public void renderLocomotive(ICartRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, @Nullable ResourceLocation emblemTexture, float light, float time) {
         super.renderLocomotive(renderer, cart, primaryColor, secondaryColor, emblemTexture, light, time);
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);

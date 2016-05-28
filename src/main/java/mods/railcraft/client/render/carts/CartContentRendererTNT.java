@@ -8,6 +8,7 @@
  */
 package mods.railcraft.client.render.carts;
 
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.common.carts.CartExplosiveBase;
 import net.minecraft.entity.item.EntityMinecart;
 import org.lwjgl.opengl.GL11;

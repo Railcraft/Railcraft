@@ -8,13 +8,14 @@
  */
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.locomotive.IRenderer;
+import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StringUtils;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -24,7 +25,7 @@ public class LocomotiveRenderer extends CartModelRenderer {
     public static final LocomotiveRenderer INSTANCE = new LocomotiveRenderer();
 
     @Override
-    public boolean render(IRenderer renderer, EntityMinecart cart, float light, float time) {
+    public boolean render(ICartRenderer renderer, EntityMinecart cart, float light, float time) {
         EntityLocomotive loco = (EntityLocomotive) cart;
 
         int primaryColor = EnumColor.fromDye(loco.getPrimaryColor()).getHexColor();
@@ -32,7 +33,7 @@ public class LocomotiveRenderer extends CartModelRenderer {
 
         String emblem = loco.getEmblem();
         ResourceLocation emblemTexture = null;
-        if (emblem != null && !emblem.equals("") && EmblemToolsClient.packageManager != null)
+        if (!StringUtils.isNullOrEmpty(emblem) && EmblemToolsClient.packageManager != null)
             emblemTexture = EmblemToolsClient.packageManager.getEmblemTextureLocation(emblem);
 
         LocomotiveRenderType renderType = loco.getRenderType();

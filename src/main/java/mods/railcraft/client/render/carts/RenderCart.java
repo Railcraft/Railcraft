@@ -8,8 +8,9 @@
  */
 package mods.railcraft.client.render.carts;
 
+import mods.railcraft.api.carts.IAlternateCartTexture;
 import mods.railcraft.api.carts.IRoutableCart;
-import mods.railcraft.api.carts.locomotive.IRenderer;
+import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.*;
@@ -17,19 +18,19 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class RenderCart extends Render<EntityMinecart> implements IRenderer {
+public class RenderCart extends Render<EntityMinecart> implements ICartRenderer {
 
-    private final Random rand = new Random();
-    private final RenderInfo fakeBlock = new RenderInfo();
+    public static final ResourceLocation minecartTextures = new ResourceLocation("textures/entity/minecart.png");
     private static final Map<Class, CartModelRenderer> renderersCore = new HashMap<Class, CartModelRenderer>();
     private static final Map<Class, CartContentRenderer> renderersContent = new HashMap<Class, CartContentRenderer>();
     private static final CartModelRenderer defaultCoreRenderer = new CartModelRenderer();
@@ -44,6 +45,9 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
         renderersContent.put(CartExplosiveBase.class, new CartContentRendererTNT());
         renderersContent.put(CartMaintenanceBase.class, new CartContentRendererMaintance());
     }
+
+    private final Random rand = new Random();
+    private final RenderInfo fakeBlock = new RenderInfo();
 
     public RenderCart(RenderManager renderManager) {
         super(renderManager);
@@ -176,8 +180,13 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
     }
 
     @Override
-    public void bindTex(ResourceLocation texture) {
+    public void bindTex(@Nonnull ResourceLocation texture) {
         super.bindTexture(texture);
+    }
+
+    @Override
+    public void bindTex(@Nonnull EntityMinecart cart) {
+        super.bindEntityTexture(cart);
     }
 
     @Override
@@ -186,8 +195,10 @@ public class RenderCart extends Render<EntityMinecart> implements IRenderer {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityMinecart entity) {
-        return null;
+    protected ResourceLocation getEntityTexture(EntityMinecart cart) {
+        if (cart instanceof IAlternateCartTexture)
+            return ((IAlternateCartTexture) cart).getTextureFile();
+        return minecartTextures;
     }
 
     public void renderHaloText(EntityMinecart entity, String text, double xOffset, double yOffset, double zOffset, int viewDist) {

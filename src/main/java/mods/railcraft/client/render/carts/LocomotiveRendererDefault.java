@@ -8,19 +8,20 @@
  */
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.locomotive.IRenderer;
+import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
@@ -29,7 +30,7 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
     private final ModelBase model;
     private final ResourceLocation[] textures;
     private final int[] color = new int[3];
-    protected final IIcon[] itemIcons = new IIcon[3];
+//    protected final IIcon[] itemIcons = new IIcon[3];
     private float emblemSize = 0.15F;
     private float emblemOffsetX = 0.47F;
     private float emblemOffsetY = -0.17F;
@@ -37,9 +38,9 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
 
     public LocomotiveRendererDefault(String rendererTag, String modelTag, ModelBase model) {
         this(rendererTag, modelTag, model, new ResourceLocation[]{
-            new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".primary.png"),
-            new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".secondary.png"),
-            new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".nocolor.png")});
+                new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".primary.png"),
+                new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".secondary.png"),
+                new ResourceLocation(RailcraftConstants.LOCOMOTIVE_TEXTURE_FOLDER + modelTag + ".nocolor.png")});
     }
 
     public LocomotiveRendererDefault(String rendererTag, String modelTag, ModelBase model, ResourceLocation[] textures) {
@@ -63,21 +64,21 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
         return LocalizationPlugin.translate("railcraft." + modelTag + ".name");
     }
 
-    @Override
-    public IIcon[] getItemIcons() {
-        return itemIcons;
-    }
+//    @Override
+//    public IIcon[] getItemIcons() {
+//        return itemIcons;
+//    }
+//
+//    @Override
+//    public void registerItemIcons(IIconRegister iconRegister) {
+//        String tag = "railcraft:locomotives/" + MiscTools.cleanTag(modelTag);
+//        itemIcons[0] = iconRegister.registerIcon(tag + ".primary");
+//        itemIcons[1] = iconRegister.registerIcon(tag + ".secondary");
+//        itemIcons[2] = iconRegister.registerIcon(tag + ".nocolor");
+//    }
 
     @Override
-    public void registerItemIcons(IIconRegister iconRegister) {
-        String tag = "railcraft:locomotives/" + MiscTools.cleanTag(modelTag);
-        itemIcons[0] = iconRegister.registerIcon(tag + ".primary");
-        itemIcons[1] = iconRegister.registerIcon(tag + ".secondary");
-        itemIcons[2] = iconRegister.registerIcon(tag + ".nocolor");
-    }
-
-    @Override
-    public void renderLocomotive(IRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, ResourceLocation emblemTexture, float light, float time) {
+    public void renderLocomotive(ICartRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, @Nullable ResourceLocation emblemTexture, float light, float time) {
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
         OpenGL.glEnable(GL11.GL_BLEND);

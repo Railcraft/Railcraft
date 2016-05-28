@@ -9,6 +9,7 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.bore.IBoreHead;
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.client.render.models.bore.ModelTunnelBore;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -16,9 +17,9 @@ import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderTunnelBore extends Render {
@@ -54,7 +55,7 @@ public class RenderTunnelBore extends Render {
                 double posZ = part.lastTickPosZ + (part.posZ - part.lastTickPosZ) * (double) time - RenderManager.renderPosZ;
                 OpenGL.glTranslatef((float) posX, (float) posY, (float) posZ);
                 float halfWidth = part.width / 2.0F;
-                AxisAlignedBB axisalignedbb = AxisAlignedBB.fromBounds(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth);
+                AxisAlignedBB axisalignedbb = new AxisAlignedBB(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth);
                 RenderGlobal.drawOutlinedBoundingBox(axisalignedbb, 16777215);
                 OpenGL.glPopMatrix();
             }

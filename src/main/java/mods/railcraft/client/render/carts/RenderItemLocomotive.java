@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.locomotive.IRenderer;
+import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.carts.EntityLocomotive;
@@ -19,11 +19,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class RenderItemLocomotive implements IItemRenderer, IRenderer {
+public class RenderItemLocomotive implements IItemRenderer, ICartRenderer {
 
     private final LocomotiveRenderType renderType;
     private final EntityLocomotive entity;
@@ -90,7 +92,7 @@ public class RenderItemLocomotive implements IItemRenderer, IRenderer {
     }
 
     @Override
-    public void bindTex(ResourceLocation texture) {
+    public void bindTex(@Nonnull ResourceLocation texture) {
         Minecraft.getMinecraft().renderEngine.bindTexture(texture);
     }
 

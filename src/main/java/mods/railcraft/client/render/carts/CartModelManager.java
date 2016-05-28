@@ -65,23 +65,17 @@ public class CartModelManager {
         ModelBase render = modelsCore.get(eClass);
         if (render == null && eClass != EntityMinecart.class) {
             render = getCoreModel(eClass.getSuperclass());
-            if (render == null) {
-                render = modelMinecart;
-            }
             modelsCore.put(eClass, render);
         }
-        return render;
+        return render != null ? render : modelMinecart;
     }
 
     public static ModelTextured getContentModel(Class eClass) {
         ModelTextured render = modelsContents.get(eClass);
         if (render == null && eClass != EntityMinecart.class) {
             render = getContentModel(eClass.getSuperclass());
-            if (render == null) {
-                render = emptyModel;
-            }
             modelsContents.put(eClass, render);
         }
-        return render;
+        return render != null ? render : emptyModel;
     }
 }

@@ -167,12 +167,12 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public boolean canWhack(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, BlockPos pos) {
+    public boolean canWhack(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, @Nonnull BlockPos pos) {
         return true;
     }
 
     @Override
-    public void onWhack(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, BlockPos pos) {
+    public void onWhack(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, @Nonnull BlockPos pos) {
         crowbar.damageItem(1, player);
         player.swingItem();
     }

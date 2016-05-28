@@ -8,12 +8,10 @@
  */
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.IAlternateCartTexture;
-import mods.railcraft.api.carts.locomotive.IRenderer;
+import mods.railcraft.api.carts.locomotive.ICartRenderer;
+import mods.railcraft.client.render.OpenGL;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 /**
  *
@@ -21,9 +19,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class CartModelRenderer {
 
-    public static final ResourceLocation minecartTextures = new ResourceLocation("textures/entity/minecart.png");
-
-    public boolean render(IRenderer renderer, EntityMinecart cart, float light, float time) {
+    public boolean render(ICartRenderer renderer, EntityMinecart cart, float light, float time) {
         OpenGL.glPushMatrix();
         OpenGL.glScalef(-1F, -1F, 1.0F);
 
@@ -34,13 +30,7 @@ public class CartModelRenderer {
 //
 //        OpenGL.glColor4f(c1 * light, c2 * light, c3 * light, 1.0F);
 
-        ResourceLocation texture = null;
-        if (cart instanceof IAlternateCartTexture)
-            texture = ((IAlternateCartTexture) cart).getTextureFile();
-
-        if (texture == null)
-            texture = minecartTextures;
-        renderer.bindTex(texture);
+        renderer.bindTex(cart);
 
         ModelBase core = CartModelManager.getCoreModel(cart.getClass());
         core.render(cart, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
