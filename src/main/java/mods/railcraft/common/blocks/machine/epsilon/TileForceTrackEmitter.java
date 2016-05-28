@@ -35,6 +35,7 @@ import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -172,12 +173,14 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     private boolean placeTrack(BlockPos pos, IBlockState blockState, EnumRailDirection direction) {
-        if (WorldPlugin.isBlockAir(worldObj, pos, blockState)) {
+        if (WorldPlugin.isBlockAir(getWorld(), pos, blockState)) {
             spawnParticles(pos);
-            TileTrack track = TrackTools.placeTrack(EnumTrack.FORCE.getTrackSpec(), worldObj, pos, direction);
-            ((TrackForce) track.getTrackInstance()).setEmitter(this);
-            numTracks++;
-            return true;
+            Optional<TileTrack> tile = TrackTools.placeTrack(EnumTrack.FORCE.getTrackSpec(), getWorld(), pos, direction);
+            if (tile.isPresent()) {
+                tile.ifPresent(tileTrack -> ((TrackForce) tileTrack.getTrackInstance()).setEmitter(this));
+                numTracks++;
+                return true;
+            }
         }
         return false;
     }

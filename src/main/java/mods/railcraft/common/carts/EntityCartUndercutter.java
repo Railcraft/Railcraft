@@ -173,10 +173,10 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
             if (item.getHasSubtypes())
                 newMeta = item.getMetadata(stock.getItemDamage());
             if (stockBlock != null && WorldPlugin.setBlockState(worldObj, pos, stockBlock.getStateFromMeta(newMeta))) {
-                SoundHelper.playBlockSound(worldObj, pos, stockBlock.stepSound.getPlaceSound(), (1f + 1.0F) / 2.0F, 1f * 0.8F, stockBlock, newMeta);
+                SoundHelper.playBlockSound(worldObj, pos, stockBlock.getSoundType().getPlaceSound(), (1f + 1.0F) / 2.0F, 1f * 0.8F, stockBlock, newMeta);
                 decrStackSize(slotStock, 1);
                 for (ItemStack stack : drops) {
-                    CartTools.offerOrDropItem(this, stack);
+                    CartTools.transferHelper.offerOrDropItem(this, stack);
                 }
                 blink();
             }

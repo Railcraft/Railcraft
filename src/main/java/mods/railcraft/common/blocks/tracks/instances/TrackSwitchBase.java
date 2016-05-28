@@ -29,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.io.DataInputStream;
@@ -82,7 +83,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
 
     @Override
     public boolean isVisuallySwitched() {
-        if (Game.isHost(getWorld()))
+        if (Game.isHost(theWorldAsserted()))
             return !isLocked() && (shouldSwitch || isSprung());
         return clientSwitched;
     }
@@ -95,7 +96,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
      * that to update().
      */
     protected boolean shouldSwitchForCart(EntityMinecart cart) {
-        if (cart == null || Game.isNotHost(getWorld()))
+        if (cart == null || Game.isNotHost(theWorldAsserted()))
             return isVisuallySwitched();
 
         if (springingCarts.contains(cart.getPersistentID()))
@@ -167,36 +168,38 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     protected void determineRailDirection() {
-        EnumRailDirection dir = TrackTools.getTrackDirectionRaw(getWorld().getBlockState(getPos()));
-        if (TrackTools.isRailBlockAt(getWorld(), getPos().east()) && TrackTools.isRailBlockAt(getWorld(), getPos().west())) {
+        World world = theWorldAsserted();
+        EnumRailDirection dir = TrackTools.getTrackDirectionRaw(world.getBlockState(getPos()));
+        if (TrackTools.isRailBlockAt(world, getPos().east()) && TrackTools.isRailBlockAt(world, getPos().west())) {
             if (dir != EnumRailDirection.EAST_WEST)
-                TrackTools.setTrackDirection(getWorld(), getPos(), EnumRailDirection.EAST_WEST);
-//        } else if (TrackTools.isRailBlockAt(getWorld(), getPos().north()) && TrackTools.isRailBlockAt(getWorld(), getPos().south())) {
+                TrackTools.setTrackDirection(world, getPos(), EnumRailDirection.EAST_WEST);
+//        } else if (TrackTools.isRailBlockAt(world, getPos().north()) && TrackTools.isRailBlockAt(world, getPos().south())) {
 //            if (dir != EnumRailDirection.NORTH_SOUTH)
-//                getWorld().setBlockState(getPos(), current.withProperty(shapeProp, EnumRailDirection.NORTH_SOUTH));
+//                world.setBlockState(getPos(), current.withProperty(shapeProp, EnumRailDirection.NORTH_SOUTH));
         } else if (dir != EnumRailDirection.NORTH_SOUTH)
-            TrackTools.setTrackDirection(getWorld(), getPos(), EnumRailDirection.NORTH_SOUTH);
+            TrackTools.setTrackDirection(world, getPos(), EnumRailDirection.NORTH_SOUTH);
     }
 
     protected void determineMirror() {
-        EnumRailDirection dir = TrackTools.getTrackDirection(getWorld(), getPos());
+        World world = theWorldAsserted();
+        EnumRailDirection dir = TrackTools.getTrackDirection(world, getPos());
         boolean prevValue = isMirrored();
         if (dir == EnumRailDirection.NORTH_SOUTH) {
             BlockPos offset = getPos();
-            if (TrackTools.isRailBlockAt(getWorld(), offset.west())) {
+            if (TrackTools.isRailBlockAt(world, offset.west())) {
                 offset = offset.west();
                 mirrored = true; // West
             } else {
                 offset = offset.east();
                 mirrored = false; // East
             }
-            if (TrackTools.isRailBlockAt(getWorld(), offset)) {
-                EnumRailDirection otherDir = TrackTools.getTrackDirection(getWorld(), offset);
+            if (TrackTools.isRailBlockAt(world, offset)) {
+                EnumRailDirection otherDir = TrackTools.getTrackDirection(world, offset);
                 if (otherDir == EnumRailDirection.NORTH_SOUTH)
-                    TrackTools.setTrackDirection(getWorld(), offset, EnumRailDirection.EAST_WEST);
+                    TrackTools.setTrackDirection(world, offset, EnumRailDirection.EAST_WEST);
             }
         } else if (dir == EnumRailDirection.EAST_WEST)
-            mirrored = TrackTools.isRailBlockAt(getWorld(), getPos().north());
+            mirrored = TrackTools.isRailBlockAt(world, getPos().north());
 
         if (prevValue != isMirrored())
             sendUpdateToClient();
@@ -204,7 +207,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
 
     @Override
     public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
-        if (Game.isHost(getWorld())) {
+        if (Game.isHost(theWorldAsserted())) {
             determineRailDirection();
             determineMirror();
         }
@@ -323,7 +326,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         // We only set sprung/locked when a cart enters our track, this is
         // mainly for visual purposes as the subclass's getRailDirection()
         // determines which direction the carts actually take.
-        List<UUID> cartsOnTrack = CartUtils.getMinecartUUIDsAt(getWorld(), getTile().getPos(), 0.3f);
+        List<UUID> cartsOnTrack = CartUtils.getMinecartUUIDsAt(theWorldAsserted(), getTile().getPos(), 0.3f);
 
         EntityMinecart bestCart = getBestCartForVisualState(cartsOnTrack);
 

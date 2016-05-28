@@ -35,7 +35,6 @@ import net.minecraft.world.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
 import org.apache.logging.log4j.Level;
 
 import java.util.ArrayList;
@@ -129,7 +128,7 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
     private void stockFuel() {
         ItemStack stack = getStackInSlot(0);
         if (stack != null && !getFuelMap().containsKey(stack)) {
-            CartTools.offerOrDropItem(this, stack);
+            CartTools.transferHelper.offerOrDropItem(this, stack);
             setInventorySlotContents(0, null);
             return;
         }

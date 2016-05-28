@@ -39,6 +39,17 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     private TrainTransferHelper() {
     }
 
+    /**
+     * Offers an item stack to linked carts or drops it if no one wants it.
+     */
+    @Override
+    public void offerOrDropItem(EntityMinecart cart, ItemStack stack) {
+        stack = pushStack(cart, stack);
+
+        if (stack != null && stack.stackSize > 0)
+            cart.entityDropItem(stack, 1);
+    }
+
     // ***************************************************************************************************************************
     // Items
     // ***************************************************************************************************************************

@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -67,63 +68,53 @@ public class TrackTools {
         return item instanceof ITrackItem || (item instanceof ItemBlock && isRailBlock(((ItemBlock) item).getBlock()));
     }
 
-    @Nullable
     public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state) {
         return getTrackDirection(world, pos, state, null);
     }
 
-    @Nullable
     public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos) {
         return getTrackDirection(world, pos, (EntityMinecart) null);
     }
 
-    @Nullable
     public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, @Nullable EntityMinecart cart) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         return getTrackDirection(world, pos, state, cart);
     }
 
-    @Nullable
+    @Nonnull
     public static BlockRailBase.EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
         if (state.getBlock() instanceof BlockRailBase)
             return ((BlockRailBase) state.getBlock()).getRailDirection(world, pos, state, cart);
-        return null;
+        throw new IllegalArgumentException("Block was not a track");
     }
 
-    @Nullable
     public static BlockRailBase.EnumRailDirection getTrackDirectionRaw(IBlockAccess world, BlockPos pos) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         return getTrackDirectionRaw(state);
     }
 
-    @Nullable
     public static BlockRailBase.EnumRailDirection getTrackDirectionRaw(IBlockState state) {
         IProperty<EnumRailDirection> prop = getRailDirectionProperty(state.getBlock());
-        if (prop != null)
-            return state.getValue(prop);
-        return null;
+        return state.getValue(prop);
     }
 
-    @Nullable
     public static IProperty<EnumRailDirection> getRailDirectionProperty(Block block) {
         if (block instanceof BlockRailBase)
             return ((BlockRailBase) block).getShapeProperty();
-        return null;
+        throw new IllegalArgumentException("Block was not a track");
     }
 
     public static boolean setTrackDirection(World world, BlockPos pos, EnumRailDirection wanted) {
         IBlockState state = world.getBlockState(pos);
         IProperty<EnumRailDirection> prop = getRailDirectionProperty(state.getBlock());
-        if (prop != null) {
-            if (prop.getAllowedValues().contains(wanted)) {
-                state = state.withProperty(prop, wanted);
-                return world.setBlockState(pos, state);
-            }
-            return false;
+        if (prop.getAllowedValues().contains(wanted)) {
+            state = state.withProperty(prop, wanted);
+            return world.setBlockState(pos, state);
         }
         return false;
     }
 
+    @Nullable
     public static ITrackInstance getTrackInstanceAt(IBlockAccess world, BlockPos pos) {
         if (!WorldPlugin.isBlockAt(world, pos, RailcraftBlocks.track.block()))
             return null;
@@ -186,11 +177,16 @@ public class TrackTools {
         return track instanceof TrackBaseRailcraft && ((TrackBaseRailcraft) track).speedController instanceof SpeedControllerHighSpeed;
     }
 
-    public static TileTrack placeTrack(TrackSpec track, World world, BlockPos pos, BlockRailBase.EnumRailDirection direction) {
-        WorldPlugin.setBlockState(world, pos, TrackToolsAPI.makeTrackState((BlockTrack) RailcraftBlocks.track.block(), direction));
-        TileTrack tile = TrackFactory.makeTrackTile(track.createInstanceFromSpec());
-        world.setTileEntity(pos, tile);
-        return tile;
+    public static Optional<TileTrack> placeTrack(TrackSpec track, World world, BlockPos pos, BlockRailBase.EnumRailDirection direction) {
+        BlockTrack block = (BlockTrack) RailcraftBlocks.track.block();
+        TileTrack tile = null;
+        if (block != null) {
+            WorldPlugin.setBlockState(world, pos, TrackToolsAPI.makeTrackState(block, direction));
+            tile = TrackFactory.makeTrackTile(track);
+            world.setTileEntity(pos, tile);
+        }
+        //noinspection ConstantConditions
+        return Optional.ofNullable(tile);
     }
 
 }

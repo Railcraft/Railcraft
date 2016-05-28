@@ -99,7 +99,7 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     protected boolean placeNewTrack(BlockPos pos, int slotStock, BlockRailBase.EnumRailDirection trackShape) {
         ItemStack trackStock = getStackInSlot(slotStock);
         if (trackStock != null)
-            if (TrackToolsAPI.placeRailAt(trackStock, worldObj, pos)) {
+            if (TrackToolsAPI.placeRailAt(trackStock, getEntityWorld(), pos)) {
                 decrStackSize(slotStock, 1);
                 blink();
                 return true;
@@ -108,14 +108,14 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     }
 
     protected BlockRailBase.EnumRailDirection removeOldTrack(BlockPos pos, Block block) {
-        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
+        IBlockState state = WorldPlugin.getBlockState(getEntityWorld(), pos);
         List<ItemStack> drops = block.getDrops(worldObj, pos, state, 0);
 
         for (ItemStack stack : drops) {
-            CartTools.offerOrDropItem(this, stack);
+            CartTools.transferHelper.offerOrDropItem(this, stack);
         }
         BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirectionRaw(state);
-        worldObj.setBlockToAir(pos);
+        getEntityWorld().setBlockToAir(pos);
         return trackShape;
     }
 
