@@ -10,8 +10,9 @@ package mods.railcraft.common.gui.buttons;
 
 import mods.railcraft.common.gui.tooltips.ToolTip;
 
+import javax.annotation.Nullable;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IMultiButtonState {
@@ -22,6 +23,7 @@ public interface IMultiButtonState {
 
     IButtonTextureSet getTextureSet();
 
+    @Nullable
     ToolTip getToolTip();
 
 }

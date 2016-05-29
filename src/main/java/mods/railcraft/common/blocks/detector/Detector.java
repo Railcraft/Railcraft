@@ -17,7 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -90,15 +90,15 @@ public class Detector implements IGuiReturnHandler {
     }
 
     @Override
-    public final World getWorld() {
+    public final World theWorld() {
         return tile.getWorld();
     }
 
     @Override
-    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
+    public void writeGuiData(DataOutputStream data) throws IOException {
     }
 
     @Override
-    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(DataInputStream data, @Nullable EntityPlayer sender) throws IOException {
     }
 }

@@ -15,7 +15,7 @@ import net.minecraft.util.text.translation.I18n;
 
 public class GuiBlastFurnace extends TileGui {
 
-    private TileBlastFurnace tile;
+    private final TileBlastFurnace tile;
 
     public GuiBlastFurnace(InventoryPlayer par1InventoryPlayer, TileBlastFurnace tile) {
         super(tile, new ContainerBlastFurnace(par1InventoryPlayer, tile), "textures/gui/container/furnace.png");
@@ -29,7 +29,7 @@ public class GuiBlastFurnace extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         GuiTools.drawCenteredString(fontRendererObj, tile.getName(), 6);
-        this.fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
     }
 
     /**
@@ -39,15 +39,15 @@ public class GuiBlastFurnace extends TileGui {
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
         super.drawGuiContainerBackgroundLayer(par1, par3, par3);
-        int x = (this.width - this.xSize) / 2;
-        int y = (this.height - this.ySize) / 2;
+        int x = (width - xSize) / 2;
+        int y = (height - ySize) / 2;
 
-        if (this.tile.clientBurning) {
-            int scale = this.tile.getBurnProgressScaled(12);
-            this.drawTexturedModalRect(x + 56, y + 36 + 12 - scale, 176, 12 - scale, 14, scale + 2);
+        if (tile.clientBurning) {
+            int scale = tile.getBurnProgressScaled(12);
+            drawTexturedModalRect(x + 56, y + 36 + 12 - scale, 176, 12 - scale, 14, scale + 2);
         }
 
-        int scale = this.tile.getCookProgressScaled(24);
-        this.drawTexturedModalRect(x + 79, y + 34, 176, 14, scale + 1, 16);
+        int scale = tile.getCookProgressScaled(24);
+        drawTexturedModalRect(x + 79, y + 34, 176, 14, scale + 1, 16);
     }
 }

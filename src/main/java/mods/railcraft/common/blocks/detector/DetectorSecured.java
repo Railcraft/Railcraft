@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -75,12 +76,12 @@ public abstract class DetectorSecured extends Detector implements ISecure<LockBu
     }
 
     @Override
-    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
+    public void writeGuiData(DataOutputStream data) throws IOException {
         data.writeByte(lockController.getCurrentState());
     }
 
     @Override
-    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(DataInputStream data, @Nullable EntityPlayer sender) throws IOException {
         byte lock = data.readByte();
         if (sender == null || canAccess(sender)) {
             lockController.setCurrentState(lock);

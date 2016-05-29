@@ -50,7 +50,7 @@ public class ItemDetector extends ItemBlock {
      */
     //TODO: do we even need a special item for this?
     @Override
-    public boolean placeBlockAt(@Nonnull ItemStack stack, @Nonnull EntityPlayer player, World world, @Nonnull BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull IBlockState newState) {
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
         if (!world.setBlockState(pos, newState, 3))
             return false;
 

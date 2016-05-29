@@ -12,16 +12,12 @@ import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileGui extends GuiContainerRailcraft {
 
-    private final RailcraftTileEntity tile;
-
-    public TileGui(RailcraftTileEntity tile, RailcraftContainer container, String texture) {
+    protected TileGui(RailcraftTileEntity tile, RailcraftContainer container, String texture) {
         super(container, texture);
-        this.tile = tile;
     }
 
 //    @Override

@@ -33,12 +33,12 @@ public class GuiBoilerSolid extends TileGui {
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
         super.drawGuiContainerBackgroundLayer(par1, par3, par3);
-        int x = (this.width - this.xSize) / 2;
-        int y = (this.height - this.ySize) / 2;
+        int x = (width - xSize) / 2;
+        int y = (height - ySize) / 2;
 
-        if (this.tile.boiler.isBurning()) {
-            int scale = this.tile.boiler.getBurnProgressScaled(12);
-            this.drawTexturedModalRect(x + 62, y + 34 - scale, 176, 59 - scale, 14, scale + 2);
+        if (tile.boiler.isBurning()) {
+            int scale = tile.boiler.getBurnProgressScaled(12);
+            drawTexturedModalRect(x + 62, y + 34 - scale, 176, 59 - scale, 14, scale + 2);
         }
     }
 }

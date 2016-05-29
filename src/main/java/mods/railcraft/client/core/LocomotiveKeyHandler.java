@@ -45,7 +45,7 @@ public class LocomotiveKeyHandler {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         if (player == null)
             return;
-        if (!(player.ridingEntity instanceof EntityMinecart))
+        if (!(player.getRidingEntity() instanceof EntityMinecart))
             return;
         if (Minecraft.getMinecraft().currentScreen instanceof GuiChat)
             return;

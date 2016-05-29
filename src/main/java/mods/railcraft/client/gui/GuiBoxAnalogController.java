@@ -1,6 +1,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.common.blocks.signals.TileBoxAnalogController;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -21,7 +22,7 @@ import java.util.regex.Pattern;
 public class GuiBoxAnalogController extends GuiBasic {
 
     private final TileBoxAnalogController tile;
-    private final static Pattern patternRange = Pattern.compile("(\\d+)-(\\d+)|(\\d+)");
+    private static final Pattern patternRange = Pattern.compile("(\\d+)-(\\d+)|(\\d+)");
     //When doing Pattern.matcher, these are the groups:           ^ 1    ^ 2    ^ 3
 
     private final EnumMap<SignalAspect, BitSet> aspects = new EnumMap<SignalAspect, BitSet>(SignalAspect.class);
@@ -120,9 +121,7 @@ public class GuiBoxAnalogController extends GuiBasic {
     public void drawScreen(int x, int y, float f) {
         super.drawScreen(x, y, f);
         OpenGL.glDisable(GL11.GL_LIGHTING);
-        for (GuiTextField t : textBox.values()) {
-            t.drawTextBox();
-        }
+        textBox.values().forEach(GuiTextField::drawTextBox);
     }
 
     @Override
@@ -134,9 +133,7 @@ public class GuiBoxAnalogController extends GuiBasic {
 
     @Override
     public void updateScreen() {
-        for (GuiTextField t : textBox.values()) {
-            t.updateCursorCounter();
-        }
+        textBox.values().forEach(GuiTextField::updateCursorCounter);
 
         super.updateScreen();
     }

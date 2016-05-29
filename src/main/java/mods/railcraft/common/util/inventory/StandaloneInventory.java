@@ -16,9 +16,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
+import javax.annotation.Nullable;
 import java.util.Iterator;
 
 /**
@@ -30,37 +31,39 @@ import java.util.Iterator;
  */
 public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IInventoryObject {
 
+    @Nullable
     private final String name;
+    @Nullable
     private final Callback callback;
     private final ItemStack[] contents;
 
-    public StandaloneInventory(int size, String name, IInventory callback) {
+    public StandaloneInventory(int size, @Nullable String name, @Nullable IInventory callback) {
         this.name = name;
         contents = new ItemStack[size];
         this.callback = callback == null ? null : new InventoryCallback(callback);
     }
 
-    public StandaloneInventory(int size, String name, RailcraftTileEntity callback) {
+    public StandaloneInventory(int size, @Nullable String name, @Nullable RailcraftTileEntity callback) {
         this.name = name;
         contents = new ItemStack[size];
         this.callback = callback == null ? null : new TileCallback(callback);
     }
 
-    public StandaloneInventory(int size, String name, Callback callback) {
+    public StandaloneInventory(int size, @Nullable String name, @Nullable Callback callback) {
         this.name = name;
         contents = new ItemStack[size];
         this.callback = callback;
     }
 
-    public StandaloneInventory(int size, IInventory callback) {
+    public StandaloneInventory(int size, @Nullable IInventory callback) {
         this(size, null, callback);
     }
 
-    public StandaloneInventory(int size, RailcraftTileEntity callback) {
+    public StandaloneInventory(int size, @Nullable RailcraftTileEntity callback) {
         this(size, null, callback);
     }
 
-    public StandaloneInventory(int size, String name) {
+    public StandaloneInventory(int size, @Nullable String name) {
         this(size, name, (RailcraftTileEntity) null);
     }
 
@@ -117,7 +120,7 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemstack) {
+    public void setInventorySlotContents(int i, @Nullable ItemStack itemstack) {
         contents[i] = itemstack;
         if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
             itemstack.stackSize = getInventoryStackLimit();
@@ -127,7 +130,7 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
 
     @Override
     public boolean hasCustomName() {
-        return name != null || callback.hasCustomName();
+        return name != null || (callback != null && callback.hasCustomName());
     }
 
     @Override
@@ -164,7 +167,7 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        return callback == null || callback.isUseableByPlayer(entityplayer);
+        return callback == null || callback.isUsableByPlayer(entityplayer);
     }
 
     @Override
@@ -226,9 +229,9 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
         markDirty();
     }
 
-    public static abstract class Callback {
+    public abstract static class Callback {
 
-        public boolean isUseableByPlayer(EntityPlayer player) {
+        public boolean isUsableByPlayer(EntityPlayer player) {
             return true;
         }
 
@@ -260,7 +263,7 @@ public class StandaloneInventory implements IInventory, Iterable<ItemStack>, IIn
         }
 
         @Override
-        public boolean isUseableByPlayer(EntityPlayer player) {
+        public boolean isUsableByPlayer(EntityPlayer player) {
             return inv.isUseableByPlayer(player);
         }
 

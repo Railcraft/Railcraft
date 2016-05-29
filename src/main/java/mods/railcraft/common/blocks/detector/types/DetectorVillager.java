@@ -16,8 +16,11 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,7 +31,8 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
 public class DetectorVillager extends Detector {
 
-    private int profession;
+    @Nonnull
+    private VillagerRegistry.VillagerProfession profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation("minecraft:farmer"));
     private Mode mode = Mode.ANY;
 
     @Override
@@ -47,7 +51,7 @@ public class DetectorVillager extends Detector {
     private boolean cartHasProfession(List<EntityMinecart> carts) {
         for (EntityMinecart cart : carts) {
             if (cart.getPassengers().stream().filter(e -> e instanceof EntityVillager).map(entity -> (EntityVillager) entity)
-                    .anyMatch(villager -> villager.getProfession() == profession))
+                    .anyMatch(villager -> villager.getProfessionForge() == profession))
                 return true;
         }
         return false;
@@ -83,11 +87,11 @@ public class DetectorVillager extends Detector {
         this.mode = mode;
     }
 
-    public int getProfession() {
+    public VillagerRegistry.VillagerProfession getProfession() {
         return profession;
     }
 
-    public void setProfession(int profession) {
+    public void setProfession(VillagerRegistry.VillagerProfession profession) {
         this.profession = profession;
     }
 
@@ -95,7 +99,7 @@ public class DetectorVillager extends Detector {
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
-        data.setInteger("profession", profession);
+        data.setString("ProfessionName", profession.getRegistryName().toString());
         data.setByte("mode", (byte) mode.ordinal());
     }
 
@@ -103,7 +107,13 @@ public class DetectorVillager extends Detector {
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        profession = data.getInteger("profession");
+        if (data.hasKey("ProfessionName")) {
+            VillagerRegistry.VillagerProfession p =
+                    VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.getString("ProfessionName")));
+            if (p == null)
+                p = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation("minecraft:farmer"));
+            setProfession(p);
+        }
         mode = Mode.values()[data.getByte("mode")];
     }
 
@@ -111,7 +121,7 @@ public class DetectorVillager extends Detector {
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
-        data.writeInt(profession);
+        data.writeUTF(profession.getRegistryName().toString());
         data.writeByte((byte) mode.ordinal());
     }
 
@@ -119,19 +129,19 @@ public class DetectorVillager extends Detector {
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
-        profession = data.readInt();
+        profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.readUTF()));
         mode = Mode.values()[data.readByte()];
     }
 
     @Override
     public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
-        data.writeInt(profession);
+        data.writeUTF(profession.getRegistryName().toString());
         data.writeByte(mode.ordinal());
     }
 
     @Override
-    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
-        profession = data.readInt();
+    public void readGuiData(@Nonnull DataInputStream data, @Nullable EntityPlayer sender) throws IOException {
+        profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.readUTF()));
         mode = Mode.values()[data.readByte()];
     }
 

@@ -32,7 +32,7 @@ public class GuiDetectorVillager extends GuiBasic {
     private GuiToggleButtonSmall none;
     private GuiToggleButtonSmall equals;
     private GuiToggleButtonSmall not;
-    private final RevolvingList<Integer> professions = new RevolvingList<Integer>();
+    private final RevolvingList<VillagerRegistry.VillagerProfession> professions = new RevolvingList<>();
 
     public GuiDetectorVillager(TileDetector t) {
         super(t.getName(), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_detector_villager.png", 176, 105);
@@ -41,10 +41,7 @@ public class GuiDetectorVillager extends GuiBasic {
         villager = new EntityVillager(tile.getWorld());
         mode = detector.getMode();
 
-        for (int prof = 0; prof < 5; prof++) {
-            professions.add(prof);
-        }
-        professions.addAll(VillagerRegistry.getRegisteredVillagers());
+        professions.addAll(VillagerRegistry.instance().getRegistry().getValues());
 
         professions.setCurrent(detector.getProfession());
         villager.setProfession(professions.getCurrent());

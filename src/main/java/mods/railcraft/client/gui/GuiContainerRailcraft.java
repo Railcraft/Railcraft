@@ -23,6 +23,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 public abstract class GuiContainerRailcraft extends GuiContainer {
@@ -167,6 +168,8 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
 //            }
 //        }
 //    }
+
+    @Nullable
     private Slot getSlotAtPosition(int par1, int par2) {
         for (int var3 = 0; var3 < inventorySlots.inventorySlots.size(); ++var3) {
             Slot var4 = inventorySlots.inventorySlots.get(var3);

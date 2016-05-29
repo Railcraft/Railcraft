@@ -9,8 +9,10 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
+import mods.railcraft.client.render.OpenGL;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.passive.EntityVillager;
@@ -44,7 +46,7 @@ public class GuiTools {
         fr.drawString(s, x - sWidth / 2, y, color, shadow);
     }
 
-    public static void newButtonRowAuto(List buttonList, int xStart, int xSize, List<? extends GuiBetterButton> buttons) {
+    public static void newButtonRowAuto(List<GuiButton> buttonList, int xStart, int xSize, List<? extends GuiBetterButton> buttons) {
         int buttonWidth = 0;
         for (GuiBetterButton b : buttons) {
             buttonWidth += b.getWidth();
@@ -60,7 +62,7 @@ public class GuiTools {
         }
     }
 
-    public static void newButtonRowBookended(List buttonList, int xStart, int xEnd, List<? extends GuiBetterButton> buttons) {
+    public static void newButtonRowBookended(List<GuiButton> buttonList, int xStart, int xEnd, List<? extends GuiBetterButton> buttons) {
         int buttonWidth = 0;
         for (GuiBetterButton b : buttons) {
             buttonWidth += b.getWidth();
@@ -76,7 +78,7 @@ public class GuiTools {
         }
     }
 
-    public static void newButtonRow(List buttonList, int xStart, int spacing, List<? extends GuiBetterButton> buttons) {
+    public static void newButtonRow(List<GuiButton> buttonList, int xStart, int spacing, List<? extends GuiBetterButton> buttons) {
         int pointer = 0;
         for (GuiBetterButton b : buttons) {
             b.xPosition = xStart + pointer;
@@ -105,7 +107,7 @@ public class GuiTools {
         villager.rotationYawHead = villager.rotationYaw;
         OpenGL.glTranslatef(0.0F, (float) villager.getYOffset(), 0.0F);
         Minecraft.getMinecraft().getRenderManager().playerViewY = 180.0F;
-        Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(villager, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+        Minecraft.getMinecraft().getRenderManager().doRenderEntity(villager, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
         OpenGL.glPopMatrix();
         RenderHelper.disableStandardItemLighting();
         OpenGL.glDisable(GL12.GL_RESCALE_NORMAL);

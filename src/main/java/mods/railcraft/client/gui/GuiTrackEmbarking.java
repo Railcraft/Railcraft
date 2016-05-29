@@ -23,9 +23,7 @@ public class GuiTrackEmbarking extends GuiBasic {
     public GuiTrackEmbarking(TrackEmbarking t) {
         super(((TileTrack) t.getTile()).getName());
         track = t;
-        if (track != null) {
-            radius = track.getArea();
-        }
+        radius = track.getArea();
     }
 
     @Override
@@ -60,7 +58,7 @@ public class GuiTrackEmbarking extends GuiBasic {
     @Override
     public void onGuiClosed() {
         track.setArea(radius);
-        if (Game.isNotHost(track.getWorld())) {
+        if (Game.isNotHost(track.theWorldAsserted())) {
             PacketGuiReturn pkt = new PacketGuiReturn((IGuiReturnHandler) track.getTile());
             pkt.sendPacket();
         }

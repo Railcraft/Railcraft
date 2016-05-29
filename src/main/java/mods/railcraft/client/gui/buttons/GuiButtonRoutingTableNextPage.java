@@ -9,11 +9,11 @@
 package mods.railcraft.client.gui.buttons;
 
 import mods.railcraft.client.gui.GuiRoutingTable;
+import mods.railcraft.client.render.OpenGL;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GuiButtonRoutingTableNextPage extends GuiButton {
@@ -34,8 +34,8 @@ public class GuiButtonRoutingTableNextPage extends GuiButton {
      */
     @Override
     public void drawButton(Minecraft par1Minecraft, int par2, int par3) {
-        if (this.visible) {
-            boolean flag = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
+        if (visible) {
+            boolean flag = par2 >= xPosition && par3 >= yPosition && par2 < xPosition + width && par3 < yPosition + height;
             OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             par1Minecraft.renderEngine.bindTexture(GuiRoutingTable.TEXTURE);
             int k = 0;
@@ -45,11 +45,11 @@ public class GuiButtonRoutingTableNextPage extends GuiButton {
                 k += 23;
             }
 
-            if (!this.nextPage) {
+            if (!nextPage) {
                 l += 13;
             }
 
-            this.drawTexturedModalRect(this.xPosition, this.yPosition, k, l, 23, 13);
+            drawTexturedModalRect(xPosition, yPosition, k, l, 23, 13);
         }
     }
 }

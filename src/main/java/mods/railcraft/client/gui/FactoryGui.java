@@ -31,6 +31,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 
@@ -113,7 +114,7 @@ public class FactoryGui {
                 case TURBINE:
                     return new GuiTurbine(inv, (TileSteamTurbine) obj);
                 case ANVIL:
-                    return new GuiAnvil(inv, world, x, y, z);
+                    return new GuiAnvil(inv, world, new BlockPos(x, y, z));
                 case ROUTING:
                     return new GuiRouting(inv, (RailcraftTileEntity) obj, (IRouter) obj);
                 case TRACK_ROUTING:

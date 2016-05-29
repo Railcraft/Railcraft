@@ -26,7 +26,7 @@ public class GuiDetectorTrain extends GuiBasic {
         super(t.getName());
         this.tile = t;
         this.detector = (DetectorTrain) tile.getDetector();
-        if (tile != null)
+        if (detector != null)
             trainSize = detector.getTrainSize();
     }
 

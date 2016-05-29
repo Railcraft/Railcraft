@@ -186,15 +186,15 @@ public abstract class MiscTools {
      * @return a side
      */
     @Nonnull
-    public static EnumFacing getSideFacingPlayer(BlockPos pos, EntityLivingBase player) {
-        if (MathHelper.abs((float) player.posX - pos.getX()) < 2.0F && MathHelper.abs((float) player.posZ - pos.getZ()) < 2.0F) {
-            double d = (player.posY + 1.82D) - player.getYOffset();
+    public static EnumFacing getSideFacingPlayer(BlockPos pos, EntityLivingBase entity) {
+        if (MathHelper.abs((float) entity.posX - pos.getX()) < 2.0F && MathHelper.abs((float) entity.posZ - pos.getZ()) < 2.0F) {
+            double d = (entity.posY + 1.82D) - entity.getYOffset();
             if (d - pos.getY() > 2D)
                 return EnumFacing.UP;
             if (pos.getY() - d > 0.0D)
                 return EnumFacing.DOWN;
         }
-        int dir = MathHelper.floor_double((double) ((player.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+        int dir = MathHelper.floor_double((double) ((entity.rotationYaw * 4F) / 360F) + 0.5D) & 3;
         switch (dir) {
             case 0:
                 return EnumFacing.NORTH;

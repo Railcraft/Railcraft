@@ -9,6 +9,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiButtonSmall;
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorItem;
 import mods.railcraft.common.core.RailcraftConstants;

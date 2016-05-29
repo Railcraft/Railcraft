@@ -39,8 +39,7 @@ public class AuraKeyHandler {
         keyBindings.put(GoggleAura.SURVEYING, new KeyBinding("railcraft.keybind.aura.surveying", Keyboard.KEY_O, Railcraft.MOD_ID));
         keyBindings.put(GoggleAura.SIGNALLING, new KeyBinding("railcraft.keybind.aura.signalling", Keyboard.KEY_I, Railcraft.MOD_ID));
 
-        for (KeyBinding binding : keyBindings.values())
-            ClientRegistry.registerKeyBinding(binding);
+        keyBindings.values().forEach(ClientRegistry::registerKeyBinding);
     }
 
     public static boolean isAuraEnabled(GoggleAura aura) {

@@ -8,6 +8,7 @@
  */
 package mods.railcraft.client.gui.buttons;
 
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
@@ -18,7 +19,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://railcraft.info/wiki/info:license>
@@ -91,6 +93,7 @@ public class GuiMultiButton<T extends IMultiButtonState> extends GuiBetterButton
         return control;
     }
 
+    @Nullable
     @Override
     public ToolTip getToolTip() {
         ToolTip tip = control.getButtonState().getToolTip();

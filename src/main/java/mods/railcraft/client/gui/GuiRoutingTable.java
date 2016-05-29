@@ -10,6 +10,7 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
 import mods.railcraft.client.gui.buttons.GuiButtonRoutingTableNextPage;
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.ItemRoutingTable;
@@ -23,8 +24,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -88,6 +89,7 @@ public class GuiRoutingTable extends GuiScreen {
 
         if (stack.hasTagCompound()) {
             NBTTagCompound nbt = stack.getTagCompound();
+            assert nbt != null;
             bookTitle = nbt.getString("title");
         }
 
@@ -96,7 +98,7 @@ public class GuiRoutingTable extends GuiScreen {
         if (LocalizationPlugin.hasTag(locTag))
             try {
                 manualPages = Integer.valueOf(LocalizationPlugin.translate(locTag));
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException ignored) {
             }
         numManualPages = manualPages;
     }
@@ -122,7 +124,7 @@ public class GuiRoutingTable extends GuiScreen {
     @Override
     public void initGui() {
         super.initGui();
-        this.buttonList.clear();
+        buttonList.clear();
         Keyboard.enableRepeatEvents(true);
 
         if (editable) {
@@ -169,7 +171,7 @@ public class GuiRoutingTable extends GuiScreen {
     }
 
     private void sendBookToServer() {
-        if (this.editable && this.bookModified) {
+        if (editable && bookModified) {
             ItemRoutingTable.setPages(bookStack, bookPages);
 
             NBTTagCompound nbt = InvTools.getItemData(bookStack);
@@ -186,15 +188,13 @@ public class GuiRoutingTable extends GuiScreen {
     /**
      * Fired when a control is clicked. This is the equivalent of
      * ActionListener.actionPerformed(ActionEvent e).
-     *
-     * @param button
      */
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.enabled) {
             if (button == buttonDone) {
-                this.mc.displayGuiScreen(null);
-                this.sendBookToServer();
+                mc.displayGuiScreen(null);
+                sendBookToServer();
             } else if (button == buttonSign) {
                 editingTitle = !editingTitle;
                 readingManual = false;
@@ -234,7 +234,7 @@ public class GuiRoutingTable extends GuiScreen {
                     currChar = 0;
                 }
 
-            this.updateButtons();
+            updateButtons();
         }
     }
 
@@ -256,10 +256,10 @@ public class GuiRoutingTable extends GuiScreen {
         super.keyTyped(c, key);
 
         if (editable && !readingManual)
-            if (this.editingTitle)
-                this.keyTypedInTitle(c, key);
+            if (editingTitle)
+                keyTypedInTitle(c, key);
             else
-                this.keyTypedInBook(c, key);
+                keyTypedInBook(c, key);
     }
 
     /**
@@ -268,7 +268,7 @@ public class GuiRoutingTable extends GuiScreen {
     private void keyTypedInBook(char c, int key) {
         switch (c) {
             case 22:
-                this.addToBook(GuiScreen.getClipboardString());
+                addToBook(GuiScreen.getClipboardString());
                 return;
         }
         switch (key) {
@@ -384,9 +384,9 @@ public class GuiRoutingTable extends GuiScreen {
 
                 return;
             default:
-                if (this.bookTitle.length() < 16 && ChatAllowedCharacters.isAllowedCharacter(c)) {
-                    this.bookTitle = this.bookTitle + Character.toString(c);
-                    this.updateButtons();
+                if (bookTitle.length() < 16 && ChatAllowedCharacters.isAllowedCharacter(c)) {
+                    this.bookTitle = bookTitle + Character.toString(c);
+                    updateButtons();
                     this.bookModified = true;
                 }
         }
@@ -416,7 +416,7 @@ public class GuiRoutingTable extends GuiScreen {
         String newText = currentText + string;
 
         if (newText.length() < ItemRoutingTable.LINE_LENGTH) {
-            this.setLine(currPage, currLine, newText);
+            setLine(currPage, currLine, newText);
             currChar = getLine(currLine).length();
         }
     }
@@ -427,28 +427,28 @@ public class GuiRoutingTable extends GuiScreen {
     @Override
     public void drawScreen(int par1, int par2, float par3) {
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture(TEXTURE);
-        int xOffset = (this.width - this.bookImageWidth) / 2;
+        mc.renderEngine.bindTexture(TEXTURE);
+        int xOffset = (width - bookImageWidth) / 2;
         byte yOffset = 2;
-        this.drawTexturedModalRect(xOffset, yOffset, 0, 0, this.bookImageWidth, this.bookImageHeight);
+        drawTexturedModalRect(xOffset, yOffset, 0, 0, bookImageWidth, bookImageHeight);
 
-        if (this.editingTitle) {
-            String title = this.bookTitle;
+        if (editingTitle) {
+            String title = bookTitle;
 
-            if (this.editable)
-                if (this.updateCount / 6 % 2 == 0)
+            if (editable)
+                if (updateCount / 6 % 2 == 0)
                     title = title + "" + TextFormatting.BLACK + "_";
                 else
                     title = title + "" + TextFormatting.GRAY + "_";
 
             String s1 = I18n.translateToLocal("book.editTitle");
-            int l = this.fontRendererObj.getStringWidth(s1);
-            this.fontRendererObj.drawString(s1, xOffset + 36 + (116 - l) / 2, yOffset + 16 + 16, 0);
-            int i1 = this.fontRendererObj.getStringWidth(title);
-            this.fontRendererObj.drawString(title, xOffset + 36 + (116 - i1) / 2, yOffset + 48, 0);
+            int l = fontRendererObj.getStringWidth(s1);
+            fontRendererObj.drawString(s1, xOffset + 36 + (116 - l) / 2, yOffset + 16 + 16, 0);
+            int i1 = fontRendererObj.getStringWidth(title);
+            fontRendererObj.drawString(title, xOffset + 36 + (116 - i1) / 2, yOffset + 48, 0);
             String s2 = String.format(I18n.translateToLocal("book.byAuthor"), Railcraft.proxy.getPlayerUsername(player));
-            int j1 = this.fontRendererObj.getStringWidth(s2);
-            this.fontRendererObj.drawString(TextFormatting.DARK_GRAY + s2, xOffset + 36 + (116 - j1) / 2, yOffset + 48 + 10, 0);
+            int j1 = fontRendererObj.getStringWidth(s2);
+            fontRendererObj.drawString(TextFormatting.DARK_GRAY + s2, xOffset + 36 + (116 - j1) / 2, yOffset + 48 + 10, 0);
 //            String s3 = StatCollector.translateToLocal("book.finalizeWarning");
 //            this.fontRendererObj.drawSplitString(s3, xOffset + 36, yOffset + 80, 116, 0);
         } else if (readingManual) {
@@ -456,8 +456,8 @@ public class GuiRoutingTable extends GuiScreen {
             fontRendererObj.drawString(LocalizationPlugin.translate(TABLE_MANUAL_LOC_TAG + "title"), xOffset + 45, yOffset + 16, 0);
 
             String pageNumString = String.format(I18n.translateToLocal("book.pageIndicator"), currPage + 1, numManualPages);
-            int pageNumStringWidth = this.fontRendererObj.getStringWidth(pageNumString);
-            this.fontRendererObj.drawString(pageNumString, xOffset - pageNumStringWidth + this.bookImageWidth - 44, yOffset + 16, 0);
+            int pageNumStringWidth = fontRendererObj.getStringWidth(pageNumString);
+            fontRendererObj.drawString(pageNumString, xOffset - pageNumStringWidth + bookImageWidth - 44, yOffset + 16, 0);
 
             if (currPage < 0 || currPage >= numManualPages)
                 return;
@@ -466,12 +466,12 @@ public class GuiRoutingTable extends GuiScreen {
 
             if (LocalizationPlugin.hasTag(pageTag)) {
                 String text = LocalizationPlugin.translate(pageTag);
-                this.fontRendererObj.drawSplitString(text, xOffset + 16, yOffset + 16 + 16, WRAP_WIDTH, 0);
+                fontRendererObj.drawSplitString(text, xOffset + 16, yOffset + 16 + 16, WRAP_WIDTH, 0);
             }
         } else {
             String pageNumString = String.format(I18n.translateToLocal("book.pageIndicator"), currPage + 1, bookPages.size());
-            int pageNumStringWidth = this.fontRendererObj.getStringWidth(pageNumString);
-            this.fontRendererObj.drawString(pageNumString, xOffset - pageNumStringWidth + this.bookImageWidth - 44, yOffset + 16, 0);
+            int pageNumStringWidth = fontRendererObj.getStringWidth(pageNumString);
+            fontRendererObj.drawString(pageNumString, xOffset - pageNumStringWidth + bookImageWidth - 44, yOffset + 16, 0);
 
             if (currPage < 0 || currPage >= bookPages.size())
                 return;
@@ -488,13 +488,13 @@ public class GuiRoutingTable extends GuiScreen {
 
                 if (editable && it.previousIndex() == currLine)
                     if (updateCount / 6 % 2 == 0) {
-                        text.insert(start + currChar, TextFormatting.UNDERLINE.toString());
-                        text.insert(start + currChar + 3, TextFormatting.BLACK.toString());
+                        text.insert(start + currChar, TextFormatting.UNDERLINE);
+                        text.insert(start + currChar + 3, TextFormatting.BLACK);
                     }
 
                 text.append("\n");
             }
-            this.fontRendererObj.drawSplitString(text.toString(), xOffset + 16, yOffset + 16 + 16, WRAP_WIDTH, 0);
+            fontRendererObj.drawSplitString(text.toString(), xOffset + 16, yOffset + 16 + 16, WRAP_WIDTH, 0);
         }
 
         super.drawScreen(par1, par2, par3);

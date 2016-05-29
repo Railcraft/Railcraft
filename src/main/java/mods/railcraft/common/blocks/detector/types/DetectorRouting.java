@@ -124,7 +124,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
     private void checkPower() {
         for (EnumFacing side : EnumFacing.VALUES) {
             if (side == tile.direction) continue;
-            if (PowerPlugin.isBlockBeingPowered(getWorld(), getTile().getPos(), side)) {
+            if (PowerPlugin.isBlockBeingPowered(theWorld(), getTile().getPos(), side)) {
                 powered = true;
                 return;
             }

@@ -26,5 +26,5 @@ public interface IGuiReturnHandler {
 
     void writeGuiData(@Nonnull DataOutputStream data) throws IOException;
 
-    void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException;
+    void readGuiData(@Nonnull DataInputStream data, @Nullable EntityPlayer sender) throws IOException;
 }

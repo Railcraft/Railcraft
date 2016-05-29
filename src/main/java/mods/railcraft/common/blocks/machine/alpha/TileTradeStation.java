@@ -30,10 +30,13 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -42,6 +45,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+@SuppressWarnings("PointlessArithmeticExpression")
 public class TileTradeStation extends TileMachineItem implements IGuiReturnHandler, ISidedInventory {
     public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
 
@@ -52,7 +56,8 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
 
     private static final int AREA = 6;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 16);
-    private int profession;
+    @Nonnull
+    private VillagerRegistry.VillagerProfession profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation("minecraft:farmer"));
     private final PhantomInventory recipeSlots = new PhantomInventory(9);
     private final InventoryMapper invInput;
     private final InventoryMapper invOutput;
@@ -69,9 +74,8 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         return EnumMachineAlpha.TRADE_STATION;
     }
 
-    @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull IBlockState state) {
+    public IBlockState getActualState(IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(FACING, direction);
         return state;
@@ -81,7 +85,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         return recipeSlots;
     }
 
-    public int getProfession() {
+    public VillagerRegistry.VillagerProfession getProfession() {
         return profession;
     }
 
@@ -115,8 +119,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         float x = getPos().getX();
         float y = getPos().getY();
         float z = getPos().getZ();
-        List<EntityVillager> villagers = MiscTools.getNearbyEntities(worldObj, EntityVillager.class, x, y - 1, y + 3, z, range);
-        return villagers;
+        return MiscTools.getNearbyEntities(worldObj, EntityVillager.class, x, y - 1, y + 3, z, range);
     }
 
     private boolean attemptTrade(List<EntityVillager> villagers, int tradeSet) {
@@ -128,8 +131,10 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
             for (MerchantRecipe recipe : recipes) {
                 if (recipe.isRecipeDisabled())
                     continue;
+                //noinspection ConstantConditions
                 if (recipe.getItemToBuy() != null && !InvTools.isItemLessThanOrEqualTo(recipe.getItemToBuy(), buy1))
                     continue;
+                //noinspection ConstantConditions
                 if (recipe.getSecondItemToBuy() != null && !InvTools.isItemLessThanOrEqualTo(recipe.getSecondItemToBuy(), buy2))
                     continue;
                 if (!InvTools.isItemGreaterOrEqualThan(recipe.getItemToSell(), sell))
@@ -145,9 +150,12 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         return false;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     private boolean canDoTrade(MerchantRecipe recipe) {
+        //noinspection ConstantConditions
         if (recipe.getItemToBuy() != null && InvTools.countItems(invInput, recipe.getItemToBuy()) < recipe.getItemToBuy().stackSize)
             return false;
+        //noinspection ConstantConditions
         if (recipe.getSecondItemToBuy() != null && InvTools.countItems(invInput, recipe.getSecondItemToBuy()) < recipe.getSecondItemToBuy().stackSize)
             return false;
         return InvTools.isRoomForStack(recipe.getItemToSell(), invOutput);
@@ -155,17 +163,19 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
 
     private void doTrade(IMerchant merchant, MerchantRecipe recipe) {
         merchant.useRecipe(recipe);
+        //noinspection ConstantConditions
         if (recipe.getItemToBuy() != null)
             InvTools.removeItemsAbsolute(invInput, recipe.getItemToBuy().stackSize, recipe.getItemToBuy());
+        //noinspection ConstantConditions
         if (recipe.getSecondItemToBuy() != null)
             InvTools.removeItemsAbsolute(invInput, recipe.getSecondItemToBuy().stackSize, recipe.getSecondItemToBuy());
         InvTools.moveItemStack(recipe.getItemToSell().copy(), invOutput);
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
-        super.onBlockPlacedBy(state, entityliving, stack);
-        direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(state, placer, stack);
+        direction = placer == null ? EnumFacing.NORTH : MiscTools.getSideFacingPlayer(getPos(), placer);
     }
 
     @Override
@@ -178,36 +188,42 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
         return true;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         recipeSlots.writeToNBT("recipe", data);
 
-        data.setInteger("profession", profession);
+        data.setString("ProfessionName", profession.getRegistryName().toString());
         data.setByte("direction", (byte) direction.ordinal());
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         recipeSlots.readFromNBT("recipe", data);
 
-        profession = data.getInteger("profession");
+        if (data.hasKey("ProfessionName")) {
+            VillagerRegistry.VillagerProfession p =
+                    VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.getString("ProfessionName")));
+            if (p == null)
+                p = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation("minecraft:farmer"));
+            profession = p;
+        }
         direction = EnumFacing.getFront(data.getByte("direction"));
     }
 
     @Override
     public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeInt(profession);
+        data.writeUTF(profession.getRegistryName().toString());
         data.writeByte(direction.ordinal());
     }
 
     @Override
     public void readPacketData(@Nonnull DataInputStream data) throws IOException {
         super.readPacketData(data);
-        profession = data.readInt();
+        profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.readUTF()));
         EnumFacing f = EnumFacing.getFront(data.readByte());
         if (direction != f) {
             direction = f;
@@ -220,14 +236,14 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     }
 
     @Override
-    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull DataInputStream data, @Nullable EntityPlayer sender) throws IOException {
         GuiPacketType type = GuiPacketType.values()[data.readByte()];
         switch (type) {
             case NEXT_TRADE:
                 nextTrade(data.readByte());
                 break;
             case SET_PROFESSION:
-                profession = data.readInt();
+                profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.readUTF()));
                 sendUpdateToClient();
                 break;
         }

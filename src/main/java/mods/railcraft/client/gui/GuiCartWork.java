@@ -10,28 +10,21 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.EntityCartWork;
 import mods.railcraft.common.gui.containers.ContainerCartWork;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.translation.I18n;
 
-public class GuiCartWork extends EntityGui
-{
+public class GuiCartWork extends EntityGui {
 
-    private EntityMinecart cart;
-
-    public GuiCartWork(InventoryPlayer inv, EntityCartWork cart)
-    {
+    public GuiCartWork(InventoryPlayer inv, EntityCartWork cart) {
         super(cart, new ContainerCartWork(inv, cart), "textures/gui/container/crafting_table.png");
-        this.cart = cart;
     }
 
     /**
      * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
-    {
-        this.fontRendererObj.drawString(I18n.translateToLocal("container.crafting"), 28, 6, 4210752);
-        this.fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        fontRendererObj.drawString(I18n.translateToLocal("container.crafting"), 28, 6, 4210752);
+        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
     }
 }

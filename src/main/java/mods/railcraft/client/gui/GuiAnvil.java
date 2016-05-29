@@ -28,11 +28,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class GuiAnvil extends GuiContainer implements ICrafting {
+public class GuiAnvil extends GuiContainer implements IContainerListener {
 
     private static final ResourceLocation anvilGuiTextures = new ResourceLocation("textures/gui/container/anvil.png");
     private final ContainerRepair repairContainer;
@@ -59,8 +60,8 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
         itemNameField.setDisabledTextColour(-1);
         itemNameField.setEnableBackgroundDrawing(false);
         itemNameField.setMaxStringLength(40);
-        inventorySlots.removeCraftingFromCrafters(this);
-        inventorySlots.onCraftGuiOpened(this);
+        inventorySlots.removeListener(this);
+        inventorySlots.addListener(this);
     }
 
     /**
@@ -71,7 +72,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
     public void onGuiClosed() {
         super.onGuiClosed();
         Keyboard.enableRepeatEvents(false);
-        inventorySlots.removeCraftingFromCrafters(this);
+        inventorySlots.removeListener(this);
     }
 
     /**
@@ -137,7 +138,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
             s = "";
 
         repairContainer.updateItemName(s);
-        mc.thePlayer.sendQueue.addToSendQueue(new CPacketCustomPayload("MC|ItemName", (new PacketBuffer(Unpooled.buffer())).writeString(s)));
+        mc.thePlayer.connection.sendPacket(new CPacketCustomPayload("MC|ItemName", (new PacketBuffer(Unpooled.buffer())).writeString(s)));
     }
 
     /**
@@ -187,7 +188,7 @@ public class GuiAnvil extends GuiContainer implements ICrafting {
      * Container, slot number, slot contents
      */
     @Override
-    public void sendSlotContents(Container par1Container, int par2, ItemStack par3ItemStack) {
+    public void sendSlotContents(Container par1Container, int par2, @Nullable ItemStack par3ItemStack) {
         if (par2 == 0) {
             itemNameField.setText(par3ItemStack == null ? "" : par3ItemStack.getDisplayName());
             itemNameField.setEnabled(par3ItemStack != null);

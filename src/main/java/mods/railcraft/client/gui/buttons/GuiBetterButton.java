@@ -8,6 +8,7 @@
  */
 package mods.railcraft.client.gui.buttons;
 
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
@@ -18,7 +19,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
 
 @SideOnly(Side.CLIENT)
 public class GuiBetterButton extends GuiButton {
@@ -84,11 +86,12 @@ public class GuiBetterButton extends GuiButton {
         drawCenteredString(fontrenderer, displayString, xPosition + width / 2, yPosition + (h - 8) / 2, getTextColor(mouseOver));
     }
 
+    @Nullable
     public ToolTip getToolTip() {
         return toolTip;
     }
 
-    public void setToolTip(ToolTip tips) {
+    public void setToolTip(@Nullable ToolTip tips) {
         this.toolTip = tips;
     }
 

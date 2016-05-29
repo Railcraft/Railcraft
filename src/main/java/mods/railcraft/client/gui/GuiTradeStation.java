@@ -34,7 +34,7 @@ public class GuiTradeStation extends TileGui {
 
     private final String label;
     private final TileTradeStation tile;
-    private final RevolvingList<Integer> professions = new RevolvingList<Integer>();
+    private final RevolvingList<VillagerRegistry.VillagerProfession> professions = new RevolvingList<VillagerRegistry.VillagerProfession>();
     private final EntityVillager villager;
 
     public GuiTradeStation(InventoryPlayer playerInv, TileTradeStation tile) {
@@ -48,10 +48,7 @@ public class GuiTradeStation extends TileGui {
 
         villager = new EntityVillager(tile.getWorld());
 
-        for (int prof = 0; prof < 5; prof++) {
-            professions.add(prof);
-        }
-        professions.addAll(VillagerRegistry.getRegisteredVillagers());
+        professions.addAll(VillagerRegistry.instance().getRegistry().getValues());
 
         professions.setCurrent(tile.getProfession());
         villager.setProfession(professions.getCurrent());
@@ -70,7 +67,8 @@ public class GuiTradeStation extends TileGui {
         GuiBetterButton[] dice = new GuiBetterButton[3];
 
         ToolTip tip = ToolTip.buildToolTip("railcraft.gui.trade.station.dice.tip");
-        tip.get(0).format = TextFormatting.YELLOW;
+        if (tip != null)
+            tip.get(0).format = TextFormatting.YELLOW;
 
         for (int b = 0; b < 3; b++) {
             dice[b] = new GuiBetterButton(2 + b, w + 93, h + 24 + 21 * b, 16, StandardButtonTextureSets.DICE_BUTTON, "");
@@ -117,8 +115,11 @@ public class GuiTradeStation extends TileGui {
                     data.writeInt((Integer) arg);
                 else if (arg instanceof Byte)
                     data.writeByte((Byte) arg);
+                else if (arg instanceof VillagerRegistry.VillagerProfession) {
+                    data.writeUTF(((VillagerRegistry.VillagerProfession) arg).getRegistryName().toString());
+                }
             }
-        } catch (IOException ex) {
+        } catch (IOException ignored) {
         }
         PacketBuilder.instance().sendGuiReturnPacket(tile, bytes.toByteArray());
     }

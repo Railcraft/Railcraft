@@ -15,6 +15,8 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by CovertJaguar on 4/2/2015.
  */
@@ -169,6 +171,7 @@ public class FluidItemHelper {
         return FluidContainerRegistry.containsFluid(stack, fluidStack);
     }
 
+    @Nullable
     public static FluidStack getFluidStackInContainer(ItemStack stack) {
         if (stack == null) return null;
         if (stack.getItem() instanceof IFluidContainerItem) {
@@ -178,6 +181,7 @@ public class FluidItemHelper {
         return FluidContainerRegistry.getFluidForFilledItem(stack);
     }
 
+    @Nullable
     public static Fluid getFluidInContainer(ItemStack stack) {
         if (stack == null) return null;
         if (stack.getItem() instanceof IFluidContainerItem) {

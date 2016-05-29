@@ -640,7 +640,7 @@ public abstract class InvTools {
      * @return True if equal
      */
     @SuppressWarnings("SimplifiableIfStatement")
-    public static boolean isItemEqualStrict(ItemStack a, ItemStack b) {
+    public static boolean isItemEqualStrict(@Nullable ItemStack a, @Nullable ItemStack b) {
         if (a == null && b == null)
             return true;
         if (a == null || b == null)
@@ -669,7 +669,7 @@ public abstract class InvTools {
      * @return True if equal
      */
     @SuppressWarnings("SimplifiableIfStatement")
-    public static boolean isItemEqualSemiStrict(ItemStack a, ItemStack b) {
+    public static boolean isItemEqualSemiStrict(@Nullable ItemStack a, @Nullable ItemStack b) {
         if (a == null && b == null)
             return true;
         if (a == null || b == null)
@@ -689,7 +689,7 @@ public abstract class InvTools {
      * @param b An ItemStack
      * @return True if equal
      */
-    public static boolean isItemEqual(ItemStack a, ItemStack b) {
+    public static boolean isItemEqual(@Nullable ItemStack a, @Nullable ItemStack b) {
         return isItemEqual(a, b, true, true);
     }
 
@@ -701,11 +701,11 @@ public abstract class InvTools {
      * @param b An ItemStack
      * @return True if equal
      */
-    public static boolean isItemEqualIgnoreNBT(ItemStack a, ItemStack b) {
+    public static boolean isItemEqualIgnoreNBT(@Nullable ItemStack a, @Nullable ItemStack b) {
         return isItemEqual(a, b, true, false);
     }
 
-    public static boolean isItemEqual(final ItemStack a, final ItemStack b, final boolean matchDamage, final boolean matchNBT) {
+    public static boolean isItemEqual(@Nullable final ItemStack a, @Nullable final ItemStack b, final boolean matchDamage, final boolean matchNBT) {
         if (a == null || b == null)
             return false;
         if (a.getItem() != b.getItem())
@@ -722,7 +722,7 @@ public abstract class InvTools {
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
-    public static boolean isCartItemEqual(final ItemStack a, final ItemStack b, final boolean matchDamage) {
+    public static boolean isCartItemEqual(@Nullable final ItemStack a, @Nullable final ItemStack b, final boolean matchDamage) {
         if (!isItemEqual(a, b, matchDamage, false))
             return false;
         return !(a.hasDisplayName() && !a.getDisplayName().equals(b.getDisplayName()));
@@ -735,7 +735,7 @@ public abstract class InvTools {
      * @param matches the ItemStacks to test against
      * @return true if a match is found
      */
-    public static boolean isItemEqual(ItemStack stack, ItemStack... matches) {
+    public static boolean isItemEqual(@Nullable ItemStack stack, ItemStack... matches) {
         for (ItemStack match : matches) {
             if (isItemEqual(stack, match))
                 return true;
@@ -750,7 +750,7 @@ public abstract class InvTools {
      * @param matches the ItemStacks to test against
      * @return true if a match is found
      */
-    public static boolean isItemEqual(ItemStack stack, Collection<ItemStack> matches) {
+    public static boolean isItemEqual(@Nullable ItemStack stack, Collection<ItemStack> matches) {
         for (ItemStack match : matches) {
             if (isItemEqual(stack, match))
                 return true;
@@ -758,11 +758,11 @@ public abstract class InvTools {
         return false;
     }
 
-    public static boolean isItemGreaterOrEqualThan(ItemStack stackA, ItemStack stackB) {
+    public static boolean isItemGreaterOrEqualThan(@Nullable ItemStack stackA, @Nullable ItemStack stackB) {
         return isItemEqual(stackA, stackB) && stackA.stackSize >= stackB.stackSize;
     }
 
-    public static boolean isItemLessThanOrEqualTo(ItemStack stackA, ItemStack stackB) {
+    public static boolean isItemLessThanOrEqualTo(@Nullable ItemStack stackA, @Nullable ItemStack stackB) {
         return isItemEqual(stackA, stackB) && stackA.stackSize <= stackB.stackSize;
     }
 
