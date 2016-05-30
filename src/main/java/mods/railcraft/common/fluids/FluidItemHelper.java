@@ -18,6 +18,8 @@ import net.minecraftforge.fluids.IFluidContainerItem;
 import javax.annotation.Nullable;
 
 /**
+ * Helper functions for Fluid Items
+ *
  * Created by CovertJaguar on 4/2/2015.
  */
 public class FluidItemHelper {
@@ -208,7 +210,7 @@ public class FluidItemHelper {
         public final FluidStack fluidDrained;
         public final boolean isAtomic;
 
-        public DrainReturn(ItemStack con, FluidStack fluidDrained, boolean isAtomic) {
+        public DrainReturn(@Nullable ItemStack con, @Nullable FluidStack fluidDrained, boolean isAtomic) {
             this.container = con;
             this.fluidDrained = fluidDrained;
             this.isAtomic = isAtomic;

@@ -17,7 +17,7 @@ import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -132,7 +132,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
             tank.renderData.reset();
     }
 
-    public void initGuiData(Container container, ICrafting player, int tankIndex) {
+    public void initGuiData(Container container, IContainerListener player, int tankIndex) {
         if (tankIndex >= tanks.size())
             return;
         StandardTank tank = tanks.get(tankIndex);
@@ -145,7 +145,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
             fluidAmount = fluidStack.amount;
         }
 
-        player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidId);
+        player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, container.windowId, tankIndex * NETWORK_DATA + 2, color);
 
@@ -154,15 +154,14 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
         tank.renderData.color = color;
     }
 
-    public void updateGuiData(Container container, List crafters, int tankIndex) {
+    public void updateGuiData(Container container, List<IContainerListener> crafters, int tankIndex) {
         StandardTank tank = tanks.get(tankIndex);
         FluidStack fluidStack = tank.getFluid();
         int color = tank.getColor();
         int pColor = tank.renderData.color;
 
-        for (Object crafter1 : crafters) {
-            ICrafting crafter = (ICrafting) crafter1;
-            EntityPlayerMP player = (EntityPlayerMP) crafter1;
+        for (IContainerListener crafter : crafters) {
+            EntityPlayerMP player = (EntityPlayerMP) crafter;
             if (fluidStack == null ^ tank.renderData.fluid == null) {
                 int fluidId = -1;
                 int fluidAmount = 0;
@@ -170,11 +169,11 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
                     fluidId = FluidHelper.getFluidId(fluidStack);
                     fluidAmount = fluidStack.amount;
                 }
-                crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidId);
+                crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
                 PacketBuilder.instance().sendGuiIntegerPacket(player, container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
             } else if (fluidStack != null && tank.renderData.fluid != null) {
                 if (fluidStack.getFluid() != tank.renderData.fluid)
-                    crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, FluidHelper.getFluidId(fluidStack));
+                    crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, FluidHelper.getFluidId(fluidStack));
                 if (fluidStack.amount != tank.renderData.amount)
                     PacketBuilder.instance().sendGuiIntegerPacket(player, container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
                 if (color != pColor)

@@ -16,19 +16,21 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -217,7 +219,7 @@ public final class FluidHelper {
         return registerContainer(liquid, filled, empty);
     }
 
-    private static boolean registerContainer(FluidStack fluidStack, ItemStack filled, ItemStack empty) {
+    private static boolean registerContainer(FluidStack fluidStack, ItemStack filled, @Nullable ItemStack empty) {
         if (empty != null) {
             FluidContainerData container = new FluidContainerData(fluidStack, filled, empty);
             registerContainer(container);
@@ -251,10 +253,12 @@ public final class FluidHelper {
         }
     }
 
+    @Nullable
     public static FluidStack drainBlock(World world, BlockPos pos, boolean doDrain) {
         return drainBlock(WorldPlugin.getBlockState(world, pos), world, pos, doDrain);
     }
 
+    @Nullable
     public static FluidStack drainBlock(IBlockState state, World world, BlockPos pos, boolean doDrain) {
         FluidStack fluid;
         if ((fluid = drainForgeFluid(state, world, pos, doDrain)) != null)
@@ -266,6 +270,7 @@ public final class FluidHelper {
         return null;
     }
 
+    @Nullable
     private static FluidStack drainForgeFluid(IBlockState state, World world, BlockPos pos, boolean doDrain) {
         if (state.getBlock() instanceof IFluidBlock) {
             IFluidBlock fluidBlock = (IFluidBlock) state.getBlock();
@@ -275,6 +280,7 @@ public final class FluidHelper {
         return null;
     }
 
+    @Nullable
     private static FluidStack drainVanillaFluid(IBlockState state, World world, BlockPos pos, boolean doDrain, Fluids fluid, Block... blocks) {
         boolean matches = false;
         for (Block block : blocks) {
@@ -306,6 +312,7 @@ public final class FluidHelper {
         return false;
     }
 
+    @Nullable
     public static Fluid getFluid(Block block) {
         if (block instanceof IFluidBlock)
             return ((IFluidBlock) block).getFluid();
@@ -316,6 +323,7 @@ public final class FluidHelper {
         return null;
     }
 
+    @Nullable
     public static Fluid getFluid(IBlockState state) {
         return getFluid(state.getBlock());
     }
@@ -329,13 +337,12 @@ public final class FluidHelper {
     }
 
     public static void drip(World world, BlockPos pos, IBlockState state, Random rand, float particleRed, float particleGreen, float particleBlue) {
-
         if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, pos.down()) && !WorldPlugin.getBlockMaterial(world, pos.down(2)).blocksMovement()) {
             double px = (double) ((float) pos.getX() + rand.nextFloat());
             double py = (double) pos.getY() - 1.05D;
             double pz = (double) ((float) pos.getZ() + rand.nextFloat());
 
-            EntityFX fx = new ParticleDrip(world, px, py, pz, particleRed, particleGreen, particleBlue);
+            Particle fx = new ParticleDrip(world, new Vec3d(px, py, pz), particleRed, particleGreen, particleBlue);
             FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
         }
     }
