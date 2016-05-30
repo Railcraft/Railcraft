@@ -10,11 +10,12 @@ package mods.railcraft.common.worldgen;
 
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
@@ -49,48 +50,51 @@ public class GeodePopulator {
 
     @SubscribeEvent
     public void generate(PopulateChunkEvent.Pre event) {
-        if (!TerrainGen.populate(event.chunkProvider, event.world, event.rand, event.chunkX, event.chunkZ, event.hasVillageGenerated, EVENT_TYPE)) {
+        if (!TerrainGen.populate(event.getGen(), event.getWorld(), event.getRand(), event.getChunkX(), event.getChunkZ(), event.isHasVillageGenerated(), EVENT_TYPE)) {
             return;
         }
-        generateGeode(event.world, event.rand, event.chunkX, event.chunkZ);
+        generateGeode(event.getWorld(), event.getRand(), event.getChunkX(), event.getChunkZ());
     }
 
+    //TODO: Much testing, oh god
     public void generateGeode(World world, Random rand, int chunkX, int chunkZ) {
         int x = chunkX * 16 + 8;
         int z = chunkZ * 16 + 8;
-        if (canGen(world, rand, x, z)) {
-            OceanFloor floor = scanOceanFloor(world, x, z);
+        BlockPos target = new BlockPos(x, 60, z);
+        if (canGen(world, rand, target)) {
+            OceanFloor floor = scanOceanFloor(world, target);
             if (floor.depth >= MIN_DEPTH && floor.floorY >= MIN_FLOOR) {
                 int y = 12 + rand.nextInt(floor.floorY - 12);
-                geode.generate(world, rand, x, y, z);
+                geode.generate(world, rand, new BlockPos(x, y, z));
             }
         }
     }
 
-    private boolean canGen(World world, Random rand, int x, int z) {
-        BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+    private boolean canGen(World world, Random rand, BlockPos pos) {
+        Biome biome = world.getBiome(pos);
         if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.WATER)) {
             return false;
         }
-        if (biome.biomeName == null || biome.biomeName.toLowerCase(Locale.ENGLISH).contains("river")) {
+        //noinspection ConstantConditions
+        if (biome.getBiomeName() == null || biome.getBiomeName().toLowerCase(Locale.ENGLISH).contains("river")) {
             return false;
         }
         return rand.nextDouble() <= 0.3;
     }
 
-    private OceanFloor scanOceanFloor(World world, int x, int z) {
-        Chunk chunk = world.getChunkFromBlockCoords(x, z);
+    private OceanFloor scanOceanFloor(World world, BlockPos pos) {
+        Chunk chunk = world.getChunkFromBlockCoords(pos);
         int y = chunk.getTopFilledSegment() + 15;
 
-        int trimmedX = x & 15;
-        int trimmedZ = z & 15;
+        int trimmedX = pos.getX() & 15;
+        int trimmedZ = pos.getZ() & 15;
 
         int depth = 0;
         for (; y > 0; --y) {
-            Block block = chunk.getBlock(trimmedX, y, trimmedZ);
-            if (block == null || block == Blocks.AIR)
+            IBlockState blockState = chunk.getBlockState(trimmedX, y, trimmedZ);
+            if (blockState == Blocks.AIR)
                 continue;
-            else if (block.getMaterial() == Material.water)
+            else if (blockState.getMaterial() == Material.WATER)
                 depth++;
             else
                 break;

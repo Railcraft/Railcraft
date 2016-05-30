@@ -24,8 +24,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.particle.ParticleDigging;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -54,13 +54,11 @@ public class BlockOre extends Block {
     private static final ParticleHelperCallback callback = new ParticleCallback();
     public static int renderPass;
     private static BlockOre instance;
-    private final int renderType;
     private final Random rand = new Random();
 
-    public BlockOre(int renderId) {
+    public BlockOre() {
         super(Material.ROCK);
         setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumOre.SULFUR));
-        renderType = renderId;
         setUnlocalizedName("railcraft.ore");
         setResistance(5);
         setHardness(3);
@@ -82,8 +80,7 @@ public class BlockOre extends Block {
 
     public static void registerBlock() {
         if (instance == null && RailcraftConfig.isBlockEnabled("ore")) {
-            int renderId = Railcraft.getProxy().getRenderId();
-            instance = new BlockOre(renderId);
+            instance = new BlockOre();
             RailcraftRegistry.register(instance, ItemOre.class);
 
             EntityTunnelBore.addMineableBlock(instance);
@@ -142,11 +139,6 @@ public class BlockOre extends Block {
     }
 
     @Override
-    public int getRenderType() {
-        return renderType;
-    }
-
-    @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumOre ore : EnumOre.values()) {
             if (!ore.isDepreciated() && ore.isEnabled())
@@ -155,8 +147,7 @@ public class BlockOre extends Block {
     }
 
     @Override
-    public ItemStack getPickBlock(RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        IBlockState state = WorldPlugin.getBlockState(world, pos);
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         return getVariant(state).getItem();
     }
 
@@ -236,22 +227,22 @@ public class BlockOre extends Block {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean addHitEffects(World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
+    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager effectRenderer) {
         return ParticleHelper.addHitEffects(worldObj, instance, target, effectRenderer, callback);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager effectRenderer) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         return ParticleHelper.addDestroyEffects(world, instance, pos, state, effectRenderer, callback);
     }
 
     @Override
-    public int getLightValue(IBlockAccess world, BlockPos pos) {
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
         if (EnumOre.FIRESTONE == getVariant(WorldPlugin.getBlockState(world, pos)))
             return 15;
-        return super.getLightValue(world, pos);
+        return super.getLightValue(state, world, pos);
     }
 
     /**
@@ -276,27 +267,27 @@ public class BlockOre extends Block {
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     private static class ParticleCallback implements ParticleHelperCallback {
         @Override
         @SideOnly(Side.CLIENT)
-        public void addHitEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
+        public void addHitEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
             setTexture(fx, world, pos, state);
         }
 
         @Override
         @SideOnly(Side.CLIENT)
-        public void addDestroyEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
+        public void addDestroyEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
             setTexture(fx, world, pos, state);
         }
 
         @SideOnly(Side.CLIENT)
-        private void setTexture(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state) {
+        private void setTexture(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
             renderPass = 0;
-            fx.setParticleIcon(instance.getIcon(0, meta));
+            fx.setParticleTexture(instance.getIcon(0, meta));
         }
     }
 }
