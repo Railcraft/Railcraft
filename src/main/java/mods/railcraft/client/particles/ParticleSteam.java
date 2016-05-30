@@ -23,7 +23,7 @@ public class ParticleSteam extends ParticleShrinking {
         super(world, x, y, z, velX, velY, velZ, scale);
         this.particleRed = this.particleGreen = this.particleBlue = (float) (Math.random() * 0.4) + 0.4f;
         this.particleMaxAge = (int) (8.0D / (Math.random() * 0.8D + 0.2D));
-        this.particleMaxAge = (int) ((float) this.particleMaxAge * scale);
+        this.particleMaxAge = (int) ((float) particleMaxAge * scale);
     }
 
 }

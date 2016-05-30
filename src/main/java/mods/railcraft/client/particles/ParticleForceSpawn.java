@@ -25,7 +25,7 @@ public class ParticleForceSpawn extends ParticleShrinking {
         this.particleGreen = 0.74F;
         this.particleBlue = 0.86F;
         this.particleMaxAge = (int) (8.0D / (Math.random() * 0.8D + 0.2D));
-        this.particleMaxAge = (int) ((float) this.particleMaxAge * scale);
+        this.particleMaxAge = (int) ((float) particleMaxAge * scale);
     }
 
 }

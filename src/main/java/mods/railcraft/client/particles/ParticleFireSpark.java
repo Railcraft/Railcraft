@@ -8,7 +8,6 @@
  */
 package mods.railcraft.client.particles;
 
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
@@ -21,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SideOnly(Side.CLIENT)
-public class ParticleFireSpark extends Particle {
+public class ParticleFireSpark extends ParticleBase {
 
     private final float lavaParticleScale;
     private final Vec3d end;
@@ -31,7 +30,7 @@ public class ParticleFireSpark extends Particle {
         super(world, start.xCoord, start.yCoord, start.zCoord, 0, 0, 0);
         this.end = end;
 
-        maxDist = getPositionVector().squareDistanceTo(end);
+        maxDist = getPos().squareDistanceTo(end);
         calculateVector(maxDist);
 
         multipleParticleScaleBy(0.5f);
@@ -45,7 +44,7 @@ public class ParticleFireSpark extends Particle {
     }
 
     private void calculateVector(double dist) {
-        Vec3d vecParticle = getPositionVector();
+        Vec3d vecParticle = getPos();
 
         Vec3d vel = vecParticle.subtract(end);
         vel = vel.normalize();
@@ -64,13 +63,13 @@ public class ParticleFireSpark extends Particle {
         return short1 | j << 16;
     }
 
-    /**
-     * Gets how bright this entity is.
-     */
-    @Override
-    public float getBrightness(float par1) {
-        return 1.0F;
-    }
+//    /**
+//     * Gets how bright this entity is.
+//     */
+//    @Override
+//    public float getBrightness(float par1) {
+//        return 1.0F;
+//    }
 
     @Override
     public void renderParticle(VertexBuffer world, Entity entity, float par2, float par3, float par4, float par5, float par6, float par7) {
@@ -89,14 +88,14 @@ public class ParticleFireSpark extends Particle {
         this.prevPosZ = posZ;
 
         if (particleAge >= particleMaxAge) {
-            setDead();
+            setExpired();
             return;
         }
         this.particleAge++;
 
-        double dist = getPositionVector().squareDistanceTo(end);
+        double dist = getPos().squareDistanceTo(end);
         if (dist <= 0.1) {
-            setDead();
+            setExpired();
             return;
         }
 

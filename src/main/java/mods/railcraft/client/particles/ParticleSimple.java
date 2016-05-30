@@ -8,22 +8,21 @@
  */
 package mods.railcraft.client.particles;
 
-import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ParticleSimple extends Particle {
+public class ParticleSimple extends ParticleBase {
 
     public double gravity = 0.004D;
 
-    public ParticleSimple(World par1World, double x, double y, double z) {
-        this(par1World, x, y, z, 0, 0, 0, 3f);
+    public ParticleSimple(World world, double x, double y, double z) {
+        this(world, x, y, z, 0, 0, 0, 3f);
     }
 
-    public ParticleSimple(World par1World, double x, double y, double z, double velX, double velY, double velZ, float scale) {
-        super(par1World, x, y, z, 0.0D, 0.0D, 0.0D);
+    public ParticleSimple(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
+        super(world, x, y, z, 0.0D, 0.0D, 0.0D);
         this.motionX *= 0.1;
         this.motionY *= 0.1;
         this.motionZ *= 0.1;
@@ -47,7 +46,7 @@ public class ParticleSimple extends Particle {
         this.prevPosZ = posZ;
 
         if (particleAge >= particleMaxAge)
-            setDead();
+            setExpired();
         this.particleAge++;
 
         setParticleTextureIndex(7 - particleAge * 8 / particleMaxAge);

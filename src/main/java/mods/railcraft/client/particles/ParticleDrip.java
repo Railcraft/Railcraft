@@ -10,22 +10,27 @@ package mods.railcraft.client.particles;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.particle.Particle;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ParticleDrip extends Particle {
+public class ParticleDrip extends ParticleBase {
 
     /**
      * The height of the current bob
      */
     private int bobTimer;
+    private boolean glows;
 
     public ParticleDrip(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue) {
+        this(world, x, y, z, particleRed, particleGreen, particleBlue, false);
+    }
+
+    public ParticleDrip(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue, boolean glows) {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
         this.motionX = this.motionY = this.motionZ = 0.0D;
 
@@ -33,12 +38,18 @@ public class ParticleDrip extends Particle {
         this.particleGreen = particleGreen;
         this.particleBlue = particleBlue;
 
-        this.setParticleTextureIndex(113);
-        this.setSize(0.01F, 0.01F);
+        setParticleTextureIndex(113);
+        setSize(0.01F, 0.01F);
         this.particleGravity = 0.06F;
         this.bobTimer = 40;
         this.particleMaxAge = (int) (64.0D / (Math.random() * 0.8D + 0.2D));
         this.motionX = this.motionY = this.motionZ = 0.0D;
+        this.glows = glows;
+    }
+
+    @Override
+    public int getBrightnessForRender(float partialTicks) {
+        return glows ? 257 : super.getBrightnessForRender(partialTicks);
     }
 
     /**
@@ -46,42 +57,53 @@ public class ParticleDrip extends Particle {
      */
     @Override
     public void onUpdate() {
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
+        this.prevPosX = posX;
+        this.prevPosY = posY;
+        this.prevPosZ = posZ;
 
-        this.motionY -= (double) this.particleGravity;
+        this.motionY -= (double) particleGravity;
 
-        if (this.bobTimer-- > 0) {
+        if (bobTimer > 0) {
             this.motionX *= 0.02D;
             this.motionY *= 0.02D;
             this.motionZ *= 0.02D;
-            this.setParticleTextureIndex(113);
+            setParticleTextureIndex(113);
         } else
-            this.setParticleTextureIndex(112);
+            setParticleTextureIndex(112);
+        this.bobTimer--;
 
-        this.moveEntity(this.motionX, this.motionY, this.motionZ);
+        moveEntity(motionX, motionY, motionZ);
         this.motionX *= 0.9800000190734863D;
         this.motionY *= 0.9800000190734863D;
         this.motionZ *= 0.9800000190734863D;
 
-        if (this.particleMaxAge-- <= 0)
-            this.setDead();
+        if (particleMaxAge <= 0)
+            setExpired();
+        this.particleMaxAge--;
 
-        if (this.onGround) {
-            this.setParticleTextureIndex(114);
+        if (isCollided) {
+            setParticleTextureIndex(114);
 
             this.motionX *= 0.699999988079071D;
             this.motionZ *= 0.699999988079071D;
         }
 
-        Material material = this.worldObj.getBlockState(getPosition()).getBlock().getMaterial();
+        BlockPos pos = new BlockPos(posX, posY, posZ);
+        IBlockState blockState = worldObj.getBlockState(pos);
+        Material material = blockState.getMaterial();
 
         if (material.isLiquid() || material.isSolid()) {
-            double d0 = (double) ((float) (MathHelper.floor_double(this.posY) + 1) - BlockLiquid.getLiquidHeightPercent(this.worldObj.getBlockMetadata(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))));
+            double filledPercent = 0.0D;
 
-            if (this.posY < d0)
-                this.setDead();
+            if (blockState.getBlock() instanceof BlockLiquid) {
+                filledPercent = (double) BlockLiquid.getLiquidHeightPercent(blockState.getValue(BlockLiquid.LEVEL));
+            }
+
+            double surfaceY = (double) (MathHelper.floor_double(posY) + 1) - filledPercent;
+
+            if (posY < surfaceY) {
+                setExpired();
+            }
         }
     }
 

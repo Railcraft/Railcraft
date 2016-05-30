@@ -23,8 +23,7 @@ public class ParticleChimney extends ParticleSimple {
         super(par1World, x, y, z, velX, velY, velZ, scale);
         this.particleRed = this.particleGreen = this.particleBlue = (float) (Math.random() * 0.3);
         this.particleMaxAge = (int) (24.0D / (Math.random() * 0.5D + 0.2D));
-        this.particleMaxAge = (int) (this.particleMaxAge * scale);
-        this.noClip = false;
+        this.particleMaxAge = (int) (particleMaxAge * scale);
     }
 
 }

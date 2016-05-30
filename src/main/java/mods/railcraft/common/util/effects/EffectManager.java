@@ -10,10 +10,11 @@ package mods.railcraft.common.util.effects;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.SidedProxy;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class EffectManager {
@@ -23,11 +24,7 @@ public class EffectManager {
 
     public interface IEffectSource {
 
-        double getX();
-
-        double getY();
-
-        double getZ();
+        Vec3d getPos();
 
         boolean isDead();
     }
@@ -41,18 +38,9 @@ public class EffectManager {
         }
 
         @Override
-        public double getX() {
-            return source.xCoord + 0.5;
-        }
-
-        @Override
-        public double getY() {
-            return source.yCoord + 0.5;
-        }
-
-        @Override
-        public double getZ() {
-            return source.zCoord + 0.5;
+        public Vec3d getPos() {
+            BlockPos pos = source.getPos();
+            return new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         }
 
         @Override
@@ -70,18 +58,8 @@ public class EffectManager {
         }
 
         @Override
-        public double getX() {
-            return source.posX;
-        }
-
-        @Override
-        public double getY() {
-            return source.posY + source.yOffset;
-        }
-
-        @Override
-        public double getZ() {
-            return source.posZ;
+        public Vec3d getPos() {
+            return new Vec3d(source.posX, source.posY + source.getYOffset(), source.posZ);
         }
 
         @Override
