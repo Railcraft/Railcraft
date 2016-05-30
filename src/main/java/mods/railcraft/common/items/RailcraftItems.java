@@ -127,6 +127,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
         return item != null && this.item == item;
     }
 
+    @Nullable
     public Item item() {
         return item;
     }

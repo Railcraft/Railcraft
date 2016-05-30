@@ -16,9 +16,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.RayTraceResult.MovingObjectType;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.BlockFluidFinite;
@@ -52,25 +54,26 @@ public class ItemBucketRailcraft extends Item {
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        RayTraceResult mop = getMovingObjectPositionFromPlayer(world, player, false);
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+        RayTraceResult mop = rayTrace(world, player, false);
 
-        if (mop != null && mop.typeOfHit == MovingObjectType.BLOCK) {
+        //noinspection ConstantConditions
+        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
             BlockPos pos = mop.getBlockPos();
 
             if (!world.isBlockModifiable(player, pos))
-                return stack;
+                return new ActionResult<>(EnumActionResult.FAIL, stack);
 
             pos = pos.offset(mop.sideHit);
 
             if (!player.canPlayerEdit(pos, mop.sideHit, stack))
-                return stack;
+                return new ActionResult<>(EnumActionResult.FAIL, stack);
 
             if (tryPlaceContainedLiquid(world, pos) && !player.capabilities.isCreativeMode)
-                return getContainerItem(stack);
+                return new ActionResult<>(EnumActionResult.SUCCESS, getContainerItem(stack));
         }
 
-        return stack;
+        return new ActionResult<>(EnumActionResult.PASS, stack);
     }
 
     private boolean tryPlaceContainedLiquid(World world, BlockPos pos) {

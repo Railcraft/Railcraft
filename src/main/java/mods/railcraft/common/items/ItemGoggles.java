@@ -8,23 +8,25 @@
  */
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.blocks.hidden.BlockHidden;
-import mods.railcraft.common.blocks.hidden.TrailTicker;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -34,11 +36,11 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "goggles.png";
 
     public ItemGoggles() {
-        super(ItemMaterials.GOGGLES, 0, 0);
+        super(ItemMaterials.GOGGLES, 0, EntityEquipmentSlot.HEAD);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
-    public static GoggleAura getCurrentAura(ItemStack goggles) {
+    public static GoggleAura getCurrentAura(@Nullable ItemStack goggles) {
         GoggleAura aura = GoggleAura.NONE;
         if (goggles != null && goggles.getItem() instanceof ItemGoggles) {
             NBTTagCompound data = goggles.getTagCompound();
@@ -48,7 +50,7 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
         return aura;
     }
 
-    public static void incrementAura(ItemStack goggles) {
+    public static void incrementAura(@Nullable ItemStack goggles) {
         if (goggles != null && goggles.getItem() instanceof ItemGoggles) {
             NBTTagCompound data = goggles.getTagCompound();
             if (data == null) {
@@ -66,17 +68,18 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
         }
     }
 
-    public static ItemStack getGoggles(EntityPlayer player) {
+    @Nullable
+    public static ItemStack getGoggles(@Nullable EntityPlayer player) {
         if (player == null)
             return null;
-        ItemStack helm = player.getCurrentArmor(MiscTools.ArmorSlots.HELM.ordinal());
+        ItemStack helm = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
         if (helm != null && helm.getItem() instanceof ItemGoggles)
             return helm;
         return null;
     }
 
     public static boolean isPlayerWearing(EntityPlayer player) {
-        ItemStack helm = player.getCurrentArmor(MiscTools.ArmorSlots.HELM.ordinal());
+        ItemStack helm = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
         return helm != null && helm.getItem() instanceof ItemGoggles;
     }
 
@@ -102,17 +105,17 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         incrementAura(stack);
         if (Game.isClient(world)) {
             GoggleAura aura = getCurrentAura(stack);
             ChatPlugin.sendLocalizedChat(player, "railcraft.gui.goggles.mode", "\u00A75" + aura);
         }
-        return stack.copy();
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack.copy());
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
         return TEXTURE;
     }
 
@@ -123,7 +126,6 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv) {
-        NBTTagCompound data = stack.getTagCompound();
         GoggleAura aura = getCurrentAura(stack);
         String mode = LocalizationPlugin.translate("railcraft.gui.goggles.mode");
         String tip = LocalizationPlugin.translate("railcraft.gui.goggles.tip");
@@ -133,7 +135,7 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
     }
 
     @Override
-    public Object getRecipeObject(IVariantEnum meta) {
+    public Object getRecipeObject(@Nullable IVariantEnum meta) {
         return this;
     }
 

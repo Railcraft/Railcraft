@@ -11,6 +11,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -37,7 +38,7 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartContainerBase extends EntityMinecartContainer implements IRailcraftCart, IItemCart {
+public abstract class CartContainerBase extends EntityMinecartContainer implements IRailcraftCart, IItemCart, IInventoryObject {
     private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
     protected EnumFacing travelDirection;
     protected EnumFacing verticalTravelDirection;
@@ -192,10 +193,20 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
         return "railcraft:" + getCartType().getBaseTag();
     }
 
-    //TODO: Explode?
+    //TODO: Will this explode?
     @Nonnull
     @Override
     public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn) {
         return null;
+    }
+
+    @Override
+    public int getNumSlots() {
+        return getSizeInventory();
+    }
+
+    @Override
+    public Object getInventoryObject() {
+        return this;
     }
 }

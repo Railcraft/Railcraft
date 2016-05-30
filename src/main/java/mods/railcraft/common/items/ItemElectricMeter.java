@@ -21,11 +21,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -59,14 +61,14 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
 
     @SuppressWarnings("unused")
     @SubscribeEvent
-    public void onEntityInteract(EntityInteractEvent event) {
-        EntityPlayer player = event.entityPlayer;
+    public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        EntityPlayer player = event.getEntityPlayer();
 
-        Entity entity = event.target;
+        Entity entity = event.getTarget();
 
-        ItemStack stack = player.getCurrentEquippedItem();
+        ItemStack stack = event.getItemStack();
         if (stack != null && stack.getItem() instanceof ItemElectricMeter)
-            player.swingItem();
+            player.swingArm(event.getHand());
 
         if (Game.isClient(player.worldObj))
             return;
@@ -88,17 +90,17 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if (Game.isClient(world))
-            return false;
-        boolean returnValue = false;
+            return EnumActionResult.PASS;
+        EnumActionResult returnValue = EnumActionResult.PASS;
         try {
             Optional<IElectricGrid> gridObject = GridTools.getGridObjectAt(world, pos);
             if (gridObject.isPresent()) {
                 IElectricGrid.ChargeHandler ch = gridObject.get().getChargeHandler();
                 if (ch != null) {
                     ChatPlugin.sendLocalizedChat(player, "railcraft.gui.electric.meter.charge", ch.getCharge(), ch.getDraw(), ch.getLosses());
-                    returnValue = true;
+                    returnValue = EnumActionResult.SUCCESS;
                 }
             }
         } catch (Throwable er) {

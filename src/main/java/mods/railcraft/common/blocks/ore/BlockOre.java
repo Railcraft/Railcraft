@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.ore;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.client.particles.ParticleHelperCallback;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
@@ -218,11 +217,6 @@ public class BlockOre extends Block {
     @Override
     public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         return true;
-    }
-
-    @Override
-    public void setBlockBoundsForItemRender() {
-        setBlockBounds(0, 0, 0, 1, 1, 1);
     }
 
     @SideOnly(Side.CLIENT)

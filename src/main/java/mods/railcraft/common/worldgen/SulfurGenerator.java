@@ -8,8 +8,9 @@
  */
 package mods.railcraft.common.worldgen;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.EnumHelper;
@@ -21,7 +22,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SulfurGenerator {
@@ -32,22 +32,21 @@ public class SulfurGenerator {
     @SubscribeEvent
     public void generate(OreGenEvent.Post event) {
 
-        World world = event.world;
-        Random rand = event.rand;
-        int worldX = event.worldX;
-        int worldZ = event.worldZ;
+        World world = event.getWorld();
+        Random rand = event.getRand();
+        BlockPos pos = event.getPos();
 
-        if (!TerrainGen.generateOre(world, rand, sulfur, worldX, worldZ, EVENT_TYPE))
+        if (!TerrainGen.generateOre(world, rand, sulfur, pos, EVENT_TYPE))
             return;
 
-        BiomeGenBase biome = world.getBiomeGenForCoords(worldX + 16, worldZ + 16);
+        Biome biome = world.getBiome(pos.add(8, 0, 8));
         if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.MOUNTAIN))
             for (int i = 0; i < 90; i++) {
-                int x = worldX + rand.nextInt(16);
+                int x = pos.getX() + rand.nextInt(16);
                 int y = 6 + rand.nextInt(10);
-                int z = worldZ + rand.nextInt(16);
+                int z = pos.getZ() + rand.nextInt(16);
 
-                sulfur.generate(world, rand, x, y, z);
+                sulfur.generate(world, rand, new BlockPos(x, y, z));
             }
     }
 

@@ -26,17 +26,18 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.IAnchor;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.ChunkPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -45,12 +46,13 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
     public static final byte TICKET_FLAG = 6;
     private static final byte ANCHOR_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
-    private final IInventory invWrapper = new InventoryMapper(this);
+    private final InventoryMapper invWrapper = new InventoryMapper(this);
+    @Nullable
     protected Ticket ticket;
     private Set<ChunkPos> chunks;
     private long anchorFuel;
-    private boolean teleported = false;
-    private int disabled = 0;
+    private boolean teleported;
+    private int disabled;
     private int clock = MiscTools.RANDOM.nextInt();
 
     public EntityCartAnchor(World world) {
@@ -141,7 +143,7 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
     }
 
     protected Ticket getTicketFromForge() {
-        return ForgeChunkManager.requestTicket(Railcraft.getMod(), worldObj, Type.ENTITY);
+        return ForgeChunkManager.requestTicket(Railcraft.getMod(), worldObj, ForgeChunkManager.Type.ENTITY);
     }
 
     public boolean needsFuel() {
@@ -166,6 +168,7 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
     private boolean requestTicket() {
         if (meetsTicketRequirements()) {
             Ticket chunkTicket = getTicketFromForge();
+            //noinspection ConstantConditions
             if (chunkTicket != null) {
 //                System.out.println("Request Ticket: " + worldObj.getClass().getSimpleName());
                 chunkTicket.getModData();
@@ -179,11 +182,11 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
         return false;
     }
 
-    public void setChunkTicket(Ticket tick) {
-        if (this.ticket != tick)
+    public void setChunkTicket(@Nullable Ticket ticket) {
+        if (this.ticket != ticket)
             ForgeChunkManager.releaseTicket(this.ticket);
-        this.ticket = tick;
-        setFlag(TICKET_FLAG, ticket != null);
+        this.ticket = ticket;
+        setFlag(TICKET_FLAG, this.ticket != null);
     }
 
     public void forceChunkLoading(int xChunk, int zChunk) {
@@ -239,10 +242,10 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
     }
 
     @Override
-    public void travelToDimension(int dim) {
+    public Entity changeDimension(int dim) {
         teleported = true;
         releaseTicket();
-        super.travelToDimension(dim);
+        return super.changeDimension(dim);
     }
 
     @Override
@@ -309,9 +312,7 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if (!RailcraftConfig.anchorsCanInteractWithPipes())
-            return false;
-        return getFuelMap().containsKey(stack);
+        return RailcraftConfig.anchorsCanInteractWithPipes() && getFuelMap().containsKey(stack);
     }
 
     @Override

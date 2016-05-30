@@ -32,14 +32,6 @@ import java.util.function.Predicate;
 @ParametersAreNonnullByDefault
 public abstract class MiscTools {
 
-    public enum ArmorSlots {
-
-        BOOTS,
-        LEGS,
-        CHEST,
-        HELM,
-    }
-
     public static final Random RANDOM = new Random();
 
     @SuppressWarnings("ConstantConditions")
