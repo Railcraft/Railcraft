@@ -241,7 +241,7 @@ public class BlockTrackElevator extends Block {
     @Override
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entityIn) {
         entityIn.fallDistance = 0;
-        if (Game.isNotHost(worldIn) || !(entityIn instanceof EntityMinecart))
+        if (Game.isClient(worldIn) || !(entityIn instanceof EntityMinecart))
             return;
         minecartInteraction(worldIn, (EntityMinecart) entityIn, pos);
     }

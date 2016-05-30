@@ -59,7 +59,7 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
 
         flow = 0;

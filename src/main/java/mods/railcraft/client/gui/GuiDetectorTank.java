@@ -60,7 +60,7 @@ public class GuiDetectorTank extends TileGui {
     public void onGuiClosed() {
         super.onGuiClosed();
 
-        if (Game.isNotHost(tile.getWorld())) {
+        if (Game.isClient(tile.getWorld())) {
             detector.getButtonController().setCurrentState(button.getController().getCurrentState());
             PacketGuiReturn pkt = new PacketGuiReturn(tile);
             PacketDispatcher.sendToServer(pkt);

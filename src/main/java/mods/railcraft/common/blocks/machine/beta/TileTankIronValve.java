@@ -86,7 +86,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
     public void update() {
         super.update();
 
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
         decrementFilling();
 

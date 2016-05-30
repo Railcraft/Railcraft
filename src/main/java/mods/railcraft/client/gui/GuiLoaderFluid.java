@@ -51,7 +51,7 @@ public class GuiLoaderFluid extends TileGui {
 
     @Override
     public void onGuiClosed() {
-        if (Game.isNotHost(tile.getWorld())) {
+        if (Game.isClient(tile.getWorld())) {
             tile.getStateController().setCurrentState(button.getController().getCurrentState());
             PacketBuilder.instance().sendGuiReturnPacket(tile);
         }

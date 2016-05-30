@@ -96,7 +96,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
      * that to update().
      */
     protected boolean shouldSwitchForCart(EntityMinecart cart) {
-        if (cart == null || Game.isNotHost(theWorldAsserted()))
+        if (cart == null || Game.isClient(theWorldAsserted()))
             return isVisuallySwitched();
 
         if (springingCarts.contains(cart.getPersistentID()))

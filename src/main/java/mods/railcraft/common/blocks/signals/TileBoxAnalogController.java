@@ -55,7 +55,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     public void update() {
         super.update();
 
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             controller.tickClient();
             return;
         }
@@ -74,7 +74,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     @Override
     public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
         int s = getPowerLevel();
         if (s != strongestSignal) {

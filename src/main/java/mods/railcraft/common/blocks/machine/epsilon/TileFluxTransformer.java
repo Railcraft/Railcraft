@@ -69,7 +69,7 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
         chargeHandler.tick();
     }

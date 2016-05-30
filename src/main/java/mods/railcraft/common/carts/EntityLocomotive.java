@@ -44,7 +44,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -329,7 +328,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         super.onUpdate();
         update++;
 
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         processTicket();

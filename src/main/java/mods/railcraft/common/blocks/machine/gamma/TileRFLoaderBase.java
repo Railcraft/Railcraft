@@ -69,7 +69,7 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
     public void update() {
         super.update();
 
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
 
         int capacity = getMaxRF();

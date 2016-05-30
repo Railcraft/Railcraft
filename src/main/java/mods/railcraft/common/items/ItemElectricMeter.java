@@ -68,7 +68,7 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
         if (stack != null && stack.getItem() instanceof ItemElectricMeter)
             player.swingItem();
 
-        if (Game.isNotHost(player.worldObj))
+        if (Game.isClient(player.worldObj))
             return;
 
         if (stack != null && stack.getItem() instanceof ItemElectricMeter)
@@ -89,7 +89,7 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
 
     @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (Game.isNotHost(world))
+        if (Game.isClient(world))
             return false;
         boolean returnValue = false;
         try {

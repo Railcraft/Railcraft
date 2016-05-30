@@ -24,7 +24,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.util.List;
 
@@ -105,7 +104,7 @@ public class ItemGoggles extends ItemArmor implements IRailcraftObject {
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         incrementAura(stack);
-        if (Game.isNotHost(world)) {
+        if (Game.isClient(world)) {
             GoggleAura aura = getCurrentAura(stack);
             ChatPlugin.sendLocalizedChat(player, "railcraft.gui.goggles.mode", "\u00A75" + aura);
         }

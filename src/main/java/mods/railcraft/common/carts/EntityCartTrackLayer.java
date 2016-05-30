@@ -48,7 +48,7 @@ public class EntityCartTrackLayer extends CartMaintenancePatternBase {
     @Override
     protected void func_180460_a(BlockPos pos, IBlockState state) {
         super.func_180460_a(pos, state);
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         stockItems(SLOT_REPLACE, SLOT_STOCK);

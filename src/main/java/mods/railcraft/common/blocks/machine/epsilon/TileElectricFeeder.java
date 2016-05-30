@@ -39,7 +39,7 @@ public class TileElectricFeeder extends TileMachineBase implements IElectricGrid
     public void update() {
         super.update();
 
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
 
         if (!addedToIC2EnergyNet) {

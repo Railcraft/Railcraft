@@ -76,7 +76,7 @@ public abstract class TileSignalBase extends TileSignalFoundation implements IAs
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             boolean needsUpdate = false;
             int lightValue = getLightValue();
             if (prevLightValue != lightValue) {

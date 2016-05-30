@@ -89,7 +89,7 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
     public void update() {
         super.update();
 
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
 
         chargeHandler.tick();

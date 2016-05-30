@@ -56,7 +56,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     public void update() {
         super.update();
 
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             controller.tickClient();
             return;
         }
@@ -75,7 +75,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
     @Override
     public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
         boolean p = isBeingPowered() || PowerPlugin.isRedstonePowered(worldObj, getPos());
         if (p != powered) {

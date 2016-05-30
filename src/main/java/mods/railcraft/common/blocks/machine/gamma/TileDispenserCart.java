@@ -138,7 +138,7 @@ public class TileDispenserCart extends TileMachineItem {
     @Override
     public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
         super.onNeighborBlockChange(state, block);
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
         boolean newPower = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         if (!powered && newPower) {

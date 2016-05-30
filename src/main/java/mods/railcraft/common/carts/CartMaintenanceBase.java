@@ -63,7 +63,7 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         if (isBlinking())

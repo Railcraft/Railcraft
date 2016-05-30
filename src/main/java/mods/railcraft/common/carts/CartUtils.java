@@ -105,7 +105,7 @@ public class CartUtils {
         cart.getEntityData().setBoolean("HighSpeed", false);
         cart.motionX = 0;
         cart.motionZ = 0;
-        if (Game.isNotHost(cart.worldObj))
+        if (Game.isClient(cart.worldObj))
             return;
         if (cart.riddenByEntity != null)
             cart.riddenByEntity.mountEntity(cart);

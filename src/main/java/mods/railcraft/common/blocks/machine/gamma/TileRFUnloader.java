@@ -47,7 +47,7 @@ public class TileRFUnloader extends TileRFLoaderBase implements IEnergyProvider,
     @Override
     public void updateEntity() {
         super.updateEntity();
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         RedstoneFluxPlugin.pushToTiles(this, tileCache, AMOUNT_TO_PUSH_TO_TILES);

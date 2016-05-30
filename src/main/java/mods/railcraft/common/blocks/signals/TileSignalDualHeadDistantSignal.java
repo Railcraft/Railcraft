@@ -43,7 +43,7 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             receiver.tickClient();
             return;
         }

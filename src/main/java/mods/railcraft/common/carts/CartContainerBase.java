@@ -90,7 +90,7 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
 
     @Override
     public void setDead() {
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             for (int slot = 0; slot < getSizeInventory(); slot++) {
                 setInventorySlotContents(slot, null);
             }

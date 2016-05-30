@@ -231,7 +231,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             if (chunks != null)
                 EffectManager.instance.chunkLoaderEffect(worldObj, this, chunks);
             return;
@@ -408,7 +408,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     @Override
     public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
         super.onNeighborBlockChange(state, block);
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
         boolean newPower = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         if (powered != newPower)

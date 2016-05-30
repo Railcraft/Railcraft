@@ -69,7 +69,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(getWorld())) {
+        if (Game.isClient(getWorld())) {
             return;
         }
 

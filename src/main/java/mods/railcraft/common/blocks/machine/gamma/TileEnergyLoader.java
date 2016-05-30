@@ -51,7 +51,7 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
     public void update() {
         super.update();
 
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
 
         transferredEnergy = false;

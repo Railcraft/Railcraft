@@ -65,7 +65,7 @@ public class GuiTrackLauncher extends GuiBasic {
     @Override
     public void onGuiClosed() {
         track.setLaunchForce(force);
-        if (Game.isNotHost(track.theWorldAsserted())) {
+        if (Game.isClient(track.theWorldAsserted())) {
             PacketGuiReturn pkt = new PacketGuiReturn((IGuiReturnHandler) track.getTile());
             pkt.sendPacket();
         }

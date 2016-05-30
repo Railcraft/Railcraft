@@ -42,7 +42,7 @@ public class Game {
         return !world.isRemote;
     }
 
-    public static boolean isNotHost(final World world) {
+    public static boolean isClient(final World world) {
         return world.isRemote;
     }
 

@@ -78,7 +78,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     public void update() {
         super.update();
 
-        if (Game.isNotHost(getWorld())) {
+        if (Game.isClient(getWorld())) {
             return;
         }
 

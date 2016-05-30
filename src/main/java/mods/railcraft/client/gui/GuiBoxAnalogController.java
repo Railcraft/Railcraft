@@ -140,7 +140,7 @@ public class GuiBoxAnalogController extends GuiBasic {
 
     @Override
     public void onGuiClosed() {
-        if (Game.isNotHost(tile.getWorld())) {
+        if (Game.isClient(tile.getWorld())) {
             for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
                 parseRegex(textBox.get(entry.getKey()).getText(), entry.getValue());
             }

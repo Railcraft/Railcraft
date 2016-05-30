@@ -169,7 +169,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     public void update() {
         super.update();
 
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         if (clock % 16 == 0)

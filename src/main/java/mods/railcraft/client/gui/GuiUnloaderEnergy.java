@@ -81,7 +81,7 @@ public class GuiUnloaderEnergy extends TileGui {
 
     @Override
     public void onGuiClosed() {
-        if (Game.isNotHost(tile.getWorld())) {
+        if (Game.isClient(tile.getWorld())) {
             PacketGuiReturn pkt = new PacketGuiReturn(tile);
             PacketDispatcher.sendToServer(pkt);
         }

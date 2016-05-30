@@ -17,7 +17,6 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
-import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -111,7 +110,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
         chargeHandler.tick();
     }
@@ -119,7 +118,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     @Override
     protected void func_180460_a(BlockPos pos, IBlockState state) {
         super.func_180460_a(pos, state);
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
         chargeHandler.tickOnTrack(pos);
     }

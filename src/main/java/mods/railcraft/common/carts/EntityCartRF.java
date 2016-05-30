@@ -98,7 +98,7 @@ public final class EntityCartRF extends CartBase {
     public void onUpdate() {
         super.onUpdate();
 
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         if (getRF() > RF_CAP)

@@ -134,7 +134,7 @@ public class ItemNotepad extends ItemRailcraft {
             nbt.removeTag("contents");
         } else {
             PasteMode pasteMode = nextPasteMode(stack);
-            if (Game.isNotHost(world))
+            if (Game.isClient(world))
                 ChatPlugin.sendLocalizedChatFromClient(player, "item.railcraft.tool.notepad.tip.mode", TextFormatting.DARK_PURPLE + pasteMode.toString());
         }
         return stack;

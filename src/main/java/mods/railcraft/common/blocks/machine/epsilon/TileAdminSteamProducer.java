@@ -39,7 +39,7 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
     }
 
     private void checkRedstone() {
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
         boolean p = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         if (powered != p) {
@@ -51,7 +51,7 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         if (!powered)

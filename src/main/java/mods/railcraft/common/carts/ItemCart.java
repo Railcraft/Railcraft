@@ -58,7 +58,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem {
 
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (Game.isNotHost(world))
+        if (Game.isClient(world))
             return false;
         EntityMinecart placedCart = placeCart(player.getGameProfile(), stack, world, pos);
         if (placedCart != null) {

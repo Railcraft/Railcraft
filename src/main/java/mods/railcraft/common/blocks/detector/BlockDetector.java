@@ -327,7 +327,7 @@ public class BlockDetector extends RailcraftBlockContainer {
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
         markBlockForUpdate(state, worldIn, pos);
-        if (Game.isNotHost(worldIn))
+        if (Game.isClient(worldIn))
             return;
         for (EnumFacing side : EnumFacing.VALUES) {
             worldIn.notifyNeighborsOfStateChange(pos.offset(side), state.getBlock());
@@ -337,7 +337,7 @@ public class BlockDetector extends RailcraftBlockContainer {
     @Override
     public void breakBlock(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        if (Game.isNotHost(worldIn))
+        if (Game.isClient(worldIn))
             return;
         for (EnumFacing side : EnumFacing.VALUES) {
             worldIn.notifyNeighborsOfStateChange(pos.offset(side), state.getBlock());

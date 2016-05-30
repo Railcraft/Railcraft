@@ -64,7 +64,7 @@ public class GuiTrackPriming extends GuiBasic {
     @Override
     public void onGuiClosed() {
         track.setFuse(fuse);
-        if (Game.isNotHost(track.theWorldAsserted())) {
+        if (Game.isClient(track.theWorldAsserted())) {
             PacketGuiReturn pkt = new PacketGuiReturn((IGuiReturnHandler) track.getTile());
             PacketDispatcher.sendToServer(pkt);
         }

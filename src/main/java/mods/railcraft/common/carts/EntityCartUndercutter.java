@@ -93,7 +93,7 @@ public class EntityCartUndercutter extends CartMaintenancePatternBase {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         stockItems(SLOT_REPLACE_UNDER, SLOT_STOCK_UNDER);

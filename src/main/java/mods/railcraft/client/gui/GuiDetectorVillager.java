@@ -108,7 +108,7 @@ public class GuiDetectorVillager extends GuiBasic {
 
     @Override
     public void onGuiClosed() {
-        if (Game.isNotHost(tile.getWorld())) {
+        if (Game.isClient(tile.getWorld())) {
             detector.setProfession(professions.getCurrent());
             detector.setMode(mode);
             PacketGuiReturn pkt = new PacketGuiReturn(tile);

@@ -67,7 +67,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
             if (jet == 0)
                 sendUpdateToClient();
         }
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             if (isJetting()) {
                 double speedFactor = 0.2;
                 for (int i = 0; i < 10; i++) {

@@ -267,7 +267,7 @@ public abstract class InvTools {
     }
 
     public static void dropInventory(IInventory inv, World world, BlockPos pos) {
-        if (Game.isNotHost(world)) return;
+        if (Game.isClient(world)) return;
         for (IExtInvSlot slot : InventoryIterator.getIterable(inv)) {
             spewItem(slot.getStack(), world, pos);
             slot.setStack(null);
@@ -275,7 +275,7 @@ public abstract class InvTools {
     }
 
     public static void dropItems(Collection<ItemStack> items, World world, BlockPos pos) {
-        if (Game.isNotHost(world)) return;
+        if (Game.isClient(world)) return;
         for (ItemStack stack : items) {
             spewItem(stack, world, pos);
         }

@@ -72,7 +72,7 @@ public class GuiBoxCapacitor extends GuiBasic {
 
     @Override
     public void onGuiClosed() {
-        if (Game.isNotHost(tile.getWorld())) {
+        if (Game.isClient(tile.getWorld())) {
             tile.ticksToPower = ticksToPower;
             tile.getStateModeController().setCurrentState(stateMode.getController().getCurrentState());
             PacketGuiReturn pkt = new PacketGuiReturn(tile);

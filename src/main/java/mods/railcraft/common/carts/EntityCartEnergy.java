@@ -61,7 +61,7 @@ abstract class EntityCartEnergy extends CartContainerBase implements IEnergyTran
     public void onUpdate() {
         super.onUpdate();
 
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         if (getEnergy() > getCapacity())

@@ -122,7 +122,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
         // Legacy stuff?
 //        if (!tested) {

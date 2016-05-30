@@ -51,7 +51,7 @@ public class CrowbarHandler {
         if (stack != null && stack.getItem() instanceof IToolCrowbar)
             thePlayer.swingItem();
 
-        if (Game.isNotHost(thePlayer.worldObj))
+        if (Game.isClient(thePlayer.worldObj))
             return;
         if (!RailcraftModuleManager.isModuleEnabled(ModuleTrain.class))
             return;

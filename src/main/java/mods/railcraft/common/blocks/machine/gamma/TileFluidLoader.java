@@ -119,7 +119,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
 
         ItemStack topSlot = getStackInSlot(SLOT_INPUT);

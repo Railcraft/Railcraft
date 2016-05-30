@@ -57,7 +57,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             receiver.tickClient();
             return;
         }

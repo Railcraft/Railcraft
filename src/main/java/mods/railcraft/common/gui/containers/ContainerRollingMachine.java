@@ -41,7 +41,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
             @Override
             public void setInventorySlotContents(int slot, ItemStack stack) {
                 super.setInventorySlotContents(slot, stack);
-                if (stack != null && Game.isNotHost(tile.getWorld()))
+                if (stack != null && Game.isClient(tile.getWorld()))
                     InvTools.addItemToolTip(stack, LocalizationPlugin.translate("railcraft.gui.rolling.machine.tip.craft"));
             }
 

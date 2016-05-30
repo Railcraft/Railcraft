@@ -109,7 +109,7 @@ public class EntityCartCommand extends CartBase {
 
     @Override
     public boolean doInteract(EntityPlayer player) {
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             player.func_146095_a(this.getCommandLogic());
         }
         return true;

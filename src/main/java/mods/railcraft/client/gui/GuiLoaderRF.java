@@ -80,7 +80,7 @@ public class GuiLoaderRF extends TileGui {
 
     @Override
     public void onGuiClosed() {
-        if (Game.isNotHost(tile.getWorld())) {
+        if (Game.isClient(tile.getWorld())) {
             tile.setWaitIfEmpty(waitIfEmpty);
             tile.setWaitTillFull(waitTillFull);
             PacketGuiReturn pkt = new PacketGuiReturn(tile);

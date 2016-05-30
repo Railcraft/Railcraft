@@ -219,7 +219,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
     @SideOnly(Side.CLIENT)
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        if (Game.isNotHost(world))
+        if (Game.isClient(world))
             Minecraft.getMinecraft().displayGuiScreen(new GuiRoutingTable(player, stack));
         return stack;
     }

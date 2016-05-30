@@ -37,7 +37,7 @@ public class CommonEffectProxy implements IEffectManager {
 
     @Override
     public void teleportEffect(Entity entity, Vec3d destination) {
-        if (Game.isNotHost(entity.worldObj))
+        if (Game.isClient(entity.worldObj))
             return;
 
         try {
@@ -54,7 +54,7 @@ public class CommonEffectProxy implements IEffectManager {
 
     @Override
     public void forceTrackSpawnEffect(World world, BlockPos pos) {
-        if (Game.isNotHost(world))
+        if (Game.isClient(world))
             return;
 
         try {
@@ -70,7 +70,7 @@ public class CommonEffectProxy implements IEffectManager {
 
     @Override
     public void fireSparkEffect(World world, Vec3d start, Vec3d end) {
-        if (Game.isNotHost(world))
+        if (Game.isClient(world))
             return;
 
         try {

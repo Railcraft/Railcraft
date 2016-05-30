@@ -64,7 +64,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             if (pistonStage != 0) {
                 pistonProgress += getPistonSpeed();
                 if (pistonProgress > 0.5 && pistonStage == 1) {
@@ -197,7 +197,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     @Override
     public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
         super.onNeighborBlockChange(state, block);
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
         checkPower();
     }
@@ -229,7 +229,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
                 direction = dir;
                 notifyBlocksOfNeighborChange();
                 sendUpdateToClient();
-                if (Game.isNotHost(worldObj))
+                if (Game.isClient(worldObj))
                     markBlockForUpdate();
                 return true;
             }

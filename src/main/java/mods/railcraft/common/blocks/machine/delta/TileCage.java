@@ -70,7 +70,7 @@ public class TileCage extends TileMachineBase {
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             if (entity != null) {
 //                entity.onUpdate();
                 entity.setPosition(0, 0, 0);

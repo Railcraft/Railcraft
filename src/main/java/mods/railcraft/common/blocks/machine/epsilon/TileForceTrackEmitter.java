@@ -87,7 +87,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     private void checkRedstone() {
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
         boolean p = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
         if (powered != p) {
@@ -110,7 +110,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     public void update() {
         super.update();
 
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
 
         double draw = getDraw(numTracks);
@@ -250,7 +250,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
 
     @Override
     public boolean rotateBlock(EnumFacing axis) {
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return false;
         if (state != State.RETRACTED)
             return false;

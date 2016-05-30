@@ -67,7 +67,7 @@ public class GuiDetectorTrain extends GuiBasic {
     @Override
     public void onGuiClosed() {
         detector.setTrainSize(trainSize);
-        if (Game.isNotHost(tile.getWorld())) {
+        if (Game.isClient(tile.getWorld())) {
             PacketGuiReturn pkt = new PacketGuiReturn(tile);
             PacketDispatcher.sendToServer(pkt);
         }

@@ -115,7 +115,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     public void update() {
         super.update();
 
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
 
         if (!isMaster || getState() == MultiBlockState.INVALID) {

@@ -282,14 +282,14 @@ public abstract class TileMultiBlock extends TileMachineBase {
     @Override
     public void onBlockAdded() {
         super.onBlockAdded();
-        if (Game.isNotHost(worldObj)) return;
+        if (Game.isClient(worldObj)) return;
         onBlockChange();
     }
 
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        if (Game.isNotHost(worldObj)) return;
+        if (Game.isClient(worldObj)) return;
         onBlockChange();
         isMaster = false;
     }
@@ -297,7 +297,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     @Override
     public void onChunkUnload() {
         super.onChunkUnload();
-        if (Game.isNotHost(worldObj)) return;
+        if (Game.isClient(worldObj)) return;
         tested = false;
         scheduleMasterRetest();
     }
@@ -457,7 +457,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
     }
 
     public final void scheduleMasterRetest() {
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
         if (masterBlock != null)
             masterBlock.tested = false;

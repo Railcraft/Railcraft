@@ -29,7 +29,7 @@ public class TileSignalDistantSignal extends TileSignalBase implements IReceiver
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(getWorld())) {
+        if (Game.isClient(getWorld())) {
             receiver.tickClient();
             return;
         }

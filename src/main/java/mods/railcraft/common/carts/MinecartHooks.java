@@ -72,7 +72,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     public void onItemUse(PlayerInteractEvent event) {
         EntityPlayer player = event.entityPlayer;
         World world = player.worldObj;
-        if (Game.isNotHost(world))
+        if (Game.isClient(world))
             return;
 
         ItemStack itemStack = player.getHeldItem();
@@ -92,7 +92,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 
     @Override
     public void onEntityCollision(EntityMinecart cart, Entity other) {
-        if (Game.isNotHost(cart.worldObj) || other == cart.riddenByEntity || !other.isEntityAlive() || !cart.isEntityAlive())
+        if (Game.isClient(cart.worldObj) || other == cart.riddenByEntity || !other.isEntityAlive() || !cart.isEntityAlive())
             return;
 
         ILinkageManager lm = LinkageManager.instance();

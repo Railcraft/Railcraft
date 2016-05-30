@@ -80,7 +80,7 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             if (getFlag(TICKET_FLAG))
                 if (chunks != null)
                     EffectManager.instance.chunkLoaderEffect(worldObj, this, chunks);

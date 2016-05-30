@@ -88,7 +88,7 @@ public class GuiDetectorItem extends TileGui {
         if (filter >= DetectorItem.FilterMode.values().length)
             filter = 0;
         detector.setFilterMode(DetectorItem.FilterMode.values()[filter]);
-        if (Game.isNotHost(tile.getWorld())) {
+        if (Game.isClient(tile.getWorld())) {
             PacketGuiReturn pkt = new PacketGuiReturn(tile);
             PacketDispatcher.sendToServer(pkt);
         }

@@ -31,7 +31,7 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
     public void update() {
         super.update();
 
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         // Check and fix invalid block ids and metadata

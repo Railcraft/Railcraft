@@ -82,7 +82,7 @@ public class GuiBoxController extends GuiBasic {
 
     @Override
     public void onGuiClosed() {
-        if (Game.isNotHost(tile.getWorld())) {
+        if (Game.isClient(tile.getWorld())) {
             tile.defaultAspect = defaultAspect;
             tile.poweredAspect = poweredAspect;
             PacketGuiReturn pkt = new PacketGuiReturn(tile);

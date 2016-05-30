@@ -56,7 +56,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             controller.tickClient();
             signalBlock.tickClient();
             return;

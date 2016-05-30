@@ -176,7 +176,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     public void update() {
         super.update();
 
-        if (Game.isNotHost(getWorld())) {
+        if (Game.isClient(getWorld())) {
             if (hasFinishedCycle())
                 EffectManager.instance.steamEffect(worldObj, this, +0.25);
             return;

@@ -54,7 +54,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     @Override
     public void update() {
         super.update();
-        if (Game.isNotHost(getWorld())) {
+        if (Game.isClient(getWorld())) {
             receiver.tickClient();
             return;
         }

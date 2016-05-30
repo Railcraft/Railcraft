@@ -58,7 +58,7 @@ public class EntityCartTrackRelayer extends CartMaintenancePatternBase {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         stockItems(SLOT_REPLACE, SLOT_STOCK);

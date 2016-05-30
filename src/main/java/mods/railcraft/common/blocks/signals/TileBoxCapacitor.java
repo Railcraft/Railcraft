@@ -96,7 +96,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     public void update() {
         super.update();
 
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         if (ticksPowered > 0) {

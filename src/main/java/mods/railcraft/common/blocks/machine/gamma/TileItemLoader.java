@@ -66,7 +66,7 @@ public class TileItemLoader extends TileLoaderItemBase {
     public void update() {
         super.update();
 
-        if (Game.isNotHost(getWorld())) {
+        if (Game.isClient(getWorld())) {
             return;
         }
 

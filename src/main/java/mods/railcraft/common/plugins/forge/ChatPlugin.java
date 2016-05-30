@@ -44,7 +44,7 @@ public class ChatPlugin {
     }
 
     public static void sendLocalizedChatFromClient(EntityPlayer player, String msg, Object... args) {
-        if (Game.isNotHost(player.worldObj))
+        if (Game.isClient(player.worldObj))
             sendLocalizedChat(player, msg, args);
     }
 

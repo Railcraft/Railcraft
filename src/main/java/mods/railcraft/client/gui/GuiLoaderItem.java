@@ -53,7 +53,7 @@ public class GuiLoaderItem extends TileGui {
 
     @Override
     public void onGuiClosed() {
-        if (Game.isNotHost(tile.getWorld())) {
+        if (Game.isClient(tile.getWorld())) {
             tile.getTransferModeController().setCurrentState(transferMode.getController().getCurrentState());
             tile.getRedstoneModeController().setCurrentState(redstoneMode.getController().getCurrentState());
             PacketBuilder.instance().sendGuiReturnPacket(tile);

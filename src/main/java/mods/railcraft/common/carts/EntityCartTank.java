@@ -113,7 +113,7 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     public void onUpdate() {
         super.onUpdate();
 
-        if (Game.isNotHost(worldObj)) {
+        if (Game.isClient(worldObj)) {
             if (getFluidId() != -1) {
                 tank.renderData.fluid = FluidRegistry.getFluid(getFluidId());
                 tank.renderData.amount = getFluidQty();

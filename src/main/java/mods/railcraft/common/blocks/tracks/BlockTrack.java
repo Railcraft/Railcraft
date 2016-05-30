@@ -242,7 +242,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
 
     @Override
     public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity) {
-        if (Game.isNotHost(world))
+        if (Game.isClient(world))
             return;
 
         if (!MiscTools.isKillableEntity(entity))
@@ -436,7 +436,7 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
     @Override
     public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
         try {
-            if (Game.isNotHost(world))
+            if (Game.isClient(world))
                 return;
             TileEntity t = WorldPlugin.getBlockTile(world, pos);
             if (t instanceof TileTrack) {

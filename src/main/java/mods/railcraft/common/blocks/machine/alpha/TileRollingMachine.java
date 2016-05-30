@@ -136,7 +136,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     public void update() {
         super.update();
 
-        if (Game.isNotHost(worldObj))
+        if (Game.isClient(worldObj))
             return;
 
         balanceSlots();

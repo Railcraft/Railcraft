@@ -51,7 +51,7 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
 
     @Override
     public void update() {
-        if (Game.isNotHost(getWorld())) {
+        if (Game.isClient(getWorld())) {
             return;
         }
         if (delay > 0) {

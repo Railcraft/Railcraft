@@ -151,7 +151,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     public void update() {
         super.update();
 
-        if (Game.isNotHost(getWorld()))
+        if (Game.isClient(getWorld()))
             return;
 
         if (!addedToIC2EnergyNet) {
