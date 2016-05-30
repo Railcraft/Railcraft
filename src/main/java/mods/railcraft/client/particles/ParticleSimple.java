@@ -8,6 +8,7 @@
  */
 package mods.railcraft.client.particles;
 
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
@@ -17,18 +18,18 @@ public class ParticleSimple extends ParticleBase {
 
     public double gravity = 0.004D;
 
-    public ParticleSimple(World world, double x, double y, double z) {
-        this(world, x, y, z, 0, 0, 0, 3f);
+    public ParticleSimple(World world, Vec3d start) {
+        this(world, start, new Vec3d(0, 0, 0), 3f);
     }
 
-    public ParticleSimple(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
-        super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+    public ParticleSimple(World world, Vec3d start, Vec3d vel, float scale) {
+        super(world, start, new Vec3d(0, 0, 0));
         this.motionX *= 0.1;
         this.motionY *= 0.1;
         this.motionZ *= 0.1;
-        this.motionX += velX;
-        this.motionY += velY;
-        this.motionZ += velZ;
+        this.motionX += vel.xCoord;
+        this.motionY += vel.yCoord;
+        this.motionZ += vel.zCoord;
         this.particleScale *= 0.75F;
         this.particleScale *= scale;
         this.particleMaxAge = (int) (24.0D / (Math.random() * 0.5D + 0.2D));

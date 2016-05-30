@@ -26,8 +26,8 @@ public class ParticleHeatTrail extends ParticleBase {
     private static Random colorRand = new Random();
     private final IEffectSource source;
 
-    public ParticleHeatTrail(World world, double x, double y, double z, long colorSeed, IEffectSource source) {
-        super(world, x, y, z, 0, 0, 0);
+    public ParticleHeatTrail(World world, Vec3d start, long colorSeed, IEffectSource source) {
+        super(world, start, new Vec3d(0, 0, 0));
         this.source = source;
 
         calculateVector();

@@ -33,13 +33,13 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     void steamEffect(World world, Object source, double yOffset);
 
-    void steamJetEffect(World world, Object source, double vecX, double vecY, double vecZ);
+    void steamJetEffect(World world, Object source, Vec3d vel);
 
     void chimneyEffect(World world, double x, double y, double z);
 
-    void teleportEffect(Entity entity, double destX, double destY, double destZ);
+    void teleportEffect(Entity entity, Vec3d destination);
 
-    void trailEffect(int startX, int startY, int startZ, TileEntity dest, long colorSeed);
+    void trailEffect(BlockPos start, TileEntity dest, long colorSeed);
 
     void fireSparkEffect(World world, Vec3d start, Vec3d end);
 

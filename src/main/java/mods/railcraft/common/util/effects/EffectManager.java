@@ -74,6 +74,6 @@ public class EffectManager {
         } else if (source instanceof Entity) {
             return new EffectSourceEntity((Entity) source);
         }
-        return null;
+        throw new RuntimeException("Invalid Effect Source");
     }
 }

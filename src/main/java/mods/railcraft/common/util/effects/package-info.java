@@ -1,4 +1,4 @@
-/**
+/*******************************************************************************
  * Copyright (c) CovertJaguar, 2011-2016
  * http://railcraft.info
  *
@@ -6,13 +6,11 @@
  * and may only be used with explicit written
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
- *
- * Created by CovertJaguar on 5/29/2016.
- */
+ ******************************************************************************/
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.client.particles;
+package mods.railcraft.common.util.effects;
 
 import mcp.MethodsReturnNonnullByDefault;
 

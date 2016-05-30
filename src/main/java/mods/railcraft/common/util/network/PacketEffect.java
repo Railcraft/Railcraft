@@ -10,6 +10,7 @@ package mods.railcraft.common.util.network;
 
 import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.io.ByteArrayOutputStream;
@@ -47,6 +48,10 @@ public class PacketEffect extends RailcraftPacket {
 
     public void sendPacket(World world, BlockPos pos) {
         PacketDispatcher.sendToAllAround(this, PacketDispatcher.targetPoint(world.provider.getDimension(), pos, 80));
+    }
+
+    public void sendPacket(World world, Vec3d vec) {
+        PacketDispatcher.sendToAllAround(this, PacketDispatcher.targetPoint(world.provider.getDimension(), vec, 80));
     }
 
     public void sendPacket(World world, double x, double y, double z) {

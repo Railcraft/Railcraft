@@ -11,6 +11,7 @@
 package mods.railcraft.common.util.network;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -29,5 +30,11 @@ public class RailcraftDataOutputStream extends DataOutputStream {
 
     public void writeBlockPos(BlockPos pos) throws IOException {
         writeLong(pos.toLong());
+    }
+
+    public void writeVec3d(Vec3d vec) throws IOException {
+        writeDouble(vec.xCoord);
+        writeDouble(vec.yCoord);
+        writeDouble(vec.zCoord);
     }
 }

@@ -8,6 +8,7 @@
  */
 package mods.railcraft.client.particles;
 
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -15,12 +16,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleSteam extends ParticleShrinking {
 
-    public ParticleSteam(World world, double x, double y, double z, double velX, double velY, double velZ) {
-        this(world, x, y, z, velX, velY, velZ, 1.0F);
+    public ParticleSteam(World world, Vec3d start, Vec3d vel) {
+        this(world, start, vel, 1.0F);
     }
 
-    public ParticleSteam(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
-        super(world, x, y, z, velX, velY, velZ, scale);
+    public ParticleSteam(World world, Vec3d start, Vec3d vel, float scale) {
+        super(world, start, vel, scale);
         this.particleRed = this.particleGreen = this.particleBlue = (float) (Math.random() * 0.4) + 0.4f;
         this.particleMaxAge = (int) (8.0D / (Math.random() * 0.8D + 0.2D));
         this.particleMaxAge = (int) ((float) particleMaxAge * scale);

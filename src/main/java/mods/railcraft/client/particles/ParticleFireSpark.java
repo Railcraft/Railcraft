@@ -16,7 +16,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SideOnly(Side.CLIENT)
@@ -27,7 +26,7 @@ public class ParticleFireSpark extends ParticleBase {
     private final double maxDist;
 
     public ParticleFireSpark(World world, Vec3d start, Vec3d end) {
-        super(world, start.xCoord, start.yCoord, start.zCoord, 0, 0, 0);
+        super(world, start, new Vec3d(0, 0, 0));
         this.end = end;
 
         maxDist = getPos().squareDistanceTo(end);
@@ -48,7 +47,7 @@ public class ParticleFireSpark extends ParticleBase {
 
         Vec3d vel = vecParticle.subtract(end);
         vel = vel.normalize();
-        
+
         float velScale = 0.1f;
         this.motionX = vel.xCoord * velScale;
         this.motionY = vel.yCoord * velScale + 0.2 * (dist / maxDist);

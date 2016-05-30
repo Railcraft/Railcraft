@@ -24,12 +24,12 @@ public class ParticleBase extends Particle {
     protected boolean noClip;
     protected boolean dimAsAge;
 
-    public ParticleBase(World par1World, double x, double y, double z) {
-        this(par1World, x, y, z, 0, 0, 0);
+    public ParticleBase(World par1World, Vec3d start) {
+        this(par1World, start, new Vec3d(0, 0, 0));
     }
 
-    public ParticleBase(World par1World, double x, double y, double z, double velX, double velY, double velZ) {
-        super(par1World, x, y, z, 0.0D, 0.0D, 0.0D);
+    public ParticleBase(World par1World, Vec3d start, Vec3d vel) {
+        super(par1World, start.xCoord, start.yCoord, start.zCoord, vel.xCoord, vel.yCoord, vel.zCoord);
     }
 
     public Vec3d getPos() {

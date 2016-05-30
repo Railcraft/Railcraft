@@ -22,10 +22,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
@@ -37,21 +36,17 @@ public class CommonEffectProxy implements IEffectManager {
     protected static final Random rand = new Random();
 
     @Override
-    public void teleportEffect(Entity entity, double destX, double destY, double destZ) {
+    public void teleportEffect(Entity entity, Vec3d destination) {
         if (Game.isNotHost(entity.worldObj))
             return;
 
         try {
             PacketEffect pkt = new PacketEffect(Effect.TELEPORT);
-            DataOutputStream data = pkt.getOutputStream();
-            data.writeDouble(entity.posX);
-            data.writeDouble(entity.posY);
-            data.writeDouble(entity.posZ);
-            data.writeDouble(destX);
-            data.writeDouble(destY);
-            data.writeDouble(destZ);
-            pkt.sendPacket(entity.worldObj, entity.posX, entity.posY, entity.posZ);
-        } catch (IOException ex) {
+            RailcraftDataOutputStream data = pkt.getOutputStream();
+            data.writeVec3d(entity.getPositionVector());
+            data.writeVec3d(destination);
+            pkt.sendPacket(entity.worldObj, entity.getPositionVector());
+        } catch (IOException ignored) {
         }
 
         SoundHelper.playSoundAtEntity(entity, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.BLOCKS, 0.25F, 1.0F);
@@ -74,21 +69,17 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public void fireSparkEffect(World world, double startX, double startY, double startZ, double endX, double endY, double endZ) {
+    public void fireSparkEffect(World world, Vec3d start, Vec3d end) {
         if (Game.isNotHost(world))
             return;
 
         try {
             PacketEffect pkt = new PacketEffect(Effect.FIRESPARK);
-            DataOutputStream data = pkt.getOutputStream();
-            data.writeDouble(startX);
-            data.writeDouble(startY);
-            data.writeDouble(startZ);
-            data.writeDouble(endX);
-            data.writeDouble(endY);
-            data.writeDouble(endZ);
-            pkt.sendPacket(world, startX, startY, startZ);
-        } catch (IOException ex) {
+            RailcraftDataOutputStream data = pkt.getOutputStream();
+            data.writeVec3d(start);
+            data.writeVec3d(end);
+            pkt.sendPacket(world, start);
+        } catch (IOException ignored) {
         }
     }
 
@@ -107,7 +98,7 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public void trailEffect(int startX, int startY, int startZ, TileEntity dest, long colorSeed) {
+    public void trailEffect(BlockPos start, TileEntity dest, long colorSeed) {
     }
 
     @Override
@@ -126,7 +117,7 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public void steamJetEffect(World world, Object source, double vecX, double vecY, double vecZ) {
+    public void steamJetEffect(World world, Object source, Vec3d vel) {
     }
 
     @Override

@@ -16,6 +16,7 @@ import mods.railcraft.client.render.models.ModelTextured;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
@@ -31,7 +32,7 @@ public class CartContentRenderer {
     private final RenderInfo info = new RenderInfo();
 
     public CartContentRenderer() {
-        info.texture = new IIcon[6];
+        info.texture = new TextureAtlasSprite[6];
     }
 
     public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
@@ -39,7 +40,7 @@ public class CartContentRenderer {
 
         if (cart instanceof ICartContentsTextureProvider) {
             ICartContentsTextureProvider texInterface = (ICartContentsTextureProvider) cart;
-            renderer.bindTex(TextureMap.locationBlocksTexture);
+            renderer.bindTex(TextureMap.LOCATION_BLOCKS_TEXTURE);
             for (int side = 0; side < 6; side++) {
                 info.texture[side] = texInterface.getBlockTextureOnSide(side);
             }

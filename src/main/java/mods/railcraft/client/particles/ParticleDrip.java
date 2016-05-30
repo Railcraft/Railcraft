@@ -13,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,12 +27,12 @@ public class ParticleDrip extends ParticleBase {
     private int bobTimer;
     private boolean glows;
 
-    public ParticleDrip(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue) {
-        this(world, x, y, z, particleRed, particleGreen, particleBlue, false);
+    public ParticleDrip(World world, Vec3d start, float particleRed, float particleGreen, float particleBlue) {
+        this(world, start, particleRed, particleGreen, particleBlue, false);
     }
 
-    public ParticleDrip(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue, boolean glows) {
-        super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+    public ParticleDrip(World world, Vec3d start, float particleRed, float particleGreen, float particleBlue, boolean glows) {
+        super(world, start, new Vec3d(0, 0, 0));
         this.motionX = this.motionY = this.motionZ = 0.0D;
 
         this.particleRed = particleRed;

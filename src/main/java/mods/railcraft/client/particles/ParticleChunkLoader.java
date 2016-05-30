@@ -24,8 +24,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ParticleChunkLoader extends ParticleBase {
     private final IEffectSource source;
 
-    public ParticleChunkLoader(World world, double x, double y, double z, IEffectSource source) {
-        super(world, x, y, z, 0, 0, 0);
+    public ParticleChunkLoader(World world, Vec3d start, IEffectSource source) {
+        super(world, start, new Vec3d(0, 0, 0));
         this.source = source;
 
         calculateVector();

@@ -14,7 +14,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.server.management.PlayerManager;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.CertificateHelper;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
@@ -60,6 +62,10 @@ public class PacketDispatcher {
 
     public static TargetPoint targetPoint(int dim, BlockPos pos, double range) {
         return new TargetPoint(dim, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, range);
+    }
+
+    public static TargetPoint targetPoint(int dim, Vec3d vec, double range) {
+        return new TargetPoint(dim, vec.xCoord, vec.yCoord, vec.zCoord, range);
     }
 
     public static TargetPoint targetPoint(int dim, double x, double y, double z, double range) {

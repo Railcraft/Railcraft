@@ -71,7 +71,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
             if (isJetting()) {
                 double speedFactor = 0.2;
                 for (int i = 0; i < 10; i++) {
-                    EffectManager.instance.steamJetEffect(worldObj, this, direction.getFrontOffsetX() * speedFactor, direction.getFrontOffsetY() * speedFactor, direction.getFrontOffsetZ() * speedFactor);
+                    EffectManager.instance.steamJetEffect(worldObj, this, new Vec3d(direction.getDirectionVec()).scale(speedFactor));
                 }
             }
             return;

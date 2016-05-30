@@ -19,14 +19,13 @@ import mods.railcraft.common.blocks.machine.beta.TileEngineSteam;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.machine.gamma.*;
 import mods.railcraft.common.blocks.signals.*;
-import mods.railcraft.common.blocks.tracks.*;
+import mods.railcraft.common.blocks.tracks.TileTrack;
 import mods.railcraft.common.blocks.tracks.instances.TrackEmbarking;
 import mods.railcraft.common.blocks.tracks.instances.TrackLauncher;
 import mods.railcraft.common.blocks.tracks.instances.TrackPriming;
 import mods.railcraft.common.blocks.tracks.instances.TrackRouting;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.gui.GuiScreen;
@@ -166,7 +165,8 @@ public class FactoryGui {
                 case LOCO_CREATIVE:
                     return new GuiLocomotiveCreative(inv, (EntityLocomotiveCreative) obj);
                 default:
-                    return RailcraftModuleManager.getGuiScreen(gui, inv, obj, world, x, y, z);
+                    //TODO: Fix this
+//                    return RailcraftModuleManager.getGuiScreen(gui, inv, obj, world, x, y, z);
             }
         } catch (ClassCastException ex) {
             Game.log(Level.WARN, "Error when attempting to build gui {0}: {1}", gui, ex);

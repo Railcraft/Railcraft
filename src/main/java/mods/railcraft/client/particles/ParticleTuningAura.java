@@ -23,8 +23,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ParticleTuningAura extends ParticleBase {
     private final IEffectSource source;
 
-    public ParticleTuningAura(World world, double x, double y, double z, IEffectSource source, int colorSeed) {
-        super(world, x, y, z, 0, 0, 0);
+    public ParticleTuningAura(World world, Vec3d start, IEffectSource source, int colorSeed) {
+        super(world, start);
         this.source = source;
 
         calculateVector();
