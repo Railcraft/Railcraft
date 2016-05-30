@@ -14,6 +14,8 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.api.signals.SignalController;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -21,8 +23,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TileSignalDualHeadDistantSignal extends TileSignalBase implements IReceiverTile, IDualHeadSignal {
@@ -94,14 +94,14 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         receiver.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
 
         receiver.readPacketData(data);

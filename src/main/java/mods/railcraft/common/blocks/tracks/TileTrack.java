@@ -11,6 +11,8 @@ package mods.railcraft.common.blocks.tracks;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -64,13 +66,13 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
         track.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
         track.readPacketData(data);
     }

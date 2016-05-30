@@ -13,6 +13,7 @@ import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.effects.EffectManager.EffectSourceEntity;
 import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,10 +23,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SideOnly(Side.CLIENT)
-public class EntityChunkLoaderFX extends EntityFX {
+public class ParticleChunkLoader extends Particle {
     private final IEffectSource source;
 
-    public EntityChunkLoaderFX(World world, double x, double y, double z, IEffectSource source) {
+    public ParticleChunkLoader(World world, double x, double y, double z, IEffectSource source) {
         super(world, x, y, z, 0, 0, 0);
         this.source = source;
 

@@ -30,6 +30,8 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -354,14 +356,14 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(stateController.getCurrentState());
         data.writeFloat(pipeLength);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
         stateController.setCurrentState(data.readByte());
         setPipeLength(data.readFloat());

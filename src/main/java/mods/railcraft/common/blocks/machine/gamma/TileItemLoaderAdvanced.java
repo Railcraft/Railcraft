@@ -10,6 +10,8 @@ package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.common.util.misc.MiscTools;
 
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -17,8 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TileItemLoaderAdvanced extends TileItemLoader {
@@ -50,14 +50,14 @@ public class TileItemLoaderAdvanced extends TileItemLoader {
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(direction.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
 
         direction = EnumFacing.getFront(data.readByte());

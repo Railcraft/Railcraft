@@ -13,13 +13,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntitySteamFX extends EntityShrinkingParticleFX {
+public class ParticleSteam extends ParticleShrinking {
 
-    public EntitySteamFX(World world, double x, double y, double z, double velX, double velY, double velZ) {
+    public ParticleSteam(World world, double x, double y, double z, double velX, double velY, double velZ) {
         this(world, x, y, z, velX, velY, velZ, 1.0F);
     }
 
-    public EntitySteamFX(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
+    public ParticleSteam(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
         super(world, x, y, z, velX, velY, velZ, scale);
         this.particleRed = this.particleGreen = this.particleBlue = (float) (Math.random() * 0.4) + 0.4f;
         this.particleMaxAge = (int) (8.0D / (Math.random() * 0.8D + 0.2D));

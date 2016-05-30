@@ -10,6 +10,8 @@ package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -67,13 +69,13 @@ public abstract class TileBoxActionManager extends TileBoxSecured implements IAs
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
         writeActionInfo(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
         readActionInfo(data.readByte());
     }

@@ -9,12 +9,10 @@
 package mods.railcraft.common.util.network;
 
 import mods.railcraft.common.util.effects.EffectManager;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class PacketEffect extends RailcraftPacket {
@@ -23,41 +21,46 @@ public class PacketEffect extends RailcraftPacket {
 
         TELEPORT,
         FIRESPARK,
-        FORCE_SPAWN
+        FORCE_SPAWN;
+        public static final Effect[] VALUES = values();
     }
 
     private Effect effect;
     private ByteArrayOutputStream bytes;
-    private DataOutputStream outStream;
+    private RailcraftDataOutputStream outStream;
 
     public PacketEffect() {
-        super();
+
     }
 
     public PacketEffect(Effect effect) {
         this.effect = effect;
     }
 
-    public DataOutputStream getOutputStream() {
+    public RailcraftDataOutputStream getOutputStream() {
         if (outStream == null) {
             bytes = new ByteArrayOutputStream();
-            outStream = new DataOutputStream(bytes);
+            outStream = new RailcraftDataOutputStream(bytes);
         }
         return outStream;
     }
 
+    public void sendPacket(World world, BlockPos pos) {
+        PacketDispatcher.sendToAllAround(this, PacketDispatcher.targetPoint(world.provider.getDimension(), pos, 80));
+    }
+
     public void sendPacket(World world, double x, double y, double z) {
-        PacketDispatcher.sendToAllAround(this, new NetworkRegistry.TargetPoint(world.provider.getDimension(), x, y, z, 80));
+        PacketDispatcher.sendToAllAround(this, PacketDispatcher.targetPoint(world.provider.getDimension(), x, y, z, 80));
     }
 
     @Override
-    public void writeData(DataOutputStream data) throws IOException {
+    public void writeData(RailcraftDataOutputStream data) throws IOException {
         data.writeByte(effect.ordinal());
         data.write(bytes.toByteArray());
     }
 
     @Override
-    public void readData(DataInputStream data) throws IOException {
+    public void readData(RailcraftDataInputStream data) throws IOException {
         EffectManager.instance.handleEffectPacket(data);
     }
 

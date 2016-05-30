@@ -20,8 +20,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class PacketTileEntity extends RailcraftPacket {
@@ -44,7 +42,7 @@ public class PacketTileEntity extends RailcraftPacket {
 //        return pkt;
 //    }
     @Override
-    public void writeData(DataOutputStream data) throws IOException {
+    public void writeData(RailcraftDataOutputStream data) throws IOException {
         BlockPos pos = tile.getPos();
         data.writeInt(pos.getX());
         data.writeInt(pos.getY());
@@ -55,7 +53,7 @@ public class PacketTileEntity extends RailcraftPacket {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void readData(DataInputStream data) throws IOException {
+    public void readData(RailcraftDataInputStream data) throws IOException {
         World world = Game.getWorld();
         if (world == null) {
 //            Game.logDebug("Receive Tile Packet: World Null");

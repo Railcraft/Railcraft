@@ -8,27 +8,24 @@
  */
 package mods.railcraft.client.particles;
 
+import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.effects.EffectManager.EffectSourceEntity;
 import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Random;
-
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SideOnly(Side.CLIENT)
-public class EntityHeatTrailFX extends EntityFX {
-
-    private static Random colorRand = new Random();
+public class ParticleTuningAura extends Particle {
     private final IEffectSource source;
 
-    public EntityHeatTrailFX(World world, double x, double y, double z, long colorSeed, IEffectSource source) {
+    public ParticleTuningAura(World world, double x, double y, double z, IEffectSource source, int colorSeed) {
         super(world, x, y, z, 0, 0, 0);
         this.source = source;
 
@@ -36,14 +33,15 @@ public class EntityHeatTrailFX extends EntityFX {
 
         multipleParticleScaleBy(0.5f);
 
-        colorRand.setSeed(colorSeed);
-        this.particleRed = colorRand.nextFloat() * 0.8F + 0.2F;
-        this.particleGreen = colorRand.nextFloat() * 0.8F + 0.2F;
-        this.particleBlue = colorRand.nextFloat() * 0.8F + 0.2F;
-        float varient = this.rand.nextFloat() * 0.6F + 0.4F;
-        this.particleRed *= varient;
-        this.particleGreen *= varient;
-        this.particleBlue *= varient;
+        float c1 = (float) (colorSeed >> 16 & 255) / 255.0F;
+        float c2 = (float) (colorSeed >> 8 & 255) / 255.0F;
+        float c3 = (float) (colorSeed & 255) / 255.0F;
+//
+        float variant = this.rand.nextFloat() * 0.6F + 0.4F;
+//        this.particleRed = this.particleGreen = this.particleBlue = 1.0F * variant;
+        this.particleRed = c1 * variant;
+        this.particleGreen = c2 * variant;
+        this.particleBlue = c3 * variant;
         this.particleMaxAge = 2000;
         this.noClip = true;
         this.setParticleTextureIndex((int) (Math.random() * 8.0D));
@@ -62,6 +60,15 @@ public class EntityHeatTrailFX extends EntityFX {
         this.motionZ = vel.zCoord * velScale;
     }
 
+    //    @Override
+//    public void renderParticle(Tessellator par1Tessellator, float par2, float par3, float par4, float par5, float par6, float par7) {
+//        float var8 = ((float)this.particleAge + par2) / (float)this.particleMaxAge;
+//        var8 = 1.0F - var8;
+//        var8 *= var8;
+//        var8 = 1.0F - var8;
+//        this.particleScale = this.portalParticleScale * var8;
+//        super.renderParticle(par1Tessellator, par2, par3, par4, par5, par6, par7);
+//    }
     @Override
     public int getBrightnessForRender(float par1) {
         int var2 = super.getBrightnessForRender(par1);
@@ -104,12 +111,17 @@ public class EntityHeatTrailFX extends EntityFX {
             return;
         }
 
+        if (!EffectManager.instance.isTuningAuraActive()) {
+            setDead();
+            return;
+        }
+
         if (this.particleAge++ >= this.particleMaxAge) {
             this.setDead();
             return;
         }
 
-        if (getDistanceSq(source.getX(), source.getY(), source.getZ()) <= 0.1) {
+        if (getDistanceSq(source.getX(), source.getY(), source.getZ()) <= 0.3) {
             this.setDead();
             return;
         }
@@ -120,5 +132,4 @@ public class EntityHeatTrailFX extends EntityFX {
 
         this.moveEntity(this.motionX, this.motionY, this.motionZ);
     }
-
 }

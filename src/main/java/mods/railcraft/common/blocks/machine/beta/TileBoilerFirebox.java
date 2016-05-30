@@ -16,6 +16,8 @@ import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ITileFilter;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import mods.railcraft.common.util.steam.ISteamUser;
 import mods.railcraft.common.util.steam.Steam;
 import mods.railcraft.common.util.steam.SteamBoiler;
@@ -31,8 +33,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
@@ -176,14 +176,14 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
         tankManager.writePacketData(data);
         data.writeBoolean(boiler.isBurning());
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
         tankManager.readPacketData(data);
         boiler.setBurning(data.readBoolean());

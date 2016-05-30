@@ -13,13 +13,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityForceSpawnFX extends EntityShrinkingParticleFX {
+public class ParticleForceSpawn extends ParticleShrinking {
 
-    public EntityForceSpawnFX(World world, double x, double y, double z, double velX, double velY, double velZ) {
+    public ParticleForceSpawn(World world, double x, double y, double z, double velX, double velY, double velZ) {
         this(world, x, y, z, velX, velY, velZ, 1.0F);
     }
 
-    public EntityForceSpawnFX(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
+    public ParticleForceSpawn(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
         super(world, x, y, z, velX, velY, velZ, scale);
         this.particleRed = 0.33F;
         this.particleGreen = 0.74F;

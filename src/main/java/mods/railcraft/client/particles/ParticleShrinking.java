@@ -16,11 +16,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityShrinkingParticleFX extends EntitySimpleParticleFX {
+public class ParticleShrinking extends ParticleSimple {
 
     private final float originalScale;
 
-    public EntityShrinkingParticleFX(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
+    public ParticleShrinking(World world, double x, double y, double z, double velX, double velY, double velZ, float scale) {
         super(world, x, y, z, velX, velY, velZ, scale);
         this.originalScale = this.particleScale;
     }

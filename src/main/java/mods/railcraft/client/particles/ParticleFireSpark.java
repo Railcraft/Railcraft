@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.particles;
 
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
@@ -21,13 +21,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SideOnly(Side.CLIENT)
-public class EntityFireSparkFX extends EntityFX {
+public class ParticleFireSpark extends Particle {
 
     private final float lavaParticleScale;
     private final Vec3d end;
     private final double maxDist;
 
-    public EntityFireSparkFX(World world, Vec3d start, Vec3d end) {
+    public ParticleFireSpark(World world, Vec3d start, Vec3d end) {
         super(world, start.xCoord, start.yCoord, start.zCoord, 0, 0, 0);
         this.end = end;
 

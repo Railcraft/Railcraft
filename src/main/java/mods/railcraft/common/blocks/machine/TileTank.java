@@ -12,6 +12,8 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.slots.SlotLiquidContainer;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
@@ -23,8 +25,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -139,13 +139,13 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
         tankManager.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
         tankManager.readPacketData(data);
     }

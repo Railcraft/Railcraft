@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.fluids;
 
-import mods.railcraft.client.particles.EntityDropParticleFX;
+import mods.railcraft.client.particles.ParticleDrip;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -335,7 +335,7 @@ public final class FluidHelper {
             double py = (double) pos.getY() - 1.05D;
             double pz = (double) ((float) pos.getZ() + rand.nextFloat());
 
-            EntityFX fx = new EntityDropParticleFX(world, px, py, pz, particleRed, particleGreen, particleBlue);
+            EntityFX fx = new ParticleDrip(world, px, py, pz, particleRed, particleGreen, particleBlue);
             FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
         }
     }

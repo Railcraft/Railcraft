@@ -12,8 +12,6 @@ import mods.railcraft.common.gui.containers.RailcraftContainer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class PacketGuiWidget extends RailcraftPacket {
@@ -32,14 +30,14 @@ public class PacketGuiWidget extends RailcraftPacket {
     }
 
     @Override
-    public void writeData(DataOutputStream data) throws IOException {
+    public void writeData(RailcraftDataOutputStream data) throws IOException {
         data.writeByte(windowId);
         data.writeByte(widgetId);
         data.write(payload);
     }
 
     @Override
-    public void readData(DataInputStream data) throws IOException {
+    public void readData(RailcraftDataInputStream data) throws IOException {
         windowId = data.readByte();
         widgetId = data.readByte();
 

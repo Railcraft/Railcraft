@@ -17,19 +17,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class PacketTicketGui extends RailcraftPacket {
 
     @Override
-    public void writeData(DataOutputStream data) throws IOException {
+    public void writeData(RailcraftDataOutputStream data) throws IOException {
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void readData(DataInputStream data) throws IOException {
+    public void readData(RailcraftDataInputStream data) throws IOException {
         try {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             ItemStack current = player.getCurrentEquippedItem();

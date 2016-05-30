@@ -11,20 +11,21 @@ package mods.railcraft.client.particles;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityDropParticleFX extends EntityFX {
+public class ParticleDrip extends Particle {
 
     /**
      * The height of the current bob
      */
     private int bobTimer;
 
-    public EntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue) {
+    public ParticleDrip(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue) {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
         this.motionX = this.motionY = this.motionZ = 0.0D;
 

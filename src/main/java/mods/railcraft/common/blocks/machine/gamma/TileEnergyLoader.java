@@ -16,6 +16,8 @@ import mods.railcraft.common.plugins.ic2.ISinkDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2SinkDelegate;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -133,7 +135,7 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         byte bits = 0;
@@ -143,7 +145,7 @@ public class TileEnergyLoader extends TileLoaderEnergyBase implements ISinkDeleg
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
 
         byte bits = data.readByte();

@@ -15,6 +15,8 @@ import mods.railcraft.common.blocks.tracks.instances.TrackSwitchBase;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,8 +28,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class TileSwitchBase extends TileSignalFoundation implements ISwitchDevice {
@@ -156,7 +156,7 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(facing);
@@ -164,7 +164,7 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
 
         byte f = data.readByte();

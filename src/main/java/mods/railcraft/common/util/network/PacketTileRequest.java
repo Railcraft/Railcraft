@@ -15,8 +15,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class PacketTileRequest extends RailcraftPacket {
@@ -34,7 +32,7 @@ public class PacketTileRequest extends RailcraftPacket {
     }
 
     @Override
-    public void writeData(DataOutputStream data) throws IOException {
+    public void writeData(RailcraftDataOutputStream data) throws IOException {
         data.writeInt(tile.getWorld().provider.getDimension());
 
         BlockPos pos = tile.getPos();
@@ -44,7 +42,7 @@ public class PacketTileRequest extends RailcraftPacket {
     }
 
     @Override
-    public void readData(DataInputStream data) throws IOException {
+    public void readData(RailcraftDataInputStream data) throws IOException {
         World world = DimensionManager.getWorld(data.readInt());
         if (world == null)
             return;

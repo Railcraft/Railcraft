@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketE
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
+import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -38,20 +39,18 @@ public class PacketHandler {
         // NOOP
     }
 
-    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onPacket(ServerCustomPacketEvent event) {
-        byte[] data = new byte[event.packet.payload().readableBytes()];
-        event.packet.payload().readBytes(data);
+        byte[] data = new byte[event.getPacket().payload().readableBytes()];
+        event.getPacket().payload().readBytes(data);
 
-        onPacketData(data, ((NetHandlerPlayServer) event.handler).playerEntity);
+        onPacketData(data, ((NetHandlerPlayServer) event.getHandler()).playerEntity);
     }
 
-    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onPacket(ClientCustomPacketEvent event) {
-        byte[] data = new byte[event.packet.payload().readableBytes()];
-        event.packet.payload().readBytes(data);
+        byte[] data = new byte[event.getPacket().payload().readableBytes()];
+        event.getPacket().payload().readBytes(data);
 
 //        System.out.println("Packet Received!");
 
@@ -59,7 +58,7 @@ public class PacketHandler {
     }
 
     private void onPacketData(byte[] bData, EntityPlayerMP player) {
-        DataInputStream data = new DataInputStream(new ByteArrayInputStream(bData));
+        RailcraftDataInputStream data = new RailcraftDataInputStream(new ByteArrayInputStream(bData));
         try {
             RailcraftPacket pkt;
 

@@ -12,11 +12,16 @@ import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketEffect;
 import mods.railcraft.common.util.network.PacketEffect.Effect;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkPos;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 import java.io.DataInputStream;
@@ -49,25 +54,23 @@ public class CommonEffectProxy implements IEffectManager {
         } catch (IOException ex) {
         }
 
-        SoundHelper.playSoundAtEntity(entity, "mob.endermen.portal", 0.25F, 1.0F);
+        SoundHelper.playSoundAtEntity(entity, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.BLOCKS, 0.25F, 1.0F);
     }
 
     @Override
-    public void forceTrackSpawnEffect(World world, int x, int y, int z) {
+    public void forceTrackSpawnEffect(World world, BlockPos pos) {
         if (Game.isNotHost(world))
             return;
 
         try {
             PacketEffect pkt = new PacketEffect(Effect.FORCE_SPAWN);
-            DataOutputStream data = pkt.getOutputStream();
-            data.writeInt(x);
-            data.writeInt(y);
-            data.writeInt(z);
-            pkt.sendPacket(world, x, y, z);
-        } catch (IOException ex) {
+            RailcraftDataOutputStream data = pkt.getOutputStream();
+            data.writeBlockPos(pos);
+            pkt.sendPacket(world, pos);
+        } catch (IOException ignored) {
         }
 
-        SoundHelper.playSound(world, x, y, z, "mob.endermen.portal", 0.25F, 1.0F);
+        SoundHelper.playSound(world, null, pos, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.BLOCKS, 0.25F, 1.0F);
     }
 
     @Override
@@ -112,10 +115,10 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public void handleEffectPacket(DataInputStream data) throws IOException {
+    public void handleEffectPacket(RailcraftDataInputStream data) throws IOException {
     }
 
-    protected void spawnParticle(EntityFX particle) {
+    protected void spawnParticle(Particle particle) {
     }
 
     @Override

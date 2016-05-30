@@ -9,7 +9,7 @@
 package mods.railcraft.client.particles;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,8 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface ParticleHelperCallback {
 
     @SideOnly(Side.CLIENT)
-    void addHitEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state);
+    void addHitEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state);
 
     @SideOnly(Side.CLIENT)
-    void addDestroyEffects(EntityDiggingFX fx, World world, BlockPos pos, IBlockState state);
+    void addDestroyEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state);
 }

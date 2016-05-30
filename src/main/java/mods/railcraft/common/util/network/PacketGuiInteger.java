@@ -12,8 +12,6 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class PacketGuiInteger extends RailcraftPacket {
@@ -35,14 +33,14 @@ public class PacketGuiInteger extends RailcraftPacket {
     }
 
     @Override
-    public void writeData(DataOutputStream data) throws IOException {
+    public void writeData(RailcraftDataOutputStream data) throws IOException {
         data.writeByte(windowId);
         data.writeByte(dataId);
         data.writeInt(value);
     }
 
     @Override
-    public void readData(DataInputStream data) throws IOException {
+    public void readData(RailcraftDataInputStream data) throws IOException {
         windowId = data.readByte();
         dataId = data.readByte();
         value = data.readInt();

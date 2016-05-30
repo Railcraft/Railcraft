@@ -25,6 +25,8 @@ import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Timer;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -46,8 +48,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -614,14 +614,14 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(color.ordinal());
         tankManager.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
         EnumColor c = EnumColor.fromOrdinal(data.readByte());
         tankManager.readPacketData(data);

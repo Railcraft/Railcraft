@@ -18,6 +18,8 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketBuilder;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,10 +28,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -44,7 +46,7 @@ import java.util.UUID;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject, IOwnable, ITickable {
+public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject<RailcraftDataInputStream, RailcraftDataOutputStream>, IOwnable, ITickable {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
     protected int clock = MiscTools.RANDOM.nextInt();
@@ -107,12 +109,12 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftDataOutputStream data) throws IOException {
 //        data.writeUTF(owner);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(RailcraftDataInputStream data) throws IOException {
 //        owner = data.readUTF();
     }
 

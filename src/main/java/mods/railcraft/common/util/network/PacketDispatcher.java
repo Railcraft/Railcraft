@@ -8,10 +8,12 @@
  */
 package mods.railcraft.common.util.network;
 
+import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.server.management.PlayerManager;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -19,7 +21,6 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import java.lang.reflect.Method;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class PacketDispatcher {
@@ -36,7 +37,7 @@ public class PacketDispatcher {
             getOrCreateChunkWatcher.setAccessible(true);
             sendToAllPlayersWatchingChunk.setAccessible(true);
         } catch (Exception ex) {
-            Game.logThrowable("Reflection Failure in PacketDispatcher initalization {0} {1}", ex);
+            Game.logThrowable("Reflection Failure in PacketDispatcher initialization {0} {1}", ex);
             throw new RuntimeException(ex);
         }
     }
@@ -51,6 +52,18 @@ public class PacketDispatcher {
 
     public static void sendToAll(RailcraftPacket packet) {
         PacketHandler.INSTANCE.channel.sendToAll(packet.getPacket());
+    }
+
+    public static TargetPoint targetPoint(WorldCoordinate point, double range) {
+        return targetPoint(point.getDim(), point, range);
+    }
+
+    public static TargetPoint targetPoint(int dim, BlockPos pos, double range) {
+        return new TargetPoint(dim, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, range);
+    }
+
+    public static TargetPoint targetPoint(int dim, double x, double y, double z, double range) {
+        return new TargetPoint(dim, x, y, z, range);
     }
 
     public static void sendToAllAround(RailcraftPacket packet, TargetPoint zone) {

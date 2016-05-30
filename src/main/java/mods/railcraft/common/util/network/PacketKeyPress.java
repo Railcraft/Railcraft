@@ -15,8 +15,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import static mods.railcraft.common.util.network.PacketKeyPress.EnumKeyBinding.*;
@@ -44,12 +42,12 @@ public class PacketKeyPress extends RailcraftPacket {
     }
 
     @Override
-    public void writeData(DataOutputStream data) throws IOException {
+    public void writeData(RailcraftDataOutputStream data) throws IOException {
         data.writeByte(binding.ordinal());
     }
 
     @Override
-    public void readData(DataInputStream data) throws IOException {
+    public void readData(RailcraftDataInputStream data) throws IOException {
         int type = data.readByte();
 //        if(type < 0 || type >= VALUES.length){
 //            return;

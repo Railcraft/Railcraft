@@ -22,8 +22,10 @@ import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketEffect.Effect;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -49,7 +51,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         SignalTools.effectManager = this;
     }
 
-    private void doTeleport(DataInputStream data) throws IOException {
+    private void doTeleport(RailcraftDataInputStream data) throws IOException {
 
         double startX = data.readDouble();
         double startY = data.readDouble();
@@ -76,23 +78,24 @@ public class ClientEffectProxy extends CommonEffectProxy {
         }
     }
 
-    public void doForceSpawn(DataInputStream data) throws IOException {
+    public void doForceSpawn(RailcraftDataInputStream data) throws IOException {
         if (!shouldSpawnParticle(true))
             return;
 
-        int x = data.readInt();
-        int y = data.readInt();
-        int z = data.readInt();
+        BlockPos pos = data.readBlockPos();
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
 //        double vx = rand.nextGaussian() * 0.1;
 //        double vy = rand.nextDouble() * 0.01;
 //        double vz = rand.nextGaussian() * 0.1;
         double vx = 0.0;
         double vy = 0.0;
         double vz = 0.0;
-        spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x + 0.1, y, z + 0.1, vx, vy, vz));
-        spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x + 0.9, y, z + 0.1, vx, vy, vz));
-        spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x + 0.1, y, z + 0.9, vx, vy, vz));
-        spawnParticle(new EntityForceSpawnFX(Game.getWorld(), x + 0.9, y, z + 0.9, vx, vy, vz));
+        spawnParticle(new ParticleForceSpawn(Game.getWorld(), x + 0.1, y, z + 0.1, vx, vy, vz));
+        spawnParticle(new ParticleForceSpawn(Game.getWorld(), x + 0.9, y, z + 0.1, vx, vy, vz));
+        spawnParticle(new ParticleForceSpawn(Game.getWorld(), x + 0.1, y, z + 0.9, vx, vy, vz));
+        spawnParticle(new ParticleForceSpawn(Game.getWorld(), x + 0.9, y, z + 0.9, vx, vy, vz));
     }
 
     @Override
@@ -129,7 +132,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
 
             int color = colorProfile.getColor(start, new WorldCoordinate(start), new WorldCoordinate(dest));
 
-            EntityFX particle = new EntityTuningFX(start.getWorld(), px, py, pz, EffectManager.getEffectSource(dest), color);
+            EntityFX particle = new ParticleTuningAura(start.getWorld(), px, py, pz, EffectManager.getEffectSource(dest), color);
             spawnParticle(particle);
         }
     }
@@ -144,7 +147,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
             double px = startX + 0.5 + rand.nextGaussian() * 0.1;
             double py = startY + 0.5 + rand.nextGaussian() * 0.1;
             double pz = startZ + 0.5 + rand.nextGaussian() * 0.1;
-            EntityFX particle = new EntityHeatTrailFX(dest.getWorld(), px, py, pz, colorSeed, EffectManager.getEffectSource(dest));
+            EntityFX particle = new ParticleHeatTrail(dest.getWorld(), px, py, pz, colorSeed, EffectManager.getEffectSource(dest));
             spawnParticle(particle);
         }
     }
@@ -154,7 +157,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         if (!shouldSpawnParticle(false))
             return;
 
-        EntityFX particle = new EntityFireSparkFX(world, start, end);
+        EntityFX particle = new ParticleFireSpark(world, start, end);
         spawnParticle(particle);
     }
 
@@ -169,13 +172,13 @@ public class ClientEffectProxy extends CommonEffectProxy {
     }
 
     @Override
-    public void handleEffectPacket(DataInputStream data) throws IOException {
+    public void handleEffectPacket(RailcraftDataInputStream data) throws IOException {
 
         byte effectId = data.readByte();
         if (effectId < 0)
             return;
 
-        Effect effect = Effect.values()[effectId];
+        Effect effect = Effect.VALUES[effectId];
         switch (effect) {
             case TELEPORT:
                 doTeleport(data);
@@ -210,7 +213,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
                 double yParticle = yCorner + rand.nextFloat() * 16;
                 double zParticle = zCorner + rand.nextFloat() * 16;
 
-                EntityFX particle = new EntityChunkLoaderFX(world, xParticle, yParticle, zParticle, es);
+                EntityFX particle = new ParticleChunkLoader(world, xParticle, yParticle, zParticle, es);
                 spawnParticle(particle);
             }
         }
@@ -224,7 +227,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         double vx = rand.nextGaussian() * 0.1;
         double vy = rand.nextDouble() * 0.01;
         double vz = rand.nextGaussian() * 0.1;
-        spawnParticle(new EntitySteamFX(world, es.getX(), es.getY() + yOffset, es.getZ(), vx, vy, vz));
+        spawnParticle(new ParticleSteam(world, es.getX(), es.getY() + yOffset, es.getZ(), vx, vy, vz));
     }
 
     @Override
@@ -235,7 +238,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         double vx = vecX + rand.nextGaussian() * 0.02;
         double vy = vecY + rand.nextGaussian() * 0.02;
         double vz = vecZ + rand.nextGaussian() * 0.02;
-        EntitySteamFX fx = new EntitySteamFX(world, es.getX(), es.getY(), es.getZ(), vx, vy, vz, 1.5F);
+        ParticleSteam fx = new ParticleSteam(world, es.getX(), es.getY(), es.getZ(), vx, vy, vz, 1.5F);
         fx.gravity = 0;
         spawnParticle(fx);
     }
@@ -244,7 +247,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
     public void chimneyEffect(World world, double x, double y, double z) {
         if (!shouldSpawnParticle(false))
             return;
-        spawnParticle(new EntityChimneyFX(world, x, y, z));
+        spawnParticle(new ParticleChimney(world, x, y, z));
     }
 
     private boolean shouldSpawnParticle(boolean canDisable) {
@@ -258,7 +261,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
     }
 
     @Override
-    protected void spawnParticle(EntityFX particle) {
+    protected void spawnParticle(Particle particle) {
         Minecraft mc = FMLClientHandler.instance().getClient();
         mc.effectRenderer.addEffect(particle);
     }

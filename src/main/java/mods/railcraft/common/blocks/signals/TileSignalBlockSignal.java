@@ -10,12 +10,12 @@ package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.api.signals.*;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TileSignalBlockSignal extends TileSignalBase implements IControllerTile, ISignalBlockTile {
@@ -81,14 +81,14 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
         controller.writePacketData(data);
         signalBlock.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
         controller.readPacketData(data);
         signalBlock.readPacketData(data);

@@ -14,8 +14,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class RailcraftPacket {
@@ -42,7 +40,7 @@ public abstract class RailcraftPacket {
 
     public FMLProxyPacket getPacket() {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        DataOutputStream data = new DataOutputStream(bytes);
+        RailcraftDataOutputStream data = new RailcraftDataOutputStream(bytes);
         try {
             data.writeByte(getID());
             writeData(data);
@@ -52,9 +50,9 @@ public abstract class RailcraftPacket {
         return new FMLProxyPacket(new PacketBuffer(Unpooled.wrappedBuffer(bytes.toByteArray())), CHANNEL_NAME);
     }
 
-    public abstract void writeData(DataOutputStream data) throws IOException;
+    public abstract void writeData(RailcraftDataOutputStream data) throws IOException;
 
-    public abstract void readData(DataInputStream data) throws IOException;
+    public abstract void readData(RailcraftDataInputStream data) throws IOException;
 
     public abstract int getID();
 

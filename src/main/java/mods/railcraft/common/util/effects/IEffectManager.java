@@ -10,13 +10,14 @@ package mods.railcraft.common.util.effects;
 
 import mods.railcraft.api.signals.IPairEffectRenderer;
 import mods.railcraft.common.items.ItemGoggles;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Set;
 
@@ -28,7 +29,7 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     boolean isGoggleAuraActive(ItemGoggles.GoggleAura aura);
 
-    void handleEffectPacket(DataInputStream data) throws IOException;
+    void handleEffectPacket(RailcraftDataInputStream data) throws IOException;
 
     void steamEffect(World world, Object source, double yOffset);
 
@@ -42,5 +43,5 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     void fireSparkEffect(World world, Vec3d start, Vec3d end);
 
-    void forceTrackSpawnEffect(World world, int x, int y, int z);
+    void forceTrackSpawnEffect(World world, BlockPos pos);
 }

@@ -21,6 +21,8 @@ import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -121,14 +123,14 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
     public abstract EnumFacing getOrientation();
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(transferModeController.getCurrentState());
         data.writeByte(redstoneModeController.getCurrentState());
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
         transferModeController.setCurrentState(data.readByte());
         redstoneModeController.setCurrentState(data.readByte());
