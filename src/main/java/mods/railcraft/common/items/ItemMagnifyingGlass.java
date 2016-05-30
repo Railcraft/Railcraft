@@ -23,11 +23,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.EnumSet;
@@ -63,18 +64,17 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         );
     }
 
-    @SuppressWarnings("unused")
     @SubscribeEvent
-    public void onEntityInteract(EntityInteractEvent event) {
-        EntityPlayer thePlayer = event.entityPlayer;
+    public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        EntityPlayer thePlayer = event.getEntityPlayer();
 
-        Entity entity = event.target;
+        Entity entity = event.getTarget();
 
-        ItemStack stack = thePlayer.getCurrentEquippedItem();
+        ItemStack stack = event.getItemStack();
         if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass)
-            thePlayer.swingItem();
+            thePlayer.swingArm(event.getHand());
 
-        if (Game.isNotHost(thePlayer.worldObj))
+        if (Game.isClient(thePlayer.worldObj))
             return;
 
         if (stack != null && stack.getItem() instanceof ItemMagnifyingGlass)
@@ -87,7 +87,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
 
     @Override
     public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-        if (Game.isNotHost(world))
+        if (Game.isClient(world))
             return EnumActionResult.PASS;
         TileEntity t = world.getTileEntity(pos);
         EnumActionResult returnValue = EnumActionResult.PASS;
