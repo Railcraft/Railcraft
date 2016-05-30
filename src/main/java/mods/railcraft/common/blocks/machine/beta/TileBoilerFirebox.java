@@ -15,7 +15,6 @@ import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.network.RailcraftDataInputStream;
 import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import mods.railcraft.common.util.steam.ISteamUser;
@@ -26,15 +25,17 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
+import java.util.function.Predicate;
 
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 
@@ -107,7 +108,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     @Override
-    public ITileFilter getOutputFilter() {
+    public Predicate<TileEntity> getOutputFilter() {
         return ISteamUser.FILTER;
     }
 
@@ -156,18 +157,18 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
         boiler.reset();
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
         inventory.writeToNBT("inv", data);
 
         boiler.writeToNBT(data);
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
         inventory.readFromNBT("inv", data);
@@ -176,14 +177,14 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
         tankManager.writePacketData(data);
         data.writeBoolean(boiler.isBurning());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
         tankManager.readPacketData(data);
         boiler.setBurning(data.readBoolean());
@@ -207,7 +208,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemstack) {
+    public void setInventorySlotContents(int i, @Nullable ItemStack itemstack) {
         TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             mBlock.inventory.setInventorySlotContents(i, itemstack);

@@ -12,6 +12,8 @@ package mods.railcraft.common.util.inventory.iterators;
 
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 /**
  * This interface extends IInvSlot by allowing you to modify a slot directly.
  * This is only valid on inventories backed by IInventory.
@@ -25,5 +27,5 @@ public interface IExtInvSlot extends IInvSlot {
     /**
      * Sets the current ItemStack in the slot.
      */
-    void setStack(ItemStack stack);
+    void setStack(@Nullable ItemStack stack);
 }

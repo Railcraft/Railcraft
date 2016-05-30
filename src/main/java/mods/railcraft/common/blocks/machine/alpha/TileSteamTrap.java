@@ -38,6 +38,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
@@ -83,7 +84,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
             }
     }
 
-    //TODO: test
+    //TODO: test, can we draw this?
     public List<EntityLivingBase> getEntitiesInSteamArea() {
         Vec3d jetVector = new Vec3d(direction.getDirectionVec()).scale(RANGE).addVector(0.5D, 0.5D, 0.5D);
         AxisAlignedBB area = AABBFactory.start().box().expandToCoordinate(jetVector).offset(getPos()).build();
@@ -142,13 +143,14 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityLiving, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
         super.onBlockPlacedBy(state, entityLiving, stack);
-        direction = MiscTools.getSideFacingPlayer(getPos(), entityLiving);
+        if (entityLiving != null)
+            direction = MiscTools.getSideFacingPlayer(getPos(), entityLiving);
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
+    public void onNeighborBlockChange(IBlockState state, Block block) {
         super.onNeighborBlockChange(state, block);
         powered = PowerPlugin.isBlockBeingPowered(worldObj, getPos());
     }
@@ -165,11 +167,12 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("direction", (byte) direction.ordinal());
         data.setBoolean("powered", powered);
         tankManager.writeTanksToNBT(data);
+        return data;
     }
 
     @Override

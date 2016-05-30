@@ -28,7 +28,7 @@ public class FluidItemHelper {
      *
      * @return The modified container and the amount of Fluid filled.
      */
-    public static FillReturn fillContainer(ItemStack container, FluidStack fluidStack) {
+    public static FillReturn fillContainer(@Nullable ItemStack container, @Nullable FluidStack fluidStack) {
         if (container == null)
             return new FillReturn(null, 0);
         container = container.copy();
@@ -45,7 +45,7 @@ public class FluidItemHelper {
         return new FillReturn(container, 0);
     }
 
-    public static FillReturn fillContainer(ItemStack stackToFill, Fluid fluid) {
+    public static FillReturn fillContainer(@Nullable ItemStack stackToFill, Fluid fluid) {
         return fillContainer(stackToFill, new FluidStack(fluid, Integer.MAX_VALUE));
     }
 
@@ -54,7 +54,7 @@ public class FluidItemHelper {
      *
      * @return The modified container and any fluid drained.
      */
-    public static DrainReturn drainContainer(ItemStack container, int maxDrain) {
+    public static DrainReturn drainContainer(@Nullable ItemStack container, int maxDrain) {
         if (container == null)
             return new DrainReturn(null, null, false);
         container = container.copy();
@@ -78,11 +78,11 @@ public class FluidItemHelper {
         return new DrainReturn(container, null, false);
     }
 
-    public static boolean isBucket(ItemStack stack) {
+    public static boolean isBucket(@Nullable ItemStack stack) {
         return FluidContainerRegistry.isBucket(stack);
     }
 
-    public static boolean isContainer(ItemStack stack) {
+    public static boolean isContainer(@Nullable ItemStack stack) {
         if (stack == null) return false;
         if (stack.getItem() instanceof IFluidContainerItem) {
             return ((IFluidContainerItem) stack.getItem()).getCapacity(stack) > 0;
@@ -90,7 +90,7 @@ public class FluidItemHelper {
         return FluidContainerRegistry.isContainer(stack);
     }
 
-    public static boolean isFilledContainer(ItemStack stack) {
+    public static boolean isFilledContainer(@Nullable ItemStack stack) {
         if (stack == null) return false;
         if (stack.getItem() instanceof IFluidContainerItem) {
             IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
@@ -99,7 +99,7 @@ public class FluidItemHelper {
         return FluidContainerRegistry.isFilledContainer(stack);
     }
 
-    public static boolean isFullContainer(ItemStack stack) {
+    public static boolean isFullContainer(@Nullable ItemStack stack) {
         if (stack == null) return false;
         if (stack.getItem() instanceof IFluidContainerItem) {
             IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
@@ -110,7 +110,7 @@ public class FluidItemHelper {
         return FluidContainerRegistry.isFilledContainer(stack);
     }
 
-    public static boolean isEmptyContainer(ItemStack stack) {
+    public static boolean isEmptyContainer(@Nullable ItemStack stack) {
         if (stack == null) return false;
         if (stack.getItem() instanceof IFluidContainerItem) {
             IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
@@ -120,7 +120,7 @@ public class FluidItemHelper {
         return FluidContainerRegistry.isEmptyContainer(stack);
     }
 
-    public static boolean isRoomInContainer(ItemStack stack) {
+    public static boolean isRoomInContainer(@Nullable ItemStack stack) {
         if (stack == null) return false;
         if (stack.getItem() instanceof IFluidContainerItem) {
             IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
@@ -131,7 +131,7 @@ public class FluidItemHelper {
         return FluidContainerRegistry.isEmptyContainer(stack);
     }
 
-    public static boolean isRoomInContainer(ItemStack stack, Fluid fluid) {
+    public static boolean isRoomInContainer(@Nullable ItemStack stack, Fluid fluid) {
         if (stack == null) return false;
         if (stack.getItem() instanceof IFluidContainerItem) {
             IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
@@ -140,7 +140,7 @@ public class FluidItemHelper {
         return FluidContainerRegistry.isEmptyContainer(stack);
     }
 
-    public static int getRoomInContainer(ItemStack stack, Fluid fluid) {
+    public static int getRoomInContainer(@Nullable ItemStack stack, Fluid fluid) {
         if (stack == null) return 0;
         if (stack.getItem() instanceof IFluidContainerItem) {
             IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
@@ -154,7 +154,7 @@ public class FluidItemHelper {
         return 0;
     }
 
-    public static boolean containsFluid(ItemStack stack, Fluid fluid) {
+    public static boolean containsFluid(@Nullable ItemStack stack, @Nullable Fluid fluid) {
         if (stack == null || fluid == null) return false;
         if (stack.getItem() instanceof IFluidContainerItem) {
             IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
@@ -163,7 +163,7 @@ public class FluidItemHelper {
         return FluidContainerRegistry.containsFluid(stack, new FluidStack(fluid, 1));
     }
 
-    public static boolean containsFluid(ItemStack stack, FluidStack fluidStack) {
+    public static boolean containsFluid(@Nullable ItemStack stack, @Nullable FluidStack fluidStack) {
         if (stack == null || fluidStack == null) return false;
         if (stack.getItem() instanceof IFluidContainerItem) {
             IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
@@ -174,7 +174,7 @@ public class FluidItemHelper {
     }
 
     @Nullable
-    public static FluidStack getFluidStackInContainer(ItemStack stack) {
+    public static FluidStack getFluidStackInContainer(@Nullable ItemStack stack) {
         if (stack == null) return null;
         if (stack.getItem() instanceof IFluidContainerItem) {
             IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
@@ -184,7 +184,7 @@ public class FluidItemHelper {
     }
 
     @Nullable
-    public static Fluid getFluidInContainer(ItemStack stack) {
+    public static Fluid getFluidInContainer(@Nullable ItemStack stack) {
         if (stack == null) return null;
         if (stack.getItem() instanceof IFluidContainerItem) {
             IFluidContainerItem fluidCon = (IFluidContainerItem) stack.getItem();
@@ -199,7 +199,7 @@ public class FluidItemHelper {
         public final ItemStack container;
         public final int amount;
 
-        public FillReturn(ItemStack con, int amount) {
+        public FillReturn(@Nullable ItemStack con, int amount) {
             this.container = con;
             this.amount = amount;
         }

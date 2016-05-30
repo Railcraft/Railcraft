@@ -7,10 +7,9 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.common.blocks.machine.alpha;
+package mods.railcraft.common.items.firestone;
 
 import mcp.MethodsReturnNonnullByDefault;
 

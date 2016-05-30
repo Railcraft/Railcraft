@@ -42,6 +42,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,8 +53,8 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
 
     public static final IStackFilter INPUT_FILTER = new StackFilter() {
         @Override
-        public boolean apply(ItemStack stack) {
-            return RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
+        public boolean apply(@Nullable ItemStack stack) {
+            return stack != null && RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
         }
     };
     public static final IStackFilter FUEL_FILTER = StackFilters.anyOf(RailcraftCraftingManager.blastFurnace.getFuels());
@@ -182,6 +183,8 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     @Override
     public int getTotalCookTime() {
         ItemStack input = getStackInSlot(SLOT_INPUT);
+        if (input == null)
+            return 1;
         IBlastFurnaceRecipe recipe = RailcraftCraftingManager.blastFurnace.getRecipe(input);
         if (recipe != null)
             return recipe.getCookTime();
@@ -263,7 +266,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
 
                     if (burnTime <= FUEL_PER_TICK * 2) {
                         ItemStack fuel = getStackInSlot(SLOT_FUEL);
-                        if (FUEL_FILTER.apply(fuel)) {
+                        if (fuel != null && FUEL_FILTER.apply(fuel)) {
                             int itemBurnTime = FuelPlugin.getBurnTime(fuel);
                             if (itemBurnTime > 0) {
                                 currentItemBurnTime = itemBurnTime + burnTime;

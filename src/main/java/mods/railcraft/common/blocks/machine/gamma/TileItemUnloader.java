@@ -17,15 +17,14 @@ import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.inventory.wrappers.InventoryObject;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -35,18 +34,12 @@ public class TileItemUnloader extends TileLoaderItemBase {
 
     private static final EnumRedstoneMode[] REDSTONE_MODES = {EnumRedstoneMode.IMMEDIATE, EnumRedstoneMode.COMPLETE, EnumRedstoneMode.MANUAL};
     private final InventoryMapper invBuffer;
-    private final Map<ItemStack, Short> transferredItems = new ItemStackMap<Short>();
+    private final Map<ItemStack, Short> transferredItems = new ItemStackMap<>();
     private final Set<ItemStack> checkedItems = new ItemStackSet();
-    private final LinkedList<IInventoryObject> chests = new LinkedList<IInventoryObject>();
-    private AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, new ITileFilter() {
-        @Override
-        public boolean matches(TileEntity tile) {
-            return !(tile instanceof TileItemUnloader);
-        }
-    }, InventorySorter.SIZE_DESCENDING);
+    private final LinkedList<IInventoryObject> chests = new LinkedList<>();
+    private AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> !(tile instanceof TileItemUnloader), InventorySorter.SIZE_DESCENDING);
 
     public TileItemUnloader() {
-        super();
         setInventorySize(9);
         invBuffer = new InventoryMapper(getInventory(), false);
     }
@@ -109,6 +102,10 @@ public class TileItemUnloader extends TileLoaderItemBase {
         checkedItems.clear();
 
         IInventoryObject cartInv = InvTools.getInventory(cart, getOrientation().getOpposite());
+        if (cartInv == null) {
+            sendCart(cart);
+            return;
+        }
 
         switch (getMode()) {
             case TRANSFER: {
@@ -226,7 +223,7 @@ public class TileItemUnloader extends TileLoaderItemBase {
     @Override
     protected boolean shouldSendCart(EntityMinecart cart) {
         IInventoryObject cartInv = InvTools.getInventory(cart, getOrientation().getOpposite());
-        if(cartInv == null)
+        if (cartInv == null)
             return true;
         EnumRedstoneMode state = getRedstoneModeController().getButtonState();
         if (!movedItemCart && state != EnumRedstoneMode.COMPLETE) {
@@ -330,12 +327,13 @@ public class TileItemUnloader extends TileLoaderItemBase {
         return true;
     }
 
+    @Override
     public EnumFacing getOrientation() {
         return EnumFacing.UP;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, @Nullable ItemStack stack, @Nullable EnumFacing direction) {
         return true;
     }
 

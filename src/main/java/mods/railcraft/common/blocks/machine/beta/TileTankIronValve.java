@@ -15,38 +15,35 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import javax.annotation.Nullable;
+import java.util.function.Predicate;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileTankIronValve extends TileTankBase implements IFluidHandler, IComparatorValueProvider {
 
-    private static final ITileFilter FLUID_OUTPUT_FILTER = new ITileFilter() {
-        @Override
-        public boolean matches(TileEntity tile) {
-            if (tile instanceof TileTankBase)
-                return false;
-            else if (tile instanceof IFluidHandler)
-                return true;
+    private static final Predicate<TileEntity> FLUID_OUTPUT_FILTER = tile -> {
+        if (tile instanceof TileTankBase)
             return false;
-        }
-
+        else if (tile instanceof IFluidHandler)
+            return true;
+        return false;
     };
     private static final EnumFacing[] FLUID_OUTPUTS = {EnumFacing.DOWN};
     private static final int FLOW_RATE = FluidHelper.BUCKET_VOLUME;
     private static final byte FILL_INCREMENT = 1;
     private final StandardTank fillTank = new StandardTank(20);
-    private int previousComparatorValue = 0;
+    private int previousComparatorValue;
 
     private boolean previousStructureValidity;
 
@@ -97,7 +94,9 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
             if (tileBelow instanceof TileTankIronValve) {
                 valveBelow = (TileTankIronValve) tileBelow;
                 if (valveBelow.isStructureValid() && valveBelow.getPatternMarker() == 'T') {
+                    //noinspection ConstantConditions
                     StandardTank tankBelow = valveBelow.getTankManager().get(0);
+                    assert tankBelow != null;
                     FluidStack liquid = tankBelow.getFluid();
                     if (liquid != null && liquid.amount >= tankBelow.getCapacity() - FluidHelper.BUCKET_VOLUME) {
                         valveBelow = null;
@@ -162,7 +161,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
 //    }
 
     @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, @Nullable FluidStack resource, boolean doFill) {
         if (!canFill(from, null))
             return 0;
         if (resource == null || resource.amount <= 0) return 0;
@@ -177,6 +176,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
         return filled;
     }
 
+    @Nullable
     @Override
     public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         if (getPatternPosition().getY() - getPattern().getMasterOffset().getY() != 1)
@@ -188,11 +188,13 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
         return null;
     }
 
+    @Nullable
     @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, @Nullable FluidStack resource, boolean doDrain) {
         if (resource == null)
             return null;
         TankManager tMan = getTankManager();
+        //noinspection ConstantConditions
         if (tMan != null && tMan.get(0).getFluidType() == resource.getFluid())
             return drain(from, resource.amount, doDrain);
         return null;

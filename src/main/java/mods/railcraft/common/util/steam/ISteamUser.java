@@ -8,21 +8,15 @@
  */
 package mods.railcraft.common.util.steam;
 
-import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import java.util.function.Predicate;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ISteamUser extends IFluidHandler {
 
-    ITileFilter FILTER = new ITileFilter() {
-        @Override
-        public boolean matches(TileEntity tile) {
-            return tile instanceof ISteamUser;
-        }
-
-    };
+    Predicate<TileEntity> FILTER = tile -> tile instanceof ISteamUser;
 }

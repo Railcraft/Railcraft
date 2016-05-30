@@ -26,7 +26,6 @@ import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.SidedInventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -41,8 +40,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -58,19 +57,22 @@ import java.util.*;
 public abstract class InvTools {
     private static final String TAG_SLOT = "Slot";
 
-    public static ItemStack makeStack(Item item, int qty, int meta) {
+    @Nullable
+    public static ItemStack makeStack(@Nullable Item item, int qty, int meta) {
         if (item != null)
             return new ItemStack(item, qty, meta);
         return null;
     }
 
     @SuppressWarnings("unused")
-    public static ItemStack makeStack(Block block, int qty, int meta) {
+    @Nullable
+    public static ItemStack makeStack(@Nullable Block block, int qty, int meta) {
         if (block != null)
             return new ItemStack(block, qty, meta);
         return null;
     }
 
+    @Nullable
     public static ItemStack makeSafe(ItemStack stack) {
         if (stack.stackSize <= 0)
             return null;
@@ -83,7 +85,7 @@ public abstract class InvTools {
     }
 
     @Nonnull
-    public static List<IInventoryObject> getAdjacentInventories(World world, BlockPos pos, Class<? extends TileEntity> type) {
+    public static List<IInventoryObject> getAdjacentInventories(World world, BlockPos pos, @Nullable Class<? extends TileEntity> type) {
         List<IInventoryObject> list = new ArrayList<IInventoryObject>(6);
         for (EnumFacing side : EnumFacing.VALUES) {
             IInventoryObject inv = getInventoryFromSide(world, pos, side, type, null);
@@ -108,28 +110,25 @@ public abstract class InvTools {
 //    }
 
     @Nullable
-    public static IInventoryObject getInventoryFromSide(World world, BlockPos pos, EnumFacing side, final Class<? extends TileEntity> type, final Class<? extends TileEntity> exclude) {
-        return getInventoryFromSide(world, pos, side, new ITileFilter() {
-            @SuppressWarnings("SimplifiableIfStatement")
-            @Override
-            public boolean matches(TileEntity tile) {
-                if (type != null && !type.isAssignableFrom(tile.getClass()))
-                    return false;
-                return exclude == null || !exclude.isAssignableFrom(tile.getClass());
-            }
+    public static IInventoryObject getInventoryFromSide(World world, BlockPos pos, EnumFacing side, @Nullable final Class<? extends TileEntity> type, @Nullable final Class<? extends TileEntity> exclude) {
+        return getInventoryFromSide(world, pos, side, tile -> {
+            //noinspection SimplifiableIfStatement
+            if (type != null && !type.isAssignableFrom(tile.getClass()))
+                return false;
+            return exclude == null || !exclude.isAssignableFrom(tile.getClass());
         });
     }
 
     @Nullable
-    public static IInventoryObject getInventoryFromSide(World world, BlockPos pos, EnumFacing side, ITileFilter filter) {
+    public static IInventoryObject getInventoryFromSide(World world, BlockPos pos, EnumFacing side, java.util.function.Predicate<TileEntity> filter) {
         TileEntity tile = WorldPlugin.getTileEntityOnSide(world, pos, side);
-        if (tile == null || !(tile instanceof IInventory) || !filter.matches(tile))
+        if (tile == null || !(tile instanceof IInventory) || !filter.test(tile))
             return null;
         return getInventory(tile, side.getOpposite());
     }
 
     @Nullable
-    public static IInventoryObject getInventory(Object obj, EnumFacing side) {
+    public static IInventoryObject getInventory(@Nullable Object obj, EnumFacing side) {
         if (obj == null)
             return null;
 
@@ -147,7 +146,7 @@ public abstract class InvTools {
     }
 
     @Nullable
-    public static IInventoryObject getInventory(Object obj) {
+    public static IInventoryObject getInventory(@Nullable Object obj) {
         if (obj == null)
             return null;
 
@@ -254,11 +253,11 @@ public abstract class InvTools {
         return stack;
     }
 
-    public static void dropItem(ItemStack stack, World world, BlockPos pos) {
+    public static void dropItem(@Nullable ItemStack stack, World world, BlockPos pos) {
         dropItem(stack, world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
     }
 
-    public static void dropItem(ItemStack stack, World world, double x, double y, double z) {
+    public static void dropItem(@Nullable ItemStack stack, World world, double x, double y, double z) {
         if (stack == null || stack.stackSize < 1)
             return;
         EntityItem entityItem = new EntityItem(world, x, y + 1.5, z, stack);
@@ -281,7 +280,7 @@ public abstract class InvTools {
         }
     }
 
-    private static void spewItem(ItemStack stack, World world, BlockPos pos) {
+    private static void spewItem(@Nullable ItemStack stack, World world, BlockPos pos) {
         if (stack != null) {
             float xOffset = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
             float yOffset = MiscTools.RANDOM.nextFloat() * 0.8F + 0.1F;
@@ -613,15 +612,15 @@ public abstract class InvTools {
         return damage == -1 || damage == OreDictionary.WILDCARD_VALUE;
     }
 
-    public static boolean isItem(ItemStack stack, Item item) {
+    public static boolean isItem(@Nullable ItemStack stack, @Nullable Item item) {
         return stack != null && item != null && stack.getItem() == item;
     }
 
-    public static boolean isItemClass(ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
+    public static boolean isItemClass(@Nullable ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
         return stack != null && stack.getItem().getClass() == itemClass;
     }
 
-    public static boolean extendsItemClass(ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
+    public static boolean extendsItemClass(@Nullable ItemStack stack, @Nonnull Class<? extends Item> itemClass) {
         return stack != null && itemClass.isAssignableFrom(stack.getItem().getClass());
     }
 
@@ -651,7 +650,7 @@ public abstract class InvTools {
             return false;
         if (a.getItemDamage() != b.getItemDamage())
             return false;
-        return a.getTagCompound() == null || a.getTagCompound().equals(b.getTagCompound());
+        return a.getTagCompound() == null || b.getTagCompound() == null || a.getTagCompound().equals(b.getTagCompound());
     }
 
     /**
@@ -678,7 +677,7 @@ public abstract class InvTools {
             return false;
         if (a.getItemDamage() != b.getItemDamage())
             return false;
-        return a.getTagCompound() == null || a.getTagCompound().equals(b.getTagCompound());
+        return a.getTagCompound() == null || b.getTagCompound() == null || a.getTagCompound().equals(b.getTagCompound());
     }
 
     /**
@@ -808,7 +807,7 @@ public abstract class InvTools {
      * @param dest  The IInventory
      * @return true if room for stack
      */
-    public static boolean isRoomForStack(ItemStack stack, IInventoryObject dest) {
+    public static boolean isRoomForStack(@Nullable ItemStack stack, @Nullable IInventoryObject dest) {
         if (stack == null || dest == null)
             return false;
         InventoryManipulator im = InventoryManipulator.get(dest);
@@ -1007,7 +1006,7 @@ public abstract class InvTools {
         }
     }
 
-    public static void writeItemToNBT(ItemStack stack, NBTTagCompound data) {
+    public static void writeItemToNBT(@Nullable ItemStack stack, NBTTagCompound data) {
         if (stack == null || stack.stackSize <= 0)
             return;
         if (stack.stackSize > 127)
@@ -1020,7 +1019,7 @@ public abstract class InvTools {
         return ItemStack.loadItemStackFromNBT(data);
     }
 
-    public static boolean isStackEqualToBlock(ItemStack stack, Block block) {
+    public static boolean isStackEqualToBlock(@Nullable ItemStack stack, @Nullable Block block) {
         return !(stack == null || block == null) && stack.getItem() instanceof ItemBlock && ((ItemBlock) stack.getItem()).getBlock() == block;
     }
 

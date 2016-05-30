@@ -16,14 +16,13 @@ import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -33,17 +32,11 @@ public class TileItemLoader extends TileLoaderItemBase {
 
     private final Map<ItemStack, Short> transferredItems = new ItemStackMap<Short>();
     private final Set<ItemStack> checkedItems = new ItemStackSet();
-    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, new ITileFilter() {
-        @Override
-        public boolean matches(TileEntity tile) {
-            return !(tile instanceof TileItemLoader);
-        }
-    }, InventorySorter.SIZE_DESCENDING);
+    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> !(tile instanceof TileItemLoader), InventorySorter.SIZE_DESCENDING);
     private final InventoryMapper invBuffer;
     private final LinkedList<IInventoryObject> chests = new LinkedList<IInventoryObject>();
 
     public TileItemLoader() {
-        super();
         setInventorySize(9);
         invBuffer = new InventoryMapper(this, false);
     }
@@ -58,6 +51,7 @@ public class TileItemLoader extends TileLoaderItemBase {
         return new Slot(this, id, x, y);
     }
 
+    @Override
     public EnumFacing getOrientation() {
         return EnumFacing.DOWN;
     }
@@ -100,6 +94,10 @@ public class TileItemLoader extends TileLoaderItemBase {
         checkedItems.clear();
 
         IInventoryObject cartInv = InvTools.getInventory(cart, getOrientation().getOpposite());
+        if (cartInv == null) {
+            sendCart(cart);
+            return;
+        }
 
         switch (getMode()) {
             case TRANSFER: {
@@ -321,7 +319,7 @@ public class TileItemLoader extends TileLoaderItemBase {
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+    public boolean canExtractItem(int index, @Nullable ItemStack stack, @Nullable EnumFacing direction) {
         return false;
     }
 

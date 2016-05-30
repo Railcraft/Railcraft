@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
 
     protected final TankManager tankManager = new TankManager();
 
-    public TileTank(String name, int invNum, List<? extends MultiBlockPattern> patterns) {
+    protected TileTank(String name, int invNum, List<? extends MultiBlockPattern> patterns) {
         super(name, invNum, patterns);
     }
 
@@ -47,6 +47,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
+    @Nullable
     public TankManager getTankManager() {
         TileTank mBlock = (TileTank) getMasterBlock();
         if (mBlock != null) {
@@ -56,6 +57,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
+    @Nullable
     public StandardTank getTank() {
         TileTank mBlock = (TileTank) getMasterBlock();
         if (mBlock != null) {
@@ -79,6 +81,7 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
+    @Nullable
     public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         TankManager tMan = getTankManager();
         if (tMan != null) {
@@ -88,7 +91,8 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     }
 
     @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
+    @Nullable
+    public FluidStack drain(EnumFacing from, @Nullable FluidStack resource, boolean doDrain) {
         if (resource == null)
             return null;
         TankManager tMan = getTankManager();
@@ -125,27 +129,27 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
         return true;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
         tankManager.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
         tankManager.readPacketData(data);
     }

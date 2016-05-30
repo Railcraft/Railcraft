@@ -69,7 +69,7 @@ public class BlockFrame extends Block implements IPostConnection, IRailcraftObje
 
     @Override
     public Object getRecipeObject(@Nullable IVariantEnum variant) {
-        return null;
+        return new ItemStack(this);
     }
 
     @Override

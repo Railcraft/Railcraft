@@ -13,13 +13,16 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ITankTile {
-
+    @Nullable
     StandardTank getTank();
 
+    @Nullable
     TankManager getTankManager();
 
     IInventory getInventory();

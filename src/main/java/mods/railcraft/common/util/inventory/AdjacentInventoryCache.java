@@ -10,11 +10,12 @@ package mods.railcraft.common.util.inventory;
 
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
-import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -25,14 +26,14 @@ public final class AdjacentInventoryCache {
     private final List<IInventoryObject> sortedInvs = new LinkedList<IInventoryObject>();
     private final Map<EnumFacing, IInventoryObject> invs = new EnumMap<EnumFacing, IInventoryObject>(EnumFacing.class);
     private final Comparator<IInventoryObject> sorter;
-    private final ITileFilter filter;
+    private final Predicate<TileEntity> filter;
     private final EnumSet<EnumFacing> changedSides = EnumSet.allOf(EnumFacing.class);
 
     public AdjacentInventoryCache(AdjacentTileCache cache) {
         this(cache, null, null);
     }
 
-    public AdjacentInventoryCache(AdjacentTileCache cache, ITileFilter filter, Comparator<IInventoryObject> sorter) {
+    public AdjacentInventoryCache(AdjacentTileCache cache, @Nullable Predicate<TileEntity> filter, @Nullable Comparator<IInventoryObject> sorter) {
         this.cache = cache;
         cache.addListener(new AdjacentTileCache.ICacheListener() {
             @Override
@@ -57,7 +58,7 @@ public final class AdjacentInventoryCache {
             for (EnumFacing side : changedSides) {
                 invs.remove(side);
                 TileEntity tile = tiles.get(side);
-                if (tile != null && (filter == null || filter.matches(tile))) {
+                if (tile != null && (filter == null || filter.test(tile))) {
                     IInventoryObject inv = InvTools.getInventory(tile, side.getOpposite());
                     if (inv != null)
                         invs.put(side, inv);

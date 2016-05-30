@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemRailcraft extends Item implements IRailcraftObject {
@@ -60,6 +61,7 @@ public class ItemRailcraft extends Item implements IRailcraftObject {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
         super.addInformation(stack, player, info, adv);
         ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tip");
@@ -68,7 +70,7 @@ public class ItemRailcraft extends Item implements IRailcraftObject {
     }
 
     @Override
-    public Object getRecipeObject(IVariantEnum variant) {
+    public Object getRecipeObject(@Nullable IVariantEnum variant) {
         IVariantEnum.tools.checkVariantObject(getClass(), variant);
         String oreTag = getOreTag(variant);
         if (oreTag != null)
@@ -78,7 +80,8 @@ public class ItemRailcraft extends Item implements IRailcraftObject {
         return this;
     }
 
-    public String getOreTag(IVariantEnum variant) {
+    @Nullable
+    public String getOreTag(@Nullable IVariantEnum variant) {
         return null;
     }
 

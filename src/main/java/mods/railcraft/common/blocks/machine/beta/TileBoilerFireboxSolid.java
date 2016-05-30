@@ -24,14 +24,13 @@ import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -49,21 +48,15 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
     private static final int SLOT_FUEL_C = 5;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 6);
     private static final IStackFilter NOT_FUEL = StandardStackFilters.FUEL.negate();
-    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, new ITileFilter() {
-        @Override
-        public boolean matches(TileEntity tile) {
-            if (tile instanceof TileSteamOven)
-                return true;
-            if (tile instanceof TileCokeOven)
-                return true;
-            if (tile instanceof TileBoiler)
-                return false;
-            IInventoryObject inventoryObject = InvTools.getInventory(tile);
-            if (inventoryObject != null)
-                return inventoryObject.getNumSlots() >= 27;
+    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> {
+        if (tile instanceof TileSteamOven)
+            return true;
+        if (tile instanceof TileCokeOven)
+            return true;
+        if (tile instanceof TileBoiler)
             return false;
-        }
-
+        IInventoryObject inventoryObject = InvTools.getInventory(tile);
+        return inventoryObject != null && inventoryObject.getNumSlots() >= 27;
     }, InventorySorter.SIZE_DESCENDING);
     private InventoryMapper invBurn = new InventoryMapper(this, SLOT_BURN, 1);
     private InventoryMapper invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
@@ -165,9 +158,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
     @Override
     public boolean needsFuel() {
         TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
-        if (mBlock != null)
-            return mBlock.needsFuel;
-        return false;
+        return mBlock != null && mBlock.needsFuel;
     }
 
     @Override

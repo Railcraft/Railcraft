@@ -55,7 +55,7 @@ public final class FluidHelper {
     private FluidHelper() {
     }
 
-    public static boolean handleRightClick(IFluidHandler tank, EnumFacing side, EntityPlayer player, boolean fill, boolean drain) {
+    public static boolean handleRightClick(IFluidHandler tank, EnumFacing side, @Nullable EntityPlayer player, boolean fill, boolean drain) {
         if (player == null)
             return false;
         ItemStack current = player.inventory.getCurrentItem();
@@ -108,17 +108,17 @@ public final class FluidHelper {
         processContainers(tank, inv, inputSlot, outputSlot, tank.getFluidType(), true, true);
     }
 
-    public static void processContainers(StandardTank tank, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
+    public static void processContainers(StandardTank tank, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
         TankManager tankManger = new TankManager();
         tankManger.add(tank);
         processContainers(tankManger, inv, inputSlot, outputSlot, fluidToFill, processFilled, processEmpty);
     }
 
-    public static void processContainers(TankManager tank, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill) {
+    public static void processContainers(TankManager tank, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill) {
         processContainers(tank, inv, inputSlot, outputSlot, fluidToFill, true, true);
     }
 
-    public static void processContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
+    public static void processContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
         ItemStack input = inv.getStackInSlot(inputSlot);
 
         if (input == null)
@@ -131,7 +131,7 @@ public final class FluidHelper {
             fillContainers(fluidHandler, inv, inputSlot, outputSlot, fluidToFill);
     }
 
-    public static boolean fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill) {
+    public static boolean fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill) {
         if (fluidToFill == null)
             return false;
         ItemStack input = inv.getStackInSlot(inputSlot);
@@ -168,7 +168,7 @@ public final class FluidHelper {
         return false;
     }
 
-    private static boolean hasPlaceToPutContainer(ItemStack output, ItemStack container) {
+    private static boolean hasPlaceToPutContainer(@Nullable ItemStack output, @Nullable ItemStack container) {
         return output == null || output.stackSize < output.getMaxStackSize() && InvTools.isItemEqual(container, output);
     }
 
@@ -176,7 +176,7 @@ public final class FluidHelper {
      * We can assume that if null is passed for the container that the container
      * was consumed by the process and we should just remove the input container.
      */
-    private static void storeContainer(IInventory inv, int inputSlot, int outputSlot, ItemStack container) {
+    private static void storeContainer(IInventory inv, int inputSlot, int outputSlot, @Nullable ItemStack container) {
         if (container == null) {
             inv.decrStackSize(inputSlot, 1);
             return;
@@ -328,7 +328,7 @@ public final class FluidHelper {
         return getFluid(state.getBlock());
     }
 
-    public static int getFluidId(FluidStack stack) {
+    public static int getFluidId(@Nullable FluidStack stack) {
         if (stack == null)
             return -1;
         if (stack.getFluid() == null)
@@ -337,7 +337,7 @@ public final class FluidHelper {
     }
 
     public static void drip(World world, BlockPos pos, IBlockState state, Random rand, float particleRed, float particleGreen, float particleBlue) {
-        if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, pos.down()) && !WorldPlugin.getBlockMaterial(world, pos.down(2)).blocksMovement()) {
+        if (rand.nextInt(10) == 0 && world.isSideSolid(pos.down(), EnumFacing.UP) && !WorldPlugin.getBlockMaterial(world, pos.down(2)).blocksMovement()) {
             double px = (double) ((float) pos.getX() + rand.nextFloat());
             double py = (double) pos.getY() - 1.05D;
             double pz = (double) ((float) pos.getZ() + rand.nextFloat());

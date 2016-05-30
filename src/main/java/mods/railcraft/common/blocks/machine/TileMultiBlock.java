@@ -34,6 +34,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -467,6 +468,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
         return masterBlock != null && masterBlock.tested && masterBlock.isMaster && !masterBlock.isInvalid();
     }
 
+    @Nullable
     public final TileMultiBlock getMasterBlock() {
         if (masterBlock != null && !isStructureValid()) {
             masterBlock = null;

@@ -10,7 +10,7 @@
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.common.blocks.machine.alpha;
+package mods.railcraft.common.blocks.machine;
 
 import mcp.MethodsReturnNonnullByDefault;
 

@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -41,6 +42,7 @@ public final class AdjacentTileCache {
         listeners.add(listener);
     }
 
+    @Nullable
     private TileEntity searchSide(EnumFacing side) {
         return WorldPlugin.getTileEntityOnSide(source.getWorld(), source.getPos(), side);
     }
@@ -52,7 +54,7 @@ public final class AdjacentTileCache {
     }
 
     public Map<EnumFacing, TileEntity> refreshTiles() {
-        Map<EnumFacing, TileEntity> tiles = new EnumMap<EnumFacing, TileEntity>(EnumFacing.class);
+        Map<EnumFacing, TileEntity> tiles = new EnumMap<>(EnumFacing.class);
         for (EnumFacing side : EnumFacing.VALUES) {
             tiles.put(side, getTileOnSide(side));
         }
@@ -74,7 +76,7 @@ public final class AdjacentTileCache {
         Arrays.fill(delay, DELAY_MIN);
     }
 
-    protected void setTile(EnumFacing side, TileEntity tile) {
+    protected void setTile(EnumFacing side, @Nullable TileEntity tile) {
         int s = side.ordinal();
         if (cache[s] != tile) {
             cache[s] = tile;
@@ -94,6 +96,7 @@ public final class AdjacentTileCache {
         return pos.getX() >> 4 == sidePos.getX() >> 4 && pos.getZ() >> 4 == sidePos.getZ() >> 4;
     }
 
+    @Nullable
     public TileEntity getTileOnSide(EnumFacing side) {
         if (Game.IS_BUKKIT || !isInSameChunk(side)) {
             changed(side);

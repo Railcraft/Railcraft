@@ -23,56 +23,54 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.ITileFilter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankWater extends TileTank implements ISidedInventory {
+public class TileTankWater extends TileTank {
 
-    private final static int OUTPUT_RATE = 40;
-    private final static int TANK_CAPACITY = FluidHelper.BUCKET_VOLUME * 400;
-    private final static int REFILL_INTERVAL = 8;
-    private final static float REFILL_RATE = 10f;
-    private final static float REFILL_PENALTY_INSIDE = 0.5f;
-    private final static float REFILL_PENALTY_SNOW = 0.5f;
-    private final static float REFILL_BOOST_RAIN = 3.0f;
-    private final static byte REFILL_RATE_MIN = 1;
-    private final static int SLOT_INPUT = 0;
-    private final static int SLOT_OUTPUT = 1;
-    private final static int[] SLOTS = InvTools.buildSlotArray(0, 2);
-    private final static EnumFacing[] LIQUID_OUTPUTS = {EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH};
-    private final static ITileFilter LIQUID_OUTPUT_FILTER = new ITileFilter() {
-        @Override
-        public boolean matches(TileEntity tile) {
-            if (tile instanceof TileTank)
-                return false;
-            else if (tile instanceof IFluidHandler)
-                return true;
+    private static final int OUTPUT_RATE = 40;
+    private static final int TANK_CAPACITY = FluidHelper.BUCKET_VOLUME * 400;
+    private static final int REFILL_INTERVAL = 8;
+    private static final float REFILL_RATE = 10f;
+    private static final float REFILL_PENALTY_INSIDE = 0.5f;
+    private static final float REFILL_PENALTY_SNOW = 0.5f;
+    private static final float REFILL_BOOST_RAIN = 3.0f;
+    private static final byte REFILL_RATE_MIN = 1;
+    private static final int SLOT_INPUT = 0;
+    private static final int SLOT_OUTPUT = 1;
+    private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
+    private static final EnumFacing[] LIQUID_OUTPUTS = {EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH};
+    private static final Predicate<TileEntity> LIQUID_OUTPUT_FILTER = tile -> {
+        if (tile instanceof TileTank)
             return false;
-        }
+        else if (tile instanceof IFluidHandler)
+            return true;
+        return false;
     };
-    private final static List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
+    private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private final FilteredTank tank;
 
     static {
@@ -115,8 +113,8 @@ public class TileTankWater extends TileTank implements ISidedInventory {
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
 
-    private IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private IInventory invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
+    private InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
+    private InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
 
     public TileTankWater() {
         super("gui.tank.water", 2, patterns);
@@ -151,13 +149,13 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
         if (Game.isHost(worldObj)) {
             if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), side, player, true, true))
                 return true;
-        } else if (FluidItemHelper.isContainer(player.inventory.getCurrentItem()))
+        } else if (FluidItemHelper.isContainer(heldItem))
             return true;
-        return super.blockActivated(player, side);
+        return super.blockActivated(player, hand, heldItem, side);
     }
 
     @Override
@@ -168,8 +166,8 @@ public class TileTankWater extends TileTank implements ISidedInventory {
             if (isMaster()) {
                 if (worldObj.provider.getDimension() != -1 && clock % REFILL_INTERVAL == 0) {
                     float rate = REFILL_RATE;
-                    BiomeGenBase biome = worldObj.getBiomeGenForCoords(getPos());
-                    float humidity = biome.rainfall;
+                    Biome biome = worldObj.getBiome(getPos());
+                    float humidity = biome.getRainfall();
                     rate *= humidity;
 //                    String debug = "Biome=" + biome.biomeName + ", Humidity=" + humidity;
 
@@ -202,6 +200,7 @@ public class TileTankWater extends TileTank implements ISidedInventory {
                 }
 
                 if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
+                    //noinspection ConstantConditions
                     FluidHelper.processContainers(tankManager.get(0), this, SLOT_INPUT, SLOT_OUTPUT);
             }
 
@@ -222,14 +221,15 @@ public class TileTankWater extends TileTank implements ISidedInventory {
     }
 
     @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, @Nullable FluidStack resource, boolean doFill) {
         if (from != EnumFacing.UP || resource == null || !Fluids.WATER.is(resource))
             return 0;
         return super.fill(from, resource, doFill);
     }
 
     @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
+    @Nullable
+    public FluidStack drain(EnumFacing from, @Nullable FluidStack resource, boolean doDrain) {
         if (resource == null || !Fluids.WATER.is(resource))
             return null;
         return super.drain(from, resource.amount, doDrain);

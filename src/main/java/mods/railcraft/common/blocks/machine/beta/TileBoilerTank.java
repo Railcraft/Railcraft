@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.common.util.misc.ITileFilter;
 import mods.railcraft.common.util.network.RailcraftDataInputStream;
 import mods.railcraft.common.util.network.RailcraftDataOutputStream;
 import net.minecraft.tileentity.TileEntity;
@@ -18,27 +17,23 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileBoilerTank extends TileBoiler {
 
-    private final static ITileFilter OUTPUT_FILTER = new ITileFilter() {
-        @Override
-        public boolean matches(TileEntity tile) {
-            if (tile instanceof TileBoiler)
-                return false;
-            else if (tile instanceof IFluidHandler)
-                return true;
+    private static final Predicate<TileEntity> OUTPUT_FILTER = tile -> {
+        if (tile instanceof TileBoiler)
             return false;
-        }
-
+        else if (tile instanceof IFluidHandler)
+            return true;
+        return false;
     };
     private boolean isConnected;
 
     protected TileBoilerTank() {
-        super();
     }
 
     @Override
@@ -65,7 +60,7 @@ public abstract class TileBoilerTank extends TileBoiler {
     }
 
     @Override
-    public ITileFilter getOutputFilter() {
+    public Predicate<TileEntity> getOutputFilter() {
         return OUTPUT_FILTER;
     }
 }

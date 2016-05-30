@@ -38,6 +38,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -47,7 +48,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,16 +61,16 @@ import java.util.Map;
 public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @SuppressWarnings("WeakerAccess")
-    public final static int CAPACITY_PER_BLOCK_IRON = 16 * FluidHelper.BUCKET_VOLUME;
+    public static final int CAPACITY_PER_BLOCK_IRON = 16 * FluidHelper.BUCKET_VOLUME;
     @SuppressWarnings("WeakerAccess")
-    public final static int CAPACITY_PER_BLOCK_STEEL = 32 * FluidHelper.BUCKET_VOLUME;
+    public static final int CAPACITY_PER_BLOCK_STEEL = 32 * FluidHelper.BUCKET_VOLUME;
     @SuppressWarnings("WeakerAccess")
-    protected final static int SLOT_INPUT = 0;
+    protected static final int SLOT_INPUT = 0;
     @SuppressWarnings("WeakerAccess")
-    protected final static int SLOT_OUTPUT = 1;
-    private final static int NETWORK_UPDATE_INTERVAL = 64;
-    private final static MetalTank IRON_TANK = new IronTank();
-    private final static List<MultiBlockPattern> patterns = buildPatterns();
+    protected static final int SLOT_OUTPUT = 1;
+    private static final int NETWORK_UPDATE_INTERVAL = 64;
+    private static final MetalTank IRON_TANK = new IronTank();
+    private static final List<MultiBlockPattern> patterns = buildPatterns();
     protected final StandardTank tank = new StandardTank(64 * FluidHelper.BUCKET_VOLUME, this);
     protected final TankManager tankManager = new TankManager();
     private final StandaloneInventory inv;
@@ -117,7 +118,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         int yOffset = 0;
         int zOffset = 2;
 
-        char[][] bottom = new char[][]{
+        char[][] bottom = {
                 {'O', 'O', 'O', 'O', 'O'},
                 {'O', 'B', 'B', 'B', 'O'},
                 {'O', 'B', 'M', 'B', 'O'},
@@ -125,7 +126,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
                 {'O', 'O', 'O', 'O', 'O'}
         };
 
-        char[][] middle = new char[][]{
+        char[][] middle = {
                 {'O', 'O', 'O', 'O', 'O'},
                 {'O', 'B', 'W', 'B', 'O'},
                 {'O', 'W', 'A', 'W', 'O'},
@@ -133,7 +134,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
                 {'O', 'O', 'O', 'O', 'O'}
         };
 
-        char[][] top = new char[][]{
+        char[][] top = {
                 {'O', 'O', 'O', 'O', 'O'},
                 {'O', 'B', 'B', 'B', 'O'},
                 {'O', 'B', 'T', 'B', 'O'},
@@ -141,7 +142,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
                 {'O', 'O', 'O', 'O', 'O'}
         };
 
-        char[][] border = new char[][]{
+        char[][] border = {
                 {'O', 'O', 'O', 'O', 'O'},
                 {'O', 'O', 'O', 'O', 'O'},
                 {'O', 'O', 'O', 'O', 'O'},
@@ -151,7 +152,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
         for (int i = 4; i <= 8; i++) {
             char[][][] map = buildMap(i, bottom, middle, top, border);
-            AxisAlignedBB entityCheck = AxisAlignedBB.fromBounds(0, 1, 0, 1, i - 1, 1);
+            AxisAlignedBB entityCheck = new AxisAlignedBB(0, 1, 0, 1, i - 1, 1);
             pats.add(buildPattern(map, xOffset, yOffset, zOffset, entityCheck));
         }
 
@@ -201,7 +202,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
             for (int i = 4; i <= 8; i++) {
                 char[][][] map = buildMap(i, bottom, middle, top, border);
-                AxisAlignedBB entityCheck = AxisAlignedBB.fromBounds(-1, 1, -1, 2, i - 1, 2);
+                AxisAlignedBB entityCheck = new AxisAlignedBB(-1, 1, -1, 2, i - 1, 2);
                 pats.add(buildPattern(map, xOffset, yOffset, zOffset, entityCheck));
             }
         }
@@ -260,7 +261,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
             for (int i = 4; i <= 8; i++) {
                 char[][][] map = buildMap(i, bottom, middle, top, border);
-                AxisAlignedBB entityCheck = AxisAlignedBB.fromBounds(-2, 1, -2, 3, i - 1, 3);
+                AxisAlignedBB entityCheck = new AxisAlignedBB(-2, 1, -2, 3, i - 1, 3);
                 pats.add(buildPattern(map, xOffset, yOffset, zOffset, entityCheck));
             }
         }
@@ -327,7 +328,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
             for (int i = 4; i <= 8; i++) {
                 char[][][] map = buildMap(i, bottom, middle, top, border);
-                AxisAlignedBB entityCheck = AxisAlignedBB.fromBounds(-3, 1, -3, 4, i - 1, 4);
+                AxisAlignedBB entityCheck = new AxisAlignedBB(-3, 1, -3, 4, i - 1, 4);
                 pats.add(buildPattern(map, xOffset, yOffset, zOffset, entityCheck));
             }
         }
@@ -453,24 +454,21 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         return tile instanceof TileTankBase;
     }
 
-    @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
-        ItemStack current = player.getCurrentEquippedItem();
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
         if (Game.isHost(worldObj)) {
-            if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), side, player, true, true)) {
+            TankManager tankManager = getTankManager();
+            if (isStructureValid() && tankManager != null && FluidHelper.handleRightClick(tankManager, side, player, true, true)) {
                 TileTankBase master = (TileTankBase) getMasterBlock();
                 if (master != null)
                     master.syncClient();
                 return true;
             }
-        } else if (FluidItemHelper.isContainer(current))
+        } else if (FluidItemHelper.isContainer(heldItem))
             return true;
 
         // Prevents players from getting inside tanks using boats
-        if (current != null && current.getItem() == Items.BOAT)
-            return true;
-        return super.blockActivated(player, side);
+        return heldItem != null && heldItem.getItem() == Items.BOAT || super.blockActivated(player, hand, heldItem, side);
     }
 
     @Override
@@ -484,6 +482,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
+    @Nullable
     public TankManager getTankManager() {
         TileTankBase mBlock = (TileTankBase) getMasterBlock();
         if (mBlock != null)
@@ -492,6 +491,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
+    @Nullable
     public StandardTank getTank() {
         TileTankBase mBlock = (TileTankBase) getMasterBlock();
         if (mBlock != null)
@@ -515,6 +515,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     protected void onMasterChanged() {
         TankManager tMan = getTankManager();
         if (tMan != null)
+            //noinspection ConstantConditions
             tMan.get(0).setFluid(null);
     }
 
@@ -570,6 +571,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
             if (isMaster) {
 
                 if (clock % FluidHelper.BUCKET_FILL_TIME == 0)
+                    //noinspection ConstantConditions
                     FluidHelper.processContainers(tankManager.get(0), inv, SLOT_INPUT, SLOT_OUTPUT);
 
                 if (networkTimer.hasTriggered(worldObj, NETWORK_UPDATE_INTERVAL))
@@ -577,6 +579,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
             }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void syncClient() {
         FluidStack fluidStack = tankManager.get(0).getFluid();
         int fluidColor = tankManager.get(0).getColor();
@@ -588,7 +591,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
-    private boolean isFluidEqual(FluidStack L1, FluidStack L2) {
+    private boolean isFluidEqual(@Nullable FluidStack L1, @Nullable FluidStack L2) {
         if (L1 == L2)
             return true;
         if (L1 == null || L2 == null)
@@ -596,17 +599,17 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         return L1.isFluidStackIdentical(L2);
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
         inv.writeToNBT("inv", data);
         color.writeToNBT(data, "color");
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
         inv.readFromNBT("inv", data);
@@ -614,14 +617,14 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(color.ordinal());
         tankManager.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
         EnumColor c = EnumColor.fromOrdinal(data.readByte());
         tankManager.readPacketData(data);
