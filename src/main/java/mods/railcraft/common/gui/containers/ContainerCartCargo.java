@@ -16,11 +16,8 @@ import net.minecraft.inventory.Slot;
 
 public class ContainerCartCargo extends RailcraftContainer {
 
-    private EntityCartCargo cart;
-
     public ContainerCartCargo(InventoryPlayer inventoryplayer, EntityCartCargo cart) {
         super(cart);
-        this.cart = cart;
 
         Slot filter = new SlotFilter(cart.getFilterInv(), 0, 25, 35).setStackLimit(1);
         addSlot(filter);

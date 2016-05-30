@@ -48,6 +48,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -133,6 +134,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9, false);
     private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
     private int processTime;
+    @Nullable
     private EnergyStorage energyStorage;
     private boolean isWorking;
     private boolean paused;
@@ -399,6 +401,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         return false;
     }
 
+    @Nullable
     public EnergyStorage getEnergyStorage() {
         TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
         if (mBlock != null && mBlock.energyStorage != null)

@@ -14,15 +14,14 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerTank extends RailcraftContainer {
 
-    private ITankTile tile;
-    private Slot input;
+    private final ITankTile tile;
 
     public ContainerTank(InventoryPlayer inventoryplayer, ITankTile tile) {
         super(tile.getInventory());
@@ -33,7 +32,7 @@ public class ContainerTank extends RailcraftContainer {
             addWidget(new FluidGaugeWidget(tank, 35, 23, 176, 0, 48, 47));
         }
 
-        addSlot(input = tile.getInputSlot(tile.getInventory(), 0, 116, 21));
+        addSlot(tile.getInputSlot(tile.getInventory(), 0, 116, 21));
         addSlot(new SlotOutput(tile.getInventory(), 1, 116, 56));
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
@@ -52,16 +51,16 @@ public class ContainerTank extends RailcraftContainer {
         super.sendUpdateToClient();
         TankManager tMan = tile.getTankManager();
         if (tMan != null) {
-            tMan.updateGuiData(this, crafters, 0);
+            tMan.updateGuiData(this, listeners, 0);
         }
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
         TankManager tMan = tile.getTankManager();
         if (tMan != null) {
-            tMan.initGuiData(this, icrafting, 0);
+            tMan.initGuiData(this, listener, 0);
         }
     }
 

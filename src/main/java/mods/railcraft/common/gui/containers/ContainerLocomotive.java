@@ -18,9 +18,8 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -77,24 +76,24 @@ public class ContainerLocomotive extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
 
-        icrafting.sendProgressBarUpdate(this, 10, loco.getSpeed().ordinal());
-        icrafting.sendProgressBarUpdate(this, 11, loco.getMode().ordinal());
-        icrafting.sendProgressBarUpdate(this, 12, loco.getLockController().getCurrentState());
-        icrafting.sendProgressBarUpdate(this, 13, PlayerPlugin.isOwnerOrOp(loco.getOwner(), playerInv.player) ? 1 : 0);
+        listener.sendProgressBarUpdate(this, 10, loco.getSpeed().ordinal());
+        listener.sendProgressBarUpdate(this, 11, loco.getMode().ordinal());
+        listener.sendProgressBarUpdate(this, 12, loco.getLockController().getCurrentState());
+        listener.sendProgressBarUpdate(this, 13, PlayerPlugin.isOwnerOrOp(loco.getOwner(), playerInv.player) ? 1 : 0);
 
         String oName = loco.getOwner().getName();
         if (oName != null)
-            PacketBuilder.instance().sendGuiStringPacket((EntityPlayerMP) icrafting, windowId, 0, oName);
+            PacketBuilder.instance().sendGuiStringPacket(listener, windowId, 0, oName);
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (ICrafting crafter : crafters) {
+        for (IContainerListener crafter : listeners) {
             LocoSpeed speed = loco.getSpeed();
             if (lastSpeed != speed)
                 crafter.sendProgressBarUpdate(this, 10, speed.ordinal());

@@ -154,13 +154,13 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
         tank.renderData.color = color;
     }
 
-    public void updateGuiData(Container container, List<IContainerListener> crafters, int tankIndex) {
+    public void updateGuiData(Container container, List<IContainerListener> listeners, int tankIndex) {
         StandardTank tank = tanks.get(tankIndex);
         FluidStack fluidStack = tank.getFluid();
         int color = tank.getColor();
         int pColor = tank.renderData.color;
 
-        for (IContainerListener crafter : crafters) {
+        for (IContainerListener crafter : listeners) {
             EntityPlayerMP player = (EntityPlayerMP) crafter;
             if (fluidStack == null ^ tank.renderData.fluid == null) {
                 int fluidId = -1;

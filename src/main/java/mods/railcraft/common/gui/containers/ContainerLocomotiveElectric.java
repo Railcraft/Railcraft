@@ -13,20 +13,18 @@ import mods.railcraft.common.carts.EntityLocomotiveElectric;
 import mods.railcraft.common.gui.widgets.ChargeIndicator;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerLocomotiveElectric extends ContainerLocomotive {
 
-    private final EntityLocomotiveElectric loco;
     private final IElectricMinecart.ChargeHandler chargeHandler;
     private final ChargeIndicator chargeIndicator;
     private double lastCharge;
 
     private ContainerLocomotiveElectric(InventoryPlayer playerInv, EntityLocomotiveElectric loco) {
         super(playerInv, loco, 161);
-        this.loco = loco;
         this.chargeHandler = loco.getChargeHandler();
         this.chargeIndicator = new ChargeIndicator(EntityLocomotiveElectric.MAX_CHARGE);
     }
@@ -43,22 +41,21 @@ public class ContainerLocomotiveElectric extends ContainerLocomotive {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
 
-        icrafting.sendProgressBarUpdate(this, 20, (int) Math.round(chargeHandler.getCharge()));
+        listener.sendProgressBarUpdate(this, 20, (int) Math.round(chargeHandler.getCharge()));
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = this.crafters.get(var1);
-
-            if (this.lastCharge != chargeHandler.getCharge())
+        for (IContainerListener var2 : listeners) {
+            if (lastCharge != chargeHandler.getCharge())
                 var2.sendProgressBarUpdate(this, 21, (int) Math.round(chargeHandler.getCharge()));
         }
+        lastCharge = chargeHandler.getCharge();
     }
 
     @Override

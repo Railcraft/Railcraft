@@ -23,7 +23,6 @@ import mods.railcraft.common.blocks.tracks.TileTrack;
 import mods.railcraft.common.blocks.tracks.instances.TrackRouting;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -143,7 +142,8 @@ public class FactoryContainer {
                 case TRACK_ROUTING:
                     return new ContainerTrackRouting(inv, (TrackRouting) ((TileTrack) obj).getTrackInstance());
                 default:
-                    return RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);
+                    //TODO: fix this
+//                    return RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);
             }
         } catch (ClassCastException ex) {
             Game.log(Level.WARN, "Error when attempting to build gui container {0}: {1}", gui, ex);

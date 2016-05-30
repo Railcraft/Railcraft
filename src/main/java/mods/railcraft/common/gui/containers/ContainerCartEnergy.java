@@ -11,9 +11,8 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.common.carts.IIC2EnergyCart;
 import mods.railcraft.common.gui.slots.SlotEnergy;
 import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,9 +40,9 @@ public class ContainerCartEnergy extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting player) {
-        super.onCraftGuiOpened(player);
-        PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 0, (int)cart.getEnergy());
+    public void addListener(IContainerListener player) {
+        super.addListener(player);
+        PacketBuilder.instance().sendGuiIntegerPacket(player, windowId, 0, (int) cart.getEnergy());
     }
 
     /**
@@ -53,11 +52,9 @@ public class ContainerCartEnergy extends RailcraftContainer {
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int i = 0; i < crafters.size(); ++i) {
-            ICrafting player = crafters.get(i);
-
+        for (IContainerListener player : listeners) {
             if (lastEnergy != cart.getEnergy())
-                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 0, (int) cart.getEnergy());
+                PacketBuilder.instance().sendGuiIntegerPacket(player, windowId, 0, (int) cart.getEnergy());
         }
 
         lastEnergy = (int) cart.getEnergy();

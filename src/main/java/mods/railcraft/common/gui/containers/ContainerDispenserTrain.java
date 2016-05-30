@@ -17,14 +17,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerDispenserTrain extends RailcraftContainer {
+import javax.annotation.Nullable;
 
-    public TileDispenserTrain tile;
-    private Slot minecart;
+public class ContainerDispenserTrain extends RailcraftContainer {
 
     public ContainerDispenserTrain(InventoryPlayer playerInv, TileDispenserTrain tile) {
         super(tile);
-        this.tile = tile;
 
         for (int i = 0; i < 9; i++) {
             addSlot(new SlotDispenserTrain(tile.getPattern(), i, 8 + i * 18, 31));
@@ -32,7 +30,7 @@ public class ContainerDispenserTrain extends RailcraftContainer {
 
         for (int i = 0; i < 2; i++) {
             for (int k = 0; k < 9; k++) {
-                addSlot(minecart = new SlotMinecart(tile, k + i * 9, 8 + k * 18, 67 + i * 18));
+                addSlot(new SlotMinecart(tile, k + i * 9, 8 + k * 18, 67 + i * 18));
             }
         }
 
@@ -55,7 +53,7 @@ public class ContainerDispenserTrain extends RailcraftContainer {
         }
 
         @Override
-        public boolean isItemValid(ItemStack stack) {
+        public boolean isItemValid(@Nullable ItemStack stack) {
             if (stack == null)
                 return false;
             if (stack.getItem() instanceof IMinecartItem)

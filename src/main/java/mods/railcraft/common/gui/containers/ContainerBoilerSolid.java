@@ -16,7 +16,7 @@ import mods.railcraft.common.gui.slots.SlotWater;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,9 +24,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ContainerBoilerSolid extends RailcraftContainer {
 
     private TileBoilerFireboxSolid tile;
-    private Slot fuel;
-    private Slot input;
-    private Slot output;
     private double lastBurnTime;
     private double lastItemBurnTime;
     private double lastHeat;
@@ -41,9 +38,9 @@ public class ContainerBoilerSolid extends RailcraftContainer {
 
         addWidget(new IndicatorWidget(tile.boiler.heatIndicator, 40, 25, 176, 61, 6, 43));
 
-        addSlot(input = new SlotWater(tile, 0, 143, 21));
-        addSlot(output = new SlotOutput(tile, 1, 143, 56));
-        addSlot(fuel = new SlotFuel(tile, 2, 62, 39));
+        addSlot(new SlotWater(tile, 0, 143, 21));
+        addSlot(new SlotOutput(tile, 1, 143, 56));
+        addSlot(new SlotFuel(tile, 2, 62, 39));
         addSlot(new SlotFuel(tile, 3, 89, 20));
         addSlot(new SlotFuel(tile, 4, 89, 38));
         addSlot(new SlotFuel(tile, 5, 89, 56));
@@ -60,18 +57,18 @@ public class ContainerBoilerSolid extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
         TankManager tMan = tile.getTankManager();
         if (tMan != null) {
-            tMan.initGuiData(this, icrafting, 0);
-            tMan.initGuiData(this, icrafting, 1);
+            tMan.initGuiData(this, listener, 0);
+            tMan.initGuiData(this, listener, 1);
         }
 
-        icrafting.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
-        icrafting.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
-        icrafting.sendProgressBarUpdate(this, 12, (int) Math.round(tile.boiler.getHeat()));
-        icrafting.sendProgressBarUpdate(this, 13, tile.boiler.isBurning() ? 1 : 0);
+        listener.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
+        listener.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+        listener.sendProgressBarUpdate(this, 12, (int) Math.round(tile.boiler.getHeat()));
+        listener.sendProgressBarUpdate(this, 13, tile.boiler.isBurning() ? 1 : 0);
     }
 
     @Override
@@ -79,24 +76,22 @@ public class ContainerBoilerSolid extends RailcraftContainer {
         super.sendUpdateToClient();
         TankManager tMan = tile.getTankManager();
         if (tMan != null) {
-            tMan.updateGuiData(this, crafters, 0);
-            tMan.updateGuiData(this, crafters, 1);
+            tMan.updateGuiData(this, listeners, 0);
+            tMan.updateGuiData(this, listeners, 1);
         }
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = this.crafters.get(var1);
+        for (IContainerListener listener : listeners) {
+            if (lastBurnTime != tile.boiler.burnTime)
+                listener.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
 
-            if (this.lastBurnTime != tile.boiler.burnTime)
-                var2.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
+            if (lastItemBurnTime != tile.boiler.currentItemBurnTime)
+                listener.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
 
-            if (this.lastItemBurnTime != tile.boiler.currentItemBurnTime)
-                var2.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+            if (lastHeat != tile.boiler.getHeat())
+                listener.sendProgressBarUpdate(this, 12, (int) Math.round(tile.boiler.getHeat()));
 
-            if (this.lastHeat != tile.boiler.getHeat())
-                var2.sendProgressBarUpdate(this, 12, (int) Math.round(tile.boiler.getHeat()));
-
-            if (this.wasBurning != tile.boiler.isBurning())
-                var2.sendProgressBarUpdate(this, 13, tile.boiler.isBurning() ? 1 : 0);
+            if (wasBurning != tile.boiler.isBurning())
+                listener.sendProgressBarUpdate(this, 13, tile.boiler.isBurning() ? 1 : 0);
         }
 
         this.lastBurnTime = tile.boiler.burnTime;

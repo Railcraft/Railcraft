@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -64,9 +65,9 @@ public class ContainerAnvil extends ContainerRepair {
     public void updateRepairOutput() {
         ItemStack input1original = inputSlots.getStackInSlot(0);
         this.maximumCost = 1;
-        int l1 = 0;
+        int enchantCost = 0;
         int baseCost = 0;
-        int j2 = 0;
+        int nameCost = 0;
 
         if (input1original == null) {
             outputSlot.setInventorySlotContents(0, null);
@@ -74,7 +75,7 @@ public class ContainerAnvil extends ContainerRepair {
         } else {
             ItemStack input1 = input1original.copy();
             ItemStack input2 = inputSlots.getStackInSlot(1);
-            Map<Integer, Integer> input1Enchantments = EnchantmentHelper.getEnchantments(input1);
+            Map<Enchantment, Integer> input1Enchantments = EnchantmentHelper.getEnchantments(input1);
             boolean isEnchantedBook = false;
             baseCost = baseCost + input1original.getRepairCost() + (input2 == null ? 0 : input2.getRepairCost());
             this.materialCost = 0;
@@ -85,9 +86,9 @@ public class ContainerAnvil extends ContainerRepair {
                 isEnchantedBook = input2.getItem() == Items.ENCHANTED_BOOK && Items.ENCHANTED_BOOK.getEnchantments(input2).tagCount() > 0;
 
                 if (input1.isItemStackDamageable() && input1.getItem().getIsRepairable(input1original, input2)) {
-                    int j4 = Math.min(input1.getItemDamage(), input1.getMaxDamage() / 4);
+                    int damageToRepair = Math.min(input1.getItemDamage(), input1.getMaxDamage() / 4);
 
-                    if (j4 <= 0) {
+                    if (damageToRepair <= 0) {
                         outputSlot.setInventorySlotContents(0, null);
                         this.maximumCost = 0;
                         return;
@@ -95,11 +96,11 @@ public class ContainerAnvil extends ContainerRepair {
 
                     int projectedMaterialCost;
 
-                    for (projectedMaterialCost = 0; j4 > 0 && projectedMaterialCost < input2.stackSize; ++projectedMaterialCost) {
-                        int j5 = input1.getItemDamage() - j4;
-                        input1.setItemDamage(j5);
-                        ++l1;
-                        j4 = Math.min(input1.getItemDamage(), input1.getMaxDamage() / 4);
+                    for (projectedMaterialCost = 0; damageToRepair > 0 && projectedMaterialCost < input2.stackSize; ++projectedMaterialCost) {
+                        int repairedDamage = input1.getItemDamage() - damageToRepair;
+                        input1.setItemDamage(repairedDamage);
+                        ++enchantCost;
+                        damageToRepair = Math.min(input1.getItemDamage(), input1.getMaxDamage() / 4);
                     }
 
                     this.materialCost = projectedMaterialCost;
@@ -123,77 +124,67 @@ public class ContainerAnvil extends ContainerRepair {
 
                         if (k3 < input1.getMetadata()) {
                             input1.setItemDamage(k3);
-                            l1 += 2;
+                            enchantCost += 2;
                         }
                     }
 
-                    Map<Integer, Integer> input2Enchantments = EnchantmentHelper.getEnchantments(input2);
+                    Map<Enchantment, Integer> input2Enchantments = EnchantmentHelper.getEnchantments(input2);
 
-                    for (int input2EnchantId : input2Enchantments.keySet()) {
-                        Enchantment enchantment = Enchantment.getEnchantmentById(input2EnchantId);
+                    for (Enchantment input2Enchantment : input2Enchantments.keySet()) {
+                        if (input2Enchantment != null) {
+                            int input1EnchantLevel = input1Enchantments.containsKey(input2Enchantment) ? input1Enchantments.get(input2Enchantment) : 0;
+                            int input2EnchantLevel = input2Enchantments.get(input2Enchantment);
+                            int highestLevel;
 
-                        if (enchantment != null) {
-                            int k5 = input1Enchantments.containsKey(input2EnchantId) ? input1Enchantments.get(input2EnchantId) : 0;
-                            int l3 = input2Enchantments.get(input2EnchantId);
-                            int i6;
-
-                            if (k5 == l3) {
-                                ++l3;
-                                i6 = l3;
+                            if (input1EnchantLevel == input2EnchantLevel) {
+                                ++input2EnchantLevel;
+                                highestLevel = input2EnchantLevel;
                             } else {
-                                i6 = Math.max(l3, k5);
+                                highestLevel = Math.max(input2EnchantLevel, input1EnchantLevel);
                             }
 
-                            l3 = i6;
-                            boolean canApplyEnchants = enchantment.canApply(input1original);
+                            input2EnchantLevel = highestLevel;
+                            boolean canApplyEnchants = input2Enchantment.canApply(input1original);
 
                             if (thePlayer.capabilities.isCreativeMode || input1original.getItem() == Items.ENCHANTED_BOOK) {
                                 canApplyEnchants = true;
                             }
 
-                            for (int input1EnchantId : input1Enchantments.keySet()) {
-                                Enchantment e2 = Enchantment.getEnchantmentById(input1EnchantId);
-                                if (input1EnchantId != input2EnchantId && !(enchantment.canApplyTogether(e2) && e2.canApplyTogether(enchantment))) //Forge BugFix: Let Both enchantments veto being together
+                            for (Enchantment input1Enchantment : input1Enchantments.keySet()) {
+                                if (input1Enchantment != input2Enchantment && !(input2Enchantment.canApplyTogether(input1Enchantment) && input1Enchantment.canApplyTogether(input2Enchantment))) //Forge BugFix: Let Both enchantments veto being together
                                 {
                                     canApplyEnchants = false;
-                                    ++l1;
+                                    ++enchantCost;
                                 }
                             }
 
                             if (canApplyEnchants) {
-                                if (l3 > enchantment.getMaxLevel()) {
-                                    l3 = enchantment.getMaxLevel();
+                                if (input2EnchantLevel > input2Enchantment.getMaxLevel()) {
+                                    input2EnchantLevel = input2Enchantment.getMaxLevel();
                                 }
 
-                                input1Enchantments.put(input2EnchantId, l3);
-                                int l5 = 0;
+                                input1Enchantments.put(input2Enchantment, input2EnchantLevel);
+                                int rarityMultiplier = 0;
 
-                                switch (enchantment.getWeight()) {
-                                    case 1:
-                                        l5 = 8;
+                                switch (input2Enchantment.getRarity()) {
+                                    case COMMON:
+                                        rarityMultiplier = 1;
                                         break;
-                                    case 2:
-                                        l5 = 4;
-                                    case 3:
-                                    case 4:
-                                    case 6:
-                                    case 7:
-                                    case 8:
-                                    case 9:
-                                    default:
+                                    case UNCOMMON:
+                                        rarityMultiplier = 2;
                                         break;
-                                    case 5:
-                                        l5 = 2;
+                                    case RARE:
+                                        rarityMultiplier = 4;
                                         break;
-                                    case 10:
-                                        l5 = 1;
+                                    case VERY_RARE:
+                                        rarityMultiplier = 8;
                                 }
 
                                 if (isEnchantedBook) {
-                                    l5 = Math.max(1, l5 / 2);
+                                    rarityMultiplier = Math.max(1, rarityMultiplier / 2);
                                 }
 
-                                l1 += l5 * l3;
+                                enchantCost += rarityMultiplier * input2EnchantLevel;
                             }
                         }
                     }
@@ -205,24 +196,24 @@ public class ContainerAnvil extends ContainerRepair {
             if (input1 != null)
                 if (StringUtils.isBlank(repairedItemName)) {
                     if (input1original.hasDisplayName()) {
-                        j2 = 1;
-                        l1 += j2;
+                        nameCost = 1;
+                        enchantCost += nameCost;
                         input1.clearCustomName();
                     }
                 } else if (!repairedItemName.equals(input1original.getDisplayName())) {
-                    j2 = 1;
-                    l1 += j2;
+                    nameCost = 1;
+                    enchantCost += nameCost;
                     input1.setStackDisplayName(repairedItemName);
                 }
 
-            this.maximumCost = baseCost + l1;
+            this.maximumCost = baseCost + enchantCost;
 
-            if (l1 <= 0) {
+            if (enchantCost <= 0) {
                 input1 = null;
             }
 
             // Railcraft changes max cost from 39 to 50
-            if (j2 == l1 && j2 > 0 && maximumCost > 50) {
+            if (nameCost == enchantCost && nameCost > 0 && maximumCost > 50) {
                 this.maximumCost = 50;
             }
 
@@ -232,14 +223,14 @@ public class ContainerAnvil extends ContainerRepair {
             }
 
             if (input1 != null) {
-                int k4 = input1.getRepairCost();
+                int repairCost = input1.getRepairCost();
 
-                if (input2 != null && k4 < input2.getRepairCost()) {
-                    k4 = input2.getRepairCost();
+                if (input2 != null && repairCost < input2.getRepairCost()) {
+                    repairCost = input2.getRepairCost();
                 }
 
-                k4 = k4 * 2 + 1;
-                input1.setRepairCost(k4);
+                repairCost = repairCost * 2 + 1;
+                input1.setRepairCost(repairCost);
                 EnchantmentHelper.setEnchantments(input1Enchantments, input1);
             }
 
@@ -257,10 +248,11 @@ public class ContainerAnvil extends ContainerRepair {
 
         if (getSlot(2).getHasStack()) {
             ItemStack itemstack = getSlot(2).getStack();
+            assert itemstack != null;
 
-            if (StringUtils.isBlank(par1Str))
+            if (StringUtils.isBlank(par1Str)) {
                 itemstack.clearCustomName();
-            else
+            } else
                 itemstack.setStackDisplayName(repairedItemName);
         }
 
@@ -285,7 +277,7 @@ public class ContainerAnvil extends ContainerRepair {
          * for the armor slots.
          */
         @Override
-        public boolean isItemValid(ItemStack par1ItemStack) {
+        public boolean isItemValid(@Nullable ItemStack par1ItemStack) {
             return false;
         }
 
@@ -332,13 +324,13 @@ public class ContainerAnvil extends ContainerRepair {
 
                 if (l > 2) {
                     worldIn.setBlockToAir(blockPosIn);
-                    worldIn.playAuxSFX(1020, blockPosIn, 0);
+                    worldIn.playEvent(1029, blockPosIn, 0);
                 } else {
                     worldIn.setBlockState(blockPosIn, iblockstate.withProperty(BlockAnvil.DAMAGE, l), 2);
-                    worldIn.playAuxSFX(1021, blockPosIn, 0);
+                    worldIn.playEvent(1030, blockPosIn, 0);
                 }
             } else if (!worldIn.isRemote) {
-                worldIn.playAuxSFX(1021, blockPosIn, 0);
+                worldIn.playEvent(1030, blockPosIn, 0);
             }
         }
 

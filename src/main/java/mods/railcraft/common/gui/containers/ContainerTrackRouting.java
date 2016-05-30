@@ -14,9 +14,8 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemTicketGold;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -27,8 +26,8 @@ public class ContainerTrackRouting extends RailcraftContainer {
     private final InventoryPlayer playerInv;
     private int lastLockState;
     public String ownerName;
-    public boolean canLock = false;
-    private SlotSecure slotTicket;
+    public boolean canLock;
+    private final SlotSecure slotTicket;
 
     public ContainerTrackRouting(InventoryPlayer playerInv, TrackRouting track) {
         super(track.getInventory());
@@ -51,29 +50,27 @@ public class ContainerTrackRouting extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
 
-        icrafting.sendProgressBarUpdate(this, 0, track.getLockController().getCurrentState());
+        listener.sendProgressBarUpdate(this, 0, track.getLockController().getCurrentState());
 
         canLock = PlayerPlugin.isOwnerOrOp(track.getOwner(), playerInv.player.getGameProfile());
         slotTicket.locked = track.isSecure() && !canLock;
-        icrafting.sendProgressBarUpdate(this, 2, canLock ? 1 : 0);
+        listener.sendProgressBarUpdate(this, 2, canLock ? 1 : 0);
 
         String username = track.getOwner().getName();
         if (username != null)
-            PacketBuilder.instance().sendGuiStringPacket((EntityPlayerMP) icrafting, windowId, 0, username);
+            PacketBuilder.instance().sendGuiStringPacket(listener, windowId, 0, username);
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = this.crafters.get(var1);
-
+        for (IContainerListener var2 : listeners) {
             int lock = track.getLockController().getCurrentState();
-            if (this.lastLockState != lock)
+            if (lastLockState != lock)
                 var2.sendProgressBarUpdate(this, 0, lock);
         }
 

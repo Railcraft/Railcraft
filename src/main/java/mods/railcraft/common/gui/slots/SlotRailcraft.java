@@ -13,8 +13,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
+import javax.annotation.Nullable;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SlotRailcraft extends Slot {
@@ -39,7 +40,7 @@ public class SlotRailcraft extends Slot {
     /**
      * @param toolTips the tooltips to set
      */
-    public void setToolTips(ToolTip toolTips) {
+    public void setToolTips(@Nullable ToolTip toolTips) {
         this.toolTips = toolTips;
     }
 

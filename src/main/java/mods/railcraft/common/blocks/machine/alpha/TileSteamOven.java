@@ -50,6 +50,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 
@@ -132,6 +133,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
         return EnumMachineAlpha.STEAM_OVEN;
     }
 
+    @Nullable
     public TankManager getTankManager() {
         TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
         if (mBlock != null)

@@ -352,6 +352,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 
+    @Nullable
     public EnergyStorage getEnergyStorage() {
         return energyStorage;
     }

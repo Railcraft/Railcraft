@@ -12,21 +12,22 @@ import mods.railcraft.common.blocks.machine.alpha.TileSteamTurbine;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 public class ContainerTurbine extends RailcraftContainer {
 
     public TileSteamTurbine tile;
-    private Slot rotor;
     private int lastOutput;
 
     public ContainerTurbine(InventoryPlayer inventoryplayer, TileSteamTurbine tile) {
         super(tile.getInventory());
         this.tile = tile;
-        addSlot(rotor = new SlotTurbine(tile.getInventory(), 0, 60, 24));
+        addSlot(new SlotTurbine(tile.getInventory(), 0, 60, 24));
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
                 addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 58 + i * 18));
@@ -42,19 +43,17 @@ public class ContainerTurbine extends RailcraftContainer {
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        for (int i = 0; i < crafters.size(); i++) {
-            ICrafting icrafting = crafters.get(i);
-
+        for (IContainerListener listener : listeners) {
             if (lastOutput != Math.round(tile.output))
-                icrafting.sendProgressBarUpdate(this, 0, Math.round(tile.output));
+                listener.sendProgressBarUpdate(this, 0, Math.round(tile.output));
         }
         lastOutput = Math.round(tile.output);
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
-        icrafting.sendProgressBarUpdate(this, 0, Math.round(tile.output));
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
+        listener.sendProgressBarUpdate(this, 0, Math.round(tile.output));
     }
 
     @Override
@@ -74,7 +73,7 @@ public class ContainerTurbine extends RailcraftContainer {
         }
 
         @Override
-        public boolean isItemValid(ItemStack stack) {
+        public boolean isItemValid(@Nullable ItemStack stack) {
             return RailcraftItems.turbineRotor.isEqual(stack);
         }
 

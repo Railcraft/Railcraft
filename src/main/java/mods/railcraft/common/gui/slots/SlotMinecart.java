@@ -13,23 +13,16 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 
-public class SlotMinecart extends SlotRailcraft
-{
+import javax.annotation.Nullable;
 
-    public SlotMinecart(IInventory iinventory, int slotIndex, int posX, int posY)
-    {
+public class SlotMinecart extends SlotRailcraft {
+
+    public SlotMinecart(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack)
-    {
-        if(stack == null) {
-            return false;
-        }
-        if(stack.getItem() instanceof IMinecartItem) {
-            return true;
-        }
-        return stack.getItem() instanceof ItemMinecart;
+    public boolean isItemValid(@Nullable ItemStack stack) {
+        return stack != null && (stack.getItem() instanceof IMinecartItem || stack.getItem() instanceof ItemMinecart);
     }
 }

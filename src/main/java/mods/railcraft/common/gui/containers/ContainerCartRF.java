@@ -8,14 +8,13 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerCartRF extends RailcraftContainer {
 
@@ -30,21 +29,19 @@ public class ContainerCartRF extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting crafter) {
-        super.addCraftingToCrafters(crafter);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
 
-        PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) crafter, windowId, 0, cart.getRF());
+        PacketBuilder.instance().sendGuiIntegerPacket(listener, windowId, 0, cart.getRF());
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int var1 = 0; var1 < crafters.size(); ++var1) {
-            ICrafting crafter = (ICrafting) crafters.get(var1);
-
+        for (IContainerListener crafter : listeners) {
             if (lastEnergy != cart.getRF())
-                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) crafter, windowId, 0, cart.getRF());
+                PacketBuilder.instance().sendGuiIntegerPacket(crafter, windowId, 0, cart.getRF());
         }
 
         this.lastEnergy = cart.getRF();

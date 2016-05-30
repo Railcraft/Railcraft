@@ -16,7 +16,7 @@ import mods.railcraft.common.gui.slots.SlotWaterLimited;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -54,39 +54,33 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
         TankManager tMan = loco.getTankManager();
-        if (tMan != null) {
-            tMan.initGuiData(this, icrafting, 0);
-            tMan.initGuiData(this, icrafting, 1);
-        }
+        tMan.initGuiData(this, listener, 0);
+        tMan.initGuiData(this, listener, 1);
 
-        icrafting.sendProgressBarUpdate(this, 20, (int) Math.round(loco.boiler.burnTime));
-        icrafting.sendProgressBarUpdate(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
-        icrafting.sendProgressBarUpdate(this, 22, (int) Math.round(loco.boiler.getHeat()));
+        listener.sendProgressBarUpdate(this, 20, (int) Math.round(loco.boiler.burnTime));
+        listener.sendProgressBarUpdate(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
+        listener.sendProgressBarUpdate(this, 22, (int) Math.round(loco.boiler.getHeat()));
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
         TankManager tMan = loco.getTankManager();
-        if (tMan != null) {
-            tMan.updateGuiData(this, crafters, 0);
-            tMan.updateGuiData(this, crafters, 1);
-        }
+        tMan.updateGuiData(this, listeners, 0);
+        tMan.updateGuiData(this, listeners, 1);
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = this.crafters.get(var1);
+        for (IContainerListener listener : listeners) {
+            if (lastBurnTime != loco.boiler.burnTime)
+                listener.sendProgressBarUpdate(this, 20, (int) Math.round(loco.boiler.burnTime));
 
-            if (this.lastBurnTime != loco.boiler.burnTime)
-                var2.sendProgressBarUpdate(this, 20, (int) Math.round(loco.boiler.burnTime));
+            if (lastItemBurnTime != loco.boiler.currentItemBurnTime)
+                listener.sendProgressBarUpdate(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
 
-            if (this.lastItemBurnTime != loco.boiler.currentItemBurnTime)
-                var2.sendProgressBarUpdate(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
-
-            if (this.lastHeat != loco.boiler.getHeat())
-                var2.sendProgressBarUpdate(this, 22, (int) Math.round(loco.boiler.getHeat()));
+            if (lastHeat != loco.boiler.getHeat())
+                listener.sendProgressBarUpdate(this, 22, (int) Math.round(loco.boiler.getHeat()));
         }
 
         this.lastBurnTime = loco.boiler.burnTime;
@@ -99,8 +93,7 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
     public void updateProgressBar(int id, int value) {
         super.updateProgressBar(id, value);
         TankManager tMan = loco.getTankManager();
-        if (tMan != null)
-            tMan.processGuiUpdate(id, value);
+        tMan.processGuiUpdate(id, value);
 
         switch (id) {
             case 20:

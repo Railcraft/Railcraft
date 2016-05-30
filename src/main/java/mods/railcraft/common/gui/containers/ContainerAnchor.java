@@ -13,11 +13,13 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.util.misc.IAnchor;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class ContainerAnchor extends RailcraftContainer {
 
@@ -30,7 +32,7 @@ public class ContainerAnchor extends RailcraftContainer {
         this.anchor = a;
         addSlot(new SlotStackFilter(new StackFilter() {
             @Override
-            public boolean apply(ItemStack stack) {
+            public boolean apply(@Nullable ItemStack stack) {
                 return anchor.getFuelMap().containsKey(stack);
             }
 
@@ -49,9 +51,9 @@ public class ContainerAnchor extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
-        icrafting.sendProgressBarUpdate(this, 0, getMinutesRemaining(anchor.getAnchorFuel()));
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
+        listener.sendProgressBarUpdate(this, 0, getMinutesRemaining(anchor.getAnchorFuel()));
     }
 
     private short getMinutesRemaining(long fuel) {
@@ -66,9 +68,9 @@ public class ContainerAnchor extends RailcraftContainer {
         super.sendUpdateToClient();
         short minutes = getMinutesRemaining(anchor.getAnchorFuel());
 
-        for (ICrafting crafter : crafters) {
+        for (IContainerListener listener : listeners) {
             if (prevMinutesRemaining != minutes)
-                crafter.sendProgressBarUpdate(this, 0, minutes);
+                listener.sendProgressBarUpdate(this, 0, minutes);
         }
 
         this.prevMinutesRemaining = minutes;

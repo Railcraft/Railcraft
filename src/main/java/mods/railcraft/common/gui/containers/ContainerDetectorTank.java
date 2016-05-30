@@ -18,12 +18,10 @@ import net.minecraft.inventory.Slot;
 
 public class ContainerDetectorTank extends RailcraftContainer {
 
-    private final TileDetector tile;
     private final DetectorTank detector;
 
     public ContainerDetectorTank(InventoryPlayer inventoryplayer, TileDetector tile) {
         super(((DetectorTank) tile.getDetector()).getFilters());
-        this.tile = tile;
         this.detector = (DetectorTank) tile.getDetector();
         addSlot(new SlotFluidFilter(detector.getFilters(), 0, 26, 24));
 //        addSlot(new Slot(tile, 0, 60, 24));

@@ -119,11 +119,11 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     }
 
     @Override
-    public boolean isEqual(ItemStack stack) {
+    public boolean isEqual(@Nullable ItemStack stack) {
         return stack != null && item == stack.getItem();
     }
 
-    public boolean isEqual(Item item) {
+    public boolean isEqual(@Nullable Item item) {
         return item != null && this.item == item;
     }
 

@@ -15,9 +15,8 @@ import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -49,26 +48,24 @@ public class ContainerEngineSteam extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting crafter) {
-        super.onCraftGuiOpened(crafter);
+    public void addListener(IContainerListener crafter) {
+        super.addListener(crafter);
         tile.getTankManager().initGuiData(this, crafter, 0);
 
-        PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) crafter, windowId, 12, tile.energy);
+        PacketBuilder.instance().sendGuiIntegerPacket(crafter, windowId, 12, tile.energy);
         crafter.sendProgressBarUpdate(this, 14, Math.round(tile.currentOutput * 100));
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        tile.getTankManager().updateGuiData(this, crafters, 0);
+        tile.getTankManager().updateGuiData(this, listeners, 0);
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting crafter = this.crafters.get(var1);
+        for (IContainerListener crafter : listeners) {
+            if (lastEnergy != tile.energy)
+                PacketBuilder.instance().sendGuiIntegerPacket(crafter, windowId, 13, tile.energy);
 
-            if (this.lastEnergy != tile.energy)
-                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) crafter, windowId, 13, tile.energy);
-
-            if (this.lastOutput != tile.currentOutput)
+            if (lastOutput != tile.currentOutput)
                 crafter.sendProgressBarUpdate(this, 14, Math.round(tile.currentOutput * 100));
         }
 

@@ -16,9 +16,8 @@ import mods.railcraft.common.gui.widgets.Widget;
 import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -75,26 +74,26 @@ public class ContainerRouting extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
 
-        icrafting.sendProgressBarUpdate(this, 0, router.getLockController().getCurrentState());
-        icrafting.sendProgressBarUpdate(this, 1, router.getRoutingController().getCurrentState());
+        listener.sendProgressBarUpdate(this, 0, router.getLockController().getCurrentState());
+        listener.sendProgressBarUpdate(this, 1, router.getRoutingController().getCurrentState());
 
         canLock = PlayerPlugin.isOwnerOrOp(router.getOwner(), playerInv.player);
         slotTicket.locked = router.isSecure() && !canLock;
-        icrafting.sendProgressBarUpdate(this, 2, canLock ? 1 : 0);
+        listener.sendProgressBarUpdate(this, 2, canLock ? 1 : 0);
 
         String username = router.getOwner().getName();
         if (username != null)
-            PacketBuilder.instance().sendGuiStringPacket((EntityPlayerMP) icrafting, windowId, 0, username);
+            PacketBuilder.instance().sendGuiStringPacket(listener, windowId, 0, username);
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (ICrafting crafter : crafters) {
+        for (IContainerListener crafter : listeners) {
             int lock = router.getLockController().getCurrentState();
             if (lastLockState != lock)
                 crafter.sendProgressBarUpdate(this, 0, lock);

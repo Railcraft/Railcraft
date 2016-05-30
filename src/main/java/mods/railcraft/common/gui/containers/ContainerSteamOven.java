@@ -13,7 +13,7 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.gui.slots.SlotSmelting;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnaceOutput;
 
@@ -58,17 +58,14 @@ public class ContainerSteamOven extends RailcraftContainer {
         super.sendUpdateToClient();
         TankManager tMan = tile.getTankManager();
         if (tMan != null) {
-            tMan.updateGuiData(this, crafters, 0);
+            tMan.updateGuiData(this, listeners, 0);
         }
 
         int cookTime = tile.cookTime;
 
-        for (int i = 0; i < crafters.size(); i++) {
-            ICrafting icrafting = crafters.get(i);
-
-
+        for (IContainerListener listener : listeners) {
             if (lastCookTime != cookTime) {
-                icrafting.sendProgressBarUpdate(this, 10, cookTime);
+                listener.sendProgressBarUpdate(this, 10, cookTime);
             }
         }
 
@@ -76,13 +73,13 @@ public class ContainerSteamOven extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
         TankManager tMan = tile.getTankManager();
         if (tMan != null) {
-            tMan.initGuiData(this, icrafting, 0);
+            tMan.initGuiData(this, listener, 0);
         }
-        icrafting.sendProgressBarUpdate(this, 10, tile.cookTime);
+        listener.sendProgressBarUpdate(this, 10, tile.cookTime);
     }
 
     @Override

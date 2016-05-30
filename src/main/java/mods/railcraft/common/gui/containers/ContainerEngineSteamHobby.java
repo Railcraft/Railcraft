@@ -16,9 +16,8 @@ import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -60,41 +59,39 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting crafter) {
-        super.onCraftGuiOpened(crafter);
-        tile.getTankManager().initGuiData(this, crafter, 0);
-        tile.getTankManager().initGuiData(this, crafter, 1);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
+        tile.getTankManager().initGuiData(this, listener, 0);
+        tile.getTankManager().initGuiData(this, listener, 1);
 
-        crafter.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
-        crafter.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
-        crafter.sendProgressBarUpdate(this, 12, Math.round(tile.currentOutput * 100));
-        crafter.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));
-        PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) crafter, windowId, 14, tile.energy);
+        listener.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
+        listener.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+        listener.sendProgressBarUpdate(this, 12, Math.round(tile.currentOutput * 100));
+        listener.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));
+        PacketBuilder.instance().sendGuiIntegerPacket(listener, windowId, 14, tile.energy);
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        tile.getTankManager().updateGuiData(this, crafters, 0);
-        tile.getTankManager().updateGuiData(this, crafters, 1);
+        tile.getTankManager().updateGuiData(this, listeners, 0);
+        tile.getTankManager().updateGuiData(this, listeners, 1);
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting crafter = this.crafters.get(var1);
-
-            if (this.lastBurnTime != tile.boiler.burnTime)
+        for (IContainerListener crafter : listeners) {
+            if (lastBurnTime != tile.boiler.burnTime)
                 crafter.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
 
-            if (this.lastItemBurnTime != tile.boiler.currentItemBurnTime)
+            if (lastItemBurnTime != tile.boiler.currentItemBurnTime)
                 crafter.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
 
-            if (this.lastOutput != tile.currentOutput)
+            if (lastOutput != tile.currentOutput)
                 crafter.sendProgressBarUpdate(this, 12, Math.round(tile.currentOutput * 100));
 
-            if (this.lastHeat != tile.boiler.getHeat())
+            if (lastHeat != tile.boiler.getHeat())
                 crafter.sendProgressBarUpdate(this, 13, (int) Math.round(tile.boiler.getHeat()));
 
-            if (this.lastEnergy != tile.energy)
-                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) crafter, windowId, 15, tile.energy);
+            if (lastEnergy != tile.energy)
+                PacketBuilder.instance().sendGuiIntegerPacket(crafter, windowId, 15, tile.energy);
         }
 
         this.lastBurnTime = tile.boiler.burnTime;

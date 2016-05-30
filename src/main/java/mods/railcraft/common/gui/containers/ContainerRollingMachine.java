@@ -24,6 +24,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 public class ContainerRollingMachine extends RailcraftContainer {
 
     private final TileRollingMachine tile;
@@ -39,7 +41,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
         craftMatrix = tile.getCraftMatrix();
         craftResult = new InventoryCraftResult() {
             @Override
-            public void setInventorySlotContents(int slot, ItemStack stack) {
+            public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
                 super.setInventorySlotContents(slot, stack);
                 if (stack != null && Game.isClient(tile.getWorld()))
                     InvTools.addItemToolTip(stack, LocalizationPlugin.translate("railcraft.gui.rolling.machine.tip.craft"));
@@ -73,24 +75,24 @@ public class ContainerRollingMachine extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
-        icrafting.sendProgressBarUpdate(this, 0, tile.getProgress());
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
+        listener.sendProgressBarUpdate(this, 0, tile.getProgress());
         EnergyStorage storage = tile.getEnergyStorage();
         if (storage != null)
-            icrafting.sendProgressBarUpdate(this, 1, storage.getEnergyStored());
+            listener.sendProgressBarUpdate(this, 1, storage.getEnergyStored());
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
         EnergyStorage storage = tile.getEnergyStorage();
-        for (Object crafter : crafters) {
-            ICrafting icrafting = (ICrafting) crafter;
+        for (Object crafter : listeners) {
+            IContainerListener listener = (IContainerListener) crafter;
             if (lastProgress != tile.getProgress())
-                icrafting.sendProgressBarUpdate(this, 0, tile.getProgress());
+                listener.sendProgressBarUpdate(this, 0, tile.getProgress());
             if (storage != null)
-                icrafting.sendProgressBarUpdate(this, 2, storage.getEnergyStored());
+                listener.sendProgressBarUpdate(this, 2, storage.getEnergyStored());
         }
 
         ItemStack output = tile.getStackInSlot(0);
@@ -123,9 +125,10 @@ public class ContainerRollingMachine extends RailcraftContainer {
         craftResult.setInventorySlotContents(0, output);
     }
 
+    @Nullable
     @Override
-    public ItemStack slotClick(int i, int j, int modifier, EntityPlayer entityplayer) {
-        ItemStack stack = super.slotClick(i, j, modifier, entityplayer);
+    public ItemStack slotClick(int slotId, int mouseButton, ClickType clickType, EntityPlayer player) {
+        ItemStack stack = super.slotClick(slotId, mouseButton, clickType, player);
         onCraftMatrixChanged(craftMatrix);
         return stack;
     }

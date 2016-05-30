@@ -10,9 +10,10 @@ package mods.railcraft.common.gui.widgets;
 
 import mods.railcraft.client.gui.GuiContainerRailcraft;
 import mods.railcraft.client.render.FluidRenderer;
+import mods.railcraft.client.render.OpenGL;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
  *
@@ -32,6 +33,7 @@ public class FluidGaugeWidget extends Widget {
         return tank.getToolTip();
     }
 
+    //TODO: test render
     @Override
     public void draw(GuiContainerRailcraft gui, int guiX, int guiY, int mouseX, int mouseY) {
         if (tank == null)
@@ -39,7 +41,7 @@ public class FluidGaugeWidget extends Widget {
         if (tank.renderData.fluid == null || tank.renderData.amount <= 0)
             return;
 
-        IIcon fluidIcon = FluidRenderer.getFluidTexture(tank.renderData.fluid, false);
+        TextureAtlasSprite fluidIcon = FluidRenderer.getFluidTexture(tank.renderData.fluid, false);
 
         if (fluidIcon == null)
             return;
@@ -51,7 +53,7 @@ public class FluidGaugeWidget extends Widget {
 
         for (int col = 0; col < w / 16; col++) {
             for (int row = 0; row <= h / 16; row++) {
-                gui.drawTexturedModelRectFromIcon(guiX + x + col * 16, guiY + y + row * 16 - 1, fluidIcon, 16, 16);
+                gui.drawTexturedModalRect(guiX + x + col * 16, guiY + y + row * 16 - 1, fluidIcon, 16, 16);
             }
         }
 

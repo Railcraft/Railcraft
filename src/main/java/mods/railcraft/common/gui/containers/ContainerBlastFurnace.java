@@ -13,7 +13,7 @@ import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,33 +21,33 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerBlastFurnace extends RailcraftContainer {
 
-    private TileBlastFurnace furnace;
-    private int lastCookTime = 0;
-    private int lastBurnTime = 0;
-    private int lastItemBurnTime = 0;
+    private final TileBlastFurnace furnace;
+    private int lastCookTime;
+    private int lastBurnTime;
+    private int lastItemBurnTime;
 
     public ContainerBlastFurnace(InventoryPlayer player, TileBlastFurnace tile) {
         super(tile);
         this.furnace = tile;
-        this.addSlot(new SlotStackFilter(TileBlastFurnace.INPUT_FILTER, tile, 0, 56, 17));
-        this.addSlot(new SlotStackFilter(TileBlastFurnace.FUEL_FILTER, tile, 1, 56, 53));
-        this.addSlot(new SlotFurnaceOutput(player.player, tile, 2, 116, 35));
+        addSlot(new SlotStackFilter(TileBlastFurnace.INPUT_FILTER, tile, 0, 56, 17));
+        addSlot(new SlotStackFilter(TileBlastFurnace.FUEL_FILTER, tile, 1, 56, 53));
+        addSlot(new SlotFurnaceOutput(player.player, tile, 2, 116, 35));
         int var3;
 
         for (var3 = 0; var3 < 3; ++var3) {
             for (int var4 = 0; var4 < 9; ++var4) {
-                this.addSlot(new Slot(player, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
+                addSlot(new Slot(player, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
             }
         }
 
         for (var3 = 0; var3 < 9; ++var3) {
-            this.addSlot(new Slot(player, var3, 8 + var3 * 18, 142));
+            addSlot(new Slot(player, var3, 8 + var3 * 18, 142));
         }
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting player) {
-        super.onCraftGuiOpened(player);
+    public void addListener(IContainerListener player) {
+        super.addListener(player);
         player.sendProgressBarUpdate(this, 0, furnace.getCookTime());
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 1, furnace.burnTime);
         PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 2, furnace.currentItemBurnTime);
@@ -60,17 +60,15 @@ public class ContainerBlastFurnace extends RailcraftContainer {
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int i = 0; i < crafters.size(); ++i) {
-            ICrafting player = crafters.get(i);
-
+        for (IContainerListener listener : listeners) {
             if (lastCookTime != furnace.getCookTime())
-                player.sendProgressBarUpdate(this, 0, furnace.getCookTime());
+                listener.sendProgressBarUpdate(this, 0, furnace.getCookTime());
 
             if (lastBurnTime != furnace.burnTime)
-                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 1, furnace.burnTime);
+                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) listener, windowId, 1, furnace.burnTime);
 
             if (lastItemBurnTime != furnace.currentItemBurnTime)
-                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 2, furnace.currentItemBurnTime);
+                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) listener, windowId, 2, furnace.currentItemBurnTime);
         }
 
         lastCookTime = furnace.getCookTime();
@@ -82,13 +80,13 @@ public class ContainerBlastFurnace extends RailcraftContainer {
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data) {
         if (id == 0)
-            this.furnace.setCookTime(data);
+            furnace.setCookTime(data);
 
         if (id == 1)
-            this.furnace.burnTime = data;
+            furnace.burnTime = data;
 
         if (id == 2)
-            this.furnace.currentItemBurnTime = data;
+            furnace.currentItemBurnTime = data;
     }
 
 }

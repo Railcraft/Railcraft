@@ -14,17 +14,14 @@ import mods.railcraft.common.gui.slots.SlotBore;
 import mods.railcraft.common.gui.slots.SlotFuel;
 import mods.railcraft.common.gui.slots.SlotTrack;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerBore extends RailcraftContainer {
 
-    private EntityTunnelBore bore;
-    private Slot ballast;
-    private Slot fuel;
-    private Slot track;
+    private final EntityTunnelBore bore;
     private int lastBurnTime;
     private int lastFuel;
 
@@ -35,15 +32,15 @@ public class ContainerBore extends RailcraftContainer {
         addSlot(new SlotBore(bore, 0, 17, 36));
 
         for (int i = 0; i < 6; i++) {
-            addSlot(fuel = new SlotFuel(bore, i + 1, 62 + i * 18, 36));
+            addSlot(new SlotFuel(bore, i + 1, 62 + i * 18, 36));
         }
 
         for (int i = 0; i < 9; i++) {
-            addSlot(ballast = new SlotBallast(bore, i + 7, 8 + i * 18, 72));
+            addSlot(new SlotBallast(bore, i + 7, 8 + i * 18, 72));
         }
 
         for (int i = 0; i < 9; i++) {
-            addSlot(track = new SlotTrack(bore, i + 16, 8 + i * 18, 108));
+            addSlot(new SlotTrack(bore, i + 16, 8 + i * 18, 108));
         }
 
         for (int i = 0; i < 3; i++) {
@@ -58,30 +55,28 @@ public class ContainerBore extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
-        icrafting.sendProgressBarUpdate(this, 0, bore.getBurnTime());
-        icrafting.sendProgressBarUpdate(this, 1, bore.getFuel());
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
+        listener.sendProgressBarUpdate(this, 0, bore.getBurnTime());
+        listener.sendProgressBarUpdate(this, 1, bore.getFuel());
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-            ICrafting var2 = this.crafters.get(var1);
-
-            if (this.lastBurnTime != this.bore.getBurnTime()) {
-                var2.sendProgressBarUpdate(this, 0, this.bore.getBurnTime());
+        for (IContainerListener var2 : listeners) {
+            if (lastBurnTime != bore.getBurnTime()) {
+                var2.sendProgressBarUpdate(this, 0, bore.getBurnTime());
             }
 
-            if (this.lastFuel != this.bore.getFuel()) {
-                var2.sendProgressBarUpdate(this, 1, this.bore.getFuel());
+            if (lastFuel != bore.getFuel()) {
+                var2.sendProgressBarUpdate(this, 1, bore.getFuel());
             }
         }
 
-        this.lastBurnTime = this.bore.getBurnTime();
-        this.lastFuel = this.bore.getFuel();
+        this.lastBurnTime = bore.getBurnTime();
+        this.lastFuel = bore.getFuel();
     }
 
     @Override
@@ -89,10 +84,10 @@ public class ContainerBore extends RailcraftContainer {
     public void updateProgressBar(int id, int value) {
         switch (id) {
             case 0:
-                this.bore.setBurnTime(value);
+                bore.setBurnTime(value);
                 break;
             case 1:
-                this.bore.setFuel(value);
+                bore.setFuel(value);
                 break;
         }
     }

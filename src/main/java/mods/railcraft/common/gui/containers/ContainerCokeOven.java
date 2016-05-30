@@ -17,7 +17,7 @@ import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -60,18 +60,18 @@ public class ContainerCokeOven extends RailcraftContainer {
 
         TankManager tMan = tile.getTankManager();
         if (tMan != null)
-            tMan.updateGuiData(this, crafters, 0);
+            tMan.updateGuiData(this, listeners, 0);
 
-        for (int i = 0; i < crafters.size(); i++) {
-            ICrafting icrafting = crafters.get(i);
+        for (int i = 0; i < listeners.size(); i++) {
+            IContainerListener listener = listeners.get(i);
 
             int cookTime = tile.getCookTime();
             if (lastCookTime != cookTime)
-                icrafting.sendProgressBarUpdate(this, 10, cookTime);
+                listener.sendProgressBarUpdate(this, 10, cookTime);
 
             int cookTimeTotal = tile.getTotalCookTime();
             if (lastCookTimeTotal != cookTimeTotal)
-                icrafting.sendProgressBarUpdate(this, 11, cookTimeTotal);
+                listener.sendProgressBarUpdate(this, 11, cookTimeTotal);
         }
 
         lastCookTime = tile.getCookTime();
@@ -79,15 +79,15 @@ public class ContainerCokeOven extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
 
         TankManager tMan = tile.getTankManager();
         if (tMan != null)
-            tMan.initGuiData(this, icrafting, 0);
+            tMan.initGuiData(this, listener, 0);
 
-        icrafting.sendProgressBarUpdate(this, 10, tile.getCookTime());
-        icrafting.sendProgressBarUpdate(this, 11, tile.getTotalCookTime());
+        listener.sendProgressBarUpdate(this, 10, tile.getCookTime());
+        listener.sendProgressBarUpdate(this, 11, tile.getTotalCookTime());
     }
 
     @Override

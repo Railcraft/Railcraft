@@ -54,7 +54,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     protected InventoryMapper invWaterInput;
     @SuppressWarnings("WeakerAccess")
     protected InventoryMapper invWaterOutput = new InventoryMapper(this, SLOT_LIQUID_OUTPUT, 1);
-    private TankManager tankManager;
+    private TankManager tankManager = new TankManager();
     private int update = rand.nextInt();
 
     @SuppressWarnings("WeakerAccess")
@@ -70,8 +70,6 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     @Override
     protected void entityInit() {
         super.entityInit();
-        tankManager = new TankManager();
-
         tankWater = new FilteredTank(FluidHelper.BUCKET_VOLUME * 6, Fluids.WATER.get());
         tankSteam = new FilteredTank(FluidHelper.BUCKET_VOLUME * 16, Fluids.STEAM.get());
 

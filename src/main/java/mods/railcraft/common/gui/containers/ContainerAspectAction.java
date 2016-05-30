@@ -12,8 +12,7 @@ import mods.railcraft.common.blocks.signals.IAspectActionManager;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,22 +30,22 @@ public class ContainerAspectAction extends RailcraftContainer {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting icrafting) {
-        super.onCraftGuiOpened(icrafting);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
 
-        icrafting.sendProgressBarUpdate(this, 0, actionManager.getLockController().getCurrentState());
-        icrafting.sendProgressBarUpdate(this, 1, PlayerPlugin.isOwnerOrOp(actionManager.getOwner(), player) ? 1 : 0);
+        listener.sendProgressBarUpdate(this, 0, actionManager.getLockController().getCurrentState());
+        listener.sendProgressBarUpdate(this, 1, PlayerPlugin.isOwnerOrOp(actionManager.getOwner(), player) ? 1 : 0);
 
         String username = actionManager.getOwner().getName();
         if (username != null)
-            PacketBuilder.instance().sendGuiStringPacket((EntityPlayerMP) icrafting, windowId, 0, username);
+            PacketBuilder.instance().sendGuiStringPacket(listener, windowId, 0, username);
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (ICrafting crafter : crafters) {
+        for (IContainerListener crafter : listeners) {
             int lock = actionManager.getLockController().getCurrentState();
             if (lastLockState != lock)
                 crafter.sendProgressBarUpdate(this, 0, lock);

@@ -16,13 +16,10 @@ import net.minecraft.inventory.Slot;
 
 public class ContainerCartTrackRelayer extends RailcraftContainer {
 
-    private EntityCartTrackRelayer cart;
-    private Slot track;
-
     public ContainerCartTrackRelayer(InventoryPlayer inventoryplayer, EntityCartTrackRelayer cart) {
         super(cart);
-        this.cart = cart;
         addSlot(new SlotTrackFilter(cart.getPattern(), 0, 26, 43));
+        Slot track;
         addSlot(track = new SlotTrackFilter(cart.getPattern(), 1, 71, 43));
         addSlot(new SlotLinked(cart, 0, 130, 43, track));
         for (int i = 0; i < 3; i++) {

@@ -8,14 +8,13 @@
  */
 package mods.railcraft.common.gui.containers;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import mods.railcraft.common.blocks.machine.gamma.TileRFLoaderBase;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerLoaderRF extends RailcraftContainer {
 
@@ -31,9 +30,9 @@ public class ContainerLoaderRF extends RailcraftContainer {
     }
 
     @Override
-    public void addCraftingToCrafters(ICrafting player) {
-        super.addCraftingToCrafters(player);
-        PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 0, device.getRF());
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
+        PacketBuilder.instance().sendGuiIntegerPacket(listener, windowId, 0, device.getRF());
     }
 
     /**
@@ -43,11 +42,9 @@ public class ContainerLoaderRF extends RailcraftContainer {
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        for (int i = 0; i < crafters.size(); ++i) {
-            ICrafting player = (ICrafting) crafters.get(i);
-
+        for (IContainerListener listener : listeners) {
             if (lastEnergy != device.getRF())
-                PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, windowId, 0, device.getRF());
+                PacketBuilder.instance().sendGuiIntegerPacket(listener, windowId, 0, device.getRF());
         }
 
         lastEnergy = device.getRF();

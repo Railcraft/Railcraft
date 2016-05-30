@@ -13,17 +13,14 @@ import mods.railcraft.common.gui.widgets.Widget;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,10 +56,10 @@ public abstract class RailcraftContainer extends Container {
     }
 
     @Override
-    public void onCraftGuiOpened(ICrafting player) {
-        super.onCraftGuiOpened(player);
+    public void addListener(IContainerListener listener) {
+        super.addListener(listener);
         for (Widget widget : widgets) {
-            widget.initWidget(player);
+            widget.initWidget(listener);
         }
     }
 
@@ -72,9 +69,7 @@ public abstract class RailcraftContainer extends Container {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
             sendUpdateToClient();
             for (Widget widget : widgets) {
-                for (ICrafting player : crafters) {
-                    widget.updateWidget(player);
-                }
+                listeners.forEach(widget::updateWidget);
             }
         }
     }
@@ -82,8 +77,8 @@ public abstract class RailcraftContainer extends Container {
     public void sendUpdateToClient() {
     }
 
-    public void sendWidgetDataToClient(Widget widget, ICrafting player, byte[] data) {
-        PacketBuilder.instance().sendGuiWidgetPacket((EntityPlayerMP) player, windowId, widgets.indexOf(widget), data);
+    public void sendWidgetDataToClient(Widget widget, IContainerListener player, byte[] data) {
+        PacketBuilder.instance().sendGuiWidgetPacket(player, windowId, widgets.indexOf(widget), data);
     }
 
     public void handleWidgetClientData(int widgetId, DataInputStream data) throws IOException {
@@ -99,15 +94,18 @@ public abstract class RailcraftContainer extends Container {
         return callback == null || callback.isUseableByPlayer(entityplayer);
     }
 
+    //TODO: test new parameters
+    @Nullable
     @Override
-    public ItemStack slotClick(int slotNum, int mouseButton, int modifier, EntityPlayer player) {
-        Slot slot = slotNum < 0 ? null : inventorySlots.get(slotNum);
+    public ItemStack slotClick(int slotId, int mouseButton, ClickType clickType, EntityPlayer player) {
+        Slot slot = slotId < 0 ? null : inventorySlots.get(slotId);
         if (slot instanceof SlotRailcraft && ((SlotRailcraft) slot).isPhantom())
-            return slotClickPhantom((SlotRailcraft) slot, mouseButton, modifier, player);
-        return super.slotClick(slotNum, mouseButton, modifier, player);
+            return slotClickPhantom((SlotRailcraft) slot, mouseButton, clickType, player);
+        return super.slotClick(slotId, mouseButton, clickType, player);
     }
 
-    private ItemStack slotClickPhantom(SlotRailcraft slot, int mouseButton, int modifier, EntityPlayer player) {
+    @Nullable
+    private ItemStack slotClickPhantom(SlotRailcraft slot, int mouseButton, ClickType clickType, EntityPlayer player) {
         ItemStack stack = null;
 
         if (mouseButton == 2) {
@@ -124,25 +122,27 @@ public abstract class RailcraftContainer extends Container {
 
             if (stackSlot == null) {
                 if (stackHeld != null && slot.isItemValid(stackHeld))
-                    fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
+                    fillPhantomSlot(slot, stackHeld, mouseButton);
             } else if (stackHeld == null) {
-                adjustPhantomSlot(slot, mouseButton, modifier);
+                adjustPhantomSlot(slot, mouseButton, clickType);
                 slot.onPickupFromSlot(player, playerInv.getItemStack());
             } else if (slot.isItemValid(stackHeld))
                 if (InvTools.isItemEqual(stackSlot, stackHeld))
-                    adjustPhantomSlot(slot, mouseButton, modifier);
+                    adjustPhantomSlot(slot, mouseButton, clickType);
                 else
-                    fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
+                    fillPhantomSlot(slot, stackHeld, mouseButton);
         }
         return stack;
     }
 
-    private void adjustPhantomSlot(SlotRailcraft slot, int mouseButton, int modifier) {
+    private void adjustPhantomSlot(SlotRailcraft slot, int mouseButton, ClickType clickType) {
         if (!slot.canAdjustPhantom())
             return;
         ItemStack stackSlot = slot.getStack();
+        if (stackSlot == null)
+            return;
         int stackSize;
-        if (modifier == 1)
+        if (clickType == ClickType.QUICK_MOVE)
             stackSize = mouseButton == 0 ? (stackSlot.stackSize + 1) / 2 : stackSlot.stackSize * 2;
         else
             stackSize = mouseButton == 0 ? stackSlot.stackSize - 1 : stackSlot.stackSize + 1;
@@ -156,7 +156,7 @@ public abstract class RailcraftContainer extends Container {
             slot.putStack(null);
     }
 
-    private void fillPhantomSlot(SlotRailcraft slot, ItemStack stackHeld, int mouseButton, int modifier) {
+    private void fillPhantomSlot(SlotRailcraft slot, ItemStack stackHeld, int mouseButton) {
         if (!slot.canAdjustPhantom())
             return;
         int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
@@ -232,6 +232,7 @@ public abstract class RailcraftContainer extends Container {
         int numSlots = inventorySlots.size();
         if (slot != null && slot.getHasStack()) {
             ItemStack stackInSlot = slot.getStack();
+            assert stackInSlot != null;
             originalStack = stackInSlot.copy();
             if (!(slotIndex >= numSlots - 9 * 4 && tryShiftItem(stackInSlot, numSlots))) {
                 if (slotIndex >= numSlots - 9 * 4 && slotIndex < numSlots - 9) {

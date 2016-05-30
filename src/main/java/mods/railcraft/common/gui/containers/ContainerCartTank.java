@@ -18,17 +18,13 @@ import net.minecraft.inventory.Slot;
 
 public class ContainerCartTank extends RailcraftContainer {
 
-    private EntityCartTank tank;
-    private final Slot input;
-
     public ContainerCartTank(InventoryPlayer inventoryplayer, EntityCartTank cart) {
         super(cart);
-        this.tank = cart;
 
         addWidget(new FluidGaugeWidget(cart.getTankManager().get(0), 35, 23, 176, 0, 16, 47));
 
         addSlot(new SlotFluidFilter(cart.getFilterInv(), 0, 71, 39));
-        addSlot(input = new SlotLiquidContainer(cart.getInvLiquids(), 0, 116, 21));
+        addSlot(new SlotLiquidContainer(cart.getInvLiquids(), 0, 116, 21));
         addSlot(new SlotOutput(cart.getInvLiquids(), 1, 116, 56));
 
         for (int i = 0; i < 3; i++) {

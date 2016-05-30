@@ -9,13 +9,14 @@
 package mods.railcraft.common.util.collections;
 
 import mods.railcraft.api.core.IStackFilter;
+import mods.railcraft.api.core.StackFilter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 
 /**
- * @param <V>
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ItemMap<V> extends HashMap<ItemKey, V> {
@@ -48,16 +49,16 @@ public class ItemMap<V> extends HashMap<ItemKey, V> {
         return containsKey(new ItemKey(item));
     }
 
-    public boolean containsKey(ItemStack stack) {
+    public boolean containsKey(@Nullable ItemStack stack) {
         if (stack == null)
             return false;
         return containsKey(stack.getItem(), stack.getItemDamage());
     }
 
     public IStackFilter getStackFilter() {
-        return new IStackFilter() {
+        return new StackFilter() {
             @Override
-            public boolean matches(ItemStack stack) {
+            public boolean apply(@Nullable ItemStack stack) {
                 return containsKey(stack);
             }
         };

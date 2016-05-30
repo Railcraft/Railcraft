@@ -13,6 +13,7 @@ import mods.railcraft.api.signals.ISignalPacketBuilder;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.network.PacketKeyPress.EnumKeyBinding;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nonnull;
@@ -69,24 +70,32 @@ public class PacketBuilder implements ISignalPacketBuilder {
         PacketDispatcher.sendToServer(pkt);
     }
 
-    public void sendGuiIntegerPacket(EntityPlayerMP player, int windowId, int key, int value) {
-        PacketGuiInteger pkt = new PacketGuiInteger(windowId, key, value);
-        PacketDispatcher.sendToPlayer(pkt, player);
+    public void sendGuiIntegerPacket(IContainerListener listener, int windowId, int key, int value) {
+        if (listener instanceof EntityPlayerMP) {
+            PacketGuiInteger pkt = new PacketGuiInteger(windowId, key, value);
+            PacketDispatcher.sendToPlayer(pkt, (EntityPlayerMP) listener);
+        }
     }
 
-    public void sendGuiStringPacket(EntityPlayerMP player, int windowId, int key, String value) {
-        PacketGuiString pkt = new PacketGuiString(windowId, key, value);
-        PacketDispatcher.sendToPlayer(pkt, player);
+    public void sendGuiStringPacket(IContainerListener listener, int windowId, int key, String value) {
+        if (listener instanceof EntityPlayerMP) {
+            PacketGuiString pkt = new PacketGuiString(windowId, key, value);
+            PacketDispatcher.sendToPlayer(pkt, (EntityPlayerMP) listener);
+        }
     }
 
-    public void sendGuiWidgetPacket(EntityPlayerMP player, int windowId, int widgetId, byte[] data) {
-        PacketGuiWidget pkt = new PacketGuiWidget(windowId, widgetId, data);
-        PacketDispatcher.sendToPlayer(pkt, player);
+    public void sendGuiWidgetPacket(IContainerListener listener, int windowId, int widgetId, byte[] data) {
+        if (listener instanceof EntityPlayerMP) {
+            PacketGuiWidget pkt = new PacketGuiWidget(windowId, widgetId, data);
+            PacketDispatcher.sendToPlayer(pkt, (EntityPlayerMP) listener);
+        }
     }
 
-    public void sendGoldenTicketGuiPacket(EntityPlayerMP player) {
-        PacketTicketGui pkt = new PacketTicketGui();
-        PacketDispatcher.sendToPlayer(pkt, player);
+    public void sendGoldenTicketGuiPacket(IContainerListener listener) {
+        if (listener instanceof EntityPlayerMP) {
+            PacketTicketGui pkt = new PacketTicketGui();
+            PacketDispatcher.sendToPlayer(pkt, (EntityPlayerMP) listener);
+        }
     }
 
 }

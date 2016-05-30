@@ -11,10 +11,11 @@ package mods.railcraft.common.gui.widgets;
 import mods.railcraft.client.gui.GuiContainerRailcraft;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -61,15 +62,16 @@ public class Widget {
         gui.drawTexturedModalRect(guiX + x, guiY + y, u, v, w, h);
     }
 
+    @Nullable
     @SideOnly(Side.CLIENT)
     public ToolTip getToolTip() {
         return null;
     }
 
-    public void initWidget(ICrafting player) {
+    public void initWidget(IContainerListener listener) {
     }
 
-    public void updateWidget(ICrafting player) {
+    public void updateWidget(IContainerListener listener) {
     }
 
     @SideOnly(Side.CLIENT)
