@@ -30,12 +30,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSignal extends RenderTESRSignals implements ICombinedRenderer {
+public class TESRSignalLamp extends TESRSignals implements ICombinedRenderer {
 
     private final SignalAspect defaultAspect;
     private final RenderInfo info = new RenderInfo();
 
-    public RenderSignal(SignalAspect defaultAspect) {
+    public TESRSignalLamp(SignalAspect defaultAspect) {
         this.defaultAspect = defaultAspect;
         info.template = RailcraftBlocksOld.getBlockSignal();
         info.texture = new IIcon[6];

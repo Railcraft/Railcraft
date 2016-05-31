@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class RenderTESRFirestone extends TileEntitySpecialRenderer<TileFirestoneRecharge> {
+public class TESRFirestone extends TileEntitySpecialRenderer<TileFirestoneRecharge> {
 
     @Override
     public void renderTileEntityAt(TileFirestoneRecharge tile, double x, double y, double z, float partialTicks, int destroyStage) {

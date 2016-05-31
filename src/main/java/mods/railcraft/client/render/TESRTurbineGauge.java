@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
-public class RenderTurbineGauge extends TileEntitySpecialRenderer<TileSteamTurbine> {
+public class TESRTurbineGauge extends TileEntitySpecialRenderer<TileSteamTurbine> {
     @Override
     public void renderTileEntityAt(TileSteamTurbine turbine, double x, double y, double z, float partialTicks, int destroyStage) {
         if (!turbine.isStructureValid()

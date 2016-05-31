@@ -22,7 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 import org.lwjgl.opengl.GL11;
 
-public class RenderPneumaticEngine extends TileEntitySpecialRenderer<TileEngine> {
+public class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEngine> {
 
     private static final float[] angleMap = new float[6];
     private static final ModelEngineFrame frame = new ModelEngineFrame();
@@ -40,7 +40,7 @@ public class RenderPneumaticEngine extends TileEntitySpecialRenderer<TileEngine>
         angleMap[EnumFacing.NORTH.ordinal()] = (float) -Math.PI / 2;
     }
 
-    public RenderPneumaticEngine(IEnumMachine<?> machineType) {
+    public TESRPneumaticEngine(IEnumMachine<?> machineType) {
         this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + machineType.getBaseTag());
         ForgeHooksClient.registerTESRItemStack(machineType.getItem().getItem(), machineType.ordinal(), machineType.getTileClass());
     }

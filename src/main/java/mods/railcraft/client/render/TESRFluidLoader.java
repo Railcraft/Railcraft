@@ -22,13 +22,13 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderTESRFluidLoader extends TileEntitySpecialRenderer<TileLoaderFluidBase> {
+public class TESRFluidLoader extends TileEntitySpecialRenderer<TileLoaderFluidBase> {
 
     private static final float PIPE_OFFSET = 5 * RenderTools.PIXEL;
     private static final RenderInfo backDrop = new RenderInfo();
     private static final RenderInfo pipe = new RenderInfo();
 
-    public RenderTESRFluidLoader() {
+    public TESRFluidLoader() {
         backDrop.minX = 0.011f;
         backDrop.minY = 0.01f;
         backDrop.minZ = 0.011f;

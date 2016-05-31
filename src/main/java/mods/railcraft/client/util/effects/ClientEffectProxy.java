@@ -13,7 +13,7 @@ import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.core.AuraKeyHandler;
 import mods.railcraft.client.particles.*;
-import mods.railcraft.client.render.RenderTESRSignals;
+import mods.railcraft.client.render.TESRSignals;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 import mods.railcraft.common.items.RailcraftItems;
@@ -126,9 +126,9 @@ public class ClientEffectProxy extends CommonEffectProxy {
             double py = pos.getY() + getRandomParticleOffset();
             double pz = pos.getZ() + getRandomParticleOffset();
 
-            RenderTESRSignals.ColorProfile colorProfile = RenderTESRSignals.ColorProfile.RAINBOW;
+            TESRSignals.ColorProfile colorProfile = TESRSignals.ColorProfile.RAINBOW;
             if (isGoggleAuraActive(GoggleAura.SIGNALLING))
-                colorProfile = RenderTESRSignals.ColorProfile.ASPECT;
+                colorProfile = TESRSignals.ColorProfile.ASPECT;
 
             int color = colorProfile.getColor(start, new WorldCoordinate(start), new WorldCoordinate(dest));
 

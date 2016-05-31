@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderTrackBuffer extends TileEntitySpecialRenderer<TileTrackTESR> {
+public class TESRTrackBuffer extends TileEntitySpecialRenderer<TileTrackTESR> {
 
     private static ModelSimple model = new ModelBufferStop();
     private static ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + "track_buffer_stop.png");

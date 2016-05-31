@@ -27,12 +27,12 @@ import org.lwjgl.opengl.GL11;
 
 import static net.minecraftforge.common.util.ForgeDirection.*;
 
-public class RenderSignalBox extends RenderTESRSignals implements ICombinedRenderer {
+public class TESRSignalBox extends TESRSignals implements ICombinedRenderer {
 
     private static final RenderInfo info = new RenderInfo();
     private final IResourceProvider iconProvider;
 
-    public RenderSignalBox(IResourceProvider iconProvider) {
+    public TESRSignalBox(IResourceProvider iconProvider) {
         info.texture = new IIcon[6];
         info.template = RailcraftBlocksOld.getBlockSignal();
 		tesrInfo.texture = new IIcon[6];

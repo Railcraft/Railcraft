@@ -24,10 +24,10 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderIronTank extends TileEntitySpecialRenderer<TileTankBase> {
+public class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
     private static final RenderInfo fillBlock = new RenderInfo();
 
-    public RenderIronTank() {
+    public TESRHollowTank() {
         float pix = RenderTools.PIXEL;
         fillBlock.minX = 5 * pix;
         fillBlock.minZ = 5 * pix;

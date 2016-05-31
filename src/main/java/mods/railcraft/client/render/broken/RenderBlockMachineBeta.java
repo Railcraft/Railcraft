@@ -9,8 +9,8 @@
  ******************************************************************************/
 package mods.railcraft.client.render.broken;
 
-import mods.railcraft.client.render.RenderChest;
-import mods.railcraft.client.render.RenderPneumaticEngine;
+import mods.railcraft.client.render.TESRChest;
+import mods.railcraft.client.render.TESRPneumaticEngine;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileChestMetals;
@@ -30,20 +30,20 @@ public class RenderBlockMachineBeta extends BlockRenderer {
         addBlockRenderer(EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE.ordinal(), new RenderBoilerTank());
 
         addBlockRenderer(EnumMachineBeta.ENGINE_STEAM_HOBBY.ordinal(), new DoNothingRenderer());
-        addItemRenderer(EnumMachineBeta.ENGINE_STEAM_HOBBY.ordinal(), RenderPneumaticEngine.renderHobby);
+        addItemRenderer(EnumMachineBeta.ENGINE_STEAM_HOBBY.ordinal(), TESRPneumaticEngine.renderHobby);
 
         addBlockRenderer(EnumMachineBeta.ENGINE_STEAM_LOW.ordinal(), new DoNothingRenderer());
-        addItemRenderer(EnumMachineBeta.ENGINE_STEAM_LOW.ordinal(), RenderPneumaticEngine.renderLow);
+        addItemRenderer(EnumMachineBeta.ENGINE_STEAM_LOW.ordinal(), TESRPneumaticEngine.renderLow);
 
         addBlockRenderer(EnumMachineBeta.ENGINE_STEAM_HIGH.ordinal(), new DoNothingRenderer());
-        addItemRenderer(EnumMachineBeta.ENGINE_STEAM_HIGH.ordinal(), RenderPneumaticEngine.renderHigh);
+        addItemRenderer(EnumMachineBeta.ENGINE_STEAM_HIGH.ordinal(), TESRPneumaticEngine.renderHigh);
 
         addCombinedRenderer(EnumMachineBeta.SENTINEL.ordinal(), new RenderSentinel());
 
         addBlockRenderer(EnumMachineBeta.VOID_CHEST.ordinal(), new DoNothingRenderer());
-        addItemRenderer(EnumMachineBeta.VOID_CHEST.ordinal(), new RenderChest(RailcraftConstants.TESR_TEXTURE_FOLDER + "chest_void.png", new TileChestVoid()));
+        addItemRenderer(EnumMachineBeta.VOID_CHEST.ordinal(), new TESRChest(RailcraftConstants.TESR_TEXTURE_FOLDER + "chest_void.png", new TileChestVoid()));
 
         addBlockRenderer(EnumMachineBeta.METALS_CHEST.ordinal(), new DoNothingRenderer());
-        addItemRenderer(EnumMachineBeta.METALS_CHEST.ordinal(), new RenderChest(RailcraftConstants.TESR_TEXTURE_FOLDER + "chest_metals.png", new TileChestMetals()));
+        addItemRenderer(EnumMachineBeta.METALS_CHEST.ordinal(), new TESRChest(RailcraftConstants.TESR_TEXTURE_FOLDER + "chest_metals.png", new TileChestMetals()));
     }
 }

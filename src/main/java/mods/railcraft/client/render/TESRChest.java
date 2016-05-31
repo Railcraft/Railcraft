@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL12;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
+public class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
 
     /**
      * The Ender Chest Chest's model.
@@ -30,7 +30,7 @@ public class RenderChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
 
     private final ResourceLocation texture;
 
-    public RenderChest(IEnumMachine<?> machineType) {
+    public TESRChest(IEnumMachine<?> machineType) {
         this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + machineType.getBaseTag());
         ForgeHooksClient.registerTESRItemStack(machineType.getItem().getItem(), machineType.ordinal(), machineType.getTileClass());
     }

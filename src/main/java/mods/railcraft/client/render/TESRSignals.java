@@ -33,7 +33,7 @@ import java.util.Arrays;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderTESRSignals extends TileEntitySpecialRenderer<TileEntity> {
+public class TESRSignals extends TileEntitySpecialRenderer<TileEntity> {
     private static final Vec3d CENTER = new Vec3d(0.5, 0.5, 0.5);
 
     @Override

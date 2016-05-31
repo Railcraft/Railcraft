@@ -11,9 +11,9 @@ package mods.railcraft.client.render.broken;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.client.render.RenderSignal;
-import mods.railcraft.client.render.RenderSignalBox;
-import mods.railcraft.client.render.RenderSignalDual;
+import mods.railcraft.client.render.TESRSignalLamp;
+import mods.railcraft.client.render.TESRSignalBox;
+import mods.railcraft.client.render.TESRSignalLampDual;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -27,20 +27,20 @@ public class RenderBlockSignal extends BlockRenderer {
     public RenderBlockSignal() {
         super(RailcraftBlocksOld.getBlockSignal());
 
-        addCombinedRenderer(EnumSignal.DUAL_HEAD_BLOCK_SIGNAL, new RenderSignalDual());
-        addCombinedRenderer(EnumSignal.DUAL_HEAD_DISTANT_SIGNAL, new RenderSignalDual());
-        addCombinedRenderer(EnumSignal.BLOCK_SIGNAL, new RenderSignal(SignalAspect.GREEN));
-        addCombinedRenderer(EnumSignal.DISTANT_SIGNAL, new RenderSignal(SignalAspect.RED));
+        addCombinedRenderer(EnumSignal.DUAL_HEAD_BLOCK_SIGNAL, new TESRSignalLampDual());
+        addCombinedRenderer(EnumSignal.DUAL_HEAD_DISTANT_SIGNAL, new TESRSignalLampDual());
+        addCombinedRenderer(EnumSignal.BLOCK_SIGNAL, new TESRSignalLamp(SignalAspect.GREEN));
+        addCombinedRenderer(EnumSignal.DISTANT_SIGNAL, new TESRSignalLamp(SignalAspect.RED));
         addCombinedRenderer(EnumSignal.SWITCH_MOTOR, new RenderSwitch(EnumSignal.SWITCH_MOTOR));
         addCombinedRenderer(EnumSignal.SWITCH_LEVER, new RenderSwitch(EnumSignal.SWITCH_LEVER));
         addCombinedRenderer(EnumSignal.SWITCH_ROUTING, new RenderSwitch(EnumSignal.SWITCH_ROUTING));
-        addCombinedRenderer(EnumSignal.BOX_RECEIVER, new RenderSignalBox(EnumSignal.BOX_RECEIVER));
-        addCombinedRenderer(EnumSignal.BOX_CONTROLLER, new RenderSignalBox(EnumSignal.BOX_CONTROLLER));
-        addCombinedRenderer(EnumSignal.BOX_CAPACITOR, new RenderSignalBox(EnumSignal.BOX_CAPACITOR));
-        addCombinedRenderer(EnumSignal.BOX_BLOCK_RELAY, new RenderSignalBox(EnumSignal.BOX_BLOCK_RELAY));
-        addCombinedRenderer(EnumSignal.BOX_SEQUENCER, new RenderSignalBox(EnumSignal.BOX_SEQUENCER));
-        addCombinedRenderer(EnumSignal.BOX_INTERLOCK, new RenderSignalBox(EnumSignal.BOX_INTERLOCK));
-        addCombinedRenderer(EnumSignal.BOX_ANALOG_CONTROLLER, new RenderSignalBox(EnumSignal.BOX_ANALOG_CONTROLLER));
+        addCombinedRenderer(EnumSignal.BOX_RECEIVER, new TESRSignalBox(EnumSignal.BOX_RECEIVER));
+        addCombinedRenderer(EnumSignal.BOX_CONTROLLER, new TESRSignalBox(EnumSignal.BOX_CONTROLLER));
+        addCombinedRenderer(EnumSignal.BOX_CAPACITOR, new TESRSignalBox(EnumSignal.BOX_CAPACITOR));
+        addCombinedRenderer(EnumSignal.BOX_BLOCK_RELAY, new TESRSignalBox(EnumSignal.BOX_BLOCK_RELAY));
+        addCombinedRenderer(EnumSignal.BOX_SEQUENCER, new TESRSignalBox(EnumSignal.BOX_SEQUENCER));
+        addCombinedRenderer(EnumSignal.BOX_INTERLOCK, new TESRSignalBox(EnumSignal.BOX_INTERLOCK));
+        addCombinedRenderer(EnumSignal.BOX_ANALOG_CONTROLLER, new TESRSignalBox(EnumSignal.BOX_ANALOG_CONTROLLER));
     }
 
     public void addCombinedRenderer(EnumSignal type, ICombinedRenderer renderer) {

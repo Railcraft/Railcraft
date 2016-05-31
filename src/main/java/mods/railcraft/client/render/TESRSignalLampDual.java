@@ -28,11 +28,11 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSignalDual extends RenderTESRSignals implements ICombinedRenderer {
+public class TESRSignalLampDual extends TESRSignals implements ICombinedRenderer {
 
     private RenderInfo info = new RenderInfo();
 
-    public RenderSignalDual() {
+    public TESRSignalLampDual() {
         info.texture = new IIcon[6];
         info.template = RailcraftBlocksOld.getBlockSignal();
         tesrInfo.texture = new IIcon[6];

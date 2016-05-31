@@ -14,7 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 
-public class RenderCagedEntity extends TileEntitySpecialRenderer<TileCage> {
+public class TESRCagedEntity extends TileEntitySpecialRenderer<TileCage> {
     @Override
     public void renderTileEntityAt(TileCage tile, double x, double y, double z, float partialTicks, int destroyStage) {
         OpenGL.glPushMatrix();
