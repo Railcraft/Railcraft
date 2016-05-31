@@ -71,7 +71,7 @@ public class TESRSignalLamp extends TESRSignals implements ICombinedRenderer {
 
         /*// Aspect
         SignalAspect aspect = tile.getSignalAspect();
-        if (!aspect.isLit())
+        if (!aspect.isOffState())
             aspect = SignalAspect.OFF;
         info.texture[facing] = BlockSignalRailcraft.texturesLampTop[aspect.getTextureIndex()];
         info.setRenderSingleSide(facing);
@@ -222,9 +222,7 @@ public class TESRSignalLamp extends TESRSignals implements ICombinedRenderer {
         if (facing >= info.texture.length)
             facing = 0;
 
-        SignalAspect aspect = tile.getSignalAspect();
-        if (!aspect.isLit())
-            aspect = SignalAspect.OFF;
+        SignalAspect aspect = tile.getSignalAspect().getDisplayAspect();
         info.texture[facing] = BlockSignalRailcraft.texturesLampTop[aspect.getTextureIndex()];
         info.setRenderSingleSide(facing);
         info.brightness = aspect.getTextureBrightness();

@@ -1,11 +1,11 @@
 /*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
- http://railcraft.info
-
- This code is the property of CovertJaguar
- and may only be used with explicit written
- permission unless otherwise specified on the
- license page at http://railcraft.info/wiki/info:license.
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
+ * This code is the property of CovertJaguar
+ * and may only be used with explicit written
+ * permission unless otherwise specified on the
+ * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.client.render.tesr;
 
@@ -65,14 +65,14 @@ public class TESRSignalLampDual extends TESRSignals implements ICombinedRenderer
         info.setRenderSingleSide(facing);
 
         SignalAspect aspect = tile.getTopAspect();
-        if (!aspect.isLit())
+        if (!aspect.isOffState())
             aspect = SignalAspect.OFF;
         info.texture[facing] = BlockSignalRailcraft.texturesLampTop[aspect.getTextureIndex()];
         info.brightness = aspect.getTextureBrightness();
         RenderFakeBlock.renderBlock(info, world, x, y, z, info.brightness < 0, false);
 
         aspect = tile.getBottomAspect();
-        if (!aspect.isLit())
+        if (!aspect.isOffState())
             aspect = SignalAspect.OFF;
         info.texture[facing] = BlockSignalRailcraft.texturesLampBottom[aspect.getTextureIndex()];
         info.brightness = aspect.getTextureBrightness();
@@ -198,7 +198,7 @@ public class TESRSignalLampDual extends TESRSignals implements ICombinedRenderer
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
         super.renderTileEntityAt(te, x, y, z, f);
-        if(!(te instanceof IDualHeadSignal)){
+        if (!(te instanceof IDualHeadSignal)) {
             return;
         }
         RenderInfo info = tesrInfo;
@@ -211,16 +211,12 @@ public class TESRSignalLampDual extends TESRSignals implements ICombinedRenderer
 
         info.setRenderSingleSide(facing);
 
-        SignalAspect aspect = tile.getTopAspect();
-        if (!aspect.isLit())
-            aspect = SignalAspect.OFF;
+        SignalAspect aspect = tile.getTopAspect().getDisplayAspect();
         info.texture[facing] = BlockSignalRailcraft.texturesLampTop[aspect.getTextureIndex()];
         info.brightness = aspect.getTextureBrightness();
         doRenderAspect(info, te, x, y, z);
 
-        aspect = tile.getBottomAspect();
-        if (!aspect.isLit())
-            aspect = SignalAspect.OFF;
+        aspect = tile.getBottomAspect().getDisplayAspect();
         info.texture[facing] = BlockSignalRailcraft.texturesLampBottom[aspect.getTextureIndex()];
         info.brightness = aspect.getTextureBrightness();
         doRenderAspect(info, te, x, y, z);
