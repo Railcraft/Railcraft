@@ -22,11 +22,9 @@ import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
 import mods.railcraft.common.blocks.aesthetics.wall.BlockRailcraftWall;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.alpha.TileSteamTurbine;
+import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.*;
-import mods.railcraft.common.blocks.machine.delta.TileCage;
-import mods.railcraft.common.blocks.machine.gamma.TileFluidLoader;
-import mods.railcraft.common.blocks.machine.gamma.TileFluidUnloader;
+import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
 import mods.railcraft.common.blocks.signals.TileSignalFoundation;
 import mods.railcraft.common.blocks.tracks.TileTrackTESR;
 import mods.railcraft.common.carts.EntityLocomotive;
@@ -117,17 +115,10 @@ public class ClientProxy extends CommonProxy {
         if (stack != null)
             MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.ELECTRIC, (EntityLocomotive) EnumCart.LOCO_ELECTRIC.makeCart(stack, null, 0, 0, 0)));
 
-        TESRFluidLoader fluidLoaderRenderer = new TESRFluidLoader();
-        ClientRegistry.bindTileEntitySpecialRenderer(TileFluidLoader.class, fluidLoaderRenderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(TileFluidUnloader.class, fluidLoaderRenderer);
+        bindTESR(EnumMachineAlpha.TURBINE, TESRTurbineGauge::new);
 
-        bindTESR(EnumMachineBeta.TANK_IRON_GAUGE, TESRHollowTank::new);
-        bindTESR(EnumMachineBeta.TANK_IRON_WALL, TESRHollowTank::new);
-        bindTESR(EnumMachineBeta.TANK_IRON_VALVE, TESRHollowTank::new);
-
-        bindTESR(EnumMachineBeta.TANK_STEEL_GAUGE, TESRHollowTank::new);
-        bindTESR(EnumMachineBeta.TANK_STEEL_WALL, TESRHollowTank::new);
-        bindTESR(EnumMachineBeta.TANK_STEEL_VALVE, TESRHollowTank::new);
+        bindTESR(TileTankBase.class, TESRHollowTank::new);
+        bindTESR(TileLoaderFluidBase.class, TESRFluidLoader::new);
 
         bindTESR(EnumMachineBeta.ENGINE_STEAM_HOBBY, TESRPneumaticEngine::new);
         bindTESR(EnumMachineBeta.ENGINE_STEAM_LOW, TESRPneumaticEngine::new);
@@ -136,18 +127,15 @@ public class ClientProxy extends CommonProxy {
         bindTESR(EnumMachineBeta.VOID_CHEST, TESRChest::new);
         bindTESR(EnumMachineBeta.METALS_CHEST, TESRChest::new);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileCage.class, new TESRCagedEntity());
+//        bindTESR(EnumMachineDelta.CAGE, TESRCagedEntity::new);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileTrackTESR.class, new TESRTrackBuffer());
+        bindTESR(TileTrackTESR.class, TESRTrackBuffer::new);
 
+        bindTESR(TilePostEmblem.class, TESREmblemPost::new);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TilePostEmblem.class, new RenderBlockPost.EmblemPostTESR());
+        bindTESR(TileFirestoneRecharge.class, TESRFirestone::new);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileFirestoneRecharge.class, new TESRFirestone());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileSteamTurbine.class, new TESRTurbineGauge());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileSignalFoundation.class, new TESRSignals());
+        bindTESR(TileSignalFoundation.class, TESRSignals::new);
 
         if (RailcraftBlocks.track.block() != null)
             RenderingRegistry.registerBlockHandler(new RenderTrack());
@@ -193,6 +181,10 @@ public class ClientProxy extends CommonProxy {
         }
 
         Game.log(Level.TRACE, "Init Complete: Renderer");
+    }
+
+    private <T extends TileEntity> void bindTESR(Class<T> tileClass, Supplier<TileEntitySpecialRenderer<? super T>> factory) {
+        ClientRegistry.bindTileEntitySpecialRenderer(tileClass, factory.get());
     }
 
     private <T extends TileEntity> void bindTESR(IEnumMachine<?> machineType, Supplier<TileEntitySpecialRenderer<? super T>> factory) {
