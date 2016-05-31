@@ -15,9 +15,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.HashSet;
+import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -38,6 +40,7 @@ public class OreDictPlugin {
 //        return false;
     }
 
+    @Nullable
     public static ItemStack getOre(String name, int qty) {
         List<ItemStack> ores = OreDictionary.getOres(name);
         for (ItemStack ore : ores) {
@@ -55,16 +58,13 @@ public class OreDictPlugin {
     }
 
     public static Set<Block> getOreBlocks() {
-        Set<Block> ores = new HashSet<Block>();
         String[] names = OreDictionary.getOreNames();
-        for (String name : names) {
-            if (name.startsWith("ore"))
-                for (ItemStack stack : OreDictionary.getOres(name)) {
-                    if (stack.getItem() instanceof ItemBlock)
-                        ores.add(InvTools.getBlockFromStack(stack));
-                }
-        }
-        return ores;
+        return Arrays.stream(names)
+                .filter(n -> n.startsWith("ore"))
+                .flatMap(n -> OreDictionary.getOres(n).stream())
+                .filter(stack -> stack.getItem() instanceof ItemBlock)
+                .map(InvTools::getBlockFromStack)
+                .collect(Collectors.toSet());
     }
 
 }

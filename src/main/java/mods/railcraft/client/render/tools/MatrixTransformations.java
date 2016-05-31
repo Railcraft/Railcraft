@@ -1,19 +1,17 @@
 /*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
- http://railcraft.info
-
- This code is the property of CovertJaguar
- and may only be used with explicit written
- permission unless otherwise specified on the
- license page at http://railcraft.info/wiki/info:license.
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
+ * This code is the property of CovertJaguar
+ * and may only be used with explicit written
+ * permission unless otherwise specified on the
+ * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.client.render.tools;
-
 
 import net.minecraft.util.EnumFacing;
 
 /**
- *
  * @author Krapht
  */
 public final class MatrixTransformations {
@@ -26,8 +24,6 @@ public final class MatrixTransformations {
 
     /**
      * Mirrors the array on the Y axis by calculating offsets from 0.5F
-     *
-     * @param targetArray
      */
     public static void mirrorY(float[][] targetArray) {
         float temp = targetArray[1][0];
@@ -53,7 +49,6 @@ public final class MatrixTransformations {
 
     /**
      * @param targetArray the array that should be transformed
-     * @param direction
      */
     public static void transform(float[][] targetArray, EnumFacing direction) {
         if ((direction.ordinal() & 0x1) == 1)
@@ -68,7 +63,6 @@ public final class MatrixTransformations {
      * Clones both dimensions of a float[][]
      *
      * @param source the float[][] to deepClone
-     * @return
      */
     public static float[][] deepClone(float[][] source) {
         float[][] target = source.clone();

@@ -16,7 +16,6 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FluidGaugeWidget extends Widget {
@@ -41,7 +40,7 @@ public class FluidGaugeWidget extends Widget {
         if (tank.renderData.fluid == null || tank.renderData.amount <= 0)
             return;
 
-        TextureAtlasSprite fluidIcon = FluidRenderer.getFluidTexture(tank.renderData.fluid, false);
+        TextureAtlasSprite fluidIcon = FluidRenderer.getFluidTexture(tank.renderData.fluid, FluidRenderer.FlowState.STILL);
 
         if (fluidIcon == null)
             return;

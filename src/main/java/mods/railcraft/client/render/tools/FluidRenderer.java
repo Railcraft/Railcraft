@@ -1,11 +1,11 @@
 /*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
- http://railcraft.info
-
- This code is the property of CovertJaguar
- and may only be used with explicit written
- permission unless otherwise specified on the
- license page at http://railcraft.info/wiki/info:license.
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
+ * This code is the property of CovertJaguar
+ * and may only be used with explicit written
+ * permission unless otherwise specified on the
+ * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.client.render.tools;
 
@@ -41,15 +41,20 @@ public class FluidRenderer {
     public static boolean hasTexture(Fluid fluid, boolean flowing) {
         if (fluid == null)
             return false;
-        TextureAtlasSprite icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
-        return icon != null;
+        ResourceLocation location = flowing ? fluid.getFlowing() : fluid.getStill();
+        return location != null;
     }
 
-    public static TextureAtlasSprite getFluidTexture(Fluid fluid, boolean flowing) {
+    public enum FlowState {
+        STILL,
+        FLOWING
+    }
+
+    public static TextureAtlasSprite getFluidTexture(Fluid fluid, FlowState flowState) {
         if (fluid == null)
-            return RenderTools.getMissingIcon();
-        TextureAtlasSprite icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
-        return RenderTools.getSafeIcon(icon);
+            return RenderTools.getMissingTexture();
+        ResourceLocation location = flowState == FlowState.FLOWING ? fluid.getFlowing() : fluid.getStill();
+        return RenderTools.getTexture(location);
     }
 
     public static ResourceLocation getFluidSheet(Fluid fluid) {
@@ -59,8 +64,8 @@ public class FluidRenderer {
     public static ResourceLocation setupFlowingLiquidTexture(Fluid fluid, TextureAtlasSprite[] texArray) {
         if (fluid == null)
             return null;
-        TextureAtlasSprite top = RenderTools.getSafeIcon(fluid.getStillIcon());
-        TextureAtlasSprite side = RenderTools.getSafeIcon(fluid.getFlowingIcon());
+        TextureAtlasSprite top = getFluidTexture(fluid, FlowState.STILL);
+        TextureAtlasSprite side = getFluidTexture(fluid, FlowState.FLOWING);
         texArray[0] = top;
         texArray[1] = top;
         texArray[2] = side;
@@ -78,11 +83,11 @@ public class FluidRenderer {
     }
 
     public static int[] getLiquidDisplayLists(Fluid fluid) {
-        return getLiquidDisplayLists(fluid, false);
+        return getLiquidDisplayLists(fluid, FlowState.STILL);
     }
 
-    public static int[] getLiquidDisplayLists(Fluid fluid, boolean flowing) {
-        Map<Fluid, int[]> cache = flowing ? flowingRenderCache : stillRenderCache;
+    public static int[] getLiquidDisplayLists(Fluid fluid, FlowState flowState) {
+        Map<Fluid, int[]> cache = flowState == FlowState.FLOWING ? flowingRenderCache : stillRenderCache;
         int[] displayLists = cache.get(fluid);
         if (displayLists != null)
             return displayLists;
@@ -93,10 +98,10 @@ public class FluidRenderer {
 
         if (fluid.getBlock() != null) {
             liquidBlock.template = fluid.getBlock();
-            liquidBlock.texture[0] = getFluidTexture(fluid, flowing);
+            liquidBlock.texture[0] = getFluidTexture(fluid, flowState);
         } else {
             liquidBlock.template = Blocks.WATER;
-            liquidBlock.texture[0] = getFluidTexture(fluid, flowing);
+            liquidBlock.texture[0] = getFluidTexture(fluid, flowState);
         }
 
         OpenGL.glDisable(GL11.GL_LIGHTING);

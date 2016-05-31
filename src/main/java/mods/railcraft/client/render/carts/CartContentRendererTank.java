@@ -36,33 +36,31 @@ public class CartContentRendererTank extends CartContentRenderer {
         StandardTank tank = cartTank.getTankManager().get(0);
         if (tank.renderData.fluid != null && tank.renderData.amount > 0) {
             int[] displayLists = FluidRenderer.getLiquidDisplayLists(tank.renderData.fluid);
-            if (displayLists != null) {
-                OpenGL.glPushMatrix();
+            OpenGL.glPushMatrix();
 
-                OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
-                OpenGL.glEnable(GL11.GL_BLEND);
-                OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+            OpenGL.glEnable(GL11.GL_BLEND);
+            OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-                OpenGL.glTranslatef(0, 0.0625f, 0);
+            OpenGL.glTranslatef(0, 0.0625f, 0);
 
-                float cap = tank.getCapacity();
-                float level = Math.min(tank.renderData.amount, cap) / cap;
+            float cap = tank.getCapacity();
+            float level = Math.min(tank.renderData.amount, cap) / cap;
 
-                renderer.bindTex(FluidRenderer.getFluidSheet(tank.renderData.fluid));
-                FluidRenderer.setColorForTank(tank);
-                OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
+            renderer.bindTex(FluidRenderer.getFluidSheet(tank.renderData.fluid));
+            FluidRenderer.setColorForTank(tank);
+            OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
 
-                if (cartTank.isFilling()) {
-                    ResourceLocation texSheet = FluidRenderer.setupFlowingLiquidTexture(tank.renderData.fluid, fillBlock.texture);
-                    if (texSheet != null) {
-                        renderer.bindTex(texSheet);
-                        RenderFakeBlock.renderBlockForEntity(fillBlock, cart.worldObj, x, y, z, false, true);
-                    }
+            if (cartTank.isFilling()) {
+                ResourceLocation texSheet = FluidRenderer.setupFlowingLiquidTexture(tank.renderData.fluid, fillBlock.texture);
+                if (texSheet != null) {
+                    renderer.bindTex(texSheet);
+                    RenderFakeBlock.renderBlockForEntity(fillBlock, cart.worldObj, x, y, z, false, true);
                 }
-
-                OpenGL.glPopAttrib();
-                OpenGL.glPopMatrix();
             }
+
+            OpenGL.glPopAttrib();
+            OpenGL.glPopMatrix();
         }
     }
 

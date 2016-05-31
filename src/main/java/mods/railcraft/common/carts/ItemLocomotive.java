@@ -88,7 +88,7 @@ public class ItemLocomotive extends ItemCart {
 //        String rendererTag = getModel(stack);
 //        LocomotiveModelRenderer renderer = renderType.getRenderer(rendererTag);
 //        if (renderer == null)
-//            return RenderTools.getMissingIcon();
+//            return RenderTools.getMissingTexture();
 //        IIcon[] icons = renderer.getItemIcons();
 //        if (pass >= icons.length || icons[pass] == null)
 //            return blankIcon;

@@ -26,7 +26,7 @@ import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.TileBoxBase;
 import org.lwjgl.opengl.GL11;
 
-import static net.minecraft.util.EnumFacing.*
+import static net.minecraft.util.EnumFacing.*;
 
 public class TESRSignalBox extends TESRSignals implements ICombinedRenderer {
 

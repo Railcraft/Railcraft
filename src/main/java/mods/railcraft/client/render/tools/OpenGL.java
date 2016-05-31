@@ -1,11 +1,11 @@
 /*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
- http://railcraft.info
-
- This code is the property of CovertJaguar
- and may only be used with explicit written
- permission unless otherwise specified on the
- license page at http://railcraft.info/wiki/info:license.
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
+ * This code is the property of CovertJaguar
+ * and may only be used with explicit written
+ * permission unless otherwise specified on the
+ * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 
 package mods.railcraft.client.render.tools;
@@ -103,28 +103,6 @@ public class OpenGL {
         GL11.glHint(target, mode);
     }
 
-    public static void glFogi(int pname, int param) {
-        switch (pname) {
-            case GL11.GL_FOG_MODE:
-                GlStateManager.setFog(param);
-                break;
-        }
-    }
-
-    public static void glFogf(int pname, float param) {
-        switch (pname) {
-            case GL11.GL_FOG_DENSITY:
-                GlStateManager.setFogDensity(param);
-                break;
-            case GL11.GL_FOG_END:
-                GlStateManager.setFogEnd(param);
-                break;
-            case GL11.GL_FOG_START:
-                GlStateManager.setFogStart(param);
-                break;
-        }
-    }
-
     public static void glAlphaFunc(int func, float ref) {
         GlStateManager.alphaFunc(func, ref);
     }
@@ -171,7 +149,13 @@ public class OpenGL {
     }
 
     public static void glCullFace(int mode) {
-        GlStateManager.cullFace(mode);
+        if (mode == GlStateManager.CullFace.BACK.mode) {
+            GlStateManager.cullFace(GlStateManager.CullFace.BACK);
+        } else if (mode == GlStateManager.CullFace.FRONT.mode) {
+            GlStateManager.cullFace(GlStateManager.CullFace.FRONT);
+        } else if (mode == GlStateManager.CullFace.FRONT_AND_BACK.mode) {
+            GlStateManager.cullFace(GlStateManager.CullFace.FRONT_AND_BACK);
+        }
     }
 
     public static void glDepthFunc(int func) {
