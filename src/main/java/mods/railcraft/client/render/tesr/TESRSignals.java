@@ -1,16 +1,19 @@
-/*
- * Copyright (c) CovertJaguar, 2015 http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
 
-package mods.railcraft.client.render;
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
+
+package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.*;
+import mods.railcraft.client.render.tools.OpenGL;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.client.render.broken.RenderFakeBlock;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.effects.EffectManager;

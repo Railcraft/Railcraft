@@ -9,8 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.client.render.broken;
 
-import mods.railcraft.client.render.OpenGL;
-import mods.railcraft.client.render.broken.IInvRenderer;
+import mods.railcraft.client.render.tools.OpenGL;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;

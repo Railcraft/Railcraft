@@ -8,8 +8,8 @@
  */
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.client.render.FluidRenderer;
-import mods.railcraft.client.render.OpenGL;
+import mods.railcraft.client.render.tools.FluidRenderer;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.broken.RenderFakeBlock;
 import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.EntityCartTank;

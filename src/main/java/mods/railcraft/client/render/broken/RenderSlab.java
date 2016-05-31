@@ -9,8 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.client.render.broken;
 
-import mods.railcraft.client.render.RenderTools;
-import mods.railcraft.client.render.broken.BlockRenderer;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.slab.TileSlab;

@@ -13,7 +13,7 @@ import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.core.AuraKeyHandler;
 import mods.railcraft.client.particles.*;
-import mods.railcraft.client.render.TESRSignals;
+import mods.railcraft.client.render.tesr.TESRSignals;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 import mods.railcraft.common.items.RailcraftItems;

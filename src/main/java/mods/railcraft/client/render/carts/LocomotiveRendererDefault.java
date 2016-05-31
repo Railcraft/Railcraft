@@ -10,7 +10,7 @@ package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
-import mods.railcraft.client.render.OpenGL;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.model.ModelBase;

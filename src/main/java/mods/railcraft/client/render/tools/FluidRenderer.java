@@ -1,12 +1,13 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.client.render;
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
+package mods.railcraft.client.render.tools;
 
 import mods.railcraft.client.render.broken.RenderFakeBlock;
 import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
@@ -19,7 +20,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 

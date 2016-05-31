@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.client.render.OpenGL;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.EntityCartFiltered;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;

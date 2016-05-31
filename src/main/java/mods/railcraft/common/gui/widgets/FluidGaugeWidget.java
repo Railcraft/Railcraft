@@ -9,8 +9,8 @@
 package mods.railcraft.common.gui.widgets;
 
 import mods.railcraft.client.gui.GuiContainerRailcraft;
-import mods.railcraft.client.render.FluidRenderer;
-import mods.railcraft.client.render.OpenGL;
+import mods.railcraft.client.render.tools.FluidRenderer;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

@@ -9,7 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.client.render.broken;
 
-import mods.railcraft.client.render.*;
+import mods.railcraft.client.render.tools.RenderTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;

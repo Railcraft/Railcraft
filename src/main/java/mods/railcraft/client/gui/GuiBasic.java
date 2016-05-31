@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.gui;
 
-import mods.railcraft.client.render.OpenGL;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;

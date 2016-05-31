@@ -7,8 +7,9 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.client.render;
+package mods.railcraft.client.render.tesr;
 
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.blocks.machine.delta.TileCage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

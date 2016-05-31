@@ -9,11 +9,11 @@
 package mods.railcraft.client.core;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.client.render.*;
 import mods.railcraft.client.render.broken.*;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid;
+import mods.railcraft.client.render.tesr.*;
 import mods.railcraft.client.sounds.RCSoundHandler;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;

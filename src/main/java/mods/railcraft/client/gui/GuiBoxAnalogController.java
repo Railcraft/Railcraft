@@ -1,7 +1,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.client.render.OpenGL;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.blocks.signals.TileBoxAnalogController;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;

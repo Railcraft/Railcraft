@@ -9,7 +9,7 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.bore.IBoreHead;
-import mods.railcraft.client.render.OpenGL;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.models.bore.ModelTunnelBore;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConstants;

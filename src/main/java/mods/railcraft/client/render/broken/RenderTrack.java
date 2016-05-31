@@ -11,7 +11,7 @@ package mods.railcraft.client.render.broken;
 
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackSwitch;
-import mods.railcraft.client.render.RenderTools;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.tracks.TileTrack;
 import mods.railcraft.common.blocks.tracks.instances.TrackGated;

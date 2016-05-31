@@ -9,7 +9,7 @@
 package mods.railcraft.client.gui;
 
 import io.netty.buffer.Unpooled;
-import mods.railcraft.client.render.OpenGL;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.gui.containers.ContainerAnvil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;

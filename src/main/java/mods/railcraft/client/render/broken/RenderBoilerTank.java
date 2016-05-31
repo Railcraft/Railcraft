@@ -9,8 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.client.render.broken;
 
-import mods.railcraft.client.render.RenderTools;
-import mods.railcraft.client.render.broken.IBlockRenderer;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerTank;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;

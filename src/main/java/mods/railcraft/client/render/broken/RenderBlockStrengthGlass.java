@@ -9,9 +9,8 @@
  ******************************************************************************/
 package mods.railcraft.client.render.broken;
 
-import mods.railcraft.client.render.OpenGL;
-import mods.railcraft.client.render.RenderTools;
-import mods.railcraft.client.render.broken.BlockRenderer;
+import mods.railcraft.client.render.tools.OpenGL;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.client.render.OpenGL;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.models.carts.ModelMaintanceLampOff;
 import mods.railcraft.client.render.models.carts.ModelMaintanceLampOn;
 import mods.railcraft.common.carts.CartMaintenanceBase;

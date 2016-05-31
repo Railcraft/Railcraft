@@ -9,8 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.client.render.broken;
 
-import mods.railcraft.client.render.OpenGL;
-import mods.railcraft.client.render.broken.BlockRenderer;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.stairs.TileStair;

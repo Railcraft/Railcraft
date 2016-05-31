@@ -9,7 +9,7 @@
 package mods.railcraft.client.gui.buttons;
 
 import mods.railcraft.client.gui.GuiRoutingTable;
-import mods.railcraft.client.render.OpenGL;
+import mods.railcraft.client.render.tools.OpenGL;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraftforge.fml.relauncher.Side;

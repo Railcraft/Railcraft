@@ -11,9 +11,9 @@ package mods.railcraft.client.render.broken;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.client.render.TESRSignalLamp;
-import mods.railcraft.client.render.TESRSignalBox;
-import mods.railcraft.client.render.TESRSignalLampDual;
+import mods.railcraft.client.render.tesr.TESRSignalLamp;
+import mods.railcraft.client.render.tesr.TESRSignalBox;
+import mods.railcraft.client.render.tesr.TESRSignalLampDual;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

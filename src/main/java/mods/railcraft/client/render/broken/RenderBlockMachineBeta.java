@@ -9,8 +9,8 @@
  ******************************************************************************/
 package mods.railcraft.client.render.broken;
 
-import mods.railcraft.client.render.TESRChest;
-import mods.railcraft.client.render.TESRPneumaticEngine;
+import mods.railcraft.client.render.tesr.TESRChest;
+import mods.railcraft.client.render.tesr.TESRPneumaticEngine;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileChestMetals;

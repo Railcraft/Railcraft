@@ -10,11 +10,9 @@
 package mods.railcraft.client.render.broken;
 
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
-import mods.railcraft.client.render.OpenGL;
-import mods.railcraft.client.render.RenderTools;
-import mods.railcraft.client.render.broken.RenderFakeBlock;
+import mods.railcraft.client.render.tools.OpenGL;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
-import mods.railcraft.client.render.broken.ICombinedRenderer;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.signals.TileSwitchBase;

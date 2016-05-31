@@ -9,7 +9,7 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.locomotive.ICartRenderer;
-import mods.railcraft.client.render.OpenGL;
+import mods.railcraft.client.render.tools.OpenGL;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.item.EntityMinecart;
 

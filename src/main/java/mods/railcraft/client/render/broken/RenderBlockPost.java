@@ -11,8 +11,8 @@ package mods.railcraft.client.render.broken;
 
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.client.emblems.EmblemToolsClient;
-import mods.railcraft.client.render.OpenGL;
-import mods.railcraft.client.render.RenderTools;
+import mods.railcraft.client.render.tools.OpenGL;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.blocks.aesthetics.post.*;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
