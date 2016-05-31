@@ -10,7 +10,9 @@ package mods.railcraft.client.render;
 
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
+import mods.railcraft.client.render.broken.RenderFakeBlock;
+import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
+import mods.railcraft.client.render.broken.ICombinedRenderer;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.aesthetics.post.PostConnectionHelper;
 import net.minecraft.block.Block;

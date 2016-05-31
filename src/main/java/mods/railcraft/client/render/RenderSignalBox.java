@@ -8,6 +8,8 @@
  */
 package mods.railcraft.client.render;
 
+import mods.railcraft.client.render.broken.ICombinedRenderer;
+import mods.railcraft.client.render.broken.RenderFakeBlock;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
@@ -16,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
+import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.TileBoxBase;
 import net.minecraft.util.IIcon;
@@ -28,9 +30,9 @@ import static net.minecraftforge.common.util.ForgeDirection.*;
 public class RenderSignalBox extends RenderTESRSignals implements ICombinedRenderer {
 
     private static final RenderInfo info = new RenderInfo();
-    private final IIconProvider iconProvider;
+    private final IResourceProvider iconProvider;
 
-    public RenderSignalBox(IIconProvider iconProvider) {
+    public RenderSignalBox(IResourceProvider iconProvider) {
         info.texture = new IIcon[6];
         info.template = RailcraftBlocksOld.getBlockSignal();
 		tesrInfo.texture = new IIcon[6];
@@ -49,7 +51,7 @@ public class RenderSignalBox extends RenderTESRSignals implements ICombinedRende
             info.override = null;
 
         info.texture[0] = BlockSignalRailcraft.texturesBox[2];
-        info.texture[1] = iconProvider.getIcon();
+        info.texture[1] = iconProvider.getResource();
         info.texture[2] = BlockSignalRailcraft.texturesBox[0];
         info.texture[3] = BlockSignalRailcraft.texturesBox[0];
         info.texture[4] = BlockSignalRailcraft.texturesBox[0];
@@ -165,7 +167,7 @@ public class RenderSignalBox extends RenderTESRSignals implements ICombinedRende
         float pix = RenderTools.PIXEL;
         info.setBlockBounds(2 * pix, 0, 2 * pix, 14 * pix, 15 * pix, 14 * pix);
         info.texture[0] = BlockSignalRailcraft.texturesBox[2];
-        info.texture[1] = iconProvider.getIcon();
+        info.texture[1] = iconProvider.getResource();
         info.texture[2] = BlockSignalRailcraft.texturesBox[0];
         info.texture[3] = BlockSignalRailcraft.texturesBox[0];
         info.texture[4] = BlockSignalRailcraft.texturesBox[0];

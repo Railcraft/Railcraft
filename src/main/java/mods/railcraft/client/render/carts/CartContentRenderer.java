@@ -10,8 +10,8 @@ package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.ICartContentsTextureProvider;
 import mods.railcraft.client.render.OpenGL;
-import mods.railcraft.client.render.RenderFakeBlock;
-import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
+import mods.railcraft.client.render.broken.RenderFakeBlock;
+import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.client.render.models.ModelTextured;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -19,7 +19,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;

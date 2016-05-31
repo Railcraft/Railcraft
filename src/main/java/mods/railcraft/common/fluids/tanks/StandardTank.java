@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
@@ -117,6 +118,7 @@ public class StandardTank extends FluidTank {
     }
 
     public static class TankRenderData {
+        @Nullable
         public Fluid fluid = null;
         public int amount = 0;
         public int color = DEFAULT_COLOR;

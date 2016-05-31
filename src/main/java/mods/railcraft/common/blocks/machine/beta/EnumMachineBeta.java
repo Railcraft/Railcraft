@@ -104,8 +104,13 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     }
 
     @Override
+    public String getBaseTag() {
+        return tag;
+    }
+
+    @Override
     public String getTag() {
-        return "tile.railcraft.machine.beta." + tag;
+        return "tile.railcraft.machine.beta." + getBaseTag();
     }
 
     @Override

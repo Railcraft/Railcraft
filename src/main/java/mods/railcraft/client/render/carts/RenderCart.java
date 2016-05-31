@@ -12,7 +12,7 @@ import mods.railcraft.api.carts.IAlternateCartTexture;
 import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.client.render.OpenGL;
-import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
+import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.*;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;

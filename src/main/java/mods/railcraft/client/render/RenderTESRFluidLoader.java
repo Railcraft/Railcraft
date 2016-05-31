@@ -8,7 +8,8 @@
  */
 package mods.railcraft.client.render;
 
-import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
+import mods.railcraft.client.render.broken.RenderFakeBlock;
+import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.blocks.machine.gamma.TileFluidLoader;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
@@ -16,7 +17,6 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -58,7 +58,7 @@ public class RenderTESRFluidLoader extends TileEntitySpecialRenderer<TileLoaderF
 //        OpenGL.glEnable(GL11.GL_CULL_FACE);
 
         backDrop.texture[0] = tile.getMachineType().getTexture(7);
-        bindTexture(TextureMap.locationBlocksTexture);
+        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         RenderFakeBlock.renderBlock(backDrop, tile.getWorld(), x, y, z, false, true);
 
         OpenGL.glTranslatef((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
@@ -66,23 +66,20 @@ public class RenderTESRFluidLoader extends TileEntitySpecialRenderer<TileLoaderF
 
         StandardTank tank = tile.getTankManager().get(0);
 
-        if (tank.renderData.fluid != null && tank.renderData.amount > 0) {
+        if (tank != null && tank.renderData.fluid != null && tank.renderData.amount > 0) {
             int[] displayLists = FluidRenderer.getLiquidDisplayLists(tank.renderData.fluid);
-            if (displayLists != null) {
-                OpenGL.glPushMatrix();
+            OpenGL.glPushMatrix();
 
-                if (FluidRenderer.getFluidTexture(tank.renderData.fluid, false) != null) {
+            if (FluidRenderer.hasTexture(tank.renderData.fluid, false)) {
+                float cap = tank.getCapacity();
+                float level = Math.min(tank.renderData.amount, cap) / cap;
 
-                    float cap = tank.getCapacity();
-                    float level = Math.min(tank.renderData.amount, cap) / cap;
-
-                    bindTexture(FluidRenderer.getFluidSheet(tank.renderData.fluid));
-                    FluidRenderer.setColorForTank(tank);
-                    OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
-                }
-
-                OpenGL.glPopMatrix();
+                bindTexture(FluidRenderer.getFluidSheet(tank.renderData.fluid));
+                FluidRenderer.setColorForTank(tank);
+                OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
             }
+
+            OpenGL.glPopMatrix();
         }
 
 //        OpenGL.glScalef(0.994f, 1.05f, 0.994f);

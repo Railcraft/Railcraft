@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.render.models.carts;
 
-import mods.railcraft.client.render.TexturedQuadAdv;
+import mods.railcraft.client.render.broken.TexturedQuadAdv;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.TexturedQuad;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;

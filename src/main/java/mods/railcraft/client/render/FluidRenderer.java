@@ -8,7 +8,8 @@
  */
 package mods.railcraft.client.render;
 
-import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
+import mods.railcraft.client.render.broken.RenderFakeBlock;
+import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -18,16 +19,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FluidRenderer {
 
-    private static final ResourceLocation BLOCK_TEXTURE = TextureMap.locationBlocksTexture;
+    private static final ResourceLocation BLOCK_TEXTURE = TextureMap.LOCATION_BLOCKS_TEXTURE;
     private static final Map<Fluid, int[]> flowingRenderCache = new HashMap<Fluid, int[]>();
     private static final Map<Fluid, int[]> stillRenderCache = new HashMap<Fluid, int[]>();
     public static final int DISPLAY_STAGES = 100;
@@ -37,12 +38,18 @@ public class FluidRenderer {
         liquidBlock.texture = new TextureAtlasSprite[1];
     }
 
+    public static boolean hasTexture(Fluid fluid, boolean flowing) {
+        if (fluid == null)
+            return false;
+        TextureAtlasSprite icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
+        return icon != null;
+    }
+
     public static TextureAtlasSprite getFluidTexture(Fluid fluid, boolean flowing) {
         if (fluid == null)
             return RenderTools.getMissingIcon();
         TextureAtlasSprite icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
-        icon = RenderTools.getSafeIcon(icon);
-        return icon;
+        return RenderTools.getSafeIcon(icon);
     }
 
     public static ResourceLocation getFluidSheet(Fluid fluid) {
@@ -75,8 +82,6 @@ public class FluidRenderer {
     }
 
     public static int[] getLiquidDisplayLists(Fluid fluid, boolean flowing) {
-        if (fluid == null)
-            return null;
         Map<Fluid, int[]> cache = flowing ? flowingRenderCache : stillRenderCache;
         int[] displayLists = cache.get(fluid);
         if (displayLists != null)

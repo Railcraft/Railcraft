@@ -6,6 +6,8 @@ import mods.railcraft.common.util.misc.AdjacentTileCache;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by CovertJaguar on 5/12/2016 for Railcraft.
  *
@@ -39,7 +41,7 @@ public class RedstoneFluxPlugin {
         return pushed;
     }
 
-    public static boolean canTileReceivePower(TileEntity tile, EnumFacing side) {
+    public static boolean canTileReceivePower(@Nullable TileEntity tile, EnumFacing side) {
         if (tile instanceof IEnergyReceiver) {
             IEnergyReceiver handler = (IEnergyReceiver) tile;
             return handler.canConnectEnergy(side);

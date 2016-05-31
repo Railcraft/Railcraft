@@ -24,8 +24,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 /**
@@ -33,10 +34,10 @@ import java.io.IOException;
  */
 public abstract class TileEngine extends TileMachineBase implements IEnergyConnection {
 
-    public float currentOutput = 0;
+    public float currentOutput;
     public int energy;
     private EnumFacing direction = EnumFacing.UP;
-    private float pistonProgress = 0;
+    private float pistonProgress = 0.25F;
     private int pistonStage;
     private boolean powered;
     private boolean isActive;
@@ -44,7 +45,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     //    public int outputDebug, genDebug, cycleTick;
     private EnergyStage energyStage = EnergyStage.BLUE;
 
-    public TileEngine() {
+    protected TileEngine() {
     }
 
     public float getCurrentOutput() {
@@ -75,7 +76,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
                     pistonProgress = 0;
                     playSoundIn();
                 }
-            } else if (this.isActive)
+            } else if (isActive)
                 pistonStage = 1;
 
             return;
@@ -165,11 +166,10 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
-        ItemStack current = player.inventory.getCurrentItem();
-        if (current != null)
-            if (current.getItem() instanceof IToolWrench) {
-                IToolWrench wrench = (IToolWrench) current.getItem();
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+        if (heldItem != null)
+            if (heldItem.getItem() instanceof IToolWrench) {
+                IToolWrench wrench = (IToolWrench) heldItem.getItem();
                 if (wrench.canWrench(player, getPos()))
                     if (Game.isHost(worldObj) && getEnergyStage() == EnergyStage.OVERHEAT) {
                         resetEnergyStage();
@@ -177,25 +177,23 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
                         return true;
                     }
             }
-        return super.blockActivated(player, side);
+        return super.blockActivated(player, hand, heldItem, side);
     }
 
     @Override
     public boolean rotateBlock(EnumFacing axis) {
-        if (getEnergyStage() == EnergyStage.OVERHEAT)
-            return false;
-        return switchOrientation();
+        return getEnergyStage() != EnergyStage.OVERHEAT && switchOrientation();
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
-        super.onBlockPlacedBy(state, entityliving, stack);
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityLiving, stack);
         switchOrientation();
         checkPower();
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
+    public void onNeighborBlockChange(IBlockState state, Block block) {
         super.onNeighborBlockChange(state, block);
         if (Game.isClient(getWorld()))
             return;
@@ -356,9 +354,8 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
 
     public abstract int maxEnergyReceived();
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setByte("direction", (byte) direction.ordinal());
@@ -366,10 +363,11 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
         data.setInteger("energyRF", energy);
         data.setFloat("currentOutput", currentOutput);
         data.setByte("energyStage", (byte) energyStage.ordinal());
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         direction = EnumFacing.getFront(data.getByte("direction"));
@@ -380,7 +378,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftDataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(direction.ordinal());
@@ -389,7 +387,7 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(RailcraftDataInputStream data) throws IOException {
         super.readPacketData(data);
 
         direction = EnumFacing.getFront(data.readByte());

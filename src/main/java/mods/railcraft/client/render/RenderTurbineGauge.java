@@ -11,16 +11,15 @@ package mods.railcraft.client.render;
 import mods.railcraft.common.blocks.machine.alpha.TileSteamTurbine;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
-public class RenderTurbineGauge extends TileEntitySpecialRenderer {
-
+public class RenderTurbineGauge extends TileEntitySpecialRenderer<TileSteamTurbine> {
     @Override
-    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks) {
-        TileSteamTurbine turbine = (TileSteamTurbine) tile;
-
+    public void renderTileEntityAt(TileSteamTurbine turbine, double x, double y, double z, float partialTicks, int destroyStage) {
         if (!turbine.isStructureValid()
                 || turbine.getPatternMarker() != 'W')
             // not a gauge block
@@ -39,22 +38,23 @@ public class RenderTurbineGauge extends TileEntitySpecialRenderer {
         int fx = 0, fz = 0; // vector towards the front of the gauge
         int rx = 0, rz = 0; // vector to the right when looking at the gauge
 
+        BlockPos patternPos = turbine.getPatternPosition();
         if (turbine.getPatternIndex() == 0) {
-            if (turbine.getPatternPositionX() == 1) {
+            if (patternPos.getX() == 1) {
                 fx = -1;
                 rz = 1;
-            } else if (turbine.getPatternPositionX() == 2) {
+            } else if (patternPos.getX() == 2) {
                 x++;
                 z++;
                 fx = 1;
                 rz = -1;
             }
         } else if (turbine.getPatternIndex() == 1)
-            if (turbine.getPatternPositionZ() == 1) {
+            if (patternPos.getZ() == 1) {
                 x++;
                 fz = -1;
                 rx = -1;
-            } else if (turbine.getPatternPositionZ() == 2) {
+            } else if (patternPos.getZ() == 2) {
                 z++;
                 fz = 1;
                 rx = 1;
@@ -64,7 +64,7 @@ public class RenderTurbineGauge extends TileEntitySpecialRenderer {
             throw new IllegalStateException("can't detect gauge orientation");
 
         // fix lightmap coords to use the brightness value in front of the block, not inside it (which would be just 0)
-        int lmCoords = tile.getWorld().getLightBrightnessForSkyBlocks(tile.xCoord + fx, tile.yCoord, tile.zCoord + fz, 0);
+        int lmCoords = turbine.getWorld().getCombinedLight(turbine.getPos().add(fx, 0, fz), 0);
         int lmX = lmCoords % 65536;
         int lmY = lmCoords / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lmX / 1.0F, lmY / 1.0F);
@@ -72,13 +72,12 @@ public class RenderTurbineGauge extends TileEntitySpecialRenderer {
         OpenGL.glDisable(GL11.GL_TEXTURE_2D);
         OpenGL.glDisable(GL11.GL_LIGHTING);
 
-        Tessellator tessellator = Tessellator.instance;
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer vertexBuffer = tessellator.getBuffer();
 
-        tessellator.startDrawingQuads();
+        vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
         // move the origin to the center of the gauge
-        tessellator.setTranslation(x + rx * 0.5 + fx * zOffset, y + 0.5, z + rz * 0.5 + fz * zOffset);
-        // set the needle color to dark-ish red
-        tessellator.setColorRGBA(100, 0, 0, 255);
+        vertexBuffer.setTranslation(x + rx * 0.5 + fx * zOffset, y + 0.5, z + rz * 0.5 + fz * zOffset);
 
         double cosA = Math.cos(angle);
         double sinA = Math.sin(angle);
@@ -94,15 +93,21 @@ public class RenderTurbineGauge extends TileEntitySpecialRenderer {
         // half width of the horizontal needle part where it connects to the "case"
         double baseOffset = 1. / Math.sin(angle) * halfWidth;
 
-        tessellator.addVertex(-rx * baseOffset, 0, -rz * baseOffset);
-        tessellator.addVertex(rx * baseOffset, 0, rz * baseOffset);
-        tessellator.addVertex(-rx * glx + rx * gwx, gly + gwy, -rz * glx + rz * gwx);
-        tessellator.addVertex(-rx * glx - rx * gwx, gly - gwy, -rz * glx - rz * gwx);
+        // set the needle color to dark-ish red
+        int red = 100;
+        int green = 0;
+        int blue = 0;
+        int alpha = 255;
+
+        vertexBuffer.pos(-rx * baseOffset, 0, -rz * baseOffset).color(red, green, blue, alpha).endVertex();
+        vertexBuffer.pos(rx * baseOffset, 0, rz * baseOffset).color(red, green, blue, alpha).endVertex();
+        vertexBuffer.pos(-rx * glx + rx * gwx, gly + gwy, -rz * glx + rz * gwx).color(red, green, blue, alpha).endVertex();
+        vertexBuffer.pos(-rx * glx - rx * gwx, gly - gwy, -rz * glx - rz * gwx).color(red, green, blue, alpha).endVertex();
 
         tessellator.draw();
 
         // resetting
-        tessellator.setTranslation(0, 0, 0);
+        vertexBuffer.setTranslation(0, 0, 0);
         OpenGL.glEnable(GL11.GL_LIGHTING);
         OpenGL.glEnable(GL11.GL_TEXTURE_2D);
     }

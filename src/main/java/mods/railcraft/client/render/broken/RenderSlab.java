@@ -1,13 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.client.render;
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
 
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
+package mods.railcraft.client.render.broken;
+
+import mods.railcraft.client.render.RenderTools;
+import mods.railcraft.client.render.broken.BlockRenderer;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.slab.TileSlab;

@@ -20,6 +20,8 @@ import net.minecraft.util.IStringSerializable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IEnumMachine<M extends IEnumMachine<M>> extends Comparable<M>, IStringSerializable, IBlockContainer, IStateContainer {
+    String getBaseTag();
+
     String getTag();
 
     boolean isEnabled();

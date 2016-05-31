@@ -12,24 +12,18 @@ import mods.railcraft.client.render.models.engine.ModelEngineBase;
 import mods.railcraft.client.render.models.engine.ModelEngineFrame;
 import mods.railcraft.client.render.models.engine.ModelEnginePiston;
 import mods.railcraft.client.render.models.engine.ModelEngineTrunk;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.beta.TileEngine;
 import mods.railcraft.common.blocks.machine.beta.TileEngine.EnergyStage;
 import mods.railcraft.common.core.RailcraftConstants;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.client.ForgeHooksClient;
 import org.lwjgl.opengl.GL11;
 
-public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements IInvRenderer {
+public class RenderPneumaticEngine extends TileEntitySpecialRenderer<TileEngine> {
 
-    public static final RenderPneumaticEngine renderHobby = new RenderPneumaticEngine(RailcraftConstants.TESR_TEXTURE_FOLDER + "steam_hobby.png");
-    public static final RenderPneumaticEngine renderLow = new RenderPneumaticEngine(RailcraftConstants.TESR_TEXTURE_FOLDER + "steam_low.png");
-    public static final RenderPneumaticEngine renderHigh = new RenderPneumaticEngine(RailcraftConstants.TESR_TEXTURE_FOLDER + "steam_high.png");
     private static final float[] angleMap = new float[6];
     private static final ModelEngineFrame frame = new ModelEngineFrame();
     private static final ModelEngineBase base = new ModelEngineBase();
@@ -46,27 +40,17 @@ public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements 
         angleMap[EnumFacing.NORTH.ordinal()] = (float) -Math.PI / 2;
     }
 
-    private RenderPneumaticEngine(String texture) {
-        this.texture = new ResourceLocation(texture);
-        func_147497_a(TileEntityRendererDispatcher.instance);
+    public RenderPneumaticEngine(IEnumMachine<?> machineType) {
+        this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + machineType.getBaseTag());
+        ForgeHooksClient.registerTESRItemStack(machineType.getItem().getItem(), machineType.ordinal(), machineType.getTileClass());
     }
 
     @Override
-    public void renderItem(RenderBlocks render, ItemStack item, ItemRenderType renderType) {
-        render(EnergyStage.BLUE, 0.25F, EnumFacing.UP, -0.5, -0.5, -0.5);
+    public void renderTileEntityAt(TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage) {
+        render(engine.getEnergyStage(), engine.getProgress(), engine.getOrientation(), x, y, z);
     }
 
-    @Override
-    public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-
-        TileEngine engine = (TileEngine) tileentity;
-
-        if (engine != null) {
-            render(engine.getEnergyStage(), engine.getProgress(), engine.getOrientation(), x, y, z);
-        }
-    }
-
-    private void render(EnergyStage energy, float progress, EnumFacing orientation, double x, double y, double z) {
+    private void render(EnergyStage stage, float progress, EnumFacing orientation, double x, double y, double z) {
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
         OpenGL.glEnable(GL11.GL_LIGHTING);
@@ -77,7 +61,7 @@ public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements 
         OpenGL.glTranslatef((float) x, (float) y, (float) z);
 
         float[] angle = {0, 0, 0};
-        float[] translate = {orientation.offsetX, orientation.offsetY, orientation.offsetZ};
+        float[] translate = {orientation.getFrontOffsetX(), orientation.getFrontOffsetY(), orientation.getFrontOffsetZ()};
 
         switch (orientation) {
             case EAST:
@@ -99,7 +83,7 @@ public class RenderPneumaticEngine extends TileEntitySpecialRenderer implements 
         float factor = (float) (1.0 / 16.0);
         bindTexture(texture);
 
-        trunk.render(energy, factor);
+        trunk.render(stage, factor);
         base.render(factor);
 
         float step;

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) CovertJaguar, 2014 http://railcraft.info
  * 
  * This code is the property of CovertJaguar
@@ -8,11 +8,14 @@
  */
 package mods.railcraft.client.render;
 
+import net.minecraft.util.ResourceLocation;
+
 /**
  *
- * @author CovertJaguar <http://www.railcraft.info>
+ * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface ICombinedRenderer extends IInvRenderer, IBlockRenderer
-{
+public interface IResourceProvider {
+
+    ResourceLocation getResource();
 
 }

@@ -1,18 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.client.render;
 
 import mods.railcraft.common.blocks.machine.delta.TileCage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
-import org.lwjgl.opengl.GL11;
 
 public class RenderCagedEntity extends TileEntitySpecialRenderer<TileCage> {
     @Override
@@ -36,7 +36,7 @@ public class RenderCagedEntity extends TileEntitySpecialRenderer<TileCage> {
 //            entity.setRotationYawHead(0);
 
             float yaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks;
-            Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, yaw, partialTicks);
+            Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, yaw, partialTicks, false);
         }
         OpenGL.glPopMatrix();
     }

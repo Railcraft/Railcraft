@@ -110,8 +110,13 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     }
 
     @Override
+    public String getBaseTag() {
+        return tag;
+    }
+
+    @Override
     public String getTag() {
-        return "tile.railcraft.machine.alpha." + tag;
+        return "tile.railcraft.machine.alpha." + getBaseTag();
     }
 
     @Override

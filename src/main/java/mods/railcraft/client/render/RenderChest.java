@@ -10,10 +10,13 @@ package mods.railcraft.client.render;
 
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.beta.TileChestRailcraft;
+import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -27,9 +30,9 @@ public class RenderChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
 
     private final ResourceLocation texture;
 
-    public RenderChest(String texture, IEnumMachine<?> machineType) {
-        this.texture = new ResourceLocation(texture);
-        ForgeHooksClient.renderTileItem(machineType.getItem().getItem(), machineType.ordinal());
+    public RenderChest(IEnumMachine<?> machineType) {
+        this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + machineType.getBaseTag());
+        ForgeHooksClient.registerTESRItemStack(machineType.getItem().getItem(), machineType.ordinal(), machineType.getTileClass());
     }
 
     /**
@@ -52,7 +55,7 @@ public class RenderChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
 
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib();
-        OpenGL.glEnable(GL11.GL_RESCALE_NORMAL);
+        OpenGL.glEnable(GL12.GL_RESCALE_NORMAL);
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         OpenGL.glTranslatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
         OpenGL.glScalef(1.0F, -1.0F, -1.0F);

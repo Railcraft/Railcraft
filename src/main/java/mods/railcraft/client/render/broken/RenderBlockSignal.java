@@ -1,15 +1,19 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.client.render;
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
+package mods.railcraft.client.render.broken;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.client.render.RenderSignal;
+import mods.railcraft.client.render.RenderSignalBox;
+import mods.railcraft.client.render.RenderSignalDual;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

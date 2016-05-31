@@ -10,6 +10,7 @@ package mods.railcraft.client.core;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.client.render.*;
+import mods.railcraft.client.render.broken.*;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid;
@@ -20,6 +21,7 @@ import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
 import mods.railcraft.common.blocks.aesthetics.wall.BlockRailcraftWall;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.alpha.TileSteamTurbine;
 import mods.railcraft.common.blocks.machine.beta.*;
 import mods.railcraft.common.blocks.machine.delta.TileCage;
@@ -32,7 +34,6 @@ import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.TileFirestoneRecharge;
 import mods.railcraft.common.modules.ModuleWorld;
@@ -41,9 +42,11 @@ import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -56,6 +59,9 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.Level;
+
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
@@ -78,14 +84,6 @@ public class ClientProxy extends CommonProxy {
     public void preInitClient() {
         MinecraftForge.EVENT_BUS.register(RCSoundHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new TextureHook());
-    }
-
-    public static class TextureHook {
-        @SubscribeEvent
-        public void textureStitch(TextureStitchEvent.Pre event) {
-            CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.map.registerSprite(new ResourceLocation("railcraft:cart.redstone.flux")));
-            CartContentRendererRedstoneFlux.instance().setFrameIcon(event.map.registerSprite(new ResourceLocation("railcraft:cart.redstone.flux.frame")));
-        }
     }
 
     @Override
@@ -123,24 +121,25 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileFluidLoader.class, fluidLoaderRenderer);
         ClientRegistry.bindTileEntitySpecialRenderer(TileFluidUnloader.class, fluidLoaderRenderer);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileTankIronGauge.class, new RenderIronTank());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileTankIronWall.class, new RenderIronTank());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileTankIronValve.class, new RenderIronTank());
+        bindTESR(EnumMachineBeta.TANK_IRON_GAUGE, RenderIronTank::new);
+        bindTESR(EnumMachineBeta.TANK_IRON_WALL, RenderIronTank::new);
+        bindTESR(EnumMachineBeta.TANK_IRON_VALVE, RenderIronTank::new);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileTankSteelGauge.class, new RenderIronTank());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileTankSteelWall.class, new RenderIronTank());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileTankSteelValve.class, new RenderIronTank());
+        bindTESR(EnumMachineBeta.TANK_STEEL_GAUGE, RenderIronTank::new);
+        bindTESR(EnumMachineBeta.TANK_STEEL_WALL, RenderIronTank::new);
+        bindTESR(EnumMachineBeta.TANK_STEEL_VALVE, RenderIronTank::new);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEngineSteamHobby.class, RenderPneumaticEngine.renderHobby);
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEngineSteamLow.class, RenderPneumaticEngine.renderLow);
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEngineSteamHigh.class, RenderPneumaticEngine.renderHigh);
+        bindTESR(EnumMachineBeta.ENGINE_STEAM_HOBBY, RenderPneumaticEngine::new);
+        bindTESR(EnumMachineBeta.ENGINE_STEAM_LOW, RenderPneumaticEngine::new);
+        bindTESR(EnumMachineBeta.ENGINE_STEAM_HIGH, RenderPneumaticEngine::new);
+
+        bindTESR(EnumMachineBeta.VOID_CHEST, RenderChest::new);
+        bindTESR(EnumMachineBeta.METALS_CHEST, RenderChest::new);
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileCage.class, new RenderCagedEntity());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileTrackTESR.class, new RenderTrackBuffer());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileChestVoid.class, new RenderChest(RailcraftConstants.TESR_TEXTURE_FOLDER + "chest_void.png", EnumMachineBeta.VOID_CHEST));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileChestMetals.class, new RenderChest(RailcraftConstants.TESR_TEXTURE_FOLDER + "chest_metals.png", EnumMachineBeta.METALS_CHEST));
 
         ClientRegistry.bindTileEntitySpecialRenderer(TilePostEmblem.class, new RenderBlockPost.EmblemPostTESR());
 
@@ -148,8 +147,7 @@ public class ClientProxy extends CommonProxy {
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileSteamTurbine.class, new RenderTurbineGauge());
 
-        RenderTESRSignals controllerRenderer = new RenderTESRSignals();
-        ClientRegistry.bindTileEntitySpecialRenderer(TileSignalFoundation.class, controllerRenderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(TileSignalFoundation.class, new RenderTESRSignals());
 
         if (RailcraftBlocks.track.block() != null)
             RenderingRegistry.registerBlockHandler(new RenderTrack());
@@ -197,10 +195,26 @@ public class ClientProxy extends CommonProxy {
         Game.log(Level.TRACE, "Init Complete: Renderer");
     }
 
+    private <T extends TileEntity> void bindTESR(IEnumMachine<?> machineType, Supplier<TileEntitySpecialRenderer<? super T>> factory) {
+        ClientRegistry.bindTileEntitySpecialRenderer(machineType.getTileClass().asSubclass(TileEntity.class), factory.get());
+    }
+
+    private <T extends TileEntity> void bindTESR(IEnumMachine<?> machineType, Function<IEnumMachine<?>, TileEntitySpecialRenderer<? super T>> factory) {
+        ClientRegistry.bindTileEntitySpecialRenderer(machineType.getTileClass().asSubclass(TileEntity.class), factory.apply(machineType));
+    }
+
     private void registerBlockRenderer(BlockRenderer renderer) {
         if (renderer.getBlock() != null) {
             RenderingRegistry.registerBlockHandler(renderer);
             MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(renderer.getBlock()), renderer.getItemRenderer());
+        }
+    }
+
+    public static class TextureHook {
+        @SubscribeEvent
+        public void textureStitch(TextureStitchEvent.Pre event) {
+            CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.map.registerSprite(new ResourceLocation("railcraft:cart.redstone.flux")));
+            CartContentRendererRedstoneFlux.instance().setFrameIcon(event.map.registerSprite(new ResourceLocation("railcraft:cart.redstone.flux.frame")));
         }
     }
 }

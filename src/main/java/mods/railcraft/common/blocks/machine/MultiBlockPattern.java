@@ -46,7 +46,10 @@ public class MultiBlockPattern {
         return entityCheckBounds.offset(masterPos.getX(), masterPos.getY(), masterPos.getZ());
     }
 
-    public char getPatternMarkerChecked(int x, int y, int z) {
+    public char getPatternMarkerChecked(BlockPos patternPos) {
+        int x = patternPos.getX();
+        int y = patternPos.getY();
+        int z = patternPos.getZ();
         if (x < 0 || y < 0 || z < 0)
             return 'O';
         if (x >= getPatternWidthX() || y >= getPatternHeight() || z >= getPatternWidthZ())

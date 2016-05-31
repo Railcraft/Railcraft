@@ -11,6 +11,7 @@ package mods.railcraft.client.render;
 
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.*;
+import mods.railcraft.client.render.broken.RenderFakeBlock;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -24,7 +25,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.RayTraceResult.MovingObjectType;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
@@ -63,14 +63,14 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer<TileEntity> {
         if (pair != null) {
             String name = pair.getName();
             if (name != null) {
-                Entity player = Minecraft.getMinecraft().getRenderManager().livingPlayer;
+                Entity player = Minecraft.getMinecraft().getRenderManager().renderViewEntity;
                 if (player != null) {
                     final float viewDist = 8f;
                     double dist = player.getDistanceSq(tile.getPos());
 
                     if (dist <= (double) (viewDist * viewDist)) {
                         RayTraceResult mop = player.rayTrace(8, partialTicks);
-                        if (mop != null && mop.typeOfHit == MovingObjectType.BLOCK && player.worldObj.getTileEntity(mop.getBlockPos()) == tile) {
+                        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK && player.worldObj.getTileEntity(mop.getBlockPos()) == tile) {
                             RenderTools.renderString(name, x + 0.5, y + 1.5, z + 0.5);
                         }
                     }
@@ -154,12 +154,12 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer<TileEntity> {
 
     protected static void doRenderAspect(RenderFakeBlock.RenderInfo info, TileEntity tile, double x, double y, double z) {
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer worldRenderer = tessellator.getWorldRenderer();
+        VertexBuffer vertexBuffer = tessellator.getBuffer();
         final float depth = 2 * RenderTools.PIXEL;
 
         OpenGL.glPushMatrix();
         OpenGL.glTranslated(x, y, z);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 //        if (info.brightness < 0) {
 //            float light;
@@ -175,39 +175,39 @@ public class RenderTESRSignals extends TileEntitySpecialRenderer<TileEntity> {
 //            } else {
 //                br = info.brightness;
 //            }
-//            worldRenderer.setBrightness(br);
-//            worldRenderer.putColorRGB_F(lightBottom * light, lightBottom * light, lightBottom * light, 0);
+//            vertexBuffer.setBrightness(br);
+//            vertexBuffer.putColorRGB_F(lightBottom * light, lightBottom * light, lightBottom * light, 0);
 //        } else {
-//            worldRenderer.setBrightness(info.brightness);
+//            vertexBuffer.setBrightness(info.brightness);
 //        }
 
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 210F, 210F);
 
-        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
         if (info.renderSide[2]) {
-            worldRenderer.pos(0, 0, depth).tex(info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(16)).endVertex();
-            worldRenderer.pos(0, 1, depth).tex(info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(0)).endVertex();
-            worldRenderer.pos(1, 1, depth).tex(info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(0)).endVertex();
-            worldRenderer.pos(1, 0, depth).tex(info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(0, 0, depth).tex(info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(0, 1, depth).tex(info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(1, 1, depth).tex(info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(1, 0, depth).tex(info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(16)).endVertex();
         }
         if (info.renderSide[3]) {
-            worldRenderer.pos(0, 0, 1 - depth).tex(info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(16)).endVertex();
-            worldRenderer.pos(1, 0, 1 - depth).tex(info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(16)).endVertex();
-            worldRenderer.pos(1, 1, 1 - depth).tex(info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(0)).endVertex();
-            worldRenderer.pos(0, 1, 1 - depth).tex(info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(0, 0, 1 - depth).tex(info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(1, 0, 1 - depth).tex(info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(1, 1, 1 - depth).tex(info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(0, 1, 1 - depth).tex(info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(0)).endVertex();
         }
         if (info.renderSide[4]) {
-            worldRenderer.pos(depth, 0, 0).tex(info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(16)).endVertex();
-            worldRenderer.pos(depth, 0, 1).tex(info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(16)).endVertex();
-            worldRenderer.pos(depth, 1, 1).tex(info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(0)).endVertex();
-            worldRenderer.pos(depth, 1, 0).tex(info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(depth, 0, 0).tex(info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(depth, 0, 1).tex(info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(depth, 1, 1).tex(info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(depth, 1, 0).tex(info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(0)).endVertex();
         }
         if (info.renderSide[5]) {
-            worldRenderer.pos(1 - depth, 0, 0).tex(info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(16)).endVertex();
-            worldRenderer.pos(1 - depth, 1, 0).tex(info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(0)).endVertex();
-            worldRenderer.pos(1 - depth, 1, 1).tex(info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(0)).endVertex();
-            worldRenderer.pos(1 - depth, 0, 1).tex(info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(1 - depth, 0, 0).tex(info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(1 - depth, 1, 0).tex(info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(1 - depth, 1, 1).tex(info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(1 - depth, 0, 1).tex(info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(16)).endVertex();
         }
 
         tessellator.draw();

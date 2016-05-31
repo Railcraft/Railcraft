@@ -9,7 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.cube;
 
-import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
+import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.util.sounds.RailcraftSound;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConfig;

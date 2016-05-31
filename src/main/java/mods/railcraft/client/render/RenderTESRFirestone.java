@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -53,10 +54,10 @@ public class RenderTESRFirestone extends TileEntitySpecialRenderer<TileFirestone
         entityitem.hoverStart = 0.0F;
 
 //        RenderItem.renderInFrame = true;
-        Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+        Minecraft.getMinecraft().getRenderManager().doRenderEntity(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
         if (!Minecraft.getMinecraft().getRenderManager().options.fancyGraphics) {
             OpenGL.glRotatef(180, 0, 1, 0);
-            Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+            Minecraft.getMinecraft().getRenderManager().doRenderEntity(entityitem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
             OpenGL.glRotatef(-180, 0, 1, 0);
         }
 //        RenderItem.renderInFrame = false;

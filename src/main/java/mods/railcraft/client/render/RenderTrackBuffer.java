@@ -10,21 +10,51 @@ package mods.railcraft.client.render;
 
 import mods.railcraft.client.render.models.ModelSimple;
 import mods.railcraft.client.render.models.tracks.ModelBufferStop;
-import mods.railcraft.common.blocks.tracks.TileTrack;
+import mods.railcraft.common.blocks.tracks.TileTrackTESR;
 import mods.railcraft.common.blocks.tracks.instances.TrackBufferStop;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RenderTrackBuffer extends TileEntitySpecialRenderer {
+public class RenderTrackBuffer extends TileEntitySpecialRenderer<TileTrackTESR> {
 
-//    private static final RenderInfo board, bumper1, bumper2, baseBig, baseSmall;
+    private static ModelSimple model = new ModelBufferStop();
+    private static ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + "track_buffer_stop.png");
+
+    @Override
+    public void renderTileEntityAt(TileTrackTESR tile, double x, double y, double z, float partialTicks, int destroyStage) {
+        if (tile.getTrackInstance() instanceof TrackBufferStop) {
+            TrackBufferStop track = (TrackBufferStop) tile.getTrackInstance();
+            OpenGL.glPushMatrix();
+            OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+            OpenGL.glEnable(GL11.GL_LIGHTING);
+            OpenGL.glDisable(GL11.GL_BLEND);
+            OpenGL.glEnable(GL11.GL_CULL_FACE);
+            OpenGL.glColor3f(1, 1, 1);
+            OpenGL.glTranslatef((float) x, (float) y, (float) z);
+
+            model.resetRotation();
+
+            int meta = tile.getBlockMetadata();
+            if (meta == 1) {
+                model.rotateY((float) (Math.PI / 2.0));
+            }
+
+            if (meta == 0 != track.isReversed()) {
+                model.rotateY((float) Math.PI);
+            }
+
+            bindTexture(TEXTURE);
+            model.render(1f / 16f);
+            OpenGL.glPopAttrib();
+            OpenGL.glPopMatrix();
+        }
+    }
+    //    private static final RenderInfo board, bumper1, bumper2, baseBig, baseSmall;
 //
 //    static {
 //        IIcon[] icons = TrackTextureLoader.INSTANCE.getTrackIcons(EnumTrack.BUFFER_STOP.getTrackSpec());
@@ -118,39 +148,4 @@ public class RenderTrackBuffer extends TileEntitySpecialRenderer {
 //        tess.startDrawingQuads();
 //        OpenGL.glPopMatrix();
 //    }
-    private static ModelSimple model = new ModelBufferStop();
-    private static ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + "track_buffer_stop.png");
-
-    @Override
-    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float time) {
-        if (tile instanceof TileTrack) {
-            if (((TileTrack) tile).getTrackInstance() instanceof TrackBufferStop) {
-                TrackBufferStop track = (TrackBufferStop) ((TileTrack) tile).getTrackInstance();
-                OpenGL.glPushMatrix();
-                OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
-                OpenGL.glEnable(GL11.GL_LIGHTING);
-                OpenGL.glDisable(GL11.GL_BLEND);
-                OpenGL.glEnable(GL11.GL_CULL_FACE);
-                OpenGL.glColor3f(1, 1, 1);
-                OpenGL.glTranslatef((float) x, (float) y, (float) z);
-
-                model.resetRotation();
-
-                int meta = tile.getBlockMetadata();
-                if (meta == 1) {
-                    model.rotateY((float) (Math.PI / 2.0));
-                }
-
-                if (meta == 0 != track.isReversed()) {
-                    model.rotateY((float) Math.PI);
-                }
-
-                bindTexture(TEXTURE);
-                model.render(1f / 16f);
-                OpenGL.glPopAttrib();
-                OpenGL.glPopMatrix();
-            }
-        }
-    }
-
 }

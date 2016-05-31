@@ -9,8 +9,8 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.client.render.OpenGL;
-import mods.railcraft.client.render.RenderFakeBlock;
-import mods.railcraft.client.render.RenderFakeBlock.RenderInfo;
+import mods.railcraft.client.render.broken.RenderFakeBlock;
+import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.EntityCartRF;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
