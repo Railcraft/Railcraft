@@ -9,40 +9,17 @@
 package mods.railcraft.common.util.network;
 
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.Packet;
-import net.minecraft.server.management.PlayerManager;
+import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.CertificateHelper;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-
-import java.lang.reflect.Method;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class PacketDispatcher {
-
-    private static final Class playerInstanceClass;
-    private static final Method getOrCreateChunkWatcher;
-    private static final Method sendToAllPlayersWatchingChunk;
-
-    static {
-        try {
-            playerInstanceClass = PlayerManager.class.getDeclaredClasses()[0];
-            getOrCreateChunkWatcher = ReflectionHelper.findMethod(PlayerManager.class, null, new String[]{"func_72690_a", "getOrCreateChunkWatcher"}, int.class, int.class, boolean.class);
-            sendToAllPlayersWatchingChunk = ReflectionHelper.findMethod(playerInstanceClass, null, new String[]{"func_151251_a", "sendToAllPlayersWatchingChunk"}, Packet.class);
-            getOrCreateChunkWatcher.setAccessible(true);
-            sendToAllPlayersWatchingChunk.setAccessible(true);
-        } catch (Exception ex) {
-            Game.logThrowable("Reflection Failure in PacketDispatcher initialization {0} {1}", ex);
-            throw new RuntimeException(ex);
-        }
-    }
 
     public static void sendToServer(RailcraftPacket packet) {
         PacketHandler.INSTANCE.channel.sendToServer(packet.getPacket());
@@ -81,14 +58,12 @@ public class PacketDispatcher {
     }
 
     public static void sendToWatchers(RailcraftPacket packet, WorldServer world, int worldX, int worldZ) {
-        try {
-            Object playerInstance = getOrCreateChunkWatcher.invoke(world.getPlayerManager(), worldX >> 4, worldZ >> 4, false);
-            if (playerInstance != null)
-                sendToAllPlayersWatchingChunk.invoke(playerInstance, (Packet) packet.getPacket());
-        } catch (Exception ex) {
-            Game.logThrowable("Reflection Failure in PacketDispatcher.sendToWatchers() {0} {1}", 20, ex, getOrCreateChunkWatcher.getName(), sendToAllPlayersWatchingChunk.getName());
-            throw new RuntimeException(ex);
-        }
+        int chunkX = worldX >> 4;
+        int chunkZ = worldZ >> 4;
+
+        PlayerChunkMapEntry chunkManager = world.getPlayerChunkMap().getEntry(chunkX, chunkZ);
+        if (chunkManager != null)
+            chunkManager.sendPacket(packet.getPacket());
     }
 
 }
