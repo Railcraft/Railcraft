@@ -12,8 +12,8 @@ package mods.railcraft.common.blocks.aesthetics.stairs;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
-import mods.railcraft.common.util.network.RailcraftDataOutputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
@@ -60,13 +60,13 @@ public class TileStair extends RailcraftTileEntity {
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeUTF(material.getRegistryName());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         material = MaterialRegistry.get(data.readUTF());
     }

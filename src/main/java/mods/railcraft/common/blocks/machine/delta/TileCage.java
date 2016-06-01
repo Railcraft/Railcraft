@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.machine.delta;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
-import mods.railcraft.common.util.network.RailcraftDataOutputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityBodyHelper;
 import net.minecraft.entity.EntityList;
@@ -110,13 +110,13 @@ public class TileCage extends TileMachineBase {
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(isOpen);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         boolean o = data.readBoolean();
         if (isOpen != o) {

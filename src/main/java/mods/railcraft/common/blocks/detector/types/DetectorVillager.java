@@ -12,6 +12,8 @@ package mods.railcraft.common.blocks.detector.types;
 import mods.railcraft.common.blocks.detector.Detector;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -134,13 +136,13 @@ public class DetectorVillager extends Detector {
     }
 
     @Override
-    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
         data.writeUTF(profession.getRegistryName().toString());
         data.writeByte(mode.ordinal());
     }
 
     @Override
-    public void readGuiData(@Nonnull DataInputStream data, @Nullable EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.readUTF()));
         mode = Mode.values()[data.readByte()];
     }

@@ -28,7 +28,7 @@ public class PacketEffect extends RailcraftPacket {
 
     private Effect effect;
     private ByteArrayOutputStream bytes;
-    private RailcraftDataOutputStream outStream;
+    private RailcraftOutputStream outStream;
 
     public PacketEffect() {
 
@@ -38,10 +38,10 @@ public class PacketEffect extends RailcraftPacket {
         this.effect = effect;
     }
 
-    public RailcraftDataOutputStream getOutputStream() {
+    public RailcraftOutputStream getOutputStream() {
         if (outStream == null) {
             bytes = new ByteArrayOutputStream();
-            outStream = new RailcraftDataOutputStream(bytes);
+            outStream = new RailcraftOutputStream(bytes);
         }
         return outStream;
     }
@@ -59,13 +59,13 @@ public class PacketEffect extends RailcraftPacket {
     }
 
     @Override
-    public void writeData(RailcraftDataOutputStream data) throws IOException {
+    public void writeData(RailcraftOutputStream data) throws IOException {
         data.writeByte(effect.ordinal());
         data.write(bytes.toByteArray());
     }
 
     @Override
-    public void readData(RailcraftDataInputStream data) throws IOException {
+    public void readData(RailcraftInputStream data) throws IOException {
         EffectManager.instance.handleEffectPacket(data);
     }
 

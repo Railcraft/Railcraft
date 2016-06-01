@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.machine.gamma;
 import mods.railcraft.common.carts.EntityCartRF;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
-import mods.railcraft.common.util.network.RailcraftDataOutputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -104,7 +104,7 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(direction.ordinal());
@@ -112,7 +112,7 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         direction = EnumFacing.getFront(data.readByte());

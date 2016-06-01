@@ -36,7 +36,7 @@ public class PacketPairUpdate extends RailcraftPacket {
     }
 
     @Override
-    public void writeData(RailcraftDataOutputStream data) throws IOException {
+    public void writeData(RailcraftOutputStream data) throws IOException {
         BlockPos pos = pairing.getCoords();
         data.writeInt(pos.getX());
         data.writeInt(pos.getY());
@@ -53,7 +53,7 @@ public class PacketPairUpdate extends RailcraftPacket {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void readData(RailcraftDataInputStream data) throws IOException {
+    public void readData(RailcraftInputStream data) throws IOException {
         World world = Game.getWorld();
         if (world == null)
             return;

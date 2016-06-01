@@ -18,9 +18,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketE
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
-import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -58,7 +56,7 @@ public class PacketHandler {
     }
 
     private void onPacketData(byte[] bData, EntityPlayerMP player) {
-        RailcraftDataInputStream data = new RailcraftDataInputStream(new ByteArrayInputStream(bData));
+        RailcraftInputStream data = new RailcraftInputStream(new ByteArrayInputStream(bData));
         try {
             RailcraftPacket pkt;
 
@@ -105,7 +103,7 @@ public class PacketHandler {
                     pkt = new PacketPairRequest(player, type);
                     break;
                 case ITEM_NBT:
-                    pkt = new PacketCurrentItemNBT(player, player.getCurrentEquippedItem());
+                    pkt = new PacketCurrentItemNBT(player, player.getActiveItemStack());
                     break;
                 case KEY_PRESS:
                     pkt = new PacketKeyPress(player);

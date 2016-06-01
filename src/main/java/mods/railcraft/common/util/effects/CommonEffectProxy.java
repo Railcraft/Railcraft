@@ -12,8 +12,8 @@ import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketEffect;
 import mods.railcraft.common.util.network.PacketEffect.Effect;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
-import mods.railcraft.common.util.network.RailcraftDataOutputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -42,7 +42,7 @@ public class CommonEffectProxy implements IEffectManager {
 
         try {
             PacketEffect pkt = new PacketEffect(Effect.TELEPORT);
-            RailcraftDataOutputStream data = pkt.getOutputStream();
+            RailcraftOutputStream data = pkt.getOutputStream();
             data.writeVec3d(entity.getPositionVector());
             data.writeVec3d(destination);
             pkt.sendPacket(entity.worldObj, entity.getPositionVector());
@@ -59,7 +59,7 @@ public class CommonEffectProxy implements IEffectManager {
 
         try {
             PacketEffect pkt = new PacketEffect(Effect.FORCE_SPAWN);
-            RailcraftDataOutputStream data = pkt.getOutputStream();
+            RailcraftOutputStream data = pkt.getOutputStream();
             data.writeBlockPos(pos);
             pkt.sendPacket(world, pos);
         } catch (IOException ignored) {
@@ -75,7 +75,7 @@ public class CommonEffectProxy implements IEffectManager {
 
         try {
             PacketEffect pkt = new PacketEffect(Effect.FIRESPARK);
-            RailcraftDataOutputStream data = pkt.getOutputStream();
+            RailcraftOutputStream data = pkt.getOutputStream();
             data.writeVec3d(start);
             data.writeVec3d(end);
             pkt.sendPacket(world, start);
@@ -106,7 +106,7 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public void handleEffectPacket(RailcraftDataInputStream data) throws IOException {
+    public void handleEffectPacket(RailcraftInputStream data) throws IOException {
     }
 
     protected void spawnParticle(Particle particle) {

@@ -19,8 +19,8 @@ import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
-import mods.railcraft.common.util.network.RailcraftDataOutputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.steam.ISteamUser;
@@ -184,14 +184,14 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(jet);
         data.writeByte(direction.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         jet = data.readByte();
         direction = EnumFacing.getFront(data.readByte());

@@ -23,7 +23,7 @@ import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketEffect.Effect;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.item.ItemStack;
@@ -51,7 +51,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         SignalTools.effectManager = this;
     }
 
-    private void doTeleport(RailcraftDataInputStream data) throws IOException {
+    private void doTeleport(RailcraftInputStream data) throws IOException {
         World world = Game.getWorld();
         if (world == null)
             return;
@@ -76,7 +76,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         }
     }
 
-    public void doForceSpawn(RailcraftDataInputStream data) throws IOException {
+    public void doForceSpawn(RailcraftInputStream data) throws IOException {
         if (thinParticles(true))
             return;
 
@@ -161,14 +161,14 @@ public class ClientEffectProxy extends CommonEffectProxy {
         spawnParticle(particle);
     }
 
-    private void doFireSpark(RailcraftDataInputStream data) throws IOException {
+    private void doFireSpark(RailcraftInputStream data) throws IOException {
         Vec3d start = data.readVec3d();
         Vec3d destination = data.readVec3d();
         fireSparkEffect(Minecraft.getMinecraft().theWorld, start, destination);
     }
 
     @Override
-    public void handleEffectPacket(RailcraftDataInputStream data) throws IOException {
+    public void handleEffectPacket(RailcraftInputStream data) throws IOException {
 
         byte effectId = data.readByte();
         if (effectId < 0)

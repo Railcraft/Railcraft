@@ -16,6 +16,8 @@ import mods.railcraft.common.gui.slots.ISlotController;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -144,13 +146,13 @@ public class DetectorItem extends DetectorFilter {
     }
 
     @Override
-    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
         data.writeByte((byte) primaryMode.ordinal());
         data.writeByte((byte) filterMode.ordinal());
     }
 
     @Override
-    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
         primaryMode = PrimaryMode.values()[data.readByte()];
         filterMode = FilterMode.values()[data.readByte()];
     }

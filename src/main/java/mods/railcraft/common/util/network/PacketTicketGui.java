@@ -9,30 +9,40 @@
 package mods.railcraft.common.util.network;
 
 import mods.railcraft.client.gui.GuiTicket;
-import mods.railcraft.common.items.ItemTicketGold;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 
-public class PacketTicketGui extends RailcraftPacket {
+class PacketTicketGui extends RailcraftPacket {
+    private EnumHand hand;
+
+    PacketTicketGui() {
+    }
+
+    PacketTicketGui(EnumHand hand) {
+        this.hand = hand;
+    }
 
     @Override
-    public void writeData(RailcraftDataOutputStream data) throws IOException {
+    public void writeData(RailcraftOutputStream data) throws IOException {
+        data.writeEnum(hand);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void readData(RailcraftDataInputStream data) throws IOException {
+    public void readData(RailcraftInputStream data) throws IOException {
         try {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-            ItemStack current = player.getCurrentEquippedItem();
-            if (current != null && current.getItem() == ItemTicketGold.item)
-                Minecraft.getMinecraft().displayGuiScreen(new GuiTicket(player, current));
+            ItemStack heldItem = player.getHeldItem(data.readEnum(EnumHand.values()));
+            if (heldItem != null && RailcraftItems.ticketGold.isEqual(heldItem))
+                Minecraft.getMinecraft().displayGuiScreen(new GuiTicket(player, heldItem));
         } catch (Exception exception) {
             Game.logThrowable("Error reading Golden Ticket Gui Packet", exception);
         }

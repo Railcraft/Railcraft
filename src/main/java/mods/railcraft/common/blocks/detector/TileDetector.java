@@ -16,8 +16,8 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
-import mods.railcraft.common.util.network.RailcraftDataOutputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,8 +25,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -99,7 +97,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     }
 
     @Override
-    public void writePacketData(RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(detector.getType().ordinal());
         data.writeByte(powerState);
@@ -108,7 +106,7 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     }
 
     @Override
-    public void readPacketData(RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         int type = data.readByte();
         if (detector == Detector.DUMMY || detector.getType().ordinal() != type)
@@ -157,12 +155,12 @@ public class TileDetector extends RailcraftTileEntity implements IGuiReturnHandl
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         detector.writeGuiData(data);
     }
 
     @Override
-    public void readGuiData(DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         detector.readGuiData(data, sender);
     }
 }

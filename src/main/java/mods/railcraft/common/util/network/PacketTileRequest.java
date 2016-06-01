@@ -32,7 +32,7 @@ public class PacketTileRequest extends RailcraftPacket {
     }
 
     @Override
-    public void writeData(RailcraftDataOutputStream data) throws IOException {
+    public void writeData(RailcraftOutputStream data) throws IOException {
         data.writeInt(tile.getWorld().provider.getDimension());
 
         BlockPos pos = tile.getPos();
@@ -42,7 +42,7 @@ public class PacketTileRequest extends RailcraftPacket {
     }
 
     @Override
-    public void readData(RailcraftDataInputStream data) throws IOException {
+    public void readData(RailcraftInputStream data) throws IOException {
         World world = DimensionManager.getWorld(data.readInt());
         if (world == null)
             return;

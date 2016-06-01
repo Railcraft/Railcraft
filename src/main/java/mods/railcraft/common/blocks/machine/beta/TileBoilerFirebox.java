@@ -15,8 +15,8 @@ import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
-import mods.railcraft.common.util.network.RailcraftDataOutputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.steam.ISteamUser;
 import mods.railcraft.common.util.steam.Steam;
 import mods.railcraft.common.util.steam.SteamBoiler;
@@ -177,14 +177,14 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     @Override
-    public void writePacketData(RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         tankManager.writePacketData(data);
         data.writeBoolean(boiler.isBurning());
     }
 
     @Override
-    public void readPacketData(RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         tankManager.readPacketData(data);
         boiler.setBurning(data.readBoolean());

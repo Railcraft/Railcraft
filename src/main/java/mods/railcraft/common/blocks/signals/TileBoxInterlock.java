@@ -10,8 +10,8 @@ package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.api.signals.*;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
-import mods.railcraft.common.util.network.RailcraftDataOutputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -130,14 +130,14 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         controller.writePacketData(data);
         receiver.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         controller.readPacketData(data);
         receiver.readPacketData(data);

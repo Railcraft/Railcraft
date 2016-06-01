@@ -20,8 +20,8 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
-import mods.railcraft.common.util.network.RailcraftDataOutputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,8 +30,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
@@ -195,7 +193,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeBoolean(ticksPowered > 0);
@@ -205,7 +203,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         ticksPowered = (short) (data.readBoolean() ? 1 : 0);
@@ -217,14 +215,14 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
     }
 
     @Override
-    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
         data.writeShort(ticksToPower);
         data.writeByte(stateModeController.getCurrentState());
 
     }
 
     @Override
-    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
         ticksToPower = data.readShort();
         stateModeController.setCurrentState(data.readByte());
     }

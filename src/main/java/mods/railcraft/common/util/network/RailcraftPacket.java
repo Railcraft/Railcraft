@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public abstract class RailcraftPacket {
 
-    public final static String CHANNEL_NAME = "RC";
+    public static final String CHANNEL_NAME = "RC";
 
     public enum PacketType {
 
@@ -39,20 +39,24 @@ public abstract class RailcraftPacket {
     }
 
     public FMLProxyPacket getPacket() {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        RailcraftDataOutputStream data = new RailcraftDataOutputStream(bytes);
-        try {
+        try (ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+             RailcraftOutputStream data = new RailcraftOutputStream(bytes)) {
             data.writeByte(getID());
             writeData(data);
+            return new FMLProxyPacket(new PacketBuffer(Unpooled.wrappedBuffer(bytes.toByteArray())), CHANNEL_NAME);
         } catch (IOException e) {
             Game.logThrowable("Error constructing packet: {0}", e, getClass());
+            if (Game.IS_DEBUG)
+                throw new RuntimeException(e);
         }
-        return new FMLProxyPacket(new PacketBuffer(Unpooled.wrappedBuffer(bytes.toByteArray())), CHANNEL_NAME);
+        PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+        buffer.writeByte(-1);
+        return new FMLProxyPacket(buffer, CHANNEL_NAME);
     }
 
-    public abstract void writeData(RailcraftDataOutputStream data) throws IOException;
+    public abstract void writeData(RailcraftOutputStream data) throws IOException;
 
-    public abstract void readData(RailcraftDataInputStream data) throws IOException;
+    public abstract void readData(RailcraftInputStream data) throws IOException;
 
     public abstract int getID();
 

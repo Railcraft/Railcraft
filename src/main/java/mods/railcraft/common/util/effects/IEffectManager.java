@@ -10,7 +10,7 @@ package mods.railcraft.common.util.effects;
 
 import mods.railcraft.api.signals.IPairEffectRenderer;
 import mods.railcraft.common.items.ItemGoggles;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +29,7 @@ public interface IEffectManager extends IPairEffectRenderer {
 
     boolean isGoggleAuraActive(ItemGoggles.GoggleAura aura);
 
-    void handleEffectPacket(RailcraftDataInputStream data) throws IOException;
+    void handleEffectPacket(RailcraftInputStream data) throws IOException;
 
     void steamEffect(World world, Object source, double yOffset);
 

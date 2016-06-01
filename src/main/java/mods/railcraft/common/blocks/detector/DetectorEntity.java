@@ -9,6 +9,8 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.detector;
 
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
@@ -104,12 +106,12 @@ public abstract class DetectorEntity<T> extends Detector {
     }
 
     @Override
-    public void writeGuiData(DataOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeUTF(currentEntity.getName());
     }
 
     @Override
-    public void readGuiData(DataInputStream data, @Nullable EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         String name = data.readUTF();
         currentEntity = getEntityClass(name);
     }

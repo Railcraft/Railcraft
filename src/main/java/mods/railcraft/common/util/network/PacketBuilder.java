@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.network.PacketKeyPress.EnumKeyBinding;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IContainerListener;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nonnull;
@@ -91,11 +92,9 @@ public class PacketBuilder implements ISignalPacketBuilder {
         }
     }
 
-    public void sendGoldenTicketGuiPacket(IContainerListener listener) {
-        if (listener instanceof EntityPlayerMP) {
-            PacketTicketGui pkt = new PacketTicketGui();
-            PacketDispatcher.sendToPlayer(pkt, (EntityPlayerMP) listener);
-        }
+    public void sendGoldenTicketGuiPacket(EntityPlayerMP player, EnumHand hand) {
+        PacketTicketGui pkt = new PacketTicketGui(hand);
+        PacketDispatcher.sendToPlayer(pkt, player);
     }
 
 }

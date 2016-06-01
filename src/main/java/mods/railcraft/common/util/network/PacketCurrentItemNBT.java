@@ -14,27 +14,30 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
+//TODO: dual welding breaks this
 public class PacketCurrentItemNBT extends RailcraftPacket {
 
     private final EntityPlayer player;
+    @Nullable
     private final ItemStack currentItem;
 
-    public PacketCurrentItemNBT(EntityPlayer player, ItemStack stack) {
+    public PacketCurrentItemNBT(EntityPlayer player, @Nullable ItemStack stack) {
         this.player = player;
         this.currentItem = stack;
     }
 
     @Override
-    public void writeData(RailcraftDataOutputStream data) throws IOException {
-        DataTools.writeItemStack(currentItem, data);
+    public void writeData(RailcraftOutputStream data) throws IOException {
+        data.writeItemStack(currentItem);
     }
 
     @Override
-    public void readData(RailcraftDataInputStream data) throws IOException {
+    public void readData(RailcraftInputStream data) throws IOException {
         try {
-            ItemStack stack = DataTools.readItemStack(data);
+            ItemStack stack = data.readItemStack();
 
             if (stack == null || currentItem == null)
                 return;

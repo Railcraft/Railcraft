@@ -42,12 +42,12 @@ public class PacketKeyPress extends RailcraftPacket {
     }
 
     @Override
-    public void writeData(RailcraftDataOutputStream data) throws IOException {
+    public void writeData(RailcraftOutputStream data) throws IOException {
         data.writeByte(binding.ordinal());
     }
 
     @Override
-    public void readData(RailcraftDataInputStream data) throws IOException {
+    public void readData(RailcraftInputStream data) throws IOException {
         int type = data.readByte();
 //        if(type < 0 || type >= VALUES.length){
 //            return;

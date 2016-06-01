@@ -7,19 +7,16 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.DataTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
-import mods.railcraft.common.util.network.RailcraftDataOutputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.EnumMap;
@@ -72,7 +69,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
         if (Game.isClient(getWorld()))
             return;
@@ -108,24 +105,23 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
         return aspect;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("strongestSignal", strongestSignal);
 
         for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
             String n = entry.getKey().name();
-            byte[] bytes = new byte[2];
-            DataTools.bitSet2ByteArray(entry.getValue(), bytes);
+            byte[] bytes = entry.getValue().toByteArray();
             data.setByteArray("aspect_" + n, bytes);
         }
 
         controller.writeToNBT(data);
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         strongestSignal = data.getInteger("strongestSignal");
 
@@ -133,7 +129,9 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
             for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
                 String n = entry.getKey().name();
                 byte[] bytes = data.getByteArray("aspect_" + n);
-                DataTools.byteArray2BitSet(entry.getValue(), bytes);
+                BitSet bitSet = entry.getValue();
+                bitSet.clear();
+                bitSet.or(BitSet.valueOf(bytes));
             }
         } catch (Exception ignored) {
         }
@@ -153,7 +151,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         writeGuiData(data);
@@ -162,7 +160,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         readGuiData(data, null);
@@ -172,21 +170,18 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
-            byte[] bytes = new byte[2];
-            DataTools.bitSet2ByteArray(entry.getValue(), bytes);
-            data.write(bytes);
+            data.writeBitSet(entry.getValue());
         }
     }
 
     @Override
-    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         for (Map.Entry<SignalAspect, BitSet> entry : aspects.entrySet()) {
-            byte[] bytes = new byte[2];
-            //noinspection ResultOfMethodCallIgnored
-            data.read(bytes);
-            DataTools.byteArray2BitSet(entry.getValue(), bytes);
+            BitSet bitSet = entry.getValue();
+            bitSet.clear();
+            bitSet.or(data.readBitSet());
         }
     }
 

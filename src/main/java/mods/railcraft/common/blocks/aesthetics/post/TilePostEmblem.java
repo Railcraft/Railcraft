@@ -12,8 +12,8 @@ package mods.railcraft.common.blocks.aesthetics.post;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.network.RailcraftDataInputStream;
-import mods.railcraft.common.util.network.RailcraftDataOutputStream;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -107,7 +107,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftDataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte((byte) facing.ordinal());
         data.writeByte((byte) (color != null ? color.ordinal() : -1));
@@ -115,7 +115,7 @@ public class TilePostEmblem extends RailcraftTileEntity {
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftDataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         boolean needsUpdate = false;

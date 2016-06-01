@@ -35,14 +35,14 @@ public class PacketGuiString extends RailcraftPacket {
     }
 
     @Override
-    public void writeData(RailcraftDataOutputStream data) throws IOException {
+    public void writeData(RailcraftOutputStream data) throws IOException {
         data.writeByte(windowId);
         data.writeByte(dataId);
         data.writeUTF(str);
     }
 
     @Override
-    public void readData(RailcraftDataInputStream data) throws IOException {
+    public void readData(RailcraftInputStream data) throws IOException {
         windowId = data.readByte();
         dataId = data.readByte();
         str = data.readUTF();

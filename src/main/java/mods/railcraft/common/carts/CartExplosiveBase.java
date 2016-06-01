@@ -15,6 +15,8 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -26,8 +28,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class CartExplosiveBase extends CartBase implements IExplosiveCart, IGuiReturnHandler {
@@ -234,13 +234,13 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
     }
 
     @Override
-    public void writeGuiData(@Nonnull DataOutputStream data) throws IOException {
+    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
         data.writeShort(getFuse());
         data.writeByte(dataWatcher.getWatchableObjectByte(BLAST_DATA_ID));
     }
 
     @Override
-    public void readGuiData(@Nonnull DataInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
         setFuse(data.readShort());
         setBlastRadius(data.readByte());
     }

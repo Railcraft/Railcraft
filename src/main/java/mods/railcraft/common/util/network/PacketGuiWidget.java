@@ -30,14 +30,14 @@ public class PacketGuiWidget extends RailcraftPacket {
     }
 
     @Override
-    public void writeData(RailcraftDataOutputStream data) throws IOException {
+    public void writeData(RailcraftOutputStream data) throws IOException {
         data.writeByte(windowId);
         data.writeByte(widgetId);
         data.write(payload);
     }
 
     @Override
-    public void readData(RailcraftDataInputStream data) throws IOException {
+    public void readData(RailcraftInputStream data) throws IOException {
         windowId = data.readByte();
         widgetId = data.readByte();
 

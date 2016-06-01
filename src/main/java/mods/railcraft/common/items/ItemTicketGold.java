@@ -21,6 +21,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 /**
@@ -59,11 +62,13 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world))
-            if (canPlayerEdit(player, stack))
-                PacketBuilder.instance().sendGoldenTicketGuiPacket((EntityPlayerMP) player);
-        return stack;
+            if (canPlayerEdit(player, stack)) {
+                PacketBuilder.instance().sendGoldenTicketGuiPacket((EntityPlayerMP) player, stack, hand);
+                return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+            }
+        return ActionResult.newResult(EnumActionResult.PASS, stack);
     }
 
     @Override
