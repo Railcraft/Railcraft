@@ -1,26 +1,26 @@
 /*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
- http://railcraft.info
-
- This code is the property of CovertJaguar
- and may only be used with explicit written
- permission unless otherwise specified on the
- license page at http://railcraft.info/wiki/info:license.
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
+ * This code is the property of CovertJaguar
+ * and may only be used with explicit written
+ * permission unless otherwise specified on the
+ * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.client.render.tesr;
 
+import mods.railcraft.client.render.tools.CubeRenderer;
+import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.FluidRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.client.render.broken.RenderFakeBlock;
-import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.beta.TileTankIronValve;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -32,20 +32,13 @@ public class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
     private static final RenderInfo fillBlock = new RenderInfo();
 
     public TESRHollowTank() {
-        float pix = RenderTools.PIXEL;
-        fillBlock.minX = 5 * pix;
-        fillBlock.minZ = 5 * pix;
-
-        fillBlock.maxX = 11 * pix;
-        fillBlock.maxZ = 11 * pix;
-
-        fillBlock.texture = new TextureAtlasSprite[6];
+        fillBlock.boundingBox = AABBFactory.start().box().expandHorizontally(-5 * RenderTools.PIXEL).build();
     }
 
     private void prepFillTexture(StandardTank tank) {
         if (tank.renderData.fluid == null)
             return;
-        ResourceLocation texSheet = FluidRenderer.setupFlowingLiquidTexture(tank.renderData.fluid, fillBlock.texture);
+        ResourceLocation texSheet = FluidRenderer.setupFluidTexture(tank.renderData.fluid, FluidRenderer.FlowState.FLOWING, fillBlock);
         if (texSheet != null)
             bindTexture(texSheet);
     }
@@ -67,7 +60,7 @@ public class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
     private void draw(StandardTank tank) {
         preGL();
         FluidRenderer.setColorForTank(tank);
-        RenderFakeBlock.renderBlockForEntity(fillBlock, null, 0, 0, 0, false, true);
+        CubeRenderer.render(fillBlock);
         postGL();
     }
 

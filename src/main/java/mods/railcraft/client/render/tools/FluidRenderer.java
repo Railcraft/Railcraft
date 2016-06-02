@@ -9,13 +9,12 @@
  ******************************************************************************/
 package mods.railcraft.client.render.tools;
 
-import mods.railcraft.client.render.broken.RenderFakeBlock;
-import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import org.lwjgl.opengl.GL11;
@@ -28,15 +27,9 @@ import java.util.Map;
  */
 public class FluidRenderer {
 
-    private static final ResourceLocation BLOCK_TEXTURE = TextureMap.LOCATION_BLOCKS_TEXTURE;
     private static final Map<Fluid, int[]> flowingRenderCache = new HashMap<Fluid, int[]>();
     private static final Map<Fluid, int[]> stillRenderCache = new HashMap<Fluid, int[]>();
     public static final int DISPLAY_STAGES = 100;
-    private static final RenderInfo liquidBlock = new RenderInfo();
-
-    static {
-        liquidBlock.texture = new TextureAtlasSprite[1];
-    }
 
     public static boolean hasTexture(Fluid fluid, boolean flowing) {
         if (fluid == null)
@@ -58,20 +51,19 @@ public class FluidRenderer {
     }
 
     public static ResourceLocation getFluidSheet(Fluid fluid) {
-        return BLOCK_TEXTURE;
+        return TextureMap.LOCATION_BLOCKS_TEXTURE;
     }
 
-    public static ResourceLocation setupFlowingLiquidTexture(Fluid fluid, TextureAtlasSprite[] texArray) {
+    public static ResourceLocation setupFluidTexture(Fluid fluid, FlowState flowState, CubeRenderer.RenderInfo renderInfo) {
         if (fluid == null)
             return null;
-        TextureAtlasSprite top = getFluidTexture(fluid, FlowState.STILL);
-        TextureAtlasSprite side = getFluidTexture(fluid, FlowState.FLOWING);
-        texArray[0] = top;
-        texArray[1] = top;
-        texArray[2] = side;
-        texArray[3] = side;
-        texArray[4] = side;
-        texArray[5] = side;
+        TextureAtlasSprite capTex = getFluidTexture(fluid, FlowState.STILL);
+        TextureAtlasSprite sideTex = getFluidTexture(fluid, flowState);
+        renderInfo.setTexture(EnumFacing.UP, capTex);
+        renderInfo.setTexture(EnumFacing.DOWN, capTex);
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            renderInfo.setTexture(side, sideTex);
+        }
         return getFluidSheet(fluid);
     }
 
@@ -94,32 +86,20 @@ public class FluidRenderer {
 
         displayLists = new int[DISPLAY_STAGES];
 
-        liquidBlock.texture[0] = null;
+        CubeRenderer.RenderInfo renderInfo = new CubeRenderer.RenderInfo();
 
-        if (fluid.getBlock() != null) {
-            liquidBlock.template = fluid.getBlock();
-            liquidBlock.texture[0] = getFluidTexture(fluid, flowState);
-        } else {
-            liquidBlock.template = Blocks.WATER;
-            liquidBlock.texture[0] = getFluidTexture(fluid, flowState);
-        }
+        setupFluidTexture(fluid, flowState, renderInfo);
 
         OpenGL.glDisable(GL11.GL_LIGHTING);
         OpenGL.glDisable(GL11.GL_BLEND);
         OpenGL.glDisable(GL11.GL_CULL_FACE);
         for (int s = 0; s < DISPLAY_STAGES; ++s) {
             displayLists[s] = GLAllocation.generateDisplayLists(1);
-            GL11.glNewList(displayLists[s], 4864 /*GL_COMPILE*/);
+            GL11.glNewList(displayLists[s], GL11.GL_COMPILE);
 
-            liquidBlock.minX = 0.01f;
-            liquidBlock.minY = 0;
-            liquidBlock.minZ = 0.01f;
+            renderInfo.boundingBox = AABBFactory.start().box().setMaxY((double) s / (double) DISPLAY_STAGES).grow(-0.01).build();
 
-            liquidBlock.maxX = 0.99f;
-            liquidBlock.maxY = (float) s / (float) DISPLAY_STAGES;
-            liquidBlock.maxZ = 0.99f;
-
-            RenderFakeBlock.renderBlockForEntity(liquidBlock, null, 0, 0, 0, false, true);
+            CubeRenderer.render(renderInfo);
 
             GL11.glEndList();
         }

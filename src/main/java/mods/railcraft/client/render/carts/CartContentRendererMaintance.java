@@ -29,8 +29,8 @@ public class CartContentRendererMaintance extends CartContentRenderer {
     private static final ResourceLocation LAMP_OFF_TEX = new ResourceLocation(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_maint_lamp_off.png");
 
     @Override
-    public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
-        super.render(renderer, cart, light, time);
+    public void render(RenderCart renderer, EntityMinecart cart, float light, float partialTicks) {
+        super.render(renderer, cart, light, partialTicks);
         int blockOffset = cart.getDisplayTileOffset();
         OpenGL.glPushMatrix();
         OpenGL.glTranslatef(-0.5F, blockOffset / 16.0F - 0.5F, -0.5F);

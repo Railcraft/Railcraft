@@ -20,13 +20,13 @@ import org.lwjgl.opengl.GL11;
 public class CartContentRendererTNT extends CartContentRenderer {
 
     @Override
-    public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
+    public void render(RenderCart renderer, EntityMinecart cart, float light, float partialTicks) {
         OpenGL.glPushMatrix();
 //        OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
 //        OpenGL.glRotatef(90F, 0.0F, 1.0F, 0.0F);
         CartExplosiveBase tnt = (CartExplosiveBase) cart;
-        if (tnt.isPrimed() && ((float) tnt.getFuse() - time) + 1.0F < 10F) {
-            float scale = 1.0F - (((float) tnt.getFuse() - time) + 1.0F) / 10F;
+        if (tnt.isPrimed() && ((float) tnt.getFuse() - partialTicks) + 1.0F < 10F) {
+            float scale = 1.0F - (((float) tnt.getFuse() - partialTicks) + 1.0F) / 10F;
             if (scale < 0.0F) {
                 scale = 0.0F;
             }
@@ -38,17 +38,17 @@ public class CartContentRendererTNT extends CartContentRenderer {
             scale = 1.0F + scale * 0.3F;
             OpenGL.glScalef(scale, scale, scale);
         }
-        super.render(renderer, cart, light, time);
+        super.render(renderer, cart, light, partialTicks);
         if (tnt.isPrimed() && (tnt.getFuse() / 5) % 2 == 0) {
             OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
             OpenGL.glDisable(GL11.GL_TEXTURE_2D);
             OpenGL.glDisable(GL11.GL_LIGHTING);
             OpenGL.glEnable(GL11.GL_BLEND);
             OpenGL.glBlendFunc(770, 772);
-            float alpha = (1.0F - (((float) tnt.getFuse() - time) + 1.0F) / 100F) * 0.8F;
+            float alpha = (1.0F - (((float) tnt.getFuse() - partialTicks) + 1.0F) / 100F) * 0.8F;
             OpenGL.glColor4f(1.0F, 1.0F, 1.0F, alpha);
             OpenGL.glScalef(1.01f, 1.01f, 1.01f);
-            super.render(renderer, cart, 1, time);
+            super.render(renderer, cart, 1, partialTicks);
             OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             OpenGL.glPopAttrib();
         }

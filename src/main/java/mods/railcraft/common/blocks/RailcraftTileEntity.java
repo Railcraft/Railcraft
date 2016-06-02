@@ -42,8 +42,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
 public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IOwnable, ITickable {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);

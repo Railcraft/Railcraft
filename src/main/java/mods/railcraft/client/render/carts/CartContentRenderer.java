@@ -9,14 +9,13 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.ICartContentsTextureProvider;
-import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.client.render.broken.RenderFakeBlock;
-import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.client.render.models.ModelTextured;
+import mods.railcraft.client.render.tools.CubeRenderer;
+import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
+import mods.railcraft.client.render.tools.OpenGL;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.EnumBlockRenderType;
@@ -30,22 +29,18 @@ public class CartContentRenderer {
 
     private final RenderInfo info = new RenderInfo();
 
-    public CartContentRenderer() {
-        info.texture = new TextureAtlasSprite[6];
-    }
-
-    public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
+    public void render(RenderCart renderer, EntityMinecart cart, float light, float partialTicks) {
         int blockOffset = cart.getDisplayTileOffset();
 
         if (cart instanceof ICartContentsTextureProvider) {
             ICartContentsTextureProvider texInterface = (ICartContentsTextureProvider) cart;
             renderer.bindTex(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            for (int side = 0; side < 6; side++) {
-                info.texture[side] = texInterface.getBlockTextureOnSide(side);
-            }
+            info.setTextures(texInterface.getTextures());
+            info.lightSource = light;
             OpenGL.glPushMatrix();
             OpenGL.glTranslatef(0.0F, (float) blockOffset / 16.0F, 0.0F);
-            RenderFakeBlock.renderBlockOnInventory(renderer.renderBlocks(), info, 1);
+            CubeRenderer.render(info);
+
             OpenGL.glPopMatrix();
             return;
         }

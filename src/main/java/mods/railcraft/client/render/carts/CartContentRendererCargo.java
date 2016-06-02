@@ -115,8 +115,8 @@ public class CartContentRendererCargo extends CartContentRenderer {
     }
 
     @Override
-    public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
-        super.render(renderer, cart, light, time);
+    public void render(RenderCart renderer, EntityMinecart cart, float light, float partialTicks) {
+        super.render(renderer, cart, light, partialTicks);
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
         OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
@@ -129,7 +129,7 @@ public class CartContentRendererCargo extends CartContentRenderer {
         int z = (int) (Math.floor(cart.posZ));
 
         EntityCartCargo cartCargo = (EntityCartCargo) cart;
-        renderCargo(renderer, cartCargo, light, time, x, y, z);
+        renderCargo(renderer, cartCargo, light, partialTicks, x, y, z);
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();

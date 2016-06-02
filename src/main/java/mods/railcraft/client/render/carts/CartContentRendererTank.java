@@ -8,13 +8,14 @@
  */
 package mods.railcraft.client.render.carts;
 
+import mods.railcraft.client.render.tools.CubeRenderer;
+import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.FluidRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.client.render.broken.RenderFakeBlock;
-import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.EntityCartTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
-import net.minecraft.client.renderer.RenderItem;
+import mods.railcraft.common.util.misc.AABBFactory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
@@ -25,16 +26,16 @@ import org.lwjgl.opengl.GL11;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CartContentRendererTank extends CartContentRenderer {
-    private final RenderInfo fillBlock = new RenderInfo(0.4f, 0.0f, 0.4f, 0.6f, 0.999f, 0.6f);
+    private final RenderInfo fillBlock = new RenderInfo();
 
     public CartContentRendererTank() {
-        fillBlock.texture = new IIcon[6];
+        fillBlock.boundingBox = AABBFactory.start().box().expandHorizontally(-0.4).setMaxY(0.999).build();
     }
 
-    private void renderTank(RenderCart renderer, EntityMinecart cart, float light, float time, int x, int y, int z) {
+    private void renderTank(RenderCart renderer, EntityMinecart cart, float light, float partialTicks, int x, int y, int z) {
         EntityCartTank cartTank = (EntityCartTank) cart;
         StandardTank tank = cartTank.getTankManager().get(0);
-        if (tank.renderData.fluid != null && tank.renderData.amount > 0) {
+        if (tank != null && tank.renderData.fluid != null && tank.renderData.amount > 0) {
             int[] displayLists = FluidRenderer.getLiquidDisplayLists(tank.renderData.fluid);
             OpenGL.glPushMatrix();
 
@@ -52,10 +53,11 @@ public class CartContentRendererTank extends CartContentRenderer {
             OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
 
             if (cartTank.isFilling()) {
-                ResourceLocation texSheet = FluidRenderer.setupFlowingLiquidTexture(tank.renderData.fluid, fillBlock.texture);
+                ResourceLocation texSheet = FluidRenderer.setupFluidTexture(tank.renderData.fluid, FluidRenderer.FlowState.FLOWING, fillBlock);
                 if (texSheet != null) {
                     renderer.bindTex(texSheet);
-                    RenderFakeBlock.renderBlockForEntity(fillBlock, cart.worldObj, x, y, z, false, true);
+                    fillBlock.lightSource = light;
+                    CubeRenderer.render(fillBlock);
                 }
             }
 
@@ -64,7 +66,7 @@ public class CartContentRendererTank extends CartContentRenderer {
         }
     }
 
-    private void renderFilterItem(RenderCart renderer, EntityCartTank cart, float light, float time, int x, int y, int z) {
+    private void renderFilterItem(RenderCart renderer, EntityCartTank cart, float light, float partialTicks, int x, int y, int z) {
         if (!cart.hasFilter())
             return;
 
@@ -97,20 +99,22 @@ public class CartContentRendererTank extends CartContentRenderer {
         OpenGL.glPopMatrix();
     }
 
+    // TODO: this probably needs to be replaced with RenderItem.renderItem
     private void renderItem(EntityItem item) {
-        RenderItem.renderInFrame = true;
-        RenderManager.instance.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
-        if (!RenderManager.instance.options.fancyGraphics) {
+//        RenderItem.renderInFrame = true;
+        RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+        renderManager.doRenderEntity(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
+        if (!renderManager.options.fancyGraphics) {
             OpenGL.glRotatef(180, 0, 1, 0);
-            RenderManager.instance.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+            renderManager.doRenderEntity(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
             OpenGL.glRotatef(-180, 0, 1, 0);
         }
-        RenderItem.renderInFrame = false;
+//        RenderItem.renderInFrame = false;
     }
 
     @Override
-    public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
-        super.render(renderer, cart, light, time);
+    public void render(RenderCart renderer, EntityMinecart cart, float light, float partialTicks) {
+        super.render(renderer, cart, light, partialTicks);
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
         OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
@@ -122,10 +126,10 @@ public class CartContentRendererTank extends CartContentRenderer {
         int y = (int) (Math.floor(cart.posY));
         int z = (int) (Math.floor(cart.posZ));
 
-        renderTank(renderer, cart, light, time, x, y, z);
+        renderTank(renderer, cart, light, partialTicks, x, y, z);
 
         EntityCartTank cartTank = (EntityCartTank) cart;
-        renderFilterItem(renderer, cartTank, light, time, x, y, z);
+        renderFilterItem(renderer, cartTank, light, partialTicks, x, y, z);
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();

@@ -127,15 +127,21 @@ public class AABBFactory {
         return this;
     }
 
-    public AABBFactory expandZAxis(double grow) {
-        minZ -= grow;
-        maxZ += grow;
-        return this;
-    }
-
     public AABBFactory expandXAxis(double grow) {
         minX -= grow;
         maxX += grow;
+        return this;
+    }
+
+    public AABBFactory expandYAxis(double grow) {
+        minY -= grow;
+        maxY += grow;
+        return this;
+    }
+
+    public AABBFactory expandZAxis(double grow) {
+        minZ -= grow;
+        maxZ += grow;
         return this;
     }
 
@@ -179,6 +185,16 @@ public class AABBFactory {
         maxX += pos.getX();
         maxY += pos.getY();
         maxZ += pos.getZ();
+        return this;
+    }
+
+    public AABBFactory setMinY(double minY) {
+        this.minY = minY;
+        return this;
+    }
+
+    public AABBFactory setMaxY(double maxY) {
+        this.maxY = maxY;
         return this;
     }
 }

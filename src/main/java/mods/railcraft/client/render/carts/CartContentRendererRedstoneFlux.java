@@ -8,9 +8,9 @@
  */
 package mods.railcraft.client.render.carts;
 
+import mods.railcraft.client.render.tools.CubeRenderer;
+import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.client.render.broken.RenderFakeBlock;
-import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.EntityCartRF;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -33,16 +33,16 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer {
     }
 
     public void setRedstoneIcon(TextureAtlasSprite icon) {
-        redBlock.override = icon;
+        redBlock.setTextureToAllSides(icon);
     }
 
     public void setFrameIcon(TextureAtlasSprite icon) {
-        leadFrame.override = icon;
+        leadFrame.setTextureToAllSides(icon);
     }
 
     @Override
-    public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
-        super.render(renderer, cart, light, time);
+    public void render(RenderCart renderer, EntityMinecart cart, float light, float partialTicks) {
+        super.render(renderer, cart, light, partialTicks);
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
         OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
@@ -56,12 +56,12 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer {
         int z = (int) (Math.floor(cart.posZ));
 
         EntityCartRF cartRF = (EntityCartRF) cart;
-        renderer.bindTex(TextureMap.locationBlocksTexture);
+        renderer.bindTex(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
         OpenGL.glTranslatef(0, 0.0625f, 0);
 
         OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderFakeBlock.renderBlockForEntity(leadFrame, cart.worldObj, x, y, z, false, true);
+        CubeRenderer.render(leadFrame);
 
         float scale = 0.99F;
         OpenGL.glScalef(scale, scale, scale);
@@ -69,7 +69,7 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer {
         float bright = 0.5F + 0.5F * (float) ((double) cartRF.getRF() / (double) cartRF.getMaxRF());
         OpenGL.glColor4f(bright, bright, bright, 1.0f);
 
-        RenderFakeBlock.renderBlockForEntity(redBlock, cart.worldObj, x, y, z, false, true);
+        CubeRenderer.render(redBlock);
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();
