@@ -94,7 +94,7 @@ configurations {
 dependencies {
 	api "net.sengir.forestry:forestry_${1.9}:${project.version_forestry}:api"
 	// runtime "net.sengir.forestry:forestry_${1.9}:${project.version_forestry}:dev"
-	//api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
+	api 'net.industrial-craft:industrialcraft-2:2.5.2-experimental:api'
 }
 
 processResources {
