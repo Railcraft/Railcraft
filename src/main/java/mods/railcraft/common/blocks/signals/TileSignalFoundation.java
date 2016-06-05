@@ -15,11 +15,15 @@ import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public abstract class TileSignalFoundation extends RailcraftTileEntity {
 
@@ -62,7 +66,7 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
         }
     }
 
-    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         return false;
     }
 
@@ -75,10 +79,6 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
     }
 
     public void onBlockRemoval() {
-    }
-
-    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-        getBlockType().setBlockBounds(0, 0, 0, 1, 1, 1);
     }
 
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {

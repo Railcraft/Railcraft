@@ -15,7 +15,6 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class TileSignalBlockSignal extends TileSignalBase implements IControllerTile, ISignalBlockTile {
@@ -57,9 +56,8 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
         return controller.getAspect();
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         try {
             super.writeToNBT(data);
             signalBlock.writeToNBT(data);
@@ -67,10 +65,11 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
         } catch (Throwable er) {
             Game.logThrowable(Level.ERROR, "Signal Tile crashed on write.", 10, er);
         }
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         try {
             super.readFromNBT(data);
             signalBlock.readFromNBT(data);
@@ -81,14 +80,14 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         controller.writePacketData(data);
         signalBlock.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         controller.readPacketData(data);
         signalBlock.readPacketData(data);

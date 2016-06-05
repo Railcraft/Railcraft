@@ -15,6 +15,8 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -30,7 +32,7 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
     private final ModelBase model;
     private final ResourceLocation[] textures;
     private final int[] color = new int[3];
-//    protected final IIcon[] itemIcons = new IIcon[3];
+    //    protected final IIcon[] itemIcons = new IIcon[3];
     private float emblemSize = 0.15F;
     private float emblemOffsetX = 0.47F;
     private float emblemOffsetY = -0.17F;
@@ -104,22 +106,24 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
 
         if (emblemTexture != null) {
             renderer.bindTex(emblemTexture);
-            Tessellator tess = Tessellator.instance;
+            Tessellator tess = Tessellator.getInstance();
+            VertexBuffer vertexBuffer = tess.getBuffer();
 
 //            float size = 0.22F;
 //            float offsetX = -0.25F;
 //            float offsetY = -0.25F;
 //            float offsetZ = -0.46F;
-            tess.startDrawingQuads();
-            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, emblemOffsetZ, 0, 0);
-            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY + emblemSize, emblemOffsetZ, 0, 1);
-            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + emblemSize, emblemOffsetZ, 1, 1);
-            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + -emblemSize, emblemOffsetZ, 1, 0);
+            // TODO: Test this!
+            vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+            vertexBuffer.pos(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, emblemOffsetZ).tex(0, 0).endVertex();
+            vertexBuffer.pos(emblemOffsetX - emblemSize, emblemOffsetY + emblemSize, emblemOffsetZ).tex(0, 1).endVertex();
+            vertexBuffer.pos(emblemOffsetX + emblemSize, emblemOffsetY + emblemSize, emblemOffsetZ).tex(1, 1).endVertex();
+            vertexBuffer.pos(emblemOffsetX + emblemSize, emblemOffsetY + -emblemSize, emblemOffsetZ).tex(1, 0).endVertex();
 
-            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + -emblemSize, -emblemOffsetZ, 0, 0);
-            tess.addVertexWithUV(emblemOffsetX + emblemSize, emblemOffsetY + emblemSize, -emblemOffsetZ, 0, 1);
-            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY + emblemSize, -emblemOffsetZ, 1, 1);
-            tess.addVertexWithUV(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, -emblemOffsetZ, 1, 0);
+            vertexBuffer.pos(emblemOffsetX + emblemSize, emblemOffsetY + -emblemSize, -emblemOffsetZ).tex(0, 0).endVertex();
+            vertexBuffer.pos(emblemOffsetX + emblemSize, emblemOffsetY + emblemSize, -emblemOffsetZ).tex(0, 1).endVertex();
+            vertexBuffer.pos(emblemOffsetX - emblemSize, emblemOffsetY + emblemSize, -emblemOffsetZ).tex(1, 1).endVertex();
+            vertexBuffer.pos(emblemOffsetX - emblemSize, emblemOffsetY - emblemSize, -emblemOffsetZ).tex(1, 0).endVertex();
             tess.draw();
         }
         OpenGL.glPopMatrix();

@@ -9,16 +9,9 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.EntityCartCargo;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -27,20 +20,11 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartContentRendererCargo extends CartContentRenderer {
-    private final RenderInfo filterSign = new RenderInfo();
+public class CartContentRendererCargo extends CartContentRenderer<EntityCartCargo> {
+
     private Random rand = new Random();
 
-    public CartContentRendererCargo() {
-        filterSign.template = Blocks.GLASS;
-        filterSign.texture = new TextureAtlasSprite[1];
-        filterSign.renderSide[0] = false;
-        filterSign.renderSide[1] = false;
-        filterSign.renderSide[2] = false;
-        filterSign.renderSide[3] = false;
-    }
-
-    public void renderCargo(RenderCart renderer, EntityCartCargo cart, float light, float time, int x, int y, int z) {
+    public void renderCargo(RenderCart renderer, EntityCartCargo cart) {
         if (!cart.hasFilter())
             return;
 
@@ -53,9 +37,11 @@ public class CartContentRendererCargo extends CartContentRenderer {
         item.getEntityItem().stackSize = 1;
         item.hoverStart = 0.0F;
 
-        boolean renderIn3D = RenderBlocks.renderItemIn3d(Block.getBlockFromItem(item.getEntityItem().getItem()).getRenderType());
+        // TODO: fix cargo cart rendering
+        boolean renderIn3D = false;
+//        boolean renderIn3D = RenderBlocks.renderItemIn3d(Block.getBlockFromItem(item.getEntityItem().getItem()).getRenderType());
 
-        RenderItem.renderInFrame = true;
+//        RenderItem.renderInFrame = true;
 
         if (!renderIn3D) {
             if (!renderer.getRenderManager().options.fancyGraphics)
@@ -100,22 +86,23 @@ public class CartContentRendererCargo extends CartContentRenderer {
             }
         }
 
-        RenderItem.renderInFrame = false;
+//        RenderItem.renderInFrame = false;
 
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();
     }
 
+    //TODO: this is probably wrong now
     private void renderEntityItem(RenderManager renderManager, EntityItem item) {
         try {
-            renderManager.renderEntityWithPosYaw(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+            renderManager.doRenderEntity(item, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
         } catch (Exception ignored) {
         }
     }
 
     @Override
-    public void render(RenderCart renderer, EntityMinecart cart, float light, float partialTicks) {
+    public void render(RenderCart renderer, EntityCartCargo cart, float light, float partialTicks) {
         super.render(renderer, cart, light, partialTicks);
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -124,12 +111,7 @@ public class CartContentRendererCargo extends CartContentRenderer {
         OpenGL.glDisable(GL11.GL_LIGHTING);
         OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        int x = (int) (Math.floor(cart.posX));
-        int y = (int) (Math.floor(cart.posY));
-        int z = (int) (Math.floor(cart.posZ));
-
-        EntityCartCargo cartCargo = (EntityCartCargo) cart;
-        renderCargo(renderer, cartCargo, light, partialTicks, x, y, z);
+        renderCargo(renderer, cart);
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();

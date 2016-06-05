@@ -1,12 +1,13 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.client.render.carts;
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
+package mods.railcraft.client.render.broken;
 
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.EntityCartFiltered;
@@ -19,6 +20,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+//TODO: utterly broken
 public class RenderCartItemFiltered implements IItemRenderer {
 
     RenderItem renderItem = new RenderItem();

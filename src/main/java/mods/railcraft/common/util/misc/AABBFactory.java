@@ -29,6 +29,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class AABBFactory {
 
+    public static final AxisAlignedBB FULL_BOX = start().box().build();
+
     public double minX;
     public double minY;
     public double minZ;

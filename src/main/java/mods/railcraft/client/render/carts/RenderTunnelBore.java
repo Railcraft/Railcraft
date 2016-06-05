@@ -13,25 +13,29 @@ import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.models.bore.ModelTunnelBore;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
-public class RenderTunnelBore extends Render {
+public class RenderTunnelBore extends Render<EntityTunnelBore> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.CART_TEXTURE_FOLDER + "tunnel_bore.png");
 
-    public RenderTunnelBore() {
+    public RenderTunnelBore(RenderManager renderManager) {
+        super(renderManager);
         shadowSize = 0.5F;
         modelTunnelBore = new ModelTunnelBore();
     }
 
-    public void render(EntityTunnelBore bore, double x, double y, double z, float yaw, float time) {
+    @Override
+    public void doRender(EntityTunnelBore bore, double x, double y, double z, float entityYaw, float partialTicks) {
         // System.out.println("Render Yaw = " + f);
         OpenGL.glPushMatrix();
         long var10 = (long) bore.getEntityId() * 493286711L;
@@ -41,7 +45,8 @@ public class RenderTunnelBore extends Render {
         float tz = (((float) (var10 >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
         OpenGL.glTranslatef(tx, ty, tz);
 
-        if (RenderManager.debugBoundingBox) {
+        RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+        if (renderManager.isDebugBoundingBox()) {
             OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
 //            OpenGL.glDepthMask(false);
             OpenGL.glDisable(GL11.GL_TEXTURE_2D);
@@ -50,13 +55,13 @@ public class RenderTunnelBore extends Render {
             OpenGL.glDisable(GL11.GL_BLEND);
             for (Entity part : bore.getParts()) {
                 OpenGL.glPushMatrix();
-                double posX = part.lastTickPosX + (part.posX - part.lastTickPosX) * (double) time - RenderManager.renderPosX;
-                double posY = part.lastTickPosY + (part.posY - part.lastTickPosY) * (double) time - RenderManager.renderPosY;
-                double posZ = part.lastTickPosZ + (part.posZ - part.lastTickPosZ) * (double) time - RenderManager.renderPosZ;
+                double posX = part.lastTickPosX + (part.posX - part.lastTickPosX) * (double) partialTicks - TileEntityRendererDispatcher.staticPlayerX;
+                double posY = part.lastTickPosY + (part.posY - part.lastTickPosY) * (double) partialTicks - TileEntityRendererDispatcher.staticPlayerY;
+                double posZ = part.lastTickPosZ + (part.posZ - part.lastTickPosZ) * (double) partialTicks - TileEntityRendererDispatcher.staticPlayerZ;
                 OpenGL.glTranslatef((float) posX, (float) posY, (float) posZ);
                 float halfWidth = part.width / 2.0F;
                 AxisAlignedBB axisalignedbb = new AxisAlignedBB(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth);
-                RenderGlobal.drawOutlinedBoundingBox(axisalignedbb, 16777215);
+                RenderGlobal.drawOutlinedBoundingBox(axisalignedbb, 255, 255, 255, 255);
                 OpenGL.glPopMatrix();
             }
 //            OpenGL.glDepthMask(true);
@@ -66,21 +71,21 @@ public class RenderTunnelBore extends Render {
         OpenGL.glTranslatef((float) x, (float) y, (float) z);
         switch (bore.getFacing()) {
             case NORTH:
-                yaw = 90;
+                entityYaw = 90;
                 break;
             case EAST:
-                yaw = 0;
+                entityYaw = 0;
                 break;
             case SOUTH:
-                yaw = 270;
+                entityYaw = 270;
                 break;
             case WEST:
-                yaw = 180;
+                entityYaw = 180;
                 break;
         }
-        OpenGL.glRotatef(yaw, 0.0F, 1.0F, 0.0F);
-        float f3 = (float) bore.getRollingAmplitude() - time;
-        float f4 = bore.getDamage() - time;
+        OpenGL.glRotatef(entityYaw, 0.0F, 1.0F, 0.0F);
+        float f3 = (float) bore.getRollingAmplitude() - partialTicks;
+        float f4 = bore.getDamage() - partialTicks;
         if (f4 < 0.0F) {
             f4 = 0.0F;
         }
@@ -90,7 +95,7 @@ public class RenderTunnelBore extends Render {
             angle = Math.copySign(angle, bore.getRollingDirection());
             OpenGL.glRotatef(angle, 1.0F, 0.0F, 0.0F);
         }
-        float light = bore.getBrightness(time);
+        float light = bore.getBrightness(partialTicks);
         light = light + ((1.0f - light) * 0.4f);
 
 
@@ -118,15 +123,10 @@ public class RenderTunnelBore extends Render {
         OpenGL.glPopMatrix();
     }
 
-    @Override
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        render((EntityTunnelBore) entity, d, d1, d2, f, f1);
-    }
-
     protected ModelTunnelBore modelTunnelBore;
 
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(EntityTunnelBore entity) {
         return TEXTURE;
     }
 }

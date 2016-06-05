@@ -1,16 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.client.render.carts;
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
+package mods.railcraft.client.render.broken;
 
 import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.render.carts.LocomotiveRenderer;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.ItemLocomotive;
 import net.minecraft.client.Minecraft;
@@ -25,6 +27,7 @@ import javax.annotation.Nonnull;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+//TODO: utterly broken
 public class RenderItemLocomotive implements IItemRenderer, ICartRenderer {
 
     private final LocomotiveRenderType renderType;

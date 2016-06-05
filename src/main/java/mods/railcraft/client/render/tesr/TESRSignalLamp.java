@@ -9,29 +9,27 @@
  ******************************************************************************/
 package mods.railcraft.client.render.tesr;
 
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
-import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.TileSignalBase;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
-public class TESRSignalLamp extends TESRSignals {
+public class TESRSignalLamp extends TESRSignals<TileSignalBase> {
 
-    private final SignalAspect defaultAspect;
-    private final RenderInfo info = new RenderInfo();
+    @Override
+    public void renderTileEntityAt(TileSignalBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
+        EnumFacing side = tile.getFacing();
 
-    public TESRSignalLamp(SignalAspect defaultAspect) {
-        this.defaultAspect = defaultAspect;
-        info.template = RailcraftBlocksOld.getBlockSignal();
-        info.texture = new IIcon[6];
-        tesrInfo.template = RailcraftBlocksOld.getBlockSignal();
-        tesrInfo.texture = new IIcon[6];
+        SignalAspect aspect = tile.getSignalAspect().getDisplayAspect();
+        lampInfo.setTexture(side, tile.getLampTexture(aspect));
+        lampInfo.lightSource = aspect.getTextureBrightness();
+        doRenderAspect(x, y, z);
     }
+
+//    private final SignalAspect defaultAspect;
+//
+//    public TESRSignalLamp(SignalAspect defaultAspect) {
+//        this.defaultAspect = defaultAspect;
+//    }
 
 //    @Override
 //    public void renderBlock(RenderBlocks renderblocks, IBlockAccess iBlockAccess, int x, int y, int z, Block block) {
@@ -193,25 +191,4 @@ public class TESRSignalLamp extends TESRSignals {
 //        OpenGL.glPopAttrib();
 //    }
 
-    private final RenderInfo tesrInfo = new RenderInfo();
-
-    @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
-        if (!(te instanceof TileSignalBase)) {
-            return;
-        }
-        RenderInfo info = tesrInfo;
-
-        TileSignalBase tile = (TileSignalBase) te;
-
-        int facing = tile.getFacing().ordinal();
-        if (facing >= info.texture.length)
-            facing = 0;
-
-        SignalAspect aspect = tile.getSignalAspect().getDisplayAspect();
-        info.resetSidesAndLight();
-        info.setTexture(facing, BlockSignalRailcraft.texturesLampTop[aspect.getTextureIndex()]);
-        info.lightSource = aspect.getTextureBrightness();
-        doRenderAspect(info, tile, x, y, z);
-    }
 }

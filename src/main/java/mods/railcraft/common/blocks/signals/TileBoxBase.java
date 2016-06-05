@@ -11,20 +11,15 @@ package mods.railcraft.common.blocks.signals;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public abstract class TileBoxBase extends TileSignalFoundation {
+public abstract class TileBoxBase extends TileSignalFoundation implements ILampTile {
 
     private static final float BOUND = -0.1f;
-
-    @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-        getBlockType().setBlockBounds(BOUND, 0, BOUND, 1 - BOUND, 1 - BOUND / 2, 1 - BOUND);
-    }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {

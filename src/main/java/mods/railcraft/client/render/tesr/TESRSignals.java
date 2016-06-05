@@ -1,20 +1,20 @@
 /*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
- http://railcraft.info
-
- This code is the property of CovertJaguar
- and may only be used with explicit written
- permission unless otherwise specified on the
- license page at http://railcraft.info/wiki/info:license.
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
+ * This code is the property of CovertJaguar
+ * and may only be used with explicit written
+ * permission unless otherwise specified on the
+ * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.*;
+import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.client.render.broken.RenderFakeBlock;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -36,11 +37,13 @@ import java.util.Arrays;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TESRSignals extends TileEntitySpecialRenderer<TileEntity> {
+public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer<T> {
     private static final Vec3d CENTER = new Vec3d(0.5, 0.5, 0.5);
 
+    protected final RenderInfo lampInfo = new RenderInfo();
+
     @Override
-    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void renderTileEntityAt(T tile, double x, double y, double z, float partialTicks, int destroyStage) {
         if (tile instanceof IControllerTile) {
             if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TUNING)) {
                 renderPairs(tile, x, y, z, partialTicks, ((IControllerTile) tile).getController(), ColorProfile.RAINBOW);
@@ -82,7 +85,7 @@ public class TESRSignals extends TileEntitySpecialRenderer<TileEntity> {
         }
     }
 
-    private void renderPairs(TileEntity tile, double x, double y, double z, float partialTicks, AbstractPair pair, ColorProfile colorProfile) {
+    private void renderPairs(T tile, double x, double y, double z, float partialTicks, AbstractPair pair, ColorProfile colorProfile) {
         if (pair.getPairs().isEmpty()) {
             return;
         }
@@ -155,7 +158,7 @@ public class TESRSignals extends TileEntitySpecialRenderer<TileEntity> {
         public abstract int getColor(TileEntity tile, WorldCoordinate source, WorldCoordinate target);
     }
 
-    protected static void doRenderAspect(RenderFakeBlock.RenderInfo info, TileEntity tile, double x, double y, double z) {
+    protected void doRenderAspect(double x, double y, double z) {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexBuffer = tessellator.getBuffer();
         final float depth = 2 * RenderTools.PIXEL;
@@ -188,33 +191,38 @@ public class TESRSignals extends TileEntitySpecialRenderer<TileEntity> {
 
         vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
-        if (info.renderSide[2]) {
-            vertexBuffer.pos(0, 0, depth).tex(info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(16)).endVertex();
-            vertexBuffer.pos(0, 1, depth).tex(info.texture[2].getInterpolatedU(16), info.texture[2].getInterpolatedV(0)).endVertex();
-            vertexBuffer.pos(1, 1, depth).tex(info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(0)).endVertex();
-            vertexBuffer.pos(1, 0, depth).tex(info.texture[2].getInterpolatedU(0), info.texture[2].getInterpolatedV(16)).endVertex();
+        if (lampInfo.sides[2].render) {
+            TextureAtlasSprite texture = lampInfo.sides[2].texture;
+            vertexBuffer.pos(0, 0, depth).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(0, 1, depth).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(1, 1, depth).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(1, 0, depth).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(16)).endVertex();
         }
-        if (info.renderSide[3]) {
-            vertexBuffer.pos(0, 0, 1 - depth).tex(info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(16)).endVertex();
-            vertexBuffer.pos(1, 0, 1 - depth).tex(info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(16)).endVertex();
-            vertexBuffer.pos(1, 1, 1 - depth).tex(info.texture[3].getInterpolatedU(16), info.texture[3].getInterpolatedV(0)).endVertex();
-            vertexBuffer.pos(0, 1, 1 - depth).tex(info.texture[3].getInterpolatedU(0), info.texture[3].getInterpolatedV(0)).endVertex();
+        if (lampInfo.sides[3].render) {
+            TextureAtlasSprite texture = lampInfo.sides[3].texture;
+            vertexBuffer.pos(0, 0, 1 - depth).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(1, 0, 1 - depth).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(1, 1, 1 - depth).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(0, 1, 1 - depth).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(0)).endVertex();
         }
-        if (info.renderSide[4]) {
-            vertexBuffer.pos(depth, 0, 0).tex(info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(16)).endVertex();
-            vertexBuffer.pos(depth, 0, 1).tex(info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(16)).endVertex();
-            vertexBuffer.pos(depth, 1, 1).tex(info.texture[4].getInterpolatedU(16), info.texture[4].getInterpolatedV(0)).endVertex();
-            vertexBuffer.pos(depth, 1, 0).tex(info.texture[4].getInterpolatedU(0), info.texture[4].getInterpolatedV(0)).endVertex();
+        if (lampInfo.sides[4].render) {
+            TextureAtlasSprite texture = lampInfo.sides[4].texture;
+            vertexBuffer.pos(depth, 0, 0).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(depth, 0, 1).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(depth, 1, 1).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(depth, 1, 0).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(0)).endVertex();
         }
-        if (info.renderSide[5]) {
-            vertexBuffer.pos(1 - depth, 0, 0).tex(info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(16)).endVertex();
-            vertexBuffer.pos(1 - depth, 1, 0).tex(info.texture[5].getInterpolatedU(16), info.texture[5].getInterpolatedV(0)).endVertex();
-            vertexBuffer.pos(1 - depth, 1, 1).tex(info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(0)).endVertex();
-            vertexBuffer.pos(1 - depth, 0, 1).tex(info.texture[5].getInterpolatedU(0), info.texture[5].getInterpolatedV(16)).endVertex();
+        if (lampInfo.sides[5].render) {
+            TextureAtlasSprite texture = lampInfo.sides[5].texture;
+            vertexBuffer.pos(1 - depth, 0, 0).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(16)).endVertex();
+            vertexBuffer.pos(1 - depth, 1, 0).tex(texture.getInterpolatedU(16), texture.getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(1 - depth, 1, 1).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(0)).endVertex();
+            vertexBuffer.pos(1 - depth, 0, 1).tex(texture.getInterpolatedU(0), texture.getInterpolatedV(16)).endVertex();
         }
 
         tessellator.draw();
 
+        lampInfo.resetSidesAndLight();
 
         OpenGL.glPopMatrix();
     }

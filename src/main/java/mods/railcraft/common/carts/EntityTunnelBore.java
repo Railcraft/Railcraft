@@ -48,6 +48,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -1000,6 +1001,7 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
         dataWatcher.updateObject(WATCHER_ID_BORE_HEAD, boreStack);
     }
 
+    @Nullable
     public IBoreHead getBoreHead() {
         ItemStack boreStack = dataWatcher.getWatchableObjectItemStack(WATCHER_ID_BORE_HEAD);
         if (boreStack != null && boreStack.getItem() instanceof IBoreHead)

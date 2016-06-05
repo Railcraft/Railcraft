@@ -8,21 +8,20 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.api.signals.DualSignalReceiver;
-import mods.railcraft.api.signals.IReceiverTile;
-import mods.railcraft.api.signals.SignalAspect;
-import mods.railcraft.api.signals.SignalController;
+import mods.railcraft.api.signals.*;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class TileSignalDualHeadDistantSignal extends TileSignalBase implements IReceiverTile, IDualHeadSignal {
@@ -37,7 +36,7 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
 
     @Override
     public int getLightValue() {
-        return Math.max(getTopAspect().getLightValue(), getBottomAspect().getLightValue());
+        return Math.max(getSignalAspect(DualLamp.TOP).getLightValue(), getSignalAspect(DualLamp.BOTTOM).getLightValue());
     }
 
     @Override
@@ -48,14 +47,15 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
             return;
         }
 
+        // TODO: WTF?
         receiver.tickServer();
         int numPairs = receiver.getNumPairs();
         boolean changed = false;
         switch (numPairs) {
             case 0:
-                changed |= receiver.setTopAspect(SignalAspect.BLINK_RED);
+                changed |= receiver.setAspect(DualLamp.TOP, SignalAspect.BLINK_RED);
             case 1:
-                changed |= receiver.setBottomAspect(SignalAspect.BLINK_RED);
+                changed |= receiver.setAspect(DualLamp.BOTTOM, SignalAspect.BLINK_RED);
         }
         if (changed) {
             sendUpdateToClient();
@@ -68,25 +68,20 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-        getBlockType().setBlockBounds(0.15f, 0f, 0.15f, 0.85f, 1f, 0.85f);
-    }
-
-    @Override
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
         return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(SIZE).build();
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         receiver.writeToNBT(data);
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         receiver.readFromNBT(data);
@@ -94,14 +89,14 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         receiver.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         receiver.readPacketData(data);
@@ -113,17 +108,18 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
     }
 
     @Override
-    public SignalAspect getTopAspect() {
-        return receiver.getTopAspect();
-    }
-
-    @Override
-    public SignalAspect getBottomAspect() {
-        return receiver.getBottomAspect();
+    public SignalAspect getSignalAspect(DualLamp lamp) {
+        return receiver.getAspect(lamp);
     }
 
     @Override
     public SignalAspect getSignalAspect() {
-        return receiver.getTopAspect();
+        return receiver.getAspect(DualLamp.TOP);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public TextureAtlasSprite getLampTexture(DualLamp lamp, SignalAspect aspect) {
+        return RenderTools.getMissingTexture();
     }
 }

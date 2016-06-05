@@ -19,11 +19,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -32,9 +31,9 @@ import java.io.IOException;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-public abstract class TileSignalBase extends TileSignalFoundation implements IAspectProvider {
+public abstract class TileSignalBase extends TileSignalFoundation implements IAspectProvider, ILampTile {
 
-    private static final EnumFacing[] UP_DOWN_AXES = new EnumFacing[]{UP, DOWN};
+    private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
     protected static final float BOUNDS = 0.15f;
     private EnumFacing facing = EnumFacing.NORTH;
     private int prevLightValue;
@@ -56,11 +55,6 @@ public abstract class TileSignalBase extends TileSignalFoundation implements IAs
     @Override
     public EnumFacing[] getValidRotations() {
         return UP_DOWN_AXES;
-    }
-
-    @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-        getBlockType().setBlockBounds(BOUNDS, 0.35f, BOUNDS, 1 - BOUNDS, 1f, 1 - BOUNDS);
     }
 
     @Override
@@ -108,28 +102,28 @@ public abstract class TileSignalBase extends TileSignalFoundation implements IAs
         facing = MiscTools.getHorizontalSideFacingPlayer(entityLiving);
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("Facing", (byte) facing.ordinal());
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         facing = EnumFacing.getFront(data.getByte("Facing"));
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte((byte) facing.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         facing = EnumFacing.getFront(data.readByte());

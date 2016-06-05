@@ -25,11 +25,11 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartContentRenderer {
+public class CartContentRenderer<T extends EntityMinecart> {
 
     private final RenderInfo info = new RenderInfo();
 
-    public void render(RenderCart renderer, EntityMinecart cart, float light, float partialTicks) {
+    public void render(RenderCart renderer, T cart, float light, float partialTicks) {
         int blockOffset = cart.getDisplayTileOffset();
 
         if (cart instanceof ICartContentsTextureProvider) {

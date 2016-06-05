@@ -12,11 +12,9 @@ import mods.railcraft.api.carts.IAlternateCartTexture;
 import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.*;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -26,7 +24,6 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class RenderCart extends Render<EntityMinecart> implements ICartRenderer {
 
@@ -43,16 +40,12 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         renderersContent.put(EntityCartTank.class, new CartContentRendererTank());
         renderersContent.put(EntityCartRF.class, CartContentRendererRedstoneFlux.instance());
         renderersContent.put(CartExplosiveBase.class, new CartContentRendererTNT());
-        renderersContent.put(CartMaintenanceBase.class, new CartContentRendererMaintance());
+        renderersContent.put(CartMaintenanceBase.class, new CartContentRendererMaintenance());
     }
-
-    private final Random rand = new Random();
-    private final RenderInfo fakeBlock = new RenderInfo();
 
     public RenderCart(RenderManager renderManager) {
         super(renderManager);
         shadowSize = 0.5F;
-        fakeBlock.texture = new TextureAtlasSprite[6];
     }
 
     @Override
@@ -68,13 +61,16 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         double my = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * (double) partialTicks;
         double mz = cart.lastTickPosZ + (cart.posZ - cart.lastTickPosZ) * (double) partialTicks;
         double d6 = 0.3;
-        Vec3d vec3d = cart.func_70489_a(mx, my, mz);
+        Vec3d vec3d = cart.getPos(mx, my, mz);
         float pitch = cart.prevRotationPitch + (cart.rotationPitch - cart.prevRotationPitch) * partialTicks;
+        //noinspection ConstantConditions
         if (vec3d != null) {
-            Vec3d vec3d1 = cart.func_70495_a(mx, my, mz, d6);
-            Vec3d vec3d2 = cart.func_70495_a(mx, my, mz, -d6);
+            Vec3d vec3d1 = cart.getPosOffset(mx, my, mz, d6);
+            Vec3d vec3d2 = cart.getPosOffset(mx, my, mz, -d6);
+            //noinspection ConstantConditions
             if (vec3d1 == null)
                 vec3d1 = vec3d;
+            //noinspection ConstantConditions
             if (vec3d2 == null)
                 vec3d2 = vec3d;
             x += vec3d.xCoord - mx;
@@ -157,6 +153,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         getContentRenderer(cart.getClass()).render(this, cart, light, time);
     }
 
+    @SuppressWarnings("ConstantConditions")
     public CartModelRenderer getCoreRenderer(Class eClass) {
         CartModelRenderer render = renderersCore.get(eClass);
         if (render == null && eClass != EntityMinecart.class) {
@@ -168,6 +165,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         return render;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public CartContentRenderer getContentRenderer(Class eClass) {
         CartContentRenderer render = renderersContent.get(eClass);
         if (render == null && eClass != EntityMinecart.class) {
