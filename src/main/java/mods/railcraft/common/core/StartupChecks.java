@@ -118,7 +118,7 @@ public class StartupChecks {
                                     Game.log(Level.WARN, "Failed to parse last Version Check Message info: {0}", ex);
                                 }
                             }
-                            sendMessage = !latest.equals(lastSeenVersion) || timeElapsed;
+                            sendMessage = timeElapsed || !latest.equals(lastSeenVersion);
                         }
 
                         try (FileOutputStream fos = new FileOutputStream(versionFile)) {
