@@ -61,11 +61,11 @@ public class StartupChecks {
                 if (connection == null) {
                     return;
                 }
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                latest = reader.readLine().trim();
-                reader.close();
-                connection.disconnect();
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    latest = reader.readLine().trim();
+                } finally {
+                    connection.disconnect();
+                }
                 String[] currentTokens = Railcraft.getVersion().trim().split("\\.");
                 String[] latestTokens = latest.split("\\.");
 
@@ -88,57 +88,49 @@ public class StartupChecks {
                 Game.log(Level.WARN, "Latest Version Check Failed: {0}", ex);
             }
 
+            // TODO: test this?
             if (hasUpdated) {
-                FileInputStream fis = null;
-                FileOutputStream fos = null;
                 try {
-                    File configFolder = Railcraft.getMod().getConfigFolder();
-                    if (!configFolder.exists()) {
-                        configFolder.mkdirs();
-                    }
-                    File versionFile = new File(configFolder, "version.prop");
-                    Properties versionProp = new Properties();
-                    if (versionFile.exists()) {
-                        fis = new FileInputStream(versionFile);
-                        versionProp.load(fis);
-                    }
-                    String lastSeenVersion = versionProp.getProperty("latest-version");
-                    if (lastSeenVersion == null) {
-                        lastSeenVersion = "";
-                    }
-                    lastSeenVersion = lastSeenVersion.trim();
-                    versionProp.setProperty("latest-version", latest);
-                    String lastMessageString = versionProp.getProperty("last-message");
-                    boolean timeElapsed = true;
                     DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.ROOT);
-                    if (lastMessageString != null) {
-                        try {
-                            Date lastMessageDate = dateFormat.parse(lastMessageString);
-                            long threeDays = TimeUnit.MILLISECONDS.convert(3, TimeUnit.DAYS);
-                            timeElapsed = System.currentTimeMillis() - lastMessageDate.getTime() >= threeDays;
-                        } catch (ParseException ex) {
-                            Game.log(Level.WARN, "Failed to parse last Version Check Message info: {0}", ex);
+                    File configFolder = Railcraft.getMod().getConfigFolder();
+                    if (configFolder.exists() || configFolder.mkdirs()) {
+                        File versionFile = new File(configFolder, "version.prop");
+                        Properties versionProp = new Properties();
+                        if (versionFile.exists()) {
+                            try (FileInputStream fis = new FileInputStream(versionFile)) {
+                                versionProp.load(fis);
+                            } catch (IOException ex) {
+                                Game.log(Level.WARN, "Failed to load last Version Check Message info: {0}", ex);
+                            }
+                            String lastSeenVersion = versionProp.getProperty("latest-version");
+                            if (lastSeenVersion == null) {
+                                lastSeenVersion = "";
+                            }
+                            lastSeenVersion = lastSeenVersion.trim();
+                            String lastMessageString = versionProp.getProperty("last-message");
+                            boolean timeElapsed = true;
+                            if (lastMessageString != null) {
+                                try {
+                                    Date lastMessageDate = dateFormat.parse(lastMessageString);
+                                    long threeDays = TimeUnit.MILLISECONDS.convert(3, TimeUnit.DAYS);
+                                    timeElapsed = System.currentTimeMillis() - lastMessageDate.getTime() >= threeDays;
+                                } catch (ParseException ex) {
+                                    Game.log(Level.WARN, "Failed to parse last Version Check Message info: {0}", ex);
+                                }
+                            }
+                            sendMessage = !latest.equals(lastSeenVersion) || timeElapsed;
+                        }
+
+                        try (FileOutputStream fos = new FileOutputStream(versionFile)) {
+                            versionProp.setProperty("latest-version", latest);
+                            versionProp.setProperty("last-message", dateFormat.format(new Date()));
+                            versionProp.store(fos, "Information for update message");
+                        } catch (IOException ex) {
+                            Game.log(Level.WARN, "Failed to save last Version Check Message info: {0}", ex);
                         }
                     }
-                    versionProp.setProperty("last-message", dateFormat.format(new Date()));
-                    sendMessage = !latest.equals(lastSeenVersion) || timeElapsed;
-                    fos = new FileOutputStream(versionFile);
-                    versionProp.store(fos, "Information for update message");
                 } catch (Exception ex) {
                     Game.log(Level.WARN, "Failed to retrieve last Version Check Message info: {0}", ex);
-                } finally {
-                    try {
-                        if (fis != null) {
-                            fis.close();
-                        }
-                    } catch (IOException ignored) {
-                    }
-                    try {
-                        if (fos != null) {
-                            fos.close();
-                        }
-                    } catch (IOException ignored) {
-                    }
                 }
             }
 
