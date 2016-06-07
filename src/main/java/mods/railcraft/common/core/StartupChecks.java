@@ -8,23 +8,20 @@
  */
 package mods.railcraft.common.core;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import mods.railcraft.common.util.misc.Game;
+import org.apache.logging.log4j.Level;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import org.apache.logging.log4j.Level;
-import mods.railcraft.common.util.misc.Game;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class StartupChecks {
@@ -33,7 +30,7 @@ public class StartupChecks {
     private static boolean versionCheckCompleted;
     private static boolean hasUpdated;
     private static boolean sendMessage = true;
-//    private static final String RELEASE_URL = "http://bit.ly/version_RC_main";
+    //    private static final String RELEASE_URL = "http://bit.ly/version_RC_main";
     private static final String RELEASE_URL = "http://www.railcraft.info/version";
     private static final String BETA_URL = "http://bit.ly/version_RC_beta";
 
@@ -113,12 +110,17 @@ public class StartupChecks {
                     versionProp.setProperty("latest-version", latest);
                     String lastMessageString = versionProp.getProperty("last-message");
                     boolean timeElapsed = true;
+                    DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.ROOT);
                     if (lastMessageString != null) {
-                        Date lastMessageDate = DateFormat.getInstance().parse(lastMessageString);
-                        long threeDays = TimeUnit.MILLISECONDS.convert(3, TimeUnit.DAYS);
-                        timeElapsed = System.currentTimeMillis() - lastMessageDate.getTime() >= threeDays;
+                        try {
+                            Date lastMessageDate = dateFormat.parse(lastMessageString);
+                            long threeDays = TimeUnit.MILLISECONDS.convert(3, TimeUnit.DAYS);
+                            timeElapsed = System.currentTimeMillis() - lastMessageDate.getTime() >= threeDays;
+                        } catch (ParseException ex) {
+                            Game.log(Level.WARN, "Failed to parse last Version Check Message info: {0}", ex);
+                        }
                     }
-                    versionProp.setProperty("last-message", DateFormat.getInstance().format(new Date()));
+                    versionProp.setProperty("last-message", dateFormat.format(new Date()));
                     sendMessage = !latest.equals(lastSeenVersion) || timeElapsed;
                     fos = new FileOutputStream(versionFile);
                     versionProp.store(fos, "Information for update message");
@@ -129,13 +131,13 @@ public class StartupChecks {
                         if (fis != null) {
                             fis.close();
                         }
-                    } catch (IOException ex) {
+                    } catch (IOException ignored) {
                     }
                     try {
                         if (fos != null) {
                             fos.close();
                         }
-                    } catch (IOException ex) {
+                    } catch (IOException ignored) {
                     }
                 }
             }
