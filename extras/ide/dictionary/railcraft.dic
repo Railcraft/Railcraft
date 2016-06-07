@@ -13,6 +13,7 @@ decoupler
 decr
 derped
 dest
+despawn
 ender
 enchantability
 invs
@@ -31,6 +32,7 @@ minecart
 minecarts
 minecraft
 mod's
+mooshroom
 multiblock
 noop
 nulled
@@ -55,6 +57,7 @@ rideable
 routable
 slimeball
 spigotmc
+tameable
 teleport
 teleported
 tessellator
