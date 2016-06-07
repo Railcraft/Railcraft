@@ -13,6 +13,7 @@ decoupler
 decr
 derped
 dest
+despawn
 ender
 enchantability
 invs
@@ -55,6 +56,7 @@ rideable
 routable
 slimeball
 spigotmc
+tameable
 teleport
 teleported
 tessellator
