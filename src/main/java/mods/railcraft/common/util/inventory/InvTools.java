@@ -217,6 +217,25 @@ public abstract class InvTools {
         return railcraftTag;
     }
 
+    public static void clearItemDataRailcraft(ItemStack stack, String tag) {
+        NBTTagCompound nbt = getItemDataRailcraft(stack);
+        if (nbt.hasKey(tag))
+            nbt.removeTag(tag);
+    }
+
+    public static void setItemDataRailcraft(ItemStack stack, String tag, NBTTagCompound data) {
+        NBTTagCompound nbt = getItemDataRailcraft(stack);
+        nbt.setTag(tag, data);
+    }
+
+    @Nullable
+    public static NBTTagCompound getItemDataRailcraft(ItemStack stack, String tag) {
+        NBTTagCompound nbt = getItemDataRailcraft(stack);
+        if (nbt.hasKey(tag))
+            return nbt.getCompoundTag(tag);
+        return null;
+    }
+
     public static void addNBTTag(ItemStack stack, String key, String value) {
         NBTTagCompound nbt = getItemData(stack);
         nbt.setString(key, value);

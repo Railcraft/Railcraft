@@ -10,7 +10,7 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.IShearable;
@@ -21,19 +21,17 @@ import net.minecraftforge.common.IShearable;
 public class ItemSteelShears extends ItemShears {
 
     public ItemSteelShears() {
-        super();
         setMaxDamage(500);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setUnlocalizedName("railcraft.tool.steel.shears");
     }
 
     @Override
-    public float getStrVsBlock(ItemStack stack, Block block) {
-        if (block == Blocks.WEB || block instanceof IShearable)
+    public float getStrVsBlock(ItemStack stack, IBlockState state) {
+        Block block = state.getBlock();
+        if (block instanceof IShearable)
             return 15;
-        if (block == Blocks.WOOL)
-            return 5;
-        return super.getStrVsBlock(stack, block);
+        return super.getStrVsBlock(stack, state);
     }
 
 }

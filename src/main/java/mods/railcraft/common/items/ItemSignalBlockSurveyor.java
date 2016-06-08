@@ -13,29 +13,27 @@ import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.signals.ISignalBlockTile;
 import mods.railcraft.api.signals.SignalBlock;
-import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.plugins.forge.ChatPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.LootPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
-public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, IActivationBlockingItem {
-
+public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable {
     public ItemSignalBlockSurveyor() {
-        setMaxDamage(0);
-        setHasSubtypes(true);
-        setMaxStackSize(1);
-
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        super("railcraft.gui.surveyor");
     }
 
     @Override
@@ -55,21 +53,13 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
                 'R', "dustRedstone");
     }
 
-    //TODO: Add name highlighting
+    //TODO: Add chat name highlighting formatting styles
+    //TODO: This function could probably be picked apart and pulled into the super class, but meh...
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 //        System.out.println("click");
-        if (Game.isHost(worldIn) && stack.hasTagCompound() && playerIn.isSneaking()) {
-            WorldCoordinate signalPos = getSignalData(stack);
-            if (signalPos != null) {
-                TileEntity tile = DimensionManager.getWorld(signalPos.getDim()).getTileEntity(signalPos);
-                if (tile instanceof ISignalBlockTile) {
-                    ((ISignalBlockTile) tile).getSignalBlock().endPairing();
-                }
-            }
-            ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.abandon");
-            stack.setTagCompound(null);
-            return false;
+        if (actionCleanPairing(stack, playerIn, worldIn, ISignalBlockTile.class, ISignalBlockTile::getSignalBlock)) {
+            return EnumActionResult.SUCCESS;
         }
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile != null)
@@ -78,63 +68,41 @@ public class ItemSignalBlockSurveyor extends ItemRailcraft implements IBoxable, 
                 if (Game.isHost(worldIn)) {
                     ISignalBlockTile signalTile = (ISignalBlockTile) tile;
                     SignalBlock signalBlock = signalTile.getSignalBlock();
-                    WorldCoordinate signalPos = getSignalData(stack);
+                    WorldCoordinate signalPos = getPairData(stack);
                     SignalBlock.Status trackStatus = signalBlock.getTrackStatus();
                     if (trackStatus == SignalBlock.Status.INVALID)
                         ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.track", signalTile.getDisplayName());
                     else if (signalPos == null) {
                         ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.begin");
-                        setSignalData(stack, tile);
+                        setPairData(stack, tile);
                         signalBlock.startPairing();
                     } else if (!pos.equals(signalPos)) {
 //                System.out.println("attempt pairing");
-                        tile = worldIn.getTileEntity(signalPos);
-                        if (tile != null && tile instanceof ISignalBlockTile) {
+                        tile = WorldPlugin.getBlockTile(worldIn, signalPos);
+                        if (tile instanceof ISignalBlockTile) {
                             ISignalBlockTile otherTile = (ISignalBlockTile) tile;
                             SignalBlock otherSignal = otherTile.getSignalBlock();
                             if (signalBlock.createSignalBlock(otherSignal)) {
                                 ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.success");
-                                stack.setTagCompound(null);
+                                clearPairData(stack);
                             } else
                                 ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.invalid");
                         } else if (WorldPlugin.isBlockLoaded(worldIn, signalPos)) {
                             ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.lost");
                             signalBlock.endPairing();
-                            stack.setTagCompound(null);
+                            clearPairData(stack);
                         } else
                             ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.unloaded");
                     } else {
                         ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.abandon");
                         signalBlock.endPairing();
-                        stack.setTagCompound(null);
+                        clearPairData(stack);
                     }
                 }
-                return true;
+                return EnumActionResult.SUCCESS;
             } else if (Game.isHost(worldIn))
                 ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.surveyor.wrong");
-        return false;
-    }
-
-    private WorldCoordinate getSignalData(ItemStack item) {
-        WorldCoordinate pos = null;
-        NBTTagCompound data = item.getTagCompound();
-        if (data != null) {
-            int sDim = data.getInteger("signalDim");
-            int sx = data.getInteger("signalX");
-            int sy = data.getInteger("signalY");
-            int sz = data.getInteger("signalZ");
-            pos = new WorldCoordinate(sDim, sx, sy, sz);
-        }
-        return pos;
-    }
-
-    private void setSignalData(ItemStack item, TileEntity tile) {
-        NBTTagCompound data = new NBTTagCompound();
-        data.setInteger("signalDim", tile.getWorld().provider.getDimension());
-        data.setInteger("signalX", tile.getPos().getX());
-        data.setInteger("signalY", tile.getPos().getY());
-        data.setInteger("signalZ", tile.getPos().getZ());
-        item.setTagCompound(data);
+        return EnumActionResult.PASS;
     }
 
     @Override

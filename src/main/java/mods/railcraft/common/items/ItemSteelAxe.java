@@ -11,6 +11,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
@@ -29,12 +30,12 @@ public class ItemSteelAxe extends ItemAxe {
     }
 
     @Override
-    public float getDigSpeed(ItemStack stack, net.minecraft.block.state.IBlockState state) {
+    public float getStrVsBlock(ItemStack stack, IBlockState state) {
         if (state.getBlock() == Blocks.MELON_BLOCK)
             return efficiencyOnProperMaterial;
-        if (state.getBlock().getMaterial() == Material.leaves)
+        if (state.getMaterial() == Material.LEAVES)
             return efficiencyOnProperMaterial;
-        return super.getDigSpeed(stack, state);
+        return super.getStrVsBlock(stack, state);
     }
 
 }

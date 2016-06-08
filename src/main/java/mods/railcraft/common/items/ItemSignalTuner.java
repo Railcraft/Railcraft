@@ -15,29 +15,26 @@ import mods.railcraft.api.signals.IControllerTile;
 import mods.railcraft.api.signals.IReceiverTile;
 import mods.railcraft.api.signals.SignalController;
 import mods.railcraft.api.signals.SignalReceiver;
-import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.plugins.forge.ChatPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.LootPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2")
-public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivationBlockingItem {
-
+public class ItemSignalTuner extends ItemPairingTool implements IBoxable {
     public ItemSignalTuner() {
-        super();
-        setMaxDamage(0);
-        setHasSubtypes(true);
-        setMaxStackSize(1);
-
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        super("railcraft.gui.tuner");
     }
 
     @Override
@@ -56,44 +53,35 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                 'T', Blocks.REDSTONE_TORCH);
     }
 
-    //TODO: Add name highlighting
+    //TODO: Add chat name highlighting formatting styles
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (Game.isHost(worldIn) && stack.hasTagCompound() && playerIn.isSneaking()) {
-            WorldCoordinate cPos = getControllerData(stack);
-            if (cPos != null) {
-                TileEntity tile = DimensionManager.getWorld(cPos.getDim()).getTileEntity(cPos);
-                if (tile instanceof IControllerTile) {
-                    ((IControllerTile) tile).getController().endPairing();
-                }
-            }
-            ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.tuner.abandon.player");
-            stack.setTagCompound(null);
-            return false;
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (actionCleanPairing(stack, playerIn, worldIn, IControllerTile.class, IControllerTile::getController)) {
+            return EnumActionResult.SUCCESS;
         }
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile != null) {
-            WorldCoordinate cPos = getControllerData(stack);
+            WorldCoordinate cPos = getPairData(stack);
             if (tile instanceof IReceiverTile && cPos != null) {
                 if (Game.isHost(worldIn)) {
                     SignalReceiver receiver = ((IReceiverTile) tile).getReceiver();
                     if (!pos.equals(cPos)) {
                         tile = worldIn.getTileEntity(cPos);
-                        if (tile != null && tile instanceof IControllerTile) {
+                        if (tile instanceof IControllerTile) {
                             SignalController controller = ((IControllerTile) tile).getController();
                             if (receiver.getTile() != controller.getTile()) {
                                 controller.registerReceiver(receiver);
                                 controller.endPairing();
                                 ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.tuner.success", controller.getLocalizationTag(), receiver.getLocalizationTag());
-                                stack.setTagCompound(null);
-                                return true;
+                                clearPairData(stack);
+                                return EnumActionResult.SUCCESS;
                             }
                         } else if (WorldPlugin.isBlockLoaded(worldIn, cPos)) {
                             ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.tuner.abandon.gone");
-                            stack.setTagCompound(null);
+                            clearPairData(stack);
                         } else {
                             ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.tuner.abandon.chunk");
-                            stack.setTagCompound(null);
+                            clearPairData(stack);
                         }
                     }
                 }
@@ -102,41 +90,19 @@ public class ItemSignalTuner extends ItemRailcraft implements IBoxable, IActivat
                     SignalController controller = ((IControllerTile) tile).getController();
                     if (cPos == null || !pos.equals(cPos)) {
                         ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.tuner.start", controller.getLocalizationTag());
-                        setControllerData(stack, tile);
+                        setPairData(stack, tile);
                         controller.startPairing();
                     } else {
                         ChatPlugin.sendLocalizedChatFromServer(playerIn, "railcraft.gui.tuner.stop", controller.getLocalizationTag());
                         controller.endPairing();
-                        stack.setTagCompound(null);
+                        clearPairData(stack);
                     }
                 }
             } else
-                return false;
-            return true;
+                return EnumActionResult.PASS;
+            return EnumActionResult.SUCCESS;
         }
-        return false;
-    }
-
-    private WorldCoordinate getControllerData(ItemStack item) {
-        WorldCoordinate cPos = null;
-        NBTTagCompound data = item.getTagCompound();
-        if (data != null) {
-            int cDim = data.getInteger("controllerDim");
-            int cx = data.getInteger("controllerX");
-            int cy = data.getInteger("controllerY");
-            int cz = data.getInteger("controllerZ");
-            cPos = new WorldCoordinate(cDim, cx, cy, cz);
-        }
-        return cPos;
-    }
-
-    private void setControllerData(ItemStack item, TileEntity tile) {
-        NBTTagCompound data = new NBTTagCompound();
-        data.setInteger("controllerDim", tile.getWorld().provider.getDimension());
-        data.setInteger("controllerX", tile.getPos().getX());
-        data.setInteger("controllerY", tile.getPos().getY());
-        data.setInteger("controllerZ", tile.getPos().getZ());
-        item.setTagCompound(data);
+        return EnumActionResult.PASS;
     }
 
     @Override

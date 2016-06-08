@@ -14,9 +14,6 @@ import net.minecraft.item.ItemStack;
 
 public class ItemSignalLamp extends ItemRailcraft {
 
-    public ItemSignalLamp() {
-    }
-
     @Override
     public void defineRecipes() {
         CraftingPlugin.addRecipe(new ItemStack(this),
