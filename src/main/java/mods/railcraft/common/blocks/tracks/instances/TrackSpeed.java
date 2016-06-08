@@ -22,8 +22,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
-
 public class TrackSpeed extends TrackBaseRailcraft {
 
     public static final float SPEED_CUTOFF = 0.39f;
@@ -31,27 +29,6 @@ public class TrackSpeed extends TrackBaseRailcraft {
 
     public TrackSpeed() {
         speedController = SpeedControllerHighSpeed.instance();
-    }
-
-    @Override
-    public EnumTrack getTrackType() {
-        return EnumTrack.SPEED;
-    }
-
-    @Override
-    public boolean isFlexibleRail() {
-        return true;
-    }
-
-    @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
-        super.onNeighborBlockChange(state, block);
-        maxSpeed = null;
-    }
-
-    @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
-        testCartSpeedForBasic(this, cart);
     }
 
     protected static void testSafety(ITrackInstance track, EntityMinecart cart) {
@@ -114,5 +91,26 @@ public class TrackSpeed extends TrackBaseRailcraft {
                 cart.getEntityData().setBoolean("HighSpeed", true);
             }
         }
+    }
+
+    @Override
+    public EnumTrack getTrackType() {
+        return EnumTrack.SPEED;
+    }
+
+    @Override
+    public boolean isFlexibleRail() {
+        return true;
+    }
+
+    @Override
+    public void onNeighborBlockChange(IBlockState state, Block block) {
+        super.onNeighborBlockChange(state, block);
+        maxSpeed = null;
+    }
+
+    @Override
+    public void onMinecartPass(EntityMinecart cart) {
+        testCartSpeedForBasic(this, cart);
     }
 }

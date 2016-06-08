@@ -18,7 +18,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -31,11 +33,10 @@ public class TileSentinel extends TileMachineBase {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
-        ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getPos())) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
+            if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                 WorldCoordinate target = TileAnchorWorld.getTarget(player);
                 if (target == null)
                     TileAnchorWorld.setTarget(this, player);
@@ -51,11 +52,11 @@ public class TileSentinel extends TileMachineBase {
                     else if (tile != null)
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.invalid", getLocalizationTag());
                 }
-                crowbar.onWhack(player, current, getPos());
+                crowbar.onWhack(player, hand, heldItem, getPos());
                 return true;
             }
         }
-        return super.blockActivated(player, side);
+        return super.blockActivated(player, hand, heldItem, side);
     }
 
     @Override

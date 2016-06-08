@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 public class ItemCrowbarSteel extends ItemCrowbar {
 
     public ItemCrowbarSteel() {
-        super(ItemMaterials.STEEL_TOOL);
+        super(ItemMaterials.Material.STEEL, ItemMaterials.STEEL_TOOL);
     }
 
     @Override

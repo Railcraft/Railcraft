@@ -10,6 +10,7 @@ package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCrowbar;
+import mods.railcraft.common.items.ItemMaterials;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
@@ -30,7 +31,7 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
     private static ItemCrowbarMagic item;
 
     public ItemCrowbarMagic() {
-        super(ThaumcraftPlugin.getThaumiumToolMaterial());
+        super(ItemMaterials.Material.THAUMIUM, ThaumcraftPlugin.getThaumiumToolMaterial());
         setUnlocalizedName(ITEM_TAG);
     }
 

@@ -13,6 +13,7 @@ import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityLocomotive.LocoSpeed;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -21,23 +22,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TrackLimiter extends TrackPowered {
     public static final PropertyEnum<LocoSpeed> MODE = PropertyEnum.create("mode", LocoSpeed.class);
-    private LocoSpeed mode;
+    private LocoSpeed mode = LocoSpeed.MAX;
 
     @Override
     public EnumTrack getTrackType() {
         return EnumTrack.LIMITER;
     }
 
-    @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull IBlockState state) {
+    public IBlockState getActualState(IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(MODE, getMode());
         return state;
@@ -52,13 +52,12 @@ public class TrackLimiter extends TrackPowered {
     }
 
     @Override
-    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
-        ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getPos())) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
+            if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                 setMode(mode.ordinal() + 1);
-                crowbar.onWhack(player, current, getPos());
+                crowbar.onWhack(player, hand, heldItem, getPos());
                 sendUpdateToClient();
                 return true;
             }
@@ -67,7 +66,7 @@ public class TrackLimiter extends TrackPowered {
     }
 
     @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+    public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             if (cart instanceof EntityLocomotive) {
                 ((EntityLocomotive) cart).setSpeed(getMode());
@@ -81,17 +80,18 @@ public class TrackLimiter extends TrackPowered {
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setString("locoSpeed", mode.getName());
+        NBTPlugin.writeEnumName(data, "locoSpeed", mode);
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         if (data.hasKey("locoSpeed")) {
-            mode = LocoSpeed.fromName(data.getString("locoSpeed"));
+            mode = NBTPlugin.readEnumName(data, "locoSpeed", LocoSpeed.MAX);
         } else if (data.hasKey("mode")) {
             setMode(data.getByte("mode") % 4);
         } else {
@@ -100,13 +100,13 @@ public class TrackLimiter extends TrackPowered {
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte((byte) mode.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         int m = data.readByte();
         if (mode.ordinal() != m) {

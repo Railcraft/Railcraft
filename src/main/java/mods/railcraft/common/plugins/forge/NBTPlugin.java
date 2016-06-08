@@ -12,13 +12,58 @@ import com.google.common.collect.ForwardingList;
 import net.minecraft.nbt.*;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class NBTPlugin {
+
+    public static <T extends Enum<T>> void writeEnumOrdinal(NBTTagCompound data, String tag, Enum<T> e) {
+        assert e.ordinal() < Byte.MAX_VALUE;
+        data.setByte(tag, (byte) e.ordinal());
+    }
+
+    public static <T extends Enum<T>> T readEnumOrdinal(NBTTagCompound data, String tag, T[] enumConstants, T defaultValue) {
+        if (data.hasKey(tag)) {
+            byte ordinal = data.getByte(tag);
+            return enumConstants[ordinal];
+        }
+        return defaultValue;
+    }
+
+    public static <T extends Enum<T>> void writeEnumName(NBTTagCompound data, String tag, Enum<T> e) {
+        data.setString(tag, e.name());
+    }
+
+    public static <T extends Enum<T>> T readEnumName(NBTTagCompound data, String tag, T defaultValue) {
+        if (data.hasKey(tag)) {
+            String name = data.getString(tag);
+            return Enum.valueOf(defaultValue.getClass().asSubclass(Enum.class), name);
+        }
+        return defaultValue;
+    }
+
+    public static void writeUUID(NBTTagCompound data, String tag, @Nullable UUID uuid) {
+        if (uuid == null)
+            return;
+        NBTTagCompound nbtTag = new NBTTagCompound();
+        nbtTag.setLong("most", uuid.getMostSignificantBits());
+        nbtTag.setLong("least", uuid.getLeastSignificantBits());
+        data.setTag(tag, nbtTag);
+    }
+
+    @Nullable
+    public static UUID readUUID(NBTTagCompound data, String tag) {
+        if (data.hasKey(tag)) {
+            NBTTagCompound nbtTag = data.getCompoundTag(tag);
+            return new UUID(nbtTag.getLong("most"), nbtTag.getLong("least"));
+        }
+        return null;
+    }
 
     public enum EnumNBTType {
 

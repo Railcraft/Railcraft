@@ -112,7 +112,7 @@ public class SoundHelper {
         }
     }
 
-    public static void playFX(World world, EntityPlayer player, int id, BlockPos pos, int data) {
+    public static void playFX(World world, @Nullable EntityPlayer player, int id, BlockPos pos, int data) {
         if (RailcraftConfig.playSounds())
             world.playEvent(player, id, pos, data);
     }

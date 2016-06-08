@@ -12,10 +12,7 @@ package mods.railcraft.common.blocks.tracks.instances;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
-import javax.annotation.Nonnull;
-
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class TrackUnsupported extends TrackBaseRailcraft {
@@ -26,7 +23,7 @@ public abstract class TrackUnsupported extends TrackBaseRailcraft {
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
     }
 
 }

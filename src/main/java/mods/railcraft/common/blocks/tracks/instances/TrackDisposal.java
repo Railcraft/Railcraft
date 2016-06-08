@@ -19,7 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -40,7 +39,7 @@ public class TrackDisposal extends TrackSuspended implements ITrackPowered {
     }
 
     @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+    public void onMinecartPass(EntityMinecart cart) {
         if (!isPowered() && cart.canBeRidden()) {
             if (cart.riddenByEntity != null) {
                 CartUtils.dismount(cart, cart.posX, cart.posY - 2, cart.posZ);
@@ -55,14 +54,13 @@ public class TrackDisposal extends TrackSuspended implements ITrackPowered {
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
         testPower(state);
     }
 
-    @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull IBlockState state) {
+    public IBlockState getActualState(IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(POWERED, isPowered());
         return state;
@@ -79,25 +77,25 @@ public class TrackDisposal extends TrackSuspended implements ITrackPowered {
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+    public void writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("powered", powered);
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
+    public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         powered = nbttagcompound.getBoolean("powered");
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(powered);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         boolean p = data.readBoolean();
         if (p != powered) {

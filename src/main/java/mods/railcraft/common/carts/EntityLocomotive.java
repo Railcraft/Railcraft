@@ -735,10 +735,15 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
         return worldObj;
     }
 
-    public enum LocoMode {
+    public enum LocoMode implements IStringSerializable {
 
         RUNNING, IDLE, SHUTDOWN;
         public static final LocoMode[] VALUES = values();
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ROOT);
+        }
     }
 
     public enum LocoSpeed implements IStringSerializable {
@@ -748,7 +753,7 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
 
         @Override
         public String getName() {
-            return name().toLowerCase(Locale.ENGLISH);
+            return name().toLowerCase(Locale.ROOT);
         }
 
         public static LocoSpeed fromName(String name) {

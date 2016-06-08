@@ -10,9 +10,9 @@
 package mods.railcraft.common.blocks;
 
 import com.mojang.authlib.GameProfile;
-import mcp.MethodsReturnNonnullByDefault;
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IOwnable;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
@@ -36,7 +36,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -190,7 +189,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         if (owner.getId() != null)
             data.setString("ownerId", owner.getId().toString());
 
-        MiscTools.writeUUID(data, "uuid", uuid);
+        NBTPlugin.writeUUID(data, "uuid", uuid);
         if (!customName.isEmpty())
             data.setString("customName", customName);
         return data;
@@ -200,7 +199,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         owner = PlayerPlugin.readOwnerFromNBT(data);
-        uuid = MiscTools.readUUID(data, "uuid");
+        uuid = NBTPlugin.readUUID(data, "uuid");
         customName = data.getString("customName");
     }
 

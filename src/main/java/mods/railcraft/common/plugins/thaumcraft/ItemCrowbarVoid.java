@@ -11,6 +11,7 @@ package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCrowbar;
+import mods.railcraft.common.items.ItemMaterials;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
@@ -33,7 +34,7 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
     public static ItemCrowbarVoid item;
 
     public ItemCrowbarVoid() {
-        super(ThaumcraftPlugin.getVoidmetalToolMaterial());
+        super(ItemMaterials.Material.VOID, ThaumcraftPlugin.getVoidmetalToolMaterial());
         setUnlocalizedName(ITEM_TAG);
     }
 

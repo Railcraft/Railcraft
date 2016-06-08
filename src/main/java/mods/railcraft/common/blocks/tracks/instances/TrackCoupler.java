@@ -26,7 +26,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -41,27 +40,25 @@ public class TrackCoupler extends TrackPowered {
         return EnumTrack.COUPLER;
     }
 
-    @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull IBlockState state) {
+    public IBlockState getActualState(IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(MODE, mode);
         return state;
     }
 
     @Override
-    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
-        ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getPos())) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem) {
+        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
+            if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                 Mode m;
                 if (player.isSneaking())
                     m = mode.previous();
                 else
                     m = mode.next();
-                crowbar.onWhack(player, current, getPos());
-                if (Game.isHost(getWorld()))
+                crowbar.onWhack(player, hand, heldItem, getPos());
+                if (Game.isHost(theWorldAsserted()))
                     setMode(m);
                 else
                     ChatPlugin.sendLocalizedChat(player, "railcraft.gui.track.mode.change", "\u00A75" + LocalizationPlugin.translate("railcraft.gui.track.coupler.mode." + m.getName()));
@@ -72,7 +69,7 @@ public class TrackCoupler extends TrackPowered {
     }
 
     @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+    public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             mode.onMinecartPass(this, cart);
         }
@@ -100,13 +97,13 @@ public class TrackCoupler extends TrackPowered {
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("mode", (byte) mode.ordinal());
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         mode = Mode.fromOrdinal(data.getByte("mode"));
@@ -119,13 +116,13 @@ public class TrackCoupler extends TrackPowered {
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(mode.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         byte m = data.readByte();
 

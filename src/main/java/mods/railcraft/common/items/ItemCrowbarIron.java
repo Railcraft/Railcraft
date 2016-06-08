@@ -21,7 +21,7 @@ public class ItemCrowbarIron extends ItemCrowbar {
     private static final String ITEM_TAG = "railcraft.tool.crowbar.iron";
 
     public ItemCrowbarIron() {
-        super(ToolMaterial.IRON);
+        super(ItemMaterials.Material.IRON, ToolMaterial.IRON);
     }
 
     @Override

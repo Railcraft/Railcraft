@@ -17,8 +17,8 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.carts.Train;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
@@ -27,11 +27,10 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -53,9 +52,8 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     private ISwitchDevice switchDevice;
     private boolean clientSwitched;
 
-    @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull IBlockState state) {
+    public IBlockState getActualState(IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(SWITCHED, isVisuallySwitched());
         return state;
@@ -152,7 +150,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
         determineRailDirection();
         determineMirror();
 
@@ -206,7 +204,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
+    public void onNeighborBlockChange(IBlockState state, Block block) {
         if (Game.isHost(theWorldAsserted())) {
             determineRailDirection();
             determineMirror();
@@ -218,7 +216,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         data.setByte(key + "Size", (byte) carts.size());
         int i = 0;
         for (UUID uuid : carts)
-            MiscTools.writeUUID(data, key + i++, uuid);
+            NBTPlugin.writeUUID(data, key + i++, uuid);
     }
 
     private Set<UUID> readCartsFromNBT(String key, NBTTagCompound data) {
@@ -227,7 +225,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         if (data.hasKey(sizeKey)) {
             byte size = data.getByte(sizeKey);
             for (int i = 0; i < size; i++) {
-                UUID id = MiscTools.readUUID(data, key + i);
+                UUID id = NBTPlugin.readUUID(data, key + i);
                 if (id != null)
                     cartUUIDs.add(id);
             }
@@ -236,7 +234,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("Direction", mirrored);
         data.setBoolean("Switched", shouldSwitch);
@@ -245,11 +243,11 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         writeCartsToNBT("springingCarts", springingCarts, data);
         writeCartsToNBT("lockingCarts", lockingCarts, data);
         writeCartsToNBT("decidingCarts", lockingCarts, data);
-        MiscTools.writeUUID(data, "currentCart", currentCart);
+        NBTPlugin.writeUUID(data, "currentCart", currentCart);
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         mirrored = data.getBoolean("Direction");
         shouldSwitch = data.getBoolean("Switched");
@@ -258,18 +256,18 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         springingCarts = readCartsFromNBT("springingCarts", data);
         lockingCarts = readCartsFromNBT("lockingCarts", data);
         decidingCarts = readCartsFromNBT("decidingCarts", data);
-        currentCart = MiscTools.readUUID(data, "currentCart");
+        currentCart = NBTPlugin.readUUID(data, "currentCart");
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(mirrored);
         data.writeBoolean(isVisuallySwitched());
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         boolean changed = false;
         boolean m = data.readBoolean();

@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ITrackCustomPlaced;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -19,11 +19,11 @@ import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlaced {
 
@@ -33,18 +33,18 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
         if (!isSupported())
             breakRail();
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block neighborBlock) {
-        World world = getWorld();
+    public void onNeighborBlockChange(IBlockState state, @Nullable Block neighborBlock) {
+        World world = theWorldAsserted();
         BlockPos pos = getTile().getPos();
         if (isSupported()) {
-            Block myBlock = RailcraftBlocksOld.getBlockTrack();
+            Block myBlock = RailcraftBlocks.track.block();
             if (neighborBlock != myBlock) {
                 for (EnumFacing side : EnumFacing.HORIZONTALS) {
                     world.notifyBlockOfStateChange(pos.offset(side), myBlock);
@@ -55,8 +55,9 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
     }
 
     private void breakRail() {
-        if (Game.isHost(getWorld()))
-            getWorld().destroyBlock(getPos(), true);
+        World world = theWorldAsserted();
+        if (Game.isHost(world))
+            world.destroyBlock(getPos(), true);
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
@@ -85,7 +86,8 @@ public class TrackSuspended extends TrackUnsupported implements ITrackCustomPlac
     }
 
     private boolean isSupported() {
-        return isSupported(getWorld(), getPos(), TrackTools.getTrackDirection(getWorld(), getPos()));
+        World world = theWorldAsserted();
+        return isSupported(world, getPos(), TrackTools.getTrackDirection(world, getPos()));
     }
 
     private boolean isSupported(World world, BlockPos pos, EnumRailDirection dir) {

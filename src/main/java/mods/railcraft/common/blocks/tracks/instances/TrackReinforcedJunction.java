@@ -14,8 +14,6 @@ import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerReinfo
 import net.minecraft.entity.Entity;
 import net.minecraft.world.Explosion;
 
-import javax.annotation.Nonnull;
-
 public class TrackReinforcedJunction extends TrackJunction {
 
     public TrackReinforcedJunction() {
@@ -28,7 +26,7 @@ public class TrackReinforcedJunction extends TrackJunction {
     }
 
     @Override
-    public float getExplosionResistance(@Nonnull Explosion explosion, @Nonnull Entity exploder) {
+    public float getExplosionResistance(Explosion explosion, Entity exploder) {
         return TrackReinforced.RESISTANCE;
     }
 }

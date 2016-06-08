@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -28,7 +29,7 @@ public class ParticleHelper {
     private static final Random rand = new Random();
 
     @SideOnly(Side.CLIENT)
-    public static boolean addHitEffects(World world, Block block, RayTraceResult target, ParticleManager manager, ParticleHelperCallback callback) {
+    public static boolean addHitEffects(World world, Block block, RayTraceResult target, ParticleManager manager, @Nullable ParticleHelperCallback callback) {
 //        BlockPos pos = target.getBlockPos();
 //        int x = pos.getX();
 //        int y = pos.getY();
@@ -81,7 +82,7 @@ public class ParticleHelper {
      * @return True to prevent vanilla break particles from spawning.
      */
     @SideOnly(Side.CLIENT)
-    public static boolean addDestroyEffects(World world, Block block, BlockPos pos, IBlockState state, ParticleManager manager, ParticleHelperCallback callback) {
+    public static boolean addDestroyEffects(World world, Block block, BlockPos pos, IBlockState state, ParticleManager manager, @Nullable ParticleHelperCallback callback) {
 //        if (!WorldPlugin.isBlockAt(world, pos, block)) return true;
 //        byte its = 4;
 //        int x = pos.getX();

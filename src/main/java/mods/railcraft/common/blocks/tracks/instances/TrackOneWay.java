@@ -17,31 +17,29 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TrackOneWay extends TrackPowered implements ITrackReversible {
 
-    private boolean reversed;
     private static final double LOSS_FACTOR = 0.49D;
+    private boolean reversed;
 
     @Override
     public EnumTrack getTrackType() {
         return EnumTrack.ONEWAY;
     }
 
-    @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull IBlockState state) {
+    public IBlockState getActualState(IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(REVERSED, reversed);
         return state;
     }
 
     @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+    public void onMinecartPass(EntityMinecart cart) {
         EnumRailDirection dir = getRailDirection();
         if (isPowered()) {
             if (TrackShapeHelper.isEastWest(dir)) {
@@ -89,25 +87,25 @@ public class TrackOneWay extends TrackPowered implements ITrackReversible {
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+    public void writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("direction", reversed);
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
+    public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         reversed = nbttagcompound.getBoolean("direction");
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(reversed);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         reversed = data.readBoolean();
 

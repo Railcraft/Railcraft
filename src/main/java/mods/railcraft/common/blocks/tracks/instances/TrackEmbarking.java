@@ -35,7 +35,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -48,7 +47,6 @@ public class TrackEmbarking extends TrackPowered implements IGuiReturnHandler {
     public static final Set<Class> excludedEntities = new HashSet<Class>();
     public static final byte MIN_AREA = 1;
     public static final byte MAX_AREA = 5;
-    private byte area = 2;
 
     static {
         excludedEntities.add(EntityIronGolem.class);
@@ -60,25 +58,27 @@ public class TrackEmbarking extends TrackPowered implements IGuiReturnHandler {
         excludedEntities.add(EntityBat.class);
     }
 
+    private byte area = 2;
+
     @Override
     public EnumTrack getTrackType() {
         return EnumTrack.EMBARKING;
     }
 
     @Override
-    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem) {
         ItemStack current = player.getCurrentEquippedItem();
         if (current != null && current.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
             GuiHandler.openGui(EnumGui.TRACK_EMBARKING, player, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
-            crowbar.onWhack(player, current, getPos());
+            crowbar.onWhack(player, hand, current, getPos());
             return true;
         }
         return false;
     }
 
     @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+    public void onMinecartPass(EntityMinecart cart) {
         if (isPowered() && cart.canBeRidden() && cart.riddenByEntity == null && cart.getEntityData().getInteger("MountPrevention") <= 0) {
             int a = area;
             AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(getPos()).build();
@@ -115,36 +115,36 @@ public class TrackEmbarking extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("area", area);
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         area = data.getByte("area");
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(area);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         setArea(data.readByte());
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeByte(area);
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         byte a = data.readByte();
         if (area != a) {
             setArea(a);
@@ -152,14 +152,14 @@ public class TrackEmbarking extends TrackPowered implements IGuiReturnHandler {
         }
     }
 
+    public byte getArea() {
+        return area;
+    }
+
     public void setArea(byte radius) {
         radius = (byte) Math.max(MIN_AREA, radius);
         radius = (byte) Math.min(MAX_AREA, radius);
         area = radius;
-    }
-
-    public byte getArea() {
-        return area;
     }
 
 }

@@ -10,9 +10,6 @@
  * Created by CovertJaguar on 5/27/2016.
  */
 
-/**
- * Created by CovertJaguar on 5/27/2016.
- */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 package mods.railcraft.common.blocks.tracks;

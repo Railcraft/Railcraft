@@ -19,7 +19,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
@@ -51,13 +50,13 @@ public class ChunkManager implements LoadingCallback, OrderedLoadingCallback, Fo
 
     @SubscribeEvent
     public void entityEnteredChunk(EntityEvent.EnteringChunk event) {
-        Entity entity = event.entity;
+        Entity entity = event.getEntity();
         if (entity instanceof EntityCartAnchor) {
             if (Game.isHost(entity.worldObj)) {
 //                System.out.println("Anchor Entering Chunk: " + event.newChunkX + ", " + event.newChunkZ);
-                ((EntityCartAnchor) entity).forceChunkLoading(event.newChunkX, event.newChunkZ);
+                ((EntityCartAnchor) entity).forceChunkLoading(event.getNewChunkX(), event.getNewChunkZ());
             } else {
-                ((EntityCartAnchor) entity).setupChunks(event.newChunkX, event.newChunkZ);
+                ((EntityCartAnchor) entity).setupChunks(event.getNewChunkX(), event.getNewChunkZ());
 
             }
         }

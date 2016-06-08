@@ -12,8 +12,6 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import net.minecraft.entity.item.EntityMinecart;
 
-import javax.annotation.Nonnull;
-
 public class TrackGatedOneWay extends TrackGated {
 
     private static final double MOTION_MIN = 0.2;
@@ -24,7 +22,7 @@ public class TrackGatedOneWay extends TrackGated {
     }
 
     @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+    public void onMinecartPass(EntityMinecart cart) {
         if (isGateOpen()) {
             int meta = getTile().getBlockMetadata();
             if (meta == 0) {

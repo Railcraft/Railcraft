@@ -16,26 +16,24 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TrackSpeedBoost extends TrackSpeed implements ITrackPowered {
 
-    private boolean powered;
     private static final double BOOST_AMOUNT = 0.06;
     private static final double SLOW_FACTOR = 0.65;
     private static final double BOOST_THRESHOLD = 0.01;
+    private boolean powered;
 
     @Override
     public EnumTrack getTrackType() {
         return EnumTrack.SPEED_BOOST;
     }
 
-    @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull IBlockState state) {
+    public IBlockState getActualState(IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(POWERED, isPowered());
         return state;
@@ -47,7 +45,7 @@ public class TrackSpeedBoost extends TrackSpeed implements ITrackPowered {
     }
 
     @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+    public void onMinecartPass(EntityMinecart cart) {
         testCartSpeedForBooster(this, cart);
         if (powered) {
             double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
@@ -91,26 +89,26 @@ public class TrackSpeedBoost extends TrackSpeed implements ITrackPowered {
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+    public void writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("powered", powered);
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
+    public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         powered = nbttagcompound.getBoolean("powered");
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeBoolean(powered);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         powered = data.readBoolean();

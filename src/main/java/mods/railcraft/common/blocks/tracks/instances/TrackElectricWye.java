@@ -13,8 +13,6 @@ import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nonnull;
-
 public class TrackElectricWye extends TrackWye implements IElectricGrid {
 
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.TRACK);
@@ -41,13 +39,13 @@ public class TrackElectricWye extends TrackWye implements IElectricGrid {
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         chargeHandler.writeToNBT(data);
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
     }

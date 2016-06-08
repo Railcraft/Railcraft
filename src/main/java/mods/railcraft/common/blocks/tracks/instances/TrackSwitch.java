@@ -13,16 +13,14 @@ import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.CartUtils;
-
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -38,9 +36,8 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
         return EnumTrack.SWITCH;
     }
 
-    @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull IBlockState state) {
+    public IBlockState getActualState(IBlockState state) {
         state = super.getActualState(state);
         state = state.withProperty(MIRRORED, mirrored);
         state = state.withProperty(REVERSED, reversed);
@@ -48,7 +45,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
     }
 
     @Override
-    public EnumRailDirection getRailDirection(@Nonnull IBlockState state, EntityMinecart cart) {
+    public EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
         EnumRailDirection current = super.getRailDirection(state, cart);
         if (cart != null && shouldSwitchForCart(cart)) {
             if (current == EnumRailDirection.NORTH_SOUTH) {
@@ -145,25 +142,25 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("Reversed", reversed);
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         reversed = data.getBoolean("Reversed");
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(reversed);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         reversed = data.readBoolean();
     }

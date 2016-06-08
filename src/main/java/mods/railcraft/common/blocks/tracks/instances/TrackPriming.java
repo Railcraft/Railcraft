@@ -23,16 +23,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TrackPriming extends TrackPowered implements IGuiReturnHandler {
 
-    private short fuse = 80;
     public static final short MAX_FUSE = 500;
     public static final short MIN_FUSE = 0;
+    private short fuse = 80;
 
     @Override
     public EnumTrack getTrackType() {
@@ -45,13 +44,12 @@ public class TrackPriming extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
-        ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getPos())) {
-                GuiHandler.openGui(EnumGui.TRACK_PRIMING, player, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
-                crowbar.onWhack(player, current, getPos());
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem) {
+        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
+            if (crowbar.canWhack(player, hand, heldItem, getPos())) {
+                GuiHandler.openGui(EnumGui.TRACK_PRIMING, player, theWorldAsserted(), getPos().getX(), getPos().getY(), getPos().getZ());
+                crowbar.onWhack(player, hand, heldItem, getPos());
                 return true;
             }
         }
@@ -59,7 +57,7 @@ public class TrackPriming extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+    public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             if (cart instanceof IExplosiveCart) {
                 IExplosiveCart tnt = (IExplosiveCart) cart;
@@ -70,13 +68,13 @@ public class TrackPriming extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeShort(fuse);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         fuse = data.readShort();
 
@@ -84,24 +82,24 @@ public class TrackPriming extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setShort("fuse", getFuse());
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         setFuse(data.getShort("fuse"));
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeShort(fuse);
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         fuse = data.readShort();
     }
 

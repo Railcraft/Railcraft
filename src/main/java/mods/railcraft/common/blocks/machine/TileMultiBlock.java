@@ -10,11 +10,11 @@ package mods.railcraft.common.blocks.machine;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.Timer;
 import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketTileRequest;
@@ -363,7 +363,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
         data.setBoolean("master", isMaster);
         data.setByte("pattern", getPatternIndex());
 
-        MiscTools.writeUUID(data, "uuidMaster", uuidMaster);
+        NBTPlugin.writeUUID(data, "uuidMaster", uuidMaster);
         return data;
     }
 
@@ -378,7 +378,7 @@ public abstract class TileMultiBlock extends TileMachineBase {
             //NOOP
         }
 
-        uuidMaster = MiscTools.readUUID(data, "uuidMaster");
+        uuidMaster = NBTPlugin.readUUID(data, "uuidMaster");
     }
 
     @Override

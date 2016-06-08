@@ -55,6 +55,7 @@ public class RailcraftOutputStream extends DataOutputStream {
     }
 
     public void writeEnum(Enum<?> value) throws IOException {
+        assert value.ordinal() < Byte.MAX_VALUE;
         writeByte(value.ordinal());
     }
 

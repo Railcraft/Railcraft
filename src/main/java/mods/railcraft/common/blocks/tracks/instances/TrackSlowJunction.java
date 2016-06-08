@@ -12,17 +12,14 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerSlow;
 
-public class TrackSlowJunction extends TrackJunction
-{
+public class TrackSlowJunction extends TrackJunction {
 
-    public TrackSlowJunction()
-    {
+    public TrackSlowJunction() {
         speedController = SpeedControllerSlow.instance();
     }
 
     @Override
-    public EnumTrack getTrackType()
-    {
+    public EnumTrack getTrackType() {
         return EnumTrack.SLOW_JUNCTION;
     }
 }

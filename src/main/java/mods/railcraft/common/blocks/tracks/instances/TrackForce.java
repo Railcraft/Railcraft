@@ -20,11 +20,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 
 public class TrackForce extends TrackUnsupported {
@@ -38,13 +39,13 @@ public class TrackForce extends TrackUnsupported {
 
     @Override
     public List<ItemStack> getDrops(int fortune) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
+    public void onNeighborBlockChange(IBlockState state, Block block) {
         super.onNeighborBlockChange(state, block);
-        if (Game.isHost(getWorld()))
+        if (Game.isHost(theWorldAsserted()))
             checkForEmitter();
     }
 
@@ -83,21 +84,21 @@ public class TrackForce extends TrackUnsupported {
                     return;
             }
         }
-        WorldPlugin.setBlockToAir(getWorld(), getPos());
+        WorldPlugin.setBlockToAir(theWorldAsserted(), getPos());
     }
 
     public TileForceTrackEmitter getEmitter() {
         return emitter;
     }
 
-    public void setEmitter(TileForceTrackEmitter emitter) {
+    public void setEmitter(@Nullable TileForceTrackEmitter emitter) {
         this.emitter = emitter;
     }
 
     private boolean isValidEmitter(BlockPos pos, Block emitterBlock, EnumFacing facing) {
-        if (WorldPlugin.getBlock(getWorld(), pos) != emitterBlock)
+        if (WorldPlugin.getBlock(theWorldAsserted(), pos) != emitterBlock)
             return false;
-        TileEntity tile = WorldPlugin.getBlockTile(getWorld(), pos);
+        TileEntity tile = WorldPlugin.getBlockTile(theWorldAsserted(), pos);
         if (tile instanceof TileForceTrackEmitter && isValidEmitterTile((TileForceTrackEmitter) tile, facing)) {
             setEmitter(emitter);
             return true;
@@ -106,7 +107,7 @@ public class TrackForce extends TrackUnsupported {
     }
 
     private boolean isValidEmitterTile(TileForceTrackEmitter tile, EnumFacing... facing) {
-        if (tile == null || tile.isInvalid())
+        if (tile.isInvalid())
             return false;
         BlockPos expected = getPos().down();
         if (!expected.equals(tile.getPos())) return false;
@@ -124,7 +125,7 @@ public class TrackForce extends TrackUnsupported {
     }
 
     @Override
-    public float getExplosionResistance(@Nonnull Explosion explosion, @Nonnull Entity exploder) {
+    public float getExplosionResistance(Explosion explosion, Entity exploder) {
         return 6000000.0F;
     }
 

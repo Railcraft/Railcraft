@@ -95,7 +95,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
         if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
-            if (crowbar.canWhack(player, heldItem, getPos())) {
+            if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                 if (Game.isHost(worldObj)) {
                     WorldCoordinate target = sentinelPairingMap.get(player);
                     if (target == null)
@@ -107,7 +107,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                         ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.cancel", getLocalizationTag());
                     } else
                         setSentinel(player, target);
-                    crowbar.onWhack(player, heldItem, getPos());
+                    crowbar.onWhack(player, hand, heldItem, getPos());
                 }
                 return true;
             }
@@ -115,6 +115,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         return super.blockActivated(player, hand, heldItem, side);
     }
 
+    @Nullable
     public static WorldCoordinate getTarget(EntityPlayer player) {
         return sentinelPairingMap.get(player);
     }
@@ -144,6 +145,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         return Math.min(ticket.getMaxChunkListDepth(), MAX_CHUNKS);
     }
 
+    @Nullable
     public static TileEntity getTargetAt(EntityPlayer player, RailcraftTileEntity searcher, WorldCoordinate coord) {
         if (!WorldPlugin.isBlockLoaded(searcher.getWorld(), coord)) {
             ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.anchor.pair.fail.unloaded", searcher.getLocalizationTag());
@@ -250,7 +252,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
             prevZ = getZ();
         }
 
-        if (hasActiveTicket() && (getTicket().world != worldObj || refreshTicket || powered))
+        if (isTicketInvalid())
             releaseTicket();
 
         if (needsFuel()) {
@@ -335,6 +337,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         return !powered && (hasFuel() || !needsFuel());
     }
 
+    @Nullable
     protected Ticket getTicketFromForge() {
         return ForgeChunkManager.requestTicket(Railcraft.getMod(), worldObj, Type.NORMAL);
     }
@@ -346,15 +349,21 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         chunkTicket.getModData().setString("type", getMachineType().getTag());
     }
 
+    public boolean isTicketInvalid() {
+        Ticket ticket = getTicket();
+        return ticket != null && (ticket.world != worldObj || refreshTicket || powered);
+    }
+
     public boolean hasActiveTicket() {
         return getTicket() != null;
     }
 
+    @Nullable
     public Ticket getTicket() {
         return tickets.get(getUUID());
     }
 
-    public void setTicket(Ticket t) {
+    public void setTicket(@Nullable Ticket t) {
         boolean changed = false;
         Ticket ticket = getTicket();
         if (ticket != t) {

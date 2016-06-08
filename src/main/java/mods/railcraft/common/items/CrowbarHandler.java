@@ -22,7 +22,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Map;
@@ -43,13 +43,13 @@ public class CrowbarHandler {
     }
 
     @SubscribeEvent
-    public void onEntityInteract(EntityInteractEvent event) {
-        EntityPlayer thePlayer = event.entityPlayer;
-        Entity entity = event.target;
+    public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        EntityPlayer thePlayer = event.getEntityPlayer();
+        Entity entity = event.getTarget();
 
-        ItemStack stack = thePlayer.getCurrentEquippedItem();
+        ItemStack stack = thePlayer.getActiveItemStack();
         if (stack != null && stack.getItem() instanceof IToolCrowbar)
-            thePlayer.swingItem();
+            thePlayer.swingArm(event.getHand());
 
         if (Game.isClient(thePlayer.worldObj))
             return;
@@ -62,7 +62,7 @@ public class CrowbarHandler {
             if (entity instanceof EntityMinecart) {
                 EntityMinecart cart = (EntityMinecart) entity;
 
-                if (crowbar.canLink(thePlayer, stack, cart)) {
+                if (crowbar.canLink(thePlayer, hand, stack, cart)) {
                     boolean linkable = cart instanceof ILinkableCart;
                     if (!linkable || ((ILinkableCart) cart).isLinkable()) {
                         EntityMinecart last = linkMap.remove(thePlayer);
@@ -86,12 +86,12 @@ public class CrowbarHandler {
                         }
                     }
                     if (used)
-                        crowbar.onLink(thePlayer, stack, cart);
-                } else if (crowbar.canBoost(thePlayer, stack, cart)) {
+                        crowbar.onLink(thePlayer, hand, stack, cart);
+                } else if (crowbar.canBoost(thePlayer, hand, stack, cart)) {
                     thePlayer.addExhaustion(1F);
 
                     //noinspection StatementWithEmptyBody
-                    if (thePlayer.ridingEntity != null) {
+                    if (thePlayer.getRidingEntity() != null) {
                         // NOOP
                     } else //noinspection StatementWithEmptyBody
                         if (cart instanceof EntityTunnelBore) {
@@ -108,7 +108,7 @@ public class CrowbarHandler {
                             else
                                 cart.motionZ += SMACK_VELOCITY;
                         }
-                    crowbar.onBoost(thePlayer, stack, cart);
+                    crowbar.onBoost(thePlayer, hand, stack, cart);
                 }
             }
         }

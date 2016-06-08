@@ -24,6 +24,7 @@ import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -35,7 +36,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.common.MinecraftForge;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -70,9 +71,8 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
         return EnumTrack.LOCKING;
     }
 
-    @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull IBlockState state) {
+    public IBlockState getActualState(IBlockState state) {
         state = super.getActualState(state);
         state.withProperty(PROFILE, profile);
         state.withProperty(ITrackPowered.POWERED, !locked);
@@ -83,12 +83,12 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
         return profile;
     }
 
-    public void setProfile(@Nonnull LockingProfileType type) {
+    public void setProfile(LockingProfileType type) {
         if (profile == type)
             return;
         profile = type;
         profileInstance = profile.create(this);
-        if (getTile() != null && Game.isHost(getWorld()))
+        if (getTile() != null && Game.isHost(theWorldAsserted()))
             sendUpdateToClient();
     }
 
@@ -106,7 +106,7 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
     @Override
     public void update() {
 
-        if (Game.isHost(getWorld())) {
+        if (Game.isHost(theWorldAsserted())) {
             boolean updateClient = false; // flag determines whether we send an update to the client, only update when visible changes occur
 
             // At the time we read from NBT, LinkageManager has not been initialized so we cannot
@@ -147,18 +147,17 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
     }
 
     @Override
-    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
-        ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getPos())) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
+            if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                 LockingProfileType p;
                 if (player.isSneaking())
                     p = profile.previous();
                 else
                     p = profile.next();
-                crowbar.onWhack(player, current, getPos());
-                if (Game.isHost(getWorld()))
+                crowbar.onWhack(player, hand, heldItem, getPos());
+                if (Game.isHost(theWorldAsserted()))
                     setProfile(p);
                 else
                     ChatPlugin.sendLocalizedChat(player, "railcraft.gui.track.mode.change", "\u00A75" + LocalizationPlugin.translate("railcraft.gui.track.locking.mode." + p.tag));
@@ -200,7 +199,7 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
     }
 
     @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+    public void onMinecartPass(EntityMinecart cart) {
         currentCart = cart;
     }
 
@@ -239,7 +238,7 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
                 else
                     trainDelay = 0; // We've encountered a new train, force the delay to 0 so we return false
             } else if (trainLeaving) {
-                List<EntityMinecart> carts = CartTools.getMinecartsAt(getWorld(), getPos(), 0.0f);
+                List<EntityMinecart> carts = CartTools.getMinecartsAt(theWorldAsserted(), getPos(), 0.0f);
                 for (EntityMinecart cart : carts) {
                     if (Train.areInSameTrain(cart, prevCart)) {
                         trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY;
@@ -308,30 +307,8 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
         this.redstone = powered;
     }
 
-    /**
-     * A utility method for writing out UUID's to NBT
-     */
-    private void setUUID(UUID id, String key, NBTTagCompound data) {
-        if (id == null) {
-            data.setLong(key + "High", 0);
-            data.setLong(key + "Low", 0);
-        } else {
-            data.setLong(key + "High", id.getMostSignificantBits());
-            data.setLong(key + "Low", id.getLeastSignificantBits());
-        }
-    }
-
-    /**
-     * A utility method for reading in UUID's from NBT
-     */
-    private UUID readUUID(String key, NBTTagCompound data) {
-        if (data.hasKey(key + "High"))
-            return new UUID(data.getLong(key + "High"), data.getLong(key + "Low"));
-        return null;
-    }
-
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("profile", (byte) profile.ordinal());
         profileInstance.writeToNBT(data);
@@ -340,15 +317,15 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
         data.setBoolean("trainLeaving", trainLeaving);
         data.setInteger("trainDelay", trainDelay);
         if (prevCart != null)
-            setUUID(prevCart.getPersistentID(), "prevCart", data);
+            NBTPlugin.writeUUID(data, "prevCart", prevCart.getPersistentID());
         if (currentCart != null)
-            setUUID(currentCart.getPersistentID(), "currentCart", data);
+            NBTPlugin.writeUUID(data, "currentCart", currentCart.getPersistentID());
 
-        setUUID(getUUID(), "uuid", data);
+        NBTPlugin.writeUUID(data, "uuid", getUUID());
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.hasKey("profile"))
             profile = LockingProfileType.fromOrdinal(data.getByte("profile"));
@@ -365,16 +342,16 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
         if (data.hasKey("trainDelay"))
             trainDelay = data.getInteger("trainDelay");
 
-        prevCartUUID = readUUID("prevCart", data);
-        currentCartUUID = readUUID("currentCart", data);
+        prevCartUUID = NBTPlugin.readUUID(data, "prevCart");
+        currentCartUUID = NBTPlugin.readUUID(data, "currentCart");
 
-        uuid = readUUID("uuid", data);
+        uuid = NBTPlugin.readUUID(data, "uuid");
 
         justLoaded = true; // This signals update() to dereference the cart UUID's we read in here
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(profile.ordinal());
@@ -385,7 +362,7 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
 
         LockingProfileType p = LockingProfileType.fromOrdinal(data.readByte());

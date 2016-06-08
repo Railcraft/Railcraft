@@ -53,7 +53,6 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
     public void readFromNBT(@Nonnull NBTTagCompound data) {
         super.readFromNBT(data);
 
-        ITrackInstance trackInstance;
         if (data.hasKey("trackTag")) {
             TrackSpec spec = TrackRegistry.getTrackSpec(data.getString("trackTag"));
             track = spec.createInstanceFromSpec(this);
@@ -64,13 +63,13 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         track.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         track.readPacketData(data);
     }

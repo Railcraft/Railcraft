@@ -10,25 +10,31 @@
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityLocomotive.LocoMode;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.util.misc.EnumTools;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TrackLocomotive extends TrackBaseRailcraft implements ITrackPowered {
+public class TrackLocomotive extends TrackPowered {
 
-    private boolean powered = false;
-    private byte mode = 0;
+    public static final PropertyEnum<LocoMode> LOCO_MODE = PropertyEnum.create("locoMode", LocoMode.class);
+
+    private LocoMode mode = LocoMode.RUNNING;
 
     @Override
     public EnumTrack getTrackType() {
@@ -36,21 +42,19 @@ public class TrackLocomotive extends TrackBaseRailcraft implements ITrackPowered
     }
 
     @Override
-    public IIcon getIcon() {
-        if (isPowered()) {
-            return getIcon(mode % LocoMode.VALUES.length);
-        }
-        return getIcon(LocoMode.VALUES.length + mode % LocoMode.VALUES.length);
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state = state.withProperty(LOCO_MODE, mode);
+        return state;
     }
 
     @Override
-    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
-        ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getPos())) {
-                mode++;
-                crowbar.onWhack(player, current, getPos());
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
+            if (crowbar.canWhack(player, hand, heldItem, getPos())) {
+                mode = EnumTools.next(mode, LocoMode.VALUES);
+                crowbar.onWhack(player, hand, heldItem, getPos());
                 sendUpdateToClient();
                 return true;
             }
@@ -59,22 +63,12 @@ public class TrackLocomotive extends TrackBaseRailcraft implements ITrackPowered
     }
 
     @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+    public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             if (cart instanceof EntityLocomotive) {
-                ((EntityLocomotive) cart).setMode(LocoMode.VALUES[mode % LocoMode.VALUES.length]);
+                ((EntityLocomotive) cart).setMode(mode);
             }
         }
-    }
-
-    @Override
-    public boolean isPowered() {
-        return powered;
-    }
-
-    @Override
-    public void setPowered(boolean powered) {
-        this.powered = powered;
     }
 
     @Override
@@ -83,33 +77,29 @@ public class TrackLocomotive extends TrackBaseRailcraft implements ITrackPowered
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setBoolean("powered", powered);
-        data.setByte("mode", mode);
+        data.setByte("mode", (byte) mode.ordinal());
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        powered = data.getBoolean("powered");
-        mode = data.getByte("mode");
+        mode = NBTPlugin.readEnumOrdinal(data, "mode", LocoMode.VALUES, LocoMode.RUNNING);
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-
-        data.writeBoolean(powered);
-        data.writeByte(mode);
+        RailcraftOutputStream outputStream = new RailcraftOutputStream(data);
+        outputStream.writeEnum(mode);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-
-        powered = data.readBoolean();
-        mode = data.readByte();
+        RailcraftInputStream inputStream = new RailcraftInputStream(data);
+        mode = inputStream.readEnum(LocoMode.VALUES);
 
         markBlockNeedsUpdate();
     }

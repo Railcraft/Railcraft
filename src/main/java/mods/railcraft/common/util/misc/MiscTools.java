@@ -39,24 +39,6 @@ public abstract class MiscTools {
         return tag.replaceAll("[Rr]ailcraft\\p{Punct}", "").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
     }
 
-    public static void writeUUID(NBTTagCompound data, String tag, @Nullable UUID uuid) {
-        if (uuid == null)
-            return;
-        NBTTagCompound nbtTag = new NBTTagCompound();
-        nbtTag.setLong("most", uuid.getMostSignificantBits());
-        nbtTag.setLong("least", uuid.getLeastSignificantBits());
-        data.setTag(tag, nbtTag);
-    }
-
-    @Nullable
-    public static UUID readUUID(NBTTagCompound data, String tag) {
-        if (data.hasKey(tag)) {
-            NBTTagCompound nbtTag = data.getCompoundTag(tag);
-            return new UUID(nbtTag.getLong("most"), nbtTag.getLong("least"));
-        }
-        return null;
-    }
-
     @Nonnull
     private static final Predicate<Entity> livingEntitySelector = entity -> entity.isEntityAlive() && EntitySelectors.NOT_SPECTATING.apply(entity);
 

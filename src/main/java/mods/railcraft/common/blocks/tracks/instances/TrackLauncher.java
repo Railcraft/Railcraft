@@ -25,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -51,13 +50,12 @@ public class TrackLauncher extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public boolean blockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, ItemStack heldItem) {
-        ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            if (crowbar.canWhack(player, current, getPos())) {
-                GuiHandler.openGui(EnumGui.TRACK_LAUNCHER, player, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
-                crowbar.onWhack(player, current, getPos());
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem) {
+        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
+            if (crowbar.canWhack(player, hand, heldItem, getPos())) {
+                GuiHandler.openGui(EnumGui.TRACK_LAUNCHER, player, theWorldAsserted(), getPos().getX(), getPos().getY(), getPos().getZ());
+                crowbar.onWhack(player, hand, heldItem, getPos());
                 return true;
             }
         }
@@ -65,7 +63,7 @@ public class TrackLauncher extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public void onMinecartPass(@Nonnull EntityMinecart cart) {
+    public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
             if (Math.abs(cart.motionX) > LAUNCH_THRESHOLD) {
                 cart.motionX = Math.copySign(0.6f, cart.motionX);
@@ -84,13 +82,13 @@ public class TrackLauncher extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("force", getLaunchForce());
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         SafeNBTWrapper safe = new SafeNBTWrapper(data);
@@ -99,24 +97,24 @@ public class TrackLauncher extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(launchForce);
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
         launchForce = data.readByte();
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeByte(launchForce);
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         launchForce = data.readByte();
     }
 
