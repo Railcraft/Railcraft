@@ -12,11 +12,15 @@ package mods.railcraft.common.commands;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
+ * Sub-Command
+ *
  * Created by CovertJaguar on 3/12/2015.
  */
 public abstract class SubCommand implements IModCommand {
@@ -36,15 +40,9 @@ public abstract class SubCommand implements IModCommand {
     private final List<String> aliases = new ArrayList<String>();
     private PermLevel permLevel = PermLevel.EVERYONE;
     private IModCommand parent;
-    private final SortedSet<SubCommand> children = new TreeSet<SubCommand>(new Comparator<SubCommand>() {
+    private final SortedSet<SubCommand> children = new TreeSet<>(SubCommand::compareTo);
 
-        @Override
-        public int compare(SubCommand o1, SubCommand o2) {
-            return o1.compareTo(o2);
-        }
-    });
-
-    public SubCommand(String name) {
+    protected SubCommand(String name) {
         this.name = name;
     }
 
@@ -78,17 +76,17 @@ public abstract class SubCommand implements IModCommand {
     }
 
     @Override
-    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return null;
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+        return Collections.emptyList();
     }
 
     @Override
-    public final void processCommand(ICommandSender sender, String[] args) throws CommandException {
-        if (!CommandHelpers.processStandardCommands(sender, this, args))
-            processSubCommand(sender, args);
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        if (!CommandHelpers.executeStandardCommands(server, sender, this, args))
+            executeSubCommand(server, sender, args);
     }
 
-    public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         CommandHelpers.throwWrongUsage(sender, this);
     }
 
@@ -103,7 +101,7 @@ public abstract class SubCommand implements IModCommand {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
         return sender.canCommandSenderUseCommand(getRequiredPermissionLevel(), getCommandName());
     }
 
@@ -129,7 +127,7 @@ public abstract class SubCommand implements IModCommand {
 
     @Override
     public int compareTo(ICommand command) {
-        return this.getCommandName().compareTo(command.getCommandName());
+        return getCommandName().compareTo(command.getCommandName());
     }
 
 }

@@ -42,13 +42,14 @@ public abstract class TileBoxActionManager extends TileBoxSecured implements IAs
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         byte[] array = new byte[powerOnAspects.length];
         for (int i = 0; i < powerOnAspects.length; i++) {
             array[i] = (byte) (powerOnAspects[i] ? 1 : 0);
         }
         data.setByteArray("powerOnAspects", array);
+        return data;
     }
 
     @Override

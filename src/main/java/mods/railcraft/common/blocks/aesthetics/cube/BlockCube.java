@@ -9,7 +9,6 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.cube;
 
-import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -36,10 +35,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
@@ -48,8 +44,6 @@ public class BlockCube extends Block {
     public static final PropertyEnum<EnumCube> VARIANT = PropertyEnum.create("variant", EnumCube.class);
 
     private static BlockCube instance;
-    @SideOnly(Side.CLIENT)
-    private RenderInfo override;
 
     public BlockCube() {
         super(Material.ROCK);
@@ -104,7 +98,6 @@ public class BlockCube extends Block {
      * Convert the given metadata into a BlockState for this Block
      */
     @Override
-    @Nonnull
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(VARIANT, EnumCube.fromOrdinal(meta));
     }
@@ -118,7 +111,6 @@ public class BlockCube extends Block {
     }
 
     @Override
-    @Nonnull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, VARIANT);
     }
@@ -145,22 +137,16 @@ public class BlockCube extends Block {
         return state.getValue(VARIANT).ordinal();
     }
 
-    @SideOnly(Side.CLIENT)
-    public void setTextureOverride(RenderInfo info) {
-        override = info;
-    }
-
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
         getVariant(worldIn, pos).getBlockDef().onNeighborBlockChange(worldIn, pos, state, neighborBlock);
     }
-    
+
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
         getVariant(world, pos).getBlockDef().updateTick(world, pos, rand);
     }
 
-    @Nonnull
     @Override
     public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return getVariant(world, pos).getBlockDef().onBlockPlaced(world, pos);
@@ -177,27 +163,22 @@ public class BlockCube extends Block {
     }
 
     @Override
-    public void breakBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
         getVariant(world, pos).getBlockDef().onBlockRemoval(world, pos);
     }
 
     @Override
-    public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         return getVariant(world, pos).getBlockDef().removedByPlayer(world, player, pos);
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, EnumFacing side) {
-        return override != null || super.shouldSideBeRendered(blockState, blockAccess, pos, side);
-    }
-
-    @Override
-    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return getVariant(world, pos).getBlockDef().canCreatureSpawn(type, world, pos);
     }
 
     @Override
-    public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumCube type : EnumCube.getCreativeList()) {
             if (type.isEnabled())
                 list.add(type.getItem());
@@ -205,7 +186,7 @@ public class BlockCube extends Block {
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, @Nonnull Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
         return getVariant(world, pos).getResistance() * 3f / 5f;
     }
 
@@ -220,7 +201,7 @@ public class BlockCube extends Block {
     }
 
     @Override
-    public boolean isFlammable(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EnumFacing face) {
+    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return getVariant(world, pos).getBlockDef().isFlammable(world, pos, face);
     }
 

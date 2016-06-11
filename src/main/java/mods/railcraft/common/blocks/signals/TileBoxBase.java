@@ -17,6 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 public abstract class TileBoxBase extends TileSignalFoundation implements ILampTile {
 
     private static final float BOUND = -0.1f;
@@ -38,7 +40,7 @@ public abstract class TileBoxBase extends TileSignalFoundation implements ILampT
 
     public abstract boolean isConnected(EnumFacing side);
 
-    public abstract SignalAspect getBoxSignalAspect(EnumFacing side);
+    public abstract SignalAspect getBoxSignalAspect(@Nullable EnumFacing side);
 
     public boolean canTransferAspect() {
         return false;

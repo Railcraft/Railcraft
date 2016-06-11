@@ -10,7 +10,6 @@ package mods.railcraft.common.items;
 
 import buildcraft.api.tools.IToolWrench;
 import com.google.common.collect.Sets;
-import com.sun.jna.platform.win32.WinDef;
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
@@ -30,19 +29,16 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -107,18 +103,18 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
 
     @Override
     public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-        Block block = WorldPlugin.getBlock(world, pos);
+        IBlockState blockState = WorldPlugin.getBlockState(world, pos);
 
-        if (WorldPlugin.isBlockAir(world, pos, block))
+        if (WorldPlugin.isBlockAir(world, pos, blockState))
             return EnumActionResult.PASS;
 
-        if (player.isSneaking() != isShiftRotation(block.getClass()))
+        if (player.isSneaking() != isShiftRotation(blockState.getBlock().getClass()))
             return EnumActionResult.PASS;
 
-        if (isBannedRotation(block.getClass()))
+        if (isBannedRotation(blockState.getBlock().getClass()))
             return EnumActionResult.PASS;
 
-        if (block.rotateBlock(world, pos, side)) {
+        if (blockState.getBlock().rotateBlock(world, pos, side)) {
             player.swingArm(hand);
             //TODO: test (was !world.isRemote)
             return EnumActionResult.SUCCESS;

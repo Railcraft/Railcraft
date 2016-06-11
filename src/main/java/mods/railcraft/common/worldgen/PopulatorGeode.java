@@ -20,10 +20,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
-import net.minecraftforge.event.terraingen.TerrainGen;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Locale;
 import java.util.Random;
@@ -31,47 +28,37 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class GeodePopulator {
+public class PopulatorGeode extends Populator {
     public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RAILCRAFT_GEODE", new Class[0], new Object[0]);
     public static final int MIN_DEPTH = 16;
     public static final int MIN_FLOOR = 24;
-    private static GeodePopulator instance;
+    public static final int GEN_HEIGHT = 60;
+    private static PopulatorGeode instance;
     private final WorldGenerator geode = new WorldGenGeode(BlockCube.getBlock(), EnumCube.ABYSSAL_STONE.ordinal());
 
-    private GeodePopulator() {
+    private PopulatorGeode() {
+        super(EVENT_TYPE, GEN_HEIGHT);
     }
 
-    public static GeodePopulator instance() {
+    public static PopulatorGeode instance() {
         if (instance == null) {
-            instance = new GeodePopulator();
+            instance = new PopulatorGeode();
         }
         return instance;
     }
 
-    @SubscribeEvent
-    public void generate(PopulateChunkEvent.Pre event) {
-        if (!TerrainGen.populate(event.getGen(), event.getWorld(), event.getRand(), event.getChunkX(), event.getChunkZ(), event.isHasVillageGenerated(), EVENT_TYPE)) {
-            return;
-        }
-        generateGeode(event.getWorld(), event.getRand(), event.getChunkX(), event.getChunkZ());
-    }
-
     //TODO: Much testing, oh god
-    public void generateGeode(World world, Random rand, int chunkX, int chunkZ) {
-        int x = chunkX * 16 + 8;
-        int z = chunkZ * 16 + 8;
-        BlockPos target = new BlockPos(x, 60, z);
-        if (canGen(world, rand, target)) {
-            OceanFloor floor = scanOceanFloor(world, target);
-            if (floor.depth >= MIN_DEPTH && floor.floorY >= MIN_FLOOR) {
-                int y = 12 + rand.nextInt(floor.floorY - 12);
-                geode.generate(world, rand, new BlockPos(x, y, z));
-            }
+    @Override
+    public void populate(World world, Random rand, BlockPos chunkCenterPos) {
+        OceanFloor floor = scanOceanFloor(world, chunkCenterPos);
+        if (floor.depth >= MIN_DEPTH && floor.floorY >= MIN_FLOOR) {
+            int y = 12 + rand.nextInt(floor.floorY - 12);
+            geode.generate(world, rand, new BlockPos(chunkCenterPos.getX(), y, chunkCenterPos.getZ()));
         }
     }
 
-    private boolean canGen(World world, Random rand, BlockPos pos) {
-        Biome biome = world.getBiome(pos);
+    @Override
+    public boolean canGen(World world, Random rand, BlockPos pos, Biome biome) {
         if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.WATER)) {
             return false;
         }

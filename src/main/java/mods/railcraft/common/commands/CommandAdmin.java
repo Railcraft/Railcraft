@@ -9,8 +9,10 @@
 package mods.railcraft.common.commands;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.server.MinecraftServer;
 
 /**
  * Commands for testing, because it was too much effort to find another mod that did them.
@@ -40,12 +42,8 @@ public class CommandAdmin extends SubCommand {
         }
 
         @Override
-        public void processSubCommand(ICommandSender sender, String[] args) {
-            for (Object obj : sender.getEntityWorld().getLoadedEntityList()) {
-                if (obj instanceof EntityAnimal) {
-                    ((EntityAnimal) obj).setDead();
-                }
-            }
+        public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) {
+            kill(sender, EntityAnimal.class);
         }
     }
 
@@ -57,12 +55,16 @@ public class CommandAdmin extends SubCommand {
         }
 
         @Override
-        public void processSubCommand(ICommandSender sender, String[] args) {
-            for (Object obj : sender.getEntityWorld().getLoadedEntityList()) {
-                if (obj instanceof EntityMinecart) {
-                    ((EntityMinecart) obj).setDead();
-                }
-            }
+        public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) {
+            kill(sender, EntityMinecart.class);
         }
+    }
+
+    private static void kill(ICommandSender sender, Class<? extends Entity> entityClass) {
+        sender.getEntityWorld()
+                .getLoadedEntityList()
+                .stream()
+                .filter(entityClass::isInstance)
+                .forEach(Entity::setDead);
     }
 }

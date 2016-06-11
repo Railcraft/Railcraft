@@ -12,7 +12,10 @@ import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -22,19 +25,16 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class WorldGenQuarry extends WorldGenerator {
 
     private static final int DISTANCE_OUTER_SQ = 8 * 8;
-    private final Block blockStone;
-    private final int meta;
+    private final IBlockState quarryStone;
     public final Set<Block> replaceable = new HashSet<Block>();
 
-    public WorldGenQuarry(Block block, int meta) {
-        this.blockStone = block;
-        this.meta = meta;
+    public WorldGenQuarry(IBlockState quarryStone) {
+        this.quarryStone = quarryStone;
 
         replaceable.add(Blocks.COAL_ORE);
         replaceable.add(Blocks.IRON_ORE);
@@ -54,38 +54,46 @@ public class WorldGenQuarry extends WorldGenerator {
     }
 
     @Override
-    public boolean generate(World world, Random rand, int x, int y, int z) {
+    public boolean generate(World world, Random rand, BlockPos position) {
 //        Game.log(Level.INFO, "Generating Quarry at {0}, {1}, {2}", x, y, z);
         boolean clearTop = true;
-        for (int i = -8; i < 8; i++) {
-            for (int k = -8; k < 8; k++) {
-                for (int j = 1; j < 4 && j + y < world.getActualHeight() - 1; j++) {
-                    int distSq = i * i + k * k;
-                    if (distSq <= DISTANCE_OUTER_SQ)
-                        if (isLiquid(world, x + i, y + j, z + k)) {
+        for (int x = -8; x < 8; x++) {
+            for (int z = -8; z < 8; z++) {
+                for (int y = 1; y < 4 && y + position.getY() < world.getActualHeight() - 1; y++) {
+                    int distSq = x * x + z * z;
+                    if (distSq <= DISTANCE_OUTER_SQ) {
+                        IBlockState existingState = WorldPlugin.getBlockState(world, position.add(x, y, z));
+                        if (isLiquid(existingState)) {
                             clearTop = false;
                             break;
                         }
+                    }
                 }
             }
         }
         if (clearTop)
-            for (int i = -8; i < 8; i++) {
-                for (int k = -8; k < 8; k++) {
-                    for (int j = 1; j < 4 && j + y < world.getActualHeight() - 1; j++) {
-                        int distSq = i * i + k * k;
-                        if (distSq <= DISTANCE_OUTER_SQ)
-                            if (!placeAir(world, rand, x + i, y + j, z + k))
+            for (int x = -8; x < 8; x++) {
+                for (int z = -8; z < 8; z++) {
+                    for (int y = 1; y < 4 && y + position.getY() < world.getActualHeight() - 1; y++) {
+                        int distSq = x * x + z * z;
+                        if (distSq <= DISTANCE_OUTER_SQ) {
+                            BlockPos targetPos = position.add(x, y, z);
+                            IBlockState existingState = WorldPlugin.getBlockState(world, targetPos);
+                            if (!placeAir(existingState, world, rand, targetPos))
                                 break;
+                        }
                     }
                 }
             }
-        for (int i = -8; i < 8; i++) {
-            for (int k = -8; k < 8; k++) {
-                for (int j = -8; j < 1 && j + y < world.getActualHeight() - 1; j++) {
-                    int distSq = i * i + k * k + j * j;
-                    if (distSq <= DISTANCE_OUTER_SQ)
-                        placeStone(world, rand, x + i, y + j, z + k);
+        for (int x = -8; x < 8; x++) {
+            for (int z = -8; z < 8; z++) {
+                for (int y = -8; y < 1 && y + position.getY() < world.getActualHeight() - 1; y++) {
+                    int distSq = x * x + z * z + y * y;
+                    if (distSq <= DISTANCE_OUTER_SQ) {
+                        BlockPos targetPos = position.add(x, y, z);
+                        IBlockState existingState = WorldPlugin.getBlockState(world, targetPos);
+                        placeStone(existingState, world, rand, targetPos);
+                    }
                 }
             }
         }
@@ -93,52 +101,46 @@ public class WorldGenQuarry extends WorldGenerator {
         return true;
     }
 
-    private boolean isLiquid(World world, int x, int y, int z) {
-        Block block = WorldPlugin.getBlock(world, x, y, z);
+    private boolean isLiquid(IBlockState existingState) {
+        Block block = existingState.getBlock();
         return block instanceof BlockLiquid || block instanceof IFluidBlock;
     }
 
-    private boolean placeAir(World world, Random rand, int x, int y, int z) {
+    private boolean placeAir(IBlockState existingState, World world, Random rand, BlockPos pos) {
 //        if (!world.isBlockLoaded(x, y, z)) {
 //            return false;
 //        }
-        if (WorldPlugin.getBlock(world, x, y + 1, z) != Blocks.AIR)
+        BlockPos up = pos.up();
+        if (!WorldPlugin.isBlockAir(world, up))
             return false;
-        if (isLiquid(world, x, y, z))
+        if (isLiquid(existingState))
             return false;
-        
-        if (WorldPlugin.getBlock(world, x + 1, y + 1, z) != Blocks.AIR)
-            return false;
-        if (WorldPlugin.getBlock(world, x - 1, y + 1, z) != Blocks.AIR)
-            return false;
-        if (WorldPlugin.getBlock(world, x, y + 1, z + 1) != Blocks.AIR)
-            return false;
-        if (WorldPlugin.getBlock(world, x, y + 1, z - 1) != Blocks.AIR)
-            return false;
-        
-        world.setBlock(x, y, z, Blocks.AIR, 0, 2);
+
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            if (!WorldPlugin.isBlockAir(world, up.offset(side)))
+                return false;
+        }
+
+        world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
         return true;
     }
 
-    private void placeStone(World world, Random rand, int x, int y, int z) {
+    private void placeStone(IBlockState existingState, World world, Random rand, BlockPos pos) {
 //        if (!world.isBlockLoaded(x, y, z)) {
 //            return;
 //        }
-        //Removes tallgrass
-        if (WorldPlugin.getBlock(world, x, y + 1, z) == Blocks.TALLGRASS)
-            world.setBlock(x, y + 1, z, Blocks.AIR, 0, 2);
-        
-        if (isReplaceable(world, x, y, z))
-            world.setBlock(x, y, z, blockStone, meta, 2);
+        //Removes tall grass
+        if (WorldPlugin.isBlockAt(world, pos.up(), Blocks.TALLGRASS))
+            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+
+        if (isReplaceable(existingState, world, pos))
+            world.setBlockState(pos, quarryStone, 2);
     }
 
-    private boolean isReplaceable(World world, int x, int y, int z) {
-        Block existing = WorldPlugin.getBlock(world, x, y, z);
-        if (existing == null)
-            return false;
-        if (existing.isReplaceableOreGen(world, x, y, z, Blocks.STONE))
+    private boolean isReplaceable(IBlockState existingState, World world, BlockPos pos) {
+        if (existingState.getBlock().isReplaceableOreGen(existingState, world, pos, GenTools.STONE::test))
             return true;
-        return replaceable.contains(existing);
+        return replaceable.contains(existingState.getBlock());
     }
 
 }

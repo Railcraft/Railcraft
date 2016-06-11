@@ -10,11 +10,10 @@
 
 package mods.railcraft.common.worldgen;
 
-import com.google.common.base.Predicate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 /**
  * Created by CovertJaguar on 4/22/2016 for Railcraft.
@@ -22,10 +21,9 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class GenTools {
-    public static final Predicate<IBlockState> STONE = new Predicate<IBlockState>() {
-        @Override
-        public boolean apply(@Nullable IBlockState input) {
-            return input != null && input.getBlock() == Blocks.STONE;
-        }
-    };
+    public static final Predicate<IBlockState> STONE = input -> input.getBlock() == Blocks.STONE;
+    public static final Predicate<IBlockState> GRAVEL = input -> input.getBlock() == Blocks.GRAVEL;
+    public static final Predicate<IBlockState> DIRT = input -> input.getBlock() == Blocks.DIRT;
+    public static final Predicate<IBlockState> SAND = input -> input.getBlock() == Blocks.SAND;
+    public static final Predicate<IBlockState> NETHERRACK = input -> input.getBlock() == Blocks.NETHERRACK;
 }

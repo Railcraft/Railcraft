@@ -70,26 +70,26 @@ public class ModuleWorld extends RailcraftModulePayload {
                 }
 
                 if (RailcraftConfig.isWorldGenEnabled("saltpeter") && EnumOre.SALTPETER.isEnabled())
-                    MinecraftForge.ORE_GEN_BUS.register(new SaltpeterGenerator());
+                    MinecraftForge.ORE_GEN_BUS.register(new GeneratorSaltpeter());
                 if (RailcraftConfig.isWorldGenEnabled("sulfur") && EnumOre.SULFUR.isEnabled())
                     MinecraftForge.ORE_GEN_BUS.register(new SulfurGenerator());
                 if (RailcraftConfig.isWorldGenEnabled("firestone") && EnumOre.FIRESTONE.isEnabled() && RailcraftModuleManager.isModuleEnabled(ModuleMagic.class))
-                    MinecraftForge.EVENT_BUS.register(new FirestoneGenerator());
+                    MinecraftForge.EVENT_BUS.register(new DecoratorFirestone());
                 if (RailcraftConfig.isWorldGenEnabled("abyssal") && EnumCube.ABYSSAL_STONE.isEnabled())
-                    MinecraftForge.EVENT_BUS.register(GeodePopulator.instance());
+                    MinecraftForge.EVENT_BUS.register(PopulatorGeode.instance());
                 if (RailcraftConfig.isWorldGenEnabled("quarried") && EnumCube.QUARRIED_STONE.isEnabled())
-                    MinecraftForge.EVENT_BUS.register(QuarryPopulator.instance());
+                    MinecraftForge.EVENT_BUS.register(PopulatorQuarry.instance());
 
                 if (RailcraftConfig.isWorldGenEnabled("iron") && EnumOre.POOR_IRON.isEnabled())
-                    MinecraftForge.ORE_GEN_BUS.register(new PoorIronGenerator());
+                    MinecraftForge.ORE_GEN_BUS.register(new GeneratorPoorOreIron());
                 if (RailcraftConfig.isWorldGenEnabled("gold") && EnumOre.POOR_GOLD.isEnabled())
-                    MinecraftForge.ORE_GEN_BUS.register(new PoorGoldGenerator());
+                    MinecraftForge.ORE_GEN_BUS.register(new GeneratorPoorOreGold());
                 if (RailcraftConfig.isWorldGenEnabled("copper") && EnumOre.POOR_COPPER.isEnabled())
-                    MinecraftForge.ORE_GEN_BUS.register(new PoorCopperGenerator());
+                    MinecraftForge.ORE_GEN_BUS.register(new GeneratorPoorOreCopper());
                 if (RailcraftConfig.isWorldGenEnabled("tin") && EnumOre.POOR_TIN.isEnabled())
-                    MinecraftForge.ORE_GEN_BUS.register(new PoorTinGenerator());
+                    MinecraftForge.ORE_GEN_BUS.register(new GeneratorPoorOreTin());
                 if (RailcraftConfig.isWorldGenEnabled("lead") && EnumOre.POOR_LEAD.isEnabled())
-                    MinecraftForge.ORE_GEN_BUS.register(new PoorLeadGenerator());
+                    MinecraftForge.ORE_GEN_BUS.register(new GeneratorPoorOreLead());
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {
                     IRecipe recipe = new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");

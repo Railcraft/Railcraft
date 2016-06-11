@@ -16,16 +16,16 @@ import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class PoorGoldGenerator extends PoorOreGenerator {
+public class GeneratorPoorOreCopper extends GeneratorPoorOre {
 
-    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RC_POOR_GOLD", new Class[0], new Object[0]);
-    private static final int Y_LEVEL = 15;
-    private static final int Y_RANGE = 1;
-    private static final int DENSITY = 1;
-    private static final int SEED = 79;
+    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RC_POOR_COPPER", new Class[0], new Object[0]);
+    private static final int Y_LEVEL = 60;
+    private static final int Y_RANGE = 3;
+    private static final int DENSITY = 8;
+    private static final int SEED = 29;
 
-    public PoorGoldGenerator() {
-        super(EVENT_TYPE, EnumOre.POOR_GOLD, DENSITY, Y_LEVEL, Y_RANGE, SEED);
+    public GeneratorPoorOreCopper() {
+        super(EVENT_TYPE, EnumOre.POOR_COPPER, DENSITY, Y_LEVEL, Y_RANGE, SEED);
     }
 
 }

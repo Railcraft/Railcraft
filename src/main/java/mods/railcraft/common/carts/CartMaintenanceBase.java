@@ -33,7 +33,7 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     private static final int BLINK_DURATION = 3;
     private static final int DATA_ID_BLINK = 25;
 
-    public CartMaintenanceBase(World world) {
+    protected CartMaintenanceBase(World world) {
         super(world);
     }
 

@@ -20,6 +20,7 @@ public class MultiButtonController<T extends IMultiButtonState> {
     private int currentState;
     private final T[] validStates;
 
+    @SafeVarargs
     private MultiButtonController(int startState, T... validStates) {
         this.currentState = startState;
         this.validStates = validStates;
@@ -30,6 +31,7 @@ public class MultiButtonController<T extends IMultiButtonState> {
         this.validStates = controller.validStates;
     }
 
+    @SafeVarargs
     public static <T extends IMultiButtonState> MultiButtonController<T> create(int startState, T... validStates) {
         return new MultiButtonController<T>(startState, validStates);
     }

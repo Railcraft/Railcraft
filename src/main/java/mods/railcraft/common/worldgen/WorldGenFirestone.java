@@ -8,49 +8,49 @@
  */
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class WorldGenFirestone extends WorldGenerator {
 
-    private final Block firestone = BlockOre.getBlock();
-    private final int firestoneMeta = EnumOre.FIRESTONE.ordinal();
-
-    public WorldGenFirestone() {
-        super();
-
-    }
+    private final IBlockState firestone = EnumOre.FIRESTONE.getState();
 
     @Override
-    public boolean generate(World world, Random rand, int x, int y, int z) {
+    public boolean generate(World world, Random rand, BlockPos position) {
+        int x = position.getX();
+        int y = position.getY();
+        int z = position.getZ();
         for (int yy = y; yy > y - 6; yy--) {
-            if (!world.blockExists(x, yy, z)) return false;
-            Block block = WorldPlugin.getBlock(world, x, yy, z);
+            BlockPos pos = new BlockPos(x, yy, z);
+            if (!WorldPlugin.isBlockLoaded(world, pos)) return false;
+            Block block = WorldPlugin.getBlock(world, pos);
             if (block != Blocks.LAVA && block != Blocks.FLOWING_LAVA)
                 return false;
         }
         int yy = y - 6;
         while (yy > 1) {
-            if (!world.blockExists(x, yy, z)) return false;
-            Block block = WorldPlugin.getBlock(world, x, yy, z);
+            BlockPos pos = new BlockPos(x, yy, z);
+            if (!WorldPlugin.isBlockLoaded(world, pos)) return false;
+            Block block = WorldPlugin.getBlock(world, pos);
             if (block != Blocks.LAVA && block != Blocks.FLOWING_LAVA)
                 break;
             yy--;
         }
-        Block block = WorldPlugin.getBlock(world, x, yy, z);
-        if (block.isReplaceableOreGen(world, x, yy, z, Blocks.NETHERRACK))
-            return world.setBlock(x, yy, z, firestone, firestoneMeta, 2);
+        BlockPos pos = new BlockPos(x, yy, z);
+        IBlockState blockState = WorldPlugin.getBlockState(world, pos);
+        if (blockState.getBlock().isReplaceableOreGen(blockState, world, pos, GenTools.NETHERRACK::test))
+            return world.setBlockState(pos, firestone, 2);
         return false;
     }
 

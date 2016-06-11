@@ -10,20 +10,20 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.ITrackTile;
-import mods.railcraft.common.blocks.tracks.instances.TrackSuspended;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.instances.TrackSuspended;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.EnumSet;
@@ -66,14 +66,12 @@ public class EntityCartTrackRelayer extends CartMaintenancePatternBase {
     }
 
     private void replace() {
-        int i = MathHelper.floor_double(this.posX);
-        int j = MathHelper.floor_double(this.posY);
-        int k = MathHelper.floor_double(this.posZ);
+        BlockPos pos = getPosition();
 
-        if (TrackTools.isRailBlockAt(this.worldObj, i, j - 1, k))
-            --j;
+        if (TrackTools.isRailBlockAt(worldObj, pos.down()))
+            pos = pos.down();
 
-        Block block = this.worldObj.getBlock(i, j, k);
+        Block block = WorldPlugin.getBlock(worldObj, pos);
 
         if (TrackTools.isRailBlock(block)) {
             ItemStack trackExist = patternInv.getStackInSlot(SLOT_EXIST);
@@ -81,7 +79,7 @@ public class EntityCartTrackRelayer extends CartMaintenancePatternBase {
 
             boolean nextToSuspended = false;
             for (EnumFacing side : EnumSet.of(EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH)) {
-                TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, i, j, k, side);
+                TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos.offset(side));
                 if (tile instanceof ITrackTile) {
                     ITrackTile track = (ITrackTile) tile;
                     if (track.getTrackInstance() instanceof TrackSuspended) {
@@ -98,17 +96,15 @@ public class EntityCartTrackRelayer extends CartMaintenancePatternBase {
                 if (trackExist.getItem() instanceof ITrackItem) {
                     ITrackItem trackItem = (ITrackItem) trackExist.getItem();
                     if (trackItem.getPlacedBlock() == block) {
-                        TileEntity tile = worldObj.getTileEntity(i, j, k);
+                        TileEntity tile = worldObj.getTileEntity(pos);
                         if (trackItem.isPlacedTileEntity(trackExist, tile)) {
-                            int meta = removeOldTrack(i, j, k, block);
-                            if (meta != -1)
-                                placeNewTrack(i, j, k, SLOT_STOCK, meta);
+                            BlockRailBase.EnumRailDirection trackShape = removeOldTrack(pos, block);
+                            placeNewTrack(pos, SLOT_STOCK, trackShape);
                         }
                     }
                 } else if (InvTools.isStackEqualToBlock(trackExist, block)) {
-                    int meta = removeOldTrack(i, j, k, block);
-                    if (meta != -1)
-                        placeNewTrack(i, j, k, SLOT_STOCK, meta);
+                    BlockRailBase.EnumRailDirection trackShape = removeOldTrack(pos, block);
+                    placeNewTrack(pos, SLOT_STOCK, trackShape);
                 }
         }
     }
@@ -121,12 +117,7 @@ public class EntityCartTrackRelayer extends CartMaintenancePatternBase {
     }
 
     @Override
-    public String getInventoryName() {
-        return LocalizationPlugin.translate(EnumCart.TRACK_RELAYER.getTag());
-    }
-
-    @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }
 

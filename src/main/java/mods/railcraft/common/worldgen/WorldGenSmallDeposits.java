@@ -8,15 +8,15 @@
  */
 package mods.railcraft.common.worldgen;
 
-import com.google.common.base.Predicate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -49,7 +49,7 @@ public class WorldGenSmallDeposits extends WorldGenerator {
     private void placeOre(World world, Random rand, BlockPos pos) {
         for (int num = 0; num < number; num++) {
             IBlockState blockState = WorldPlugin.getBlockState(world, pos);
-            if (!WorldPlugin.isBlockAir(world, pos, blockState) && blockState.getBlock().isReplaceableOreGen(world, pos, replace))
+            if (!WorldPlugin.isBlockAir(world, pos, blockState) && blockState.getBlock().isReplaceableOreGen(blockState, world, pos, replace::test))
                 WorldPlugin.setBlockState(world, pos, ore, 2);
 
             pos = pos.offset(EnumFacing.random(rand));

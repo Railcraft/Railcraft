@@ -20,26 +20,28 @@ import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType
 import net.minecraftforge.event.terraingen.TerrainGen;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Random;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class PoorOreGenerator {
+public abstract class GeneratorPoorOre {
 
     private final EventType eventType;
+    @Nullable
     private final WorldGenerator oreGen;
     private final double scale, denseArea, fringeArea;
     private final int yLevel, yRange, noiseSeed;
 
     private final Map<World, NoiseGen> noiseMap = new MapMaker().weakKeys().makeMap();
 
-    protected PoorOreGenerator(EventType eventType, EnumOre ore, int density, int yLevel, int yRange, int noiseSeed) {
+    protected GeneratorPoorOre(EventType eventType, EnumOre ore, int density, int yLevel, int yRange, int noiseSeed) {
         this(eventType, ore, 0.0025, 0.85, 0.65, density, yLevel, yRange, noiseSeed);
     }
 
-    protected PoorOreGenerator(EventType eventType, EnumOre ore, double scale, double denseArea, double fringeArea, int density, int yLevel, int yRange, int noiseSeed) {
+    protected GeneratorPoorOre(EventType eventType, EnumOre ore, double scale, double denseArea, double fringeArea, int density, int yLevel, int yRange, int noiseSeed) {
         this.eventType = eventType;
         this.scale = scale;
         this.denseArea = denseArea;
@@ -47,21 +49,25 @@ public abstract class PoorOreGenerator {
         this.yLevel = yLevel;
         this.yRange = yRange;
         this.noiseSeed = noiseSeed;
-        if (density >= 4)
-            oreGen = new WorldGenMinable(ore.getState(), density, GenTools.STONE);
+        if (ore.getState() == null)
+            oreGen = null;
+        else if (density >= 4)
+            oreGen = new WorldGenMinable(ore.getState(), density, GenTools.STONE::test);
         else
             oreGen = new WorldGenSmallDeposits(ore.getState(), density, GenTools.STONE);
     }
 
     @SubscribeEvent
     public void generate(OreGenEvent.Post event) {
+        if (oreGen == null)
+            return;
 
-        World world = event.world;
-        Random rand = event.rand;
-        int worldX = event.pos.getX();
-        int worldZ = event.pos.getZ();
+        World world = event.getWorld();
+        Random rand = event.getRand();
+        int worldX = event.getPos().getX();
+        int worldZ = event.getPos().getZ();
 
-        if (!TerrainGen.generateOre(world, rand, oreGen, event.pos, eventType))
+        if (!TerrainGen.generateOre(world, rand, oreGen, event.getPos(), eventType))
             return;
 
         NoiseGen noise = noiseMap.get(world);

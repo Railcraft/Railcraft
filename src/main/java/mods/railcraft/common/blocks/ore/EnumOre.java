@@ -63,7 +63,9 @@ public enum EnumOre implements IBlockVariantEnum<EnumOre> {
     @Nullable
     @Override
     public IBlockState getState() {
-        return null;
+        if (getBlock() == null)
+            return null;
+        return getBlock().getDefaultState().withProperty(BlockOre.VARIANT, this);
     }
 
     public ItemStack getItem() {

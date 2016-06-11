@@ -51,9 +51,10 @@ public abstract class TileBoxSecured extends TileBoxBase implements IAspectActio
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         lockController.writeToNBT(data, "lock");
+        return data;
     }
 
     @Override

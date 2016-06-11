@@ -11,7 +11,6 @@ package mods.railcraft.common.plugins.forge;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -40,12 +39,7 @@ public class WorldPlugin {
     }
 
     public static Material getBlockMaterial(IBlockAccess world, BlockPos pos) {
-        return getBlock(world, pos).getMaterial();
-    }
-
-    @Deprecated
-    public static Block getBlockOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return getBlockState(world, pos.offset(side)).getBlock();
+        return getBlockState(world, pos).getMaterial();
     }
 
     public static boolean isBlockLoaded(World world, BlockPos pos) {
@@ -56,32 +50,16 @@ public class WorldPlugin {
         return world.isAreaLoaded(pos1, pos2);
     }
 
-    public static boolean isBlockAir(IBlockAccess world, BlockPos pos, Block block) {
-        return block.isAir(world, pos);
-    }
-
     public static boolean isBlockAir(IBlockAccess world, BlockPos pos) {
         return world.isAirBlock(pos);
     }
 
     public static boolean isBlockAir(IBlockAccess world, BlockPos pos, IBlockState state) {
-        return isBlockAir(world, pos, state.getBlock());
+        return state.getBlock().isAir(state, world, pos);
     }
 
     public static boolean isBlockAt(IBlockAccess world, BlockPos pos, Block block) {
         return block != null && block == getBlock(world, pos);
-    }
-
-    public static TileEntity getTileEntityOnSide(World world, BlockPos pos, EnumFacing side) {
-        pos = pos.offset(side);
-        if (isBlockLoaded(world, pos) && getBlock(world, pos) != Blocks.AIR)
-            return getBlockTile(world, pos);
-        return null;
-    }
-
-    public static TileEntity getTileEntityOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
-        pos = pos.offset(side);
-        return world.getTileEntity(pos);
     }
 
     public static boolean setBlockState(World world, BlockPos pos, IBlockState blockState) {
@@ -110,11 +88,25 @@ public class WorldPlugin {
         world.notifyNeighborsOfStateChange(pos, block);
     }
 
+    public static void markBlockForUpdate(World world, BlockPos pos) {
+        IBlockState state = getBlockState(world, pos);
+        markBlockForUpdate(world, pos, state);
+    }
+
+    public static void markBlockForUpdate(World world, BlockPos pos, IBlockState state) {
+        markBlockForUpdate(world, pos, state, state);
+    }
+
+    public static void markBlockForUpdate(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        world.notifyBlockUpdate(pos, oldState, newState, 3);
+    }
+
     public static void addBlockEvent(World world, BlockPos pos, Block block, int key, int value) {
         if (world != null && block != null)
             world.addBlockEvent(pos, block, key, value);
     }
 
+    @Nullable
     public static BlockPos findBlock(World world, BlockPos pos, int distance, Predicate<IBlockState> matcher) {
         int x = pos.getX();
         int y = pos.getY();

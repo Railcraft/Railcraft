@@ -14,21 +14,23 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.triggers.IAspectProvider;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
 import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
 
-public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBlockTile, IAspectActionManager, IGuiReturnHandler, IAspectProvider {
+public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBlockTile, IAspectProvider {
 
     private final SimpleSignalController controller = new SimpleSignalController(getLocalizationTag(), this);
     private final SignalBlock signalBlock = new SignalBlockRelay(getLocalizationTag(), this);
@@ -39,7 +41,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (player.isSneaking())
             return false;
         if (Game.isHost(worldObj))
@@ -86,7 +88,7 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
 
     @Override
     public int getPowerOutput(EnumFacing side) {
-        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, getPos(), side.getOpposite());
+        TileEntity tile = WorldPlugin.getBlockTile(worldObj, getPos().offset(side.getOpposite()));
         if (tile instanceof TileBoxBase)
             return NO_POWER;
         return isEmittingRedstone(side) ? FULL_POWER : NO_POWER;
@@ -104,11 +106,12 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         signalBlock.writeToNBT(data);
         controller.writeToNBT(data);
+        return data;
     }
 
     @Override
@@ -159,13 +162,11 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     @Override
     public boolean isConnected(EnumFacing side) {
         TileEntity tile = tileCache.getTileOnSide(side);
-        if (tile instanceof TileBoxBase)
-            return ((TileBoxBase) tile).canReceiveAspect();
-        return false;
+        return tile instanceof TileBoxBase && ((TileBoxBase) tile).canReceiveAspect();
     }
 
     @Override
-    public SignalAspect getBoxSignalAspect(EnumFacing side) {
+    public SignalAspect getBoxSignalAspect(@Nullable EnumFacing side) {
         return controller.getAspect();
     }
 

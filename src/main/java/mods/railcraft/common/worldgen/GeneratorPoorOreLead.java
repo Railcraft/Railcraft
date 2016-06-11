@@ -16,16 +16,16 @@ import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class PoorTinGenerator extends PoorOreGenerator {
+public class GeneratorPoorOreLead extends GeneratorPoorOre {
 
-    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RC_POOR_TIN", new Class[0], new Object[0]);
-    private static final int Y_LEVEL = 50;
-    private static final int Y_RANGE = 2;
-    private static final int DENSITY = 2;
-    private static final int SEED = 50;
+    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RC_POOR_LEAD", new Class[0], new Object[0]);
+    private static final int Y_LEVEL = 30;
+    private static final int Y_RANGE = 3;
+    private static final int DENSITY = 6;
+    private static final int SEED = 82;
 
-    public PoorTinGenerator() {
-        super(EVENT_TYPE, EnumOre.POOR_TIN, DENSITY, Y_LEVEL, Y_RANGE, SEED);
+    public GeneratorPoorOreLead() {
+        super(EVENT_TYPE, EnumOre.POOR_LEAD, DENSITY, Y_LEVEL, Y_RANGE, SEED);
     }
 
 }

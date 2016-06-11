@@ -18,9 +18,10 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.message.Message;
@@ -30,6 +31,8 @@ import org.apache.logging.log4j.message.MessageFormatMessageFactory;
 import java.util.List;
 
 /**
+ * Commands for assisting with debug operations.
+ *
  * Created by CovertJaguar on 3/12/2015.
  */
 public class CommandDebug extends SubCommand {
@@ -49,10 +52,7 @@ public class CommandDebug extends SubCommand {
 
     private static void printTarget(ICommandSender sender, World world, WorldCoordinate pos) {
         Block block = WorldPlugin.getBlock(world, pos);
-        if (block != null)
-            printLine(sender, "Target block [{0}] = {1}, {2}", shortCoords(pos), block.getClass(), block.getUnlocalizedName());
-        else
-            printLine(sender, "Target block [{0}] = null", shortCoords(pos));
+        printLine(sender, "Target block [{0}] = {1}, {2}", shortCoords(pos), block.getClass(), block.getUnlocalizedName());
         TileEntity t = world.getTileEntity(pos);
         if (t != null)
             printLine(sender, "Target tile [{0}, {1}, {2}] = {3}", t.getPos().getX(), t.getPos().getY(), t.getPos().getZ(), t.getClass());
@@ -72,14 +72,14 @@ public class CommandDebug extends SubCommand {
         }
 
         @Override
-        public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
+        public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
             if (args.length != 3)
                 CommandHelpers.throwWrongUsage(sender, this);
 
 
             BlockPos pos = CommandHelpers.parseBlockPos(sender, this, args, 0);
 
-            World world = CommandHelpers.getWorld(sender, this);
+            World world = CommandHelpers.getWorld(sender);
             TileEntity tile = WorldPlugin.getBlockTile(world, pos);
             if (tile instanceof RailcraftTileEntity) {
                 List<String> debug = ((RailcraftTileEntity) tile).getDebugOutput();
@@ -99,13 +99,13 @@ public class CommandDebug extends SubCommand {
         }
 
         @Override
-        public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
+        public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
             if (args.length != 3)
                 CommandHelpers.throwWrongUsage(sender, this);
 
             BlockPos pos = CommandHelpers.parseBlockPos(sender, this, args, 0);
 
-            World world = CommandHelpers.getWorld(sender, this);
+            World world = CommandHelpers.getWorld(sender);
             TileEntity tile = WorldPlugin.getBlockTile(world, pos);
             if (tile instanceof IControllerTile) {
                 IControllerTile conTile = (IControllerTile) tile;
@@ -122,7 +122,7 @@ public class CommandDebug extends SubCommand {
                         printLine(sender, "Updating Rec Aspect");
                         rec.onControllerAspectChange(con, con.getAspectFor(pair));
                         printLine(sender, "Post Rec Aspect = {0}", ((SimpleSignalReceiver) rec).getAspect());
-                        world.markBlockForUpdate(pos);
+                        WorldPlugin.markBlockForUpdate(world, pos);
                     } else if (rec == null) {
                         printLine(sender, "Could not find Rec at {0}", shortCoords(pair));
                         printTarget(sender, tile.getWorld(), pair);
@@ -142,13 +142,13 @@ public class CommandDebug extends SubCommand {
         }
 
         @Override
-        public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
+        public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
             if (args.length != 3)
                 CommandHelpers.throwWrongUsage(sender, this);
 
             BlockPos pos = CommandHelpers.parseBlockPos(sender, this, args, 0);
 
-            World world = CommandHelpers.getWorld(sender, this);
+            World world = CommandHelpers.getWorld(sender);
             TileEntity tile = WorldPlugin.getBlockTile(world, pos);
             if (tile instanceof IReceiverTile) {
                 IReceiverTile recTile = (IReceiverTile) tile;
@@ -169,7 +169,7 @@ public class CommandDebug extends SubCommand {
                             printLine(sender, "Updating Rec Aspect");
                             rec.onControllerAspectChange(con, con.getAspectFor(pair));
                             printLine(sender, "Post Rec Aspect = {0}", ((SimpleSignalReceiver) rec).getAspect());
-                            world.markBlockForUpdate(pos);
+                            WorldPlugin.markBlockForUpdate(world, pos);
                         }
                     } else {
                         printLine(sender, "Could not find Con at {0}", shortCoords(pair));

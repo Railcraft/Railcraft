@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 public abstract class CartMaintenancePatternBase extends CartMaintenanceBase implements ISidedInventory {
     protected final StandaloneInventory patternInv = new StandaloneInventory(6, this);
 
-    public CartMaintenancePatternBase(World world) {
+    protected CartMaintenancePatternBase(World world) {
         super(world);
     }
 

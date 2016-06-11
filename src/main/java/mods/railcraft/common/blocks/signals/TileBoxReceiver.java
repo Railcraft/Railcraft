@@ -82,7 +82,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
 
     @Override
     public int getPowerOutput(EnumFacing side) {
-        TileEntity tile = WorldPlugin.getTileEntityOnSide(worldObj, getPos(), side.getOpposite());
+        TileEntity tile = WorldPlugin.getBlockTile(worldObj, getPos().offset(side.getOpposite()));
         if (tile instanceof TileBoxBase)
             return NO_POWER;
         return doesActionOnAspect(receiver.getAspect()) ? FULL_POWER : NO_POWER;

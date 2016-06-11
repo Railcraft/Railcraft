@@ -121,7 +121,7 @@ public abstract class InvTools {
 
     @Nullable
     public static IInventoryObject getInventoryFromSide(World world, BlockPos pos, EnumFacing side, java.util.function.Predicate<TileEntity> filter) {
-        TileEntity tile = WorldPlugin.getTileEntityOnSide(world, pos, side);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos.offset(side));
         if (tile == null || !(tile instanceof IInventory) || !filter.test(tile))
             return null;
         return getInventory(tile, side.getOpposite());
