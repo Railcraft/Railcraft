@@ -8,7 +8,7 @@
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 
-package mods.railcraft.client.sounds;
+package mods.railcraft.client.util.sounds;
 
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.item.EntityMinecart;

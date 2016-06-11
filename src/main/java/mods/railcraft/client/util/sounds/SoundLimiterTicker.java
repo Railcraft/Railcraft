@@ -6,7 +6,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  */
-package mods.railcraft.client.sounds;
+package mods.railcraft.client.util.sounds;
 
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

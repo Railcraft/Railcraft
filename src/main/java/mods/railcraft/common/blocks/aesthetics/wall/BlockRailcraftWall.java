@@ -9,7 +9,6 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.wall;
 
-import mods.railcraft.common.util.sounds.RailcraftSound;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -17,6 +16,7 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockWall;
@@ -53,7 +53,7 @@ public class BlockRailcraftWall extends BlockWall {
 
         this.alphaBlend = alphaBlend;
         this.proxy = proxy;
-        this.setSoundType(RailcraftSound.instance());
+        this.setSoundType(RailcraftSoundTypes.OVERRIDE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 

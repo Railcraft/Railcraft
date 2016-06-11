@@ -13,6 +13,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -100,11 +101,11 @@ public class SoundHelper {
     //TODO: test
     public static void playBlockSound(World world, BlockPos pos, SoundEvent sound, SoundCategory category, float volume, float pitch, IBlockState state) {
         if (world != null && sound != null) {
-            String soundPath = sound.getSoundName().getResourcePath();
-            if (soundPath.contains("railcraft")) {
+            ResourceLocation soundPath = sound.getSoundName();
+            if (matchesSoundResource(sound.getSoundName(), "override")) {
                 SoundType blockSound = SoundRegistry.getBlockSound(state, world, pos);
                 if (blockSound != null) {
-                    SoundEvent newSound = SoundRegistry.matchSoundType(soundPath, blockSound);
+                    SoundEvent newSound = matchSoundEvent(soundPath, blockSound);
                     playSound(world, null, pos, newSound, category, volume, pitch * blockSound.getPitch());
                 }
             }
@@ -117,4 +118,25 @@ public class SoundHelper {
             world.playEvent(player, id, pos, data);
     }
 
+    public static boolean matchesSoundResource(ResourceLocation resource, String type) {
+        return resource.getResourceDomain().startsWith("railcraft") && resource.getResourcePath().startsWith(type);
+    }
+
+    public static SoundEvent matchSoundEvent(ResourceLocation resource, SoundType soundType) {
+        String soundPath = resource.getResourcePath();
+        String typeString = soundPath.substring(soundPath.lastIndexOf(".") + 1);
+        switch (typeString) {
+            case "break":
+                return soundType.getBreakSound();
+            case "fall":
+                return soundType.getFallSound();
+            case "hit":
+                return soundType.getHitSound();
+            case "place":
+                return soundType.getPlaceSound();
+            case "step":
+                return soundType.getStepSound();
+        }
+        return soundType.getStepSound();
+    }
 }

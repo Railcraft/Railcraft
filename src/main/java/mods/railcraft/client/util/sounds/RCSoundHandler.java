@@ -1,18 +1,21 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.client.sounds;
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
+package mods.railcraft.client.util.sounds;
 
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.block.SoundType;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -33,7 +36,10 @@ public class RCSoundHandler {
     @SubscribeEvent
     public void onPlaySound(PlaySoundEvent event) {
         ISound soundEvent = event.getSound();
-        if (soundEvent != null && soundEvent.getSoundLocation().getResourcePath().contains("railcraft")) {
+        ResourceLocation soundResource = soundEvent.getSoundLocation();
+        if (SoundHelper.matchesSoundResource(soundResource, "null")) {
+            event.setResultSound(null);
+        } else if (SoundHelper.matchesSoundResource(soundResource, "override")) {
             World world = Railcraft.getProxy().getClientWorld();
             if (world != null) {
                 float x = soundEvent.getXPosF();
@@ -50,7 +56,7 @@ public class RCSoundHandler {
                     }
                 }
                 if (blockSound != null) {
-                    SoundEvent newSound = SoundRegistry.matchSoundType(soundPath, blockSound);
+                    SoundEvent newSound = SoundHelper.matchSoundEvent(soundResource, blockSound);
                     event.setResultSound(new PositionedSoundRecord(newSound, soundEvent.getCategory(), soundEvent.getVolume(), soundEvent.getPitch() * blockSound.getPitch(), x, y, z));
                 }
             }

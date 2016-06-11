@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.aesthetics.slab;
 
 import mods.railcraft.client.particles.ParticleHelper;
-import mods.railcraft.common.util.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -21,6 +20,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.IBlockSoundProvider;
+import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -62,7 +62,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
 
     BlockRailcraftSlab() {
         super(Material.ROCK);
-        setSoundType(RailcraftSound.instance());
+        setSoundType(RailcraftSoundTypes.OVERRIDE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         useNeighborBrightness = true;
     }

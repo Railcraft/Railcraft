@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.util.sounds;
 
-import com.google.common.base.Strings;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPost;
@@ -19,10 +18,10 @@ import mods.railcraft.common.blocks.aesthetics.wall.EnumWallBeta;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,23 +44,6 @@ public class SoundRegistry {
         else {
             return customSounds.get(blockState);
         }
-    }
-
-    public static SoundEvent matchSoundType(String soundPath, SoundType soundType) {
-        String typeString = soundPath.substring(soundPath.lastIndexOf(".") + 1);
-        switch (typeString) {
-            case "break":
-                return soundType.getBreakSound();
-            case "fall":
-                return soundType.getFallSound();
-            case "hit":
-                return soundType.getHitSound();
-            case "place":
-                return soundType.getPlaceSound();
-            case "step":
-                return soundType.getStepSound();
-        }
-        return soundType.getStepSound();
     }
 
     public static void setupBlockSounds() {
@@ -94,8 +76,8 @@ public class SoundRegistry {
                 registerBlockSound(wall.ordinal(), SoundType.STONE);
             }
 
-            registerBlockSound(EnumWallAlpha.ICE.ordinal(), Block.soundTypeGlass);
-            registerBlockSound(EnumWallAlpha.SNOW.ordinal(), Block.soundTypeSnow);
+            registerBlockSound(EnumWallAlpha.ICE.ordinal(), SoundType.GLASS);
+            registerBlockSound(EnumWallAlpha.SNOW.ordinal(), SoundType.SNOW);
         }
 
         block = BlockRailcraftWall.getBlockBeta();
@@ -107,7 +89,9 @@ public class SoundRegistry {
         }
     }
 
-    private static void registerBlockSound(IBlockState blockState, SoundType sound) {
+    private static void registerBlockSound(@Nullable IBlockState blockState, SoundType sound) {
+        if (blockState == null)
+            return;
         customSounds.put(blockState, sound);
     }
 }

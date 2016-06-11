@@ -8,12 +8,9 @@
  */
 package mods.railcraft.common.carts;
 
-
 import net.minecraft.item.Item;
 
-
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemCartVanilla extends ItemCart {
@@ -24,15 +21,4 @@ public class ItemCartVanilla extends ItemCart {
         super(cart);
         this.original = original;
     }
-
-    @Override
-    public IIcon getIconFromDamage(int damage) {
-        return original.getIconFromDamage(damage);
-    }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        original.registerIcons(iconRegister);
-    }
-
 }

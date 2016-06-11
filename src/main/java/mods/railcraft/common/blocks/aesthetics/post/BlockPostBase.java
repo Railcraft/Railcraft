@@ -9,11 +9,11 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import mods.railcraft.common.util.sounds.RailcraftSound;
 import mods.railcraft.common.blocks.signals.MaterialStructure;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
+import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -36,7 +36,7 @@ public abstract class BlockPostBase extends Block {
 
     protected BlockPostBase() {
         super(new MaterialStructure());
-        setSoundType(RailcraftSound.instance());
+        setSoundType(RailcraftSoundTypes.OVERRIDE);
         setResistance(15);
         setHardness(3);
 

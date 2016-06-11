@@ -14,7 +14,7 @@ import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid;
 import mods.railcraft.client.render.tesr.*;
-import mods.railcraft.client.sounds.RCSoundHandler;
+import mods.railcraft.client.util.sounds.RCSoundHandler;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;

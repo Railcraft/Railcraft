@@ -11,19 +11,22 @@ package mods.railcraft.common.items.firestone;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -31,6 +34,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -40,6 +44,7 @@ import java.util.Random;
  */
 public class BlockFirestoneRecharge extends BlockContainer {
     public static final PropertyBool CRACKED = PropertyBool.create("cracked");
+    public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-0.3).raiseFloor(0.4).raiseCeiling(-0.1).build();
     private static Block block;
 
     public static Block getBlock() {
@@ -59,13 +64,16 @@ public class BlockFirestoneRecharge extends BlockContainer {
     public BlockFirestoneRecharge() {
         super(Material.ROCK);
         disableStats();
-        setSoundType(new SoundType("null", 0, 0));
-        float f = 0.2F;
-        setBlockBounds(0.5F - f, 0.4F, 0.5F - f, 0.5F + f, 0.9f, 0.5F + f);
+        setSoundType(RailcraftSoundTypes.NULL);
         setLightLevel(1);
         setDefaultState(blockState.getBaseState().withProperty(CRACKED, false));
 
         GameRegistry.registerTileEntity(TileFirestoneRecharge.class, "RCFirestoneRechargeTile");
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return BOUNDING_BOX;
     }
 
     /**
@@ -100,7 +108,7 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     @Override
-    public ItemStack getPickBlock(RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         return ItemFirestoneRefined.getItemCharged();
     }
 
@@ -112,7 +120,7 @@ public class BlockFirestoneRecharge extends BlockContainer {
             TileFirestoneRecharge firestone = (TileFirestoneRecharge) tile;
             Item item = state.getValue(CRACKED) ? ItemFirestoneRefined.item : ItemFirestoneCracked.item;
             ItemStack drop = new ItemStack(item, 1, ItemFirestoneRefined.item.getMaxDamage() - firestone.charge);
-            if (firestone.getItemName() != null)
+            if (firestone.hasCustomName())
                 drop.setStackDisplayName(firestone.getItemName());
             drops.add(drop);
         } else
@@ -121,12 +129,13 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+        //noinspection ConstantConditions
+        player.addStat(StatList.getBlockStats(this));
         player.addExhaustion(0.025F);
         if (Game.isHost(world))
             dropBlockAsItem(world, pos, WorldPlugin.getBlockState(world, pos), 0);
@@ -134,59 +143,42 @@ public class BlockFirestoneRecharge extends BlockContainer {
     }
 
     @Override
-    public int getRenderType() {
-        return -1;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isFullCube() {
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
         return null;
     }
 
-    //    @Override
-//    public void addCollisionBoxesToList(World par1World, int par2, int par3, int par4, AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity) {
-//    }
-//
-//    @Override
-//    public boolean canCollideCheck(int par1, boolean par2) {
-//        return false;
-//    }
-//    @Override
-//    public boolean isCollidable() {
-//        return false;
-//    }
-//
-//    @Override
-//    public int getMobilityFlag() {
-//        return 1;
-//    }
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileFirestoneRecharge();
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager effectRenderer) {
         return true;
     }
 
     @Override
-    public boolean addHitEffects(World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
+    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
         return true;
     }
 

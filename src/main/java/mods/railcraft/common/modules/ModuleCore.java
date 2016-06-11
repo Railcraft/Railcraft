@@ -15,7 +15,7 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
-import mods.railcraft.client.sounds.SoundLimiterTicker;
+import mods.railcraft.client.util.sounds.SoundLimiterTicker;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.machine.IEnumMachine;

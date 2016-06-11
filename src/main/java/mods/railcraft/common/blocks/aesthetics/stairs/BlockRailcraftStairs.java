@@ -19,7 +19,7 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.IBlockSoundProvider;
-import mods.railcraft.common.util.sounds.RailcraftSound;
+import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
@@ -60,7 +60,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
 
     BlockRailcraftStairs() {
         super(Blocks.STONEBRICK.getDefaultState());
-        setSoundType(RailcraftSound.instance());
+        setSoundType(RailcraftSoundTypes.OVERRIDE);
         setDefaultState(getDefaultState().withProperty(MATERIAL, BlockMaterial.SANDY_BRICK));
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         useNeighborBrightness = true;

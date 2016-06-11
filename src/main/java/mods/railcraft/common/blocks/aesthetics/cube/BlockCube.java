@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.aesthetics.cube;
 
 import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
-import mods.railcraft.common.util.sounds.RailcraftSound;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -19,6 +18,7 @@ import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
+import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -31,8 +31,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -57,7 +57,7 @@ public class BlockCube extends Block {
         setUnlocalizedName("railcraft.cube");
         setResistance(20);
         setHardness(5);
-        setSoundType(RailcraftSound.instance());
+        setSoundType(RailcraftSoundTypes.OVERRIDE);
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
