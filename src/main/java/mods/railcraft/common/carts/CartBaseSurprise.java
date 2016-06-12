@@ -1,0 +1,263 @@
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
+ * This code is the property of CovertJaguar
+ * and may only be used with explicit written
+ * permission unless otherwise specified on the
+ * license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
+package mods.railcraft.common.carts;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.PotionsPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.BiConsumer;
+
+public abstract class CartBaseSurprise extends EntityCartTNTWood {
+
+    protected static final Surprise COAL = new SurpriseItem(new ItemStack(Items.COAL), 100);
+    private static final byte SPAWN_DIST = 2;
+    private static final Multimap<Class<? extends CartBaseSurprise>, SurpriseCategory> SURPRISES = HashMultimap.create();
+
+    protected CartBaseSurprise(World world) {
+        super(world);
+    }
+
+    protected CartBaseSurprise(World world, double d, double d1, double d2) {
+        super(world);
+    }
+
+    protected static SurpriseCategory createSurpriseCategory(Class<? extends CartBaseSurprise> clazz, int chance) {
+        SurpriseCategory category = new SurpriseCategory(chance);
+        SURPRISES.put(clazz, category);
+        return category;
+    }
+
+    public Random getRandom() {
+        return rand;
+    }
+
+    @Override
+    public final void explode(float blastRadius) {
+        super.explode(blastRadius);
+        if (Game.isHost(worldObj))
+            spawnSurprises();
+    }
+
+    protected void spawnSurprises() {
+        List<SurpriseCategory> categories = new ArrayList<>(SURPRISES.get(getClass()));
+        while (true) {
+            int index = rand.nextInt(categories.size());
+            SurpriseCategory category = categories.get(index);
+            int weight = rand.nextInt(100);
+            if (category.chance >= weight) {
+                category.spawnSurprises(this);
+                return;
+            }
+        }
+    }
+
+    protected interface Surprise {
+
+        void spawn(CartBaseSurprise cart);
+
+        int getWeight();
+
+    }
+
+    protected static class SurpriseCategory {
+        private final List<Surprise> surprises = new ArrayList<>();
+        private final int chance;
+        private int numberToSpawn = 1;
+
+        private SurpriseCategory(int chance) {
+            this.chance = chance;
+        }
+
+        protected void setNumberToSpawn(int amount) {
+            this.numberToSpawn = amount;
+        }
+
+        protected Surprise getWeightedSurprise(Random rand) {
+            if (surprises.isEmpty())
+                return COAL;
+            while (true) {
+                int index = rand.nextInt(surprises.size());
+                Surprise surprise = surprises.get(index);
+                int weight = rand.nextInt(100);
+                if (surprise.getWeight() >= weight)
+                    return surprise;
+            }
+        }
+
+        protected void spawnSurprises(CartBaseSurprise cart) {
+            for (int i = 0; i < numberToSpawn; i++) {
+                getWeightedSurprise(cart.rand).spawn(cart);
+            }
+        }
+
+        protected void add(Surprise surprise) {
+            surprises.add(surprise);
+        }
+
+        protected void add(@Nullable ItemStack gift, int chance) {
+            if (gift != null)
+                surprises.add(new SurpriseItem(gift, chance));
+        }
+
+        protected void add(@Nullable Item gift, int chance) {
+            if (gift != null)
+                surprises.add(new SurpriseItem(new ItemStack(gift), chance));
+        }
+
+        protected void add(@Nullable Item gift, int stackSize, int chance) {
+            if (gift != null)
+                surprises.add(new SurpriseItem(new ItemStack(gift, stackSize), chance));
+        }
+
+        protected void add(@Nullable Block gift, int chance) {
+            if (gift != null)
+                surprises.add(new SurpriseItem(new ItemStack(gift), chance));
+        }
+
+        protected void add(RailcraftItems gift, int chance) {
+            add(gift.getStack(), chance);
+        }
+    }
+
+    protected abstract static class SurpriseItemStack implements Surprise {
+        public final int weight;
+
+        protected SurpriseItemStack(int weight) {
+            this.weight = weight;
+        }
+
+        public abstract ItemStack getStack(Random rand);
+
+        @Override
+        public void spawn(CartBaseSurprise cart) {
+            Random rand = cart.rand;
+            double x = cart.posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
+            double y = cart.posY + 1 + rand.nextInt(3) - 1;
+            double z = cart.posZ + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
+            InvTools.dropItem(getStack(rand), cart.worldObj, x, y, z);
+        }
+
+        @Override
+        public int getWeight() {
+            return weight;
+        }
+    }
+
+    protected static class SurpriseItem extends SurpriseItemStack {
+
+        public final ItemStack stack;
+
+        protected SurpriseItem(ItemStack stack, int weight) {
+            super(weight);
+            this.stack = stack;
+        }
+
+        @Override
+        public ItemStack getStack(Random rand) {
+            return stack.copy();
+        }
+    }
+
+    protected static class SurprisePotion extends SurpriseItemStack {
+
+        protected SurprisePotion(int weight) {
+            super(weight);
+        }
+
+        @Override
+        public ItemStack getStack(Random rand) {
+            float type = rand.nextFloat();
+            List<ItemStack> choices;
+            if (type > 0.8F)
+                choices = PotionsPlugin.getPotionsLingering();
+            else if (type > 0.5F)
+                choices = PotionsPlugin.getPotionsSplash();
+            else
+                choices = PotionsPlugin.getPotions();
+            ItemStack potion = choices.get(rand.nextInt(choices.size()));
+            return potion.copy();
+        }
+    }
+
+    protected static class SurpriseEntity<T extends EntityLiving> implements Surprise {
+        public final Class<T> entityType;
+        public final int weight;
+        public final int numToSpawn;
+        private final BiConsumer<CartBaseSurprise, T> setup;
+
+        protected SurpriseEntity(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup) {
+            this.entityType = entityType;
+            this.weight = weight;
+            this.numToSpawn = numToSpawn;
+            this.setup = setup;
+        }
+
+        public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn) {
+            return new SurpriseEntity<T>(entityType, weight, numToSpawn, (cart, entity) -> entity.onInitialSpawn(cart.worldObj.getDifficultyForLocation(new BlockPos(entity)), null));
+        }
+
+        public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup) {
+            return new SurpriseEntity<T>(entityType, weight, numToSpawn, setup);
+        }
+
+        @Override
+        public void spawn(CartBaseSurprise cart) {
+            Random rand = cart.rand;
+            World world = cart.worldObj;
+
+            for (int i = 0; i < numToSpawn; i++) {
+                Entity entity = EntityList.createEntityByName(EntityList.getEntityStringFromClass(entityType), world);
+
+                if (entityType.isInstance(entity)) {
+                    T living = entityType.cast(entity);
+                    double x = cart.posX + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
+                    double y = cart.posY + living.height + rand.nextInt(3);
+                    double z = cart.posZ + (rand.nextDouble() - rand.nextDouble()) * SPAWN_DIST;
+                    living.setLocationAndAngles(x, y, z, rand.nextFloat() * 360.0F, 0.0F);
+
+                    if (world.checkNoEntityCollision(living.getEntityBoundingBox())
+                            && world.getCollisionBoxes(living, living.getEntityBoundingBox()).isEmpty()
+                            && !world.containsAnyLiquid(living.getEntityBoundingBox())) {
+
+                        setup.accept(cart, entityType.cast(living));
+
+                        world.spawnEntityInWorld(living);
+                        world.playEvent(2004, new BlockPos(x, y, z), 0);
+
+                        living.spawnExplosionParticle();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public int getWeight() {
+            return weight;
+        }
+    }
+
+}
