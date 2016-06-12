@@ -89,8 +89,8 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
     protected void entityInit() {
         super.entityInit();
 
-        fireAspect = new EssentiaTank(Aspect.FIRE, 256, dataWatcher, FIRE_ASPECT_DATA_ID);
-        waterAspect = new EssentiaTank(Aspect.WATER, 256, dataWatcher, WATER_ASPECT_DATA_ID);
+        fireAspect = new EssentiaTank(Aspect.FIRE, 256, dataManager, FIRE_ASPECT_DATA_ID);
+        waterAspect = new EssentiaTank(Aspect.WATER, 256, dataManager, WATER_ASPECT_DATA_ID);
 
         boiler.setFuelProvider(new EssentiaFuelProvider(fireAspect) {
             @Override

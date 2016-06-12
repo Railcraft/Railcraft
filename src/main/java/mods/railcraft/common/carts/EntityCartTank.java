@@ -69,34 +69,34 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.addObject(FLUID_ID_DATA_ID, -1);
-        dataWatcher.addObject(FLUID_QTY_DATA_ID, 0);
-        dataWatcher.addObject(FLUID_COLOR_DATA_ID, StandardTank.DEFAULT_COLOR);
-        dataWatcher.addObject(FILLING_DATA_ID, (byte) 0);
+        dataManager.register(FLUID_ID_DATA_ID, -1);
+        dataManager.register(FLUID_QTY_DATA_ID, 0);
+        dataManager.register(FLUID_COLOR_DATA_ID, StandardTank.DEFAULT_COLOR);
+        dataManager.register(FILLING_DATA_ID, (byte) 0);
     }
 
     private int getFluidQty() {
-        return dataWatcher.getWatchableObjectInt(FLUID_QTY_DATA_ID);
+        return dataManager.get(FLUID_QTY_DATA_ID);
     }
 
     private void setFluidQty(int qty) {
-        dataWatcher.updateObject(FLUID_QTY_DATA_ID, qty);
+        dataManager.set(FLUID_QTY_DATA_ID, qty);
     }
 
     private int getFluidId() {
-        return dataWatcher.getWatchableObjectInt(FLUID_ID_DATA_ID);
+        return dataManager.get(FLUID_ID_DATA_ID);
     }
 
     private void setFluidId(int fluidId) {
-        dataWatcher.updateObject(FLUID_ID_DATA_ID, fluidId);
+        dataManager.set(FLUID_ID_DATA_ID, fluidId);
     }
 
     private int getFluidColor() {
-        return dataWatcher.getWatchableObjectInt(FLUID_COLOR_DATA_ID);
+        return dataManager.get(FLUID_COLOR_DATA_ID);
     }
 
     private void setFluidColor(int color) {
-        dataWatcher.updateObject(FLUID_COLOR_DATA_ID, color);
+        dataManager.set(FLUID_COLOR_DATA_ID, color);
     }
 
     public TankManager getTankManager() {
@@ -233,12 +233,12 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     }
 
     public boolean isFilling() {
-        return dataWatcher.getWatchableObjectByte(FILLING_DATA_ID) != 0;
+        return dataManager.get(FILLING_DATA_ID) != 0;
     }
 
     @Override
     public void setFilling(boolean fill) {
-        dataWatcher.updateObject(FILLING_DATA_ID, fill ? 1 : (byte) 0);
+        dataManager.set(FILLING_DATA_ID, fill ? 1 : (byte) 0);
     }
 
     public Fluid getFilterFluid() {

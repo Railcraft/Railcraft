@@ -110,13 +110,13 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     protected void entityInit() {
         super.entityInit();
 
-        dataWatcher.addObject(HAS_FUEL_DATA_ID, (byte) 0);
-        dataWatcher.addObject(PRIMARY_COLOR_DATA_ID, (byte) 0);
-        dataWatcher.addObject(SECONDARY_COLOR_DATA_ID, (byte) 0);
-        dataWatcher.addObject(LOCOMOTIVE_MODE_DATA_ID, (byte) LocoMode.SHUTDOWN.ordinal());
-        dataWatcher.addObject(LOCOMOTIVE_SPEED_DATA_ID, (byte) 0);
-        dataWatcher.addObject(EMBLEM_DATA_ID, "");
-        dataWatcher.addObject(DEST_DATA_ID, "");
+        dataManager.register(HAS_FUEL_DATA_ID, (byte) 0);
+        dataManager.register(PRIMARY_COLOR_DATA_ID, (byte) 0);
+        dataManager.register(SECONDARY_COLOR_DATA_ID, (byte) 0);
+        dataManager.register(LOCOMOTIVE_MODE_DATA_ID, (byte) LocoMode.SHUTDOWN.ordinal());
+        dataManager.register(LOCOMOTIVE_SPEED_DATA_ID, (byte) 0);
+        dataManager.register(EMBLEM_DATA_ID, "");
+        dataManager.register(DEST_DATA_ID, "");
     }
 
     @Override
@@ -227,12 +227,12 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
     }
 
     public String getEmblem() {
-        return dataWatcher.getWatchableObjectString(EMBLEM_DATA_ID);
+        return dataManager.get(EMBLEM_DATA_ID);
     }
 
     public void setEmblem(String emblem) {
         if (!getEmblem().equals(emblem))
-            dataWatcher.updateObject(EMBLEM_DATA_ID, emblem);
+            dataManager.set(EMBLEM_DATA_ID, emblem);
     }
 
     public ItemStack getDestItem() {
@@ -241,50 +241,50 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
 
     @Override
     public String getDestination() {
-        return dataWatcher.getWatchableObjectString(DEST_DATA_ID);
+        return dataManager.get(DEST_DATA_ID);
     }
 
     public void setDestString(String dest) {
         if (!getDestination().equals(dest))
-            dataWatcher.updateObject(DEST_DATA_ID, dest);
+            dataManager.set(DEST_DATA_ID, dest);
     }
 
     public LocoMode getMode() {
-        return LocoMode.VALUES[dataWatcher.getWatchableObjectByte(LOCOMOTIVE_MODE_DATA_ID)];
+        return LocoMode.VALUES[dataManager.get(LOCOMOTIVE_MODE_DATA_ID)];
     }
 
     public void setMode(LocoMode mode) {
         if (getMode() != mode)
-            dataWatcher.updateObject(LOCOMOTIVE_MODE_DATA_ID, (byte) mode.ordinal());
+            dataManager.set(LOCOMOTIVE_MODE_DATA_ID, (byte) mode.ordinal());
     }
 
     public LocoSpeed getSpeed() {
-        return LocoSpeed.VALUES[dataWatcher.getWatchableObjectByte(LOCOMOTIVE_SPEED_DATA_ID)];
+        return LocoSpeed.VALUES[dataManager.get(LOCOMOTIVE_SPEED_DATA_ID)];
     }
 
     public void setSpeed(LocoSpeed speed) {
         if (getSpeed() != speed)
-            dataWatcher.updateObject(LOCOMOTIVE_SPEED_DATA_ID, (byte) speed.ordinal());
+            dataManager.set(LOCOMOTIVE_SPEED_DATA_ID, (byte) speed.ordinal());
     }
 
     public void increaseSpeed() {
         LocoSpeed speed = getSpeed();
         if (speed != LocoSpeed.MAX)
-            dataWatcher.updateObject(LOCOMOTIVE_SPEED_DATA_ID, (byte) (speed.ordinal() - 1));
+            dataManager.set(LOCOMOTIVE_SPEED_DATA_ID, (byte) (speed.ordinal() - 1));
     }
 
     public void decreaseSpeed() {
         LocoSpeed speed = getSpeed();
         if (speed != LocoSpeed.REVERSE)
-            dataWatcher.updateObject(LOCOMOTIVE_SPEED_DATA_ID, (byte) (speed.ordinal() + 1));
+            dataManager.set(LOCOMOTIVE_SPEED_DATA_ID, (byte) (speed.ordinal() + 1));
     }
 
     public boolean hasFuel() {
-        return dataWatcher.getWatchableObjectByte(HAS_FUEL_DATA_ID) != 0;
+        return dataManager.get(HAS_FUEL_DATA_ID) != 0;
     }
 
     public void setHasFuel(boolean powered) {
-        dataWatcher.updateObject(HAS_FUEL_DATA_ID, (byte) (powered ? 1 : 0));
+        dataManager.set(HAS_FUEL_DATA_ID, (byte) (powered ? 1 : 0));
     }
 
     public boolean isRunning() {
@@ -706,20 +706,20 @@ public abstract class EntityLocomotive extends CartContainerBase implements IDir
 
     @Override
     public final EnumDyeColor getPrimaryColor() {
-        return EnumDyeColor.byMetadata(dataWatcher.getWatchableObjectByte(PRIMARY_COLOR_DATA_ID));
+        return EnumDyeColor.byMetadata(dataManager.get(PRIMARY_COLOR_DATA_ID));
     }
 
     public final void setPrimaryColor(EnumDyeColor color) {
-        dataWatcher.updateObject(PRIMARY_COLOR_DATA_ID, color.getMetadata());
+        dataManager.set(PRIMARY_COLOR_DATA_ID, color.getMetadata());
     }
 
     @Override
     public final EnumDyeColor getSecondaryColor() {
-        return EnumDyeColor.byMetadata(dataWatcher.getWatchableObjectByte(SECONDARY_COLOR_DATA_ID));
+        return EnumDyeColor.byMetadata(dataManager.get(SECONDARY_COLOR_DATA_ID));
     }
 
     public final void setSecondaryColor(EnumDyeColor color) {
-        dataWatcher.updateObject(SECONDARY_COLOR_DATA_ID, color.getMetadata());
+        dataManager.set(SECONDARY_COLOR_DATA_ID, color.getMetadata());
     }
 
     public final String getModel() {

@@ -16,17 +16,21 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartCommandBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
-    private static final byte SLOTS_FILLED_DATA_ID = 25;
+    private static final DataParameter<Integer> SLOTS_FILLED = EntityDataManager.createKey(EntityMinecartCommandBlock.class, DataSerializers.VARINT);
 
     public EntityCartCargo(World world) {
         super(world);
@@ -51,15 +55,15 @@ public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.addObject(SLOTS_FILLED_DATA_ID, -1);
+        dataManager.register(SLOTS_FILLED, -1);
     }
 
     public int getSlotsFilled() {
-        return dataWatcher.getWatchableObjectInt(SLOTS_FILLED_DATA_ID);
+        return dataManager.get(SLOTS_FILLED);
     }
 
     private void setSlotsFilled(int slotsFilled) {
-        dataWatcher.updateObject(SLOTS_FILLED_DATA_ID, slotsFilled);
+        dataManager.set(SLOTS_FILLED, slotsFilled);
     }
 
     @Override

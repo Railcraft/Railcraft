@@ -248,19 +248,19 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.addObject(WATCHER_ID_FUEL, (byte) 0);
-        dataWatcher.addObject(WATCHER_ID_MOVING, (byte) 0);
-        dataWatcher.addObjectByDataType(WATCHER_ID_BORE_HEAD, 5);
-        dataWatcher.addObject(WATCHER_ID_FACING, (byte) 0);
-//        dataWatcher.addObject(WATCHER_ID_BURN_TIME, Integer.valueOf(0));
+        dataManager.register(WATCHER_ID_FUEL, (byte) 0);
+        dataManager.register(WATCHER_ID_MOVING, (byte) 0);
+        dataManager.addObjectByDataType(WATCHER_ID_BORE_HEAD, 5);
+        dataManager.register(WATCHER_ID_FACING, (byte) 0);
+//        dataManager.register(WATCHER_ID_BURN_TIME, Integer.valueOf(0));
     }
 
     public boolean isMinecartPowered() {
-        return dataWatcher.getWatchableObjectByte(WATCHER_ID_FUEL) != 0;
+        return dataManager.get(WATCHER_ID_FUEL) != 0;
     }
 
     public void setMinecartPowered(boolean powered) {
-        dataWatcher.updateObject(WATCHER_ID_FUEL, (byte) (powered ? 1 : 0));
+        dataManager.set(WATCHER_ID_FUEL, (byte) (powered ? 1 : 0));
     }
 
     @Override
@@ -897,52 +897,52 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
 
     protected int getDelay() {
         return delay;
-//        return dataWatcher.getWatchableObjectInt(WATCHER_ID_DELAY);
+//        return dataManager.get(WATCHER_ID_DELAY);
     }
 
     protected void setDelay(int i) {
         delay = i;
-//        dataWatcher.updateObject(WATCHER_ID_DELAY, Integer.valueOf(i));
+//        dataManager.set(WATCHER_ID_DELAY, Integer.valueOf(i));
     }
 
     protected boolean isActive() {
         return active;
-//        return dataWatcher.getWatchableObjectByte(WATCHER_ID_ACTIVE) != 0;
+//        return dataManager.get(WATCHER_ID_ACTIVE) != 0;
     }
 
     protected void setActive(boolean active) {
         this.active = active;
         TrainState state = active ? Train.TrainState.STOPPED : Train.TrainState.NORMAL;
         Train.getTrain(this).setTrainState(state);
-//        dataWatcher.updateObject(WATCHER_ID_ACTIVE, Byte.valueOf((byte)(active ? 1 : 0)));
+//        dataManager.set(WATCHER_ID_ACTIVE, Byte.valueOf((byte)(active ? 1 : 0)));
     }
 
     protected boolean isMoving() {
-        return dataWatcher.getWatchableObjectByte(WATCHER_ID_MOVING) != 0;
+        return dataManager.get(WATCHER_ID_MOVING) != 0;
     }
 
     protected void setMoving(boolean move) {
-        dataWatcher.updateObject(WATCHER_ID_MOVING, (byte) (move ? 1 : 0));
+        dataManager.set(WATCHER_ID_MOVING, (byte) (move ? 1 : 0));
     }
 
     public int getBurnTime() {
         return burnTime;
-//        return dataWatcher.getWatchableObjectInt(WATCHER_ID_BURN_TIME);
+//        return dataManager.get(WATCHER_ID_BURN_TIME);
     }
 
     public void setBurnTime(int burnTime) {
         this.burnTime = burnTime;
-//        dataWatcher.updateObject(WATCHER_ID_BURN_TIME, Integer.valueOf(burnTime));
+//        dataManager.set(WATCHER_ID_BURN_TIME, Integer.valueOf(burnTime));
     }
 
     public int getFuel() {
         return fuel;
-//        return dataWatcher.getWatchableObjectInt(WATCHER_ID_FUEL);
+//        return dataManager.get(WATCHER_ID_FUEL);
     }
 
     public void setFuel(int i) {
         fuel = i;
-//        dataWatcher.updateObject(WATCHER_ID_FUEL, Integer.valueOf(i));
+//        dataManager.set(WATCHER_ID_FUEL, Integer.valueOf(i));
     }
 
     public boolean outOfFuel() {
@@ -998,12 +998,12 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
         ItemStack boreStack = getStackInSlot(0);
         if (boreStack != null)
             boreStack = boreStack.copy();
-        dataWatcher.updateObject(WATCHER_ID_BORE_HEAD, boreStack);
+        dataManager.set(WATCHER_ID_BORE_HEAD, boreStack);
     }
 
     @Nullable
     public IBoreHead getBoreHead() {
-        ItemStack boreStack = dataWatcher.getWatchableObjectItemStack(WATCHER_ID_BORE_HEAD);
+        ItemStack boreStack = dataManager.get(WATCHER_ID_BORE_HEAD);
         if (boreStack != null && boreStack.getItem() instanceof IBoreHead)
             return (IBoreHead) boreStack.getItem();
         return null;
@@ -1042,11 +1042,11 @@ public class EntityTunnelBore extends CartContainerBase implements ILinkableCart
     }
 
     public final EnumFacing getFacing() {
-        return EnumFacing.getFront(dataWatcher.getWatchableObjectByte(WATCHER_ID_FACING));
+        return EnumFacing.getFront(dataManager.get(WATCHER_ID_FACING));
     }
 
     protected final void setFacing(EnumFacing facing) {
-        dataWatcher.updateObject(WATCHER_ID_FACING, (byte) facing.ordinal());
+        dataManager.set(WATCHER_ID_FACING, (byte) facing.ordinal());
 
         setYaw();
     }

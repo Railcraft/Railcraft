@@ -18,15 +18,15 @@ import thaumcraft.api.aspects.Aspect;
 public class EssentiaTank {
 
     private final Aspect aspect;
-    private final EntityDataManager dataWatcher;
+    private final EntityDataManager dataManager;
     private final int capacity, dataId;
 
-    public EssentiaTank(Aspect aspect, int capacity, EntityDataManager dataWatcher, int dataId) {
+    public EssentiaTank(Aspect aspect, int capacity, EntityDataManager dataManager, int dataId) {
         this.aspect = aspect;
-        this.dataWatcher = dataWatcher;
+        this.dataManager = dataManager;
         this.dataId = dataId;
         this.capacity = capacity;
-        dataWatcher.addObject(dataId, (short) 0);
+        dataManager.register(dataId, (short) 0);
     }
 
     public Aspect getAspect() {
@@ -34,11 +34,11 @@ public class EssentiaTank {
     }
 
     public int getAmount() {
-        return dataWatcher.getWatchableObjectShort(dataId);
+        return dataManager.get(dataId);
     }
 
     public void setAmount(int amount) {
-        dataWatcher.updateObject(dataId, (short) amount);
+        dataManager.set(dataId, (short) amount);
     }
 
     public int fill(int amount, boolean doAdd) {

@@ -40,7 +40,7 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.addObject(DATA_ID_BLINK, (byte) 0);
+        dataManager.register(DATA_ID_BLINK, (byte) 0);
     }
 
     @Override
@@ -49,15 +49,15 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     }
 
     protected void blink() {
-        dataWatcher.updateObject(DATA_ID_BLINK, (byte) BLINK_DURATION);
+        dataManager.set(DATA_ID_BLINK, (byte) BLINK_DURATION);
     }
 
     protected void setBlink(byte blink) {
-        dataWatcher.updateObject(DATA_ID_BLINK, blink);
+        dataManager.set(DATA_ID_BLINK, blink);
     }
 
     protected byte getBlink() {
-        return dataWatcher.getWatchableObjectByte(DATA_ID_BLINK);
+        return dataManager.get(DATA_ID_BLINK);
     }
 
     @Override
@@ -93,7 +93,7 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     }
 
     public boolean isBlinking() {
-        return dataWatcher.getWatchableObjectByte(DATA_ID_BLINK) > 0;
+        return dataManager.get(DATA_ID_BLINK) > 0;
     }
 
     protected boolean placeNewTrack(BlockPos pos, int slotStock, BlockRailBase.EnumRailDirection trackShape) {

@@ -46,7 +46,7 @@ public final class EntityCartRF extends CartBase {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.addObject(DATA_ID_RF, 0);
+        dataManager.register(DATA_ID_RF, 0);
     }
 
     public int addRF(int amount) {
@@ -76,11 +76,11 @@ public final class EntityCartRF extends CartBase {
     }
 
     public void setRF(int amount) {
-        dataWatcher.updateObject(DATA_ID_RF, amount);
+        dataManager.set(DATA_ID_RF, amount);
     }
 
     public int getRF() {
-        return dataWatcher.getWatchableObjectInt(DATA_ID_RF);
+        return dataManager.get(DATA_ID_RF);
     }
 
     public int getMaxRF() {

@@ -41,7 +41,7 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.addObjectByDataType(FILTER_DATA_ID, 5);
+        dataManager.addObjectByDataType(FILTER_DATA_ID, 5);
     }
 
     public static ItemStack getFilterFromCartItem(ItemStack cart) {
@@ -115,7 +115,7 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
     }
 
     public ItemStack getFilterItem() {
-        return dataWatcher.getWatchableObjectItemStack(FILTER_DATA_ID);
+        return dataManager.get(FILTER_DATA_ID);
     }
 
     public PhantomInventory getFilterInv() {
@@ -123,7 +123,7 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
     }
 
     public void setFilter(ItemStack filter) {
-//        dataWatcher.updateObject(FILTER_DATA_ID, filter);
+//        dataManager.set(FILTER_DATA_ID, filter);
         getFilterInv().setInventorySlotContents(0, filter);
     }
 
@@ -135,6 +135,6 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
     @Override
     public void markDirty() {
         super.markDirty();
-        dataWatcher.updateObject(FILTER_DATA_ID, getFilterInv().getStackInSlot(0));
+        dataManager.set(FILTER_DATA_ID, getFilterInv().getStackInSlot(0));
     }
 }

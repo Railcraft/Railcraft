@@ -17,12 +17,18 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityMinecartCommandBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -32,9 +38,9 @@ import java.io.IOException;
 
 public abstract class CartExplosiveBase extends CartBase implements IExplosiveCart, IGuiReturnHandler {
 
-    private static final byte FUSE_DATA_ID = 25;
-    private static final byte BLAST_DATA_ID = 26;
-    private static final byte PRIMED_DATA_ID = 27;
+    private static final DataParameter<Integer> FUSE = EntityDataManager.createKey(EntityMinecartCommandBlock.class, DataSerializers.VARINT);
+    private static final DataParameter<Byte> BLAST = EntityDataManager.createKey(EntityMinecartCommandBlock.class, DataSerializers.BYTE);
+    private static final DataParameter<Boolean> PRIMED = EntityDataManager.createKey(EntityMinecartCommandBlock.class, DataSerializers.BOOLEAN);
     private static final float BLAST_RADIUS_BYTE_MULTIPLIER = 0.5f;
     private static final float BLAST_RADIUS_MIN = 2;
     private static final float BLAST_RADIUS_MAX = 6;
@@ -56,9 +62,9 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
     protected void entityInit() {
         super.entityInit();
 
-        dataWatcher.addObject(FUSE_DATA_ID, (short) 80);
-        dataWatcher.addObject(BLAST_DATA_ID, (byte) 8);
-        dataWatcher.addObject(PRIMED_DATA_ID, (byte) 0);
+        dataManager.register(FUSE, 80);
+        dataManager.register(BLAST, (byte) 8);
+        dataManager.register(PRIMED, false);
     }
 
     @Override
@@ -96,7 +102,7 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
     @SuppressWarnings("WeakerAccess")
     protected void explode(float blastRadius) {
         isExploding = true;
-        if (Game.isHost(getWorld())) {
+        if (Game.isHost(theWorld())) {
             worldObj.createExplosion(this, posX, posY, posZ, blastRadius, true);
             setDead();
         }
@@ -166,29 +172,29 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
 
     @Override
     public boolean isPrimed() {
-        return dataWatcher.getWatchableObjectByte(PRIMED_DATA_ID) != 0;
+        return dataManager.get(PRIMED);
     }
 
     @Override
     public void setPrimed(boolean primed) {
         if (Game.isHost(worldObj) && isPrimed() != primed) {
             if (primed) {
-                worldObj.playSoundAtEntity(this, "random.fuse", 1.0F, 1.0F);
+                SoundHelper.playSoundForEntity(this, SoundEvents.ENTITY_TNT_PRIMED, 1F, 1F);
             }
-            dataWatcher.updateObject(PRIMED_DATA_ID, primed ? Byte.valueOf((byte) 1) : Byte.valueOf((byte) 0));
+            dataManager.set(PRIMED, primed);
         }
     }
 
     @Override
     public int getFuse() {
-        return dataWatcher.getWatchableObjectShort(FUSE_DATA_ID);
+        return dataManager.get(FUSE);
     }
 
     @Override
     public void setFuse(int f) {
         f = (short) Math.max(f, MIN_FUSE);
         f = (short) Math.min(f, MAX_FUSE);
-        dataWatcher.updateObject(FUSE_DATA_ID, (short) f);
+        dataManager.set(FUSE, f);
     }
 
     protected float getMinBlastRadius() {
@@ -206,7 +212,7 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
 
     @Override
     public float getBlastRadius() {
-        return dataWatcher.getWatchableObjectByte(BLAST_DATA_ID) * BLAST_RADIUS_BYTE_MULTIPLIER;
+        return dataManager.get(BLAST) * BLAST_RADIUS_BYTE_MULTIPLIER;
     }
 
     @Override
@@ -214,14 +220,14 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
         b = Math.max(b, getMinBlastRadius());
         b = Math.min(b, getMaxBlastRadius());
         b /= BLAST_RADIUS_BYTE_MULTIPLIER;
-        dataWatcher.updateObject(BLAST_DATA_ID, (byte) b);
+        dataManager.set(BLAST, (byte) b);
     }
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
         data.setShort("Fuse", (short) getFuse());
-        data.setByte("blastRadius", dataWatcher.getWatchableObjectByte(BLAST_DATA_ID));
+        data.setByte("blastRadius", dataManager.get(BLAST));
         data.setBoolean("Primed", isPrimed());
     }
 
@@ -236,7 +242,7 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
     @Override
     public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
         data.writeShort(getFuse());
-        data.writeByte(dataWatcher.getWatchableObjectByte(BLAST_DATA_ID));
+        data.writeByte(dataManager.get(BLAST));
     }
 
     @Override
