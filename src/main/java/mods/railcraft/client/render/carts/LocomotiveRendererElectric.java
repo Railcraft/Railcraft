@@ -9,18 +9,14 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.locomotive.ICartRenderer;
-import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.client.render.broken.TexturedQuadAdv;
 import mods.railcraft.client.render.models.ModelSimple;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveElectric;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBox;
-import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -31,7 +27,7 @@ import javax.annotation.Nullable;
 public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
 
     private static final ModelBase LAMP_OFF = new ModelLampOff();
-    private static final ModelBase LAMP_ON = new ModelLampOn();
+//    private static final ModelBase LAMP_ON = new ModelLampOn();
     private final ResourceLocation LAMP_TEX_ON;
     private final ResourceLocation LAMP_TEX_OFF;
 
@@ -54,7 +50,7 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
 
         if (((EntityLocomotive) cart).getMode() == EntityLocomotive.LocoMode.RUNNING) {
             renderer.bindTex(LAMP_TEX_ON);
-            LAMP_ON.render(cart, -0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+//            LAMP_ON.render(cart, -0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         } else {
             renderer.bindTex(LAMP_TEX_OFF);
             LAMP_OFF.render(cart, -0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
@@ -79,21 +75,22 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
 
     }
 
-    private static class ModelLampOn extends ModelLampOff {
-
-        public ModelLampOn() {
-            for (Object box : renderer.cubeList) {
-                TexturedQuadAdv[] quadsNew = new TexturedQuadAdv[6];
-                TexturedQuad[] quadsOld = ObfuscationReflectionHelper.getPrivateValue(ModelBox.class, (ModelBox) box, 1);
-                for (int i = 0; i < 6; i++) {
-                    quadsNew[i] = new TexturedQuadAdv(quadsOld[i].vertexPositions);
-                    quadsNew[i].setBrightness(210);
-                    quadsNew[i].setColorRGBA(255, 255, 255, 255);
-                }
-                ObfuscationReflectionHelper.setPrivateValue(ModelBox.class, (ModelBox) box, quadsNew, 1);
-            }
-        }
-
-    }
+    //TODO: render this differently
+//    private static class ModelLampOn extends ModelLampOff {
+//
+//        public ModelLampOn() {
+//            for (Object box : renderer.cubeList) {
+//                TexturedQuadAdv[] quadsNew = new TexturedQuadAdv[6];
+//                TexturedQuad[] quadsOld = ObfuscationReflectionHelper.getPrivateValue(ModelBox.class, (ModelBox) box, 1);
+//                for (int i = 0; i < 6; i++) {
+//                    quadsNew[i] = new TexturedQuadAdv(quadsOld[i].vertexPositions);
+//                    quadsNew[i].setBrightness(210);
+//                    quadsNew[i].setColorRGBA(255, 255, 255, 255);
+//                }
+//                ObfuscationReflectionHelper.setPrivateValue(ModelBox.class, (ModelBox) box, quadsNew, 1);
+//            }
+//        }
+//
+//    }
 
 }
