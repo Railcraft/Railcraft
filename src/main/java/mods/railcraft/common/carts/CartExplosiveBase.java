@@ -245,9 +245,4 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
         setBlastRadius(data.readByte());
     }
 
-    @Override
-    public World getWorld() {
-        return worldObj;
-    }
-
 }

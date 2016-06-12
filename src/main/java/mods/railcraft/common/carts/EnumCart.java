@@ -252,9 +252,9 @@ public enum EnumCart implements ICartType {
         EntityRegistry.registerModEntity(type, MiscTools.cleanTag(getTag()), id, Railcraft.getMod(), 256, 3, true);
 
         // Legacy stuff
-        EntityList.stringToClassMapping.put("Railcraft." + getTag(), type);
+        EntityList.NAME_TO_CLASS.put("Railcraft." + getTag(), type);
         if (this == LOCO_STEAM_SOLID)
-            EntityList.stringToClassMapping.put("Railcraft.railcraft.cart.loco.steam", type);
+            EntityList.NAME_TO_CLASS.put("Railcraft.railcraft.cart.loco.steam", type);
     }
 
     public boolean setup() {

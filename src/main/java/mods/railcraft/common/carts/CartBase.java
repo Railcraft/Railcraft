@@ -31,12 +31,14 @@ import java.util.List;
 public abstract class CartBase extends EntityMinecart implements IRailcraftCart, IItemCart {
     protected CartBase(World world) {
         super(world);
-        //TODO: Is this the best way?
-        setRenderDistanceWeight(CartConstants.RENDER_DIST_MULTIPLIER);
     }
 
     protected CartBase(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    {
+        //TODO: Is this the best way?
         setRenderDistanceWeight(CartConstants.RENDER_DIST_MULTIPLIER);
     }
 
@@ -105,5 +107,9 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     @Override
     public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
         return false;
+    }
+
+    public World theWorld() {
+        return worldObj;
     }
 }

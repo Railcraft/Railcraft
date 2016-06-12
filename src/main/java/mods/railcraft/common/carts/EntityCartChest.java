@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.util.misc.Game;
@@ -28,7 +27,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCartChest extends CartContainerBase implements IItemCart {
+public class EntityCartChest extends CartContainerBase {
     public EntityCartChest(World world) {
         super(world);
     }

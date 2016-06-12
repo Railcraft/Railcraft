@@ -194,13 +194,12 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 // Items
-                replaceVanillaCart(EnumCart.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, "MinecartCommandBlock", 40);
-                Items.COMMAND_BLOCK_MINECART.setCreativeTab(CreativeTabs.TRANSPORTATION);
-                replaceVanillaCart(EnumCart.BASIC, Items.MINECART, "MinecartRideable", 42);
-                replaceVanillaCart(EnumCart.CHEST, Items.CHEST_MINECART, "MinecartChest", 43);
-                replaceVanillaCart(EnumCart.FURNACE, Items.FURNACE_MINECART, "MinecartFurnace", 44);
-                replaceVanillaCart(EnumCart.TNT, Items.TNT_MINECART, "MinecartTNT", 45);
-                replaceVanillaCart(EnumCart.HOPPER, Items.HOPPER_MINECART, "MinecartHopper", 46);
+                replaceVanillaCart(EnumCart.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, EntityMinecart.Type.COMMAND_BLOCK, 40);
+                replaceVanillaCart(EnumCart.BASIC, Items.MINECART, EntityMinecart.Type.RIDEABLE, 42);
+                replaceVanillaCart(EnumCart.CHEST, Items.CHEST_MINECART, EntityMinecart.Type.CHEST, 43);
+                replaceVanillaCart(EnumCart.FURNACE, Items.FURNACE_MINECART, EntityMinecart.Type.FURNACE, 44);
+                replaceVanillaCart(EnumCart.TNT, Items.TNT_MINECART, EntityMinecart.Type.TNT, 45);
+                replaceVanillaCart(EnumCart.HOPPER, Items.HOPPER_MINECART, EntityMinecart.Type.HOPPER, 46);
 
                 LootPlugin.addLoot(EnumCart.BASIC.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.basic");
                 LootPlugin.addLoot(EnumCart.CHEST.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.chest");
@@ -282,20 +281,21 @@ public class ModuleCore extends RailcraftModulePayload {
                 MachineTileRegistery.registerTileEntities();
             }
 
-            private void replaceVanillaCart(EnumCart cartType, Item original, String entityTag, int entityId) {
+            private void replaceVanillaCart(EnumCart cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
                 cartType.registerEntity();
 
-                Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(entityTag);
+                Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(minecartType.getName());
 
                 CartUtils.classReplacements.put(minecartClass, cartType);
                 CartUtils.vanillaCartItemMap.put(original, cartType);
 
                 EntityList.ID_TO_CLASS.remove(entityId);
-                EntityList.addMapping(cartType.getCartClass(), entityTag, entityId);
+                EntityList.addMapping(cartType.getCartClass(), minecartType.getName(), entityId);
 
                 BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());
 
                 original.setMaxStackSize(RailcraftConfig.getMinecartStackSize());
+                original.setCreativeTab(CreativeTabs.TRANSPORTATION);
                 cartType.setCartItem(new ItemStack(original));
             }
 

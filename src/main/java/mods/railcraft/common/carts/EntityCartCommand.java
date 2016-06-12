@@ -8,19 +8,17 @@
  */
 package mods.railcraft.common.carts;
 
-import io.netty.buffer.ByteBuf;
-import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
+import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.entity.item.EntityMinecartCommandBlock;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.CommandBlockBaseLogic;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Credits to CovertJaguar.
@@ -28,7 +26,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author liach
  */
 public class EntityCartCommand extends EntityMinecartCommandBlock {
-
 
     public EntityCartCommand(World world) {
         super(world);
@@ -38,31 +35,38 @@ public class EntityCartCommand extends EntityMinecartCommandBlock {
         super(world, x, y, z);
     }
 
-    @Override
-    public boolean doInteract(EntityPlayer player) {
-        if (Game.isClient(worldObj)) {
-            player.func_146095_a(this.getCommandLogic());
-        }
-        return true;
+    {
+        //TODO: Is this the best way?
+        setRenderDistanceWeight(CartConstants.RENDER_DIST_MULTIPLIER);
     }
 
-    public CommandBlockBaseLogic getCommandLogic() {
-        return commandLogic;
+    @Nonnull
+    @Override
+    public ItemStack getCartItem() {
+        ItemStack stack = new ItemStack(Items.COMMAND_BLOCK_MINECART);
+        if (hasCustomName())
+            stack.setStackDisplayName(getName());
+        return stack;
     }
 
+    public List<ItemStack> getItemsDropped() {
+        List<ItemStack> items = new ArrayList<ItemStack>();
+        if (RailcraftConfig.doCartsBreakOnDrop()) {
+            items.add(new ItemStack(Items.MINECART));
+            items.add(new ItemStack(Blocks.COMMAND_BLOCK));
+        } else
+            items.add(getCartItem());
+        return items;
+    }
 
     @Override
-    public void func_145781_i(int dataValueId) {
-        super.func_145781_i(dataValueId);
-
-        if (dataValueId == 24) {
-            try {
-                this.commandLogic.func_145750_b(ITextComponent.Serializer.func_150699_a(this.getDataWatcher().getWatchableObjectString(24)));
-            } catch (Throwable ignored) {
-
-            }
-        } else if (dataValueId == 23) {
-            this.commandLogic.func_145752_a(this.getDataWatcher().getWatchableObjectString(23));
+    public void killMinecart(DamageSource par1DamageSource) {
+        setDead();
+        List<ItemStack> drops = getItemsDropped();
+        if (hasCustomName())
+            drops.get(0).setStackDisplayName(getCustomNameTag());
+        for (ItemStack item : drops) {
+            entityDropItem(item, 0.0F);
         }
     }
 }
