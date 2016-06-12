@@ -74,10 +74,6 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
         return true;
     }
 
-    public double getDrag() {
-        return CartConstants.STANDARD_DRAG;
-    }
-
     @Nonnull
     @Override
     public ItemStack getCartItem() {

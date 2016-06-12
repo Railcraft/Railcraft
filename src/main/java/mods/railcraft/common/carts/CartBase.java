@@ -61,8 +61,6 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
         return true;
     }
 
-    public abstract double getDrag();
-
     @Nonnull
     @Override
     public ItemStack getCartItem() {

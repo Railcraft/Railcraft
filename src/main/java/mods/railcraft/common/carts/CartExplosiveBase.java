@@ -250,8 +250,4 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
         return worldObj;
     }
 
-    @Override
-    public double getDrag() {
-        return CartConstants.STANDARD_DRAG;
-    }
 }

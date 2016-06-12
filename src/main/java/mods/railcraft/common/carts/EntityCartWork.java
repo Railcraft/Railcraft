@@ -76,9 +76,4 @@ public class EntityCartWork extends CartBase {
     public IBlockState getDefaultDisplayTile() {
         return Blocks.CRAFTING_TABLE.getDefaultState();
     }
-
-    @Override
-    public double getDrag() {
-        return CartConstants.STANDARD_DRAG;
-    }
 }

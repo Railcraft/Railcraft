@@ -142,9 +142,4 @@ public final class EntityCartRF extends CartBase {
 //        return Blocks.REDSTONE_BLOCK;
 //    }
 
-    @Override
-    public double getDrag() {
-        return CartConstants.STANDARD_DRAG;
-    }
-
 }

@@ -316,11 +316,6 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
     }
 
     @Override
-    public double getDrag() {
-        return CartConstants.STANDARD_DRAG;
-    }
-
-    @Override
     public void onActivatorRailPass(int x, int y, int z, boolean powered) {
         if (powered) {
             disabled = 10;
