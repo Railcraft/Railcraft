@@ -17,6 +17,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,11 +37,6 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
 
     protected CartBase(World world, double x, double y, double z) {
         super(world, x, y, z);
-    }
-
-    {
-        //TODO: Is this the best way?
-        setRenderDistanceWeight(CartConstants.RENDER_DIST_MULTIPLIER);
     }
 
     public abstract ICartType getCartType();
@@ -111,5 +108,14 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
 
     public World theWorld() {
         return worldObj;
+    }
+
+    /**
+     * Checks if the entity is in range to render.
+     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isInRangeToRenderDist(double distance) {
+        return CartUtils.isInRangeToRenderDist(this, distance);
     }
 }

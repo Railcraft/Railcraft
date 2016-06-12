@@ -31,6 +31,7 @@ import mods.railcraft.common.util.misc.IAnchor;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,7 +58,7 @@ import java.util.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedInventory {
-
+    public static final PropertyBool DISABLED = PropertyBool.create("disabled");
     private static final Map<UUID, Ticket> tickets = new MapMaker().makeMap();
     private static final Map<EntityPlayer, WorldCoordinate> sentinelPairingMap = new MapMaker().weakKeys().makeMap();
     private static final int SENTINEL_CHECK = 128;
@@ -79,6 +80,13 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
 
     public TileAnchorWorld() {
         super(1);
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state) {
+        state = super.getActualState(state);
+        state.withProperty(DISABLED, !hasTicket);
+        return state;
     }
 
     @Override

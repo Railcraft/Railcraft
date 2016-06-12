@@ -12,6 +12,8 @@ import net.minecraft.entity.item.EntityMinecartEmpty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityCartBasic extends EntityMinecartEmpty {
 
@@ -23,6 +25,14 @@ public class EntityCartBasic extends EntityMinecartEmpty {
         super(world, x, y, z);
     }
 
+    /**
+     * Checks if the entity is in range to render.
+     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isInRangeToRenderDist(double distance) {
+        return CartUtils.isInRangeToRenderDist(this, distance);
+    }
 //    @Override
 //    protected double getDrag() {
 //        if (RailcraftConfig.adjustBasicCartDrag()) {
@@ -70,7 +80,7 @@ public class EntityCartBasic extends EntityMinecartEmpty {
 //
 //        super.onUpdate();
 //    }
-    
+
     @Override
     public void moveMinecartOnRail(BlockPos pos) {
         double mX = motionX;

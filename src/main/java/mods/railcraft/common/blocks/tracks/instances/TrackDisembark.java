@@ -17,6 +17,7 @@ import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3d;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -41,11 +42,11 @@ public class TrackDisembark extends TrackPowered implements ITrackReversible {
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        if (isPowered() && cart.canBeRidden() && cart.riddenByEntity != null) {
+        if (isPowered() && cart.isBeingRidden()) {
             double x = getPos().getX();
             double z = getPos().getZ();
             double offset = 1.5;
-            IBlockState state = getWorld().getBlockState(getPos());
+            IBlockState state = theWorldAsserted().getBlockState(getPos());
             EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
             if (dir == EnumRailDirection.NORTH_SOUTH)
                 if (mirrored)
@@ -56,7 +57,7 @@ public class TrackDisembark extends TrackPowered implements ITrackReversible {
                 z += offset;
             else
                 z -= offset;
-            CartUtils.dismount(cart, x + 0.5, getPos().getY() + 1, z + 0.5);
+            CartUtils.removePassengers(cart, new Vec3d(x + 0.5, getPos().getY() + 1, z + 0.5));
             cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
         }
     }

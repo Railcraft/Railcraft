@@ -10,9 +10,9 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -137,21 +137,25 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
         return tag;
     }
 
+    @Nullable
     @Override
     public ItemStack getWildcard() {
         return getStack(1, OreDictionary.WILDCARD_VALUE);
     }
 
+    @Nullable
     @Override
     public ItemStack getStack() {
         return getStack(1, 0);
     }
 
+    @Nullable
     @Override
     public ItemStack getStack(int qty) {
         return getStack(qty, 0);
     }
 
+    @Nullable
     @Override
     public ItemStack getStack(int qty, int meta) {
         register();

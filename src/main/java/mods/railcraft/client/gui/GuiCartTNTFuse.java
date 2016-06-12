@@ -8,7 +8,7 @@
  */
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.carts.CartExplosiveBase;
+import mods.railcraft.common.carts.CartBaseExplosive;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketBuilder;
@@ -19,9 +19,9 @@ public class GuiCartTNTFuse extends GuiBasic {
     private final String FUSE = LocalizationPlugin.translate("railcraft.gui.cart.tnt.fuse") + " = ";
     private final String TICKS = " " + LocalizationPlugin.translate("railcraft.gui.ticks");
     protected int fuse = 80;
-    CartExplosiveBase cart;
+    CartBaseExplosive cart;
 
-    public GuiCartTNTFuse(CartExplosiveBase c) {
+    public GuiCartTNTFuse(CartBaseExplosive c) {
         super(c.getName());
         cart = c;
         if (cart != null)
@@ -50,10 +50,10 @@ public class GuiCartTNTFuse extends GuiBasic {
             f += 1;
         if (guibutton.id == 3)
             f += 10;
-        if (f < CartExplosiveBase.MIN_FUSE)
-            f = CartExplosiveBase.MIN_FUSE;
-        if (f > CartExplosiveBase.MAX_FUSE)
-            f = CartExplosiveBase.MAX_FUSE;
+        if (f < CartBaseExplosive.MIN_FUSE)
+            f = CartBaseExplosive.MIN_FUSE;
+        if (f > CartBaseExplosive.MAX_FUSE)
+            f = CartBaseExplosive.MAX_FUSE;
         fuse = f;
     }
 

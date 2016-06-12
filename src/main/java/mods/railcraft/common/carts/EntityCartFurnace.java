@@ -17,9 +17,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +35,15 @@ public class EntityCartFurnace extends EntityMinecartFurnace {
 
     public EntityCartFurnace(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    /**
+     * Checks if the entity is in range to render.
+     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isInRangeToRenderDist(double distance) {
+        return CartUtils.isInRangeToRenderDist(this, distance);
     }
 
     public List<ItemStack> getItemsDropped() {
@@ -67,10 +80,9 @@ public class EntityCartFurnace extends EntityMinecartFurnace {
 //    }
 
     @Override
-    public boolean interactFirst(EntityPlayer player) {
+    public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
         Integer fuel = ReflectionHelper.getPrivateValue(EntityMinecartFurnace.class, this, 0);
         if (fuel <= 0) {
-            ItemStack stack = player.inventory.getCurrentItem();
             if (stack != null) {
                 int burnTime = FuelPlugin.getBurnTime(stack);
 

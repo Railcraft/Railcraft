@@ -149,7 +149,7 @@ public class FactoryGui {
                 case CART_ANCHOR:
                     return new GuiCartAnchor(inv, (EntityCartAnchor) obj);
                 case CART_TNT_FUSE:
-                    return new GuiCartTNTFuse((CartExplosiveBase) obj);
+                    return new GuiCartTNTFuse((CartBaseExplosive) obj);
                 case CART_WORK:
                     return new GuiCartWork(inv, (EntityCartWork) obj);
                 case CART_TRACK_LAYER:

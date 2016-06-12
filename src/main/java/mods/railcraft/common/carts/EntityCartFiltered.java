@@ -8,42 +8,49 @@
  */
 package mods.railcraft.common.carts;
 
+import com.google.common.base.Optional;
 import mods.railcraft.api.carts.IMinecart;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class EntityCartFiltered extends CartContainerBase implements IMinecart {
-    private static final byte FILTER_DATA_ID = 29;
+public abstract class EntityCartFiltered extends CartBaseContainer implements IMinecart {
+    private static final DataParameter<Optional<ItemStack>> FILTER = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.OPTIONAL_ITEM_STACK);
     private final PhantomInventory invFilter = new PhantomInventory(1, this);
 
-    public EntityCartFiltered(World world) {
+    protected EntityCartFiltered(World world) {
         super(world);
     }
 
-    public EntityCartFiltered(World world, double d, double d1, double d2) {
+    protected EntityCartFiltered(World world, double x, double y, double z) {
         this(world);
-        setPosition(d, d1 + getYOffset(), d2);
+        setPosition(x, y + getYOffset(), z);
         motionX = 0.0D;
         motionY = 0.0D;
         motionZ = 0.0D;
-        prevPosX = d;
-        prevPosY = d1;
-        prevPosZ = d2;
+        prevPosX = x;
+        prevPosY = y;
+        prevPosZ = z;
     }
 
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.addObjectByDataType(FILTER_DATA_ID, 5);
+        dataManager.register(FILTER, Optional.absent());
     }
 
+    @Nullable
     public static ItemStack getFilterFromCartItem(ItemStack cart) {
         ItemStack filter = null;
         NBTTagCompound nbt = cart.getTagCompound();
@@ -54,7 +61,7 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
         return filter;
     }
 
-    public static ItemStack addFilterToCartItem(ItemStack cart, ItemStack filter) {
+    public static ItemStack addFilterToCartItem(ItemStack cart, @Nullable ItemStack filter) {
         if (filter != null) {
             NBTTagCompound nbt = InvTools.getItemData(cart);
             NBTTagCompound filterNBT = new NBTTagCompound();
@@ -64,7 +71,7 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
         return cart;
     }
 
-    public ItemStack getFilteredCartItem(ItemStack filter) {
+    public ItemStack getFilteredCartItem(@Nullable ItemStack filter) {
         ItemStack stack = getCartType().getCartItem();
         return addFilterToCartItem(stack, filter);
     }
@@ -114,15 +121,16 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
         return getFilterItem() != null;
     }
 
+    @Nullable
     public ItemStack getFilterItem() {
-        return dataManager.get(FILTER_DATA_ID);
+        return dataManager.get(FILTER).orNull();
     }
 
     public PhantomInventory getFilterInv() {
         return invFilter;
     }
 
-    public void setFilter(ItemStack filter) {
+    public void setFilter(@Nullable ItemStack filter) {
 //        dataManager.set(FILTER_DATA_ID, filter);
         getFilterInv().setInventorySlotContents(0, filter);
     }
@@ -135,6 +143,6 @@ public abstract class EntityCartFiltered extends CartContainerBase implements IM
     @Override
     public void markDirty() {
         super.markDirty();
-        dataManager.set(FILTER_DATA_ID, getFilterInv().getStackInSlot(0));
+        dataManager.set(FILTER, Optional.fromNullable(getFilterInv().getStackInSlot(0)));
     }
 }

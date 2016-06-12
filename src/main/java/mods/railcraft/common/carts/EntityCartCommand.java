@@ -15,6 +15,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -35,9 +37,13 @@ public class EntityCartCommand extends EntityMinecartCommandBlock {
         super(world, x, y, z);
     }
 
-    {
-        //TODO: Is this the best way?
-        setRenderDistanceWeight(CartConstants.RENDER_DIST_MULTIPLIER);
+    /**
+     * Checks if the entity is in range to render.
+     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isInRangeToRenderDist(double distance) {
+        return CartUtils.isInRangeToRenderDist(this, distance);
     }
 
     @Nonnull

@@ -64,7 +64,7 @@ import java.util.Locale;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class EntityLocomotive extends CartContainerBase implements IDirectionalCart, IGuiReturnHandler,
+public abstract class EntityLocomotive extends CartBaseContainer implements IDirectionalCart, IGuiReturnHandler,
         ILinkableCart, IMinecart, ISecure<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
     private static final byte HAS_FUEL_DATA_ID = 16;
     private static final byte PRIMARY_COLOR_DATA_ID = 25;

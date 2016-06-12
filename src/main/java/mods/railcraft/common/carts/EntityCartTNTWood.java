@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartTNTWood extends CartExplosiveBase implements IAlternateCartTexture {
+public class EntityCartTNTWood extends CartBaseExplosive implements IAlternateCartTexture {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_wood.png");
 

@@ -4,7 +4,7 @@ import ic2.api.item.IC2Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public final class EntityCartEnergyMFSU extends EntityCartEnergy {
+public final class EntityCartEnergyMFSU extends CartBaseEnergy {
 
     public EntityCartEnergyMFSU(World world) {
         super(world);

@@ -32,11 +32,11 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class EntityCartEnergy extends CartContainerBase implements IEnergyTransfer, IElectricMinecart, IIC2EnergyCart {
+abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IElectricMinecart, IIC2EnergyCart {
 
     private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.Type.STORAGE, getCapacity());
 
-    protected EntityCartEnergy(World world) {
+    protected CartBaseEnergy(World world) {
         super(world);
     }
 

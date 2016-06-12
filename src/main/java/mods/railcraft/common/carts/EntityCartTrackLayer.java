@@ -19,7 +19,7 @@ import net.minecraftforge.common.IShearable;
 
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
-public class EntityCartTrackLayer extends CartMaintenancePatternBase {
+public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
 
     public static final int SLOT_STOCK = 0;
     public static final int SLOT_REPLACE = 0;

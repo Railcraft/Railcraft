@@ -35,8 +35,6 @@ public class Train implements Iterable<EntityMinecart> {
     }
 
     public static Train getTrain(EntityMinecart cart) {
-        if (cart == null)
-            return null;
         Train train = trains.get(getTrainUUID(cart));
         if (train != null && !train.containsCart(cart)) {
             train.releaseTrain();
@@ -367,7 +365,7 @@ public class Train implements Iterable<EntityMinecart> {
         int numLocomotives = getNumRunningLocomotives();
         for (EntityMinecart c : this) {
             float baseSpeed = c.getMaxCartSpeedOnRail();
-            if (numLocomotives > 0 && !(c instanceof EntityCartEnergy) && c instanceof IElectricMinecart) {
+            if (numLocomotives > 0 && !(c instanceof CartBaseEnergy) && c instanceof IElectricMinecart) {
                 IElectricMinecart e = (IElectricMinecart) c;
                 if (e.getChargeHandler().getType() != IElectricMinecart.ChargeHandler.Type.USER) {
                     baseSpeed = Math.min(0.2F, 0.03F + (numLocomotives - 1) * 0.075F);

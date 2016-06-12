@@ -11,6 +11,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMinecart {
+public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMinecart {
     public static final byte TICKET_FLAG = 6;
     private static final byte ANCHOR_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
@@ -289,17 +290,9 @@ public class EntityCartAnchor extends CartContainerBase implements IAnchor, IMin
     }
 
     @Override
-    public IBlockState getDisplayTile() {
-        return EnumMachineAlpha.ANCHOR_WORLD.getState();
+    public IBlockState getDefaultDisplayTile() {
+        return EnumMachineAlpha.ANCHOR_WORLD.getState().withProperty(TileAnchorWorld.DISABLED, !getFlag(TICKET_FLAG));
     }
-
-    //TODO: replace with models?
-//    @Override
-//    public IIcon getBlockTextureOnSide(int side) {
-//        if (side < 2 && !getFlag(TICKET_FLAG))
-//            return EnumMachineAlpha.ANCHOR_WORLD.getTexture(6);
-//        return EnumMachineAlpha.ANCHOR_WORLD.getTexture(side);
-//    }
 
     @Override
     public long getAnchorFuel() {

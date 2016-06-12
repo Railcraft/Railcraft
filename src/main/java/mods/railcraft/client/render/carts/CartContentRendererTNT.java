@@ -9,7 +9,7 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.carts.CartExplosiveBase;
+import mods.railcraft.common.carts.CartBaseExplosive;
 import net.minecraft.entity.item.EntityMinecart;
 import org.lwjgl.opengl.GL11;
 
@@ -24,7 +24,7 @@ public class CartContentRendererTNT extends CartContentRenderer {
         OpenGL.glPushMatrix();
 //        OpenGL.glTranslatef(0.0F, 0.3125F, 0.0F);
 //        OpenGL.glRotatef(90F, 0.0F, 1.0F, 0.0F);
-        CartExplosiveBase tnt = (CartExplosiveBase) cart;
+        CartBaseExplosive tnt = (CartBaseExplosive) cart;
         if (tnt.isPrimed() && ((float) tnt.getFuse() - partialTicks) + 1.0F < 10F) {
             float scale = 1.0F - (((float) tnt.getFuse() - partialTicks) + 1.0F) / 10F;
             if (scale < 0.0F) {

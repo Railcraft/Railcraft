@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class EntityCartUndercutter extends CartMaintenancePatternBase {
+public class EntityCartUndercutter extends CartBaseMaintenancePattern {
 
     public static final Set<Block> EXCLUDED_BLOCKS = new HashSet<Block>();
     private static final int SLOT_EXIST_UNDER_A = 0;

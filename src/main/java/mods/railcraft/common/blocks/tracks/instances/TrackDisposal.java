@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -40,9 +41,9 @@ public class TrackDisposal extends TrackSuspended implements ITrackPowered {
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        if (!isPowered() && cart.canBeRidden()) {
-            if (cart.riddenByEntity != null) {
-                CartUtils.dismount(cart, cart.posX, cart.posY - 2, cart.posZ);
+        if (!isPowered()) {
+            if (cart.isBeingRidden()) {
+                CartUtils.removePassengers(cart, cart.getPositionVector().addVector(0, -2, 0));
             }
             cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
         }
@@ -54,7 +55,7 @@ public class TrackDisposal extends TrackSuspended implements ITrackPowered {
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+    public void onNeighborBlockChange(IBlockState state, @Nullable Block neighborBlock) {
         super.onNeighborBlockChange(state, neighborBlock);
         testPower(state);
     }

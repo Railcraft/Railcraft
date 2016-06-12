@@ -10,6 +10,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -20,7 +21,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Type;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -58,7 +58,7 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
 
     @Override
     protected ForgeChunkManager.Ticket getTicketFromForge() {
-        return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), CartTools.getCartOwner(this).getName(), worldObj, Type.ENTITY);
+        return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), CartTools.getCartOwner(this).getName(), worldObj, ForgeChunkManager.Type.ENTITY);
     }
 
     @Override
@@ -72,16 +72,8 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
     }
 
     @Override
-    public IBlockState getDisplayTile() {
-        return EnumMachineAlpha.ANCHOR_PERSONAL.getState();
+    public IBlockState getDefaultDisplayTile() {
+        return EnumMachineAlpha.ANCHOR_PERSONAL.getState().withProperty(TileAnchorWorld.DISABLED, !getFlag(TICKET_FLAG));
     }
-
-    //TODO: replace with models?
-//    @Override
-//    public IIcon getBlockTextureOnSide(int side) {
-//        if (side < 2 && !getFlag(TICKET_FLAG))
-//            return EnumMachineAlpha.ANCHOR_PERSONAL.getTexture(6);
-//        return EnumMachineAlpha.ANCHOR_PERSONAL.getTexture(side);
-//    }
 
 }

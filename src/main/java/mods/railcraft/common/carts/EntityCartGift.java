@@ -14,13 +14,16 @@ import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionHelper;
+import net.minecraft.potion.PotionType;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -29,7 +32,9 @@ public class EntityCartGift extends EntityCartTNTWood {
 
     private static final byte SPAWN_DIST = 2;
     private static final List<Gift> gifts = new ArrayList<Gift>();
-    private static final List<Integer> potions = new ArrayList<Integer>();
+    private static final List<ItemStack> potions = new ArrayList<>();
+    private static final List<ItemStack> potionsSplash = new ArrayList<>();
+    private static final List<ItemStack> potionsLingering = new ArrayList<>();
 
     static {
         gifts.add(new GiftPotion());
@@ -148,11 +153,10 @@ public class EntityCartGift extends EntityCartTNTWood {
         addGift(RailcraftToolItems.getSteelLegs(), armorChance);
         addGift(RailcraftToolItems.getSteelBoots(), armorChance);
 
-        for (int meta = 0; meta <= 32767; ++meta) {
-            List effects = PotionHelper.getPotionEffects(meta, false);
-
-            if (effects != null && !effects.isEmpty())
-                potions.add(meta);
+        for (PotionType potiontype : PotionType.REGISTRY) {
+            potions.add(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), potiontype));
+            potionsSplash.add(PotionUtils.addPotionToItemStack(new ItemStack(Items.SPLASH_POTION), potiontype));
+            potionsLingering.add(PotionUtils.addPotionToItemStack(new ItemStack(Items.LINGERING_POTION), potiontype));
         }
     }
 
@@ -172,29 +176,28 @@ public class EntityCartGift extends EntityCartTNTWood {
         setBlastRadius(1.5f);
     }
 
-    private static void addGift(ItemStack gift, int chance) {
+    private static void addGift(@Nullable ItemStack gift, int chance) {
         if (gift != null)
             gifts.add(new GiftItem(gift, chance));
     }
 
-    private static void addGift(Item gift, int chance) {
+    private static void addGift(@Nullable Item gift, int chance) {
         if (gift != null)
             gifts.add(new GiftItem(new ItemStack(gift), chance));
     }
 
-    private static void addGift(Item gift, int stackSize, int chance) {
+    private static void addGift(@Nullable Item gift, int stackSize, int chance) {
         if (gift != null)
             gifts.add(new GiftItem(new ItemStack(gift, stackSize), chance));
     }
 
-    private static void addGift(Block gift, int chance) {
+    private static void addGift(@Nullable Block gift, int chance) {
         if (gift != null)
             gifts.add(new GiftItem(new ItemStack(gift), chance));
     }
 
     private static void addGift(RailcraftItems gift, int chance) {
-        if (gift != null)
-            gifts.add(new GiftItem(gift.getStack(), chance));
+        addGift(gift.getStack(), chance);
     }
 
     @Override
@@ -214,8 +217,8 @@ public class EntityCartGift extends EntityCartTNTWood {
     }
 
     @Override
-    public Block func_145820_n() {
-        return null;
+    public IBlockState getDefaultDisplayTile() {
+        return Blocks.AIR.getDefaultState();
     }
 
     @Override
@@ -235,7 +238,7 @@ public class EntityCartGift extends EntityCartTNTWood {
 
     @Override
     public void explode() {
-        if (Game.isHost(getWorld())) {
+        if (Game.isHost(worldObj)) {
             worldObj.createExplosion(this, posX, posY, posZ, getBlastRadius(), true);
             setDead();
 
@@ -306,8 +309,16 @@ public class EntityCartGift extends EntityCartTNTWood {
 
         @Override
         public ItemStack getStack(Random rand) {
-            int meta = potions.get(rand.nextInt(potions.size()));
-            return new ItemStack(Items.POTIONITEM, 1, meta);
+            float type = rand.nextFloat();
+            List<ItemStack> choices;
+            if (type > 0.8F)
+                choices = potionsLingering;
+            else if (type > 0.5F)
+                choices = potionsSplash;
+            else
+                choices = potions;
+            ItemStack potion = choices.get(rand.nextInt(choices.size()));
+            return potion.copy();
         }
 
         @Override

@@ -13,13 +13,13 @@ import mods.railcraft.api.carts.IExplosiveCart;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityMinecartCommandBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -28,19 +28,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 
-public abstract class CartExplosiveBase extends CartBase implements IExplosiveCart, IGuiReturnHandler {
+public abstract class CartBaseExplosive extends CartBase implements IExplosiveCart, IGuiReturnHandler {
 
-    private static final DataParameter<Integer> FUSE = EntityDataManager.createKey(EntityMinecartCommandBlock.class, DataSerializers.VARINT);
-    private static final DataParameter<Byte> BLAST = EntityDataManager.createKey(EntityMinecartCommandBlock.class, DataSerializers.BYTE);
-    private static final DataParameter<Boolean> PRIMED = EntityDataManager.createKey(EntityMinecartCommandBlock.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> FUSE = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.VARINT);
+    private static final DataParameter<Byte> BLAST = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BYTE);
+    private static final DataParameter<Boolean> PRIMED = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
     private static final float BLAST_RADIUS_BYTE_MULTIPLIER = 0.5f;
     private static final float BLAST_RADIUS_MIN = 2;
     private static final float BLAST_RADIUS_MAX = 6;
@@ -49,12 +49,12 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
     public static final short MIN_FUSE = 0;
     private boolean isExploding;
 
-    protected CartExplosiveBase(World world) {
+    protected CartBaseExplosive(World world) {
         super(world);
 
     }
 
-    protected CartExplosiveBase(World world, double x, double y, double z) {
+    protected CartBaseExplosive(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
@@ -68,7 +68,7 @@ public abstract class CartExplosiveBase extends CartBase implements IExplosiveCa
     }
 
     @Override
-    public IBlockState getDisplayTile() {
+    public IBlockState getDefaultDisplayTile() {
         return Blocks.TNT.getDefaultState();
     }
 

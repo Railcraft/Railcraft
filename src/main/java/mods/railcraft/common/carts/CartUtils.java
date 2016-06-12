@@ -22,13 +22,18 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SPacketEntityAttach;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-import java.util.*;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -53,6 +58,7 @@ public class CartUtils {
      * @return the cart placed or null if failed
      * @see IMinecartItem , ItemMinecart
      */
+    @Nullable
     public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, BlockPos pos) {
         if (cart == null)
             return null;
@@ -65,6 +71,7 @@ public class CartUtils {
         return CartTools.placeCart(owner, cart, world, pos);
     }
 
+    @Nullable
     public static EntityMinecart placeCart(ICartType cartType, GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         if (TrackTools.isRailBlock(state))
@@ -107,8 +114,7 @@ public class CartUtils {
         cart.motionZ = 0;
         if (Game.isClient(cart.worldObj))
             return;
-        if (cart.riddenByEntity != null)
-            cart.riddenByEntity.mountEntity(cart);
+        removePassengers(cart, cart.getPositionVector().addVector(0.0, 1.5, 0.0));
         cart.worldObj.newExplosion(cart, cart.posX, cart.posY, cart.posZ, 3F, true, true);
         if (MiscTools.RANDOM.nextInt(2) == 0)
             cart.setDead();
@@ -120,12 +126,7 @@ public class CartUtils {
 
     public static List<EntityMinecart> getMinecartsIn(World world, AxisAlignedBB searchBox) {
         List<EntityMinecart> entities = world.getEntitiesWithinAABB(EntityMinecart.class, searchBox);
-        List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
-        for (EntityMinecart cart : entities) {
-            if (!cart.isDead)
-                carts.add(cart);
-        }
-        return carts;
+        return entities.stream().filter(cart -> !cart.isDead).collect(Collectors.toList());
     }
 
     public static List<UUID> getMinecartUUIDsAt(World world, BlockPos pos, float sensitivity) {
@@ -134,26 +135,33 @@ public class CartUtils {
 
     public static List<UUID> getMinecartUUIDsAt(World world, int i, int j, int k, float sensitivity) {
         sensitivity = Math.min(sensitivity, 0.49f);
-        List<EntityMinecart> entities = world.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.fromBounds(i + sensitivity, j + sensitivity, k + sensitivity, i + 1 - sensitivity, j + 1 - sensitivity, k + 1 - sensitivity));
-        List<UUID> carts = new ArrayList<UUID>();
-        for (EntityMinecart cart : entities) {
-            if (!cart.isDead)
-                carts.add(cart.getPersistentID());
-        }
-        return carts;
+        List<EntityMinecart> entities = world.getEntitiesWithinAABB(EntityMinecart.class, new AxisAlignedBB(i + sensitivity, j + sensitivity, k + sensitivity, i + 1 - sensitivity, j + 1 - sensitivity, k + 1 - sensitivity));
+        return entities.stream().filter(cart -> !cart.isDead).map(Entity::getPersistentID).collect(Collectors.toList());
     }
 
-    public static void dismount(EntityMinecart cart, double x, double y, double z) {
-        if (cart.riddenByEntity == null)
-            return;
-        Entity rider = cart.riddenByEntity;
-        rider.ridingEntity = null;
-        cart.riddenByEntity = null;
-        if (rider instanceof EntityPlayerMP) {
-            EntityPlayerMP player = ((EntityPlayerMP) rider);
-            player.playerNetServerHandler.sendPacket(new SPacketEntityAttach(0, rider, null));
-            player.setPositionAndUpdate(x, y, z);
-        } else
-            rider.setLocationAndAngles(x, y, z, rider.rotationYaw, rider.rotationPitch);
+    public static void removePassengers(EntityMinecart cart, Vec3d resultingPosition) {
+        List<Entity> passengers = cart.getPassengers();
+        cart.removePassengers();
+        for (Entity entity : passengers) {
+            if (entity instanceof EntityPlayerMP) {
+                EntityPlayerMP player = ((EntityPlayerMP) entity);
+                player.setPositionAndUpdate(resultingPosition.xCoord, resultingPosition.yCoord, resultingPosition.zCoord);
+            } else
+                entity.setLocationAndAngles(resultingPosition.xCoord, resultingPosition.yCoord, resultingPosition.zCoord, entity.rotationYaw, entity.rotationPitch);
+        }
+    }
+
+    /**
+     * Checks if the entity is in range to render.
+     */
+    public static boolean isInRangeToRenderDist(EntityMinecart entity, double distance) {
+        double range = entity.getEntityBoundingBox().getAverageEdgeLength();
+
+        if (Double.isNaN(range)) {
+            range = 1.0D;
+        }
+
+        range = range * 64.0D * CartConstants.RENDER_DIST_MULTIPLIER;
+        return distance < range * range;
     }
 }

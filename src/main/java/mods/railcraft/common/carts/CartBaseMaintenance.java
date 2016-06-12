@@ -11,36 +11,41 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartMaintenanceBase extends CartContainerBase {
+public abstract class CartBaseMaintenance extends CartBaseContainer {
 
+    private static final DataParameter<Byte> BLINK = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BYTE);
     protected static final double DRAG_FACTOR = 0.9;
     protected static final float MAX_SPEED = 0.1f;
     private static final int BLINK_DURATION = 3;
     private static final int DATA_ID_BLINK = 25;
 
-    protected CartMaintenanceBase(World world) {
+    protected CartBaseMaintenance(World world) {
         super(world);
     }
 
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(DATA_ID_BLINK, (byte) 0);
+        dataManager.register(BLINK, (byte) 0);
     }
 
     @Override
@@ -49,15 +54,15 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     }
 
     protected void blink() {
-        dataManager.set(DATA_ID_BLINK, (byte) BLINK_DURATION);
+        dataManager.set(BLINK, (byte) BLINK_DURATION);
     }
 
     protected void setBlink(byte blink) {
-        dataManager.set(DATA_ID_BLINK, blink);
+        dataManager.set(BLINK, blink);
     }
 
     protected byte getBlink() {
-        return dataManager.get(DATA_ID_BLINK);
+        return dataManager.get(BLINK);
     }
 
     @Override
@@ -83,8 +88,10 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     }
 
     @Override
-    public double getDrag() {
-        return EntityCartTrackRelayer.DRAG_FACTOR;
+    protected void applyDrag() {
+        super.applyDrag();
+        this.motionX *= DRAG_FACTOR;
+        this.motionZ *= DRAG_FACTOR;
     }
 
     @Override
@@ -93,7 +100,7 @@ public abstract class CartMaintenanceBase extends CartContainerBase {
     }
 
     public boolean isBlinking() {
-        return dataManager.get(DATA_ID_BLINK) > 0;
+        return dataManager.get(BLINK) > 0;
     }
 
     protected boolean placeNewTrack(BlockPos pos, int slotStock, BlockRailBase.EnumRailDirection trackShape) {

@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import java.util.HashSet;
 import java.util.Set;
 
-public class EntityCartTrackRemover extends CartMaintenanceBase {
+public class EntityCartTrackRemover extends CartBaseMaintenance {
 
     private final Set<WorldCoordinate> tracksBehind = new HashSet<WorldCoordinate>();
     private final Set<WorldCoordinate> tracksRemoved = new HashSet<WorldCoordinate>();

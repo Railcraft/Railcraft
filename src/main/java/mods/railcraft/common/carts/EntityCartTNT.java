@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartTNT extends CartExplosiveBase {
+public class EntityCartTNT extends CartBaseExplosive {
 
     public EntityCartTNT(World world) {
         super(world);

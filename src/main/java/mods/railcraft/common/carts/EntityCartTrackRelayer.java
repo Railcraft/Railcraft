@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 
 import java.util.EnumSet;
 
-public class EntityCartTrackRelayer extends CartMaintenancePatternBase {
+public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
 
     private static final int SLOT_STOCK = 0;
     private static final int SLOT_EXIST = 0;

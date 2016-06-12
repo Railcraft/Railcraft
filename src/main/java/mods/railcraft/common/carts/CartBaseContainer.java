@@ -21,13 +21,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,19 +40,17 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartContainerBase extends EntityMinecartContainer implements IRailcraftCart, IItemCart, IInventoryObject {
+public abstract class CartBaseContainer extends EntityMinecartContainer implements IRailcraftCart, IItemCart, IInventoryObject {
     private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
     protected EnumFacing travelDirection;
     protected EnumFacing verticalTravelDirection;
 
-    protected CartContainerBase(World world) {
+    protected CartBaseContainer(World world) {
         super(world);
-        setRenderDistanceWeight(CartConstants.RENDER_DIST_MULTIPLIER);
     }
 
-    protected CartContainerBase(World world, double x, double y, double z) {
+    protected CartBaseContainer(World world, double x, double y, double z) {
         super(world, x, y, z);
-        setRenderDistanceWeight(CartConstants.RENDER_DIST_MULTIPLIER);
     }
 
     public abstract ICartType getCartType();
@@ -204,5 +204,14 @@ public abstract class CartContainerBase extends EntityMinecartContainer implemen
     @Override
     public Object getInventoryObject() {
         return this;
+    }
+
+    /**
+     * Checks if the entity is in range to render.
+     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isInRangeToRenderDist(double distance) {
+        return CartUtils.isInRangeToRenderDist(this, distance);
     }
 }

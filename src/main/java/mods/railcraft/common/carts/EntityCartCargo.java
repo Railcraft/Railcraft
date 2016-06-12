@@ -8,29 +8,28 @@
  */
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityMinecartCommandBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCartCargo extends EntityCartFiltered implements IItemCart {
-    private static final DataParameter<Integer> SLOTS_FILLED = EntityDataManager.createKey(EntityMinecartCommandBlock.class, DataSerializers.VARINT);
+public class EntityCartCargo extends EntityCartFiltered {
+    private static final DataParameter<Integer> SLOTS_FILLED = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.VARINT);
 
     public EntityCartCargo(World world) {
         super(world);

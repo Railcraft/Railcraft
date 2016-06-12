@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCartChest extends CartContainerBase {
+public class EntityCartChest extends CartBaseContainer {
     public EntityCartChest(World world) {
         super(world);
     }
