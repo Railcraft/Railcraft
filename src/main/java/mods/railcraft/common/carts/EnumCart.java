@@ -17,6 +17,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.thaumcraft.EntityLocomotiveSteamMagic;
 import mods.railcraft.common.util.crafting.CartUncraftingRecipe;
 import mods.railcraft.common.util.misc.EntityIDs;
 import mods.railcraft.common.util.misc.EnumColor;
