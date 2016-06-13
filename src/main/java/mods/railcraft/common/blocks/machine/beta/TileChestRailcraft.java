@@ -10,22 +10,26 @@ package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
-
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.List;
 
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
@@ -33,16 +37,17 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+//TODO: investigate chest locking
 public abstract class TileChestRailcraft extends TileMachineItem {
 
-    private static final EnumFacing[] UP_DOWN_AXES = new EnumFacing[]{UP, DOWN};
+    private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
     private static final int TICK_PER_SYNC = 64;
     private EnumFacing facing = EnumFacing.EAST;
     public float lidAngle;
     public float prevLidAngle;
     public int numUsingPlayers;
 
-    public TileChestRailcraft() {
+    protected TileChestRailcraft() {
         super(27);
     }
 
@@ -51,9 +56,10 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
-        super.onBlockPlacedBy(state, entityliving, stack);
-        facing = entityliving.getHorizontalFacing();
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityLiving, stack);
+        if (entityLiving != null)
+            facing = entityLiving.getHorizontalFacing();
     }
 
     @Override
@@ -85,18 +91,9 @@ public abstract class TileChestRailcraft extends TileMachineItem {
     }
 
     private boolean isCatOnChest() {
-        int x = getX();
-        int y = getY();
-        int z = getZ();
-        Iterator it = worldObj.getEntitiesWithinAABB(EntityOcelot.class, AxisAlignedBB.fromBounds(x, (y + 1), z, (x + 1), (y + 2), (z + 1))).iterator();
-        EntityOcelot cat;
-        do {
-            if (!it.hasNext())
-                return false;
-            EntityOcelot entityocelot = (EntityOcelot) it.next();
-            cat = entityocelot;
-        } while (!cat.isSitting());
-        return true;
+        AxisAlignedBB searchBox = AABBFactory.start().createBoxForTileAt(getPos()).offset(0.0, 1.0, 0.0).build();
+        List<EntityOcelot> cats = worldObj.getEntitiesWithinAABB(EntityOcelot.class, searchBox);
+        return cats.stream().anyMatch(EntityTameable::isSitting);
     }
 
     @Override
@@ -106,29 +103,29 @@ public abstract class TileChestRailcraft extends TileMachineItem {
         if (clock % TICK_PER_SYNC == 0)
             WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, numUsingPlayers);
 
-        this.prevLidAngle = this.lidAngle;
+        this.prevLidAngle = lidAngle;
         float angleChange = 0.1F;
 
-        if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F)
-            this.worldObj.playSoundEffect(getX() + 0.5D, getY() + 0.5D, getZ() + 0.5D, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+        if (numUsingPlayers > 0 && lidAngle == 0.0F)
+            SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
 
-        if (this.numUsingPlayers == 0 && this.lidAngle > 0.0F || this.numUsingPlayers > 0 && this.lidAngle < 1.0F) {
-            float angle = this.lidAngle;
+        if (numUsingPlayers == 0 && lidAngle > 0.0F || numUsingPlayers > 0 && lidAngle < 1.0F) {
+            float angle = lidAngle;
 
-            if (this.numUsingPlayers > 0)
+            if (numUsingPlayers > 0)
                 this.lidAngle += angleChange;
             else
                 this.lidAngle -= angleChange;
 
-            if (this.lidAngle > 1.0F)
+            if (lidAngle > 1.0F)
                 this.lidAngle = 1.0F;
 
             float openAngle = 0.5F;
 
-            if (this.lidAngle < openAngle && angle >= openAngle)
-                this.worldObj.playSoundEffect(getX() + 0.5D, getY() + 0.5D, getZ() + 0.5D, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            if (lidAngle < openAngle && angle >= openAngle)
+                SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
 
-            if (this.lidAngle < 0.0F)
+            if (lidAngle < 0.0F)
                 this.lidAngle = 0.0F;
         }
     }
@@ -154,27 +151,27 @@ public abstract class TileChestRailcraft extends TileMachineItem {
         WorldPlugin.addBlockEvent(worldObj, getPos(), getBlockType(), 1, numUsingPlayers);
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("facing", (byte) facing.ordinal());
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         facing = EnumFacing.getFront(data.getByte("facing"));
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte((byte) facing.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         facing = EnumFacing.getFront(data.readByte());
     }

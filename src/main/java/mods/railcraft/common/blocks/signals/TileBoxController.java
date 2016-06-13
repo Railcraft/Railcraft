@@ -110,7 +110,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("Powered", powered);
 

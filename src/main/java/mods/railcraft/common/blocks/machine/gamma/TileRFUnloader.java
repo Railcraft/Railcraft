@@ -24,12 +24,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class TileRFUnloader extends TileRFLoaderBase implements IEnergyProvider, IGuiReturnHandler {
-    private boolean waitTillEmpty = true;
     private static final int AMOUNT_TO_PUSH_TO_TILES = 2000;
+    private boolean waitTillEmpty = true;
 
     @Override
     public IEnumMachine getMachineType() {
@@ -43,8 +43,8 @@ public class TileRFUnloader extends TileRFLoaderBase implements IEnergyProvider,
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (Game.isClient(worldObj))
             return;
 
@@ -106,40 +106,40 @@ public class TileRFUnloader extends TileRFLoaderBase implements IEnergyProvider,
         return false;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
-        super.writeToNBT(nbttagcompound);
-        nbttagcompound.setBoolean("WaitTillEmpty", waitTillEmpty());
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        data.setBoolean("WaitTillEmpty", waitTillEmpty());
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
+    public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
         setWaitTillEmpty(nbttagcompound.getBoolean("WaitTillEmpty"));
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeBoolean(waitTillEmpty);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         waitTillEmpty = data.readBoolean();
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeBoolean(waitTillEmpty);
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         waitTillEmpty = data.readBoolean();
     }
 

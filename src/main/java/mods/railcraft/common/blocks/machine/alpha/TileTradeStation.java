@@ -56,7 +56,7 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
 
     private static final int AREA = 6;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 16);
-    @Nonnull
+
     private VillagerRegistry.VillagerProfession profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation("minecraft:farmer"));
     private final PhantomInventory recipeSlots = new PhantomInventory(9);
     private final InventoryMapper invInput;
@@ -214,14 +214,14 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData( RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeUTF(profession.getRegistryName().toString());
         data.writeByte(direction.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData( RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.readUTF()));
         EnumFacing f = EnumFacing.getFront(data.readByte());
@@ -232,11 +232,11 @@ public class TileTradeStation extends TileMachineItem implements IGuiReturnHandl
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData( RailcraftOutputStream data) throws IOException {
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
+    public void readGuiData( RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         GuiPacketType type = GuiPacketType.values()[data.readByte()];
         switch (type) {
             case NEXT_TRADE:

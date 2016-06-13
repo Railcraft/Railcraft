@@ -20,9 +20,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
+//TODO: standardize with other loaders
 public abstract class TileRFLoaderBase extends TileLoaderBase {
     protected static final int TRANSFER_RATE = 8000;
     protected static final int TRANSFER_FADE = 20;
@@ -43,7 +43,7 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
 //    }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)
@@ -88,23 +88,23 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
 
     protected abstract boolean processCart();
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("rf", amountRF);
         data.setByte("direction", (byte) direction.ordinal());
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         amountRF = data.getInteger("rf");
         direction = EnumFacing.getFront(data.getByte("direction"));
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(direction.ordinal());
@@ -112,7 +112,7 @@ public abstract class TileRFLoaderBase extends TileLoaderBase {
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         direction = EnumFacing.getFront(data.readByte());

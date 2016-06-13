@@ -38,13 +38,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHandler {
@@ -111,7 +110,7 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return AxisAlignedBB.fromBounds(getX(), getY() - 1, getZ(), getX() + 1, getY() + 1, getZ() + 1);
+        return new AxisAlignedBB(getX(), getY() - 1, getZ(), getX() + 1, getY() + 1, getZ() + 1);
     }
 
     @Override
@@ -325,18 +324,18 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
         return false;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         stateController.writeToNBT(data, "state");
 
         data.setFloat("pipeLength", pipeLength);
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         stateController.readFromNBT(data, "state");
@@ -354,14 +353,14 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(stateController.getCurrentState());
         data.writeFloat(pipeLength);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         stateController.setCurrentState(data.readByte());
         setPipeLength(data.readFloat());
@@ -383,12 +382,12 @@ public class TileFluidLoader extends TileLoaderFluidBase implements IGuiReturnHa
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeByte(stateController.getCurrentState());
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         stateController.setCurrentState(data.readByte());
     }
 

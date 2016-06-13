@@ -252,7 +252,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy( IBlockState state,  EntityLivingBase placer,  ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
         facing = MiscTools.getHorizontalSideFacingPlayer(placer);
     }
@@ -288,9 +288,9 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
         return false;
     }
 
-    @Nonnull
+
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT( NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
         data.setInteger("cookTime", cookTime);
@@ -299,7 +299,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT( NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
         cookTime = data.getInteger("cookTime");
@@ -307,14 +307,14 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData( RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(facing.ordinal());
         data.writeBoolean(finishedCycle);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData( RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         EnumFacing f = EnumFacing.getFront(data.readByte());
         finishedCycle = data.readBoolean();

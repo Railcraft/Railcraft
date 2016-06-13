@@ -10,7 +10,7 @@ package mods.railcraft.common.blocks.machine.delta;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.electricity.IElectricGrid;
-import mods.railcraft.common.blocks.frame.BlockFrame;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.BoundingBoxManager;
 import mods.railcraft.common.blocks.machine.BoundingBoxManager.ReducedBoundingBox;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
@@ -23,12 +23,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
@@ -59,30 +60,30 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
-        ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && InvTools.isStackEqualToBlock(current, BlockFrame.getBlock()))
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+        if (heldItem != null && InvTools.isStackEqualToBlock(heldItem, RailcraftBlocks.frame.block()))
             if (setAddon(AddonType.FRAME)) {
                 if (!player.capabilities.isCreativeMode)
-                    player.setCurrentItemOrArmor(0, InvTools.depleteItem(current));
+                    player.setHeldItem(hand, InvTools.depleteItem(heldItem));
                 return true;
             }
-        return super.blockActivated(player, side);
+        return super.blockActivated(player, hand, heldItem, side);
     }
 
     @Override
     public List<ItemStack> getDrops(int fortune) {
         List<ItemStack> drops = super.getDrops(fortune);
-        if (addon == AddonType.FRAME && BlockFrame.getBlock() != null)
-            drops.add(BlockFrame.getItem());
+        if (addon == AddonType.FRAME) {
+            ItemStack stackFrame = RailcraftBlocks.frame.getStack();
+            if (stackFrame != null)
+                drops.add(stackFrame);
+        }
         return drops;
     }
 
     @Override
     public boolean isSideSolid(EnumFacing side) {
-        if (addon == AddonType.FRAME)
-            return side == EnumFacing.UP;
-        return false;
+        return addon == AddonType.FRAME && side == EnumFacing.UP;
     }
 
     @Override
@@ -95,29 +96,29 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
         chargeHandler.tick();
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         chargeHandler.writeToNBT(data);
         data.setString("addonType", addon.name());
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
         addon = AddonType.valueOf(data.getString("addonType"));
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(addon.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         setAddon(AddonType.fromOrdinal(data.readByte()));
         markBlockForUpdate();
@@ -130,9 +131,9 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
     public boolean setAddon(AddonType addon) {
         if (this.addon == addon)
             return false;
-        if (this.addon != AddonType.NONE) {
-            //dropStuff
-        }
+        //TODO: drop stuff
+//        if (this.addon != AddonType.NONE) {
+//        }
         this.addon = addon;
         sendUpdateToClient();
         return true;

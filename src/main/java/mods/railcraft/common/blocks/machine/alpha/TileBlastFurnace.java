@@ -314,9 +314,9 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         return false;
     }
 
-    @Nonnull
+
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT( NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setInteger("burnTime", burnTime);
@@ -325,7 +325,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT( NBTTagCompound data) {
         super.readFromNBT(data);
 
         burnTime = data.getInteger("burnTime");
@@ -333,13 +333,13 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData( RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(burnTime > 0);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData( RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         clientBurning = data.readBoolean();
     }
@@ -362,7 +362,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, @Nonnull ItemStack stack) {
+    public boolean isItemValidForSlot(int slot,  ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         switch (slot) {
@@ -376,19 +376,19 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         return false;
     }
 
-    @Nonnull
+
     @Override
-    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
+    public int[] getSlotsForFace( EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, @Nonnull EnumFacing direction) {
+    public boolean canInsertItem(int index,  ItemStack itemStackIn,  EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, @Nonnull ItemStack stack, @Nonnull EnumFacing direction) {
+    public boolean canExtractItem(int index,  ItemStack stack,  EnumFacing direction) {
         return index == SLOT_OUTPUT;
     }
 }

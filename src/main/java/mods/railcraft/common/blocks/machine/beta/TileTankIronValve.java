@@ -219,7 +219,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IC
     }
 
     @Override
-    public int getComparatorInputOverride(World world, BlockPos pos, EnumFacing face) {
+    public int getComparatorInputOverride(World world, BlockPos pos) {
         TileMultiBlock masterBlock = getMasterBlock();
         if (masterBlock instanceof TileTankBase)
             return ((TileTankBase) masterBlock).getComparatorValue();

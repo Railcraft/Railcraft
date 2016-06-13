@@ -14,7 +14,6 @@ import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +26,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISidedInventory {
@@ -76,7 +74,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(state, entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)
@@ -192,16 +190,16 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
         dropFromNet();
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("energy", energy);
         data.setByte("direction", (byte) direction.ordinal());
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         energy = data.getInteger("energy");
         direction = EnumFacing.getFront(data.getByte("direction"));
@@ -210,7 +208,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(direction.ordinal());
@@ -219,7 +217,7 @@ public abstract class TileLoaderEnergyBase extends TileLoaderBase implements ISi
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         direction = EnumFacing.getFront(data.readByte());

@@ -169,7 +169,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setShort("ticksPowered", ticksPowered);

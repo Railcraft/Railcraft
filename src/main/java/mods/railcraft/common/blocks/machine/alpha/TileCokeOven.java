@@ -243,14 +243,14 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT( NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
     }
 
-    @Nonnull
+
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT( NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
         return data;
@@ -297,7 +297,7 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public boolean isItemValidForSlot(int slot, @Nonnull ItemStack stack) {
+    public boolean isItemValidForSlot(int slot,  ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         switch (slot) {
@@ -310,19 +310,19 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
         }
     }
 
-    @Nonnull
+
     @Override
-    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
+    public int[] getSlotsForFace( EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, @Nonnull EnumFacing direction) {
+    public boolean canInsertItem(int index,  ItemStack itemStackIn,  EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, @Nonnull ItemStack stack, @Nonnull EnumFacing direction) {
+    public boolean canExtractItem(int index,  ItemStack stack,  EnumFacing direction) {
         return index == SLOT_OUTPUT || index == SLOT_LIQUID_OUTPUT;
     }
 }

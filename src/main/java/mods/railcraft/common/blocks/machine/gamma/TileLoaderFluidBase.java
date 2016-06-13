@@ -32,7 +32,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInventory, IFluidHandler, ISidedInventory {
@@ -60,6 +60,7 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
         return invFilter;
     }
 
+    @Nullable
     public Fluid getFilterFluid() {
         if (invFilter.getStackInSlot(0) != null) {
             FluidStack fluidStack = FluidItemHelper.getFluidStackInContainer(invFilter.getStackInSlot(0));
@@ -130,11 +131,13 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
         return tankManager.fill(from, resource, doFill);
     }
 
+    @Nullable
     @Override
     public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return tankManager.drain(from, maxDrain, doDrain);
     }
 
+    @Nullable
     @Override
     public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         return tankManager.drain(from, resource, doDrain);
@@ -161,7 +164,16 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+
+        tankManager.writeTanksToNBT(data);
+        getFluidFilter().writeToNBT("invFilter", data);
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         if (data.getTag("tanks") instanceof NBTTagCompound)
@@ -175,24 +187,15 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
             getFluidFilter().readFromNBT("invFilter", data);
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
-        super.writeToNBT(data);
-
-        tankManager.writeTanksToNBT(data);
-        getFluidFilter().writeToNBT("invFilter", data);
-    }
-
-    @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         tankManager.writePacketData(data);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         tankManager.readPacketData(data);

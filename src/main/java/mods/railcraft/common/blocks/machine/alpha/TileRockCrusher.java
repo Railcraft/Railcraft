@@ -47,7 +47,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -312,9 +311,9 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         return false;
     }
 
-    @Nonnull
+
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT( NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("processTime", processTime);
 
@@ -324,7 +323,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT( NBTTagCompound data) {
         super.readFromNBT(data);
         processTime = data.getInteger("processTime");
 
@@ -373,27 +372,27 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
             mBlock.actions.add(action);
     }
 
-    @Nonnull
+
     @Override
-    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
+    public int[] getSlotsForFace( EnumFacing side) {
         if (side == EnumFacing.UP)
             return SLOTS_INPUT;
         return SLOTS_OUTPUT;
     }
 
     @Override
-    public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, @Nonnull EnumFacing direction) {
+    public boolean canInsertItem(int index,  ItemStack itemStackIn,  EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, @Nonnull ItemStack stack, @Nonnull EnumFacing direction) {
+    public boolean canExtractItem(int index,  ItemStack stack,  EnumFacing direction) {
         return index >= 9;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, @Nonnull ItemStack stack) {
+    public boolean isItemValidForSlot(int slot,  ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         if (slot < 9)

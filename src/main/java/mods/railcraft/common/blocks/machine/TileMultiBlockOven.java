@@ -20,7 +20,6 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -86,9 +85,9 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         }
     }
 
-    @Nonnull
+
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT( NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setInteger("cookTime", cookTime);
@@ -97,7 +96,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT( NBTTagCompound data) {
         super.readFromNBT(data);
 
         cookTime = data.getInteger("cookTime");
@@ -105,7 +104,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData( RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeInt(cookTime);
@@ -113,7 +112,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData( RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         cookTime = data.readInt();

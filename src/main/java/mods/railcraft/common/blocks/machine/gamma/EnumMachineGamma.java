@@ -96,8 +96,13 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
     }
 
     @Override
+    public String getBaseTag() {
+        return tag;
+    }
+
+    @Override
     public String getTag() {
-        return "tile.railcraft.machine.gamma." + tag;
+        return "tile.railcraft.machine.gamma." + getBaseTag();
     }
 
     @Override

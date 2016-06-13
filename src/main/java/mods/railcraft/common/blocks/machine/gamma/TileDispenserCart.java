@@ -31,11 +31,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class TileDispenserCart extends TileMachineItem {
@@ -70,11 +70,15 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
-        super.onBlockPlacedBy(state, entityliving, stack);
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityLiving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, getPos());
-        if (direction == null)
-            direction = MiscTools.getSideFacingPlayer(getPos(), entityliving);
+        if (direction == null) {
+            if (entityLiving != null)
+                direction = MiscTools.getSideFacingPlayer(getPos(), entityLiving);
+            else
+                direction = EnumFacing.NORTH;
+        }
     }
 
     @Override
@@ -128,15 +132,15 @@ public class TileDispenserCart extends TileMachineItem {
             ItemStack remainder = InvTools.moveItemStack(cartStack.copy(), testInv);
             if (remainder == null) {
                 InvTools.moveItemStack(cartStack, this);
-                if (cart.riddenByEntity != null)
-                    cart.riddenByEntity.mountEntity(null);
+                if (cart.isBeingRidden())
+                    CartUtils.removePassengers(cart);
                 cart.setDead();
             }
         }
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
+    public void onNeighborBlockChange(IBlockState state, Block block) {
         super.onNeighborBlockChange(state, block);
         if (Game.isClient(getWorld()))
             return;
@@ -148,19 +152,19 @@ public class TileDispenserCart extends TileMachineItem {
             powered = newPower;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("powered", powered);
         data.setByte("direction", (byte) direction.ordinal());
 
         data.setInteger("time", timeSinceLastSpawn);
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         powered = data.getBoolean("powered");
@@ -170,7 +174,7 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(direction.ordinal());
@@ -178,7 +182,7 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         direction = EnumFacing.getFront(data.readByte());

@@ -138,7 +138,7 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("Powered", isPowered());

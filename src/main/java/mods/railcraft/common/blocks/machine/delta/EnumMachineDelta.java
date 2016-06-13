@@ -10,7 +10,10 @@ package mods.railcraft.common.blocks.machine.delta;
 
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.*;
+import mods.railcraft.common.blocks.machine.BoundingBoxManager;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
+import mods.railcraft.common.blocks.machine.MachineProxy;
+import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleElectricity;
@@ -23,6 +26,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +55,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
     private final int[] textureInfo;
     private ToolTip tip;
 
-    EnumMachineDelta(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineDelta(@Nullable Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
@@ -67,6 +71,11 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
     @Override
     public boolean isDepreciated() {
         return module == null;
+    }
+
+    @Override
+    public String getBaseTag() {
+        return tag;
     }
 
     @Override
@@ -98,11 +107,13 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
         }
     }
 
+    @Nullable
     @Override
     public ItemStack getItem() {
         return getItem(1);
     }
 
+    @Nullable
     @Override
     public ItemStack getItem(int qty) {
         Block block = getBlock();

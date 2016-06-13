@@ -29,18 +29,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 
 public class TileDispenserTrain extends TileDispenserCart {
 
     public static final int PATTERN_SIZE = 9;
     public static final int BUFFER_SIZE = 18;
+    private final PhantomInventory invPattern = new PhantomInventory(PATTERN_SIZE, this);
+    private final InventoryMapper invStock;
     private byte patternIndex;
     private boolean spawningTrain = false;
     private EntityMinecart lastCart;
-    private final PhantomInventory invPattern = new PhantomInventory(PATTERN_SIZE, this);
-    private final InventoryMapper invStock;
 
     public TileDispenserTrain() {
         super();
@@ -74,27 +73,6 @@ public class TileDispenserTrain extends TileDispenserCart {
         }
 
         return true;
-    }
-
-    private static class MinecartItemType extends StackFilter {
-
-        private final ItemStack original;
-
-        public MinecartItemType(ItemStack cart) {
-            original = cart;
-        }
-
-        @Override
-        public boolean apply(ItemStack stack) {
-            if (stack == null)
-                return false;
-            if (InvTools.isItemEqual(stack, original))
-                return true;
-            if (stack.getItem() instanceof ItemCartAnchor || stack.getItem() instanceof ItemLocomotive)
-                return InvTools.isItemEqual(stack, original, false, false);
-            return false;
-        }
-
     }
 
     private boolean spawnNextCart() {
@@ -162,9 +140,8 @@ public class TileDispenserTrain extends TileDispenserCart {
         return 64;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("spawningTrain", spawningTrain);
@@ -174,7 +151,7 @@ public class TileDispenserTrain extends TileDispenserCart {
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         spawningTrain = data.getBoolean("spawningTrain");
@@ -185,6 +162,27 @@ public class TileDispenserTrain extends TileDispenserCart {
             getPattern().readFromNBT("Items", pattern);
         } else
             getPattern().readFromNBT("invPattern", data);
+    }
+
+    private static class MinecartItemType extends StackFilter {
+
+        private final ItemStack original;
+
+        public MinecartItemType(ItemStack cart) {
+            original = cart;
+        }
+
+        @Override
+        public boolean apply(ItemStack stack) {
+            if (stack == null)
+                return false;
+            if (InvTools.isItemEqual(stack, original))
+                return true;
+            if (stack.getItem() instanceof ItemCartAnchor || stack.getItem() instanceof ItemLocomotive)
+                return InvTools.isItemEqual(stack, original, false, false);
+            return false;
+        }
+
     }
 
     /*@Override

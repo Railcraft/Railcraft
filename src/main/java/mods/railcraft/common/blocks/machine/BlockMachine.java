@@ -27,6 +27,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,15 +45,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer implements IPostConnection {
 
     private final MachineProxy<M> proxy;
-    private final BlockStateContainer blockstate;
+    private final BlockStateContainer myBlockState;
 
     public BlockMachine(MachineProxy<M> proxy, boolean opaque) {
         super(Material.ROCK);
@@ -62,8 +63,8 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         setSoundType(SoundType.STONE);
         setTickRandomly(true);
         this.proxy = proxy;
-        this.blockstate = new BlockStateContainer(this, proxy.getVariantProperty());
-        setDefaultState(blockstate.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMetaMap().get(0)));
+        this.myBlockState = new BlockStateContainer(this, proxy.getVariantProperty());
+        setDefaultState(myBlockState.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMetaMap().get(0)));
         this.fullBlock = opaque;
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
@@ -76,7 +77,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
 
     @Override
     public BlockStateContainer getBlockState() {
-        return blockstate;
+        return myBlockState;
     }
 
     @Override
@@ -94,7 +95,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
      */
     @SideOnly(Side.CLIENT)
     @Override
-    public float getAmbientOcclusionLightValue() {
+    public float getAmbientOcclusionLightValue(IBlockState state) {
         return 1;
     }
 
@@ -107,11 +108,11 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public int colorMultiplier(IBlockAccess worldIn, BlockPos pos, int renderPass) {
+    public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int renderPass) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).colorMultiplier();
-        return super.colorMultiplier(worldIn, pos, renderPass);
+        return super.colorMultiplier(state, worldIn, pos, renderPass);
     }
 
     @Override
@@ -147,40 +148,45 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void randomDisplayTick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
             ((TileMachineBase) tile).randomDisplayTick(rand);
     }
 
     @Override
-    public boolean isBlockNormalCube() {
+    public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileEntity tile = world.getTileEntity(pos);
         return !(tile instanceof TileMachineBase) || ((TileMachineBase) tile).isSideSolid(side);
     }
 
+    //TODO: Do we need to do this anymore?
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+        //noinspection ConstantConditions
+        player.addStat(StatList.getBlockStats(this));
         player.addExhaustion(0.025F);
-        IBlockState state = world.getBlockState(pos);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
-            if (canSilkHarvest(world, pos, state, player) && EnchantmentHelper.getSilkTouchModifier(player)) {
+            if (canSilkHarvest(world, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player.getHeldItemMainhand()) > 0) {
                 List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, state, 0);
+                net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(drops, world, pos, state, 0, 1.0f, true, player);
                 for (ItemStack stack : drops) {
                     spawnAsEntity(world, pos, stack);
                 }
-            } else
+            } else {
+                harvesters.set(player);
                 dropBlockAsItem(world, pos, state, 0);
+                harvesters.set(null);
+            }
         return world.setBlockToAir(pos);
     }
 
@@ -206,18 +212,18 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public ItemStack getPickBlock(RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         List<ItemStack> drops = getBlockDroppedSilkTouch(world, pos, world.getBlockState(pos), 0);
         return drops.get(0);
     }
 
     @Override
-    public boolean canProvidePower() {
+    public boolean canProvidePower(IBlockState state) {
         return true;
     }
 
     @Override
-    public int getWeakPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side) {
+    public int getWeakPower(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).isPoweringTo(side) ? PowerPlugin.FULL_POWER : PowerPlugin.NO_POWER;
@@ -225,7 +231,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
             ((TileMachineBase) tile).canConnectRedstone(side);
@@ -246,7 +252,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
         try {
             TileEntity tile = worldIn.getTileEntity(pos);
             if (tile instanceof TileMachineBase)
@@ -284,13 +290,14 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         return getMachineType(state).getTileEntity();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public TileEntity createNewTileEntity(World var1, int meta) {
         return null;
     }
 
     @Override
-    public int getLightValue(IBlockAccess world, BlockPos pos) {
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
         if (pos.getY() < 0)
             return 0;
         TileEntity tile = world.getTileEntity(pos);
@@ -306,20 +313,22 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (IEnumMachine type : proxy.getCreativeList()) {
-            if (type.isAvailable())
-                list.add(type.getItem());
-        }
+        list.addAll(
+                proxy.getCreativeList().stream()
+                        .filter(IEnumMachine::isAvailable)
+                        .map(IEnumMachine::getItem)
+                        .collect(Collectors.toList())
+        );
     }
 
     //TODO: is this necessary?
     @Override
-    public final boolean isOpaqueCube() {
+    public final boolean isOpaqueCube(IBlockState state) {
         return fullBlock;
     }
 
     @Override
-    public int getLightOpacity(IBlockAccess world, BlockPos pos) {
+    public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
         return getMachineType(WorldPlugin.getBlockState(world, pos)).passesLight() ? 0 : 255;
     }
 
@@ -332,28 +341,28 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).canCreatureSpawn(type);
-        return super.canCreatureSpawn(world, pos, type);
+        return super.canCreatureSpawn(state, world, pos, type);
     }
 
     @Override
-    public float getBlockHardness(World worldIn, BlockPos pos) {
+    public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).getHardness();
-        return super.getBlockHardness(worldIn, pos);
+        return super.getBlockHardness(state, worldIn, pos);
     }
 
     @Override
-    public boolean hasComparatorInputOverride() {
+    public boolean hasComparatorInputOverride(IBlockState state) {
         return proxy instanceof IComparatorOverride;
     }
 
@@ -361,15 +370,15 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
      * Value is provided by the tile entity
      */
     @Override
-    public int getComparatorInputOverride(World worldIn, BlockPos pos) {
+    public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof IComparatorValueProvider)
-            return ((IComparatorValueProvider) tile).getComparatorInputOverride(worldIn, pos, null);
+            return ((IComparatorValueProvider) tile).getComparatorInputOverride(worldIn, pos);
         return 0;
     }
 
     @Override
-    public ConnectStyle connectsToPost(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EnumFacing face) {
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing face) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileMachineBase)
             return ((TileMachineBase) tile).connectsToPost(face);
@@ -377,12 +386,12 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
         return BoundingBoxManager.getCollisionBox(world, pos, getMachineType(world.getBlockState(pos)));
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
         return BoundingBoxManager.getSelectionBox(world, pos, getMachineType(world.getBlockState(pos)));
     }
 }

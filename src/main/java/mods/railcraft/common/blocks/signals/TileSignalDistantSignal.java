@@ -52,7 +52,7 @@ public class TileSignalDistantSignal extends TileSignalBase implements IReceiver
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         receiver.writeToNBT(data);

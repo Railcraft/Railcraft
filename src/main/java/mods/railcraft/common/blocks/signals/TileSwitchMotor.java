@@ -90,7 +90,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         byte[] array = new byte[switchOnAspects.length];

@@ -181,12 +181,16 @@ public class AABBFactory {
     }
 
     public AABBFactory offset(Vec3i pos) {
-        minX += pos.getX();
-        minY += pos.getY();
-        minZ += pos.getZ();
-        maxX += pos.getX();
-        maxY += pos.getY();
-        maxZ += pos.getZ();
+        return offset(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    public AABBFactory offset(double x, double y, double z) {
+        minX += x;
+        minY += y;
+        minZ += z;
+        maxX += x;
+        maxY += y;
+        maxZ += z;
         return this;
     }
 

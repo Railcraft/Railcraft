@@ -30,10 +30,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -62,27 +62,42 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
                 case EXTENDING:
                     emitter.extend();
                     break;
-                case RETRACTING:
-                    emitter.retract();
+                case RETRACTING: {
+                    if (emitter.numTracks <= 0)
+                        emitter.state = State.RETRACTED;
+                    else if (emitter.clock % TICKS_PER_ACTION == 0) {
+                        int x = emitter.numTracks * emitter.facing.getFrontOffsetX();
+                        int z = emitter.numTracks * emitter.facing.getFrontOffsetZ();
+                        emitter.removeTrack(emitter.getPos().add(x, 1, z));
+                    }
                     break;
-                case EXTENDED:
-                    emitter.extended();
+                }
+                case EXTENDED: {
+                    TileEntity tile = emitter.tileCache.getTileOnSide(EnumFacing.UP);
+                    if (tile instanceof TileTrack) {
+                        TileTrack trackTile = (TileTrack) tile;
+                        ITrackInstance track = trackTile.getTrackInstance();
+                        if (track instanceof ITrackLockdown)
+                            ((ITrackLockdown) track).releaseCart();
+                    }
                     break;
+                }
             }
         }
 
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
+    public void onNeighborBlockChange(IBlockState state, Block block) {
         super.onNeighborBlockChange(state, block);
         checkRedstone();
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
-        super.onBlockPlacedBy(state, entityliving, stack);
-        facing = entityliving.getHorizontalFacing();
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityLiving, stack);
+        if (entityLiving != null)
+            facing = entityLiving.getHorizontalFacing();
         checkRedstone();
     }
 
@@ -135,17 +150,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     private void spawnParticles(BlockPos pos) {
-        EffectManager.instance.forceTrackSpawnEffect(worldObj, pos.getX(), pos.getY(), pos.getZ());
-    }
-
-    private void extended() {
-        TileEntity tile = tileCache.getTileOnSide(EnumFacing.UP);
-        if (tile instanceof TileTrack) {
-            TileTrack trackTile = (TileTrack) tile;
-            ITrackInstance track = trackTile.getTrackInstance();
-            if (track instanceof ITrackLockdown)
-                ((ITrackLockdown) track).releaseCart();
-        }
+        EffectManager.instance.forceTrackSpawnEffect(worldObj, pos);
     }
 
     private void extend() {
@@ -191,6 +196,8 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         if (TrackTools.getTrackDirectionRaw(state) != direction)
             return false;
         TileEntity tile = WorldPlugin.getBlockTile(worldObj, pos);
+        if (tile == null)
+            return false;
         if (!TrackTools.isTrackSpec(tile, EnumTrack.FORCE.getTrackSpec()))
             return false;
         TrackForce track = (TrackForce) ((TileTrack) tile).getTrackInstance();
@@ -203,6 +210,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         return false;
     }
 
+    @SuppressWarnings("unused")
     public int getNumberOfTracks() {
         return numTracks;
     }
@@ -213,16 +221,6 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
 
     public boolean hasPowerToExtend() {
         return chargeHandler.getCharge() >= getDraw(numTracks + 1);
-    }
-
-    private void retract() {
-        if (numTracks <= 0)
-            state = State.RETRACTED;
-        else if (clock % TICKS_PER_ACTION == 0) {
-            int x = numTracks * facing.getFrontOffsetX();
-            int z = numTracks * facing.getFrontOffsetZ();
-            removeTrack(getPos().add(x, 1, z));
-        }
     }
 
     private void removeTrack(BlockPos pos) {
@@ -266,19 +264,19 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         return true;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         chargeHandler.writeToNBT(data);
         data.setBoolean("powered", powered);
         data.setByte("facing", (byte) facing.ordinal());
         data.setInteger("numTracks", numTracks);
         data.setString("state", state.name());
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
         powered = data.getBoolean("powered");
@@ -288,14 +286,14 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(powered);
         data.writeByte((byte) facing.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         boolean update = false;

@@ -134,13 +134,12 @@ public class TileChestMetals extends TileChestRailcraft {
 
         };
 
-        public final static Target[] VALUES = values();
+        public static final Target[] VALUES = values();
 
         public abstract boolean evaluate(IInventory inv);
 
         public Target next() {
-            Target next = VALUES[(ordinal() + 1) % VALUES.length];
-            return next;
+            return VALUES[(ordinal() + 1) % VALUES.length];
         }
 
     }

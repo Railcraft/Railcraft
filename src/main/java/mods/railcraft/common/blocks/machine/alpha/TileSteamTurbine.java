@@ -40,7 +40,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -324,19 +324,19 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         return mBlock.gaugeState * 0.01F;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         inv.writeToNBT("rotor", data);
         tankManager.writeTanksToNBT(data);
         chargeHandler.writeToNBT(data);
         data.setFloat("energy", (float) energy);
         data.setFloat("output", output);
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         inv.readFromNBT("rotor", data);
         tankManager.readTanksFromNBT(data);
@@ -393,6 +393,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         return inv;
     }
 
+    @Nullable
     public TankManager getTankManager() {
         TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
         if (mBlock != null)
@@ -407,6 +408,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         return 0;
     }
 
+    @Nullable
     @Override
     public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         TankManager tMan = getTankManager();
@@ -414,6 +416,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         return null;
     }
 
+    @Nullable
     @Override
     public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if (Fluids.WATER.is(resource))

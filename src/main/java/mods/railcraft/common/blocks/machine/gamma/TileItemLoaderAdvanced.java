@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.common.util.misc.MiscTools;
-
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.state.IBlockState;
@@ -18,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class TileItemLoaderAdvanced extends TileItemLoader {
@@ -34,30 +32,30 @@ public class TileItemLoaderAdvanced extends TileItemLoader {
         return EnumMachineGamma.ITEM_LOADER_ADVANCED;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound nbttagcompound) {
-        super.writeToNBT(nbttagcompound);
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
 
-        nbttagcompound.setByte("direction", (byte) direction.ordinal());
+        data.setByte("direction", (byte) direction.ordinal());
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         direction = EnumFacing.getFront(data.getByte("direction"));
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeByte(direction.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         direction = EnumFacing.getFront(data.readByte());
@@ -66,7 +64,7 @@ public class TileItemLoaderAdvanced extends TileItemLoader {
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(state, entityliving, stack);
         direction = MiscTools.getSideFacingTrack(worldObj, getPos());
         if (direction == null)

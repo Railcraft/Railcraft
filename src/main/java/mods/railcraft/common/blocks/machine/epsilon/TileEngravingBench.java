@@ -33,14 +33,15 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class TileEngravingBench extends TileMachineItem implements IEnergyReceiver, ISidedInventory, IHasWork, IGuiReturnHandler {
 
     public enum GuiPacketType {
@@ -48,12 +49,12 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
         START_CRAFTING, NORMAL_RETURN, OPEN_UNLOCK, OPEN_NORMAL, UNLOCK_EMBLEM
     }
 
-    private final static int PROCESS_TIME = 100;
-    private final static int ACTIVATION_POWER = 50;
-    private final static int MAX_RECEIVE = 1000;
-    private final static int MAX_ENERGY = ACTIVATION_POWER * (PROCESS_TIME + (PROCESS_TIME / 2));
-    private final static int SLOT_INPUT = 0;
-    private final static int SLOT_RESULT = 1;
+    private static final int PROCESS_TIME = 100;
+    private static final int ACTIVATION_POWER = 50;
+    private static final int MAX_RECEIVE = 1000;
+    private static final int MAX_ENERGY = ACTIVATION_POWER * (PROCESS_TIME + (PROCESS_TIME / 2));
+    private static final int SLOT_INPUT = 0;
+    private static final int SLOT_RESULT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private final InventoryMapper invResult = new InventoryMapper(this, SLOT_RESULT, 1, false);
     private EnergyStorage energyStorage;
@@ -73,9 +74,8 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
         return EnumMachineEpsilon.ENGRAVING_BENCH;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setBoolean("flippedAxis", flippedAxis);
@@ -85,10 +85,11 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
 
         if (energyStorage != null)
             energyStorage.writeToNBT(data);
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         flippedAxis = data.getBoolean("flippedAxis");
@@ -101,24 +102,24 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(flippedAxis);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         flippedAxis = data.readBoolean();
         markBlockForUpdate();
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         GuiPacketType type = GuiPacketType.values()[data.readByte()];
         switch (type) {
             case START_CRAFTING:
@@ -215,6 +216,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
             progress++;
     }
 
+    @Nullable
     private ItemStack makeEmblem() {
         if (currentEmblem == null || currentEmblem.isEmpty() || EmblemToolsServer.manager == null)
             return null;
@@ -232,10 +234,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
 
     private void processActions() {
         paused = false;
-        for (IActionExternal action : actions) {
-            if (action == Actions.PAUSE)
-                paused = true;
-        }
+        paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
         actions.clear();
     }
 
@@ -259,8 +258,9 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
         return index == SLOT_RESULT;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, @Nullable ItemStack stack) {
         if (slot == SLOT_RESULT)
             return false;
         if (stack == null)
@@ -275,11 +275,13 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
-        super.onBlockPlacedBy(state, entityliving, stack);
-        EnumFacing facing = entityliving.getHorizontalFacing();
-        if (facing == EnumFacing.EAST || facing == EnumFacing.WEST)
-            flippedAxis = true;
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
+        super.onBlockPlacedBy(state, entityLiving, stack);
+        if (entityLiving != null) {
+            EnumFacing facing = entityLiving.getHorizontalFacing();
+            if (facing == EnumFacing.EAST || facing == EnumFacing.WEST)
+                flippedAxis = true;
+        }
     }
 
     @Override

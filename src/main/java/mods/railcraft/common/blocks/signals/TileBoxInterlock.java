@@ -114,7 +114,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
 
         controller.writeToNBT(data);

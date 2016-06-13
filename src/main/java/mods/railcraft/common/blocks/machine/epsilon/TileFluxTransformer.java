@@ -8,11 +8,10 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,12 +57,10 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
     }
 
     public static void placeFluxTransformer(World world, BlockPos pos) {
-        for (MultiBlockPattern pattern : TileFluxTransformer.patterns) {
-            Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
-            blockMapping.put('B', EnumMachineEpsilon.FLUX_TRANSFORMER.getState());
-            pattern.placeStructure(world, pos, blockMapping);
-            return;
-        }
+        MultiBlockPattern pattern = TileFluxTransformer.patterns.get(0);
+        Map<Character, IBlockState> blockMapping = new HashMap<Character, IBlockState>();
+        blockMapping.put('B', EnumMachineEpsilon.FLUX_TRANSFORMER.getState());
+        pattern.placeStructure(world, pos, blockMapping);
     }
 
     @Override
@@ -118,16 +115,16 @@ public class TileFluxTransformer extends TileMultiBlock implements IElectricGrid
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         chargeHandler.writeToNBT(data);
+        return data;
     }
 
 }

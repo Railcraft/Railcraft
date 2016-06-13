@@ -19,8 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nonnull;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -68,16 +66,16 @@ public class TileElectricFeeder extends TileMachineBase implements IElectricGrid
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         chargeHandler.readFromNBT(data);
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         chargeHandler.writeToNBT(data);
+        return data;
     }
 
     @Override

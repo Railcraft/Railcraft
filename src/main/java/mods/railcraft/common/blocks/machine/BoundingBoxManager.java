@@ -16,8 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Why did I write this? Use AABBFactory instead?
+ *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+@Deprecated
 public class BoundingBoxManager {
 
     public static final BoundingBox DEFAULT = new BoundingBox();
@@ -73,7 +76,7 @@ public class BoundingBoxManager {
             int x = pos.getX();
             int y = pos.getY();
             int z = pos.getZ();
-            return AxisAlignedBB.fromBounds(x + min, y + min, z + min, x + max, y + max, z + max);
+            return new AxisAlignedBB(x + min, y + min, z + min, x + max, y + max, z + max);
         }
     }
 

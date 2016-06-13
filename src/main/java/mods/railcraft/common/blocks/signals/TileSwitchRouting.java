@@ -110,7 +110,7 @@ public class TileSwitchRouting extends TileSwitchSecured implements IRouter, IRo
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         inv.writeToNBT("inv", data);
         routingController.writeToNBT(data, "railwayType");

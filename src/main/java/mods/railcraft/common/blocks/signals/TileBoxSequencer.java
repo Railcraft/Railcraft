@@ -145,7 +145,7 @@ public class TileBoxSequencer extends TileBoxBase {
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("sideOutput", (byte) sideOutput.ordinal());
         data.setBoolean("powerState", powerState);

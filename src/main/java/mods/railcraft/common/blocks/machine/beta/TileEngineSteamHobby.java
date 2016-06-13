@@ -33,10 +33,11 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -88,15 +89,14 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
-        ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() != Items.BUCKET)
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+        if (heldItem != null && heldItem.getItem() != Items.BUCKET)
             if (Game.isHost(worldObj)) {
                 if (FluidHelper.handleRightClick(this, side, player, true, false))
                     return true;
-            } else if (FluidItemHelper.isContainer(current))
+            } else if (FluidItemHelper.isContainer(heldItem))
                 return true;
-        return super.blockActivated(player, side);
+        return super.blockActivated(player, hand, heldItem, side);
     }
 
     @Override
@@ -192,17 +192,17 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
         return (float) boiler.getHeat();
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         inv.writeToNBT("Items", data);
 
         boiler.writeToNBT(data);
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         inv.readFromNBT("Items", data);
 
@@ -237,7 +237,8 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public void setField(int id, int value) {}
+    public void setField(int id, int value) {
+    }
 
     @Override
     public int getFieldCount() {

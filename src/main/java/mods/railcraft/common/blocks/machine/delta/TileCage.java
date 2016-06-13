@@ -110,13 +110,13 @@ public class TileCage extends TileMachineBase {
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData( RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(isOpen);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData( RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         boolean o = data.readBoolean();
         if (isOpen != o) {

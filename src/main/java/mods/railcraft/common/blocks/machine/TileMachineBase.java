@@ -16,7 +16,6 @@ import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -135,7 +134,7 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
 
             IBlockState state = worldObj.getBlockState(getPos());
             int meta = state.getBlock().getMetaFromState(state);
-            if (getBlockType() != null && getClass() != ((BlockMachine<?>) getBlockType()).getMachineProxy().getMachine(meta).getTileClass()) {
+            if (getBlockType() != null && getClass() != ((BlockMachine<?>) getBlockType()).getMachineProxy().getMetaMap().get(meta).getTileClass()) {
                 worldObj.setBlockState(getPos(), getMachineType().getState(), 3);
                 validate();
                 worldObj.setTileEntity(getPos(), this);

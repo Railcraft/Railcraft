@@ -20,6 +20,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -72,10 +74,12 @@ public enum Metal {
         return "nugget" + tag;
     }
 
+    @Nullable
     public ItemStack getNugget() {
         return getNugget(1);
     }
 
+    @Nullable
     public ItemStack getNugget(int qty) {
         switch (this) {
             case GOLD:
@@ -93,10 +97,12 @@ public enum Metal {
         return "ingot" + tag;
     }
 
+    @Nullable
     public ItemStack getIngot() {
         return getIngot(1);
     }
 
+    @Nullable
     public ItemStack getIngot(int qty) {
         switch (this) {
             case IRON:
@@ -116,10 +122,12 @@ public enum Metal {
         return "block" + tag;
     }
 
+    @Nullable
     public ItemStack getBlock() {
         return getBlock(1);
     }
 
+    @Nullable
     public ItemStack getBlock(int qty) {
         switch (this) {
             case IRON:
@@ -135,10 +143,12 @@ public enum Metal {
         }
     }
 
+    @Nullable
     public ItemStack getPoorOre() {
         return getPoorOre(1);
     }
 
+    @Nullable
     public ItemStack getPoorOre(int qty) {
         switch (this) {
             case STEEL:

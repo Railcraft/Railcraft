@@ -32,7 +32,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturnHandler {
@@ -47,11 +46,6 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
 
     public MultiButtonController<ButtonState> getStateController() {
         return stateController;
-    }
-
-    @Override
-    public boolean blockActivated(EntityPlayer player, EnumFacing side) {
-        return super.blockActivated(player, side);
     }
 
     @Override
@@ -140,38 +134,38 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
         return true;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         stateController.writeToNBT(data, "state");
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         stateController.readFromNBT(data, "state");
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(stateController.getCurrentState());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         stateController.setCurrentState(data.readByte());
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeByte(stateController.getCurrentState());
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         stateController.setCurrentState(data.readByte());
     }
 

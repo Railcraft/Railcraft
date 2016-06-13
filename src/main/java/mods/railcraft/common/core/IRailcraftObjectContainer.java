@@ -12,6 +12,8 @@ package mods.railcraft.common.core;
 
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 /**
  * This interface is mainly to ensure that RailcraftBlocks and RailcraftItems have similar syntax.
  *
@@ -24,22 +26,30 @@ public interface IRailcraftObjectContainer {
 
     String getBaseTag();
 
+    @Nullable
     ItemStack getWildcard();
 
+    @Nullable
     ItemStack getStack();
 
+    @Nullable
     ItemStack getStack(int qty);
 
+    @Nullable
     ItemStack getStack(int qty, int meta);
 
+    @Nullable
     ItemStack getStack(IVariantEnum variant);
 
+    @Nullable
     ItemStack getStack(int qty, IVariantEnum variant);
 
     IRailcraftObject getObject();
 
+    @Nullable
     Object getRecipeObject();
 
+    @Nullable
     Object getRecipeObject(IVariantEnum variant);
 
     boolean isEnabled();

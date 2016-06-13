@@ -24,8 +24,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nonnull;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -125,17 +123,17 @@ public abstract class TileLoaderBase extends TileMachineItem implements IHasCart
         return TrackTools.isRailBlock(block) || block == Blocks.REDSTONE_WIRE || block == Blocks.POWERED_REPEATER || block == Blocks.UNPOWERED_REPEATER;
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("powered", powered);
 
         getCartFilters().writeToNBT("invCarts", data);
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         setPowered(data.getBoolean("powered"));
 

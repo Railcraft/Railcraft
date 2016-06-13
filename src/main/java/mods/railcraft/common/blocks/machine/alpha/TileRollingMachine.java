@@ -34,7 +34,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -69,9 +68,9 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
         return EnumMachineAlpha.ROLLING_MACHINE;
     }
 
-    @Nonnull
+
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT( NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setInteger("progress", progress);
@@ -85,7 +84,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT( NBTTagCompound data) {
         super.readFromNBT(data);
 
         progress = data.getInteger("progress");
@@ -256,19 +255,19 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
         return true;
     }
 
-    @Nonnull
+
     @Override
-    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
+    public int[] getSlotsForFace( EnumFacing side) {
         return SLOTS;
     }
 
     @Override
-    public boolean canInsertItem(int index, @Nullable ItemStack itemStackIn, @Nonnull EnumFacing direction) {
+    public boolean canInsertItem(int index, @Nullable ItemStack itemStackIn,  EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index, @Nullable ItemStack stack, @Nonnull EnumFacing direction) {
+    public boolean canExtractItem(int index, @Nullable ItemStack stack,  EnumFacing direction) {
         return index == SLOT_RESULT;
     }
 
@@ -307,11 +306,11 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public void openInventory(@Nonnull EntityPlayer player) {
+    public void openInventory( EntityPlayer player) {
     }
 
     @Override
-    public void closeInventory(@Nonnull EntityPlayer player) {
+    public void closeInventory( EntityPlayer player) {
     }
 
     @Override
@@ -348,7 +347,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     }
 
     @Override
-    public boolean isUseableByPlayer(@Nonnull EntityPlayer player) {
+    public boolean isUseableByPlayer( EntityPlayer player) {
         return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
     }
 
@@ -386,7 +385,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     private static class RollingContainer extends Container {
 
         @Override
-        public boolean canInteractWith(@Nonnull EntityPlayer entityplayer) {
+        public boolean canInteractWith( EntityPlayer entityplayer) {
             return true;
         }
 

@@ -15,7 +15,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.function.Predicate;
 
@@ -37,14 +36,14 @@ public abstract class TileBoilerTank extends TileBoiler {
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData( RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeBoolean(isStructureValid());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData( RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         isConnected = data.readBoolean();

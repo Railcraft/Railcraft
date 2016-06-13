@@ -23,5 +23,5 @@ public interface IGuiReturnHandler {
 
     void writeGuiData(RailcraftOutputStream data) throws IOException;
 
-    void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException;
+    void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException;
 }

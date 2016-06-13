@@ -165,9 +165,9 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
         return true;
     }
 
-    @Nonnull
+
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT( NBTTagCompound data) {
         super.writeToNBT(data);
         data.setByte("direction", (byte) direction.ordinal());
         data.setBoolean("powered", powered);
@@ -176,7 +176,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT( NBTTagCompound data) {
         super.readFromNBT(data);
         direction = EnumFacing.getFront(data.getByte("direction"));
         powered = data.getBoolean("powered");
@@ -184,14 +184,14 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData( RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(jet);
         data.writeByte(direction.ordinal());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData( RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         jet = data.readByte();
         direction = EnumFacing.getFront(data.readByte());

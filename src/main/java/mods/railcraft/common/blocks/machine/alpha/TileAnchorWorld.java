@@ -423,7 +423,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
+    public void onNeighborBlockChange( IBlockState state,  Block block) {
         super.onNeighborBlockChange(state, block);
         if (Game.isClient(getWorld()))
             return;
@@ -433,7 +433,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData( RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeBoolean(hasTicket);
@@ -444,7 +444,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData( RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         boolean tick = data.readBoolean();
@@ -460,9 +460,9 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         setupChunks();
     }
 
-    @Nonnull
+
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT( NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setLong("fuel", fuel);
@@ -480,7 +480,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT( NBTTagCompound data) {
         super.readFromNBT(data);
 
         if (needsFuel())
@@ -512,21 +512,21 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
         return fuel;
     }
 
-    @Nonnull
+
     @Override
-    public int[] getSlotsForFace(@Nonnull EnumFacing side) {
+    public int[] getSlotsForFace( EnumFacing side) {
         if (RailcraftConfig.anchorsCanInteractWithPipes())
             return SLOTS;
         return SLOTS_NO_ACCESS;
     }
 
     @Override
-    public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, @Nonnull EnumFacing direction) {
+    public boolean canInsertItem(int index,  ItemStack itemStackIn,  EnumFacing direction) {
         return RailcraftConfig.anchorsCanInteractWithPipes();
     }
 
     @Override
-    public boolean canExtractItem(int index, @Nonnull ItemStack stack, @Nonnull EnumFacing direction) {
+    public boolean canExtractItem(int index,  ItemStack stack,  EnumFacing direction) {
         return false;
     }
 }

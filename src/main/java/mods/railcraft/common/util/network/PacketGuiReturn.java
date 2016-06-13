@@ -24,7 +24,6 @@ public class PacketGuiReturn extends RailcraftPacket {
     private byte[] extraData;
 
     public PacketGuiReturn(EntityPlayer sender) {
-        super();
         this.sender = sender;
     }
 

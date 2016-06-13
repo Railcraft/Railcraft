@@ -19,7 +19,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class TileAdminSteamProducer extends TileMachineBase implements IFluidHandler {
@@ -27,13 +26,13 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
     private boolean powered;
 
     @Override
-    public void onNeighborBlockChange(@Nonnull IBlockState state, @Nonnull Block block) {
+    public void onNeighborBlockChange(IBlockState state, Block block) {
         super.onNeighborBlockChange(state, block);
         checkRedstone();
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull IBlockState state, @Nonnull EntityLivingBase entityliving, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(state, entityliving, stack);
         checkRedstone();
     }
@@ -113,26 +112,26 @@ public class TileAdminSteamProducer extends TileMachineBase implements IFluidHan
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         powered = data.getBoolean("powered");
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("powered", powered);
+        return data;
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeBoolean(powered);
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         boolean p = data.readBoolean();
         if (powered != p) {

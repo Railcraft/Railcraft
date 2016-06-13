@@ -31,7 +31,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 /**
@@ -121,42 +120,42 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
     public abstract EnumFacing getOrientation();
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(transferModeController.getCurrentState());
         data.writeByte(redstoneModeController.getCurrentState());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         transferModeController.setCurrentState(data.readByte());
         redstoneModeController.setCurrentState(data.readByte());
     }
 
     @Override
-    public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
         data.writeByte(transferModeController.getCurrentState());
         data.writeByte(redstoneModeController.getCurrentState());
     }
 
     @Override
-    public void readGuiData(@Nonnull RailcraftInputStream data, EntityPlayer sender) throws IOException {
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         transferModeController.setCurrentState(data.readByte());
         redstoneModeController.setCurrentState(data.readByte());
     }
 
-    @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         transferModeController.writeToNBT(data, "mode");
         redstoneModeController.writeToNBT(data, "redstone");
         getItemFilters().writeToNBT("invFilters", data);
+        return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         transferModeController.readFromNBT(data, "mode");
         redstoneModeController.readFromNBT(data, "redstone");

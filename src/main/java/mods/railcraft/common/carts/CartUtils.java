@@ -139,6 +139,10 @@ public class CartUtils {
         return entities.stream().filter(cart -> !cart.isDead).map(Entity::getPersistentID).collect(Collectors.toList());
     }
 
+    public static void removePassengers(EntityMinecart cart) {
+        removePassengers(cart, cart.getPositionVector());
+    }
+
     public static void removePassengers(EntityMinecart cart, Vec3d resultingPosition) {
         List<Entity> passengers = cart.getPassengers();
         cart.removePassengers();

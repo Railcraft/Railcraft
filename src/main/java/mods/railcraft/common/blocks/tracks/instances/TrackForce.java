@@ -87,6 +87,7 @@ public class TrackForce extends TrackUnsupported {
         WorldPlugin.setBlockToAir(theWorldAsserted(), getPos());
     }
 
+    @Nullable
     public TileForceTrackEmitter getEmitter() {
         return emitter;
     }

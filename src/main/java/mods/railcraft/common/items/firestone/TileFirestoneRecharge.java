@@ -174,7 +174,7 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
 
     @Nonnull
     @Override
-    public void writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         data.setShort("charge", (short) charge);
         data.setByte("rebuildDelay", (byte) rebuildDelay);

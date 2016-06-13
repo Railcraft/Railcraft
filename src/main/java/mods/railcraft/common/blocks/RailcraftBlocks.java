@@ -37,7 +37,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 
@@ -115,11 +114,11 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     }
 
     @Override
-    public boolean isEqual(ItemStack stack) {
+    public boolean isEqual(@Nullable ItemStack stack) {
         return stack != null && block != null && InvTools.getBlockFromStack(stack) == block;
     }
 
-    public boolean isEqual(Block block) {
+    public boolean isEqual(@Nullable Block block) {
         return block != null && this.block == block;
     }
 
@@ -133,21 +132,25 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
         return tag;
     }
 
+    @Nullable
     @Override
     public ItemStack getWildcard() {
         return getStack(1, OreDictionary.WILDCARD_VALUE);
     }
 
+    @Nullable
     @Override
     public ItemStack getStack() {
         return getStack(1, 0);
     }
 
+    @Nullable
     @Override
     public ItemStack getStack(int qty) {
         return getStack(qty, 0);
     }
 
+    @Nullable
     @Override
     public ItemStack getStack(int qty, int meta) {
 //        register(); Blocks are not created lazily like items.
@@ -156,28 +159,32 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
         return new ItemStack(block, qty, meta);
     }
 
-    private void checkVariantObject(IVariantEnum variant) {
+    private void checkVariantObject(@Nullable IVariantEnum variant) {
         IVariantEnum.tools.checkVariantObject(itemClass, variant);
     }
 
+    @Nullable
     @Override
-    public ItemStack getStack(@Nonnull IVariantEnum variant) {
+    public ItemStack getStack(IVariantEnum variant) {
         return getStack(1, variant);
     }
 
+    @Nullable
     @Override
-    public ItemStack getStack(int qty, @Nonnull IVariantEnum variant) {
+    public ItemStack getStack(int qty, IVariantEnum variant) {
         checkVariantObject(variant);
         return getStack(qty, variant.getItemMeta());
     }
 
+    @Nullable
     @Override
     public Object getRecipeObject() {
         return getRecipeObject(null);
     }
 
+    @Nullable
     @Override
-    public Object getRecipeObject(IVariantEnum variant) {
+    public Object getRecipeObject(@Nullable IVariantEnum variant) {
         checkVariantObject(variant);
 //        register(); Blocks are not created lazily like items.
         Object obj = null;

@@ -16,6 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -30,8 +32,10 @@ public interface IEnumMachine<M extends IEnumMachine<M>> extends Comparable<M>, 
 
     boolean isDepreciated();
 
+    @Nullable
     ItemStack getItem();
 
+    @Nullable
     ItemStack getItem(int qty);
 
     RailcraftBlocks getBlockContainer();
