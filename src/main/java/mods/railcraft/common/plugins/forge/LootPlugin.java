@@ -10,11 +10,14 @@ package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.ChestGenHooks;
 
 /**
@@ -22,6 +25,7 @@ import net.minecraftforge.common.ChestGenHooks;
  */
 public class LootPlugin {
 
+    public static final ResourceLocation CHESTS_VILLAGE_WORKSHOP = LootTableList.register(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "chests/village_workshop"));
     public static final String WORKSHOP = "railcraft:workshop";
 
     public static void init() {

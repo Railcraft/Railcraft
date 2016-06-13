@@ -17,6 +17,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -31,10 +32,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -57,7 +58,8 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         super(Material.ROCK);
         setResistance(4.5F);
         setHardness(2.0F);
-        setSoundType(soundTypeStone);
+        // TODO: This can't be right
+        setSoundType(SoundType.STONE);
         setTickRandomly(true);
         this.proxy = proxy;
         this.blockstate = new BlockStateContainer(this, proxy.getVariantProperty());
@@ -70,12 +72,6 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         for (IEnumMachine<M> machine : proxy.getMetaMap().values()) {
             HarvestPlugin.setStateHarvestLevel(machine.getToolClass(), machine);
         }
-    }
-
-    //TODO: Only some blocks have TESRs
-    @Override
-    public int getRenderType() {
-        return 2;
     }
 
     @Override

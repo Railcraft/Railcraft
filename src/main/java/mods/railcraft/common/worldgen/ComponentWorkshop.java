@@ -9,34 +9,41 @@
 package mods.railcraft.common.worldgen;
 
 import mods.railcraft.api.tracks.ITrackReversible;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.api.tracks.TrackRegistry;
+import mods.railcraft.api.tracks.TrackSpec;
+import mods.railcraft.api.tracks.TrackToolsAPI;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.beta.TileEngineSteamHobby;
+import mods.railcraft.common.blocks.tracks.BlockTrack;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import mods.railcraft.common.blocks.tracks.TileTrack;
-import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.TrackFactory;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
-import net.minecraftforge.common.ChestGenHooks;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
+//TODO: Test extensively
 public class ComponentWorkshop extends StructureVillagePieces.Village {
 
     private int averageGroundLevel = -1;
@@ -45,138 +52,157 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
     public ComponentWorkshop() {
     }
 
-    public ComponentWorkshop(Start villagePiece, int par2, Random par3Random, StructureBoundingBox sbb, int coordBaseMode) {
-        super();
-        this.coordBaseMode = coordBaseMode;
+    public ComponentWorkshop(Start villagePiece, int type, Random rand, StructureBoundingBox sbb, EnumFacing facing) {
+        super(villagePiece, type);
         this.boundingBox = sbb;
-
+        setCoordBaseMode(facing);
     }
 
-    public static ComponentWorkshop buildComponent(Start villagePiece, List pieces, Random random, int x, int y, int z, int coordBaseMode, int p5) {
-        StructureBoundingBox box = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 11, 6, 11, coordBaseMode);
-        return canVillageGoDeeper(box) && StructureComponent.findIntersecting(pieces, box) == null ? new ComponentWorkshop(villagePiece, p5, random, box, coordBaseMode) : null;
+    @Nullable
+    public static ComponentWorkshop buildComponent(Start villagePiece, List pieces, Random random, int x, int y, int z, EnumFacing facing, int type) {
+        StructureBoundingBox box = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 11, 6, 11, facing);
+        return canVillageGoDeeper(box) && StructureComponent.findIntersecting(pieces, box) == null ? new ComponentWorkshop(villagePiece, type, random, box, facing) : null;
     }
 
     @Override
     public boolean addComponentParts(World world, Random random, StructureBoundingBox sbb) {
-        if (this.averageGroundLevel < 0) {
-            this.averageGroundLevel = this.getAverageGroundLevel(world, sbb);
+        if (averageGroundLevel < 0) {
+            this.averageGroundLevel = getAverageGroundLevel(world, sbb);
 
-            if (this.averageGroundLevel < 0)
+            if (averageGroundLevel < 0)
                 return true;
 
-            this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + 4, 0);
+            boundingBox.offset(0, averageGroundLevel - boundingBox.maxY + 4, 0);
         }
-        int x = this.boundingBox.minX;
-        int y = this.boundingBox.minY;
-        int z = this.boundingBox.minZ;
+
+        IBlockState torch = Blocks.TORCH.getDefaultState();
+        IBlockState blockBrick = Blocks.BRICK_BLOCK.getDefaultState();
+        IBlockState glassPane = Blocks.GLASS_PANE.getDefaultState();
+        IBlockState stainedGlass = Blocks.STAINED_GLASS.getStateFromMeta(9);
+
+        IBlockState stoneBrick = Blocks.STONEBRICK.getDefaultState();
+        IBlockState mossyStoneBrick = stoneBrick.withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY);
+        IBlockState crackedStoneBrick = stoneBrick.withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CRACKED);
+
+        IBlockState roofEast = Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
+        IBlockState roofWest = Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
+        IBlockState roofNorth = Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH);
+        IBlockState roofSouth = Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
 
         //Clear area
-        fillWithBlocks(world, sbb, 1, 1, 2, 3, 3, 4, Blocks.AIR, Blocks.AIR, false);
-        fillWithBlocks(world, sbb, 5, 1, 0, 9, 4, 10, Blocks.AIR, Blocks.AIR, false);
+        fillWithAir(world, sbb, 1, 1, 2, 3, 3, 4);
+        fillWithAir(world, sbb, 5, 1, 0, 9, 4, 10);
         // floor
 //        fillWithBlocks(world, sbb, 0, 0, 0, 11, 0, 11, Blocks.GRAVEL, Blocks.GRAVEL, false);
-        fillWithBlocks(world, sbb, 4, 0, 0, 10, 0, 10, Blocks.DOUBLE_STONE_SLAB, Blocks.DOUBLE_STONE_SLAB, false);
-        fillWithBlocks(world, sbb, 0, 0, 1, 3, 0, 5, Blocks.DOUBLE_STONE_SLAB, Blocks.DOUBLE_STONE_SLAB, false);
+        fillWithBlocks(world, sbb, 4, 0, 0, 10, 0, 10, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), Blocks.DOUBLE_STONE_SLAB.getDefaultState(), false);
+        fillWithBlocks(world, sbb, 0, 0, 1, 3, 0, 5, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), Blocks.DOUBLE_STONE_SLAB.getDefaultState(), false);
 
         // track
-        fillWithBlocks(world, sbb, 7, 1, 2, 7, 1, 8, Blocks.RAIL, Blocks.RAIL, false);
-        placeTrack(EnumTrack.BUFFER_STOP, world, 7, 1, 1, sbb, EnumTrackMeta.NORTH_SOUTH.ordinal(), false);
-        placeTrack(EnumTrack.BUFFER_STOP, world, 7, 1, 9, sbb, EnumTrackMeta.NORTH_SOUTH.ordinal(), true);
+        fillWithBlocks(world, sbb, 7, 1, 2, 7, 1, 8, Blocks.RAIL.getDefaultState(), Blocks.RAIL.getDefaultState(), false);
+        placeTrack(EnumTrack.BUFFER_STOP, world, 7, 1, 1, sbb, EnumRailDirection.NORTH_SOUTH, false);
+        placeTrack(EnumTrack.BUFFER_STOP, world, 7, 1, 9, sbb, EnumRailDirection.NORTH_SOUTH, true);
+
 
         // hall walls
-        fillWithBlocks(world, sbb, 4, 0, 0, 4, 3, 10, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
-        fillWithBlocks(world, sbb, 10, 0, 0, 10, 3, 10, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
+        fillWithBlocks(world, sbb, 4, 0, 0, 4, 3, 10, blockBrick, blockBrick, false);
+        fillWithBlocks(world, sbb, 10, 0, 0, 10, 3, 10, blockBrick, blockBrick, false);
 
-        fillWithBlocks(world, sbb, 5, 0, 0, 5, 4, 0, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
-        fillWithBlocks(world, sbb, 9, 0, 0, 9, 4, 0, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
+        fillWithBlocks(world, sbb, 5, 0, 0, 5, 4, 0, blockBrick, blockBrick, false);
+        fillWithBlocks(world, sbb, 9, 0, 0, 9, 4, 0, blockBrick, blockBrick, false);
 
-        fillWithBlocks(world, sbb, 5, 0, 10, 5, 4, 10, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
-        fillWithBlocks(world, sbb, 9, 0, 10, 9, 4, 10, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
+        fillWithBlocks(world, sbb, 5, 0, 10, 5, 4, 10, blockBrick, blockBrick, false);
+        fillWithBlocks(world, sbb, 9, 0, 10, 9, 4, 10, blockBrick, blockBrick, false);
 
-        int metaRoofSupportA = getMetadataWithOffset(Blocks.STONE_STAIRS, 1) | 0x4;
-        int metaRoofSupportB = getMetadataWithOffset(Blocks.STONE_STAIRS, 0) | 0x4;
-        for (int rz = 1; rz <= 9; rz++) {
-            placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportA, 5, 4, rz, sbb);
-            placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportB, 9, 4, rz, sbb);
-        }
-        placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportA, 6, 4, 0, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportB, 8, 4, 0, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportA, 6, 4, 10, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.BRICK_STAIRS, metaRoofSupportB, 8, 4, 10, sbb);
+        // hall molding
+        IBlockState roofSupportWest = Blocks.BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST).withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM);
+        IBlockState roofSupportEast = Blocks.BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST).withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM);
+        fillWithBlocks(world, sbb, 5, 4, 1, 5, 4, 9, roofSupportWest, roofSupportWest, false);
+        fillWithBlocks(world, sbb, 9, 4, 1, 9, 4, 9, roofSupportEast, roofSupportEast, false);
+
+        // hall door
+        setBlockState(world, roofSupportWest, 6, 4, 0, sbb);
+        setBlockState(world, roofSupportEast, 8, 4, 0, sbb);
+        setBlockState(world, roofSupportWest, 6, 4, 10, sbb);
+        setBlockState(world, roofSupportEast, 8, 4, 10, sbb);
 
         // hall windows
-        fillWithBlocks(world, sbb, 10, 2, 2, 10, 2, 3, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
-        fillWithBlocks(world, sbb, 10, 2, 7, 10, 2, 8, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
-        fillWithBlocks(world, sbb, 4, 2, 7, 4, 2, 8, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
+        fillWithBlocks(world, sbb, 10, 2, 2, 10, 2, 3, glassPane, glassPane, false);
+        fillWithBlocks(world, sbb, 10, 2, 7, 10, 2, 8, glassPane, glassPane, false);
+        fillWithBlocks(world, sbb, 4, 2, 7, 4, 2, 8, glassPane, glassPane, false);
+
+        // hall roof slope
+        fillWithBlocks(world, sbb, 4, 4, 0, 4, 4, 10, roofEast, roofEast, false);
+        fillWithBlocks(world, sbb, 5, 5, 0, 5, 5, 10, roofEast, roofEast, false);
+
+        fillWithBlocks(world, sbb, 10, 4, 0, 10, 4, 10, roofWest, roofWest, false);
+        fillWithBlocks(world, sbb, 9, 5, 0, 9, 5, 10, roofWest, roofWest, false);
 
         // hall roof
-        int metaHallRoofA = getMetadataWithOffset(Blocks.STONE_STAIRS, 0);
-        int metaHallRoofB = getMetadataWithOffset(Blocks.STONE_STAIRS, 1);
-        for (int rz = 0; rz <= 10; rz++) {
-            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHallRoofA, 4, 4, rz, sbb);
-            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHallRoofB, 10, 4, rz, sbb);
+        BlockSelector roofSelector = new BlockSelector() {
+            @Override
+            public void selectBlocks(Random rand, int x, int y, int z, boolean boundary) {
+                float f = rand.nextFloat();
 
-            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHallRoofA, 5, 5, rz, sbb);
-            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHallRoofB, 9, 5, rz, sbb);
-        }
+                if (f < 0.2F) {
+                    this.blockstate = crackedStoneBrick;
+                } else if (f < 0.5F) {
+                    this.blockstate = mossyStoneBrick;
+                    // is this too mean?
+//                } else if (f < 0.55F) {
+//                    this.blockstate = Blocks.MONSTER_EGG.getStateFromMeta(BlockSilverfish.EnumType.STONEBRICK.getMetadata());
+                } else {
+                    this.blockstate = stoneBrick;
+                }
+            }
+        };
 
-        fillWithBlocks(world, sbb, 6, 5, 0, 8, 5, 10, Blocks.STONEBRICK, Blocks.STONEBRICK, false);
-        fillWithMetadataBlocks(world, sbb, 6, 5, 1, 8, 5, 9, Blocks.STONEBRICK, 2, Blocks.STONEBRICK, 2, false);
-        fillWithMetadataBlocks(world, sbb, 7, 5, 2, 7, 5, 8, Blocks.STONEBRICK, 1, Blocks.STONEBRICK, 1, false);
-        placeBlockAtCurrentPosition(world, Blocks.STAINED_GLASS, 9, 7, 5, 2, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.STAINED_GLASS, 9, 7, 5, 5, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.STAINED_GLASS, 9, 7, 5, 8, sbb);
+        fillWithRandomizedBlocks(world, sbb, 6, 5, 0, 8, 5, 10, true, random, roofSelector);
+        setBlockState(world, stainedGlass, 7, 5, 2, sbb);
+        setBlockState(world, stainedGlass, 7, 5, 5, sbb);
+        setBlockState(world, stainedGlass, 7, 5, 8, sbb);
 
         // hall torches
-//        int meta = getMetadataWithOffset(Blocks.TORCH, 4);
-        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 9, 3, 1, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 9, 3, 5, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 9, 3, 9, sbb);
+//        int meta = getMetadataWithOffset(torch, 4);
+        setBlockState(world, torch, 9, 3, 1, sbb);
+        setBlockState(world, torch, 9, 3, 5, sbb);
+        setBlockState(world, torch, 9, 3, 9, sbb);
 
-//        meta = getMetadataWithOffset(Blocks.TORCH, 3);
-        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 5, 3, 1, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 5, 3, 5, sbb);
-        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 5, 3, 9, sbb);
+//        meta = getMetadataWithOffset(torch, 3);
+        setBlockState(world, torch, 5, 3, 1, sbb);
+        setBlockState(world, torch, 5, 3, 5, sbb);
+        setBlockState(world, torch, 5, 3, 9, sbb);
 
         // hut walls
-        fillWithBlocks(world, sbb, 0, 0, 1, 0, 3, 5, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
-        fillWithBlocks(world, sbb, 1, 0, 1, 3, 3, 1, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
-        fillWithBlocks(world, sbb, 1, 0, 5, 3, 3, 5, Blocks.BRICK_BLOCK, Blocks.BRICK_BLOCK, false);
+        fillWithBlocks(world, sbb, 0, 0, 1, 0, 3, 5, blockBrick, blockBrick, false);
+        fillWithBlocks(world, sbb, 1, 0, 1, 3, 3, 1, blockBrick, blockBrick, false);
+        fillWithBlocks(world, sbb, 1, 0, 5, 3, 3, 5, blockBrick, blockBrick, false);
 
         // hut roof
-        fillWithBlocks(world, sbb, 1, 4, 2, 4, 4, 4, Blocks.STONEBRICK, Blocks.STONEBRICK, false);
-        int metaHutRoofA = getMetadataWithOffset(Blocks.STONE_STAIRS, 0);
-        for (int rz = 1; rz <= 5; rz++) {
-            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHutRoofA, 0, 4, rz, sbb);
-        }
-        int metaHutRoofB = getMetadataWithOffset(Blocks.STONE_STAIRS, 3);
-        int metaHutRoofC = getMetadataWithOffset(Blocks.STONE_STAIRS, 2);
-        for (int rx = 1; rx <= 3; rx++) {
-            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHutRoofB, rx, 4, 1, sbb);
-            placeBlockAtCurrentPosition(world, Blocks.STONE_BRICK_STAIRS, metaHutRoofC, rx, 4, 5, sbb);
-        }
+        fillWithRandomizedBlocks(world, sbb, 1, 4, 2, 4, 4, 4, true, random, roofSelector);
+        fillWithBlocks(world, sbb, 0, 4, 1, 0, 4, 5, roofEast, roofEast, false);
+        fillWithBlocks(world, sbb, 4, 1, 1, 4, 1, 3, roofNorth, roofNorth, false);
+        fillWithBlocks(world, sbb, 4, 5, 1, 4, 5, 3, roofSouth, roofSouth, false);
 
         // hut door
-        fillWithBlocks(world, sbb, 4, 1, 3, 4, 2, 3, Blocks.AIR, Blocks.AIR, false);
-        fillWithBlocks(world, sbb, 4, 1, 3, 4, 2, 3, Blocks.AIR, Blocks.AIR, false);
-        placeBlockAtCurrentPosition(world, Blocks.DOUBLE_STONE_SLAB, 0, 4, 0, 3, sbb);
-        placeDoorAtCurrentPosition(world, boundingBox, random, 4, 1, 3, 2);
+        fillWithAir(world, sbb, 4, 1, 3, 4, 2, 3);
+        fillWithAir(world, sbb, 4, 1, 3, 4, 2, 3);
+        setBlockState(world, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), 4, 0, 3, sbb);
+        placeDoorCurrentPosition(world, boundingBox, random, 4, 1, 3, EnumFacing.NORTH);
 
         // hut windows
-        fillWithBlocks(world, sbb, 2, 2, 1, 2, 2, 1, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
-        fillWithBlocks(world, sbb, 2, 2, 5, 2, 2, 5, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
-        fillWithBlocks(world, sbb, 0, 2, 3, 0, 2, 3, Blocks.GLASS_PANE, Blocks.GLASS_PANE, false);
+        fillWithBlocks(world, sbb, 2, 2, 1, 2, 2, 1, glassPane, glassPane, false);
+        fillWithBlocks(world, sbb, 2, 2, 5, 2, 2, 5, glassPane, glassPane, false);
+        fillWithBlocks(world, sbb, 0, 2, 3, 0, 2, 3, glassPane, glassPane, false);
 
         // hut torches
-//        meta = getMetadataWithOffset(Blocks.TORCH, 1);
-        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 2, 3, 2, sbb);
-//        meta = getMetadataWithOffset(Blocks.TORCH, 2);
-        placeBlockAtCurrentPosition(world, Blocks.TORCH, 0, 2, 3, 4, sbb);
+//        meta = getMetadataWithOffset(torch, 1);
+        setBlockState(world, torch, 2, 3, 2, sbb);
+//        meta = getMetadataWithOffset(torch, 2);
+        setBlockState(world, torch, 2, 3, 4, sbb);
 
         // machines
         if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable()) {
-            placeBlockAtCurrentPosition(world, RailcraftBlocksOld.getBlockMachineAlpha(), EnumMachineAlpha.ROLLING_MACHINE.ordinal(), 9, 1, 5, sbb);
+            setBlockState(world, EnumMachineAlpha.ROLLING_MACHINE.getState(), 9, 1, 5, sbb);
             if (EnumMachineBeta.ENGINE_STEAM_HOBBY.isAvailable() && RailcraftConfig.machinesRequirePower())
                 placeEngine(world, 9, 1, 6, sbb);
         }
@@ -185,67 +211,61 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         // foundation
         for (int k = 0; k < 11; ++k) {
             for (int l = 4; l < 11; ++l) {
-                this.clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
-                this.func_151554_b(world, Blocks.COBBLESTONE, 0, l, -1, k, sbb);
+                clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
+                replaceAirAndLiquidDownwards(world, Blocks.COBBLESTONE.getDefaultState(), l, -1, k, sbb);
             }
         }
         for (int k = 1; k < 6; ++k) {
             for (int l = 0; l < 4; ++l) {
-                this.clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
-                this.func_151554_b(world, Blocks.COBBLESTONE, 0, l, -1, k, sbb);
+                clearCurrentPositionBlocksUpwards(world, l, 6, k, sbb);
+                replaceAirAndLiquidDownwards(world, Blocks.COBBLESTONE.getDefaultState(), l, -1, k, sbb);
             }
         }
 
-        placeChest(world, 9, 1, 4, 3, random, sbb);
+        placeChest(world, 9, 1, 4, random, sbb);
 
+        //TODO: implement forge compatible version
         spawnVillagers(world, sbb, 0, 0, 0, 2);
         return true;
     }
 
-    @Override
-    protected int getVillagerType(int par1) {
-        return 456;
+    private BlockPos getPosWithOffset(int x, int y, int z) {
+        return new BlockPos(getXWithOffset(x, z), getYWithOffset(y), getZWithOffset(x, z));
     }
 
-    private void placeTrack(EnumTrack track, World world, int x, int y, int z, StructureBoundingBox sbb, int meta, boolean reversed) {
-        if (!track.isEnabled()) {
-            placeBlockAtCurrentPosition(world, Blocks.RAIL, 0, x, y, z, sbb);
-            return;
-        }
-        int xx = this.getXWithOffset(x, z);
-        int yy = this.getYWithOffset(y);
-        int zz = this.getZWithOffset(x, z);
-
-        if (!sbb.isVecInside(xx, yy, zz))
+    private void placeTrack(EnumTrack track, World world, int x, int y, int z, StructureBoundingBox sbb, EnumRailDirection trackShape, boolean reversed) {
+        BlockTrack blockTrack = (BlockTrack) RailcraftBlocks.track.block();
+        // TODO: place vanilla tracks?
+        if (blockTrack == null)
             return;
 
-//        System.out.println("coordBaseMode = " + coordBaseMode);
+        TrackSpec trackSpec;
+        if (track.isEnabled()) {
+            trackSpec = track.getTrackSpec();
+        } else
+            trackSpec = TrackRegistry.getDefaultTrackSpec();
 
-        TileTrack tile = TrackTools.placeTrack(track.getTrackSpec(), world, xx, yy, zz, meta);
-        boolean r = false;
-        switch (this.coordBaseMode) {
-            case 0: // checked
-            case 1: // checked
-                r = false;
-                break;
-            case 2: // checked
-            case 3:
-                r = true;
-                break;
-        }
+        BlockPos pos = getPosWithOffset(x, y, z);
+
+        if (!sbb.isVecInside(pos))
+            return;
+
+        setBlockState(world, TrackToolsAPI.makeTrackState(blockTrack, trackShape), x, y, z, sbb);
+        TileTrack tile = TrackFactory.makeTrackTile(trackSpec);
+        world.setTileEntity(pos, tile);
+        EnumFacing facing = getCoordBaseMode();
+        boolean r = facing != null && facing.getAxis() == EnumFacing.Axis.Z;
         ((ITrackReversible) tile.getTrackInstance()).setReversed(r != reversed);
     }
 
     private void placeEngine(World world, int x, int y, int z, StructureBoundingBox sbb) {
-        int xx = this.getXWithOffset(x, z);
-        int yy = this.getYWithOffset(y);
-        int zz = this.getZWithOffset(x, z);
+        BlockPos pos = getPosWithOffset(x, y, z);
 
-        if (!sbb.isVecInside(xx, yy, zz))
+        if (!sbb.isVecInside(pos))
             return;
 
-        WorldPlugin.setBlock(world, xx, yy, zz, RailcraftBlocksOld.getBlockMachineBeta(), EnumMachineBeta.ENGINE_STEAM_HOBBY.ordinal());
-        TileEntity tile = WorldPlugin.getBlockTile(world, xx, yy, zz);
+        setBlockState(world, EnumMachineBeta.ENGINE_STEAM_HOBBY.getState(), x, y, z, sbb);
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileEngineSteamHobby) {
             TileEngineSteamHobby engine = (TileEngineSteamHobby) tile;
             engine.switchOrientation();
@@ -255,32 +275,19 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
     }
 
     @Override
-    protected void func_143012_a(NBTTagCompound nbt) {
-        super.func_143012_a(nbt);
+    protected void writeStructureToNBT(NBTTagCompound nbt) {
+        super.writeStructureToNBT(nbt);
         nbt.setBoolean("Chest", hasMadeChest);
     }
 
     @Override
-    protected void func_143011_b(NBTTagCompound nbt) {
-        super.func_143011_b(nbt);
+    protected void readStructureFromNBT(NBTTagCompound nbt) {
+        super.readStructureFromNBT(nbt);
         hasMadeChest = nbt.getBoolean("Chest");
     }
 
-    private void placeChest(World world, int x, int y, int z, int meta, Random rand, StructureBoundingBox sbb) {
-        int xx = this.getXWithOffset(x, z);
-        int yy = this.getYWithOffset(y);
-        int zz = this.getZWithOffset(x, z);
-
-        if (!hasMadeChest && sbb.isVecInside(xx, yy, zz)) {
-            hasMadeChest = true;
-            if (world.getBlock(xx, yy, zz) != Blocks.CHEST) {
-                world.setBlock(xx, yy, zz, Blocks.CHEST, getMetadataWithOffset(Blocks.CHEST, meta), 2);
-                TileEntityChest chest = (TileEntityChest) world.getTileEntity(xx, yy, zz);
-
-                if (chest != null)
-                    WeightedRandomChestContent.generateChestContents(rand, ChestGenHooks.getItems(LootPlugin.WORKSHOP, rand), chest, ChestGenHooks.getCount(LootPlugin.WORKSHOP, rand));
-            }
-        }
+    private void placeChest(World world, int x, int y, int z, Random rand, StructureBoundingBox sbb) {
+        generateChest(world, sbb, rand, x, y, z, LootPlugin.CHESTS_VILLAGE_WORKSHOP);
     }
 
 }

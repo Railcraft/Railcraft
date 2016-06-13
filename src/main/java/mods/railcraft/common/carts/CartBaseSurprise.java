@@ -243,7 +243,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
                             && world.getCollisionBoxes(living, living.getEntityBoundingBox()).isEmpty()
                             && !world.containsAnyLiquid(living.getEntityBoundingBox())) {
 
-                        setup.accept(cart, entityType.cast(living));
+                        setup.accept(cart, living);
 
                         world.spawnEntityInWorld(living);
                         world.playEvent(2004, new BlockPos(x, y, z), 0);

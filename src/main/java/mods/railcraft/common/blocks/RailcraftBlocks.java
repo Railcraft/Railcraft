@@ -38,6 +38,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 
 /**
@@ -122,6 +123,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
         return block != null && this.block == block;
     }
 
+    @Nullable
     public Block block() {
         return block;
     }

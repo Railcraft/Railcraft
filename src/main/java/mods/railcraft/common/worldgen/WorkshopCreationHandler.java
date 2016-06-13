@@ -8,14 +8,17 @@
  */
 package mods.railcraft.common.worldgen;
 
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.PieceWeight;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
 import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class WorkshopCreationHandeler implements IVillageCreationHandler {
+public class WorkshopCreationHandler implements IVillageCreationHandler {
 
     @Override
     public PieceWeight getVillagePieceWeight(Random random, int i) {
@@ -27,9 +30,10 @@ public class WorkshopCreationHandeler implements IVillageCreationHandler {
         return ComponentWorkshop.class;
     }
 
+    @Nullable
     @Override
-    public Object buildComponent(PieceWeight villagePiece, Start startPiece, List pieces, Random random, int x, int y, int z, int coordBaseMode, int p5) {
-        return ComponentWorkshop.buildComponent(startPiece, pieces, random, x, y, z, coordBaseMode, p5);
+    public StructureVillagePieces.Village buildComponent(PieceWeight villagePiece, Start startPiece, List pieces, Random random, int x, int y, int z, EnumFacing facing, int type) {
+        return ComponentWorkshop.buildComponent(startPiece, pieces, random, x, y, z, facing, type);
     }
 
 }

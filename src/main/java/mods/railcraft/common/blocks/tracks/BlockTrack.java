@@ -21,11 +21,8 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.BlockRail;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
@@ -58,14 +55,11 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BlockTrack extends BlockRailBase implements IPostConnection {
-    public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("direction", EnumRailDirection.class);
+public class BlockTrack extends BlockRail implements IPostConnection {
 
     public static final float HARDNESS = 2F;
 
     public BlockTrack() {
-        super(false);
-        setDefaultState(blockState.getBaseState().withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_SOUTH));
         setResistance(3.5F);
         setHardness(HARDNESS);
         setSoundType(SoundType.METAL);
@@ -91,26 +85,6 @@ public class BlockTrack extends BlockRailBase implements IPostConnection {
             return track.getActualState(state);
         }
         return state;
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, SHAPE);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(SHAPE).getMetadata();
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(SHAPE, EnumRailDirection.byMetadata(meta));
-    }
-
-    @Override
-    public IProperty<EnumRailDirection> getShapeProperty() {
-        return SHAPE;
     }
 
     @Override
