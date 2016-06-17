@@ -13,18 +13,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class EmblemToolsServer {
-    
+
     public static IEmblemManager manager;
 
     public static String getEmblemIdentifier(ItemStack stack) {
         if (stack.hasTagCompound()) {
             NBTTagCompound nbt = stack.getTagCompound();
-            NBTTagString emblemIdent = (NBTTagString) nbt.getTag("emblem");
-            return emblemIdent != null ? emblemIdent.func_150285_a_() : "";
+            if (nbt != null) {
+                NBTTagString emblemIdent = (NBTTagString) nbt.getTag("emblem");
+                return emblemIdent != null ? emblemIdent.getString() : "";
+            }
         }
         return "";
     }

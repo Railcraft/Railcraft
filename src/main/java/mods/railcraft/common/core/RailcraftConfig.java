@@ -1118,7 +1118,7 @@ public class RailcraftConfig {
 
     private static void decorateComment(Property property, String tag, String comment) {
         comment = COMMENT_PREFIX + comment.replace("{t}", tag) + COMMENT_SUFFIX;
-        property.comment = comment;
+        property.setComment(comment);
     }
 
     private static void loadCartProperty(String tag) {

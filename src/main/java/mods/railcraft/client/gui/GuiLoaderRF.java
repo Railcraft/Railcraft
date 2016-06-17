@@ -91,7 +91,7 @@ public class GuiLoaderRF extends TileGui {
     @Override
     public void updateScreen() {
         super.updateScreen();
-        TileEntity t = tile.getWorld().getTileEntity(tile.getX(), tile.getY(), tile.getZ());
+        TileEntity t = tile.getWorld().getTileEntity(tile.getPos());
         if (t instanceof TileRFLoader)
             tile = (TileRFLoader) t;
         else

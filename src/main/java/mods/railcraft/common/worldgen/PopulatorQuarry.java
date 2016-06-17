@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.init.Blocks;
@@ -29,7 +28,7 @@ public class PopulatorQuarry extends Populator {
     public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RAILCRAFT_QUARRY", new Class[0], new Object[0]);
     public static final int GEN_HEIGHT = 50;
     private static PopulatorQuarry instance;
-    private final WorldGenQuarry quarry = new WorldGenQuarry(BlockCube.getBlock(), EnumCube.QUARRIED_STONE.ordinal());
+    private final WorldGenQuarry quarry = new WorldGenQuarry(EnumCube.QUARRIED_STONE.getState());
 
     public static PopulatorQuarry instance() {
         if (instance == null) {

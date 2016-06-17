@@ -33,7 +33,7 @@ public class GuiHandler implements IGuiHandler {
                 player.openGui(Railcraft.getMod(), gui.ordinal(), world, x, y, z);
             }
         } else if (!gui.hasContainer()) {
-            TileEntity tile = world.getTileEntity(x, y, z);
+            TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
             FMLClientHandler.instance().displayGuiScreen(player, FactoryGui.build(gui, player.inventory, tile, world, x, y, z));
         }
     }
@@ -58,7 +58,7 @@ public class GuiHandler implements IGuiHandler {
             }
             return FactoryContainer.build(EnumGui.fromOrdinal(ID), player.inventory, entity, world, x, y, z);
         }
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
         return FactoryContainer.build(EnumGui.fromOrdinal(ID), player.inventory, tile, world, x, y, z);
     }
 
@@ -72,7 +72,7 @@ public class GuiHandler implements IGuiHandler {
             }
             return FactoryGui.build(EnumGui.fromOrdinal(ID), player.inventory, entity, world, x, y, z);
         }
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
         return FactoryGui.build(EnumGui.fromOrdinal(ID), player.inventory, tile, world, x, y, z);
     }
 }

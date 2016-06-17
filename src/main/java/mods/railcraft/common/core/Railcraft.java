@@ -14,8 +14,8 @@ import com.google.common.primitives.Ints;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
-import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.fluids.RailcraftFluids;
@@ -221,8 +221,8 @@ public final class Railcraft {
                     remap(RailcraftFluids.STEAM.getBlock(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge") && BlockFirestoneRecharge.getBlock() != null)
                     remap(BlockFirestoneRecharge.getBlock(), mapping);
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && BlockRCAnvil.getBlock() != null)
-                    remap(BlockRCAnvil.getBlock(), mapping);
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && RailcraftBlocks.anvil_steel.block() != null)
+                    remap(RailcraftBlocks.anvil_steel.block(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
                 else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
@@ -239,8 +239,8 @@ public final class Railcraft {
                     remap(Item.getItemFromBlock(RailcraftFluids.STEAM.getBlock()), mapping);
                 else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge") && BlockFirestoneRecharge.getBlock() != null)
                     remap(Item.getItemFromBlock(BlockFirestoneRecharge.getBlock()), mapping);
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && BlockRCAnvil.getBlock() != null)
-                    remap(Item.getItemFromBlock(BlockRCAnvil.getBlock()), mapping);
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && RailcraftBlocks.anvil_steel.block() != null)
+                    remap(Item.getItemFromBlock(RailcraftBlocks.anvil_steel.block()), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
                 else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))

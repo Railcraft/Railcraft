@@ -59,9 +59,9 @@ public class PacketKeyPress extends RailcraftPacket {
         EntityPlayer entityPlayer = player;
         if (entityPlayer == null)
             return;
-        if (!(entityPlayer.ridingEntity instanceof EntityMinecart))
+        if (!(entityPlayer.getRidingEntity() instanceof EntityMinecart))
             return;
-        Train train = Train.getTrain((EntityMinecart) entityPlayer.ridingEntity);
+        Train train = Train.getTrain((EntityMinecart) entityPlayer.getRidingEntity());
         if (binding == LOCOMOTIVE_INCREASE_SPEED) {
             for (EntityMinecart cart : train) {
                 if (cart instanceof EntityLocomotive) {

@@ -77,9 +77,10 @@ public class BlockRailcraftFluid extends BlockFluidClassic {
 //        this.theIcon = new IIcon[]{still, flowing};
 //    }
 
+
     @Override
-    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-        super.onNeighborBlockChange(world, pos, state, neighborBlock);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock) {
+        super.neighborChanged(state, world, pos, neighborBlock);
         if (flammable && world.provider.getDimension() == -1) {
             world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 4F, true, true);
             world.setBlockToAir(pos);
@@ -125,8 +126,8 @@ public class BlockRailcraftFluid extends BlockFluidClassic {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        super.randomDisplayTick(world, pos, state, rand);
+    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+        super.randomDisplayTick(state, world, pos, rand);
         FluidHelper.drip(world, pos, state, rand, particleRed, particleGreen, particleBlue);
     }
 

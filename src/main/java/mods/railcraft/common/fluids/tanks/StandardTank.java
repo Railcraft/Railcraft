@@ -100,7 +100,7 @@ public class StandardTank extends FluidTank {
         if (renderData.fluid != null && renderData.amount > 0) {
             EnumRarity rarity = renderData.fluid.getRarity();
             if (rarity == null)
-                rarity = EnumRarity.common;
+                rarity = EnumRarity.COMMON;
             ToolTipLine fluidName = new ToolTipLine(renderData.fluid.getLocalizedName(new FluidStack(renderData.fluid, renderData.amount)), rarity.rarityColor);
             fluidName.setSpacing(2);
             toolTip.add(fluidName);

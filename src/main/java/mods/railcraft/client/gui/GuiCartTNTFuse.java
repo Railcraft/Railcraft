@@ -66,7 +66,7 @@ public class GuiCartTNTFuse extends GuiBasic {
     @Override
     public void onGuiClosed() {
         cart.setFuse(fuse);
-        if (Game.isClient(cart.getWorld()))
+        if (Game.isClient(cart.theWorld()))
             PacketBuilder.instance().sendGuiReturnPacket(cart);
     }
 

@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -34,7 +33,7 @@ public class PopulatorGeode extends Populator {
     public static final int MIN_FLOOR = 24;
     public static final int GEN_HEIGHT = 60;
     private static PopulatorGeode instance;
-    private final WorldGenerator geode = new WorldGenGeode(BlockCube.getBlock(), EnumCube.ABYSSAL_STONE.ordinal());
+    private final WorldGenerator geode = new WorldGenGeode(EnumCube.ABYSSAL_STONE.getState());
 
     private PopulatorGeode() {
         super(EVENT_TYPE, GEN_HEIGHT);

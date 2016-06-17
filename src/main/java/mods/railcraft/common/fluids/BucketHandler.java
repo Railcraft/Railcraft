@@ -34,12 +34,12 @@ public class BucketHandler {
     @SubscribeEvent
     public void onBucketFill(FillBucketEvent event) {
 
-        ItemStack result = fillCustomBucket(event.world, event.target, event.current);
+        ItemStack result = fillCustomBucket(event.getWorld(), event.getTarget(), event.getEmptyBucket());
 
         if (result == null)
             return;
 
-        event.result = result;
+        event.setFilledBucket(result);
         event.setResult(Result.ALLOW);
     }
 

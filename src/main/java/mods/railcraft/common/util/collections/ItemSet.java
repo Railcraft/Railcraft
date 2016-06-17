@@ -9,9 +9,11 @@
 package mods.railcraft.common.util.collections;
 
 import mods.railcraft.api.core.IStackFilter;
+import mods.railcraft.api.core.StackFilter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 
 /**
@@ -39,10 +41,10 @@ public class ItemSet extends HashSet<ItemKey> {
     }
 
     public IStackFilter getStackFilter() {
-        return new IStackFilter() {
+        return new StackFilter() {
             @Override
-            public boolean matches(ItemStack stack) {
-                return contains(stack);
+            public boolean apply(@Nullable ItemStack input) {
+                return contains(input);
             }
         };
     }

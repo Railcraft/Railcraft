@@ -39,7 +39,7 @@ public enum RailcraftFluids {
 
         @Override
         public Block makeBlock() {
-            return new BlockRailcraftFluid(standardFluid.get(), Material.water).setFlammable(true).setFlammability(10);
+            return new BlockRailcraftFluid(standardFluid.get(), Material.WATER).setFlammable(true).setFlammability(10);
         }
     },
     STEAM("fluid.steam", Fluids.STEAM, -1000, 500) {
@@ -50,7 +50,7 @@ public enum RailcraftFluids {
 
         @Override
         Block makeBlock() {
-            return new BlockRailcraftFluidFinite(standardFluid.get(), new MaterialLiquid(MapColor.airColor)).setNoFlow();
+            return new BlockRailcraftFluidFinite(standardFluid.get(), new MaterialLiquid(MapColor.AIR)).setNoFlow();
         }
     };
     public static final RailcraftFluids[] VALUES = values();

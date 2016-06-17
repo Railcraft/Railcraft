@@ -97,8 +97,8 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        super.randomDisplayTick(world, pos, state, rand);
+    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+        super.randomDisplayTick(state, world, pos, rand);
         FluidHelper.drip(world, pos, state, rand, particleRed, particleGreen, particleBlue);
     }
 

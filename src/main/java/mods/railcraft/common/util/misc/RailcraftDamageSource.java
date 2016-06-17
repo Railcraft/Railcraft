@@ -48,7 +48,7 @@ public class RailcraftDamageSource extends DamageSource {
     }
 
     @Override
-    public ITextComponent func_151519_b(EntityLivingBase entity) {
+    public ITextComponent getDeathMessage(EntityLivingBase entity) {
         String locTag = "death.railcraft." + damageType + "." + (MiscTools.RANDOM.nextInt(numMessages) + 1);
         return ChatPlugin.chatComp(locTag, entity.getName());
     }
@@ -59,10 +59,10 @@ public class RailcraftDamageSource extends DamageSource {
 
         @SubscribeEvent
         public void modifyDrops(LivingDropsEvent event) {
-            if (event.source == STEAM)
-                for (EntityItem entityItem : event.drops) {
+            if (event.getSource() == STEAM)
+                for (EntityItem entityItem : event.getDrops()) {
                     ItemStack drop = entityItem.getEntityItem();
-                    ItemStack cooked = FurnaceRecipes.smelting().getSmeltingResult(drop);
+                    ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drop);
                     if (cooked != null && MiscTools.RANDOM.nextDouble() < 0.5) {
                         cooked = cooked.copy();
                         cooked.stackSize = drop.stackSize;

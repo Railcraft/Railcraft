@@ -35,6 +35,6 @@ public class SlotFeed extends Slot
 
     public static boolean canPlaceItem(ItemStack stack)
     {
-        return  StandardStackFilters.FEED.matches(stack);
+        return  StandardStackFilters.FEED.apply(stack);
     }
 }
