@@ -321,7 +321,7 @@ public class LinkageHandler {
      */
     @SubscribeEvent
     public void onMinecartUpdate(MinecartUpdateEvent event) {
-        EntityMinecart cart = event.minecart;
+        EntityMinecart cart = event.getMinecart();
 
         LinkageManager lm = LinkageManager.instance();
 
@@ -341,8 +341,8 @@ public class LinkageHandler {
 
     @SubscribeEvent
     public void onMinecartInteract(MinecartInteractEvent event) {
-        EntityPlayer player = event.player;
-        if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof IToolCrowbar)
+        EntityPlayer player = event.getPlayer();
+        if (player.getActiveItemStack() != null && player.getActiveItemStack().getItem() instanceof IToolCrowbar)
             event.setCanceled(true);
     }
 

@@ -9,7 +9,7 @@
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.items.ItemTicket;
-import mods.railcraft.common.items.ItemTicketGold;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
@@ -29,9 +29,9 @@ public class RoutingTicketCopyRecipe implements IRecipe {
         for (int slot = 0; slot < grid.getSizeInventory(); slot++) {
             ItemStack stack = grid.getStackInSlot(slot);
             if (stack != null) {
-                if (stack.getItem() == ItemTicketGold.item) {
+                if (RailcraftItems.ticketGold.isEqual(stack)) {
                     numTickets++;
-                } else if (stack.getItem() == Items.PAPER || stack.getItem() == ItemTicket.item) {
+                } else if (stack.getItem() == Items.PAPER || RailcraftItems.ticket.isEqual(stack)) {
                     numPaper++;
                 } else {
                     return false;
@@ -46,11 +46,9 @@ public class RoutingTicketCopyRecipe implements IRecipe {
         ItemStack ticket = null;
         for (int slot = 0; slot < grid.getSizeInventory(); slot++) {
             ItemStack stack = grid.getStackInSlot(slot);
-            if (stack != null) {
-                if (stack.getItem() == ItemTicketGold.item) {
-                    ticket = stack;
-                    break;
-                }
+            if (RailcraftItems.ticketGold.isEqual(stack)) {
+                ticket = stack;
+                break;
             }
         }
         if (ticket != null) {
@@ -66,7 +64,7 @@ public class RoutingTicketCopyRecipe implements IRecipe {
 
     @Override
     public ItemStack getRecipeOutput() {
-        return ItemTicket.getTicket();
+        return RailcraftItems.ticket.getStack();
     }
 
     @Override

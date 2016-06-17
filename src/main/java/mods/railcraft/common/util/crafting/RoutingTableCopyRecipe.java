@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.util.crafting;
 
-import mods.railcraft.common.items.ItemRoutingTable;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -23,14 +23,14 @@ public class RoutingTableCopyRecipe implements IRecipe {
     @Override
     public boolean matches(InventoryCrafting grid, World world) {
         ItemStack source = grid.getStackInSlot(0);
-        if (source == null || source.getItem() != ItemRoutingTable.item || source.stackSize > 1) {
+        if (source == null || RailcraftItems.routingTable.isEqual(source) || source.stackSize > 1) {
             return false;
         }
         int numCopies = 0;
         for (int slot = 1; slot < grid.getSizeInventory(); slot++) {
             ItemStack stack = grid.getStackInSlot(slot);
             if (stack != null) {
-                if (stack.getItem() == ItemRoutingTable.item) {
+                if (RailcraftItems.routingTable.isEqual(stack)) {
                     numCopies++;
                 } else {
                     return false;
@@ -43,11 +43,11 @@ public class RoutingTableCopyRecipe implements IRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting grid) {
         ItemStack source = grid.getStackInSlot(0);
-        if (source != null && source.getItem() == ItemRoutingTable.item && source.stackSize == 1) {
+        if (source != null && RailcraftItems.routingTable.isEqual(source) && source.stackSize == 1) {
             int copies = 0;
             for (int slot = 1; slot < grid.getSizeInventory(); slot++) {
                 ItemStack stack = grid.getStackInSlot(slot);
-                if (stack != null && stack.getItem() == ItemRoutingTable.item) {
+                if (stack != null && RailcraftItems.routingTable.isEqual(stack)) {
                     copies++;
                 }
             }

@@ -40,6 +40,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public final class MinecartHooks implements IMinecartCollisionHandler {
@@ -69,21 +70,21 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 
     @SuppressWarnings("unused")
     @SubscribeEvent
-    public void onItemUse(PlayerInteractEvent event) {
-        EntityPlayer player = event.entityPlayer;
+    public void onItemUse(PlayerInteractEvent.RightClickBlock event) {
+        EntityPlayer player = event.getEntityPlayer();
         World world = player.worldObj;
         if (Game.isClient(world))
             return;
 
-        ItemStack itemStack = player.getHeldItem();
-        if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && itemStack != null) {
+        ItemStack itemStack = event.getItemStack();
+        if (itemStack != null) {
             Item item = itemStack.getItem();
             if (item != null && CartUtils.vanillaCartItemMap.containsKey(item)) {
-                event.useItem = Event.Result.DENY;
+                event.setResult(Event.Result.DENY);
                 EntityMinecart placedCart = CartUtils.placeCart(
                         CartUtils.vanillaCartItemMap.get(item),
                         player.getGameProfile(), itemStack, world,
-                        event.pos);
+                        event.getPos());
                 if (placedCart != null && !player.capabilities.isCreativeMode)
                     itemStack.stackSize--;
             }
@@ -92,26 +93,27 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 
     @Override
     public void onEntityCollision(EntityMinecart cart, Entity other) {
-        if (Game.isClient(cart.worldObj) || other == cart.riddenByEntity || !other.isEntityAlive() || !cart.isEntityAlive())
+        if (Game.isClient(cart.worldObj) || cart.isPassenger(other) || !other.isEntityAlive() || !cart.isEntityAlive())
             return;
 
         ILinkageManager lm = LinkageManager.instance();
         EntityMinecart link = lm.getLinkedCartA(cart);
-        if (link != null && (link == other || other == link.riddenByEntity))
+        if (link != null && (link == other || link.isPassenger(other)))
             return;
         link = lm.getLinkedCartB(cart);
-        if (link != null && (link == other || other == link.riddenByEntity))
+        if (link != null && (link == other || link.isPassenger(other)))
             return;
 
         boolean isLiving = other instanceof EntityLivingBase;
         boolean isPlayer = other instanceof EntityPlayer;
 
+        //TODO: needs more thought in regards to passenger handling
         if (isLiving && !isPlayer && cart.canBeRidden() && !(other instanceof EntityIronGolem)
                 && cart.motionX * cart.motionX + cart.motionZ * cart.motionZ > 0.001D
-                && cart.riddenByEntity == null && other.ridingEntity == null) {
+                && !cart.isBeingRidden() && !other.isRiding()) {
             int mountPrevention = cart.getEntityData().getInteger("MountPrevention");
             if (mountPrevention <= 0)
-                other.mountEntity(cart);
+                other.startRiding(cart);
         }
 
         if (isLiving && WorldPlugin.isBlockAt(cart.worldObj, cart.getPosition(), RailcraftBlocksOld.getBlockElevator()))
@@ -192,6 +194,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         }
     }
 
+    @Nullable
     @Override
     public AxisAlignedBB getCollisionBox(EntityMinecart cart, Entity other) {
         if (other instanceof EntityItem && RailcraftConfig.doCartsCollideWithItems())
@@ -210,6 +213,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         return cart.getEntityBoundingBox().expand(x, MinecartHooks.COLLISION_EXPANSION, z);
     }
 
+    @Nullable
     @Override
     public AxisAlignedBB getBoundingBox(EntityMinecart cart) {
         if (cart == null || cart.isDead)
@@ -229,7 +233,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onMinecartUpdate(MinecartUpdateEvent event) {
-        EntityMinecart cart = event.minecart;
+        EntityMinecart cart = event.getMinecart();
         NBTTagCompound data = cart.getEntityData();
 
 // Code Added by Yopu to replace vanilla carts, deemed incomplete and unnecessary, pursuing other solutions
@@ -246,18 +250,18 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 //            return;
 //        }
 
-        Block block = WorldPlugin.getBlock(cart.worldObj, event.pos);
+        Block block = WorldPlugin.getBlock(cart.worldObj, event.getPos());
         int launched = data.getInteger("Launched");
         if (TrackTools.isRailBlock(block)) {
             cart.fallDistance = 0;
-            if (cart.riddenByEntity != null)
-                cart.riddenByEntity.fallDistance = 0;
+            if (cart.isBeingRidden())
+                cart.getPassengers().stream().forEach(p -> p.fallDistance = 0);
             if (launched > 1)
                 land(cart);
         } else if (launched == 1) {
             data.setInteger("Launched", 2);
             cart.setCanUseRail(true);
-        } else if (launched > 1 && (cart.onGround || cart.isInsideOfMaterial(Material.circuits)))
+        } else if (launched > 1 && (cart.onGround || cart.isInsideOfMaterial(Material.CIRCUITS)))
             land(cart);
 
         int mountPrevention = data.getInteger("MountPrevention");
@@ -280,7 +284,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         if (data.getBoolean("HighSpeed"))
             if (CartUtils.cartVelocityIsLessThan(cart, TrackSpeed.SPEED_CUTOFF))
                 data.setBoolean("HighSpeed", false);
-            else if (!TrackSpeed.isTrackHighSpeedCapable(cart.worldObj, event.pos))
+            else if (!TrackSpeed.isTrackHighSpeedCapable(cart.worldObj, event.getPos()))
                 CartUtils.explodeCart(cart);
 
         cart.motionX = Math.copySign(Math.min(Math.abs(cart.motionX), 9.5), cart.motionX);
@@ -301,9 +305,9 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onMinecartEntityCollision(MinecartCollisionEvent event) {
-        EntityMinecart cart = event.minecart;
-        Entity other = event.collider;
-        if (other == cart.riddenByEntity)
+        EntityMinecart cart = event.getMinecart();
+        Entity other = event.getCollider();
+        if (cart.isPassenger(other))
             return;
 
         if (other instanceof EntityMinecart)
@@ -331,7 +335,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
             if (other instanceof EntityMinecart && Train.areInSameTrain(cart, (EntityMinecart) other))
                 return;
             for (EntityMinecart c : Train.getTrain(cart)) {
-                if (other == c.riddenByEntity)
+                if (c.isPassenger(other))
                     return;
             }
 
@@ -357,8 +361,8 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onMinecartInteract(MinecartInteractEvent event) {
-        EntityMinecart cart = event.minecart;
-        EntityPlayer player = event.player;
+        EntityMinecart cart = event.getMinecart();
+        EntityPlayer player = event.getPlayer();
 
         if (!CartTools.doesCartHaveOwner(cart))
             CartTools.setCartOwner(cart, player);
@@ -372,15 +376,16 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
             return;
         }
         if (cart.canBeRidden()) {
-            if (cart.riddenByEntity != null && player.ridingEntity != cart) {
+            //TODO: this will interfere with carts that multiple players can ride, re-evaluate
+            if (cart.isBeingRidden() && player.getRidingEntity() != cart) {
                 event.setCanceled(true);
                 return;
             }
-            if (player.ridingEntity != null && player.ridingEntity != cart) {
+            if (player.getRidingEntity() != null && player.getRidingEntity() != cart) {
                 event.setCanceled(true);
                 return;
             }
-            if (player.ridingEntity != cart && player.isOnLadder()) {
+            if (player.getRidingEntity() != cart && player.isOnLadder()) {
                 event.setCanceled(true);
                 return;
             }

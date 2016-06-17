@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.carts;
 
+import com.google.common.base.Optional;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.bore.IBoreHead;
@@ -19,6 +20,7 @@ import mods.railcraft.common.carts.Train.TrainState;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -38,7 +40,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -49,6 +55,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 import javax.annotation.Nullable;
+import java.lang.invoke.MethodHandles;
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -66,10 +73,13 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     public static final float HARDNESS_MULTIPLIER = 8;
     public static final BlockSet mineableBlocks = new BlockSet();
     public static final Set<Block> replaceableBlocks = new HashSet<Block>();
+    private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> MOVING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
+    private static final DataParameter<EnumFacing> FACING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.FACING);
+    private static final DataParameter<com.google.common.base.Optional<ItemStack>> BORE_HEAD = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.OPTIONAL_ITEM_STACK);
     protected static final int WATCHER_ID_FUEL = 16;
     protected static final int WATCHER_ID_MOVING = 25;
     protected static final int WATCHER_ID_BORE_HEAD = 26;
-    protected static final int WATCHER_ID_FACING = 5;
     private static final Block[] mineable = {
             Blocks.CLAY,
             Blocks.SNOW_LAYER,
@@ -248,19 +258,19 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(WATCHER_ID_FUEL, (byte) 0);
-        dataManager.register(WATCHER_ID_MOVING, (byte) 0);
-        dataManager.addObjectByDataType(WATCHER_ID_BORE_HEAD, 5);
-        dataManager.register(WATCHER_ID_FACING, (byte) 0);
+        dataManager.register(HAS_FUEL, false);
+        dataManager.register(MOVING, false);
+        dataManager.register(BORE_HEAD, Optional.absent());
+        dataManager.register(FACING, EnumFacing.NORTH);
 //        dataManager.register(WATCHER_ID_BURN_TIME, Integer.valueOf(0));
     }
 
     public boolean isMinecartPowered() {
-        return dataManager.get(WATCHER_ID_FUEL) != 0;
+        return dataManager.get(HAS_FUEL);
     }
 
     public void setMinecartPowered(boolean powered) {
-        dataManager.set(WATCHER_ID_FUEL, (byte) (powered ? 1 : 0));
+        dataManager.set(HAS_FUEL, powered);
     }
 
     @Override
@@ -276,8 +286,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 boolean flag = source.getEntity() instanceof EntityPlayer && ((EntityPlayer) source.getEntity()).capabilities.isCreativeMode;
 
                 if (flag || getDamage() > 120) {
-                    if (riddenByEntity != null)
-                        riddenByEntity.mountEntity(this);
+                    removePassengers();
 
                     if (flag && !hasCustomName())
                         setDead();
@@ -811,7 +820,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         if (existingState.getBlock() instanceof IMineable) {
             return head != null && ((IMineable) existingState.getBlock()).canMineBlock(worldObj, targetPos, this, head);
         }
-        if (existingState.getBlock().getBlockHardness(worldObj, targetPos) < 0)
+        if (existingState.getBlockHardness(worldObj, targetPos) < 0)
             return false;
         return isMineableBlock(existingState) && canHeadHarvestBlock(head, existingState);
     }
@@ -852,7 +861,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         if (!canMineBlock(pos, blockState))
             return 0.1f;
 
-        float hardness = blockState.getBlock().getBlockHardness(worldObj, pos);
+        float hardness = blockState.getBlockHardness(worldObj, pos);
         if (hardness <= 0)
             hardness = 0.1f;
         return hardness;
@@ -918,11 +927,11 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected boolean isMoving() {
-        return dataManager.get(WATCHER_ID_MOVING) != 0;
+        return dataManager.get(MOVING);
     }
 
     protected void setMoving(boolean move) {
-        dataManager.set(WATCHER_ID_MOVING, (byte) (move ? 1 : 0));
+        dataManager.set(MOVING, move);
     }
 
     public int getBurnTime() {
@@ -998,12 +1007,12 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         ItemStack boreStack = getStackInSlot(0);
         if (boreStack != null)
             boreStack = boreStack.copy();
-        dataManager.set(WATCHER_ID_BORE_HEAD, boreStack);
+        dataManager.set(BORE_HEAD, Optional.fromNullable(boreStack));
     }
 
     @Nullable
     public IBoreHead getBoreHead() {
-        ItemStack boreStack = dataManager.get(WATCHER_ID_BORE_HEAD);
+        ItemStack boreStack = dataManager.get(BORE_HEAD).orNull();
         if (boreStack != null && boreStack.getItem() instanceof IBoreHead)
             return (IBoreHead) boreStack.getItem();
         return null;
@@ -1011,9 +1020,9 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     @Override
     protected void applyDrag() {
-        motionX *= getDrag();
+        motionX *= CartConstants.STANDARD_DRAG;
         motionY *= 0.0D;
-        motionZ *= getDrag();
+        motionZ *= CartConstants.STANDARD_DRAG;
     }
 
     @Override
@@ -1042,11 +1051,11 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     public final EnumFacing getFacing() {
-        return EnumFacing.getFront(dataManager.get(WATCHER_ID_FACING));
+        return dataManager.get(FACING);
     }
 
     protected final void setFacing(EnumFacing facing) {
-        dataManager.set(WATCHER_ID_FACING, (byte) facing.ordinal());
+        dataManager.set(FACING, facing);
 
         setYaw();
     }

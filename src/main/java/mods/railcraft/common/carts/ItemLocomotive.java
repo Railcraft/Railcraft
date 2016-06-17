@@ -34,7 +34,7 @@ import java.util.List;
 public class ItemLocomotive extends ItemCart {
 
     private final LocomotiveRenderType renderType;
-//    private IIcon blankIcon;
+    //    private IIcon blankIcon;
     private final EnumColor defaultPrimary;
     private final EnumColor defaultSecondary;
 
@@ -206,7 +206,7 @@ public class ItemLocomotive extends ItemCart {
         if (nbt == null || !nbt.hasKey("secondaryColor")) {
             return ((ItemLocomotive) stack.getItem()).defaultSecondary;
         }
-        return  EnumColor.readFromNBT(nbt, "secondaryColor");
+        return EnumColor.readFromNBT(nbt, "secondaryColor");
     }
 
 }

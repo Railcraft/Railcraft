@@ -11,16 +11,23 @@ package mods.railcraft.common.carts;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class ItemTunnelBore extends ItemCart implements IMinecartItem {
 
@@ -30,45 +37,38 @@ public class ItemTunnelBore extends ItemCart implements IMinecartItem {
     }
 
     @Override
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int i, int j, int k, int l, float par8, float par9, float par10) {
-        Block block = world.getBlock(i, j, k);
-        if (TrackTools.isRailBlock(block)) {
-            if (Game.isHost(world) && !CartTools.isMinecartAt(world, i, j, k, 0, null, true)) {
-                int meta = ((BlockRailBase) block).getBasicRailMetadata(world, null, i, j, k);
-                if (meta == 0 || meta == 1) {
-                    int playerYaw = -90 - MathHelper.floor_float(player.rotationYaw);
-                    for (; playerYaw > 360; playerYaw -= 360);
-                    for (; playerYaw < 0; playerYaw += 360);
-                    EnumFacing facing = EnumFacing.EAST;
-                    if (Math.abs(90 - playerYaw) <= 45) {
-                        facing = EnumFacing.NORTH;
-                    } else if (Math.abs(180 - playerYaw) <= 45) {
-                        facing = EnumFacing.WEST;
-                    } else if (Math.abs(270 - playerYaw) <= 45) {
-                        facing = EnumFacing.SOUTH;
-                    }
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        IBlockState existingState = WorldPlugin.getBlockState(world, pos);
+        if (TrackTools.isRailBlock(existingState)) {
+            if (Game.isHost(world) && !CartTools.isMinecartAt(world, pos, 0)) {
+                BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirection(world, pos, existingState);
+                if (TrackShapeHelper.isLevelStraight(trackShape)) {
+                    // TODO: test Bore placement
+                    EnumFacing playerFacing = MiscTools.getHorizontalSideFacingPlayer(player).getOpposite();
 
-                    if (meta == 0 && facing == EnumFacing.WEST) {
-                        facing = EnumFacing.NORTH;
-                    } else if (meta == 0 && facing == EnumFacing.EAST) {
-                        facing = EnumFacing.SOUTH;
-                    } else if (meta == 1 && facing == EnumFacing.SOUTH) {
-                        facing = EnumFacing.EAST;
-                    } else if (meta == 1 && facing == EnumFacing.NORTH) {
-                        facing = EnumFacing.WEST;
+                    if (trackShape == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
+                        if (playerFacing == EnumFacing.WEST)
+                            playerFacing = EnumFacing.NORTH;
+                        else if (playerFacing == EnumFacing.EAST)
+                            playerFacing = EnumFacing.SOUTH;
+                    } else if (trackShape == BlockRailBase.EnumRailDirection.EAST_WEST) {
+                        if (playerFacing == EnumFacing.SOUTH)
+                            playerFacing = EnumFacing.EAST;
+                        else if (playerFacing == EnumFacing.NORTH)
+                            playerFacing = EnumFacing.WEST;
                     }
 
 //					System.out.println("PlayerYaw = " + playerYaw + " Yaw = " + facing + " Meta = " + meta);
 
-                    EntityMinecart bore = new EntityTunnelBore(world, (float) i + 0.5F, (float) j, (float) k + 0.5F, facing);
+                    EntityMinecart bore = new EntityTunnelBore(world, (float) pos.getX() + 0.5F, (float) pos.getY(), (float) pos.getZ() + 0.5F, playerFacing);
                     CartTools.setCartOwner(bore, player);
                     world.spawnEntityInWorld(bore);
                 }
             }
-            itemstack.stackSize--;
-            return true;
+            stack.stackSize--;
+            return EnumActionResult.SUCCESS;
         } else {
-            return false;
+            return EnumActionResult.FAIL;
         }
     }
 
@@ -77,8 +77,9 @@ public class ItemTunnelBore extends ItemCart implements IMinecartItem {
         return false;
     }
 
+    @Nullable
     @Override
-    public EntityMinecart placeCart(GameProfile owner, ItemStack cart, World world, int i, int j, int k) {
+    public EntityMinecart placeCart(GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
         return null;
     }
 }

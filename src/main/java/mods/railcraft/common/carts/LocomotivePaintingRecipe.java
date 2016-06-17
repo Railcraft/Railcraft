@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.carts;
 
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.DyeHelper;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -16,8 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class LocomotivePaintingRecipe implements IRecipe {
@@ -29,20 +31,23 @@ public class LocomotivePaintingRecipe implements IRecipe {
         InvTools.addNBTTag(locomotive, "gregfix", "get the hell off my lawn!");
     }
 
-    private boolean isDye(ItemStack stack) {
-        return getDye(stack) != -1;
+    private boolean isDye(@Nullable ItemStack stack) {
+        return getDye(stack) != null;
     }
 
-    private int getDye(ItemStack stack) {
+    @Nullable
+    private EnumColor getDye(@Nullable ItemStack stack) {
+        if (stack == null)
+            return null;
         for (EnumColor color : EnumColor.VALUES) {
             if (InvTools.isItemEqual(stack, DyeHelper.getDyes().get(color)))
-                return color.ordinal();
+                return color;
         }
-        return -1;
+        return null;
     }
 
-    private boolean isLocomotive(ItemStack loco) {
-        return InvTools.isItemEqualIgnoreNBT(this.locomotive, loco);
+    private boolean isLocomotive(@Nullable ItemStack loco) {
+        return InvTools.isItemEqualIgnoreNBT(locomotive, loco);
     }
 
     @Override
@@ -69,9 +74,18 @@ public class LocomotivePaintingRecipe implements IRecipe {
         if (loco == null)
             return null;
 
+        EnumColor colorPrimary = getDye(dyePrimary);
+        EnumColor colorSecondary = getDye(dyeSecondary);
+
         ItemStack result = loco.copy();
-        ItemLocomotive.setItemColorData(result, getDye(dyePrimary), getDye(dyeSecondary));
+        if (colorPrimary != null && colorSecondary != null)
+            ItemLocomotive.setItemColorData(result, colorPrimary, colorSecondary);
         return result;
+    }
+
+    @Override
+    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+        return CraftingPlugin.emptyContainers(inv);
     }
 
     @Override
