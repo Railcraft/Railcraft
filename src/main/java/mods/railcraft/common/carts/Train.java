@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.carts;
 
+import com.google.common.collect.Lists;
 import mods.railcraft.api.electricity.IElectricMinecart;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -341,7 +342,16 @@ public class Train implements Iterable<EntityMinecart> {
         return null;
     }
 
-    public List<UUID> getCartsInTrain() {
+    public <T extends EntityMinecart> Collection<T> getCarts(Class<T> cartClass) {
+        List<T> list = Lists.newArrayList();
+        for (EntityMinecart cart : this) {
+            if (cartClass.isInstance(cart))
+                list.add(cartClass.cast(cart));
+        }
+        return list;
+    }
+
+    public List<UUID> getUUIDs() {
         return safeCarts;
     }
 

@@ -8,23 +8,18 @@
  */
 package mods.railcraft.common.carts;
 
-import com.google.common.collect.MapMaker;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.Map;
-
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
-import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.RailTools;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
-import mods.railcraft.common.util.collections.CircularVec3Queue;
 import mods.railcraft.common.util.misc.Vec2D;
-import net.minecraft.util.Vec3;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 
 public class LinkageHandler {
     public static final String LINK_A_TIMER = "linkA_timer";
@@ -354,5 +349,19 @@ public class LinkageHandler {
     private boolean isOnElevator(EntityMinecart cart) {
         int elevator = cart.getEntityData().getByte("elevator");
         return elevator > 0;
+    }
+
+    @SubscribeEvent
+    public void canMinecartTick(EntityEvent.CanUpdate event) {
+        if (event.entity instanceof EntityMinecart) {
+            EntityMinecart cart = (EntityMinecart) event.entity;
+            Train train = Train.getTrain(cart);
+            for (EntityCartAnchor anchor : train.getCarts(EntityCartAnchor.class)) {
+                if (anchor.hasActiveTicket()) {
+                    event.canUpdate = true;
+                    return;
+                }
+            }
+        }
     }
 }
