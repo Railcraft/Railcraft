@@ -104,7 +104,7 @@ public class ModuleChunkLoading extends RailcraftModule {
         EnumCart cart = EnumCart.ANCHOR;
         if (EnumMachineAlpha.WORLD_ANCHOR.isAvaliable() && cart.setup()) {
             ItemStack anchor = EnumMachineAlpha.WORLD_ANCHOR.getItem();
-            if (RailcraftConfig.canCraftPersonalAnchors()) {
+            if (RailcraftConfig.canCraftAnchors()) {
                 CraftingPlugin.addShapedRecipe(cart.getCartItem(),
                         "A",
                         "M",
