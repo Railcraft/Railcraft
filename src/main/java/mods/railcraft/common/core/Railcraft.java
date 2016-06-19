@@ -44,6 +44,7 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
 import java.io.File;
 
 @SuppressWarnings("unused")
@@ -215,13 +216,13 @@ public final class Railcraft {
                 Block block = GameRegistry.findBlock(MOD_ID, MiscTools.cleanTag(mapping.name));
                 if (block != null)
                     remap(block, mapping);
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote"))
                     remap(RailcraftFluids.CREOSOTE.getBlock(), mapping);
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam") && RailcraftFluids.STEAM.getBlock() != null)
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam"))
                     remap(RailcraftFluids.STEAM.getBlock(), mapping);
-                else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge") && BlockFirestoneRecharge.getBlock() != null)
+                else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge"))
                     remap(BlockFirestoneRecharge.getBlock(), mapping);
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && RailcraftBlocks.anvil_steel.block() != null)
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil"))
                     remap(RailcraftBlocks.anvil_steel.block(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
@@ -233,14 +234,14 @@ public final class Railcraft {
                     remap(Item.getItemFromBlock(block), mapping);
                 else if (mapping.name.equals("Railcraft:tool.mag.glass") && RailcraftItems.magGlass.item() != null)
                     remap(RailcraftItems.magGlass.item(), mapping);
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote") && RailcraftFluids.CREOSOTE.getBlock() != null)
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.creosote"))
                     remap(Item.getItemFromBlock(RailcraftFluids.CREOSOTE.getBlock()), mapping);
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam") && RailcraftFluids.STEAM.getBlock() != null)
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam"))
                     remap(Item.getItemFromBlock(RailcraftFluids.STEAM.getBlock()), mapping);
-                else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge") && BlockFirestoneRecharge.getBlock() != null)
+                else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge"))
                     remap(Item.getItemFromBlock(BlockFirestoneRecharge.getBlock()), mapping);
-                else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil") && RailcraftBlocks.anvil_steel.block() != null)
-                    remap(Item.getItemFromBlock(RailcraftBlocks.anvil_steel.block()), mapping);
+                else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil"))
+                    remap(RailcraftBlocks.anvil_steel.item(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
                 else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
@@ -249,13 +250,17 @@ public final class Railcraft {
         }
     }
 
-    private void remap(Block block, FMLMissingMappingsEvent.MissingMapping mapping) {
-        mapping.remap(block);
-        Game.log(Level.WARN, "Remapping block " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(block.getUnlocalizedName()));
+    private void remap(@Nullable Block block, FMLMissingMappingsEvent.MissingMapping mapping) {
+        if (block != null) {
+            mapping.remap(block);
+            Game.log(Level.WARN, "Remapping block " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(block.getUnlocalizedName()));
+        }
     }
 
-    private void remap(Item item, FMLMissingMappingsEvent.MissingMapping mapping) {
-        mapping.remap(item);
-        Game.log(Level.WARN, "Remapping item " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(item.getUnlocalizedName()));
+    private void remap(@Nullable Item item, FMLMissingMappingsEvent.MissingMapping mapping) {
+        if (item != null) {
+            mapping.remap(item);
+            Game.log(Level.WARN, "Remapping item " + mapping.name + " to " + MOD_ID + ":" + MiscTools.cleanTag(item.getUnlocalizedName()));
+        }
     }
 }

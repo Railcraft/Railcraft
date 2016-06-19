@@ -24,13 +24,13 @@ public class LinkageHandler {
     public static final String LINK_A_TIMER = "linkA_timer";
     public static final String LINK_B_TIMER = "linkB_timer";
     public static final double LINK_DRAG = 0.95;
-    public static final float MAX_DISTANCE = 8f;
-    private static final float STIFFNESS = 0.7f;
-    private static final float HS_STIFFNESS = 0.7f;
+    public static final float MAX_DISTANCE_SQ = 8F * 8F;
+    private static final float STIFFNESS = 0.7F;
+    private static final float HS_STIFFNESS = 0.7F;
     //    private static final float TRANSFER = 0.15f;
-    private static final float DAMPING = 0.4f;
-    private static final float HS_DAMPING = 0.3f;
-    private static final float FORCE_LIMITER = 6f;
+    private static final float DAMPING = 0.4F;
+    private static final float HS_DAMPING = 0.3F;
+    private static final float FORCE_LIMITER = 6F;
 //    private static final int TICK_HISTORY = 200;
     private static LinkageHandler instance;
 //    private static Map<EntityMinecart, CircularVec3Queue> history = new MapMaker().weakKeys().makeMap();
@@ -98,8 +98,8 @@ public class LinkageHandler {
         }
         cart1.getEntityData().setShort(timer, (short) 0);
 
-        double dist = cart1.getDistanceToEntity(cart2);
-        if (dist > MAX_DISTANCE) {
+        double distSq = cart1.getDistanceSqToEntity(cart2);
+        if (distSq > MAX_DISTANCE_SQ) {
             LinkageManager.instance().breakLink(cart1, cart2);
             LinkageManager.printDebug("Reason For Broken Link: Max distance exceeded.");
             return;
@@ -135,7 +135,7 @@ public class LinkageHandler {
         // Spring force
 
         float optDist = getOptimalDistance(cart1, cart2);
-        double stretch = dist - optDist;
+        double stretch = distSq - optDist;
 //        if(Math.abs(stretch) > 0.5) {
 //            stretch *= 2;
 //        }

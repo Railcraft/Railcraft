@@ -32,6 +32,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemAnvilBlock;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -125,6 +126,13 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     @Nullable
     public Block block() {
         return block;
+    }
+
+    @Nullable
+    public Item item() {
+        if (block == null)
+            return null;
+        return Item.getItemFromBlock(block);
     }
 
     @Override
