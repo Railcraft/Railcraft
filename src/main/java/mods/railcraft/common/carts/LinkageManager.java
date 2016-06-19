@@ -17,6 +17,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
@@ -100,6 +101,7 @@ public class LinkageManager implements ILinkageManager {
      * @param id Cart's persistent UUID
      * @return EntityMinecart
      */
+    @Nullable
     @Override
     public EntityMinecart getCartFromUUID(UUID id) {
         EntityMinecart cart = carts.get(id);
@@ -303,38 +305,9 @@ public class LinkageManager implements ILinkageManager {
         return getLinkedCart(cart, LinkType.LINK_B);
     }
 
+    @Nullable
     public EntityMinecart getLinkedCart(EntityMinecart cart, LinkType type) {
         return getCartFromUUID(getLink(cart, type));
-    }
-
-    @Deprecated
-    public Train getTrain(EntityMinecart cart) {
-        return Train.getTrain(cart);
-    }
-
-    @Deprecated
-    public Train getTrain(UUID cartUUID) {
-        if (cartUUID == null)
-            return null;
-        EntityMinecart cart = getCartFromUUID(cartUUID);
-        if (cart == null)
-            return null;
-        return getTrain(cart);
-    }
-
-    @Deprecated
-    public UUID getTrainUUID(EntityMinecart cart) {
-        return Train.getTrainUUID(cart);
-    }
-
-    @Deprecated
-    public void resetTrain(EntityMinecart cart) {
-        Train.resetTrain(cart);
-    }
-
-    @Deprecated
-    public boolean areInSameTrain(EntityMinecart cart1, EntityMinecart cart2) {
-        return Train.areInSameTrain(cart1, cart2);
     }
 
     /**
@@ -487,6 +460,7 @@ public class LinkageManager implements ILinkageManager {
         return Train.getTrain(cart);
     }
 
+    //TODO: Merge with Train.orderedIterator? This appears to move one direction from the starting cart
     public Iterable<EntityMinecart> getLinkedCarts(final EntityMinecart cart, final LinkType type) {
         return new Iterable<EntityMinecart>() {
             @Override

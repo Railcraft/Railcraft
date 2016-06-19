@@ -162,7 +162,7 @@ public enum EnumCart implements ICartType {
 
     @Override
     public String getBaseTag() {
-        return name().toLowerCase(Locale.ENGLISH).replace('_', '.');
+        return name().toLowerCase(Locale.ROOT).replace('_', '.');
     }
 
     @Override

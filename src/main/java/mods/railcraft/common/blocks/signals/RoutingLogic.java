@@ -22,6 +22,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Deque;
 import java.util.Iterator;
@@ -249,8 +250,10 @@ public class RoutingLogic {
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
             if (cart instanceof IRoutableCart) {
                 String cartDest = ((IRoutableCart) cart).getDestination();
-                if (value.equals("null"))
-                    return cartDest == null || cartDest.equals("");
+                if (StringUtils.equalsIgnoreCase("null", value))
+                    return StringUtils.isBlank(cartDest);
+                if (cartDest == null)
+                    return false;
                 if (isRegex)
                     return cartDest.matches(value);
                 return cartDest.startsWith(value);
@@ -268,7 +271,7 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            return value.equalsIgnoreCase(CartTools.getCartOwner(cart).getName());
+            return StringUtils.equalsIgnoreCase(value, CartTools.getCartOwner(cart).getName());
         }
 
     }
@@ -281,12 +284,12 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
+            if (!cart.hasCustomName())
+                return StringUtils.equalsIgnoreCase("null", value);
             String customName = cart.getName();
-            if (customName == null)
-                return "null".equals(value);
             if (isRegex)
                 return customName.matches(value);
-            return value.equals(customName);
+            return StringUtils.equalsIgnoreCase(customName, value);
         }
 
     }
@@ -340,7 +343,7 @@ public class RoutingLogic {
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
             for (EntityMinecart c : Train.getTrain(cart)) {
-                if (c != null && c.riddenByEntity instanceof EntityPlayer)
+                if (c != null && c.getPassengers().stream().anyMatch(p -> p instanceof EntityPlayer))
                     return ridden;
             }
             return !ridden;
@@ -356,11 +359,11 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            for (EntityMinecart c : Train.getTrain(cart)) {
-                if (c != null && c.riddenByEntity instanceof EntityPlayer)
-                    return c.riddenByEntity.getName().equalsIgnoreCase(value);
-            }
-            return false;
+            return Train.getTrain(cart).stream()
+                    .filter(c -> c != null)
+                    .flatMap(c -> c.getPassengers().stream())
+                    .filter(entity -> entity instanceof EntityPlayer)
+                    .anyMatch(player -> StringUtils.equalsIgnoreCase(player.getName(), value));
         }
 
     }

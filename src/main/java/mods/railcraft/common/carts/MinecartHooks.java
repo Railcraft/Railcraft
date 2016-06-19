@@ -335,7 +335,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
             if (other instanceof EntityMinecart && Train.areInSameTrain(cart, (EntityMinecart) other))
                 return;
             for (EntityMinecart c : Train.getTrain(cart)) {
-                if (c.isPassenger(other))
+                if (c != null && c.isPassenger(other))
                     return;
             }
 

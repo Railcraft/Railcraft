@@ -32,7 +32,7 @@ public class LinkageHandler {
     private static final float DAMPING = 0.4F;
     private static final float HS_DAMPING = 0.3F;
     private static final float FORCE_LIMITER = 6F;
-//    private static final int TICK_HISTORY = 200;
+    //    private static final int TICK_HISTORY = 200;
     private static LinkageHandler instance;
 //    private static Map<EntityMinecart, CircularVec3Queue> history = new MapMaker().weakKeys().makeMap();
 
@@ -354,12 +354,12 @@ public class LinkageHandler {
 
     @SubscribeEvent
     public void canMinecartTick(EntityEvent.CanUpdate event) {
-        if (event.entity instanceof EntityMinecart) {
-            EntityMinecart cart = (EntityMinecart) event.entity;
+        if (event.getEntity() instanceof EntityMinecart) {
+            EntityMinecart cart = (EntityMinecart) event.getEntity();
             Train train = Train.getTrain(cart);
             for (EntityCartAnchor anchor : train.getCarts(EntityCartAnchor.class)) {
                 if (anchor.hasActiveTicket()) {
-                    event.canUpdate = true;
+                    event.setCanUpdate(true);
                     return;
                 }
             }

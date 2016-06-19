@@ -8,12 +8,16 @@
  */
 package mods.railcraft.common.carts;
 
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import mods.railcraft.api.electricity.IElectricMinecart;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -83,7 +87,7 @@ public class Train implements Iterable<EntityMinecart> {
             train.releaseTrain();
     }
 
-    public static boolean areInSameTrain(EntityMinecart cart1, EntityMinecart cart2) {
+    public static boolean areInSameTrain(@Nullable EntityMinecart cart1, @Nullable EntityMinecart cart2) {
         if (cart1 == null || cart2 == null)
             return false;
         if (cart1 == cart2)
@@ -92,7 +96,7 @@ public class Train implements Iterable<EntityMinecart> {
         UUID train1 = getTrainUUID(cart1);
         UUID train2 = getTrainUUID(cart2);
 
-        return train1 != null && train1.equals(train2);
+        return Objects.equals(train1, train2);
     }
 
     public static Train getLongestTrain(EntityMinecart cart1, EntityMinecart cart2) {
@@ -117,7 +121,8 @@ public class Train implements Iterable<EntityMinecart> {
         cart.getEntityData().setLong(TRAIN_LOW, trainId.getLeastSignificantBits());
     }
 
-    public Train getTrain(UUID cartUUID) {
+    @Nullable
+    public Train getTrain(@Nullable UUID cartUUID) {
         if (cartUUID == null)
             return null;
         EntityMinecart cart = LinkageManager.instance().getCartFromUUID(cartUUID);
@@ -126,20 +131,69 @@ public class Train implements Iterable<EntityMinecart> {
         return getTrain(cart);
     }
 
+    public Stream<EntityMinecart> stream() {
+        return StreamSupport.stream(spliterator(), false);
+    }
+
     @Override
     public Iterator<EntityMinecart> iterator() {
-        return new Iterator<EntityMinecart>() {
-            private final Iterator<UUID> it = carts.iterator();
+        LinkageManager lm = LinkageManager.instance();
+        return Iterators.transform(Iterators.unmodifiableIterator(carts.iterator()), lm::getCartFromUUID);
+//        return new Iterator<EntityMinecart>() {
+//            private final PeekingIterator<UUID> it = Iterators.peekingIterator(carts.iterator());
+//            private final LinkageManager lm = LinkageManager.instance();
+//            @Nullable
+//            EntityMinecart nextCart;
+//
+//            @Override
+//            public boolean hasNext() {
+//                return it.hasNext() && (nextCart = lm.getCartFromUUID(it.peek())) != null;
+//            }
+//
+//            @Override
+//            public EntityMinecart next() {
+//                it.next();
+//                Objects.requireNonNull(nextCart);
+//                return nextCart;
+//            }
+//
+//            @Override
+//            public void remove() {
+//                throw new UnsupportedOperationException("Removing not supported.");
+//            }
+//        };
+    }
+
+    public Iterable<EntityMinecart> orderedIterable(final EntityMinecart head) {
+        return () -> new Iterator<EntityMinecart>() {
             private final LinkageManager lm = LinkageManager.instance();
+            private EntityMinecart last;
+            private EntityMinecart current = head;
 
             @Override
             public boolean hasNext() {
-                return it.hasNext();
+                EntityMinecart next = lm.getLinkedCartA(current);
+                if (next != null && next != last)
+                    return true;
+                next = lm.getLinkedCartB(current);
+                return next != null && next != last;
             }
 
             @Override
             public EntityMinecart next() {
-                return lm.getCartFromUUID(it.next());
+                EntityMinecart next = lm.getLinkedCartA(current);
+                if (next != null && next != last) {
+                    last = current;
+                    current = next;
+                    return current;
+                }
+                next = lm.getLinkedCartB(current);
+                if (next != null && next != last) {
+                    last = current;
+                    current = next;
+                    return current;
+                }
+                throw new NoSuchElementException();
             }
 
             @Override
@@ -149,51 +203,7 @@ public class Train implements Iterable<EntityMinecart> {
         };
     }
 
-    public Iterable<EntityMinecart> orderedIterable(final EntityMinecart head) {
-        return new Iterable<EntityMinecart>() {
-            @Override
-            public Iterator<EntityMinecart> iterator() {
-                return new Iterator<EntityMinecart>() {
-                    private final LinkageManager lm = LinkageManager.instance();
-                    private EntityMinecart last;
-                    private EntityMinecart current = head;
-
-                    @Override
-                    public boolean hasNext() {
-                        EntityMinecart next = lm.getLinkedCartA(current);
-                        if (next != null && next != last)
-                            return true;
-                        next = lm.getLinkedCartB(current);
-                        return next != null && next != last;
-                    }
-
-                    @Override
-                    public EntityMinecart next() {
-                        EntityMinecart next = lm.getLinkedCartA(current);
-                        if (next != last) {
-                            last = current;
-                            current = next;
-                            return current;
-                        }
-                        next = lm.getLinkedCartB(current);
-                        if (next != last) {
-                            last = current;
-                            current = next;
-                            return current;
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    public void remove() {
-                        throw new UnsupportedOperationException("Removing not supported.");
-                    }
-                };
-            }
-        };
-    }
-
-    private void buildTrain(EntityMinecart prev, EntityMinecart next) {
+    private void buildTrain(@Nullable EntityMinecart prev, EntityMinecart next) {
         _addLink(prev, next);
 
         LinkageManager lm = LinkageManager.instance();
@@ -228,10 +238,11 @@ public class Train implements Iterable<EntityMinecart> {
                 }
             }
             releaseTrain();
-            if (first == null)
+            EntityMinecart firstCart;
+            if (first == null || (firstCart = LinkageManager.instance().getCartFromUUID(first)) == null)
                 trains.remove(getUUID());
             else
-                buildTrain(null, LinkageManager.instance().getCartFromUUID(first));
+                buildTrain(null, firstCart);
         }
     }
 
@@ -278,7 +289,7 @@ public class Train implements Iterable<EntityMinecart> {
             buildTrain(cart2, cart1);
     }
 
-    private void _addLink(EntityMinecart cartBase, EntityMinecart cartNew) {
+    private void _addLink(@Nullable EntityMinecart cartBase, EntityMinecart cartNew) {
         if (cartBase == null || carts.getFirst() == cartBase.getPersistentID())
             carts.addFirst(cartNew.getPersistentID());
         else if (carts.getLast() == cartBase.getPersistentID())
