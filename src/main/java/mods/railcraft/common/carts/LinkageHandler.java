@@ -16,6 +16,7 @@ import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.misc.Vec2D;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -349,5 +350,19 @@ public class LinkageHandler {
     private boolean isOnElevator(EntityMinecart cart) {
         int elevator = cart.getEntityData().getByte("elevator");
         return elevator > 0;
+    }
+
+    @SubscribeEvent
+    public void canMinecartTick(EntityEvent.CanUpdate event) {
+        if (event.entity instanceof EntityMinecart) {
+            EntityMinecart cart = (EntityMinecart) event.entity;
+            Train train = Train.getTrain(cart);
+            for (EntityCartAnchor anchor : train.getCarts(EntityCartAnchor.class)) {
+                if (anchor.hasActiveTicket()) {
+                    event.canUpdate = true;
+                    return;
+                }
+            }
+        }
     }
 }
