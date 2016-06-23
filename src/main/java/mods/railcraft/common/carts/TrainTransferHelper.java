@@ -14,8 +14,8 @@ import mods.railcraft.api.carts.ITrainTransferHelper;
 import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
@@ -55,12 +55,12 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     // ***************************************************************************************************************************
     @Override
     public ItemStack pushStack(EntityMinecart requester, ItemStack stack) {
-        Iterable<EntityMinecart> carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_A);
+        Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
         stack = _pushStack(requester, carts, stack);
         if (stack == null)
             return null;
         if (LinkageManager.instance().hasLink(requester, LinkageManager.LinkType.LINK_B)) {
-            carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_B);
+            carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_B);
             stack = _pushStack(requester, carts, stack);
         }
         return stack;
@@ -69,8 +69,9 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     @Nullable
     private ItemStack _pushStack(EntityMinecart requester, Iterable<EntityMinecart> carts, ItemStack stack) {
         for (EntityMinecart cart : carts) {
-            if (canAcceptPushedItem(requester, cart, stack))
-                stack = InvTools.moveItemStack(stack, (IInventory) cart);
+            IInventoryObject inv = InvTools.getInventory(cart);
+            if (inv != null && canAcceptPushedItem(requester, cart, stack))
+                stack = InvTools.moveItemStack(stack, inv);
             if (stack == null || !canPassItemRequests(cart))
                 break;
         }
@@ -79,22 +80,23 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
 
     @Override
     public ItemStack pullStack(EntityMinecart requester, IStackFilter filter) {
-        Iterable<EntityMinecart> carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_A);
+        Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
         ItemStack stack = _pullStack(requester, carts, filter);
         if (stack != null)
             return stack;
-        carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_B);
+        carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_B);
         return _pullStack(requester, carts, filter);
     }
 
     @Nullable
     private ItemStack _pullStack(EntityMinecart requester, Iterable<EntityMinecart> carts, IStackFilter filter) {
         for (EntityMinecart cart : carts) {
-            if (cart instanceof IInventory) {
-                Set<ItemStack> items = InvTools.findMatchingItems((IInventory) cart, filter);
+            IInventoryObject inv = InvTools.getInventory(cart);
+            if (inv != null) {
+                Set<ItemStack> items = InvTools.findMatchingItems(inv, filter);
                 for (ItemStack stack : items) {
                     if (stack != null && canProvidePulledItem(requester, cart, stack)) {
-                        ItemStack removed = InvTools.removeOneItem((IInventory) cart, stack);
+                        ItemStack removed = InvTools.removeOneItem(inv, stack);
                         if (removed != null)
                             return removed;
                     }
@@ -107,27 +109,18 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     }
 
     private boolean canAcceptPushedItem(EntityMinecart requester, EntityMinecart cart, ItemStack stack) {
-        if (!(cart instanceof IInventory))
-            return false;
-        if (cart instanceof IItemCart)
-            return ((IItemCart) cart).canAcceptPushedItem(requester, stack);
-        return true;
+        return !(cart instanceof IItemCart) || ((IItemCart) cart).canAcceptPushedItem(requester, stack);
     }
 
     private boolean canProvidePulledItem(EntityMinecart requester, EntityMinecart cart, ItemStack stack) {
-        if (!(cart instanceof IInventory))
-            return false;
-        if (cart instanceof IItemCart)
-            return ((IItemCart) cart).canProvidePulledItem(requester, stack);
-        return true;
+        return !(cart instanceof IItemCart) || ((IItemCart) cart).canProvidePulledItem(requester, stack);
     }
 
     private boolean canPassItemRequests(EntityMinecart cart) {
         if (cart instanceof IItemCart)
             return ((IItemCart) cart).canPassItemRequests();
-        if (cart instanceof IInventory)
-            return ((IInventory) cart).getSizeInventory() >= NUM_SLOTS;
-        return false;
+        IInventoryObject inv = InvTools.getInventory(cart);
+        return inv != null && inv.getNumSlots() >= NUM_SLOTS;
     }
 
     // ***************************************************************************************************************************
@@ -135,12 +128,12 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     // ***************************************************************************************************************************
     @Override
     public FluidStack pushFluid(EntityMinecart requester, FluidStack fluidStack) {
-        Iterable<EntityMinecart> carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_A);
+        Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
         fluidStack = _pushFluid(requester, carts, fluidStack);
         if (fluidStack == null)
             return null;
         if (LinkageManager.instance().hasLink(requester, LinkageManager.LinkType.LINK_B)) {
-            carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_B);
+            carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_B);
             fluidStack = _pushFluid(requester, carts, fluidStack);
         }
         return fluidStack;
@@ -162,11 +155,11 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
 
     @Override
     public FluidStack pullFluid(EntityMinecart requester, FluidStack fluidStack) {
-        Iterable<EntityMinecart> carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_A);
+        Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
         FluidStack pulled = _pullFluid(requester, carts, fluidStack);
         if (pulled != null)
             return pulled;
-        carts = LinkageManager.instance().getLinkedCarts(requester, LinkageManager.LinkType.LINK_B);
+        carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_B);
         return _pullFluid(requester, carts, fluidStack);
     }
 

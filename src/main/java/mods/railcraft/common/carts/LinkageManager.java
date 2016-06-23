@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Level;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 /**
@@ -456,63 +457,57 @@ public class LinkageManager implements ILinkageManager {
     }
 
     @Override
-    public Iterable<EntityMinecart> getCartsInTrain(EntityMinecart cart) {
+    public Iterable<EntityMinecart> trainIterator(EntityMinecart cart) {
         return Train.getTrain(cart);
     }
 
-    //TODO: Merge with Train.orderedIterator? This appears to move one direction from the starting cart
-    public Iterable<EntityMinecart> getLinkedCarts(final EntityMinecart cart, final LinkType type) {
-        return new Iterable<EntityMinecart>() {
+    public Iterable<EntityMinecart> linkIterator(final EntityMinecart start, final LinkType type) {
+        return () -> new Iterator<EntityMinecart>() {
+            private final LinkageManager lm = LinkageManager.instance();
+            private EntityMinecart last;
+            private EntityMinecart current = start;
+
             @Override
-            public Iterator<EntityMinecart> iterator() {
-                return new Iterator<EntityMinecart>() {
-                    private final LinkageManager lm = LinkageManager.instance();
-                    private EntityMinecart last = null;
-                    private EntityMinecart current = cart;
+            public boolean hasNext() {
+                if (last == null) {
+                    EntityMinecart next = lm.getLinkedCart(current, type);
+                    return next != null;
+                }
+                EntityMinecart next = lm.getLinkedCartA(current);
+                if (next != null && next != last)
+                    return true;
+                next = lm.getLinkedCartB(current);
+                return next != null && next != last;
+            }
 
-                    @Override
-                    public boolean hasNext() {
-                        if (last == null) {
-                            EntityMinecart next = lm.getLinkedCart(current, type);
-                            return next != null;
-                        }
-                        EntityMinecart next = lm.getLinkedCartA(current);
-                        if (next != null && next != last)
-                            return true;
-                        next = lm.getLinkedCartB(current);
-                        return next != null && next != last;
-                    }
+            @Override
+            public EntityMinecart next() {
+                if (last == null) {
+                    EntityMinecart next = lm.getLinkedCart(current, type);
+                    if (next == null)
+                        throw new NoSuchElementException();
+                    last = current;
+                    current = next;
+                    return current;
+                }
+                EntityMinecart next = lm.getLinkedCartA(current);
+                if (next != null && next != last) {
+                    last = current;
+                    current = next;
+                    return current;
+                }
+                next = lm.getLinkedCartB(current);
+                if (next != null && next != last) {
+                    last = current;
+                    current = next;
+                    return current;
+                }
+                throw new NoSuchElementException();
+            }
 
-                    @Override
-                    public EntityMinecart next() {
-                        if (last == null) {
-                            EntityMinecart next = lm.getLinkedCart(current, type);
-                            if (next == null)
-                                return null;
-                            last = current;
-                            current = next;
-                            return current;
-                        }
-                        EntityMinecart next = lm.getLinkedCartA(current);
-                        if (next != null && next != last) {
-                            last = current;
-                            current = next;
-                            return current;
-                        }
-                        next = lm.getLinkedCartB(current);
-                        if (next != null && next != last) {
-                            last = current;
-                            current = next;
-                            return current;
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    public void remove() {
-                        throw new UnsupportedOperationException("Removing not supported.");
-                    }
-                };
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("Removal not supported.");
             }
         };
     }

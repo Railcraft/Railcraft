@@ -81,7 +81,7 @@ public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMin
     }
 
     public boolean hasActiveTicket() {
-        return ticket != null || (Game.isNotHost(worldObj) && getFlag(TICKET_FLAG));
+        return ticket != null || (Game.isClient(worldObj) && getFlag(TICKET_FLAG));
     }
 
     @Override

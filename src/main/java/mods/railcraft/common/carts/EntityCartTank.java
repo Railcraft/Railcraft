@@ -16,6 +16,7 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -26,15 +27,22 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
-public class EntityCartTank extends EntityCartFiltered implements IFluidHandler, ISidedInventory, IFluidCart {
-    private static final byte FLUID_ID_DATA_ID = 25;
-    private static final byte FLUID_QTY_DATA_ID = 26;
-    private static final byte FLUID_COLOR_DATA_ID = 27;
-    private static final byte FILLING_DATA_ID = 28;
+import javax.annotation.Nullable;
+import java.lang.invoke.MethodHandles;
+import java.util.Optional;
+
+public class EntityCartTank extends CartBaseFiltered implements IFluidHandler, ISidedInventory, IFluidCart {
+    private static final DataParameter<Optional<FluidStack>> FLUID_STACK = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataManagerPlugin.OPTIONAL_FLUID_STACK);
+    private static final DataParameter<Boolean> FILLING = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.BOOLEAN);
     private static final int SLOT_INPUT = 0;
     private static final int SLOT_OUTPUT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
@@ -69,34 +77,18 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(FLUID_ID_DATA_ID, -1);
-        dataManager.register(FLUID_QTY_DATA_ID, 0);
-        dataManager.register(FLUID_COLOR_DATA_ID, StandardTank.DEFAULT_COLOR);
-        dataManager.register(FILLING_DATA_ID, (byte) 0);
+        dataManager.register(FLUID_STACK, Optional.empty());
+        dataManager.register(FILLING, false);
     }
 
-    private int getFluidQty() {
-        return dataManager.get(FLUID_QTY_DATA_ID);
+    @Nullable
+    private FluidStack getFluidStack() {
+        return dataManager.get(FLUID_STACK).orElse(null);
     }
 
-    private void setFluidQty(int qty) {
-        dataManager.set(FLUID_QTY_DATA_ID, qty);
-    }
-
-    private int getFluidId() {
-        return dataManager.get(FLUID_ID_DATA_ID);
-    }
-
-    private void setFluidId(int fluidId) {
-        dataManager.set(FLUID_ID_DATA_ID, fluidId);
-    }
-
-    private int getFluidColor() {
-        return dataManager.get(FLUID_COLOR_DATA_ID);
-    }
-
-    private void setFluidColor(int color) {
-        dataManager.set(FLUID_COLOR_DATA_ID, color);
+    private void setFluidStack(@Nullable FluidStack fluidStack) {
+        dataManager.set(FLUID_STACK, Optional.ofNullable(fluidStack));
+        dataManager.setDirty(FLUID_STACK);
     }
 
     public TankManager getTankManager() {
@@ -114,10 +106,11 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
         super.onUpdate();
 
         if (Game.isClient(worldObj)) {
-            if (getFluidId() != -1) {
-                tank.renderData.fluid = FluidRegistry.getFluid(getFluidId());
-                tank.renderData.amount = getFluidQty();
-                tank.renderData.color = getFluidColor();
+            FluidStack fluidStack = getFluidStack();
+            if (fluidStack != null) {
+                tank.renderData.fluid = fluidStack.getFluid();
+                tank.renderData.amount = fluidStack.amount;
+                tank.renderData.color = tank.renderData.fluid.getColor(fluidStack);
             } else {
                 tank.renderData.fluid = null;
                 tank.renderData.amount = 0;
@@ -128,20 +121,11 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
 
         FluidStack fluidStack = tank.getFluid();
         if (fluidStack != null) {
-            int fluidId = FluidHelper.getFluidId(fluidStack);
-            if (fluidId != getFluidId())
-                setFluidId(fluidId);
-            if (fluidStack.amount != getFluidQty())
-                setFluidQty(fluidStack.amount);
-            if (tank.getColor() != getFluidColor())
-                setFluidQty(tank.getColor());
+            FluidStack syncedStack = getFluidStack();
+            if (!fluidStack.isFluidStackIdentical(syncedStack))
+                setFluidStack(fluidStack);
         } else {
-            if (getFluidId() != -1)
-                setFluidId(-1);
-            if (getFluidQty() != 0)
-                setFluidQty(0);
-            if (getFluidColor() != StandardTank.DEFAULT_COLOR)
-                setFluidColor(StandardTank.DEFAULT_COLOR);
+            setFluidStack(null);
         }
 
         update++;
@@ -233,14 +217,15 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
     }
 
     public boolean isFilling() {
-        return dataManager.get(FILLING_DATA_ID) != 0;
+        return dataManager.get(FILLING);
     }
 
     @Override
     public void setFilling(boolean fill) {
-        dataManager.set(FILLING_DATA_ID, fill ? 1 : (byte) 0);
+        dataManager.set(FILLING, fill);
     }
 
+    @Nullable
     public Fluid getFilterFluid() {
         ItemStack filter = getFilterItem();
         if (filter == null)

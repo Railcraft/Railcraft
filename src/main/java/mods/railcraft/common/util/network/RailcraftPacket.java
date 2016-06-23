@@ -8,12 +8,13 @@
  */
 package mods.railcraft.common.util.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public abstract class RailcraftPacket {
@@ -39,17 +40,18 @@ public abstract class RailcraftPacket {
     }
 
     public FMLProxyPacket getPacket() {
-        try (ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-             RailcraftOutputStream data = new RailcraftOutputStream(bytes)) {
+        ByteBuf byteBuf = Unpooled.buffer();
+        try (ByteBufOutputStream out = new ByteBufOutputStream(byteBuf);
+             RailcraftOutputStream data = new RailcraftOutputStream(out)) {
             data.writeByte(getID());
             writeData(data);
-            return new FMLProxyPacket(new PacketBuffer(Unpooled.wrappedBuffer(bytes.toByteArray())), CHANNEL_NAME);
+            return new FMLProxyPacket(new PacketBuffer(byteBuf), CHANNEL_NAME);
         } catch (IOException e) {
             Game.logThrowable("Error constructing packet: {0}", e, getClass());
             if (Game.IS_DEBUG)
                 throw new RuntimeException(e);
         }
-        PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+        PacketBuffer buffer = new PacketBuffer(byteBuf);
         buffer.writeByte(-1);
         return new FMLProxyPacket(buffer, CHANNEL_NAME);
     }

@@ -94,7 +94,7 @@ public class ItemCart extends ItemMinecart implements IMinecartItem {
         ToolTip tip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tip");
         if (tip != null)
             info.addAll(tip.convertToStrings());
-        ItemStack filter = EntityCartFiltered.getFilterFromCartItem(stack);
+        ItemStack filter = CartBaseFiltered.getFilterFromCartItem(stack);
         if (filter != null) {
             info.add(TextFormatting.BLUE + LocalizationPlugin.translate("railcraft.gui.filter") + ": " + filter.getDisplayName());
         }

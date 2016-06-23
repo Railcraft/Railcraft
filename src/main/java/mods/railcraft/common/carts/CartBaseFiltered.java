@@ -25,15 +25,15 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class EntityCartFiltered extends CartBaseContainer implements IMinecart {
+public abstract class CartBaseFiltered extends CartBaseContainer implements IMinecart {
     private static final DataParameter<Optional<ItemStack>> FILTER = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.OPTIONAL_ITEM_STACK);
     private final PhantomInventory invFilter = new PhantomInventory(1, this);
 
-    protected EntityCartFiltered(World world) {
+    protected CartBaseFiltered(World world) {
         super(world);
     }
 
-    protected EntityCartFiltered(World world, double x, double y, double z) {
+    protected CartBaseFiltered(World world, double x, double y, double z) {
         this(world);
         setPosition(x, y + getYOffset(), z);
         motionX = 0.0D;
@@ -79,7 +79,7 @@ public abstract class EntityCartFiltered extends CartBaseContainer implements IM
     @Override
     public void initEntityFromItem(ItemStack stack) {
         super.initEntityFromItem(stack);
-        ItemStack filter = EntityCartFiltered.getFilterFromCartItem(stack);
+        ItemStack filter = CartBaseFiltered.getFilterFromCartItem(stack);
         setFilter(filter);
     }
 

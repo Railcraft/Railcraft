@@ -28,7 +28,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCartCargo extends EntityCartFiltered {
+public class EntityCartCargo extends CartBaseFiltered {
     private static final DataParameter<Integer> SLOTS_FILLED = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.VARINT);
 
     public EntityCartCargo(World world) {

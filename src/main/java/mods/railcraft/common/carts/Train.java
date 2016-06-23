@@ -164,45 +164,6 @@ public class Train implements Iterable<EntityMinecart> {
 //        };
     }
 
-    public Iterable<EntityMinecart> orderedIterable(final EntityMinecart head) {
-        return () -> new Iterator<EntityMinecart>() {
-            private final LinkageManager lm = LinkageManager.instance();
-            private EntityMinecart last;
-            private EntityMinecart current = head;
-
-            @Override
-            public boolean hasNext() {
-                EntityMinecart next = lm.getLinkedCartA(current);
-                if (next != null && next != last)
-                    return true;
-                next = lm.getLinkedCartB(current);
-                return next != null && next != last;
-            }
-
-            @Override
-            public EntityMinecart next() {
-                EntityMinecart next = lm.getLinkedCartA(current);
-                if (next != null && next != last) {
-                    last = current;
-                    current = next;
-                    return current;
-                }
-                next = lm.getLinkedCartB(current);
-                if (next != null && next != last) {
-                    last = current;
-                    current = next;
-                    return current;
-                }
-                throw new NoSuchElementException();
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException("Removing not supported.");
-            }
-        };
-    }
-
     private void buildTrain(@Nullable EntityMinecart prev, EntityMinecart next) {
         _addLink(prev, next);
 

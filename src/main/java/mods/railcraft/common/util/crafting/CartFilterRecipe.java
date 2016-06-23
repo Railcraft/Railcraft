@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.util.crafting;
 
-import mods.railcraft.common.carts.EntityCartFiltered;
+import mods.railcraft.common.carts.CartBaseFiltered;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.ICartType;
 import mods.railcraft.common.fluids.FluidItemHelper;
@@ -96,7 +96,7 @@ public class CartFilterRecipe implements IRecipe {
             return null;
 
         filterItem.stackSize = 1;
-        return EntityCartFiltered.addFilterToCartItem(cartItem, filterItem);
+        return CartBaseFiltered.addFilterToCartItem(cartItem, filterItem);
     }
 
     @Override

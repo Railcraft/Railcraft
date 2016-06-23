@@ -8,6 +8,8 @@
  */
 package mods.railcraft.common.util.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftPacket.PacketType;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,9 +20,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketE
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class PacketHandler {
     public static final PacketHandler INSTANCE = new PacketHandler();
@@ -39,24 +39,16 @@ public class PacketHandler {
 
     @SubscribeEvent
     public void onPacket(ServerCustomPacketEvent event) {
-        byte[] data = new byte[event.getPacket().payload().readableBytes()];
-        event.getPacket().payload().readBytes(data);
-
-        onPacketData(data, ((NetHandlerPlayServer) event.getHandler()).playerEntity);
+        onPacketData(event.getPacket().payload(), ((NetHandlerPlayServer) event.getHandler()).playerEntity);
     }
 
     @SubscribeEvent
     public void onPacket(ClientCustomPacketEvent event) {
-        byte[] data = new byte[event.getPacket().payload().readableBytes()];
-        event.getPacket().payload().readBytes(data);
-
-//        System.out.println("Packet Received!");
-
-        onPacketData(data, null);
+        onPacketData(event.getPacket().payload(), null);
     }
 
-    private void onPacketData(byte[] bData, EntityPlayerMP player) {
-        RailcraftInputStream data = new RailcraftInputStream(new ByteArrayInputStream(bData));
+    private void onPacketData(ByteBuf byteBuf, EntityPlayerMP player) {
+        RailcraftInputStream data = new RailcraftInputStream(new ByteBufInputStream(byteBuf));
         try {
             RailcraftPacket pkt;
 
@@ -116,7 +108,7 @@ public class PacketHandler {
             }
             pkt.readData(data);
         } catch (IOException e) {
-            Game.logThrowable("Exception in PacketHandler.onPacketData: {0}", e, Arrays.toString(bData));
+            Game.logThrowable("Exception in PacketHandler.onPacketData", e);
         }
     }
 }

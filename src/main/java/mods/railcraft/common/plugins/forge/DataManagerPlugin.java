@@ -10,11 +10,21 @@
 
 package mods.railcraft.common.plugins.forge;
 
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraftforge.fluids.FluidStack;
+
+import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Created by CovertJaguar on 6/12/2016 for Railcraft.
@@ -22,6 +32,42 @@ import net.minecraft.network.datasync.EntityDataManager;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class DataManagerPlugin {
+
+    public static final DataSerializer<Optional<FluidStack>> OPTIONAL_FLUID_STACK = new DataSerializer<java.util.Optional<FluidStack>>() {
+        @Override
+        public void write(PacketBuffer buf, Optional<FluidStack> value) {
+            try (ByteBufOutputStream out = new ByteBufOutputStream(buf);
+                 RailcraftOutputStream data = new RailcraftOutputStream(out)) {
+                data.writeFluidStack(value.orElse(null));
+            } catch (IOException e) {
+                Game.logThrowable("Error syncing FluidStack", e);
+                if (Game.IS_DEBUG)
+                    throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public Optional<FluidStack> read(PacketBuffer buf) throws IOException {
+            try (ByteBufInputStream out = new ByteBufInputStream(buf);
+                 RailcraftInputStream data = new RailcraftInputStream(out)) {
+                return Optional.ofNullable(data.readFluidStack());
+            } catch (IOException e) {
+                Game.logThrowable("Error syncing FluidStack", e);
+                if (Game.IS_DEBUG)
+                    throw new RuntimeException(e);
+            }
+            return Optional.empty();
+        }
+
+        @Override
+        public DataParameter<Optional<FluidStack>> createKey(int id) {
+            return new DataParameter<Optional<FluidStack>>(id, this);
+        }
+    };
+
+    static {
+        DataSerializers.registerSerializer(OPTIONAL_FLUID_STACK);
+    }
 
     public static <T> DataParameter<T> create(Class<?> clazz, DataSerializer<T> serializer) {
         return EntityDataManager.createKey(clazz.asSubclass(Entity.class), serializer);

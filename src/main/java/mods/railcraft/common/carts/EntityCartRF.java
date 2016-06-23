@@ -10,17 +10,21 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class EntityCartRF extends CartBase {
-    private static final int DATA_ID_RF = 25;
+    private static final DataParameter<Integer> RF = DataManagerPlugin.create(MethodHandles.lookup().lookupClass(), DataSerializers.VARINT);
     private static final int RF_CAP = 2000000;
 
     public EntityCartRF(World world) {
@@ -46,7 +50,7 @@ public final class EntityCartRF extends CartBase {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(DATA_ID_RF, 0);
+        dataManager.register(RF, 0);
     }
 
     public int addRF(int amount) {
@@ -76,11 +80,11 @@ public final class EntityCartRF extends CartBase {
     }
 
     public void setRF(int amount) {
-        dataManager.set(DATA_ID_RF, amount);
+        dataManager.set(RF, amount);
     }
 
     public int getRF() {
-        return dataManager.get(DATA_ID_RF);
+        return dataManager.get(RF);
     }
 
     public int getMaxRF() {

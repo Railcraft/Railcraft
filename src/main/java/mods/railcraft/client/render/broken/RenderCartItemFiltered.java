@@ -10,7 +10,7 @@
 package mods.railcraft.client.render.broken;
 
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.carts.EntityCartFiltered;
+import mods.railcraft.common.carts.CartBaseFiltered;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
@@ -71,7 +71,7 @@ public class RenderCartItemFiltered implements IItemRenderer {
         IIcon cartTexture = stack.getIconIndex();
         renderItem.renderIcon(0, 0, cartTexture, 16, 16);
 
-        ItemStack filter = EntityCartFiltered.getFilterFromCartItem(stack);
+        ItemStack filter = CartBaseFiltered.getFilterFromCartItem(stack);
         if (filter != null) {
             rendererType.setupRender();
             RenderItem.getInstance().renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), filter, 0, 0);
