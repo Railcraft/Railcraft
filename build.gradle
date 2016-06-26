@@ -1,9 +1,3 @@
-allprojects {
-	apply plugin: 'java'
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
-}
-
 evaluationDependsOn(':version')
 
 buildscript {
@@ -25,6 +19,8 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 group = "com.covertjaguar.railcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Railcraft_" + project.version_minecraft
