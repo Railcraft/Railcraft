@@ -22,6 +22,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import java.lang.invoke.MethodHandles;
@@ -84,7 +85,7 @@ public class EntityCartCargo extends CartBaseFiltered {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player) {
+    public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
         if (Game.isHost(worldObj)) {
             GuiHandler.openGui(EnumGui.CART_CARGO, player, worldObj, this);
         }

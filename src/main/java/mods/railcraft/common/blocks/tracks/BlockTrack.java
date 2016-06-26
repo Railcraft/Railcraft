@@ -13,7 +13,7 @@ import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.items.ItemOveralls;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -216,12 +216,13 @@ public class BlockTrack extends BlockRail implements IPostConnection {
 
         IElectricGrid.ChargeHandler chargeHandler = ((IElectricGrid) track).getChargeHandler();
         if (chargeHandler != null && chargeHandler.getCharge() > 2000)
-            if (entity instanceof EntityPlayer && ItemOveralls.isPlayerWearing((EntityPlayer) entity)) {
-                if (!((EntityPlayer) entity).capabilities.isCreativeMode && MiscTools.RANDOM.nextInt(150) == 0) {
-                    EntityPlayer player = ((EntityPlayer) entity);
-                    ItemStack pants = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-                    if (pants != null)
-                        player.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(pants, 1));
+            if (entity instanceof EntityPlayer) {
+                EntityPlayer player = ((EntityPlayer) entity);
+                ItemStack pants = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+                if (pants != null && RailcraftItems.overalls.isInstance(pants)
+                        && !((EntityPlayer) entity).capabilities.isCreativeMode
+                        && MiscTools.RANDOM.nextInt(150) == 0) {
+                    player.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(pants, 1));
                 }
             } else if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
                 chargeHandler.removeCharge(2000);

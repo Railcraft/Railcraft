@@ -22,6 +22,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class EntityCartChest extends CartBaseContainer {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player) {
+    public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
         if (Game.isHost(worldObj))
             player.displayGUIChest(this);
         return true;

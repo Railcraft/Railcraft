@@ -12,6 +12,7 @@ package mods.railcraft.common.plugins.forge;
 
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -33,12 +34,12 @@ import java.util.Optional;
  */
 public class DataManagerPlugin {
 
-    public static final DataSerializer<Optional<FluidStack>> OPTIONAL_FLUID_STACK = new DataSerializer<java.util.Optional<FluidStack>>() {
+    public abstract static class DataSerializerIO<T> implements DataSerializer<T> {
         @Override
-        public void write(PacketBuffer buf, Optional<FluidStack> value) {
+        public final void write(PacketBuffer buf, T value) {
             try (ByteBufOutputStream out = new ByteBufOutputStream(buf);
                  RailcraftOutputStream data = new RailcraftOutputStream(out)) {
-                data.writeFluidStack(value.orElse(null));
+                write(data, value);
             } catch (IOException e) {
                 Game.logThrowable("Error syncing FluidStack", e);
                 if (Game.IS_DEBUG)
@@ -46,31 +47,69 @@ public class DataManagerPlugin {
             }
         }
 
+        protected abstract void write(RailcraftOutputStream outputStream, T value) throws IOException;
+
         @Override
-        public Optional<FluidStack> read(PacketBuffer buf) throws IOException {
+        public final T read(PacketBuffer buf) throws IOException {
             try (ByteBufInputStream out = new ByteBufInputStream(buf);
                  RailcraftInputStream data = new RailcraftInputStream(out)) {
-                return Optional.ofNullable(data.readFluidStack());
-            } catch (IOException e) {
-                Game.logThrowable("Error syncing FluidStack", e);
-                if (Game.IS_DEBUG)
-                    throw new RuntimeException(e);
+                return read(data);
             }
-            return Optional.empty();
+        }
+
+        protected abstract T read(RailcraftInputStream inputStream) throws IOException;
+
+        @Override
+        public DataParameter<T> createKey(int id) {
+            return new DataParameter<T>(id, this);
+        }
+    }
+
+    public static final DataSerializer<Optional<FluidStack>> OPTIONAL_FLUID_STACK = new DataSerializerIO<java.util.Optional<FluidStack>>() {
+        @Override
+        public void write(RailcraftOutputStream outputStream, Optional<FluidStack> value) throws IOException {
+            outputStream.writeFluidStack(value.orElse(null));
         }
 
         @Override
-        public DataParameter<Optional<FluidStack>> createKey(int id) {
-            return new DataParameter<Optional<FluidStack>>(id, this);
+        public Optional<FluidStack> read(RailcraftInputStream inputStream) throws IOException {
+            return Optional.ofNullable(inputStream.readFluidStack());
+        }
+    };
+
+    public static final DataSerializer<EnumColor> ENUM_COLOR = new DataSerializerIO<EnumColor>() {
+        @Override
+        public void write(RailcraftOutputStream outputStream, EnumColor value) throws IOException {
+            outputStream.writeEnum(value);
+        }
+
+        @Override
+        public EnumColor read(RailcraftInputStream inputStream) throws IOException {
+            return inputStream.readEnum(EnumColor.VALUES);
         }
     };
 
     static {
         DataSerializers.registerSerializer(OPTIONAL_FLUID_STACK);
+        DataSerializers.registerSerializer(ENUM_COLOR);
     }
 
+    public static <T> DataParameter<T> create(DataSerializer<T> serializer) {
+        Class<?> clazz = sun.reflect.Reflection.getCallerClass(2);
+        return EntityDataManager.createKey(clazz.asSubclass(Entity.class), serializer);
+    }
+
+    @Deprecated
     public static <T> DataParameter<T> create(Class<?> clazz, DataSerializer<T> serializer) {
         return EntityDataManager.createKey(clazz.asSubclass(Entity.class), serializer);
+    }
+
+    public static <T extends Enum<T>> void writeEnum(EntityDataManager dataManager, DataParameter<Byte> parameter, Enum<T> value) {
+        dataManager.set(parameter, (byte) value.ordinal());
+    }
+
+    public static <T extends Enum<T>> T readEnum(EntityDataManager dataManager, DataParameter<Byte> parameter, T[] values) {
+        return values[dataManager.get(parameter)];
     }
 
     public interface DataWrapper<T> {

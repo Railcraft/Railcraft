@@ -32,6 +32,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -254,7 +255,7 @@ public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMin
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player) {
+    public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
         if (Game.isHost(worldObj) && needsFuel())
             GuiHandler.openGui(EnumGui.CART_ANCHOR, player, worldObj, this);
         return true;

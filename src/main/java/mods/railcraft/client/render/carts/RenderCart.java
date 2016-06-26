@@ -19,6 +19,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -113,7 +114,7 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
 
         if (cart instanceof IRoutableCart) {
             String dest = ((IRoutableCart) cart).getDestination();
-            if (!dest.isEmpty())
+            if (!StringUtils.isBlank(dest))
                 renderHaloText(cart, dest, 0, name ? 0.5 : 0, 0, 64);
         }
 

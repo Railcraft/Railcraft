@@ -16,10 +16,10 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
@@ -34,17 +34,12 @@ public class ItemOveralls extends ItemArmor implements IRailcraftObject {
     private static final String TEXTURE = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "overalls.png";
 
     public ItemOveralls() {
-        super(ItemMaterials.OVERALLS, 0, 2);
+        super(ItemMaterials.OVERALLS, 0, EntityEquipmentSlot.LEGS);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
-    public static boolean isPlayerWearing(EntityPlayer player) {
-        ItemStack pants = player.getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
-        return pants != null && pants.getItem() instanceof ItemOveralls;
-    }
-
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
         return TEXTURE;
     }
 

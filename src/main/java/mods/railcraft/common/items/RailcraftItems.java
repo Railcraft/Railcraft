@@ -123,6 +123,10 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
         return stack != null && item == stack.getItem();
     }
 
+    public boolean isInstance(@Nullable ItemStack stack) {
+        return stack != null && (item == stack.getItem() || itemClass.isInstance(stack.getItem()));
+    }
+
     public boolean isEqual(@Nullable Item item) {
         return item != null && this.item == item;
     }

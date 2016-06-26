@@ -67,10 +67,10 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
 
     @Override
     public boolean processInitialInteract(@Nonnull EntityPlayer player, @Nullable ItemStack stack, @Nonnull EnumHand hand) {
-        return MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, stack, hand)) || doInteract(player);
+        return MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, stack, hand)) || doInteract(player, stack, hand);
     }
 
-    public boolean doInteract(EntityPlayer player) {
+    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
         return true;
     }
 

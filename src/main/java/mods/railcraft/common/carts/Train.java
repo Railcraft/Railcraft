@@ -11,6 +11,7 @@ package mods.railcraft.common.carts;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import mods.railcraft.api.electricity.IElectricMinecart;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -281,6 +282,10 @@ public class Train implements Iterable<EntityMinecart> {
             }
         }
         return removed;
+    }
+
+    public boolean isPassenger(Entity entity) {
+        return stream().anyMatch(c -> c.isPassenger(entity));
     }
 
     public boolean containsCart(EntityMinecart cart) {

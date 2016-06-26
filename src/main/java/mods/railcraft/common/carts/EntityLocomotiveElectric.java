@@ -24,9 +24,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
@@ -116,8 +116,8 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     }
 
     @Override
-    protected void func_180460_a(BlockPos pos, IBlockState state) {
-        super.func_180460_a(pos, state);
+    protected void moveAlongTrack(BlockPos pos, IBlockState state) {
+        super.moveAlongTrack(pos, state);
         if (Game.isClient(worldObj))
             return;
         chargeHandler.tickOnTrack(pos);

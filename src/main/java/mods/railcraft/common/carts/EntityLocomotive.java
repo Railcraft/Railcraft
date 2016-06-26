@@ -23,9 +23,10 @@ import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.items.ItemOveralls;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.ItemWhistleTuner;
+import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -40,11 +41,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
@@ -52,8 +57,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -66,13 +73,13 @@ import java.util.Locale;
  */
 public abstract class EntityLocomotive extends CartBaseContainer implements IDirectionalCart, IGuiReturnHandler,
         ILinkableCart, IMinecart, ISecure<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
-    private static final byte HAS_FUEL_DATA_ID = 16;
-    private static final byte PRIMARY_COLOR_DATA_ID = 25;
-    private static final byte SECONDARY_COLOR_DATA_ID = 26;
-    private static final byte LOCOMOTIVE_MODE_DATA_ID = 27;
-    private static final byte LOCOMOTIVE_SPEED_DATA_ID = 28;
-    private static final byte EMBLEM_DATA_ID = 29;
-    private static final byte DEST_DATA_ID = 30;
+    private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(DataSerializers.BOOLEAN);
+    private static final DataParameter<Byte> LOCOMOTIVE_MODE = DataManagerPlugin.create(DataSerializers.BYTE);
+    private static final DataParameter<Byte> LOCOMOTIVE_SPEED = DataManagerPlugin.create(DataSerializers.BYTE);
+    private static final DataParameter<EnumColor> PRIMARY_COLOR = DataManagerPlugin.create(DataManagerPlugin.ENUM_COLOR);
+    private static final DataParameter<EnumColor> SECONDARY_COLOR = DataManagerPlugin.create(DataManagerPlugin.ENUM_COLOR);
+    private static final DataParameter<String> EMBLEM = DataManagerPlugin.create(DataSerializers.STRING);
+    private static final DataParameter<String> DEST = DataManagerPlugin.create(DataSerializers.STRING);
     private static final double DRAG_FACTOR = 0.9;
     private static final float HS_FORCE_BONUS = 3.5F;
     private static final byte FUEL_USE_INTERVAL = 8;
@@ -92,13 +99,13 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     private int tempIdle;
     private float whistlePitch = getNewWhistlePitch();
 
-    public EntityLocomotive(World world) {
+    protected EntityLocomotive(World world) {
         super(world);
         setPrimaryColor(EnumColor.SILVER.getDye());
         setSecondaryColor(EnumColor.GRAY.getDye());
     }
 
-    public EntityLocomotive(World world, double x, double y, double z) {
+    protected EntityLocomotive(World world, double x, double y, double z) {
         this(world);
         setPosition(x, y + getYOffset(), z);
         prevPosX = x;
@@ -110,13 +117,13 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     protected void entityInit() {
         super.entityInit();
 
-        dataManager.register(HAS_FUEL_DATA_ID, (byte) 0);
-        dataManager.register(PRIMARY_COLOR_DATA_ID, (byte) 0);
-        dataManager.register(SECONDARY_COLOR_DATA_ID, (byte) 0);
-        dataManager.register(LOCOMOTIVE_MODE_DATA_ID, (byte) LocoMode.SHUTDOWN.ordinal());
-        dataManager.register(LOCOMOTIVE_SPEED_DATA_ID, (byte) 0);
-        dataManager.register(EMBLEM_DATA_ID, "");
-        dataManager.register(DEST_DATA_ID, "");
+        dataManager.register(HAS_FUEL, false);
+        dataManager.register(PRIMARY_COLOR, EnumColor.WHITE);
+        dataManager.register(SECONDARY_COLOR, EnumColor.WHITE);
+        dataManager.register(LOCOMOTIVE_MODE, (byte) LocoMode.SHUTDOWN.ordinal());
+        dataManager.register(LOCOMOTIVE_SPEED, (byte) LocoSpeed.MAX.ordinal());
+        dataManager.register(EMBLEM, "");
+        dataManager.register(DEST, "");
     }
 
     @Override
@@ -184,14 +191,13 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     protected abstract ItemStack getCartItemBase();
 
     @Override
-    public boolean doInteract(EntityPlayer player) {
-        if (Game.isHost(getWorld())) {
-            ItemStack current = player.getCurrentEquippedItem();
-            if (current != null && current.getItem() instanceof ItemWhistleTuner) {
+    public boolean doInteract(EntityPlayer player, @Nullable ItemStack stack, @Nullable EnumHand hand) {
+        if (Game.isHost(worldObj)) {
+            if (stack != null && stack.getItem() instanceof ItemWhistleTuner) {
                 if (whistleDelay <= 0) {
                     whistlePitch = getNewWhistlePitch();
                     whistle();
-                    current.damageItem(1, player);
+                    stack.damageItem(1, player);
                 }
                 return true;
             }
@@ -227,64 +233,65 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     public String getEmblem() {
-        return dataManager.get(EMBLEM_DATA_ID);
+        return dataManager.get(EMBLEM);
     }
 
     public void setEmblem(String emblem) {
         if (!getEmblem().equals(emblem))
-            dataManager.set(EMBLEM_DATA_ID, emblem);
+            dataManager.set(EMBLEM, emblem);
     }
 
+    @Nullable
     public ItemStack getDestItem() {
         return getTicketInventory().getStackInSlot(1);
     }
 
     @Override
     public String getDestination() {
-        return dataManager.get(DEST_DATA_ID);
+        return StringUtils.defaultIfBlank(dataManager.get(DEST), "");
     }
 
     public void setDestString(String dest) {
-        if (!getDestination().equals(dest))
-            dataManager.set(DEST_DATA_ID, dest);
+        if (!StringUtils.equals(getDestination(), dest))
+            dataManager.set(DEST, dest);
     }
 
     public LocoMode getMode() {
-        return LocoMode.VALUES[dataManager.get(LOCOMOTIVE_MODE_DATA_ID)];
+        return DataManagerPlugin.readEnum(dataManager, LOCOMOTIVE_MODE, LocoMode.VALUES);
     }
 
     public void setMode(LocoMode mode) {
         if (getMode() != mode)
-            dataManager.set(LOCOMOTIVE_MODE_DATA_ID, (byte) mode.ordinal());
+            DataManagerPlugin.writeEnum(dataManager, LOCOMOTIVE_MODE, mode);
     }
 
     public LocoSpeed getSpeed() {
-        return LocoSpeed.VALUES[dataManager.get(LOCOMOTIVE_SPEED_DATA_ID)];
+        return DataManagerPlugin.readEnum(dataManager, LOCOMOTIVE_SPEED, LocoSpeed.VALUES);
     }
 
     public void setSpeed(LocoSpeed speed) {
         if (getSpeed() != speed)
-            dataManager.set(LOCOMOTIVE_SPEED_DATA_ID, (byte) speed.ordinal());
+            DataManagerPlugin.writeEnum(dataManager, LOCOMOTIVE_SPEED, speed);
     }
 
     public void increaseSpeed() {
         LocoSpeed speed = getSpeed();
         if (speed != LocoSpeed.MAX)
-            dataManager.set(LOCOMOTIVE_SPEED_DATA_ID, (byte) (speed.ordinal() - 1));
+            dataManager.set(LOCOMOTIVE_SPEED, (byte) (speed.ordinal() - 1));
     }
 
     public void decreaseSpeed() {
         LocoSpeed speed = getSpeed();
         if (speed != LocoSpeed.REVERSE)
-            dataManager.set(LOCOMOTIVE_SPEED_DATA_ID, (byte) (speed.ordinal() + 1));
+            dataManager.set(LOCOMOTIVE_SPEED, (byte) (speed.ordinal() + 1));
     }
 
     public boolean hasFuel() {
-        return dataManager.get(HAS_FUEL_DATA_ID) != 0;
+        return dataManager.get(HAS_FUEL);
     }
 
     public void setHasFuel(boolean powered) {
-        dataManager.set(HAS_FUEL_DATA_ID, (byte) (powered ? 1 : 0));
+        dataManager.set(HAS_FUEL, powered);
     }
 
     public boolean isRunning() {
@@ -364,7 +371,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public boolean setDestination(ItemStack ticket) {
+    public boolean setDestination(@Nullable ItemStack ticket) {
         if (ticket != null && ticket.getItem() instanceof ItemTicket) {
             if (isSecure() && !ItemTicket.matchesOwnerOrOp(ticket, CartTools.getCartOwner(this)))
                 return false;
@@ -472,17 +479,18 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         setHasFuel(fuel > 0);
     }
 
-    private boolean cartVelocityIsGreaterThan(float vel) {
+    private boolean cartVelocityIsGreaterThan(@SuppressWarnings("SameParameterValue") float vel) {
         return Math.abs(motionX) > vel || Math.abs(motionZ) > vel;
     }
 
     public int getDamageToRoadKill(EntityLivingBase entity) {
-        if (entity instanceof EntityPlayer)
-            if (ItemOveralls.isPlayerWearing((EntityPlayer) entity)) {
-                ItemStack pants = entity.getCurrentArmor(MiscTools.ArmorSlots.LEGS.ordinal());
-                entity.setCurrentItemOrArmor(MiscTools.ArmorSlots.LEGS.ordinal() + 1, InvTools.damageItem(pants, 5));
+        if (entity instanceof EntityPlayer) {
+            ItemStack pants = entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+            if (pants != null && RailcraftItems.overalls.isInstance(pants)) {
+                entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(pants, 5));
                 return 4;
             }
+        }
         return 25;
     }
 
@@ -491,7 +499,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         if (Game.isHost(worldObj)) {
             if (!entity.isEntityAlive())
                 return;
-            if (entity != this.riddenByEntity && (cartVelocityIsGreaterThan(0.2f) || getEntityData().getBoolean("HighSpeed")) && MiscTools.isKillableEntity(entity)) {
+            if (!Train.getTrain(this).isPassenger(entity) && (cartVelocityIsGreaterThan(0.2f) || getEntityData().getBoolean("HighSpeed")) && MiscTools.isKillableEntity(entity)) {
                 EntityLivingBase living = (EntityLivingBase) entity;
                 if (RailcraftConfig.locomotiveDamageMobs())
                     living.attackEntityFrom(RailcraftDamageSource.TRAIN, getDamageToRoadKill(living));
@@ -544,7 +552,6 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     public abstract int getMoreGoJuice();
 
-    @Override
     public double getDrag() {
         return DRAG_FACTOR;
     }
@@ -561,7 +568,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
         data.setString("emblem", getEmblem());
 
-        data.setString("dest", getDestination());
+        data.setString("dest", StringUtils.defaultIfBlank(getDestination(), ""));
 
         data.setByte("locoMode", (byte) getMode().ordinal());
         data.setByte("locoSpeed", (byte) getSpeed().ordinal());
@@ -706,20 +713,20 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public final EnumDyeColor getPrimaryColor() {
-        return EnumDyeColor.byMetadata(dataManager.get(PRIMARY_COLOR_DATA_ID));
+        return dataManager.get(PRIMARY_COLOR).getDye();
     }
 
     public final void setPrimaryColor(EnumDyeColor color) {
-        dataManager.set(PRIMARY_COLOR_DATA_ID, color.getMetadata());
+        dataManager.set(PRIMARY_COLOR, EnumColor.fromDye(color));
     }
 
     @Override
     public final EnumDyeColor getSecondaryColor() {
-        return EnumDyeColor.byMetadata(dataManager.get(SECONDARY_COLOR_DATA_ID));
+        return dataManager.get(SECONDARY_COLOR).getDye();
     }
 
     public final void setSecondaryColor(EnumDyeColor color) {
-        dataManager.set(SECONDARY_COLOR_DATA_ID, color.getMetadata());
+        dataManager.set(SECONDARY_COLOR, EnumColor.fromDye(color));
     }
 
     public final String getModel() {
@@ -731,7 +738,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public World getWorld() {
+    public World theWorld() {
         return worldObj;
     }
 
@@ -787,6 +794,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
             return texture;
         }
 
+        @Nullable
         @Override
         public ToolTip getToolTip() {
             return null;

@@ -38,6 +38,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
 
+import javax.annotation.Nonnull;
 import java.util.Map.Entry;
 
 /**
@@ -114,7 +115,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
     }
 
     @Override
-    protected void openGui(EntityPlayer player) {
+    protected void openGui(@Nonnull EntityPlayer player) {
         GuiHandler.openGui(EnumGui.LOCO_STEAM, player, worldObj, this);
     }
 

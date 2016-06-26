@@ -252,7 +252,7 @@ public class RoutingLogic {
                 String cartDest = ((IRoutableCart) cart).getDestination();
                 if (StringUtils.equalsIgnoreCase("null", value))
                     return StringUtils.isBlank(cartDest);
-                if (cartDest == null)
+                if (StringUtils.isBlank(cartDest))
                     return false;
                 if (isRegex)
                     return cartDest.matches(value);

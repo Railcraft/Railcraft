@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
     public abstract int getTier();
 
     @Override
-    public boolean doInteract(EntityPlayer player) {
+    public boolean doInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
         if (Game.isHost(worldObj))
             GuiHandler.openGui(EnumGui.CART_ENERGY, player, worldObj, this);
         return true;
