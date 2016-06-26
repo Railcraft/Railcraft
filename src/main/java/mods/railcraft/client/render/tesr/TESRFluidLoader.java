@@ -21,6 +21,7 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -59,20 +60,23 @@ public class TESRFluidLoader extends TileEntitySpecialRenderer<TileLoaderFluidBa
 
         StandardTank tank = tile.getTankManager().get(0);
 
-        if (tank != null && tank.renderData.fluid != null && tank.renderData.amount > 0) {
-            int[] displayLists = FluidRenderer.getLiquidDisplayLists(tank.renderData.fluid);
-            OpenGL.glPushMatrix();
+        if (tank != null) {
+            FluidStack fluidStack = tank.getFluid();
+            if (fluidStack != null && fluidStack.amount > 0) {
+                int[] displayLists = FluidRenderer.getLiquidDisplayLists(fluidStack);
+                OpenGL.glPushMatrix();
 
-            if (FluidRenderer.hasTexture(tank.renderData.fluid, false)) {
-                float cap = tank.getCapacity();
-                float level = Math.min(tank.renderData.amount, cap) / cap;
+                if (FluidRenderer.hasTexture(fluidStack, FluidRenderer.FlowState.STILL)) {
+                    float cap = tank.getCapacity();
+                    float level = Math.min(fluidStack.amount, cap) / cap;
 
-                bindTexture(FluidRenderer.getFluidSheet(tank.renderData.fluid));
-                FluidRenderer.setColorForTank(tank);
-                OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
+                    bindTexture(FluidRenderer.getFluidSheet(fluidStack));
+                    FluidRenderer.setColorForFluid(fluidStack);
+                    OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
+                }
+
+                OpenGL.glPopMatrix();
             }
-
-            OpenGL.glPopMatrix();
         }
 
 //        OpenGL.glScalef(0.994f, 1.05f, 0.994f);

@@ -12,16 +12,16 @@ package mods.railcraft.client.render.broken;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.CartBaseFiltered;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 //TODO: utterly broken
-public class RenderCartItemFiltered implements IItemRenderer {
+public class RenderCartItemFiltered implements ItemMeshDefinition {
 
     RenderItem renderItem = new RenderItem();
 

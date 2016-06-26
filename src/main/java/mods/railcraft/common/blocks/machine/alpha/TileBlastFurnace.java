@@ -41,7 +41,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -220,10 +219,10 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
         int xLava = xCoord + 1;
         int yLava = yCoord + 2;
         int zLava = zCoord + 1;
-        if (worldObj.getBlock(xLava, yLava, zLava).getMaterial() == Material.lava)
+        if (worldObj.getBlock(xLava, yLava, zLava).getMaterial() == Material.LAVA)
             worldObj.setBlockToAir(xLava, yLava, zLava);
         yLava -= 1;
-        if (worldObj.getBlock(xLava, yLava, zLava).getMaterial() == Material.lava)
+        if (worldObj.getBlock(xLava, yLava, zLava).getMaterial() == Material.LAVA)
             worldObj.setBlockToAir(xLava, yLava, zLava);
     }*/
 

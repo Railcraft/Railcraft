@@ -10,7 +10,6 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.machine.alpha.TileCokeOven;
-import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.gui.slots.SlotFluidContainerEmpty;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
@@ -58,10 +57,6 @@ public class ContainerCokeOven extends RailcraftContainer {
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
 
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null)
-            tMan.updateGuiData(this, listeners, 0);
-
         for (int i = 0; i < listeners.size(); i++) {
             IContainerListener listener = listeners.get(i);
 
@@ -82,10 +77,6 @@ public class ContainerCokeOven extends RailcraftContainer {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
 
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null)
-            tMan.initGuiData(this, listener, 0);
-
         listener.sendProgressBarUpdate(this, 10, tile.getCookTime());
         listener.sendProgressBarUpdate(this, 11, tile.getTotalCookTime());
     }
@@ -93,9 +84,6 @@ public class ContainerCokeOven extends RailcraftContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data) {
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null)
-            tMan.processGuiUpdate(id, data);
 
         switch (id) {
             case 10:

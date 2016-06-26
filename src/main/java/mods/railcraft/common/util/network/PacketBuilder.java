@@ -8,9 +8,14 @@
  */
 package mods.railcraft.common.util.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.Unpooled;
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.ISignalPacketBuilder;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.gui.widgets.Widget;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketKeyPress.EnumKeyBinding;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IContainerListener;
@@ -18,6 +23,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -85,10 +91,25 @@ public class PacketBuilder implements ISignalPacketBuilder {
         }
     }
 
-    public void sendGuiWidgetPacket(IContainerListener listener, int windowId, int widgetId, byte[] data) {
+    public void sendGuiDataPacket(IContainerListener listener, int windowId, int key, byte[] value) {
         if (listener instanceof EntityPlayerMP) {
-            PacketGuiWidget pkt = new PacketGuiWidget(windowId, widgetId, data);
+            PacketGuiData pkt = new PacketGuiData(windowId, key, value);
             PacketDispatcher.sendToPlayer(pkt, (EntityPlayerMP) listener);
+        }
+    }
+
+    public void sendGuiWidgetPacket(IContainerListener listener, int windowId, Widget widget) {
+        if (listener instanceof EntityPlayerMP && widget.hasServerSyncData(listener)) {
+            ByteBuf byteBuf = Unpooled.buffer();
+            try (ByteBufOutputStream out = new ByteBufOutputStream(byteBuf);
+                 RailcraftOutputStream data = new RailcraftOutputStream(out)) {
+                widget.writeServerSyncData(listener, data);
+                PacketGuiWidget pkt = new PacketGuiWidget(windowId, widget, byteBuf.array());
+                PacketDispatcher.sendToPlayer(pkt, (EntityPlayerMP) listener);
+            } catch (IOException ex) {
+                if (Game.IS_DEBUG)
+                    throw new RuntimeException(ex);
+            }
         }
     }
 

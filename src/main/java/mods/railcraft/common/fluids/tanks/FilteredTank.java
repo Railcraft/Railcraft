@@ -15,7 +15,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FilteredTank extends StandardTank {
@@ -59,8 +58,9 @@ public class FilteredTank extends StandardTank {
             ToolTipLine name = new ToolTipLine(filter.getLocalizedName(getFluid()), rarity.rarityColor);
             name.setSpacing(2);
             toolTip.add(name);
-            if (renderData.fluid != null && renderData.amount > 0)
-                amount = renderData.amount;
+            FluidStack fluidStack = getFluid();
+            if (fluidStack != null && fluidStack.amount > 0)
+                amount = fluidStack.amount;
         }
         toolTip.add(new ToolTipLine(String.format("%,d", amount) + " / " + String.format("%,d", getCapacity())));
     }

@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
@@ -38,10 +39,10 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -77,7 +78,6 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     private final Timer networkTimer = new Timer();
     private EnumColor color = EnumColor.WHITE;
     private FluidStack previousFluidStack;
-    private int previousFluidColor;
 
     TileTankBase() {
         super(patterns);
@@ -582,21 +582,10 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     @SuppressWarnings("ConstantConditions")
     private void syncClient() {
         FluidStack fluidStack = tankManager.get(0).getFluid();
-        int fluidColor = tankManager.get(0).getColor();
-        if (fluidColor != previousFluidColor || !isFluidEqual(fluidStack, previousFluidStack)) {
+        if (!Fluids.areIdentical(previousFluidStack, fluidStack)) {
             previousFluidStack = fluidStack == null ? null : fluidStack.copy();
-            previousFluidColor = fluidColor;
             sendUpdateToClient();
         }
-    }
-
-    @SuppressWarnings("SimplifiableIfStatement")
-    private boolean isFluidEqual(@Nullable FluidStack L1, @Nullable FluidStack L2) {
-        if (L1 == L2)
-            return true;
-        if (L1 == null || L2 == null)
-            return false;
-        return L1.isFluidStackIdentical(L2);
     }
 
     @Override

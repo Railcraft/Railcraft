@@ -23,7 +23,10 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -35,10 +38,10 @@ public class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
         fillBlock.boundingBox = AABBFactory.start().box().expandHorizontally(-5 * RenderTools.PIXEL).build();
     }
 
-    private void prepFillTexture(StandardTank tank) {
-        if (tank.renderData.fluid == null)
+    private void prepFillTexture(@Nullable FluidStack fluidStack) {
+        if (fluidStack == null)
             return;
-        ResourceLocation texSheet = FluidRenderer.setupFluidTexture(tank.renderData.fluid, FluidRenderer.FlowState.FLOWING, fillBlock);
+        ResourceLocation texSheet = FluidRenderer.setupFluidTexture(fluidStack, FluidRenderer.FlowState.FLOWING, fillBlock);
         if (texSheet != null)
             bindTexture(texSheet);
     }
@@ -57,9 +60,9 @@ public class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
         return height;
     }
 
-    private void draw(StandardTank tank) {
+    private void draw(FluidStack fluidStack) {
         preGL();
-        FluidRenderer.setColorForTank(tank);
+        FluidRenderer.setColorForFluid(fluidStack);
         CubeRenderer.render(fillBlock);
         postGL();
     }
@@ -86,11 +89,12 @@ public class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
         if (tile instanceof TileTankIronValve) {
             TileTankIronValve valve = (TileTankIronValve) tile;
             StandardTank fillTank = valve.getFillTank();
-            if (fillTank.renderData.fluid != null && fillTank.renderData.amount > 0) {
+            FluidStack fillStack = fillTank.getFluid();
+            if (fillStack != null && fillStack.amount > 0) {
                 OpenGL.glPushMatrix();
                 if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPosition()) == 'A') {
 
-                    prepFillTexture(fillTank);
+                    prepFillTexture(fillStack);
 
                     int height = getTankHeight(valve);
                     float yOffset = height / 2f;
@@ -98,47 +102,47 @@ public class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
                     OpenGL.glTranslatef((float) x + 0.5F, (float) y + yOffset - height + 1, (float) z + 0.5F);
                     OpenGL.glScalef(1f, vScale, 1f);
 
-                    draw(fillTank);
+                    draw(fillStack);
                 } else if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPosition().add(-1, 0, 0)) == 'A') {
 
-                    prepFillTexture(fillTank);
+                    prepFillTexture(fillStack);
 
                     float vScale = getVerticalScaleSide(valve);
                     float yOffset = 0.5f - vScale / 2f + RenderTools.PIXEL * 3;
                     OpenGL.glTranslatef((float) x - 0.5F + RenderTools.PIXEL * 5, (float) y + yOffset, (float) z + 0.5F);
                     OpenGL.glScalef(1f, vScale, 1f);
 
-                    draw(fillTank);
+                    draw(fillStack);
                 } else if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPosition().add(1, 0, 0)) == 'A') {
 
-                    prepFillTexture(fillTank);
+                    prepFillTexture(fillStack);
 
                     float vScale = getVerticalScaleSide(valve);
                     float yOffset = 0.5f - vScale / 2f + RenderTools.PIXEL * 3;
                     OpenGL.glTranslatef((float) x + 1.5F - RenderTools.PIXEL * 5, (float) y + yOffset, (float) z + 0.5F);
                     OpenGL.glScalef(1f, vScale, 1f);
 
-                    draw(fillTank);
+                    draw(fillStack);
                 } else if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPosition().add(0, 0, -1)) == 'A') {
 
-                    prepFillTexture(fillTank);
+                    prepFillTexture(fillStack);
 
                     float vScale = getVerticalScaleSide(valve);
                     float yOffset = 0.5f - vScale / 2f + RenderTools.PIXEL * 3;
                     OpenGL.glTranslatef((float) x + 0.5F, (float) y + yOffset, (float) z - 0.5F + RenderTools.PIXEL * 5);
                     OpenGL.glScalef(1f, vScale, 1f);
 
-                    draw(fillTank);
+                    draw(fillStack);
                 } else if (valve.getPattern().getPatternMarkerChecked(valve.getPatternPosition().add(0, 0, 1)) == 'A') {
 
-                    prepFillTexture(fillTank);
+                    prepFillTexture(fillStack);
 
                     float vScale = getVerticalScaleSide(valve);
                     float yOffset = 0.5f - vScale / 2f + RenderTools.PIXEL * 3;
                     OpenGL.glTranslatef((float) x + 0.5F, (float) y + yOffset, (float) z + 1.5F - RenderTools.PIXEL * 5);
                     OpenGL.glScalef(1f, vScale, 1f);
 
-                    draw(fillTank);
+                    draw(fillStack);
                 }
                 OpenGL.glPopMatrix();
             }
@@ -158,20 +162,21 @@ public class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
         if (tank == null)
             return;
 
-        if (tank.renderData.fluid != null && tank.renderData.amount > 0) {
+        FluidStack fluidStack = tank.getFluid();
+        if (fluidStack != null && fluidStack.amount > 0) {
             preGL();
             OpenGL.glTranslatef((float) x + 0.5F, (float) y + yOffset + 0.01f, (float) z + 0.5F);
             OpenGL.glScalef(hScale, vScale, hScale);
 
 //        OpenGL.glScalef(0.999f, 1, 0.999f);
-            int[] displayLists = FluidRenderer.getLiquidDisplayLists(tank.renderData.fluid);
+            int[] displayLists = FluidRenderer.getLiquidDisplayLists(fluidStack);
             OpenGL.glPushMatrix();
 
             float cap = tank.getCapacity();
-            float level = Math.min(tank.renderData.amount, cap) / cap;
+            float level = Math.min(fluidStack.amount, cap) / cap;
 
-            bindTexture(FluidRenderer.getFluidSheet(tank.renderData.fluid));
-            FluidRenderer.setColorForTank(tank);
+            bindTexture(FluidRenderer.getFluidSheet(fluidStack));
+            FluidRenderer.setColorForFluid(fluidStack);
             OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
 
             OpenGL.glPopMatrix();

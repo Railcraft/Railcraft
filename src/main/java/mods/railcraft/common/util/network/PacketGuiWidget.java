@@ -9,6 +9,7 @@
 package mods.railcraft.common.util.network;
 
 import mods.railcraft.common.gui.containers.RailcraftContainer;
+import mods.railcraft.common.gui.widgets.Widget;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
@@ -16,35 +17,37 @@ import java.io.IOException;
 
 public class PacketGuiWidget extends RailcraftPacket {
 
-    private byte windowId, widgetId;
+    private byte windowId;
+    private Widget widget;
     private byte[] payload;
 
     public PacketGuiWidget() {
-        super();
     }
 
-    public PacketGuiWidget(int windowId, int widgetId, byte[] data) {
+    public PacketGuiWidget(int windowId, Widget widget, byte[] data) {
         this.windowId = (byte) windowId;
-        this.widgetId = (byte) widgetId;
+        this.widget = widget;
         this.payload = data;
     }
 
     @Override
     public void writeData(RailcraftOutputStream data) throws IOException {
         data.writeByte(windowId);
-        data.writeByte(widgetId);
+        data.writeByte(widget.getId());
         data.write(payload);
     }
 
     @Override
     public void readData(RailcraftInputStream data) throws IOException {
         windowId = data.readByte();
-        widgetId = data.readByte();
+        byte widgetId = data.readByte();
 
         EntityPlayerSP player = FMLClientHandler.instance().getClient().thePlayer;
 
-        if (player.openContainer instanceof RailcraftContainer && player.openContainer.windowId == windowId)
-            ((RailcraftContainer) player.openContainer).handleWidgetClientData(widgetId, data);
+        if (player.openContainer instanceof RailcraftContainer && player.openContainer.windowId == windowId) {
+            RailcraftContainer railcraftContainer = ((RailcraftContainer) player.openContainer);
+            railcraftContainer.getWidgets().get(widgetId).readServerSyncData(data);
+        }
     }
 
     @Override

@@ -9,7 +9,6 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFireboxFluid;
-import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.gui.slots.SlotFluidContainerFilled;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
@@ -55,12 +54,6 @@ public class ContainerBoilerFluid extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null) {
-            tMan.initGuiData(this, listener, 0);
-            tMan.initGuiData(this, listener, 1);
-            tMan.initGuiData(this, listener, 2);
-        }
 
         listener.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
         listener.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
@@ -71,12 +64,6 @@ public class ContainerBoilerFluid extends RailcraftContainer {
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null) {
-            tMan.updateGuiData(this, listeners, 0);
-            tMan.updateGuiData(this, listeners, 1);
-            tMan.updateGuiData(this, listeners, 2);
-        }
 
         for (IContainerListener listener : listeners) {
             if (lastBurnTime != tile.boiler.burnTime)
@@ -101,9 +88,6 @@ public class ContainerBoilerFluid extends RailcraftContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null)
-            tMan.processGuiUpdate(id, value);
 
         switch (id) {
             case 10:

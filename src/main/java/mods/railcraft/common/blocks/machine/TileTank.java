@@ -145,12 +145,12 @@ public abstract class TileTank extends TileMultiBlockInventory implements IFluid
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        tankManager.writePacketData(data);
+//        tankManager.writePacketData(data);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        tankManager.readPacketData(data);
+//        tankManager.readPacketData(data);
     }
 }

@@ -9,15 +9,11 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.machine.ITankTile;
-import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerTank extends RailcraftContainer {
 
@@ -45,32 +41,4 @@ public class ContainerTank extends RailcraftContainer {
             addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
         }
     }
-
-    @Override
-    public void sendUpdateToClient() {
-        super.sendUpdateToClient();
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null) {
-            tMan.updateGuiData(this, listeners, 0);
-        }
-    }
-
-    @Override
-    public void addListener(IContainerListener listener) {
-        super.addListener(listener);
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null) {
-            tMan.initGuiData(this, listener, 0);
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int id, int data) {
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null) {
-            tMan.processGuiUpdate(id, data);
-        }
-    }
-
 }

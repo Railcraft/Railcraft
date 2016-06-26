@@ -50,7 +50,6 @@ public class ContainerEngineSteam extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener crafter) {
         super.addListener(crafter);
-        tile.getTankManager().initGuiData(this, crafter, 0);
 
         PacketBuilder.instance().sendGuiIntegerPacket(crafter, windowId, 12, tile.energy);
         crafter.sendProgressBarUpdate(this, 14, Math.round(tile.currentOutput * 100));
@@ -59,7 +58,6 @@ public class ContainerEngineSteam extends RailcraftContainer {
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        tile.getTankManager().updateGuiData(this, listeners, 0);
 
         for (IContainerListener crafter : listeners) {
             if (lastEnergy != tile.energy)
@@ -76,7 +74,6 @@ public class ContainerEngineSteam extends RailcraftContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
-        tile.getTankManager().processGuiUpdate(id, value);
 
         switch (id) {
             case 12:

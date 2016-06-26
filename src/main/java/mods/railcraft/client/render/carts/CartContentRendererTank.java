@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -35,34 +36,37 @@ public class CartContentRendererTank extends CartContentRenderer {
     private void renderTank(RenderCart renderer, EntityMinecart cart, float light, float partialTicks, int x, int y, int z) {
         EntityCartTank cartTank = (EntityCartTank) cart;
         StandardTank tank = cartTank.getTankManager().get(0);
-        if (tank != null && tank.renderData.fluid != null && tank.renderData.amount > 0) {
-            int[] displayLists = FluidRenderer.getLiquidDisplayLists(tank.renderData.fluid);
-            OpenGL.glPushMatrix();
+        if (tank != null) {
+            FluidStack fluidStack = tank.getFluid();
+            if (fluidStack != null && fluidStack.amount > 0) {
+                int[] displayLists = FluidRenderer.getLiquidDisplayLists(fluidStack);
+                OpenGL.glPushMatrix();
 
-            OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
-            OpenGL.glEnable(GL11.GL_BLEND);
-            OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+                OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
+                OpenGL.glEnable(GL11.GL_BLEND);
+                OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-            OpenGL.glTranslatef(0, 0.0625f, 0);
+                OpenGL.glTranslatef(0, 0.0625f, 0);
 
-            float cap = tank.getCapacity();
-            float level = Math.min(tank.renderData.amount, cap) / cap;
+                float cap = tank.getCapacity();
+                float level = Math.min(fluidStack.amount, cap) / cap;
 
-            renderer.bindTex(FluidRenderer.getFluidSheet(tank.renderData.fluid));
-            FluidRenderer.setColorForTank(tank);
-            OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
+                renderer.bindTex(FluidRenderer.getFluidSheet(fluidStack));
+                FluidRenderer.setColorForFluid(fluidStack);
+                OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
 
-            if (cartTank.isFilling()) {
-                ResourceLocation texSheet = FluidRenderer.setupFluidTexture(tank.renderData.fluid, FluidRenderer.FlowState.FLOWING, fillBlock);
-                if (texSheet != null) {
-                    renderer.bindTex(texSheet);
-                    fillBlock.lightSource = light;
-                    CubeRenderer.render(fillBlock);
+                if (cartTank.isFilling()) {
+                    ResourceLocation texSheet = FluidRenderer.setupFluidTexture(fluidStack, FluidRenderer.FlowState.FLOWING, fillBlock);
+                    if (texSheet != null) {
+                        renderer.bindTex(texSheet);
+                        fillBlock.lightSource = light;
+                        CubeRenderer.render(fillBlock);
+                    }
                 }
-            }
 
-            OpenGL.glPopAttrib();
-            OpenGL.glPopMatrix();
+                OpenGL.glPopAttrib();
+                OpenGL.glPopMatrix();
+            }
         }
     }
 

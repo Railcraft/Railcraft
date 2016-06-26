@@ -179,14 +179,14 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        tankManager.writePacketData(data);
+//        tankManager.writePacketData(data);
         data.writeBoolean(boiler.isBurning());
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        tankManager.readPacketData(data);
+//        tankManager.readPacketData(data);
         boiler.setBurning(data.readBoolean());
     }
 

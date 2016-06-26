@@ -56,16 +56,11 @@ public class ContainerSteamOven extends RailcraftContainer {
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null) {
-            tMan.updateGuiData(this, listeners, 0);
-        }
-
         int cookTime = tile.cookTime;
 
         for (IContainerListener listener : listeners) {
             if (lastCookTime != cookTime) {
-                listener.sendProgressBarUpdate(this, 10, cookTime);
+                listener.sendProgressBarUpdate(this, 0, cookTime);
             }
         }
 
@@ -75,21 +70,13 @@ public class ContainerSteamOven extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null) {
-            tMan.initGuiData(this, listener, 0);
-        }
-        listener.sendProgressBarUpdate(this, 10, tile.cookTime);
+        listener.sendProgressBarUpdate(this, 0, tile.cookTime);
     }
 
     @Override
     public void updateProgressBar(int id, int value) {
-        TankManager tMan = tile.getTankManager();
-        if (tMan != null) {
-            tMan.processGuiUpdate(id, value);
-        }
         switch (id) {
-            case 10:
+            case 0:
                 tile.cookTime = value;
                 break;
         }

@@ -107,16 +107,6 @@ public class EntityCartTank extends CartBaseFiltered implements IFluidHandler, I
         super.onUpdate();
 
         if (Game.isClient(worldObj)) {
-            FluidStack fluidStack = getFluidStack();
-            if (fluidStack != null) {
-                tank.renderData.fluid = fluidStack.getFluid();
-                tank.renderData.amount = fluidStack.amount;
-                tank.renderData.color = tank.renderData.fluid.getColor(fluidStack);
-            } else {
-                tank.renderData.fluid = null;
-                tank.renderData.amount = 0;
-                tank.renderData.color = StandardTank.DEFAULT_COLOR;
-            }
             return;
         }
 

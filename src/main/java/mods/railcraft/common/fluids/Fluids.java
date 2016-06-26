@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
@@ -32,6 +33,10 @@ public enum Fluids {
         if (fluidStack != null && fluid == fluidStack.getFluid())
             return true;
         return fluid == null && fluidStack == null;
+    }
+
+    public static boolean areIdentical(@Nullable FluidStack fluidStackA, @Nullable FluidStack fluidStackB) {
+        return fluidStackA == fluidStackB || fluidStackA != null && fluidStackA.isFluidStackIdentical(fluidStackB);
     }
 
     public String getTag() {

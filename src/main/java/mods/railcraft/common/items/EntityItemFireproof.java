@@ -97,7 +97,7 @@ public class EntityItemFireproof extends EntityItem {
 
     @Override
     public boolean isInLava() {
-        return worldObj.isMaterialInBB(getEntityBoundingBox(), Material.lava);
+        return worldObj.isMaterialInBB(getEntityBoundingBox(), Material.LAVA);
     }
 
     @Override

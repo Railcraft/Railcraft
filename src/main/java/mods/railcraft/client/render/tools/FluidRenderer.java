@@ -9,7 +9,6 @@
  ******************************************************************************/
 package mods.railcraft.client.render.tools;
 
-import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -17,8 +16,10 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,56 +32,62 @@ public class FluidRenderer {
     private static final Map<Fluid, int[]> stillRenderCache = new HashMap<Fluid, int[]>();
     public static final int DISPLAY_STAGES = 100;
 
-    public static boolean hasTexture(Fluid fluid, boolean flowing) {
-        if (fluid == null)
-            return false;
-        ResourceLocation location = flowing ? fluid.getFlowing() : fluid.getStill();
-        return location != null;
-    }
-
     public enum FlowState {
         STILL,
         FLOWING
     }
 
-    public static TextureAtlasSprite getFluidTexture(Fluid fluid, FlowState flowState) {
-        if (fluid == null)
+    @Nullable
+    private static ResourceLocation findFluidTexture(@Nullable FluidStack fluidStack, FlowState flowState) {
+        if (fluidStack == null)
+            return null;
+        return flowState == FlowState.FLOWING ? fluidStack.getFluid().getFlowing(fluidStack) : fluidStack.getFluid().getStill(fluidStack);
+    }
+
+    public static boolean hasTexture(@Nullable FluidStack fluidStack, FlowState flowState) {
+        if (fluidStack == null)
+            return false;
+        ResourceLocation location = findFluidTexture(fluidStack, flowState);
+        return location != null;
+    }
+
+    @Nullable
+    public static TextureAtlasSprite getFluidTexture(@Nullable FluidStack fluidStack, FlowState flowState) {
+        if (fluidStack == null)
             return RenderTools.getMissingTexture();
-        ResourceLocation location = flowState == FlowState.FLOWING ? fluid.getFlowing() : fluid.getStill();
+        ResourceLocation location = findFluidTexture(fluidStack, flowState);
         return RenderTools.getTexture(location);
     }
 
-    public static ResourceLocation getFluidSheet(Fluid fluid) {
+    public static ResourceLocation getFluidSheet(@Nullable FluidStack fluidStack) {
         return TextureMap.LOCATION_BLOCKS_TEXTURE;
     }
 
-    public static ResourceLocation setupFluidTexture(Fluid fluid, FlowState flowState, CubeRenderer.RenderInfo renderInfo) {
-        if (fluid == null)
+    @Nullable
+    public static ResourceLocation setupFluidTexture(@Nullable FluidStack fluidStack, FlowState flowState, CubeRenderer.RenderInfo renderInfo) {
+        if (fluidStack == null)
             return null;
-        TextureAtlasSprite capTex = getFluidTexture(fluid, FlowState.STILL);
-        TextureAtlasSprite sideTex = getFluidTexture(fluid, flowState);
+        TextureAtlasSprite capTex = getFluidTexture(fluidStack, FlowState.STILL);
+        TextureAtlasSprite sideTex = getFluidTexture(fluidStack, flowState);
         renderInfo.setTexture(EnumFacing.UP, capTex);
         renderInfo.setTexture(EnumFacing.DOWN, capTex);
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
             renderInfo.setTexture(side, sideTex);
         }
-        return getFluidSheet(fluid);
+        return getFluidSheet(fluidStack);
     }
 
-    public static void setColorForTank(StandardTank tank) {
-        if (tank == null)
-            return;
-
-        RenderTools.setColor(tank.renderData.color);
+    public static void setColorForFluid(FluidStack fluidStack) {
+        RenderTools.setColor(fluidStack.getFluid().getColor(fluidStack));
     }
 
-    public static int[] getLiquidDisplayLists(Fluid fluid) {
-        return getLiquidDisplayLists(fluid, FlowState.STILL);
+    public static int[] getLiquidDisplayLists(FluidStack fluidStack) {
+        return getLiquidDisplayLists(fluidStack, FlowState.STILL);
     }
 
-    public static int[] getLiquidDisplayLists(Fluid fluid, FlowState flowState) {
+    public static int[] getLiquidDisplayLists(FluidStack fluidStack, FlowState flowState) {
         Map<Fluid, int[]> cache = flowState == FlowState.FLOWING ? flowingRenderCache : stillRenderCache;
-        int[] displayLists = cache.get(fluid);
+        int[] displayLists = cache.get(fluidStack.getFluid());
         if (displayLists != null)
             return displayLists;
 
@@ -88,7 +95,7 @@ public class FluidRenderer {
 
         CubeRenderer.RenderInfo renderInfo = new CubeRenderer.RenderInfo();
 
-        setupFluidTexture(fluid, flowState, renderInfo);
+        setupFluidTexture(fluidStack, flowState, renderInfo);
 
         OpenGL.glDisable(GL11.GL_LIGHTING);
         OpenGL.glDisable(GL11.GL_BLEND);
@@ -109,7 +116,7 @@ public class FluidRenderer {
         OpenGL.glEnable(GL11.GL_BLEND);
         OpenGL.glEnable(GL11.GL_LIGHTING);
 
-        cache.put(fluid, displayLists);
+        cache.put(fluidStack.getFluid(), displayLists);
 
         return displayLists;
     }

@@ -61,9 +61,6 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        tile.getTankManager().initGuiData(this, listener, 0);
-        tile.getTankManager().initGuiData(this, listener, 1);
-
         listener.sendProgressBarUpdate(this, 10, (int) Math.round(tile.boiler.burnTime));
         listener.sendProgressBarUpdate(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
         listener.sendProgressBarUpdate(this, 12, Math.round(tile.currentOutput * 100));
@@ -74,8 +71,6 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        tile.getTankManager().updateGuiData(this, listeners, 0);
-        tile.getTankManager().updateGuiData(this, listeners, 1);
 
         for (IContainerListener crafter : listeners) {
             if (lastBurnTime != tile.boiler.burnTime)
@@ -104,7 +99,6 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
-        tile.getTankManager().processGuiUpdate(id, value);
 
         switch (id) {
             case 10:

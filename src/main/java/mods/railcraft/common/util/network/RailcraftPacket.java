@@ -29,6 +29,7 @@ public abstract class RailcraftPacket {
         TILE_REQUEST,
         GUI_INTEGER,
         GUI_STRING,
+        GUI_DATA,
         GUI_WIDGET,
         EFFECT,
         CONTROLLER_REQUEST, CONTROLLER_UPDATE,

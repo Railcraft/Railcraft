@@ -11,16 +11,16 @@ package mods.railcraft.common.gui.widgets;
 import mods.railcraft.client.gui.GuiContainerRailcraft;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.io.DataInputStream;
 import java.io.IOException;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class Widget {
@@ -33,6 +33,7 @@ public class Widget {
     public final int h;
     public boolean hidden;
     protected RailcraftContainer container;
+    private byte widgetId;
 
     public Widget(int x, int y, int u, int v, int w, int h) {
         this.x = x;
@@ -45,6 +46,11 @@ public class Widget {
 
     public void addToContainer(RailcraftContainer container) {
         this.container = container;
+        widgetId = (byte) container.getWidgets().indexOf(this);
+    }
+
+    public byte getId() {
+        return widgetId;
     }
 
     @SideOnly(Side.CLIENT)
@@ -68,14 +74,14 @@ public class Widget {
         return null;
     }
 
-    public void initWidget(IContainerListener listener) {
+    public boolean hasServerSyncData(IContainerListener listener) {
+        return false;
     }
 
-    public void updateWidget(IContainerListener listener) {
+    public void writeServerSyncData(IContainerListener listener, RailcraftOutputStream data) throws IOException {
     }
 
-    @SideOnly(Side.CLIENT)
-    public void handleClientPacketData(DataInputStream data) throws IOException {
-    }
+    public void readServerSyncData(RailcraftInputStream data) throws IOException {
 
+    }
 }

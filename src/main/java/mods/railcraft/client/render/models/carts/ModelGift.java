@@ -9,9 +9,9 @@
 package mods.railcraft.client.render.models.carts;
 
 import mods.railcraft.client.render.models.ModelTextured;
+import mods.railcraft.client.render.tools.OpenGL;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 /**
@@ -23,33 +23,33 @@ public class ModelGift extends ModelTextured {
     /**
      * The chest lid in the chest's model.
      */
-    public ModelRenderer chestLid = (new ModelRenderer(this, 0, 0)).setTextureSize(64, 64);
+    public final ModelRenderer chestLid = (new ModelRenderer(this, 0, 0)).setTextureSize(64, 64);
     /**
      * The model of the bottom of the chest.
      */
-    public ModelRenderer chestBelow;
+    public final ModelRenderer chestBelow;
     /**
      * The chest's knob in the chest model.
      */
-    public ModelRenderer chestKnob;
+    public final ModelRenderer chestKnob;
 
     public ModelGift() {
         super("gift");
         setTexture("textures/entity/chest/christmas.png");
-        this.chestLid.addBox(0.0F, -5.0F, -14.0F, 14, 5, 14, 0.0F);
-        this.chestLid.rotationPointX = 1.0F;
-        this.chestLid.rotationPointY = 7.0F;
-        this.chestLid.rotationPointZ = 15.0F;
+        chestLid.addBox(0.0F, -5.0F, -14.0F, 14, 5, 14, 0.0F);
+        chestLid.rotationPointX = 1.0F;
+        chestLid.rotationPointY = 7.0F;
+        chestLid.rotationPointZ = 15.0F;
         this.chestKnob = (new ModelRenderer(this, 0, 0)).setTextureSize(64, 64);
-        this.chestKnob.addBox(-1.0F, -2.0F, -15.0F, 2, 4, 1, 0.0F);
-        this.chestKnob.rotationPointX = 8.0F;
-        this.chestKnob.rotationPointY = 7.0F;
-        this.chestKnob.rotationPointZ = 15.0F;
+        chestKnob.addBox(-1.0F, -2.0F, -15.0F, 2, 4, 1, 0.0F);
+        chestKnob.rotationPointX = 8.0F;
+        chestKnob.rotationPointY = 7.0F;
+        chestKnob.rotationPointZ = 15.0F;
         this.chestBelow = (new ModelRenderer(this, 0, 19)).setTextureSize(64, 64);
-        this.chestBelow.addBox(0.0F, 0.0F, 0.0F, 14, 10, 14, 0.0F);
-        this.chestBelow.rotationPointX = 1.0F;
-        this.chestBelow.rotationPointY = 6.0F;
-        this.chestBelow.rotationPointZ = 1.0F;
+        chestBelow.addBox(0.0F, 0.0F, 0.0F, 14, 10, 14, 0.0F);
+        chestBelow.rotationPointX = 1.0F;
+        chestBelow.rotationPointY = 6.0F;
+        chestBelow.rotationPointZ = 1.0F;
     }
 
     @Override
@@ -61,10 +61,10 @@ public class ModelGift extends ModelTextured {
         OpenGL.glTranslatef(0.5F, 0.5F, 0.5F);
         OpenGL.glRotatef(-90, 0.0F, 1.0F, 0.0F);
         OpenGL.glTranslatef(-0.5F, -0.5F, -0.5F);
-        this.chestKnob.rotateAngleX = this.chestLid.rotateAngleX;
-        this.chestLid.render(0.0625F);
-        this.chestKnob.render(0.0625F);
-        this.chestBelow.render(0.0625F);
+        chestKnob.rotateAngleX = chestLid.rotateAngleX;
+        chestLid.render(0.0625F);
+        chestKnob.render(0.0625F);
+        chestBelow.render(0.0625F);
         OpenGL.glPopMatrix();
     }
 }

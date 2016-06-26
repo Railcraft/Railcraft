@@ -13,10 +13,8 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin.NBTList;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
-import mods.railcraft.common.util.network.PacketBuilder;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -24,8 +22,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
 
 import javax.annotation.Nullable;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,115 +88,15 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
         }
     }
 
-    public void writePacketData(DataOutputStream data) throws IOException {
-        for (int i = 0; i < tanks.size(); i++) {
-            writePacketData(data, i);
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
+        for (StandardTank tank : tanks) {
+            data.writeFluidStack(tank.getFluid());
         }
     }
 
-    public void writePacketData(DataOutputStream data, int tankIndex) throws IOException {
-        if (tankIndex >= tanks.size())
-            return;
-        StandardTank tank = tanks.get(tankIndex);
-        FluidStack fluidStack = tank.getFluid();
-        if (fluidStack != null) {
-            data.writeShort(FluidHelper.getFluidId(fluidStack));
-            data.writeInt(fluidStack.amount);
-            data.writeInt(fluidStack.getFluid().getColor(fluidStack));
-        } else
-            data.writeShort(-1);
-    }
-
-    public void readPacketData(DataInputStream data) throws IOException {
-        for (int i = 0; i < tanks.size(); i++) {
-            readPacketData(data, i);
-        }
-    }
-
-    public void readPacketData(DataInputStream data, int tankIndex) throws IOException {
-        if (tankIndex >= tanks.size())
-            return;
-        StandardTank tank = tanks.get(tankIndex);
-        int fluidId = data.readShort();
-        if (fluidId != -1) {
-            tank.renderData.fluid = FluidRegistry.getFluid(fluidId);
-            tank.renderData.amount = data.readInt();
-            tank.renderData.color = data.readInt();
-        } else
-            tank.renderData.reset();
-    }
-
-    public void initGuiData(Container container, IContainerListener listener, int tankIndex) {
-        if (tankIndex >= tanks.size())
-            return;
-        StandardTank tank = tanks.get(tankIndex);
-        FluidStack fluidStack = tanks.get(tankIndex).getFluid();
-        int color = tank.getColor();
-        int fluidId = -1;
-        int fluidAmount = 0;
-        if (fluidStack != null && fluidStack.amount > 0) {
-            //TODO: fix this...somehow...
-            fluidId = fluidStack.getFluid().getID();
-            fluidAmount = fluidStack.amount;
-        }
-
-        listener.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
-        PacketBuilder.instance().sendGuiIntegerPacket(listener, container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
-        PacketBuilder.instance().sendGuiIntegerPacket(listener, container.windowId, tankIndex * NETWORK_DATA + 2, color);
-
-        tank.renderData.fluid = tank.getFluidType();
-        tank.renderData.amount = fluidAmount;
-        tank.renderData.color = color;
-    }
-
-    public void updateGuiData(Container container, List<IContainerListener> listeners, int tankIndex) {
-        StandardTank tank = tanks.get(tankIndex);
-        FluidStack fluidStack = tank.getFluid();
-        int color = tank.getColor();
-        int pColor = tank.renderData.color;
-
-        for (IContainerListener crafter : listeners) {
-            EntityPlayerMP player = (EntityPlayerMP) crafter;
-            if (fluidStack == null ^ tank.renderData.fluid == null) {
-                int fluidId = -1;
-                int fluidAmount = 0;
-                if (fluidStack != null) {
-                    fluidId = FluidHelper.getFluidId(fluidStack);
-                    fluidAmount = fluidStack.amount;
-                }
-                crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
-                PacketBuilder.instance().sendGuiIntegerPacket(player, container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
-            } else if (fluidStack != null && tank.renderData.fluid != null) {
-                if (fluidStack.getFluid() != tank.renderData.fluid)
-                    crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, FluidHelper.getFluidId(fluidStack));
-                if (fluidStack.amount != tank.renderData.amount)
-                    PacketBuilder.instance().sendGuiIntegerPacket(player, container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
-                if (color != pColor)
-                    PacketBuilder.instance().sendGuiIntegerPacket(player, container.windowId, tankIndex * NETWORK_DATA + 2, color);
-            }
-        }
-
-        tank.renderData.fluid = tank.getFluidType();
-        tank.renderData.amount = tank.getFluidAmount();
-        tank.renderData.color = color;
-    }
-
-    public void processGuiUpdate(int messageId, int data) {
-        int tankIndex = messageId / NETWORK_DATA;
-
-        if (tankIndex >= tanks.size())
-            return;
-        StandardTank tank = tanks.get(tankIndex);
-        switch (messageId % NETWORK_DATA) {
-            case 0:
-                tank.renderData.fluid = FluidRegistry.getFluid(data);
-                break;
-            case 1:
-                tank.renderData.amount = data;
-                break;
-            case 2:
-                tank.renderData.color = data;
-                break;
+    public void readPacketData(RailcraftInputStream data) throws IOException {
+        for (StandardTank tank : tanks) {
+            tank.setFluid(data.readFluidStack());
         }
     }
 

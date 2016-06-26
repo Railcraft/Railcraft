@@ -58,7 +58,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         if (playerInv.getItemStack() == null) {
             int mX = mouseX - left;
             int mY = mouseY - top;
-            for (Widget element : container.getElements()) {
+            for (Widget element : container.getWidgets()) {
                 if (element.hidden)
                     continue;
                 ToolTip tips = element.getToolTip();
@@ -121,7 +121,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         int mX = mouseX - guiLeft;
         int mY = mouseY - guiTop;
 
-        for (Widget element : container.getElements()) {
+        for (Widget element : container.getWidgets()) {
             if (element.hidden)
                 continue;
             element.draw(this, x, y, mX, mY);
@@ -197,7 +197,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         int mX = mouseX - guiLeft;
         int mY = mouseY - guiTop;
 
-        for (Widget element : container.getElements()) {
+        for (Widget element : container.getWidgets()) {
             if (element.hidden)
                 continue;
             if (!element.isMouseOver(mX, mY))

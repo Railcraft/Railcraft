@@ -16,9 +16,9 @@ import mods.railcraft.client.render.carts.LocomotiveRenderer;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.ItemLocomotive;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 //TODO: utterly broken
-public class RenderItemLocomotive implements IItemRenderer, ICartRenderer {
+public class RenderItemLocomotive implements ItemMeshDefinition, ICartRenderer {
 
     private final LocomotiveRenderType renderType;
     private final EntityLocomotive entity;

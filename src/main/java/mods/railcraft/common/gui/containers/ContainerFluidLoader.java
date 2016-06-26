@@ -15,10 +15,7 @@ import mods.railcraft.common.gui.slots.SlotMinecartFilter;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerFluidLoader extends RailcraftContainer {
 
@@ -46,23 +43,4 @@ public class ContainerFluidLoader extends RailcraftContainer {
             addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
         }
     }
-
-    @Override
-    public void addListener(IContainerListener listener) {
-        super.addListener(listener);
-        tile.getTankManager().initGuiData(this, listener, 0);
-    }
-
-    @Override
-    public void sendUpdateToClient() {
-        super.sendUpdateToClient();
-        tile.getTankManager().updateGuiData(this, listeners, 0);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int id, int data) {
-        tile.getTankManager().processGuiUpdate(id, data);
-    }
-
 }

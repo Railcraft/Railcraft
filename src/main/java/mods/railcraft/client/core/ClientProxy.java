@@ -9,21 +9,19 @@
 package mods.railcraft.client.core;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.client.render.broken.*;
+import mods.railcraft.client.render.broken.BlockRenderer;
+import mods.railcraft.client.render.broken.RenderCartItemFiltered;
+import mods.railcraft.client.render.broken.RenderItemLocomotive;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid;
 import mods.railcraft.client.render.tesr.*;
 import mods.railcraft.client.util.sounds.RCSoundHandler;
-import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
-import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
-import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
-import mods.railcraft.common.blocks.aesthetics.wall.BlockRailcraftWall;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.beta.*;
+import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
+import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
 import mods.railcraft.common.blocks.signals.TileSignalFoundation;
 import mods.railcraft.common.blocks.tracks.TileTrackTESR;
@@ -38,8 +36,7 @@ import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
@@ -52,7 +49,6 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
@@ -103,17 +99,17 @@ public class ClientProxy extends CommonProxy {
         LocomotiveRenderType.STEAM_MAGIC.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));
         LocomotiveRenderType.ELECTRIC.registerRenderer(new LocomotiveRendererElectric());
 
-        ItemStack stack = LocomotiveRenderType.STEAM_SOLID.getItemWithRenderer("railcraft:default");
-        if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.STEAM_SOLID, (EntityLocomotive) EnumCart.LOCO_STEAM_SOLID.makeCart(stack, null, 0, 0, 0)));
+//        ItemStack stack = LocomotiveRenderType.STEAM_SOLID.getItemWithRenderer("railcraft:default");
+//        if (stack != null)
+//            registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.STEAM_SOLID, (EntityLocomotive) EnumCart.LOCO_STEAM_SOLID.makeCart(stack, null, 0, 0, 0)));
 
-        stack = LocomotiveRenderType.STEAM_MAGIC.getItemWithRenderer("railcraft:default");
-        if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.STEAM_MAGIC, (EntityLocomotive) EnumCart.LOCO_STEAM_MAGIC.makeCart(stack, null, 0, 0, 0)));
+//        stack = LocomotiveRenderType.STEAM_MAGIC.getItemWithRenderer("railcraft:default");
+//        if (stack != null)
+//            registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.STEAM_MAGIC, (EntityLocomotive) EnumCart.LOCO_STEAM_MAGIC.makeCart(stack, null, 0, 0, 0)));
 
-        stack = LocomotiveRenderType.ELECTRIC.getItemWithRenderer("railcraft:default");
-        if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.ELECTRIC, (EntityLocomotive) EnumCart.LOCO_ELECTRIC.makeCart(stack, null, 0, 0, 0)));
+//        stack = LocomotiveRenderType.ELECTRIC.getItemWithRenderer("railcraft:default");
+//        if (stack != null)
+//            registerItemRenderer(stack.getItem(), new RenderItemLocomotive(LocomotiveRenderType.ELECTRIC, (EntityLocomotive) EnumCart.LOCO_ELECTRIC.makeCart(stack, null, 0, 0, 0)));
 
         bindTESR(EnumMachineAlpha.TURBINE, TESRTurbineGauge::new);
 
@@ -137,43 +133,39 @@ public class ClientProxy extends CommonProxy {
 
         bindTESR(TileSignalFoundation.class, TESRSignals::new);
 
-        if (RailcraftBlocks.track.block() != null)
-            RenderingRegistry.registerBlockHandler(new RenderTrack());
+        //TODO: this needs a smart model or something
+//        if (RailcraftBlocks.track.block() != null)
+//            RenderingRegistry.registerBlockHandler(new RenderTrack());
 
-        if (RailcraftBlocksOld.getBlockElevator() != null)
-            RenderingRegistry.registerBlockHandler(new RenderElevator());
+//        if (RailcraftBlocksOld.getBlockElevator() != null)
+//            RenderingRegistry.registerBlockHandler(new RenderElevator());
 
-        registerBlockRenderer(new RenderBlockMachineBeta());
-        registerBlockRenderer(new RenderBlockMachineDelta());
-        registerBlockRenderer(new RenderBlockSignal());
-        registerBlockRenderer(RenderBlockPost.make());
-        registerBlockRenderer(RenderBlockPostMetal.make(BlockPostMetal.post));
-        registerBlockRenderer(RenderBlockPostMetal.make(BlockPostMetal.platform));
-        registerBlockRenderer(new RenderBlockOre());
-        registerBlockRenderer(new RenderBlockFrame());
-        registerBlockRenderer(new RenderBlockStrengthGlass());
-        registerBlockRenderer(new RenderBlockLamp(BlockLantern.getBlockStone()));
-        registerBlockRenderer(new RenderBlockLamp(BlockLantern.getBlockMetal()));
-        registerBlockRenderer(new RenderWall(BlockRailcraftWall.getBlockAlpha()));
-        registerBlockRenderer(new RenderWall(BlockRailcraftWall.getBlockBeta()));
-        registerBlockRenderer(new RenderStair());
-        registerBlockRenderer(new RenderSlab());
+//        registerBlockRenderer(new RenderBlockMachineBeta());
+//        registerBlockRenderer(new RenderBlockMachineDelta());
+//        registerBlockRenderer(new RenderBlockSignal());
+//        registerBlockRenderer(RenderBlockPost.make());
+//        registerBlockRenderer(RenderBlockPostMetal.make(BlockPostMetal.post));
+//        registerBlockRenderer(RenderBlockPostMetal.make(BlockPostMetal.platform));
+//        registerBlockRenderer(new RenderBlockOre());
+//        registerBlockRenderer(new RenderBlockFrame());
+//        registerBlockRenderer(new RenderBlockStrengthGlass());
+//        registerBlockRenderer(new RenderBlockLamp(BlockLantern.getBlockStone()));
+//        registerBlockRenderer(new RenderBlockLamp(BlockLantern.getBlockMetal()));
+//        registerBlockRenderer(new RenderWall(BlockRailcraftWall.getBlockAlpha()));
+//        registerBlockRenderer(new RenderWall(BlockRailcraftWall.getBlockBeta()));
+//        registerBlockRenderer(new RenderStair());
+//        registerBlockRenderer(new RenderSlab());
 
-        RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, new RenderTunnelBore());
-        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, new IRenderFactory<EntityMinecart>() {
-            @Override
-            public Render<? super EntityMinecart> createRenderFor(RenderManager manager) {
-                return new RenderCart(manager);
-            }
-        });
+        RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, RenderTunnelBore::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, RenderCart::new);
 
-        stack = EnumCart.TANK.getCartItem();
-        if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Tank));
-
-        stack = EnumCart.CARGO.getCartItem();
-        if (stack != null)
-            MinecraftForgeClient.registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Cargo));
+//        stack = EnumCart.TANK.getCartItem();
+//        if (stack != null)
+//            registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Tank));
+//
+//        stack = EnumCart.CARGO.getCartItem();
+//        if (stack != null)
+//            registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Cargo));
 
         if (RailcraftConfig.isWorldGenEnabled("workshop")) {
             int id = RailcraftConfig.villagerID();
@@ -195,18 +187,23 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(machineType.getTileClass().asSubclass(TileEntity.class), factory.apply(machineType));
     }
 
+    //TODO: no idea if ItemMeshDefinition will do what I need to do
+    private void registerItemRenderer(Item item, ItemMeshDefinition itemMesh) {
+//        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, itemMesh);
+    }
+
     private void registerBlockRenderer(BlockRenderer renderer) {
-        if (renderer.getBlock() != null) {
-            RenderingRegistry.registerBlockHandler(renderer);
-            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(renderer.getBlock()), renderer.getItemRenderer());
-        }
+//        if (renderer.getBlock() != null) {
+//            RenderingRegistry.registerBlockHandler(renderer);
+//            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(renderer.getBlock()), renderer.getItemRenderer());
+//        }
     }
 
     public static class TextureHook {
         @SubscribeEvent
         public void textureStitch(TextureStitchEvent.Pre event) {
-            CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.map.registerSprite(new ResourceLocation("railcraft:cart.redstone.flux")));
-            CartContentRendererRedstoneFlux.instance().setFrameIcon(event.map.registerSprite(new ResourceLocation("railcraft:cart.redstone.flux.frame")));
+            CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:cart.redstone.flux")));
+            CartContentRendererRedstoneFlux.instance().setFrameIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:cart.redstone.flux.frame")));
         }
     }
 }

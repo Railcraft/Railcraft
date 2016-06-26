@@ -47,10 +47,10 @@ public class EntityItemFirestone extends EntityItemFireproof {
         if (worldObj.isRemote)
             return;
         BlockPos surface = new BlockPos(posX, posY, posZ);
-        if (WorldPlugin.getBlockMaterial(worldObj, surface) == Material.lava || WorldPlugin.getBlockMaterial(worldObj, surface.up()) == Material.lava)
+        if (WorldPlugin.getBlockMaterial(worldObj, surface) == Material.LAVA || WorldPlugin.getBlockMaterial(worldObj, surface.up()) == Material.LAVA)
             for (int i = 0; i < 10; i++) {
                 surface = surface.up();
-                if (WorldPlugin.isBlockAir(worldObj, surface) && WorldPlugin.getBlockMaterial(worldObj, surface.down()) == Material.lava) {
+                if (WorldPlugin.isBlockAir(worldObj, surface) && WorldPlugin.getBlockMaterial(worldObj, surface.down()) == Material.LAVA) {
                     boolean cracked = getEntityItem().getItem() instanceof ItemFirestoneCracked;
                     WorldPlugin.setBlockState(worldObj, surface, BlockFirestoneRecharge.getBlock().getDefaultState().withProperty(BlockFirestoneRecharge.CRACKED, cracked));
                     TileEntity tile = WorldPlugin.getBlockTile(worldObj, surface);

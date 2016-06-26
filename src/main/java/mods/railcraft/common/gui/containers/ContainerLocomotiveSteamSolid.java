@@ -9,7 +9,6 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.carts.EntityLocomotiveSteamSolid;
-import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.gui.slots.SlotFuel;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotWaterLimited;
@@ -56,10 +55,6 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        TankManager tMan = loco.getTankManager();
-        tMan.initGuiData(this, listener, 0);
-        tMan.initGuiData(this, listener, 1);
-
         listener.sendProgressBarUpdate(this, 20, (int) Math.round(loco.boiler.burnTime));
         listener.sendProgressBarUpdate(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
         listener.sendProgressBarUpdate(this, 22, (int) Math.round(loco.boiler.getHeat()));
@@ -68,10 +63,6 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
-        TankManager tMan = loco.getTankManager();
-        tMan.updateGuiData(this, listeners, 0);
-        tMan.updateGuiData(this, listeners, 1);
-
         for (IContainerListener listener : listeners) {
             if (lastBurnTime != loco.boiler.burnTime)
                 listener.sendProgressBarUpdate(this, 20, (int) Math.round(loco.boiler.burnTime));
@@ -92,8 +83,6 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
         super.updateProgressBar(id, value);
-        TankManager tMan = loco.getTankManager();
-        tMan.processGuiUpdate(id, value);
 
         switch (id) {
             case 20:

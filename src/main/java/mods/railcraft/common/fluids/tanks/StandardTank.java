@@ -24,7 +24,6 @@ import java.util.Locale;
  */
 public class StandardTank extends FluidTank {
     public static final int DEFAULT_COLOR = 0xFFFFFF;
-    public final TankRenderData renderData = new TankRenderData();
     protected final ToolTip toolTip = new ToolTip() {
         @Override
         public void refresh() {
@@ -97,14 +96,15 @@ public class StandardTank extends FluidTank {
     protected void refreshTooltip() {
         toolTip.clear();
         int amount = 0;
-        if (renderData.fluid != null && renderData.amount > 0) {
-            EnumRarity rarity = renderData.fluid.getRarity();
+        FluidStack fluidStack = getFluid();
+        if (fluidStack != null && fluidStack.amount > 0) {
+            EnumRarity rarity = fluidStack.getFluid().getRarity();
             if (rarity == null)
                 rarity = EnumRarity.COMMON;
-            ToolTipLine fluidName = new ToolTipLine(renderData.fluid.getLocalizedName(new FluidStack(renderData.fluid, renderData.amount)), rarity.rarityColor);
+            ToolTipLine fluidName = new ToolTipLine(fluidStack.getLocalizedName(), rarity.rarityColor);
             fluidName.setSpacing(2);
             toolTip.add(fluidName);
-            amount = renderData.amount;
+            amount = fluidStack.amount;
         }
         toolTip.add(new ToolTipLine(String.format(Locale.ENGLISH, "%,d / %,d", amount, getCapacity())));
     }

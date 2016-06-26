@@ -12,6 +12,7 @@ import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.Widget;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.network.PacketBuilder;
+import mods.railcraft.common.util.network.RailcraftInputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
@@ -21,8 +22,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.io.DataInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public abstract class RailcraftContainer extends Container {
         this.callback = null;
     }
 
-    public Iterable<Widget> getElements() {
+    public List<Widget> getWidgets() {
         return widgets;
     }
 
@@ -58,9 +57,7 @@ public abstract class RailcraftContainer extends Container {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        for (Widget widget : widgets) {
-            widget.initWidget(listener);
-        }
+        sendWidgetsServerData();
     }
 
     @Override
@@ -68,25 +65,27 @@ public abstract class RailcraftContainer extends Container {
         super.detectAndSendChanges();
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
             sendUpdateToClient();
-            for (Widget widget : widgets) {
-                listeners.forEach(widget::updateWidget);
-            }
+            sendWidgetsServerData();
         }
+    }
+
+    private void sendWidgetsServerData() {
+        widgets.stream().forEach(this::sendWidgetServerData);
+    }
+
+    private void sendWidgetServerData(Widget widget) {
+        listeners.forEach(l -> PacketBuilder.instance().sendGuiWidgetPacket(l, windowId, widget));
     }
 
     public void sendUpdateToClient() {
     }
 
-    public void sendWidgetDataToClient(Widget widget, IContainerListener player, byte[] data) {
-        PacketBuilder.instance().sendGuiWidgetPacket(player, windowId, widgets.indexOf(widget), data);
-    }
-
-    public void handleWidgetClientData(int widgetId, DataInputStream data) throws IOException {
-        widgets.get(widgetId).handleClientPacketData(data);
+    @SideOnly(Side.CLIENT)
+    public void updateString(byte id, String data) {
     }
 
     @SideOnly(Side.CLIENT)
-    public void updateString(byte id, String data) {
+    public void updateData(byte id, RailcraftInputStream data) {
     }
 
     @Override
