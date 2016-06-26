@@ -1,13 +1,13 @@
 package thaumcraft.api.golems.tasks;
 
-import java.util.UUID;
-
 import net.minecraft.entity.Entity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import thaumcraft.api.golems.GolemHelper;
 import thaumcraft.api.golems.IGolemAPI;
 import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.seals.SealPos;
+
+import java.util.UUID;
 
 public class Task {
 
@@ -135,7 +135,7 @@ public class Task {
 	}
 
 	public boolean canGolemPerformTask(IGolemAPI golem) {
-		ISealEntity se = GolemHelper.getSealEntity(golem.getGolemWorld().provider.getDimensionId(), this.sealPos);
+		ISealEntity se = GolemHelper.getSealEntity(golem.getGolemWorld().provider.getDimension(), this.sealPos);
 		if (se!=null) {
 			if (golem.getGolemColor()>0 && se.getColor()>0 && golem.getGolemColor() != se.getColor()) return false;
 			return se.getSeal().canGolemPerformTask(golem,this);

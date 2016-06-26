@@ -17,7 +17,7 @@ public class PotionFluxTaint extends Potion
     
     public PotionFluxTaint(boolean par2, int par3)
     {
-    	super(new ResourceLocation("flux_taint"),par2,par3);
+    	super(par2,par3);
     	setIconIndex(0, 0);
     }
     

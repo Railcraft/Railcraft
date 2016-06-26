@@ -3,12 +3,13 @@ package thaumcraft.api.blocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * 
@@ -36,10 +37,11 @@ public class TileThaumcraft extends TileEntity {
     }
 
 	@Override
-    public void writeToNBT(NBTTagCompound nbt)
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
         writeCustomNBT(nbt);
+		return nbt;
     }
 	
 	public void writeCustomNBT(NBTTagCompound nbt)
@@ -48,15 +50,21 @@ public class TileThaumcraft extends TileEntity {
     }
 	
 	//Client Packet stuff
+	@Nullable
 	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound nbt = new NBTTagCompound();
-        this.writeCustomNBT(nbt);
-        return new S35PacketUpdateTileEntity(this.getPos(), -999, nbt);
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(this.getPos(), -999,  this.getUpdateTag());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		this.writeCustomNBT(nbt);
+		return nbt;
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		super.onDataPacket(net, pkt);		
 		this.readCustomNBT(pkt.getNbtCompound());
 	}

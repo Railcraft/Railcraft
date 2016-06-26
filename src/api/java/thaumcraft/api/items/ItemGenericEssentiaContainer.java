@@ -1,7 +1,5 @@
 package thaumcraft.api.items;
 
-import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +12,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IEssentiaContainerItem;
+
+import java.util.List;
 
 public class ItemGenericEssentiaContainer extends Item implements IEssentiaContainerItem
 {
@@ -38,16 +38,16 @@ public class ItemGenericEssentiaContainer extends Item implements IEssentiaConta
 		}
 	}
 	    
-	@SideOnly(Side.CLIENT)
-    @Override
-    public int getColorFromItemStack(ItemStack stack, int par2) 
-    {
-    	if (getAspects(stack)!=null) {
-    		return  getAspects(stack).getAspects()[0].getColor();
-    	} else {
-    		return  16777215;
-    	}
-    }
+//	@SideOnly(Side.CLIENT)
+//    @Override
+//    public int getColorFromItemStack(ItemStack stack, int par2)
+//    {
+//    	if (getAspects(stack)!=null) {
+//    		return  getAspects(stack).getAspects()[0].getColor();
+//    	} else {
+//    		return  16777215;
+//    	}
+//    }
     
 	@Override
 	public AspectList getAspects(ItemStack itemstack) {

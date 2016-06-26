@@ -1,17 +1,17 @@
 package thaumcraft.api.golems;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.golems.seals.ISeal;
 import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.seals.SealPos;
 import thaumcraft.api.golems.tasks.Task;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GolemHelper {
 
@@ -48,9 +48,9 @@ public class GolemHelper {
 	 * @param stack the stack requested. Can accept wildcard values.
 	 */
 	public static void requestProvisioning(World world, ISealEntity seal, ItemStack stack) {
-		if (!provisionRequests.containsKey(world.provider.getDimensionId()))
-			provisionRequests.put(world.provider.getDimensionId(), new ArrayList<ProvisionRequest>());
-		ArrayList<ProvisionRequest> list = provisionRequests.get(world.provider.getDimensionId());
+		if (!provisionRequests.containsKey(world.provider.getDimension()))
+			provisionRequests.put(world.provider.getDimension(), new ArrayList<ProvisionRequest>());
+		ArrayList<ProvisionRequest> list = provisionRequests.get(world.provider.getDimension());
 		ProvisionRequest pr = new ProvisionRequest(seal,stack.copy());
 		if (!list.contains(pr))
 			list.add(pr);
@@ -91,7 +91,7 @@ public class GolemHelper {
 	 * @return
 	 */
 	public static AxisAlignedBB getBoundsForArea(ISealEntity seal) {
-		return AxisAlignedBB.fromBounds(
+		return new AxisAlignedBB(
 				seal.getSealPos().pos.getX(), seal.getSealPos().pos.getY(), seal.getSealPos().pos.getZ(), 
 				seal.getSealPos().pos.getX()+1, seal.getSealPos().pos.getY()+1, seal.getSealPos().pos.getZ()+1)
 				.offset(

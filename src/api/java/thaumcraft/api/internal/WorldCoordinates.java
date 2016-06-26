@@ -2,7 +2,7 @@ package thaumcraft.api.internal;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 public class WorldCoordinates implements Comparable
 {
@@ -21,7 +21,7 @@ public class WorldCoordinates implements Comparable
     public WorldCoordinates(TileEntity tile)
     {
         this.pos = tile.getPos();
-        this.dim = tile.getWorld().provider.getDimensionId();
+        this.dim = tile.getWorld().provider.getDimension();
     }
 
     public WorldCoordinates(WorldCoordinates par1ChunkCoordinates)
