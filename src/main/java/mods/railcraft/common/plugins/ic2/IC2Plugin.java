@@ -14,10 +14,7 @@ import ic2.api.energy.tile.IEnergyTile;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IC2Items;
 import ic2.api.item.IElectricItem;
-import ic2.api.recipe.IRecipeInput;
-import ic2.api.recipe.RecipeInputItemStack;
-import ic2.api.recipe.RecipeOutput;
-import ic2.api.recipe.Recipes;
+import ic2.api.recipe.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Items;
@@ -94,7 +91,6 @@ public class IC2Plugin {
     }
 
     /**
-     * @param stack
      * @return energy used
      */
     public static double chargeItem(ItemStack stack, double energy, int tier) {
@@ -108,7 +104,6 @@ public class IC2Plugin {
     }
 
     /**
-     * @param stack
      * @return energy received
      */
     public static double dischargeItem(ItemStack stack, double energyNeeded, int tier) {
@@ -155,12 +150,11 @@ public class IC2Plugin {
 
     public static void removeMaceratorRecipes(ItemStack... items) {
         try {
-            Map<IRecipeInput, RecipeOutput> recipes = Recipes.macerator.getRecipes();
 
-            Iterator<Entry<IRecipeInput, RecipeOutput>> it = recipes.entrySet().iterator();
+            Iterator<IMachineRecipeManager.RecipeIoContainer> it = Recipes.macerator.getRecipes().iterator();
             while (it.hasNext()) {
-                Entry<IRecipeInput, RecipeOutput> entry = it.next();
-                if (doesRecipeRequire(entry.getKey(), items) || doesRecipeProduce(entry.getValue(), items))
+                IMachineRecipeManager.RecipeIoContainer recipe = it.next();
+                if (doesRecipeRequire(recipe.input, items) || doesRecipeProduce(recipe.output, items))
                     it.remove();
             }
         } catch (Throwable error) {
