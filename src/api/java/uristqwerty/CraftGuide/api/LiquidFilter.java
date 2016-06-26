@@ -1,8 +1,5 @@
 package uristqwerty.CraftGuide.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -11,8 +8,10 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-
 import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LiquidFilter implements ItemFilter
 {
@@ -77,11 +76,11 @@ public class LiquidFilter implements ItemFilter
 			TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 
 			Fluid fluid = liquid.getFluid();
-			TextureAtlasSprite icon = fluid.getStillIcon();
+			TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getStill(liquid).toString());
 
 			if(icon != null)
 			{
-				textureManager.bindTexture(TextureMap.locationBlocksTexture);
+				textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
                 double u = icon.getInterpolatedU(3.0);
                 double u2 = icon.getInterpolatedU(13.0);
