@@ -47,11 +47,6 @@ public class ApothecariesBackpack extends BaseBackpack implements IBackpackDefin
     }
 
     @Override
-    public String getKey() {
-        return "APOTHECARY";
-    }
-
-    @Override
     public int getPrimaryColour() {
         return 16262179;
     }

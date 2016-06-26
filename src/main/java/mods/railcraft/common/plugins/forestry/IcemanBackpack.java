@@ -76,11 +76,6 @@ public class IcemanBackpack extends BaseBackpack {
     }
 
     @Override
-    public String getKey() {
-        return "ICEMAN";
-    }
-
-    @Override
     public int getPrimaryColour() {
         return 0xFFFFFF;
     }

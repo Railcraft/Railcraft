@@ -13,7 +13,6 @@ import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftBlocksOld;
-import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -44,15 +43,15 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
 
     public void setup() {
 
-        for (ResourceLocation id : Block.blockRegistry.getKeys()) {
-            Block block = Block.blockRegistry.getObject(id);
+        for (ResourceLocation id : Block.REGISTRY.getKeys()) {
+            Block block = Block.REGISTRY.getObject(id);
             if (block == null) continue;
             if (TrackTools.isRailBlock(block))
                 add(block);
         }
 
-        for (ResourceLocation id : Item.itemRegistry.getKeys()) {
-            Item item = Item.itemRegistry.getObject(id);
+        for (ResourceLocation id : Item.REGISTRY.getKeys()) {
+            Item item = Item.REGISTRY.getObject(id);
             if (item instanceof ItemMinecart || item instanceof IMinecartItem)
                 add(item);
         }
@@ -91,11 +90,6 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
         add(RailcraftBlocksOld.getBlockElevator());
         add(RailcraftBlocks.signal);
         add(RailcraftBlocks.detector);
-    }
-
-    @Override
-    public String getKey() {
-        return "TRACKMAN";
     }
 
     @Override

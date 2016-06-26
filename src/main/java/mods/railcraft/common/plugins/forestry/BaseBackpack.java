@@ -44,6 +44,11 @@ public abstract class BaseBackpack implements IBackpackDefinition {
         }
     }
 
+    @Override
+    public void addValidOreDictName(String oreDictName) {
+        add(StackFilters.ofOreType(oreDictName));
+    }
+
     public void add(ItemStack stack) {
         if (stack == null) return;
         items.add(stack);
@@ -73,7 +78,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
     }
 
     @Override
-    public boolean isValidItem(ItemStack pickup) {
+    public boolean test(ItemStack pickup) {
         for (Predicate<ItemStack> filter : filters) {
             if (filter.apply(pickup))
                 return true;

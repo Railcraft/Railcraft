@@ -13,7 +13,7 @@ package mods.railcraft.common.util.inventory.filters;
 import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.inventory.IInventory;
+import mods.railcraft.common.util.inventory.wrappers.InventoryObject;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -136,7 +136,7 @@ public final class StackFilters {
     /**
      * Matches if the Inventory contains the given ItemStack.
      */
-    public static StackFilter containedIn(@Nonnull final IInventory inv) {
+    public static StackFilter containedIn(@Nonnull final InventoryObject inv) {
         return new StackFilter() {
 
             @Override

@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.plugins.forestry;
 
+import forestry.api.storage.EnumBackpackType;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -114,7 +115,7 @@ public class ForestryPlugin {
 
                 String tag = "railcraft.backpack.trackman.t1";
                 if (RailcraftConfig.isItemEnabled(tag)) {
-                    trackmanBackpackT1 = registerBackpack(TrackmanBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T1, tag);
+                    trackmanBackpackT1 = registerBackpack(TrackmanBackpack.getInstance(), EnumBackpackType.NORMAL, tag);
 
                     ItemStack output = new ItemStack(trackmanBackpackT1);
                     addBackpackTooltip(output);
@@ -130,7 +131,7 @@ public class ForestryPlugin {
 
                 tag = "railcraft.backpack.trackman.t2";
                 if (RailcraftConfig.isItemEnabled(tag)) {
-                    trackmanBackpackT2 = registerBackpack(TrackmanBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T2, tag);
+                    trackmanBackpackT2 = registerBackpack(TrackmanBackpack.getInstance(), EnumBackpackType.WOVEN, tag);
 
                     ItemStack silk = getItem("craftingMaterial");
 
@@ -150,7 +151,7 @@ public class ForestryPlugin {
 
                 tag = "railcraft.backpack.iceman.t1";
                 if (RailcraftConfig.isItemEnabled(tag)) {
-                    icemanBackpackT1 = registerBackpack(IcemanBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T1, tag);
+                    icemanBackpackT1 = registerBackpack(IcemanBackpack.getInstance(), EnumBackpackType.NORMAL, tag);
 
                     ItemStack output = new ItemStack(icemanBackpackT1);
                     addBackpackTooltip(output);
@@ -166,7 +167,7 @@ public class ForestryPlugin {
 
                 tag = "railcraft.backpack.iceman.t2";
                 if (RailcraftConfig.isItemEnabled(tag)) {
-                    icemanBackpackT2 = registerBackpack(IcemanBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T2, tag);
+                    icemanBackpackT2 = registerBackpack(IcemanBackpack.getInstance(), EnumBackpackType.WOVEN, tag);
 
                     ItemStack silk = getItem("craftingMaterial");
 
@@ -189,7 +190,7 @@ public class ForestryPlugin {
 
                 tag = "railcraft.backpack.apothecary.t1";
                 if (RailcraftConfig.isItemEnabled(tag)) {
-                    apothecariesBackpackT1 = registerBackpack(ApothecariesBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T1, tag);
+                    apothecariesBackpackT1 = registerBackpack(ApothecariesBackpack.getInstance(), EnumBackpackType.NORMAL, tag);
 
                     ItemStack output = new ItemStack(apothecariesBackpackT1);
                     addBackpackTooltip(output);
@@ -224,7 +225,7 @@ public class ForestryPlugin {
 
                 tag = "railcraft.backpack.apothecary.t2";
                 if (RailcraftConfig.isItemEnabled(tag)) {
-                    apothecariesBackpackT2 = registerBackpack(ApothecariesBackpack.getInstance(), forestry.api.storage.EnumBackpackType.T2, tag);
+                    apothecariesBackpackT2 = registerBackpack(ApothecariesBackpack.getInstance(), EnumBackpackType.WOVEN, tag);
 
                     ItemStack silk = getItem("craftingMaterial");
 
@@ -248,7 +249,7 @@ public class ForestryPlugin {
 
         @Optional.Method(modid = "Forestry")
         private Item registerBackpack(BaseBackpack backpack, forestry.api.storage.EnumBackpackType type, String tag) {
-            Item item = forestry.api.storage.BackpackManager.backpackInterface.addBackpack(backpack, type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
+            Item item = forestry.api.storage.BackpackManager.backpackInterface.createBackpack(backpack, type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
             RailcraftRegistry.registerInit(item);
             return item;
         }
