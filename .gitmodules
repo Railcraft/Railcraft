@@ -4,9 +4,6 @@
 [submodule "api/railcraft"]
 	path = api/railcraft
 	url = https://github.com/CovertJaguar/Railcraft-API.git
-[submodule "api/redstoneflux"]
-	path = api/redstoneflux
-	url = https://github.com/CoFH/RedstoneFlux-API.git
 [submodule "api/thaumcraft/thaumcraft/api"]
 	path = api/thaumcraft/thaumcraft/api
 	url = https://github.com/Azanor/thaumcraft-5-api.git
