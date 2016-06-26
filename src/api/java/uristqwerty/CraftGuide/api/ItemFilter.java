@@ -16,7 +16,7 @@ public interface ItemFilter
 	 * @param item
 	 * @return
 	 */
-	boolean matches(Object item);
+	public boolean matches(Object item);
 	
 	/**
 	 * Draw a visual representation of this filter at (x, y), within a
@@ -26,12 +26,12 @@ public interface ItemFilter
 	 * @param x
 	 * @param y
 	 */
-	void draw(Renderer renderer, int x, int y);
+	public void draw(Renderer renderer, int x, int y);
 	
 	/**
 	 * Gets a description of the filter, displayed when the user moves
 	 * their cursor over the filter display.
 	 * @return a List of lines of text
 	 */
-	List<String> getTooltip();
+	public List<String> getTooltip();
 }

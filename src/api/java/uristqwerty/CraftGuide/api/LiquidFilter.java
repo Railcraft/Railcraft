@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -32,7 +33,7 @@ public class LiquidFilter implements ItemFilter
 
 	public void setLiquid(FluidStack liquid)
 	{
-		String name = liquid.getFluid().getLocalizedName();
+		String name = liquid.getFluid().getLocalizedName(liquid);
 		this.liquid = liquid;
 		liquidName = name.toLowerCase();
 		tooltip.clear();
@@ -56,7 +57,7 @@ public class LiquidFilter implements ItemFilter
 		}
 		else if(item instanceof List)
 		{
-			for(Object object: ((List)item))
+			for(Object object: ((List<?>)item))
 			{
 				if(matches(object))
 				{
@@ -76,7 +77,7 @@ public class LiquidFilter implements ItemFilter
 			TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 
 			Fluid fluid = liquid.getFluid();
-			IIcon icon = fluid.getStillIcon();
+			TextureAtlasSprite icon = fluid.getStillIcon();
 
 			if(icon != null)
 			{
@@ -88,7 +89,8 @@ public class LiquidFilter implements ItemFilter
                 double v2 = icon.getInterpolatedV(15.0);
 
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
-                GL11.glColor4d(1.0, 1.0, 1.0, 1.0);
+
+                GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 
         		GL11.glBegin(GL11.GL_QUADS);
         	        GL11.glTexCoord2d(u, v);

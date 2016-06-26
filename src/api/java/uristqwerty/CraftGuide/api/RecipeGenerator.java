@@ -26,7 +26,7 @@ public interface RecipeGenerator
 	 * @param craftingType
 	 * @return
 	 */
-	RecipeTemplate createRecipeTemplate(Slot[] slots, ItemStack craftingType);
+	public RecipeTemplate createRecipeTemplate(Slot[] slots, ItemStack craftingType);
 
 	/**
 	 * Creates a {@link RecipeTemplate} for the provided ISlot[],
@@ -43,7 +43,7 @@ public interface RecipeGenerator
 	 * @return
 	 */
 
-	RecipeTemplate createRecipeTemplate(Slot[] slots, ItemStack craftingType, String backgroundTexture, int backgroundX, int backgroundY, int backgroundSelectedX, int backgroundSelectedY);
+	public RecipeTemplate createRecipeTemplate(Slot[] slots, ItemStack craftingType, String backgroundTexture, int backgroundX, int backgroundY, int backgroundSelectedX, int backgroundSelectedY);
 	/**
 	 * Creates a {@link RecipeTemplate} for the provided ISlot[],
 	 * associated with the provided crafting type. The background is
@@ -59,7 +59,7 @@ public interface RecipeGenerator
 	 * @param backgroundSelectedY
 	 * @return
 	 */
-	RecipeTemplate createRecipeTemplate(Slot[] slots, ItemStack craftingType, String backgroundTexture, int backgroundX, int backgroundY, String backgroundSelectedTexture, int backgroundSelectedX, int backgroundSelectedY);
+	public RecipeTemplate createRecipeTemplate(Slot[] slots, ItemStack craftingType, String backgroundTexture, int backgroundX, int backgroundY, String backgroundSelectedTexture, int backgroundSelectedX, int backgroundSelectedY);
 
 	/**
 	 * Generates a recipe from the template and Object[] passed to
@@ -68,7 +68,7 @@ public interface RecipeGenerator
 	 * @param template
 	 * @param crafting
 	 */
-	void addRecipe(RecipeTemplate template, Object[] crafting);
+	public void addRecipe(RecipeTemplate template, Object[] crafting);
 
 	/**
 	 * If you have your own recipe implementation, you can use this
@@ -76,7 +76,7 @@ public interface RecipeGenerator
 	 * @param recipe
 	 * @param craftingType
 	 */
-	void addRecipe(CraftGuideRecipe recipe, ItemStack craftingType);
+	public void addRecipe(CraftGuideRecipe recipe, ItemStack craftingType);
 
 	/**
 	 * Sets whether a certain type of recipe is initially visible.
@@ -87,7 +87,7 @@ public interface RecipeGenerator
 	 * @param type an ItemStack associated with the recipe type
 	 * @param visible whether it is initially visible or not
 	 */
-	void setDefaultTypeVisibility(ItemStack type, boolean visible);
+	public void setDefaultTypeVisibility(ItemStack type, boolean visible);
 
 	/**
 	 * Takes an IRecipe, and returns an array representing a
@@ -103,7 +103,7 @@ public interface RecipeGenerator
 	 * @return an Object[10], where the first nine elements form
 	 * the 3x3 input grid, and the last element is the recipe output.
 	 */
-	Object[] getCraftingRecipe(IRecipe recipe);
+	public Object[] getCraftingRecipe(IRecipe recipe);
 
 	/**
 	 * Takes an IRecipe, and returns an array representing a
@@ -116,5 +116,5 @@ public interface RecipeGenerator
 	 * 		the recipe fits in a 2x2 grid.
 	 * @return an Object[10] or an Object[5]
 	 */
-	Object[] getCraftingRecipe(IRecipe recipe, boolean allowSmallGrid);
+	public Object[] getCraftingRecipe(IRecipe recipe, boolean allowSmallGrid);
 }

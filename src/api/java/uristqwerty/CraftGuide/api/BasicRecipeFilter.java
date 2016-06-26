@@ -17,5 +17,5 @@ public interface BasicRecipeFilter
 	 * @param recipeType
 	 * @return
 	 */
-	boolean shouldKeepRecipe(CraftGuideRecipe recipe, ItemStack recipeType);
+	public boolean shouldKeepRecipe(CraftGuideRecipe recipe, ItemStack recipeType);
 }

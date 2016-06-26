@@ -9,7 +9,7 @@ public interface RecipeProvider
 {
 	/**
 	 * Called by CraftGuide when it is (re)populating its recipe list, as a request
-	 * for the implementing Object to provide recipes through the IRecipeGenerator
+	 * for the implementing Object to provide recipes through the RecipeGenerator
 	 * instance passed to it.
 	 * @param generator
 	 * @see RecipeGenerator

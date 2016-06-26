@@ -14,7 +14,7 @@ public interface Renderer
 	 * @param y
 	 * @param stack
 	 */
-	void renderItemStack(int x, int y, ItemStack stack);
+	public void renderItemStack(int x, int y, ItemStack stack);
 
 
 	/**
@@ -26,7 +26,7 @@ public interface Renderer
 	 * @param color_argb Red, Green, Blue, and Alpha, packed into a single int,
 	 * in the form 0xaarrggbb
 	 */
-	void renderRect(int x, int y, int width, int height, int color_argb);
+	public void renderRect(int x, int y, int width, int height, int color_argb);
 
 
 	/**
@@ -39,7 +39,7 @@ public interface Renderer
 	 * form 0x00rrggbb
 	 * @param alpha
 	 */
-	void renderRect(int x, int y, int width, int height, int color_rgb, int alpha);
+	public void renderRect(int x, int y, int width, int height, int color_rgb, int alpha);
 
 	/**
 	 * Draws a solid color rectangle
@@ -52,7 +52,7 @@ public interface Renderer
 	 * @param blue
 	 * @param alpha
 	 */
-	void renderRect(int x, int y, int width, int height, int red, int green, int blue, int alpha);
+	public void renderRect(int x, int y, int width, int height, int red, int green, int blue, int alpha);
 
 	/**
 	 * Draws a rectangle, textured with a NamedTexture obtained from
@@ -63,7 +63,7 @@ public interface Renderer
 	 * @param height
 	 * @param texture
 	 */
-	void renderRect(int x, int y, int width, int height, NamedTexture texture);
+	public void renderRect(int x, int y, int width, int height, NamedTexture texture);
 
 	/**
 	 * Draws a rectangle, containing a vertical gradient
@@ -76,7 +76,7 @@ public interface Renderer
 	 * @param topColor_argb
 	 * @param bottomColor_argb
 	 */
-	void renderVerticalGradient(int x, int y, int width, int height, int topColor_argb, int bottomColor_argb);
+	public void renderVerticalGradient(int x, int y, int width, int height, int topColor_argb, int bottomColor_argb);
 
 	/**
 	 * Draws a rectangle, containing a horizontal gradient.
@@ -89,7 +89,7 @@ public interface Renderer
 	 * @param leftColor_argb
 	 * @param rightColor_argb
 	 */
-	void renderHorizontalGradient(int x, int y, int width, int height, int leftColor_argb, int rightColor_argb);
+	public void renderHorizontalGradient(int x, int y, int width, int height, int leftColor_argb, int rightColor_argb);
 
 	/**
 	 * Draws a rectangle, containing an arbitrary gradient.
@@ -104,5 +104,5 @@ public interface Renderer
 	 * @param bottomLeftColor_argb
 	 * @param bottomRightColor_argb
 	 */
-	void renderGradient(int x, int y, int width, int height, int topLeftColor_argb, int topRightColor_argb, int bottomLeftColor_argb, int bottomRightColor_argb);
+	public void renderGradient(int x, int y, int width, int height, int topLeftColor_argb, int topRightColor_argb, int bottomLeftColor_argb, int bottomRightColor_argb);
 }
