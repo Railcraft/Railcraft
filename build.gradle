@@ -28,7 +28,7 @@ archivesBaseName = "Railcraft_" + project.version_minecraft
 ext.apiRailcraft = "./api/railcraft"
 // ext.apiForestry = "./api/forestry"
 // ext.apiRedstoneFlux = "./api/redstoneflux"
-ext.apiThaumcraft = "./api/thaumcraft"
+// ext.apiThaumcraft = "./api/thaumcraft"
 ext.apiBuildcraft = "./api/buildcraft"
 
 ext.dirLang = "./lang"
@@ -55,7 +55,7 @@ sourceSets {
 		java {
 			srcDir project.apiRailcraft
 			// srcDir project.apiRedstoneFlux + "/src/main/java"
-			srcDir project.apiThaumcraft
+			// srcDir project.apiThaumcraft
 		}
 		java {
 			srcDir project.apiBuildcraft + "/api"
@@ -157,10 +157,10 @@ jar {
 		// from project.apiForestry + "/LICENSE.txt"
 	// }
 	into ('thaumcraft/api') {
-		from project.apiThaumcraft + "/LICENSE"
+		from "./src/api/java/thaumcraft/api/LICENSE.txt"
 	}
 	into ('cofh/api') {
-		from "./src/api/java/cofh/LICENSE - LGPLv3.txt"
+		from "./src/api/java/cofh/api/LICENSE - LGPLv3.txt"
 	}
 }
 
