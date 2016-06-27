@@ -11,7 +11,8 @@ package mods.railcraft.common.util.collections;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 
 import java.util.HashMap;
@@ -19,39 +20,38 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+//TODO: test this!
 public class BlockItemListParser {
 
     public enum ParseType {
 
         ITEM {
-                    @Override
-                    public ItemKey makeKey(String entry) throws IllegalArgumentException {
-                        String[] tokens = entry.split("#");
-                        Item item = GameData.getItemRegistry().getObject(tokens[0]);
-                        if (item == null)
-                            throw new IllegalArgumentException("Invalid Item Name while parsing config = " + entry);
-                        int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;
-                        return new ItemKey(item, meta);
-                    }
+            @Override
+            public ItemKey makeKey(String entry) throws IllegalArgumentException {
+                String[] tokens = entry.split("#");
+                Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tokens[0]));
+                if (item == null)
+                    throw new IllegalArgumentException("Invalid Item Name while parsing config = " + entry);
+                int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;
+                return new ItemKey(item, meta);
+            }
 
-                },
+        },
         BLOCK {
-                    @Override
-                    public BlockKey makeKey(String entry) throws IllegalArgumentException {
-                        String[] tokens = entry.split("#");
-                        Block block = GameData.getBlockRegistry().getObject(tokens[0]);
-                        if (block == null)
-                            throw new IllegalArgumentException("Invalid Block Name while parsing config = " + entry);
-                        int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;
-                        return new BlockKey(block, meta);
-                    }
+            @Override
+            public BlockKey makeKey(String entry) throws IllegalArgumentException {
+                String[] tokens = entry.split("#");
+                Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tokens[0]));
+                if (block == null)
+                    throw new IllegalArgumentException("Invalid Block Name while parsing config = " + entry);
+                int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;
+                return new BlockKey(block.getStateFromMeta(meta));
+            }
 
-                };
+        };
 
         public abstract Object makeKey(String entry);
 
@@ -60,21 +60,19 @@ public class BlockItemListParser {
     public enum ValueType {
 
         INT {
+            @Override
+            public Integer parseValue(String value) {
+                return Integer.valueOf(value);
+            }
 
-                    @Override
-                    public Integer parseValue(String value) {
-                        return Integer.valueOf(value);
-                    }
-
-                },
+        },
         FLOAT {
+            @Override
+            public Float parseValue(String value) {
+                return Float.valueOf(value);
+            }
 
-                    @Override
-                    public Float parseValue(String value) {
-                        return Float.valueOf(value);
-                    }
-
-                };
+        };
 
         public abstract Object parseValue(String value);
 

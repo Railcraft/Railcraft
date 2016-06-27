@@ -43,7 +43,7 @@ public class BlockFactoryLantern extends BlockFactory {
         for (BlockMaterial mat : variants.values()) {
             RailcraftRegistry.register(block.getItem(mat));
 
-            ForestryPlugin.addBackpackItem("builder", block.getItem(mat));
+            ForestryPlugin.addBackpackItem("forestry.builder", block.getItem(mat));
         }
         return block;
     }

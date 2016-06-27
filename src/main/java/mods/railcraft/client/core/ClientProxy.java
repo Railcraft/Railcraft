@@ -9,9 +9,6 @@
 package mods.railcraft.client.core;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import mods.railcraft.client.render.broken.BlockRenderer;
-import mods.railcraft.client.render.broken.RenderCartItemFiltered;
-import mods.railcraft.client.render.broken.RenderItemLocomotive;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid;
@@ -25,14 +22,11 @@ import mods.railcraft.common.blocks.machine.beta.TileTankBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
 import mods.railcraft.common.blocks.signals.TileSignalFoundation;
 import mods.railcraft.common.blocks.tracks.TileTrackTESR;
-import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.TileFirestoneRecharge;
-import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.client.Minecraft;
@@ -44,14 +38,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.Level;
 
 import java.util.function.Function;
@@ -169,7 +161,7 @@ public class ClientProxy extends CommonProxy {
 
         if (RailcraftConfig.isWorldGenEnabled("workshop")) {
             int id = RailcraftConfig.villagerID();
-            VillagerRegistry.instance().registerVillagerSkin(id, ModuleWorld.VILLAGER_TEXTURE);
+//            VillagerRegistry.instance().registerVillagerSkin(id, ModuleWorld.VILLAGER_TEXTURE);
         }
 
         Game.log(Level.TRACE, "Init Complete: Renderer");
@@ -192,12 +184,12 @@ public class ClientProxy extends CommonProxy {
 //        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, itemMesh);
     }
 
-    private void registerBlockRenderer(BlockRenderer renderer) {
+//    private void registerBlockRenderer(BlockRenderer renderer) {
 //        if (renderer.getBlock() != null) {
 //            RenderingRegistry.registerBlockHandler(renderer);
 //            MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(renderer.getBlock()), renderer.getItemRenderer());
 //        }
-    }
+//    }
 
     public static class TextureHook {
         @SubscribeEvent

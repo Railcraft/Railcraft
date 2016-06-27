@@ -39,6 +39,7 @@ public class ApothecariesBackpack extends BaseBackpack implements IBackpackDefin
     }
 
     protected ApothecariesBackpack() {
+        super("railcraft.apothecary");
     }
 
     public void setup() {

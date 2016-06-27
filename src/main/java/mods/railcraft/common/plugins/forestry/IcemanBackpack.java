@@ -39,6 +39,7 @@ public class IcemanBackpack extends BaseBackpack {
     }
 
     protected IcemanBackpack() {
+        super("railcraft.iceman");
     }
 
     public void setup() {

@@ -52,7 +52,7 @@ public class ItemCrowbarMagic extends ItemCrowbar implements IRepairable {
                     " RI",
                     "RIR",
                     "IR ",
-                    'I', ThaumcraftPlugin.getItem("itemResource", 2),
+                    'I', ThaumcraftPlugin.ITEMS.get("ingots", 0),
                     'R', "dyeRed");
 
             AspectList aspects = new AspectList();

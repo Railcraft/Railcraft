@@ -55,7 +55,7 @@ public class ItemCrowbarVoid extends ItemCrowbar implements IRepairable, IWarpin
                     " RI",
                     "RIR",
                     "IR ",
-                    'I', ThaumcraftPlugin.getItem("itemResource", 16),
+                    'I', ThaumcraftPlugin.ITEMS.get("ingots", 1),
                     'R', "dyeRed");
 
             AspectList aspects = new AspectList();

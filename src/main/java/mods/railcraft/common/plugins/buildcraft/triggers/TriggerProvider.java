@@ -9,10 +9,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
 import java.util.Collection;
-import java.util.LinkedList;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TriggerProvider implements ITriggerProvider {
@@ -22,13 +20,11 @@ public class TriggerProvider implements ITriggerProvider {
     }
 
     @Override
-    public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer isc) {
-        return null;
+    public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
     }
 
     @Override
-    public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
-        LinkedList<ITriggerExternal> triggers = new LinkedList<ITriggerExternal>();
+    public void addExternalTriggers(Collection<ITriggerExternal> triggers, EnumFacing side, TileEntity tile) {
         if (tile instanceof IHasWork)
             triggers.add(Triggers.HAS_WORK);
         if (tile instanceof IHasCart)
@@ -57,7 +53,6 @@ public class TriggerProvider implements ITriggerProvider {
             triggers.add(Triggers.ASPECT_RED);
             triggers.add(Triggers.ASPECT_OFF);
         }
-        return triggers;
     }
 
 }

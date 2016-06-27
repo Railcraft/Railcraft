@@ -67,8 +67,7 @@ public class BlockRailcraftWall extends BlockWall {
 
     public static void registerBlocks() {
         if (alpha == null && RailcraftConfig.isBlockEnabled("wall.alpha")) {
-            int renderId = Railcraft.getProxy().getRenderId();
-            alpha = new BlockRailcraftWall(renderId, true, new WallProxyApha());
+            alpha = new BlockRailcraftWall(true, new WallProxyApha());
             alpha.setUnlocalizedName("railcraft.wall.alpha");
             RailcraftRegistry.register(alpha, ItemWall.class);
 
@@ -87,7 +86,7 @@ public class BlockRailcraftWall extends BlockWall {
                 RailcraftRegistry.register(wall.getItem());
 
                 if (wall != EnumWallAlpha.SNOW || wall != EnumWallAlpha.ICE)
-                    ForestryPlugin.addBackpackItem("builder", wall.getItem());
+                    ForestryPlugin.addBackpackItem("forestry.builder", wall.getItem());
             }
 
         }
@@ -105,7 +104,7 @@ public class BlockRailcraftWall extends BlockWall {
 
                 RailcraftRegistry.register(wall.getItem());
 
-                ForestryPlugin.addBackpackItem("builder", wall.getItem());
+                ForestryPlugin.addBackpackItem("forestry.builder", wall.getItem());
             }
         }
     }

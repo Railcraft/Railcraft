@@ -10,8 +10,8 @@ package mods.railcraft.common.plugins.forge;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -61,7 +61,7 @@ public class PowerPlugin {
         BlockPos wirePos = pos.up(yOffset).offset(side);
         Block block = WorldPlugin.getBlock(world, wirePos);
         if (block == Blocks.REDSTONE_WIRE) {
-            return block.getWeakPower(world, wirePos, WorldPlugin.getBlockState(world, wirePos), side) > 0;
+            return block.getWeakPower(WorldPlugin.getBlockState(world, wirePos), world, wirePos, side) > 0;
         }
         return false;
     }

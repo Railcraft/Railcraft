@@ -75,15 +75,15 @@ public class BlockCube extends Block {
 
                 EntityTunnelBore.addMineableBlock(instance);
 
-                ForestryPlugin.addBackpackItem("miner", EnumCube.COKE_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("miner", EnumCube.COPPER_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("miner", EnumCube.LEAD_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("miner", EnumCube.STEEL_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("miner", EnumCube.TIN_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("builder", EnumCube.CONCRETE_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("builder", EnumCube.CREOSOTE_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("digger", EnumCube.ABYSSAL_STONE.getItem());
-                ForestryPlugin.addBackpackItem("digger", EnumCube.QUARRIED_STONE.getItem());
+                ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.COKE_BLOCK.getItem());
+                ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.COPPER_BLOCK.getItem());
+                ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.LEAD_BLOCK.getItem());
+                ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.STEEL_BLOCK.getItem());
+                ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.TIN_BLOCK.getItem());
+                ForestryPlugin.addBackpackItem("forestry.builder", EnumCube.CONCRETE_BLOCK.getItem());
+                ForestryPlugin.addBackpackItem("forestry.builder", EnumCube.CREOSOTE_BLOCK.getItem());
+                ForestryPlugin.addBackpackItem("forestry.digger", EnumCube.ABYSSAL_STONE.getItem());
+                ForestryPlugin.addBackpackItem("forestry.digger", EnumCube.QUARRIED_STONE.getItem());
 
                 MicroBlockPlugin.addMicroBlockCandidate(instance, EnumCube.CONCRETE_BLOCK.ordinal());
                 MicroBlockPlugin.addMicroBlockCandidate(instance, EnumCube.CREOSOTE_BLOCK.ordinal());

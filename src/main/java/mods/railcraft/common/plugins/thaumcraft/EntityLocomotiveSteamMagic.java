@@ -1,11 +1,11 @@
 /*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
- http://railcraft.info
-
- This code is the property of CovertJaguar
- and may only be used with explicit written
- permission unless otherwise specified on the
- license page at http://railcraft.info/wiki/info:license.
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
+ * This code is the property of CovertJaguar
+ * and may only be used with explicit written
+ * permission unless otherwise specified on the
+ * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.plugins.thaumcraft;
 
@@ -18,8 +18,8 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
+import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
-import mods.railcraft.common.plugins.thaumcraft.EssentiaTank;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
@@ -30,6 +30,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -54,8 +56,8 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
     private static final int SLOT_TICKET = 6;
     private static final int SLOT_DESTINATION = 7;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 7);
-    private static final byte FIRE_ASPECT_DATA_ID = 30;
-    private static final byte WATER_ASPECT_DATA_ID = 31;
+    private static final DataParameter<Integer> FIRE_ASPECT = DataManagerPlugin.create(DataSerializers.VARINT);
+    private static final DataParameter<Integer> WATER_ASPECT = DataManagerPlugin.create(DataSerializers.VARINT);
     private final InventoryMapper invBurn = new InventoryMapper(this, SLOT_BURN, 1);
     private final InventoryMapper invStock = new InventoryMapper(this, SLOT_FUEL_A, 3);
     private final InventoryMapper invFuel = new InventoryMapper(this, SLOT_BURN, 4);
@@ -90,8 +92,8 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
     protected void entityInit() {
         super.entityInit();
 
-        fireAspect = new EssentiaTank(Aspect.FIRE, 256, dataManager, FIRE_ASPECT_DATA_ID);
-        waterAspect = new EssentiaTank(Aspect.WATER, 256, dataManager, WATER_ASPECT_DATA_ID);
+        fireAspect = new EssentiaTank(Aspect.FIRE, 256, dataManager, FIRE_ASPECT);
+        waterAspect = new EssentiaTank(Aspect.WATER, 256, dataManager, WATER_ASPECT);
 
         boiler.setFuelProvider(new EssentiaFuelProvider(fireAspect) {
             @Override
@@ -126,7 +128,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
             return true;
         if (InvTools.countItems(invFuel) < 16)
             return true;
-        for (IInvSlot slot : InventoryIterator.getIterable(invFuel)) {
+        for (IInvSlot slot : InventoryIterator.getIterable((IInventory) invFuel)) {
             ItemStack stack = slot.getStack();
             if (stack == null || stack.stackSize < stack.getMaxStackSize() / 4)
                 return true;

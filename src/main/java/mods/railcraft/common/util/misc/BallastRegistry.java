@@ -11,8 +11,8 @@ package mods.railcraft.common.util.misc;
 import mods.railcraft.common.util.collections.BlockKey;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import java.util.HashSet;
@@ -35,11 +35,14 @@ public abstract class BallastRegistry {
     }
 
     public static void registerBallast(Block block, int metadata) {
-        ballastRegistry.add(new BlockKey(block, metadata));
+        ballastRegistry.add(new BlockKey(block.getStateFromMeta(metadata)));
     }
 
     public static boolean isItemBallast(ItemStack stack) {
-        return stack != null && stack.getItem() instanceof ItemBlock && ballastRegistry.contains(new BlockKey(InvTools.getBlockFromStack(stack), stack.getItemDamage()));
+        if (stack == null)
+            return false;
+        IBlockState state = InvTools.getBlockStateFromStack(stack);
+        return state != null && ballastRegistry.contains(new BlockKey(state));
     }
 
     public static Set<BlockKey> getRegisteredBallasts() {

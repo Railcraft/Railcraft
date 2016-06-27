@@ -57,7 +57,7 @@ public class ItemSignalLabel extends ItemRailcraft {
                 }
                 if (done) {
                     --stack.stackSize;
-                    PlayerPlugin.swingItem(playerIn);
+                    PlayerPlugin.swingArm(playerIn, hand);
                     IBlockState state = WorldPlugin.getBlockState(worldIn, pos);
                     worldIn.notifyBlockUpdate(pos, state, state, 3);
                     return EnumActionResult.SUCCESS;

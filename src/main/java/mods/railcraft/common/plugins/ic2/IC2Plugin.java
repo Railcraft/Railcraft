@@ -17,6 +17,7 @@ import ic2.api.item.IElectricItem;
 import ic2.api.recipe.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.ItemStackCache;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -26,41 +27,21 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 
-import java.util.HashMap;
+import javax.annotation.Nullable;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class IC2Plugin {
-
+    public static final ItemStackCache ITEMS = new ItemStackCache("IC2", IC2Items.class, IC2Plugin::isModInstalled, IC2Items::getItem);
     public static final int[] POWER_TIERS = {1, 6, 32, 512, 2048, 8192};
-    private static final Map<String, ItemStack> itemCache = new HashMap<String, ItemStack>();
-    private static final Map<String, Boolean> itemCacheFlag = new HashMap<String, Boolean>();
-    private static Boolean modLoaded = null;
-    private static Boolean classic = null;
+    private static Boolean modLoaded;
+    private static Boolean classic;
 
+    @Nullable
     public static ItemStack getItem(String tag) {
-        if (!isModInstalled())
-            return null;
-        ItemStack stack = itemCache.get(tag);
-        if (stack != null)
-            return stack;
-        Boolean wasCached = itemCacheFlag.get(tag);
-        if (wasCached == Boolean.TRUE)
-            return null;
-        try {
-            itemCacheFlag.put(tag, Boolean.TRUE);
-            stack = IC2Items.getItem(tag);
-            if (stack != null)
-                itemCache.put(tag, stack.copy());
-            return stack;
-        } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, Items.class);
-        }
-        return null;
+        return ITEMS.get(tag);
     }
 
     public static void addTileToNet(TileEntity tile) {
@@ -180,12 +161,10 @@ public class IC2Plugin {
 
     public static void removeMaceratorDustRecipes(ItemStack... items) {
         try {
-            Map<IRecipeInput, RecipeOutput> recipes = Recipes.macerator.getRecipes();
-
-            Iterator<Entry<IRecipeInput, RecipeOutput>> it = recipes.entrySet().iterator();
+            Iterator<IMachineRecipeManager.RecipeIoContainer> it = Recipes.macerator.getRecipes().iterator();
             while (it.hasNext()) {
-                Entry<IRecipeInput, RecipeOutput> entry = it.next();
-                if (isInputBlock(entry.getKey(), items) && doesRecipeProduce(entry.getValue(), items))
+                IMachineRecipeManager.RecipeIoContainer recipe = it.next();
+                if (isInputBlock(recipe.input, items) && doesRecipeProduce(recipe.output, items))
                     it.remove();
             }
         } catch (Throwable error) {

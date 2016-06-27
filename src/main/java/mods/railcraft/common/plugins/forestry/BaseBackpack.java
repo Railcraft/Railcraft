@@ -31,6 +31,15 @@ import java.util.List;
 public abstract class BaseBackpack implements IBackpackDefinition {
     protected List<ItemStack> items = new ArrayList<ItemStack>(50);
     protected List<Predicate<ItemStack>> filters = new ArrayList<Predicate<ItemStack>>();
+    private final String key;
+
+    protected BaseBackpack(String key) {
+        this.key = key;
+    }
+
+    public String getKey() {
+        return key;
+    }
 
     @Override
     public void addValidItem(ItemStack stack) {
@@ -73,7 +82,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
         filters.add(filter);
     }
 
-    public void addOre(String oreTag) {
+    public void add(String oreTag) {
         add(StackFilters.ofOreType(oreTag));
     }
 

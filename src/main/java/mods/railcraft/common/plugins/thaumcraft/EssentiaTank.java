@@ -8,25 +8,26 @@
  */
 package mods.railcraft.common.plugins.thaumcraft;
 
+import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
 import thaumcraft.api.aspects.Aspect;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class EssentiaTank {
 
     private final Aspect aspect;
     private final EntityDataManager dataManager;
-    private final int capacity, dataId;
+    private final DataParameter<Integer> parameter;
+    private final int capacity;
 
-    public EssentiaTank(Aspect aspect, int capacity, EntityDataManager dataManager, int dataId) {
+    public EssentiaTank(Aspect aspect, int capacity, EntityDataManager dataManager, DataParameter<Integer> parameter) {
         this.aspect = aspect;
         this.dataManager = dataManager;
-        this.dataId = dataId;
+        this.parameter = parameter;
         this.capacity = capacity;
-        dataManager.register(dataId, (short) 0);
+        dataManager.register(parameter, 0);
     }
 
     public Aspect getAspect() {
@@ -34,11 +35,11 @@ public class EssentiaTank {
     }
 
     public int getAmount() {
-        return dataManager.get(dataId);
+        return dataManager.get(parameter);
     }
 
     public void setAmount(int amount) {
-        dataManager.set(dataId, (short) amount);
+        dataManager.set(parameter, amount);
     }
 
     public int fill(int amount, boolean doAdd) {

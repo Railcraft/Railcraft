@@ -1050,6 +1050,18 @@ public abstract class InvTools {
     }
 
     @Nullable
+    public static IBlockState getBlockStateFromStack(@Nullable ItemStack stack) {
+        if (stack == null)
+            return null;
+        Item item = stack.getItem();
+        if (item instanceof ItemBlock) {
+            int meta = item.getMetadata(stack.getMetadata());
+            return ((ItemBlock) item).getBlock().getStateFromMeta(stack.getItemDamage());
+        }
+        return null;
+    }
+
+    @Nullable
     public static IBlockState getBlockStateFromStack(@Nullable ItemStack stack, WorldServer world, BlockPos pos) {
         if (stack == null)
             return null;

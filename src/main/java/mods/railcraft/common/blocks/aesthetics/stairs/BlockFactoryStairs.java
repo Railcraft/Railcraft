@@ -47,7 +47,7 @@ public class BlockFactoryStairs extends BlockFactory {
                 case ICE:
                     break;
                 default:
-                    ForestryPlugin.addBackpackItem("builder", getItem(mat));
+                    ForestryPlugin.addBackpackItem("forestry.builder", getItem(mat));
             }
         }
     }

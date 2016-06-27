@@ -85,7 +85,7 @@ public class BlockOre extends Block {
             EntityTunnelBore.addMineableBlock(instance);
 
             for (EnumOre ore : EnumOre.values()) {
-                ForestryPlugin.addBackpackItem("miner", ore.getItem());
+                ForestryPlugin.addBackpackItem("forestry.miner", ore.getItem());
 
                 switch (ore) {
                     case FIRESTONE:

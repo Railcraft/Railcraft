@@ -36,7 +36,7 @@ public class ItemNugget extends ItemRailcraft {
         for (EnumNugget n : EnumNugget.VALUES) {
             ItemStack stack = new ItemStack(this, 1, n.ordinal());
             RailcraftRegistry.register(stack);
-            ForestryPlugin.addBackpackItem("miner", stack);
+            ForestryPlugin.addBackpackItem("forestry.miner", stack);
             Metal m = Metal.get(n);
             OreDictionary.registerOre(m.getNuggetTag(), m.getNugget());
         }

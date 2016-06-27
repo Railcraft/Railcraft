@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -74,19 +75,19 @@ public class ForestryPlugin {
     }
 
     public static void addBackpackItem(String pack, Item item) {
-        sendBackpackMessage(String.format("%s@%s:*", pack, GameRegistry.findUniqueIdentifierFor(item)));
+        sendBackpackMessage(String.format("%s@%s:*", pack, ForgeRegistries.ITEMS.getKey(item)));
     }
 
     public static void addBackpackItem(String pack, Item item, int damage) {
-        sendBackpackMessage(String.format("%s@%s:%d", pack, GameRegistry.findUniqueIdentifierFor(item), damage));
+        sendBackpackMessage(String.format("%s@%s:%d", pack, ForgeRegistries.ITEMS.getKey(item), damage));
     }
 
     public static void addBackpackItem(String pack, Block block) {
-        sendBackpackMessage(String.format("%s@%s:*", pack, GameRegistry.findUniqueIdentifierFor(block)));
+        sendBackpackMessage(String.format("%s@%s:*", pack, ForgeRegistries.BLOCKS.getKey(block)));
     }
 
     public static void addBackpackItem(String pack, Block block, int meta) {
-        sendBackpackMessage(String.format("%s@%s:%d", pack, GameRegistry.findUniqueIdentifierFor(block), meta));
+        sendBackpackMessage(String.format("%s@%s:%d", pack, ForgeRegistries.BLOCKS.getKey(block), meta));
     }
 
     private static void sendBackpackMessage(String message) {
@@ -251,6 +252,7 @@ public class ForestryPlugin {
         private Item registerBackpack(BaseBackpack backpack, forestry.api.storage.EnumBackpackType type, String tag) {
             Item item = forestry.api.storage.BackpackManager.backpackInterface.createBackpack(backpack, type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
             RailcraftRegistry.registerInit(item);
+            forestry.api.storage.BackpackManager.backpackInterface.registerBackpack(backpack.getKey(), backpack);
             return item;
         }
 

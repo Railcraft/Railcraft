@@ -8,33 +8,33 @@
  */
 package mods.railcraft.common.plugins.ic2;
 
+import ic2.api.energy.tile.IEnergyAcceptor;
+import ic2.api.energy.tile.IEnergyTile;
 import ic2.api.energy.tile.IMetaDelegate;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TileIC2MultiEmitterDelegate extends TileIC2EmitterDelegate implements IMetaDelegate {
-    private final List<TileEntity> subTiles = new ArrayList<TileEntity>(30);
+    private final List<IEnergyTile> subTiles;
 
     public TileIC2MultiEmitterDelegate(IMultiEmitterDelegate delegate) {
         super(delegate);
-        subTiles.addAll(delegate.getSubTiles());
+        subTiles = delegate.getSubTiles().stream().map(IEnergyTile.class::cast).collect(Collectors.toList());
     }
 
     @Override
-    public boolean emitsEnergyTo(TileEntity receiver, EnumFacing direction) {
+    public boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing direction) {
         return true;
     }
 
     @Override
-    public List<TileEntity> getSubTiles() {
+    public List<IEnergyTile> getSubTiles() {
         return subTiles;
     }
-
 
 }

@@ -39,6 +39,7 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
     }
 
     protected TrackmanBackpack() {
+        super("railcraft.trackman");
     }
 
     public void setup() {
@@ -56,7 +57,7 @@ public class TrackmanBackpack extends BaseBackpack implements IBackpackDefinitio
                 add(item);
         }
 
-        addOre(IToolCrowbar.ORE_TAG);
+        add(IToolCrowbar.ORE_TAG);
 
         add(FluidContainers.getCreosoteOilBottle());
         add(FluidContainers.getCreosoteOilBucket());

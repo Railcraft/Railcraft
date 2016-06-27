@@ -8,20 +8,17 @@ import buildcraft.api.statements.*;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.beta.TileEngine.EnergyStage;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.EnumSet;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum Triggers implements ITriggerExternal {
@@ -62,13 +59,6 @@ public enum Triggers implements ITriggerExternal {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public static void textureStitchPre(TextureMap map) {
-        for (Triggers trigger : VALUES) {
-            trigger.registerSprite(map);
-        }
-    }
-
     @Override
     public String getUniqueTag() {
         return "railcraft:" + tag;
@@ -85,14 +75,14 @@ public enum Triggers implements ITriggerExternal {
     }
 
     @Override
+    public void registerIcons(TextureMap register) {
+        sprite = register.registerSprite(new ResourceLocation("railcraft", "buildcraft.gate.trigger." + tag));
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getGuiSprite() {
         return sprite;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void registerSprite(TextureMap map) {
-        sprite = map.registerSprite(new ResourceLocation("railcraft", "buildcraft.gate.trigger." + tag));
     }
 
     @Override

@@ -43,7 +43,7 @@ public class BlockFactorySlab extends BlockFactory {
                 case PACKED_ICE:
                     break;
                 default:
-                    ForestryPlugin.addBackpackItem("builder", getItem(mat));
+                    ForestryPlugin.addBackpackItem("forestry.builder", getItem(mat));
             }
         }
     }

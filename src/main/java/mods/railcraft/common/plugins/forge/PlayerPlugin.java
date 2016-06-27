@@ -10,11 +10,10 @@ package mods.railcraft.common.plugins.forge;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketAnimation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -91,22 +90,22 @@ public class PlayerPlugin {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
             throw new RuntimeException("You derped up! Don't call this on the client!");
         MinecraftServer mcServer = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if (mcServer.getConfigurationManager().canSendCommands(gameProfile)) {
-            UserListOpsEntry opsEntry = mcServer.getConfigurationManager().getOppedPlayers().getEntry(gameProfile);
+        if (mcServer.getPlayerList().canSendCommands(gameProfile)) {
+            UserListOpsEntry opsEntry = mcServer.getPlayerList().getOppedPlayers().getEntry(gameProfile);
             return opsEntry != null ? opsEntry.getPermissionLevel() : 0;
         }
         return 0;
     }
 
     public static boolean isPlayerConnected(GameProfile player) {
-        return FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerByUsername(player.getName()) != null;
+        return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(player.getName()) != null;
     }
 
-    public static void swingItem(EntityPlayer player) {
-        player.swingItem();
-        if (player instanceof EntityPlayerMP && ((EntityPlayerMP) player).playerNetServerHandler != null) {
-            ((EntityPlayerMP) player).playerNetServerHandler.sendPacket(new SPacketAnimation(player, 0));
-        }
+    public static void swingArm(EntityPlayer player, EnumHand hand) {
+        player.swingArm(hand);
+//        if (player instanceof EntityPlayerMP && ((EntityPlayerMP) player).playerNetServerHandler != null) {
+//            ((EntityPlayerMP) player).playerNetServerHandler.sendPacket(new SPacketAnimation(player, 0));
+//        }
     }
 
 }

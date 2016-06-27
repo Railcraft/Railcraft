@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.plugins.ic2;
 
+import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -25,8 +26,8 @@ public class TileIC2EmitterDelegate extends TileIC2Delegate implements IEnergySo
     }
 
     @Override
-    public boolean emitsEnergyTo(TileEntity receiver, EnumFacing direction) {
-        return delegate.emitsEnergyTo(receiver, direction);
+    public boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing direction) {
+        return delegate.emitsEnergyTo((TileEntity) receiver, direction);
     }
 
     @Override

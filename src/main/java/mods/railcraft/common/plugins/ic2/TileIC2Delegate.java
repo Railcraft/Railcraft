@@ -21,9 +21,7 @@ public class TileIC2Delegate extends TileEntity implements IEnergyTile {
 
     public TileIC2Delegate(TileEntity delegate) {
         this.delegate = delegate;
-        this.xCoord = delegate.xCoord;
-        this.yCoord = delegate.yCoord;
-        this.zCoord = delegate.zCoord;
+        setPos(delegate.getPos());
         this.worldObj = delegate.getWorld();
     }
 

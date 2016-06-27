@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.api.core.RailcraftItemRegistry;
+import mods.railcraft.api.core.RailcraftItemStackRegistry;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -17,6 +17,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import javax.annotation.Nullable;
 
 /**
  * This class contains a registry of all currently active Railcraft items. Which
@@ -50,9 +52,10 @@ public final class RailcraftRegistry {
      * @param qty The stackSize of the returned item
      * @return The ItemStack or null if no item exists for that tag
      */
+    @Nullable
     public static ItemStack getItem(String tag, int qty) {
         tag = MiscTools.cleanTag(tag);
-        return RailcraftItemRegistry.getStack(tag, qty);
+        return RailcraftItemStackRegistry.getStack(tag, qty).orNull();
 //        return GameRegistry.findItemStack(Railcraft.getModId(), tag, qty);
     }
 
@@ -66,8 +69,7 @@ public final class RailcraftRegistry {
      * @param stack The item
      */
     public static void register(String tag, ItemStack stack) {
-        if (stack == null)
-            throw new RuntimeException("Don't register null items!");
+        assert stack != null : "Do not register null items!";
         tag = MiscTools.cleanTag(tag);
 //        TagList.addTag(tag);
 //        System.out.println(tag);
@@ -75,7 +77,7 @@ public final class RailcraftRegistry {
         Block existingBlock = GameRegistry.findBlock(Railcraft.MOD_ID, tag);
         if (existingItem == null && existingBlock == null) {
 //            GameRegistry.registerCustomItemStack(tag, stack);
-            RailcraftItemRegistry.register(tag, stack);
+            RailcraftItemStackRegistry.register(tag, stack);
         } else
             throw new RuntimeException("ItemStack registrations must be unique!");
     }
@@ -89,8 +91,7 @@ public final class RailcraftRegistry {
      * @param stack The item
      */
     public static void register(ItemStack stack) {
-        if (stack == null)
-            throw new RuntimeException("Don't register null items!");
+        assert stack != null : "Do not register null items!";
         register(stack.getUnlocalizedName(), stack);
     }
 
@@ -119,7 +120,7 @@ public final class RailcraftRegistry {
         tag = MiscTools.cleanTag(tag);
 //        TagList.addTag(tag);
         GameRegistry.registerItem(item, tag);
-        RailcraftItemRegistry.register(tag, new ItemStack(item));
+        RailcraftItemStackRegistry.register(tag, new ItemStack(item));
     }
 
     /**
@@ -149,6 +150,6 @@ public final class RailcraftRegistry {
         tag = MiscTools.cleanTag(tag);
 //        TagList.addTag(tag);
         GameRegistry.registerBlock(block, itemclass, tag);
-        RailcraftItemRegistry.register(tag, new ItemStack(block));
+        RailcraftItemStackRegistry.register(tag, new ItemStack(block));
     }
 }

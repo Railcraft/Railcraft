@@ -10,7 +10,6 @@ package mods.railcraft.common.plugins.thaumcraft;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IEssentiaContainerItem;
@@ -30,7 +29,7 @@ public class EssentiaHelper {
             if (aspects.getAmount(aspect) > 0) {
                 aspects.remove(aspect, 1);
                 if (aspects.size() == 0) {
-                    ItemStack emptyJar = GameRegistry.findItemStack("Thaumcraft", "blockJar", 1);
+                    ItemStack emptyJar = ThaumcraftPlugin.BLOCKS.get("jar");
                     inv.setInventorySlotContents(slot, emptyJar);
                 } else
                     jar.setAspects(stack, aspects);

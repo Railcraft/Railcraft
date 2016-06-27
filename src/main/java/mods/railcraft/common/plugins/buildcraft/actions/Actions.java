@@ -8,22 +8,16 @@ import buildcraft.api.statements.IActionExternal;
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.StatementManager;
-
-import mods.railcraft.common.plugins.buildcraft.triggers.Triggers;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum Actions implements IActionExternal {
@@ -46,13 +40,6 @@ public enum Actions implements IActionExternal {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public static void textureStitchPre(TextureMap map) {
-        for (Actions acion : VALUES) {
-            acion.registerSprite(map);
-        }
-    }
-
     @Override
     public String getUniqueTag() {
         return "railcraft:" + tag;
@@ -69,9 +56,9 @@ public enum Actions implements IActionExternal {
         return sprite;
     }
 
-    @SideOnly(Side.CLIENT)
-    public void registerSprite(TextureMap map) {
-        sprite = map.registerSprite(new ResourceLocation("railcraft", "buildcraft.gate.action." + tag));
+    @Override
+    public void registerIcons(TextureMap register) {
+        sprite = register.registerSprite(new ResourceLocation("railcraft", "buildcraft.gate.action." + tag));
     }
 
     @Override
