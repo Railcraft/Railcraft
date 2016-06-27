@@ -18,8 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nullable;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -92,14 +90,14 @@ public abstract class DetectorEntity<T> extends Detector {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         writeGuiData(data);
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         readGuiData(data, null);

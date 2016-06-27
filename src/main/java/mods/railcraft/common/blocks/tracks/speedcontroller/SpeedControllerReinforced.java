@@ -32,7 +32,7 @@ public class SpeedControllerReinforced extends SpeedController {
 
     @Override
     public float getMaxSpeed(ITrackInstance track, EntityMinecart cart) {
-        BlockRailBase.EnumRailDirection dir = track.getRailDirection(WorldPlugin.getBlockState(track.getWorld(), track.getPos()), cart);
+        BlockRailBase.EnumRailDirection dir = track.getRailDirection(WorldPlugin.getBlockState(track.theWorld(), track.getPos()), cart);
         if (TrackShapeHelper.isTurn(dir))
             return CORNER_SPEED;
         return MAX_SPEED;

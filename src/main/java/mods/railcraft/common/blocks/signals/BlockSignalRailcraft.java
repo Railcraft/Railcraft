@@ -278,7 +278,7 @@ public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftO
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 

@@ -16,6 +16,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -52,20 +53,21 @@ public class TrackReinforcedBooster extends TrackReinforced implements ITrackPow
     public void onMinecartPass(EntityMinecart cart) {
         EnumRailDirection dir = getRailDirection();
         double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
+        World world = theWorldAsserted();
         if (powered) {
             if (speed > BOOST_THRESHOLD) {
                 cart.motionX += (cart.motionX / speed) * BOOST_FACTOR;
                 cart.motionZ += (cart.motionZ / speed) * BOOST_FACTOR;
             } else if (dir == EnumRailDirection.EAST_WEST) {
-                if (getWorld().isSideSolid(getPos().west(), EnumFacing.EAST)) {
+                if (world.isSideSolid(getPos().west(), EnumFacing.EAST)) {
                     cart.motionX = START_BOOST;
-                } else if (getWorld().isSideSolid(getPos().east(), EnumFacing.WEST)) {
+                } else if (world.isSideSolid(getPos().east(), EnumFacing.WEST)) {
                     cart.motionX = -START_BOOST;
                 }
             } else if (dir == EnumRailDirection.NORTH_SOUTH) {
-                if (getWorld().isSideSolid(getPos().north(), EnumFacing.SOUTH)) {
+                if (world.isSideSolid(getPos().north(), EnumFacing.SOUTH)) {
                     cart.motionZ = START_BOOST;
-                } else if (getWorld().isSideSolid(getPos().south(), EnumFacing.NORTH)) {
+                } else if (world.isSideSolid(getPos().south(), EnumFacing.NORTH)) {
                     cart.motionZ = -START_BOOST;
                 }
             }

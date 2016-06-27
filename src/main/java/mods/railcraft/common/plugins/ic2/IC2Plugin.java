@@ -123,7 +123,7 @@ public class IC2Plugin {
 
     public static void addMaceratorRecipe(ItemStack input, ItemStack output) {
         try {
-            Recipes.macerator.addRecipe(new RecipeInputItemStack(input), null, output);
+            Recipes.macerator.addRecipe(new RecipeInputItemStack(input), null, false, output);
         } catch (Throwable error) {
             Game.logErrorAPI("IC2", error, Recipes.class);
         }

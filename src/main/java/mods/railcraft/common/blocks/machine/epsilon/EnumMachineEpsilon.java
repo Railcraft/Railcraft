@@ -82,6 +82,11 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     }
 
     @Override
+    public String getBaseTag() {
+        return tag;
+    }
+
+    @Override
     public String getTag() {
         return "tile.railcraft.machine.epsilon." + tag;
     }

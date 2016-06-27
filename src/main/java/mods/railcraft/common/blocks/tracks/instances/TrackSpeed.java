@@ -38,22 +38,23 @@ public class TrackSpeed extends TrackBaseRailcraft {
     }
 
     protected static boolean isTrackSafeForHighSpeed(ITrackInstance track, EntityMinecart cart) {
-        EnumRailDirection dir = track.getRailDirection(track.getWorld().getBlockState(track.getPos()), cart);
-        World world = track.getWorld();
+        World world = track.theWorld();
+        assert world != null;
+        EnumRailDirection dir = track.getRailDirection(world.getBlockState(track.getPos()), cart);
         BlockPos pos = track.getPos();
         if (!TrackShapeHelper.isStraight(dir)) {
             return false;
         }
         if (TrackShapeHelper.isNorthSouth(dir)) {
-            BlockPos north = track.getPos().north();
-            BlockPos south = track.getPos().south();
+            BlockPos north = pos.north();
+            BlockPos south = pos.south();
             if ((isTrackHighSpeedCapable(world, north) || isTrackHighSpeedCapable(world, north.up()) || isTrackHighSpeedCapable(world, north.down()))
                     && (isTrackHighSpeedCapable(world, south) || isTrackHighSpeedCapable(world, south.up()) || isTrackHighSpeedCapable(world, south.down()))) {
                 return true;
             }
         } else if (TrackShapeHelper.isEastWest(dir)) {
-            BlockPos east = track.getPos().east();
-            BlockPos west = track.getPos().west();
+            BlockPos east = pos.east();
+            BlockPos west = pos.west();
             if ((isTrackHighSpeedCapable(world, east) || isTrackHighSpeedCapable(world, east.up()) || isTrackHighSpeedCapable(world, east.down()))
                     && (isTrackHighSpeedCapable(world, west) || isTrackHighSpeedCapable(world, west.up()) || isTrackHighSpeedCapable(world, west.down()))) {
                 return true;

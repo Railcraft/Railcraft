@@ -15,6 +15,7 @@ import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -22,13 +23,13 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * Implementation of the iron ladder blocks. Iron ladders act much like normal
@@ -42,6 +43,16 @@ public class BlockTrackElevator extends Block {
 
     public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
     public static final PropertyBool POWERED = PropertyBool.create("powered");
+    private static final float OFFSET = 0.125F;
+    private static final AxisAlignedBB[] BOUNDS = {
+            new AxisAlignedBB(0.0F, 0.0F, 1.0F - OFFSET, 1.0F, 1.0F, 1.0F),
+
+            new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, OFFSET),
+
+            new AxisAlignedBB(1.0F - OFFSET, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F),
+
+            new AxisAlignedBB(0.0F, 0.0F, 0.0F, OFFSET, 1.0F, 1.0F)
+    };
 
 //    /**
 //     * The upward velocity of an entity climbing the ladder.
@@ -68,9 +79,9 @@ public class BlockTrackElevator extends Block {
     public BlockTrackElevator() {
         super(new MaterialElevator());
         setHardness(1.05F);
-        setSoundType(soundTypeMetal);
+        setSoundType(SoundType.METAL);
 
-        setCreativeTab(CreativeTabs.tabTransport);
+        setCreativeTab(CreativeTabs.TRANSPORTATION);
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWERED, false));
     }
 
@@ -90,51 +101,35 @@ public class BlockTrackElevator extends Block {
         return state.getValue(POWERED);
     }
 
+    @Nullable
     @Override
-    public RayTraceResult collisionRayTrace(World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-        setBlockBoundsBasedOnState(worldIn, pos);
-        return super.collisionRayTrace(worldIn, pos, start, end);
-    }
-
-    @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-        EnumFacing facing = getFacing(world, pos);
-        float f = 0.125F;
-        switch (facing) {
-            case NORTH:
-                setBlockBounds(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
-            case SOUTH:
-                setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
-            case WEST:
-                setBlockBounds(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-            case EAST:
-                setBlockBounds(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
-        }
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
         return null;
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-        setBlockBoundsBasedOnState(world, pos);
-        return AABBFactory.start().setBoundsFromBlock(this, pos).build();
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World world, BlockPos pos) {
+        return AABBFactory.start().setBoundsFromBlock(blockState, world, pos).build();
     }
 
     @Override
-    public boolean isLadder(IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        EnumFacing facing = getFacing(source, pos);
+        return BOUNDS[facing.ordinal() - 2];
+    }
+
+    @Override
+    public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
         return true;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isFullCube() {
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
@@ -220,8 +215,8 @@ public class BlockTrackElevator extends Block {
     }
 
     @Override
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-        super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
+        super.neighborChanged(state, worldIn, pos, neighborBlock);
         EnumFacing facing = getFacing(state);
         boolean valid = false;
 
@@ -239,7 +234,7 @@ public class BlockTrackElevator extends Block {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, Entity entityIn) {
+    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
         entityIn.fallDistance = 0;
         if (Game.isClient(worldIn) || !(entityIn instanceof EntityMinecart))
             return;
@@ -368,15 +363,15 @@ public class BlockTrackElevator extends Block {
      * directly above the ladder block and if the block directly above the
      * supporting block is a rail.
      *
-     * @param world    the world in which the block resides
-     * @param cart the minecart that is pushed which onto the block if
-     *                 possible
+     * @param world the world in which the block resides
+     * @param cart  the minecart that is pushed which onto the block if
+     *              possible
      * @return true if the minecart can be pushed onto the supporting block,
      * otherwise false
      */
     //TODO: test
     private boolean pushMinecartOnSupportingBlockIfPossible(World world, BlockPos pos, IBlockState state, EntityMinecart cart) {
-        if (!state.getBlock().getMaterial().isSolid()) {
+        if (!state.getMaterial().isSolid()) {
             EnumFacing facing = getFacing(state);
             if (TrackTools.isRailBlockAt(world, pos.up().offset(facing.getOpposite()))) {
                 cart.motionY = RIDE_UP_VELOCITY;
@@ -412,7 +407,7 @@ public class BlockTrackElevator extends Block {
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos) {
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 }

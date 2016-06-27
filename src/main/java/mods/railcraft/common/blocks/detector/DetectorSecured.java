@@ -21,8 +21,6 @@ import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
@@ -66,13 +64,13 @@ public abstract class DetectorSecured extends Detector implements ISecure<LockBu
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(lockController.getCurrentState());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         lockController.setCurrentState(data.readByte());
     }

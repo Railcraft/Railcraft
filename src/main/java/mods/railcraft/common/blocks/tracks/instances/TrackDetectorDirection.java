@@ -12,13 +12,14 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.api.tracks.ITrackEmitter;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -49,7 +50,7 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
 
     @Override
     public void update() {
-        if (Game.isClient(getWorld())) {
+        if (Game.isClient(theWorldAsserted())) {
             return;
         }
         if (delay > 0) {
@@ -64,19 +65,20 @@ public class TrackDetectorDirection extends TrackBaseRailcraft implements ITrack
     public void onMinecartPass(EntityMinecart cart) {
         int meta = getTile().getBlockMetadata();
         if (meta == 1 || meta == 2 || meta == 3) {
-            if ((isReversed() && cart.motionX < 0.0D) || (!isReversed() && cart.motionX > 0.0D)) {
+            if (isReversed() ? cart.motionX < 0.0D : cart.motionX > 0.0D) {
                 setTrackPowering();
             }
         } else if (meta == 0 || meta == 4 || meta == 5) {
-            if ((isReversed() && cart.motionZ > 0.0D) || (!isReversed() && cart.motionZ < 0.0D)) {
+            if (isReversed() ? cart.motionZ > 0.0D : cart.motionZ < 0.0D) {
                 setTrackPowering();
             }
         }
     }
 
     private void notifyNeighbors() {
-        getWorld().notifyNeighborsOfStateChange(getPos(), RailcraftBlocksOld.getBlockTrack());
-        getWorld().notifyNeighborsOfStateChange(getPos().down(), RailcraftBlocksOld.getBlockTrack());
+        World world = theWorldAsserted();
+        world.notifyNeighborsOfStateChange(getPos(), RailcraftBlocks.track.block());
+        world.notifyNeighborsOfStateChange(getPos().down(), RailcraftBlocks.track.block());
         sendUpdateToClient();
     }
 

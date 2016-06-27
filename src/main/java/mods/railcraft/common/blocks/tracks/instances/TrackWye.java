@@ -84,7 +84,7 @@ public class TrackWye extends TrackSwitchBase {
                 offset = offset.north();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), offset, 0.1f);
+        return CartUtils.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class TrackWye extends TrackSwitchBase {
                 offset = offset.east();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), offset, 0.1f);
+        return CartUtils.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class TrackWye extends TrackSwitchBase {
                 offset = offset.south();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), offset, 0.1f);
+        return CartUtils.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
 
     @Override

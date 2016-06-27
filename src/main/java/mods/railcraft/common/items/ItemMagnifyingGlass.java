@@ -10,6 +10,7 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.IOwnable;
+import mods.railcraft.api.signals.DualLamp;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.TileMultiBlock.MultiBlockStateReturn;
@@ -110,8 +111,8 @@ public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlo
         }
         if (t instanceof IDualHeadSignal) {
             IDualHeadSignal signal = (IDualHeadSignal) t;
-            SignalAspect top = signal.getTopAspect();
-            SignalAspect bottom = signal.getBottomAspect();
+            SignalAspect top = signal.getSignalAspect(DualLamp.TOP);
+            SignalAspect bottom = signal.getSignalAspect(DualLamp.BOTTOM);
             ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.gui.mag.glass.aspect.dual", top.getLocalizationTag(), bottom.getLocalizationTag());
             returnValue = EnumActionResult.SUCCESS;
         } else if (t instanceof TileSignalBase) {

@@ -1,12 +1,13 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.common.blocks.tracks.instances.TrackForce;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.tracks.instances.TrackForce;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
@@ -14,8 +15,8 @@ import java.util.Set;
 
 public class EntityCartTrackRemover extends CartBaseMaintenance {
 
-    private final Set<WorldCoordinate> tracksBehind = new HashSet<WorldCoordinate>();
-    private final Set<WorldCoordinate> tracksRemoved = new HashSet<WorldCoordinate>();
+    private final Set<BlockPos> tracksBehind = new HashSet<BlockPos>();
+    private final Set<BlockPos> tracksRemoved = new HashSet<BlockPos>();
 
     public EntityCartTrackRemover(World world) {
         super(world);
@@ -38,36 +39,36 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
     }
 
     @Override
-    protected void func_145821_a(int trackX, int trackY, int trackZ, double maxSpeed, double slopeAdjustment, Block trackBlock, int trackMeta) {
-        super.func_145821_a(trackX, trackY, trackZ, maxSpeed, slopeAdjustment, trackBlock, trackMeta);
+    protected void moveAlongTrack(BlockPos pos, IBlockState state){
+        super.moveAlongTrack(pos, state);
         if (Game.isClient(worldObj))
             return;
 
-        for (WorldCoordinate track : tracksBehind) {
-            if (track.isEqual(worldObj.provider.getDimension(), trackX, trackY, trackZ))
+        for (BlockPos track : tracksBehind) {
+            if (track.equals(pos))
                 continue;
             removeTrack(track);
         }
         tracksBehind.removeAll(tracksRemoved);
         tracksRemoved.clear();
 
-        addTravelledTrack(trackX, trackY, trackZ);
+        addTravelledTrack(pos);
     }
 
-    private void addTravelledTrack(int trackX, int trackY, int trackZ) {
-        tracksBehind.add(new WorldCoordinate(worldObj.provider.getDimension(), trackX, trackY, trackZ));
+    private void addTravelledTrack(BlockPos pos) {
+        tracksBehind.add(pos);
     }
 
-    private void removeTrack(WorldCoordinate track) {
-        if (WorldPlugin.getDistanceSq(track, posX, posY, posZ) >= 9)
+    private void removeTrack(BlockPos track) {
+        if (getDistanceSq(track) >= 9)
             tracksRemoved.add(track);
-        else if (!TrackTools.isRailBlockAt(worldObj, track.x, track.y, track.z))
+        else if (!TrackTools.isRailBlockAt(worldObj, track))
             tracksRemoved.add(track);
-        else if ((TrackTools.getTrackInstanceAt(worldObj, track.x, track.y, track.z) instanceof TrackForce))
+        else if ((TrackTools.getTrackInstanceAt(worldObj, track) instanceof TrackForce))
             tracksRemoved.add(track);
-        else if (!CartTools.isMinecartAt(worldObj, track.x, track.y, track.z, -0.2f)) {
-            Block block = WorldPlugin.getBlock(worldObj, track.x, track.y, track.z);
-            removeOldTrack(track.x, track.y, track.z, block);
+        else if (!CartTools.isMinecartAt(worldObj, track, -0.2f)) {
+            Block block = WorldPlugin.getBlock(worldObj, track);
+            removeOldTrack(track, block);
             blink();
             tracksRemoved.add(track);
         }

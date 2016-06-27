@@ -26,7 +26,7 @@ public enum Fluids {
     private final String tag;
 
     Fluids() {
-        tag = name().toLowerCase(Locale.ENGLISH);
+        tag = name().toLowerCase(Locale.ROOT);
     }
 
     public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {

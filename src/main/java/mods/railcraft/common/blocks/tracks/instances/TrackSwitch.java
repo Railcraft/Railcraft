@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
     }
 
     @Override
-    public EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
+    public EnumRailDirection getRailDirection(IBlockState state, @Nullable EntityMinecart cart) {
         EnumRailDirection current = super.getRailDirection(state, cart);
         if (cart != null && shouldSwitchForCart(cart)) {
             if (current == EnumRailDirection.NORTH_SOUTH) {
@@ -92,13 +93,13 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
                 offset = offset.north();
             }
         } else if (dir == EnumRailDirection.EAST_WEST) {
-            if (!isReversed() != isMirrored()) {
+            if (isReversed() == isMirrored()) {
                 offset = offset.east();
             } else {
                 offset = offset.west();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), offset, 0.1f);
+        return CartUtils.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
 
     @Override
@@ -112,13 +113,13 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
                 offset = offset.south();
             }
         } else if (dir == EnumRailDirection.EAST_WEST) {
-            if (!isReversed() != isMirrored()) {
+            if (isReversed() == isMirrored()) {
                 offset = offset.west();
             } else {
                 offset = offset.east();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), offset, 0.1f);
+        return CartUtils.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
 
     @Override
@@ -138,7 +139,7 @@ public class TrackSwitch extends TrackSwitchBase implements ITrackReversible {
                 offset = offset.south();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(getWorld(), offset, 0.1f);
+        return CartUtils.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
 
     @Override

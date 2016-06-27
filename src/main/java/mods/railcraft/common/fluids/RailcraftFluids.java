@@ -151,6 +151,7 @@ public enum RailcraftFluids {
         }
     }
 
+    //TODO: this may be obsolete finally
     public static class TextureHook {
         @SubscribeEvent
         @SideOnly(Side.CLIENT)

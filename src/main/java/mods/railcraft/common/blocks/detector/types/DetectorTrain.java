@@ -21,8 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -75,13 +73,13 @@ public class DetectorTrain extends Detector {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeShort(getTrainSize());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         setTrainSize(data.readShort());
     }

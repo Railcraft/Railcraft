@@ -51,7 +51,7 @@ public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
 
     @SubscribeEvent
     public void attackEvent(AttackEntityEvent event) {
-        target = new WeakReference<Entity>(event.target);
+        target = new WeakReference<Entity>(event.getTarget());
     }
 
     @Override

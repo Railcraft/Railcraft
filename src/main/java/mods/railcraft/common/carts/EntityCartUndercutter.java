@@ -25,9 +25,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -173,8 +174,9 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
             int newMeta = 0;
             if (item.getHasSubtypes())
                 newMeta = item.getMetadata(stock.getItemDamage());
-            if (stockBlock != null && WorldPlugin.setBlockState(worldObj, pos, stockBlock.getStateFromMeta(newMeta))) {
-                SoundHelper.playBlockSound(worldObj, pos, stockBlock.getSoundType().getPlaceSound(), (1f + 1.0F) / 2.0F, 1f * 0.8F, stockBlock, newMeta);
+            IBlockState newState;
+            if (stockBlock != null && WorldPlugin.setBlockState(worldObj, pos, (newState = stockBlock.getStateFromMeta(newMeta)))) {
+                SoundHelper.playBlockSound(worldObj, pos, stockBlock.getSoundType().getPlaceSound(), SoundCategory.NEUTRAL, (1f + 1.0F) / 2.0F, 1f * 0.8F, newState);
                 decrStackSize(slotStock, 1);
                 for (ItemStack stack : drops) {
                     CartTools.transferHelper.offerOrDropItem(this, stack);
@@ -204,15 +206,15 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
         if (WorldPlugin.isBlockAir(worldObj, pos))
             return false;
 
-        Block block = WorldPlugin.getBlock(worldObj, pos);
+        IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
 
-        if (block.getMaterial().isLiquid())
+        if (state.getMaterial().isLiquid())
             return false;
 
-        if (block.getBlockHardness(worldObj, pos) < 0)
+        if (state.getBlockHardness(worldObj, pos) < 0)
             return false;
 
-        return !block.isReplaceable(worldObj, pos);
+        return !state.getBlock().isReplaceable(worldObj, pos);
     }
 
     @Override

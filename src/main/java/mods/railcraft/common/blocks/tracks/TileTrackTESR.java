@@ -8,18 +8,7 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.tracks.ITrackInstance;
-
 public class TileTrackTESR extends TileTrack {
-
-    public TileTrackTESR() {
-        super();
-    }
-
-    public TileTrackTESR(ITrackInstance t) {
-        super(t);
-    }
-
     @Override
     public double getMaxRenderDistanceSquared() {
         return Short.MAX_VALUE;

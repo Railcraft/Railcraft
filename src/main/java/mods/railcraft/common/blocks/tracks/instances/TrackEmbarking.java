@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.carts.CartUtils;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -35,6 +36,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -66,12 +68,11 @@ public class TrackEmbarking extends TrackPowered implements IGuiReturnHandler {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem) {
-        ItemStack current = player.getCurrentEquippedItem();
-        if (current != null && current.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-            GuiHandler.openGui(EnumGui.TRACK_EMBARKING, player, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
-            crowbar.onWhack(player, hand, current, getPos());
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
+            GuiHandler.openGui(EnumGui.TRACK_EMBARKING, player, theWorldAsserted(), getPos().getX(), getPos().getY(), getPos().getZ());
+            crowbar.onWhack(player, hand, heldItem, getPos());
             return true;
         }
         return false;
@@ -79,11 +80,11 @@ public class TrackEmbarking extends TrackPowered implements IGuiReturnHandler {
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        if (isPowered() && cart.canBeRidden() && cart.riddenByEntity == null && cart.getEntityData().getInteger("MountPrevention") <= 0) {
+        if (isPowered() && cart.canBeRidden() && !cart.isBeingRidden() && cart.getEntityData().getInteger("MountPrevention") <= 0) {
             int a = area;
             AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(getPos()).build();
             box = box.expand(a, a, a);
-            List<EntityLivingBase> entities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, box);
+            List<EntityLivingBase> entities = theWorldAsserted().getEntitiesWithinAABB(EntityLivingBase.class, box);
 
             if (entities.size() > 0) {
                 EntityLivingBase entity = entities.get(MiscTools.RANDOM.nextInt(entities.size()));
@@ -94,7 +95,7 @@ public class TrackEmbarking extends TrackPowered implements IGuiReturnHandler {
                         return;
                     }
 
-                    ItemStack current = player.getCurrentEquippedItem();
+                    ItemStack current = player.getActiveItemStack();
                     if (current != null && current.getItem() instanceof IToolCrowbar) {
                         return;
                     }
@@ -106,9 +107,9 @@ public class TrackEmbarking extends TrackPowered implements IGuiReturnHandler {
                         return;
                 }
 
-                if (entity.ridingEntity == null) {
-                    EffectManager.instance.teleportEffect(entity, cart.posX, cart.posY, cart.posZ);
-                    entity.mountEntity(cart);
+                if (!entity.isRiding()) {
+                    EffectManager.instance.teleportEffect(entity, cart.getPositionVector());
+                    CartUtils.addPassenger(cart, entity);
                 }
             }
         }

@@ -32,8 +32,6 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -153,13 +151,13 @@ public class DetectorTank extends DetectorFilter {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(buttonController.getCurrentState());
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         buttonController.setCurrentState(data.readByte());
     }

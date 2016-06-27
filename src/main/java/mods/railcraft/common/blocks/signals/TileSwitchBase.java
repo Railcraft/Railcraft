@@ -20,10 +20,12 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -88,9 +90,9 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
         if (lastSwitchState != isSwitched) {
             lastSwitchState = isSwitched;
             if (isSwitched)
-                SoundHelper.playSound(worldObj, getPos(), "tile.piston.in", 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
             else
-                SoundHelper.playSound(worldObj, getPos(), "tile.piston.out", 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
+                SoundHelper.playSound(worldObj, null, getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.25f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
         }
     }
 
@@ -144,6 +146,7 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
         data.setBoolean("Powered", isPowered());
         data.setBoolean("lastSwitchState", lastSwitchState);
         data.setByte("Facing", facing);
+        return data;
     }
 
     @Override

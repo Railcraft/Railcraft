@@ -48,14 +48,15 @@ public class EntityItemFireproof extends EntityItem {
         isImmuneToFire = true;
     }
 
+    //TODO: test this, if the entity item is null we can't tell
     @Override
     public void onUpdate() {
-        ItemStack stack = getDataWatcher().getWatchableObjectItemStack(10);
-        if (stack != null && stack.getItem() != null && stack.getItem().onEntityItemUpdate(this))
+        ItemStack stack = getEntityItem();
+        if (stack.getItem().onEntityItemUpdate(this))
             return;
-        if (getEntityItem() == null) {
-            setDead();
-        } else {
+//        if (getEntityItem() == null) {
+//            setDead();
+//        } else {
             onEntityUpdate();
 
             int delayBeforeCanPickup = ReflectionHelper.getPrivateValue(EntityItem.class, this, "field_145804_b", "delayBeforeCanPickup");
@@ -84,7 +85,7 @@ public class EntityItemFireproof extends EntityItem {
                 this.motionY *= -0.5D;
 
             handleWaterMovement();
-        }
+//        }
     }
 
     @Override

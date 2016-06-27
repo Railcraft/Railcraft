@@ -14,7 +14,7 @@ import net.minecraft.block.material.Material;
 public class MaterialStructure extends Material {
 
     public MaterialStructure() {
-        super(MapColor.ironColor);
+        super(MapColor.IRON);
         setRequiresTool();
     }
 }

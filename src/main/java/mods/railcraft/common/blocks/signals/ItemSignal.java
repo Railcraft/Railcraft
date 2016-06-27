@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemSignal extends ItemBlockRailcraftMultiType {
@@ -34,31 +35,18 @@ public class ItemSignal extends ItemBlockRailcraftMultiType {
     }
 
     @Override
-    public boolean func_150936_a(World world, int x, int y, int z, int side, EntityPlayer player, ItemStack stack) {
-        Block oldBlock = world.getBlock(x, y, z);
+    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, EntityPlayer player, ItemStack stack) {
+        Block block = worldIn.getBlockState(pos).getBlock();
 
-        if (oldBlock == Blocks.SNOW_LAYER)
-            side = 1;
-        else if (oldBlock != Blocks.VINE && oldBlock != Blocks.TALLGRASS && oldBlock != Blocks.DEADBUSH && !oldBlock.isReplaceable(world, x, y, z)) {
-            if (side == 0)
-                --y;
-
-            if (side == 1)
-                ++y;
-
-            if (side == 2)
-                --z;
-
-            if (side == 3)
-                ++z;
-
-            if (side == 4)
-                --x;
-
-            if (side == 5)
-                ++x;
+        if (block == Blocks.SNOW_LAYER && block.isReplaceable(worldIn, pos))
+        {
+            side = EnumFacing.UP;
+        }
+        else if (!block.isReplaceable(worldIn, pos))
+        {
+            pos = pos.offset(side);
         }
 
-        return world.canPlaceEntityOnSide(field_150939_a, x, y, z, false, side, (Entity) null, stack) && (!getStructureType(stack).needsSupport() || world.isSideSolid(x, y - 1, z, EnumFacing.UP));
+        return worldIn.canBlockBePlaced(getBlock(), pos, false, side, (Entity) null, stack) && (!getStructureType(stack).needsSupport() || worldIn.isSideSolid(pos.down(), EnumFacing.UP));
     }
 }

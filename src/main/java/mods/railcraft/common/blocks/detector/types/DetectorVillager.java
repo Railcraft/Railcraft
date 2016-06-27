@@ -23,8 +23,6 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -120,7 +118,7 @@ public class DetectorVillager extends Detector {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeUTF(profession.getRegistryName().toString());
@@ -128,7 +126,7 @@ public class DetectorVillager extends Detector {
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         profession = VillagerRegistry.instance().getRegistry().getValue(new ResourceLocation(data.readUTF()));

@@ -15,6 +15,7 @@ import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -222,7 +223,7 @@ public class RailcraftToolItems {
             String tag = "railcraft.armor.steel.helmet";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
-                item = itemSteelHelmet = new ItemSteelArmor(0);
+                item = itemSteelHelmet = new ItemSteelArmor(EntityEquipmentSlot.HEAD);
                 item.setUnlocalizedName(tag);
                 RailcraftRegistry.register(item);
 
@@ -248,7 +249,7 @@ public class RailcraftToolItems {
             String tag = "railcraft.armor.steel.plate";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
-                item = itemSteelArmor = new ItemSteelArmor(1);
+                item = itemSteelArmor = new ItemSteelArmor(EntityEquipmentSlot.CHEST);
                 item.setUnlocalizedName(tag);
                 RailcraftRegistry.register(item);
 
@@ -275,7 +276,7 @@ public class RailcraftToolItems {
             String tag = "railcraft.armor.steel.legs";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
-                item = itemSteelLegs = new ItemSteelArmor(2);
+                item = itemSteelLegs = new ItemSteelArmor(EntityEquipmentSlot.LEGS);
                 item.setUnlocalizedName(tag);
                 RailcraftRegistry.register(item);
 
@@ -302,7 +303,7 @@ public class RailcraftToolItems {
             String tag = "railcraft.armor.steel.boots";
 
             if (RailcraftConfig.isItemEnabled(tag)) {
-                item = itemSteelBoots = new ItemSteelArmor(3);
+                item = itemSteelBoots = new ItemSteelArmor(EntityEquipmentSlot.FEET);
                 item.setUnlocalizedName(tag);
                 RailcraftRegistry.register(item);
 

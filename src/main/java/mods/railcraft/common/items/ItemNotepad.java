@@ -15,9 +15,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
@@ -127,7 +131,7 @@ public class ItemNotepad extends ItemRailcraft {
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         NBTTagCompound nbt = InvTools.getItemDataRailcraft(stack);
 
         if (player.isSneaking()) {
@@ -137,19 +141,18 @@ public class ItemNotepad extends ItemRailcraft {
             if (Game.isClient(world))
                 ChatPlugin.sendLocalizedChatFromClient(player, "item.railcraft.tool.notepad.tip.mode", TextFormatting.DARK_PURPLE + pasteMode.toString());
         }
-        return stack;
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-        //Dunno why this is needed, but without this override it stops working properly.
-        return true;
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        return EnumActionResult.PASS;
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         TileEntity tileEntity = world.getTileEntity(pos);
-        if (Game.isHost(world)) {
+        if (tileEntity != null && Game.isHost(world)) {
             if (player.isSneaking()) // COPY
             {
                 EnumMap<Contents, NBTTagCompound> contents = new EnumMap<Contents, NBTTagCompound>(Contents.class);
@@ -165,7 +168,7 @@ public class ItemNotepad extends ItemRailcraft {
                     setContents(stack, contents);
                     if (tileEntity instanceof IWorldNameable)
                         ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.copy", ((IWorldNameable) tileEntity).getDisplayName());
-                    player.getCurrentEquippedItem().damageItem(1, player);
+                    stack.damageItem(1, player);
                 }
             } else // PASTE
             {
@@ -188,11 +191,11 @@ public class ItemNotepad extends ItemRailcraft {
                 }
             }
         }
-        return !world.isRemote;
+        return EnumActionResult.SUCCESS;
     }
 
     @Override
-    public boolean doesSneakBypassUse(World world, BlockPos pos, EntityPlayer player) {
+    public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
         return true;
     }
 

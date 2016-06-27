@@ -12,7 +12,6 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
@@ -36,6 +35,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                 add(
                         RailcraftItems.electricMeter,
                         RailcraftBlocks.track,
+                        RailcraftBlocks.frame,
                         RailcraftBlocks.machine_alpha,
                         RailcraftBlocks.machine_delta,
                         RailcraftBlocks.machine_epsilon
@@ -44,8 +44,6 @@ public class ModuleElectricity extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                BlockFrame.registerBlock();
-
                 EnumMachineAlpha alpha = EnumMachineAlpha.TURBINE;
                 if (alpha.isEnabled()) {
                     CraftingPlugin.addRecipe(alpha.getItem(3),

@@ -13,8 +13,10 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -41,7 +43,7 @@ public class TileBoxAnalogController extends TileBoxBase implements IControllerT
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (player.isSneaking())
             return false;
         GuiHandler.openGui(EnumGui.BOX_ANALOG_CONTROLLER, player, worldObj, getPos());

@@ -65,7 +65,7 @@ public class ItemTicketGold extends ItemTicket implements IEditableItem {
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world))
             if (canPlayerEdit(player, stack)) {
-                PacketBuilder.instance().sendGoldenTicketGuiPacket((EntityPlayerMP) player, stack, hand);
+                PacketBuilder.instance().sendGoldenTicketGuiPacket((EntityPlayerMP) player, hand);
                 return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
             }
         return ActionResult.newResult(EnumActionResult.PASS, stack);

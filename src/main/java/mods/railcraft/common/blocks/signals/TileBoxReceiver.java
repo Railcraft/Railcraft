@@ -21,11 +21,14 @@ import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 import static mods.railcraft.common.plugins.forge.PowerPlugin.FULL_POWER;
@@ -42,7 +45,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (player.isSneaking())
             return false;
         if (Game.isHost(worldObj))

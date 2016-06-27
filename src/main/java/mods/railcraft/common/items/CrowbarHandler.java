@@ -22,6 +22,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -46,6 +47,7 @@ public class CrowbarHandler {
     public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         EntityPlayer thePlayer = event.getEntityPlayer();
         Entity entity = event.getTarget();
+        EnumHand hand = event.getHand();
 
         ItemStack stack = thePlayer.getActiveItemStack();
         if (stack != null && stack.getItem() instanceof IToolCrowbar)

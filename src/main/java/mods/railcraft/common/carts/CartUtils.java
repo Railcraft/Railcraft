@@ -139,6 +139,10 @@ public class CartUtils {
         return entities.stream().filter(cart -> !cart.isDead).map(Entity::getPersistentID).collect(Collectors.toList());
     }
 
+    public static void addPassenger(EntityMinecart cart, Entity passenger){
+        cart.startRiding(passenger);
+    }
+
     public static void removePassengers(EntityMinecart cart) {
         removePassengers(cart, cart.getPositionVector());
     }

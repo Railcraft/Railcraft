@@ -47,8 +47,8 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
     }
 
     @Override
-    protected void func_180460_a(BlockPos pos, IBlockState state) {
-        super.func_180460_a(pos, state);
+    protected void moveAlongTrack(BlockPos pos, IBlockState state) {
+        super.moveAlongTrack(pos, state);
         if (Game.isClient(worldObj))
             return;
 
@@ -87,7 +87,7 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
     }
 
     private boolean isValidNewTrackPosition(BlockPos pos) {
-        return isValidReplacementBlock(pos) && World.doesBlockHaveSolidTopSurface(worldObj, pos.down());
+        return isValidReplacementBlock(pos) && worldObj.isSideSolid(pos.down(), EnumFacing.UP);
     }
 
     private boolean isValidReplacementBlock(BlockPos pos) {

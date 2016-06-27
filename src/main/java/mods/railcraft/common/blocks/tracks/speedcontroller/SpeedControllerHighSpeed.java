@@ -14,8 +14,8 @@ import mods.railcraft.common.blocks.tracks.instances.TrackSpeed;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -46,7 +46,8 @@ public class SpeedControllerHighSpeed extends SpeedController {
     }
 
     public static float speedForCurrentTrack(ITrackInstance track, EntityMinecart cart) {
-        World world = track.getWorld();
+        World world = track.theWorld();
+        assert world != null;
         BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, track.getPos(), cart);
         if (dir != null && dir.isAscending())
             return SPEED_SLOPE;
