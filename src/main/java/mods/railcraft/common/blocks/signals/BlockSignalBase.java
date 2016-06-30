@@ -117,10 +117,18 @@ public abstract class BlockSignalBase extends RailcraftBlockContainer implements
     }
 
     @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        TileEntity tile = source.getTileEntity(pos);
+        if (tile instanceof TileSignalFoundation)
+            return ((TileSignalFoundation) tile).getBoundingBox(source, pos);
+        return AABBFactory.FULL_BOX;
+    }
+
+    @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileSignalFoundation)
-            return ((TileSignalFoundation) tile).getCollisionBoundingBox(worldIn, pos);
+            return ((TileSignalFoundation) tile).getBoundingBox(worldIn, pos);
         return AABBFactory.FULL_BOX;
     }
 

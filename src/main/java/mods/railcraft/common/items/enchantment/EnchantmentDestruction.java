@@ -1,9 +1,11 @@
 package mods.railcraft.common.items.enchantment;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
+
 public class EnchantmentDestruction extends EnchantmentCrowbar {
 
-    public EnchantmentDestruction(int id, int weight) {
-        super("destruction", id, weight);
+    public EnchantmentDestruction(Rarity rarity) {
+        super("destruction", rarity, EntityEquipmentSlot.MAINHAND);
     }
 
     @Override

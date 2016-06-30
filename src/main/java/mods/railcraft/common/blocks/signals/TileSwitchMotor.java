@@ -23,10 +23,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionManager, IGuiReturnHandler, IReceiverTile {
@@ -46,7 +49,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (Game.isHost(worldObj))
             GuiHandler.openGui(EnumGui.SWITCH_MOTOR, player, worldObj, getPos());
         return true;
@@ -104,6 +107,7 @@ public class TileSwitchMotor extends TileSwitchSecured implements IAspectActionM
         data.setBoolean("switchOnRedstone", switchOnRedstone);
 
         receiver.writeToNBT(data);
+        return data;
     }
 
     @Override

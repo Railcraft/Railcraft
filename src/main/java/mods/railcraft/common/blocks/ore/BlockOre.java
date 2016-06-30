@@ -8,8 +8,6 @@
  */
 package mods.railcraft.common.blocks.ore;
 
-import mods.railcraft.client.particles.ParticleHelper;
-import mods.railcraft.client.particles.ParticleHelperCallback;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemDust;
@@ -23,8 +21,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.ParticleDigging;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -35,8 +31,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -50,7 +44,7 @@ import java.util.Random;
 public class BlockOre extends Block {
 
     public static final PropertyEnum<EnumOre> VARIANT = PropertyEnum.create("variant", EnumOre.class);
-    private static final ParticleHelperCallback callback = new ParticleCallback();
+//    private static final ParticleHelperCallback callback = new ParticleCallback();
     public static int renderPass;
     private static BlockOre instance;
     private final Random rand = new Random();
@@ -219,18 +213,19 @@ public class BlockOre extends Block {
         return true;
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager effectRenderer) {
-        return ParticleHelper.addHitEffects(worldObj, instance, target, effectRenderer, callback);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager effectRenderer) {
-        IBlockState state = WorldPlugin.getBlockState(world, pos);
-        return ParticleHelper.addDestroyEffects(world, instance, pos, state, effectRenderer, callback);
-    }
+    //TODO: determine if the particle overrides are still necessary
+//    @SideOnly(Side.CLIENT)
+//    @Override
+//    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager effectRenderer) {
+//        return ParticleHelper.addHitEffects(worldObj, instance, target, effectRenderer, callback);
+//    }
+//
+//    @SideOnly(Side.CLIENT)
+//    @Override
+//    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager effectRenderer) {
+//        IBlockState state = WorldPlugin.getBlockState(world, pos);
+//        return ParticleHelper.addDestroyEffects(world, instance, pos, state, effectRenderer, callback);
+//    }
 
     @Override
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
@@ -265,23 +260,23 @@ public class BlockOre extends Block {
         return false;
     }
 
-    private static class ParticleCallback implements ParticleHelperCallback {
-        @Override
-        @SideOnly(Side.CLIENT)
-        public void addHitEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
-            setTexture(fx, world, pos, state);
-        }
-
-        @Override
-        @SideOnly(Side.CLIENT)
-        public void addDestroyEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
-            setTexture(fx, world, pos, state);
-        }
-
-        @SideOnly(Side.CLIENT)
-        private void setTexture(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
-            renderPass = 0;
-            fx.setParticleTexture(instance.getIcon(0, meta));
-        }
-    }
+//    private static class ParticleCallback implements ParticleHelperCallback {
+//        @Override
+//        @SideOnly(Side.CLIENT)
+//        public void addHitEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
+//            setTexture(fx, world, pos, state);
+//        }
+//
+//        @Override
+//        @SideOnly(Side.CLIENT)
+//        public void addDestroyEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
+//            setTexture(fx, world, pos, state);
+//        }
+//
+//        @SideOnly(Side.CLIENT)
+//        private void setTexture(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
+//            renderPass = 0;
+//            fx.setParticleTexture(instance.getIcon(0, meta));
+//        }
+//    }
 }

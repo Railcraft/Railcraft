@@ -11,7 +11,11 @@ package mods.railcraft.common.blocks.signals;
 import mods.railcraft.api.tracks.ITrackSwitch;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+
+import javax.annotation.Nullable;
 
 public class TileSwitchLever extends TileSwitchBase {
 
@@ -21,7 +25,7 @@ public class TileSwitchLever extends TileSwitchBase {
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         setPowered(!isPowered());
         return true;
     }

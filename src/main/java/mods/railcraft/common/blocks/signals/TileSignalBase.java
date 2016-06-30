@@ -23,7 +23,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockAccess;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -33,8 +33,9 @@ import static net.minecraft.util.EnumFacing.UP;
 
 public abstract class TileSignalBase extends TileSignalFoundation implements IAspectProvider, ILampTile {
 
-    private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
     protected static final float BOUNDS = 0.15f;
+    private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
+    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-BOUNDS).raiseFloor(0.35).build();
     private EnumFacing facing = EnumFacing.NORTH;
     private int prevLightValue;
 
@@ -58,8 +59,8 @@ public abstract class TileSignalBase extends TileSignalFoundation implements IAs
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-BOUNDS).raiseFloor(0.35).build();
+    public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos) {
+        return BOUNDING_BOX;
     }
 
     @Override
@@ -88,12 +89,12 @@ public abstract class TileSignalBase extends TileSignalFoundation implements IAs
         return getSignalAspect().getLightValue();
     }
 
-    public void setFacing(EnumFacing facing) {
-        this.facing = facing;
-    }
-
     public EnumFacing getFacing() {
         return facing;
+    }
+
+    public void setFacing(EnumFacing facing) {
+        this.facing = facing;
     }
 
     @Override

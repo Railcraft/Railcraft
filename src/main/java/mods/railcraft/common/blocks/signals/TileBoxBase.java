@@ -15,22 +15,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
 public abstract class TileBoxBase extends TileSignalFoundation implements ILampTile {
 
     private static final float BOUND = -0.1f;
+    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(BOUND).raiseCeiling(BOUND / 2).build();
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(BOUND).raiseCeiling(BOUND / 2).build();
-    }
-
-    @Override
-    public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(BOUND).raiseCeiling(BOUND / 2).build();
+    public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos) {
+        return BOUNDING_BOX;
     }
 
     @Override

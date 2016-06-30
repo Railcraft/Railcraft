@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -27,6 +27,7 @@ import java.io.IOException;
 public class TileSignalDualHeadDistantSignal extends TileSignalBase implements IReceiverTile, IDualHeadSignal {
 
     private static final float SIZE = -0.15f;
+    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(SIZE).build();
     private final DualSignalReceiver receiver = new DualSignalReceiver(getLocalizationTag(), this);
 
     @Override
@@ -68,8 +69,8 @@ public class TileSignalDualHeadDistantSignal extends TileSignalBase implements I
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(SIZE).build();
+    public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos) {
+        return BOUNDING_BOX;
     }
 
     @Override

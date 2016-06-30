@@ -11,15 +11,14 @@ package mods.railcraft.common.blocks.signals;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -81,12 +80,20 @@ public abstract class TileSignalFoundation extends RailcraftTileEntity {
     public void onBlockRemoval() {
     }
 
+//    public AxisAlignedBB getBoundingBox(World world, BlockPos pos) {
+//        return AABBFactory.start().createBoxForTileAt(pos).build();
+//    }
+
+    public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos) {
+        return Block.FULL_BLOCK_AABB;
+    }
+
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.start().createBoxForTileAt(pos).build();
+        return getBoundingBox(world, pos);
     }
 
     public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-        return getCollisionBoundingBox(world, pos);
+        return getBoundingBox(world, pos).offset(pos);
     }
 
     public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {

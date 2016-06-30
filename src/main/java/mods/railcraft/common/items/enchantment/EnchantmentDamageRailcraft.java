@@ -4,6 +4,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -16,8 +17,8 @@ public class EnchantmentDamageRailcraft extends EnchantmentCrowbar {
     private final float damageBonusPerLevel;
     private WeakReference<Entity> target;
 
-    public EnchantmentDamageRailcraft(String tag, int id, int weight, int baseEnchantability, int levelEnchantability, int thresholdEnchantability, Class<? extends EntityLivingBase> targetType, float damageBonusPerLevel) {
-        super(tag, id, weight);
+    public EnchantmentDamageRailcraft(String tag, Rarity rarity, int baseEnchantability, int levelEnchantability, int thresholdEnchantability, Class<? extends EntityLivingBase> targetType, float damageBonusPerLevel) {
+        super(tag, rarity, EntityEquipmentSlot.MAINHAND);
         this.baseEnchantability = baseEnchantability;
         this.levelEnchantability = levelEnchantability;
         this.thresholdEnchantability = thresholdEnchantability;

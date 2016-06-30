@@ -21,8 +21,10 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -30,10 +32,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 public abstract class TileSwitchBase extends TileSignalFoundation implements ISwitchDevice {
     private static final float BOUNDS = -0.2F;
+    private static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(BOUNDS).raiseCeiling(-0.2F).build();
+    private static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().expandHorizontally(BOUNDS).raiseCeiling(-0.2F).build();
 
     private byte facing = (byte) EnumFacing.NORTH.ordinal();
     private static final int ARROW_UPDATE_INTERVAL = 16;
@@ -51,17 +56,17 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-        getBlockType().setBlockBounds(0.2f, 0f, 0.2f, 0.8f, 0.8f, 0.8f);
+    public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos) {
+        return BOUNDING_BOX;
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
-        return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(BOUNDS).raiseCeiling(-0.6F).build();
+        return COLLISION_BOX;
     }
 
     @Override
-    public boolean blockActivated(EnumFacing side, EntityPlayer player) {
+    public boolean blockActivated(EnumFacing side, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         powered = !powered;
         sendUpdateToClient();
         return true;
@@ -120,7 +125,8 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
             markBlockForUpdate();
     }
 
-    private ArrowDirection mergeArrowDirection(ArrowDirection arrow1, ArrowDirection arrow2) {
+    @Nullable
+    private ArrowDirection mergeArrowDirection(@Nullable ArrowDirection arrow1, @Nullable ArrowDirection arrow2) {
         if (arrow1 == arrow2) return arrow1;
         if (arrow1 == null) return arrow2;
         if (arrow2 == null) return arrow1;
