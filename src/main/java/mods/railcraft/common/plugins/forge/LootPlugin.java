@@ -12,39 +12,39 @@ import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.loot.LootEventDispatcher;
+import mods.railcraft.common.loot.WeightedRandomChestContent;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.common.ChestGenHooks;
+
+import static net.minecraft.world.storage.loot.LootTableList.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class LootPlugin {
 
-    public static final ResourceLocation CHESTS_VILLAGE_WORKSHOP = LootTableList.register(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "chests/village_workshop"));
-    public static final String WORKSHOP = "railcraft:workshop";
+    public static final ResourceLocation CHESTS_VILLAGE_WORKSHOP = register(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "chests/village_workshop"));
 
     public static void init() {
-        LootPlugin.increaseLootGen(1, 2,
-                ChestGenHooks.MINESHAFT_CORRIDOR,
-                ChestGenHooks.VILLAGE_BLACKSMITH);
-        LootPlugin.increaseLootGen(10, 16, WORKSHOP);
+        /*LootPlugin.increaseLootGen(1, 2,
+                CHESTS_ABANDONED_MINESHAFT,
+                CHESTS_VILLAGE_BLACKSMITH);
+        LootPlugin.increaseLootGen(10, 16, CHESTS_VILLAGE_WORKSHOP);*/
         addLoot(new ItemStack(Items.COAL), 8, 16, Type.WORKSHOP, "fuel.coal");
     }
 
-    public static void increaseLootGen(int min, int max, String... locations) {
-        for (String location : locations) {
+    /*public static void increaseLootGen(int min, int max, ResourceLocation... locations) {
+        for (ResourceLocation location : locations) {
             ChestGenHooks lootInfo = ChestGenHooks.getInfo(location);
             lootInfo.setMin(lootInfo.getMin() + min);
             lootInfo.setMax(lootInfo.getMax() + max);
         }
-    }
+    }*/
 
-    private static void addLoot(ItemStack loot, int minStack, int maxStack, String tag, String... locations) {
+    private static void addLoot(ItemStack loot, int minStack, int maxStack, String tag, ResourceLocation... locations) {
         if (loot == null) {
             if (Game.IS_DEBUG)
                 throw new RuntimeException("Invalid Loot");
@@ -54,9 +54,9 @@ public class LootPlugin {
         addLoot(contents, locations);
     }
 
-    private static void addLoot(WeightedRandomChestContent loot, String... locations) {
-        for (String location : locations) {
-            ChestGenHooks.addItem(location, loot);
+    private static void addLoot(WeightedRandomChestContent loot, ResourceLocation... locations) {
+        for (ResourceLocation location : locations) {
+            LootEventDispatcher.addItem(location, loot);
         }
     }
 
@@ -82,23 +82,25 @@ public class LootPlugin {
     }
 
     public enum Type {
-        WARRIOR(ChestGenHooks.VILLAGE_BLACKSMITH,
-                ChestGenHooks.DUNGEON_CHEST,
-                ChestGenHooks.PYRAMID_DESERT_CHEST,
-                ChestGenHooks.PYRAMID_JUNGLE_CHEST,
-                ChestGenHooks.STRONGHOLD_CORRIDOR,
-                ChestGenHooks.STRONGHOLD_CROSSING),
-        RAILWAY(ChestGenHooks.MINESHAFT_CORRIDOR,
-                LootPlugin.WORKSHOP),
-        WORKSHOP(LootPlugin.WORKSHOP),
-        TOOL(ChestGenHooks.MINESHAFT_CORRIDOR,
-                ChestGenHooks.VILLAGE_BLACKSMITH);
-        private final String[] locations;
+        WARRIOR(CHESTS_VILLAGE_BLACKSMITH,
+                CHESTS_SIMPLE_DUNGEON,
+                CHESTS_DESERT_PYRAMID,
+                CHESTS_JUNGLE_TEMPLE,
+                CHESTS_STRONGHOLD_CORRIDOR,
+                CHESTS_STRONGHOLD_CROSSING),
 
-        Type(String... locations) {
+        RAILWAY(CHESTS_ABANDONED_MINESHAFT,
+                CHESTS_VILLAGE_WORKSHOP),
+
+        WORKSHOP(CHESTS_VILLAGE_WORKSHOP),
+
+        TOOL(CHESTS_STRONGHOLD_CORRIDOR,
+                CHESTS_VILLAGE_BLACKSMITH);
+
+        private final ResourceLocation[] locations;
+
+        Type(ResourceLocation... locations) {
             this.locations = locations;
         }
-
     }
-
 }
