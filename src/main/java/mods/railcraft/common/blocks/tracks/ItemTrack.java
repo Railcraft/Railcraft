@@ -23,8 +23,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -109,7 +110,7 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
 
         TrackSpec spec = getTrackSpec(stack);
         TileTrack tile = TrackFactory.makeTrackTile(spec);
-        ITrackInstance track = spec.createInstanceFromSpec();
+        ITrackInstance track = spec.createInstanceFromSpec(tile);
 
         boolean canPlace = world.canBlockBePlaced(blockTrack, pos, true, face, null, stack);
         if (track instanceof ITrackCustomPlaced)
@@ -123,15 +124,20 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
             // System.out.println("Block placement attempted");
             if (placed) {
                 if (world.getBlockState(pos).getBlock() == blockTrack) {
-                    TileTrack tile = TrackFactory.makeTrackTile(track);
-                    world.setTileEntity(pos, tile);
+                    TileTrack placedTileTrack = TrackFactory.makeTrackTile(track.getTrackSpec());
+                    world.setTileEntity(pos, placedTileTrack);
                     blockTrack.onBlockPlacedBy(world, pos, wantedState, player, stack);
-                    world.markBlockForUpdate(pos);
+                    world.scheduleUpdate(pos, blockTrack, blockTrack.tickRate(world));
                 }
                 double x = pos.getX() + 0.5;
                 double y = pos.getY() + 0.5;
                 double z = pos.getZ() + 0.5;
-                world.playSoundEffect(x, y, z, blockTrack.stepSound.getPlaceSound(), (blockTrack.stepSound.getVolume() + 1.0F) / 2.0F, blockTrack.stepSound.getFrequency() * 0.8F);
+                world.playSound(x, y, z,
+                        blockTrack.getSoundType().getPlaceSound(),
+                        SoundCategory.PLAYERS,
+                        (blockTrack.getSoundType().getVolume() + 1.0F) / 2.0F,
+                        blockTrack.getSoundType().getPitch() * 0.8F,
+                        false);
             }
             return true;
         } else

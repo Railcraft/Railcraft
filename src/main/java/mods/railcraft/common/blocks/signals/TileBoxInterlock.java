@@ -119,6 +119,7 @@ public class TileBoxInterlock extends TileBoxBase implements IControllerTile, IR
 
         controller.writeToNBT(data);
         receiver.writeToNBT(data);
+        return data;
     }
 
     @Override

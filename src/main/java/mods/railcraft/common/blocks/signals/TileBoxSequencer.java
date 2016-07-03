@@ -150,6 +150,7 @@ public class TileBoxSequencer extends TileBoxBase {
         data.setByte("sideOutput", (byte) sideOutput.ordinal());
         data.setBoolean("powerState", powerState);
         data.setBoolean("neighborState", neighborState);
+        return data;
     }
 
     @Override

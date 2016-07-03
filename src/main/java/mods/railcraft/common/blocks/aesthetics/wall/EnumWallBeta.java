@@ -126,8 +126,8 @@ public enum EnumWallBeta implements WallInfo {
     public float getBlockHardness(World world, BlockPos pos) {
         Block block = getSource();
         if (block == null)
-            return Blocks.BRICK_BLOCK.getBlockHardness(world, pos);
-        return block.getBlockHardness(world, pos);
+            Blocks.BRICK_BLOCK.getDefaultState().getBlockHardness(world, pos);
+        return world.getBlockState(pos).getBlockHardness(world, pos);
     }
 
     @Override

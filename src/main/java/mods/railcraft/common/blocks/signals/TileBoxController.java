@@ -121,6 +121,7 @@ public class TileBoxController extends TileBoxBase implements IControllerTile, I
         data.setInteger("PoweredAspect", poweredAspect.ordinal());
 
         controller.writeToNBT(data);
+        return data;
     }
 
     @Override

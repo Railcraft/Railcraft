@@ -53,6 +53,7 @@ public abstract class TileSwitchSecured extends TileSwitchBase implements IGuiRe
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         lockController.writeToNBT(data, "lock");
+        return data;
     }
 
     @Override

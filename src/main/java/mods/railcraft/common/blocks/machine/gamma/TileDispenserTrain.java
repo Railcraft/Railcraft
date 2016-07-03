@@ -148,6 +148,7 @@ public class TileDispenserTrain extends TileDispenserCart {
         data.setByte("patternIndex", patternIndex);
 
         getPattern().writeToNBT("invPattern", data);
+        return data;
     }
 
     @Override

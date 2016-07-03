@@ -62,7 +62,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
             return false;
         if (EntityCartUndercutter.EXCLUDED_BLOCKS.contains(block))
             return false;
-        if (block.isOpaqueCube())
+        if (block.isVisuallyOpaque())
             return true;
         return stack.getItem() instanceof ItemPost;
     }

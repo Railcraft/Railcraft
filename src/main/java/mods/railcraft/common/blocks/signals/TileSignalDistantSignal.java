@@ -56,6 +56,7 @@ public class TileSignalDistantSignal extends TileSignalBase implements IReceiver
         super.writeToNBT(data);
 
         receiver.writeToNBT(data);
+        return data;
     }
 
     @Override

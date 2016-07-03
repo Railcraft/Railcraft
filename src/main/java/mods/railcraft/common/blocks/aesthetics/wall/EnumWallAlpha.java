@@ -159,8 +159,8 @@ public enum EnumWallAlpha implements WallInfo {
             default:
                 Block block = getSource();
                 if (block == null)
-                    return Blocks.BRICK_BLOCK.getBlockHardness(world, pos);
-                return block.getBlockHardness(world, pos);
+                    Blocks.BRICK_BLOCK.getDefaultState().getBlockHardness(world, pos);
+                return world.getBlockState(pos).getBlockHardness(world, pos);
         }
     }
 

@@ -180,6 +180,7 @@ public class TileFirestoneRecharge extends RailcraftTileEntity {
         data.setByte("rebuildDelay", (byte) rebuildDelay);
         if (itemName != null)
             data.setString("itemName", itemName);
+        return data;
     }
 
     @Override

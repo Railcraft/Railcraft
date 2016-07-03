@@ -179,6 +179,7 @@ public class TileBoxCapacitor extends TileBoxBase implements IGuiReturnHandler {
         data.setShort("ticksToPower", ticksToPower);
         data.setByte("aspect", (byte) aspect.ordinal());
         stateModeController.writeToNBT(data, "mode");
+        return data;
     }
 
     @Override

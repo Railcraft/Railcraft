@@ -96,6 +96,7 @@ public class TileBoxReceiver extends TileBoxActionManager implements IAspectActi
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
         receiver.writeToNBT(data);
+        return data;
     }
 
     @Override
