@@ -94,7 +94,7 @@ public class LootPlugin {
 
         WORKSHOP(CHESTS_VILLAGE_WORKSHOP),
 
-        TOOL(CHESTS_STRONGHOLD_CORRIDOR,
+        TOOL(CHESTS_ABANDONED_MINESHAFT,
                 CHESTS_VILLAGE_BLACKSMITH);
 
         private final ResourceLocation[] locations;
