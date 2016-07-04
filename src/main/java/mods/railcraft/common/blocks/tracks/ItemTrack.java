@@ -100,8 +100,6 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
     }
 
     private boolean placeTrack(ItemStack stack, @Nullable EntityPlayer player, World world, BlockPos pos, @Nullable EnumRailDirection trackShape, EnumFacing face) {
-        IBlockState originalBlockstate = world.getBlockState(pos);
-
         BlockTrack blockTrack = getPlacedBlock();
         if (blockTrack == null)
             return false;
@@ -129,7 +127,7 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
                     TileTrack placedTileTrack = TrackFactory.makeTrackTile(track.getTrackSpec());
                     world.setTileEntity(pos, placedTileTrack);
                     blockTrack.onBlockPlacedBy(world, pos, wantedState, player, stack);
-                    world.notifyBlockUpdate(pos, originalBlockstate, wantedState, 3);
+                    world.notifyBlockUpdate(pos, wantedState, wantedState, 3);
                 }
                 double x = pos.getX() + 0.5;
                 double y = pos.getY() + 0.5;
