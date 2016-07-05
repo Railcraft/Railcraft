@@ -13,10 +13,12 @@ import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
+import mods.railcraft.common.plugins.forge.ColorPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
@@ -31,7 +33,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemLocomotive extends ItemCart {
+public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem {
 
     private final LocomotiveRenderType renderType;
     //    private IIcon blankIcon;
@@ -44,6 +46,7 @@ public class ItemLocomotive extends ItemCart {
         setMaxStackSize(1);
         this.defaultPrimary = primary;
         this.defaultSecondary = secondary;
+        ColorPlugin.instance.register(this, this);
     }
 
     @SideOnly(Side.CLIENT)
@@ -60,7 +63,7 @@ public class ItemLocomotive extends ItemCart {
 //        blankIcon = iconRegister.registerIcon("railcraft:locomotives/blank");
 //    }
 
-//    @Override
+    //    @Override
 //    public boolean requiresMultipleRenderPasses() {
 //        return true;
 //    }
@@ -69,17 +72,19 @@ public class ItemLocomotive extends ItemCart {
 //    public int getRenderPasses(int metadata) {
 //        return 3;
 //    }
-
     @Override
-    public int getColorFromItemStack(ItemStack stack, int pass) {
-        switch (pass) {
-            case 0:
-                return getPrimaryColor(stack).getHexColor();
-            case 1:
-                return getSecondaryColor(stack).getHexColor();
-            default:
-                return super.getColorFromItemStack(stack, pass);
-        }
+    @SideOnly(Side.CLIENT)
+    public IItemColor colorHandler() {
+        return (stack, tintIndex) -> {
+            switch (tintIndex) {
+                case 0:
+                    return getPrimaryColor(stack).getHexColor();
+                case 1:
+                    return getSecondaryColor(stack).getHexColor();
+                default:
+                    return EnumColor.WHITE.getHexColor();
+            }
+        };
     }
 
 //    @Override

@@ -9,14 +9,14 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.glass;
 
+import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStrengthGlass extends ItemBlock {
+public class ItemStrengthGlass extends ItemBlockRailcraft {
 
     public ItemStrengthGlass(Block block) {
         super(block);
@@ -26,10 +26,12 @@ public class ItemStrengthGlass extends ItemBlock {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack stack, int pass) {
-        if (BlockStrengthGlass.renderingHighlight)
-            return super.getColorFromItemStack(stack, pass);
-        return EnumColor.fromOrdinal(15 - stack.getItemDamage()).getHexColor();
+    public IItemColor colorHandler() {
+        return (stack, tintIndex) -> {
+            if (BlockStrengthGlass.renderingHighlight)
+                return EnumColor.WHITE.getHexColor();
+            return EnumColor.fromOrdinal(15 - stack.getItemDamage()).getHexColor();
+        };
     }
 
     @Override

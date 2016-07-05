@@ -10,10 +10,8 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -21,6 +19,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -50,7 +49,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer implements IPostConnection {
+public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer implements IPostConnection, ColorPlugin.IColoredBlock {
 
     private final MachineProxy<M> proxy;
     private final BlockStateContainer myBlockState;
@@ -66,6 +65,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         this.myBlockState = new BlockStateContainer(this, proxy.getVariantProperty());
         setDefaultState(myBlockState.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMetaMap().get(0)));
         this.fullBlock = opaque;
+        ColorPlugin.instance.register(this, this);
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         lightOpacity = opaque ? 255 : 0;
@@ -108,11 +108,13 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     }
 
     @Override
-    public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int renderPass) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileMachineBase)
-            return ((TileMachineBase) tile).colorMultiplier();
-        return super.colorMultiplier(state, worldIn, pos, renderPass);
+    public IBlockColor colorHandler() {
+        return (state, worldIn, pos, tintIndex) -> {
+            TileEntity tile = worldIn.getTileEntity(pos);
+            if (tile instanceof TileMachineBase)
+                return ((TileMachineBase) tile).colorMultiplier();
+            return EnumColor.WHITE.getHexColor();
+        };
     }
 
     @Override

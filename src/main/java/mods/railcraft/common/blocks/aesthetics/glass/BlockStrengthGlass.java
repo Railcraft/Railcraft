@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.glass;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.ColorPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -38,7 +39,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class BlockStrengthGlass extends BlockGlass {
+public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColoredBlock {
 
     public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
     public static boolean renderingHighlight;
@@ -52,6 +53,7 @@ public class BlockStrengthGlass extends BlockGlass {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setUnlocalizedName("railcraft.glass");
         this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
+        ColorPlugin.instance.register(this, this);
     }
 
     public static BlockStrengthGlass getBlock() {
@@ -149,11 +151,12 @@ public class BlockStrengthGlass extends BlockGlass {
     }
 
     @Override
-    public int colorMultiplier(IBlockAccess worldIn, BlockPos pos, int renderPass) {
-        if (renderingHighlight)
-            return super.colorMultiplier(worldIn, pos, renderPass);
-        IBlockState state = WorldPlugin.getBlockState(worldIn, pos);
-        return getColor(state).getHexColor();
+    public IBlockColor colorHandler() {
+        return (state, worldIn, pos, tintIndex) -> {
+            if (renderingHighlight)
+                return EnumColor.WHITE.getHexColor();
+            return getColor(state).getHexColor();
+        };
     }
 
     @Override
