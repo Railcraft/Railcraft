@@ -24,7 +24,6 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,6 +34,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
@@ -167,25 +167,14 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public boolean canWrench(EntityPlayer player, BlockPos pos) {
+    public boolean canWrench(EntityPlayer player,  EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
         return true;
     }
 
     @Override
-    public void wrenchUsed(EntityPlayer player, BlockPos pos) {
-        player.getActiveItemStack().damageItem(1, player);
-        player.swingArm(player.getActiveHand());
-    }
-
-    @Override
-    public boolean canWrench(EntityPlayer player, Entity entity) {
-        return true;
-    }
-
-    @Override
-    public void wrenchUsed(EntityPlayer player, Entity entity) {
-        player.getActiveItemStack().damageItem(1, player);
-        player.swingArm(player.getActiveHand());
+    public void wrenchUsed(EntityPlayer player,  EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
+        wrench.damageItem(1, player);
+        player.swingArm(hand);
     }
 
     @Override

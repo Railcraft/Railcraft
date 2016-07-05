@@ -40,7 +40,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,12 +137,12 @@ public class TileCokeOven extends TileMultiBlockOven implements IFluidHandler, I
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (isStructureValid() && FluidHelper.handleRightClick(this, side, player, false, true))
             return true;
         else if (FluidItemHelper.isContainer(player.inventory.getCurrentItem()))
             return true;
-        return super.blockActivated(player, hand, heldItem, side);
+        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override

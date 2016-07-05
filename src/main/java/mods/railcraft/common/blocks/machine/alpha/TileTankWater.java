@@ -149,13 +149,13 @@ public class TileTankWater extends TileTank {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isHost(worldObj)) {
             if (isStructureValid() && FluidHelper.handleRightClick(getTankManager(), side, player, true, true))
                 return true;
         } else if (FluidItemHelper.isContainer(heldItem))
             return true;
-        return super.blockActivated(player, hand, heldItem, side);
+        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override

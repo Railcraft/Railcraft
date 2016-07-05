@@ -129,7 +129,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity tile = worldIn.getTileEntity(pos);
-        return tile instanceof TileMachineBase && ((TileMachineBase) tile).blockActivated(playerIn, hand, heldItem, side);
+        return tile instanceof TileMachineBase && ((TileMachineBase) tile).blockActivated(playerIn, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override

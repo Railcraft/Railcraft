@@ -25,6 +25,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -166,18 +168,19 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (heldItem != null)
             if (heldItem.getItem() instanceof IToolWrench) {
                 IToolWrench wrench = (IToolWrench) heldItem.getItem();
-                if (wrench.canWrench(player, getPos()))
+                RayTraceResult rayTraceResult = new RayTraceResult(new Vec3d(hitX + getPos().getX(), hitY + getPos().getY(), hitZ + getPos().getZ()), side, getPos());
+                if (wrench.canWrench(player, hand, heldItem, rayTraceResult))
                     if (Game.isHost(worldObj) && getEnergyStage() == EnergyStage.OVERHEAT) {
                         resetEnergyStage();
-                        wrench.wrenchUsed(player, getPos());
+                        wrench.wrenchUsed(player, hand, heldItem, rayTraceResult);
                         return true;
                     }
             }
-        return super.blockActivated(player, hand, heldItem, side);
+        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override

@@ -49,7 +49,6 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import org.apache.logging.log4j.Level;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
@@ -100,7 +99,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
@@ -120,7 +119,7 @@ public class TileAnchorWorld extends TileMachineItem implements IAnchor, ISidedI
                 return true;
             }
         }
-        return super.blockActivated(player, hand, heldItem, side);
+        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Nullable

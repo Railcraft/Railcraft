@@ -135,7 +135,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (heldItem != null && heldItem.getItem() != Items.BUCKET)
             if (Game.isHost(worldObj)) {
                 TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
@@ -144,7 +144,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IFluidHandler
                         return true;
             } else if (FluidItemHelper.isContainer(heldItem))
                 return true;
-        return super.blockActivated(player, hand, heldItem, side);
+        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     public void explode() {

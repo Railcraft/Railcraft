@@ -89,14 +89,14 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (heldItem != null && heldItem.getItem() != Items.BUCKET)
             if (Game.isHost(worldObj)) {
                 if (FluidHelper.handleRightClick(this, side, player, true, false))
                     return true;
             } else if (FluidItemHelper.isContainer(heldItem))
                 return true;
-        return super.blockActivated(player, hand, heldItem, side);
+        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override

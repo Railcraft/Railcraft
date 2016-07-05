@@ -455,7 +455,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (Game.isHost(worldObj)) {
             TankManager tankManager = getTankManager();
             if (isStructureValid() && tankManager != null && FluidHelper.handleRightClick(tankManager, side, player, true, true)) {
@@ -468,7 +468,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
             return true;
 
         // Prevents players from getting inside tanks using boats
-        return heldItem != null && heldItem.getItem() == Items.BOAT || super.blockActivated(player, hand, heldItem, side);
+        return heldItem != null && heldItem.getItem() == Items.BOAT || super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override

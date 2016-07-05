@@ -48,7 +48,7 @@ public class TileCage extends TileMachineBase {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 //        if (player.isSneaking()) {
         if (Game.isHost(worldObj)) {
             isOpen = !isOpen;

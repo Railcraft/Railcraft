@@ -60,14 +60,14 @@ public class TileWire extends TileMachineBase implements IElectricGrid {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (heldItem != null && InvTools.isStackEqualToBlock(heldItem, RailcraftBlocks.frame.block()))
             if (setAddon(AddonType.FRAME)) {
                 if (!player.capabilities.isCreativeMode)
                     player.setHeldItem(hand, InvTools.depleteItem(heldItem));
                 return true;
             }
-        return super.blockActivated(player, hand, heldItem, side);
+        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override

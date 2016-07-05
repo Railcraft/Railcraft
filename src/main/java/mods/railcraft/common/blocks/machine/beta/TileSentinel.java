@@ -33,7 +33,7 @@ public class TileSentinel extends TileMachineBase {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
@@ -56,7 +56,7 @@ public class TileSentinel extends TileMachineBase {
                 return true;
             }
         }
-        return super.blockActivated(player, hand, heldItem, side);
+        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override
