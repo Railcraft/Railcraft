@@ -305,8 +305,8 @@ public class RoutingLogic {
             ItemStack stack = cart.getCartItem();
             if (stack == null || stack.getItem() == null)
                 return false;
-            String itemName = stack.getItem().getRegistryName();
-            return itemName != null && itemName.equalsIgnoreCase(value);
+            String itemName = stack.getItem().getRegistryName().toString();
+            return itemName.equalsIgnoreCase(value);
         }
 
     }

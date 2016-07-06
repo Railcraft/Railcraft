@@ -17,7 +17,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -41,10 +40,10 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
         setUnlocalizedName("railcraft.track");
     }
 
-    @Override
-    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
-        return getTrackSpec(stack).getItemModel();
-    }
+//    @Override
+//    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+//        return getTrackSpec(stack).getItemModel();
+//    }
 
     @Nonnull
     public TrackSpec getTrackSpec(ItemStack stack) {

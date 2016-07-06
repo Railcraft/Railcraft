@@ -101,7 +101,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 SignalTools.packetBuilder = PacketBuilder.instance();
 
                 RailcraftFluids.preInitFluids();
-                MinecraftForge.EVENT_BUS.register(RailcraftFluids.getTextureHook());
                 MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
                 MinecraftForge.EVENT_BUS.register(RailcraftDamageSource.EVENT_HANDLER);
 

@@ -9,7 +9,6 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -17,10 +16,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
@@ -209,10 +208,10 @@ public class ItemNotepad extends ItemRailcraft {
 //    }
 
     //TODO: Make this do something interesting
-    @Override
-    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
-        return super.getModel(stack, player, useRemaining);
-    }
+//    @Override
+//    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+//        return super.getModel(stack, player, useRemaining);
+//    }
 
     private enum Contents {
         FILTER_CART("filter.cart", "item.railcraft.tool.notepad.tip.contents.filter.cart") {

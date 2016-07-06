@@ -14,11 +14,11 @@ import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.FluidRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.blocks.machine.gamma.TileFluidLoader;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.AABBFactory;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraftforge.fluids.FluidStack;
@@ -38,8 +38,18 @@ public class TESRFluidLoader extends TileEntitySpecialRenderer<TileLoaderFluidBa
 
         pipe.boundingBox = AABBFactory.start().box().expandHorizontally(-PIPE_OFFSET).setMaxY(RenderTools.PIXEL).build();
 
-        pipe.setTextureToAllSides(EnumMachineGamma.pipeTexture);
+        pipe.setTextureToAllSides(getPipeTexture());
 
+    }
+
+    //TODO: setup texture
+    private TextureAtlasSprite getPipeTexture() {
+        return RenderTools.getMissingTexture();
+    }
+
+    //TODO: setup texture
+    private TextureAtlasSprite getBackdropTexture() {
+        return RenderTools.getMissingTexture();
     }
 
     @Override
@@ -50,7 +60,7 @@ public class TESRFluidLoader extends TileEntitySpecialRenderer<TileLoaderFluidBa
         OpenGL.glDisable(GL11.GL_BLEND);
 //        OpenGL.glEnable(GL11.GL_CULL_FACE);
 
-        backDrop.setTextureToAllSides(tile.getMachineType().getTexture(7));
+        backDrop.setTextureToAllSides(getBackdropTexture());
         bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         backDrop.lightSource(tile.getWorld(), tile.getPos());
         CubeRenderer.render(backDrop);

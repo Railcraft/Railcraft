@@ -43,6 +43,7 @@ public enum Fluids {
         return tag;
     }
 
+    @Nullable
     public Fluid get() {
         return FluidRegistry.getFluid(tag);
     }

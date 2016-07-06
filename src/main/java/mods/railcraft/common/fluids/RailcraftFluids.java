@@ -14,12 +14,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
-import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -38,8 +35,8 @@ public enum RailcraftFluids {
         }
 
         @Override
-        public Block makeBlock() {
-            return new BlockRailcraftFluid(standardFluid.get(), Material.WATER).setFlammable(true).setFlammability(10);
+        public Block makeBlock(Fluid fluid) {
+            return new BlockRailcraftFluid(fluid, Material.WATER).setFlammable(true).setFlammability(10);
         }
     },
     STEAM("fluid.steam", Fluids.STEAM, -1000, 500) {
@@ -49,8 +46,8 @@ public enum RailcraftFluids {
         }
 
         @Override
-        Block makeBlock() {
-            return new BlockRailcraftFluidFinite(standardFluid.get(), new MaterialLiquid(MapColor.AIR)).setNoFlow();
+        Block makeBlock(Fluid fluid) {
+            return new BlockRailcraftFluidFinite(fluid, new MaterialLiquid(MapColor.AIR)).setNoFlow();
         }
     };
     public static final RailcraftFluids[] VALUES = values();
@@ -79,10 +76,6 @@ public enum RailcraftFluids {
         }
     }
 
-    public static Object getTextureHook() {
-        return new TextureHook();
-    }
-
     private void init() {
         initFluid();
         initBlock();
@@ -99,7 +92,10 @@ public enum RailcraftFluids {
 
     private void initFluid() {
         if (railcraftFluid == null && RailcraftConfig.isFluidEnabled(standardFluid.getTag())) {
-            railcraftFluid = new Fluid(standardFluid.getTag()).setDensity(density).setViscosity(viscosity).setGaseous(density < 0);
+            String fluidName = standardFluid.getTag();
+            ResourceLocation stillTexture = new ResourceLocation("railcraft:fluids/" + fluidName + "_still");
+            ResourceLocation flowTexture = new ResourceLocation("railcraft:fluids/" + fluidName + "_flow");
+            railcraftFluid = new Fluid(fluidName, stillTexture, flowTexture).setDensity(density).setViscosity(viscosity).setGaseous(density < 0);
 //            if (!FluidRegistry.isFluidRegistered(standardFluid.getTag()))
             FluidRegistry.registerFluid(railcraftFluid);
 //            else {
@@ -113,11 +109,12 @@ public enum RailcraftFluids {
     void defineContainers() {
     }
 
-    abstract Block makeBlock();
+    abstract Block makeBlock(Fluid fluid);
 
     private void initBlock() {
-        if (railcraftBlock == null && RailcraftConfig.isBlockEnabled(tag)) {
-            railcraftBlock = makeBlock();
+        Fluid fluid;
+        if (railcraftBlock == null && RailcraftConfig.isBlockEnabled(tag) && (fluid = standardFluid.get()) != null) {
+            railcraftBlock = makeBlock(fluid);
             railcraftBlock.setUnlocalizedName("railcraft." + tag);
             RailcraftRegistry.register(railcraftBlock);
             railcraftFluid.setBlock(railcraftBlock);
@@ -150,20 +147,4 @@ public enum RailcraftFluids {
             super("Fluid '" + tag + "' was not found. Please check your configs.");
         }
     }
-
-    //TODO: this may be obsolete finally
-    public static class TextureHook {
-        @SubscribeEvent
-        @SideOnly(Side.CLIENT)
-        public void textureHook(TextureStitchEvent.Post event) {
-            if (event.map.getTextureType() == 0)
-                for (RailcraftFluids fluidType : VALUES) {
-                    if (fluidType.railcraftFluid != null) {
-                        Block block = fluidType.railcraftBlock != null ? fluidType.railcraftBlock : fluidType.standardFluid.get().getBlock();
-                        fluidType.railcraftFluid.setIcons(block.getBlockTextureFromSide(1), block.getBlockTextureFromSide(2));
-                    }
-                }
-        }
-    }
-
 }
