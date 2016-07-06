@@ -23,6 +23,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -180,38 +181,36 @@ public class BlockTrackElevator extends Block {
     }
 
     @Override
-    public void onPostBlockPlaced(World world, int x, int y, int z, int meta) {
-        setBlockBoundsBasedOnState(world, x, y, z);
-
-        if (TrackTools.isRailBlockAt(world, x, y - 1, z)) {
-            Block block = WorldPlugin.getBlock(world, x, y - 1, z);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        BlockPos down = pos.down();
+        if (TrackTools.isRailBlockAt(world, down)) {
+            Block block = WorldPlugin.getBlock(world, down);
             BlockRailBase railBlock = (BlockRailBase) block;
-            if (railBlock.canMakeSlopes(world, x, y - 1, z)) {
-                int trackMeta = railBlock.getBasicRailMetadata(world, null, x, y - 1, z);
-                int ladderMeta = getLadderFacingMetadata(world, x, y, z);
+            if (railBlock.canMakeSlopes(world, down)) {
+                BlockRailBase.EnumRailDirection trackMeta = TrackTools.getTrackDirection(world, down, (EntityMinecart) null);
+                EnumFacing ladderFacing = getFacing(state);
 
-                int outputMeta = 0;
-                if (trackMeta == 0 && ladderMeta == 2)
-                    outputMeta = 5;
-                else if (trackMeta == 0 && ladderMeta == 3)
-                    outputMeta = 4;
-                else if (trackMeta == 1 && ladderMeta == 4)
-                    outputMeta = 2;
-                else if (trackMeta == 1 && ladderMeta == 5)
-                    outputMeta = 3;
-                if (outputMeta != 0) {
-                    if (railBlock.isPowered())
-                        outputMeta = outputMeta | (world.getBlockMetadata(x, y - 1, z) & 8);
-                    world.setBlockMetadataWithNotify(x, y - 1, z, outputMeta, 3);
+                BlockRailBase.EnumRailDirection newTrackShape = null;
+                if (trackMeta == BlockRailBase.EnumRailDirection.NORTH_SOUTH) {
+                    if (ladderFacing == EnumFacing.NORTH)
+                        newTrackShape = BlockRailBase.EnumRailDirection.ASCENDING_SOUTH;
+                    else if (ladderFacing == EnumFacing.SOUTH)
+                        newTrackShape = BlockRailBase.EnumRailDirection.ASCENDING_NORTH;
+                } else if (trackMeta == BlockRailBase.EnumRailDirection.EAST_WEST) {
+                    if (ladderFacing == EnumFacing.EAST)
+                        newTrackShape = BlockRailBase.EnumRailDirection.ASCENDING_WEST;
+                    else if (ladderFacing == EnumFacing.WEST)
+                        newTrackShape = BlockRailBase.EnumRailDirection.ASCENDING_EAST;
+                }
+                if (newTrackShape != null) {
+                    TrackTools.setTrackDirection(world, down, newTrackShape);
                 }
             }
         }
 
-        meta = world.getBlockMetadata(x, y, z);
-        boolean powered = (meta & 8) != 0;
-        if (powered ^ isPowered(world, x, y, z))
-            world.setBlockMetadataWithNotify(x, y, z, meta ^ 8, 3);
-        world.markBlockForUpdate(x, y, z);
+        boolean powered = getPowered(state);
+        if (powered ^ isPowered(world, pos, state))
+            WorldPlugin.setBlockState(world, pos, state.withProperty(POWERED, powered));
     }
 
     @Override
