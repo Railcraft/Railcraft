@@ -19,6 +19,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nullable;
+
 import static net.minecraft.world.storage.loot.LootTableList.*;
 
 /**
@@ -44,7 +46,7 @@ public class LootPlugin {
         }
     }*/
 
-    private static void addLoot(ItemStack loot, int minStack, int maxStack, String tag, ResourceLocation... locations) {
+    private static void addLoot(@Nullable ItemStack loot, int minStack, int maxStack, String tag, ResourceLocation... locations) {
         if (loot == null) {
             if (Game.IS_DEBUG)
                 throw new RuntimeException("Invalid Loot");
@@ -74,7 +76,8 @@ public class LootPlugin {
 
     public static void addLootUnique(RailcraftItems item, IVariantEnum meta, int minStack, int maxStack, Type type) {
         ItemStack stack = item.getStack(meta);
-        addLoot(stack, minStack, maxStack, stack.getUnlocalizedName(), type.locations);
+        if (stack != null)
+            addLoot(stack, minStack, maxStack, stack.getUnlocalizedName(), type.locations);
     }
 
     public static void addLoot(RailcraftItems item, int minStack, int maxStack, Type type) {

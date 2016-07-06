@@ -69,22 +69,23 @@ public class SoundRegistry {
             registerBlockSound(EnumCube.CREOSOTE_BLOCK.getState(), SoundType.WOOD);
         }
 
+        //TODO: add wall sounds
         block = BlockRailcraftWall.getBlockAlpha();
         if (block != null) {
 
             for (EnumWallAlpha wall : EnumWallAlpha.VALUES) {
-                registerBlockSound(wall.ordinal(), SoundType.STONE);
+//                registerBlockSound(wall.ordinal(), SoundType.STONE);
             }
 
-            registerBlockSound(EnumWallAlpha.ICE.ordinal(), SoundType.GLASS);
-            registerBlockSound(EnumWallAlpha.SNOW.ordinal(), SoundType.SNOW);
+//            registerBlockSound(EnumWallAlpha.ICE.ordinal(), SoundType.GLASS);
+//            registerBlockSound(EnumWallAlpha.SNOW.ordinal(), SoundType.SNOW);
         }
 
         block = BlockRailcraftWall.getBlockBeta();
         if (block != null) {
 
             for (EnumWallBeta wall : EnumWallBeta.VALUES) {
-                registerBlockSound(wall.ordinal(), SoundType.STONE);
+//                registerBlockSound(wall.ordinal(), SoundType.STONE);
             }
         }
     }
