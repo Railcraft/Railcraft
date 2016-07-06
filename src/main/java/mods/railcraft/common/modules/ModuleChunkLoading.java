@@ -82,7 +82,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                 }
 
                 EnumMachineBeta beta = EnumMachineBeta.SENTINEL;
-                if (alpha.isEnabled()) {
+                if (beta.isEnabled()) {
                     ItemStack stack = beta.getItem();
                     if (RailcraftConfig.canCraftAnchors()) {
                         CraftingPlugin.addRecipe(stack,
@@ -99,7 +99,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                 EnumCart cart = EnumCart.ANCHOR;
                 if (EnumMachineAlpha.ANCHOR_WORLD.isAvailable() && cart.setup()) {
                     ItemStack anchor = EnumMachineAlpha.ANCHOR_WORLD.getItem();
-                    if (RailcraftConfig.canCraftPersonalAnchors()) {
+                    if (RailcraftConfig.canCraftAnchors()) {
                         CraftingPlugin.addRecipe(cart.getCartItem(),
                                 "A",
                                 "M",
