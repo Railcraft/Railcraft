@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 public enum RailcraftItems implements IRailcraftObjectContainer {
 
     circuit(ItemCircuit.class, "part.circuit"),
+    coke(ItemCircuit.class, "fuel.coke"),
     crowbarIron(ItemCrowbarIron.class, "tool.crowbar.iron"),
     crowbarSteel(ItemCrowbarSteel.class, "tool.crowbar.steel"),
     dust(ItemDust.class, "dust"),
@@ -49,6 +50,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     signalLabel(ItemSignalLabel.class, "tool.signal.label"),
     signalLamp(ItemSignalLamp.class, "part.signal.lamp", Blocks.REDSTONE_LAMP),
     signalTuner(ItemSignalTuner.class, "tool.signal.tuner"),
+    stoneCarver(ItemStoneCarver.class, "tool.stone.carver"),
     ticket(ItemTicket.class, "routing.ticket", Items.PAPER),
     ticketGold(ItemTicketGold.class, "routing.ticket.gold", Items.GOLD_NUGGET),
     tie(ItemTie.class, "part.tie"),
@@ -103,15 +105,13 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
         if (isEnabled()) {
             try {
                 item = itemClass.newInstance();
-            } catch (InstantiationException ex) {
-                throw new RuntimeException("Invalid Item Constructor");
-            } catch (IllegalAccessException ex) {
+            } catch (InstantiationException | IllegalAccessException ex) {
                 throw new RuntimeException("Invalid Item Constructor");
             }
             if (!(item instanceof IRailcraftObject))
                 throw new RuntimeException("Railcraft Items must implement IRailcraftObject");
             railcraftObject = (IRailcraftObject) item;
-            item.setUnlocalizedName("railcraft." + tag);
+            item.setUnlocalizedName(getFullTag());
             RailcraftRegistry.register(item);
             railcraftObject.initializeDefinintion();
             railcraftObject.defineRecipes();
@@ -141,6 +141,10 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
         return tag;
     }
 
+    public String getFullTag() {
+        return "railcraft." + tag;
+    }
+
     @Nullable
     @Override
     public ItemStack getWildcard() {
@@ -168,7 +172,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
         return new ItemStack(item, qty, meta);
     }
 
-    private void checkVariantObject(IVariantEnum variant) {
+    private void checkVariantObject(@Nullable IVariantEnum variant) {
         IVariantEnum.tools.checkVariantObject(itemClass, variant);
     }
 
@@ -180,7 +184,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     @Override
     public ItemStack getStack(int qty, @Nonnull IVariantEnum variant) {
         checkVariantObject(variant);
-        return getStack(qty, variant.getItemMeta());
+        return railcraftObject.getStack(qty, variant);
     }
 
     @Override
@@ -196,7 +200,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
         if (railcraftObject != null)
             obj = railcraftObject.getRecipeObject(variant);
         if (obj == null && variant != null)
-            obj = variant.getAlternate();
+            obj = variant.getAlternate(this);
         if (obj == null)
             obj = altRecipeObject;
         if (obj instanceof ItemStack)

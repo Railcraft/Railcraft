@@ -12,7 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.ore.BlockOre;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
@@ -31,8 +31,14 @@ public class ModuleMagic extends RailcraftModulePayload {
     public ModuleMagic() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
+            public void construction() {
+                add(
+                        RailcraftBlocks.ore
+                );
+            }
+
+            @Override
             public void preInit() {
-                BlockOre.registerBlock();
                 BlockFirestoneRecharge.registerBlock();
 
                 EntityItemFirestone.register();

@@ -11,7 +11,6 @@ package mods.railcraft.common.core;
 
 import net.minecraft.util.IStringSerializable;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -22,17 +21,16 @@ public interface IVariantEnum extends IStringSerializable {
 
     class Tools {
         public void checkVariantObject(Class<?> clazz, @Nullable IVariantEnum variant) {
-            if (variant != null && variant.getParentClass() != clazz)
+            if (variant != null && variant.isValid(clazz))
                 throw new RuntimeException("Incorrect Variant object used.");
         }
     }
 
-    int getItemMeta();
+    int ordinal();
 
-    @Nonnull
-    Class<?> getParentClass();
+    boolean isValid(Class<?> clazz);
 
     @Nullable
-    Object getAlternate();
+    Object getAlternate(IRailcraftObjectContainer container);
 
 }

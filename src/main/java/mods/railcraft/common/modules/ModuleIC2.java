@@ -16,8 +16,8 @@ import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.ItemRailcraft;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -88,7 +88,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
                 if (blockDetector != null) {
                     ItemStack stack = EnumDetector.ENERGY.getItem();
-                    Object tin = RailcraftItems.plate.getRecipeObject(EnumPlate.TIN);
+                    Object tin = RailcraftItems.plate.getRecipeObject(Metal.TIN);
                     if (tin == null)
                         tin = "ingotTin";
                     CraftingPlugin.addRecipe(stack, false,

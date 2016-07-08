@@ -121,7 +121,9 @@ public class IC2Plugin {
         return false;
     }
 
-    public static void addMaceratorRecipe(ItemStack input, ItemStack output) {
+    public static void addMaceratorRecipe(@Nullable ItemStack input, @Nullable ItemStack output) {
+        if (input == null || output == null)
+            return;
         try {
             Recipes.macerator.addRecipe(new RecipeInputItemStack(input), null, false, output);
         } catch (Throwable error) {

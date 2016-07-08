@@ -10,9 +10,8 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.BlockWorldLogic;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -42,6 +41,9 @@ public class ModuleWorld extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
+                add(
+                        RailcraftBlocks.ore
+                );
                 if (RailcraftConfig.isWorldGenEnabled("workshop")) {
                     int id = RailcraftConfig.villagerID();
                     VillagerRegistry.instance().registerVillagerId(id);
@@ -56,17 +58,16 @@ public class ModuleWorld extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                BlockOre.registerBlock();
                 BlockWorldLogic.registerBlock();
 
                 EnumCube cubeType = EnumCube.ABYSSAL_STONE;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    BlockCube.registerBlock();
+                    RailcraftBlocks.cube.register();
                 }
 
                 cubeType = EnumCube.QUARRIED_STONE;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    BlockCube.registerBlock();
+                    RailcraftBlocks.cube.register();
                 }
 
                 if (RailcraftConfig.isWorldGenEnabled("saltpeter") && EnumOre.SALTPETER.isEnabled())

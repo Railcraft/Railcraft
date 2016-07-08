@@ -12,12 +12,12 @@ import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IBlockVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.types.*;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.modules.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
@@ -91,19 +91,13 @@ public enum EnumDetector implements IBlockVariantEnum<EnumDetector> {
 
     @Nullable
     @Override
-    public Object getAlternate() {
+    public Object getAlternate(IRailcraftObjectContainer container) {
         return null;
     }
 
     @Override
-    public int getItemMeta() {
-        return ordinal();
-    }
-
-    @Nonnull
-    @Override
-    public Class<?> getParentClass() {
-        return BlockDetector.class;
+    public boolean isValid(Class<?> clazz) {
+        return clazz == BlockDetector.class;
     }
 
     @Override

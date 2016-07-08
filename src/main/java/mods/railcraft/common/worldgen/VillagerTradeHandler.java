@@ -10,10 +10,7 @@ package mods.railcraft.common.worldgen;
 
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EnumCart;
-import mods.railcraft.common.items.ItemCrowbar;
-import mods.railcraft.common.items.ItemCrowbarSteel;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityVillager;
@@ -28,6 +25,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public class VillagerTradeHandler implements IVillageTradeHandler {
@@ -42,8 +40,8 @@ public class VillagerTradeHandler implements IVillageTradeHandler {
         addTrade(recipeList, rand, 0.7F, new Offer(Items.COAL, 16, 24), new Offer(Items.EMERALD));
         addTrade(recipeList, rand, 0.7F, new Offer(Items.EMERALD), new Offer(Items.COAL, 24, 32));
 
-        addTrade(recipeList, rand, 0.4F, new Offer(RailcraftToolItems.getCoalCoke(), 8, 12), new Offer(Items.EMERALD));
-        addTrade(recipeList, rand, 0.4F, new Offer(Items.EMERALD), new Offer(RailcraftToolItems.getCoalCoke(), 12, 16));
+        addTrade(recipeList, rand, 0.4F, new Offer(RailcraftItems.coke, 8, 12), new Offer(Items.EMERALD));
+        addTrade(recipeList, rand, 0.4F, new Offer(Items.EMERALD), new Offer(RailcraftItems.coke, 12, 16));
 
         addTrade(recipeList, rand, 0.7F, new Offer(Blocks.RAIL, 30, 34), new Offer(Items.EMERALD, 2, 3));
         addTrade(recipeList, rand, 0.1F, new Offer(Blocks.ACTIVATOR_RAIL, 14, 18), new Offer(Items.EMERALD, 2, 3));
@@ -52,7 +50,7 @@ public class VillagerTradeHandler implements IVillageTradeHandler {
 
         for (EnumTrack track : EnumTrack.VALUES) {
             if (track.isEnabled())
-                addTrade(recipeList, rand, 0.1F, new Offer(track.getItem(), track.recipeOutput - 2, track.recipeOutput + 2), new Offer(Items.EMERALD, 2, 3));
+                addTrade(recipeList, rand, 0.1F, new Offer(track.getStack(), track.recipeOutput - 2, track.recipeOutput + 2), new Offer(Items.EMERALD, 2, 3));
         }
 
         addTrade(recipeList, rand, 0.3F, new Offer(Items.MINECART), new Offer(Items.EMERALD, 8, 10));
@@ -72,21 +70,21 @@ public class VillagerTradeHandler implements IVillageTradeHandler {
     }
 
     private class Offer {
-
+        @Nullable
         public final Object obj;
         public final int min, max;
 
-        public Offer(Object obj, int min, int max) {
+        public Offer(@Nullable Object obj, int min, int max) {
             this.obj = obj;
             this.min = min;
             this.max = max;
         }
 
-        public Offer(Object obj, int amount) {
+        public Offer(@Nullable Object obj, int amount) {
             this(obj, amount, amount);
         }
 
-        public Offer(Object obj) {
+        public Offer(@Nullable Object obj) {
             this(obj, 1);
         }
 
@@ -113,6 +111,7 @@ public class VillagerTradeHandler implements IVillageTradeHandler {
         }
     }
 
+    @Nullable
     private ItemStack prepareStack(Random rand, Offer offer) throws IllegalArgumentException {
         if (offer.obj instanceof RailcraftItems) {
             return ((RailcraftItems) offer.obj).getStack(stackSize(rand, offer));

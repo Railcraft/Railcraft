@@ -19,8 +19,7 @@ import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.carts.LocomotivePaintingRecipe;
 import mods.railcraft.common.items.ItemGear.EnumGear;
-import mods.railcraft.common.items.ItemIngot;
-import mods.railcraft.common.items.ItemPlate.EnumPlate;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -62,8 +61,8 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                         tank = EnumMachineBeta.BOILER_TANK_LOW_PRESSURE.getItem();
                     else if (EnumMachineBeta.TANK_IRON_WALL.isAvailable())
                         tank = EnumMachineBeta.TANK_IRON_WALL.getItem();
-                    else if (RailcraftItems.ingot.getStack(ItemIngot.EnumIngot.STEEL) != null)
-                        tank = RailcraftItems.ingot.getStack(ItemIngot.EnumIngot.STEEL);
+                    else if (RailcraftItems.ingot.getStack(Metal.STEEL) != null)
+                        tank = RailcraftItems.ingot.getStack(Metal.STEEL);
                     else
                         tank = new ItemStack(Items.IRON_INGOT);
 
@@ -112,7 +111,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                             'U', feederUnit,
                             'M', Items.MINECART,
                             'G', RailcraftItems.gear.getRecipeObject(EnumGear.STEEL),
-                            'T', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL));
+                            'T', RailcraftItems.plate.getRecipeObject(Metal.STEEL));
                 }
             }
 

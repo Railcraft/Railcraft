@@ -313,7 +313,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 for (EnumCube type : EnumCube.values()) {
                     if (type.isEnabled())
-                        RailcraftRegistry.register(type.getItem());
+                        RailcraftRegistry.register(type.getStack());
                 }
 
                 Set<IEnumMachine> machines = new HashSet<IEnumMachine>();

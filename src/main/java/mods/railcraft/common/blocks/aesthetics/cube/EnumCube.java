@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.cube;
 
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IBlockVariantEnum;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleFactory;
 import mods.railcraft.common.modules.ModuleStructures;
@@ -84,21 +85,15 @@ public enum EnumCube implements IBlockVariantEnum<EnumCube> {
         return VALUES[id];
     }
 
-    @Nonnull
     @Override
-    public Class<?> getParentClass() {
-        return BlockCube.class;
+    public boolean isValid(Class<?> clazz) {
+        return clazz == BlockCube.class;
     }
 
     @Nullable
     @Override
-    public Object getAlternate() {
+    public Object getAlternate(IRailcraftObjectContainer container) {
         return null;
-    }
-
-    @Override
-    public int getItemMeta() {
-        return ordinal();
     }
 
     public Class<? extends IRailcraftModule> getModule() {
@@ -137,11 +132,11 @@ public enum EnumCube implements IBlockVariantEnum<EnumCube> {
         return getModule() != null && RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag()) && BlockCube.getBlock() != null;
     }
 
-    public ItemStack getItem() {
-        return getItem(1);
+    public ItemStack getStack() {
+        return getStack(1);
     }
 
-    public ItemStack getItem(int qty) {
+    public ItemStack getStack(int qty) {
         if (!isEnabled())
             return null;
         return new ItemStack(BlockCube.getBlock(), qty, ordinal());

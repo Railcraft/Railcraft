@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.common.blocks.IBlockVariantEnum;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
@@ -78,19 +79,13 @@ public enum EnumPost implements IBlockVariantEnum<EnumPost> {
     }
 
     @Override
-    public int getItemMeta() {
-        return ordinal();
-    }
-
-    @Nonnull
-    @Override
-    public Class<?> getParentClass() {
-        return BlockPost.class;
+    public boolean isValid(Class<?> clazz) {
+        return clazz ==  BlockPost.class;
     }
 
     @Nullable
     @Override
-    public Object getAlternate() {
+    public Object getAlternate(IRailcraftObjectContainer container) {
         return null;
     }
 

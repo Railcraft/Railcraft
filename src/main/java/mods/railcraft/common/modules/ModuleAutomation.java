@@ -12,7 +12,6 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.ai.TamingInteractHandler;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
@@ -21,7 +20,7 @@ import mods.railcraft.common.carts.ItemBoreHeadDiamond;
 import mods.railcraft.common.carts.ItemBoreHeadIron;
 import mods.railcraft.common.carts.ItemBoreHeadSteel;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.items.ItemPlate.EnumPlate;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.orehandlers.BoreOreHandler;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -42,6 +41,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(new BoreOreHandler());
                 add(
                         RailcraftBlocks.detector,
+                        RailcraftBlocks.cube,
                         RailcraftBlocks.machine_alpha,
                         RailcraftBlocks.machine_gamma
                 );
@@ -49,8 +49,6 @@ public class ModuleAutomation extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                BlockCube.registerBlock();
-
                 EnumMachineGamma gamma = EnumMachineGamma.DISPENSER_CART;
                 if (gamma.isAvailable())
                     CraftingPlugin.addRecipe(gamma.getItem(),
@@ -66,7 +64,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             "CSC",
                             "PCP",
                             'P', "plankWood",
-                            'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL) : "blockIron",
+                            'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.plate.getRecipeObject(Metal.STEEL) : "blockIron",
                             'C', new ItemStack(Items.GOLDEN_CARROT));
 
                     MinecraftForge.EVENT_BUS.register(new TamingInteractHandler());
@@ -82,7 +80,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'D', new ItemStack(Blocks.DISPENSER),
                             'G', "paneGlass",
                             'E', "gemEmerald",
-                            'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL) : "blockIron");
+                            'S', RailcraftModuleManager.isModuleEnabled(ModuleFactory.class) ? RailcraftItems.plate.getRecipeObject(Metal.STEEL) : "blockIron");
                 }
 
                 // Define Bore

@@ -13,8 +13,7 @@ import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.delta.TileWire;
 import mods.railcraft.common.blocks.machine.delta.TileWire.AddonType;
 import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.IVariantEnum;
-import mods.railcraft.common.items.ItemPlate.EnumPlate;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -63,13 +62,8 @@ public class BlockFrame extends Block implements IPostConnection, IRailcraftObje
                 "PPP",
                 "I I",
                 "III",
-                'P', RailcraftItems.plate, EnumPlate.IRON,
+                'P', RailcraftItems.plate, Metal.IRON,
                 'I', RailcraftItems.rebar);
-    }
-
-    @Override
-    public Object getRecipeObject(@Nullable IVariantEnum variant) {
-        return new ItemStack(this);
     }
 
     @Override
@@ -78,11 +72,6 @@ public class BlockFrame extends Block implements IPostConnection, IRailcraftObje
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
 
         ForestryPlugin.addBackpackItem("builder", this);
-    }
-
-    @Override
-    public void finalizeDefinition() {
-
     }
 
     @Override

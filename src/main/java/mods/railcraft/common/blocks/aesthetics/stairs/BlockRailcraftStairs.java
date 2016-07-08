@@ -54,7 +54,7 @@ import static mods.railcraft.common.blocks.aesthetics.BlockMaterial.SANDY_BRICK;
 import static mods.railcraft.common.blocks.aesthetics.BlockMaterial.STAIR_MATS;
 
 public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProvider {
-    public static final PropertyEnum<BlockMaterial> MATERIAL = PropertyEnum.create("material", BlockMaterial.class, EnumSet.complementOf(BlockMaterial.VANILLA_STAIRS));
+    public static final PropertyEnum<BlockMaterial> MATERIAL = PropertyEnum.create("material", BlockMaterial.class, EnumSet.complementOf(BlockMaterial.VANILLA_REFINED_MATS));
     public static int currentRenderPass;
     static BlockRailcraftStairs block;
 

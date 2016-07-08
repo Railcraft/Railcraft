@@ -10,6 +10,10 @@
 
 package mods.railcraft.common.core;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import javax.annotation.Nullable;
 
 /**
@@ -18,12 +22,32 @@ import javax.annotation.Nullable;
  * Created by CovertJaguar on 3/14/2016.
  */
 public interface IRailcraftObject {
+    @Nullable
+    default Object getRecipeObject(@Nullable IVariantEnum variant) {
+        return getStack(1, variant);
+    }
 
-    Object getRecipeObject(@Nullable IVariantEnum variant);
+    @Nullable
+    default ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+        IVariantEnum.tools.checkVariantObject(getClass(), variant);
+        int meta;
+        if (variant != null)
+            meta = variant.ordinal();
+        else
+            meta = 0;
+        if (this instanceof Item)
+            return new ItemStack((Item) this, qty, meta);
+        if (this instanceof Block)
+            return new ItemStack((Block) this, qty, meta);
+        return null;
+    }
 
-    void defineRecipes();
+    default void defineRecipes() {
+    }
 
-    void initializeDefinintion();
+    default void initializeDefinintion() {
+    }
 
-    void finalizeDefinition();
+    default void finalizeDefinition() {
+    }
 }

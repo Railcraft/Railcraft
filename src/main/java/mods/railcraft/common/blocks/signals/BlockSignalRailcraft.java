@@ -9,7 +9,6 @@
 package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
@@ -28,7 +27,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftObject {
@@ -280,21 +278,5 @@ public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftO
     @Override
     public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
-    }
-
-    @Override
-    public Object getRecipeObject(@Nullable IVariantEnum variant) {
-        IVariantEnum.tools.checkVariantObject(getClass(), variant);
-        return new ItemStack(this, 1, variant != null ? variant.getItemMeta() : 0);
-    }
-
-    @Override
-    public void initializeDefinintion() {
-
-    }
-
-    @Override
-    public void finalizeDefinition() {
-
     }
 }

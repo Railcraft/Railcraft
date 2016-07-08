@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
@@ -19,7 +20,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
 
@@ -90,26 +90,19 @@ public class ItemTie extends ItemRailcraft {
         }
 
         @Override
-        public Object getAlternate() {
+        public Object getAlternate(IRailcraftObjectContainer container) {
             return alternate;
         }
 
-        @Nonnull
         @Override
-        public Class<? extends ItemRailcraft> getParentClass() {
-            return ItemTie.class;
+        public boolean isValid(Class<?> clazz) {
+            return clazz == ItemTie.class;
         }
 
         @Override
         public String getName() {
             return name().toLowerCase(Locale.ENGLISH);
         }
-
-        @Override
-        public int getItemMeta() {
-            return ordinal();
-        }
-
     }
 
 }

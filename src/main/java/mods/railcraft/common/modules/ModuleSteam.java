@@ -15,8 +15,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.items.ItemGear.EnumGear;
-import mods.railcraft.common.items.ItemIngot;
-import mods.railcraft.common.items.ItemPlate.EnumPlate;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
@@ -61,11 +60,11 @@ public class ModuleSteam extends RailcraftModulePayload {
                             " C ",
                             "GPG",
                             'P', new ItemStack(Blocks.PISTON),
-                            'I', RailcraftItems.plate.getRecipeObject(EnumPlate.IRON),
+                            'I', RailcraftItems.plate.getRecipeObject(Metal.IRON),
                             'C', "blockGlassColorless",
                             'G', "gearIron");
 
-                    RailcraftCraftingManager.blastFurnace.addRecipe(beta.getItem(), true, false, 15360, RailcraftItems.ingot.getStack(12, ItemIngot.EnumIngot.STEEL));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(beta.getItem(), true, false, 15360, RailcraftItems.ingot.getStack(12, Metal.STEEL));
                 }
 
                 beta = EnumMachineBeta.ENGINE_STEAM_HIGH;
@@ -75,7 +74,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                             " C ",
                             "GPG",
                             'P', new ItemStack(Blocks.PISTON),
-                            'I', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL),
+                            'I', RailcraftItems.plate.getRecipeObject(Metal.STEEL),
                             'C', "blockGlassColorless",
                             'G', RailcraftItems.gear.getRecipeObject(EnumGear.STEEL));
                 }
@@ -100,7 +99,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                             'B', new ItemStack(Items.BUCKET),
                             'G', new ItemStack(Blocks.IRON_BARS),
                             'C', new ItemStack(Items.FIRE_CHARGE),
-                            'P', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL),
+                            'P', RailcraftItems.plate.getRecipeObject(Metal.STEEL),
                             'F', new ItemStack(Blocks.FURNACE));
                 }
 
@@ -109,9 +108,9 @@ public class ModuleSteam extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(beta.getItem(),
                             "P",
                             "P",
-                            'P', RailcraftItems.plate.getRecipeObject(EnumPlate.IRON));
+                            'P', RailcraftItems.plate.getRecipeObject(Metal.IRON));
 
-                    RailcraftCraftingManager.blastFurnace.addRecipe(beta.getItem(), true, false, 2560, RailcraftItems.ingot.getStack(2, ItemIngot.EnumIngot.STEEL));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(beta.getItem(), true, false, 2560, RailcraftItems.ingot.getStack(2, Metal.STEEL));
                 }
 
                 beta = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE;
@@ -119,7 +118,7 @@ public class ModuleSteam extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(beta.getItem(),
                             "P",
                             "P",
-                            'P', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL));
+                            'P', RailcraftItems.plate.getRecipeObject(Metal.STEEL));
                 }
             }
 
@@ -163,9 +162,9 @@ public class ModuleSteam extends RailcraftModulePayload {
                 else if (EnumMachineBeta.TANK_STEEL_WALL.isAvailable())
                     tank = EnumMachineBeta.TANK_STEEL_WALL.getItem();
                 else
-                    tank = RailcraftItems.plate.getStack(1, EnumPlate.STEEL);
+                    tank = RailcraftItems.plate.getStack(1, Metal.STEEL);
                 if (tank == null)
-                    tank = RailcraftItems.ingot.getStack(1, ItemIngot.EnumIngot.STEEL);
+                    tank = RailcraftItems.ingot.getStack(1, Metal.STEEL);
                 if (tank == null)
                     tank = new ItemStack(Blocks.IRON_BLOCK);
                 return tank;

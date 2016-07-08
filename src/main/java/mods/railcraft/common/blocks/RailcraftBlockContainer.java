@@ -11,18 +11,14 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 /**
  * Created by CovertJaguar on 4/13/2016 for Railcraft.
@@ -41,26 +37,6 @@ public abstract class RailcraftBlockContainer extends BlockContainer implements 
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
-    }
-
-    @Override
-    public void finalizeDefinition() {
-
-    }
-
-    @Override
-    public void initializeDefinintion() {
-
-    }
-
-    @Override
-    public void defineRecipes() {
-
-    }
-
-    @Override
-    public Object getRecipeObject(@Nullable IVariantEnum meta) {
-        return new ItemStack(this);
     }
 
     public void markBlockForUpdate(World world, BlockPos pos) {

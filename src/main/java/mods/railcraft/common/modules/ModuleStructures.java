@@ -70,10 +70,10 @@ public class ModuleStructures extends RailcraftModulePayload {
 
                 EnumCube cubeType = EnumCube.CONCRETE_BLOCK;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    BlockCube.registerBlock();
+                    RailcraftBlocks.cube.register();
                     Block cube = BlockCube.getBlock();
                     if (cube != null) {
-                        ItemStack stack = cubeType.getItem();
+                        ItemStack stack = cubeType.getStack();
                         if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable() && RailcraftItems.rebar.isEnabled()) {
                             stack.stackSize = 8;
                             CraftingPlugin.addRecipe(stack,
@@ -96,10 +96,10 @@ public class ModuleStructures extends RailcraftModulePayload {
 
                 cubeType = EnumCube.CREOSOTE_BLOCK;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    BlockCube.registerBlock();
+                    RailcraftBlocks.cube.register();
                     Block cube = BlockCube.getBlock();
                     if (cube != null) {
-                        ItemStack stack = cubeType.getItem();
+                        ItemStack stack = cubeType.getStack();
                         for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME))) {
                             CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
                         }
@@ -290,7 +290,7 @@ public class ModuleStructures extends RailcraftModulePayload {
 
                 EnumCube cubeType = EnumCube.CREOSOTE_BLOCK;
                 if (cubeType.isEnabled()) {
-                    ItemStack stack = cubeType.getItem();
+                    ItemStack stack = cubeType.getStack();
                     for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME))) {
                         CraftingPlugin.addShapelessRecipe(stack, "logWood", container);
                     }

@@ -8,109 +8,25 @@
  */
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.core.IVariantEnum;
-import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
+import mods.railcraft.common.util.collections.CollectionTools;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Locale;
+import static mods.railcraft.common.items.Metal.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemIngot extends ItemRailcraft {
+public class ItemIngot extends ItemMetal {
 
     public ItemIngot() {
-        setHasSubtypes(true);
-        setMaxDamage(0);
-        setUnlocalizedName("railcraft.ingot");
+        super(Form.INGOT, "item.railcraft.ingot.", true, true, CollectionTools.createIndexedLookupTable(STEEL, COPPER, TIN, LEAD));
         setSmeltingExperience(1);
     }
 
     @Override
     public void initializeDefinintion() {
-        for (EnumIngot type : EnumIngot.VALUES) {
-            ItemStack stack = new ItemStack(this, 1, type.ordinal());
-            ForestryPlugin.addBackpackItem("forestry.miner", stack);
-            RailcraftRegistry.register(stack);
-            Metal m = Metal.get(type);
-            OreDictionary.registerOre(m.getIngotTag(), m.getIngot());
-            LootPlugin.addLootUnique(RailcraftItems.ingot, type, 5, 9, LootPlugin.Type.TOOL);
-        }
-
-    }
-
-    @Override
-    public String getOreTag(IVariantEnum variant) {
-        IVariantEnum.tools.checkVariantObject(getClass(), variant);
-        return ((EnumIngot) variant).oreTag;
-    }
-
-    @Override
-    public void getSubItems(Item id, CreativeTabs tab, List<ItemStack> list) {
-        for (EnumIngot ingot : EnumIngot.VALUES) {
-            list.add(new ItemStack(this, 1, ingot.ordinal()));
+        for (Metal m : variants().values()) {
+            LootPlugin.addLootUnique(RailcraftItems.ingot, m, 5, 9, LootPlugin.Type.TOOL);
         }
     }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        int damage = stack.getItemDamage();
-        if (damage < 0 || damage >= EnumIngot.VALUES.length)
-            return "item.railcraft.ingot";
-        switch (EnumIngot.VALUES[damage]) {
-            case STEEL:
-                return "item.railcraft.ingot.steel";
-            case COPPER:
-                return "item.railcraft.ingot.copper";
-            case TIN:
-                return "item.railcraft.ingot.tin";
-            case LEAD:
-                return "item.railcraft.ingot.lead";
-            default:
-                return "item.railcraft.ingot";
-        }
-    }
-
-    public enum EnumIngot implements IVariantEnum {
-
-        STEEL("ingotSteel"),
-        COPPER("ingotCopper"),
-        TIN("ingotTin"),
-        LEAD("ingotLead");
-        public static final EnumIngot[] VALUES = values();
-        private String oreTag;
-
-        EnumIngot(String oreTag) {
-            this.oreTag = oreTag;
-        }
-
-        @Override
-        public Object getAlternate() {
-            return oreTag;
-        }
-
-        @Nonnull
-        @Override
-        public Class<? extends ItemRailcraft> getParentClass() {
-            return ItemIngot.class;
-        }
-
-        @Override
-        public String getName() {
-            return name().toLowerCase(Locale.ENGLISH);
-        }
-
-        @Override
-        public int getItemMeta() {
-            return ordinal();
-        }
-    }
-
 }

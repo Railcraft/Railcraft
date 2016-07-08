@@ -36,9 +36,9 @@ public class ItemOre extends ItemBlock {
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         int damage = stack.getItemDamage();
-        if (damage < 0 || damage >= EnumOre.values().length)
+        if (damage < 0 || damage >= EnumOre.VALUES.length)
             return "";
-        return EnumOre.values()[damage].getTag();
+        return EnumOre.VALUES[damage].getTag();
     }
 
     @Override

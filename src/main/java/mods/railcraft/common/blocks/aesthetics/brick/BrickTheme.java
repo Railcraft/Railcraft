@@ -39,8 +39,8 @@ public enum BrickTheme {
         @Override
         public void initRecipes() {
             if (EnumCube.ABYSSAL_STONE.isEnabled()) {
-                CraftingPlugin.addFurnaceRecipe(EnumCube.ABYSSAL_STONE.getItem(), new ItemStack(getBlock(), 1, 2), 0.2F);
-                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumCube.ABYSSAL_STONE.getItem(), true, false);
+                CraftingPlugin.addFurnaceRecipe(EnumCube.ABYSSAL_STONE.getStack(), new ItemStack(getBlock(), 1, 2), 0.2F);
+                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumCube.ABYSSAL_STONE.getStack(), true, false);
                 recipe.addOutput(get(COBBLE, 1), 1.0F);
             }
         }
@@ -95,8 +95,8 @@ public enum BrickTheme {
         @Override
         public void initRecipes() {
             if (EnumCube.QUARRIED_STONE.isEnabled()) {
-                CraftingPlugin.addFurnaceRecipe(EnumCube.QUARRIED_STONE.getItem(), new ItemStack(getBlock(), 1, 2), 0.2F);
-                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumCube.QUARRIED_STONE.getItem(), true, false);
+                CraftingPlugin.addFurnaceRecipe(EnumCube.QUARRIED_STONE.getStack(), new ItemStack(getBlock(), 1, 2), 0.2F);
+                ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumCube.QUARRIED_STONE.getStack(), true, false);
                 recipe.addOutput(get(COBBLE, 1), 1.0F);
             }
         }

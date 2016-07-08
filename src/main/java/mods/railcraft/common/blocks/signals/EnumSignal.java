@@ -10,6 +10,7 @@ package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleRouting;
@@ -18,7 +19,6 @@ import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -145,20 +145,14 @@ public enum EnumSignal implements ISignalTileDefinition, IVariantEnum {
         return tag;
     }
 
-    @Nonnull
     @Override
-    public Class<?> getParentClass() {
-        return BlockSignalRailcraft.class;
+    public boolean isValid(Class<?> clazz) {
+        return clazz == BlockSignalRailcraft.class;
     }
 
     @Nullable
     @Override
-    public Object getAlternate() {
+    public Object getAlternate(IRailcraftObjectContainer container) {
         return null;
-    }
-
-    @Override
-    public int getItemMeta() {
-        return ordinal();
     }
 }

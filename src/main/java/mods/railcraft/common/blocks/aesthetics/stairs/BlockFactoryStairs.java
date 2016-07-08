@@ -39,7 +39,7 @@ public class BlockFactoryStairs extends BlockFactory {
         RailcraftRegistry.register(BlockRailcraftStairs.block, ItemStair.class);
         GameRegistry.registerTileEntity(TileStair.class, "RCStairTile");
 
-        for (BlockMaterial mat : BlockMaterial.STAIR_MATS) {
+        for (BlockMaterial mat : BlockMaterial.VALUES) {
             RailcraftRegistry.register(getItem(mat));
 
             switch (mat) {
@@ -55,7 +55,7 @@ public class BlockFactoryStairs extends BlockFactory {
     @Override
     protected void doRecipeInit() {
         BlockMaterial.initialize();
-        for (BlockMaterial mat : BlockMaterial.STAIR_MATS) {
+        for (BlockMaterial mat : BlockMaterial.VALUES) {
             if (BlockRailcraftStairs.isEnabled(mat) && mat.getSourceItem() != null) {
                 CraftingPlugin.addRecipe(BlockRailcraftStairs.getItem(mat, 4), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
                 ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(BlockRailcraftStairs.getItem(mat), true, false);

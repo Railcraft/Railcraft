@@ -22,11 +22,10 @@ import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.ICartType;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.ItemGear.EnumGear;
-import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemTie.EnumTie;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneCut;
 import mods.railcraft.common.items.firestone.ItemFirestoneRaw;
@@ -114,11 +113,11 @@ public class ThaumcraftPlugin {
             addBrickAspects(BrickTheme.QUARRIED, Aspect.LIGHT);
             addBrickAspects(BrickTheme.SANDY, Aspect.EARTH);
 
-            addItemAspect(EnumCube.ABYSSAL_STONE.getItem(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.DARKNESS, 2));
-            addItemAspect(EnumCube.QUARRIED_STONE.getItem(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.LIGHT, 2));
-            addItemAspect(EnumCube.CRUSHED_OBSIDIAN.getItem(), copyAspects(Blocks.OBSIDIAN).remove(Aspect.EARTH, 1).add(Aspect.ENTROPY, 1).add(Aspect.ELDRITCH, 1));
-            addItemAspect(EnumCube.CONCRETE_BLOCK.getItem(), new AspectList().add(Aspect.EARTH, 3).add(Aspect.METAL, 1));
-            addItemAspect(EnumCube.CREOSOTE_BLOCK.getItem(), new AspectList().add(Aspect.PLANT, 3).add(Aspect.ORDER, 1));
+            addItemAspect(EnumCube.ABYSSAL_STONE.getStack(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.DARKNESS, 2));
+            addItemAspect(EnumCube.QUARRIED_STONE.getStack(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.LIGHT, 2));
+            addItemAspect(EnumCube.CRUSHED_OBSIDIAN.getStack(), copyAspects(Blocks.OBSIDIAN).remove(Aspect.EARTH, 1).add(Aspect.ENTROPY, 1).add(Aspect.ELDRITCH, 1));
+            addItemAspect(EnumCube.CONCRETE_BLOCK.getStack(), new AspectList().add(Aspect.EARTH, 3).add(Aspect.METAL, 1));
+            addItemAspect(EnumCube.CREOSOTE_BLOCK.getStack(), new AspectList().add(Aspect.PLANT, 3).add(Aspect.ORDER, 1));
 
             addItemAspect(EnumOre.DARK_DIAMOND.getItem(), copyAspects(Blocks.DIAMOND_ORE).add(Aspect.DARKNESS, 1));
             addItemAspect(EnumOre.DARK_EMERALD.getItem(), copyAspects(Blocks.EMERALD_ORE).add(Aspect.DARKNESS, 1));
@@ -142,11 +141,11 @@ public class ThaumcraftPlugin {
             addItemAspect(RailcraftItems.tie.getStack(1, EnumTie.WOOD), new AspectList().add(Aspect.PLANT, 3).add(Aspect.ORDER, 1));
             addItemAspect(RailcraftItems.tie.getStack(1, EnumTie.STONE), new AspectList().add(Aspect.EARTH, 3).add(Aspect.METAL, 1));
 
-            addItemAspect(RailcraftToolItems.getCoalCoke(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.ENERGY, 4));
+            addItemAspect(RailcraftItems.coke.getStack(), new AspectList().add(Aspect.FIRE, 4).add(Aspect.ENERGY, 4));
 
-            addItemAspect(RailcraftItems.plate.getStack(1, EnumPlate.IRON), new AspectList().add(Aspect.METAL, 4));
-            addItemAspect(RailcraftItems.plate.getStack(1, EnumPlate.STEEL), new AspectList().add(Aspect.METAL, 3).add(Aspect.ORDER, 1));
-            addItemAspect(RailcraftItems.plate.getStack(1, EnumPlate.TIN), new AspectList().add(Aspect.METAL, 3));
+            addItemAspect(RailcraftItems.plate.getStack(1, Metal.IRON), new AspectList().add(Aspect.METAL, 4));
+            addItemAspect(RailcraftItems.plate.getStack(1, Metal.STEEL), new AspectList().add(Aspect.METAL, 3).add(Aspect.ORDER, 1));
+            addItemAspect(RailcraftItems.plate.getStack(1, Metal.TIN), new AspectList().add(Aspect.METAL, 3));
 
             addItemAspect(RailcraftItems.gear.getStack(EnumGear.GOLD_PLATE), new AspectList().add(Aspect.METAL, 4).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 2).add(Aspect.DESIRE, 2));
             addItemAspect(RailcraftItems.gear.getStack(EnumGear.BUSHING), new AspectList().add(Aspect.METAL, 1).add(Aspect.ORDER, 1).add(Aspect.MECHANISM, 1));

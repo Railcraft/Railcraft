@@ -16,7 +16,7 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.items.ItemPlate.EnumPlate;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RotorRepairRecipe;
@@ -50,7 +50,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             "BPB",
                             "P P",
                             "BPB",
-                            'P', RailcraftItems.plate.getRecipeObject(EnumPlate.STEEL),
+                            'P', RailcraftItems.plate.getRecipeObject(Metal.STEEL),
                             'B', "blockSteel");
 
                     RailcraftItems.turbineRotor.register();
@@ -68,7 +68,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             "PCP",
                             "CCC",
                             "PCP",
-                            'P', RailcraftItems.plate.getRecipeObject(EnumPlate.TIN),
+                            'P', RailcraftItems.plate.getRecipeObject(Metal.TIN),
                             'C', "ingotCopper");
 
                 epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;
@@ -78,7 +78,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             "PCP",
                             "CDC",
                             "PCP",
-                            'P', RailcraftItems.plate.getRecipeObject(EnumPlate.TIN),
+                            'P', RailcraftItems.plate.getRecipeObject(Metal.TIN),
                             'D', "blockDiamond",
                             'C', "ingotCopper");
                 }
@@ -89,7 +89,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                             "PGP",
                             "GRG",
                             "PGP",
-                            'P', RailcraftItems.plate.getRecipeObject(EnumPlate.COPPER),
+                            'P', RailcraftItems.plate.getRecipeObject(Metal.COPPER),
                             'G', "ingotGold",
                             'R', "blockRedstone");
 

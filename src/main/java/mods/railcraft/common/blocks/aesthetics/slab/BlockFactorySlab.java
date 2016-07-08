@@ -34,7 +34,7 @@ public class BlockFactorySlab extends BlockFactory {
         RailcraftRegistry.register(BlockRailcraftSlab.block, ItemSlab.class);
         GameRegistry.registerTileEntity(TileSlab.class, "RCSlabTile");
 
-        for (BlockMaterial mat : BlockMaterial.SLAB_MATS) {
+        for (BlockMaterial mat : BlockMaterial.VALUES) {
             RailcraftRegistry.register(getItem(mat));
 
             switch (mat) {
@@ -51,7 +51,7 @@ public class BlockFactorySlab extends BlockFactory {
     @Override
     protected void doRecipeInit() {
         BlockMaterial.initialize();
-        for (BlockMaterial mat : BlockMaterial.SLAB_MATS) {
+        for (BlockMaterial mat : BlockMaterial.VALUES) {
             if (BlockRailcraftSlab.isEnabled(mat) && mat.getSourceItem() != null) {
                 switch (mat) {
                     case SNOW:

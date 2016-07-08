@@ -8,13 +8,17 @@
  */
 package mods.railcraft.common.blocks.ore;
 
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.HarvestPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -41,12 +45,11 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockOre extends Block {
+public class BlockOre extends Block implements IRailcraftObject {
 
     public static final PropertyEnum<EnumOre> VARIANT = PropertyEnum.create("variant", EnumOre.class);
-//    private static final ParticleHelperCallback callback = new ParticleCallback();
+    //    private static final ParticleHelperCallback callback = new ParticleCallback();
     public static int renderPass;
-    private static BlockOre instance;
     private final Random rand = new Random();
 
     public BlockOre() {
@@ -61,65 +64,65 @@ public class BlockOre extends Block {
 
     @Nullable
     public static BlockOre getBlock() {
-        return instance;
+        return (BlockOre) RailcraftBlocks.ore.block();
     }
 
     @Nullable
     public static IBlockState getState(EnumOre ore) {
-        if (instance == null)
+        Block block = getBlock();
+        if (block == null)
             return null;
-        return instance.getDefaultState().withProperty(VARIANT, ore);
+        return block.getDefaultState().withProperty(VARIANT, ore);
     }
 
-    public static void registerBlock() {
-        if (instance == null && RailcraftConfig.isBlockEnabled("ore")) {
-            instance = new BlockOre();
-            RailcraftRegistry.register(instance, ItemOre.class);
+    @Override
+    public void defineRecipes() {
+        registerPoorOreRecipe(Metal.COPPER);
+        registerPoorOreRecipe(Metal.GOLD);
+        registerPoorOreRecipe(Metal.IRON);
+        registerPoorOreRecipe(Metal.TIN);
+        registerPoorOreRecipe(Metal.LEAD);
+    }
 
-            EntityTunnelBore.addMineableBlock(instance);
+    @Override
+    public void initializeDefinintion() {
+        EntityTunnelBore.addMineableBlock(this);
 
-            for (EnumOre ore : EnumOre.values()) {
-                ForestryPlugin.addBackpackItem("forestry.miner", ore.getItem());
+        for (EnumOre ore : EnumOre.VALUES) {
+            ForestryPlugin.addBackpackItem("forestry.miner", ore.getItem());
 
-                switch (ore) {
-                    case FIRESTONE:
-                        HarvestPlugin.setStateHarvestLevel("pickaxe", 3, ore);
-                        break;
-                    case DARK_LAPIS:
-                    case POOR_IRON:
-                    case POOR_TIN:
-                    case POOR_COPPER:
-                        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, ore);
-                        break;
-                    default:
-                        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, ore);
-                }
+            switch (ore) {
+                case FIRESTONE:
+                    HarvestPlugin.setStateHarvestLevel("pickaxe", 3, ore);
+                    break;
+                case DARK_LAPIS:
+                case POOR_IRON:
+                case POOR_TIN:
+                case POOR_COPPER:
+                    HarvestPlugin.setStateHarvestLevel("pickaxe", 1, ore);
+                    break;
+                default:
+                    HarvestPlugin.setStateHarvestLevel("pickaxe", 2, ore);
             }
-
-            RailcraftItems.dust.register();
-
-            registerOre("oreSulfur", EnumOre.SULFUR);
-            registerOre("oreSaltpeter", EnumOre.SALTPETER);
-            registerOre("oreDiamond", EnumOre.DARK_DIAMOND);
-            registerOre("oreEmerald", EnumOre.DARK_EMERALD);
-            registerOre("oreLapis", EnumOre.DARK_LAPIS);
-            registerOre("oreFirestone", EnumOre.FIRESTONE);
-            registerOre("orePoorCopper", EnumOre.POOR_COPPER);
-            registerOre("orePoorGold", EnumOre.POOR_GOLD);
-            registerOre("orePoorIron", EnumOre.POOR_IRON);
-            registerOre("orePoorTin", EnumOre.POOR_TIN);
-            registerOre("orePoorLead", EnumOre.POOR_LEAD);
-
-            registerPoorOreRecipe(Metal.COPPER);
-            registerPoorOreRecipe(Metal.GOLD);
-            registerPoorOreRecipe(Metal.IRON);
-            registerPoorOreRecipe(Metal.TIN);
-            registerPoorOreRecipe(Metal.LEAD);
         }
+
+        RailcraftItems.dust.register();
+
+        registerOre("oreSulfur", EnumOre.SULFUR);
+        registerOre("oreSaltpeter", EnumOre.SALTPETER);
+        registerOre("oreDiamond", EnumOre.DARK_DIAMOND);
+        registerOre("oreEmerald", EnumOre.DARK_EMERALD);
+        registerOre("oreLapis", EnumOre.DARK_LAPIS);
+        registerOre("oreFirestone", EnumOre.FIRESTONE);
+        registerOre("orePoorCopper", EnumOre.POOR_COPPER);
+        registerOre("orePoorGold", EnumOre.POOR_GOLD);
+        registerOre("orePoorIron", EnumOre.POOR_IRON);
+        registerOre("orePoorTin", EnumOre.POOR_TIN);
+        registerOre("orePoorLead", EnumOre.POOR_LEAD);
     }
 
     private static void registerPoorOreRecipe(Metal metal) {
-        CraftingPlugin.addFurnaceRecipe(metal.getPoorOre(), metal.getNugget(2), 0.1F);
+        CraftingPlugin.addFurnaceRecipe(Metal.Form.POOR_ORE.getStack(metal), metal.getStack(Metal.Form.NUGGET, 2), 0.1F);
     }
 
     private static void registerOre(String name, EnumOre ore) {

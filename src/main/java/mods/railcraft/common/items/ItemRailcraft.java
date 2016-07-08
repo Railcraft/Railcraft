@@ -76,24 +76,12 @@ public class ItemRailcraft extends Item implements IRailcraftObject {
         if (oreTag != null)
             return oreTag;
         if (variant != null && getHasSubtypes())
-            return new ItemStack(this, 1, variant.getItemMeta());
+            return new ItemStack(this, 1, variant.ordinal());
         return this;
     }
 
     @Nullable
     public String getOreTag(@Nullable IVariantEnum variant) {
         return null;
-    }
-
-    @Override
-    public void defineRecipes() {
-    }
-
-    @Override
-    public void finalizeDefinition() {
-    }
-
-    @Override
-    public void initializeDefinintion() {
     }
 }

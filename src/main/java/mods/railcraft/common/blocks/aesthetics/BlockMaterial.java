@@ -59,7 +59,7 @@ public enum BlockMaterial implements IStringSerializable {
     QUARTZ("quartz"),
     QUARTZ_CHISELED("quartz_chiseled"),
 
-//    PURPUR("purpur"),
+    PURPUR("purpur"),
 
     SANDY_BRICK(0, "sandy_brick"),
     INFERNAL_BRICK(1, "infernal_brick"),
@@ -110,11 +110,7 @@ public enum BlockMaterial implements IStringSerializable {
     public static final BlockMaterial[] CREATIVE_LIST;
     public static final BlockMaterial[] OLD_WALL1_MATS;
     public static final BlockMaterial[] OLD_WALL2_MATS;
-    //    public static final BlockMaterial[] WALL_SANDY_MATS;
-    public static final EnumSet<BlockMaterial> STAIR_MATS;
-    public static final EnumSet<BlockMaterial> SLAB_MATS;
-    public static final EnumSet<BlockMaterial> VANILLA_STAIRS;
-    public static final EnumSet<BlockMaterial> VANILLA_SLABS;
+    public static final EnumSet<BlockMaterial> VANILLA_REFINED_MATS;
     public static final BiMap<BlockMaterial, Integer> OLD_ORDINALS;
     private static boolean needsInit = true;
     private SoundType sound = SoundType.STONE;
@@ -125,8 +121,7 @@ public enum BlockMaterial implements IStringSerializable {
     private final String name;
 
     static {
-        VANILLA_STAIRS = EnumSet.of(SANDSTONE, RED_SANDSTONE, QUARTZ, NETHER_BRICK, STONE_BRICK, BRICK);
-        VANILLA_SLABS = EnumSet.of(SANDSTONE, RED_SANDSTONE, QUARTZ, NETHER_BRICK, STONE_BRICK, BRICK);
+        VANILLA_REFINED_MATS = EnumSet.of(SANDSTONE, RED_SANDSTONE, QUARTZ, NETHER_BRICK, STONE_BRICK, BRICK, PURPUR);
 
         OLD_WALL1_MATS = new BlockMaterial[]{
                 INFERNAL_BRICK,
@@ -164,26 +159,6 @@ public enum BlockMaterial implements IStringSerializable {
 //                    SANDY_COBBLE,
 //        } ;
 
-        STAIR_MATS = EnumSet.complementOf(EnumSet.of(
-                STONE_BRICK,
-                STONE_BRICK_MOSSY,
-                STONE_BRICK_CHISELED,
-                STONE_BRICK_CRACKED,
-                SANDSTONE,
-                SANDSTONE_CHISELED,
-                SANDSTONE_SMOOTH
-        ));
-
-        SLAB_MATS = EnumSet.complementOf(EnumSet.of(
-                STONE_BRICK,
-                STONE_BRICK_MOSSY,
-                STONE_BRICK_CHISELED,
-                STONE_BRICK_CRACKED,
-                SANDSTONE,
-                SANDSTONE_CHISELED,
-                SANDSTONE_SMOOTH
-        ));
-
         OLD_ORDINALS = HashBiMap.create();
         for (BlockMaterial mat : BlockMaterial.VALUES) {
             if (mat.oldOrdinal >= 0) {
@@ -191,65 +166,7 @@ public enum BlockMaterial implements IStringSerializable {
             }
         }
 
-        CREATIVE_LIST = new BlockMaterial[]{
-                SNOW,
-                ICE,
-                PACKED_ICE,
-                IRON,
-                STEEL,
-                COPPER,
-                TIN,
-                LEAD,
-                GOLD,
-                DIAMOND,
-                OBSIDIAN,
-                OBSIDIAN_CRUSHED,
-                CONCRETE,
-                CREOSOTE,
-                STONE_BRICK,
-                STONE_BRICK_MOSSY,
-                STONE_BRICK_CRACKED,
-                STONE_BRICK_CHISELED,
-                SANDSTONE,
-                SANDSTONE_CHISELED,
-                SANDSTONE_SMOOTH,
-                RED_SANDSTONE,
-                RED_SANDSTONE_CHISELED,
-                RED_SANDSTONE_SMOOTH,
-                QUARTZ,
-                QUARTZ_CHISELED,
-                ABYSSAL_BRICK,
-                ABYSSAL_FITTED,
-                ABYSSAL_BLOCK,
-                ABYSSAL_COBBLE,
-                INFERNAL_BRICK,
-                INFERNAL_FITTED,
-                INFERNAL_BLOCK,
-                INFERNAL_COBBLE,
-                BLOODSTAINED_BRICK,
-                BLOODSTAINED_FITTED,
-                BLOODSTAINED_BLOCK,
-                BLOODSTAINED_COBBLE,
-                SANDY_BRICK,
-                SANDY_FITTED,
-                SANDY_BLOCK,
-                SANDY_COBBLE,
-                BLEACHEDBONE_BRICK,
-                BLEACHEDBONE_FITTED,
-                BLEACHEDBONE_BLOCK,
-                BLEACHEDBONE_COBBLE,
-                NETHER_BRICK,
-                NETHER_FITTED,
-                NETHER_BLOCK,
-                NETHER_COBBLE,
-                QUARRIED_BRICK,
-                QUARRIED_FITTED,
-                QUARRIED_BLOCK,
-                QUARRIED_COBBLE,
-                FROSTBOUND_BRICK,
-                FROSTBOUND_FITTED,
-                FROSTBOUND_BLOCK,
-                FROSTBOUND_COBBLE};
+        CREATIVE_LIST = values();
     }
 
     BlockMaterial(String name) {
@@ -366,7 +283,7 @@ public enum BlockMaterial implements IStringSerializable {
                     if (mat.state != null)
                         mat.sound = mat.state.getBlock().getSoundType();
             }
-                throw new RuntimeException("Invalid Sound Defined!");
+            throw new RuntimeException("Invalid Sound Defined!");
         }
     }
 

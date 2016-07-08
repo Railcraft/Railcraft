@@ -9,6 +9,7 @@
 package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.common.blocks.IBlockVariantEnum;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.modules.RailcraftModuleManager;
@@ -16,7 +17,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -54,10 +54,9 @@ public enum EnumOre implements IBlockVariantEnum<EnumOre> {
         return BlockOre.getBlock();
     }
 
-    @Nonnull
     @Override
-    public Class<?> getParentClass() {
-        return BlockOre.class;
+    public boolean isValid(Class<?> clazz) {
+        return clazz == BlockOre.class;
     }
 
     @Nullable
@@ -100,14 +99,9 @@ public enum EnumOre implements IBlockVariantEnum<EnumOre> {
         return tag;
     }
 
-    @Override
-    public int getItemMeta() {
-        return ordinal();
-    }
-
     @Nullable
     @Override
-    public Object getAlternate() {
+    public Object getAlternate(IRailcraftObjectContainer container) {
         return null;
     }
 }

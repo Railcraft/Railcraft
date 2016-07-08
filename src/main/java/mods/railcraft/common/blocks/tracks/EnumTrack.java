@@ -18,10 +18,10 @@ import mods.railcraft.common.blocks.tracks.instances.*;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.items.ItemPlate.EnumPlate;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
 import mods.railcraft.common.items.ItemTie.EnumTie;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -32,6 +32,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public enum EnumTrack {
@@ -199,11 +200,13 @@ public enum EnumTrack {
         return depreciated;
     }
 
-    public ItemStack getItem() {
-        return getItem(1);
+    @Nullable
+    public ItemStack getStack() {
+        return getStack(1);
     }
 
-    public ItemStack getItem(int qty) {
+    @Nullable
+    public ItemStack getStack(int qty) {
         if (trackSpec != null)
             return trackSpec.getItem(qty);
         return null;
@@ -229,10 +232,11 @@ public enum EnumTrack {
         return itemIconIndex;
     }
 
+    @Nullable
     private ItemStack registerRecipe() {
-        if (getItem() == null)
+        if (getStack() == null)
             return null;
-        ItemStack output = getItem(recipeOutput * 2);
+        ItemStack output = getStack(recipeOutput * 2);
         Object railWood = RailcraftConfig.useOldRecipes() ? "slabWood" : RailcraftItems.rail.getRecipeObject(EnumRail.WOOD);
         Object railStandard = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.IRON_INGOT) : RailcraftItems.rail.getRecipeObject(EnumRail.STANDARD);
         Object railAdvanced = RailcraftConfig.useOldRecipes() ? new ItemStack(Items.GOLD_INGOT) : RailcraftItems.rail.getRecipeObject(EnumRail.ADVANCED);
@@ -485,7 +489,7 @@ public enum EnumTrack {
                         "IPI",
                         "ItI",
                         'I', railStandard,
-                        'P', RailcraftItems.plate, EnumPlate.STEEL,
+                        'P', RailcraftItems.plate, Metal.STEEL,
                         't', woodTie);
                 break;
             case BUFFER_STOP:

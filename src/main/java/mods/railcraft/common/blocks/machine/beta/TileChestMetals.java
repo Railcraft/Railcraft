@@ -15,6 +15,7 @@ import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -31,9 +32,9 @@ public class TileChestMetals extends TileChestRailcraft {
 
     static {
         for (Metal m : Metal.VALUES) {
-            nuggetFilters.put(m, StackFilters.noneOf(m.getNugget()).and(m.nuggetFilter));
-            ingotFilters.put(m, StackFilters.noneOf(m.getIngot()).and(m.ingotFilter));
-            blockFilters.put(m, StackFilters.noneOf(m.getBlock()).and(m.blockFilter));
+            nuggetFilters.put(m, StackFilters.noneOf(m.getStack(Metal.Form.NUGGET)).and(m.nuggetFilter));
+            ingotFilters.put(m, StackFilters.noneOf(m.getStack(Metal.Form.INGOT)).and(m.ingotFilter));
+            blockFilters.put(m, StackFilters.noneOf(m.getStack(Metal.Form.BLOCK)).and(m.blockFilter));
         }
     }
 
@@ -60,9 +61,10 @@ public class TileChestMetals extends TileChestRailcraft {
             public boolean evaluate(IInventory inv) {
                 InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
-                    if (metal.getIngot() != null && im.canRemoveItems(metal.nuggetFilter, 9) && im.canAddStack(metal.getIngot())) {
+                    ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
+                    if (ingotStack != null && im.canRemoveItems(metal.nuggetFilter, 9) && im.canAddStack(ingotStack)) {
                         im.removeItems(metal.nuggetFilter, 9);
-                        im.addStack(metal.getIngot());
+                        im.addStack(ingotStack);
                         return true;
                     }
                 }
@@ -75,9 +77,10 @@ public class TileChestMetals extends TileChestRailcraft {
             public boolean evaluate(IInventory inv) {
                 InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
-                    if (metal.getBlock() != null && im.canRemoveItems(metal.ingotFilter, 9) && im.canAddStack(metal.getBlock())) {
+                    ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
+                    if (blockStack != null && im.canRemoveItems(metal.ingotFilter, 9) && im.canAddStack(blockStack)) {
                         im.removeItems(metal.ingotFilter, 9);
-                        im.addStack(metal.getBlock());
+                        im.addStack(blockStack);
                         return true;
                     }
                 }
@@ -91,9 +94,10 @@ public class TileChestMetals extends TileChestRailcraft {
                 InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     IStackFilter filter = nuggetFilters.get(metal);
-                    if (metal.getNugget() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getNugget())) {
+                    ItemStack nuggetStack = metal.getStack(Metal.Form.NUGGET);
+                    if (nuggetStack != null && im.canRemoveItems(filter, 1) && im.canAddStack(nuggetStack)) {
                         im.removeItems(filter, 1);
-                        im.addStack(metal.getNugget());
+                        im.addStack(nuggetStack);
                         return true;
                     }
                 }
@@ -107,9 +111,10 @@ public class TileChestMetals extends TileChestRailcraft {
                 InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     IStackFilter filter = ingotFilters.get(metal);
-                    if (metal.getIngot() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getIngot())) {
+                    ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
+                    if (ingotStack != null && im.canRemoveItems(filter, 1) && im.canAddStack(ingotStack)) {
                         im.removeItems(filter, 1);
-                        im.addStack(metal.getIngot());
+                        im.addStack(ingotStack);
                         return true;
                     }
                 }
@@ -123,9 +128,10 @@ public class TileChestMetals extends TileChestRailcraft {
                 InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     IStackFilter filter = blockFilters.get(metal);
-                    if (metal.getBlock() != null && im.canRemoveItems(filter, 1) && im.canAddStack(metal.getBlock())) {
+                    ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
+                    if (blockStack != null && im.canRemoveItems(filter, 1) && im.canAddStack(blockStack)) {
                         im.removeItems(filter, 1);
-                        im.addStack(metal.getBlock());
+                        im.addStack(blockStack);
                         return true;
                     }
                 }

@@ -12,7 +12,7 @@ import mods.railcraft.api.crafting.IBlastFurnaceCraftingManager;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.items.RailcraftToolItems;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
@@ -21,6 +21,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,8 +48,8 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
 
             };
             fuel.add(ThaumcraftPlugin.ITEMS.get("alumentum", 0));
-            fuel.add(RailcraftToolItems.getCoalCoke());
-            fuel.add(EnumCube.COKE_BLOCK.getItem());
+            fuel.add(RailcraftItems.coke.getStack());
+            fuel.add(EnumCube.COKE_BLOCK.getStack());
             fuel.add(new ItemStack(Items.COAL, 1, 1));
             fuel.add(InvTools.makeStack(ItemFirestoneRefined.item, 1, OreDictionary.WILDCARD_VALUE));
             fuel.add(InvTools.makeStack(ItemFirestoneCracked.item, 1, OreDictionary.WILDCARD_VALUE));
@@ -116,7 +117,7 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
     }
 
     @Override
-    public void addRecipe(ItemStack input, boolean matchDamage, boolean matchNBT, int cookTime, ItemStack output) {
+    public void addRecipe(@Nullable ItemStack input, boolean matchDamage, boolean matchNBT, int cookTime, @Nullable ItemStack output) {
         if (input != null && output != null)
             recipes.add(new BlastFurnaceRecipe(input, matchDamage, matchNBT, cookTime, output));
     }

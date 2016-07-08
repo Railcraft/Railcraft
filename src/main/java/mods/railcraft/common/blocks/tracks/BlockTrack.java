@@ -92,7 +92,7 @@ public class BlockTrack extends BlockRail implements IPostConnection {
         list.addAll(
                 EnumTrack.getCreativeList().stream()
                         .filter(EnumTrack::isEnabled)
-                        .map(EnumTrack::getItem)
+                        .map(EnumTrack::getStack)
                         .collect(Collectors.toList())
         );
 

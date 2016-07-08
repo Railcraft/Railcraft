@@ -9,12 +9,12 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.cube;
 
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
@@ -36,14 +36,13 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BlockCube extends Block {
+public class BlockCube extends Block implements IRailcraftObject {
 
     public static final PropertyEnum<EnumCube> VARIANT = PropertyEnum.create("variant", EnumCube.class);
-
-    private static BlockCube instance;
 
     public BlockCube() {
         super(Material.ROCK);
@@ -56,42 +55,37 @@ public class BlockCube extends Block {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
-    public static BlockCube getBlock() {
-        return instance;
+    @Override
+    public void initializeDefinintion() {
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.COKE_BLOCK);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.ABYSSAL_STONE);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumCube.STEEL_BLOCK);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.CONCRETE_BLOCK);
+        HarvestPlugin.setStateHarvestLevel("axe", 0, EnumCube.CREOSOTE_BLOCK);
+        HarvestPlugin.setStateHarvestLevel("shovel", 3, EnumCube.CRUSHED_OBSIDIAN);
+
+        EntityTunnelBore.addMineableBlock(this);
+
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.COKE_BLOCK.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.COPPER_BLOCK.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.LEAD_BLOCK.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.STEEL_BLOCK.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.TIN_BLOCK.getStack());
+        ForestryPlugin.addBackpackItem("forestry.builder", EnumCube.CONCRETE_BLOCK.getStack());
+        ForestryPlugin.addBackpackItem("forestry.builder", EnumCube.CREOSOTE_BLOCK.getStack());
+        ForestryPlugin.addBackpackItem("forestry.digger", EnumCube.ABYSSAL_STONE.getStack());
+        ForestryPlugin.addBackpackItem("forestry.digger", EnumCube.QUARRIED_STONE.getStack());
+
+        MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.CONCRETE_BLOCK.ordinal());
+        MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.CREOSOTE_BLOCK.ordinal());
+        MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.STEEL_BLOCK.ordinal());
+        MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.ABYSSAL_STONE.ordinal());
+        MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.QUARRIED_STONE.ordinal());
     }
 
-    public static void registerBlock() {
-        if (instance == null)
-            if (RailcraftConfig.isBlockEnabled("cube")) {
-                instance = new BlockCube();
-                RailcraftRegistry.register(instance, ItemCube.class);
-
-                HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.COKE_BLOCK);
-                HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.ABYSSAL_STONE);
-                HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumCube.STEEL_BLOCK);
-                HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.CONCRETE_BLOCK);
-                HarvestPlugin.setStateHarvestLevel("axe", 0, EnumCube.CREOSOTE_BLOCK);
-                HarvestPlugin.setStateHarvestLevel("shovel", 3, EnumCube.CRUSHED_OBSIDIAN);
-
-                EntityTunnelBore.addMineableBlock(instance);
-
-                ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.COKE_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.COPPER_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.LEAD_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.STEEL_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.TIN_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("forestry.builder", EnumCube.CONCRETE_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("forestry.builder", EnumCube.CREOSOTE_BLOCK.getItem());
-                ForestryPlugin.addBackpackItem("forestry.digger", EnumCube.ABYSSAL_STONE.getItem());
-                ForestryPlugin.addBackpackItem("forestry.digger", EnumCube.QUARRIED_STONE.getItem());
-
-                MicroBlockPlugin.addMicroBlockCandidate(instance, EnumCube.CONCRETE_BLOCK.ordinal());
-                MicroBlockPlugin.addMicroBlockCandidate(instance, EnumCube.CREOSOTE_BLOCK.ordinal());
-                MicroBlockPlugin.addMicroBlockCandidate(instance, EnumCube.STEEL_BLOCK.ordinal());
-                MicroBlockPlugin.addMicroBlockCandidate(instance, EnumCube.ABYSSAL_STONE.ordinal());
-                MicroBlockPlugin.addMicroBlockCandidate(instance, EnumCube.QUARRIED_STONE.ordinal());
-            }
-
+    @Nullable
+    public static BlockCube getBlock() {
+        return (BlockCube) RailcraftBlocks.cube.block();
     }
 
     /**
@@ -181,7 +175,7 @@ public class BlockCube extends Block {
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumCube type : EnumCube.getCreativeList()) {
             if (type.isEnabled())
-                list.add(type.getItem());
+                list.add(type.getStack());
         }
     }
 

@@ -9,6 +9,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -22,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
 
@@ -149,24 +149,18 @@ public class ItemRail extends ItemRailcraft {
         }
 
         @Override
-        public Object getAlternate() {
+        public Object getAlternate(IRailcraftObjectContainer container) {
             return alternate;
         }
 
-        @Nonnull
         @Override
-        public Class<? extends ItemRailcraft> getParentClass() {
-            return ItemRail.class;
+        public boolean isValid(Class<?> clazz) {
+            return clazz == ItemRail.class;
         }
 
         @Override
         public String getName() {
             return name().toLowerCase(Locale.ENGLISH);
-        }
-
-        @Override
-        public int getItemMeta() {
-            return ordinal();
         }
     }
 

@@ -12,7 +12,7 @@ import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemRailcraft;
-import mods.railcraft.common.items.RailcraftToolItems;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -41,8 +41,8 @@ public class FuelPlugin {
     private static class FuelHandler implements IFuelHandler {
 
         private static final int COKE_HEAT = 3200;
-        private final ItemStack coke = RailcraftToolItems.getCoalCoke();
-        private final ItemStack cokeBlock = EnumCube.COKE_BLOCK.getItem();
+        private final ItemStack coke = RailcraftItems.coke.getStack();
+        private final ItemStack cokeBlock = EnumCube.COKE_BLOCK.getStack();
 
         private FuelHandler() {
         }

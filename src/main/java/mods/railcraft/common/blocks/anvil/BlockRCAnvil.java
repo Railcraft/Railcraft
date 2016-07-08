@@ -65,10 +65,6 @@ public class BlockRCAnvil extends BlockAnvil implements IRailcraftObject {
     }
 
     @Override
-    public void finalizeDefinition() {
-    }
-
-    @Override
     public boolean onBlockActivated(World worldIn, @Nonnull BlockPos pos, IBlockState state, @Nonnull EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote)
             return true;

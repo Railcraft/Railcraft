@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -19,7 +20,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
 
@@ -87,24 +87,18 @@ public class ItemDust extends ItemRailcraft {
         }
 
         @Override
-        public Object getAlternate() {
+        public Object getAlternate(IRailcraftObjectContainer container) {
             return oreTag;
         }
 
-        @Nonnull
         @Override
-        public Class<? extends ItemRailcraft> getParentClass() {
-            return ItemDust.class;
+        public boolean isValid(Class<?> clazz) {
+            return clazz == ItemDust.class;
         }
 
         @Override
         public String getName() {
             return name().toLowerCase(Locale.ENGLISH);
-        }
-
-        @Override
-        public int getItemMeta() {
-            return ordinal();
         }
     }
 

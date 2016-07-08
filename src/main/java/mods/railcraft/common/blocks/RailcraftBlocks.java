@@ -10,6 +10,8 @@
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
+import mods.railcraft.common.blocks.aesthetics.cube.ItemCube;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
@@ -21,6 +23,8 @@ import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
+import mods.railcraft.common.blocks.ore.BlockOre;
+import mods.railcraft.common.blocks.ore.ItemOre;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
@@ -49,12 +53,14 @@ import java.lang.reflect.Constructor;
 public enum RailcraftBlocks implements IRailcraftObjectContainer {
     anvil_steel(BlockRCAnvil.class, ItemAnvilBlock.class, "anvil"),
     detector(BlockDetector.class, ItemDetector.class, "detector"),
+    cube(BlockCube.class, ItemCube.class, "cube"),
     frame(BlockFrame.class, ItemBlockRailcraft.class, "frame"),
     machine_alpha(BlockMachine.class, ItemMachine.class, "machine.alpha", EnumMachineAlpha.PROXY, true),
     machine_beta(BlockMachine.class, ItemMachine.class, "machine.beta", EnumMachineBeta.PROXY, false),
     machine_gamma(BlockMachine.class, ItemMachine.class, "machine.gamma", EnumMachineGamma.PROXY, false),
     machine_delta(BlockMachine.class, ItemMachine.class, "machine.delta", EnumMachineDelta.PROXY, false),
     machine_epsilon(BlockMachine.class, ItemMachine.class, "machine.epsilon", EnumMachineEpsilon.PROXY, true),
+    ore(BlockOre.class, ItemOre.class, "ore"),
     signal(BlockSignalRailcraft.class, ItemSignal.class, "signal"),
     track(BlockTrack.class, ItemTrack.class, "track");
     public static final RailcraftBlocks[] VALUES = values();
@@ -181,7 +187,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     @Override
     public ItemStack getStack(int qty, IVariantEnum variant) {
         checkVariantObject(variant);
-        return getStack(qty, variant.getItemMeta());
+        return railcraftObject.getStack(qty, variant);
     }
 
     @Nullable
@@ -199,7 +205,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
         if (railcraftObject != null)
             obj = railcraftObject.getRecipeObject(variant);
         if (obj == null && variant != null)
-            obj = variant.getAlternate();
+            obj = variant.getAlternate(this);
         if (obj == null)
             obj = altRecipeObject;
         if (obj instanceof ItemStack)

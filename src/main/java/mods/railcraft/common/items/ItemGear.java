@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
@@ -17,7 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
 
@@ -114,24 +114,18 @@ public class ItemGear extends ItemRailcraft {
         }
 
         @Override
-        public Object getAlternate() {
+        public Object getAlternate(IRailcraftObjectContainer container) {
             return alternate;
         }
 
-        @Nonnull
         @Override
-        public Class<? extends ItemRailcraft> getParentClass() {
-            return ItemGear.class;
+        public boolean isValid(Class<?> clazz) {
+            return clazz == ItemGear.class;
         }
 
         @Override
         public String getName() {
             return name().toLowerCase(Locale.ENGLISH).replace('_', '.');
-        }
-
-        @Override
-        public int getItemMeta() {
-            return ordinal();
         }
     }
 
