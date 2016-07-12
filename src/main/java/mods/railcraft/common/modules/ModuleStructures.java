@@ -21,8 +21,6 @@ import mods.railcraft.common.blocks.aesthetics.lantern.BlockFactoryLantern;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPost;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
-import mods.railcraft.common.blocks.aesthetics.slab.BlockFactorySlab;
-import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockFactoryStairs;
 import mods.railcraft.common.blocks.aesthetics.wall.BlockRailcraftWall;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -49,13 +47,13 @@ public class ModuleStructures extends RailcraftModulePayload {
             @Override
             public void construction() {
                 addBlockFactory(new BlockFactoryStairs());
-                addBlockFactory(new BlockFactorySlab());
                 addBlockFactory(new BlockFactoryLantern());
                 for (BrickTheme brick : BrickTheme.VALUES) {
                     addBlockFactory(brick.makeFactory());
                 }
                 add(
                         RailcraftBlocks.signal,
+                        RailcraftBlocks.slab,
                         RailcraftBlocks.machine_alpha
                 );
             }
@@ -153,7 +151,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(EnumPost.WOOD_PLATFORM.getItem(),
                             " T ",
                             " I ",
-                            'T', BlockRailcraftSlab.getItem(BlockMaterial.CREOSOTE),
+                            'T', RailcraftBlocks.slab, BlockMaterial.CREOSOTE,
                             'I', EnumPost.WOOD.getItem());
 
                     CraftingPlugin.addRecipe(EnumPost.STONE.getItem(8),
@@ -165,7 +163,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(EnumPost.STONE_PLATFORM.getItem(),
                             " T ",
                             " I ",
-                            'T', BlockRailcraftSlab.getItem(BlockMaterial.CONCRETE),
+                            'T', RailcraftBlocks.slab, BlockMaterial.CONCRETE,
                             'I', EnumPost.STONE.getItem());
 
                     ItemStack stack = EnumPost.METAL_UNPAINTED.getItem(16);
@@ -185,7 +183,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(EnumPost.METAL_PLATFORM_UNPAINTED.getItem(4),
                             " T ",
                             " I ",
-                            'T', BlockRailcraftSlab.getItem(BlockMaterial.IRON),
+                            'T', RailcraftBlocks.slab, BlockMaterial.IRON,
                             'I', EnumPost.METAL_UNPAINTED.getItem());
 
                     stack = EnumPost.METAL_UNPAINTED.getItem(32);

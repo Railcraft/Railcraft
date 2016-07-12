@@ -42,7 +42,7 @@ public class CraftGuidePlugin {
     private static void registerCraftGuideObject(Object obj) {
         try {
             if (register == null) {
-                Class api = Class.forName("uristqwerty.CraftGuide.ReflectionAPI");
+                Class<?> api = Class.forName("uristqwerty.CraftGuide.ReflectionAPI");
                 register = api.getMethod("registerAPIObject", Object.class);
             }
             register.invoke(null, obj);

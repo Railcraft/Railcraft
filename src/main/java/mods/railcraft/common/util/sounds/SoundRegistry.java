@@ -32,11 +32,13 @@ public class SoundRegistry {
 
     private static final Map<IBlockState, SoundType> customSounds = new HashMap<>();
 
+    @Nullable
     public static SoundType getBlockSound(World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         return getBlockSound(state, world, pos);
     }
 
+    @Nullable
     public static SoundType getBlockSound(IBlockState blockState, World world, BlockPos pos) {
         Block block = blockState.getBlock();
         if (block instanceof IBlockSoundProvider)
@@ -74,18 +76,18 @@ public class SoundRegistry {
         if (block != null) {
 
             for (EnumWallAlpha wall : EnumWallAlpha.VALUES) {
-//                registerBlockSound(wall.ordinal(), SoundType.STONE);
+                registerBlockSound(wall.ordinal(), SoundType.STONE);
             }
 
-//            registerBlockSound(EnumWallAlpha.ICE.ordinal(), SoundType.GLASS);
-//            registerBlockSound(EnumWallAlpha.SNOW.ordinal(), SoundType.SNOW);
+            registerBlockSound(EnumWallAlpha.ICE.ordinal(), SoundType.GLASS);
+            registerBlockSound(EnumWallAlpha.SNOW.ordinal(), SoundType.SNOW);
         }
 
         block = BlockRailcraftWall.getBlockBeta();
         if (block != null) {
 
             for (EnumWallBeta wall : EnumWallBeta.VALUES) {
-//                registerBlockSound(wall.ordinal(), SoundType.STONE);
+                registerBlockSound(wall.ordinal(), SoundType.STONE);
             }
         }
     }

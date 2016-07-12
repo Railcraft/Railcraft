@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.lantern;
 
 import com.google.common.collect.BiMap;
 import mods.railcraft.common.blocks.BlockFactory;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
@@ -26,7 +27,7 @@ import net.minecraft.item.ItemStack;
 public class BlockFactoryLantern extends BlockFactory {
 
     public BlockFactoryLantern() {
-        super("lamp");
+        super("lantern");
     }
 
     @Override
@@ -56,7 +57,7 @@ public class BlockFactoryLantern extends BlockFactory {
                 if (BlockLantern.stone.isAvailable(mat) && mat.getState() != null) {
                     Object slab = null;
                     if (mat.getState().getBlock() instanceof BlockBrick)
-                        slab = BlockRailcraftSlab.getItem(mat);
+                        slab = RailcraftBlocks.slab.getRecipeObject(mat);
                     else if (mat == BlockMaterial.SANDSTONE)
                         slab = new ItemStack(Blocks.STONE_SLAB, 1, 1);
                     else if (mat == BlockMaterial.STONE_BRICK)

@@ -16,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -45,7 +44,7 @@ public class MaterialRegistry {
         if (mat == null)
             mat = BlockMaterial.fromName(name);
         if (mat == null)
-            mat = BlockMaterial.STONE_BRICK;
+            mat = BlockMaterial.getPlaceholder();
         return mat;
     }
 
@@ -61,14 +60,16 @@ public class MaterialRegistry {
         nbt.setString(key, material.getRegistryName());
     }
 
-    @Nullable
     public static BlockMaterial from(ItemStack stack, String key) {
         if (stack == null)
-            return BlockMaterial.STONE_BRICK;
+            return BlockMaterial.getPlaceholder();
         NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
         if (nbt.hasKey(key))
             return get(nbt.getString(key));
-        return BlockMaterial.OLD_ORDINALS.inverse().get(stack.getItemDamage());
+        BlockMaterial material = BlockMaterial.OLD_ORDINALS.inverse().get(stack.getItemDamage());
+        if (material != null)
+            return material;
+        return BlockMaterial.getPlaceholder();
     }
 
     @Nonnull

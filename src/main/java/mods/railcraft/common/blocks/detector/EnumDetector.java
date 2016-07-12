@@ -96,7 +96,7 @@ public enum EnumDetector implements IBlockVariantEnum<EnumDetector> {
     }
 
     @Override
-    public boolean isValid(Class<?> clazz) {
+    public boolean isValidBaseObject(Class<?> clazz) {
         return clazz == BlockDetector.class;
     }
 

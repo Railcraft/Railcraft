@@ -169,6 +169,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return PlayerPlugin.isSamePlayer(owner, player);
     }
 
+    @Nonnull
     public abstract String getLocalizationTag();
 
     public List<String> getDebugOutput() {

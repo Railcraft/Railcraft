@@ -19,14 +19,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
@@ -85,7 +86,7 @@ public class ItemSlab extends ItemBlock {
         return MaterialRegistry.from(stack, MATERIAL_KEY);
     }
 
-    private boolean canAddSlab(TileSlab tileSlab, EnumFacing side) {
+    private boolean canAddSlab(@Nullable TileSlab tileSlab, EnumFacing side) {
         if (tileSlab != null) {
             boolean up = tileSlab.isTopSlab();
             return (side == UP && !up || side == DOWN && up) && !tileSlab.isDoubleSlab();
@@ -93,7 +94,7 @@ public class ItemSlab extends ItemBlock {
         return false;
     }
 
-    private boolean isSingleSlab(TileSlab tileSlab) {
+    private boolean isSingleSlab(@Nullable TileSlab tileSlab) {
         return tileSlab != null && !tileSlab.isDoubleSlab();
     }
 

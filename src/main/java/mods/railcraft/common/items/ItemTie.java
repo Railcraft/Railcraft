@@ -95,7 +95,7 @@ public class ItemTie extends ItemRailcraft {
         }
 
         @Override
-        public boolean isValid(Class<?> clazz) {
+        public boolean isValidBaseObject(Class<?> clazz) {
             return clazz == ItemTie.class;
         }
 

@@ -21,6 +21,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,22 +59,21 @@ public abstract class BaseBackpack implements IBackpackDefinition {
         add(StackFilters.ofOreType(oreDictName));
     }
 
-    public void add(ItemStack stack) {
+    public void add(@Nullable ItemStack stack) {
         if (stack == null) return;
         items.add(stack);
     }
 
     public void add(IRailcraftObjectContainer objectContainer) {
-        if (objectContainer == null) return;
         items.add(objectContainer.getWildcard());
     }
 
-    public void add(Item item) {
+    public void add(@Nullable Item item) {
         if (item == null) return;
         items.add(new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE));
     }
 
-    public void add(Block block) {
+    public void add(@Nullable Block block) {
         if (block == null) return;
         items.add(new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
     }

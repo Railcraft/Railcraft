@@ -12,10 +12,13 @@ package mods.railcraft.common.blocks.aesthetics.slab;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleStructures;
-import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
@@ -30,6 +33,7 @@ import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -41,6 +45,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -48,12 +53,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static mods.railcraft.common.blocks.aesthetics.slab.ItemSlab.MATERIAL_KEY;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundProvider {
+public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundProvider, IRailcraftObject {
 
     public static final PropertyEnum<BlockMaterial> TOP_MATERIAL = PropertyEnum.create("top_material", BlockMaterial.class);
     public static final PropertyEnum<BlockMaterial> BOTTOM_MATERIAL = PropertyEnum.create("bottom_material", BlockMaterial.class);
@@ -65,20 +71,55 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
         setSoundType(RailcraftSoundTypes.OVERRIDE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         useNeighborBrightness = true;
+        GameRegistry.registerTileEntity(TileSlab.class, "RCSlabTile");
     }
 
-    public static BlockRailcraftSlab getBlock() {
-        return block;
+    @Override
+    public void initializeDefinintion() {
+        for (BlockMaterial mat : BlockMaterial.getValidMats()) {
+            RailcraftRegistry.register(getStack(1, mat));
+
+            switch (mat) {
+                case SNOW:
+                case ICE:
+                case PACKED_ICE:
+                    break;
+                default:
+                    ForestryPlugin.addBackpackItem("forestry.builder", getStack(1, mat));
+            }
+        }
     }
 
-    public static ItemStack getItem(BlockMaterial mat) {
-        return getItem(mat, 1);
+    @Override
+    public void defineRecipes() {
+        for (BlockMaterial mat : BlockMaterial.getValidMats()) {
+            switch (mat) {
+                case SNOW: // TODO: is this necessary?
+                    CraftingPlugin.addRecipe(getStack(3, mat),
+                            " T ",
+                            "SSS",
+                            'T', RailcraftItems.stoneCarver,
+                            'S', Blocks.SNOW_LAYER);
+                    break;
+                default:
+                    CraftingPlugin.addRecipe(getStack(6, mat),
+                            " T ",
+                            "SSS",
+                            'T', RailcraftItems.stoneCarver,
+                            'S', mat.getSourceItem());
+
+                    CraftingPlugin.addRecipe(mat.getSourceItem(), "S", "S", 'S', getStack(1, mat));
+            }
+        }
     }
 
-    public static ItemStack getItem(BlockMaterial mat, int qty) {
-        if (block == null) return null;
+    @Nonnull
+    @Override
+    public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+        IVariantEnum.tools.checkVariantObject(getClass(), variant);
         ItemStack stack = new ItemStack(block, qty);
-        MaterialRegistry.tagItemStack(stack, MATERIAL_KEY, mat);
+        if (variant != null)
+            MaterialRegistry.tagItemStack(stack, MATERIAL_KEY, (BlockMaterial) variant);
         return stack;
     }
 
@@ -86,16 +127,12 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
         return "tile.railcraft.slab." + mat.getLocalizationSuffix();
     }
 
-    public static boolean isEnabled(BlockMaterial mat) {
-        return RailcraftModuleManager.isModuleEnabled(ModuleStructures.class) && RailcraftConfig.isSubBlockEnabled(getTag(mat)) && getBlock() != null;
-    }
-
     @SuppressWarnings("unused")
     public static BlockMaterial getTopSlab(IBlockAccess world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab)
             return ((TileSlab) tile).getTopSlab();
-        return null;
+        return BlockMaterial.NO_MAT;
     }
 
     @SuppressWarnings("unused")
@@ -103,9 +140,10 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab)
             return ((TileSlab) tile).getBottomSlab();
-        return null;
+        return BlockMaterial.NO_MAT;
     }
 
+    @Nullable
     static TileSlab getSlabTile(IBlockAccess world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab)
@@ -113,57 +151,50 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
         return null;
     }
 
-    @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         TileSlab tile = getSlabTile(worldIn, pos);
         if (tile != null)
             state = state.withProperty(TOP_MATERIAL, tile.getTopSlab()).withProperty(BOTTOM_MATERIAL, tile.getBottomSlab());
         return state;
     }
 
-    @Nonnull
     @Override
-    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab) {
             BlockMaterial slab = ((TileSlab) tile).getUpmostSlab();
-            if (slab != null)
-                return getItem(slab);
+            return getStack(1, slab);
         }
-        return null;
+        return getStack(1, BlockMaterial.getPlaceholder());
     }
 
     @Override
-    public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (BlockMaterial mat : BlockMaterial.CREATIVE_LIST) {
-            if (isEnabled(mat) && BlockMaterial.SLAB_MATS.contains(mat))
-                list.add(getItem(mat));
-        }
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+        list.addAll(BlockMaterial.getCreativeList().stream().map(mat -> getStack(1, mat)).collect(Collectors.toList()));
     }
 
-    @Nonnull
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         TileEntity tile = world.getTileEntity(pos);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if (tile instanceof TileSlab) {
             BlockMaterial top = ((TileSlab) tile).getTopSlab();
             BlockMaterial bottom = ((TileSlab) tile).getBottomSlab();
-            if (top != null)
-                items.add(getItem(top));
-            if (bottom != null)
-                items.add(getItem(bottom));
+            if (top != BlockMaterial.NO_MAT)
+                items.add(getStack(1, top));
+            if (bottom != BlockMaterial.NO_MAT)
+                items.add(getStack(1, bottom));
         }
         return items;
     }
 
     @Override
-    public void harvestBlock(@Nonnull World worldIn, EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
     }
 
     @Override
-    public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
         player.addExhaustion(0.025F);
@@ -185,11 +216,11 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
             BlockMaterial top = ((TileSlab) tile).getTopSlab();
             BlockMaterial bottom = ((TileSlab) tile).getBottomSlab();
             float hardness = 0;
-            if (top != null)
+            if (top != BlockMaterial.NO_MAT)
                 hardness += top.getBlockHardness(worldIn, pos);
-            if (bottom != null)
+            if (bottom != BlockMaterial.NO_MAT)
                 hardness += bottom.getBlockHardness(worldIn, pos);
-            if (top != null && bottom != null)
+            if (top != BlockMaterial.NO_MAT && bottom != BlockMaterial.NO_MAT)
                 hardness = hardness / 2.0F;
             return hardness;
         }
@@ -197,17 +228,18 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, @Nonnull Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab) {
-            BlockMaterial top = ((TileSlab) tile).getTopSlab();
-            BlockMaterial bottom = ((TileSlab) tile).getBottomSlab();
+            TileSlab slab = (TileSlab) tile;
+            BlockMaterial top = slab.getTopSlab();
+            BlockMaterial bottom = slab.getBottomSlab();
             float resist = 0;
-            if (top != null)
+            if (top != BlockMaterial.NO_MAT)
                 resist += top.getExplosionResistance(exploder);
-            if (bottom != null)
+            if (bottom != BlockMaterial.NO_MAT)
                 resist += bottom.getExplosionResistance(exploder);
-            if (top != null && bottom != null)
+            if (top != BlockMaterial.NO_MAT && bottom != BlockMaterial.NO_MAT)
                 resist = resist / 2.0F;
             return resist;
         }
@@ -226,18 +258,17 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
         return ParticleHelper.addDestroyEffects(world, block, pos, state, manager, null);
     }
 
+    @Nullable
     @Override
     public SoundType getSound(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSlab) {
             BlockMaterial slab = ((TileSlab) tile).getUpmostSlab();
-            if (slab != null)
-                return slab.getSound();
+            return slab.getSound();
         }
         return null;
     }
 
-    @Nonnull
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         TileSlab slab = getSlabTile(source, pos);
@@ -277,7 +308,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
     @SuppressWarnings("SimplifiableIfStatement")
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean shouldSideBeRendered(IBlockState state, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
         BlockPos offsetPos = pos.offset(side);
 
         TileEntity tile = worldIn.getTileEntity(pos);
@@ -292,7 +323,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
             if (side != UP && side != DOWN && !super.shouldSideBeRendered(state, worldIn, pos, side))
                 return false;
 
-            if (top != null) {
+            if (top != BlockMaterial.NO_MAT) {
                 if (side == DOWN)
                     return true;
                 if (side == UP && super.shouldSideBeRendered(state, worldIn, pos, side))
@@ -306,7 +337,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
                     return otherSlab.isBottomSlab() || (otherSlab.isTopSlab() && otherSlab.getTopSlab().isTransparent());
                 }
             }
-            if (bottom != null) {
+            if (bottom != BlockMaterial.NO_MAT) {
                 if (side == UP)
                     return true;
                 if (side == DOWN && super.shouldSideBeRendered(state, worldIn, pos, side))
@@ -325,7 +356,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
     }
 
     @Override
-    public boolean isSideSolid(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileSlab tile = getSlabTile(world, pos);
         if (tile != null) {
             if (tile.isDoubleSlab())
@@ -339,7 +370,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
     }
 
     @Override
-    public boolean canPlaceTorchOnTop(IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos) {
+    public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileSlab tile = getSlabTile(world, pos);
         if (tile != null) {
             if (tile.isDoubleSlab())
@@ -350,9 +381,8 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
         return false;
     }
 
-    @Nonnull
     @Override
-    public TileEntity createNewTileEntity(@Nonnull World world, int meta) {
+    public TileEntity createNewTileEntity(World world, int meta) {
         return new TileSlab();
     }
 

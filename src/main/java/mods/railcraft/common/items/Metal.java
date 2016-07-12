@@ -106,7 +106,7 @@ public enum Metal implements IVariantEnum {
     }
 
     @Override
-    public boolean isValid(Class<?> clazz) {
+    public boolean isValidBaseObject(Class<?> clazz) {
         return metalObjects.contains(clazz);
     }
 

@@ -82,7 +82,7 @@ public class ItemRailbed extends ItemRailcraft {
         }
 
         @Override
-        public boolean isValid(Class<?> clazz) {
+        public boolean isValidBaseObject(Class<?> clazz) {
             return clazz == ItemRailbed.class;
         }
 

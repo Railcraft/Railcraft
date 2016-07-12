@@ -79,7 +79,7 @@ public enum EnumPost implements IBlockVariantEnum<EnumPost> {
     }
 
     @Override
-    public boolean isValid(Class<?> clazz) {
+    public boolean isValidBaseObject(Class<?> clazz) {
         return clazz ==  BlockPost.class;
     }
 

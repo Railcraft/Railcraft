@@ -49,9 +49,9 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static mods.railcraft.common.blocks.aesthetics.BlockMaterial.SANDY_BRICK;
-import static mods.railcraft.common.blocks.aesthetics.BlockMaterial.STAIR_MATS;
 
 public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProvider {
     public static final PropertyEnum<BlockMaterial> MATERIAL = PropertyEnum.create("material", BlockMaterial.class, EnumSet.complementOf(BlockMaterial.VANILLA_REFINED_MATS));
@@ -123,10 +123,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
 
     @Override
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (BlockMaterial mat : BlockMaterial.CREATIVE_LIST) {
-            if (isEnabled(mat) && STAIR_MATS.contains(mat))
-                list.add(getItem(mat));
-        }
+        list.addAll(BlockMaterial.CREATIVE_LIST.stream().map(BlockRailcraftStairs::getItem).collect(Collectors.toList()));
     }
 
     @Nonnull

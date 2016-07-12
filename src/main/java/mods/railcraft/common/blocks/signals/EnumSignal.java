@@ -146,7 +146,7 @@ public enum EnumSignal implements ISignalTileDefinition, IVariantEnum {
     }
 
     @Override
-    public boolean isValid(Class<?> clazz) {
+    public boolean isValidBaseObject(Class<?> clazz) {
         return clazz == BlockSignalRailcraft.class;
     }
 

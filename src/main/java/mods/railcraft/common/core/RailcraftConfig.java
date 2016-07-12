@@ -9,13 +9,9 @@
 package mods.railcraft.common.core;
 
 import mods.railcraft.api.signals.SignalTools;
-import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
-import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
-import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
-import mods.railcraft.common.blocks.aesthetics.wall.EnumWallAlpha;
-import mods.railcraft.common.blocks.aesthetics.wall.EnumWallBeta;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
@@ -457,7 +453,9 @@ public class RailcraftConfig {
                         + "Changing these will have adverse effects on existing worlds.\n"
                         + "For the list of which sub-blocks are on each ID see the sub-block section below.");
 
-        loadBlockProperty("anvil");
+        for (RailcraftBlocks block : RailcraftBlocks.VALUES) {
+            loadBlockProperty(block.getBaseTag());
+        }
 
         loadBlockProperty("brick.abyssal");
         loadBlockProperty("brick.bleachedbone");
@@ -468,37 +466,15 @@ public class RailcraftConfig {
         loadBlockProperty("brick.quarried");
         loadBlockProperty("brick.sandy");
 
-        loadBlockProperty("cube");
-        loadBlockProperty("detector");
         loadBlockProperty("elevator");
         loadBlockProperty("firestone.recharge");
         loadBlockProperty("fluid.creosote");
         loadBlockProperty("fluid.steam");
         loadBlockProperty("glass");
-        loadBlockProperty("residual.heat");
-
-        loadBlockProperty("machine.alpha");
-        loadBlockProperty("machine.beta");
-        loadBlockProperty("machine.delta");
-        loadBlockProperty("machine.gamma");
-        loadBlockProperty("machine.epsilon");
-
-        loadBlockProperty("ore");
-
-        loadBlockProperty("frame");
 
         loadBlockProperty("post");
         loadBlockProperty("post.metal");
         loadBlockProperty("post.metal.platform");
-
-        loadBlockProperty("signal");
-        loadBlockProperty("slab");
-        loadBlockProperty("stair");
-        loadBlockProperty("lamp");
-        loadBlockProperty("track");
-
-        loadBlockProperty("wall.alpha");
-        loadBlockProperty("wall.beta");
 
         loadBlockProperty("worldlogic");
 
@@ -515,52 +491,43 @@ public class RailcraftConfig {
             loadBlockFeature(type.getTag());
         }
 
-        for (EnumWallAlpha type : EnumWallAlpha.VALUES) {
-            loadBlockFeature(type.getTag());
-        }
+//        for (EnumWallAlpha type : EnumWallAlpha.VALUES) {
+//            loadBlockFeature(type.getTag());
+//        }
+//
+//        for (EnumWallBeta type : EnumWallBeta.VALUES) {
+//            loadBlockFeature(type.getTag());
+//        }
 
-        for (EnumWallBeta type : EnumWallBeta.VALUES) {
-            loadBlockFeature(type.getTag());
-        }
+//        for (BlockMaterial mat : BlockMaterial.STAIR_MATS) {
+//            loadBlockFeature(BlockRailcraftStairs.getTag(mat));
+//        }
+//
+//        for (BlockMaterial mat : BlockMaterial.SLAB_MATS) {
+//            loadBlockFeature(BlockRailcraftSlab.getTag(mat));
+//        }
 
-        for (BlockMaterial mat : BlockMaterial.STAIR_MATS) {
-            loadBlockFeature(BlockRailcraftStairs.getTag(mat));
-        }
-
-        for (BlockMaterial mat : BlockMaterial.SLAB_MATS) {
-            loadBlockFeature(BlockRailcraftSlab.getTag(mat));
-        }
-
-        for (BlockMaterial mat : BlockLantern.STONE_LANTERN.values()) {
-            loadBlockFeature(BlockLantern.getTag(mat));
-        }
-
-        for (BlockMaterial mat : BlockLantern.METAL_LANTERN.values()) {
-            loadBlockFeature(BlockLantern.getTag(mat));
-        }
+//        for (BlockMaterial mat : BlockLantern.STONE_LANTERN.values()) {
+//            loadBlockFeature(BlockLantern.getTag(mat));
+//        }
+//
+//        for (BlockMaterial mat : BlockLantern.METAL_LANTERN.values()) {
+//            loadBlockFeature(BlockLantern.getTag(mat));
+//        }
 
         for (EnumOre type : EnumOre.values()) {
             if (!type.isDepreciated())
                 loadBlockFeature(type.getTag());
         }
 
-        for (EnumMachineAlpha type : EnumMachineAlpha.values()) {
-            loadBlockFeature(type.getTag());
-        }
+        Set<IEnumMachine<?>> machineVariants = new HashSet<>();
+        machineVariants.addAll(Arrays.asList(EnumMachineAlpha.VALUES));
+        machineVariants.addAll(Arrays.asList(EnumMachineBeta.values()));
+        machineVariants.addAll(Arrays.asList(EnumMachineGamma.values()));
+        machineVariants.addAll(Arrays.asList(EnumMachineDelta.values()));
+        machineVariants.addAll(Arrays.asList(EnumMachineEpsilon.values()));
 
-        for (EnumMachineBeta type : EnumMachineBeta.values()) {
-            loadBlockFeature(type.getTag());
-        }
-
-        for (EnumMachineGamma type : EnumMachineGamma.values()) {
-            loadBlockFeature(type.getTag());
-        }
-
-        for (EnumMachineDelta type : EnumMachineDelta.values()) {
-            loadBlockFeature(type.getTag());
-        }
-
-        for (EnumMachineEpsilon type : EnumMachineEpsilon.values()) {
+        for (IEnumMachine<?> type : machineVariants) {
             loadBlockFeature(type.getTag());
         }
 

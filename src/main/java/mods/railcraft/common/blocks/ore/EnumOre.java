@@ -55,7 +55,7 @@ public enum EnumOre implements IBlockVariantEnum<EnumOre> {
     }
 
     @Override
-    public boolean isValid(Class<?> clazz) {
+    public boolean isValidBaseObject(Class<?> clazz) {
         return clazz == BlockOre.class;
     }
 

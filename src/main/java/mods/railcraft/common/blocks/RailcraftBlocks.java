@@ -12,6 +12,10 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.ItemCube;
+import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
+import mods.railcraft.common.blocks.aesthetics.slab.ItemSlab;
+import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
+import mods.railcraft.common.blocks.aesthetics.stairs.ItemStair;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
@@ -62,6 +66,8 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     machine_epsilon(BlockMachine.class, ItemMachine.class, "machine.epsilon", EnumMachineEpsilon.PROXY, true),
     ore(BlockOre.class, ItemOre.class, "ore"),
     signal(BlockSignalRailcraft.class, ItemSignal.class, "signal"),
+    slab(BlockRailcraftSlab.class, ItemSlab.class, "slab"),
+    stair(BlockRailcraftStairs.class, ItemStair.class, "stair"),
     track(BlockTrack.class, ItemTrack.class, "track");
     public static final RailcraftBlocks[] VALUES = values();
     private final Class<? extends Block> blockClass;

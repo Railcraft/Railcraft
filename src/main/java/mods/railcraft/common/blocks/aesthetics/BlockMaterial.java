@@ -14,39 +14,35 @@ import com.google.common.collect.HashBiMap;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
+import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
+import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.IVariantEnum;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum BlockMaterial implements IStringSerializable {
-
-    SNOW(3, "snow"),
-    ICE(4, "ice"),
-    PACKED_ICE(5, "packed_ice"),
-    IRON(6, "iron"),
-    GOLD(7, "gold"),
-    DIAMOND(8, "diamond"),
-    OBSIDIAN(39, "obsidian"),
-    BRICK("brick"),
+public enum BlockMaterial implements IVariantEnum {
 
     STONE_BRICK("stone_brick"),
     STONE_BRICK_CHISELED("stone_brick_chiseled"),
     STONE_BRICK_CRACKED("stone_brick_cracked"),
     STONE_BRICK_MOSSY("stone_brick_mossy"),
+
+    BRICK("brick"),
 
     SANDSTONE("sandstone"),
     SANDSTONE_CHISELED("sandstone_chiseled"),
@@ -60,6 +56,22 @@ public enum BlockMaterial implements IStringSerializable {
     QUARTZ_CHISELED("quartz_chiseled"),
 
     PURPUR("purpur"),
+
+    OBSIDIAN(39, "obsidian"),
+    OBSIDIAN_CRUSHED("crushed_obsidian"),
+
+    SNOW(3, "snow"),
+    ICE(4, "ice"),
+    PACKED_ICE(5, "packed_ice"),
+
+    IRON(6, "iron"),
+    STEEL(43, "steel"),
+    COPPER(40, "copper"),
+    TIN(41, "tin"),
+    LEAD(42, "lead"),
+    GOLD(7, "gold"),
+
+    DIAMOND(8, "diamond"),
 
     SANDY_BRICK(0, "sandy_brick"),
     INFERNAL_BRICK(1, "infernal_brick"),
@@ -99,58 +111,48 @@ public enum BlockMaterial implements IStringSerializable {
 
     CONCRETE(2, "concrete"),
     CREOSOTE(38, "creosote"),
-    OBSIDIAN_CRUSHED("crushed_obsidian"),
 
-    COPPER(40, "copper"),
-    TIN(41, "tin"),
-    LEAD(42, "lead"),
-    STEEL(43, "steel");
-    public static final BlockMaterial[] VALUES = values();
+    NO_MAT("no_mat");
     public static final Map<String, BlockMaterial> NAMES = new HashMap<String, BlockMaterial>();
-    public static final BlockMaterial[] CREATIVE_LIST;
-    public static final BlockMaterial[] OLD_WALL1_MATS;
-    public static final BlockMaterial[] OLD_WALL2_MATS;
+    //    public static final BlockMaterial[] OLD_WALL1_MATS;
+//    public static final BlockMaterial[] OLD_WALL2_MATS;
     public static final EnumSet<BlockMaterial> VANILLA_REFINED_MATS;
     public static final BiMap<BlockMaterial, Integer> OLD_ORDINALS;
+    private static final BlockMaterial[] VALUES = values();
+    private static final List<BlockMaterial> CREATIVE_LIST;
     private static boolean needsInit = true;
-    private SoundType sound = SoundType.STONE;
-    @Nullable
-    private IBlockState state;
-    private String oreTag;
-    public final int oldOrdinal;
-    private final String name;
 
     static {
         VANILLA_REFINED_MATS = EnumSet.of(SANDSTONE, RED_SANDSTONE, QUARTZ, NETHER_BRICK, STONE_BRICK, BRICK, PURPUR);
 
-        OLD_WALL1_MATS = new BlockMaterial[]{
-                INFERNAL_BRICK,
-                SANDY_BRICK,
-                CONCRETE,
-                SNOW,
-                ICE,
-                STONE_BRICK,
-                STONE_BRICK_MOSSY,
-                STONE_BRICK_CRACKED,
-                STONE_BRICK_CHISELED,
-                NETHER_BRICK,
-                BRICK,
-                SANDSTONE,
-                SANDSTONE_CHISELED,
-                SANDSTONE_SMOOTH,
-                OBSIDIAN,
-                FROSTBOUND_BRICK};
-
-        OLD_WALL2_MATS = new BlockMaterial[]{
-                QUARTZ,
-                QUARTZ_CHISELED,
-                IRON,
-                GOLD,
-                DIAMOND,
-                ABYSSAL_BRICK,
-                QUARRIED_BRICK,
-                BLOODSTAINED_BRICK,
-                BLEACHEDBONE_BRICK};
+//        OLD_WALL1_MATS = new BlockMaterial[]{
+//                INFERNAL_BRICK,
+//                SANDY_BRICK,
+//                CONCRETE,
+//                SNOW,
+//                ICE,
+//                STONE_BRICK,
+//                STONE_BRICK_MOSSY,
+//                STONE_BRICK_CRACKED,
+//                STONE_BRICK_CHISELED,
+//                NETHER_BRICK,
+//                BRICK,
+//                SANDSTONE,
+//                SANDSTONE_CHISELED,
+//                SANDSTONE_SMOOTH,
+//                OBSIDIAN,
+//                FROSTBOUND_BRICK};
+//
+//        OLD_WALL2_MATS = new BlockMaterial[]{
+//                QUARTZ,
+//                QUARTZ_CHISELED,
+//                IRON,
+//                GOLD,
+//                DIAMOND,
+//                ABYSSAL_BRICK,
+//                QUARRIED_BRICK,
+//                BLOODSTAINED_BRICK,
+//                BLEACHEDBONE_BRICK};
 
 //        WALL_SANDY_MATS = new BlockMaterial[16] {
 //            SANDY_BRICK,
@@ -166,8 +168,15 @@ public enum BlockMaterial implements IStringSerializable {
             }
         }
 
-        CREATIVE_LIST = values();
+        CREATIVE_LIST = Arrays.asList(values());
     }
+
+    public final int oldOrdinal;
+    private final String name;
+    private SoundType sound = SoundType.STONE;
+    @Nullable
+    private IBlockState state;
+    private String oreTag;
 
     BlockMaterial(String name) {
         this(-1, name);
@@ -302,6 +311,24 @@ public enum BlockMaterial implements IStringSerializable {
         return SANDY_BRICK;
     }
 
+    public static List<BlockMaterial> getValidMats() {
+        initialize();
+        return Arrays.stream(VALUES).filter(BlockMaterial::isSourceValid).collect(Collectors.toList());
+    }
+
+    public static List<BlockMaterial> getCreativeList() {
+        initialize();
+        return CREATIVE_LIST.stream().filter(BlockMaterial::isSourceValid).collect(Collectors.toList());
+    }
+
+    public static BlockMaterial getPlaceholder() {
+        for (BlockMaterial material : VALUES) {
+            if (material.isSourceValid())
+                return material;
+        }
+        throw new RuntimeException("this should never happen");
+    }
+
     @Nullable
     public IBlockState getState() {
         return state;
@@ -400,4 +427,18 @@ public enum BlockMaterial implements IStringSerializable {
         }
     }
 
+    public boolean isSourceValid() {
+        return getSourceItem() != null;
+    }
+
+    @Override
+    public boolean isValidBaseObject(Class<?> clazz) {
+        return clazz == BlockRailcraftSlab.class || clazz == BlockRailcraftStairs.class || clazz == BlockLantern.class;
+    }
+
+    @Nullable
+    @Override
+    public Object getAlternate(IRailcraftObjectContainer container) {
+        return null;
+    }
 }

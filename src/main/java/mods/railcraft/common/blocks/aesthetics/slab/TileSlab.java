@@ -24,8 +24,10 @@ import java.io.IOException;
  */
 public class TileSlab extends RailcraftTileEntity {
 
-    private BlockMaterial top;
-    private BlockMaterial bottom;
+    @Nonnull
+    private BlockMaterial top = BlockMaterial.NO_MAT;
+    @Nonnull
+    private BlockMaterial bottom = BlockMaterial.NO_MAT;
 
     public BlockMaterial getTopSlab() {
         return top;
@@ -36,11 +38,11 @@ public class TileSlab extends RailcraftTileEntity {
     }
 
     public boolean isDoubleSlab() {
-        return top != null && bottom != null;
+        return top != BlockMaterial.NO_MAT && bottom != BlockMaterial.NO_MAT;
     }
 
     public boolean isTopSlab() {
-        return top != null && bottom == null;
+        return top != BlockMaterial.NO_MAT && bottom == BlockMaterial.NO_MAT;
     }
 
     public void setTopSlab(BlockMaterial slab) {
@@ -51,7 +53,7 @@ public class TileSlab extends RailcraftTileEntity {
     }
 
     public boolean isBottomSlab() {
-        return top == null && bottom != null;
+        return top == BlockMaterial.NO_MAT && bottom != BlockMaterial.NO_MAT;
     }
 
     public void setBottomSlab(BlockMaterial slab) {
@@ -62,24 +64,26 @@ public class TileSlab extends RailcraftTileEntity {
     }
 
     public BlockMaterial getUpmostSlab() {
-        if (top != null) {
+        if (top != BlockMaterial.NO_MAT)
             return top;
-        }
-        return bottom;
+        if (bottom != BlockMaterial.NO_MAT)
+            return bottom;
+        return BlockMaterial.getPlaceholder();
     }
 
     public boolean addSlab(BlockMaterial slab) {
-        if (bottom == null) {
+        if (bottom == BlockMaterial.NO_MAT) {
             setBottomSlab(slab);
             return true;
         }
-        if (top == null) {
+        if (top == BlockMaterial.NO_MAT) {
             setTopSlab(slab);
             return true;
         }
         return false;
     }
 
+    @Nonnull
     @Override
     public String getLocalizationTag() {
         return BlockRailcraftSlab.getTag(getUpmostSlab());
@@ -89,10 +93,10 @@ public class TileSlab extends RailcraftTileEntity {
     @Override
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
         super.writeToNBT(data);
-        if (top != null) {
+        if (top != BlockMaterial.NO_MAT) {
             data.setString("top", top.getRegistryName());
         }
-        if (bottom != null) {
+        if (bottom != BlockMaterial.NO_MAT) {
             data.setString("bottom", bottom.getRegistryName());
         }
         return data;
@@ -112,8 +116,8 @@ public class TileSlab extends RailcraftTileEntity {
     @Override
     public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeUTF(top != null ? top.getRegistryName() : "");
-        data.writeUTF(bottom != null ? bottom.getRegistryName() : "");
+        data.writeUTF(top != BlockMaterial.NO_MAT ? top.getRegistryName() : "");
+        data.writeUTF(bottom != BlockMaterial.NO_MAT ? bottom.getRegistryName() : "");
     }
 
     @Override
@@ -123,13 +127,13 @@ public class TileSlab extends RailcraftTileEntity {
         if (!t.isEmpty()) {
             top = MaterialRegistry.get(t);
         } else {
-            top = null;
+            top = BlockMaterial.NO_MAT;
         }
         String b = data.readUTF();
         if (!b.isEmpty()) {
             bottom = MaterialRegistry.get(b);
         } else {
-            bottom = null;
+            bottom = BlockMaterial.NO_MAT;
         }
         markBlockForUpdate();
     }

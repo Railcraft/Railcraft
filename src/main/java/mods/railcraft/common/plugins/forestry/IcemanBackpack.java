@@ -8,9 +8,8 @@
  */
 package mods.railcraft.common.plugins.forestry;
 
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
-import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.wall.EnumWallAlpha;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
@@ -50,8 +49,8 @@ public class IcemanBackpack extends BaseBackpack {
         add(EnumWallAlpha.SNOW.getItem());
         add(EnumWallAlpha.ICE.getItem());
         for (BlockMaterial mat : coldMaterials) {
-            add(BlockRailcraftStairs.getItem(mat));
-            add(BlockRailcraftSlab.getItem(mat));
+            add(RailcraftBlocks.stair.getStack(mat));
+            add(RailcraftBlocks.slab.getStack(mat));
         }
         add(Items.SNOWBALL);
     }

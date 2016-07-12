@@ -86,7 +86,7 @@ public enum EnumCube implements IBlockVariantEnum<EnumCube> {
     }
 
     @Override
-    public boolean isValid(Class<?> clazz) {
+    public boolean isValidBaseObject(Class<?> clazz) {
         return clazz == BlockCube.class;
     }
 

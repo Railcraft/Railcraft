@@ -154,7 +154,7 @@ public class ItemRail extends ItemRailcraft {
         }
 
         @Override
-        public boolean isValid(Class<?> clazz) {
+        public boolean isValidBaseObject(Class<?> clazz) {
             return clazz == ItemRail.class;
         }
 
