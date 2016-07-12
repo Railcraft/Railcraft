@@ -30,9 +30,9 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
 
     public static final ResourceLocation minecartTextures = new ResourceLocation("textures/entity/minecart.png");
     private static final Map<Class, CartModelRenderer> renderersCore = new HashMap<Class, CartModelRenderer>();
-    private static final Map<Class, CartContentRenderer> renderersContent = new HashMap<Class, CartContentRenderer>();
+    private static final Map<Class, CartContentRenderer<?>> renderersContent = new HashMap<>();
     private static final CartModelRenderer defaultCoreRenderer = new CartModelRenderer();
-    private static final CartContentRenderer defaultContentRenderer = new CartContentRenderer();
+    private static final CartContentRenderer<EntityMinecart> defaultContentRenderer = new CartContentRenderer<EntityMinecart>();
 
     static {
         renderersCore.put(EntityLocomotive.class, LocomotiveRenderer.INSTANCE);
@@ -166,16 +166,16 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         return render;
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public CartContentRenderer getContentRenderer(Class eClass) {
-        CartContentRenderer render = renderersContent.get(eClass);
+    @SuppressWarnings({"ConstantConditions", "unchecked"})
+    public <T extends EntityMinecart> CartContentRenderer<T> getContentRenderer(Class<? extends EntityMinecart> eClass) {
+        CartContentRenderer<? extends EntityMinecart> render = renderersContent.get(eClass);
         if (render == null && eClass != EntityMinecart.class) {
-            render = getContentRenderer(eClass.getSuperclass());
+            render = getContentRenderer(eClass.getSuperclass().asSubclass(EntityMinecart.class));
             if (render == null)
                 render = defaultContentRenderer;
             renderersContent.put(eClass, render);
         }
-        return render;
+        return (CartContentRenderer<T>) render;
     }
 
     @Override

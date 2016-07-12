@@ -18,7 +18,6 @@ import mods.railcraft.common.util.misc.AABBFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
@@ -26,16 +25,15 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartContentRendererTank extends CartContentRenderer {
+public class CartContentRendererTank extends CartContentRenderer<EntityCartTank> {
     private final RenderInfo fillBlock = new RenderInfo();
 
     public CartContentRendererTank() {
         fillBlock.boundingBox = AABBFactory.start().box().expandHorizontally(-0.4).setMaxY(0.999).build();
     }
 
-    private void renderTank(RenderCart renderer, EntityMinecart cart, float light, float partialTicks, int x, int y, int z) {
-        EntityCartTank cartTank = (EntityCartTank) cart;
-        StandardTank tank = cartTank.getTankManager().get(0);
+    private void renderTank(RenderCart renderer, EntityCartTank cart, float light, float partialTicks, int x, int y, int z) {
+        StandardTank tank = cart.getTankManager().get(0);
         if (tank != null) {
             FluidStack fluidStack = tank.getFluid();
             if (fluidStack != null && fluidStack.amount > 0) {
@@ -55,7 +53,7 @@ public class CartContentRendererTank extends CartContentRenderer {
                 FluidRenderer.setColorForFluid(fluidStack);
                 OpenGL.glCallList(displayLists[(int) (level * (float) (FluidRenderer.DISPLAY_STAGES - 1))]);
 
-                if (cartTank.isFilling()) {
+                if (cart.isFilling()) {
                     ResourceLocation texSheet = FluidRenderer.setupFluidTexture(fluidStack, FluidRenderer.FlowState.FLOWING, fillBlock);
                     if (texSheet != null) {
                         renderer.bindTex(texSheet);
@@ -117,7 +115,7 @@ public class CartContentRendererTank extends CartContentRenderer {
     }
 
     @Override
-    public void render(RenderCart renderer, EntityMinecart cart, float light, float partialTicks) {
+    public void render(RenderCart renderer, EntityCartTank cart, float light, float partialTicks) {
         super.render(renderer, cart, light, partialTicks);
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -131,9 +129,7 @@ public class CartContentRendererTank extends CartContentRenderer {
         int z = (int) (Math.floor(cart.posZ));
 
         renderTank(renderer, cart, light, partialTicks, x, y, z);
-
-        EntityCartTank cartTank = (EntityCartTank) cart;
-        renderFilterItem(renderer, cartTank, light, partialTicks, x, y, z);
+        renderFilterItem(renderer, cart, light, partialTicks, x, y, z);
 
         OpenGL.glPopAttrib();
         OpenGL.glPopMatrix();

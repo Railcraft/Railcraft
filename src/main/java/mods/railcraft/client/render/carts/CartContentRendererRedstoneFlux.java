@@ -14,13 +14,12 @@ import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.EntityCartRF;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.item.EntityMinecart;
 import org.lwjgl.opengl.GL11;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartContentRendererRedstoneFlux extends CartContentRenderer {
+public class CartContentRendererRedstoneFlux extends CartContentRenderer<EntityCartRF> {
     private static final CartContentRendererRedstoneFlux instance = new CartContentRendererRedstoneFlux();
     private final RenderInfo redBlock = new RenderInfo();
     private final RenderInfo leadFrame = new RenderInfo();
@@ -41,7 +40,7 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer {
     }
 
     @Override
-    public void render(RenderCart renderer, EntityMinecart cart, float light, float partialTicks) {
+    public void render(RenderCart renderer, EntityCartRF cart, float light, float partialTicks) {
         super.render(renderer, cart, light, partialTicks);
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -51,11 +50,6 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer {
         OpenGL.glEnable(GL11.GL_BLEND);
         OpenGL.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        int x = (int) (Math.floor(cart.posX));
-        int y = (int) (Math.floor(cart.posY));
-        int z = (int) (Math.floor(cart.posZ));
-
-        EntityCartRF cartRF = (EntityCartRF) cart;
         renderer.bindTex(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
         OpenGL.glTranslatef(0, 0.0625f, 0);
@@ -66,7 +60,7 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer {
         float scale = 0.99F;
         OpenGL.glScalef(scale, scale, scale);
 
-        float bright = 0.5F + 0.5F * (float) ((double) cartRF.getRF() / (double) cartRF.getMaxRF());
+        float bright = 0.5F + 0.5F * (float) ((double) cart.getRF() / (double) cart.getMaxRF());
         OpenGL.glColor4f(bright, bright, bright, 1.0f);
 
         CubeRenderer.render(redBlock);

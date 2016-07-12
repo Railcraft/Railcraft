@@ -22,6 +22,7 @@ public class CollectionTools {
     private CollectionTools() {
     }
 
+    @SafeVarargs
     public static <T> BiMap<Integer, T> createIndexedLookupTable(T... elements) {
         BiMap<Integer, T> biMap = HashBiMap.create();
         for (int i = 0; i < elements.length; i++) {
