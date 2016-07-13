@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.aesthetics.stairs;
 
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -29,7 +28,7 @@ public class ItemStair extends ItemBlock {
     }
 
     public static BlockMaterial getMat(ItemStack stack) {
-        return MaterialRegistry.from(stack, MATERIAL_KEY);
+        return BlockMaterial.from(stack, MATERIAL_KEY);
     }
 
     @Override

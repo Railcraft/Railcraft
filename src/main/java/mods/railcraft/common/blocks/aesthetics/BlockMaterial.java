@@ -19,12 +19,14 @@ import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.common.core.Railcraft;
 import net.minecraft.block.*;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -33,6 +35,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import static mods.railcraft.common.blocks.aesthetics.slab.ItemSlab.MATERIAL_KEY;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -234,7 +238,6 @@ public enum BlockMaterial implements IVariantEnum {
         return VALUES[id];
     }
 
-    @Deprecated
     public static BlockMaterial fromName(String name) {
         BlockMaterial mat = NAMES.get(name);
         if (mat != null)
@@ -260,6 +263,34 @@ public enum BlockMaterial implements IVariantEnum {
         throw new RuntimeException("this should never happen");
     }
 
+    @Nonnull
+    public static ItemStack getStack(Block block, int qty, @Nullable IVariantEnum variant) {
+        tools.checkVariantObject(block.getClass(), variant);
+        ItemStack stack = new ItemStack(block, qty);
+        if (variant != null)
+            tagItemStack(stack, MATERIAL_KEY, (BlockMaterial) variant);
+        return stack;
+    }
+
+    public static void tagItemStack(ItemStack stack, String key, BlockMaterial material) {
+        if (stack == null)
+            return;
+        NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
+        nbt.setString(key, material.getName());
+    }
+
+    public static BlockMaterial from(ItemStack stack, String key) {
+        if (stack == null)
+            return getPlaceholder();
+        NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
+        if (nbt.hasKey(key))
+            return fromName(nbt.getString(key));
+        BlockMaterial material = OLD_ORDINALS.inverse().get(stack.getItemDamage());
+        if (material != null)
+            return material;
+        return getPlaceholder();
+    }
+
     @Nullable
     public IBlockState getState() {
         if (state == null)
@@ -267,27 +298,20 @@ public enum BlockMaterial implements IVariantEnum {
         return state;
     }
 
-    @Nonnull
     @Override
     public String getName() {
         return name;
     }
 
-    @Nonnull
-    public String getRegistryName() {
-        return "railcraft:" + name;
-    }
-
-    @Nonnull
     public String getLocalizationSuffix() {
         return name;
     }
 
+    @Nullable
     public String getOreTag() {
         return oreTag;
     }
 
-    @Nonnull
     public SoundType getSound() {
         if (sound == null) {
             IBlockState state = getState();

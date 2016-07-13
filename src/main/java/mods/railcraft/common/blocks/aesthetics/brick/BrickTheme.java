@@ -13,7 +13,6 @@ import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.aesthetics.cube.ReplacerCube;
 import mods.railcraft.common.items.ItemRailcraft;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -26,6 +25,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
@@ -83,7 +83,7 @@ public enum BrickTheme {
     INFERNAL(MapColor.GRAY) {
         @Override
         public void initRecipes() {
-            ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
+//            ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
             CraftingPlugin.addRecipe(new ItemStack(getBlock(), 2, 2),
                     "MB",
                     "BM",
@@ -104,7 +104,7 @@ public enum BrickTheme {
     SANDY(MapColor.SAND) {
         @Override
         public void initRecipes() {
-            ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
+//            ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
             CraftingPlugin.addRecipe(new ItemStack(getBlock(), 1, 2),
                     "BM",
                     "MB",
@@ -143,10 +143,12 @@ public enum BrickTheme {
         return mapColor;
     }
 
+    @Nullable
     public final BlockBrick getBlock() {
         return block;
     }
 
+    @Nullable
     public final IBlockState getState(BrickVariant variant) {
         if (block == null) return null;
         return block.getState(variant);
@@ -166,14 +168,16 @@ public enum BrickTheme {
         MicroBlockPlugin.addMicroBlockCandidate(getBlock(), variant.ordinal());
     }
 
+    @Nullable
     public final ItemStack get(BrickVariant variant) {
         return get(variant, 1);
     }
 
+    @Nullable
     public ItemStack get(BrickVariant variant, int qty) {
         if (block == null)
             return null;
-        return new ItemStack(getBlock(), qty, variant.ordinal());
+        return new ItemStack(block, qty, variant.ordinal());
     }
 
     public final BlockFactory makeFactory() {

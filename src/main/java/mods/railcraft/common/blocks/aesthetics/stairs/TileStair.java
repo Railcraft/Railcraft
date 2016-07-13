@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.aesthetics.stairs;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagByte;
@@ -26,6 +25,7 @@ import java.io.IOException;
  */
 public class TileStair extends RailcraftTileEntity {
 
+    @Nonnull
     private BlockMaterial material = BlockMaterial.getPlaceholder();
 
     public BlockMaterial getMaterial() {
@@ -41,34 +41,33 @@ public class TileStair extends RailcraftTileEntity {
         return BlockRailcraftStairs.getTag(material);
     }
 
-    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setString("stair", material.getRegistryName());
+        data.setString("stair", material.getName());
         return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.getTag("stair") instanceof NBTTagString) {
-            material = MaterialRegistry.get(data.getString("stair"));
+            material = BlockMaterial.fromName(data.getString("stair"));
         } else if (data.getTag("stair") instanceof NBTTagByte) {
             material = BlockMaterial.fromOrdinal(data.getByte("stair"));
         }
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeUTF(material.getRegistryName());
+        data.writeUTF(material.getName());
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        material = MaterialRegistry.get(data.readUTF());
+        material = BlockMaterial.fromName(data.readUTF());
     }
 
     @Override

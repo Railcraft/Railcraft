@@ -13,7 +13,6 @@ import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.core.IRailcraftObject;
@@ -126,7 +125,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     @Nonnull
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        return MaterialRegistry.getStack(this, qty, variant);
+        return getStack(this, qty, variant);
     }
 
     @Override

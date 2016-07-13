@@ -15,8 +15,8 @@ import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
@@ -216,23 +216,23 @@ public class RockCrusherCraftingManager implements ICrusherCraftingManager {
         }
 
         @Override
-        public void addOutput(ItemStack output, IGenRule genRule) {
+        public void addOutput(@Nullable ItemStack output, IGenRule genRule) {
             if (output == null) return;
             outputs.add(new OutputEntry(output, genRule));
         }
 
         @Override
-        public void addOutput(ItemStack output, float chance, int maxItems, String... groupNames) {
+        public void addOutput(@Nullable ItemStack output, float chance, int maxItems, String... groupNames) {
             addOutput(output, RailcraftCraftingManager.rockCrusher.createGenRule(chance, maxItems, groupNames));
         }
 
         @Override
-        public void addOutput(ItemStack output, float chance) {
+        public void addOutput(@Nullable ItemStack output, float chance) {
             addOutput(output, RailcraftCraftingManager.rockCrusher.createGenRule(chance));
         }
 
         @Override
-        public void addOutput(ItemStack output) {
+        public void addOutput(@Nullable ItemStack output) {
             addOutput(output, RailcraftCraftingManager.rockCrusher.createGenRule());
         }
 

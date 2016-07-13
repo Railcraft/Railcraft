@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.aesthetics.slab;
 
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.RailcraftItems;
@@ -124,7 +123,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
     @Nonnull
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        return MaterialRegistry.getStack(this, qty, variant);
+        return BlockMaterial.getStack(this, qty, variant);
     }
 
     public static String getTag(BlockMaterial mat) {

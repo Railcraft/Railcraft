@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.aesthetics.slab;
 
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
@@ -83,7 +82,7 @@ public class ItemSlab extends ItemBlock {
     }
 
     private BlockMaterial getMat(ItemStack stack) {
-        return MaterialRegistry.from(stack, MATERIAL_KEY);
+        return BlockMaterial.from(stack, MATERIAL_KEY);
     }
 
     private boolean canAddSlab(@Nullable TileSlab tileSlab, EnumFacing side) {

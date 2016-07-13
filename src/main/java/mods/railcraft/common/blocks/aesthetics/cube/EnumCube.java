@@ -19,6 +19,7 @@ import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -59,6 +60,9 @@ public enum EnumCube implements IBlockVariantEnum<EnumCube> {
         creativeList.add(CRUSHED_OBSIDIAN);
         creativeList.add(ABYSSAL_STONE);
         creativeList.add(QUARRIED_STONE);
+
+        ((ReplacerCube) SANDY_BRICK.blockDef).replacementState = Blocks.STONEBRICK.getDefaultState();
+        ((ReplacerCube) INFERNAL_BRICK.blockDef).replacementState = Blocks.STONEBRICK.getDefaultState();
     }
 
     private final Class<? extends IRailcraftModule> module;

@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.aesthetics.slab;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
@@ -83,55 +82,53 @@ public class TileSlab extends RailcraftTileEntity {
         return false;
     }
 
-    @Nonnull
     @Override
     public String getLocalizationTag() {
         return BlockRailcraftSlab.getTag(getUpmostSlab());
     }
 
-    @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         if (top != BlockMaterial.NO_MAT) {
-            data.setString("top", top.getRegistryName());
+            data.setString("top", top.getName());
         }
         if (bottom != BlockMaterial.NO_MAT) {
-            data.setString("bottom", bottom.getRegistryName());
+            data.setString("bottom", bottom.getName());
         }
         return data;
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.hasKey("top")) {
-            top = MaterialRegistry.get(data.getString("top"));
+            top = BlockMaterial.fromName(data.getString("top"));
         }
         if (data.hasKey("bottom")) {
-            bottom = MaterialRegistry.get(data.getString("bottom"));
+            bottom = BlockMaterial.fromName(data.getString("bottom"));
         }
     }
 
     @Override
-    public void writePacketData(@Nonnull RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeUTF(top != BlockMaterial.NO_MAT ? top.getRegistryName() : "");
-        data.writeUTF(bottom != BlockMaterial.NO_MAT ? bottom.getRegistryName() : "");
+        data.writeUTF(top != BlockMaterial.NO_MAT ? top.getName() : "");
+        data.writeUTF(bottom != BlockMaterial.NO_MAT ? bottom.getName() : "");
     }
 
     @Override
-    public void readPacketData(@Nonnull RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         String t = data.readUTF();
         if (!t.isEmpty()) {
-            top = MaterialRegistry.get(t);
+            top = BlockMaterial.fromName(t);
         } else {
             top = BlockMaterial.NO_MAT;
         }
         String b = data.readUTF();
         if (!b.isEmpty()) {
-            bottom = MaterialRegistry.get(b);
+            bottom = BlockMaterial.fromName(b);
         } else {
             bottom = BlockMaterial.NO_MAT;
         }
