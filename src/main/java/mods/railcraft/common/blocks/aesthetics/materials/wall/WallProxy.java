@@ -7,10 +7,16 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package mods.railcraft.common.blocks.aesthetics.lantern;
+package mods.railcraft.common.blocks.aesthetics.materials.wall;
 
-import mcp.MethodsReturnNonnullByDefault;
+import java.util.List;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+/**
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public interface WallProxy {
+
+    List<? extends WallInfo> getCreativeList();
+
+    WallInfo fromMeta(int meta);
+}

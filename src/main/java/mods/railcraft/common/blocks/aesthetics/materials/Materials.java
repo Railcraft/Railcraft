@@ -7,16 +7,14 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics;
+package mods.railcraft.common.blocks.aesthetics.materials;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
-import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
-import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
+import mods.railcraft.common.blocks.aesthetics.materials.slab.BlockRailcraftSlab;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.Railcraft;
@@ -29,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,12 +35,10 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static mods.railcraft.common.blocks.aesthetics.slab.ItemSlab.MATERIAL_KEY;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum BlockMaterial implements IVariantEnum {
+public enum Materials implements IVariantEnum {
 
     STONE_BRICK("stone_brick", () -> Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT)),
     STONE_BRICK_CHISELED("stone_brick_chiseled", () -> Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED)),
@@ -123,18 +120,19 @@ public enum BlockMaterial implements IVariantEnum {
     CREOSOTE(38, "creosote", EnumCube.CREOSOTE_BLOCK::getState),
 
     NO_MAT("no_mat", () -> null);
-    public static final PropertyEnum<BlockMaterial> MATERIAL_PROPERTY = PropertyEnum.create("material", BlockMaterial.class);
-    public static final Map<String, BlockMaterial> NAMES = new HashMap<String, BlockMaterial>();
+    public static final String MATERIAL_KEY = "mat";
+    public static final PropertyEnum<Materials> MATERIAL_PROPERTY = PropertyEnum.create("material", Materials.class);
+    public static final Map<String, Materials> NAMES = new HashMap<String, Materials>();
     //    public static final BlockMaterial[] OLD_WALL1_MATS;
 //    public static final BlockMaterial[] OLD_WALL2_MATS;
-    public static final EnumSet<BlockMaterial> VANILLA_REFINED_MATS;
-    public static final BiMap<BlockMaterial, Integer> OLD_ORDINALS;
-    private static final BlockMaterial[] VALUES = values();
-    private static final List<BlockMaterial> CREATIVE_LIST;
+    public static final EnumSet<Materials> MAT_SET_VANILLA = EnumSet.of(SANDSTONE, RED_SANDSTONE, QUARTZ, NETHER_BRICK, STONE_BRICK, BRICK, PURPUR);
+    public static final EnumSet<Materials> MAT_SET_FROZEN = EnumSet.of(SNOW, ICE, PACKED_ICE);
+    public static final BiMap<Materials, Integer> OLD_ORDINALS;
+    private static final Materials[] VALUES = values();
+    private static final List<Materials> CREATIVE_LIST;
     private static boolean needsInit = true;
 
     static {
-        VANILLA_REFINED_MATS = EnumSet.of(SANDSTONE, RED_SANDSTONE, QUARTZ, NETHER_BRICK, STONE_BRICK, BRICK, PURPUR);
 
 //        OLD_WALL1_MATS = new BlockMaterial[]{
 //                INFERNAL_BRICK,
@@ -173,7 +171,7 @@ public enum BlockMaterial implements IVariantEnum {
 //        } ;
 
         OLD_ORDINALS = HashBiMap.create();
-        for (BlockMaterial mat : BlockMaterial.VALUES) {
+        for (Materials mat : Materials.VALUES) {
             if (mat.oldOrdinal >= 0) {
                 OLD_ORDINALS.put(mat, mat.oldOrdinal);
             }
@@ -190,11 +188,11 @@ public enum BlockMaterial implements IVariantEnum {
     private IBlockState state;
     private String oreTag;
 
-    BlockMaterial(String name, Supplier<IBlockState> stateSupplier) {
+    Materials(String name, Supplier<IBlockState> stateSupplier) {
         this(-1, name, stateSupplier);
     }
 
-    BlockMaterial(int oldOrdinal, String name, Supplier<IBlockState> stateSupplier) {
+    Materials(int oldOrdinal, String name, Supplier<IBlockState> stateSupplier) {
         this.oldOrdinal = oldOrdinal;
         this.name = name;
         this.stateSupplier = stateSupplier;
@@ -204,6 +202,8 @@ public enum BlockMaterial implements IVariantEnum {
         if (!needsInit)
             return;
         needsInit = false;
+
+        GameRegistry.registerTileEntity(TileMaterial.class, "RCMaterialTile");
 
         IRON.oreTag = "blockIron";
         GOLD.oreTag = "blockGold";
@@ -225,38 +225,38 @@ public enum BlockMaterial implements IVariantEnum {
         LEAD.sound = SoundType.METAL;
         STEEL.sound = SoundType.METAL;
 
-        for (BlockMaterial mat : VALUES) {
+        for (Materials mat : VALUES) {
             NAMES.put(mat.name(), mat);
             NAMES.put(mat.name, mat);
         }
     }
 
     @Deprecated
-    public static BlockMaterial fromOrdinal(int id) {
+    public static Materials fromOrdinal(int id) {
         if (id < 0 || id >= VALUES.length)
             return VALUES[0];
         return VALUES[id];
     }
 
-    public static BlockMaterial fromName(String name) {
-        BlockMaterial mat = NAMES.get(name);
+    public static Materials fromName(String name) {
+        Materials mat = NAMES.get(name);
         if (mat != null)
             return mat;
         return getPlaceholder();
     }
 
-    public static List<BlockMaterial> getValidMats() {
+    public static List<Materials> getValidMats() {
         initialize();
-        return Arrays.stream(VALUES).filter(BlockMaterial::isSourceValid).collect(Collectors.toList());
+        return Arrays.stream(VALUES).filter(Materials::isSourceValid).collect(Collectors.toList());
     }
 
-    public static List<BlockMaterial> getCreativeList() {
+    public static List<Materials> getCreativeList() {
         initialize();
-        return CREATIVE_LIST.stream().filter(BlockMaterial::isSourceValid).collect(Collectors.toList());
+        return CREATIVE_LIST.stream().filter(Materials::isSourceValid).collect(Collectors.toList());
     }
 
-    public static BlockMaterial getPlaceholder() {
-        for (BlockMaterial material : VALUES) {
+    public static Materials getPlaceholder() {
+        for (Materials material : VALUES) {
             if (material.isSourceValid())
                 return material;
         }
@@ -268,24 +268,24 @@ public enum BlockMaterial implements IVariantEnum {
         tools.checkVariantObject(block.getClass(), variant);
         ItemStack stack = new ItemStack(block, qty);
         if (variant != null)
-            tagItemStack(stack, MATERIAL_KEY, (BlockMaterial) variant);
+            tagItemStack(stack, MATERIAL_KEY, (Materials) variant);
         return stack;
     }
 
-    public static void tagItemStack(ItemStack stack, String key, BlockMaterial material) {
+    public static void tagItemStack(ItemStack stack, String key, Materials material) {
         if (stack == null)
             return;
         NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
         nbt.setString(key, material.getName());
     }
 
-    public static BlockMaterial from(ItemStack stack, String key) {
+    public static Materials from(ItemStack stack, String key) {
         if (stack == null)
             return getPlaceholder();
         NBTTagCompound nbt = stack.getSubCompound(Railcraft.MOD_ID, true);
         if (nbt.hasKey(key))
             return fromName(nbt.getString(key));
-        BlockMaterial material = OLD_ORDINALS.inverse().get(stack.getItemDamage());
+        Materials material = OLD_ORDINALS.inverse().get(stack.getItemDamage());
         if (material != null)
             return material;
         return getPlaceholder();

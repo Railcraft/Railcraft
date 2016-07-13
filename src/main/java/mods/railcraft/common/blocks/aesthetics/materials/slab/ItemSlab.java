@@ -7,9 +7,9 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics.slab;
+package mods.railcraft.common.blocks.aesthetics.materials.slab;
 
-import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static mods.railcraft.common.blocks.aesthetics.materials.Materials.MATERIAL_KEY;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
@@ -35,7 +36,6 @@ import static net.minecraft.util.EnumFacing.UP;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemSlab extends ItemBlock {
-    public static final String MATERIAL_KEY = "material";
 
     public ItemSlab(Block block) {
         super(block);
@@ -81,8 +81,8 @@ public class ItemSlab extends ItemBlock {
         }
     }
 
-    private BlockMaterial getMat(ItemStack stack) {
-        return BlockMaterial.from(stack, MATERIAL_KEY);
+    private Materials getMat(ItemStack stack) {
+        return Materials.from(stack, MATERIAL_KEY);
     }
 
     private boolean canAddSlab(@Nullable TileSlab tileSlab, EnumFacing side) {

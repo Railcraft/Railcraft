@@ -7,22 +7,22 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics.wall;
+package mods.railcraft.common.blocks.aesthetics.materials.wall;
 
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class WallProxyApha implements WallProxy {
+public class WallProxyBeta implements WallProxy {
 
     @Override
     public List<? extends WallInfo> getCreativeList() {
-        return EnumWallAlpha.getCreativeList();
+        return EnumWallBeta.getCreativeList();
     }
 
     @Override
     public WallInfo fromMeta(int meta) {
-        return EnumWallAlpha.fromMeta(meta);
+        return EnumWallBeta.fromMeta(meta);
     }
 }

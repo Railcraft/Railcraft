@@ -9,7 +9,7 @@
  ******************************************************************************/
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.common.blocks.aesthetics.stairs;
+package mods.railcraft.common.blocks.aesthetics.materials;
 
 import mcp.MethodsReturnNonnullByDefault;
 

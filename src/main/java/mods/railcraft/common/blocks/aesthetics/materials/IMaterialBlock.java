@@ -7,22 +7,17 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics.wall;
 
-import java.util.List;
+package mods.railcraft.common.blocks.aesthetics.materials;
+
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.util.sounds.IBlockSoundProvider;
 
 /**
+ * Created by CovertJaguar on 7/13/2016 for Railcraft.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class WallProxyBeta implements WallProxy {
-
-    @Override
-    public List<? extends WallInfo> getCreativeList() {
-        return EnumWallBeta.getCreativeList();
-    }
-
-    @Override
-    public WallInfo fromMeta(int meta) {
-        return EnumWallBeta.fromMeta(meta);
-    }
+public interface IMaterialBlock extends IRailcraftObject, IBlockSoundProvider {
+    String getUnlocalizedName(Materials mat);
 }

@@ -11,7 +11,7 @@ package mods.railcraft.client.render.broken;
 
 import mods.railcraft.client.render.broken.RenderFakeBlock.RenderInfo;
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
+import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostBase;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.MiscTools;

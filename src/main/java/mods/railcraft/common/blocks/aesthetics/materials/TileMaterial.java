@@ -7,15 +7,12 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics.stairs;
+package mods.railcraft.common.blocks.aesthetics.materials;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagString;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -23,38 +20,36 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileStair extends RailcraftTileEntity {
+public class TileMaterial extends RailcraftTileEntity {
 
     @Nonnull
-    private BlockMaterial material = BlockMaterial.getPlaceholder();
+    private Materials material = Materials.getPlaceholder();
 
-    public BlockMaterial getMaterial() {
+    public Materials getMaterial() {
         return material;
     }
 
-    public void setStair(BlockMaterial stair) {
-        this.material = stair;
+    public void setMaterial(Materials material) {
+        this.material = material;
     }
 
     @Override
     public String getLocalizationTag() {
-        return BlockRailcraftStairs.getTag(material);
+        return ((IMaterialBlock) getBlockType()).getUnlocalizedName(material);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setString("stair", material.getName());
+        data.setString("mat", material.getName());
         return data;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        if (data.getTag("stair") instanceof NBTTagString) {
-            material = BlockMaterial.fromName(data.getString("stair"));
-        } else if (data.getTag("stair") instanceof NBTTagByte) {
-            material = BlockMaterial.fromOrdinal(data.getByte("stair"));
+        if (data.hasKey("mat")) {
+            material = Materials.fromName(data.getString("mat"));
         }
     }
 
@@ -67,7 +62,7 @@ public class TileStair extends RailcraftTileEntity {
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        material = BlockMaterial.fromName(data.readUTF());
+        material = Materials.fromName(data.readUTF());
     }
 
     @Override

@@ -10,9 +10,9 @@
 package mods.railcraft.client.render.broken;
 
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.slab.BlockRailcraftSlab;
-import mods.railcraft.common.blocks.aesthetics.slab.TileSlab;
+import mods.railcraft.common.blocks.aesthetics.materials.Materials;
+import mods.railcraft.common.blocks.aesthetics.materials.slab.BlockRailcraftSlab;
+import mods.railcraft.common.blocks.aesthetics.materials.slab.TileSlab;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
@@ -66,7 +66,7 @@ public class RenderSlab extends BlockRenderer {
         return rendered;
     }
 
-    private boolean canRenderInPass(RenderBlocks renderer, BlockMaterial slab) {
+    private boolean canRenderInPass(RenderBlocks renderer, Materials slab) {
         int pass = BlockRailcraftSlab.currentRenderPass;
         return renderer.hasOverrideBlockTexture() || ((pass == 1) == (slab.isTransparent()));
     }

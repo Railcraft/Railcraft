@@ -10,9 +10,9 @@
 package mods.railcraft.client.render.broken;
 
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.blocks.aesthetics.wall.BlockRailcraftWall;
-import mods.railcraft.common.blocks.aesthetics.wall.EnumWallAlpha;
-import mods.railcraft.common.blocks.aesthetics.wall.WallInfo;
+import mods.railcraft.common.blocks.aesthetics.materials.wall.BlockRailcraftWall;
+import mods.railcraft.common.blocks.aesthetics.materials.wall.EnumWallAlpha;
+import mods.railcraft.common.blocks.aesthetics.materials.wall.WallInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWall;
 import net.minecraft.client.renderer.RenderBlocks;

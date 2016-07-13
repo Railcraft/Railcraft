@@ -132,7 +132,7 @@ public final class RailcraftRegistry {
      * @param block The block
      */
     public static void register(Block block) {
-        register(block, ItemBlock.class);
+        register(block, new ItemBlock(block));
     }
 
     /**
@@ -143,13 +143,14 @@ public final class RailcraftRegistry {
      *
      * @param block The block
      */
-    public static void register(Block block, Class<? extends ItemBlock> itemclass) {
+    public static void register(Block block, ItemBlock item) {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
             throw new RuntimeException("Blocks must be initialized in PreInit or InitFirst!");
         String tag = block.getUnlocalizedName();
         tag = MiscTools.cleanTag(tag);
 //        TagList.addTag(tag);
-        GameRegistry.registerBlock(block, itemclass, tag);
+        GameRegistry.register(block);
+        GameRegistry.register(item);
         RailcraftItemStackRegistry.register(tag, new ItemStack(block));
     }
 }

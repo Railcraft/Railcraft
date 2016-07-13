@@ -7,10 +7,10 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics.slab;
+package mods.railcraft.common.blocks.aesthetics.materials.slab;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
+import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,27 +24,27 @@ import java.io.IOException;
 public class TileSlab extends RailcraftTileEntity {
 
     @Nonnull
-    private BlockMaterial top = BlockMaterial.NO_MAT;
+    private Materials top = Materials.NO_MAT;
     @Nonnull
-    private BlockMaterial bottom = BlockMaterial.NO_MAT;
+    private Materials bottom = Materials.NO_MAT;
 
-    public BlockMaterial getTopSlab() {
+    public Materials getTopSlab() {
         return top;
     }
 
-    public BlockMaterial getBottomSlab() {
+    public Materials getBottomSlab() {
         return bottom;
     }
 
     public boolean isDoubleSlab() {
-        return top != BlockMaterial.NO_MAT && bottom != BlockMaterial.NO_MAT;
+        return top != Materials.NO_MAT && bottom != Materials.NO_MAT;
     }
 
     public boolean isTopSlab() {
-        return top != BlockMaterial.NO_MAT && bottom == BlockMaterial.NO_MAT;
+        return top != Materials.NO_MAT && bottom == Materials.NO_MAT;
     }
 
-    public void setTopSlab(BlockMaterial slab) {
+    public void setTopSlab(Materials slab) {
         if (top != slab) {
             this.top = slab;
             sendUpdateToClient();
@@ -52,30 +52,30 @@ public class TileSlab extends RailcraftTileEntity {
     }
 
     public boolean isBottomSlab() {
-        return top == BlockMaterial.NO_MAT && bottom != BlockMaterial.NO_MAT;
+        return top == Materials.NO_MAT && bottom != Materials.NO_MAT;
     }
 
-    public void setBottomSlab(BlockMaterial slab) {
+    public void setBottomSlab(Materials slab) {
         if (bottom != slab) {
             this.bottom = slab;
             sendUpdateToClient();
         }
     }
 
-    public BlockMaterial getUpmostSlab() {
-        if (top != BlockMaterial.NO_MAT)
+    public Materials getUpmostSlab() {
+        if (top != Materials.NO_MAT)
             return top;
-        if (bottom != BlockMaterial.NO_MAT)
+        if (bottom != Materials.NO_MAT)
             return bottom;
-        return BlockMaterial.getPlaceholder();
+        return Materials.getPlaceholder();
     }
 
-    public boolean addSlab(BlockMaterial slab) {
-        if (bottom == BlockMaterial.NO_MAT) {
+    public boolean addSlab(Materials slab) {
+        if (bottom == Materials.NO_MAT) {
             setBottomSlab(slab);
             return true;
         }
-        if (top == BlockMaterial.NO_MAT) {
+        if (top == Materials.NO_MAT) {
             setTopSlab(slab);
             return true;
         }
@@ -90,10 +90,10 @@ public class TileSlab extends RailcraftTileEntity {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        if (top != BlockMaterial.NO_MAT) {
+        if (top != Materials.NO_MAT) {
             data.setString("top", top.getName());
         }
-        if (bottom != BlockMaterial.NO_MAT) {
+        if (bottom != Materials.NO_MAT) {
             data.setString("bottom", bottom.getName());
         }
         return data;
@@ -103,18 +103,18 @@ public class TileSlab extends RailcraftTileEntity {
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         if (data.hasKey("top")) {
-            top = BlockMaterial.fromName(data.getString("top"));
+            top = Materials.fromName(data.getString("top"));
         }
         if (data.hasKey("bottom")) {
-            bottom = BlockMaterial.fromName(data.getString("bottom"));
+            bottom = Materials.fromName(data.getString("bottom"));
         }
     }
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeUTF(top != BlockMaterial.NO_MAT ? top.getName() : "");
-        data.writeUTF(bottom != BlockMaterial.NO_MAT ? bottom.getName() : "");
+        data.writeUTF(top != Materials.NO_MAT ? top.getName() : "");
+        data.writeUTF(bottom != Materials.NO_MAT ? bottom.getName() : "");
     }
 
     @Override
@@ -122,15 +122,15 @@ public class TileSlab extends RailcraftTileEntity {
         super.readPacketData(data);
         String t = data.readUTF();
         if (!t.isEmpty()) {
-            top = BlockMaterial.fromName(t);
+            top = Materials.fromName(t);
         } else {
-            top = BlockMaterial.NO_MAT;
+            top = Materials.NO_MAT;
         }
         String b = data.readUTF();
         if (!b.isEmpty()) {
-            bottom = BlockMaterial.fromName(b);
+            bottom = Materials.fromName(b);
         } else {
-            bottom = BlockMaterial.NO_MAT;
+            bottom = Materials.NO_MAT;
         }
         markBlockForUpdate();
     }

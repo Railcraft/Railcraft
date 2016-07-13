@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
-import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
+import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;

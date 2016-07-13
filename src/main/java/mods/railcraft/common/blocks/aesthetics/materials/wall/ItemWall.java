@@ -7,7 +7,7 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics.wall;
+package mods.railcraft.common.blocks.aesthetics.materials.wall;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;

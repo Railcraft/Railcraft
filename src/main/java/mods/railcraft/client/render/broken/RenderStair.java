@@ -10,8 +10,8 @@
 package mods.railcraft.client.render.broken;
 
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
-import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
+import mods.railcraft.common.blocks.aesthetics.materials.Materials;
+import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.stairs.TileStair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
@@ -43,9 +43,9 @@ public class RenderStair extends BlockRenderer {
         return false;
     }
 
-    private boolean canRenderInPass(RenderBlocks renderer, BlockMaterial stair) {
+    private boolean canRenderInPass(RenderBlocks renderer, Materials stair) {
         int pass = BlockRailcraftStairs.currentRenderPass;
-        return renderer.hasOverrideBlockTexture() || ((pass == 1) == (stair == BlockMaterial.ICE));
+        return renderer.hasOverrideBlockTexture() || ((pass == 1) == (stair == Materials.ICE));
     }
 
     @Override

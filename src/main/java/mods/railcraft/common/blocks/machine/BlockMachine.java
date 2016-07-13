@@ -54,7 +54,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
     private final MachineProxy<M> proxy;
     private final BlockStateContainer myBlockState;
 
-    public BlockMachine(MachineProxy<M> proxy, boolean opaque) {
+    public BlockMachine(MachineProxy<M> proxy, Boolean opaque) {
         super(Material.ROCK);
         setResistance(4.5F);
         setHardness(2.0F);

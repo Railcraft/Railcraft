@@ -7,17 +7,22 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
+package mods.railcraft.common.blocks.aesthetics.materials.wall;
 
-package mods.railcraft.common.blocks.aesthetics;
+import java.util.List;
 
 /**
- * Created by CovertJaguar on 3/24/2016.
+ * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum BlockType {
-    STAIR,
-    SLAB,
-    WALL_FROST_BOUND,
-    WALL_FITTED,
-    WALL_BLOCK,
-    WALL_COBBLE,
+public class WallProxyApha implements WallProxy {
+
+    @Override
+    public List<? extends WallInfo> getCreativeList() {
+        return EnumWallAlpha.getCreativeList();
+    }
+
+    @Override
+    public WallInfo fromMeta(int meta) {
+        return EnumWallAlpha.fromMeta(meta);
+    }
 }
