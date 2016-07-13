@@ -10,16 +10,21 @@
 
 package mods.railcraft.common.blocks.aesthetics;
 
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.Railcraft;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import static mods.railcraft.common.blocks.aesthetics.slab.ItemSlab.MATERIAL_KEY;
 
 /**
  * Created by CovertJaguar on 3/24/2016 for Railcraft.
@@ -51,6 +56,15 @@ public class MaterialRegistry {
     @Nonnull
     public static BlockMaterial get(ResourceLocation name) {
         return get(name.toString());
+    }
+
+    @Nonnull
+    public static ItemStack getStack(Block block, int qty, @Nullable IVariantEnum variant) {
+        IVariantEnum.tools.checkVariantObject(block.getClass(), variant);
+        ItemStack stack = new ItemStack(block, qty);
+        if (variant != null)
+            MaterialRegistry.tagItemStack(stack, MATERIAL_KEY, (BlockMaterial) variant);
+        return stack;
     }
 
     public static void tagItemStack(ItemStack stack, String key, BlockMaterial material) {

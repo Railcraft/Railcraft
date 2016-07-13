@@ -28,6 +28,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
@@ -55,7 +56,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static mods.railcraft.common.blocks.aesthetics.slab.ItemSlab.MATERIAL_KEY;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
@@ -70,12 +70,19 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
         super(Material.ROCK);
         setSoundType(RailcraftSoundTypes.OVERRIDE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setDefaultState(getDefaultState().withProperty(BOTTOM_MATERIAL, BlockMaterial.getPlaceholder()));
         useNeighborBrightness = true;
         GameRegistry.registerTileEntity(TileSlab.class, "RCSlabTile");
     }
 
     @Override
-    public void initializeDefinintion() {
+    @Nonnull
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, TOP_MATERIAL, BOTTOM_MATERIAL);
+    }
+
+    @Override
+    public void finalizeDefinition() {
         for (BlockMaterial mat : BlockMaterial.getValidMats()) {
             RailcraftRegistry.register(getStack(1, mat));
 
@@ -87,12 +94,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
                 default:
                     ForestryPlugin.addBackpackItem("forestry.builder", getStack(1, mat));
             }
-        }
-    }
 
-    @Override
-    public void defineRecipes() {
-        for (BlockMaterial mat : BlockMaterial.getValidMats()) {
             switch (mat) {
                 case SNOW: // TODO: is this necessary?
                     CraftingPlugin.addRecipe(getStack(3, mat),
@@ -115,12 +117,14 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
 
     @Nonnull
     @Override
+    public ItemStack getStack(@Nullable IVariantEnum variant) {
+        return getStack(1, variant);
+    }
+
+    @Nonnull
+    @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        IVariantEnum.tools.checkVariantObject(getClass(), variant);
-        ItemStack stack = new ItemStack(block, qty);
-        if (variant != null)
-            MaterialRegistry.tagItemStack(stack, MATERIAL_KEY, (BlockMaterial) variant);
-        return stack;
+        return MaterialRegistry.getStack(this, qty, variant);
     }
 
     public static String getTag(BlockMaterial mat) {
@@ -171,7 +175,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        list.addAll(BlockMaterial.getCreativeList().stream().map(mat -> getStack(1, mat)).collect(Collectors.toList()));
+        list.addAll(BlockMaterial.getCreativeList().stream().map(this::getStack).collect(Collectors.toList()));
     }
 
     @Override

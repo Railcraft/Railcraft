@@ -26,7 +26,7 @@ import java.io.IOException;
  */
 public class TileStair extends RailcraftTileEntity {
 
-    private BlockMaterial material = BlockMaterial.SANDY_BRICK;
+    private BlockMaterial material = BlockMaterial.getPlaceholder();
 
     public BlockMaterial getMaterial() {
         return material;

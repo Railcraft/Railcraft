@@ -9,20 +9,25 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.stairs;
 
+import mods.railcraft.api.crafting.ICrusherCraftingManager;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.blocks.aesthetics.BlockMaterial;
 import mods.railcraft.common.blocks.aesthetics.MaterialRegistry;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleStructures;
-import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.IBlockSoundProvider;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
@@ -40,67 +45,101 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import static mods.railcraft.common.blocks.aesthetics.BlockMaterial.SANDY_BRICK;
+import static mods.railcraft.common.blocks.aesthetics.BlockMaterial.*;
 
-public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProvider {
-    public static final PropertyEnum<BlockMaterial> MATERIAL = PropertyEnum.create("material", BlockMaterial.class, EnumSet.complementOf(BlockMaterial.VANILLA_REFINED_MATS));
+public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProvider, IRailcraftObject {
     public static int currentRenderPass;
     static BlockRailcraftStairs block;
 
     BlockRailcraftStairs() {
         super(Blocks.STONEBRICK.getDefaultState());
         setSoundType(RailcraftSoundTypes.OVERRIDE);
-        setDefaultState(getDefaultState().withProperty(MATERIAL, BlockMaterial.SANDY_BRICK));
+        setDefaultState(getDefaultState().withProperty(BlockMaterial.MATERIAL_PROPERTY, BlockMaterial.SANDY_BRICK));
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         useNeighborBrightness = true;
         isBlockContainer = true;
-    }
-
-    public static BlockRailcraftStairs getBlock() {
-        return block;
-    }
-
-    public static ItemStack getItem(BlockMaterial mat) {
-        return getItem(mat, 1);
-    }
-
-    public static ItemStack getItem(BlockMaterial mat, int qty) {
-        if (block == null) return null;
-        ItemStack stack = new ItemStack(block, qty);
-        MaterialRegistry.tagItemStack(stack, ItemStair.MATERIAL_KEY, mat);
-        return stack;
+        GameRegistry.registerTileEntity(TileStair.class, "RCStairTile");
     }
 
     public static String getTag(BlockMaterial mat) {
         return "tile.railcraft.stair." + mat.getLocalizationSuffix();
     }
 
-    public static boolean isEnabled(BlockMaterial mat) {
-        return RailcraftModuleManager.isModuleEnabled(ModuleStructures.class) && RailcraftConfig.isSubBlockEnabled(getTag(mat)) && getBlock() != null;
+    @Override
+    public void finalizeDefinition() {
+        for (BlockMaterial mat : BlockMaterial.getValidMats()) {
+            RailcraftRegistry.register(getStack(mat));
+
+            switch (mat) {
+                case SNOW:
+                case ICE:
+                    break;
+                default:
+                    ForestryPlugin.addBackpackItem("forestry.builder", getStack(mat));
+            }
+
+            CraftingPlugin.addRecipe(getStack(4, mat), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
+            ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(getStack(mat), true, false);
+            //noinspection ConstantConditions
+            recipe.addOutput(mat.getSourceItem(), 1.0f);
+        }
+
+        addRockCrusherRecipe(BrickTheme.ABYSSAL, ABYSSAL_BLOCK, ABYSSAL_BRICK, ABYSSAL_COBBLE, ABYSSAL_FITTED);
+        addRockCrusherRecipe(BrickTheme.BLEACHEDBONE, BLEACHEDBONE_BLOCK, BLEACHEDBONE_BRICK, BLEACHEDBONE_COBBLE, BLEACHEDBONE_FITTED);
+        addRockCrusherRecipe(BrickTheme.BLOODSTAINED, BLOODSTAINED_BLOCK, BLOODSTAINED_BRICK, BLOODSTAINED_COBBLE, BLOODSTAINED_FITTED);
+        addRockCrusherRecipe(BrickTheme.FROSTBOUND, FROSTBOUND_BLOCK, FROSTBOUND_BRICK, FROSTBOUND_COBBLE, FROSTBOUND_FITTED);
+        addRockCrusherRecipe(BrickTheme.INFERNAL, INFERNAL_BLOCK, INFERNAL_BRICK, INFERNAL_COBBLE, INFERNAL_FITTED);
+        addRockCrusherRecipe(BrickTheme.NETHER, NETHER_BLOCK, NETHER_BRICK, NETHER_COBBLE, NETHER_FITTED);
+        addRockCrusherRecipe(BrickTheme.QUARRIED, QUARRIED_BLOCK, QUARRIED_BRICK, QUARRIED_COBBLE, QUARRIED_FITTED);
+        addRockCrusherRecipe(BrickTheme.SANDY, SANDY_BLOCK, SANDY_BRICK, SANDY_COBBLE, SANDY_FITTED);
+    }
+
+    private void addRockCrusherRecipe(BrickTheme brickTheme, BlockMaterial... types) {
+        if (brickTheme.getBlock() == null)
+            return;
+        ItemStack output = brickTheme.get(BrickVariant.COBBLE, 1);
+        for (BlockMaterial mat : types) {
+            if (!mat.isSourceValid())
+                continue;
+            ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(getStack(mat), true, false);
+            recipe.addOutput(output, 1.0F);
+        }
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getStack(@Nullable IVariantEnum variant) {
+        return getStack(1, variant);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+        return MaterialRegistry.getStack(this, qty, variant);
     }
 
     @Override
     @Nonnull
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, HALF, SHAPE, MATERIAL);
+        return new BlockStateContainer(this, FACING, HALF, SHAPE, BlockMaterial.MATERIAL_PROPERTY);
     }
 
     @Nonnull
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         IBlockState actState = super.getActualState(state, worldIn, pos);
-        return actState.withProperty(MATERIAL, getMat(worldIn, pos));
+        return actState.withProperty(BlockMaterial.MATERIAL_PROPERTY, getMat(worldIn, pos));
     }
 
     @Nonnull
@@ -108,9 +147,9 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
     public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileStair) {
-            return getItem(((TileStair) tile).getMaterial());
+            return getStack(1, ((TileStair) tile).getMaterial());
         }
-        return getItem(BlockMaterial.SANDY_BRICK);
+        return getStack(1, BlockMaterial.getPlaceholder());
     }
 
     public BlockMaterial getMat(IBlockAccess world, BlockPos pos) {
@@ -123,7 +162,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
 
     @Override
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
-        list.addAll(BlockMaterial.CREATIVE_LIST.stream().map(BlockRailcraftStairs::getItem).collect(Collectors.toList()));
+        list.addAll(BlockMaterial.getCreativeList().stream().map(this::getStack).collect(Collectors.toList()));
     }
 
     @Nonnull
@@ -132,7 +171,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         TileEntity tile = world.getTileEntity(pos);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         if (tile instanceof TileStair)
-            items.add(getItem(((TileStair) tile).getMaterial()));
+            items.add(getStack(((TileStair) tile).getMaterial()));
         return items;
     }
 
@@ -217,10 +256,11 @@ public class BlockRailcraftStairs extends BlockStairs implements IBlockSoundProv
         return null;
     }
 
+    //TODO: apply to other mat blocks?
     @Nonnull
     @Override
     public String getHarvestTool(@Nonnull IBlockState state) {
-        IBlockState matState = state.getValue(MATERIAL).getState();
+        IBlockState matState = state.getValue(BlockMaterial.MATERIAL_PROPERTY).getState();
         if (matState != null)
             return matState.getBlock().getHarvestTool(matState);
         return "pickaxe";

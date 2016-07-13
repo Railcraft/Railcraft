@@ -20,6 +20,7 @@ import mods.railcraft.common.blocks.aesthetics.stairs.BlockRailcraftStairs;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import net.minecraft.block.*;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -30,6 +31,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -37,82 +39,87 @@ import java.util.stream.Collectors;
  */
 public enum BlockMaterial implements IVariantEnum {
 
-    STONE_BRICK("stone_brick"),
-    STONE_BRICK_CHISELED("stone_brick_chiseled"),
-    STONE_BRICK_CRACKED("stone_brick_cracked"),
-    STONE_BRICK_MOSSY("stone_brick_mossy"),
+    STONE_BRICK("stone_brick", () -> Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT)),
+    STONE_BRICK_CHISELED("stone_brick_chiseled", () -> Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED)),
+    STONE_BRICK_CRACKED("stone_brick_cracked", () -> Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CRACKED)),
+    STONE_BRICK_MOSSY("stone_brick_mossy", () -> Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY)),
 
-    BRICK("brick"),
+    BRICK("brick", Blocks.BRICK_BLOCK::getDefaultState),
 
-    SANDSTONE("sandstone"),
-    SANDSTONE_CHISELED("sandstone_chiseled"),
-    SANDSTONE_SMOOTH("sandstone_smooth"),
+    SANDSTONE("sandstone", () -> Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.DEFAULT)),
+    SANDSTONE_CHISELED("sandstone_chiseled", () -> Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED)),
+    SANDSTONE_SMOOTH("sandstone_smooth", () -> Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH)),
 
-    RED_SANDSTONE("red_sandstone"),
-    RED_SANDSTONE_CHISELED("red_sandstone_chiseled"),
-    RED_SANDSTONE_SMOOTH("red_sandstone_smooth"),
+    RED_SANDSTONE("red_sandstone", () -> Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.DEFAULT)),
+    RED_SANDSTONE_CHISELED("red_sandstone_chiseled", () -> Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED)),
+    RED_SANDSTONE_SMOOTH("red_sandstone_smooth", () -> Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH)),
 
-    QUARTZ("quartz"),
-    QUARTZ_CHISELED("quartz_chiseled"),
+    QUARTZ("quartz", () -> Blocks.QUARTZ_BLOCK.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.DEFAULT)),
+    QUARTZ_CHISELED("quartz_chiseled", () -> Blocks.QUARTZ_BLOCK.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.CHISELED)),
 
-    PURPUR("purpur"),
+    PURPUR("purpur", Blocks.PURPUR_BLOCK::getDefaultState),
 
-    OBSIDIAN(39, "obsidian"),
-    OBSIDIAN_CRUSHED("crushed_obsidian"),
+    OBSIDIAN(39, "obsidian", Blocks.OBSIDIAN::getDefaultState),
+    OBSIDIAN_CRUSHED("crushed_obsidian", EnumCube.CRUSHED_OBSIDIAN::getState),
 
-    SNOW(3, "snow"),
-    ICE(4, "ice"),
-    PACKED_ICE(5, "packed_ice"),
+    ABYSSAL_BLOCK(28, "abyssal_block", () -> BrickTheme.ABYSSAL.getState(BrickVariant.BLOCK)),
+    ABYSSAL_BRICK(13, "abyssal_brick", () -> BrickTheme.ABYSSAL.getState(BrickVariant.BRICK)),
+    ABYSSAL_COBBLE(36, "abyssal_cobble", () -> BrickTheme.ABYSSAL.getState(BrickVariant.COBBLE)),
+    ABYSSAL_FITTED(20, "abyssal_fitted", () -> BrickTheme.ABYSSAL.getState(BrickVariant.FITTED)),
 
-    IRON(6, "iron"),
-    STEEL(43, "steel"),
-    COPPER(40, "copper"),
-    TIN(41, "tin"),
-    LEAD(42, "lead"),
-    GOLD(7, "gold"),
+    BLEACHEDBONE_BLOCK(26, "bleached_bone_block", () -> BrickTheme.BLEACHEDBONE.getState(BrickVariant.BLOCK)),
+    BLEACHEDBONE_BRICK(11, "bleached_bone_brick", () -> BrickTheme.BLEACHEDBONE.getState(BrickVariant.BRICK)),
+    BLEACHEDBONE_COBBLE(34, "bleached_bone_cobble", () -> BrickTheme.BLEACHEDBONE.getState(BrickVariant.COBBLE)),
+    BLEACHEDBONE_FITTED(18, "bleached_bone_fitted", () -> BrickTheme.BLEACHEDBONE.getState(BrickVariant.FITTED)),
 
-    DIAMOND(8, "diamond"),
+    BLOODSTAINED_BLOCK(27, "bloodstained_block", () -> BrickTheme.BLOODSTAINED.getState(BrickVariant.BLOCK)),
+    BLOODSTAINED_BRICK(12, "bloodstained_brick", () -> BrickTheme.BLOODSTAINED.getState(BrickVariant.BRICK)),
+    BLOODSTAINED_COBBLE(35, "bloodstained_cobble", () -> BrickTheme.BLOODSTAINED.getState(BrickVariant.COBBLE)),
+    BLOODSTAINED_FITTED(19, "bloodstained_fitted", () -> BrickTheme.BLOODSTAINED.getState(BrickVariant.FITTED)),
 
-    SANDY_BRICK(0, "sandy_brick"),
-    INFERNAL_BRICK(1, "infernal_brick"),
-    FROSTBOUND_BRICK(9, "frost_bound_brick"),
-    QUARRIED_BRICK(10, "quarried_brick"),
-    BLEACHEDBONE_BRICK(11, "bleached_bone_brick"),
-    BLOODSTAINED_BRICK(12, "bloodstained_brick"),
-    ABYSSAL_BRICK(13, "abyssal_brick"),
-    NETHER_BRICK("nether_brick"),
+    FROSTBOUND_BLOCK(24, "frost_bound_block", () -> BrickTheme.FROSTBOUND.getState(BrickVariant.BLOCK)),
+    FROSTBOUND_BRICK(9, "frost_bound_brick", () -> BrickTheme.FROSTBOUND.getState(BrickVariant.BRICK)),
+    FROSTBOUND_COBBLE(32, "frost_bound_cobble", () -> BrickTheme.FROSTBOUND.getState(BrickVariant.COBBLE)),
+    FROSTBOUND_FITTED(16, "frost_bound_fitted", () -> BrickTheme.FROSTBOUND.getState(BrickVariant.FITTED)),
 
-    SANDY_FITTED(14, "sandy_fitted"),
-    INFERNAL_FITTED(15, "infernal_fitted"),
-    FROSTBOUND_FITTED(16, "frost_bound_fitted"),
-    QUARRIED_FITTED(17, "quarried_fitted"),
-    BLEACHEDBONE_FITTED(18, "bleached_bone_fitted"),
-    BLOODSTAINED_FITTED(19, "bloodstained_fitted"),
-    ABYSSAL_FITTED(20, "abyssal_fitted"),
-    NETHER_FITTED(21, "nether_fitted"),
+    INFERNAL_BLOCK(23, "infernal_block", () -> BrickTheme.INFERNAL.getState(BrickVariant.BLOCK)),
+    INFERNAL_BRICK(1, "infernal_brick", () -> BrickTheme.INFERNAL.getState(BrickVariant.BRICK)),
+    INFERNAL_COBBLE(31, "infernal_cobble", () -> BrickTheme.INFERNAL.getState(BrickVariant.COBBLE)),
+    INFERNAL_FITTED(15, "infernal_fitted", () -> BrickTheme.INFERNAL.getState(BrickVariant.FITTED)),
 
-    SANDY_BLOCK(22, "sandy_block"),
-    INFERNAL_BLOCK(23, "infernal_block"),
-    FROSTBOUND_BLOCK(24, "frost_bound_block"),
-    QUARRIED_BLOCK(25, "quarried_block"),
-    BLEACHEDBONE_BLOCK(26, "bleached_bone_block"),
-    BLOODSTAINED_BLOCK(27, "bloodstained_block"),
-    ABYSSAL_BLOCK(28, "abyssal_block"),
-    NETHER_BLOCK(29, "nether_block"),
+    NETHER_BLOCK(29, "nether_block", () -> BrickTheme.NETHER.getState(BrickVariant.BLOCK)),
+    NETHER_BRICK("nether_brick", Blocks.NETHER_BRICK::getDefaultState),
+    NETHER_COBBLE(37, "nether_cobble", () -> BrickTheme.NETHER.getState(BrickVariant.COBBLE)),
+    NETHER_FITTED(21, "nether_fitted", () -> BrickTheme.NETHER.getState(BrickVariant.FITTED)),
 
-    SANDY_COBBLE(30, "sandy_cobble"),
-    INFERNAL_COBBLE(31, "infernal_cobble"),
-    FROSTBOUND_COBBLE(32, "frost_bound_cobble"),
-    QUARRIED_COBBLE(33, "quarried_cobble"),
-    BLEACHEDBONE_COBBLE(34, "bleached_bone_cobble"),
-    BLOODSTAINED_COBBLE(35, "bloodstained_cobble"),
-    ABYSSAL_COBBLE(36, "abyssal_cobble"),
-    NETHER_COBBLE(37, "nether_cobble"),
+    QUARRIED_BLOCK(25, "quarried_block", () -> BrickTheme.QUARRIED.getState(BrickVariant.BLOCK)),
+    QUARRIED_BRICK(10, "quarried_brick", () -> BrickTheme.QUARRIED.getState(BrickVariant.BRICK)),
+    QUARRIED_COBBLE(33, "quarried_cobble", () -> BrickTheme.QUARRIED.getState(BrickVariant.COBBLE)),
+    QUARRIED_FITTED(17, "quarried_fitted", () -> BrickTheme.QUARRIED.getState(BrickVariant.FITTED)),
 
-    CONCRETE(2, "concrete"),
-    CREOSOTE(38, "creosote"),
+    SANDY_BLOCK(22, "sandy_block", () -> BrickTheme.SANDY.getState(BrickVariant.BLOCK)),
+    SANDY_BRICK(0, "sandy_brick", () -> BrickTheme.SANDY.getState(BrickVariant.BRICK)),
+    SANDY_COBBLE(30, "sandy_cobble", () -> BrickTheme.SANDY.getState(BrickVariant.COBBLE)),
+    SANDY_FITTED(14, "sandy_fitted", () -> BrickTheme.SANDY.getState(BrickVariant.FITTED)),
 
-    NO_MAT("no_mat");
+    SNOW(3, "snow", Blocks.SNOW::getDefaultState),
+    ICE(4, "ice", Blocks.ICE::getDefaultState),
+    PACKED_ICE(5, "packed_ice", Blocks.PACKED_ICE::getDefaultState),
+
+    IRON(6, "iron", Blocks.IRON_BLOCK::getDefaultState),
+    STEEL(43, "steel", EnumCube.STEEL_BLOCK::getState),
+    COPPER(40, "copper", EnumCube.COPPER_BLOCK::getState),
+    TIN(41, "tin", EnumCube.TIN_BLOCK::getState),
+    LEAD(42, "lead", EnumCube.LEAD_BLOCK::getState),
+    GOLD(7, "gold", Blocks.GOLD_BLOCK::getDefaultState),
+
+    DIAMOND(8, "diamond", Blocks.DIAMOND_BLOCK::getDefaultState),
+
+    CONCRETE(2, "concrete", EnumCube.CONCRETE_BLOCK::getState),
+    CREOSOTE(38, "creosote", EnumCube.CREOSOTE_BLOCK::getState),
+
+    NO_MAT("no_mat", () -> null);
+    public static final PropertyEnum<BlockMaterial> MATERIAL_PROPERTY = PropertyEnum.create("material", BlockMaterial.class);
     public static final Map<String, BlockMaterial> NAMES = new HashMap<String, BlockMaterial>();
     //    public static final BlockMaterial[] OLD_WALL1_MATS;
 //    public static final BlockMaterial[] OLD_WALL2_MATS;
@@ -173,18 +180,20 @@ public enum BlockMaterial implements IVariantEnum {
 
     public final int oldOrdinal;
     private final String name;
+    private final Supplier<IBlockState> stateSupplier;
     private SoundType sound = SoundType.STONE;
     @Nullable
     private IBlockState state;
     private String oreTag;
 
-    BlockMaterial(String name) {
-        this(-1, name);
+    BlockMaterial(String name, Supplier<IBlockState> stateSupplier) {
+        this(-1, name, stateSupplier);
     }
 
-    BlockMaterial(int oldOrdinal, String name) {
+    BlockMaterial(int oldOrdinal, String name, Supplier<IBlockState> stateSupplier) {
         this.oldOrdinal = oldOrdinal;
         this.name = name;
+        this.stateSupplier = stateSupplier;
     }
 
     public static void initialize() {
@@ -192,107 +201,29 @@ public enum BlockMaterial implements IVariantEnum {
             return;
         needsInit = false;
 
-        SNOW.state = Blocks.SNOW.getDefaultState();
-        ICE.state = Blocks.ICE.getDefaultState();
-        PACKED_ICE.state = Blocks.PACKED_ICE.getDefaultState();
-        IRON.state = Blocks.IRON_BLOCK.getDefaultState();
         IRON.oreTag = "blockIron";
-        GOLD.state = Blocks.GOLD_BLOCK.getDefaultState();
         GOLD.oreTag = "blockGold";
-        DIAMOND.state = Blocks.DIAMOND_BLOCK.getDefaultState();
         DIAMOND.oreTag = "blockDiamond";
-        OBSIDIAN.state = Blocks.OBSIDIAN.getDefaultState();
-        BRICK.state = Blocks.BRICK_BLOCK.getDefaultState();
 
-        STONE_BRICK.state = Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.DEFAULT);
-        STONE_BRICK_CHISELED.state = Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
-        STONE_BRICK_CRACKED.state = Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CRACKED);
-        STONE_BRICK_MOSSY.state = Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY);
-
-        SANDSTONE.state = Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.DEFAULT);
-        SANDSTONE_CHISELED.state = Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
-        SANDSTONE_SMOOTH.state = Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH);
-
-        RED_SANDSTONE.state = Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.DEFAULT);
-        RED_SANDSTONE_CHISELED.state = Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED);
-        RED_SANDSTONE_SMOOTH.state = Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH);
-
-        QUARTZ.state = Blocks.QUARTZ_BLOCK.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.DEFAULT);
-        QUARTZ_CHISELED.state = Blocks.QUARTZ_BLOCK.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.CHISELED);
-
-        INFERNAL_BRICK.state = BrickTheme.INFERNAL.getState(BrickVariant.BRICK);
-        SANDY_BRICK.state = BrickTheme.SANDY.getState(BrickVariant.BRICK);
-        FROSTBOUND_BRICK.state = BrickTheme.FROSTBOUND.getState(BrickVariant.BRICK);
-        QUARRIED_BRICK.state = BrickTheme.QUARRIED.getState(BrickVariant.BRICK);
-        BLEACHEDBONE_BRICK.state = BrickTheme.BLEACHEDBONE.getState(BrickVariant.BRICK);
-        BLOODSTAINED_BRICK.state = BrickTheme.BLOODSTAINED.getState(BrickVariant.BRICK);
-        ABYSSAL_BRICK.state = BrickTheme.ABYSSAL.getState(BrickVariant.BRICK);
-        NETHER_BRICK.state = Blocks.NETHER_BRICK.getDefaultState();
-
-        SANDY_FITTED.state = BrickTheme.SANDY.getState(BrickVariant.FITTED);
-        INFERNAL_FITTED.state = BrickTheme.INFERNAL.getState(BrickVariant.FITTED);
-        FROSTBOUND_FITTED.state = BrickTheme.FROSTBOUND.getState(BrickVariant.FITTED);
-        QUARRIED_FITTED.state = BrickTheme.QUARRIED.getState(BrickVariant.FITTED);
-        BLEACHEDBONE_FITTED.state = BrickTheme.BLEACHEDBONE.getState(BrickVariant.FITTED);
-        BLOODSTAINED_FITTED.state = BrickTheme.BLOODSTAINED.getState(BrickVariant.FITTED);
-        ABYSSAL_FITTED.state = BrickTheme.ABYSSAL.getState(BrickVariant.FITTED);
-        NETHER_FITTED.state = BrickTheme.NETHER.getState(BrickVariant.FITTED);
-
-        SANDY_BLOCK.state = BrickTheme.SANDY.getState(BrickVariant.BLOCK);
-        INFERNAL_BLOCK.state = BrickTheme.INFERNAL.getState(BrickVariant.BLOCK);
-        FROSTBOUND_BLOCK.state = BrickTheme.FROSTBOUND.getState(BrickVariant.BLOCK);
-        QUARRIED_BLOCK.state = BrickTheme.QUARRIED.getState(BrickVariant.BLOCK);
-        BLEACHEDBONE_BLOCK.state = BrickTheme.BLEACHEDBONE.getState(BrickVariant.BLOCK);
-        BLOODSTAINED_BLOCK.state = BrickTheme.BLOODSTAINED.getState(BrickVariant.BLOCK);
-        ABYSSAL_BLOCK.state = BrickTheme.ABYSSAL.getState(BrickVariant.BLOCK);
-        NETHER_BLOCK.state = BrickTheme.NETHER.getState(BrickVariant.BLOCK);
-
-        SANDY_COBBLE.state = BrickTheme.SANDY.getState(BrickVariant.COBBLE);
-        INFERNAL_COBBLE.state = BrickTheme.INFERNAL.getState(BrickVariant.COBBLE);
-        FROSTBOUND_COBBLE.state = BrickTheme.FROSTBOUND.getState(BrickVariant.COBBLE);
-        QUARRIED_COBBLE.state = BrickTheme.QUARRIED.getState(BrickVariant.COBBLE);
-        BLEACHEDBONE_COBBLE.state = BrickTheme.BLEACHEDBONE.getState(BrickVariant.COBBLE);
-        BLOODSTAINED_COBBLE.state = BrickTheme.BLOODSTAINED.getState(BrickVariant.COBBLE);
-        ABYSSAL_COBBLE.state = BrickTheme.ABYSSAL.getState(BrickVariant.COBBLE);
-        NETHER_COBBLE.state = BrickTheme.NETHER.getState(BrickVariant.COBBLE);
-
-        CONCRETE.state = EnumCube.CONCRETE_BLOCK.getState();
-        CREOSOTE.state = EnumCube.CREOSOTE_BLOCK.getState();
-        OBSIDIAN_CRUSHED.state = EnumCube.CRUSHED_OBSIDIAN.getState();
-
-        COPPER.state = EnumCube.COPPER_BLOCK.getState();
         COPPER.oreTag = "blockCopper";
-        TIN.state = EnumCube.TIN_BLOCK.getState();
         TIN.oreTag = "blockTin";
-        LEAD.state = EnumCube.LEAD_BLOCK.getState();
         LEAD.oreTag = "blockLead";
-        STEEL.state = EnumCube.STEEL_BLOCK.getState();
         STEEL.oreTag = "blockSteel";
+
+        CONCRETE.sound = SoundType.STONE;
+
+        CREOSOTE.sound = SoundType.WOOD;
+
+        OBSIDIAN_CRUSHED.sound = SoundType.GROUND;
+
+        COPPER.sound = SoundType.METAL;
+        TIN.sound = SoundType.METAL;
+        LEAD.sound = SoundType.METAL;
+        STEEL.sound = SoundType.METAL;
 
         for (BlockMaterial mat : VALUES) {
             NAMES.put(mat.name(), mat);
             NAMES.put(mat.name, mat);
-            switch (mat) {
-                case CONCRETE:
-                    mat.sound = SoundType.STONE;
-                    break;
-                case CREOSOTE:
-                    mat.sound = SoundType.WOOD;
-                    break;
-                case OBSIDIAN_CRUSHED:
-                    mat.sound = SoundType.GROUND;
-                    break;
-                case COPPER:
-                case TIN:
-                case LEAD:
-                case STEEL:
-                    mat.sound = SoundType.METAL;
-                    break;
-                default:
-                    if (mat.state != null)
-                        mat.sound = mat.state.getBlock().getSoundType();
-            }
-            throw new RuntimeException("Invalid Sound Defined!");
         }
     }
 
@@ -308,7 +239,7 @@ public enum BlockMaterial implements IVariantEnum {
         BlockMaterial mat = NAMES.get(name);
         if (mat != null)
             return mat;
-        return SANDY_BRICK;
+        return getPlaceholder();
     }
 
     public static List<BlockMaterial> getValidMats() {
@@ -331,6 +262,8 @@ public enum BlockMaterial implements IVariantEnum {
 
     @Nullable
     public IBlockState getState() {
+        if (state == null)
+            state = stateSupplier.get();
         return state;
     }
 
@@ -356,11 +289,18 @@ public enum BlockMaterial implements IVariantEnum {
 
     @Nonnull
     public SoundType getSound() {
+        if (sound == null) {
+            IBlockState state = getState();
+            if (state != null) {
+                sound = state.getBlock().getSoundType();
+            }
+        }
         return sound;
     }
 
     @Nullable
     public ItemStack getSourceItem() {
+        IBlockState state = getState();
         if (state == null) return null;
         return new ItemStack(state.getBlock(), 1, state.getBlock().damageDropped(state));
     }
@@ -428,7 +368,7 @@ public enum BlockMaterial implements IVariantEnum {
     }
 
     public boolean isSourceValid() {
-        return getSourceItem() != null;
+        return getState() != null;
     }
 
     @Override

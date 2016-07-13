@@ -21,7 +21,6 @@ import mods.railcraft.common.blocks.aesthetics.lantern.BlockFactoryLantern;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPost;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
-import mods.railcraft.common.blocks.aesthetics.stairs.BlockFactoryStairs;
 import mods.railcraft.common.blocks.aesthetics.wall.BlockRailcraftWall;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -46,14 +45,14 @@ public class ModuleStructures extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
-                addBlockFactory(new BlockFactoryStairs());
-                addBlockFactory(new BlockFactoryLantern());
                 for (BrickTheme brick : BrickTheme.VALUES) {
                     addBlockFactory(brick.makeFactory());
                 }
                 add(
                         RailcraftBlocks.signal,
                         RailcraftBlocks.slab,
+                        RailcraftBlocks.stair,
+                        RailcraftBlocks.lantern,
                         RailcraftBlocks.machine_alpha
                 );
             }

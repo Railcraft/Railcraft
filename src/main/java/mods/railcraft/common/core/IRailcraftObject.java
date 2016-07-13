@@ -28,6 +28,11 @@ public interface IRailcraftObject {
     }
 
     @Nullable
+    default ItemStack getStack(@Nullable IVariantEnum variant) {
+        return getStack(1, variant);
+    }
+
+    @Nullable
     default ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         IVariantEnum.tools.checkVariantObject(getClass(), variant);
         int meta;
