@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.items.firestone;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -20,8 +20,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nonnull;
@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TileFirestoneRecharge extends RailcraftTileEntity {
+public class TileFirestoneRecharge extends RailcraftTickingTileEntity {
     public static final int[] REBUILD_DELAY = new int[8];
     private final Deque<BlockPos> queue = new LinkedList<BlockPos>();
     private final Set<BlockPos> visitedBlocks = new HashSet<BlockPos>();

@@ -9,7 +9,7 @@
 package mods.railcraft.common.blocks.signals;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public abstract class TileSignalFoundation extends RailcraftTileEntity {
+public abstract class TileSignalFoundation extends RailcraftTickingTileEntity {
 
     private boolean checkedBlock = false;
 

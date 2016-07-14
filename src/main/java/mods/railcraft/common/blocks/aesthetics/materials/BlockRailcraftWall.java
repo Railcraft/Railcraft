@@ -53,6 +53,7 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
+    //TODO: recipe??
     @Override
     public void finalizeDefinition() {
         for (Materials mat : Materials.getValidMats()) {

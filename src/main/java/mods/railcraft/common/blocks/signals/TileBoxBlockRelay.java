@@ -50,11 +50,6 @@ public class TileBoxBlockRelay extends TileBoxActionManager implements ISignalBl
     }
 
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
     public void update() {
         super.update();
         if (Game.isClient(worldObj)) {

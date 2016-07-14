@@ -69,6 +69,7 @@ public class BlockTrack extends BlockRail implements IPostConnection {
 
         GameRegistry.registerTileEntity(TileTrack.class, "RailcraftTrackTile");
         GameRegistry.registerTileEntity(TileTrackTESR.class, "RailcraftTrackTESRTile");
+        GameRegistry.registerTileEntity(TileTrackTicking.class, "RailcraftTrackTickingTile");
 
         try {
             TrackSpec.blockTrack = this;

@@ -64,11 +64,6 @@ public abstract class TileSignalBase extends TileSignalFoundation implements IAs
     }
 
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
     public void update() {
         super.update();
         if (Game.isClient(worldObj)) {

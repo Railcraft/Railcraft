@@ -29,10 +29,6 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
     public TileTrack() {
     }
 
-    public void makeTrackInstance(@Nonnull TrackSpec trackSpec) {
-        this.track = trackSpec.createInstanceFromSpec(this);
-    }
-
     @Override
     public String getLocalizationTag() {
         return "tile." + track.getTrackSpec().getTrackTag().replace(':', '.') + ".name";
@@ -55,10 +51,11 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
 
         if (data.hasKey("trackTag")) {
             TrackSpec spec = TrackRegistry.getTrackSpec(data.getString("trackTag"));
-            track = spec.createInstanceFromSpec(this);
+            track = spec.createInstanceFromSpec();
         } else
-            track = TrackRegistry.getDefaultTrackSpec().createInstanceFromSpec(this);
+            track = TrackRegistry.getDefaultTrackSpec().createInstanceFromSpec();
 
+        track.setTile(this);
         track.readFromNBT(data);
     }
 
@@ -72,17 +69,6 @@ public class TileTrack extends RailcraftTileEntity implements ITrackTile, IGuiRe
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         track.readPacketData(data);
-    }
-
-    @Override
-    public boolean canUpdate() {
-        return track.canUpdate();
-    }
-
-    @Override
-    public void update() {
-        super.update();
-        track.update();
     }
 
     @Override

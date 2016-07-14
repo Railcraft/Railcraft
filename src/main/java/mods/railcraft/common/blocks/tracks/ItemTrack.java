@@ -109,7 +109,7 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
 
         TrackSpec spec = getTrackSpec(stack);
         TileTrack tile = TrackFactory.makeTrackTile(spec);
-        ITrackInstance track = spec.createInstanceFromSpec(tile);
+        ITrackInstance track = tile.getTrackInstance();
 
         boolean canPlace = world.canBlockBePlaced(blockTrack, pos, true, face, null, stack);
         if (track instanceof ITrackCustomPlaced)
@@ -123,8 +123,7 @@ public class ItemTrack extends ItemBlock implements ITrackItem {
             // System.out.println("Block placement attempted");
             if (placed) {
                 if (world.getBlockState(pos).getBlock() == blockTrack) {
-                    TileTrack placedTileTrack = TrackFactory.makeTrackTile(track.getTrackSpec());
-                    world.setTileEntity(pos, placedTileTrack);
+                    world.setTileEntity(pos, tile);
                     blockTrack.onBlockPlacedBy(world, pos, wantedState, player, stack);
                     world.notifyBlockUpdate(pos, wantedState, wantedState, 3);
                 }

@@ -76,11 +76,6 @@ public abstract class TileSwitchBase extends TileSignalFoundation implements ISw
     public abstract boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart);
 
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
     public void update() {
         super.update();
         if (Game.isHost(worldObj))

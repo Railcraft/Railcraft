@@ -28,11 +28,6 @@ public abstract class TileBoxBase extends TileSignalFoundation implements ILampT
         return BOUNDING_BOX;
     }
 
-    @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
     public abstract boolean isConnected(EnumFacing side);
 
     public abstract SignalAspect getBoxSignalAspect(@Nullable EnumFacing side);

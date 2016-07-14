@@ -8,17 +8,13 @@
  */
 package mods.railcraft.common.blocks.tracks;
 
-import mcp.MethodsReturnNonnullByDefault;
+import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackSpec;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
 public class TrackFactory {
 
     public static TileTrack makeTrackTile(int trackID) {
@@ -27,12 +23,16 @@ public class TrackFactory {
     }
 
     public static TileTrack makeTrackTile(TrackSpec trackSpec) {
+        ITrackInstance trackInstance = trackSpec.createInstanceFromSpec();
         TileTrack tileTrack;
         if (trackSpec == EnumTrack.BUFFER_STOP.getTrackSpec())
             tileTrack = new TileTrackTESR();
+        else if (trackInstance.canUpdate())
+            tileTrack = new TileTrackTicking();
         else
             tileTrack = new TileTrack();
-        tileTrack.makeTrackInstance(trackSpec);
+        tileTrack.track = trackInstance;
+        trackInstance.setTile(tileTrack);
         return tileTrack;
     }
 

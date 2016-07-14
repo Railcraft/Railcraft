@@ -10,7 +10,7 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.api.core.items.ITrackItem;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class TileMachineBase extends RailcraftTileEntity {
+public abstract class TileMachineBase extends RailcraftTickingTileEntity {
 
     private boolean checkedBlock;
 

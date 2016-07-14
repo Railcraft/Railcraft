@@ -16,7 +16,6 @@ import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -28,7 +27,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -41,13 +39,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IOwnable, ITickable {
+public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IOwnable {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
-    protected int clock = MiscTools.RANDOM.nextInt();
     @Nonnull
     private GameProfile owner = new GameProfile(null, "[Railcraft]");
-    private boolean sendClientUpdate;
     private UUID uuid;
     @Nonnull
     private String customName = "";
@@ -72,23 +68,6 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     public AdjacentTileCache getTileCache() {
         return tileCache;
-    }
-
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
-    public void update() {
-        if (!canUpdate())
-            worldObj.tickabNOPEleTileEntities.remove(this); // Concurrency error
-
-        clock++;
-
-        if (sendClientUpdate) {
-            sendClientUpdate = false;
-            PacketBuilder.instance().sendTileEntityPacket(this);
-        }
     }
 
     @Nullable
@@ -127,10 +106,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     public void sendUpdateToClient() {
-        if (canUpdate())
-            sendClientUpdate = true;
-        else
-            PacketBuilder.instance().sendTileEntityPacket(this);
+        PacketBuilder.instance().sendTileEntityPacket(this);
     }
 
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
