@@ -30,6 +30,8 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -68,7 +70,7 @@ public class ForestryPlugin {
         return new ItemStack(item, 1);
     }
 
-    public static void addBackpackItem(String pack, ItemStack stack) {
+    public static void addBackpackItem(String pack, @Nullable ItemStack stack) {
         if (stack == null)
             return;
         addBackpackItem(pack, stack.getItem(), stack.getItemDamage());

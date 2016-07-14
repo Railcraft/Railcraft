@@ -10,8 +10,8 @@
 package mods.railcraft.common.blocks.aesthetics.materials.slab;
 
 import mods.railcraft.client.particles.ParticleHelper;
+import mods.railcraft.common.blocks.aesthetics.materials.IMaterialBlock;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -21,7 +21,6 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.sounds.IBlockSoundProvider;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -58,7 +57,7 @@ import java.util.stream.Collectors;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundProvider, IRailcraftObject {
+public class BlockRailcraftSlab extends BlockContainer implements IMaterialBlock {
 
     public static final PropertyEnum<Materials> TOP_MATERIAL = PropertyEnum.create("top_material", Materials.class);
     public static final PropertyEnum<Materials> BOTTOM_MATERIAL = PropertyEnum.create("bottom_material", Materials.class);
@@ -126,7 +125,8 @@ public class BlockRailcraftSlab extends BlockContainer implements IBlockSoundPro
         return Materials.getStack(this, qty, variant);
     }
 
-    public static String getTag(Materials mat) {
+    @Override
+    public String getUnlocalizedName(Materials mat) {
         return "tile.railcraft.slab." + mat.getLocalizationSuffix();
     }
 

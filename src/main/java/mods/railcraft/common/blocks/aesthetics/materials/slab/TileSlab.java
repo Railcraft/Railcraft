@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.materials.slab;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.aesthetics.materials.IMaterialBlock;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -84,7 +85,7 @@ public class TileSlab extends RailcraftTileEntity {
 
     @Override
     public String getLocalizationTag() {
-        return BlockRailcraftSlab.getTag(getUpmostSlab());
+        return ((IMaterialBlock) getBlockType()).getUnlocalizedName(getUpmostSlab());
     }
 
     @Override

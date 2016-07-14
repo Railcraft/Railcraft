@@ -20,7 +20,7 @@ import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPost;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
-import mods.railcraft.common.blocks.aesthetics.materials.wall.BlockRailcraftWall;
+import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -52,6 +52,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                         RailcraftBlocks.slab,
                         RailcraftBlocks.stair,
                         RailcraftBlocks.lantern,
+                        RailcraftBlocks.wall,
                         RailcraftBlocks.machine_alpha
                 );
             }
@@ -141,8 +142,6 @@ public class ModuleStructures extends RailcraftModulePayload {
 
             @Override
             public void init() {
-                BlockRailcraftWall.initialize();
-
                 Block blockPost = BlockPost.getBlock();
                 if (blockPost != null) {
                     CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getItem(4), RailcraftItems.tie.getRecipeObject(ItemTie.EnumTie.WOOD));

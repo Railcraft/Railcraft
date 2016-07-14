@@ -131,8 +131,31 @@ public final class RailcraftRegistry {
      *
      * @param block The block
      */
+    @Deprecated
     public static void register(Block block) {
-        register(block, new ItemBlock(block));
+        ItemBlock item = new ItemBlock(block);
+        //TODO: test or remove
+        item.setRegistryName(block.getRegistryName().toString());
+        register(block, item);
+    }
+
+    /**
+     * Registers a new block with the GameRegistry.
+     * <p/>
+     * This should generally only be called by Railcraft itself while the mod is
+     * initializing during the pre-initializeDefinintion and initializeDefinintion stages.
+     *
+     * @param block The block
+     */
+    @Deprecated
+    public static void register(Block block, Class<? extends ItemBlock> itemBlock) {
+        if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
+            throw new RuntimeException("Blocks must be initialized in PreInit or InitFirst!");
+        String tag = block.getUnlocalizedName();
+        tag = MiscTools.cleanTag(tag);
+//        TagList.addTag(tag);
+        GameRegistry.registerBlock(block, itemBlock);
+        RailcraftItemStackRegistry.register(tag, new ItemStack(block));
     }
 
     /**

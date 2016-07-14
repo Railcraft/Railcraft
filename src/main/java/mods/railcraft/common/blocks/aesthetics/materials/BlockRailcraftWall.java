@@ -9,16 +9,16 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.materials;
 
-import mods.railcraft.api.crafting.ICrusherCraftingManager;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.common.blocks.aesthetics.post.BlockPostBase;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
-import net.minecraft.block.BlockStairs;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockWall;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -32,7 +32,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -45,78 +44,89 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock {
+public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
+
     public static int currentRenderPass;
-    static BlockRailcraftStairs block;
 
-    BlockRailcraftStairs() {
-        super(Blocks.STONEBRICK.getDefaultState());
-        setSoundType(RailcraftSoundTypes.OVERRIDE);
+    public BlockRailcraftWall() {
+        super(Blocks.STONEBRICK);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        useNeighborBrightness = true;
-        isBlockContainer = true;
-    }
-
-    @Override
-    public String getUnlocalizedName(Materials mat) {
-        return "tile.railcraft.stair." + mat.getLocalizationSuffix();
     }
 
     @Override
     public void finalizeDefinition() {
         for (Materials mat : Materials.getValidMats()) {
-            RailcraftRegistry.register(getStack(mat));
-
-            switch (mat) {
-                case SNOW:
-                case ICE:
-                    break;
-                default:
-                    ForestryPlugin.addBackpackItem("forestry.builder", getStack(mat));
+            ItemStack stack = getStack(mat);
+            if (stack != null) {
+                RailcraftRegistry.register(stack);
+                if (!Materials.MAT_SET_FROZEN.contains(mat))
+                    ForestryPlugin.addBackpackItem("forestry.builder", stack);
             }
-
-            CraftingPlugin.addRecipe(getStack(4, mat), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
-            ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(getStack(mat), true, false);
-            //noinspection ConstantConditions
-            recipe.addOutput(mat.getSourceItem(), 1.0f);
         }
-
-        MatTools.defineCrusherRecipes(this);
-    }
-
-    @Nonnull
-    @Override
-    public ItemStack getStack(@Nullable IVariantEnum variant) {
-        return getStack(1, variant);
-    }
-
-    @Nonnull
-    @Override
-    public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        return Materials.getStack(this, qty, variant);
     }
 
     @Override
-    @Nonnull
+    public String getUnlocalizedName(Materials mat) {
+        return "tile.railcraft.wall." + mat.getLocalizationSuffix();
+    }
+
+    @Override
     protected BlockStateContainer createBlockState() {
-        return new ExtendedBlockState(this, new IProperty[]{FACING, HALF, SHAPE}, new IUnlistedProperty[]{Materials.MATERIAL_PROPERTY});
+        return new ExtendedBlockState(this, new IProperty[]{UP, NORTH, EAST, WEST, SOUTH, VARIANT}, new IUnlistedProperty[]{Materials.MATERIAL_PROPERTY});
     }
 
-    @Nonnull
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        IExtendedBlockState actState = (IExtendedBlockState) super.getActualState(state, worldIn, pos);
-        return actState.withProperty(Materials.MATERIAL_PROPERTY, MatTools.getMat(worldIn, pos));
+        boolean north = canConnectTo(worldIn, pos.north());
+        boolean east = canConnectTo(worldIn, pos.east());
+        boolean south = canConnectTo(worldIn, pos.south());
+        boolean west = canConnectTo(worldIn, pos.west());
+        boolean smooth = north && !east && south && !west || !north && east && !south && west;
+        state = state.withProperty(UP, !smooth || !worldIn.isAirBlock(pos.up())).withProperty(NORTH, north).withProperty(EAST, east).withProperty(SOUTH, south).withProperty(WEST, west);
+
+
+        IExtendedBlockState actState = (IExtendedBlockState) state;
+        actState = actState.withProperty(Materials.MATERIAL_PROPERTY, MatTools.getMat(worldIn, pos));
+        return actState;
     }
 
-    @Nonnull
+    /**
+     * Return whether an adjacent block can connect to a wall.
+     */
+    public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos) {
+        if (canConnectToOld(worldIn, pos))
+            return true;
+
+        Block block = WorldPlugin.getBlock(worldIn, pos);
+
+        if (block instanceof BlockRailcraftWall)
+            return true;
+        else if (block instanceof BlockPostBase)
+            return true;
+        return false;
+    }
+
+    private boolean canConnectToOld(IBlockAccess worldIn, BlockPos pos) {
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        Block block = iblockstate.getBlock();
+        return block == Blocks.BARRIER ? false : (block != this && !(block instanceof BlockFenceGate) ? (iblockstate.getMaterial().isOpaque() && iblockstate.isFullCube() ? iblockstate.getMaterial() != Material.GOURD : false) : true);
+    }
+
+    /**
+     * Determines if a torch can be placed on the top surface of this block.
+     * Useful for creating your own block that torches can be on, such as
+     * fences.
+     *
+     * @param world The current world
+     * @return True to allow the torch to be placed
+     */
     @Override
-    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
-        return MatTools.getPickBlock(state, target, world, pos, player);
+    public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return true;
     }
 
     @Override
-    public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         list.addAll(Materials.getCreativeList().stream().map(this::getStack).collect(Collectors.toList()));
     }
 
@@ -173,27 +183,4 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
     public float getExplosionResistance(World world, BlockPos pos, @Nonnull Entity exploder, Explosion explosion) {
         return MatTools.getExplosionResistance(world, pos, exploder, explosion);
     }
-
-    //TODO: fix particles
-//    @SideOnly(Side.CLIENT)
-//    @Override
-//    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager particleManager) {
-//        return ParticleHelper.addHitEffects(worldObj, block, target, particleManager, null);
-//    }
-//
-//    @Override
-//    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager particleManager) {
-//        IBlockState state = WorldPlugin.getBlockState(world, pos);
-//        return ParticleHelper.addDestroyEffects(world, block, pos, state, particleManager, null);
-//    }
-
-    //TODO: fix?
-//    @Nonnull
-//    @Override
-//    public String getHarvestTool(@Nonnull IBlockState state) {
-//        IBlockState matState = state.getValue(Materials.MATERIAL_PROPERTY).getState();
-//        if (matState != null)
-//            return matState.getBlock().getHarvestTool(matState);
-//        return "pickaxe";
-//    }
 }

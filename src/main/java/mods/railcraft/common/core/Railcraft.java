@@ -15,7 +15,6 @@ import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.fluids.RailcraftFluids;
@@ -226,8 +225,6 @@ public final class Railcraft {
                     remap(RailcraftBlocks.anvil_steel.block(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
-                else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
-                    remap(BlockLantern.getBlockStone(), mapping);
             } else if (mapping.type == GameRegistry.Type.ITEM) {
                 Block block = GameRegistry.findBlock(MOD_ID, MiscTools.cleanTag(mapping.name));
                 if (block != null)
@@ -244,8 +241,6 @@ public final class Railcraft {
                     remap(RailcraftBlocks.anvil_steel.item(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
-                else if (mapping.name.equals("Railcraft:tile.railcraft.stonelamp"))
-                    remap(Item.getItemFromBlock(BlockLantern.getBlockStone()), mapping);
             }
         }
     }

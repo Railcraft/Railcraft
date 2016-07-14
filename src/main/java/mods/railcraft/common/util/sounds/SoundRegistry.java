@@ -12,9 +12,6 @@ import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPost;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
-import mods.railcraft.common.blocks.aesthetics.materials.wall.BlockRailcraftWall;
-import mods.railcraft.common.blocks.aesthetics.materials.wall.EnumWallAlpha;
-import mods.railcraft.common.blocks.aesthetics.materials.wall.EnumWallBeta;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -69,26 +66,6 @@ public class SoundRegistry {
             registerBlockSound(EnumCube.STEEL_BLOCK.getState(), SoundType.METAL);
             registerBlockSound(EnumCube.CRUSHED_OBSIDIAN.getState(), SoundType.GROUND);
             registerBlockSound(EnumCube.CREOSOTE_BLOCK.getState(), SoundType.WOOD);
-        }
-
-        //TODO: add wall sounds
-        block = BlockRailcraftWall.getBlockAlpha();
-        if (block != null) {
-
-            for (EnumWallAlpha wall : EnumWallAlpha.VALUES) {
-                registerBlockSound(wall.ordinal(), SoundType.STONE);
-            }
-
-            registerBlockSound(EnumWallAlpha.ICE.ordinal(), SoundType.GLASS);
-            registerBlockSound(EnumWallAlpha.SNOW.ordinal(), SoundType.SNOW);
-        }
-
-        block = BlockRailcraftWall.getBlockBeta();
-        if (block != null) {
-
-            for (EnumWallBeta wall : EnumWallBeta.VALUES) {
-                registerBlockSound(wall.ordinal(), SoundType.STONE);
-            }
         }
     }
 

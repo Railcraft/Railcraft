@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nonnull;
@@ -121,7 +122,7 @@ public enum Materials implements IVariantEnum {
 
     NO_MAT("no_mat", () -> null);
     public static final String MATERIAL_KEY = "mat";
-    public static final PropertyEnum<Materials> MATERIAL_PROPERTY = PropertyEnum.create("material", Materials.class);
+    public static final IUnlistedProperty<Materials> MATERIAL_PROPERTY = net.minecraftforge.common.property.Properties.toUnlisted(PropertyEnum.create("material", Materials.class));
     public static final Map<String, Materials> NAMES = new HashMap<String, Materials>();
     //    public static final BlockMaterial[] OLD_WALL1_MATS;
 //    public static final BlockMaterial[] OLD_WALL2_MATS;

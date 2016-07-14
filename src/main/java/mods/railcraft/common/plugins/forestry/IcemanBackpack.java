@@ -10,7 +10,6 @@ package mods.railcraft.common.plugins.forestry;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
-import mods.railcraft.common.blocks.aesthetics.materials.wall.EnumWallAlpha;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import net.minecraft.init.Blocks;
@@ -24,7 +23,6 @@ import net.minecraftforge.fml.common.Optional;
  */
 @Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = "Forestry")
 public class IcemanBackpack extends BaseBackpack {
-    private static final Materials[] coldMaterials = {Materials.SNOW, Materials.ICE, Materials.PACKED_ICE};
     private static IcemanBackpack instance;
     private static final ItemStack SNOWBALL = new ItemStack(Items.SNOWBALL);
     private static final ItemStack SNOW_BLOCK = new ItemStack(Blocks.SNOW);
@@ -46,9 +44,8 @@ public class IcemanBackpack extends BaseBackpack {
         add(Blocks.SNOW_LAYER);
         add(Blocks.ICE);
         add(Blocks.PACKED_ICE);
-        add(EnumWallAlpha.SNOW.getItem());
-        add(EnumWallAlpha.ICE.getItem());
-        for (Materials mat : coldMaterials) {
+        for (Materials mat : Materials.MAT_SET_FROZEN) {
+            add(RailcraftBlocks.wall.getStack(mat));
             add(RailcraftBlocks.stair.getStack(mat));
             add(RailcraftBlocks.slab.getStack(mat));
         }

@@ -9,13 +9,13 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.materials.slab;
 
+import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -35,19 +35,12 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemSlab extends ItemBlock {
+public class ItemSlab extends ItemMaterial {
 
     public ItemSlab(Block block) {
         super(block);
         setMaxDamage(0);
         setHasSubtypes(false);
-        setUnlocalizedName("railcraft.slab");
-    }
-
-    @Nonnull
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return BlockRailcraftSlab.getTag(getMat(stack));
     }
 
     /**

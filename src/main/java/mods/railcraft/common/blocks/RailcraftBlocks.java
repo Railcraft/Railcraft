@@ -10,13 +10,14 @@
 
 package mods.railcraft.common.blocks;
 
-import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.ItemCube;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
+import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftStairs;
+import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
+import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.ItemSlab;
-import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
@@ -70,7 +71,8 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     signal("signal", BlockSignalRailcraft.class, ItemSignal.class),
     slab("slab", BlockRailcraftSlab.class, ItemSlab.class),
     stair("stair", BlockRailcraftStairs.class, ItemMaterial.class),
-    track("track", BlockTrack.class, ItemTrack.class);
+    track("track", BlockTrack.class, ItemTrack.class),
+    wall("wall", BlockRailcraftWall.class, ItemMaterial.class);
     public static final RailcraftBlocks[] VALUES = values();
     private final ObjectDef<Block> blockDef;
     private final ObjectDef<ItemBlock> itemDef;

@@ -22,6 +22,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -39,6 +40,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -200,10 +204,6 @@ public class BlockLantern extends Block implements IMaterialBlock {
         return MatTools.getExplosionResistance(world, pos, exploder, explosion);
     }
 
-    @Override
-    public SoundType getSound(World world, BlockPos pos) {
-        return MatTools.getSound(world, pos);
-    }
     //TODO: fix particles
 //    @SideOnly(Side.CLIENT)
 //    @Override
@@ -229,13 +229,13 @@ public class BlockLantern extends Block implements IMaterialBlock {
     @Nonnull
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, Materials.MATERIAL_PROPERTY);
+        return new ExtendedBlockState(this, new IProperty[]{}, new IUnlistedProperty[]{Materials.MATERIAL_PROPERTY});
     }
 
     @Nonnull
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        IBlockState actState = super.getActualState(state, worldIn, pos);
+        IExtendedBlockState actState = (IExtendedBlockState) super.getActualState(state, worldIn, pos);
         return actState.withProperty(Materials.MATERIAL_PROPERTY, MatTools.getMat(worldIn, pos));
     }
 }
