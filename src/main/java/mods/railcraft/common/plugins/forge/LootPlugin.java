@@ -12,7 +12,6 @@ import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.loot.LootEventDispatcher;
 import mods.railcraft.common.loot.WeightedRandomChestContent;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Items;
@@ -58,7 +57,8 @@ public class LootPlugin {
 
     private static void addLoot(WeightedRandomChestContent loot, ResourceLocation... locations) {
         for (ResourceLocation location : locations) {
-            LootEventDispatcher.addItem(location, loot);
+            //TODO: this broken, fix
+//            LootEventDispatcher.addItem(location, loot);
         }
     }
 

@@ -13,10 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntityWitch;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -48,7 +45,7 @@ public class EntityCartPumpkin extends CartBaseSurprise {
             Random rand = cart.getRandom();
             if (rand.nextInt(4) == 0) {
                 skeleton.tasks.addTask(4, new EntityAIAttackMelee(skeleton, 0.25F, false));
-                skeleton.setSkeletonType(1);
+                skeleton.setSkeletonType(SkeletonType.WITHER);
                 skeleton.setItemStackToSlot(MAINHAND, new ItemStack(Items.STONE_SWORD));
             } else {
                 skeleton.tasks.addTask(4, new EntityAIAttackRanged(skeleton, 0.25F, 60, 10.0F));

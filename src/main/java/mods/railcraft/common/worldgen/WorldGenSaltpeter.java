@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.ore.BlockWorldLogic;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
@@ -26,14 +26,14 @@ public class WorldGenSaltpeter extends WorldGenerator {
      * The block ID of the ore to be placed using this generator.
      */
     private final IBlockState mineableBlock = EnumOre.SALTPETER.getState();
-    private final IBlockState logicBlock = BlockWorldLogic.getBlock() != null ? BlockWorldLogic.getBlock().getDefaultState() : null;
+    private final IBlockState logicBlock = RailcraftBlocks.worldLogic.getDefaultState();
 
     public WorldGenSaltpeter() {
     }
 
     @Override
     public boolean generate(World world, Random rand, BlockPos pos) {
-        if (isReplaceable(world, pos)) {
+        if (mineableBlock != null && isReplaceable(world, pos)) {
             WorldPlugin.setBlockState(world, pos, mineableBlock, 2);
 
             if (logicBlock != null) {

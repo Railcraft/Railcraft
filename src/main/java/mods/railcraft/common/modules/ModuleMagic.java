@@ -33,14 +33,13 @@ public class ModuleMagic extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
+                        RailcraftBlocks.ritual,
                         RailcraftBlocks.ore
                 );
             }
 
             @Override
             public void preInit() {
-                BlockFirestoneRecharge.registerBlock();
-
                 EntityItemFirestone.register();
 
                 ItemFirestoneRaw.registerItem();

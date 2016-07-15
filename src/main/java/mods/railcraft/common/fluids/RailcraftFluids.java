@@ -8,12 +8,14 @@
  */
 package mods.railcraft.common.fluids;
 
+import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -115,8 +117,11 @@ public enum RailcraftFluids {
         Fluid fluid;
         if (railcraftBlock == null && RailcraftConfig.isBlockEnabled(tag) && (fluid = standardFluid.get()) != null) {
             railcraftBlock = makeBlock(fluid);
+            railcraftBlock.setRegistryName(tag);
             railcraftBlock.setUnlocalizedName("railcraft." + tag);
-            RailcraftRegistry.register(railcraftBlock);
+            ItemBlock itemBlock = new ItemBlockRailcraft(railcraftBlock);
+            itemBlock.setRegistryName(tag);
+            RailcraftRegistry.register(railcraftBlock, itemBlock);
             railcraftFluid.setBlock(railcraftBlock);
         }
     }

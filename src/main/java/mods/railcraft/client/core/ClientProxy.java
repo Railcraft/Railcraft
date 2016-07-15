@@ -26,7 +26,7 @@ import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.items.firestone.TileFirestoneRecharge;
+import mods.railcraft.common.items.firestone.TileRitual;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.client.Minecraft;
@@ -121,7 +121,7 @@ public class ClientProxy extends CommonProxy {
 
         bindTESR(TilePostEmblem.class, TESREmblemPost::new);
 
-        bindTESR(TileFirestoneRecharge.class, TESRFirestone::new);
+        bindTESR(TileRitual.class, TESRFirestone::new);
 
         bindTESR(TileSignalFoundation.class, TESRSignals::new);
 

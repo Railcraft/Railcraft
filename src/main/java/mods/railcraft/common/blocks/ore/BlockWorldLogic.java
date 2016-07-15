@@ -8,9 +8,9 @@
  */
 package mods.railcraft.common.blocks.ore;
 
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
@@ -28,20 +28,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockWorldLogic extends Block {
-
-    private static BlockWorldLogic instance;
-
-    public static BlockWorldLogic getBlock() {
-        return instance;
-    }
-
-    public static void registerBlock() {
-        if (instance == null && RailcraftConfig.isBlockEnabled("worldlogic")) {
-            instance = new BlockWorldLogic();
-            RailcraftRegistry.register(instance);
-        }
-    }
+public class BlockWorldLogic extends Block implements IRailcraftObject {
 
     private BlockWorldLogic() {
         super(Material.ROCK);

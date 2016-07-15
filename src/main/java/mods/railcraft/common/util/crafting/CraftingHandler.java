@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 public class CraftingHandler {
 
+    //TODO: get rid of this if possible
     @SubscribeEvent
     public void onCrafting(ItemCraftedEvent event) {
         EntityPlayer player = event.player;

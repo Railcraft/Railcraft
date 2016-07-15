@@ -12,7 +12,7 @@ package mods.railcraft.client.render.tesr;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
-import mods.railcraft.common.items.firestone.TileFirestoneRecharge;
+import mods.railcraft.common.items.firestone.TileRitual;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
@@ -22,10 +22,10 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TESRFirestone extends TileEntitySpecialRenderer<TileFirestoneRecharge> {
+public class TESRFirestone extends TileEntitySpecialRenderer<TileRitual> {
 
     @Override
-    public void renderTileEntityAt(TileFirestoneRecharge tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void renderTileEntityAt(TileRitual tile, double x, double y, double z, float partialTicks, int destroyStage) {
 
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib();

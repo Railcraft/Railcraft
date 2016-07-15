@@ -185,6 +185,7 @@ public enum BrickTheme {
             @Override
             protected void doBlockInit() {
                 block = new BlockBrick(BrickTheme.this);
+                block.setRegistryName("brick." + themeTag());
                 block.setUnlocalizedName("railcraft.brick." + themeTag());
                 RailcraftRegistry.register(block, ItemBrick.class);
                 ForestryPlugin.addBackpackItem("builder", block);

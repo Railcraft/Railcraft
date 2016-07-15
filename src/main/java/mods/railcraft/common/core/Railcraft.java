@@ -19,7 +19,6 @@ import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.items.firestone.BlockFirestoneRecharge;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.craftguide.CraftGuidePlugin;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
@@ -50,20 +49,20 @@ import java.io.File;
 @Mod(modid = Railcraft.MOD_ID, name = "Railcraft",
         version = Railcraft.VERSION,
         certificateFingerprint = "a0c255ac501b2749537d5824bb0f0588bf0320fa",
-        acceptedMinecraftVersions = "[1.7.10,1.8)",
-        dependencies = "required-after:Forge@[10.13.4.1448,);"
+        acceptedMinecraftVersions = Railcraft.MC_VERSION,
+        dependencies = "required-after:Forge@[12.18.0.2010,);"
                 + "after:BuildCraft|Core[6.1.7,);"
                 + "after:BuildCraft|Energy;"
                 + "after:BuildCraft|Builders;"
                 + "after:BuildCraft|Factory;"
                 + "after:BuildCraftAPI|statements[1.0,);"
                 + "after:BuildCraftAPI|transport[1.0,);"
-                + "after:Forestry[3,);"
+                + "after:Forestry[5,);"
                 + "after:Thaumcraft;"
-                + "after:IC2@[2.2,)")
+                + "after:IC2@[2.6.9-ex110,)")
 public final class Railcraft {
     public static final String MOD_ID = "Railcraft";
-    public static final String MC_VERSION = "[1.7.10,1.8)";
+    public static final String MC_VERSION = "[1.10.2,1.11)";
     public static final RootCommand rootCommand = new RootCommand();
     static final String VERSION = "@VERSION@";
     @Instance("Railcraft")
@@ -219,8 +218,9 @@ public final class Railcraft {
                     remap(RailcraftFluids.CREOSOTE.getBlock(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam"))
                     remap(RailcraftFluids.STEAM.getBlock(), mapping);
-                else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge"))
-                    remap(BlockFirestoneRecharge.getBlock(), mapping);
+                else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge")
+                        || mapping.name.equals("Railcraft:tile.firestone.recharge"))
+                    remap(RailcraftBlocks.ritual.block(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil"))
                     remap(RailcraftBlocks.anvil_steel.block(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
@@ -235,8 +235,9 @@ public final class Railcraft {
                     remap(Item.getItemFromBlock(RailcraftFluids.CREOSOTE.getBlock()), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.fluid.steam"))
                     remap(Item.getItemFromBlock(RailcraftFluids.STEAM.getBlock()), mapping);
-                else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge"))
-                    remap(Item.getItemFromBlock(BlockFirestoneRecharge.getBlock()), mapping);
+                else if (mapping.name.equals("Railcraft:tile.block.firestone.recharge")
+                        || mapping.name.equals("Railcraft:tile.firestone.recharge"))
+                    remap(RailcraftBlocks.ritual.item(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil"))
                     remap(RailcraftBlocks.anvil_steel.item(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))

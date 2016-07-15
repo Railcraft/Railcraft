@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TileFirestoneRecharge extends RailcraftTickingTileEntity {
+public class TileRitual extends RailcraftTickingTileEntity {
     public static final int[] REBUILD_DELAY = new int[8];
     private final Deque<BlockPos> queue = new LinkedList<BlockPos>();
     private final Set<BlockPos> visitedBlocks = new HashSet<BlockPos>();

@@ -30,6 +30,7 @@ import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.blocks.ore.BlockOre;
+import mods.railcraft.common.blocks.ore.BlockWorldLogic;
 import mods.railcraft.common.blocks.ore.ItemOre;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.ItemSignal;
@@ -39,9 +40,11 @@ import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.firestone.BlockRitual;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAnvilBlock;
 import net.minecraft.item.ItemBlock;
@@ -68,11 +71,13 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     machine_delta("machine.delta", ObjectDef.define(BlockMachine.class, EnumMachineDelta.PROXY, false), ItemMachine.class),
     machine_epsilon("machine.epsilon", ObjectDef.define(BlockMachine.class, EnumMachineEpsilon.PROXY, true), ItemMachine.class),
     ore("ore", BlockOre.class, ItemOre.class),
+    ritual("ritual", BlockRitual.class, ItemBlockRailcraft.class),
     signal("signal", BlockSignalRailcraft.class, ItemSignal.class),
     slab("slab", BlockRailcraftSlab.class, ItemSlab.class),
     stair("stair", BlockRailcraftStairs.class, ItemMaterial.class),
     track("track", BlockTrack.class, ItemTrack.class),
-    wall("wall", BlockRailcraftWall.class, ItemMaterial.class);
+    wall("wall", BlockRailcraftWall.class, ItemMaterial.class),
+    worldLogic("worldlogic", BlockWorldLogic.class, ItemBlockRailcraft.class);
     public static final RailcraftBlocks[] VALUES = values();
     private final ObjectDef<Block> blockDef;
     private final ObjectDef<ItemBlock> itemDef;
@@ -176,6 +181,13 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     @Nullable
     public Block block() {
         return block;
+    }
+
+    @Nullable
+    public IBlockState getDefaultState() {
+        if (block == null)
+            return null;
+        return block.getDefaultState();
     }
 
     @Nullable

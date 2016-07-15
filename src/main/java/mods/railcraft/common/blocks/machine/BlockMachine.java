@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection;
+import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;

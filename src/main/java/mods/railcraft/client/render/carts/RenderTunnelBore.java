@@ -9,8 +9,8 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.bore.IBoreHead;
-import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.models.bore.ModelTunnelBore;
+import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.Minecraft;
@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -60,8 +59,7 @@ public class RenderTunnelBore extends Render<EntityTunnelBore> {
                 double posZ = part.lastTickPosZ + (part.posZ - part.lastTickPosZ) * (double) partialTicks - TileEntityRendererDispatcher.staticPlayerZ;
                 OpenGL.glTranslatef((float) posX, (float) posY, (float) posZ);
                 float halfWidth = part.width / 2.0F;
-                AxisAlignedBB axisalignedbb = new AxisAlignedBB(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth);
-                RenderGlobal.drawOutlinedBoundingBox(axisalignedbb, 255, 255, 255, 255);
+                RenderGlobal.func_189694_a(-halfWidth, 0.0, -halfWidth, halfWidth, part.height, halfWidth, 255, 255, 255, 255);
                 OpenGL.glPopMatrix();
             }
 //            OpenGL.glDepthMask(true);

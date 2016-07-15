@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.glass;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.ColorPlugin;
+import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;

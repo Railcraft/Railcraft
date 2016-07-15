@@ -10,7 +10,7 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
-import mods.railcraft.common.plugins.forge.ColorPlugin;
+import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.block.Block;

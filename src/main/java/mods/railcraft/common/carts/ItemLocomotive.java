@@ -13,7 +13,7 @@ import mods.railcraft.api.carts.locomotive.LocomotiveModelRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
-import mods.railcraft.common.plugins.forge.ColorPlugin;
+import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;

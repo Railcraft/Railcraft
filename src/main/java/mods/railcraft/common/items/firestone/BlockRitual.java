@@ -8,13 +8,10 @@
  */
 package mods.railcraft.common.items.firestone;
 
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -42,33 +39,18 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockFirestoneRecharge extends BlockContainer {
+public class BlockRitual extends BlockContainer {
     public static final PropertyBool CRACKED = PropertyBool.create("cracked");
     public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-0.3).raiseFloor(0.4).raiseCeiling(-0.1).build();
-    private static Block block;
 
-    public static Block getBlock() {
-        return block;
-    }
-
-    public static void registerBlock() {
-        if (block == null) {
-            String tag = "railcraft.firestone.recharge";
-            if (RailcraftConfig.isBlockEnabled(tag)) {
-                block = new BlockFirestoneRecharge().setUnlocalizedName(tag);
-                RailcraftRegistry.register(block);
-            }
-        }
-    }
-
-    public BlockFirestoneRecharge() {
+    public BlockRitual() {
         super(Material.ROCK);
         disableStats();
         setSoundType(RailcraftSoundTypes.NULL);
         setLightLevel(1);
         setDefaultState(blockState.getBaseState().withProperty(CRACKED, false));
 
-        GameRegistry.registerTileEntity(TileFirestoneRecharge.class, "RCFirestoneRechargeTile");
+        GameRegistry.registerTileEntity(TileRitual.class, "RCRitualTile");
     }
 
     @Override
@@ -116,8 +98,8 @@ public class BlockFirestoneRecharge extends BlockContainer {
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileFirestoneRecharge) {
-            TileFirestoneRecharge firestone = (TileFirestoneRecharge) tile;
+        if (tile instanceof TileRitual) {
+            TileRitual firestone = (TileRitual) tile;
             Item item = state.getValue(CRACKED) ? ItemFirestoneRefined.item : ItemFirestoneCracked.item;
             ItemStack drop = new ItemStack(item, 1, ItemFirestoneRefined.item.getMaxDamage() - firestone.charge);
             if (firestone.hasCustomName())
@@ -164,7 +146,7 @@ public class BlockFirestoneRecharge extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return new TileFirestoneRecharge();
+        return new TileRitual();
     }
 
     @Override
