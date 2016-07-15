@@ -12,9 +12,9 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.ore.BlockWorldLogic;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.worldgen.*;
@@ -23,7 +23,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
@@ -35,20 +34,29 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 @RailcraftModule("world")
 public class ModuleWorld extends RailcraftModulePayload {
 
-    public static final ResourceLocation VILLAGER_TEXTURE = new ResourceLocation("railcraft:textures/entities/villager/trackman.png");
+    public static final String VILLAGER_TEXTURE = RailcraftConstants.ENTITY_TEXTURE_FOLDER + "villager/trackman.png";
+    public static final String ZOMBIE_TEXTURE = RailcraftConstants.ENTITY_TEXTURE_FOLDER + "villager/zombie_trackman.png";
+    public static final String VILLAGER_ID = RailcraftConstants.RESOURCE_DOMAIN + ":trackman";
 
     public ModuleWorld() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.ore
+                        RailcraftBlocks.ore,
+                        RailcraftBlocks.worldLogic
                 );
                 if (RailcraftConfig.isWorldGenEnabled("workshop")) {
-                    int id = RailcraftConfig.villagerID();
-                    VillagerRegistry.instance().registerVillagerId(id);
-                    VillagerRegistry.instance().registerVillageTradeHandler(id, new VillagerTradeHandler());
-                    VillagerRegistry.instance().registerVillageCreationHandler(new WorkshopCreationHandler());
+                    WorkshopCreationHandler workshop = new WorkshopCreationHandler();
+                    VillagerRegistry villagerRegistry = VillagerRegistry.instance();
+                    villagerRegistry.registerVillageCreationHandler(workshop);
+
+                    VillagerRegistry.VillagerProfession villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
+                    villagerRegistry.register(villagerTrackman);
+
+                    VillagerRegistry.VillagerCareer trackmanCareer = new VillagerRegistry.VillagerCareer(villagerTrackman, "trackman");
+                    VillagerTrades.define(trackmanCareer);
+
                     try {
                         MapGenStructureIO.registerStructureComponent(ComponentWorkshop.class, "railcraft:workshop");
                     } catch (Throwable ignored) {
@@ -58,8 +66,6 @@ public class ModuleWorld extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                BlockWorldLogic.registerBlock();
-
                 EnumCube cubeType = EnumCube.ABYSSAL_STONE;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
                     RailcraftBlocks.cube.register();

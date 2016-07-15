@@ -187,7 +187,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         fillWithAir(world, sbb, 4, 1, 3, 4, 2, 3);
         fillWithAir(world, sbb, 4, 1, 3, 4, 2, 3);
         setBlockState(world, Blocks.DOUBLE_STONE_SLAB.getDefaultState(), 4, 0, 3, sbb);
-        placeDoorCurrentPosition(world, boundingBox, random, 4, 1, 3, EnumFacing.NORTH);
+        func_189927_a(world, boundingBox, random, 4, 1, 3, EnumFacing.NORTH);
 
         // hut windows
         fillWithBlocks(world, sbb, 2, 2, 1, 2, 2, 1, glassPane, glassPane, false);
