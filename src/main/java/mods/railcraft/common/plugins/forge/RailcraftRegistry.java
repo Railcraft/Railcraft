@@ -11,6 +11,7 @@ package mods.railcraft.common.plugins.forge;
 import mods.railcraft.api.core.RailcraftItemStackRegistry;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -18,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 
@@ -120,8 +122,10 @@ public final class RailcraftRegistry {
         String tag = item.getUnlocalizedName();
         tag = MiscTools.cleanTag(tag);
 //        TagList.addTag(tag);
-        GameRegistry.registerItem(item, tag);
+        GameRegistry.register(item);
         RailcraftItemStackRegistry.register(tag, new ItemStack(item));
+        if (Game.IS_DEBUG)
+            Game.log(Level.INFO, "Item registered: {0}, {1}", item.getClass(), item.getRegistryName().toString());
     }
 
     /**
@@ -141,6 +145,8 @@ public final class RailcraftRegistry {
 //        TagList.addTag(tag);
         GameRegistry.registerBlock(block, itemBlock);
         RailcraftItemStackRegistry.register(tag, new ItemStack(block));
+        if (Game.IS_DEBUG)
+            Game.log(Level.INFO, "Block registered: {0}, {1}", block.getClass(), block.getRegistryName().toString());
     }
 
     /**
@@ -160,5 +166,7 @@ public final class RailcraftRegistry {
         GameRegistry.register(block);
         GameRegistry.register(item);
         RailcraftItemStackRegistry.register(tag, new ItemStack(block));
+        if (Game.IS_DEBUG)
+            Game.log(Level.INFO, "Block registered: {0}, {1}", block.getClass(), block.getRegistryName().toString());
     }
 }

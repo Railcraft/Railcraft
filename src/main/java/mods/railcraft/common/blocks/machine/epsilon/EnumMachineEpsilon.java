@@ -114,7 +114,7 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
 
     @Override
     public RailcraftBlocks getBlockContainer() {
-        return RailcraftBlocks.machine_alpha;
+        return RailcraftBlocks.machine_epsilon;
     }
 
     @Override

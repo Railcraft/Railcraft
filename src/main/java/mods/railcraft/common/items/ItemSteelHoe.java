@@ -8,17 +8,34 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 
-public class ItemSteelHoe extends ItemHoe {
+public class ItemSteelHoe extends ItemHoe implements IRailcraftObject {
 
     public ItemSteelHoe() {
         super(ItemMaterials.STEEL_TOOL);
-        setUnlocalizedName("railcraft.tool.steel.hoe");
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Override
+    public void initializeDefinintion() {
+        LootPlugin.addLoot(RailcraftItems.hoeSteel, 1, 1, LootPlugin.Type.TOOL);
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this), false,
+                "II ",
+                " S ",
+                " S ",
+                'I', "ingotSteel",
+                'S', "stickWood");
     }
 
     @Override

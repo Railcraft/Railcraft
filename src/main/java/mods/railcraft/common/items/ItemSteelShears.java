@@ -8,7 +8,10 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LootPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemShears;
@@ -18,12 +21,26 @@ import net.minecraftforge.common.IShearable;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemSteelShears extends ItemShears {
+public class ItemSteelShears extends ItemShears implements IRailcraftObject {
 
     public ItemSteelShears() {
         setMaxDamage(500);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setUnlocalizedName("railcraft.tool.steel.shears");
+    }
+
+    @Override
+    public void initializeDefinintion() {
+        LootPlugin.addLoot(RailcraftItems.shearsSteel, 1, 1, LootPlugin.Type.TOOL);
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this), false,
+                " I ",
+                " I ",
+                " S ",
+                'I', "ingotSteel",
+                'S', "stickWood");
     }
 
     @Override

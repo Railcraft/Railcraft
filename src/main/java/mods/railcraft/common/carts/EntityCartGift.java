@@ -10,7 +10,6 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.items.RailcraftToolItems;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -113,11 +112,12 @@ public class EntityCartGift extends CartBaseSurprise {
         gifts.add(Items.IRON_SWORD, toolChance);
         gifts.add(Items.IRON_HOE, toolChance);
 
-        gifts.add(RailcraftToolItems.getSteelAxe(), toolChance);
-        gifts.add(RailcraftToolItems.getSteelPickaxe(), toolChance);
-        gifts.add(RailcraftToolItems.getSteelSword(), toolChance);
-        gifts.add(RailcraftToolItems.getSteelShovel(), toolChance);
-        gifts.add(RailcraftToolItems.getSteelHoe(), toolChance);
+        gifts.add(RailcraftItems.axeSteel, toolChance);
+        gifts.add(RailcraftItems.pickaxeSteel, toolChance);
+        gifts.add(RailcraftItems.swordSteel, toolChance);
+        gifts.add(RailcraftItems.shovelSteel, toolChance);
+        gifts.add(RailcraftItems.hoeSteel, toolChance);
+        gifts.add(RailcraftItems.shearsSteel, toolChance);
 
         int armorChance = 5;
 
@@ -141,10 +141,10 @@ public class EntityCartGift extends CartBaseSurprise {
         gifts.add(Items.LEATHER_LEGGINGS, armorChance);
         gifts.add(Items.LEATHER_BOOTS, armorChance);
 
-        gifts.add(RailcraftToolItems.getSteelHelm(), armorChance);
-        gifts.add(RailcraftToolItems.getSteelArmor(), armorChance);
-        gifts.add(RailcraftToolItems.getSteelLegs(), armorChance);
-        gifts.add(RailcraftToolItems.getSteelBoots(), armorChance);
+        gifts.add(RailcraftItems.armorHelmetSteel, armorChance);
+        gifts.add(RailcraftItems.armorChestplateSteel, armorChance);
+        gifts.add(RailcraftItems.armorLeggingsSteel, armorChance);
+        gifts.add(RailcraftItems.armorBootsSteel, armorChance);
     }
 
     private EntityCartGift(World world) {

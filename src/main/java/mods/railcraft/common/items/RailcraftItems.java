@@ -9,6 +9,10 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
+import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.ItemBoreHeadDiamond;
+import mods.railcraft.common.carts.ItemBoreHeadIron;
+import mods.railcraft.common.carts.ItemBoreHeadSteel;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
@@ -16,74 +20,104 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public enum RailcraftItems implements IRailcraftObjectContainer {
 
-    circuit(ItemCircuit.class, "part.circuit"),
-    coke(ItemCircuit.class, "fuel.coke"),
-    crowbarIron(ItemCrowbarIron.class, "tool.crowbar.iron"),
-    crowbarSteel(ItemCrowbarSteel.class, "tool.crowbar.steel"),
-    dust(ItemDust.class, "dust"),
-    electricMeter(ItemElectricMeter.class, "tool.electric.meter"),
-    gear(ItemGear.class, "part.gear"),
-    goggles(ItemGoggles.class, "armor.goggles"),
-    ingot(ItemIngot.class, "ingot"),
-    magGlass(ItemMagnifyingGlass.class, "tool.magnifying.glass"),
-    notepad(ItemNotepad.class, "tool.notepad"),
-    nugget(ItemNugget.class, "nugget"),
-    overalls(ItemOveralls.class, "armor.overalls"),
-    plate(ItemPlate.class, "part.plate"),
-    rail(ItemRail.class, "part.rail"),
-    railbed(ItemRailbed.class, "part.railbed"),
-    rebar(ItemRebar.class, "part.rebar", "ingotIron"),
-    routingTable(ItemRoutingTable.class, "routing.table", Items.WRITABLE_BOOK),
-    signalBlockSurveyor(ItemSignalBlockSurveyor.class, "tool.signal.surveyor"),
-    signalLabel(ItemSignalLabel.class, "tool.signal.label"),
-    signalLamp(ItemSignalLamp.class, "part.signal.lamp", Blocks.REDSTONE_LAMP),
-    signalTuner(ItemSignalTuner.class, "tool.signal.tuner"),
-    stoneCarver(ItemStoneCarver.class, "tool.stone.carver"),
-    ticket(ItemTicket.class, "routing.ticket", Items.PAPER),
-    ticketGold(ItemTicketGold.class, "routing.ticket.gold", Items.GOLD_NUGGET),
-    tie(ItemTie.class, "part.tie"),
-    turbineBlade(ItemTurbineBlade.class, "part.turbine.blade", "ingotSteel") {
+    armorBootsSteel(() -> new ItemSteelArmor(EntityEquipmentSlot.FEET), "armor.boots.steel", Items.IRON_BOOTS),
+    armorHelmetSteel(() -> new ItemSteelArmor(EntityEquipmentSlot.HEAD), "armor.helmet.steel", Items.IRON_HELMET),
+    armorLeggingsSteel(() -> new ItemSteelArmor(EntityEquipmentSlot.LEGS), "armor.leggings.steel", Items.IRON_LEGGINGS),
+    armorChestplateSteel(() -> new ItemSteelArmor(EntityEquipmentSlot.CHEST), "armor.chestplate.steel", Items.IRON_CHESTPLATE),
+    axeSteel(ItemSteelAxe::new, "tool.axe.steel", Items.IRON_AXE),
+    boreHeadIron(ItemBoreHeadIron::new, "borehead.iron") {
+        @Override
+        public boolean isEnabled() {
+            return super.isEnabled() && EnumCart.BORE.isEnabled();
+        }
+    },
+    boreHeadSteel(ItemBoreHeadSteel::new, "borehead.steel") {
+        @Override
+        public boolean isEnabled() {
+            return super.isEnabled() && EnumCart.BORE.isEnabled();
+        }
+    },
+    boreHeadDiamond(ItemBoreHeadDiamond::new, "borehead.diamond") {
+        @Override
+        public boolean isEnabled() {
+            return super.isEnabled() && EnumCart.BORE.isEnabled();
+        }
+    },
+    circuit(ItemCircuit::new, "part.circuit"),
+    coke(ItemCircuit::new, "fuel.coke"),
+    crowbarIron(ItemCrowbarIron::new, "tool.crowbar.iron"),
+    crowbarSteel(ItemCrowbarSteel::new, "tool.crowbar.steel"),
+    dust(ItemDust::new, "dust"),
+    electricMeter(ItemElectricMeter::new, "tool.electric.meter"),
+    gear(ItemGear::new, "part.gear"),
+    goggles(ItemGoggles::new, "armor.goggles"),
+    hoeSteel(ItemSteelHoe::new, "tool.hoe.steel", Items.IRON_HOE),
+    ingot(ItemIngot::new, "ingot"),
+    magGlass(ItemMagnifyingGlass::new, "tool.magnifying.glass"),
+    notepad(ItemNotepad::new, "tool.notepad"),
+    nugget(ItemNugget::new, "nugget"),
+    overalls(ItemOveralls::new, "armor.overalls"),
+    pickaxeSteel(ItemSteelPickaxe::new, "tool.pickaxe.steel", Items.IRON_PICKAXE),
+    plate(ItemPlate::new, "part.plate"),
+    rail(ItemRail::new, "part.rail"),
+    railbed(ItemRailbed::new, "part.railbed"),
+    rebar(ItemRebar::new, "part.rebar", "ingotIron"),
+    routingTable(ItemRoutingTable::new, "routing.table", Items.WRITABLE_BOOK),
+    shearsSteel(ItemSteelShears::new, "tool.shears.steel", Items.SHEARS),
+    shovelSteel(ItemSteelShovel::new, "tool.shovel.steel", Items.IRON_SHOVEL),
+    signalBlockSurveyor(ItemSignalBlockSurveyor::new, "tool.signal.surveyor"),
+    signalLabel(ItemSignalLabel::new, "tool.signal.label"),
+    signalLamp(ItemSignalLamp::new, "part.signal.lamp", Blocks.REDSTONE_LAMP),
+    signalTuner(ItemSignalTuner::new, "tool.signal.tuner"),
+    stoneCarver(ItemStoneCarver::new, "tool.stone.carver"),
+    swordSteel(ItemSteelSword::new, "tool.sword.steel", Items.IRON_SWORD),
+    ticket(ItemTicket::new, "routing.ticket", Items.PAPER),
+    ticketGold(ItemTicketGold::new, "routing.ticket.gold", Items.GOLD_NUGGET),
+    tie(ItemTie::new, "part.tie"),
+    turbineBlade(ItemTurbineBlade::new, "part.turbine.blade", "ingotSteel") {
         @Override
         public boolean isEnabled() {
             return super.isEnabled() && EnumMachineAlpha.TURBINE.isAvailable();
         }
     },
-    turbineDisk(ItemTurbineDisk.class, "part.turbine.disk", "blockSteel") {
+    turbineDisk(ItemTurbineDisk::new, "part.turbine.disk", "blockSteel") {
         @Override
         public boolean isEnabled() {
             return super.isEnabled() && EnumMachineAlpha.TURBINE.isAvailable();
         }
     },
-    turbineRotor(ItemTurbineRotor.class, "part.turbine.rotor") {
+    turbineRotor(ItemTurbineRotor::new, "part.turbine.rotor") {
         @Override
         public boolean isEnabled() {
             return super.isEnabled() && EnumMachineAlpha.TURBINE.isAvailable();
         }
     },
-    whistleTuner(ItemWhistleTuner.class, "tool.whistle.tuner");
+    whistleTuner(ItemWhistleTuner::new, "tool.whistle.tuner");
     public static final RailcraftItems[] VALUES = values();
-    private final Class<? extends Item> itemClass;
+    private final Supplier<Item> itemSupplier;
     private final String tag;
     private final Object altRecipeObject;
     private Item item;
     private IRailcraftObject railcraftObject;
 
-    RailcraftItems(Class<? extends Item> itemClass, String tag) {
-        this(itemClass, tag, null);
+    RailcraftItems(Supplier<Item> itemSupplier, String tag) {
+        this(itemSupplier, tag, null);
     }
 
-    RailcraftItems(Class<? extends Item> itemClass, String tag, Object alt) {
-        this.itemClass = itemClass;
+    RailcraftItems(Supplier<Item> itemSupplier, String tag, Object alt) {
+        this.itemSupplier = itemSupplier;
         this.tag = tag;
         this.altRecipeObject = alt;
     }
@@ -101,14 +135,11 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
             return;
 
         if (isEnabled()) {
-            try {
-                item = itemClass.newInstance();
-            } catch (InstantiationException | IllegalAccessException ex) {
-                throw new RuntimeException("Invalid Item Constructor");
-            }
+            item = itemSupplier.get();
             if (!(item instanceof IRailcraftObject))
                 throw new RuntimeException("Railcraft Items must implement IRailcraftObject");
             railcraftObject = (IRailcraftObject) item;
+            item.setRegistryName(getBaseTag());
             item.setUnlocalizedName(getFullTag());
             RailcraftRegistry.register(item);
             railcraftObject.initializeDefinintion();
@@ -122,7 +153,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     }
 
     public boolean isInstance(@Nullable ItemStack stack) {
-        return stack != null && (item == stack.getItem() || itemClass.isInstance(stack.getItem()));
+        return stack != null && (item == stack.getItem() || item.getClass().isInstance(stack.getItem()));
     }
 
     public boolean isEqual(@Nullable Item item) {
@@ -153,7 +184,8 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     }
 
     private void checkVariantObject(@Nullable IVariantEnum variant) {
-        IVariantEnum.tools.checkVariantObject(itemClass, variant);
+        if (item != null)
+            IVariantEnum.tools.checkVariantObject(item.getClass(), variant);
     }
 
     @Nullable

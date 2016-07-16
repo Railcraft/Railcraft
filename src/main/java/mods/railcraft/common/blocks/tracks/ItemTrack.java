@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.tracks;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -31,7 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemTrack extends ItemBlock implements ITrackItem {
+public class ItemTrack extends ItemBlock implements ITrackItem, IRailcraftObject {
 
     public ItemTrack(Block block) {
         super(block);

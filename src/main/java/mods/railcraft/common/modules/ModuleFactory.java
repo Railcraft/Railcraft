@@ -119,16 +119,16 @@ public class ModuleFactory extends RailcraftModulePayload {
                     RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.IRON_DOOR), false, false, burnTime * 6, RailcraftItems.ingot.getStack(6, steel));
 
                     int recycleTime = burnTime / 2;
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelHelm(), false, false, recycleTime * 4, RailcraftItems.ingot.getStack(4, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelArmor(), false, false, recycleTime * 6, RailcraftItems.ingot.getStack(6, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelLegs(), false, false, recycleTime * 5, RailcraftItems.ingot.getStack(5, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelBoots(), false, false, recycleTime * 3, RailcraftItems.ingot.getStack(3, steel));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.armorHelmetSteel.getStack(), false, false, recycleTime * 4, RailcraftItems.ingot.getStack(4, steel));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.armorChestplateSteel.getStack(), false, false, recycleTime * 6, RailcraftItems.ingot.getStack(6, steel));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.armorLeggingsSteel.getStack(), false, false, recycleTime * 5, RailcraftItems.ingot.getStack(5, steel));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.armorBootsSteel.getStack(), false, false, recycleTime * 3, RailcraftItems.ingot.getStack(3, steel));
 
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelSword(), false, false, recycleTime, RailcraftItems.ingot.getStack(1, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelPickaxe(), false, false, recycleTime * 2, RailcraftItems.ingot.getStack(2, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelHoe(), false, false, recycleTime, RailcraftItems.ingot.getStack(1, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelAxe(), false, false, recycleTime * 2, RailcraftItems.ingot.getStack(2, steel));
-                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelShears(), false, false, recycleTime, RailcraftItems.ingot.getStack(1, steel));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.swordSteel.getStack(), false, false, recycleTime, RailcraftItems.ingot.getStack(1, steel));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.pickaxeSteel.getStack(), false, false, recycleTime * 2, RailcraftItems.ingot.getStack(2, steel));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.hoeSteel.getStack(), false, false, recycleTime, RailcraftItems.ingot.getStack(1, steel));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.axeSteel.getStack(), false, false, recycleTime * 2, RailcraftItems.ingot.getStack(2, steel));
+                    RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftItems.shearsSteel.getStack(), false, false, recycleTime, RailcraftItems.ingot.getStack(1, steel));
                 }
 
                 alpha = EnumMachineAlpha.ROCK_CRUSHER;

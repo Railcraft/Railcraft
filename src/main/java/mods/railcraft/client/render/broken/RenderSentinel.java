@@ -10,7 +10,6 @@
 package mods.railcraft.client.render.broken;
 
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;

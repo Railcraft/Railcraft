@@ -37,6 +37,7 @@ import mods.railcraft.common.blocks.ore.ItemOre;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
+import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
@@ -63,8 +64,8 @@ import java.util.function.Supplier;
  */
 public enum RailcraftBlocks implements IRailcraftObjectContainer {
     anvil_steel("anvil", BlockRCAnvil::new, ItemAnvilBlock::new),
-    detector("detector", BlockDetector::new, ItemDetector::new),
     cube("cube", BlockCube::new, ItemCube::new),
+    detector("detector", BlockDetector::new, ItemDetector::new),
     frame("frame", BlockFrame::new, ItemBlockRailcraft::new),
     glass("glass", BlockStrengthGlass::new, ItemStrengthGlass::new),
     lantern("lantern", BlockLantern::new, ItemMaterial::new),
@@ -79,6 +80,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     slab("slab", BlockRailcraftSlab::new, ItemSlab::new),
     stair("stair", BlockRailcraftStairs::new, ItemMaterial::new),
     track("track", BlockTrack::new, ItemTrack::new),
+    trackElevator("track.elevator", BlockTrackElevator::new, ItemBlockRailcraft::new),
     wall("wall", BlockRailcraftWall::new, ItemMaterial::new),
     worldLogic("worldlogic", BlockWorldLogic::new, ItemBlockRailcraft::new);
     public static final RailcraftBlocks[] VALUES = values();

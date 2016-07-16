@@ -40,7 +40,6 @@ import mods.railcraft.common.items.EntityItemFireproof;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.ItemRailbed.EnumRailbed;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.plugins.buildcraft.BuildcraftPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -120,6 +119,19 @@ public class ModuleCore extends RailcraftModulePayload {
                 add(
                         RailcraftItems.crowbarIron,
                         RailcraftItems.crowbarSteel,
+
+                        RailcraftItems.axeSteel,
+                        RailcraftItems.hoeSteel,
+                        RailcraftItems.pickaxeSteel,
+                        RailcraftItems.shearsSteel,
+                        RailcraftItems.shovelSteel,
+                        RailcraftItems.swordSteel,
+
+                        RailcraftItems.armorHelmetSteel,
+                        RailcraftItems.armorChestplateSteel,
+                        RailcraftItems.armorLeggingsSteel,
+                        RailcraftItems.armorBootsSteel,
+
                         RailcraftItems.magGlass,
                         RailcraftItems.goggles,
                         RailcraftItems.overalls,
@@ -135,8 +147,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 LootPlugin.init();
 
                 RailcraftEnchantments.registerEnchantment();
-
-                RailcraftToolItems.initializeToolsArmor();
 
                 EntityEnderman.setCarriable(Blocks.GRAVEL, false);
 

@@ -9,6 +9,11 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.ItemRail;
+import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
@@ -18,17 +23,23 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
@@ -40,7 +51,7 @@ import javax.annotation.Nullable;
  *
  * @author DizzyDragon
  */
-public class BlockTrackElevator extends Block {
+public class BlockTrackElevator extends Block implements IRailcraftObject {
 
     public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
     public static final PropertyBool POWERED = PropertyBool.create("powered");
@@ -81,9 +92,78 @@ public class BlockTrackElevator extends Block {
         super(new MaterialElevator());
         setHardness(1.05F);
         setSoundType(SoundType.METAL);
+        setHarvestLevel("crowbar", 0);
 
         setCreativeTab(CreativeTabs.TRANSPORTATION);
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWERED, false));
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this, 8),
+                "IRI",
+                "ISI",
+                "IRI",
+                'I', RailcraftConfig.useOldRecipes() ? "ingotGold" : RailcraftItems.rail.getRecipeObject(ItemRail.EnumRail.ADVANCED),
+                'S', RailcraftConfig.useOldRecipes() ? "ingotIron" : RailcraftItems.rail.getRecipeObject(ItemRail.EnumRail.STANDARD),
+                'R', "dustRedstone");
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, POWERED, FACING);
+    }
+
+    /**
+     * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
+     * blockstate.
+     */
+    @Override
+    public IBlockState withRotation(IBlockState state, Rotation rot) {
+        return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
+    }
+
+    /**
+     * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
+     * blockstate.
+     */
+    @Override
+    public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+        return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
+    }
+
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        EnumFacing enumfacing = EnumFacing.getFront(meta & 0x7);
+
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
+            enumfacing = EnumFacing.NORTH;
+        }
+
+        IBlockState state = getDefaultState().withProperty(FACING, enumfacing);
+
+        state.withProperty(POWERED, (meta & 0x8) > 0);
+
+        return state;
+    }
+
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        int meta = state.getValue(FACING).getIndex();
+        if (state.getValue(POWERED))
+            meta |= 0x8;
+        return meta;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
     }
 
     public EnumFacing getFacing(IBlockAccess world, BlockPos pos) {
@@ -173,6 +253,7 @@ public class BlockTrackElevator extends Block {
             if ((placement == null || facing == side) && isSideFacingSolid(worldIn, pos, side))
                 placement = side;
         }
+        assert placement != null;
         return getDefaultState().withProperty(FACING, placement);
     }
 

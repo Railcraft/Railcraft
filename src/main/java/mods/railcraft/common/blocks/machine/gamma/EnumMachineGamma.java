@@ -128,7 +128,7 @@ public enum EnumMachineGamma implements IEnumMachine<EnumMachineGamma> {
 
     @Override
     public RailcraftBlocks getBlockContainer() {
-        return RailcraftBlocks.machine_alpha;
+        return RailcraftBlocks.machine_gamma;
     }
 
     @Override

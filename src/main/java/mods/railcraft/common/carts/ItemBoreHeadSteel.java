@@ -9,6 +9,8 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class ItemBoreHeadSteel extends ItemBoreHead {
@@ -17,7 +19,16 @@ public class ItemBoreHeadSteel extends ItemBoreHead {
 
     public ItemBoreHeadSteel() {
         setMaxDamage(3000);
-        setUnlocalizedName("railcraft.borehead.steel");
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this),
+                "III",
+                "IDI",
+                "III",
+                'I', "ingotSteel",
+                'D', "blockSteel");
     }
 
     @Override

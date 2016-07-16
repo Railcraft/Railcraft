@@ -8,20 +8,35 @@
  */
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.plugins.forge.*;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemSteelShovel extends ItemSpade {
+public class ItemSteelShovel extends ItemSpade implements IRailcraftObject {
 
     public ItemSteelShovel() {
         super(ItemMaterials.STEEL_TOOL);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setUnlocalizedName("railcraft.tool.steel.shovel");
+    }
+
+    @Override
+    public void initializeDefinintion() {
+        HarvestPlugin.setToolClass(this, "shovel", 2);
+        LootPlugin.addLoot(RailcraftItems.shovelSteel, 1, 1, LootPlugin.Type.TOOL);
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this), false,
+                " I ",
+                " S ",
+                " S ",
+                'I', "ingotSteel",
+                'S', "stickWood");
     }
 
     @Override

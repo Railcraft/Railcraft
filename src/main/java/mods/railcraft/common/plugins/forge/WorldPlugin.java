@@ -58,7 +58,7 @@ public class WorldPlugin {
         return state.getBlock().isAir(state, world, pos);
     }
 
-    public static boolean isBlockAt(IBlockAccess world, BlockPos pos, Block block) {
+    public static boolean isBlockAt(IBlockAccess world, BlockPos pos, @Nullable Block block) {
         return block != null && block == getBlock(world, pos);
     }
 

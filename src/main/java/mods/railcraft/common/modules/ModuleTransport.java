@@ -17,9 +17,8 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.carts.EnumCart;
-import mods.railcraft.common.items.*;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.CartFilterRecipe;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -89,7 +88,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                                 "ISI",
                                 'I', "ingotSteel",
                                 'R', "dustRedstone",
-                                'S', RailcraftToolItems.getSteelShovel(),
+                                'S', RailcraftItems.shovelSteel,
                                 'L', stack);
                 }
 
@@ -115,7 +114,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                                 "ISI",
                                 'I', "ingotSteel",
                                 'R', "dustRedstone",
-                                'S', RailcraftToolItems.getSteelShovel(),
+                                'S', RailcraftItems.shovelSteel,
                                 'L', stack);
                 }
 

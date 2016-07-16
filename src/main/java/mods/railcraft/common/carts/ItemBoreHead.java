@@ -9,10 +9,11 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.bore.IBoreHead;
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.item.Item;
 
-public abstract class ItemBoreHead extends Item implements IBoreHead {
+public abstract class ItemBoreHead extends Item implements IBoreHead, IRailcraftObject {
 
     protected ItemBoreHead() {
         maxStackSize = 1;

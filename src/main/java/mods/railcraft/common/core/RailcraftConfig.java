@@ -399,20 +399,21 @@ public class RailcraftConfig {
 
         loadLootProperty("steel.block", 5);
         loadLootProperty("tool.crowbar.iron", 10);
-        loadLootProperty("tool.steel.shears", 5);
-        loadLootProperty("tool.steel.sword", 5);
-        loadLootProperty("tool.steel.shovel", 5);
-        loadLootProperty("tool.steel.pickaxe", 5);
-        loadLootProperty("tool.steel.axe", 5);
+        loadLootProperty("tool.hoe.steel", 5);
+        loadLootProperty("tool.shears.steel", 5);
+        loadLootProperty("tool.sword.steel", 5);
+        loadLootProperty("tool.shovel.steel", 5);
+        loadLootProperty("tool.pickaxe.steel", 5);
+        loadLootProperty("tool.axe.steel", 5);
         loadLootProperty("tool.signal.tuner", 5);
         loadLootProperty("tool.surveyor", 5);
         loadLootProperty("tool.magnifying.glass", 5);
         loadLootProperty("tool.electric.meter", 5);
         loadLootProperty("armor.goggles", 5);
-        loadLootProperty("armor.steel.helmet", 5);
-        loadLootProperty("armor.steel.plate", 5);
-        loadLootProperty("armor.steel.legs", 5);
-        loadLootProperty("armor.steel.boots", 5);
+        loadLootProperty("armor.helmet.steel", 5);
+        loadLootProperty("armor.chestplate.steel", 5);
+        loadLootProperty("armor.leggings.steel", 5);
+        loadLootProperty("armor.boots.steel", 5);
         loadLootProperty("armor.overalls", 10);
         loadLootProperty("gear.bushing", 5);
     }

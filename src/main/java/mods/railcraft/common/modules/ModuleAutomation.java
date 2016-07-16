@@ -16,18 +16,12 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.ai.TamingInteractHandler;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.carts.EnumCart;
-import mods.railcraft.common.carts.ItemBoreHeadDiamond;
-import mods.railcraft.common.carts.ItemBoreHeadIron;
-import mods.railcraft.common.carts.ItemBoreHeadSteel;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.orehandlers.BoreOreHandler;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -43,7 +37,11 @@ public class ModuleAutomation extends RailcraftModulePayload {
                         RailcraftBlocks.detector,
                         RailcraftBlocks.cube,
                         RailcraftBlocks.machine_alpha,
-                        RailcraftBlocks.machine_gamma
+                        RailcraftBlocks.machine_gamma,
+
+                        RailcraftItems.boreHeadIron,
+                        RailcraftItems.boreHeadSteel,
+                        RailcraftItems.boreHeadDiamond
                 );
             }
 
@@ -94,42 +92,6 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'S', Items.CHEST_MINECART,
                             'F', Blocks.FURNACE,
                             'C', Items.MINECART);
-
-                    String tag = "tool.bore.head.diamond";
-                    if (RailcraftConfig.isItemEnabled(tag)) {
-                        Item item = new ItemBoreHeadDiamond();
-                        RailcraftRegistry.register(item);
-                        CraftingPlugin.addRecipe(new ItemStack(item),
-                                "III",
-                                "IDI",
-                                "III",
-                                'I', "ingotSteel",
-                                'D', "blockDiamond");
-                    }
-
-                    tag = "tool.bore.head.steel";
-                    if (RailcraftConfig.isItemEnabled(tag)) {
-                        Item item = new ItemBoreHeadSteel();
-                        RailcraftRegistry.register(item);
-                        CraftingPlugin.addRecipe(new ItemStack(item),
-                                "III",
-                                "IDI",
-                                "III",
-                                'I', "ingotSteel",
-                                'D', "blockSteel");
-                    }
-
-                    tag = "tool.bore.head.iron";
-                    if (RailcraftConfig.isItemEnabled(tag)) {
-                        Item item = new ItemBoreHeadIron();
-                        RailcraftRegistry.register(item);
-                        CraftingPlugin.addRecipe(new ItemStack(item),
-                                "III",
-                                "IDI",
-                                "III",
-                                'I', "ingotSteel",
-                                'D', "blockIron");
-                    }
                 }
 
                 // Define Track Relayer Cart

@@ -9,7 +9,6 @@
  ******************************************************************************/
 package mods.railcraft.client.render.broken;
 
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;

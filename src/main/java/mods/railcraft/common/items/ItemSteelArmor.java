@@ -9,8 +9,11 @@
 package mods.railcraft.common.items;
 
 import ic2.api.item.IMetalArmor;
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +24,7 @@ import net.minecraft.item.ItemStack;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemSteelArmor extends ItemArmor implements IMetalArmor {
+public class ItemSteelArmor extends ItemArmor implements IMetalArmor, IRailcraftObject {
 
     private static final String TEXTURE_1 = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "steel_1.png";
     private static final String TEXTURE_2 = RailcraftConstants.ARMOR_TEXTURE_FOLDER + "steel_2.png";
@@ -29,6 +32,43 @@ public class ItemSteelArmor extends ItemArmor implements IMetalArmor {
     public ItemSteelArmor(EntityEquipmentSlot type) {
         super(ItemMaterials.STEEL_ARMOR, 0, type);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Override
+    public void initializeDefinintion() {
+        LootPlugin.addLoot(new ItemStack(this), 1, 1, LootPlugin.Type.WARRIOR);
+    }
+
+    @Override
+    public void defineRecipes() {
+        switch (armorType) {
+            case HEAD:
+                CraftingPlugin.addRecipe(new ItemStack(this), true,
+                        "III",
+                        "I I",
+                        'I', "ingotSteel");
+                break;
+            case CHEST:
+                CraftingPlugin.addRecipe(new ItemStack(this), true,
+                        "I I",
+                        "III",
+                        "III",
+                        'I', "ingotSteel");
+                break;
+            case LEGS:
+                CraftingPlugin.addRecipe(new ItemStack(this), true,
+                        "III",
+                        "I I",
+                        "I I",
+                        'I', "ingotSteel");
+                break;
+            case FEET:
+                CraftingPlugin.addRecipe(new ItemStack(this), true,
+                        "I I",
+                        "I I",
+                        'I', "ingotSteel");
+                break;
+        }
     }
 
     @Override

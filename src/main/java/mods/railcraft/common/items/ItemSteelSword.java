@@ -8,19 +8,32 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
-public class ItemSteelSword extends ItemSword {
+public class ItemSteelSword extends ItemSword implements IRailcraftObject{
 
     public ItemSteelSword() {
         super(ItemMaterials.STEEL_TOOL);
-        setUnlocalizedName("railcraft.tool.steel.sword");
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
+    @Override
+    public void initializeDefinintion() {
+        LootPlugin.addLoot(RailcraftItems.shearsSteel, 1, 1, LootPlugin.Type.WARRIOR);
+    }
 
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this), false,
+                " I",
+                "I ",
+                'I', "ingotSteel");
+    }
     @Override
     public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
         return OreDictPlugin.isOreType("ingotSteel", stack);

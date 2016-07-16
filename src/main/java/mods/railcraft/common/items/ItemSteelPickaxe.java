@@ -8,17 +8,32 @@
  */
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.plugins.forge.*;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 
-public class ItemSteelPickaxe extends ItemPickaxe {
+public class ItemSteelPickaxe extends ItemPickaxe implements IRailcraftObject {
 
     public ItemSteelPickaxe() {
         super(ItemMaterials.STEEL_TOOL);
-        setUnlocalizedName("railcraft.tool.steel.pickaxe");
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Override
+    public void initializeDefinintion() {
+        HarvestPlugin.setToolClass(this, "pickaxe", 2);
+        LootPlugin.addLoot(RailcraftItems.pickaxeSteel, 1, 1, LootPlugin.Type.TOOL);
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addRecipe(new ItemStack(this), false,
+                "III",
+                " S ",
+                " S ",
+                'I', "ingotSteel",
+                'S', "stickWood");
     }
 
     @Override

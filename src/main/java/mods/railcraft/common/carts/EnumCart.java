@@ -330,7 +330,7 @@ public enum EnumCart implements ICartType, IRailcraftObjectContainer {
             isSetup = true;
             registerEntity();
             item = defineItem();
-            item.setRegistryName(getBaseTag());
+            item.setRegistryName("cart." + getBaseTag());
             item.setUnlocalizedName(tag);
             item.setRarity(rarity);
             RailcraftRegistry.register(item);

@@ -11,7 +11,6 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -26,14 +25,13 @@ public class ModuleExtras extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.track
+                        RailcraftBlocks.track,
+                        RailcraftBlocks.trackElevator
                 );
             }
 
             @Override
             public void preInit() {
-                RailcraftBlocksOld.registerBlockRailElevator();
-
                 EnumTrack.PRIMING.register();
                 EnumTrack.LAUNCHER.register();
                 EnumTrack.SUSPENDED.register();

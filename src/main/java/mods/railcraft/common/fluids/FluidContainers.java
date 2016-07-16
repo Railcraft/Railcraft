@@ -8,12 +8,6 @@
  */
 package mods.railcraft.common.fluids;
 
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.LootPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -35,18 +29,19 @@ public class FluidContainers {
     }
 
     public static ItemStack getCreosoteOilBucket() {
-        Item item = itemCreosoteOilBucket;
-        if (item == null) {
-            String tag = "railcraft.fluid.creosote.bucket";
-            item = new ItemBucketRailcraft(Fluids.CREOSOTE.get());
-            item.setUnlocalizedName(tag);
-            RailcraftRegistry.register(item);
-
-            FluidHelper.registerBucket(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
-
-            itemCreosoteOilBucket = item;
-        }
-        return new ItemStack(item);
+        return null;
+//        Item item = itemCreosoteOilBucket;
+//        if (item == null) {
+//            String tag = "railcraft.fluid.creosote.bucket";
+//            item = new ItemBucketRailcraft(Fluids.CREOSOTE.get());
+//            item.setUnlocalizedName(tag);
+//            RailcraftRegistry.register(item);
+//
+//            FluidHelper.registerBucket(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//
+//            itemCreosoteOilBucket = item;
+//        }
+//        return new ItemStack(item);
     }
 
     public static ItemStack getCreosoteOilBottle() {
@@ -54,24 +49,25 @@ public class FluidContainers {
     }
 
     public static ItemStack getCreosoteOilBottle(int qty) {
-        Item item = itemCreosoteOilBottle;
-        if (item == null) {
-            String tag = "railcraft.fluid.creosote.bottle";
-
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemFluidContainer().setUnlocalizedName(tag).setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-                RailcraftRegistry.register(item);
-
-                LootPlugin.addLoot(new ItemStack(item), 4, 16, LootPlugin.Type.RAILWAY);
-
-                if (!RailcraftConfig.useCreosoteFurnaceRecipes() && RailcraftConfig.isSubBlockEnabled(EnumMachineAlpha.COKE_OVEN.getTag()))
-                    FluidHelper.registerBottle(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
-
-                itemCreosoteOilBottle = item;
-            } else
-                return null;
-        }
-        return new ItemStack(item, qty);
+        return null;
+//        Item item = itemCreosoteOilBottle;
+//        if (item == null) {
+//            String tag = "railcraft.fluid.creosote.bottle";
+//
+//            if (RailcraftConfig.isItemEnabled(tag)) {
+//                item = new ItemFluidContainer().setUnlocalizedName(tag).setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+//                RailcraftRegistry.register(item);
+//
+//                LootPlugin.addLoot(new ItemStack(item), 4, 16, LootPlugin.Type.RAILWAY);
+//
+//                if (!RailcraftConfig.useCreosoteFurnaceRecipes() && RailcraftConfig.isSubBlockEnabled(EnumMachineAlpha.COKE_OVEN.getTag()))
+//                    FluidHelper.registerBottle(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//
+//                itemCreosoteOilBottle = item;
+//            } else
+//                return null;
+//        }
+//        return new ItemStack(item, qty);
     }
 
     public static ItemStack getCreosoteOilCan() {
@@ -79,23 +75,24 @@ public class FluidContainers {
     }
 
     public static ItemStack getCreosoteOilCan(int qty) {
-        ItemFluidContainer item = itemCreosoteOilCan;
-        if (item == null) {
-            String tag = "railcraft.fluid.creosote.can";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemFluidContainer();
-                item.setUnlocalizedName(tag);
-                RailcraftRegistry.register(item);
-
-                boolean forestry = FluidHelper.registerCan(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
-                if (forestry)
-                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-
-                itemCreosoteOilCan = item;
-            } else
-                return null;
-        }
-        return new ItemStack(item, qty);
+        return null;
+//        ItemFluidContainer item = itemCreosoteOilCan;
+//        if (item == null) {
+//            String tag = "railcraft.fluid.creosote.can";
+//            if (RailcraftConfig.isItemEnabled(tag)) {
+//                item = new ItemFluidContainer();
+//                item.setUnlocalizedName(tag);
+//                RailcraftRegistry.register(item);
+//
+//                boolean forestry = FluidHelper.registerCan(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//                if (forestry)
+//                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+//
+//                itemCreosoteOilCan = item;
+//            } else
+//                return null;
+//        }
+//        return new ItemStack(item, qty);
     }
 
     public static ItemStack getCreosoteOilWax() {
@@ -103,23 +100,24 @@ public class FluidContainers {
     }
 
     public static ItemStack getCreosoteOilWax(int qty) {
-        ItemFluidContainer item = itemCreosoteOilWax;
-        if (item == null) {
-            String tag = "railcraft.fluid.creosote.wax";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemFluidContainer();
-                item.setUnlocalizedName(tag);
-                RailcraftRegistry.register(item);
-
-                boolean forestry = FluidHelper.registerWax(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
-                if (forestry)
-                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-
-                itemCreosoteOilWax = item;
-            } else
-                return null;
-        }
-        return new ItemStack(item, qty);
+        return null;
+//        ItemFluidContainer item = itemCreosoteOilWax;
+//        if (item == null) {
+//            String tag = "railcraft.fluid.creosote.wax";
+//            if (RailcraftConfig.isItemEnabled(tag)) {
+//                item = new ItemFluidContainer();
+//                item.setUnlocalizedName(tag);
+//                RailcraftRegistry.register(item);
+//
+//                boolean forestry = FluidHelper.registerWax(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//                if (forestry)
+//                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+//
+//                itemCreosoteOilWax = item;
+//            } else
+//                return null;
+//        }
+//        return new ItemStack(item, qty);
     }
 
     public static ItemStack getCreosoteOilRefactory() {
@@ -127,23 +125,24 @@ public class FluidContainers {
     }
 
     public static ItemStack getCreosoteOilRefactory(int qty) {
-        ItemFluidContainer item = itemCreosoteOilRefactory;
-        if (item == null) {
-            String tag = "railcraft.fluid.creosote.refactory";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemFluidContainer();
-                item.setUnlocalizedName(tag);
-                RailcraftRegistry.register(item);
-
-                boolean forestry = FluidHelper.registerRefactory(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
-                if (forestry)
-                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-
-                itemCreosoteOilRefactory = item;
-            } else
-                return null;
-        }
-        return new ItemStack(item, qty);
+        return null;
+//        ItemFluidContainer item = itemCreosoteOilRefactory;
+//        if (item == null) {
+//            String tag = "railcraft.fluid.creosote.refactory";
+//            if (RailcraftConfig.isItemEnabled(tag)) {
+//                item = new ItemFluidContainer();
+//                item.setUnlocalizedName(tag);
+//                RailcraftRegistry.register(item);
+//
+//                boolean forestry = FluidHelper.registerRefactory(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//                if (forestry)
+//                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+//
+//                itemCreosoteOilRefactory = item;
+//            } else
+//                return null;
+//        }
+//        return new ItemStack(item, qty);
     }
 
     public static ItemStack getCreosoteOilCell() {
@@ -151,23 +150,24 @@ public class FluidContainers {
     }
 
     public static ItemStack getCreosoteOilCell(int qty) {
-        ItemFluidContainer item = itemCreosoteOilCell;
-        if (item == null) {
-            String tag = "railcraft.fluid.creosote.cell";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemFluidContainer();
-                item.setUnlocalizedName(tag);
-                RailcraftRegistry.register(item);
-
-                boolean ic2 = FluidHelper.registerCell(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
-                if (ic2)
-                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-
-                itemCreosoteOilCell = item;
-            } else
-                return null;
-        }
-        return new ItemStack(item, qty);
+        return null;
+//        ItemFluidContainer item = itemCreosoteOilCell;
+//        if (item == null) {
+//            String tag = "railcraft.fluid.creosote.cell";
+//            if (RailcraftConfig.isItemEnabled(tag)) {
+//                item = new ItemFluidContainer();
+//                item.setUnlocalizedName(tag);
+//                RailcraftRegistry.register(item);
+//
+//                boolean ic2 = FluidHelper.registerCell(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//                if (ic2)
+//                    item.setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+//
+//                itemCreosoteOilCell = item;
+//            } else
+//                return null;
+//        }
+//        return new ItemStack(item, qty);
     }
 
     public static ItemStack getSteamBottle() {
@@ -175,19 +175,20 @@ public class FluidContainers {
     }
 
     public static ItemStack getSteamBottle(int qty) {
-        Item item = itemSteamBottle;
-        if (item == null) {
-            String tag = "railcraft.fluid.steam.bottle";
-
-            item = new ItemBucketRailcraft(Fluids.STEAM.get()).setContainerItemStack(new ItemStack(Items.GLASS_BOTTLE));
-            item.setUnlocalizedName(tag);
-            RailcraftRegistry.register(item);
-
-            FluidHelper.registerBottle(Fluids.STEAM.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
-
-            itemSteamBottle = item;
-        }
-        return new ItemStack(item);
+        return null;
+//        Item item = itemSteamBottle;
+//        if (item == null) {
+//            String tag = "railcraft.fluid.steam.bottle";
+//
+//            item = new ItemBucketRailcraft(Fluids.STEAM.get()).setContainerItemStack(new ItemStack(Items.GLASS_BOTTLE));
+//            item.setUnlocalizedName(tag);
+//            RailcraftRegistry.register(item);
+//
+//            FluidHelper.registerBottle(Fluids.STEAM.get(FluidHelper.BUCKET_VOLUME), new ItemStack(item));
+//
+//            itemSteamBottle = item;
+//        }
+//        return new ItemStack(item);
     }
 
 }

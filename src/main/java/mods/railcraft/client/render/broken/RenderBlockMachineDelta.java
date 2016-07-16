@@ -14,7 +14,6 @@ import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler.ConnectType;
 import mods.railcraft.client.render.tools.MatrixTransformations;
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.common.blocks.RailcraftBlocksOld;
 import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
 import mods.railcraft.common.blocks.machine.delta.TileWire;
