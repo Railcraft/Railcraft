@@ -9,6 +9,7 @@
 package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
@@ -97,15 +98,17 @@ public class BlockRitual extends BlockContainer implements IRailcraftObject {
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> drops = new ArrayList<>();
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileRitual) {
             TileRitual firestone = (TileRitual) tile;
-            Item item = state.getValue(CRACKED) ? ItemFirestoneRefined.item : ItemFirestoneCracked.item;
-            ItemStack drop = new ItemStack(item, 1, ItemFirestoneRefined.item.getMaxDamage() - firestone.charge);
-            if (firestone.hasCustomName())
-                drop.setStackDisplayName(firestone.getItemName());
-            drops.add(drop);
+            Item item = state.getValue(CRACKED) ? RailcraftItems.firestoneRefined.item() : RailcraftItems.firestoneCracked.item();
+            if (item != null) {
+                ItemStack drop = new ItemStack(item, 1, ItemFirestoneRefined.CHARGES - firestone.charge);
+                if (firestone.hasCustomName())
+                    drop.setStackDisplayName(firestone.getItemName());
+                drops.add(drop);
+            }
         } else
             drops.add(ItemFirestoneRefined.getItemEmpty());
         return drops;

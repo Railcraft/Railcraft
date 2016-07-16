@@ -72,7 +72,7 @@ public enum RailcraftFluids {
         }
     }
 
-    public static void postInitFluids() {
+    public static void finalizeDefinitions() {
         for (RailcraftFluids fluidType : VALUES) {
             fluidType.postInit();
         }

@@ -13,9 +13,9 @@ import net.minecraft.block.Block;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemBlockRailcraftMultiType extends ItemBlockRailcraft {
+public class ItemBlockRailcraftSubtyped extends ItemBlockRailcraft {
 
-    public ItemBlockRailcraftMultiType(Block block) {
+    public ItemBlockRailcraftSubtyped(Block block) {
         super(block);
         setMaxDamage(0);
         setHasSubtypes(true);

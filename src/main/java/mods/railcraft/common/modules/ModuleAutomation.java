@@ -15,7 +15,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.ai.TamingInteractHandler;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.orehandlers.BoreOreHandler;
@@ -82,7 +82,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                 }
 
                 // Define Bore
-                EnumCart cart = EnumCart.BORE;
+                RailcraftCarts cart = RailcraftCarts.BORE;
                 if (cart.setup()) {
                     CraftingPlugin.addRecipe(cart.getCartItem(),
                             "ICI",
@@ -95,7 +95,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                 }
 
                 // Define Track Relayer Cart
-                cart = EnumCart.TRACK_RELAYER;
+                cart = RailcraftCarts.TRACK_RELAYER;
                 if (cart.setup())
                     CraftingPlugin.addRecipe(cart.getCartItem(),
                             "YLY",
@@ -109,7 +109,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'M', new ItemStack(Items.MINECART));
 
                 // Define Undercutter Cart
-                cart = EnumCart.UNDERCUTTER;
+                cart = RailcraftCarts.UNDERCUTTER;
                 if (cart.setup())
                     CraftingPlugin.addRecipe(cart.getCartItem(),
                             "YLY",
@@ -122,7 +122,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'S', "blockSteel",
                             'M', new ItemStack(Items.MINECART));
 
-                cart = EnumCart.TRACK_LAYER;
+                cart = RailcraftCarts.TRACK_LAYER;
                 if (cart.setup())
                     CraftingPlugin.addRecipe(cart.getCartItem(),
                             "YLY",
@@ -135,7 +135,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
                             'D', new ItemStack(Blocks.DISPENSER),
                             'M', new ItemStack(Items.MINECART));
 
-                cart = EnumCart.TRACK_REMOVER;
+                cart = RailcraftCarts.TRACK_REMOVER;
                 if (cart.setup())
                     CraftingPlugin.addRecipe(cart.getCartItem(),
                             "YLY",

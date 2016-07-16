@@ -54,11 +54,6 @@ public enum EnumOre implements IBlockVariantEnum<EnumOre> {
         return BlockOre.getBlock();
     }
 
-    @Override
-    public boolean isValidBaseObject(Class<?> clazz) {
-        return clazz == BlockOre.class;
-    }
-
     @Nullable
     @Override
     public IBlockState getState() {
@@ -96,7 +91,7 @@ public enum EnumOre implements IBlockVariantEnum<EnumOre> {
 
     @Override
     public String getName() {
-        return tag;
+        return tag.replace(".","_");
     }
 
     @Nullable

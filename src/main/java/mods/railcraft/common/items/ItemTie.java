@@ -20,6 +20,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,6 +29,12 @@ public class ItemTie extends ItemRailcraft {
     public ItemTie() {
         setHasSubtypes(true);
         setMaxDamage(0);
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumTie.class;
     }
 
     @Override
@@ -92,11 +99,6 @@ public class ItemTie extends ItemRailcraft {
         @Override
         public Object getAlternate(IRailcraftObjectContainer container) {
             return alternate;
-        }
-
-        @Override
-        public boolean isValidBaseObject(Class<?> clazz) {
-            return clazz == ItemTie.class;
         }
 
         @Override

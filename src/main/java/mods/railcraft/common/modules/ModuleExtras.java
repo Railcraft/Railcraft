@@ -12,7 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import net.minecraft.init.Blocks;
@@ -37,7 +37,7 @@ public class ModuleExtras extends RailcraftModulePayload {
                 EnumTrack.SUSPENDED.register();
 
                 // Define Wood TNT Cart
-                EnumCart cart = EnumCart.TNT_WOOD;
+                RailcraftCarts cart = RailcraftCarts.TNT_WOOD;
                 if (cart.setup()) {
                     CraftingPlugin.addRecipe(cart.getCartItem(),
                             "WTW",
@@ -48,7 +48,7 @@ public class ModuleExtras extends RailcraftModulePayload {
                 }
 
                 // Define Work Cart
-                cart = EnumCart.WORK;
+                cart = RailcraftCarts.WORK;
                 if (cart.setup()) {
                     CraftingPlugin.addRecipe(cart.getCartItem(),
                             "B",
@@ -57,10 +57,6 @@ public class ModuleExtras extends RailcraftModulePayload {
                             'M', Items.MINECART);
                     LootPlugin.addLoot(cart.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, cart.getTag());
                 }
-
-                EnumTrack.PRIMING.register();
-                EnumTrack.LAUNCHER.register();
-                EnumTrack.SUSPENDED.register();
             }
         });
     }

@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.fluids;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -73,8 +74,12 @@ public enum Fluids {
         return get() == fluid;
     }
 
-    public boolean is(FluidStack fluidStack) {
+    public boolean is(@Nullable FluidStack fluidStack) {
         return fluidStack != null && get() == fluidStack.getFluid();
+    }
+
+    public boolean is(@Nullable Block fluidBlock) {
+        return fluidBlock != null && get() == FluidHelper.getFluid(fluidBlock);
     }
 
     public boolean isContained(ItemStack containerStack) {

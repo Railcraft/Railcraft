@@ -249,7 +249,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.BORE;
+        return RailcraftCarts.BORE;
     }
 
     private boolean isMineableBlock(IBlockState blockState) {

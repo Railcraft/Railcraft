@@ -46,6 +46,10 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
         setMaxStackSize(1);
         this.defaultPrimary = primary;
         this.defaultSecondary = secondary;
+    }
+
+    @Override
+    public void finalizeDefinition() {
         ColorPlugin.instance.register(this, this);
     }
 

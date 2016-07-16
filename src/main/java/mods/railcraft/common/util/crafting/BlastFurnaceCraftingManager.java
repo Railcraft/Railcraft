@@ -13,13 +13,10 @@ import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
-import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -51,8 +48,8 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
             fuel.add(RailcraftItems.coke.getStack());
             fuel.add(EnumCube.COKE_BLOCK.getStack());
             fuel.add(new ItemStack(Items.COAL, 1, 1));
-            fuel.add(InvTools.makeStack(ItemFirestoneRefined.item, 1, OreDictionary.WILDCARD_VALUE));
-            fuel.add(InvTools.makeStack(ItemFirestoneCracked.item, 1, OreDictionary.WILDCARD_VALUE));
+            fuel.add(RailcraftItems.firestoneRefined.getWildcard());
+            fuel.add(RailcraftItems.firestoneCracked.getWildcard());
             fuels = Collections.unmodifiableList(fuel);
         }
         return fuels;

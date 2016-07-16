@@ -10,19 +10,21 @@ package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.EnumOre;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -33,11 +35,11 @@ public class FirestoneTickHandler {
     private int clock;
 
     @SuppressWarnings("SimplifiableIfStatement")
-    private boolean shouldBurn(ItemStack stack) {
+    private boolean shouldSpawnFire(@Nullable ItemStack stack) {
         if (stack == null || stack.getItem() == null) return false;
-        if (stack.getItem() == ItemFirestoneRaw.item) return true;
-        if (stack.getItem() == ItemFirestoneCut.item) return true;
-        if (stack.getItem() == ItemFirestoneCracked.item) return true;
+        if (RailcraftItems.firestoneRaw.isEqual(stack)) return true;
+        if (RailcraftItems.firestoneCut.isEqual(stack)) return true;
+        if (RailcraftItems.firestoneCracked.isEqual(stack)) return true;
         return InvTools.isStackEqualToBlock(stack, BlockOre.getBlock()) && stack.getItemDamage() == EnumOre.FIRESTONE.ordinal();
     }
 
@@ -51,7 +53,7 @@ public class FirestoneTickHandler {
         EntityPlayer player = event.player;
         if (player.openContainer != player.inventoryContainer) return;
         for (ItemStack stack : player.inventory.mainInventory) {
-            if (shouldBurn(stack)) {
+            if (shouldSpawnFire(stack)) {
                 boolean spawnedFire = false;
                 for (int i = 0; i < stack.stackSize; i++) {
                     spawnedFire |= spawnFire(player);

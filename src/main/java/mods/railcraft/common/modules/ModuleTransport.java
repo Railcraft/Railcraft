@@ -16,7 +16,7 @@ import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -156,7 +156,7 @@ public class ModuleTransport extends RailcraftModulePayload {
 //                'I', new ItemStack(Block.fenceIron),
 //                'W', new ItemStack(Item.wheat),
 //                'P', ItemPlate.getPlate(ItemPlate.EnumPlate.STEEL));
-                EnumCart cart = EnumCart.TANK;
+                RailcraftCarts cart = RailcraftCarts.TANK;
 
                 if (cart.setup()) {
                     if (EnumMachineBeta.TANK_IRON_GAUGE.isAvailable()) {
@@ -178,7 +178,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(new CartFilterRecipe());
                 }
 
-                cart = EnumCart.CARGO;
+                cart = RailcraftCarts.CARGO;
 
                 if (cart.setup()) {
                     CraftingPlugin.addRecipe(cart.getCartItem(),

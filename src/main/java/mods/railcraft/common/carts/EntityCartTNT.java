@@ -25,6 +25,6 @@ public class EntityCartTNT extends CartBaseExplosive {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.TNT;
+        return RailcraftCarts.TNT;
     }
 }

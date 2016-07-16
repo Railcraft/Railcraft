@@ -130,6 +130,7 @@ public enum EnumSignal implements ISignalTileDefinition, IVariantEnum {
         return module != null && RailcraftModuleManager.isModuleEnabled(getModule()) && getBlock() != null && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
+    @Nullable
     @Override
     public Block getBlock() {
         return RailcraftBlocks.signal.block();
@@ -142,12 +143,7 @@ public enum EnumSignal implements ISignalTileDefinition, IVariantEnum {
 
     @Override
     public String getName() {
-        return tag;
-    }
-
-    @Override
-    public boolean isValidBaseObject(Class<?> clazz) {
-        return clazz == BlockSignalRailcraft.class;
+        return tag.replace(".", "_");
     }
 
     @Nullable

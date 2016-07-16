@@ -8,8 +8,11 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
+
+import javax.annotation.Nullable;
 
 import static mods.railcraft.common.items.Metal.*;
 
@@ -21,6 +24,12 @@ public class ItemIngot extends ItemMetal {
     public ItemIngot() {
         super(Form.INGOT, "item.railcraft.ingot.", true, true, CollectionTools.createIndexedLookupTable(STEEL, COPPER, TIN, LEAD));
         setSmeltingExperience(1);
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return Metal.class;
     }
 
     @Override

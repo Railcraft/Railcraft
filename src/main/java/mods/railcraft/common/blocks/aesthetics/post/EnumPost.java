@@ -78,11 +78,6 @@ public enum EnumPost implements IBlockVariantEnum<EnumPost> {
         return name().toLowerCase(Locale.ENGLISH).replace("_", ".");
     }
 
-    @Override
-    public boolean isValidBaseObject(Class<?> clazz) {
-        return clazz ==  BlockPost.class;
-    }
-
     @Nullable
     @Override
     public Object getAlternate(IRailcraftObjectContainer container) {

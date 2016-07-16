@@ -8,71 +8,43 @@
  */
 package mods.railcraft.common.items.firestone;
 
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import java.util.List;
+import javax.annotation.Nullable;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ItemFirestoneCracked extends ItemFirestoneRefined {
 
     public static int HEAT = 100;
-    public static Item item;
 
-    public static void registerItem() {
-        if (item == null) {
-            String tag = "railcraft.firestone.cracked";
-
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemFirestoneCracked().setUnlocalizedName(tag);
-                RailcraftRegistry.register(item);
-            }
-        }
-    }
-
+    @Nullable
     public static ItemStack getItemCharged() {
-        return new ItemStack(item);
+        return RailcraftItems.firestoneCracked.getStack();
     }
 
+    @Nullable
     public static ItemStack getItemEmpty() {
-        return new ItemStack(item, 1, item.getMaxDamage() - 1);
+        return RailcraftItems.firestoneCracked.getStack(CHARGES - 1);
     }
 
+    public ItemFirestoneCracked() {
+        heat = HEAT;
+    }
+
+    @SuppressWarnings("ConstantConditions")
     @Override
     public ItemStack getContainerItem(ItemStack stack) {
         double damageLevel = (double) stack.getItemDamage() / (double) stack.getMaxDamage();
         if (MiscTools.RANDOM.nextDouble() < damageLevel * 0.0001)
-            return ItemFirestoneRaw.getItem();
+            return RailcraftItems.firestoneRaw.getStack();
         ItemStack newStack = stack.copy();
         newStack.stackSize = 1;
         newStack = InvTools.damageItem(newStack, 1);
         return newStack;
     }
-
-    @Override
-    public int getHeatValue(ItemStack stack) {
-        if (stack.getItemDamage() < getMaxDamage())
-            return HEAT;
-        return 0;
-    }
-
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean adv) {
-        String tipTag = getUnlocalizedName() + ".tip.charged";
-        if (stack.getItemDamage() >= stack.getMaxDamage() - 5)
-            tipTag = getUnlocalizedName() + ".tip.empty";
-        ToolTip tip = ToolTip.buildToolTip(tipTag);
-        if (tip != null)
-            info.addAll(tip.convertToStrings());
-    }
-
 }

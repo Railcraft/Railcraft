@@ -53,7 +53,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.LOCO_ELECTRIC;
+        return RailcraftCarts.LOCO_ELECTRIC;
     }
 
     @Override
@@ -99,7 +99,7 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
 
     @Override
     protected ItemStack getCartItemBase() {
-        return EnumCart.LOCO_ELECTRIC.getCartItem();
+        return RailcraftCarts.LOCO_ELECTRIC.getCartItem();
     }
 
     @Override

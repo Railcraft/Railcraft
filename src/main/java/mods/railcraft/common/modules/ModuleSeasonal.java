@@ -10,7 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Blocks;
@@ -29,7 +29,7 @@ public class ModuleSeasonal extends RailcraftModulePayload {
             @Override
             public void preInit() {
                 // Define Pumpkin Cart
-                EnumCart cart = EnumCart.PUMPKIN;
+                RailcraftCarts cart = RailcraftCarts.PUMPKIN;
                 if (cart.setup()) {
                     Calendar cal = Calendar.getInstance();
                     int month = cal.get(Calendar.MONTH);
@@ -45,7 +45,7 @@ public class ModuleSeasonal extends RailcraftModulePayload {
                 }
 
                 // Define Gift Cart
-                cart = EnumCart.GIFT;
+                cart = RailcraftCarts.GIFT;
                 if (cart.setup()) {
                     Calendar cal = Calendar.getInstance();
                     int month = cal.get(Calendar.MONTH);

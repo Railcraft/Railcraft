@@ -43,7 +43,7 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.TRACK_LAYER;
+        return RailcraftCarts.TRACK_LAYER;
     }
 
     @Override

@@ -15,10 +15,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class ItemFirestoneBase extends ItemRailcraft {
+public class ItemFirestone extends ItemRailcraft {
+    public ItemFirestone() {
+        setMaxStackSize(1);
+    }
 
     /**
      * Determines if this Item has a special entity for when they are in the
@@ -40,10 +42,10 @@ public abstract class ItemFirestoneBase extends ItemRailcraft {
      * Returning null here will not kill the EntityItem and will leave it to
      * function normally. Called when the item it placed in a world.
      *
-     * @param world The world object
+     * @param world    The world object
      * @param location The EntityItem object, useful for getting the position of
-     * the entity
-     * @param stack The current item stack
+     *                 the entity
+     * @param stack    The current item stack
      * @return A new Entity object to spawn or null
      */
     @Override
@@ -58,6 +60,7 @@ public abstract class ItemFirestoneBase extends ItemRailcraft {
 
     /**
      * Called by CraftingManager to determine if an item is reparable.
+     *
      * @return Always returns false for ItemFirestoneBase
      */
     @Override

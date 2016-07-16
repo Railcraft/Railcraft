@@ -75,28 +75,20 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
 
         @Override
         public void preInit() {
-            for (BlockFactory factory : blockFactories) {
-                factory.initBlock();
-            }
-            for (IRailcraftObjectContainer obj : objectContainers) {
-                obj.register();
-            }
+            blockFactories.forEach(BlockFactory::initBlock);
+            objectContainers.forEach(IRailcraftObjectContainer::register);
             enabledEventHandler.preInit();
         }
 
         @Override
         public void init() {
-            for (BlockFactory factory : blockFactories) {
-                factory.initRecipes();
-            }
+            blockFactories.forEach(BlockFactory::initRecipes);
             enabledEventHandler.init();
         }
 
         @Override
         public void postInit() {
-            for (BlockFactory factory : blockFactories) {
-                factory.finalizeBlocks();
-            }
+            blockFactories.forEach(BlockFactory::finalizeBlocks);
             enabledEventHandler.postInit();
         }
     }

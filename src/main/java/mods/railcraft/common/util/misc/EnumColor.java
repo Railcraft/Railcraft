@@ -9,7 +9,6 @@
  ******************************************************************************/
 package mods.railcraft.common.util.misc;
 
-import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -196,11 +195,6 @@ public enum EnumColor implements IVariantEnum {
 
     public boolean isEqual(EnumDyeColor dye) {
         return dye != null && getDye() == dye;
-    }
-
-    @Override
-    public boolean isValidBaseObject(Class<?> clazz) {
-        return clazz == BlockStrengthGlass.class;
     }
 
     @Nullable

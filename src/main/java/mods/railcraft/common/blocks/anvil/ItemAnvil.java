@@ -7,20 +7,20 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.core;
 
-import net.minecraft.util.IStringSerializable;
+package mods.railcraft.common.blocks.anvil;
 
-import javax.annotation.Nullable;
+import mods.railcraft.common.core.IRailcraftObject;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemAnvilBlock;
 
 /**
- * @author CovertJaguar <http://www.railcraft.info/>
+ * Created by CovertJaguar on 7/15/2016 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IVariantEnum extends IStringSerializable {
-
-    int ordinal();
-
-    @Nullable
-    Object getAlternate(IRailcraftObjectContainer container);
-
+public class ItemAnvil extends ItemAnvilBlock implements IRailcraftObject {
+    public ItemAnvil(Block block) {
+        super(block);
+    }
 }

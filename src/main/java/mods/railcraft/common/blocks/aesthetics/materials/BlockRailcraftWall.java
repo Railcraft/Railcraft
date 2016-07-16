@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.materials;
 
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostBase;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -51,6 +52,12 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
     public BlockRailcraftWall() {
         super(Blocks.STONEBRICK);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return Materials.class;
     }
 
     //TODO: recipe??

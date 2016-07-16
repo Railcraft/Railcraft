@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.ore;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -60,6 +61,12 @@ public class BlockOre extends Block implements IRailcraftObject {
         setHardness(3);
         setSoundType(SoundType.STONE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumOre.class;
     }
 
     @Nullable

@@ -12,6 +12,7 @@ import mods.railcraft.common.blocks.RailcraftBlockContainer;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.IActivationBlockingItem;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
@@ -29,9 +30,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -56,6 +57,12 @@ public class BlockDetector extends RailcraftBlockContainer {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
 
         GameRegistry.registerTileEntity(TileDetector.class, "RCDetectorTile");
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumDetector.class;
     }
 
     @Override

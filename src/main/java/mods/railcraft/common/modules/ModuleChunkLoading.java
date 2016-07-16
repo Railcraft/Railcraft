@@ -13,7 +13,7 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -96,7 +96,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                 }
 
                 // Define Anchor Cart
-                EnumCart cart = EnumCart.ANCHOR;
+                RailcraftCarts cart = RailcraftCarts.ANCHOR;
                 if (EnumMachineAlpha.ANCHOR_WORLD.isAvailable() && cart.setup()) {
                     ItemStack anchor = EnumMachineAlpha.ANCHOR_WORLD.getItem();
                     if (RailcraftConfig.canCraftAnchors()) {
@@ -111,7 +111,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
 
 
                 // Define Personal Anchor Cart
-                cart = EnumCart.ANCHOR_PERSONAL;
+                cart = RailcraftCarts.ANCHOR_PERSONAL;
                 if (EnumMachineAlpha.ANCHOR_PERSONAL.isAvailable() && cart.setup()) {
                     ItemStack anchor = EnumMachineAlpha.ANCHOR_PERSONAL.getItem();
                     if (RailcraftConfig.canCraftPersonalAnchors()) {
@@ -125,7 +125,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                 }
 
                 // Define Admin Anchor Cart
-                cart = EnumCart.ANCHOR_ADMIN;
+                cart = RailcraftCarts.ANCHOR_ADMIN;
                 if (EnumMachineAlpha.ANCHOR_ADMIN.isAvailable() && cart.setup()) {
                     ItemStack anchor = EnumMachineAlpha.ANCHOR_ADMIN.getItem();
                     cart.setContents(anchor);

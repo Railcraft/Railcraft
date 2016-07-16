@@ -150,7 +150,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return EnumCart.getCartType(stack) == getCartType();
+        return RailcraftCarts.getCartType(stack) == getCartType();
     }
 
     @Override

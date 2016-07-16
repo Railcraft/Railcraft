@@ -35,6 +35,6 @@ public class EntityCartTNTWood extends CartBaseExplosive implements IAlternateCa
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.TNT_WOOD;
+        return RailcraftCarts.TNT_WOOD;
     }
 }

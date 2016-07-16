@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.util.crafting;
 
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
@@ -75,9 +75,9 @@ public class CartUncraftingRecipe implements IRecipe {
     }
 
     public static class EnumCartUncraftingRecipe extends CartUncraftingRecipe {
-        private final EnumCart cart;
+        private final RailcraftCarts cart;
 
-        public EnumCartUncraftingRecipe(EnumCart cart) {
+        public EnumCartUncraftingRecipe(RailcraftCarts cart) {
             super(cart.getContents(), cart.getCartItem(), new ItemStack(Items.MINECART));
             this.cart = cart;
         }

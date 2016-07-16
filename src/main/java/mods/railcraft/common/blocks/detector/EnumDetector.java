@@ -96,11 +96,6 @@ public enum EnumDetector implements IBlockVariantEnum<EnumDetector> {
     }
 
     @Override
-    public boolean isValidBaseObject(Class<?> clazz) {
-        return clazz == BlockDetector.class;
-    }
-
-    @Override
     public boolean isEnabled() {
         return getBlock() != null && RailcraftModuleManager.isModuleEnabled(module);
     }

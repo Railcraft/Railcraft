@@ -35,7 +35,7 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.TRACK_REMOVER;
+        return RailcraftCarts.TRACK_REMOVER;
     }
 
     @Override

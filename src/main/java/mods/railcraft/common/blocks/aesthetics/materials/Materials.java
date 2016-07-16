@@ -14,7 +14,7 @@ import com.google.common.collect.HashBiMap;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.aesthetics.materials.slab.BlockRailcraftSlab;
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.Railcraft;
@@ -266,7 +266,7 @@ public enum Materials implements IVariantEnum {
 
     @Nonnull
     public static ItemStack getStack(Block block, int qty, @Nullable IVariantEnum variant) {
-        tools.checkVariantObject(block.getClass(), variant);
+        ((IRailcraftObject) block).checkVariant(variant);
         ItemStack stack = new ItemStack(block, qty);
         if (variant != null)
             tagItemStack(stack, MATERIAL_KEY, (Materials) variant);
@@ -394,11 +394,6 @@ public enum Materials implements IVariantEnum {
 
     public boolean isSourceValid() {
         return getState() != null;
-    }
-
-    @Override
-    public boolean isValidBaseObject(Class<?> clazz) {
-        return clazz == BlockRailcraftSlab.class || clazz == BlockRailcraftStairs.class || clazz == BlockLantern.class;
     }
 
     @Nullable

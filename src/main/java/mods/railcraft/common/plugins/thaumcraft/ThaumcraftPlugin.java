@@ -17,8 +17,8 @@ import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.ore.EnumOre;
-import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.ICartType;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.ItemGear.EnumGear;
 import mods.railcraft.common.items.ItemRail.EnumRail;
@@ -26,8 +26,6 @@ import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
-import mods.railcraft.common.items.firestone.ItemFirestoneCut;
-import mods.railcraft.common.items.firestone.ItemFirestoneRaw;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -195,19 +193,19 @@ public class ThaumcraftPlugin {
                 addItemAspect(RailcraftBlocks.glass.getStack(color), glassAspects);
             }
 
-            addItemAspect(RailcraftBlocks.anvil_steel.getStack(), new AspectList().add(Aspect.CRAFT, 4).add(Aspect.EXCHANGE, 2).add(Aspect.METAL, 4).add(Aspect.ORDER, 2));
+            addItemAspect(RailcraftBlocks.anvilSteel.getStack(), new AspectList().add(Aspect.CRAFT, 4).add(Aspect.EXCHANGE, 2).add(Aspect.METAL, 4).add(Aspect.ORDER, 2));
 
-            addCartAspect(EnumCart.LOCO_STEAM_SOLID, steamAspects.copy().add(Aspect.MOTION, 2).add(Aspect.MECHANISM, 4));
-            addCartAspect(EnumCart.LOCO_ELECTRIC, new AspectList().add(Aspect.FLUX, 6).add(Aspect.MECHANISM, 6).add(Aspect.MOTION, 2));
-            addCartAspect(EnumCart.PUMPKIN, new AspectList(new ItemStack(Blocks.PUMPKIN)).add(Aspect.MOTION, 2).add(Aspect.ENTROPY, 6));
-            addCartAspect(EnumCart.ANCHOR, anchorAspects.copy().add(Aspect.MOTION, 2));
-            addCartAspect(EnumCart.ANCHOR_ADMIN, anchorAspects.copy().add(Aspect.MOTION, 2));
-            addCartAspect(EnumCart.ANCHOR_PERSONAL, anchorAspects.copy().add(Aspect.MOTION, 2));
+            addCartAspect(RailcraftCarts.LOCO_STEAM_SOLID, steamAspects.copy().add(Aspect.MOTION, 2).add(Aspect.MECHANISM, 4));
+            addCartAspect(RailcraftCarts.LOCO_ELECTRIC, new AspectList().add(Aspect.FLUX, 6).add(Aspect.MECHANISM, 6).add(Aspect.MOTION, 2));
+            addCartAspect(RailcraftCarts.PUMPKIN, new AspectList(new ItemStack(Blocks.PUMPKIN)).add(Aspect.MOTION, 2).add(Aspect.ENTROPY, 6));
+            addCartAspect(RailcraftCarts.ANCHOR, anchorAspects.copy().add(Aspect.MOTION, 2));
+            addCartAspect(RailcraftCarts.ANCHOR_ADMIN, anchorAspects.copy().add(Aspect.MOTION, 2));
+            addCartAspect(RailcraftCarts.ANCHOR_PERSONAL, anchorAspects.copy().add(Aspect.MOTION, 2));
 
             addItemAspect(RailcraftItems.goggles.getStack(), new AspectList().add(Aspect.AURA, 4).add(Aspect.SENSES, 4));
 
-            addItemAspect(ItemFirestoneRaw.getItem(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ENTROPY, 4));
-            addItemAspect(ItemFirestoneCut.getItem(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ENTROPY, 2).add(Aspect.ORDER, 2));
+            addItemAspect(RailcraftItems.firestoneRaw.getStack(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ENTROPY, 4));
+            addItemAspect(RailcraftItems.firestoneCut.getStack(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ENTROPY, 2).add(Aspect.ORDER, 2));
             addItemAspect(ItemFirestoneRefined.getItemCharged(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ORDER, 4));
             addItemAspect(ItemFirestoneCracked.getItemCharged(), new AspectList().add(Aspect.FIRE, 6).add(Aspect.CRYSTAL, 2).add(Aspect.ENTROPY, 4));
         } catch (Throwable error) {

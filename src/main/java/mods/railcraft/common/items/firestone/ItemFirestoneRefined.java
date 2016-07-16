@@ -8,9 +8,14 @@
  */
 package mods.railcraft.common.items.firestone;
 
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.api.crafting.ICrusherCraftingManager;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.blocks.ore.EnumOre;
+import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -21,6 +26,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -34,37 +40,63 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemFirestoneRefined extends ItemFirestoneBase {
+public class ItemFirestoneRefined extends ItemFirestone {
 
+    public static final int CHARGES = 5000;
     private static final int HEAT = 250;
-    public static Item item;
 
-    public static void registerItem() {
-        if (item == null) {
-            String tag = "railcraft.firestone.refined";
-            if (RailcraftConfig.isItemEnabled(tag)) {
-                item = new ItemFirestoneRefined().setUnlocalizedName(tag);
-                RailcraftRegistry.register(item);
-            }
-        }
-    }
+    protected int heat = HEAT;
 
+    @Nullable
     public static ItemStack getItemCharged() {
-        return new ItemStack(item);
+        return RailcraftItems.firestoneRefined.getStack();
     }
 
+    @Nullable
     public static ItemStack getItemEmpty() {
-        return new ItemStack(item, 1, item.getMaxDamage() - 1);
+        return RailcraftItems.firestoneRefined.getStack(CHARGES - 1);
     }
 
     public ItemFirestoneRefined() {
         setMaxStackSize(1);
-        setMaxDamage(5000);
+        setMaxDamage(CHARGES);
+    }
+
+    @Override
+    public void defineRecipes() {
+        ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumOre.FIRESTONE.getItem(), true, false);
+        recipe.addOutput(RailcraftItems.firestoneRaw.getStack(), 1F);
+
+        CraftingPlugin.addRecipe(RailcraftItems.firestoneCut.getStack(),
+                " P ",
+                "PFP",
+                " P ",
+                'P', Items.DIAMOND_PICKAXE,
+                'F', RailcraftItems.firestoneRaw);
+
+        for (ItemStack stack : FluidHelper.getContainersFilledWith(Fluids.LAVA.get(FluidHelper.BUCKET_VOLUME))) {
+            CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
+                    "LRL",
+                    "RFR",
+                    "LRL",
+                    'R', "blockRedstone",
+                    'L', stack,
+                    'F', RailcraftItems.firestoneCut);
+            CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
+                    "LOL",
+                    "RFR",
+                    "LRL",
+                    'R', "blockRedstone",
+                    'L', stack,
+                    'O', RailcraftItems.firestoneRaw,
+                    'F', RailcraftItems.firestoneCracked.getWildcard());
+        }
     }
 
     @Override
@@ -94,9 +126,9 @@ public class ItemFirestoneRefined extends ItemFirestoneBase {
     }
 
     @Override
-    public int getHeatValue(ItemStack stack) {
+    public final int getHeatValue(ItemStack stack) {
         if (stack.getItemDamage() < getMaxDamage())
-            return HEAT;
+            return heat;
         return 0;
     }
 

@@ -137,7 +137,7 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
 
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return EnumCart.getCartType(stack) == getCartType();
+        return RailcraftCarts.getCartType(stack) == getCartType();
     }
 
     @Override

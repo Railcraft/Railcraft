@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.cube;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
@@ -53,6 +54,12 @@ public class BlockCube extends Block implements IRailcraftObject {
         setSoundType(RailcraftSoundTypes.OVERRIDE);
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumCube.class;
     }
 
     @Override

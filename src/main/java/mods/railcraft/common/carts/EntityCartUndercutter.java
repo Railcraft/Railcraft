@@ -84,7 +84,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.UNDERCUTTER;
+        return RailcraftCarts.UNDERCUTTER;
     }
 
     @Override

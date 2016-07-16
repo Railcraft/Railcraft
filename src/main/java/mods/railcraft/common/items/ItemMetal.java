@@ -44,6 +44,12 @@ public abstract class ItemMetal extends ItemRailcraft {
         this.variants = Maps.unmodifiableBiMap(variants);
     }
 
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return Metal.class;
+    }
+
     public final BiMap<Integer, Metal> variants() {
         return variants;
     }
@@ -68,7 +74,7 @@ public abstract class ItemMetal extends ItemRailcraft {
     @Nullable
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        IVariantEnum.tools.checkVariantObject(getClass(), variant);
+        checkVariant(variant);
         Integer meta = variants.inverse().get((Metal) variant);
         if (meta == null)
             meta = 0;
@@ -77,7 +83,7 @@ public abstract class ItemMetal extends ItemRailcraft {
 
     @Override
     public String getOreTag(@Nullable IVariantEnum variant) {
-        IVariantEnum.tools.checkVariantObject(getClass(), variant);
+        checkVariant(variant);
         return ((Metal) variant).getOreTag(form);
     }
 

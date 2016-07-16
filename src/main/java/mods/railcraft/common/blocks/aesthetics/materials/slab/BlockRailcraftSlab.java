@@ -73,6 +73,12 @@ public class BlockRailcraftSlab extends BlockContainer implements IMaterialBlock
         GameRegistry.registerTileEntity(TileSlab.class, "RCSlabTile");
     }
 
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return Materials.class;
+    }
+
     @Override
     @Nonnull
     protected BlockStateContainer createBlockState() {

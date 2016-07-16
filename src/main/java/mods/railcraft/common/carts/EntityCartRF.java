@@ -44,7 +44,7 @@ public final class EntityCartRF extends CartBase {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.REDSTONE_FLUX;
+        return RailcraftCarts.REDSTONE_FLUX;
     }
 
     @Override

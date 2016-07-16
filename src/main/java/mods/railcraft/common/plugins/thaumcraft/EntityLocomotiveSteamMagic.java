@@ -11,7 +11,7 @@ package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.carts.EntityLocomotiveSteam;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.carts.ICartType;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
@@ -75,7 +75,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.LOCO_STEAM_MAGIC;
+        return RailcraftCarts.LOCO_STEAM_MAGIC;
     }
 
     @Override

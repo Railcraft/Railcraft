@@ -8,29 +8,22 @@
  */
 package mods.railcraft.common.blocks.ore;
 
+import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.EntityItemFireproof;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ItemOre extends ItemBlock {
+public class ItemOre extends ItemBlockRailcraftSubtyped {
 
     public ItemOre(Block block) {
         super(block);
-        setMaxDamage(0);
-        setHasSubtypes(true);
-    }
-
-    @Override
-    public int getMetadata(int meta) {
-        return meta;
     }
 
     @Override

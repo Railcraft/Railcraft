@@ -34,7 +34,7 @@ public interface IRailcraftObject {
 
     @Nullable
     default ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        IVariantEnum.tools.checkVariantObject(getClass(), variant);
+        checkVariant(variant);
         int meta;
         if (variant != null)
             meta = variant.ordinal();
@@ -54,5 +54,15 @@ public interface IRailcraftObject {
     }
 
     default void finalizeDefinition() {
+    }
+
+    default void checkVariant(@Nullable IVariantEnum variant) {
+        if (getVariantEnum() != (variant == null ? null : variant.getClass()))
+            throw new RuntimeException("Incorrect Variant object used.");
+    }
+
+    @Nullable
+    default Class<? extends IVariantEnum> getVariantEnum() {
+        return null;
     }
 }

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.common.blocks.ItemBlockRailcraftMultiType;
+import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +18,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemSignal extends ItemBlockRailcraftMultiType {
+public class ItemSignal extends ItemBlockRailcraftSubtyped {
 
     public ItemSignal(Block block) {
         super(block);

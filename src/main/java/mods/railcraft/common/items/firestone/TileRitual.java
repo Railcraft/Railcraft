@@ -11,6 +11,7 @@ package mods.railcraft.common.items.firestone;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.Game;
@@ -19,12 +20,14 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Deque;
 import java.util.HashSet;
@@ -72,7 +75,11 @@ public class TileRitual extends RailcraftTickingTileEntity {
             return;
         }
 
-        if (charge >= ItemFirestoneRefined.item.getMaxDamage())
+        Item firestone = RailcraftItems.firestoneRefined.item();
+        if (firestone == null)
+            return;
+
+        if (charge >= firestone.getMaxDamage())
             return;
 
 //        if (clock % 4 == 0) {
@@ -93,7 +100,7 @@ public class TileRitual extends RailcraftTickingTileEntity {
 
     private boolean coolLava(BlockPos pos) {
         Block block = WorldPlugin.getBlock(worldObj, pos);
-        if (Fluids.LAVA.is(FluidHelper.getFluid(block))) {
+        if (Fluids.LAVA.is(block)) {
             boolean placed = WorldPlugin.setBlockState(worldObj, pos, Blocks.OBSIDIAN.getDefaultState());
             if (placed) {
                 Vec3d startPosition = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
@@ -107,6 +114,7 @@ public class TileRitual extends RailcraftTickingTileEntity {
         return false;
     }
 
+    @Nullable
     private BlockPos getNextLavaBlock(boolean remove) {
         if (queue.isEmpty())
             return null;

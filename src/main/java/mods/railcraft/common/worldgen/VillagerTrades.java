@@ -9,7 +9,7 @@
 package mods.railcraft.common.worldgen;
 
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -51,7 +51,7 @@ public class VillagerTrades {
         career.addTrade(2, new GenericTrade(offer(Items.MINECART), offer(Items.EMERALD, 8, 10)));
         career.addTrade(2, new GenericTrade(offer(Items.EMERALD, 6, 8), offer(Items.MINECART)));
 
-        career.addTrade(2, new GenericTrade(offer(EnumCart.LOCO_STEAM_SOLID.getCartItem()), offer(Items.EMERALD, 32, 40)));
+        career.addTrade(2, new GenericTrade(offer(RailcraftCarts.LOCO_STEAM_SOLID.getCartItem()), offer(Items.EMERALD, 32, 40)));
 
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.crowbarIron), offer(Items.EMERALD, 7, 9)));
         career.addTrade(3, new GenericTrade(offer(RailcraftItems.crowbarSteel), offer(Items.EMERALD, 14, 18)));

@@ -63,7 +63,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
     @Nonnull
     @Override
     public ItemStack getCartItem() {
-        ItemStack stack = EnumCart.fromCart(this).getCartItem();
+        ItemStack stack = RailcraftCarts.fromCart(this).getCartItem();
         if (hasCustomName())
             stack.setStackDisplayName(getCustomNameTag());
         return stack;

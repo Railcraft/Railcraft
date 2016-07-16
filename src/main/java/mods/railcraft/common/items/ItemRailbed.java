@@ -18,6 +18,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,6 +28,12 @@ public class ItemRailbed extends ItemRailcraft {
         setHasSubtypes(true);
         setMaxDamage(0);
         setUnlocalizedName("railcraft.part.railbed");
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumRailbed.class;
     }
 
     @Override
@@ -79,11 +86,6 @@ public class ItemRailbed extends ItemRailcraft {
         @Override
         public Object getAlternate(IRailcraftObjectContainer container) {
             return alternate;
-        }
-
-        @Override
-        public boolean isValidBaseObject(Class<?> clazz) {
-            return clazz == ItemRailbed.class;
         }
 
         @Override

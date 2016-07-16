@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 public class ItemTunnelBore extends ItemCart implements IMinecartItem {
 
     public ItemTunnelBore() {
-        super(EnumCart.BORE);
+        super(RailcraftCarts.BORE);
         maxStackSize = 1;
     }
 

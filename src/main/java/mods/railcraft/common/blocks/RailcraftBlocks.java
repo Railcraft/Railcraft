@@ -21,6 +21,7 @@ import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.ItemSlab;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
+import mods.railcraft.common.blocks.anvil.ItemAnvil;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
 import mods.railcraft.common.blocks.frame.BlockFrame;
@@ -49,7 +50,6 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemAnvilBlock;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
@@ -63,7 +63,7 @@ import java.util.function.Supplier;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum RailcraftBlocks implements IRailcraftObjectContainer {
-    anvil_steel("anvil", BlockRCAnvil::new, ItemAnvilBlock::new),
+    anvilSteel("anvil", BlockRCAnvil::new, ItemAnvil::new),
     cube("cube", BlockCube::new, ItemCube::new),
     detector("detector", BlockDetector::new, ItemDetector::new),
     frame("frame", BlockFrame::new, ItemBlockRailcraft::new),
@@ -97,7 +97,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
         this.tag = tag;
     }
 
-    public static void definePostRecipes() {
+    public static void finalizeDefinitions() {
         for (RailcraftBlocks type : VALUES) {
             if (type.block != null)
                 ((IRailcraftObject) type.block).finalizeDefinition();
@@ -181,7 +181,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
 
     private void checkVariantObject(@Nullable IVariantEnum variant) {
         if (block != null)
-            IVariantEnum.tools.checkVariantObject(block.getClass(), variant);
+            ((IRailcraftObject) block).checkVariant(variant);
     }
 
     @Nullable

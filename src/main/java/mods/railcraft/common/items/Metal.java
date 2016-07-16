@@ -23,9 +23,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -43,12 +41,8 @@ public enum Metal implements IVariantEnum {
 //    private static final EnumBiMap<Metal, EnumNugget> nuggetMap = EnumBiMap.create(Metal.class, EnumNugget.class);
     private static final BiMap<Metal, IVariantEnum> poorOreMap = HashBiMap.create();
     private static final BiMap<Metal, IVariantEnum> blockMap = HashBiMap.create();
-    private static final Set<Class<?>> metalObjects = new HashSet<>();
 
     static {
-        metalObjects.add(ItemIngot.class);
-        metalObjects.add(ItemNugget.class);
-        metalObjects.add(ItemPlate.class);
 //        metalObjects.add(BlockMetal.class);
 
 //        ingotMap.put(STEEL, EnumIngot.STEEL);
@@ -102,11 +96,6 @@ public enum Metal implements IVariantEnum {
 
     public static Metal get(EnumCube ore) {
         return blockMap.inverse().get(ore);
-    }
-
-    @Override
-    public boolean isValidBaseObject(Class<?> clazz) {
-        return metalObjects.contains(clazz);
     }
 
     @Nullable

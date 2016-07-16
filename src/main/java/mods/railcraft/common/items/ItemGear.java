@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,6 +27,12 @@ public class ItemGear extends ItemRailcraft {
     public ItemGear() {
         setHasSubtypes(true);
         setMaxDamage(0);
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumGear.class;
     }
 
     @Override
@@ -116,11 +123,6 @@ public class ItemGear extends ItemRailcraft {
         @Override
         public Object getAlternate(IRailcraftObjectContainer container) {
             return alternate;
-        }
-
-        @Override
-        public boolean isValidBaseObject(Class<?> clazz) {
-            return clazz == ItemGear.class;
         }
 
         @Override

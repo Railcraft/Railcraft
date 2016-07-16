@@ -34,7 +34,7 @@ public final class EntityCartEnergyBatBox extends CartBaseEnergy {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.ENERGY_BATBOX;
+        return RailcraftCarts.ENERGY_BATBOX;
     }
 
     @Override

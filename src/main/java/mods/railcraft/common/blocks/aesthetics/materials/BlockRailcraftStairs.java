@@ -57,6 +57,11 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
         isBlockContainer = true;
     }
 
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return Materials.class;
+    }
     @Override
     public String getUnlocalizedName(Materials mat) {
         return "tile.railcraft.stair." + mat.getLocalizationSuffix();

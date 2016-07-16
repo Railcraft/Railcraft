@@ -222,7 +222,7 @@ public final class Railcraft {
                         || mapping.name.equals("Railcraft:tile.firestone.recharge"))
                     remap(RailcraftBlocks.ritual.block(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil"))
-                    remap(RailcraftBlocks.anvil_steel.block(), mapping);
+                    remap(RailcraftBlocks.anvilSteel.block(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
             } else if (mapping.type == GameRegistry.Type.ITEM) {
@@ -239,7 +239,7 @@ public final class Railcraft {
                         || mapping.name.equals("Railcraft:tile.firestone.recharge"))
                     remap(RailcraftBlocks.ritual.item(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.block.anvil"))
-                    remap(RailcraftBlocks.anvil_steel.item(), mapping);
+                    remap(RailcraftBlocks.anvilSteel.item(), mapping);
                 else if (mapping.name.equals("Railcraft:tile.railcraft.hidden"))
                     mapping.ignore();
             }

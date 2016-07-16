@@ -9,22 +9,15 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.brick;
 
+import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 
-public class ItemBrick extends ItemBlock {
+public class ItemBrick extends ItemBlockRailcraftSubtyped {
 
     public ItemBrick(Block block) {
         super(block);
-        setMaxDamage(0);
-        setHasSubtypes(true);
-    }
-
-    @Override
-    public int getMetadata(int meta) {
-        return meta;
     }
 
     @Override

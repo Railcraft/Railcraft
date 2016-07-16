@@ -44,7 +44,7 @@ public class EntityCartWork extends CartBase {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.WORK;
+        return RailcraftCarts.WORK;
     }
 
     @Override

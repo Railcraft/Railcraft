@@ -59,7 +59,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.LOCO_STEAM_SOLID;
+        return RailcraftCarts.LOCO_STEAM_SOLID;
     }
 
     @Override

@@ -43,7 +43,7 @@ public final class EntityCartEnergyMFSU extends CartBaseEnergy {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.ENERGY_MFSU;
+        return RailcraftCarts.ENERGY_MFSU;
     }
 
 }

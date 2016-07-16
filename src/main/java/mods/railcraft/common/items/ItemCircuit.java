@@ -18,6 +18,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,10 +32,17 @@ public class ItemCircuit extends ItemRailcraft {
         setMaxDamage(0);
     }
 
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumCircuit.class;
+    }
+
     @Override
     public void initializeDefinintion() {
         for (EnumCircuit circuit : EnumCircuit.VALUES) {
-            ItemStack stack = new ItemStack(this, 1, circuit.ordinal());
+            ItemStack stack = getStack(circuit);
+            assert stack != null;
             RailcraftRegistry.register(stack);
         }
     }
@@ -112,11 +120,6 @@ public class ItemCircuit extends ItemRailcraft {
         @Override
         public Object getAlternate(IRailcraftObjectContainer container) {
             return alternate;
-        }
-
-        @Override
-        public boolean isValidBaseObject(Class<?> clazz) {
-            return clazz == ItemCircuit.class;
         }
 
         @Override

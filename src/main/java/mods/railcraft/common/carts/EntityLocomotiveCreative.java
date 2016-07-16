@@ -45,7 +45,7 @@ public class EntityLocomotiveCreative extends EntityLocomotive implements ISided
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.LOCO_CREATIVE;
+        return RailcraftCarts.LOCO_CREATIVE;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class EntityLocomotiveCreative extends EntityLocomotive implements ISided
 
     @Override
     protected ItemStack getCartItemBase() {
-        return EnumCart.LOCO_CREATIVE.getCartItem();
+        return RailcraftCarts.LOCO_CREATIVE.getCartItem();
     }
 
     @Override

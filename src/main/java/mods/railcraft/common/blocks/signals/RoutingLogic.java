@@ -13,7 +13,7 @@ import mods.railcraft.api.carts.IPaintedCart;
 import mods.railcraft.api.carts.IRefuelableCart;
 import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.common.carts.EntityLocomotive;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -428,11 +428,11 @@ public class RoutingLogic {
             if (cart instanceof EntityLocomotive) {
                 EntityLocomotive loco = (EntityLocomotive) cart;
                 if (value.equalsIgnoreCase("Electric"))
-                    return loco.getCartType() == EnumCart.LOCO_ELECTRIC;
+                    return loco.getCartType() == RailcraftCarts.LOCO_ELECTRIC;
                 if (value.equalsIgnoreCase("Steam"))
-                    return loco.getCartType() == EnumCart.LOCO_STEAM_SOLID;
+                    return loco.getCartType() == RailcraftCarts.LOCO_STEAM_SOLID;
                 if (value.equalsIgnoreCase("Steam_Magic"))
-                    return loco.getCartType() == EnumCart.LOCO_STEAM_MAGIC;
+                    return loco.getCartType() == RailcraftCarts.LOCO_STEAM_MAGIC;
                 if (value.equalsIgnoreCase("None"))
                     return false;
             }

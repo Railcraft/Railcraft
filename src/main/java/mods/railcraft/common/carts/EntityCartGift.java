@@ -165,7 +165,7 @@ public class EntityCartGift extends CartBaseSurprise {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.GIFT;
+        return RailcraftCarts.GIFT;
     }
 
     @Override

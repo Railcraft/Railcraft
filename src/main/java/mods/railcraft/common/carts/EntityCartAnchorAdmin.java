@@ -31,7 +31,7 @@ public class EntityCartAnchorAdmin extends EntityCartAnchor {
 
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return EnumCart.getCartType(stack) == EnumCart.ANCHOR_ADMIN;
+        return RailcraftCarts.getCartType(stack) == RailcraftCarts.ANCHOR_ADMIN;
     }
 
     @Override

@@ -8,9 +8,9 @@
  */
 package mods.railcraft.common.util.crafting;
 
-import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.ICartType;
-import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
+import mods.railcraft.common.carts.RailcraftCarts;
+import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -31,10 +31,10 @@ public class CraftingHandler {
             ItemStack stack = craftMatrix.getStackInSlot(i);
             if (stack != null) {
                 count++;
-                if (stack.getItem() == ItemFirestoneCracked.item)
+                if (RailcraftItems.firestoneCracked.isEqual(stack))
                     craftMatrix.setInventorySlotContents(i, null);
-                ICartType cartType = EnumCart.getCartType(stack);
-                if (cartType != null && cartType != EnumCart.BASIC)
+                ICartType cartType = RailcraftCarts.getCartType(stack);
+                if (cartType != null && cartType != RailcraftCarts.BASIC)
                     cartItem = stack;
             }
         }

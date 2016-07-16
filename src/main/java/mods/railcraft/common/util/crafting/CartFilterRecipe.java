@@ -9,7 +9,7 @@
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.carts.CartBaseFiltered;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.carts.ICartType;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
@@ -27,8 +27,8 @@ import javax.annotation.Nullable;
 public class CartFilterRecipe implements IRecipe {
 
     public enum FilterType {
-        Cargo(EnumCart.CARGO),
-        Tank(EnumCart.TANK) {
+        Cargo(RailcraftCarts.CARGO),
+        Tank(RailcraftCarts.TANK) {
             @Override
             public boolean isAllowedFilterItem(ItemStack stack) {
                 return FluidItemHelper.isFilledContainer(stack);
@@ -73,7 +73,7 @@ public class CartFilterRecipe implements IRecipe {
         for (IInvSlot slot : InventoryIterator.getIterable(grid).notNull()) {
             itemCount++;
             ItemStack stack = slot.getStack();
-            FilterType type = FilterType.fromCartType(EnumCart.getCartType(stack));
+            FilterType type = FilterType.fromCartType(RailcraftCarts.getCartType(stack));
             if (type != null) {
                 cartSlot = slot.getIndex();
                 filterType = type;
@@ -115,7 +115,7 @@ public class CartFilterRecipe implements IRecipe {
 
         for (IInvSlot slot : InventoryIterator.getIterable(inv).notNull()) {
             ItemStack stack = slot.getStack();
-            if (FilterType.fromCartType(EnumCart.getCartType(stack)) == null) {
+            if (FilterType.fromCartType(RailcraftCarts.getCartType(stack)) == null) {
                 grid[slot.getIndex()] = stack.copy();
             }
         }

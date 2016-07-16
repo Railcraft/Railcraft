@@ -39,7 +39,7 @@ public class EntityCartChest extends CartBaseContainer {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.CHEST;
+        return RailcraftCarts.CHEST;
     }
 
     @Override

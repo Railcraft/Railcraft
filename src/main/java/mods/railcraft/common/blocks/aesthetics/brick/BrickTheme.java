@@ -155,7 +155,7 @@ public enum BrickTheme {
     }
 
     public final String themeTag() {
-        return name().toLowerCase(Locale.ENGLISH);
+        return name().toLowerCase(Locale.ROOT);
     }
 
     protected void initBlock() {

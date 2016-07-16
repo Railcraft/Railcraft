@@ -4,7 +4,7 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -31,7 +31,7 @@ public class ModuleRF extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                EnumCart cart = EnumCart.REDSTONE_FLUX;
+                RailcraftCarts cart = RailcraftCarts.REDSTONE_FLUX;
                 if (cart.setup()) {
                     CraftingPlugin.addRecipe(cart.getCartItem(),
                             "LRL",

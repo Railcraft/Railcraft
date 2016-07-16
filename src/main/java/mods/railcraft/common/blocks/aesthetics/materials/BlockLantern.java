@@ -69,6 +69,12 @@ public class BlockLantern extends Block implements IMaterialBlock {
         setHarvestLevel("pickaxe", 0);
     }
 
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return Materials.class;
+    }
+
     @Override
     public void finalizeDefinition() {
         for (Materials mat : Materials.getValidMats()) {

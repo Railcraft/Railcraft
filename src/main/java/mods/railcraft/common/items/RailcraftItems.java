@@ -9,14 +9,17 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.carts.ItemBoreHeadDiamond;
 import mods.railcraft.common.carts.ItemBoreHeadIron;
 import mods.railcraft.common.carts.ItemBoreHeadSteel;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.firestone.ItemFirestone;
+import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
+import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -40,29 +43,33 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     boreHeadIron(ItemBoreHeadIron::new, "borehead.iron") {
         @Override
         public boolean isEnabled() {
-            return super.isEnabled() && EnumCart.BORE.isEnabled();
+            return super.isEnabled() && RailcraftCarts.BORE.isEnabled();
         }
     },
     boreHeadSteel(ItemBoreHeadSteel::new, "borehead.steel") {
         @Override
         public boolean isEnabled() {
-            return super.isEnabled() && EnumCart.BORE.isEnabled();
+            return super.isEnabled() && RailcraftCarts.BORE.isEnabled();
         }
     },
     boreHeadDiamond(ItemBoreHeadDiamond::new, "borehead.diamond") {
         @Override
         public boolean isEnabled() {
-            return super.isEnabled() && EnumCart.BORE.isEnabled();
+            return super.isEnabled() && RailcraftCarts.BORE.isEnabled();
         }
     },
     circuit(ItemCircuit::new, "part.circuit"),
-    coke(ItemCircuit::new, "fuel.coke"),
+    coke(ItemCoke::new, "fuel.coke"),
     crowbarIron(ItemCrowbarIron::new, "tool.crowbar.iron"),
     crowbarSteel(ItemCrowbarSteel::new, "tool.crowbar.steel"),
     dust(ItemDust::new, "dust"),
     electricMeter(ItemElectricMeter::new, "tool.electric.meter"),
     gear(ItemGear::new, "part.gear"),
     goggles(ItemGoggles::new, "armor.goggles"),
+    firestoneCracked(ItemFirestoneCracked::new, "firestone.cracked"),
+    firestoneCut(ItemFirestone::new, "firestone.cut"),
+    firestoneRaw(ItemFirestone::new, "firestone.raw"),
+    firestoneRefined(ItemFirestoneRefined::new, "firestone.refined"),
     hoeSteel(ItemSteelHoe::new, "tool.hoe.steel", Items.IRON_HOE),
     ingot(ItemIngot::new, "ingot"),
     magGlass(ItemMagnifyingGlass::new, "tool.magnifying.glass"),
@@ -122,7 +129,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
         this.altRecipeObject = alt;
     }
 
-    public static void definePostRecipes() {
+    public static void finalizeDefinitions() {
         for (RailcraftItems type : VALUES) {
             if (type.railcraftObject != null)
                 type.railcraftObject.finalizeDefinition();
@@ -185,7 +192,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
 
     private void checkVariantObject(@Nullable IVariantEnum variant) {
         if (item != null)
-            IVariantEnum.tools.checkVariantObject(item.getClass(), variant);
+            ((IRailcraftObject) item).checkVariant(variant);
     }
 
     @Nullable

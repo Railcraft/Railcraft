@@ -21,7 +21,7 @@ import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.ModuleChunkLoading;
@@ -406,7 +406,7 @@ public class RailcraftConfig {
         loadLootProperty("tool.pickaxe.steel", 5);
         loadLootProperty("tool.axe.steel", 5);
         loadLootProperty("tool.signal.tuner", 5);
-        loadLootProperty("tool.surveyor", 5);
+        loadLootProperty("tool.signal.surveyor", 5);
         loadLootProperty("tool.magnifying.glass", 5);
         loadLootProperty("tool.electric.meter", 5);
         loadLootProperty("armor.goggles", 5);
@@ -421,7 +421,7 @@ public class RailcraftConfig {
     private static void loadCarts() {
         configMain.addCustomCategoryComment(CAT_CARTS, "Disable individual carts here.");
 
-        for (EnumCart cart : EnumCart.VALUES) {
+        for (RailcraftCarts cart : RailcraftCarts.VALUES) {
             if (!cart.isVanillaCart())
                 loadCartProperty("cart." + cart.getBaseTag());
         }

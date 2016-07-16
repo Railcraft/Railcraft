@@ -10,6 +10,8 @@ package mods.railcraft.common.blocks.signals;
 
 import net.minecraft.block.Block;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -23,6 +25,7 @@ public interface ISignalTileDefinition {
 
     boolean isEnabled();
 
+    @Nullable
     Block getBlock();
 
     int getMeta();

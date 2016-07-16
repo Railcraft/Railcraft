@@ -77,7 +77,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     @Nonnull
     @Override
     public ItemStack getCartItem() {
-        ItemStack stack = EnumCart.fromCart(this).getCartItem();
+        ItemStack stack = RailcraftCarts.fromCart(this).getCartItem();
         if (hasCustomName())
             stack.setStackDisplayName(getCustomNameTag());
         return stack;

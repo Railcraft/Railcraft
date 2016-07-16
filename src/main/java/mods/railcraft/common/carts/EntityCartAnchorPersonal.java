@@ -53,7 +53,7 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
 
     @Override
     public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart) {
-        return EnumCart.getCartType(stack) == EnumCart.ANCHOR_PERSONAL;
+        return RailcraftCarts.getCartType(stack) == RailcraftCarts.ANCHOR_PERSONAL;
     }
 
     @Override

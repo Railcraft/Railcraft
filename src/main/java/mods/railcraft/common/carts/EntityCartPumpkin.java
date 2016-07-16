@@ -66,7 +66,7 @@ public class EntityCartPumpkin extends CartBaseSurprise {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.PUMPKIN;
+        return RailcraftCarts.PUMPKIN;
     }
 
     @Override

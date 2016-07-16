@@ -175,7 +175,7 @@ public enum EnumTrack {
     }
 
     public void register() {
-        if (RailcraftBlocks.track.isLoaded() && RailcraftConfig.isSubBlockEnabled(getTag())) {
+        if (trackSpec == null && RailcraftBlocks.track.isLoaded() && RailcraftConfig.isSubBlockEnabled(getTag())) {
             ToolTip toolTip = ToolTip.buildToolTip("tile.railcraft." + MiscTools.cleanTag(getTag()) + ".tip");
             List<String> tips = toolTip != null ? toolTip.convertToStrings() : null;
             trackSpec = new TrackSpec((short) ordinal(), getTag(), /* TODO: create a ModelResourceLocation */ null, trackInstance, tips);

@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,6 +32,12 @@ public class ItemDust extends ItemRailcraft {
     public ItemDust() {
         setHasSubtypes(true);
         setMaxDamage(0);
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumDust.class;
     }
 
     @Override
@@ -66,9 +73,11 @@ public class ItemDust extends ItemRailcraft {
     }
 
     @Override
-    public String getOreTag(IVariantEnum variant) {
-        IVariantEnum.tools.checkVariantObject(getClass(), variant);
-        return ((EnumDust) variant).oreTag;
+    public String getOreTag(@Nullable IVariantEnum variant) {
+        checkVariant(variant);
+        if (variant != null)
+            return ((EnumDust) variant).oreTag;
+        return null;
     }
 
     public enum EnumDust implements IVariantEnum {
@@ -89,11 +98,6 @@ public class ItemDust extends ItemRailcraft {
         @Override
         public Object getAlternate(IRailcraftObjectContainer container) {
             return oreTag;
-        }
-
-        @Override
-        public boolean isValidBaseObject(Class<?> clazz) {
-            return clazz == ItemDust.class;
         }
 
         @Override

@@ -71,7 +71,7 @@ public class ItemRailcraft extends Item implements IRailcraftObject {
 
     @Override
     public Object getRecipeObject(@Nullable IVariantEnum variant) {
-        IVariantEnum.tools.checkVariantObject(getClass(), variant);
+        checkVariant(variant);
         String oreTag = getOreTag(variant);
         if (oreTag != null)
             return oreTag;

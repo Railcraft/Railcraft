@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.glass;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.color.ColorPlugin;
@@ -39,6 +40,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -56,6 +58,11 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
         setSoundType(SoundType.GLASS);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
+    }
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumColor.class;
     }
 
     @Override

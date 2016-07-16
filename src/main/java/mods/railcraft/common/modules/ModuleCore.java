@@ -203,18 +203,18 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 // Items
-                replaceVanillaCart(EnumCart.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, EntityMinecart.Type.COMMAND_BLOCK, 40);
-                replaceVanillaCart(EnumCart.BASIC, Items.MINECART, EntityMinecart.Type.RIDEABLE, 42);
-                replaceVanillaCart(EnumCart.CHEST, Items.CHEST_MINECART, EntityMinecart.Type.CHEST, 43);
-                replaceVanillaCart(EnumCart.FURNACE, Items.FURNACE_MINECART, EntityMinecart.Type.FURNACE, 44);
-                replaceVanillaCart(EnumCart.TNT, Items.TNT_MINECART, EntityMinecart.Type.TNT, 45);
-                replaceVanillaCart(EnumCart.HOPPER, Items.HOPPER_MINECART, EntityMinecart.Type.HOPPER, 46);
+                replaceVanillaCart(RailcraftCarts.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, EntityMinecart.Type.COMMAND_BLOCK, 40);
+                replaceVanillaCart(RailcraftCarts.BASIC, Items.MINECART, EntityMinecart.Type.RIDEABLE, 42);
+                replaceVanillaCart(RailcraftCarts.CHEST, Items.CHEST_MINECART, EntityMinecart.Type.CHEST, 43);
+                replaceVanillaCart(RailcraftCarts.FURNACE, Items.FURNACE_MINECART, EntityMinecart.Type.FURNACE, 44);
+                replaceVanillaCart(RailcraftCarts.TNT, Items.TNT_MINECART, EntityMinecart.Type.TNT, 45);
+                replaceVanillaCart(RailcraftCarts.HOPPER, Items.HOPPER_MINECART, EntityMinecart.Type.HOPPER, 46);
 
-                LootPlugin.addLoot(EnumCart.BASIC.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.basic");
-                LootPlugin.addLoot(EnumCart.CHEST.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.chest");
-                LootPlugin.addLoot(EnumCart.TNT.getCartItem(), 1, 3, LootPlugin.Type.RAILWAY, "cart.tnt");
+                LootPlugin.addLoot(RailcraftCarts.BASIC.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.basic");
+                LootPlugin.addLoot(RailcraftCarts.CHEST.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.chest");
+                LootPlugin.addLoot(RailcraftCarts.TNT.getCartItem(), 1, 3, LootPlugin.Type.RAILWAY, "cart.tnt");
                 LootPlugin.addLoot(new ItemStack(Blocks.RAIL), 8, 32, LootPlugin.Type.RAILWAY, "track.basic");
-                LootPlugin.addLoot(EnumCart.HOPPER.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.hopper");
+                LootPlugin.addLoot(RailcraftCarts.HOPPER.getCartItem(), 1, 1, LootPlugin.Type.RAILWAY, "cart.hopper");
 
                 float h = BlockTrack.HARDNESS;
                 Blocks.RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
@@ -290,7 +290,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 MachineTileRegistery.registerTileEntities();
             }
 
-            private void replaceVanillaCart(EnumCart cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
+            private void replaceVanillaCart(RailcraftCarts cartType, Item original, EntityMinecart.Type minecartType, int entityId) {
                 cartType.registerEntity();
 
                 Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(minecartType.getName());
@@ -341,9 +341,10 @@ public class ModuleCore extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                RailcraftFluids.postInitFluids();
-                RailcraftBlocks.definePostRecipes();
-                RailcraftItems.definePostRecipes();
+                RailcraftFluids.finalizeDefinitions();
+                RailcraftBlocks.finalizeDefinitions();
+                RailcraftItems.finalizeDefinitions();
+                RailcraftCarts.finalizeDefinitions();
 
                 GameRegistry.registerFuelHandler(FuelPlugin.getFuelHandler());
 

@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.machine;
 
-import mods.railcraft.common.blocks.ItemBlockRailcraftMultiType;
+import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class ItemMachine extends ItemBlockRailcraftMultiType {
+public class ItemMachine extends ItemBlockRailcraftSubtyped {
 
     private final BlockMachine<? extends IEnumMachine<?>> machineBlock;
 

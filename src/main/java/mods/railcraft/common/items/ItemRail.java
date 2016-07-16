@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,6 +32,12 @@ public class ItemRail extends ItemRailcraft {
     public ItemRail() {
         setHasSubtypes(true);
         setMaxDamage(0);
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumRail.class;
     }
 
     @Override
@@ -151,11 +158,6 @@ public class ItemRail extends ItemRailcraft {
         @Override
         public Object getAlternate(IRailcraftObjectContainer container) {
             return alternate;
-        }
-
-        @Override
-        public boolean isValidBaseObject(Class<?> clazz) {
-            return clazz == ItemRail.class;
         }
 
         @Override

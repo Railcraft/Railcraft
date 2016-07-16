@@ -72,7 +72,7 @@ public class EntityCartTank extends CartBaseFiltered implements IFluidHandler, I
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.TANK;
+        return RailcraftCarts.TANK;
     }
 
     @Override

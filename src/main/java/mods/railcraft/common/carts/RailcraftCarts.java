@@ -36,7 +36,7 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Locale;
 
-public enum EnumCart implements ICartType, IRailcraftObjectContainer {
+public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer {
 
     BASIC(0, EntityCartBasic.class),
     CHEST(0, EntityCartChest.class, true, new ItemStack(Blocks.CHEST)),
@@ -88,7 +88,7 @@ public enum EnumCart implements ICartType, IRailcraftObjectContainer {
     COMMAND_BLOCK(3, EntityCartCommand.class, true, new ItemStack(Blocks.COMMAND_BLOCK)),
     REDSTONE_FLUX(0, EntityCartRF.class);
     @SuppressWarnings("WeakerAccess")
-    public static final EnumCart[] VALUES = values();
+    public static final RailcraftCarts[] VALUES = values();
     private final Class<? extends EntityMinecart> type;
     private final byte id;
     private final byte rarity;
@@ -99,15 +99,15 @@ public enum EnumCart implements ICartType, IRailcraftObjectContainer {
     private ItemStack cartItem;
     private boolean isSetup;
 
-    EnumCart(int rarity, Class<? extends EntityMinecart> type) {
+    RailcraftCarts(int rarity, Class<? extends EntityMinecart> type) {
         this(rarity, type, false, null);
     }
 
-    EnumCart(int rarity, Class<? extends EntityMinecart> type, boolean canBeUncrafted) {
+    RailcraftCarts(int rarity, Class<? extends EntityMinecart> type, boolean canBeUncrafted) {
         this(rarity, type, canBeUncrafted, null);
     }
 
-    EnumCart(int rarity, Class<? extends EntityMinecart> type, boolean canBeUncrafted, ItemStack contents) {
+    RailcraftCarts(int rarity, Class<? extends EntityMinecart> type, boolean canBeUncrafted, ItemStack contents) {
         int entityId;
         try {
             entityId = (byte) EntityIDs.class.getField("CART_" + name()).getInt(null);
@@ -122,13 +122,8 @@ public enum EnumCart implements ICartType, IRailcraftObjectContainer {
     }
 
     @SuppressWarnings("WeakerAccess")
-    protected final void addModule(Class<? extends IRailcraftModule> module) {
-        modules.add(module);
-    }
-
-    @SuppressWarnings("WeakerAccess")
     public static ICartType fromClass(Class<? extends EntityMinecart> cls) {
-        for (EnumCart cart : VALUES) {
+        for (RailcraftCarts cart : VALUES) {
             if (cls.equals(cart.type))
                 return cart;
         }
@@ -143,18 +138,30 @@ public enum EnumCart implements ICartType, IRailcraftObjectContainer {
         if (cart == null)
             return null;
         if (cart.getItem() == Items.MINECART)
-            return EnumCart.BASIC;
+            return RailcraftCarts.BASIC;
         if (cart.getItem() == Items.CHEST_MINECART)
-            return EnumCart.CHEST;
+            return RailcraftCarts.CHEST;
         if (cart.getItem() == Items.TNT_MINECART)
-            return EnumCart.TNT;
+            return RailcraftCarts.TNT;
         if (cart.getItem() == Items.FURNACE_MINECART)
-            return EnumCart.FURNACE;
+            return RailcraftCarts.FURNACE;
         if (cart.getItem() == Items.HOPPER_MINECART)
-            return EnumCart.HOPPER;
+            return RailcraftCarts.HOPPER;
         if (cart.getItem() instanceof ItemCart)
             return ((ItemCart) cart.getItem()).getCartType();
         return null;
+    }
+
+    public static void finalizeDefinitions() {
+        for (RailcraftCarts type : VALUES) {
+            if (type.item != null)
+                type.item.finalizeDefinition();
+        }
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    protected final void addModule(Class<? extends IRailcraftModule> module) {
+        modules.add(module);
     }
 
     @Override

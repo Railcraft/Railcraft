@@ -15,7 +15,7 @@ import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.carts.LocomotivePaintingRecipe;
 import mods.railcraft.common.items.ItemGear.EnumGear;
@@ -50,7 +50,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                 EnumTrack.LOCOMOTIVE.register();
                 EnumTrack.LIMITER.register();
 
-                EnumCart cart = EnumCart.LOCO_STEAM_SOLID;
+                RailcraftCarts cart = RailcraftCarts.LOCO_STEAM_SOLID;
                 if (cart.setup()) {
                     paintLocomotive(cart.getCartItem());
 
@@ -84,14 +84,14 @@ public class ModuleLocomotives extends RailcraftModulePayload {
                             'B', new ItemStack(Blocks.IRON_BARS));
                 }
 
-                cart = EnumCart.LOCO_ELECTRIC;
+                cart = RailcraftCarts.LOCO_ELECTRIC;
                 if (cart.setup()) {
                     paintLocomotive(cart.getCartItem());
                     RailcraftItems.gear.register();
                     RailcraftItems.plate.register();
                 }
 
-                cart = EnumCart.LOCO_CREATIVE;
+                cart = RailcraftCarts.LOCO_CREATIVE;
                 if (cart.setup()) {
                     paintLocomotive(cart.getCartItem());
                 }
@@ -99,9 +99,9 @@ public class ModuleLocomotives extends RailcraftModulePayload {
 
             @Override
             public void init() {
-                if (EnumCart.LOCO_ELECTRIC.isEnabled()) {
+                if (RailcraftCarts.LOCO_ELECTRIC.isEnabled()) {
                     Object feederUnit = EnumMachineEpsilon.ELECTRIC_FEEDER.isAvailable() ? EnumMachineEpsilon.ELECTRIC_FEEDER.getItem() : "blockCopper";
-                    ItemStack cartStack = EnumCart.LOCO_ELECTRIC.getCartItem();
+                    ItemStack cartStack = RailcraftCarts.LOCO_ELECTRIC.getCartItem();
                     ItemLocomotive.setItemColorData(cartStack, EnumColor.YELLOW, EnumColor.BLACK);
                     CraftingPlugin.addRecipe(cartStack,
                             "LT ",

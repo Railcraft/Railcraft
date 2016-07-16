@@ -89,11 +89,6 @@ public enum EnumCube implements IBlockVariantEnum<EnumCube> {
         return VALUES[id];
     }
 
-    @Override
-    public boolean isValidBaseObject(Class<?> clazz) {
-        return clazz == BlockCube.class;
-    }
-
     @Nullable
     @Override
     public Object getAlternate(IRailcraftObjectContainer container) {

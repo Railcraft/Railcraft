@@ -51,7 +51,7 @@ public class ModuleFactory extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.anvil_steel,
+                        RailcraftBlocks.anvilSteel,
                         RailcraftBlocks.cube,
                         RailcraftBlocks.machine_alpha,
                         RailcraftBlocks.machine_beta,
@@ -83,7 +83,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                             "SFS",
                             "SSS",
                             'F', new ItemStack(Blocks.FURNACE),
-                            'S', RailcraftItems.plate.getRecipeObject(Metal.STEEL));
+                            'S', RailcraftItems.plate, Metal.STEEL);
 
                 alpha = EnumMachineAlpha.BLAST_FURNACE;
                 if (alpha.isAvailable()) {

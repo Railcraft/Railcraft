@@ -49,7 +49,7 @@ public class EntityCartCargo extends CartBaseFiltered {
 
     @Override
     public ICartType getCartType() {
-        return EnumCart.CARGO;
+        return RailcraftCarts.CARGO;
     }
 
     @Override

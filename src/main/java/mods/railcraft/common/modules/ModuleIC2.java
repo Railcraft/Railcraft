@@ -14,7 +14,7 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
-import mods.railcraft.common.carts.EnumCart;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRailcraft;
 import mods.railcraft.common.items.Metal;
@@ -60,10 +60,10 @@ public class ModuleIC2 extends RailcraftModulePayload {
                     RailcraftRegistry.register("ic2.upgrade.lapotron", new ItemStack(lapotronUpgrade));
                 }
 
-                EnumCart.ENERGY_BATBOX.setup();
-                EnumCart.ENERGY_MFE.setup();
-                if (IC2Plugin.isClassic()) EnumCart.ENERGY_MFSU.setup();
-                else EnumCart.ENERGY_CESU.setup();
+                RailcraftCarts.ENERGY_BATBOX.setup();
+                RailcraftCarts.ENERGY_MFE.setup();
+                if (IC2Plugin.isClassic()) RailcraftCarts.ENERGY_MFSU.setup();
+                else RailcraftCarts.ENERGY_CESU.setup();
 
 //        id = RailcraftConfig.getItemId("item.creosote.wood");
 //        if(id > 0){
@@ -101,7 +101,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
                 ItemStack batbox = IC2Plugin.getItem("batBox");
                 if (batbox != null) {
-                    EnumCart cart = EnumCart.ENERGY_BATBOX;
+                    RailcraftCarts cart = RailcraftCarts.ENERGY_BATBOX;
                     cart.setContents(batbox);
                     ItemStack stack = cart.getCartItem();
                     if (stack != null) {
@@ -117,7 +117,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                 if (!IC2Plugin.isClassic()) {
                     ItemStack cesu = IC2Plugin.getItem("cesuUnit");
                     if (cesu != null) {
-                        EnumCart cart = EnumCart.ENERGY_CESU;
+                        RailcraftCarts cart = RailcraftCarts.ENERGY_CESU;
                         cart.setContents(cesu);
                         ItemStack stack = cart.getCartItem();
                         if (stack != null) {
@@ -132,7 +132,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                 } else {
                     ItemStack mfsu = IC2Plugin.getItem("mfsUnit");
                     if (mfsu != null) {
-                        EnumCart cart = EnumCart.ENERGY_MFSU;
+                        RailcraftCarts cart = RailcraftCarts.ENERGY_MFSU;
                         cart.setContents(mfsu);
                         ItemStack stack = cart.getCartItem();
                         if (stack != null) {
@@ -148,7 +148,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
 
                 ItemStack mfe = IC2Plugin.getItem("mfeUnit");
                 if (mfe != null) {
-                    EnumCart cart = EnumCart.ENERGY_MFE;
+                    RailcraftCarts cart = RailcraftCarts.ENERGY_MFE;
                     cart.setContents(mfe);
                     ItemStack stack = cart.getCartItem();
                     if (stack != null) {
