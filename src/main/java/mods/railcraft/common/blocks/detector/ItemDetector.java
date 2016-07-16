@@ -8,19 +8,19 @@
  */
 package mods.railcraft.common.blocks.detector;
 
+import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
-public class ItemDetector extends ItemBlock {
+public class ItemDetector extends ItemBlockRailcraft {
 
     private final BlockDetector blockDetector;
 

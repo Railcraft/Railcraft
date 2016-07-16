@@ -16,7 +16,7 @@ import mods.railcraft.common.blocks.tracks.EnumTrack;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-@RailcraftModule(value = "tracks|electric", dependencyClasses = {ModuleLocomotives.class, ModuleElectricity.class})
+@RailcraftModule(value = "railcraft:tracks|electric", dependencyClasses = {ModuleLocomotives.class, ModuleElectricity.class})
 public class ModuleTracksElectric extends RailcraftModulePayload {
 
     public ModuleTracksElectric() {

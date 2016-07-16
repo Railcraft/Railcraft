@@ -18,12 +18,12 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class MachineProxy<T extends IEnumMachine<T>> {
+public class MachineProxy<T extends Enum<T> & IEnumMachine<T>> {
     private final BiMap<Integer, T> metaMap;
     private final List<T> creativeList;
     private final IProperty<T> property;
 
-    public static <T extends IEnumMachine<T>> MachineProxy<T> create(T[] values, IProperty<T> property, List<T> creativeList) {
+    public static <T extends Enum<T> & IEnumMachine<T>> MachineProxy<T> create(T[] values, IProperty<T> property, List<T> creativeList) {
         return new MachineProxy<T>(values, property, creativeList);
     }
 

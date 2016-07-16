@@ -25,7 +25,7 @@ import net.minecraft.init.Items;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-@RailcraftModule("electricity")
+@RailcraftModule("railcraft:electricity")
 public class ModuleElectricity extends RailcraftModulePayload {
 
     public ModuleElectricity() {

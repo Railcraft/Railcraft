@@ -14,15 +14,11 @@ import mods.railcraft.common.blocks.machine.BoundingBoxManager;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleElectricity;
 import mods.railcraft.common.modules.ModuleTransport;
-import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -84,11 +80,6 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
     }
 
     @Override
-    public String getToolClass() {
-        return "pickaxe:2";
-    }
-
-    @Override
     public boolean passesLight() {
         return true;
     }
@@ -107,21 +98,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
         }
     }
 
-    @Nullable
     @Override
-    public ItemStack getItem() {
-        return getItem(1);
-    }
-
-    @Nullable
-    @Override
-    public ItemStack getItem(int qty) {
-        Block block = getBlock();
-        if (block == null)
-            return null;
-        return new ItemStack(block, qty, ordinal());
-    }
-
     public Class<? extends IRailcraftModule> getModule() {
         return module;
     }
@@ -132,18 +109,8 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
     }
 
     @Override
-    public Block getBlock() {
-        return getBlockContainer().block();
-    }
-
-    @Override
-    public IBlockState getState() {
-        return getBlock().getDefaultState().withProperty(VARIANT, this);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
+    public PropertyEnum<EnumMachineDelta> getVariantProperty() {
+        return VARIANT;
     }
 
     @Override
@@ -163,6 +130,6 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
 
     @Override
     public String getName() {
-        return name();
+        return tag.replace(".", "_");
     }
 }

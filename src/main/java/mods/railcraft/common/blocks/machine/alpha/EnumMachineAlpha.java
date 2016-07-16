@@ -20,9 +20,7 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -144,18 +142,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     }
 
     @Override
-    public ItemStack getItem() {
-        return getItem(1);
-    }
-
-    @Override
-    public ItemStack getItem(int qty) {
-        Block block = getBlock();
-        if (block == null)
-            return null;
-        return new ItemStack(block, qty, ordinal());
-    }
-
     public Class<? extends IRailcraftModule> getModule() {
         return module;
     }
@@ -166,21 +152,8 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     }
 
     @Override
-    public Block getBlock() {
-        return getBlockContainer().block();
-    }
-
-    @Override
-    public IBlockState getState() {
-        return getBlock().getDefaultState().withProperty(VARIANT, this);
-    }
-
-    /**
-     * Block is enabled, but may not be defined yet.
-     */
-    @Override
-    public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(getModule()) && getBlockContainer().isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag());
+    public PropertyEnum<EnumMachineAlpha> getVariantProperty() {
+        return VARIANT;
     }
 
     /**
@@ -228,6 +201,6 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
     @Override
     public String getName() {
-        return name();
+        return tag.replace(".", "_");
     }
 }

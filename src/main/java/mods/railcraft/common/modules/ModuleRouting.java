@@ -24,7 +24,7 @@ import net.minecraft.item.ItemStack;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule(value = "routing", dependencyClasses = {ModuleSignals.class})
+@RailcraftModule(value = "railcraft:routing", dependencyClasses = {ModuleSignals.class})
 public class ModuleRouting extends RailcraftModulePayload {
     public ModuleRouting() {
         setEnabledEventHandler(new ModuleEventHandler() {

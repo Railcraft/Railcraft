@@ -12,6 +12,8 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.ItemCube;
+import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
+import mods.railcraft.common.blocks.aesthetics.glass.ItemStrengthGlass;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
@@ -49,10 +51,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemAnvilBlock;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Constructor;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Created by CovertJaguar on 4/13/2016 for Railcraft.
@@ -60,82 +62,45 @@ import java.lang.reflect.Constructor;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum RailcraftBlocks implements IRailcraftObjectContainer {
-    anvil_steel("anvil", BlockRCAnvil.class, ItemAnvilBlock.class),
-    detector("detector", BlockDetector.class, ItemDetector.class),
-    cube("cube", BlockCube.class, ItemCube.class),
-    frame("frame", BlockFrame.class, ItemBlockRailcraft.class),
-    lantern("lantern", BlockLantern.class, ItemMaterial.class),
-    machine_alpha("machine.alpha", ObjectDef.define(BlockMachine.class, EnumMachineAlpha.PROXY, true), ItemMachine.class),
-    machine_beta("machine.beta", ObjectDef.define(BlockMachine.class, EnumMachineBeta.PROXY, false), ItemMachine.class),
-    machine_gamma("machine.gamma", ObjectDef.define(BlockMachine.class, EnumMachineGamma.PROXY, false), ItemMachine.class),
-    machine_delta("machine.delta", ObjectDef.define(BlockMachine.class, EnumMachineDelta.PROXY, false), ItemMachine.class),
-    machine_epsilon("machine.epsilon", ObjectDef.define(BlockMachine.class, EnumMachineEpsilon.PROXY, true), ItemMachine.class),
-    ore("ore", BlockOre.class, ItemOre.class),
-    ritual("ritual", BlockRitual.class, ItemBlockRailcraft.class),
-    signal("signal", BlockSignalRailcraft.class, ItemSignal.class),
-    slab("slab", BlockRailcraftSlab.class, ItemSlab.class),
-    stair("stair", BlockRailcraftStairs.class, ItemMaterial.class),
-    track("track", BlockTrack.class, ItemTrack.class),
-    wall("wall", BlockRailcraftWall.class, ItemMaterial.class),
-    worldLogic("worldlogic", BlockWorldLogic.class, ItemBlockRailcraft.class);
+    anvil_steel("anvil", BlockRCAnvil::new, ItemAnvilBlock::new),
+    detector("detector", BlockDetector::new, ItemDetector::new),
+    cube("cube", BlockCube::new, ItemCube::new),
+    frame("frame", BlockFrame::new, ItemBlockRailcraft::new),
+    glass("glass", BlockStrengthGlass::new, ItemStrengthGlass::new),
+    lantern("lantern", BlockLantern::new, ItemMaterial::new),
+    machine_alpha("machine.alpha", () -> new BlockMachine<EnumMachineAlpha>(EnumMachineAlpha.PROXY, true), ItemMachine::new),
+    machine_beta("machine.beta", () -> new BlockMachine<EnumMachineBeta>(EnumMachineBeta.PROXY, false), ItemMachine::new),
+    machine_gamma("machine.gamma", () -> new BlockMachine<EnumMachineGamma>(EnumMachineGamma.PROXY, false), ItemMachine::new),
+    machine_delta("machine.delta", () -> new BlockMachine<EnumMachineDelta>(EnumMachineDelta.PROXY, false), ItemMachine::new),
+    machine_epsilon("machine.epsilon", () -> new BlockMachine<EnumMachineEpsilon>(EnumMachineEpsilon.PROXY, true), ItemMachine::new),
+    ore("ore", BlockOre::new, ItemOre::new),
+    ritual("ritual", BlockRitual::new, ItemBlockRailcraft::new),
+    signal("signal", BlockSignalRailcraft::new, ItemSignal::new),
+    slab("slab", BlockRailcraftSlab::new, ItemSlab::new),
+    stair("stair", BlockRailcraftStairs::new, ItemMaterial::new),
+    track("track", BlockTrack::new, ItemTrack::new),
+    wall("wall", BlockRailcraftWall::new, ItemMaterial::new),
+    worldLogic("worldlogic", BlockWorldLogic::new, ItemBlockRailcraft::new);
     public static final RailcraftBlocks[] VALUES = values();
-    private final ObjectDef<Block> blockDef;
-    private final ObjectDef<ItemBlock> itemDef;
+    private final Supplier<Block> blockSupplier;
+    private final Function<Block, ItemBlock> itemSupplier;
     private final String tag;
     protected Object altRecipeObject;
     private Block block;
     private ItemBlock item;
-    private IRailcraftObject railcraftObject;
 
-    private static class ObjectDef<T> {
-        private final Class<? extends T> clazz;
-        private Object[] args;
-
-        private ObjectDef(Class<? extends T> clazz, Object... args) {
-            this.clazz = clazz;
-            this.args = args;
-        }
-
-        public static <T> ObjectDef<T> define(Class<? extends T> itemClass, Object... args) {
-            return new ObjectDef<T>(itemClass, args);
-        }
-
-        public T create() {
-            try {
-                Class<?>[] classes = new Class<?>[args.length];
-                for (int i = 1; i < classes.length; i++) {
-                    classes[i] = args[i].getClass();
-                }
-                Constructor<? extends T> constructor = clazz.getConstructor(classes);
-                return constructor.newInstance((Object[]) classes);
-            } catch (Exception ex) {
-                throw new RuntimeException("Invalid Constructor");
-            }
-        }
-    }
-
-    RailcraftBlocks(String tag, Class<? extends Block> blockClass, Class<? extends ItemBlock> itemClass) {
-        this(tag, ObjectDef.define(blockClass), ObjectDef.define(itemClass));
-    }
-
-    RailcraftBlocks(String tag, Class<? extends Block> blockClass, ObjectDef<ItemBlock> itemDef) {
-        this(tag, ObjectDef.define(blockClass), itemDef);
-    }
-
-    RailcraftBlocks(String tag, ObjectDef<Block> blockDef, Class<? extends ItemBlock> itemClass) {
-        this(tag, blockDef, ObjectDef.define(itemClass));
-    }
-
-    RailcraftBlocks(String tag, ObjectDef<Block> blockDef, ObjectDef<ItemBlock> itemDef) {
-        this.blockDef = blockDef;
-        this.itemDef = itemDef;
+    RailcraftBlocks(String tag, Supplier<Block> blockSupplier, Function<Block, ItemBlock> itemSupplier) {
+        this.blockSupplier = blockSupplier;
+        this.itemSupplier = itemSupplier;
         this.tag = tag;
     }
 
     public static void definePostRecipes() {
         for (RailcraftBlocks type : VALUES) {
-            if (type.railcraftObject != null)
-                type.railcraftObject.finalizeDefinition();
+            if (type.block != null)
+                ((IRailcraftObject) type.block).finalizeDefinition();
+            if (type.item != null)
+                ((IRailcraftObject) type.item).finalizeDefinition();
         }
     }
 
@@ -145,23 +110,26 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
             return;
 
         if (isEnabled()) {
-            block = blockDef.create();
-            if (!(block instanceof IRailcraftObject))
-                throw new RuntimeException("Railcraft Blocks must implement IRailcraftObject");
-            railcraftObject = (IRailcraftObject) block;
+            block = blockSupplier.get();
             block.setRegistryName(tag);
             block.setUnlocalizedName("railcraft." + tag);
 
-            Object[] itemArgs = itemDef.args;
-            itemDef.args = new Object[itemArgs.length + 1];
-            itemDef.args[0] = block;
-            System.arraycopy(itemArgs, 0, itemDef.args, 1, itemArgs.length);
-            item = itemDef.create();
+            item = itemSupplier.apply(block);
             item.setRegistryName(tag);
 
             RailcraftRegistry.register(block, item);
-            railcraftObject.initializeDefinintion();
-            railcraftObject.defineRecipes();
+
+            if (!(block instanceof IRailcraftObject))
+                throw new RuntimeException("Railcraft Blocks must implement IRailcraftObject");
+            IRailcraftObject blockObject = (IRailcraftObject) block;
+            blockObject.initializeDefinintion();
+            blockObject.defineRecipes();
+
+            if (!(item instanceof IRailcraftObject))
+                throw new RuntimeException("Railcraft ItemBlocks must implement IRailcraftObject");
+            IRailcraftObject itemObject = (IRailcraftObject) item;
+            itemObject.initializeDefinintion();
+            itemObject.defineRecipes();
         }
     }
 
@@ -202,24 +170,6 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
 
     @Nullable
     @Override
-    public ItemStack getWildcard() {
-        return getStack(1, OreDictionary.WILDCARD_VALUE);
-    }
-
-    @Nullable
-    @Override
-    public ItemStack getStack() {
-        return getStack(1, 0);
-    }
-
-    @Nullable
-    @Override
-    public ItemStack getStack(int qty) {
-        return getStack(qty, 0);
-    }
-
-    @Nullable
-    @Override
     public ItemStack getStack(int qty, int meta) {
 //        register(); Blocks are not created lazily like items.
         if (block == null)
@@ -228,26 +178,17 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     }
 
     private void checkVariantObject(@Nullable IVariantEnum variant) {
-        IVariantEnum.tools.checkVariantObject(blockDef.clazz, variant);
-    }
-
-    @Nullable
-    @Override
-    public ItemStack getStack(IVariantEnum variant) {
-        return getStack(1, variant);
+        if (block != null)
+            IVariantEnum.tools.checkVariantObject(block.getClass(), variant);
     }
 
     @Nullable
     @Override
     public ItemStack getStack(int qty, IVariantEnum variant) {
         checkVariantObject(variant);
-        return railcraftObject.getStack(qty, variant);
-    }
-
-    @Nullable
-    @Override
-    public Object getRecipeObject() {
-        return getRecipeObject(null);
+        if (block != null)
+            return ((IRailcraftObject) block).getStack(qty, variant);
+        return null;
     }
 
     @Nullable
@@ -256,8 +197,8 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
         checkVariantObject(variant);
 //        register(); Blocks are not created lazily like items.
         Object obj = null;
-        if (railcraftObject != null)
-            obj = railcraftObject.getRecipeObject(variant);
+        if (block != null)
+            obj = ((IRailcraftObject) block).getRecipeObject(variant);
         if (obj == null && variant != null)
             obj = variant.getAlternate(this);
         if (obj == null)
@@ -269,7 +210,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
 
     @Override
     public IRailcraftObject getObject() {
-        return railcraftObject;
+        return ((IRailcraftObject) block);
     }
 
     @Override

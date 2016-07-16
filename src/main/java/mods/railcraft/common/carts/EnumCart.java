@@ -12,8 +12,7 @@ import com.google.common.collect.Lists;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.*;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -32,11 +31,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Locale;
 
-public enum EnumCart implements ICartType {
+public enum EnumCart implements ICartType, IRailcraftObjectContainer {
 
     BASIC(0, EntityCartBasic.class),
     CHEST(0, EntityCartChest.class, true, new ItemStack(Blocks.CHEST)),
@@ -81,6 +81,7 @@ public enum EnumCart implements ICartType {
     ENERGY_CESU(0, EntityCartEnergyCESU.class, true),
     ENERGY_MFE(0, EntityCartEnergyMFE.class, true),
     ENERGY_MFSU(1, EntityCartEnergyMFSU.class, true),
+    // TODO: listing vanilla classes here causes weird error messages
     HOPPER(0, EntityMinecartHopper.class, true, new ItemStack(Blocks.HOPPER)),
     TRACK_LAYER(1, EntityCartTrackLayer.class),
     TRACK_REMOVER(1, EntityCartTrackRemover.class),
@@ -93,6 +94,7 @@ public enum EnumCart implements ICartType {
     private final byte rarity;
     private final boolean canBeUncrafted;
     private final List<Class<? extends IRailcraftModule>> modules = Lists.newArrayList();
+    private ItemCart item;
     private ItemStack contents;
     private ItemStack cartItem;
     private boolean isSetup;
@@ -161,8 +163,73 @@ public enum EnumCart implements ICartType {
     }
 
     @Override
+    public void register() {
+
+    }
+
+    @Override
+    public boolean isEqual(ItemStack stack) {
+        return false;
+    }
+
+    @Override
     public String getBaseTag() {
         return name().toLowerCase(Locale.ROOT).replace('_', '.');
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getWildcard() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getStack() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getStack(int qty) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getStack(int qty, int meta) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getStack(IVariantEnum variant) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getStack(int qty, IVariantEnum variant) {
+        if (cartItem != null)
+            return cartItem.copy();
+        return null;
+    }
+
+    @Override
+    public IRailcraftObject getObject() {
+        return item;
+    }
+
+    @Nullable
+    @Override
+    public Object getRecipeObject() {
+        return item;
+    }
+
+    @Nullable
+    @Override
+    public Object getRecipeObject(IVariantEnum variant) {
+        return item;
     }
 
     @Override
@@ -262,10 +329,15 @@ public enum EnumCart implements ICartType {
         if (!isSetup && isEnabled()) {
             isSetup = true;
             registerEntity();
-            ItemCart item = defineItem();
+            item = defineItem();
+            item.setRegistryName(getBaseTag());
             item.setUnlocalizedName(tag);
             item.setRarity(rarity);
             RailcraftRegistry.register(item);
+
+            item.initializeDefinintion();
+            item.defineRecipes();
+
             ItemStack cartItem = new ItemStack(item);
             setCartItem(cartItem);
             if (canBeUncrafted)
@@ -284,6 +356,11 @@ public enum EnumCart implements ICartType {
         return RailcraftConfig.isCartEnabled(getTag());
     }
 
+    @Override
+    public boolean isLoaded() {
+        return false;
+    }
+
     public boolean isVanillaCart() {
         switch (this) {
             case CHEST:
@@ -296,4 +373,5 @@ public enum EnumCart implements ICartType {
         }
         return false;
     }
+
 }

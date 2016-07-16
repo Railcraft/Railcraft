@@ -21,7 +21,7 @@ public interface IVariantEnum extends IStringSerializable {
 
     class Tools {
         public void checkVariantObject(Class<?> clazz, @Nullable IVariantEnum variant) {
-            if (variant != null && variant.isValidBaseObject(clazz))
+            if (variant != null && !variant.isValidBaseObject(clazz))
                 throw new RuntimeException("Incorrect Variant object used.");
         }
     }

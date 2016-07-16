@@ -26,7 +26,7 @@ import net.minecraft.item.ItemStack;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule("steam")
+@RailcraftModule("railcraft:steam")
 public class ModuleSteam extends RailcraftModulePayload {
 
     public ModuleSteam() {

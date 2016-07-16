@@ -28,7 +28,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-@RailcraftModule("ic2")
+@RailcraftModule("railcraft:ic2")
 public class ModuleIC2 extends RailcraftModulePayload {
 
     public static Item lapotronUpgrade;

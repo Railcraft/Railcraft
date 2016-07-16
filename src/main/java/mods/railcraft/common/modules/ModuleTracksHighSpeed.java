@@ -13,7 +13,7 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 
-@RailcraftModule("tracks|high_speed")
+@RailcraftModule("railcraft:tracks|high_speed")
 public class ModuleTracksHighSpeed extends RailcraftModulePayload {
 
     public ModuleTracksHighSpeed() {

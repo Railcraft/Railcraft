@@ -17,7 +17,7 @@ import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-@RailcraftModule("thaumcraft")
+@RailcraftModule("railcraft:thaumcraft")
 public class ModuleThaumcraft extends RailcraftModulePayload {
 
     @Override

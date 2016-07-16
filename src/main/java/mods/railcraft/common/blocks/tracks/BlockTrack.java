@@ -12,6 +12,7 @@ import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.client.particles.ParticleHelper;
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -55,7 +56,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BlockTrack extends BlockRail implements IPostConnection {
+public class BlockTrack extends BlockRail implements IPostConnection, IRailcraftObject {
 
     public static final float HARDNESS = 2F;
 
@@ -401,7 +402,7 @@ public class BlockTrack extends BlockRail implements IPostConnection {
                 tile.getTrackInstance().onNeighborBlockChange(state, neighborBlock);
             }
         } catch (StackOverflowError error) {
-            Game.logThrowable(Level.ERROR, "Stack Overflow Error in BlockTrack.onNeighborBlockChange()", 10, error);
+            Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockTrack.onNeighborBlockChange()");
             if (Game.IS_DEBUG)
                 throw error;
         }

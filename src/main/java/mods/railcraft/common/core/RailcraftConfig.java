@@ -23,6 +23,7 @@ import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.carts.EnumCart;
 import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.ModuleChunkLoading;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.collections.BlockItemListParser;
@@ -397,7 +398,7 @@ public class RailcraftConfig {
         loadLootProperty("ingot.tin", 10);
 
         loadLootProperty("steel.block", 5);
-        loadLootProperty("tool.crowbar", 10);
+        loadLootProperty("tool.crowbar.iron", 10);
         loadLootProperty("tool.steel.shears", 5);
         loadLootProperty("tool.steel.sword", 5);
         loadLootProperty("tool.steel.shovel", 5);
@@ -553,24 +554,12 @@ public class RailcraftConfig {
                 + "This is not true for all items, so some experimentation may be needed.\n"
                 + "Some disabled items will cause a substitute to be used in crafting recipes.");
 
-        loadItemProperty("tool.crowbar");
-        loadItemProperty("tool.crowbar.reinforced");
+        for(RailcraftItems item : RailcraftItems.VALUES){
+            loadItemProperty(item.getBaseTag());
+        }
+
         loadItemProperty("tool.crowbar.magic");
         loadItemProperty("tool.crowbar.void");
-
-        loadItemProperty("tool.magnifying.glass");
-
-        loadItemProperty("tool.surveyor");
-
-        loadItemProperty("tool.signal.label");
-
-        loadItemProperty("tool.signal.tuner");
-
-        loadItemProperty("tool.electric.meter");
-
-        loadItemProperty("tool.whistle.tuner");
-
-        loadItemProperty("tool.notepad");
 
         loadItemProperty("backpack.trackman.t1");
         loadItemProperty("backpack.trackman.t2");
@@ -587,28 +576,10 @@ public class RailcraftConfig {
         loadItemProperty("fluid.creosote.refactory");
         loadItemProperty("fluid.creosote.bucket");
 
-        loadItemProperty("part.signal.lamp");
-
-        loadItemProperty("part.circuit");
-
-        changeItemProperty("item.coke", "fuel.coke");
-
         loadItemProperty("firestone.cut");
         loadItemProperty("firestone.raw");
         loadItemProperty("firestone.refined");
         loadItemProperty("firestone.cracked");
-
-        loadItemProperty("part.rebar");
-
-        loadItemProperty("part.rail");
-        loadItemProperty("part.plate");
-        loadItemProperty("part.gear");
-        loadItemProperty("part.tie");
-        loadItemProperty("part.railbed");
-
-        loadItemProperty("part.turbine.blade");
-        loadItemProperty("part.turbine.disk");
-        loadItemProperty("part.turbine.rotor");
 
         loadItemProperty("tool.steel.shears");
         loadItemProperty("tool.steel.sword");
@@ -617,21 +588,10 @@ public class RailcraftConfig {
         loadItemProperty("tool.steel.axe");
         loadItemProperty("tool.steel.hoe");
 
-        loadItemProperty("armor.goggles");
-        loadItemProperty("armor.overalls");
-
         loadItemProperty("armor.steel.helmet");
         loadItemProperty("armor.steel.plate");
         loadItemProperty("armor.steel.legs");
         loadItemProperty("armor.steel.boots");
-
-        changeItemProperty("part.ingot.steel", "ingot");
-        loadItemProperty("dust");
-        loadItemProperty("nugget");
-
-        loadItemProperty("routing.table");
-        loadItemProperty("routing.ticket.gold");
-        loadItemProperty("routing.ticket");
 
         changeItemProperty("item.ic2.upgrade.lapotron", "ic2.upgrade.lapotron");
 
@@ -1047,7 +1007,7 @@ public class RailcraftConfig {
         try {
             parsed = Integer.parseInt(value);
         } catch (NumberFormatException ex) {
-            Game.logThrowable(Level.WARN, "Failed to parse config tag, resetting to default: {0}", 3, ex, prop.getName());
+            Game.logThrowable(Level.WARN, 3, ex, "Failed to parse config tag, resetting to default: {0}", prop.getName());
             prop.set(defaultValue);
             return defaultValue;
         }
@@ -1060,7 +1020,7 @@ public class RailcraftConfig {
         try {
             parsed = Double.parseDouble(value);
         } catch (NumberFormatException ex) {
-            Game.logThrowable(Level.WARN, "Failed to parse config tag, resetting to default: {0}", 3, ex, prop.getName());
+            Game.logThrowable(Level.WARN, 3, ex, "Failed to parse config tag, resetting to default: {0}", prop.getName());
             prop.set(defaultValue);
             return defaultValue;
         }

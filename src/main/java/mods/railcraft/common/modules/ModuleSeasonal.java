@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Level;
 
 import java.util.Calendar;
 
-@RailcraftModule("seasonal")
+@RailcraftModule("railcraft:seasonal")
 public class ModuleSeasonal extends RailcraftModulePayload {
 
     public ModuleSeasonal() {

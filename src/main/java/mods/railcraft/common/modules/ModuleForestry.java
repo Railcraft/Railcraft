@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.Optional;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule("forestry")
+@RailcraftModule("railcraft:forestry")
 public class ModuleForestry extends RailcraftModulePayload {
     @Override
     public void checkPrerequisites() throws MissingPrerequisiteException {

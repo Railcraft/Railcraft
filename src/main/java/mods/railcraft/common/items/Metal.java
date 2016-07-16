@@ -43,7 +43,6 @@ public enum Metal implements IVariantEnum {
 //    private static final EnumBiMap<Metal, EnumNugget> nuggetMap = EnumBiMap.create(Metal.class, EnumNugget.class);
     private static final BiMap<Metal, IVariantEnum> poorOreMap = HashBiMap.create();
     private static final BiMap<Metal, IVariantEnum> blockMap = HashBiMap.create();
-    private static final BiMap<Form, IRailcraftObjectContainer> formMap = HashBiMap.create();
     private static final Set<Class<?>> metalObjects = new HashSet<>();
 
     static {
@@ -84,9 +83,9 @@ public enum Metal implements IVariantEnum {
     Metal(String oreSuffix) {
         this.oreSuffix = oreSuffix;
         this.tag = name().toLowerCase(Locale.ROOT);
-        nuggetFilter = StackFilters.ofOreType(getOreTag(Form.NUGGET));
-        ingotFilter = StackFilters.ofOreType(getOreTag(Form.INGOT));
-        blockFilter = StackFilters.ofOreType(getOreTag(Form.BLOCK));
+        nuggetFilter = StackFilters.ofOreType("nugget" + oreSuffix);
+        ingotFilter = StackFilters.ofOreType("ingot" + oreSuffix);
+        blockFilter = StackFilters.ofOreType("block" + oreSuffix);
     }
 
 //    public static Metal get(EnumNugget nugget) {
@@ -113,7 +112,7 @@ public enum Metal implements IVariantEnum {
     @Nullable
     @Override
     public Object getAlternate(IRailcraftObjectContainer container) {
-        return formMap.inverse().get(container).getOreDictTag(this);
+        return Form.containerMap.inverse().get(container).getOreDictTag(this);
     }
 
     @Override
@@ -175,10 +174,17 @@ public enum Metal implements IVariantEnum {
             }
         },
         POOR_ORE("poorOre", RailcraftBlocks.ore, poorOreMap);
+        private static final BiMap<Form, IRailcraftObjectContainer> containerMap = HashBiMap.create();
         public static Form[] VALUES = values();
         private final String orePrefix;
         private final IRailcraftObjectContainer container;
         private final BiMap<Metal, IVariantEnum> variantMap;
+
+        static {
+            for (Form form : VALUES) {
+                containerMap.put(form, form.container);
+            }
+        }
 
         Form(String orePrefix, IRailcraftObjectContainer container) {
             this(orePrefix, container, null);
@@ -188,7 +194,6 @@ public enum Metal implements IVariantEnum {
             this.orePrefix = orePrefix;
             this.container = container;
             this.variantMap = variantMap;
-            formMap.put(this, container);
         }
 
         public final String getOreDictTag(Metal metal) {

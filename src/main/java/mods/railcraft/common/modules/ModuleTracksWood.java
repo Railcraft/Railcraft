@@ -13,7 +13,7 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 
-@RailcraftModule("tracks|wood")
+@RailcraftModule("railcraft:tracks|wood")
 public class ModuleTracksWood extends RailcraftModulePayload {
 
     public ModuleTracksWood() {

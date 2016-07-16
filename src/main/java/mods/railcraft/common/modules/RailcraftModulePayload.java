@@ -15,12 +15,15 @@ import mods.railcraft.common.blocks.BlockFactory;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 public abstract class RailcraftModulePayload implements IRailcraftModule {
 
     private static final ModuleEventHandler BLANK_EVENT_HANDLER = new ModuleEventHandler();
-    private final Set<IRailcraftObjectContainer> objectContainers = new HashSet<IRailcraftObjectContainer>();
+    private final LinkedHashSet<IRailcraftObjectContainer> objectContainers = new LinkedHashSet<>();
     private final List<BlockFactory> blockFactories = new ArrayList<BlockFactory>();
     private final ModuleEventHandler baseEventHandler = new BaseModuleEventHandler();
     private ModuleEventHandler enabledEventHandler = BLANK_EVENT_HANDLER;

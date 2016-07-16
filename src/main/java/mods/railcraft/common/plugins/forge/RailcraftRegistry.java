@@ -13,6 +13,7 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -75,7 +76,7 @@ public final class RailcraftRegistry {
 //        System.out.println(tag);
         Item existingItem = GameRegistry.findItem(Railcraft.MOD_ID, tag);
         Block existingBlock = GameRegistry.findBlock(Railcraft.MOD_ID, tag);
-        if (existingItem == null && existingBlock == null) {
+        if (existingItem == null && existingBlock == Blocks.AIR) {
 //            GameRegistry.registerCustomItemStack(tag, stack);
             RailcraftItemStackRegistry.register(tag, stack);
         } else

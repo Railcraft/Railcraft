@@ -55,6 +55,7 @@ public final class FluidHelper {
     private FluidHelper() {
     }
 
+    @Deprecated
     public static boolean handleRightClick(IFluidHandler tank, @Nullable EnumFacing side, @Nullable EntityPlayer player, boolean fill, boolean drain) {
         if (player == null)
             return false;

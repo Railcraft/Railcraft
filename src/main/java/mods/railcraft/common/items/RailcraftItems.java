@@ -18,9 +18,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -147,24 +145,6 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
 
     @Nullable
     @Override
-    public ItemStack getWildcard() {
-        return getStack(1, OreDictionary.WILDCARD_VALUE);
-    }
-
-    @Nullable
-    @Override
-    public ItemStack getStack() {
-        return getStack(1, 0);
-    }
-
-    @Nullable
-    @Override
-    public ItemStack getStack(int qty) {
-        return getStack(qty, 0);
-    }
-
-    @Nullable
-    @Override
     public ItemStack getStack(int qty, int meta) {
         register();
         if (item == null)
@@ -176,20 +156,14 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
         IVariantEnum.tools.checkVariantObject(itemClass, variant);
     }
 
+    @Nullable
     @Override
-    public ItemStack getStack(@Nonnull IVariantEnum variant) {
-        return getStack(1, variant);
-    }
-
-    @Override
-    public ItemStack getStack(int qty, @Nonnull IVariantEnum variant) {
+    public ItemStack getStack(int qty, IVariantEnum variant) {
         checkVariantObject(variant);
-        return railcraftObject.getStack(qty, variant);
-    }
-
-    @Override
-    public Object getRecipeObject() {
-        return getRecipeObject(null);
+        register();
+        if (railcraftObject != null)
+            return railcraftObject.getStack(qty, variant);
+        return null;
     }
 
     @Override

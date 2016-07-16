@@ -31,7 +31,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
-@RailcraftModule("automation")
+@RailcraftModule("railcraft:automation")
 public class ModuleAutomation extends RailcraftModulePayload {
     public ModuleAutomation() {
         setEnabledEventHandler(new ModuleEventHandler() {

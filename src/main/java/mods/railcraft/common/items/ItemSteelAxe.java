@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 public class ItemSteelAxe extends ItemAxe {
 
     public ItemSteelAxe() {
-        super(ItemMaterials.STEEL_TOOL);
+        super(ItemMaterials.STEEL_TOOL, 8F, -3F);
         setUnlocalizedName("railcraft.tool.steel.axe");
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }

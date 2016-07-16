@@ -27,7 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule("chunk_loading")
+@RailcraftModule("railcraft:chunk_loading")
 public class ModuleChunkLoading extends RailcraftModulePayload {
 
     public ModuleChunkLoading() {

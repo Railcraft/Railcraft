@@ -80,7 +80,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-@RailcraftModule("core")
+@RailcraftModule("railcraft:core")
 public class ModuleCore extends RailcraftModulePayload {
 
     public ModuleCore() {

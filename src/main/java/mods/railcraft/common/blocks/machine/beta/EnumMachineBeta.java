@@ -13,16 +13,12 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleChunkLoading;
 import mods.railcraft.common.modules.ModuleSteam;
 import mods.railcraft.common.modules.ModuleTransport;
-import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -138,18 +134,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     }
 
     @Override
-    public ItemStack getItem() {
-        return getItem(1);
-    }
-
-    @Override
-    public ItemStack getItem(int qty) {
-        Block block = getBlock();
-        if (block == null)
-            return null;
-        return new ItemStack(block, qty, ordinal());
-    }
-
     public Class<? extends IRailcraftModule> getModule() {
         return module;
     }
@@ -160,18 +144,8 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     }
 
     @Override
-    public Block getBlock() {
-        return getBlockContainer().block();
-    }
-
-    @Override
-    public IBlockState getState() {
-        return getBlock().getDefaultState().withProperty(VARIANT, this);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
+    public PropertyEnum<EnumMachineBeta> getVariantProperty() {
+        return VARIANT;
     }
 
     @Override
@@ -191,6 +165,6 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
 
     @Override
     public String getName() {
-        return name();
+        return tag.replace(".", "_");
     }
 }

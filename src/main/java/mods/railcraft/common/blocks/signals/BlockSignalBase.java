@@ -100,7 +100,7 @@ public abstract class BlockSignalBase extends RailcraftBlockContainer implements
                     structure.onNeighborBlockChange(state, neighborBlock);
             }
         } catch (StackOverflowError error) {
-            Game.logThrowable(Level.ERROR, "Error in BlockSignalBase.onNeighborBlockChange()", 10, error);
+            Game.logThrowable(Level.ERROR, 10, error, "Error in BlockSignalBase.onNeighborBlockChange()");
             throw error;
         }
     }

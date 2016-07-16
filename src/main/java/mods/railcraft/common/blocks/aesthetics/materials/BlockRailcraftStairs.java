@@ -49,7 +49,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
     public static int currentRenderPass;
     static BlockRailcraftStairs block;
 
-    BlockRailcraftStairs() {
+    public BlockRailcraftStairs() {
         super(Blocks.STONEBRICK.getDefaultState());
         setSoundType(RailcraftSoundTypes.OVERRIDE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);

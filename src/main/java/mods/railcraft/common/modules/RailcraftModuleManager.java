@@ -9,6 +9,7 @@
  ******************************************************************************/
 package mods.railcraft.common.modules;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.RailcraftModule;
@@ -60,9 +61,10 @@ public class RailcraftModuleManager {
         }
     }
 
-    private static final Map<Class<? extends IRailcraftModule>, IRailcraftModule> classToInstanceMapping = new HashMap<Class<? extends IRailcraftModule>, IRailcraftModule>();
-    private static final Map<String, Class<? extends IRailcraftModule>> nameToClassMapping = new HashMap<String, Class<? extends IRailcraftModule>>();
-    private static final LinkedHashSet<Class<? extends IRailcraftModule>> enabledModules = new LinkedHashSet<Class<? extends IRailcraftModule>>();
+    private static final Map<Class<? extends IRailcraftModule>, IRailcraftModule> classToInstanceMapping = new HashMap<>();
+    private static final Map<String, Class<? extends IRailcraftModule>> nameToClassMapping = new HashMap<>();
+    private static final LinkedHashSet<Class<? extends IRailcraftModule>> enabledModules = new LinkedHashSet<>();
+    private static final List<Class<? extends IRailcraftModule>> loadOrder = new LinkedList<>();
     private static Stage stage = Stage.LOADING;
 
     private RailcraftModuleManager() {
@@ -117,9 +119,9 @@ public class RailcraftModuleManager {
                 + "It will define alternate recipes and crafting paths, but the system is far from flawless.\n"
                 + "Unexpected behavior, bugs, or crashes may occur. Please report any issues so they can be fixed.\n");
 
-
-        Set<Class<? extends IRailcraftModule>> toEnable = Sets.newHashSet();
-        toEnable.add(ModuleCore.class);
+        // Add enabled modules to list
+        List<Class<? extends IRailcraftModule>> toEnable = Lists.newArrayList();
+        List<Class<? extends IRailcraftModule>> toDisable = Lists.newArrayList();
         for (Map.Entry<Class<? extends IRailcraftModule>, IRailcraftModule> entry : classToInstanceMapping.entrySet()) {
             if (ModuleCore.class.equals(entry.getKey()))
                 continue;
@@ -132,34 +134,45 @@ public class RailcraftModuleManager {
             try {
                 module.checkPrerequisites();
             } catch (IRailcraftModule.MissingPrerequisiteException ex) {
-                Game.logThrowable(Level.INFO, "Module failed prerequisite check, disabling: {0}", 0, ex, moduleName);
+                Game.logThrowable(Level.INFO, 0, ex, "Module failed prerequisite check, disabling: {0}", moduleName);
+                toDisable.add(module.getClass());
                 continue;
             }
             toEnable.add(module.getClass());
         }
+
+        // Add modules to the load order as their dependencies become available
+        Collections.sort(toEnable, (o1, o2) -> getModuleName(o1).compareTo(getModuleName(o2)));
+        loadOrder.add(ModuleCore.class);
         boolean changed;
         do {
             changed = false;
             Iterator<Class<? extends IRailcraftModule>> it = toEnable.iterator();
             while (it.hasNext()) {
                 Class<? extends IRailcraftModule> moduleClass = it.next();
-                RailcraftModule annotation = moduleClass.getAnnotation(RailcraftModule.class);
-                String[] dependencies = annotation.dependencies();
-                Set<Class<? extends IRailcraftModule>> dependencyClasses = Sets.newHashSet();
-                dependencyClasses.addAll(Arrays.asList(annotation.dependencyClasses()));
-                for (String dependency : dependencies) {
-                    dependencyClasses.add(nameToClassMapping.get(dependency));
-                }
-                if (!toEnable.containsAll(dependencyClasses)) {
+                if (loadOrder.containsAll(getDependencies(moduleClass))) {
                     it.remove();
+                    loadOrder.add(moduleClass);
                     changed = true;
-                    Game.log(Level.WARN, "Module is missing dependencies, disabling: {0} -> {1}", dependencies, getModuleName(moduleClass));
+                    break;
                 }
             }
         } while (changed);
 
-        enabledModules.add(ModuleCore.class);
-        enabledModules.addAll(toEnable);
+        // Tell the user which modules are missing dependencies
+        for (Class<? extends IRailcraftModule> moduleClass : toEnable) {
+            Game.log(Level.WARN, "Module is missing dependencies, disabling: {0} -> {1}", getDependencies(moduleClass), getModuleName(moduleClass));
+        }
+
+        // Add modules missing dependencies to the disabled list
+        toDisable.addAll(toEnable);
+        Collections.sort(toDisable, (o1, o2) -> getModuleName(o1).compareTo(getModuleName(o2)));
+
+        // Add the valid modules to the enabled list in the load order
+        enabledModules.addAll(loadOrder);
+
+        // Add the disabled modules to the load order
+        loadOrder.addAll(toDisable);
 
         if (config.hasChanged())
             config.save();
@@ -168,6 +181,17 @@ public class RailcraftModuleManager {
 
         processStage(Stage.CONSTRUCTION);
         processStage(Stage.PRE_INIT);
+    }
+
+    private static Set<Class<? extends IRailcraftModule>> getDependencies(Class<? extends IRailcraftModule> moduleClass) {
+        RailcraftModule annotation = moduleClass.getAnnotation(RailcraftModule.class);
+        String[] dependencies = annotation.dependencies();
+        Set<Class<? extends IRailcraftModule>> dependencyClasses = Sets.newHashSet();
+        dependencyClasses.addAll(Arrays.asList(annotation.dependencyClasses()));
+        for (String dependency : dependencies) {
+            dependencyClasses.add(nameToClassMapping.get(dependency));
+        }
+        return dependencyClasses;
     }
 
     public static void init() {
@@ -182,13 +206,16 @@ public class RailcraftModuleManager {
     private static void processStage(Stage s) {
         stage = s;
         Game.log(Level.TRACE, "Performing {0} on Modules.", stage.name());
-        for (Map.Entry<Class<? extends IRailcraftModule>, IRailcraftModule> entry : classToInstanceMapping.entrySet()) {
-            IRailcraftModule module = entry.getValue();
+        for (Class<? extends IRailcraftModule> moduleClass : loadOrder) {
+            IRailcraftModule module = classToInstanceMapping.get(moduleClass);
+            boolean enabled = enabledModules.contains(moduleClass);
             try {
-                stage.passToModule(module.getModuleEventHandler(enabledModules.contains(entry.getKey())));
-            } catch (RuntimeException ex) {
-                Game.logThrowable(Level.ERROR, "Module failed during {0}: {1}", 3, ex, stage.name(), getModuleName(module));
-                throw ex;
+                if (Game.IS_DEBUG)
+                    Game.log(Level.INFO, "Module performing stage {0}: {1} {2}", stage.name(), getModuleName(module), enabled ? "+" : "-");
+                stage.passToModule(module.getModuleEventHandler(enabled));
+            } catch (Throwable th) {
+                Game.logThrowable(Level.ERROR, 3, th, "Module failed during {0}: {1} {2}", stage.name(), getModuleName(module), enabled ? "+" : "-");
+                throw th;
             }
         }
     }

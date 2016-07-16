@@ -9,11 +9,14 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.glass;
 
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.color.ColorPlugin;
+import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
@@ -26,6 +29,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,17 +37,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColoredBlock {
+public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColoredBlock, IRailcraftObject {
 
     public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
     public static boolean renderingHighlight;
-    private static BlockStrengthGlass instance;
 
     public BlockStrengthGlass() {
         super(Material.GLASS, false);
@@ -51,40 +55,53 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
         setHardness(1);
         setSoundType(SoundType.GLASS);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setUnlocalizedName("railcraft.glass");
-        this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
+        setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
+    }
+
+    @Override
+    public void initializeDefinintion() {
+        ForestryPlugin.addBackpackItem("builder", this);
+
+        for (int meta = 0; meta < 16; meta++) {
+            MicroBlockPlugin.addMicroBlockCandidate(this, meta);
+        }
+    }
+
+    @Override
+    public void finalizeDefinition() {
         ColorPlugin.instance.register(this, this);
-    }
 
-    public static BlockStrengthGlass getBlock() {
-        return instance;
-    }
-
-    public static void registerBlock() {
-        if (instance == null)
-            if (RailcraftConfig.isBlockEnabled("glass")) {
-                instance = new BlockStrengthGlass();
-                RailcraftRegistry.register(instance, ItemStrengthGlass.class);
-
-                ForestryPlugin.addBackpackItem("builder", instance);
-
-                for (int meta = 0; meta < 16; meta++) {
-                    MicroBlockPlugin.addMicroBlockCandidate(instance, meta);
-                }
+        Object[] frameTypes = {"ingotTin", Items.IRON_INGOT};
+        FluidStack water = Fluids.WATER.get(FluidHelper.BUCKET_VOLUME);
+        // TODO: this is bogus, waiting on FluidStacks as ingredients
+        for (ItemStack container : FluidHelper.getContainersFilledWith(water)) {
+            for (Object frame : frameTypes) {
+                CraftingPlugin.addRecipe(getStack(6, EnumColor.WHITE),
+                        "GFG",
+                        "GSG",
+                        "GWG",
+                        'G', "blockGlassColorless",
+                        'F', frame,
+                        'S', "dustSaltpeter",
+                        'W', container);
             }
+        }
+    }
+
+    @Override
+    public void defineRecipes() {
+        for (EnumColor color : EnumColor.VALUES) {
+            CraftingPlugin.addRecipe(getStack(8, color),
+                    "GGG",
+                    "GDG",
+                    "GGG",
+                    'G', RailcraftBlocks.glass.getWildcard(),
+                    'D', color.getDyeOreDictTag());
+        }
     }
 
     public EnumColor getColor(IBlockState state) {
         return state.getValue(COLOR);
-    }
-
-    public static ItemStack getItem(int meta) {
-        return getItem(1, meta);
-    }
-
-    public static ItemStack getItem(int qty, int meta) {
-        if (instance == null) return null;
-        return new ItemStack(instance, qty, meta);
     }
 
     @Override
@@ -172,6 +189,7 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
     /**
      * Get the MapColor for this Block and the given BlockState
      */
+    @Override
     public MapColor getMapColor(IBlockState state) {
         return getColor(state).getMapColor();
     }
@@ -179,6 +197,7 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Override
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta).inverse());
     }
@@ -186,10 +205,12 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
     /**
      * Convert the BlockState into the correct metadata value
      */
+    @Override
     public int getMetaFromState(IBlockState state) {
         return getColor(state).inverse().ordinal();
     }
 
+    @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, COLOR);
     }

@@ -64,7 +64,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IMaterialBlock
     public static int currentRenderPass;
     static BlockRailcraftSlab block;
 
-    BlockRailcraftSlab() {
+    public BlockRailcraftSlab() {
         super(Material.ROCK);
         setSoundType(RailcraftSoundTypes.OVERRIDE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);

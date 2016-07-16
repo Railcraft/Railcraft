@@ -30,7 +30,7 @@ import net.minecraft.item.ItemStack;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule("transport")
+@RailcraftModule("railcraft:transport")
 public class ModuleTransport extends RailcraftModulePayload {
     public ModuleTransport() {
         setEnabledEventHandler(new ModuleEventHandler() {

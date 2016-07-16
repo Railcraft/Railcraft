@@ -63,7 +63,7 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
             signalBlock.writeToNBT(data);
             controller.writeToNBT(data);
         } catch (Throwable er) {
-            Game.logThrowable(Level.ERROR, "Signal Tile crashed on write.", 10, er);
+            Game.logThrowable(Level.ERROR, 10, er, "Signal Tile crashed on write.");
         }
         return data;
     }
@@ -75,7 +75,7 @@ public class TileSignalBlockSignal extends TileSignalBase implements IController
             signalBlock.readFromNBT(data);
             controller.readFromNBT(data);
         } catch (Throwable er) {
-            Game.logThrowable(Level.ERROR, "Signal Tile crashed on read.", 10, er);
+            Game.logThrowable(Level.ERROR, 10, er, "Signal Tile crashed on read.");
         }
     }
 

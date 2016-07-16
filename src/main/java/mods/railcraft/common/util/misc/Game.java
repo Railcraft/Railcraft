@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFormatMessage;
+import org.apache.logging.log4j.message.SimpleMessage;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -48,7 +49,7 @@ public class Game {
         return world.isRemote;
     }
 
-    public static MinecraftServer getServer(){
+    public static MinecraftServer getServer() {
         return FMLCommonHandler.instance().getMinecraftServerInstance();
     }
 
@@ -102,17 +103,16 @@ public class Game {
     }
 
     public static void logThrowable(String msg, Throwable error, Object... args) {
-        logThrowable(Level.ERROR, msg, 3, error, args);
+        logThrowable(Level.ERROR, 3, error, msg, args);
     }
 
     public static void logThrowable(String msg, int lines, Throwable error, Object... args) {
-        logThrowable(Level.ERROR, msg, lines, error, args);
+        logThrowable(Level.ERROR, lines, error, msg, args);
     }
 
-    public static void logThrowable(Level level, String msg, int lines, Throwable error, Object... args) {
+    public static void logThrowable(Level level, int lines, Throwable error, String msg, Object... args) {
         log(level, msg, args);
-        if (error.getMessage() != null)
-            log(level, error.getMessage());
+        log(level, new SimpleMessage(error.toString()));
         logTrace(level, lines, 0, error.getStackTrace());
     }
 
@@ -125,7 +125,7 @@ public class Game {
     public static void logErrorAPI(String mod, Throwable error, Class... classFiles) {
         StringBuilder msg = new StringBuilder(mod);
         msg.append(" API error, please update your mods. Error: ").append(error);
-        logThrowable(Level.ERROR, msg.toString(), 2, error);
+        logThrowable(Level.ERROR, 2, error, msg.toString());
 
         for (Class classFile : classFiles) {
             if (classFile != null) {

@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
 import mods.railcraft.common.plugins.color.ColorPlugin;
@@ -27,10 +28,14 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColoredItem {
+public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColoredItem, IRailcraftObject {
 
     public ItemBlockRailcraft(Block block) {
         super(block);
+    }
+
+    @Override
+    public void finalizeDefinition() {
         if (block instanceof ColorPlugin.IColoredBlock)
             ColorPlugin.instance.register(this, this);
     }

@@ -136,19 +136,24 @@ public enum EnumCube implements IBlockVariantEnum<EnumCube> {
         return getModule() != null && RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag()) && BlockCube.getBlock() != null;
     }
 
+    @Nullable
     public ItemStack getStack() {
         return getStack(1);
     }
 
+    @Nullable
     public ItemStack getStack(int qty) {
         if (!isEnabled())
             return null;
-        return new ItemStack(BlockCube.getBlock(), qty, ordinal());
+        Block block = getBlock();
+        if (block != null)
+            return new ItemStack(block, qty, ordinal());
+        return null;
     }
 
     @Nonnull
     @Override
     public String getName() {
-        return tag;
+        return tag.replace(".", "_");
     }
 }

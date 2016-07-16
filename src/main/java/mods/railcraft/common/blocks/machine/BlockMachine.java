@@ -10,8 +10,12 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection;
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.plugins.color.ColorPlugin;
-import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.plugins.forge.HarvestPlugin;
+import mods.railcraft.common.plugins.forge.PowerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -50,7 +54,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer implements IPostConnection, ColorPlugin.IColoredBlock {
+public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockContainer implements IPostConnection, ColorPlugin.IColoredBlock, IRailcraftObject {
 
     private final MachineProxy<M> proxy;
     private final BlockStateContainer myBlockState;
@@ -66,7 +70,6 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         this.myBlockState = new BlockStateContainer(this, proxy.getVariantProperty());
         setDefaultState(myBlockState.getBaseState().withProperty(proxy.getVariantProperty(), proxy.getMetaMap().get(0)));
         this.fullBlock = opaque;
-        ColorPlugin.instance.register(this, this);
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         lightOpacity = opaque ? 255 : 0;
@@ -74,6 +77,11 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
         for (IEnumMachine<M> machine : proxy.getMetaMap().values()) {
             HarvestPlugin.setStateHarvestLevel(machine.getToolClass(), machine);
         }
+    }
+
+    @Override
+    public void finalizeDefinition() {
+        ColorPlugin.instance.register(this, this);
     }
 
     @Override
@@ -261,7 +269,7 @@ public class BlockMachine<M extends IEnumMachine<M>> extends BlockContainer impl
             if (tile instanceof TileMachineBase)
                 ((TileMachineBase) tile).onNeighborBlockChange(state, neighborBlock);
         } catch (StackOverflowError error) {
-            Game.logThrowable(Level.ERROR, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()", 10, error);
+            Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()");
             if (Game.IS_DEBUG)
                 throw error;
         }

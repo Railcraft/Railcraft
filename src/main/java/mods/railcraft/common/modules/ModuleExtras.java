@@ -19,7 +19,7 @@ import mods.railcraft.common.plugins.forge.LootPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 
-@RailcraftModule("extras")
+@RailcraftModule("railcraft:extras")
 public class ModuleExtras extends RailcraftModulePayload {
     public ModuleExtras() {
         setEnabledEventHandler(new ModuleEventHandler() {

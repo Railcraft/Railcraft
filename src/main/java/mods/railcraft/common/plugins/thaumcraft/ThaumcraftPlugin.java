@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
@@ -193,7 +192,7 @@ public class ThaumcraftPlugin {
 
             AspectList glassAspects = new AspectList().add(Aspect.CRYSTAL, 4).add(Aspect.METAL, 1);
             for (EnumColor color : EnumColor.VALUES) {
-                addItemAspect(BlockStrengthGlass.getItem(color.ordinal()), glassAspects);
+                addItemAspect(RailcraftBlocks.glass.getStack(color), glassAspects);
             }
 
             addItemAspect(RailcraftBlocks.anvil_steel.getStack(), new AspectList().add(Aspect.CRAFT, 4).add(Aspect.EXCHANGE, 2).add(Aspect.METAL, 4).add(Aspect.ORDER, 2));

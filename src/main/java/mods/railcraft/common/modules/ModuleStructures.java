@@ -12,15 +12,13 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
+import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPost;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
-import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidHelper;
@@ -34,10 +32,9 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-@RailcraftModule("structures")
+@RailcraftModule("railcraft:structures")
 public class ModuleStructures extends RailcraftModulePayload {
 
     public ModuleStructures() {
@@ -48,6 +45,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     addBlockFactory(brick.makeFactory());
                 }
                 add(
+                        RailcraftBlocks.glass,
                         RailcraftBlocks.signal,
                         RailcraftBlocks.slab,
                         RailcraftBlocks.stair,
@@ -62,8 +60,6 @@ public class ModuleStructures extends RailcraftModulePayload {
                 BlockPost.registerBlock();
                 BlockPostMetal.registerPost();
                 BlockPostMetal.registerPlatform();
-                BlockRailcraftWall.registerBlocks();
-                BlockStrengthGlass.registerBlock();
 
                 EnumCube cubeType = EnumCube.CONCRETE_BLOCK;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
@@ -129,15 +125,7 @@ public class ModuleStructures extends RailcraftModulePayload {
 //                        'W', Block.planks});
 //            }
 //        }
-                if (BlockStrengthGlass.getBlock() != null)
-                    for (EnumColor color : EnumColor.VALUES) {
-                        CraftingPlugin.addRecipe(BlockStrengthGlass.getItem(8, color.inverse().ordinal()),
-                                "GGG",
-                                "GDG",
-                                "GGG",
-                                'G', BlockStrengthGlass.getBlock(),
-                                'D', color.getDyeOreDictTag());
-                    }
+
             }
 
             @Override
@@ -266,23 +254,6 @@ public class ModuleStructures extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                if (BlockStrengthGlass.getBlock() != null) {
-                    Object[] frameTypes = {"ingotTin", Items.IRON_INGOT};
-                    FluidStack water = Fluids.WATER.get(FluidHelper.BUCKET_VOLUME);
-                    for (ItemStack container : FluidHelper.getContainersFilledWith(water)) {
-                        for (Object frame : frameTypes) {
-                            CraftingPlugin.addRecipe(BlockStrengthGlass.getItem(6, 0),
-                                    "GFG",
-                                    "GSG",
-                                    "GWG",
-                                    'G', "blockGlassColorless",
-                                    'F', frame,
-                                    'S', "dustSaltpeter",
-                                    'W', container);
-                        }
-                    }
-                }
-
                 EnumCube cubeType = EnumCube.CREOSOTE_BLOCK;
                 if (cubeType.isEnabled()) {
                     ItemStack stack = cubeType.getStack();

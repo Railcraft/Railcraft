@@ -31,7 +31,7 @@ import net.minecraft.item.crafting.IRecipe;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule("locomotives")
+@RailcraftModule("railcraft:locomotives")
 public class ModuleLocomotives extends RailcraftModulePayload {
     public ModuleLocomotives() {
         setEnabledEventHandler(new ModuleEventHandler() {

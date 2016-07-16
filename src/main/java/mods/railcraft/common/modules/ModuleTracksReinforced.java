@@ -13,7 +13,7 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 
-@RailcraftModule("tracks|reinforced")
+@RailcraftModule("railcraft:tracks|reinforced")
 public class ModuleTracksReinforced extends RailcraftModulePayload {
 
     public ModuleTracksReinforced() {

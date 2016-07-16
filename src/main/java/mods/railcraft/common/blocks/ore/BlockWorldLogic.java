@@ -30,7 +30,7 @@ import java.util.Random;
  */
 public class BlockWorldLogic extends Block implements IRailcraftObject {
 
-    private BlockWorldLogic() {
+    public BlockWorldLogic() {
         super(Material.ROCK);
         setUnlocalizedName("railcraft.worldlogic");
         setResistance(6000000.0F);

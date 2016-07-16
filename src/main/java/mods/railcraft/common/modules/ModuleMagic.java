@@ -26,7 +26,7 @@ import net.minecraftforge.oredict.OreDictionary;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-@RailcraftModule("magic")
+@RailcraftModule("railcraft:magic")
 public class ModuleMagic extends RailcraftModulePayload {
     public ModuleMagic() {
         setEnabledEventHandler(new ModuleEventHandler() {

@@ -9,15 +9,15 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.cube;
 
+import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public class ItemCube extends ItemBlock {
+public class ItemCube extends ItemBlockRailcraft {
 
     public ItemCube(Block block) {
         super(block);

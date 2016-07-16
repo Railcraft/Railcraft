@@ -1,14 +1,17 @@
 /*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
- http://railcraft.info
-
- This code is the property of CovertJaguar
- and may only be used with explicit written
- permission unless otherwise specified on the
- license page at http://railcraft.info/wiki/info:license.
+ * Copyright (c) CovertJaguar, 2011-2016
+ * http://railcraft.info
+ *
+ * This code is the property of CovertJaguar
+ * and may only be used with explicit written
+ * permission unless otherwise specified on the
+ * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.util.misc;
 
+import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.material.MapColor;
@@ -17,15 +20,15 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IStringSerializable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumColor implements IStringSerializable {
+public enum EnumColor implements IVariantEnum {
 
     BLACK(0x2D2D2D, "dyeBlack", "black"),
     RED(0xA33835, "dyeRed", "red"),
@@ -43,7 +46,7 @@ public enum EnumColor implements IStringSerializable {
     MAGENTA(0xFF64FF, "dyeMagenta", "magenta"),
     ORANGE(0xFF6A00, "dyeOrange", "orange"),
     WHITE(0xFFFFFF, "dyeWhite", "white");
-    public final static EnumColor[] VALUES = values();
+    public static final EnumColor[] VALUES = values();
     public static final String DEFAULT_COLOR_TAG = "color";
     private final int hexColor;
     private final String oreTagDyeName;
@@ -193,5 +196,16 @@ public enum EnumColor implements IStringSerializable {
 
     public boolean isEqual(EnumDyeColor dye) {
         return dye != null && getDye() == dye;
+    }
+
+    @Override
+    public boolean isValidBaseObject(Class<?> clazz) {
+        return clazz == BlockStrengthGlass.class;
+    }
+
+    @Nullable
+    @Override
+    public Object getAlternate(IRailcraftObjectContainer container) {
+        return null;
     }
 }

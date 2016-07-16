@@ -1,5 +1,6 @@
 package mods.railcraft.common.modules;
 
+import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
@@ -16,6 +17,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@RailcraftModule("railcraft:redstone_flux")
 public class ModuleRF extends RailcraftModulePayload {
     public ModuleRF() {
         setEnabledEventHandler(new ModuleEventHandler() {

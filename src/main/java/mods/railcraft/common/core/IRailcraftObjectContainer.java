@@ -11,6 +11,7 @@
 package mods.railcraft.common.core;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 
@@ -27,19 +28,27 @@ public interface IRailcraftObjectContainer {
     String getBaseTag();
 
     @Nullable
-    ItemStack getWildcard();
+    default ItemStack getWildcard() {
+        return getStack(1, OreDictionary.WILDCARD_VALUE);
+    }
 
     @Nullable
-    ItemStack getStack();
+    default ItemStack getStack() {
+        return getStack(1);
+    }
 
     @Nullable
-    ItemStack getStack(int qty);
+    default ItemStack getStack(int qty) {
+        return getStack(qty, 0);
+    }
 
     @Nullable
     ItemStack getStack(int qty, int meta);
 
     @Nullable
-    ItemStack getStack(IVariantEnum variant);
+    default ItemStack getStack(IVariantEnum variant) {
+        return getStack(1, variant);
+    }
 
     @Nullable
     ItemStack getStack(int qty, IVariantEnum variant);
@@ -47,10 +56,12 @@ public interface IRailcraftObjectContainer {
     IRailcraftObject getObject();
 
     @Nullable
-    Object getRecipeObject();
+    default Object getRecipeObject() {
+        return getRecipeObject(null);
+    }
 
     @Nullable
-    Object getRecipeObject(IVariantEnum variant);
+    Object getRecipeObject(@Nullable IVariantEnum variant);
 
     boolean isEnabled();
 

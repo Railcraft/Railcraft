@@ -13,15 +13,12 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.ModuleElectricity;
 import mods.railcraft.common.modules.ModuleSteam;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -92,11 +89,6 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     }
 
     @Override
-    public String getToolClass() {
-        return "pickaxe:2";
-    }
-
-    @Override
     public boolean passesLight() {
         return false;
     }
@@ -116,18 +108,6 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     }
 
     @Override
-    public ItemStack getItem() {
-        return getItem(1);
-    }
-
-    @Override
-    public ItemStack getItem(int qty) {
-        Block block = getBlock();
-        if (block == null)
-            return null;
-        return new ItemStack(block, qty, ordinal());
-    }
-
     public Class<? extends IRailcraftModule> getModule() {
         return RailcraftModuleManager.getModule(moduleName);
     }
@@ -138,21 +118,8 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     }
 
     @Override
-    public Block getBlock() {
-        return getBlockContainer().block();
-    }
-
-    @Override
-    public IBlockState getState() {
-        return getBlock().getDefaultState().withProperty(VARIANT, this);
-    }
-
-    /**
-     * Block is enabled, but may not be defined yet.
-     */
-    @Override
-    public boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(getModule()) && getBlockContainer().isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag());
+    public PropertyEnum<EnumMachineEpsilon> getVariantProperty() {
+        return VARIANT;
     }
 
     /**
@@ -175,6 +142,6 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
 
     @Override
     public String getName() {
-        return name();
+        return tag.replace(".", "_");
     }
 }
