@@ -11,12 +11,11 @@ package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.core.IVariantEnum;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.PropertyEnum;
@@ -43,9 +42,8 @@ import java.util.List;
 public class BlockPost extends BlockPostBase implements IPostConnection {
 
     public static final PropertyEnum<EnumPost> VARIANT = PropertyEnum.create("variant", EnumPost.class);
-    private static BlockPost block;
 
-    private BlockPost() {
+    public BlockPost() {
         setUnlocalizedName("railcraft.post");
         setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumPost.WOOD));
     }
@@ -56,41 +54,36 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
         return EnumPost.class;
     }
 
-    public static void registerBlock() {
-        if (getBlock() != null)
-            return;
+    @Override
+    public IBlockState getState(@Nullable IVariantEnum variant) {
+        IBlockState state = getDefaultState();
+        if (variant != null) {
+            checkVariant(variant);
+            state = state.withProperty(VARIANT, (EnumPost) variant);
+        }
+        return state;
+    }
 
-        if (RailcraftConfig.isBlockEnabled("post")) {
-            block = new BlockPost();
+    @Override
+    public void initializeDefinintion() {
+        GameRegistry.registerTileEntity(TilePostEmblem.class, "RCPostEmblemTile");
 
-            GameRegistry.registerTileEntity(TilePostEmblem.class, "RCPostEmblemTile");
-
-            RailcraftRegistry.register(getBlock(), ItemPost.class);
-
-            for (EnumPost post : EnumPost.VALUES) {
-                ItemStack stack = post.getItem();
+        for (EnumPost post : EnumPost.VALUES) {
+            ItemStack stack = post.getStack();
+            if (stack != null)
                 RailcraftRegistry.register(stack);
-            }
+        }
 
 //            HarvestPlugin.setStateHarvestLevel(block, "crowbar", 0);
-            HarvestPlugin.setStateHarvestLevel("axe", 0, getBlockState(EnumPost.WOOD));
-            HarvestPlugin.setStateHarvestLevel("pickaxe", 1, getBlockState(EnumPost.STONE));
-            HarvestPlugin.setStateHarvestLevel("pickaxe", 2, getBlockState(EnumPost.METAL_UNPAINTED));
-            HarvestPlugin.setStateHarvestLevel("pickaxe", 2, getBlockState(EnumPost.EMBLEM));
-            HarvestPlugin.setStateHarvestLevel("axe", 0, getBlockState(EnumPost.WOOD_PLATFORM));
-            HarvestPlugin.setStateHarvestLevel("pickaxe", 1, getBlockState(EnumPost.STONE_PLATFORM));
-            HarvestPlugin.setStateHarvestLevel("pickaxe", 2, getBlockState(EnumPost.METAL_PLATFORM_UNPAINTED));
+        HarvestPlugin.setStateHarvestLevel("axe", 0, EnumPost.WOOD.getState());
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumPost.STONE.getState());
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumPost.METAL_UNPAINTED.getState());
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumPost.EMBLEM.getState());
+        HarvestPlugin.setStateHarvestLevel("axe", 0, EnumPost.WOOD_PLATFORM.getState());
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumPost.STONE_PLATFORM.getState());
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumPost.METAL_PLATFORM_UNPAINTED.getState());
 
-            ForestryPlugin.addBackpackItem("builder", getBlock());
-        }
-    }
-
-    public static IBlockState getBlockState(EnumPost variant) {
-        return getBlock().getDefaultState().withProperty(VARIANT, variant);
-    }
-
-    public static BlockPost getBlock() {
-        return block;
+        ForestryPlugin.addBackpackItem("builder", this);
     }
 
     @Override
@@ -108,7 +101,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumPost post : EnumPost.values()) {
             if (post == EnumPost.EMBLEM) continue;
-            list.add(post.getItem());
+            list.add(post.getStack());
         }
     }
 
@@ -169,6 +162,7 @@ public class BlockPost extends BlockPostBase implements IPostConnection {
 
     @Override
     public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+        //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
         player.addExhaustion(0.025F);
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)

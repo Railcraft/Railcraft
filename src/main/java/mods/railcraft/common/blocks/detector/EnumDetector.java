@@ -24,7 +24,7 @@ import java.util.Locale;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum EnumDetector implements IBlockVariantEnum<EnumDetector> {
+public enum EnumDetector implements IBlockVariantEnum {
 
     ITEM(ModuleAutomation.class, DetectorItem.class),
     ANY(ModuleAutomation.class, Detector.class),

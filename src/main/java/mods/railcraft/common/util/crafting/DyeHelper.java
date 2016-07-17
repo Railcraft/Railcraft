@@ -10,7 +10,7 @@ package mods.railcraft.common.util.crafting;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 

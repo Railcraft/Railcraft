@@ -401,7 +401,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                                 " B ",
                                 "BPB",
                                 " B ",
-                                'B', BrickTheme.INFERNAL.get(BrickVariant.BRICK, 1),
+                                'B', BrickTheme.INFERNAL.getStack(1, BrickVariant.BRICK),
                                 'P', Items.MAGMA_CREAM);
                     }
                     if (EnumMachineAlpha.COKE_OVEN.isAvailable() && BrickTheme.SANDY.getBlock() != null) {
@@ -410,7 +410,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                                 " B ",
                                 " S ",
                                 " B ",
-                                'B', BrickTheme.SANDY.get(BrickVariant.BRICK, 1),
+                                'B', BrickTheme.SANDY.getStack(1, BrickVariant.BRICK),
                                 'S', "sand");
                     }
                 }

@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumOre implements IBlockVariantEnum<EnumOre> {
+public enum EnumOre implements IBlockVariantEnum {
 
     SULFUR("sulfur"),
     SALTPETER("saltpeter"),

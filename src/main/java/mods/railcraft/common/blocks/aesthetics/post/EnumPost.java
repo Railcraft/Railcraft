@@ -10,7 +10,9 @@
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.common.blocks.IBlockVariantEnum;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
@@ -23,7 +25,7 @@ import java.util.Locale;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumPost implements IBlockVariantEnum<EnumPost> {
+public enum EnumPost implements IBlockVariantEnum {
 
     WOOD(MapColor.BROWN),
     STONE(MapColor.STONE),
@@ -49,19 +51,22 @@ public enum EnumPost implements IBlockVariantEnum<EnumPost> {
         return mapColor;
     }
 
-    public ItemStack getItem() {
-        return getItem(1);
+    @Nullable
+    public ItemStack getStack() {
+        return getStack(1);
     }
 
-    public ItemStack getItem(int qty) {
-        if (!isEnabled())
+    @Nullable
+    public ItemStack getStack(int qty) {
+        Block block = getBlock();
+        if (!isEnabled() || block == null)
             return null;
-        return new ItemStack(BlockPost.getBlock(), qty, ordinal());
+        return new ItemStack(block, qty, ordinal());
     }
 
     @Override
     public boolean isEnabled() {
-        return BlockPost.getBlock() != null;
+        return RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
     public boolean canBurn() {
@@ -69,13 +74,17 @@ public enum EnumPost implements IBlockVariantEnum<EnumPost> {
     }
 
     public String getTag() {
-        return "tile.railcraft.post." + getName();
+        return "tile.railcraft.post." + getBaseTag();
+    }
+
+    public String getBaseTag() {
+        return name().toLowerCase(Locale.ROOT).replace("_", ".");
     }
 
     @Nonnull
     @Override
     public String getName() {
-        return name().toLowerCase(Locale.ENGLISH).replace("_", ".");
+        return name().toLowerCase(Locale.ROOT);
     }
 
     @Nullable
@@ -87,7 +96,7 @@ public enum EnumPost implements IBlockVariantEnum<EnumPost> {
     @Nullable
     @Override
     public Block getBlock() {
-        return BlockPost.getBlock();
+        return RailcraftBlocks.post.block();
     }
 
     @Nullable

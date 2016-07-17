@@ -16,7 +16,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.AABBFactory;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;

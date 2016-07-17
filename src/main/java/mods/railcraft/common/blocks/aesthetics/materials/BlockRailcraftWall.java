@@ -63,7 +63,8 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
     //TODO: recipe??
     @Override
     public void finalizeDefinition() {
-        for (Materials mat : Materials.getValidMats()) {
+        List<Materials> mats = Materials.getValidMats();
+        for (Materials mat : mats) {
             ItemStack stack = getStack(mat);
             if (stack != null) {
                 RailcraftRegistry.register(stack);
@@ -71,6 +72,12 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
                     ForestryPlugin.addBackpackItem("forestry.builder", stack);
             }
         }
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+        return Materials.getStack(this, qty, variant);
     }
 
     @Override

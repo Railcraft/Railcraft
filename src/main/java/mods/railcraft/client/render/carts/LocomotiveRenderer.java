@@ -12,7 +12,7 @@ import mods.railcraft.api.carts.locomotive.ICartRenderer;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.carts.EntityLocomotive;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;

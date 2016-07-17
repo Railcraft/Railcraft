@@ -9,26 +9,19 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
+import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemPostMetal extends ItemBlock {
+public class ItemPostMetal extends ItemBlockRailcraftSubtyped {
 
     public ItemPostMetal(Block block) {
         super(block);
-        setMaxDamage(0);
-        setHasSubtypes(true);
-    }
-
-    @Override
-    public int getMetadata(int meta) {
-        return meta;
     }
 
     @Override

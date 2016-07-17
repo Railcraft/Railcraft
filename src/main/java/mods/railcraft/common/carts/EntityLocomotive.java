@@ -29,7 +29,7 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;

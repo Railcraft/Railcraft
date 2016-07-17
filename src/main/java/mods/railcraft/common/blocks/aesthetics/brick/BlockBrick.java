@@ -9,6 +9,12 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.brick;
 
+import mods.railcraft.api.crafting.ICrusherCraftingManager;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.common.blocks.IRailcraftBlock;
+import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -18,14 +24,18 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockBrick extends Block {
+import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
+
+public class BlockBrick extends Block implements IRailcraftBlock {
     public static final PropertyEnum<BrickVariant> VARIANT = PropertyEnum.create("variant", BrickVariant.class);
     private final BrickTheme theme;
 
@@ -40,8 +50,58 @@ public class BlockBrick extends Block {
         setHarvestLevel("pickaxe", 0);
     }
 
-    public IBlockState getState(BrickVariant variant) {
-        return getDefaultState().withProperty(VARIANT, variant);
+    @Override
+    public void initializeDefinintion() {
+        ForestryPlugin.addBackpackItem("builder", this);
+        theme.initBlock(this);
+
+        for (BrickVariant variant : BrickVariant.VALUES) {
+            theme.initVariant(this, variant);
+        }
+    }
+
+    @Override
+    public void defineRecipes() {
+        CraftingPlugin.addShapelessRecipe(getStack(BRICK), getStack(FITTED));
+        CraftingPlugin.addShapelessRecipe(getStack(FITTED), getStack(BLOCK));
+        CraftingPlugin.addRecipe(getStack(8, ORNATE),
+                "III",
+                "I I",
+                "III",
+                'I', getStack(BLOCK));
+        CraftingPlugin.addShapelessRecipe(getStack(ETCHED), getStack(BLOCK), new ItemStack(Items.GUNPOWDER));
+
+        ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(new ItemStack(this), false, false);
+        recipe.addOutput(getStack(COBBLE), 1.0F);
+
+        CraftingPlugin.addFurnaceRecipe(getStack(COBBLE), getStack(BLOCK), 0.0F);
+        theme.initRecipes(this);
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return BrickVariant.class;
+    }
+
+    @Override
+    public IBlockState getState(@Nullable IVariantEnum variant) {
+        IBlockState state = getDefaultState();
+        if (variant != null) {
+            checkVariant(variant);
+            state = state.withProperty(VARIANT, (BrickVariant) variant);
+        }
+        return state;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+        if (variant != null) {
+            checkVariant(variant);
+            return theme.getStack((BrickVariant) variant);
+        }
+        return new ItemStack(this);
     }
 
     @Override
@@ -52,7 +112,7 @@ public class BlockBrick extends Block {
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (BrickVariant variant : BrickVariant.VALUES) {
-            list.add(theme.get(variant, 1));
+            list.add(theme.getStack(1, variant));
         }
     }
 

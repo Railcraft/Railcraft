@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks;
 
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
@@ -25,7 +24,7 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class RailcraftBlockContainer extends BlockContainer implements IRailcraftObject {
+public abstract class RailcraftBlockContainer extends BlockContainer implements IRailcraftBlock {
     public RailcraftBlockContainer(Material materialIn) {
         super(materialIn);
     }

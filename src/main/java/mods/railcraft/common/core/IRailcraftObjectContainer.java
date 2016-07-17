@@ -21,7 +21,8 @@ import javax.annotation.Nullable;
  * Created by CovertJaguar on 4/13/2016.
  */
 public interface IRailcraftObjectContainer {
-    void register();
+    default void register() {
+    }
 
     boolean isEqual(ItemStack stack);
 
@@ -43,16 +44,27 @@ public interface IRailcraftObjectContainer {
     }
 
     @Nullable
-    ItemStack getStack(int qty, int meta);
+    default ItemStack getStack(int qty, int meta) {
+        IRailcraftObject object = getObject();
+        if (object != null)
+            return object.getStack(qty, meta);
+        return null;
+    }
 
     @Nullable
-    default ItemStack getStack(IVariantEnum variant) {
+    default ItemStack getStack(@Nullable IVariantEnum variant) {
         return getStack(1, variant);
     }
 
     @Nullable
-    ItemStack getStack(int qty, IVariantEnum variant);
+    default ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+        IRailcraftObject object = getObject();
+        if (object != null)
+            return object.getStack(qty, variant);
+        return null;
+    }
 
+    @Nullable
     IRailcraftObject getObject();
 
     @Nullable
@@ -61,7 +73,19 @@ public interface IRailcraftObjectContainer {
     }
 
     @Nullable
-    Object getRecipeObject(@Nullable IVariantEnum variant);
+    default Object getRecipeObject(@Nullable IVariantEnum variant) {
+        Object obj = null;
+        IRailcraftObject railcraftObject = getObject();
+        if (railcraftObject != null) {
+            railcraftObject.checkVariant(variant);
+            obj = railcraftObject.getRecipeObject(variant);
+        }
+        if (obj == null && variant != null)
+            obj = variant.getAlternate(this);
+        if (obj instanceof ItemStack)
+            obj = ((ItemStack) obj).copy();
+        return obj;
+    }
 
     boolean isEnabled();
 

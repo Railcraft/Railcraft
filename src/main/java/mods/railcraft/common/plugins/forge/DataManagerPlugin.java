@@ -12,7 +12,7 @@ package mods.railcraft.common.plugins.forge;
 
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;

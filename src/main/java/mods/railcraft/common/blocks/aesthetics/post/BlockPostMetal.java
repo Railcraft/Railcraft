@@ -9,12 +9,12 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.EnumColor;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.PropertyEnum;
@@ -31,6 +31,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,38 +45,39 @@ public class BlockPostMetal extends BlockPostBase {
     public static BlockPostMetal platform;
     public final boolean isPlatform;
 
-    private BlockPostMetal(boolean isPlatform) {
+    public BlockPostMetal(boolean isPlatform) {
         setSoundType(SoundType.METAL);
         this.isPlatform = isPlatform;
         setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
     }
 
-    public static void registerPost() {
-        if (post == null && RailcraftConfig.isBlockEnabled("post.metal"))
-            post = BlockPostMetal.make("post.metal", false);
-    }
+    @Override
+    public void initializeDefinintion() {
+        HarvestPlugin.setBlockHarvestLevel("pickaxe", 2, this);
 
-    public static void registerPlatform() {
-        if (platform == null && RailcraftConfig.isBlockEnabled("post.metal.platform"))
-            platform = BlockPostMetal.make("post.metal.platform", true);
-    }
-
-    private static BlockPostMetal make(String tag, boolean isPlatform) {
-        BlockPostMetal block = new BlockPostMetal(isPlatform);
-        block.setUnlocalizedName("railcraft." + tag);
-        RailcraftRegistry.register(block, ItemPostMetal.class);
-
-//        HarvestPlugin.setBlockHarvestLevel(block, "crowbar", 0);
-        HarvestPlugin.setBlockHarvestLevel("pickaxe", 2, block);
-
-        ForestryPlugin.addBackpackItem("builder", block);
+        ForestryPlugin.addBackpackItem("builder", this);
 
         for (EnumColor color : EnumColor.VALUES) {
-            ItemStack stack = block.getItem(1, color.ordinal());
-            RailcraftRegistry.register(stack);
+            ItemStack stack = getStack(1, color);
+            if (stack != null)
+                RailcraftRegistry.register(stack);
         }
+    }
 
-        return block;
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumColor.class;
+    }
+
+    @Override
+    public IBlockState getState(@Nullable IVariantEnum variant) {
+        IBlockState state = getDefaultState();
+        if (variant != null) {
+            checkVariant(variant);
+            state = state.withProperty(COLOR, (EnumColor) variant);
+        }
+        return state;
     }
 
     public EnumColor getColor(IBlockState state) {
@@ -87,26 +89,10 @@ public class BlockPostMetal extends BlockPostBase {
         return isPlatform;
     }
 
-    public ItemStack getItem() {
-        return getItem(1, 3);
-    }
-
-    public ItemStack getItem(int qty) {
-        return getItem(qty, 3);
-    }
-
-    public ItemStack getItem(int qty, int color) {
-        return new ItemStack(this, qty, color);
-    }
-
-    public ItemStack getItem(int qty, EnumColor color) {
-        return new ItemStack(this, qty, color.ordinal());
-    }
-
     @Override
     public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
         for (EnumColor color : EnumColor.VALUES) {
-            list.add(getItem(1, color.ordinal()));
+            list.add(getStack(1, color.ordinal()));
         }
     }
 
@@ -120,9 +106,9 @@ public class BlockPostMetal extends BlockPostBase {
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
         List<ItemStack> list = new ArrayList<ItemStack>();
         if (isPlatform)
-            list.add(EnumPost.METAL_PLATFORM_UNPAINTED.getItem());
+            list.add(EnumPost.METAL_PLATFORM_UNPAINTED.getStack());
         else
-            list.add(EnumPost.METAL_UNPAINTED.getItem());
+            list.add(EnumPost.METAL_UNPAINTED.getStack());
         return list;
     }
 

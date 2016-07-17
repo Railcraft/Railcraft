@@ -10,6 +10,9 @@
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
+import mods.railcraft.common.blocks.aesthetics.brick.ItemBrick;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.ItemCube;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
@@ -20,6 +23,10 @@ import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
 import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.ItemSlab;
+import mods.railcraft.common.blocks.aesthetics.post.BlockPost;
+import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
+import mods.railcraft.common.blocks.aesthetics.post.ItemPost;
+import mods.railcraft.common.blocks.aesthetics.post.ItemPostMetal;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.anvil.ItemAnvil;
 import mods.railcraft.common.blocks.detector.BlockDetector;
@@ -64,6 +71,14 @@ import java.util.function.Supplier;
  */
 public enum RailcraftBlocks implements IRailcraftObjectContainer {
     anvilSteel("anvil", BlockRCAnvil::new, ItemAnvil::new),
+    brickAbyssal("brick.abyssal", () -> new BlockBrick(BrickTheme.ABYSSAL), ItemBrick::new),
+    brickBleachedBone("brick.bleachedbone", () -> new BlockBrick(BrickTheme.BLEACHEDBONE), ItemBrick::new),
+    brickBloodStained("brick.bloodstained", () -> new BlockBrick(BrickTheme.BLOODSTAINED), ItemBrick::new),
+    brickFrostBound("brick.frostbound", () -> new BlockBrick(BrickTheme.FROSTBOUND), ItemBrick::new),
+    brickInfernal("brick.infernal", () -> new BlockBrick(BrickTheme.INFERNAL), ItemBrick::new),
+    brickNether("brick.nether", () -> new BlockBrick(BrickTheme.NETHER), ItemBrick::new),
+    brickQuarried("brick.quarried", () -> new BlockBrick(BrickTheme.QUARRIED), ItemBrick::new),
+    brickSandy("brick.sandy", () -> new BlockBrick(BrickTheme.SANDY), ItemBrick::new),
     cube("cube", BlockCube::new, ItemCube::new),
     detector("detector", BlockDetector::new, ItemDetector::new),
     frame("frame", BlockFrame::new, ItemBlockRailcraft::new),
@@ -75,6 +90,9 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     machine_delta("machine.delta", () -> new BlockMachine<EnumMachineDelta>(EnumMachineDelta.PROXY, false), ItemMachine::new),
     machine_epsilon("machine.epsilon", () -> new BlockMachine<EnumMachineEpsilon>(EnumMachineEpsilon.PROXY, true), ItemMachine::new),
     ore("ore", BlockOre::new, ItemOre::new),
+    post("post", BlockPost::new, ItemPost::new),
+    postMetal("post.metal", () -> new BlockPostMetal(false), ItemPostMetal::new),
+    postMetalPlatform("post.metal.platform", () -> new BlockPostMetal(true), ItemPostMetal::new),
     ritual("ritual", BlockRitual::new, ItemBlockRailcraft::new),
     signal("signal", BlockSignalRailcraft::new, ItemSignal::new),
     slab("slab", BlockRailcraftSlab::new, ItemSlab::new),
@@ -161,6 +179,13 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     }
 
     @Nullable
+    public IBlockState getState(@Nullable IVariantEnum variant) {
+        if (block instanceof IRailcraftBlock)
+            return ((IRailcraftBlock) block).getState(variant);
+        return getDefaultState();
+    }
+
+    @Nullable
     public Item item() {
         return item;
     }
@@ -170,27 +195,9 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
         return tag;
     }
 
-    @Nullable
-    @Override
-    public ItemStack getStack(int qty, int meta) {
-//        register(); Blocks are not created lazily like items.
-        if (block == null)
-            return null;
-        return new ItemStack(block, qty, meta);
-    }
-
     private void checkVariantObject(@Nullable IVariantEnum variant) {
         if (block != null)
             ((IRailcraftObject) block).checkVariant(variant);
-    }
-
-    @Nullable
-    @Override
-    public ItemStack getStack(int qty, IVariantEnum variant) {
-        checkVariantObject(variant);
-        if (block != null)
-            return ((IRailcraftObject) block).getStack(qty, variant);
-        return null;
     }
 
     @Nullable

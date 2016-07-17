@@ -7,12 +7,13 @@
  * permission unless otherwise specified on the
  * license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.util.misc;
+package mods.railcraft.common.plugins.color;
 
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -22,7 +23,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -36,25 +39,35 @@ public enum EnumColor implements IVariantEnum {
     BLUE(0x3441A2, "dyeBlue", "blue"),
     PURPLE(0x843FBF, "dyePurple", "purple"),
     CYAN(0x36809E, "dyeCyan", "cyan"),
-    SILVER(0x888888, "dyeLightGray", "silver", "lightGray"),
+    SILVER(0x888888, "dyeLightGray", "silver", "light_gray", "lightGray"),
     GRAY(0x444444, "dyeGray", "gray"),
     PINK(0xE585A0, "dyePink", "pink"),
     LIME(0x3FAA36, "dyeLime", "lime"),
     YELLOW(0xFFC700, "dyeYellow", "yellow"),
-    LIGHT_BLUE(0x7F9AD1, "dyeLightBlue", "lightBlue"),
+    LIGHT_BLUE(0x7F9AD1, "dyeLightBlue", "light_blue", "lightBlue"),
     MAGENTA(0xFF64FF, "dyeMagenta", "magenta"),
     ORANGE(0xFF6A00, "dyeOrange", "orange"),
     WHITE(0xFFFFFF, "dyeWhite", "white");
     public static final EnumColor[] VALUES = values();
     public static final String DEFAULT_COLOR_TAG = "color";
+    public static final Map<String, EnumColor> nameMap = new HashMap<>();
     private final int hexColor;
     private final String oreTagDyeName;
     private final String[] names;
+
+    static {
+        for (EnumColor color : VALUES) {
+            for (String name : color.names) {
+                nameMap.put(name, color);
+            }
+        }
+    }
 
     EnumColor(int hexColor, String oreTagDyeName, String... names) {
         this.hexColor = hexColor;
         this.oreTagDyeName = oreTagDyeName;
         this.names = names;
+
     }
 
     public static EnumColor fromDye(EnumDyeColor dyeColor) {
@@ -76,12 +89,10 @@ public enum EnumColor implements IVariantEnum {
     }
 
     public static EnumColor fromName(String name) {
-        for (EnumColor color : VALUES) {
-            for (String tag : color.names)
-                if (tag.equalsIgnoreCase(name))
-                    return color;
-        }
-        return null;
+        EnumColor color = nameMap.get(name);
+        if (color == null)
+            return WHITE;
+        return color;
     }
 
     public static EnumColor getRand() {

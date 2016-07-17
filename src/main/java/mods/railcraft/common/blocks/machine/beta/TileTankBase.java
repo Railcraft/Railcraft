@@ -23,7 +23,7 @@ import mods.railcraft.common.gui.slots.SlotLiquidContainer;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Timer;
 import mods.railcraft.common.util.network.RailcraftInputStream;

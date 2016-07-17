@@ -25,6 +25,7 @@ import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -44,6 +45,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -59,8 +64,8 @@ import static net.minecraft.util.EnumFacing.UP;
 
 public class BlockRailcraftSlab extends BlockContainer implements IMaterialBlock {
 
-    public static final PropertyEnum<Materials> TOP_MATERIAL = PropertyEnum.create("top_material", Materials.class);
-    public static final PropertyEnum<Materials> BOTTOM_MATERIAL = PropertyEnum.create("bottom_material", Materials.class);
+    public static final IUnlistedProperty<Materials> TOP_MATERIAL = Properties.toUnlisted(PropertyEnum.create("top_material", Materials.class));
+    public static final IUnlistedProperty<Materials> BOTTOM_MATERIAL = Properties.toUnlisted(PropertyEnum.create("bottom_material", Materials.class));
     public static int currentRenderPass;
     static BlockRailcraftSlab block;
 
@@ -68,7 +73,6 @@ public class BlockRailcraftSlab extends BlockContainer implements IMaterialBlock
         super(Material.ROCK);
         setSoundType(RailcraftSoundTypes.OVERRIDE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setDefaultState(getDefaultState().withProperty(BOTTOM_MATERIAL, Materials.getPlaceholder()));
         useNeighborBrightness = true;
         GameRegistry.registerTileEntity(TileSlab.class, "RCSlabTile");
     }
@@ -82,7 +86,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IMaterialBlock
     @Override
     @Nonnull
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, TOP_MATERIAL, BOTTOM_MATERIAL);
+        return new ExtendedBlockState(this, new IProperty[]{}, new IUnlistedProperty[]{TOP_MATERIAL, BOTTOM_MATERIAL});
     }
 
     @Override
@@ -164,7 +168,7 @@ public class BlockRailcraftSlab extends BlockContainer implements IMaterialBlock
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         TileSlab tile = getSlabTile(worldIn, pos);
         if (tile != null)
-            state = state.withProperty(TOP_MATERIAL, tile.getTopSlab()).withProperty(BOTTOM_MATERIAL, tile.getBottomSlab());
+            state = ((IExtendedBlockState) state).withProperty(TOP_MATERIAL, tile.getTopSlab()).withProperty(BOTTOM_MATERIAL, tile.getBottomSlab());
         return state;
     }
 

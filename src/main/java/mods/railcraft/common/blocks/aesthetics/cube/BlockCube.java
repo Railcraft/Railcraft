@@ -9,9 +9,9 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.cube;
 
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BlockCube extends Block implements IRailcraftObject {
+public class BlockCube extends Block implements IRailcraftBlock {
 
     public static final PropertyEnum<EnumCube> VARIANT = PropertyEnum.create("variant", EnumCube.class);
 
@@ -54,12 +54,6 @@ public class BlockCube extends Block implements IRailcraftObject {
         setSoundType(RailcraftSoundTypes.OVERRIDE);
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-    }
-
-    @Nullable
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumCube.class;
     }
 
     @Override
@@ -88,6 +82,22 @@ public class BlockCube extends Block implements IRailcraftObject {
         MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.STEEL_BLOCK.ordinal());
         MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.ABYSSAL_STONE.ordinal());
         MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.QUARRIED_STONE.ordinal());
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumCube.class;
+    }
+
+    @Override
+    public IBlockState getState(@Nullable IVariantEnum variant) {
+        IBlockState state = getDefaultState();
+        if (variant != null) {
+            checkVariant(variant);
+            state = state.withProperty(VARIANT, (EnumCube) variant);
+        }
+        return state;
     }
 
     @Nullable

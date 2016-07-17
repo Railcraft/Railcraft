@@ -14,6 +14,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 
+import javax.annotation.Nullable;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -66,8 +68,9 @@ public class HarvestPlugin {
             setStateHarvestLevel(toolClass, level, state);
     }
 
-    public static void setStateHarvestLevel(String toolClass, int level, IBlockState blockState) {
-        blockState.getBlock().setHarvestLevel(toolClass, level, blockState);
+    public static void setStateHarvestLevel(String toolClass, int level, @Nullable IBlockState blockState) {
+        if (blockState != null)
+            blockState.getBlock().setHarvestLevel(toolClass, level, blockState);
     }
 
     public static int getHarvestLevel(IBlockState blockState, String toolClass) {

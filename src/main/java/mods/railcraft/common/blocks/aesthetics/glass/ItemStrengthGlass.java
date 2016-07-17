@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.glass;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraftforge.fml.relauncher.Side;

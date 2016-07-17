@@ -8,9 +8,9 @@
  */
 package mods.railcraft.common.util.sounds;
 
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
-import mods.railcraft.common.blocks.aesthetics.post.BlockPost;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -46,7 +46,7 @@ public class SoundRegistry {
     }
 
     public static void setupBlockSounds() {
-        Block block = BlockPost.getBlock();
+        Block block = RailcraftBlocks.post.block();
         if (block != null) {
             registerBlockSound(EnumPost.WOOD.getState(), SoundType.WOOD);
             registerBlockSound(EnumPost.STONE.getState(), SoundType.STONE);

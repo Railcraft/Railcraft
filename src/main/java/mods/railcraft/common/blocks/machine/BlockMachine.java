@@ -16,7 +16,7 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -322,12 +322,14 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
         return true;
     }
 
+    @SuppressWarnings("Convert2MethodRef")
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         list.addAll(
+                // leave this as lambda's instead of method references, it breaks otherwise.
                 proxy.getCreativeList().stream()
-                        .filter(IEnumMachine::isAvailable)
-                        .map(IEnumMachine::getItem)
+                        .filter((m) -> m.isAvailable())
+                        .map((m1) -> m1.getItem())
                         .collect(Collectors.toList())
         );
     }

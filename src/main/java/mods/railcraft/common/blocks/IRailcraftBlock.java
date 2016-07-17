@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) CovertJaguar, 2011-2016
  * http://railcraft.info
- * <p>
+ *
  * This code is the property of CovertJaguar
  * and may only be used with explicit written
  * permission unless otherwise specified on the
@@ -10,14 +10,21 @@
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+
+import javax.annotation.Nullable;
 
 /**
- * Lets apply some standardization to my variant enums.
- * <p>
- * Created by CovertJaguar on 3/24/2016.
+ * Created by CovertJaguar on 7/16/2016 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IBlockVariantEnum extends IVariantEnum, IStateContainer, IBlockContainer {
+public interface IRailcraftBlock extends IRailcraftObject {
 
-    boolean isEnabled();
+    default IBlockState getState(@Nullable IVariantEnum variant) {
+        return ((Block) this).getDefaultState();
+    }
 }

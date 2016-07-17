@@ -19,7 +19,7 @@ import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.thaumcraft.EntityLocomotiveSteamMagic;
 import mods.railcraft.common.util.crafting.CartUncraftingRecipe;
 import mods.railcraft.common.util.misc.EntityIDs;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.EntityList;
@@ -348,7 +348,7 @@ public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer {
             ItemStack cartItem = new ItemStack(item);
             setCartItem(cartItem);
             if (canBeUncrafted)
-                CraftingPlugin.addRecipe(new CartUncraftingRecipe.EnumCartUncraftingRecipe(this));
+                CraftingPlugin.addRecipe(new CartUncraftingRecipe.RailcraftCartUncraftingRecipe(this));
             return true;
         }
         return isSetup;

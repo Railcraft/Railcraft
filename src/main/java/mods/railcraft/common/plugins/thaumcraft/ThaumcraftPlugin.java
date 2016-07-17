@@ -28,7 +28,7 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ItemStackCache;
 import net.minecraft.block.Block;
@@ -251,9 +251,9 @@ public class ThaumcraftPlugin {
             aspects.add(a, baseAmount);
         }
         ThaumcraftApi.registerObjectTag(new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE), aspects);
-        ThaumcraftApi.registerObjectTag(brick.get(BrickVariant.COBBLE), aspects.copy().remove(Aspect.EARTH, 2).add(Aspect.ENTROPY, 2));
-        ThaumcraftApi.registerObjectTag(brick.get(BrickVariant.BLOCK), aspects.copy().remove(Aspect.EARTH, 2).add(Aspect.ORDER, 2));
-        ThaumcraftApi.registerObjectTag(brick.get(BrickVariant.ETCHED), aspects.copy().remove(Aspect.EARTH, 2).add(Aspect.DESIRE, 2));
+        ThaumcraftApi.registerObjectTag(brick.getStack(BrickVariant.COBBLE), aspects.copy().remove(Aspect.EARTH, 2).add(Aspect.ENTROPY, 2));
+        ThaumcraftApi.registerObjectTag(brick.getStack(BrickVariant.BLOCK), aspects.copy().remove(Aspect.EARTH, 2).add(Aspect.ORDER, 2));
+        ThaumcraftApi.registerObjectTag(brick.getStack(BrickVariant.ETCHED), aspects.copy().remove(Aspect.EARTH, 2).add(Aspect.DESIRE, 2));
     }
 
     public static ToolMaterial getThaumiumToolMaterial() {

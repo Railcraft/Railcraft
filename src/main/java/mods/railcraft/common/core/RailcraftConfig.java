@@ -11,6 +11,7 @@ package mods.railcraft.common.core;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
@@ -493,6 +494,10 @@ public class RailcraftConfig {
             loadBlockFeature(type.getTag());
         }
 
+        for (EnumPost type : EnumPost.VALUES) {
+            loadBlockFeature(type.getTag());
+        }
+
 //        for (EnumWallAlpha type : EnumWallAlpha.VALUES) {
 //            loadBlockFeature(type.getTag());
 //        }
@@ -555,7 +560,7 @@ public class RailcraftConfig {
                 + "This is not true for all items, so some experimentation may be needed.\n"
                 + "Some disabled items will cause a substitute to be used in crafting recipes.");
 
-        for(RailcraftItems item : RailcraftItems.VALUES){
+        for (RailcraftItems item : RailcraftItems.VALUES) {
             loadItemProperty(item.getBaseTag());
         }
 

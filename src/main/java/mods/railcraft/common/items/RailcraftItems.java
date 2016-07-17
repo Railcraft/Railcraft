@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.items;
 
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.carts.ItemBoreHeadDiamond;
 import mods.railcraft.common.carts.ItemBoreHeadIron;
@@ -40,24 +41,10 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     armorLeggingsSteel(() -> new ItemSteelArmor(EntityEquipmentSlot.LEGS), "armor.leggings.steel", Items.IRON_LEGGINGS),
     armorChestplateSteel(() -> new ItemSteelArmor(EntityEquipmentSlot.CHEST), "armor.chestplate.steel", Items.IRON_CHESTPLATE),
     axeSteel(ItemSteelAxe::new, "tool.axe.steel", Items.IRON_AXE),
-    boreHeadIron(ItemBoreHeadIron::new, "borehead.iron") {
-        @Override
-        public boolean isEnabled() {
-            return super.isEnabled() && RailcraftCarts.BORE.isEnabled();
-        }
-    },
-    boreHeadSteel(ItemBoreHeadSteel::new, "borehead.steel") {
-        @Override
-        public boolean isEnabled() {
-            return super.isEnabled() && RailcraftCarts.BORE.isEnabled();
-        }
-    },
-    boreHeadDiamond(ItemBoreHeadDiamond::new, "borehead.diamond") {
-        @Override
-        public boolean isEnabled() {
-            return super.isEnabled() && RailcraftCarts.BORE.isEnabled();
-        }
-    },
+    bleachedClay(ItemRailcraft::new, "part.bleached.clay", Items.CLAY_BALL, RailcraftBlocks.brickBleachedBone::isEnabled),
+    boreHeadIron(ItemBoreHeadIron::new, "borehead.iron", null, RailcraftCarts.BORE::isEnabled),
+    boreHeadSteel(ItemBoreHeadSteel::new, "borehead.steel", null, RailcraftCarts.BORE::isEnabled),
+    boreHeadDiamond(ItemBoreHeadDiamond::new, "borehead.diamond", null, RailcraftCarts.BORE::isEnabled),
     circuit(ItemCircuit::new, "part.circuit"),
     coke(ItemCoke::new, "fuel.coke"),
     crowbarIron(ItemCrowbarIron::new, "tool.crowbar.iron"),
@@ -93,29 +80,16 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     ticket(ItemTicket::new, "routing.ticket", Items.PAPER),
     ticketGold(ItemTicketGold::new, "routing.ticket.gold", Items.GOLD_NUGGET),
     tie(ItemTie::new, "part.tie"),
-    turbineBlade(ItemTurbineBlade::new, "part.turbine.blade", "ingotSteel") {
-        @Override
-        public boolean isEnabled() {
-            return super.isEnabled() && EnumMachineAlpha.TURBINE.isAvailable();
-        }
-    },
-    turbineDisk(ItemTurbineDisk::new, "part.turbine.disk", "blockSteel") {
-        @Override
-        public boolean isEnabled() {
-            return super.isEnabled() && EnumMachineAlpha.TURBINE.isAvailable();
-        }
-    },
-    turbineRotor(ItemTurbineRotor::new, "part.turbine.rotor") {
-        @Override
-        public boolean isEnabled() {
-            return super.isEnabled() && EnumMachineAlpha.TURBINE.isAvailable();
-        }
-    },
+    turbineBlade(ItemTurbineBlade::new, "part.turbine.blade", "ingotSteel", EnumMachineAlpha.TURBINE::isAvailable),
+    turbineDisk(ItemTurbineDisk::new, "part.turbine.disk", "blockSteel", EnumMachineAlpha.TURBINE::isAvailable),
+    turbineRotor(ItemTurbineRotor::new, "part.turbine.rotor", null, EnumMachineAlpha.TURBINE::isAvailable),
     whistleTuner(ItemWhistleTuner::new, "tool.whistle.tuner");
     public static final RailcraftItems[] VALUES = values();
     private final Supplier<Item> itemSupplier;
     private final String tag;
+    @Nullable
     private final Object altRecipeObject;
+    private final Supplier<Boolean> prerequisites;
     private Item item;
     private IRailcraftObject railcraftObject;
 
@@ -123,10 +97,15 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
         this(itemSupplier, tag, null);
     }
 
-    RailcraftItems(Supplier<Item> itemSupplier, String tag, Object alt) {
+    RailcraftItems(Supplier<Item> itemSupplier, String tag, @Nullable Object alt) {
+        this(itemSupplier, tag, alt, () -> true);
+    }
+
+    RailcraftItems(Supplier<Item> itemSupplier, String tag, @Nullable Object alt, Supplier<Boolean> prerequisites) {
         this.itemSupplier = itemSupplier;
         this.tag = tag;
         this.altRecipeObject = alt;
+        this.prerequisites = prerequisites;
     }
 
     public static void finalizeDefinitions() {
@@ -228,7 +207,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
 
     @Override
     public boolean isEnabled() {
-        return RailcraftConfig.isItemEnabled(tag);
+        return RailcraftConfig.isItemEnabled(tag) && prerequisites.get();
     }
 
     @Override

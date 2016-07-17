@@ -74,10 +74,10 @@ public class CartUncraftingRecipe implements IRecipe {
         return grid;
     }
 
-    public static class EnumCartUncraftingRecipe extends CartUncraftingRecipe {
+    public static class RailcraftCartUncraftingRecipe extends CartUncraftingRecipe {
         private final RailcraftCarts cart;
 
-        public EnumCartUncraftingRecipe(RailcraftCarts cart) {
+        public RailcraftCartUncraftingRecipe(RailcraftCarts cart) {
             super(cart.getContents(), cart.getCartItem(), new ItemStack(Items.MINECART));
             this.cart = cart;
         }

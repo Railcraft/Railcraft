@@ -171,7 +171,7 @@ public class BlockDetector extends RailcraftBlockContainer {
                     "XXX",
                     "XPX",
                     "XXX",
-                    'X', BrickTheme.INFERNAL.get(BrickVariant.BRICK, 1),
+                    'X', BrickTheme.INFERNAL.getStack(1, BrickVariant.BRICK),
                     'P', Blocks.STONE_PRESSURE_PLATE);
     }
 

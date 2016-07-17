@@ -47,6 +47,15 @@ public interface IRailcraftObject {
         return null;
     }
 
+    @Nullable
+    default ItemStack getStack(int qty, int meta) {
+        if (this instanceof Item)
+            return new ItemStack((Item) this, qty, meta);
+        if (this instanceof Block)
+            return new ItemStack((Block) this, qty, meta);
+        return null;
+    }
+
     default void defineRecipes() {
     }
 

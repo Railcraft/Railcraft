@@ -13,7 +13,7 @@ import mods.railcraft.common.blocks.detector.DetectorFilter;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

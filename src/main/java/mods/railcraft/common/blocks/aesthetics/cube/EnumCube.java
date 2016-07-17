@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumCube implements IBlockVariantEnum<EnumCube> {
+public enum EnumCube implements IBlockVariantEnum {
 
     COKE_BLOCK(ModuleFactory.class, "coke", new FlammableCube(5, 10), 2f, 10f),
     CONCRETE_BLOCK(ModuleStructures.class, "concrete", new SimpleCube(), 3f, 15f),
@@ -128,7 +128,7 @@ public enum EnumCube implements IBlockVariantEnum<EnumCube> {
 
     @Override
     public boolean isEnabled() {
-        return getModule() != null && RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag()) && BlockCube.getBlock() != null;
+        return getModule() != null && RailcraftModuleManager.isModuleEnabled(getModule()) && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
     @Nullable

@@ -9,8 +9,8 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.glass;
 
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
@@ -20,7 +20,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.block.BlockGlass;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColoredBlock, IRailcraftObject {
+public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColoredBlock, IRailcraftBlock {
 
     public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
     public static boolean renderingHighlight;
@@ -58,11 +58,6 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
         setSoundType(SoundType.GLASS);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
-    }
-    @Nullable
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumColor.class;
     }
 
     @Override
@@ -105,6 +100,22 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
                     'G', RailcraftBlocks.glass.getWildcard(),
                     'D', color.getDyeOreDictTag());
         }
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return EnumColor.class;
+    }
+
+    @Override
+    public IBlockState getState(@Nullable IVariantEnum variant) {
+        IBlockState state = getDefaultState();
+        if (variant != null) {
+            checkVariant(variant);
+            state = state.withProperty(COLOR, (EnumColor) variant);
+        }
+        return state;
     }
 
     public EnumColor getColor(IBlockState state) {

@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.util.misc.EnumColor;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;

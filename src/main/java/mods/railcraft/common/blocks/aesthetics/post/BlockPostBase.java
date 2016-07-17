@@ -9,9 +9,9 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.signals.MaterialStructure;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-public abstract class BlockPostBase extends Block implements IRailcraftObject {
+public abstract class BlockPostBase extends Block implements IRailcraftBlock {
 
     private static final float SIZE = 0.15f;
     private static final float SELECT = 4F / 16F;

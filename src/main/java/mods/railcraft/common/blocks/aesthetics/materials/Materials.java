@@ -305,7 +305,7 @@ public enum Materials implements IVariantEnum {
     }
 
     public String getLocalizationSuffix() {
-        return name;
+        return name.replace("_", ".");
     }
 
     @Nullable

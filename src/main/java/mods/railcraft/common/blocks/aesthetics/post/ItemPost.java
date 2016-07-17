@@ -11,10 +11,10 @@ package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
+import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemPost extends ItemBlock {
+public class ItemPost extends ItemBlockRailcraft {
 
     public ItemPost(Block block) {
         super(block);
