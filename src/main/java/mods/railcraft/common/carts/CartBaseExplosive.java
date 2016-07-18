@@ -242,7 +242,7 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
     @Override
     public void writeGuiData(@Nonnull RailcraftOutputStream data) throws IOException {
         data.writeShort(getFuse());
-        data.writeByte(dataManager.get(BLAST));
+        data.writeByte(dataManager.get(BLAST).intValue());
     }
 
     @Override

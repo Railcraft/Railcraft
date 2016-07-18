@@ -30,10 +30,10 @@ public class CommonProxy {
         return 15;
     }
 
-    public void preInitClient() {
+    public void initializeClient() {
     }
 
-    public void initClient() {
+    public void finalizeClient() {
     }
 
     public UUID getPlayerIdentifier(EntityPlayer player) {

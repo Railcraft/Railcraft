@@ -170,7 +170,7 @@ public final class Railcraft {
 
         RailcraftModuleManager.preInit();
 
-        proxy.preInitClient();
+        proxy.initializeClient();
 
         FMLInterModComms.sendMessage("OpenBlocks", "donateUrl", "http://www.railcraft.info/donate/");
     }
@@ -189,7 +189,7 @@ public final class Railcraft {
 //        Game.log(Level.FINE, "Post-Init Phase");
         RailcraftModuleManager.postInit();
 
-        proxy.initClient();
+        proxy.finalizeClient();
 
         CraftGuidePlugin.init();
 

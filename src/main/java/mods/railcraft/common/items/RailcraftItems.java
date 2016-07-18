@@ -41,7 +41,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     armorLeggingsSteel(() -> new ItemSteelArmor(EntityEquipmentSlot.LEGS), "armor.leggings.steel", Items.IRON_LEGGINGS),
     armorChestplateSteel(() -> new ItemSteelArmor(EntityEquipmentSlot.CHEST), "armor.chestplate.steel", Items.IRON_CHESTPLATE),
     axeSteel(ItemSteelAxe::new, "tool.axe.steel", Items.IRON_AXE),
-    bleachedClay(ItemRailcraft::new, "part.bleached.clay", Items.CLAY_BALL, RailcraftBlocks.brickBleachedBone::isEnabled),
+    bleachedClay(ItemRailcraft::new, "bleached.clay", Items.CLAY_BALL, RailcraftBlocks.brickBleachedBone::isEnabled),
     boreHeadIron(ItemBoreHeadIron::new, "borehead.iron", null, RailcraftCarts.BORE::isEnabled),
     boreHeadSteel(ItemBoreHeadSteel::new, "borehead.steel", null, RailcraftCarts.BORE::isEnabled),
     boreHeadDiamond(ItemBoreHeadDiamond::new, "borehead.diamond", null, RailcraftCarts.BORE::isEnabled),
