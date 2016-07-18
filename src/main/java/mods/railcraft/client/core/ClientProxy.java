@@ -33,7 +33,6 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
@@ -73,6 +72,15 @@ public class ClientProxy extends CommonProxy {
     public void initializeClient() {
         MinecraftForge.EVENT_BUS.register(RCSoundHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new TextureHook());
+
+        for (RailcraftItems itemContainer : RailcraftItems.VALUES) {
+            Item item = itemContainer.item();
+            if (item instanceof IRailcraftItem) {
+                ((IRailcraftItem) item).defineModels();
+            } else if (item != null) {
+                ModelManager.registerItemModel(item, 0);
+            }
+        }
     }
 
     @Override
@@ -88,16 +96,6 @@ public class ClientProxy extends CommonProxy {
 
         Game.log(Level.TRACE, "Init Start: Renderer");
 
-        ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-
-        for (RailcraftItems itemContainer : RailcraftItems.VALUES) {
-            Item item = itemContainer.item();
-            if (item instanceof IRailcraftItem) {
-                ((IRailcraftItem) item).registerModels(mesher);
-            } else if (item != null) {
-                ModelManager.registerItemModel(mesher, item, 0);
-            }
-        }
 
         LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.solid.default", new ModelLocomotiveSteamSolid()));
 //        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:magic", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));

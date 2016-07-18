@@ -13,7 +13,7 @@ package mods.railcraft.common.core;
  */
 public class RailcraftConstants {
 
-    public static final String RESOURCE_DOMAIN = "railcraft";
+    public static final String RESOURCE_DOMAIN = Railcraft.MOD_ID;
     public static final String SOUND_FOLDER = RESOURCE_DOMAIN + ":";
     public static final String TEXTURE_FOLDER = RESOURCE_DOMAIN + ":textures/";
     public static final String ENTITY_TEXTURE_FOLDER = TEXTURE_FOLDER + "entities/";

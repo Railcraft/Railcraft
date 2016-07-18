@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -22,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemRailcraft extends Item implements IRailcraftObject {
+public class ItemRailcraft extends Item implements IRailcraftItem {
     private float smeltingExperience = -1;
     private int rarity;
 

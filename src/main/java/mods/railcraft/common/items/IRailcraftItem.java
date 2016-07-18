@@ -12,7 +12,7 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.client.render.tools.ModelManager;
 import mods.railcraft.common.core.IRailcraftObject;
-import net.minecraft.client.renderer.ItemModelMesher;
+import mods.railcraft.common.core.IVariantEnum;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,7 +25,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IRailcraftItem extends IRailcraftObject {
 
     @SideOnly(Side.CLIENT)
-    default void registerModels(ItemModelMesher mesher) {
-        ModelManager.registerItemModel(mesher, (Item) this, 0);
+    default void defineModels() {
+        Class<? extends IVariantEnum> variantEnum = getVariantEnum();
+        if (variantEnum != null) {
+            for (IVariantEnum variant : variantEnum.getEnumConstants()) {
+                ModelManager.registerItemModel((Item) this, variant.ordinal(), getResourcePath() + "." + variant.getResourcePathSuffix());
+
+            }
+        } else {
+            ModelManager.registerItemModel((Item) this, 0);
+        }
     }
 }

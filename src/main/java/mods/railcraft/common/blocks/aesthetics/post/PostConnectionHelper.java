@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.post;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IPostConnection.ConnectStyle;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -72,7 +73,7 @@ public class PostConnectionHelper {
             if (block instanceof IPostConnection && ((IPostConnection) block).connectsToPost(world, pos, state, side) == ConnectStyle.NONE)
                 return ConnectStyle.NONE;
         } catch (Error error) {
-            Game.logErrorAPI("Railcraft", error, IPostConnection.class);
+            Game.logErrorAPI(Railcraft.NAME, error, IPostConnection.class);
             return ConnectStyle.NONE;
         }
 
@@ -90,7 +91,7 @@ public class PostConnectionHelper {
             if (otherBlock instanceof IPostConnection)
                 return ((IPostConnection) otherBlock).connectsToPost(world, otherPos, otherState, oppositeSide);
         } catch (Error error) {
-            Game.logErrorAPI("Railcraft", error, IPostConnection.class);
+            Game.logErrorAPI(Railcraft.NAME, error, IPostConnection.class);
         }
 
         if (otherBlock instanceof BlockPostBase)

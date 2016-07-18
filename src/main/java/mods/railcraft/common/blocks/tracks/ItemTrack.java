@@ -12,6 +12,7 @@ import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -75,7 +76,7 @@ public class ItemTrack extends ItemBlock implements ITrackItem, IRailcraftObject
             if (tips != null)
                 list.addAll(tips);
         } catch (Throwable error) {
-            Game.logErrorAPI("Railcraft", error, TrackSpec.class);
+            Game.logErrorAPI(Railcraft.NAME, error, TrackSpec.class);
         }
     }
 

@@ -8,6 +8,7 @@
  */
 package mods.railcraft.common.plugins.forge;
 
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -33,7 +34,7 @@ public class CreativePlugin {
 
         @Override
         public String getTranslatedTabLabel() {
-            return "Railcraft";
+            return Railcraft.NAME;
         }
 
         @Override

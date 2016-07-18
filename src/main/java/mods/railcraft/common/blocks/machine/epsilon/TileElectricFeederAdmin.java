@@ -2,6 +2,7 @@ package mods.railcraft.common.blocks.machine.epsilon;
 
 import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -55,7 +56,7 @@ public class TileElectricFeederAdmin extends TileMachineBase implements IElectri
                 chargeHandler.setCharge(capacity);
             } catch (Throwable err) {
                 chargeHandler.addCharge(capacity - chargeHandler.getCharge());
-                Game.logErrorAPI("Railcraft", err, IElectricGrid.class);
+                Game.logErrorAPI(Railcraft.NAME, err, IElectricGrid.class);
             }
         }
         chargeHandler.tick();

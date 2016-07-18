@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IOwnable;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -43,7 +44,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
     @Nonnull
-    private GameProfile owner = new GameProfile(null, "[Railcraft]");
+    private GameProfile owner = new GameProfile(null, RailcraftConstantsAPI.RAILCRAFT_PLAYER);
     private UUID uuid;
     @Nonnull
     private String customName = "";

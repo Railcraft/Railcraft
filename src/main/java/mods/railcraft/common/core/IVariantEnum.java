@@ -20,7 +20,18 @@ public interface IVariantEnum extends IStringSerializable {
 
     int ordinal();
 
+    default String getResourcePathSuffix() {
+        return getName();
+    }
+
     @Nullable
-    Object getAlternate(IRailcraftObjectContainer container);
+    default String getOreTag() {
+        return null;
+    }
+
+    @Nullable
+    default Object getAlternate(IRailcraftObjectContainer container) {
+        return getOreTag();
+    }
 
 }

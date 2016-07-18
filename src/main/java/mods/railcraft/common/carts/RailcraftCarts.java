@@ -14,15 +14,14 @@ import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.*;
 import mods.railcraft.common.modules.*;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.thaumcraft.EntityLocomotiveSteamMagic;
 import mods.railcraft.common.util.crafting.CartUncraftingRecipe;
 import mods.railcraft.common.util.misc.EntityIDs;
-import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartHopper;
 import net.minecraft.init.Blocks;
@@ -326,9 +325,9 @@ public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer {
         EntityRegistry.registerModEntity(type, MiscTools.cleanTag(getTag()), id, Railcraft.getMod(), 256, 3, true);
 
         // Legacy stuff
-        EntityList.NAME_TO_CLASS.put("Railcraft." + getTag(), type);
-        if (this == LOCO_STEAM_SOLID)
-            EntityList.NAME_TO_CLASS.put("Railcraft.railcraft.cart.loco.steam", type);
+//        EntityList.NAME_TO_CLASS.put("Railcraft." + getTag(), type);
+//        if (this == LOCO_STEAM_SOLID)
+//            EntityList.NAME_TO_CLASS.put("Railcraft.railcraft.cart.loco.steam", type);
     }
 
     public boolean setup() {

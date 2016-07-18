@@ -13,6 +13,7 @@ package mods.railcraft.common.core;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
@@ -73,5 +74,18 @@ public interface IRailcraftObject {
     @Nullable
     default Class<? extends IVariantEnum> getVariantEnum() {
         return null;
+    }
+
+    @Nullable
+    default IVariantEnum[] getVariants() {
+        Class<? extends IVariantEnum> variantEnum = getVariantEnum();
+        if (variantEnum != null) {
+            return variantEnum.getEnumConstants();
+        }
+        return null;
+    }
+
+    default String getResourcePath() {
+        return ((IForgeRegistryEntry) this).getRegistryName().getResourcePath();
     }
 }
