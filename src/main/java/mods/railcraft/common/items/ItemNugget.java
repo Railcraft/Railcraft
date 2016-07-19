@@ -19,12 +19,12 @@ import static mods.railcraft.common.items.Metal.*;
 public class ItemNugget extends ItemMetal {
 
     public ItemNugget() {
-        super(Form.NUGGET, "item.railcraft.nugget.", true, true, CollectionTools.createIndexedLookupTable(IRON, STEEL, COPPER, TIN, LEAD));
+        super(Form.NUGGET, true, true, CollectionTools.createIndexedLookupTable(IRON, STEEL, COPPER, TIN, LEAD));
     }
 
     @Override
     public void defineRecipes() {
-        for (Metal m : variants().values()) {
+        for (Metal m : getMetalBiMap().values()) {
             CraftingPlugin.addShapelessRecipe(m.getStack(Metal.Form.NUGGET, 9), m.getStack(Metal.Form.INGOT));
             CraftingPlugin.addRecipe(m.getStack(Metal.Form.INGOT),
                     "NNN",

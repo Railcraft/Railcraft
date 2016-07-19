@@ -12,30 +12,19 @@ import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemCircuit extends ItemRailcraft {
+public class ItemCircuit extends ItemRailcraftSubtyped {
 
     public ItemCircuit() {
-        setHasSubtypes(true);
-        setMaxDamage(0);
-    }
-
-    @Nullable
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumCircuit.class;
+        super(EnumCircuit.class);
     }
 
     @Override
@@ -81,30 +70,6 @@ public class ItemCircuit extends ItemRailcraft {
                 'B', "slimeball");
     }
 
-    @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (EnumCircuit circuit : EnumCircuit.VALUES) {
-            list.add(new ItemStack(this, 1, circuit.ordinal()));
-        }
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        int damage = stack.getItemDamage();
-        if (damage < 0 || damage >= EnumCircuit.VALUES.length)
-            return "";
-        switch (EnumCircuit.VALUES[damage]) {
-            case CONTROLLER:
-                return "item.railcraft.part.circuit.controller";
-            case RECEIVER:
-                return "item.railcraft.part.circuit.receiver";
-            case SIGNAL:
-                return "item.railcraft.part.circuit.signal";
-            default:
-                return "";
-        }
-    }
-
     public enum EnumCircuit implements IVariantEnum {
 
         CONTROLLER(Items.COMPARATOR),
@@ -124,7 +89,7 @@ public class ItemCircuit extends ItemRailcraft {
 
         @Override
         public String getName() {
-            return name().toLowerCase(Locale.ENGLISH);
+            return name().toLowerCase(Locale.ROOT);
         }
     }
 

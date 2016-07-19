@@ -1,23 +1,24 @@
 package mods.railcraft.common.items;
 
+import mods.railcraft.client.render.tools.ModelManager;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderFluidBase;
 import mods.railcraft.common.blocks.machine.gamma.TileLoaderItemBase;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.PhantomInventory;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
@@ -36,7 +37,10 @@ import java.util.*;
  *
  * Created by Forecaster on 09/05/2016 for the Railcraft project.
  */
-public class ItemNotepad extends ItemRailcraft {
+public class ItemNotepad extends ItemRailcraft implements ItemMeshDefinition {
+    public final ModelResourceLocation MODEL_FILLED = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.notepad.getBaseTag() + ".filled"), "inventory");
+    public final ModelResourceLocation MODEL_EMPTY = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.notepad.getBaseTag() + ".empty"), "inventory");
+
     public ItemNotepad() {
         setMaxStackSize(1);
         setMaxDamage(50);
@@ -51,6 +55,20 @@ public class ItemNotepad extends ItemRailcraft {
                 'F', Items.FEATHER,
                 'X', RailcraftItems.magGlass,
                 'P', Items.PAPER);
+    }
+
+    @Override
+    public void defineModels() {
+        ModelManager.registerComplexItemModel(this, this, MODEL_EMPTY, MODEL_FILLED);
+    }
+
+    @Override
+    public ModelResourceLocation getModelLocation(ItemStack stack) {
+        NBTTagCompound tag = InvTools.getItemDataRailcraft(stack);
+        if (tag.hasKey("contents")) {
+            return MODEL_FILLED;
+        }
+        return MODEL_EMPTY;
     }
 
     private static void setPasteMode(ItemStack stack, PasteMode mode) {
@@ -197,21 +215,6 @@ public class ItemNotepad extends ItemRailcraft {
     public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
         return true;
     }
-
-    //    @Override
-//    public IIcon getIconIndex(ItemStack stack) {
-//        NBTTagCompound tag = InvTools.getItemDataRailcraft(stack);
-//        if (tag.hasKey("contents")) {
-//            return itemIconFull;
-//        }
-//        return itemIcon;
-//    }
-
-    //TODO: Make this do something interesting
-//    @Override
-//    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
-//        return super.getModel(stack, player, useRemaining);
-//    }
 
     private enum Contents {
         FILTER_CART("filter.cart", "item.railcraft.tool.notepad.tip.contents.filter.cart") {

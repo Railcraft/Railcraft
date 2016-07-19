@@ -48,13 +48,13 @@ public class ItemRailcraftSubtyped extends ItemRailcraft {
 
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-        Class<? extends IVariantEnum> variantEnum = getVariantEnum();
-        if (variantEnum != null) {
-            for (IVariantEnum variant : variantEnum.getEnumConstants()) {
-                list.add(new ItemStack(this, 1, variant.ordinal()));
+        IVariantEnum[] variants = getVariants();
+        if (variants != null) {
+            for (IVariantEnum variant : variants) {
+                list.add(getStack(variant));
             }
         } else {
-            list.add(new ItemStack(this));
+            list.add(getStack(null));
         }
     }
 

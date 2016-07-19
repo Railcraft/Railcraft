@@ -58,6 +58,7 @@ public class ContainerLocomotive extends RailcraftContainer {
         };
         slotTicket.setToolTips(ToolTip.buildToolTip("gui.locomotive.tip.slot.ticket"));
         addSlot(slotTicket);
+        // TODO: make some way to clear this?
         addSlot(new SlotUntouchable(loco, loco.getSizeInventory() - 1, 134, guiHeight - 111));
 
         for (int i = 0; i < 3; i++) {

@@ -13,26 +13,15 @@ import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Locale;
 
-public class ItemGear extends ItemRailcraft {
+public class ItemGear extends ItemRailcraftSubtyped {
 
     public ItemGear() {
-        setHasSubtypes(true);
-        setMaxDamage(0);
-    }
-
-    @Nullable
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumGear.class;
+        super(EnumGear.class);
     }
 
     @Override
@@ -46,13 +35,6 @@ public class ItemGear extends ItemRailcraft {
 
         ItemStack itemStack = new ItemStack(this, 1, EnumGear.BUSHING.ordinal());
         LootPlugin.addLoot(itemStack, 1, 8, LootPlugin.Type.RAILWAY, "gear.bushing");
-    }
-
-    @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (EnumGear gear : EnumGear.VALUES) {
-            list.add(new ItemStack(this, 1, gear.ordinal()));
-        }
     }
 
     @Override
@@ -86,25 +68,6 @@ public class ItemGear extends ItemRailcraft {
                 " I ",
                 'I', "ingotSteel",
                 'B', bushing);
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        int damage = stack.getItemDamage();
-        if (damage < 0 || damage >= EnumGear.VALUES.length)
-            return "";
-        switch (EnumGear.VALUES[damage]) {
-            case GOLD_PLATE:
-                return "item.railcraft.part.gear.gold.plate";
-            case IRON:
-                return "item.railcraft.part.gear.iron";
-            case STEEL:
-                return "item.railcraft.part.gear.steel";
-            case BUSHING:
-                return "item.railcraft.part.gear.bushing";
-            default:
-                return "";
-        }
     }
 
     public enum EnumGear implements IVariantEnum {

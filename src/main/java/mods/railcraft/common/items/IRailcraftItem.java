@@ -26,11 +26,11 @@ public interface IRailcraftItem extends IRailcraftObject {
 
     @SideOnly(Side.CLIENT)
     default void defineModels() {
-        Class<? extends IVariantEnum> variantEnum = getVariantEnum();
-        if (variantEnum != null) {
-            for (IVariantEnum variant : variantEnum.getEnumConstants()) {
-                ModelManager.registerItemModel((Item) this, variant.ordinal(), getResourcePath() + "." + variant.getResourcePathSuffix());
-
+        IVariantEnum[] variants = getVariants();
+        if (variants != null) {
+            for (int i = 0, variantsLength = variants.length; i < variantsLength; i++) {
+                IVariantEnum variant = variants[i];
+                ModelManager.registerItemModel((Item) this, i, getResourcePath() + "." + variant.getResourcePathSuffix());
             }
         } else {
             ModelManager.registerItemModel((Item) this, 0);

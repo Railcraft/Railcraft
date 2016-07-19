@@ -13,50 +13,21 @@ import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Locale;
 
-public class ItemRailbed extends ItemRailcraft {
+public class ItemRailbed extends ItemRailcraftSubtyped {
 
     public ItemRailbed() {
-        setHasSubtypes(true);
-        setMaxDamage(0);
-        setUnlocalizedName("railcraft.part.railbed");
-    }
-
-    @Nullable
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumRailbed.class;
+        super(EnumRailbed.class);
     }
 
     @Override
     public void initializeDefinintion() {
         for (EnumRailbed railbed : EnumRailbed.VALUES) {
             RailcraftRegistry.register(new ItemStack(this, 1, railbed.ordinal()));
-        }
-    }
-
-    @Override
-    public void getSubItems(Item id, CreativeTabs tab, List<ItemStack> list) {
-        for (int i = 0; i < 2; i++) {
-            list.add(new ItemStack(this, 1, i));
-        }
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        switch (stack.getItemDamage()) {
-            case 1:
-                return "item.railcraft.part.railbed.stone";
-            default:
-                return "item.railcraft.part.railbed.wood";
         }
     }
 
@@ -90,7 +61,7 @@ public class ItemRailbed extends ItemRailcraft {
 
         @Override
         public String getName() {
-            return name().toLowerCase(Locale.ENGLISH);
+            return name().toLowerCase(Locale.ROOT);
         }
     }
 

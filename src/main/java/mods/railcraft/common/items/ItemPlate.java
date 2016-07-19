@@ -19,12 +19,12 @@ import static mods.railcraft.common.items.Metal.*;
 public class ItemPlate extends ItemMetal {
 
     public ItemPlate() {
-        super(Form.PLATE, "item.railcraft.part.plate.", false, false, CollectionTools.createIndexedLookupTable(IRON, STEEL, TIN, COPPER, LEAD));
+        super(Form.PLATE, false, false, CollectionTools.createIndexedLookupTable(IRON, STEEL, TIN, COPPER, LEAD));
     }
 
     @Override
     public void initializeDefinintion() {
-        for (Metal m : variants().values()) {
+        for (Metal m : getMetalBiMap().values()) {
             LootPlugin.addLoot(RailcraftItems.plate, m, 6, 18, LootPlugin.Type.WORKSHOP);
         }
     }

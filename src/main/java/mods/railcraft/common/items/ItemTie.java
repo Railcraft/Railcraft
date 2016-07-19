@@ -15,44 +15,15 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Locale;
 
-public class ItemTie extends ItemRailcraft {
+public class ItemTie extends ItemRailcraftSubtyped {
 
     public ItemTie() {
-        setHasSubtypes(true);
-        setMaxDamage(0);
-    }
-
-    @Nullable
-    @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumTie.class;
-    }
-
-    @Override
-    public void getSubItems(Item id, CreativeTabs tab, List<ItemStack> list) {
-        for (int i = 0; i < 2; i++) {
-            list.add(new ItemStack(this, 1, i));
-        }
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        String base = super.getUnlocalizedName();
-        switch (stack.getItemDamage()) {
-            case 1:
-                return base + ".stone";
-            default:
-                return base + ".wood";
-        }
+        super(EnumTie.class);
     }
 
     @Override
@@ -103,7 +74,7 @@ public class ItemTie extends ItemRailcraft {
 
         @Override
         public String getName() {
-            return name().toLowerCase(Locale.ENGLISH);
+            return name().toLowerCase(Locale.ROOT);
         }
     }
 

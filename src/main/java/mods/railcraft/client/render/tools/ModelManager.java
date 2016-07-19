@@ -12,11 +12,15 @@ package mods.railcraft.client.render.tools;
 
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import org.apache.logging.log4j.Level;
+
+import java.util.Arrays;
 
 /**
  * Created by CovertJaguar on 7/18/2016 for Railcraft.
@@ -37,7 +41,15 @@ public class ModelManager {
     public static void registerItemModel(Item item, int meta, ModelResourceLocation location) {
         if (Game.IS_DEBUG)
             Game.log(Level.INFO, "Registering item model: {0} meta:{1} location:{2}", item.getRegistryName(), meta, location);
-//        mesher.register(item, meta, location);
         ModelLoader.setCustomModelResourceLocation(item, meta, location);
+    }
+
+    public static void registerComplexItemModel(Item item, ItemMeshDefinition meshDefinition, ModelResourceLocation... locations) {
+        if (Game.IS_DEBUG)
+            Game.log(Level.INFO, "Registering complex item model: {0} locations:{1}", item.getRegistryName(), Arrays.toString(locations));
+        ModelLoader.setCustomMeshDefinition(item, meshDefinition);
+        for (ModelResourceLocation location : locations) {
+            ModelBakery.registerItemVariants(item, location);
+        }
     }
 }
