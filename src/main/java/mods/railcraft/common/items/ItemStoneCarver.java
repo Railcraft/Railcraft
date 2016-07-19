@@ -22,5 +22,4 @@ public class ItemStoneCarver extends ItemRailcraft {
                 'I', Metal.STEEL.getOreTag(Metal.Form.INGOT),
                 'W', "stickWood");
     }
-
 }

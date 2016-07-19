@@ -11,10 +11,15 @@ package mods.railcraft.common.items;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,9 +29,18 @@ import java.util.List;
 public class ItemRailcraft extends Item implements IRailcraftItem {
     private float smeltingExperience = -1;
     private int rarity;
+    private static final IItemPropertyGetter HELD_GETTER = new IItemPropertyGetter() {
+        @Override
+        @SideOnly(Side.CLIENT)
+        public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+            return entityIn != null && (entityIn.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack
+                    || entityIn.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND) == stack) ? 1.0F : 0.0F;
+        }
+    };
 
     public ItemRailcraft() {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        this.addPropertyOverride(new ResourceLocation("held"), HELD_GETTER);
     }
 
     public ItemRailcraft setRarity(int rarity) {
