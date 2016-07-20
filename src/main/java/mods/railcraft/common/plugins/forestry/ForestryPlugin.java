@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.plugins.forestry;
 
 import forestry.api.storage.EnumBackpackType;
@@ -252,9 +253,9 @@ public class ForestryPlugin {
 
         @Optional.Method(modid = "Forestry")
         private Item registerBackpack(BaseBackpack backpack, forestry.api.storage.EnumBackpackType type, String tag) {
-            Item item = forestry.api.storage.BackpackManager.backpackInterface.createBackpack(backpack, type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
-            RailcraftRegistry.registerInit(item);
-            forestry.api.storage.BackpackManager.backpackInterface.registerBackpack(backpack.getKey(), backpack);
+            forestry.api.storage.BackpackManager.backpackInterface.registerBackpackDefinition(backpack.getId(), backpack);
+            Item item = forestry.api.storage.BackpackManager.backpackInterface.createBackpack(backpack.getId(), type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
+            RailcraftRegistry.register(item);
             return item;
         }
 
