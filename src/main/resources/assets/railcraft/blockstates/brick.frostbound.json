@@ -11,10 +11,23 @@
       }
     ],
     "variant": {
+      "brick": {
+        "textures": {"all": "railcraft:blocks/brick.frostbound.0"}
+      },
+      "fitted": {
+        "textures": {"all": "railcraft:blocks/brick.frostbound.1"}
+      },
       "block": {
-        "textures": {
-          "all": "railcraft:blocks/brick.frostbound.2"
-        }
+        "textures": {"all": "railcraft:blocks/brick.frostbound.2"}
+      },
+      "ornate": {
+        "textures": {"all": "railcraft:blocks/brick.frostbound.3"}
+      },
+      "etched": {
+        "textures": {"all": "railcraft:blocks/brick.frostbound.4"}
+      },
+      "cobble": {
+        "textures": {"all": "railcraft:blocks/brick.frostbound.5"}
       }
     }
   }

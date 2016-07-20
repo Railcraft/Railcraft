@@ -1,21 +1,20 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.cube;
 
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -33,17 +32,10 @@ public class SimpleCube {
     public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
     }
 
-    public IBlockState onBlockPlaced(World world, BlockPos pos) {
-        return WorldPlugin.getBlockState(world, pos);
-    }
-
     public void randomDisplayTick(World world, BlockPos pos, Random rand) {
     }
 
     public void onBlockAdded(World world, BlockPos pos) {
-    }
-
-    public void onBlockRemoval(World world, BlockPos pos) {
     }
 
     public boolean removedByPlayer(World world, EntityPlayer player, BlockPos pos) {

@@ -1,16 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.IBlockContainer;
-import mods.railcraft.common.blocks.IStateContainer;
+import mods.railcraft.common.blocks.IBlockVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -20,14 +20,13 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IStringSerializable;
 
 import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Comparable<M>, IStringSerializable, IBlockContainer, IStateContainer {
+public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Comparable<M>, IBlockVariantEnum {
     String getBaseTag();
 
     String getTag();
@@ -37,6 +36,7 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
     /**
      * Block is enabled, but may not be defined yet.
      */
+    @Override
     default boolean isEnabled() {
         return RailcraftModuleManager.isModuleEnabled(getModule()) && getBlockContainer().isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag());
     }
@@ -89,5 +89,6 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
 
     ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv);
 
+    @Override
     int ordinal();
 }

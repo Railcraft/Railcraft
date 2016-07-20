@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "coke": {"textures": {"all": "railcraft:blocks/cube.coke"}},
+      "concrete": {"textures": {"all": "railcraft:blocks/concrete"}},
+      "steel": {"textures": {"all": "railcraft:blocks/cube.steel"}},
+      "crushed_obsidian": {"textures": {"all": "railcraft:blocks/cube.crushed.obsidian"}},
+      "stone_abyssal": {"textures": {"all": "railcraft:blocks/cube.stone.abyssal"}},
+      "stone_quarried": {"textures": {"all": "railcraft:blocks/cube.stone.quarried"}},
+      "creosote": {"textures": {"all": "railcraft:blocks/creosote"}},
+      "copper": {"textures": {"all": "railcraft:blocks/cube.copper"}},
+      "tin": {"textures": {"all": "railcraft:blocks/cube.tin"}},
+      "lead": {"textures": {"all": "railcraft:blocks/cube.lead"}}
+    }
+  }
+}

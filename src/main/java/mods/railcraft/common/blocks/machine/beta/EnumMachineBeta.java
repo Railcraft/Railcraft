@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.api.core.IRailcraftModule;
@@ -21,6 +22,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,22 +32,22 @@ import java.util.List;
  */
 public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
 
-    TANK_IRON_WALL(ModuleTransport.class, "tank.iron.wall", TileTankIronWall.class, true, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_IRON_GAUGE(ModuleTransport.class, "tank.iron.gauge", TileTankIronGauge.class, true, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_IRON_VALVE(ModuleTransport.class, "tank.iron.valve", TileTankIronValve.class, true, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
-    BOILER_TANK_LOW_PRESSURE(ModuleSteam.class, "boiler.tank.pressure.low", TileBoilerTankLow.class, true, 2, 1, 0, 0, 1, 1, 1, 1),
-    BOILER_TANK_HIGH_PRESSURE(ModuleSteam.class, "boiler.tank.pressure.high", TileBoilerTankHigh.class, true, 2, 1, 0, 0, 1, 1, 1, 1),
-    BOILER_FIREBOX_SOLID(ModuleSteam.class, "boiler.firebox.solid", TileBoilerFireboxSolid.class, false, 3, 1, 0, 0, 1, 1, 1, 1, 2),
-    BOILER_FIREBOX_FLUID(ModuleSteam.class, "boiler.firebox.liquid", TileBoilerFireboxFluid.class, false, 3, 1, 0, 0, 1, 1, 1, 1, 2),
-    ENGINE_STEAM_HOBBY(ModuleSteam.class, "engine.steam.hobby", TileEngineSteamHobby.class, true, 1, 1, 0),
-    ENGINE_STEAM_LOW(ModuleSteam.class, "engine.steam.low", TileEngineSteamLow.class, true, 1, 1, 0),
-    ENGINE_STEAM_HIGH(ModuleSteam.class, "engine.steam.high", TileEngineSteamHigh.class, true, 1, 1, 0),
-    SENTINEL(ModuleChunkLoading.class, "anchor.sentinel", TileSentinel.class, true, 2, 1, 0, 0, 1, 1, 1, 1),
-    VOID_CHEST(ModuleTransport.class, "chest.void", TileChestVoid.class, true, 1, 1, 0),
-    METALS_CHEST(ModuleTransport.class, "chest.metals", TileChestMetals.class, true, 1, 1, 0),
-    TANK_STEEL_WALL(ModuleTransport.class, "tank.steel.wall", TileTankSteelWall.class, true, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_STEEL_GAUGE(ModuleTransport.class, "tank.steel.gauge", TileTankSteelGauge.class, true, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_STEEL_VALVE(ModuleTransport.class, "tank.steel.valve", TileTankSteelValve.class, true, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3);
+    TANK_IRON_WALL(ModuleTransport.class, "tank.iron.wall", TileTankIronWall.class, true, 2, 1),
+    TANK_IRON_GAUGE(ModuleTransport.class, "tank.iron.gauge", TileTankIronGauge.class, true, 1, 5),
+    TANK_IRON_VALVE(ModuleTransport.class, "tank.iron.valve", TileTankIronValve.class, true, 4, 1),
+    BOILER_TANK_LOW_PRESSURE(ModuleSteam.class, "boiler.tank.pressure.low", TileBoilerTankLow.class, true, 2, 1),
+    BOILER_TANK_HIGH_PRESSURE(ModuleSteam.class, "boiler.tank.pressure.high", TileBoilerTankHigh.class, true, 2, 1),
+    BOILER_FIREBOX_SOLID(ModuleSteam.class, "boiler.firebox.solid", TileBoilerFireboxSolid.class, false, 3, 1),
+    BOILER_FIREBOX_FLUID(ModuleSteam.class, "boiler.firebox.liquid", TileBoilerFireboxFluid.class, false, 3, 1),
+    ENGINE_STEAM_HOBBY(ModuleSteam.class, "engine.steam.hobby", TileEngineSteamHobby.class, true, 1, 1),
+    ENGINE_STEAM_LOW(ModuleSteam.class, "engine.steam.low", TileEngineSteamLow.class, true, 1, 1),
+    ENGINE_STEAM_HIGH(ModuleSteam.class, "engine.steam.high", TileEngineSteamHigh.class, true, 1, 1),
+    SENTINEL(ModuleChunkLoading.class, "anchor.sentinel", TileSentinel.class, true, 2, 1),
+    VOID_CHEST(ModuleTransport.class, "chest.void", TileChestVoid.class, true, 1, 1),
+    METALS_CHEST(ModuleTransport.class, "chest.metals", TileChestMetals.class, true, 1, 1),
+    TANK_STEEL_WALL(ModuleTransport.class, "tank.steel.wall", TileTankSteelWall.class, true, 2, 1),
+    TANK_STEEL_GAUGE(ModuleTransport.class, "tank.steel.gauge", TileTankSteelGauge.class, true, 1, 5),
+    TANK_STEEL_VALVE(ModuleTransport.class, "tank.steel.valve", TileTankSteelValve.class, true, 4, 1);
     public static final PropertyEnum<EnumMachineBeta> VARIANT = PropertyEnum.create("variant", EnumMachineBeta.class);
     private static final List<EnumMachineBeta> creativeList = new ArrayList<EnumMachineBeta>();
     private static final EnumMachineBeta[] VALUES = values();
@@ -75,17 +77,18 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     private final Class<? extends IRailcraftModule> module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
-    private final int[] textureInfo;
+    private final int textureWidth, textureHeight;
     private final boolean passesLight;
     private ToolTip tip;
     private String toolClass = "pickaxe:2";
 
-    EnumMachineBeta(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, boolean passesLight, int... textureInfo) {
+    EnumMachineBeta(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, boolean passesLight, int textureWidth, int textureHeight) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
         this.passesLight = passesLight;
-        this.textureInfo = textureInfo;
+        this.textureWidth = textureWidth;
+        this.textureHeight = textureHeight;
     }
 
     public static EnumMachineBeta fromId(int id) {
@@ -117,6 +120,11 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     @Override
     public boolean passesLight() {
         return passesLight;
+    }
+
+    @Override
+    public Tuple<Integer, Integer> getTextureDimensions() {
+        return new Tuple<>(textureWidth, textureHeight);
     }
 
     @Override

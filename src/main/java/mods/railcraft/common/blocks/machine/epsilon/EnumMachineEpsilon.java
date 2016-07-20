@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import mods.railcraft.api.core.IRailcraftModule;
@@ -21,6 +22,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +32,12 @@ import java.util.List;
  */
 public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
 
-    ELECTRIC_FEEDER(ModuleElectricity.class, "electric.feeder", TileElectricFeeder.class, 1, 1, 0),
-    ELECTRIC_FEEDER_ADMIN(ModuleElectricity.class, "electric.feeder.admin", TileElectricFeederAdmin.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
-    ADMIN_STEAM_PRODUCER(ModuleSteam.class, "admin.steam.producer", TileAdminSteamProducer.class, 2, 1, 0, 0, 0, 0, 0, 0, 1),
-    FORCE_TRACK_EMITTER(ModuleElectricity.class, "force.track.emitter", TileForceTrackEmitter.class),
-    FLUX_TRANSFORMER(ModuleElectricity.class, "flux.transformer", TileFluxTransformer.class),
-    ENGRAVING_BENCH("emblem", "engraving.bench", TileEngravingBench.class, 4, 1, 0, 1, 3, 3, 3, 3, 2);
+    ELECTRIC_FEEDER(ModuleElectricity.class, "electric.feeder", TileElectricFeeder.class, 1, 1),
+    ELECTRIC_FEEDER_ADMIN(ModuleElectricity.class, "electric.feeder.admin", TileElectricFeederAdmin.class, 2, 1),
+    ADMIN_STEAM_PRODUCER(ModuleSteam.class, "admin.steam.producer", TileAdminSteamProducer.class, 2, 1),
+    FORCE_TRACK_EMITTER(ModuleElectricity.class, "force.track.emitter", TileForceTrackEmitter.class, 1, 1),
+    FLUX_TRANSFORMER(ModuleElectricity.class, "flux.transformer", TileFluxTransformer.class, 1, 1),
+    ENGRAVING_BENCH("emblem", "engraving.bench", TileEngravingBench.class, 4, 1);
     public static final PropertyEnum<EnumMachineEpsilon> VARIANT = PropertyEnum.create("variant", EnumMachineEpsilon.class);
     public static final EnumMachineEpsilon[] VALUES = values();
     private static final List<EnumMachineEpsilon> creativeList = new ArrayList<EnumMachineEpsilon>();
@@ -53,18 +55,19 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     private final String moduleName;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
-    private final int[] textureInfo;
+    private final int textureWidth, textureHeight;
     private ToolTip tip;
 
-    EnumMachineEpsilon(String moduleName, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineEpsilon(String moduleName, String tag, Class<? extends TileMachineBase> tile, int textureWidth, int textureHeight) {
         this.moduleName = moduleName;
         this.tile = tile;
         this.tag = tag;
-        this.textureInfo = textureInfo;
+        this.textureWidth = textureWidth;
+        this.textureHeight = textureHeight;
     }
 
-    EnumMachineEpsilon(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
-        this(RailcraftModuleManager.getModuleName(module), tag, tile, textureInfo);
+    EnumMachineEpsilon(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int textureWidth, int textureHeight) {
+        this(RailcraftModuleManager.getModuleName(module), tag, tile, textureWidth, textureHeight);
     }
 
     public static EnumMachineEpsilon fromId(int id) {
@@ -91,6 +94,11 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     @Override
     public boolean passesLight() {
         return false;
+    }
+
+    @Override
+    public Tuple<Integer, Integer> getTextureDimensions() {
+        return new Tuple<>(textureWidth, textureHeight);
     }
 
     @Override

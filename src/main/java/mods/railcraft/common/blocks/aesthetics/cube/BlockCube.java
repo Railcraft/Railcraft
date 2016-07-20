@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.cube;
 
@@ -27,7 +27,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,7 +47,6 @@ public class BlockCube extends Block implements IRailcraftBlock {
     public BlockCube() {
         super(Material.ROCK);
         setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumCube.COKE_BLOCK));
-        setUnlocalizedName("railcraft.cube");
         setResistance(20);
         setHardness(5);
         setSoundType(RailcraftSoundTypes.OVERRIDE);
@@ -134,10 +132,6 @@ public class BlockCube extends Block implements IRailcraftBlock {
         return state.getValue(VARIANT);
     }
 
-    IBlockState getState(EnumCube cube) {
-        return getDefaultState().withProperty(VARIANT, cube);
-    }
-
     @Override
     public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
         return getVariant(blockState).getHardness();
@@ -159,11 +153,6 @@ public class BlockCube extends Block implements IRailcraftBlock {
     }
 
     @Override
-    public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return getVariant(world, pos).getBlockDef().onBlockPlaced(world, pos);
-    }
-
-    @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         getVariant(stateIn).getBlockDef().randomDisplayTick(worldIn, pos, rand);
     }
@@ -171,11 +160,6 @@ public class BlockCube extends Block implements IRailcraftBlock {
     @Override
     public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
         getVariant(world, pos).getBlockDef().onBlockAdded(world, pos);
-    }
-
-    @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        getVariant(world, pos).getBlockDef().onBlockRemoval(world, pos);
     }
 
     @Override

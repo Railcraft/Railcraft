@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks.machine.delta;
 
 import mods.railcraft.api.core.IRailcraftModule;
@@ -21,6 +22,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -31,8 +33,8 @@ import java.util.List;
  */
 public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
 
-    WIRE(ModuleElectricity.class, "wire", TileWire.class, 1, 1, 0, 0, 0, 0, 0, 0),
-    CAGE(ModuleTransport.class, "cage", TileCage.class, 4, 1, 0, 1, 2, 2, 2, 2, 3);
+    WIRE(ModuleElectricity.class, "wire", TileWire.class, 1, 1),
+    CAGE(ModuleTransport.class, "cage", TileCage.class, 4, 1);
     public static final PropertyEnum<EnumMachineDelta> VARIANT = PropertyEnum.create("variant", EnumMachineDelta.class);
     private static final List<EnumMachineDelta> creativeList = new ArrayList<EnumMachineDelta>();
     private static final EnumMachineDelta[] VALUES = values();
@@ -48,14 +50,15 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
     private final Class<? extends IRailcraftModule> module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
-    private final int[] textureInfo;
+    private final int textureWidth, textureHeight;
     private ToolTip tip;
 
-    EnumMachineDelta(@Nullable Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineDelta(@Nullable Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int textureWidth, int textureHeight) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
-        this.textureInfo = textureInfo;
+        this.textureWidth = textureWidth;
+        this.textureHeight = textureHeight;
     }
 
     public static EnumMachineDelta fromId(int id) {
@@ -82,6 +85,11 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
     @Override
     public boolean passesLight() {
         return true;
+    }
+
+    @Override
+    public Tuple<Integer, Integer> getTextureDimensions() {
+        return new Tuple<>(textureWidth, textureHeight);
     }
 
     @Override

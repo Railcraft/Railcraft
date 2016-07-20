@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks.machine.alpha;
 
 import mods.railcraft.api.core.IRailcraftModule;
@@ -23,6 +24,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,22 +34,22 @@ import java.util.List;
  */
 public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
 
-    ANCHOR_WORLD(ModuleChunkLoading.class, "anchor.world", TileAnchorWorld.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
-    TURBINE(ModuleElectricity.class, "turbine", TileSteamTurbine.class, 3, 3, 2, 2, 2, 2, 6, 2, 0, 1, 3, 4, 5, 7),
-    ANCHOR_PERSONAL(ModuleChunkLoading.class, "anchor.personal", TileAnchorPersonal.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
-    STEAM_OVEN(ModuleFactory.class, "steam.oven", TileSteamOven.class, 4, 2, 2, 2, 3, 3, 6, 3, 0, 1, 4, 5),
-    ANCHOR_ADMIN(ModuleChunkLoading.class, "anchor.admin", TileAnchorAdmin.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
-    SMOKER(ModuleStructures.class, "smoker", TileSmoker.class, 3, 1, 0, 1, 2, 2, 2, 2),
-    TRADE_STATION(ModuleAutomation.class, "trade.station", TileTradeStation.class, 3, 1, 0, 0, 1, 1, 2, 1),
-    COKE_OVEN(ModuleFactory.class, "coke.oven", TileCokeOven.class, 3, 1, 0, 0, 0, 0, 1, 0, 1, 2),
-    ROLLING_MACHINE(ModuleFactory.class, "rolling.machine", TileRollingMachine.class, 3, 1, 0, 1, 2, 2, 2, 2),
-    STEAM_TRAP_MANUAL(ModuleExtras.class, "steam.trap", TileSteamTrapManual.class, 3, 1, 0, 2, 1, 1, 1, 1, 0, 1, 2),
-    STEAM_TRAP_AUTO(ModuleExtras.class, "steam.trap.auto", TileSteamTrapAuto.class, 4, 1, 0, 2, 1, 1, 1, 1, 0, 1, 2, 3),
-    FEED_STATION(ModuleAutomation.class, "feed.station", TileFeedStation.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    BLAST_FURNACE(ModuleFactory.class, "blast.furnace", TileBlastFurnace.class, 3, 1, 0, 0, 0, 0, 1, 0, 1, 2),
-    ANCHOR_PASSIVE(ModuleChunkLoading.class, "anchor.passive", TileAnchorPassive.class, 3, 1, 0, 0, 1, 1, 1, 1, 2),
-    TANK_WATER(ModuleTransport.class, "tank.water", TileTankWater.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    ROCK_CRUSHER(ModuleFactory.class, "rock.crusher", TileRockCrusher.class, 4, 3, 3, 11, 3, 3, 7, 3, 7, 0, 1, 2, 4, 6, 8, 9, 10);
+    ANCHOR_WORLD(ModuleChunkLoading.class, "anchor.world", TileAnchorWorld.class, 3, 1),
+    TURBINE(ModuleElectricity.class, "turbine", TileSteamTurbine.class, 3, 3),
+    ANCHOR_PERSONAL(ModuleChunkLoading.class, "anchor.personal", TileAnchorPersonal.class, 3, 1),
+    STEAM_OVEN(ModuleFactory.class, "steam.oven", TileSteamOven.class, 4, 2),
+    ANCHOR_ADMIN(ModuleChunkLoading.class, "anchor.admin", TileAnchorAdmin.class, 3, 1),
+    SMOKER(ModuleStructures.class, "smoker", TileSmoker.class, 3, 1),
+    TRADE_STATION(ModuleAutomation.class, "trade.station", TileTradeStation.class, 3, 1),
+    COKE_OVEN(ModuleFactory.class, "coke.oven", TileCokeOven.class, 3, 1),
+    ROLLING_MACHINE(ModuleFactory.class, "rolling.machine", TileRollingMachine.class, 3, 1),
+    STEAM_TRAP_MANUAL(ModuleExtras.class, "steam.trap", TileSteamTrapManual.class, 3, 1),
+    STEAM_TRAP_AUTO(ModuleExtras.class, "steam.trap.auto", TileSteamTrapAuto.class, 4, 1),
+    FEED_STATION(ModuleAutomation.class, "feed.station", TileFeedStation.class, 2, 1),
+    BLAST_FURNACE(ModuleFactory.class, "blast.furnace", TileBlastFurnace.class, 3, 1),
+    ANCHOR_PASSIVE(ModuleChunkLoading.class, "anchor.passive", TileAnchorPassive.class, 3, 1),
+    TANK_WATER(ModuleTransport.class, "tank.water", TileTankWater.class, 2, 1),
+    ROCK_CRUSHER(ModuleFactory.class, "rock.crusher", TileRockCrusher.class, 4, 3);
     public static final PropertyEnum<EnumMachineAlpha> VARIANT = PropertyEnum.create("variant", EnumMachineAlpha.class);
     public static final EnumMachineAlpha[] VALUES = values();
     private static final List<EnumMachineAlpha> creativeList = new ArrayList<EnumMachineAlpha>();
@@ -85,15 +87,16 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     private final Class<? extends IRailcraftModule> module;
     private final String tag;
     private final Class<? extends TileMachineBase> tile;
-    private final int[] textureInfo;
+    private final int textureWidth, textureHeight;
     private ToolTip tip;
     private String toolClass = HarvestPlugin.ToolClass.PICKAXE.getToolString(2);
 
-    EnumMachineAlpha(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int... textureInfo) {
+    EnumMachineAlpha(Class<? extends IRailcraftModule> module, String tag, Class<? extends TileMachineBase> tile, int textureWidth, int textureHeight) {
         this.module = module;
         this.tile = tile;
         this.tag = tag;
-        this.textureInfo = textureInfo;
+        this.textureWidth = textureWidth;
+        this.textureHeight = textureHeight;
     }
 
     public static EnumMachineAlpha fromId(int id) {
@@ -125,6 +128,11 @@ public enum EnumMachineAlpha implements IEnumMachine<EnumMachineAlpha> {
     @Override
     public boolean passesLight() {
         return false;
+    }
+
+    @Override
+    public Tuple<Integer, Integer> getTextureDimensions() {
+        return new Tuple<>(textureWidth, textureHeight);
     }
 
     @Override
