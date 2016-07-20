@@ -1,12 +1,17 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "railcraft:worldlogic"
+    "model": "cube_all",
+    "textures": {
+      "all": "blocks/bedrock"
+    }
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{
-      "transform": "forge:default-block"
-    }]
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ]
   }
 }
