@@ -1,28 +1,31 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.client.util.textures;
 
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.Level;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.io.IOException;
+import java.util.Map;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TextureAtlasSheet extends TextureAtlasSprite {
@@ -31,25 +34,25 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
     private final int rows;
     private final int columns;
 
-//    public static TextureAtlasSprite[] unstitchIcons(IIconRegister iconRegister, String name, int numIcons) {
-//        return unstitchIcons(iconRegister, name, numIcons, 1);
-//    }
-//
-//    public static TextureAtlasSprite[] unstitchIcons(IIconRegister iconRegister, String name, int columns, int rows) {
-//        TextureMap textureMap = (TextureMap) iconRegister;
-//        int numIcons = rows * columns;
+    public static void unstitchIcons(TextureMap textureMap, ResourceLocation textureResource, int columns, int rows) {
+        int numIcons = rows * columns;
 //        TextureAtlasSprite[] icons = new TextureAtlasSprite[numIcons];
-//        for (int i = 0; i < numIcons; i++) {
-//            String texName = name + "." + i;
-//            TextureAtlasSheet texture = new TextureAtlasSheet(texName, i, rows, columns);
-//            textureMap.setTextureEntry(texName, texture);
+        String domain = textureResource.getResourceDomain();
+        String name = textureResource.getResourcePath();
+
+        Map<String, TextureAtlasSprite> mapRegisteredSprites = ObfuscationReflectionHelper.getPrivateValue(TextureMap.class, textureMap, 5);
+
+        for (int i = 0; i < numIcons; i++) {
+            String texName = domain + ":blocks/" + name;
+            TextureAtlasSheet texture = new TextureAtlasSheet(texName, i, rows, columns);
+            mapRegisteredSprites.put(texture.getIconName(), texture);
 //            icons[i] = texture;
-//        }
+        }
 //        return icons;
-//    }
+    }
 
     private TextureAtlasSheet(String name, int index, int rows, int columns) {
-        super(name);
+        super(name + "." + index);
         this.index = index;
         this.rows = rows;
         this.columns = columns;
@@ -62,11 +65,8 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
 
     @Override
     public boolean load(IResourceManager manager, ResourceLocation location) {
+        // Remove the index from the resource path so we can find the original texture.
         location = new ResourceLocation(location.getResourceDomain(), location.getResourcePath().replace("." + index, ""));
-        int split = location.getResourcePath().indexOf(':');
-        if (split != -1)
-            location = new ResourceLocation(location.getResourceDomain(), location.getResourcePath().substring(0, split));
-        location = new ResourceLocation(location.getResourceDomain(), "textures/blocks/" + location.getResourcePath() + ".png");
 
         BufferedImage image;
         IResource resource = null;
@@ -107,4 +107,8 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return super.toString().replace("TextureAtlasSprite", "TextureAtlasSheet");
+    }
 }

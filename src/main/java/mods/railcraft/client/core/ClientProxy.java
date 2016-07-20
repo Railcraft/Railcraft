@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.client.core;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
@@ -15,6 +16,8 @@ import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid
 import mods.railcraft.client.render.tesr.*;
 import mods.railcraft.client.render.tools.ModelManager;
 import mods.railcraft.client.util.sounds.RCSoundHandler;
+import mods.railcraft.client.util.textures.TextureAtlasSheet;
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
@@ -26,6 +29,8 @@ import mods.railcraft.common.blocks.signals.TileSignalFoundation;
 import mods.railcraft.common.blocks.tracks.TileTrackTESR;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.items.RailcraftItems;
@@ -36,14 +41,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -76,7 +81,24 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void initializeClient() {
         MinecraftForge.EVENT_BUS.register(RCSoundHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(new TextureHook());
+        MinecraftForge.EVENT_BUS.register(new Object() {
+            @SubscribeEvent
+            public void textureStitch(TextureStitchEvent.Pre event) {
+                CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:cart.redstone.flux")));
+                CartContentRendererRedstoneFlux.instance().setFrameIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:cart.redstone.flux.frame")));
+
+
+                for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
+                    Block block = blockContainer.block();
+                    if (block instanceof IRailcraftBlock) {
+                        Tuple<Integer, Integer> textureDimensions = ((IRailcraftBlock) block).getTextureDimensions();
+                        if (textureDimensions.getFirst() > 1 || textureDimensions.getSecond() > 1) {
+                            TextureAtlasSheet.unstitchIcons(event.getMap(), block.getRegistryName(), textureDimensions.getFirst(), textureDimensions.getSecond());
+                        }
+                    }
+                }
+            }
+        });
 
         for (RailcraftItems itemContainer : RailcraftItems.VALUES) {
             Item item = itemContainer.item();
@@ -88,12 +110,20 @@ public class ClientProxy extends CommonProxy {
         }
 
         for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
-            Item item = blockContainer.item();
+            ItemBlock item = blockContainer.item();
             Block block = blockContainer.block();
-            IBlockState state = blockContainer.getDefaultState();
-            if (item != null && block != null && state != null) {
-                ModelResourceLocation modelResourceLocation = new ModelResourceLocation(Block.REGISTRY.getNameForObject(block), new DefaultStateMapper().getPropertyString(state.getProperties()));
-                ModelManager.registerItemModel(item, 0, modelResourceLocation);
+            IRailcraftObject object = blockContainer.getObject();
+            if (item != null && block != null && object != null) {
+                IVariantEnum[] variants = blockContainer.getObject().getVariants();
+                if (variants != null) {
+                    for (IVariantEnum variant : variants) {
+                        IBlockState variantState = blockContainer.getState(variant);
+                        if (variantState != null)
+                            ModelManager.registerBlockItemModel(item, variantState);
+                    }
+                } else {
+                    ModelManager.registerBlockItemModel(item, block.getDefaultState());
+                }
             }
         }
     }
@@ -218,11 +248,4 @@ public class ClientProxy extends CommonProxy {
 //        }
 //    }
 
-    public static class TextureHook {
-        @SubscribeEvent
-        public void textureStitch(TextureStitchEvent.Pre event) {
-            CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:cart.redstone.flux")));
-            CartContentRendererRedstoneFlux.instance().setFrameIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:cart.redstone.flux.frame")));
-        }
-    }
 }
