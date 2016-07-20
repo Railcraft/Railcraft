@@ -15,6 +15,7 @@ import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid
 import mods.railcraft.client.render.tesr.*;
 import mods.railcraft.client.render.tools.ModelManager;
 import mods.railcraft.client.util.sounds.RCSoundHandler;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -31,8 +32,12 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.TileRitual;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
@@ -79,6 +84,16 @@ public class ClientProxy extends CommonProxy {
                 ((IRailcraftItem) item).defineModels();
             } else if (item != null) {
                 ModelManager.registerItemModel(item, 0);
+            }
+        }
+
+        for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
+            Item item = blockContainer.item();
+            Block block = blockContainer.block();
+            IBlockState state = blockContainer.getDefaultState();
+            if (item != null && block != null && state != null) {
+                ModelResourceLocation modelResourceLocation = new ModelResourceLocation(Block.REGISTRY.getNameForObject(block), new DefaultStateMapper().getPropertyString(state.getProperties()));
+                ModelManager.registerItemModel(item, 0, modelResourceLocation);
             }
         }
     }

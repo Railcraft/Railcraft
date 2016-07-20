@@ -32,7 +32,6 @@ public class BlockWorldLogic extends Block implements IRailcraftObject {
 
     public BlockWorldLogic() {
         super(Material.ROCK);
-        setUnlocalizedName("railcraft.worldlogic");
         setResistance(6000000.0F);
         setBlockUnbreakable();
         setSoundType(SoundType.STONE);
