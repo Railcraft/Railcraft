@@ -1,16 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.util.sounds;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -56,16 +57,16 @@ public class SoundRegistry {
             registerBlockSound(EnumPost.METAL_PLATFORM_UNPAINTED.getState(), SoundType.METAL);
         }
 
-        block = BlockCube.getBlock();
+        block = BlockGeneric.getBlock();
         if (block != null) {
 
-            for (EnumCube cube : EnumCube.VALUES) {
+            for (EnumGeneric cube : EnumGeneric.VALUES) {
                 registerBlockSound(cube.getState(), SoundType.STONE);
             }
 
-            registerBlockSound(EnumCube.STEEL_BLOCK.getState(), SoundType.METAL);
-            registerBlockSound(EnumCube.CRUSHED_OBSIDIAN.getState(), SoundType.GROUND);
-            registerBlockSound(EnumCube.CREOSOTE_BLOCK.getState(), SoundType.WOOD);
+            registerBlockSound(EnumGeneric.BLOCK_STEEL.getState(), SoundType.METAL);
+            registerBlockSound(EnumGeneric.CRUSHED_OBSIDIAN.getState(), SoundType.GROUND);
+            registerBlockSound(EnumGeneric.BLOCK_CREOSOTE.getState(), SoundType.WOOD);
         }
     }
 

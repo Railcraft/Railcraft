@@ -1,19 +1,19 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks;
 
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
 import mods.railcraft.common.plugins.color.ColorPlugin;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColoredItem, IRailcraftObject {
+public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColoredItem, IRailcraftItemBlock {
 
     public ItemBlockRailcraft(Block block) {
         super(block);

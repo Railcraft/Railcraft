@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics.cube;
+package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IBlockVariantEnum;
@@ -19,7 +19,6 @@ import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -30,48 +29,42 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumCube implements IBlockVariantEnum {
+public enum EnumGeneric implements IBlockVariantEnum {
 
-    COKE_BLOCK(ModuleFactory.class, "coke", new FlammableCube(5, 10), 2f, 10f),
-    CONCRETE_BLOCK(ModuleStructures.class, "concrete", new SimpleCube(), 3f, 15f),
-    STEEL_BLOCK(ModuleFactory.class, "steel", new SimpleCube(), 5f, 15f),
-    @Deprecated
-    INFERNAL_BRICK(ModuleStructures.class, "brick.infernal", new ReplacerCube(), 3f, 15f),
+    BLOCK_COPPER(ModuleFactory.class, "copper", new SimpleCube(), 3f, 10f),
+    BLOCK_TIN(ModuleFactory.class, "tin", new SimpleCube(), 3f, 10f),
+    BLOCK_LEAD(ModuleFactory.class, "lead", new SimpleCube(), 2f, 20f),
+    BLOCK_STEEL(ModuleFactory.class, "steel", new SimpleCube(), 5f, 15f),
+    BLOCK_CONCRETE(ModuleStructures.class, "concrete", new SimpleCube(), 3f, 15f),
+    BLOCK_CREOSOTE(ModuleStructures.class, "creosote", new FlammableCube(5, 300), 3f, 10f),
+    BLOCK_COKE(ModuleFactory.class, "coke", new FlammableCube(5, 10), 2f, 10f),
     CRUSHED_OBSIDIAN(ModuleFactory.class, "crushed.obsidian", new CrushedObsidian(), 2f, 45f),
-    @Deprecated
-    SANDY_BRICK(ModuleStructures.class, "brick.sandy", new ReplacerCube(), 2f, 10f),
-    ABYSSAL_STONE(ModuleWorld.class, "stone.abyssal", new SimpleCube(), 2f, 10f),
-    QUARRIED_STONE(ModuleWorld.class, "stone.quarried", new SimpleCube(), 2f, 10f),
-    CREOSOTE_BLOCK(ModuleStructures.class, "creosote", new FlammableCube(5, 300), 3f, 10f),
-    COPPER_BLOCK(ModuleFactory.class, "copper", new SimpleCube(), 3f, 10f),
-    TIN_BLOCK(ModuleFactory.class, "tin", new SimpleCube(), 3f, 10f),
-    LEAD_BLOCK(ModuleFactory.class, "lead", new SimpleCube(), 2f, 20f),;
-    public static final EnumCube[] VALUES = values();
-    private static final List<EnumCube> creativeList = new ArrayList<EnumCube>();
+    STONE_ABYSSAL(ModuleWorld.class, "stone.abyssal", new SimpleCube(), 2f, 10f),
+    STONE_QUARRIED(ModuleWorld.class, "stone.quarried", new SimpleCube(), 2f, 10f),;
+    public static final EnumGeneric[] VALUES = values();
+    private static final List<EnumGeneric> creativeList = new ArrayList<EnumGeneric>();
 
     static {
-        creativeList.add(COKE_BLOCK);
-        creativeList.add(COPPER_BLOCK);
-        creativeList.add(TIN_BLOCK);
-        creativeList.add(LEAD_BLOCK);
-        creativeList.add(STEEL_BLOCK);
-        creativeList.add(CONCRETE_BLOCK);
-        creativeList.add(CREOSOTE_BLOCK);
+        creativeList.add(BLOCK_COPPER);
+        creativeList.add(BLOCK_TIN);
+        creativeList.add(BLOCK_LEAD);
+        creativeList.add(BLOCK_STEEL);
+        creativeList.add(BLOCK_CONCRETE);
+        creativeList.add(BLOCK_CREOSOTE);
+        creativeList.add(BLOCK_COKE);
         creativeList.add(CRUSHED_OBSIDIAN);
-        creativeList.add(ABYSSAL_STONE);
-        creativeList.add(QUARRIED_STONE);
-
-        ((ReplacerCube) SANDY_BRICK.blockDef).replacementState = Blocks.STONEBRICK.getDefaultState();
-        ((ReplacerCube) INFERNAL_BRICK.blockDef).replacementState = Blocks.STONEBRICK.getDefaultState();
+        creativeList.add(STONE_ABYSSAL);
+        creativeList.add(STONE_QUARRIED);
     }
 
+    @Nullable
     private final Class<? extends IRailcraftModule> module;
     private final String tag;
     private final SimpleCube blockDef;
     private final float hardness;
     private final float resistance;
 
-    EnumCube(Class<? extends IRailcraftModule> module, String tag, SimpleCube blockDef, float hardness, float resistance) {
+    EnumGeneric(@Nullable Class<? extends IRailcraftModule> module, String tag, SimpleCube blockDef, float hardness, float resistance) {
         this.module = module;
         this.tag = tag;
         this.blockDef = blockDef;
@@ -79,13 +72,13 @@ public enum EnumCube implements IBlockVariantEnum {
         this.resistance = resistance;
     }
 
-    public static List<EnumCube> getCreativeList() {
+    public static List<EnumGeneric> getCreativeList() {
         return creativeList;
     }
 
-    public static EnumCube fromOrdinal(int id) {
+    public static EnumGeneric fromOrdinal(int id) {
         if (id < 0 || id >= VALUES.length)
-            return CONCRETE_BLOCK;
+            return BLOCK_CONCRETE;
         return VALUES[id];
     }
 
@@ -95,12 +88,13 @@ public enum EnumCube implements IBlockVariantEnum {
         return null;
     }
 
+    @Nullable
     public Class<? extends IRailcraftModule> getModule() {
         return module;
     }
 
     public String getTag() {
-        return "tile.railcraft.cube." + tag;
+        return "tile.railcraft.generic." + tag;
     }
 
     public SimpleCube getBlockDef() {
@@ -109,13 +103,13 @@ public enum EnumCube implements IBlockVariantEnum {
 
     @Override
     public Block getBlock() {
-        return BlockCube.getBlock();
+        return BlockGeneric.getBlock();
     }
 
     @Override
     public IBlockState getState() {
-        if (BlockCube.getBlock() == null) return null;
-        return BlockCube.getBlock().getState(this);
+        if (BlockGeneric.getBlock() == null) return null;
+        return BlockGeneric.getBlock().getState(this);
     }
 
     public float getHardness() {

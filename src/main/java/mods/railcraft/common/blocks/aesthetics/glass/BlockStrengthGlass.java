@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.glass;
 
@@ -15,12 +15,12 @@ import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.color.ColorPlugin;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
-import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.block.BlockGlass;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -28,6 +28,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -35,20 +36,24 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColoredBlock, IRailcraftBlock {
+public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, ColorPlugin.IColoredBlock {
 
     public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
+    public static final PropertyEnum<Position> POSITION = PropertyEnum.create("position", Position.class);
     public static boolean renderingHighlight;
 
     public BlockStrengthGlass() {
@@ -57,7 +62,7 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
         setHardness(1);
         setSoundType(SoundType.GLASS);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE));
+        setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE).withProperty(POSITION, Position.SINGLE));
     }
 
     @Override
@@ -67,6 +72,11 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
         for (int meta = 0; meta < 16; meta++) {
             MicroBlockPlugin.addMicroBlockCandidate(this, meta);
         }
+    }
+
+    @Override
+    public void initializeClient() {
+        ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(COLOR).build());
     }
 
     @Override
@@ -108,6 +118,12 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
         return EnumColor.class;
     }
 
+    @Nullable
+    @Override
+    public IVariantEnum[] getVariants() {
+        return EnumColor.VALUES_INVERTED;
+    }
+
     @Override
     public IBlockState getState(@Nullable IVariantEnum variant) {
         IBlockState state = getDefaultState();
@@ -132,23 +148,48 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
         return true;
     }
 
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void registerBlockIcons(IIconRegister iconRegister) {
-//        icons = TextureAtlasSheet.unstitchIcons(iconRegister, "railcraft:glass", 1, 5);
-//
-//        patterns.put(EnumSet.noneOf(Neighbors.class), icons[0]);
-//        patterns.put(EnumSet.of(Neighbors.BOTTOM), icons[1]);
-//        patterns.put(EnumSet.of(Neighbors.TOP, Neighbors.BOTTOM), icons[2]);
-//        patterns.put(EnumSet.of(Neighbors.TOP), icons[3]);
-//    }
-//
-//    private enum Neighbors {
-//
-//        TOP, BOTTOM;
-//    }
-//
-//    @Override
+    @Override
+    public Tuple<Integer, Integer> getTextureDimensions() {
+        return new Tuple<>(1, 5);
+    }
+
+    public enum Position implements IStringSerializable {
+        SINGLE,
+        TOP,
+        CENTER,
+        BOTTOM;
+        public static Map<EnumSet<Position>, Position> patterns = new HashMap<>();
+
+        static {
+            patterns.put(EnumSet.noneOf(Position.class), SINGLE);
+            patterns.put(EnumSet.of(BOTTOM), TOP);
+            patterns.put(EnumSet.of(TOP, BOTTOM), CENTER);
+            patterns.put(EnumSet.of(TOP), BOTTOM);
+        }
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        state = super.getActualState(state, world, pos);
+
+        EnumSet<Position> neighbors = EnumSet.noneOf(Position.class);
+
+        if (WorldPlugin.getBlockState(world, pos.up()) == state)
+            neighbors.add(Position.TOP);
+
+        if (WorldPlugin.getBlockState(world, pos.down()) == state)
+            neighbors.add(Position.BOTTOM);
+
+        state = state.withProperty(POSITION, Position.patterns.get(neighbors));
+        return state;
+    }
+
+    //    @Override
 //    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 //        if (renderingHighlight)
 //            return icons[4];
@@ -217,7 +258,7 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta).inverse());
+        return getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta).inverse());
     }
 
     /**
@@ -230,7 +271,7 @@ public class BlockStrengthGlass extends BlockGlass implements ColorPlugin.IColor
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR);
+        return new BlockStateContainer(this, COLOR, POSITION);
     }
 
 }

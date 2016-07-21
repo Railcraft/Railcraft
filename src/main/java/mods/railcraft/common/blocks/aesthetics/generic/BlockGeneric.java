@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics.cube;
+package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -40,13 +40,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BlockCube extends Block implements IRailcraftBlock {
+public class BlockGeneric extends Block implements IRailcraftBlock {
 
-    public static final PropertyEnum<EnumCube> VARIANT = PropertyEnum.create("variant", EnumCube.class);
+    public static final PropertyEnum<EnumGeneric> VARIANT = PropertyEnum.create("variant", EnumGeneric.class);
 
-    public BlockCube() {
+    public BlockGeneric() {
         super(Material.ROCK);
-        setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumCube.COKE_BLOCK));
+        setDefaultState(blockState.getBaseState().withProperty(VARIANT, EnumGeneric.BLOCK_COKE));
         setResistance(20);
         setHardness(5);
         setSoundType(RailcraftSoundTypes.OVERRIDE);
@@ -56,36 +56,36 @@ public class BlockCube extends Block implements IRailcraftBlock {
 
     @Override
     public void initializeDefinintion() {
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.COKE_BLOCK);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.ABYSSAL_STONE);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumCube.STEEL_BLOCK);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumCube.CONCRETE_BLOCK);
-        HarvestPlugin.setStateHarvestLevel("axe", 0, EnumCube.CREOSOTE_BLOCK);
-        HarvestPlugin.setStateHarvestLevel("shovel", 3, EnumCube.CRUSHED_OBSIDIAN);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_COKE);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.STONE_ABYSSAL);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 2, EnumGeneric.BLOCK_STEEL);
+        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_CONCRETE);
+        HarvestPlugin.setStateHarvestLevel("axe", 0, EnumGeneric.BLOCK_CREOSOTE);
+        HarvestPlugin.setStateHarvestLevel("shovel", 3, EnumGeneric.CRUSHED_OBSIDIAN);
 
         EntityTunnelBore.addMineableBlock(this);
 
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.COKE_BLOCK.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.COPPER_BLOCK.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.LEAD_BLOCK.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.STEEL_BLOCK.getStack());
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumCube.TIN_BLOCK.getStack());
-        ForestryPlugin.addBackpackItem("forestry.builder", EnumCube.CONCRETE_BLOCK.getStack());
-        ForestryPlugin.addBackpackItem("forestry.builder", EnumCube.CREOSOTE_BLOCK.getStack());
-        ForestryPlugin.addBackpackItem("forestry.digger", EnumCube.ABYSSAL_STONE.getStack());
-        ForestryPlugin.addBackpackItem("forestry.digger", EnumCube.QUARRIED_STONE.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_COKE.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_COPPER.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_LEAD.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_STEEL.getStack());
+        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_TIN.getStack());
+        ForestryPlugin.addBackpackItem("forestry.builder", EnumGeneric.BLOCK_CONCRETE.getStack());
+        ForestryPlugin.addBackpackItem("forestry.builder", EnumGeneric.BLOCK_CREOSOTE.getStack());
+        ForestryPlugin.addBackpackItem("forestry.digger", EnumGeneric.STONE_ABYSSAL.getStack());
+        ForestryPlugin.addBackpackItem("forestry.digger", EnumGeneric.STONE_QUARRIED.getStack());
 
-        MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.CONCRETE_BLOCK.ordinal());
-        MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.CREOSOTE_BLOCK.ordinal());
-        MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.STEEL_BLOCK.ordinal());
-        MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.ABYSSAL_STONE.ordinal());
-        MicroBlockPlugin.addMicroBlockCandidate(this, EnumCube.QUARRIED_STONE.ordinal());
+        MicroBlockPlugin.addMicroBlockCandidate(this, EnumGeneric.BLOCK_CONCRETE.ordinal());
+        MicroBlockPlugin.addMicroBlockCandidate(this, EnumGeneric.BLOCK_CREOSOTE.ordinal());
+        MicroBlockPlugin.addMicroBlockCandidate(this, EnumGeneric.BLOCK_STEEL.ordinal());
+        MicroBlockPlugin.addMicroBlockCandidate(this, EnumGeneric.STONE_ABYSSAL.ordinal());
+        MicroBlockPlugin.addMicroBlockCandidate(this, EnumGeneric.STONE_QUARRIED.ordinal());
     }
 
     @Nullable
     @Override
     public Class<? extends IVariantEnum> getVariantEnum() {
-        return EnumCube.class;
+        return EnumGeneric.class;
     }
 
     @Override
@@ -93,14 +93,14 @@ public class BlockCube extends Block implements IRailcraftBlock {
         IBlockState state = getDefaultState();
         if (variant != null) {
             checkVariant(variant);
-            state = state.withProperty(VARIANT, (EnumCube) variant);
+            state = state.withProperty(VARIANT, (EnumGeneric) variant);
         }
         return state;
     }
 
     @Nullable
-    public static BlockCube getBlock() {
-        return (BlockCube) RailcraftBlocks.cube.block();
+    public static BlockGeneric getBlock() {
+        return (BlockGeneric) RailcraftBlocks.generic.block();
     }
 
     /**
@@ -108,7 +108,7 @@ public class BlockCube extends Block implements IRailcraftBlock {
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(VARIANT, EnumCube.fromOrdinal(meta));
+        return getDefaultState().withProperty(VARIANT, EnumGeneric.fromOrdinal(meta));
     }
 
     /**
@@ -124,11 +124,11 @@ public class BlockCube extends Block implements IRailcraftBlock {
         return new BlockStateContainer(this, VARIANT);
     }
 
-    private EnumCube getVariant(IBlockAccess world, BlockPos pos) {
+    private EnumGeneric getVariant(IBlockAccess world, BlockPos pos) {
         return getVariant(WorldPlugin.getBlockState(world, pos));
     }
 
-    private EnumCube getVariant(IBlockState state) {
+    private EnumGeneric getVariant(IBlockState state) {
         return state.getValue(VARIANT);
     }
 
@@ -174,7 +174,7 @@ public class BlockCube extends Block implements IRailcraftBlock {
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (EnumCube type : EnumCube.getCreativeList()) {
+        for (EnumGeneric type : EnumGeneric.getCreativeList()) {
             if (type.isEnabled())
                 list.add(type.getStack());
         }

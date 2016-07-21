@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 
 package mods.railcraft.common.core;
@@ -14,6 +14,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
@@ -64,6 +66,10 @@ public interface IRailcraftObject {
     }
 
     default void finalizeDefinition() {
+    }
+
+    @SideOnly(Side.CLIENT)
+    default void initializeClient() {
     }
 
     default void checkVariant(@Nullable IVariantEnum variant) {

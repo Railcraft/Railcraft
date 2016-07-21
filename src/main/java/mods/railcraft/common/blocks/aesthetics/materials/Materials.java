@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.materials;
 
@@ -13,7 +13,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
@@ -62,7 +62,7 @@ public enum Materials implements IVariantEnum {
     PURPUR("purpur", Blocks.PURPUR_BLOCK::getDefaultState),
 
     OBSIDIAN(39, "obsidian", Blocks.OBSIDIAN::getDefaultState),
-    OBSIDIAN_CRUSHED("crushed_obsidian", EnumCube.CRUSHED_OBSIDIAN::getState),
+    OBSIDIAN_CRUSHED("crushed_obsidian", EnumGeneric.CRUSHED_OBSIDIAN::getState),
 
     ABYSSAL_BLOCK(28, "abyssal_block", () -> BrickTheme.ABYSSAL.getState(BrickVariant.BLOCK)),
     ABYSSAL_BRICK(13, "abyssal_brick", () -> BrickTheme.ABYSSAL.getState(BrickVariant.BRICK)),
@@ -109,16 +109,16 @@ public enum Materials implements IVariantEnum {
     PACKED_ICE(5, "packed_ice", Blocks.PACKED_ICE::getDefaultState),
 
     IRON(6, "iron", Blocks.IRON_BLOCK::getDefaultState),
-    STEEL(43, "steel", EnumCube.STEEL_BLOCK::getState),
-    COPPER(40, "copper", EnumCube.COPPER_BLOCK::getState),
-    TIN(41, "tin", EnumCube.TIN_BLOCK::getState),
-    LEAD(42, "lead", EnumCube.LEAD_BLOCK::getState),
+    STEEL(43, "steel", EnumGeneric.BLOCK_STEEL::getState),
+    COPPER(40, "copper", EnumGeneric.BLOCK_COPPER::getState),
+    TIN(41, "tin", EnumGeneric.BLOCK_TIN::getState),
+    LEAD(42, "lead", EnumGeneric.BLOCK_LEAD::getState),
     GOLD(7, "gold", Blocks.GOLD_BLOCK::getDefaultState),
 
     DIAMOND(8, "diamond", Blocks.DIAMOND_BLOCK::getDefaultState),
 
-    CONCRETE(2, "concrete", EnumCube.CONCRETE_BLOCK::getState),
-    CREOSOTE(38, "creosote", EnumCube.CREOSOTE_BLOCK::getState),
+    CONCRETE(2, "concrete", EnumGeneric.BLOCK_CONCRETE::getState),
+    CREOSOTE(38, "creosote", EnumGeneric.BLOCK_CREOSOTE::getState),
 
     NO_MAT("no_mat", () -> null);
     public static final String MATERIAL_KEY = "mat";
@@ -308,6 +308,7 @@ public enum Materials implements IVariantEnum {
         return name.replace("_", ".");
     }
 
+    @Override
     @Nullable
     public String getOreTag() {
         return oreTag;
@@ -343,19 +344,19 @@ public enum Materials implements IVariantEnum {
     public float getBlockHardness(World world, BlockPos pos) {
         switch (this) {
             case CONCRETE:
-                return EnumCube.CONCRETE_BLOCK.getHardness();
+                return EnumGeneric.BLOCK_CONCRETE.getHardness();
             case CREOSOTE:
-                return EnumCube.CONCRETE_BLOCK.getHardness();
+                return EnumGeneric.BLOCK_CONCRETE.getHardness();
             case OBSIDIAN_CRUSHED:
-                return EnumCube.CRUSHED_OBSIDIAN.getHardness();
+                return EnumGeneric.CRUSHED_OBSIDIAN.getHardness();
             case COPPER:
-                return EnumCube.COPPER_BLOCK.getHardness();
+                return EnumGeneric.BLOCK_COPPER.getHardness();
             case TIN:
-                return EnumCube.TIN_BLOCK.getHardness();
+                return EnumGeneric.BLOCK_TIN.getHardness();
             case LEAD:
-                return EnumCube.LEAD_BLOCK.getHardness();
+                return EnumGeneric.BLOCK_LEAD.getHardness();
             case STEEL:
-                return EnumCube.STEEL_BLOCK.getHardness();
+                return EnumGeneric.BLOCK_STEEL.getHardness();
             default:
                 IBlockState state = getState();
                 if (state == null)
@@ -367,19 +368,19 @@ public enum Materials implements IVariantEnum {
     public float getExplosionResistance(Entity entity) {
         switch (this) {
             case CONCRETE:
-                return EnumCube.CONCRETE_BLOCK.getResistance() * 3f / 5f;
+                return EnumGeneric.BLOCK_CONCRETE.getResistance() * 3f / 5f;
             case CREOSOTE:
-                return EnumCube.CONCRETE_BLOCK.getResistance() * 3f / 5f;
+                return EnumGeneric.BLOCK_CONCRETE.getResistance() * 3f / 5f;
             case OBSIDIAN_CRUSHED:
-                return EnumCube.CRUSHED_OBSIDIAN.getResistance() * 3f / 5f;
+                return EnumGeneric.CRUSHED_OBSIDIAN.getResistance() * 3f / 5f;
             case COPPER:
-                return EnumCube.COPPER_BLOCK.getResistance() * 3f / 5f;
+                return EnumGeneric.BLOCK_COPPER.getResistance() * 3f / 5f;
             case TIN:
-                return EnumCube.TIN_BLOCK.getResistance() * 3f / 5f;
+                return EnumGeneric.BLOCK_TIN.getResistance() * 3f / 5f;
             case LEAD:
-                return EnumCube.LEAD_BLOCK.getResistance() * 3f / 5f;
+                return EnumGeneric.BLOCK_LEAD.getResistance() * 3f / 5f;
             case STEEL:
-                return EnumCube.STEEL_BLOCK.getResistance() * 3f / 5f;
+                return EnumGeneric.BLOCK_STEEL.getResistance() * 3f / 5f;
             default:
                 IBlockState state = getState();
                 if (state == null)

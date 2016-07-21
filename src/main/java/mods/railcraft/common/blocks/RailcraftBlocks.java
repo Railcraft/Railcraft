@@ -13,8 +13,8 @@ package mods.railcraft.common.blocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.ItemBrick;
-import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
-import mods.railcraft.common.blocks.aesthetics.cube.ItemCube;
+import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
+import mods.railcraft.common.blocks.aesthetics.generic.ItemBlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.blocks.aesthetics.glass.ItemStrengthGlass;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
@@ -51,6 +51,7 @@ import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.items.IRailcraftItem;
 import mods.railcraft.common.items.firestone.BlockRitual;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -78,7 +79,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     brickNether("brick.nether", () -> new BlockBrick(BrickTheme.NETHER), ItemBrick::new),
     brickQuarried("brick.quarried", () -> new BlockBrick(BrickTheme.QUARRIED), ItemBrick::new),
     brickSandy("brick.sandy", () -> new BlockBrick(BrickTheme.SANDY), ItemBrick::new),
-    cube("cube", BlockCube::new, ItemCube::new),
+    generic("generic", BlockGeneric::new, ItemBlockGeneric::new),
     detector("detector", BlockDetector::new, ItemDetector::new),
     frame("frame", BlockFrame::new, ItemBlockRailcraft::new),
     glass("glass", BlockStrengthGlass::new, ItemStrengthGlass::new),
@@ -144,8 +145,10 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
             blockObject.initializeDefinintion();
             blockObject.defineRecipes();
 
-            if (!(item instanceof IRailcraftObject))
-                throw new RuntimeException("Railcraft ItemBlocks must implement IRailcraftObject");
+            if (!(item instanceof IRailcraftItemBlock))
+                throw new RuntimeException("Railcraft ItemBlocks must implement IRailcraftItemBlock");
+            if (item instanceof IRailcraftItem)
+                throw new RuntimeException("Railcraft ItemBlocks must not implement IRailcraftItem");
             IRailcraftObject itemObject = (IRailcraftObject) item;
             itemObject.initializeDefinintion();
             itemObject.defineRecipes();

@@ -40,7 +40,6 @@ import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
@@ -103,7 +102,7 @@ public class ClientProxy extends CommonProxy {
         for (RailcraftItems itemContainer : RailcraftItems.VALUES) {
             Item item = itemContainer.item();
             if (item instanceof IRailcraftItem) {
-                ((IRailcraftItem) item).defineModels();
+                ((IRailcraftItem) item).initializeClient();
             } else if (item != null) {
                 ModelManager.registerItemModel(item, 0);
             }
@@ -114,7 +113,9 @@ public class ClientProxy extends CommonProxy {
             Block block = blockContainer.block();
             IRailcraftObject object = blockContainer.getObject();
             if (item != null && block != null && object != null) {
-                IVariantEnum[] variants = blockContainer.getObject().getVariants();
+                object.initializeClient();
+                ((IRailcraftObject) item).initializeClient();
+                IVariantEnum[] variants = object.getVariants();
                 if (variants != null) {
                     for (IVariantEnum variant : variants) {
                         IBlockState variantState = blockContainer.getState(variant);
@@ -234,11 +235,6 @@ public class ClientProxy extends CommonProxy {
 
     private <T extends TileEntity> void bindTESR(IEnumMachine<?> machineType, Function<IEnumMachine<?>, TileEntitySpecialRenderer<? super T>> factory) {
         ClientRegistry.bindTileEntitySpecialRenderer(machineType.getTileClass().asSubclass(TileEntity.class), factory.apply(machineType));
-    }
-
-    //TODO: no idea if ItemMeshDefinition will do what I need to do
-    private void registerItemRenderer(Item item, ItemMeshDefinition itemMesh) {
-//        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, itemMesh);
     }
 
 //    private void registerBlockRenderer(BlockRenderer renderer) {

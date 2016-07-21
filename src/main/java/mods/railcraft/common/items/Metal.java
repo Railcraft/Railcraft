@@ -1,18 +1,19 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.items;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
@@ -62,10 +63,10 @@ public enum Metal implements IVariantEnum {
         poorOreMap.put(TIN, EnumOre.POOR_TIN);
         poorOreMap.put(LEAD, EnumOre.POOR_LEAD);
 
-        blockMap.put(STEEL, EnumCube.STEEL_BLOCK);
-        blockMap.put(COPPER, EnumCube.COPPER_BLOCK);
-        blockMap.put(TIN, EnumCube.TIN_BLOCK);
-        blockMap.put(LEAD, EnumCube.LEAD_BLOCK);
+        blockMap.put(STEEL, EnumGeneric.BLOCK_STEEL);
+        blockMap.put(COPPER, EnumGeneric.BLOCK_COPPER);
+        blockMap.put(TIN, EnumGeneric.BLOCK_TIN);
+        blockMap.put(LEAD, EnumGeneric.BLOCK_LEAD);
     }
 
     public final IStackFilter nuggetFilter;
@@ -94,7 +95,7 @@ public enum Metal implements IVariantEnum {
         return poorOreMap.inverse().get(ore);
     }
 
-    public static Metal get(EnumCube ore) {
+    public static Metal get(EnumGeneric ore) {
         return blockMap.inverse().get(ore);
     }
 
@@ -149,7 +150,7 @@ public enum Metal implements IVariantEnum {
             }
         },
         PLATE("plate", RailcraftItems.plate),
-        BLOCK("block", RailcraftBlocks.cube, blockMap) {
+        BLOCK("block", RailcraftBlocks.generic, blockMap) {
             @Nullable
             @Override
             public ItemStack getStack(Metal metal, int qty) {

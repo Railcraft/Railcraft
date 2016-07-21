@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.plugins.color;
 
@@ -20,11 +20,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -49,6 +49,7 @@ public enum EnumColor implements IVariantEnum {
     ORANGE(0xFF6A00, "dyeOrange", "orange"),
     WHITE(0xFFFFFF, "dyeWhite", "white");
     public static final EnumColor[] VALUES = values();
+    public static final EnumColor[] VALUES_INVERTED = values();
     public static final String DEFAULT_COLOR_TAG = "color";
     public static final Map<String, EnumColor> nameMap = new HashMap<>();
     private final int hexColor;
@@ -56,6 +57,7 @@ public enum EnumColor implements IVariantEnum {
     private final String[] names;
 
     static {
+        ArrayUtils.reverse(VALUES_INVERTED);
         for (EnumColor color : VALUES) {
             for (String name : color.names) {
                 nameMap.put(name, color);
@@ -161,7 +163,7 @@ public enum EnumColor implements IVariantEnum {
     }
 
     public String getBaseTag() {
-        return name().replace("_", ".").toLowerCase(Locale.ENGLISH);
+        return getName();
     }
 
     public String getTranslatedName() {
@@ -178,13 +180,7 @@ public enum EnumColor implements IVariantEnum {
 
     @Override
     public String toString() {
-        String s = name().replace("_", " ");
-        String[] words = s.split(" ");
-        StringBuilder b = new StringBuilder();
-        for (String word : words) {
-            b.append(word.charAt(0)).append(word.substring(1).toLowerCase(Locale.ENGLISH)).append(" ");
-        }
-        return b.toString().trim();
+        return getName();
     }
 
     @Override
@@ -213,4 +209,6 @@ public enum EnumColor implements IVariantEnum {
     public Object getAlternate(IRailcraftObjectContainer container) {
         return null;
     }
+
+
 }

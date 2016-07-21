@@ -10,13 +10,13 @@
 
 package mods.railcraft.client.render.tools;
 
+import mods.railcraft.common.blocks.IRailcraftItemBlock;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
@@ -48,9 +48,9 @@ public class ModelManager {
     }
 
     public static void registerBlockItemModel(ItemBlock item, IBlockState state) {
+        ModelResourceLocation modelResourceLocation = new ModelResourceLocation(state.getBlock().getRegistryName(), ((IRailcraftItemBlock) item).getPropertyString(state));
         if (Game.IS_DEBUG)
-            Game.log(Level.INFO, "Registering block item model: {0} state:{1}", item.getRegistryName(), state);
-        ModelResourceLocation modelResourceLocation = new ModelResourceLocation(state.getBlock().getRegistryName(), new DefaultStateMapper().getPropertyString(state.getProperties()));
+            Game.log(Level.INFO, "Registering block item model: {0} state: {1} location: {2}", item.getRegistryName(), state, modelResourceLocation);
         ModelLoader.setCustomModelResourceLocation(item, state.getBlock().getMetaFromState(state), modelResourceLocation);
     }
 

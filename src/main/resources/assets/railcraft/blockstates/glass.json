@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:glass",
+    "textures": {
+      "particle": "railcraft:blocks/glass.0",
+      "overlay": "railcraft:blocks/glass.4",
+      "down": "railcraft:blocks/glass.0",
+      "up": "railcraft:blocks/glass.0"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "position": {
+      "single": {"textures": {"side": "railcraft:blocks/glass.0"}},
+      "top": {"textures": {"side": "railcraft:blocks/glass.1"}},
+      "center": {"textures": {"side": "railcraft:blocks/glass.2"}},
+      "bottom": {"textures": {"side": "railcraft:blocks/glass.3"}}
+    }
+  }
+}

@@ -1,17 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.api.crafting.IBlastFurnaceCraftingManager;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -38,15 +39,13 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
             List<ItemStack> fuel = new ArrayList<ItemStack>() {
                 @Override
                 public boolean add(ItemStack e) {
-                    if (e == null)
-                        return false;
-                    return super.add(e);
+                    return e != null && super.add(e);
                 }
 
             };
             fuel.add(ThaumcraftPlugin.ITEMS.get("alumentum", 0));
             fuel.add(RailcraftItems.coke.getStack());
-            fuel.add(EnumCube.COKE_BLOCK.getStack());
+            fuel.add(EnumGeneric.BLOCK_COKE.getStack());
             fuel.add(new ItemStack(Items.COAL, 1, 1));
             fuel.add(RailcraftItems.firestoneRefined.getWildcard());
             fuel.add(RailcraftItems.firestoneCracked.getWildcard());

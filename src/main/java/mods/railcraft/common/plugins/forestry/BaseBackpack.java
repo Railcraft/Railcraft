@@ -9,12 +9,11 @@
  ******************************************************************************/
 package mods.railcraft.common.plugins.forestry;
 
-import com.google.common.base.Predicate;
+import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.IBackpackFilter;
 import forestry.api.storage.IBackpackFilterConfigurable;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -34,14 +34,14 @@ import java.util.List;
 @Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = "Forestry")
 public abstract class BaseBackpack implements IBackpackDefinition {
     private final String id;
-    protected final List<Predicate<ItemStack>> filters = new ArrayList<Predicate<ItemStack>>();
-    protected final IBackpackFilterConfigurable stackFilter = forestry.api.storage.BackpackManager.backpackInterface.createBackpackFilter();
-    protected final IBackpackFilter filterExpanded = stack -> {
+    protected final List<Predicate<ItemStack>> filters = new ArrayList<>();
+    protected final IBackpackFilterConfigurable backpackFilter = BackpackManager.backpackInterface.createBackpackFilter();
+    protected final IBackpackFilter compoundFilter = stack -> {
         for (Predicate<ItemStack> filter : filters) {
-            if (filter.apply(stack))
+            if (filter.test(stack))
                 return true;
         }
-        return stackFilter.test(stack);
+        return backpackFilter.test(stack);
     };
 
     protected BaseBackpack(String id) {
@@ -55,12 +55,12 @@ public abstract class BaseBackpack implements IBackpackDefinition {
     @Nonnull
     @Override
     public IBackpackFilter getFilter() {
-        return filterExpanded;
+        return compoundFilter;
     }
 
     public void add(@Nullable ItemStack stack) {
         if (stack == null) return;
-        stackFilter.acceptItem(stack);
+        backpackFilter.acceptItem(stack);
     }
 
     public void add(IRailcraftObjectContainer objectContainer) {
@@ -82,7 +82,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
     }
 
     public void add(String oreTag) {
-        add(StackFilters.ofOreType(oreTag));
+        backpackFilter.acceptOreDictName(oreTag);
     }
 
     @Override

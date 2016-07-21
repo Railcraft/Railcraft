@@ -1,16 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.core;
 
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -28,8 +29,6 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.ModuleChunkLoading;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.collections.BlockItemListParser;
-import mods.railcraft.common.util.collections.BlockKey;
-import mods.railcraft.common.util.collections.ItemKey;
 import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -179,10 +178,10 @@ public class RailcraftConfig {
     public static void postInit() {
         Game.log(Level.TRACE, "Railcraft Config: Doing post init configuration");
 
-        anchorFuelWorld.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelWorldString, "Adding World Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
-        anchorFuelPersonal.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelPersonalString, "Adding Personal Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
-        anchorFuelPassive.putAll(BlockItemListParser.<ItemKey, Float>parseDictionary(anchorFuelPassiveString, "Adding Passive Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
-        EntityTunnelBore.mineableBlocks.addAll(BlockItemListParser.<BlockKey>parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser.ParseType.BLOCK));
+        anchorFuelWorld.putAll(BlockItemListParser.parseDictionary(anchorFuelWorldString, "Adding World Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
+        anchorFuelPersonal.putAll(BlockItemListParser.parseDictionary(anchorFuelPersonalString, "Adding Personal Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
+        anchorFuelPassive.putAll(BlockItemListParser.parseDictionary(anchorFuelPassiveString, "Adding Passive Anchor Fuel = {0}", BlockItemListParser.ParseType.ITEM, BlockItemListParser.ValueType.FLOAT));
+        EntityTunnelBore.mineableBlocks.addAll(BlockItemListParser.parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemListParser.ParseType.BLOCK));
     }
 
     private static void loadEnchantment() {
@@ -490,7 +489,7 @@ public class RailcraftConfig {
             loadBlockFeature(type.getTag());
         }
 
-        for (EnumCube type : EnumCube.VALUES) {
+        for (EnumGeneric type : EnumGeneric.VALUES) {
             loadBlockFeature(type.getTag());
         }
 

@@ -12,6 +12,7 @@ concatenator
 coord
 coords
 crafter
+cullface
 decoupler
 decr
 derped
@@ -63,6 +64,7 @@ rideable
 routable
 slimeball
 spigotmc
+subtyped
 tameable
 teleport
 teleported

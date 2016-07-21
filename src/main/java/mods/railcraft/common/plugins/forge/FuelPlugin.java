@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemRailcraft;
@@ -42,7 +43,7 @@ public class FuelPlugin {
 
         private static final int COKE_HEAT = 3200;
         private final ItemStack coke = RailcraftItems.coke.getStack();
-        private final ItemStack cokeBlock = EnumCube.COKE_BLOCK.getStack();
+        private final ItemStack cokeBlock = EnumGeneric.BLOCK_COKE.getStack();
 
         private FuelHandler() {
         }

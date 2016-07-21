@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics.cube;
+package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -17,9 +17,9 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public class ItemCube extends ItemBlockRailcraft {
+public class ItemBlockGeneric extends ItemBlockRailcraft {
 
-    public ItemCube(Block block) {
+    public ItemBlockGeneric(Block block) {
         super(block);
         setMaxDamage(0);
         setHasSubtypes(true);
@@ -32,7 +32,7 @@ public class ItemCube extends ItemBlockRailcraft {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return EnumCube.fromOrdinal(stack.getItemDamage()).getTag();
+        return EnumGeneric.fromOrdinal(stack.getItemDamage()).getTag();
     }
 
     @Override

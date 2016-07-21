@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.modules;
 
@@ -13,8 +13,8 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
-import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
@@ -61,10 +61,10 @@ public class ModuleStructures extends RailcraftModulePayload {
             @Override
             public void preInit() {
 
-                EnumCube cubeType = EnumCube.CONCRETE_BLOCK;
+                EnumGeneric cubeType = EnumGeneric.BLOCK_CONCRETE;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.cube.register();
-                    Block cube = BlockCube.getBlock();
+                    RailcraftBlocks.generic.register();
+                    Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
                         if (EnumMachineAlpha.ROLLING_MACHINE.isAvailable() && RailcraftItems.rebar.isEnabled()) {
@@ -87,10 +87,10 @@ public class ModuleStructures extends RailcraftModulePayload {
                     }
                 }
 
-                cubeType = EnumCube.CREOSOTE_BLOCK;
+                cubeType = EnumGeneric.BLOCK_CREOSOTE;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.cube.register();
-                    Block cube = BlockCube.getBlock();
+                    RailcraftBlocks.generic.register();
+                    Block cube = BlockGeneric.getBlock();
                     if (cube != null) {
                         ItemStack stack = cubeType.getStack();
                         for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME))) {
@@ -254,7 +254,7 @@ public class ModuleStructures extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                EnumCube cubeType = EnumCube.CREOSOTE_BLOCK;
+                EnumGeneric cubeType = EnumGeneric.BLOCK_CREOSOTE;
                 if (cubeType.isEnabled()) {
                     ItemStack stack = cubeType.getStack();
                     for (ItemStack container : FluidHelper.getContainersFilledWith(Fluids.CREOSOTE.get(FluidHelper.BUCKET_VOLUME))) {

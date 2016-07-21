@@ -1,17 +1,17 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -66,14 +66,14 @@ public class ModuleWorld extends RailcraftModulePayload {
 
             @Override
             public void preInit() {
-                EnumCube cubeType = EnumCube.ABYSSAL_STONE;
+                EnumGeneric cubeType = EnumGeneric.STONE_ABYSSAL;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.cube.register();
+                    RailcraftBlocks.generic.register();
                 }
 
-                cubeType = EnumCube.QUARRIED_STONE;
+                cubeType = EnumGeneric.STONE_QUARRIED;
                 if (RailcraftConfig.isSubBlockEnabled(cubeType.getTag())) {
-                    RailcraftBlocks.cube.register();
+                    RailcraftBlocks.generic.register();
                 }
 
                 if (RailcraftConfig.isWorldGenEnabled("saltpeter") && EnumOre.SALTPETER.isEnabled())
@@ -82,9 +82,9 @@ public class ModuleWorld extends RailcraftModulePayload {
                     MinecraftForge.ORE_GEN_BUS.register(new SulfurGenerator());
                 if (RailcraftConfig.isWorldGenEnabled("firestone") && EnumOre.FIRESTONE.isEnabled() && RailcraftModuleManager.isModuleEnabled(ModuleMagic.class))
                     MinecraftForge.EVENT_BUS.register(new DecoratorFirestone());
-                if (RailcraftConfig.isWorldGenEnabled("abyssal") && EnumCube.ABYSSAL_STONE.isEnabled())
+                if (RailcraftConfig.isWorldGenEnabled("abyssal") && EnumGeneric.STONE_ABYSSAL.isEnabled())
                     MinecraftForge.EVENT_BUS.register(PopulatorGeode.instance());
-                if (RailcraftConfig.isWorldGenEnabled("quarried") && EnumCube.QUARRIED_STONE.isEnabled())
+                if (RailcraftConfig.isWorldGenEnabled("quarried") && EnumGeneric.STONE_QUARRIED.isEnabled())
                     MinecraftForge.EVENT_BUS.register(PopulatorQuarry.instance());
 
                 if (RailcraftConfig.isWorldGenEnabled("iron") && EnumOre.POOR_IRON.isEnabled())

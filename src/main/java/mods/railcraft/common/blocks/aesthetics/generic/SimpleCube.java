@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics.cube;
+package mods.railcraft.common.blocks.aesthetics.generic;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

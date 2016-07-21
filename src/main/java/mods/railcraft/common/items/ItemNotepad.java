@@ -1,3 +1,13 @@
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
+
 package mods.railcraft.common.items;
 
 import mods.railcraft.client.render.tools.ModelManager;
@@ -58,7 +68,7 @@ public class ItemNotepad extends ItemRailcraft implements ItemMeshDefinition {
     }
 
     @Override
-    public void defineModels() {
+    public void initializeClient() {
         ModelManager.registerComplexItemModel(this, this, MODEL_EMPTY, MODEL_FILLED);
     }
 
@@ -184,7 +194,7 @@ public class ItemNotepad extends ItemRailcraft implements ItemMeshDefinition {
                 } else {
                     setContents(stack, contents);
                     if (tileEntity instanceof IWorldNameable)
-                        ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.copy", ((IWorldNameable) tileEntity).getDisplayName());
+                        ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.copy", tileEntity.getDisplayName());
                     stack.damageItem(1, player);
                 }
             } else // PASTE
@@ -201,7 +211,7 @@ public class ItemNotepad extends ItemRailcraft implements ItemMeshDefinition {
                     }
                     if (pasted) {
                         if (tileEntity instanceof IWorldNameable)
-                            ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.paste", ((IWorldNameable) tileEntity).getDisplayName());
+                            ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.paste", tileEntity.getDisplayName());
                     } else
                         //TODO: Fix in 1.8 to use getDisplayName
                         ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.paste.fail");

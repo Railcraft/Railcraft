@@ -1,18 +1,18 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
@@ -38,9 +38,9 @@ public enum BrickTheme implements IRailcraftObjectContainer {
     ABYSSAL(RailcraftBlocks.brickAbyssal, MapColor.BLACK) {
         @Override
         public void initRecipes(BlockBrick block) {
-            if (EnumCube.ABYSSAL_STONE.isEnabled()) {
-                CraftingPlugin.addFurnaceRecipe(EnumCube.ABYSSAL_STONE.getStack(), new ItemStack(block, 1, 2), 0.2F);
-                ItemStack abyssalStone = EnumCube.ABYSSAL_STONE.getStack();
+            if (EnumGeneric.STONE_ABYSSAL.isEnabled()) {
+                CraftingPlugin.addFurnaceRecipe(EnumGeneric.STONE_ABYSSAL.getStack(), new ItemStack(block, 1, 2), 0.2F);
+                ItemStack abyssalStone = EnumGeneric.STONE_ABYSSAL.getStack();
                 if (abyssalStone != null) {
                     ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(abyssalStone, true, false);
                     recipe.addOutput(getStack(1, COBBLE), 1.0F);
@@ -87,9 +87,9 @@ public enum BrickTheme implements IRailcraftObjectContainer {
     QUARRIED(RailcraftBlocks.brickQuarried, MapColor.SNOW) {
         @Override
         public void initRecipes(BlockBrick block) {
-            if (EnumCube.QUARRIED_STONE.isEnabled()) {
-                CraftingPlugin.addFurnaceRecipe(EnumCube.QUARRIED_STONE.getStack(), new ItemStack(block, 1, 2), 0.2F);
-                ItemStack quarriedStone = EnumCube.QUARRIED_STONE.getStack();
+            if (EnumGeneric.STONE_QUARRIED.isEnabled()) {
+                CraftingPlugin.addFurnaceRecipe(EnumGeneric.STONE_QUARRIED.getStack(), new ItemStack(block, 1, 2), 0.2F);
+                ItemStack quarriedStone = EnumGeneric.STONE_QUARRIED.getStack();
                 if (quarriedStone != null) {
                     ICrusherCraftingManager.ICrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(quarriedStone, true, false);
                     recipe.addOutput(getStack(1, COBBLE), 1.0F);

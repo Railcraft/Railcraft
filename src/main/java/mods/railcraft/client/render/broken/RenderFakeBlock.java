@@ -10,7 +10,7 @@
 package mods.railcraft.client.render.broken;
 
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.blocks.aesthetics.cube.BlockCube;
+import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -112,7 +112,7 @@ public class RenderFakeBlock {
     }
 
     public static void renderAsBlock(RenderInfo info, RenderBlocks renderBlocks, IBlockAccess blockAccess, double x, double y, double z) {
-        BlockCube block = BlockCube.getBlock();
+        BlockGeneric block = BlockGeneric.getBlock();
         if (block != null) {
             block.setTextureOverride(info);
             renderBlocks.setRenderBounds(info.minX, info.minY, info.minZ, info.maxX, info.maxY, info.maxZ);

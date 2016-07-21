@@ -1,17 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.*;
+import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -20,7 +21,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemTrack extends ItemBlock implements ITrackItem, IRailcraftObject {
+public class ItemTrack extends ItemBlockRailcraft implements ITrackItem {
 
     public ItemTrack(Block block) {
         super(block);

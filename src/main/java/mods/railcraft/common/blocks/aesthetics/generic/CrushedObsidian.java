@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
-package mods.railcraft.common.blocks.aesthetics.cube;
+package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
@@ -46,12 +46,12 @@ public class CrushedObsidian extends SimpleCube {
 
     @Override
     public void onBlockAdded(World world, BlockPos pos) {
-        world.scheduleBlockUpdate(pos, BlockCube.getBlock(), tickRate(), 0);
+        world.scheduleBlockUpdate(pos, BlockGeneric.getBlock(), tickRate(), 0);
     }
 
     @Override
     public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-        world.scheduleBlockUpdate(pos, BlockCube.getBlock(), tickRate(), 0);
+        world.scheduleBlockUpdate(pos, BlockGeneric.getBlock(), tickRate(), 0);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class CrushedObsidian extends SimpleCube {
                 }
 
                 if (blockPos.getY() > 0)
-                    WorldPlugin.setBlockState(world, blockPos.up(), BlockCube.getBlock().getDefaultState().withProperty(BlockCube.VARIANT, EnumCube.CRUSHED_OBSIDIAN));
+                    WorldPlugin.setBlockState(world, blockPos.up(), BlockGeneric.getBlock().getDefaultState().withProperty(BlockGeneric.VARIANT, EnumGeneric.CRUSHED_OBSIDIAN));
             }
         }
     }

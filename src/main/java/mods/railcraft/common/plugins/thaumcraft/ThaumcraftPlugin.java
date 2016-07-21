@@ -1,18 +1,18 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
-import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
@@ -110,11 +110,11 @@ public class ThaumcraftPlugin {
             addBrickAspects(BrickTheme.QUARRIED, Aspect.LIGHT);
             addBrickAspects(BrickTheme.SANDY, Aspect.EARTH);
 
-            addItemAspect(EnumCube.ABYSSAL_STONE.getStack(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.DARKNESS, 2));
-            addItemAspect(EnumCube.QUARRIED_STONE.getStack(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.LIGHT, 2));
-            addItemAspect(EnumCube.CRUSHED_OBSIDIAN.getStack(), copyAspects(Blocks.OBSIDIAN).remove(Aspect.EARTH, 1).add(Aspect.ENTROPY, 1).add(Aspect.ELDRITCH, 1));
-            addItemAspect(EnumCube.CONCRETE_BLOCK.getStack(), new AspectList().add(Aspect.EARTH, 3).add(Aspect.METAL, 1));
-            addItemAspect(EnumCube.CREOSOTE_BLOCK.getStack(), new AspectList().add(Aspect.PLANT, 3).add(Aspect.ORDER, 1));
+            addItemAspect(EnumGeneric.STONE_ABYSSAL.getStack(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.DARKNESS, 2));
+            addItemAspect(EnumGeneric.STONE_QUARRIED.getStack(), new AspectList().add(Aspect.EARTH, 4).add(Aspect.LIGHT, 2));
+            addItemAspect(EnumGeneric.CRUSHED_OBSIDIAN.getStack(), copyAspects(Blocks.OBSIDIAN).remove(Aspect.EARTH, 1).add(Aspect.ENTROPY, 1).add(Aspect.ELDRITCH, 1));
+            addItemAspect(EnumGeneric.BLOCK_CONCRETE.getStack(), new AspectList().add(Aspect.EARTH, 3).add(Aspect.METAL, 1));
+            addItemAspect(EnumGeneric.BLOCK_CREOSOTE.getStack(), new AspectList().add(Aspect.PLANT, 3).add(Aspect.ORDER, 1));
 
             addItemAspect(EnumOre.DARK_DIAMOND.getItem(), copyAspects(Blocks.DIAMOND_ORE).add(Aspect.DARKNESS, 1));
             addItemAspect(EnumOre.DARK_EMERALD.getItem(), copyAspects(Blocks.EMERALD_ORE).add(Aspect.DARKNESS, 1));

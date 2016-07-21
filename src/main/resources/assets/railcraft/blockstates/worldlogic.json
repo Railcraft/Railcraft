@@ -2,16 +2,10 @@
   "forge_marker": 1,
   "defaults": {
     "model": "cube_all",
-    "textures": {
-      "all": "blocks/bedrock"
-    }
+    "textures": {"all": "blocks/bedrock"}
   },
   "variants": {
     "normal": [{}],
-    "inventory": [
-      {
-        "transform": "forge:default-block"
-      }
-    ]
+    "inventory": [{"transform": "forge:default-block"}]
   }
 }
