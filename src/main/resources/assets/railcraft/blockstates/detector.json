@@ -1,0 +1,114 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:detector"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "any": {
+        "textures": {
+          "all": "railcraft:blocks/detector.any.0",
+          "front": "railcraft:blocks/detector.any.1"
+        }
+      },
+      "item": {
+        "textures": {
+          "all": "railcraft:blocks/detector.item.0",
+          "front": "railcraft:blocks/detector.item.1"
+        }
+      },
+      "empty": {
+        "textures": {
+          "all": "railcraft:blocks/detector.empty.0",
+          "front": "railcraft:blocks/detector.empty.1"
+        }
+      },
+      "mob": {
+        "textures": {
+          "all": "railcraft:blocks/detector.mob.0",
+          "front": "railcraft:blocks/detector.mob.1"
+        }
+      },
+      "powered": {
+        "textures": {
+          "all": "railcraft:blocks/detector.powered.0",
+          "front": "railcraft:blocks/detector.powered.1"
+        }
+      },
+      "player": {
+        "textures": {
+          "all": "railcraft:blocks/detector.player.0",
+          "front": "railcraft:blocks/detector.player.1"
+        }
+      },
+      "explosive": {
+        "textures": {
+          "all": "railcraft:blocks/detector.explosive.0",
+          "front": "railcraft:blocks/detector.explosive.1"
+        }
+      },
+      "animal": {
+        "textures": {
+          "all": "railcraft:blocks/detector.animal.0",
+          "front": "railcraft:blocks/detector.animal.1"
+        }
+      },
+      "tank": {
+        "textures": {
+          "all": "railcraft:blocks/detector.tank.0",
+          "front": "railcraft:blocks/detector.tank.1"
+        }
+      },
+      "advanced": {
+        "textures": {
+          "all": "railcraft:blocks/detector.advanced.0",
+          "front": "railcraft:blocks/detector.advanced.1"
+        }
+      },
+      "energy": {
+        "textures": {
+          "all": "railcraft:blocks/detector.energy.0",
+          "front": "railcraft:blocks/detector.energy.1"
+        }
+      },
+      "age": {
+        "textures": {
+          "all": "railcraft:blocks/detector.age.0",
+          "front": "railcraft:blocks/detector.age.1"
+        }
+      },
+      "train": {
+        "textures": {
+          "all": "railcraft:blocks/detector.train.0",
+          "front": "railcraft:blocks/detector.train.1"
+        }
+      },
+      "sheep": {
+        "textures": {
+          "all": "railcraft:blocks/detector.sheep.0",
+          "front": "railcraft:blocks/detector.sheep.1"
+        }
+      },
+      "villager": {
+        "textures": {
+          "all": "railcraft:blocks/detector.villager.0",
+          "front": "railcraft:blocks/detector.villager.1"
+        }
+      },
+      "locomotive": {
+        "textures": {
+          "all": "railcraft:blocks/detector.locomotive.0",
+          "front": "railcraft:blocks/detector.locomotive.1"
+        }
+      },
+      "routing": {
+        "textures": {
+          "all": "railcraft:blocks/detector.routing.0",
+          "front": "railcraft:blocks/detector.routing.1"
+        }
+      }
+    }
+  }
+}

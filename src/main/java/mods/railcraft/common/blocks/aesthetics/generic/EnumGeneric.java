@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.IBlockVariantEnum;
+import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleFactory;
@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * @author CovertJaguar
  */
-public enum EnumGeneric implements IBlockVariantEnum {
+public enum EnumGeneric implements IVariantEnumBlock {
 
     BLOCK_COPPER(ModuleFactory.class, "copper", new SimpleCube(), 3f, 10f),
     BLOCK_TIN(ModuleFactory.class, "tin", new SimpleCube(), 3f, 10f),

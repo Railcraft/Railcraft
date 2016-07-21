@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import org.apache.logging.log4j.Level;
@@ -47,11 +47,15 @@ public class ModelManager {
         ModelLoader.setCustomModelResourceLocation(item, meta, location);
     }
 
-    public static void registerBlockItemModel(ItemBlock item, IBlockState state) {
-        ModelResourceLocation modelResourceLocation = new ModelResourceLocation(state.getBlock().getRegistryName(), ((IRailcraftItemBlock) item).getPropertyString(state));
-        if (Game.IS_DEBUG)
-            Game.log(Level.INFO, "Registering block item model: {0} state: {1} location: {2}", item.getRegistryName(), state, modelResourceLocation);
-        ModelLoader.setCustomModelResourceLocation(item, state.getBlock().getMetaFromState(state), modelResourceLocation);
+    public static void registerBlockItemModel(ItemStack stack, IBlockState state) {
+        Item item = stack.getItem();
+        if (item instanceof IRailcraftItemBlock) {
+            ModelResourceLocation modelResourceLocation = new ModelResourceLocation(state.getBlock().getRegistryName(), ((IRailcraftItemBlock) item).getPropertyString(state));
+            int meta = stack.getItemDamage();
+            if (Game.IS_DEBUG)
+                Game.log(Level.INFO, "Registering block item model: {0} meta: {1} state: {2} location: {3}", item.getRegistryName(), meta, state, modelResourceLocation);
+            ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);
+        }
     }
 
     public static void registerComplexItemModel(Item item, ItemMeshDefinition meshDefinition, ModelResourceLocation... locations) {

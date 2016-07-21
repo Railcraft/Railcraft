@@ -1,15 +1,16 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.blocks.detector.types;
 
 import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.DetectorSecured;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.signals.IRouter;
@@ -122,8 +123,9 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
     }
 
     private void checkPower() {
+        EnumFacing front = ((BlockDetector) tile.getBlockType()).getFront(theWorld(), tile.getPos());
         for (EnumFacing side : EnumFacing.VALUES) {
-            if (side == tile.direction) continue;
+            if (side == front) continue;
             if (PowerPlugin.isBlockBeingPowered(theWorld(), getTile().getPos(), side)) {
                 powered = true;
                 return;

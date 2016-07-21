@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.Level;
 
@@ -34,7 +35,15 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
     private final int rows;
     private final int columns;
 
-    public static void unstitchIcons(TextureMap textureMap, ResourceLocation textureResource, int columns, int rows) {
+    public static void unstitchIcons(TextureMap textureMap, ResourceLocation textureResource, Tuple<Integer, Integer> textureDimensions) {
+        int columns = textureDimensions.getFirst();
+        int rows = textureDimensions.getSecond();
+        if (columns <= 1 && rows <= 1)
+            return;
+
+        if (Game.IS_DEBUG)
+            Game.log(Level.INFO, "Unstitching texture sheet: {0} {1}x{2}", textureResource, columns, rows);
+
         int numIcons = rows * columns;
 //        TextureAtlasSprite[] icons = new TextureAtlasSprite[numIcons];
         String domain = textureResource.getResourceDomain();

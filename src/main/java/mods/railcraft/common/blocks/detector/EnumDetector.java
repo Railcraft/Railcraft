@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.IBlockVariantEnum;
+import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.types.*;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
@@ -17,14 +18,17 @@ import mods.railcraft.common.modules.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum EnumDetector implements IBlockVariantEnum {
+public enum EnumDetector implements IVariantEnumBlock {
 
     ITEM(ModuleAutomation.class, DetectorItem.class),
     ANY(ModuleAutomation.class, Detector.class),
@@ -44,6 +48,14 @@ public enum EnumDetector implements IBlockVariantEnum {
     LOCOMOTIVE(ModuleAutomation.class, DetectorLocomotive.class),
     ROUTING(ModuleRouting.class, DetectorRouting.class);
     public static final EnumDetector[] VALUES = values();
+    public static final Map<String, EnumDetector> nameMap = new HashMap<>();
+
+    static {
+        for (EnumDetector detector : VALUES) {
+            nameMap.put(detector.getName(), detector);
+        }
+    }
+
     private final Class<? extends Detector> handler;
     private final Class<? extends IRailcraftModule> module;
 
@@ -57,6 +69,13 @@ public enum EnumDetector implements IBlockVariantEnum {
             meta = 0;
         }
         return VALUES[meta];
+    }
+
+    public static EnumDetector fromName(String name) {
+        EnumDetector detector = nameMap.get(name);
+        if (detector == null)
+            return ANY;
+        return detector;
     }
 
     public Detector buildHandler() {
@@ -98,6 +117,11 @@ public enum EnumDetector implements IBlockVariantEnum {
     @Override
     public boolean isEnabled() {
         return getBlock() != null && RailcraftModuleManager.isModuleEnabled(module);
+    }
+
+    @Override
+    public Tuple<Integer, Integer> getTextureDimensions() {
+        return new Tuple<>(3, 1);
     }
 
     /**

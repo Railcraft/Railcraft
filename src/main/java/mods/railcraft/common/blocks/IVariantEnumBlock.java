@@ -18,7 +18,7 @@ import net.minecraft.util.Tuple;
  * <p>
  * Created by CovertJaguar on 3/24/2016.
  */
-public interface IBlockVariantEnum extends IVariantEnum, IStateContainer, IBlockContainer {
+public interface IVariantEnumBlock extends IVariantEnum, IStateContainer, IBlockContainer {
 
     boolean isEnabled();
 

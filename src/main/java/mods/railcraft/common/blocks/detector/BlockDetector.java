@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.common.blocks.RailcraftBlockContainer;
@@ -20,7 +21,11 @@ import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,6 +41,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nonnull;
@@ -47,12 +53,17 @@ import static net.minecraft.util.EnumFacing.*;
 
 public class BlockDetector extends RailcraftBlockContainer {
 
+    public static final PropertyEnum<EnumDetector> VARIANT = PropertyEnum.create("variant", EnumDetector.class);
+    public static final PropertyEnum<EnumFacing> FRONT = PropertyEnum.create("front", EnumFacing.class);
+    public static final PropertyBool POWERED = PropertyBool.create("powered");
+
     @SuppressWarnings("WeakerAccess")
     public BlockDetector() {
         super(Material.ROCK);
         setResistance(4.5F);
         setHardness(2.0F);
         setSoundType(SoundType.STONE);
+        setDefaultState(blockState.getBaseState().withProperty(FRONT, NORTH).withProperty(POWERED, false).withProperty(VARIANT, EnumDetector.ANY));
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
 
@@ -74,6 +85,11 @@ public class BlockDetector extends RailcraftBlockContainer {
             ItemStack stack = new ItemStack(this, 1, d.ordinal());
             RailcraftRegistry.register(stack);
         }
+    }
+
+    @Override
+    public void initializeClient() {
+        ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(FRONT).ignore(POWERED).build());
     }
 
     @Override
@@ -175,6 +191,27 @@ public class BlockDetector extends RailcraftBlockContainer {
                     'P', Blocks.STONE_PRESSURE_PLATE);
     }
 
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(FRONT, EnumFacing.getFront(meta));
+    }
+
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(FRONT).getIndex();
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, VARIANT, FRONT, POWERED);
+    }
+
     @Nonnull
     @Override
     public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
@@ -237,9 +274,9 @@ public class BlockDetector extends RailcraftBlockContainer {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        setFront(worldIn, pos, MiscTools.getSideFacingPlayer(pos, placer));
         TileEntity tile = worldIn.getTileEntity(pos);
         if (tile instanceof TileDetector) {
-            ((TileDetector) tile).direction = MiscTools.getSideFacingPlayer(pos, placer);
             ((TileDetector) tile).onBlockPlacedBy(state, placer, stack);
         }
     }
@@ -270,17 +307,19 @@ public class BlockDetector extends RailcraftBlockContainer {
 
     @Override
     public boolean rotateBlock(World world, @Nonnull BlockPos pos, EnumFacing axis) {
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileDetector) {
-            TileDetector detector = (TileDetector) tile;
-            if (detector.direction == axis)
-                detector.direction = axis.getOpposite();
-            else
-                detector.direction = axis;
-            markBlockForUpdate(world, pos);
-            return true;
-        }
-        return false;
+        if (getFront(world, pos) == axis)
+            setFront(world, pos, axis.getOpposite());
+        else
+            setFront(world, pos, axis);
+        return true;
+    }
+
+    public EnumFacing getFront(World world, BlockPos pos) {
+        return WorldPlugin.getBlockState(world, pos).getValue(FRONT);
+    }
+
+    public void setFront(World world, BlockPos pos, EnumFacing front) {
+        WorldPlugin.setBlockState(world, pos, getDefaultState().withProperty(FRONT, front));
     }
 
     @Nonnull
@@ -314,7 +353,7 @@ public class BlockDetector extends RailcraftBlockContainer {
         TileEntity t = worldIn.getTileEntity(pos);
         if (t instanceof TileDetector) {
             TileDetector tile = (TileDetector) t;
-            if (tile.direction == side.getOpposite())
+            if (state.getValue(FRONT) == side.getOpposite())
                 return tile.powerState;
         }
         return PowerPlugin.NO_POWER;
@@ -351,20 +390,18 @@ public class BlockDetector extends RailcraftBlockContainer {
         }
     }
 
+    // TODO: wtf? test this
     @Override
     public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        TileEntity t = world.getTileEntity(pos);
-        if (t instanceof TileDetector) {
-            TileDetector tile = (TileDetector) t;
-            if (side == UP && tile.direction == EAST)
-                return true;
-            if (side == SOUTH && tile.direction == WEST)
-                return true;
-            if (side == NORTH && tile.direction == SOUTH)
-                return true;
-            if (side == DOWN && tile.direction == NORTH)
-                return true;
-        }
+        EnumFacing front = state.getValue(FRONT);
+        if (side == UP && front == EAST)
+            return true;
+        if (side == SOUTH && front == WEST)
+            return true;
+        if (side == NORTH && front == SOUTH)
+            return true;
+        if (side == DOWN && front == NORTH)
+            return true;
         return false;
     }
 

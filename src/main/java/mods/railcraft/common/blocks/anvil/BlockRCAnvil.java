@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks.anvil;
 
-import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -26,20 +27,41 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Locale;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class BlockRCAnvil extends BlockAnvil implements IRailcraftObject {
-
+public class BlockRCAnvil extends BlockAnvil implements IRailcraftBlock {
 
     public BlockRCAnvil() {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         setHardness(5.0F);
         setSoundType(SoundType.ANVIL);
         setResistance(2000.0F);
+    }
+
+    @Nullable
+    @Override
+    public Class<? extends IVariantEnum> getVariantEnum() {
+        return DamageState.class;
+    }
+
+    @Nullable
+    @Override
+    public IVariantEnum[] getVariants() {
+        return DamageState.VALUES;
+    }
+
+    @Override
+    public IBlockState getState(@Nullable IVariantEnum variant) {
+        IBlockState state = getDefaultState();
+        if (variant != null) {
+            checkVariant(variant);
+            state = state.withProperty(DAMAGE, variant.ordinal());
+        }
+        return state;
     }
 
     @Override
@@ -65,12 +87,24 @@ public class BlockRCAnvil extends BlockAnvil implements IRailcraftObject {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, @Nonnull BlockPos pos, IBlockState state, @Nonnull EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote)
             return true;
         else {
             GuiHandler.openGui(EnumGui.ANVIL, playerIn, worldIn, pos);
             return true;
+        }
+    }
+
+    public enum DamageState implements IVariantEnum {
+        UNDAMAGED,
+        SLIGHTLY_DAMAGED,
+        VARY_DAMAGED;
+        public static DamageState[] VALUES = values();
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ROOT);
         }
     }
 

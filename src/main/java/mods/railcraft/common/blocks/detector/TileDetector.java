@@ -1,28 +1,29 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -32,7 +33,6 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
 
     public static final float SENSITIVITY = 0.2f;
     private static final int POWER_DELAY = 10;
-    public EnumFacing direction = EnumFacing.UP;
     public int powerState;
     @Nonnull
     public Detector detector = Detector.DUMMY;
@@ -73,9 +73,8 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
-        data.setByte("type", (byte) detector.getType().ordinal());
+        data.setString("type", detector.getType().getName());
         detector.writeToNBT(data);
-        data.setByte("direction", (byte) direction.ordinal());
         data.setByte("powerState", (byte) powerState);
         data.setByte("powerDelay", (byte) powerDelay);
         return data;
@@ -85,14 +84,11 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        SafeNBTWrapper safe = new SafeNBTWrapper(data);
-
-        direction = EnumFacing.getFront(safe.getByte("direction"));
         powerState = data.getByte("powerState");
         powerDelay = data.getByte("powerDelay");
 
         if (data.hasKey("type"))
-            setDetector(EnumDetector.fromOrdinal(data.getByte("type")));
+            setDetector(EnumDetector.fromName(data.getString("type")));
         detector.readFromNBT(data);
     }
 
@@ -101,7 +97,6 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
         super.writePacketData(data);
         data.writeByte(detector.getType().ordinal());
         data.writeByte(powerState);
-        data.writeByte(direction.ordinal());
         detector.writePacketData(data);
     }
 
@@ -112,7 +107,6 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
         if (detector == Detector.DUMMY || detector.getType().ordinal() != type)
             setDetector(EnumDetector.fromOrdinal(type));
         powerState = data.readByte();
-        direction = EnumFacing.getFront(data.readByte());
         detector.readPacketData(data);
         markBlockForUpdate();
     }
@@ -143,8 +137,8 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
                 if (powerState > PowerPlugin.NO_POWER)
                     powerDelay = POWER_DELAY;
                 sendUpdateToClient();
-                worldObj.notifyNeighborsOfStateChange(getPos(), RailcraftBlocks.detector.block());
-                WorldPlugin.notifyBlocksOfNeighborChangeOnSide(worldObj, getPos(), RailcraftBlocks.detector.block(), direction);
+                worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
+                WorldPlugin.notifyBlocksOfNeighborChangeOnSide(worldObj, getPos(), getBlockType(), getBlockState().getValue(BlockDetector.FRONT));
             }
         }
     }
@@ -162,5 +156,10 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     @Override
     public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         detector.readGuiData(data, sender);
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+        return oldState.getBlock() != newSate.getBlock();
     }
 }

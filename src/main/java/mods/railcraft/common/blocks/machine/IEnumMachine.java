@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.common.blocks.IBlockVariantEnum;
+import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Comparable<M>, IBlockVariantEnum {
+public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Comparable<M>, IVariantEnumBlock {
     String getBaseTag();
 
     String getTag();

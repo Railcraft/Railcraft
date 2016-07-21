@@ -18,6 +18,8 @@ import mods.railcraft.client.render.tools.ModelManager;
 import mods.railcraft.client.util.sounds.RCSoundHandler;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.IRailcraftBlock;
+import mods.railcraft.common.blocks.IRailcraftItemBlock;
+import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
@@ -92,7 +94,14 @@ public class ClientProxy extends CommonProxy {
                     if (block instanceof IRailcraftBlock) {
                         Tuple<Integer, Integer> textureDimensions = ((IRailcraftBlock) block).getTextureDimensions();
                         if (textureDimensions.getFirst() > 1 || textureDimensions.getSecond() > 1) {
-                            TextureAtlasSheet.unstitchIcons(event.getMap(), block.getRegistryName(), textureDimensions.getFirst(), textureDimensions.getSecond());
+                            TextureAtlasSheet.unstitchIcons(event.getMap(), block.getRegistryName(), textureDimensions);
+                        }
+                        IVariantEnum[] variants = ((IRailcraftBlock) block).getVariants();
+                        if (variants != null) {
+                            for (IVariantEnum variant : variants) {
+                                if (variant instanceof IVariantEnumBlock)
+                                    TextureAtlasSheet.unstitchIcons(event.getMap(), new ResourceLocation(block.getRegistryName() + "." + variant.getResourcePathSuffix()), ((IVariantEnumBlock) variant).getTextureDimensions());
+                            }
                         }
                     }
                 }
@@ -118,12 +127,15 @@ public class ClientProxy extends CommonProxy {
                 IVariantEnum[] variants = object.getVariants();
                 if (variants != null) {
                     for (IVariantEnum variant : variants) {
-                        IBlockState variantState = blockContainer.getState(variant);
-                        if (variantState != null)
-                            ModelManager.registerBlockItemModel(item, variantState);
+                        ItemStack stack = blockContainer.getStack(variant);
+                        IBlockState variantState = ((IRailcraftItemBlock) item).getState(variant);
+                        if (stack != null && variantState != null)
+                            ModelManager.registerBlockItemModel(stack, variantState);
                     }
                 } else {
-                    ModelManager.registerBlockItemModel(item, block.getDefaultState());
+                    ItemStack stack = blockContainer.getStack();
+                    if (stack != null)
+                        ModelManager.registerBlockItemModel(stack, block.getDefaultState());
                 }
             }
         }
