@@ -18,7 +18,7 @@ import net.minecraft.util.math.Vec3d;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-//TODO: this is probably the most stupid way to adjust the brightness of a model's vertexes
+// this is probably the most stupid way to adjust the brightness of a model's vertexes
 public class TexturedQuadAdv extends TexturedQuad {
 
     private int r, g, b, a, brightness;

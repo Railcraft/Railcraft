@@ -78,12 +78,12 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     @Nullable
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
+    public final SPacketUpdateTileEntity getUpdatePacket() {
         return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
     }
 
     @Override
-    public NBTTagCompound getUpdateTag() {
+    public final NBTTagCompound getUpdateTag() {
         NBTTagCompound nbt = super.getUpdateTag();
         ByteBuf byteBuf = Unpooled.buffer();
         try (ByteBufOutputStream out = new ByteBufOutputStream(byteBuf);
@@ -99,7 +99,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     @Override
-    public void handleUpdateTag(NBTTagCompound nbt) {
+    public final void handleUpdateTag(NBTTagCompound nbt) {
         byte[] bytes = nbt.getByteArray("sync");
         try (ByteArrayInputStream in = new ByteArrayInputStream(bytes);
              RailcraftInputStream data = new RailcraftInputStream(in)) {
@@ -109,6 +109,11 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
             if (Game.IS_DEBUG)
                 throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public final void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.SPacketUpdateTileEntity pkt) {
+        handleUpdateTag(pkt.getNbtCompound());
     }
 
     @Override

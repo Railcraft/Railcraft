@@ -1,11 +1,28 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "railcraft:detector"
+    "model": "railcraft:detector",
+    "textures": {
+      "overlay": "railcraft:blocks/detector.overlay"
+    }
   },
   "variants": {
     "normal": [{}],
     "inventory": [{"transform": "forge:default-block"}],
+    "powered": {
+      "true": {
+        "submodel": "railcraft:detector.overlay"
+      },
+      "false": {}
+    },
+    "front": {
+      "down": {"x": 90},
+      "up": {"x": 270},
+      "north": {},
+      "south": {"y": 180},
+      "east": {"y": 90},
+      "west": {"y": 270}
+    },
     "variant": {
       "any": {
         "textures": {

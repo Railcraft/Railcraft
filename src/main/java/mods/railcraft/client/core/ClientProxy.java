@@ -49,7 +49,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -92,10 +91,7 @@ public class ClientProxy extends CommonProxy {
                 for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
                     Block block = blockContainer.block();
                     if (block instanceof IRailcraftBlock) {
-                        Tuple<Integer, Integer> textureDimensions = ((IRailcraftBlock) block).getTextureDimensions();
-                        if (textureDimensions.getFirst() > 1 || textureDimensions.getSecond() > 1) {
-                            TextureAtlasSheet.unstitchIcons(event.getMap(), block.getRegistryName(), textureDimensions);
-                        }
+                        TextureAtlasSheet.unstitchIcons(event.getMap(), block.getRegistryName(), ((IRailcraftBlock) block).getTextureDimensions());
                         IVariantEnum[] variants = ((IRailcraftBlock) block).getVariants();
                         if (variants != null) {
                             for (IVariantEnum variant : variants) {
@@ -129,7 +125,7 @@ public class ClientProxy extends CommonProxy {
                     for (IVariantEnum variant : variants) {
                         ItemStack stack = blockContainer.getStack(variant);
                         IBlockState variantState = ((IRailcraftItemBlock) item).getState(variant);
-                        if (stack != null && variantState != null)
+                        if (stack != null)
                             ModelManager.registerBlockItemModel(stack, variantState);
                     }
                 } else {

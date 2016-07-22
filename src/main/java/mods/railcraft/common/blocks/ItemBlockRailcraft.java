@@ -46,7 +46,7 @@ public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColore
     public IBlockState getState(@Nullable IVariantEnum variant) {
         if (block instanceof IRailcraftBlock)
             return ((IRailcraftBlock) block).getState(variant);
-        else return block.getDefaultState();
+        return block.getDefaultState();
     }
 
     @Override

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
@@ -132,42 +133,6 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     public void drawGradientRect(int x1, int y1, int x2, int y2, int c1, int c2) {
         super.drawGradientRect(x1, y1, x2, y2, c1, c2);
     }
-
-    //    @Override
-//    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-//        super.mouseClicked(mouseX, mouseY, mouseButton);
-    // TODO: Fix button mouse mode passing
-//        for (Object obj : buttonList) {
-//            if (obj instanceof GuiBetterButton && ((GuiBetterButton)obj).mousePressed(this.mc, mouseX, mouseY, mouseButton)) {
-//                this.selectedButton = guibutton;
-//                this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-//                this.actionPerformed((GuiBetterButton)obj);
-//            }
-//
-//            if () {
-//            }
-//        }
-//        if (mouseButton == 2) {
-//            Slot var4 = this.getSlotAtPosition(par1, par2);
-//            int var5 = this.guiLeft;
-//            int var6 = this.guiTop;
-//            boolean var7 = par1 < var5 || par2 < var6 || par1 >= var5 + this.xSize || par2 >= var6 + this.ySize;
-//            int var8 = -1;
-//
-//            if (var4 != null) {
-//                var8 = var4.slotNumber;
-//            }
-//
-//            if (var7) {
-//                var8 = -999;
-//            }
-//
-//            if (var8 != -1) {
-//                boolean var9 = var8 != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
-//                this.handleMouseClick(var4, var8, mouseButton, var9 ? 1 : 0);
-//            }
-//        }
-//    }
 
     @Nullable
     private Slot getSlotAtPosition(int par1, int par2) {

@@ -121,7 +121,7 @@ public enum EnumDetector implements IVariantEnumBlock {
 
     @Override
     public Tuple<Integer, Integer> getTextureDimensions() {
-        return new Tuple<>(3, 1);
+        return new Tuple<>(2, 1);
     }
 
     /**

@@ -48,7 +48,6 @@ public class ItemDetector extends ItemBlockRailcraftSubtyped {
      *               block is not being placed by a player.
      * @param side   The side the player (or machine) right-clicked on.
      */
-    //TODO: do we even need a special item for this?
     @Override
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
         if (!world.setBlockState(pos, newState, 3))
