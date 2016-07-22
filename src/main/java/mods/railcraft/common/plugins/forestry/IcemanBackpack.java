@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.plugins.forestry;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -21,7 +22,7 @@ import net.minecraftforge.fml.common.Optional;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = "Forestry")
+@Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = ForestryPlugin.FORESTRY_ID)
 public class IcemanBackpack extends BaseBackpack {
     private static IcemanBackpack instance;
     private static final ItemStack SNOWBALL = new ItemStack(Items.SNOWBALL);

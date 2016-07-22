@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = "Forestry")
+@Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = ForestryPlugin.FORESTRY_ID)
 public abstract class BaseBackpack implements IBackpackDefinition {
     private final String id;
     protected final List<Predicate<ItemStack>> filters = new ArrayList<>();

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.items.ModItems;
@@ -26,7 +27,7 @@ public class ForestryFluidRegistrar extends FluidRegistrar {
     }
 
     @Override
-    @Optional.Method(modid = "Forestry")
+    @Optional.Method(modid = "forestry")
     public void registerContainer(FluidContainerData container) {
         ItemStack recycle;
         int chance;

@@ -37,6 +37,8 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ForestryPlugin {
+    public static final String FORESTRY_ID = "forestry";
+    public static final String FORESTRY_NAME = "Forestry";
     public static Item trackmanBackpackT1;
     public static Item trackmanBackpackT2;
     public static Item icemanBackpackT1;
@@ -58,14 +60,14 @@ public class ForestryPlugin {
 
     public static boolean isForestryInstalled() {
         if (modLoaded == null)
-            modLoaded = Loader.isModLoaded("Forestry");
+            modLoaded = Loader.isModLoaded("forestry");
         return modLoaded;
     }
 
     public static ItemStack getItem(String tag) {
         if (!isForestryInstalled())
             return null;
-        Item item = GameRegistry.findItem("Forestry", tag);
+        Item item = GameRegistry.findItem("forestry", tag);
         if (item == null)
             return null;
         return new ItemStack(item, 1);
@@ -97,7 +99,7 @@ public class ForestryPlugin {
         if (message.contains("null"))
             throw new IllegalArgumentException("Attempting to register broken item with Forestry Backpack!");
 //        Game.logDebug(Level.FINEST, "Sending IMC to Forestry add-backpack-items: {0}", message);
-        FMLInterModComms.sendMessage("Forestry", "add-backpack-items", message);
+        FMLInterModComms.sendMessage(ForestryPlugin.FORESTRY_ID, "add-backpack-items", message);
     }
 
     public void registerBackpacks() {
@@ -111,7 +113,7 @@ public class ForestryPlugin {
 
     private static class ForestryPluginInstalled extends ForestryPlugin {
         @Override
-        @Optional.Method(modid = "Forestry")
+        @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
         public void registerBackpacks() {
             try {
                 if (forestry.api.storage.BackpackManager.backpackInterface == null)
@@ -247,11 +249,11 @@ public class ForestryPlugin {
                     }
                 }
             } catch (Throwable error) {
-                Game.logErrorAPI("Forestry", error, forestry.api.storage.BackpackManager.class);
+                Game.logErrorAPI(ForestryPlugin.FORESTRY_NAME, error, forestry.api.storage.BackpackManager.class);
             }
         }
 
-        @Optional.Method(modid = "Forestry")
+        @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
         private Item registerBackpack(BaseBackpack backpack, forestry.api.storage.EnumBackpackType type, String tag) {
             forestry.api.storage.BackpackManager.backpackInterface.registerBackpackDefinition(backpack.getId(), backpack);
             Item item = forestry.api.storage.BackpackManager.backpackInterface.createBackpack(backpack.getId(), type).setCreativeTab(CreativePlugin.RAILCRAFT_TAB).setUnlocalizedName(tag);
@@ -259,13 +261,13 @@ public class ForestryPlugin {
             return item;
         }
 
-        @Optional.Method(modid = "Forestry")
+        @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
         private void addBackpackTooltip(ItemStack stack) {
             InvTools.addItemToolTip(stack, "\u00a77\u00a7o" + LocalizationPlugin.translate("item.railcraft.backpack.tip"));
         }
 
         @Override
-        @Optional.Method(modid = "Forestry")
+        @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
         public void setupBackpackContents() {
             try {
                 if (forestry.api.storage.BackpackManager.backpackInterface == null)
@@ -274,18 +276,18 @@ public class ForestryPlugin {
                 IcemanBackpack.getInstance().setup();
                 ApothecariesBackpack.getInstance().setup();
             } catch (Throwable error) {
-                Game.logErrorAPI("Forestry", error, forestry.api.storage.BackpackManager.class);
+                Game.logErrorAPI(ForestryPlugin.FORESTRY_NAME, error, forestry.api.storage.BackpackManager.class);
             }
         }
 
         @Override
-        @Optional.Method(modid = "Forestry")
+        @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
         public void addCarpenterRecipe(String recipeTag, int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
             try {
                 if (forestry.api.recipes.RecipeManagers.carpenterManager != null && RailcraftConfig.getRecipeConfig("forestry.carpenter." + recipeTag))
                     forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(packagingTime, liquid, null, product, materials);
             } catch (Throwable error) {
-                Game.logErrorAPI("Forestry", error, forestry.api.recipes.RecipeManagers.class);
+                Game.logErrorAPI(ForestryPlugin.FORESTRY_NAME, error, forestry.api.recipes.RecipeManagers.class);
             }
         }
     }
