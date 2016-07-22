@@ -1,15 +1,18 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.blocks;
 
 import com.mojang.authlib.GameProfile;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.Unpooled;
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
@@ -17,6 +20,7 @@ import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -35,6 +39,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,13 +79,36 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        PacketBuilder.instance().sendTileEntityPacket(this);
-        return null;
+        return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
     }
 
     @Override
     public NBTTagCompound getUpdateTag() {
-        return super.getUpdateTag();
+        NBTTagCompound nbt = super.getUpdateTag();
+        ByteBuf byteBuf = Unpooled.buffer();
+        try (ByteBufOutputStream out = new ByteBufOutputStream(byteBuf);
+             RailcraftOutputStream data = new RailcraftOutputStream(out)) {
+            writePacketData(data);
+        } catch (IOException e) {
+            Game.logThrowable("Error constructing tile packet: {0}", e, getClass());
+            if (Game.IS_DEBUG)
+                throw new RuntimeException(e);
+        }
+        nbt.setByteArray("sync", byteBuf.array());
+        return nbt;
+    }
+
+    @Override
+    public void handleUpdateTag(NBTTagCompound nbt) {
+        byte[] bytes = nbt.getByteArray("sync");
+        try (ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+             RailcraftInputStream data = new RailcraftInputStream(in)) {
+            readPacketData(data);
+        } catch (IOException e) {
+            Game.logThrowable("Error decoding tile packet: {0}", e, getClass());
+            if (Game.IS_DEBUG)
+                throw new RuntimeException(e);
+        }
     }
 
     @Override

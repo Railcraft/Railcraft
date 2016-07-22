@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.util.network;
 
 import io.netty.buffer.ByteBuf;
@@ -13,16 +14,18 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import mods.railcraft.api.signals.AbstractPair;
 import mods.railcraft.api.signals.ISignalPacketBuilder;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.gui.widgets.Widget;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketKeyPress.EnumKeyBinding;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IContainerListener;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 /**
@@ -32,6 +35,9 @@ public class PacketBuilder implements ISignalPacketBuilder {
 
     private static PacketBuilder instance;
 
+    private PacketBuilder() {
+    }
+
     @Nonnull
     public static PacketBuilder instance() {
         if (instance == null)
@@ -39,14 +45,20 @@ public class PacketBuilder implements ISignalPacketBuilder {
         return instance;
     }
 
-    private PacketBuilder() {
-    }
-
-    public void sendTileEntityPacket(RailcraftTileEntity tile) {
+    public void sendTileEntityPacket(TileEntity tile) {
         if (tile.getWorld() instanceof WorldServer) {
             WorldServer world = (WorldServer) tile.getWorld();
-            PacketTileEntity pkt = new PacketTileEntity(tile);
-            PacketDispatcher.sendToWatchers(pkt, world, tile.getPos().getX(), tile.getPos().getZ());
+            SPacketUpdateTileEntity packet = tile.getUpdatePacket();
+            if (packet != null)
+                PacketDispatcher.sendToWatchers(packet, world, tile.getPos().getX(), tile.getPos().getZ());
+        }
+    }
+
+    public void sendTileEntityPacket(@Nullable TileEntity tile, EntityPlayerMP player) {
+        if (tile != null) {
+            SPacketUpdateTileEntity packet = tile.getUpdatePacket();
+            if (packet != null)
+                PacketDispatcher.sendToPlayer(packet, player);
         }
     }
 

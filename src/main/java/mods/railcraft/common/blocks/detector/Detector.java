@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.common.gui.EnumGui;
@@ -31,7 +32,12 @@ import static mods.railcraft.common.plugins.forge.PowerPlugin.NO_POWER;
  */
 public class Detector implements IGuiReturnHandler {
 
-    public static final Detector DUMMY = new Detector();
+    public static final Detector DUMMY = new Detector() {
+        @Override
+        public String toString() {
+            return "DUMMY";
+        }
+    };
     public static final float SENSITIVITY = 0.2f;
     protected TileDetector tile;
 
@@ -100,5 +106,10 @@ public class Detector implements IGuiReturnHandler {
 
     @Override
     public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
+    }
+
+    @Override
+    public String toString() {
+        return getType().name();
     }
 }

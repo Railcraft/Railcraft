@@ -212,6 +212,17 @@ public class BlockDetector extends RailcraftBlockContainer {
         return new BlockStateContainer(this, VARIANT, FRONT, POWERED);
     }
 
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        state = super.getActualState(state, worldIn, pos);
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof TileDetector) {
+            TileDetector detector = (TileDetector) tile;
+            state = state.withProperty(VARIANT, detector.getDetector().getType()).withProperty(POWERED, detector.powerState > PowerPlugin.NO_POWER);
+        }
+        return state;
+    }
+
     @Nonnull
     @Override
     public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
@@ -400,9 +411,7 @@ public class BlockDetector extends RailcraftBlockContainer {
             return true;
         if (side == NORTH && front == SOUTH)
             return true;
-        if (side == DOWN && front == NORTH)
-            return true;
-        return false;
+        return side == DOWN && front == NORTH;
     }
 
     @Override

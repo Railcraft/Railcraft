@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.util.network;
 
 import io.netty.buffer.ByteBuf;
@@ -60,9 +61,6 @@ public class PacketHandler {
 //            System.out.println("Packet Received: " + packetID);
             PacketType type = packetTypes[packetID];
             switch (type) {
-                case TILE_ENTITY:
-                    pkt = new PacketTileEntity();
-                    break;
                 case GUI_RETURN:
                     pkt = new PacketGuiReturn(player);
                     break;

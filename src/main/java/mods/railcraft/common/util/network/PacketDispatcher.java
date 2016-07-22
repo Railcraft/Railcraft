@@ -1,15 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.util.network;
 
 import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.Packet;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -27,6 +29,10 @@ public class PacketDispatcher {
 
     public static void sendToPlayer(RailcraftPacket packet, EntityPlayerMP player) {
         PacketHandler.INSTANCE.channel.sendTo(packet.getPacket(), player);
+    }
+
+    public static void sendToPlayer(Packet packet, EntityPlayerMP player) {
+        player.connection.sendPacket(packet);
     }
 
     public static void sendToAll(RailcraftPacket packet) {
@@ -58,12 +64,16 @@ public class PacketDispatcher {
     }
 
     public static void sendToWatchers(RailcraftPacket packet, WorldServer world, int worldX, int worldZ) {
+        sendToWatchers(packet.getPacket(), world, worldX, worldZ);
+    }
+
+    public static void sendToWatchers(Packet packet, WorldServer world, int worldX, int worldZ) {
         int chunkX = worldX >> 4;
         int chunkZ = worldZ >> 4;
 
         PlayerChunkMapEntry chunkManager = world.getPlayerChunkMap().getEntry(chunkX, chunkZ);
         if (chunkManager != null)
-            chunkManager.sendPacket(packet.getPacket());
+            chunkManager.sendPacket(packet);
     }
 
 }
