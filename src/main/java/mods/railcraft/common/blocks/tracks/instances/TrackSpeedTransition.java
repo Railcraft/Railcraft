@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  ******************************************************************************/
 package mods.railcraft.common.blocks.tracks.instances;
 
@@ -55,11 +55,11 @@ public class TrackSpeedTransition extends TrackSpeed implements ITrackPowered, I
     @Override
     public void onMinecartPass(EntityMinecart cart) {
         testCartSpeedForBooster(this, cart);
-        boolean highSpeed = cart.getEntityData().getBoolean("HighSpeed");
         if (powered) {
             double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
             if (speed > BOOST_THRESHOLD) {
                 int meta = getTile().getBlockMetadata();
+                boolean highSpeed = cart.getEntityData().getBoolean("HighSpeed");
                 if (meta == 0 || meta == 4 || meta == 5) {
                     if (reversed ^ cart.motionZ < 0) {
                         boostCartSpeed(cart, speed);
@@ -74,7 +74,9 @@ public class TrackSpeedTransition extends TrackSpeed implements ITrackPowered, I
                     }
                 }
             }
-        } else {
+        }
+        // removed this code an weird an unneeded
+        /*else {
             if (highSpeed) {
                 int meta = getTile().getBlockMetadata();
                 if (meta == 0 || meta == 4 || meta == 5) {
@@ -90,7 +92,7 @@ public class TrackSpeedTransition extends TrackSpeed implements ITrackPowered, I
             } else {
                 normalCartSpeed(cart);
             }
-        }
+        }*/
     }
 
     private void boostCartSpeed(EntityMinecart cart, double currentSpeed) {

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ ******************************************************************************/
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
@@ -26,10 +27,10 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.ItemWhistleTuner;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.misc.RailcraftDamageSource;
@@ -668,22 +669,21 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public boolean canLinkWithCart(EntityMinecart cart) {
-        if (cart instanceof EntityLocomotive)
+        if (isExemptFromLinkLimits(cart))
             return true;
 
         LinkageManager lm = LinkageManager.instance();
 
         EntityMinecart linkA = lm.getLinkedCartA(this);
-        if (linkA != null && !(linkA instanceof EntityLocomotive))
+        if (linkA != null && !isExemptFromLinkLimits(linkA))
             return false;
 
         EntityMinecart linkB = lm.getLinkedCartB(this);
-        return linkB == null || linkB instanceof EntityLocomotive;
+        return linkB == null || isExemptFromLinkLimits(linkB);
     }
 
-    @Override
-    public boolean hasTwoLinks() {
-        return true;
+    private boolean isExemptFromLinkLimits(EntityMinecart cart) {
+        return cart instanceof EntityLocomotive || cart instanceof CartBaseMaintenance;
     }
 
     @Override
@@ -697,16 +697,8 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     @Override
-    public boolean canBeAdjusted(EntityMinecart cart) {
+    public boolean canPassItemRequests() {
         return true;
-    }
-
-    @Override
-    public void onLinkCreated(EntityMinecart cart) {
-    }
-
-    @Override
-    public void onLinkBroken(EntityMinecart cart) {
     }
 
     public abstract LocomotiveRenderType getRenderType();
