@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,10 +6,9 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forestry;
 
-import forestry.api.storage.IBackpackDefinition;
 import mods.railcraft.common.plugins.thaumcraft.ResearchItemRC;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -25,11 +24,10 @@ import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = ForestryPlugin.FORESTRY_ID)
-public class ApothecariesBackpack extends BaseBackpack implements IBackpackDefinition {
+public class ApothecariesBackpack extends BaseBackpack {
 
     private static ApothecariesBackpack instance;
 

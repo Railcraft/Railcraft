@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.gamma;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.*;
 import mods.railcraft.common.gui.EnumGui;
@@ -73,7 +74,7 @@ public class TileFluidUnloader extends TileLoaderFluidBase implements IGuiReturn
 
         tankManager.outputLiquid(tileCache, TankManager.TANK_FILTER, EnumFacing.VALUES, 0, TRANSFER_RATE);
 
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0.1f, EnumFacing.UP);
+        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0.1f, EnumFacing.UP);
 
         if (cart != currentCart) {
             setPowered(false);

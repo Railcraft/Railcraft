@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,10 +6,10 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.detector;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -58,7 +58,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     }
 
     public List<EntityMinecart> getCarts() {
-        return CartTools.getMinecartsOnAllSides(worldObj, getPos(), SENSITIVITY);
+        return CartToolsAPI.getMinecartsOnAllSides(worldObj, getPos(), SENSITIVITY);
     }
 
     public boolean blockActivated(EntityPlayer player) {

@@ -1,17 +1,17 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.carts.CartUtils;
+import mods.railcraft.common.carts.CartTools;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
@@ -84,7 +84,7 @@ public class TrackWye extends TrackSwitchBase {
                 offset = offset.north();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
+        return CartTools.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class TrackWye extends TrackSwitchBase {
                 offset = offset.east();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
+        return CartTools.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class TrackWye extends TrackSwitchBase {
                 offset = offset.south();
             }
         }
-        return CartUtils.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
+        return CartTools.getMinecartUUIDsAt(theWorldAsserted(), offset, 0.1f);
     }
 
     @Override

@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import com.google.common.base.Optional;
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.bore.IBoreHead;
 import mods.railcraft.api.carts.bore.IMineable;
@@ -639,7 +640,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     protected void stockBallast() {
         if (InvTools.isEmptySlot(invBallast)) {
-            ItemStack stack = CartTools.transferHelper.pullStack(this, StandardStackFilters.BALLAST);
+            ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.BALLAST);
             if (stack != null)
                 InvTools.moveItemStack(stack, invBallast);
         }
@@ -667,7 +668,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     protected void stockTracks() {
         if (InvTools.isEmptySlot(invRails)) {
-            ItemStack stack = CartTools.transferHelper.pullStack(this, StandardStackFilters.TRACK);
+            ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.TRACK);
             if (stack != null)
                 InvTools.moveItemStack(stack, invRails);
         }
@@ -793,7 +794,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 stack = InvTools.moveItemStack(stack, invBallast);
 
             if (stack != null && stack.stackSize > 0)
-                stack = CartTools.transferHelper.pushStack(this, stack);
+                stack = CartToolsAPI.transferHelper.pushStack(this, stack);
 
             if (stack != null && stack.stackSize > 0 && !RailcraftConfig.boreDestroysBlocks()) {
                 float f = 0.7F;
@@ -965,7 +966,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     protected void stockFuel() {
         if (InvTools.isEmptySlot(invFuel)) {
-            ItemStack stack = CartTools.transferHelper.pullStack(this, StandardStackFilters.FUEL);
+            ItemStack stack = CartToolsAPI.transferHelper.pullStack(this, StandardStackFilters.FUEL);
             if (stack != null)
                 InvTools.moveItemStack(stack, invFuel);
         }

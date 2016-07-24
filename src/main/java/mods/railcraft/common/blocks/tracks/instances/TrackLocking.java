@@ -1,15 +1,15 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.instances;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.events.CartLockdownEvent;
 import mods.railcraft.api.tracks.ITrackLockdown;
@@ -238,7 +238,7 @@ public class TrackLocking extends TrackBaseRailcraft implements ITrackLockdown, 
                 else
                     trainDelay = 0; // We've encountered a new train, force the delay to 0 so we return false
             } else if (trainLeaving) {
-                List<EntityMinecart> carts = CartTools.getMinecartsAt(theWorldAsserted(), getPos(), 0.0f);
+                List<EntityMinecart> carts = CartToolsAPI.getMinecartsAt(theWorldAsserted(), getPos(), 0.0f);
                 for (EntityMinecart cart : carts) {
                     if (Train.areInSameTrain(cart, prevCart)) {
                         trainDelay = TrackTools.TRAIN_LOCKDOWN_DELAY;

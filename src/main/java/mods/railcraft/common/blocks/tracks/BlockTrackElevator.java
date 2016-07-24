@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail;
@@ -356,7 +357,7 @@ public class BlockTrackElevator extends Block implements IRailcraftObject {
             boolean nextIsOffload = isOffloadRail(world, posUp, state);
             if (nextIsOffload || WorldPlugin.isBlockAt(world, posUp, this)) {
                 boolean empty = true;
-                for (EntityMinecart c : CartTools.getMinecartsAt(world, posUp, 0.2f)) {
+                for (EntityMinecart c : CartToolsAPI.getMinecartsAt(world, posUp, 0.2f)) {
                     if (c != cart)
                         empty = false;
                 }
@@ -375,7 +376,7 @@ public class BlockTrackElevator extends Block implements IRailcraftObject {
             return;
         } else {
             boolean empty = true;
-            for (EntityMinecart c : CartTools.getMinecartsAt(world, posDown, 0.2f)) {
+            for (EntityMinecart c : CartToolsAPI.getMinecartsAt(world, posDown, 0.2f)) {
                 if (c != cart)
                     empty = false;
             }

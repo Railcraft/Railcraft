@@ -1,14 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import mods.railcraft.api.electricity.IElectricMinecart;
 import net.minecraft.entity.Entity;
@@ -139,30 +139,13 @@ public class Train implements Iterable<EntityMinecart> {
     @Override
     public Iterator<EntityMinecart> iterator() {
         LinkageManager lm = LinkageManager.instance();
-        return Iterators.transform(Iterators.unmodifiableIterator(carts.iterator()), lm::getCartFromUUID);
-//        return new Iterator<EntityMinecart>() {
-//            private final PeekingIterator<UUID> it = Iterators.peekingIterator(carts.iterator());
-//            private final LinkageManager lm = LinkageManager.instance();
-//            @Nullable
-//            EntityMinecart nextCart;
-//
-//            @Override
-//            public boolean hasNext() {
-//                return it.hasNext() && (nextCart = lm.getCartFromUUID(it.peek())) != null;
-//            }
-//
-//            @Override
-//            public EntityMinecart next() {
-//                it.next();
-//                Objects.requireNonNull(nextCart);
-//                return nextCart;
-//            }
-//
-//            @Override
-//            public void remove() {
-//                throw new UnsupportedOperationException("Removing not supported.");
-//            }
-//        };
+        List<EntityMinecart> entities = new ArrayList<>(carts.size());
+        for (UUID cart : carts) {
+            EntityMinecart entity = lm.getCartFromUUID(cart);
+            if (entity != null)
+                entities.add(entity);
+        }
+        return entities.iterator();
     }
 
     private void buildTrain(@Nullable EntityMinecart prev, EntityMinecart next) {

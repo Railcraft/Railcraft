@@ -1,15 +1,16 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
@@ -25,12 +26,16 @@ import net.minecraft.world.World;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class RailcraftBlockContainer extends BlockContainer implements IRailcraftBlock {
-    public RailcraftBlockContainer(Material materialIn) {
+    protected RailcraftBlockContainer(Material materialIn) {
         super(materialIn);
     }
 
-    protected RailcraftBlockContainer(Material p_i46402_1_, MapColor p_i46402_2_) {
-        super(p_i46402_1_, p_i46402_2_);
+    protected RailcraftBlockContainer(Material material, MapColor mapColor) {
+        super(material, mapColor);
+    }
+
+    {
+        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
     @Override

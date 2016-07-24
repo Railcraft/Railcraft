@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,10 +6,10 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -80,10 +80,10 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         ItemStack itemStack = event.getItemStack();
         if (itemStack != null) {
             Item item = itemStack.getItem();
-            if (item != null && CartUtils.vanillaCartItemMap.containsKey(item)) {
+            if (item != null && CartTools.vanillaCartItemMap.containsKey(item)) {
                 event.setResult(Event.Result.DENY);
-                EntityMinecart placedCart = CartUtils.placeCart(
-                        CartUtils.vanillaCartItemMap.get(item),
+                EntityMinecart placedCart = CartTools.placeCart(
+                        CartTools.vanillaCartItemMap.get(item),
                         player.getGameProfile(), itemStack, world,
                         event.getPos());
                 if (placedCart != null && !player.capabilities.isCreativeMode)
@@ -279,14 +279,14 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
 
         if (data.getBoolean("explode")) {
             cart.getEntityData().setBoolean("explode", false);
-            CartUtils.explodeCart(cart);
+            CartTools.explodeCart(cart);
         }
 
-        if (data.getBoolean("HighSpeed"))
-            if (CartUtils.cartVelocityIsLessThan(cart, TrackSpeed.SPEED_CUTOFF))
-                data.setBoolean("HighSpeed", false);
+        if (data.getBoolean(CartTools.HIGH_SPEED_TAG))
+            if (CartTools.cartVelocityIsLessThan(cart, TrackSpeed.SPEED_CUTOFF))
+                data.setBoolean(CartTools.HIGH_SPEED_TAG, false);
             else if (!TrackSpeed.isTrackHighSpeedCapable(cart.worldObj, event.getPos()))
-                CartUtils.explodeCart(cart);
+                CartTools.explodeCart(cart);
 
         cart.motionX = Math.copySign(Math.min(Math.abs(cart.motionX), 9.5), cart.motionX);
         cart.motionY = Math.copySign(Math.min(Math.abs(cart.motionY), 9.5), cart.motionY);
@@ -324,14 +324,14 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
                 }
 
         if (MiscTools.RANDOM.nextFloat() < 0.001f) {
-            List<EntityMinecart> carts = CartTools.getMinecartsAt(cart.worldObj, cart.getPosition(), 0);
+            List<EntityMinecart> carts = CartToolsAPI.getMinecartsAt(cart.worldObj, cart.getPosition(), 0);
             if (carts.size() >= 12)
                 primeToExplode(cart);
         }
     }
 
     private void testHighSpeedCollision(EntityMinecart cart, Entity other) {
-        boolean highSpeed = cart.getEntityData().getBoolean("HighSpeed");
+        boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
         if (highSpeed) {
             if (other instanceof EntityMinecart && Train.areInSameTrain(cart, (EntityMinecart) other))
                 return;
@@ -341,7 +341,7 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
             }
 
             if (other instanceof EntityMinecart) {
-                boolean otherHighSpeed = other.getEntityData().getBoolean("HighSpeed");
+                boolean otherHighSpeed = CartTools.isTravellingHighSpeed((EntityMinecart) other);
                 if (!otherHighSpeed || (cart.motionX > 0 ^ other.motionX > 0) || (cart.motionZ > 0 ^ other.motionZ > 0)) {
                     primeToExplode(cart);
                     return;
@@ -365,8 +365,8 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         EntityMinecart cart = event.getMinecart();
         EntityPlayer player = event.getPlayer();
 
-        if (!CartTools.doesCartHaveOwner(cart))
-            CartTools.setCartOwner(cart, player);
+        if (!CartToolsAPI.doesCartHaveOwner(cart))
+            CartToolsAPI.setCartOwner(cart, player);
 
         if (!(cart instanceof EntityTunnelBore) && player.getDistanceSqToEntity(cart) > MAX_INTERACT_DIST_SQ) {
             event.setCanceled(true);

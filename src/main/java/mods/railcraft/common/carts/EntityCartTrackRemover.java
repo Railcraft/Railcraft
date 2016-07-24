@@ -1,6 +1,16 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.instances.TrackForce;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -66,7 +76,7 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
             tracksRemoved.add(track);
         else if ((TrackTools.getTrackInstanceAt(worldObj, track) instanceof TrackForce))
             tracksRemoved.add(track);
-        else if (!CartTools.isMinecartAt(worldObj, track, -0.2f)) {
+        else if (!CartToolsAPI.isMinecartAt(worldObj, track, -0.2f)) {
             Block block = WorldPlugin.getBlock(worldObj, track);
             removeOldTrack(track, block);
             blink();

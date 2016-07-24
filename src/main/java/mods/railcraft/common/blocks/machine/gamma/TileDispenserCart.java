@@ -1,17 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.gamma;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
-import mods.railcraft.common.carts.CartUtils;
+import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -89,7 +90,7 @@ public class TileDispenserCart extends TileMachineItem {
     }
 
     public void onPulse() {
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0, direction);
+        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, direction);
         if (cart == null) {
             if (timeSinceLastSpawn > RailcraftConfig.getCartDispenserMinDelay() * 20)
                 for (int ii = 0; ii < getSizeInventory(); ii++) {
@@ -103,7 +104,7 @@ public class TileDispenserCart extends TileMachineItem {
                                 canPlace = ((IMinecartItem) cartStack.getItem()).canBePlacedByNonPlayer(cartStack);
                             if (canPlace) {
                                 ItemStack placedStack = cartStack.copy();
-                                EntityMinecart placedCart = CartUtils.placeCart(getOwner(), placedStack, (WorldServer) worldObj, pos);
+                                EntityMinecart placedCart = CartTools.placeCart(getOwner(), placedStack, (WorldServer) worldObj, pos);
                                 if (placedCart != null) {
                                     decrStackSize(ii, 1);
                                     timeSinceLastSpawn = 0;
@@ -133,7 +134,7 @@ public class TileDispenserCart extends TileMachineItem {
             if (remainder == null) {
                 InvTools.moveItemStack(cartStack, this);
                 if (cart.isBeingRidden())
-                    CartUtils.removePassengers(cart);
+                    CartTools.removePassengers(cart);
                 cart.setDead();
             }
         }

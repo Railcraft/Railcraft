@@ -1,16 +1,17 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -54,7 +55,7 @@ public class TrackSpeedBoost extends TrackSpeed implements ITrackPowered {
                 cart.motionZ += (cart.motionZ / speed) * BOOST_AMOUNT;
             }
         } else {
-            boolean highSpeed = cart.getEntityData().getBoolean("HighSpeed");
+            boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
             if (highSpeed) {
                 if (cart instanceof EntityLocomotive) {
                     ((EntityLocomotive) cart).forceIdle(20);

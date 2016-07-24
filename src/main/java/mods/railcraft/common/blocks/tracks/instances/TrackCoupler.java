@@ -1,15 +1,15 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.instances;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
@@ -136,14 +136,14 @@ public class TrackCoupler extends TrackPowered {
         COUPLER("coupler", 8) {
             @Override
             public void onMinecartPass(TrackCoupler track, EntityMinecart cart) {
-                CartTools.getLinkageManager(cart.worldObj).createLink(track.taggedCart, cart);
+                CartToolsAPI.getLinkageManager(cart.worldObj).createLink(track.taggedCart, cart);
                 track.taggedCart = cart;
             }
         },
         DECOUPLER("decoupler", 0) {
             @Override
             public void onMinecartPass(TrackCoupler track, EntityMinecart cart) {
-                CartTools.getLinkageManager(cart.worldObj).breakLinks(cart);
+                CartToolsAPI.getLinkageManager(cart.worldObj).breakLinks(cart);
                 LinkageManager.printDebug("Reason For Broken Link: Passed Decoupler Track.");
             }
         },

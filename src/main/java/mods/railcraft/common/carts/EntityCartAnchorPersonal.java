@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
 import mods.railcraft.common.core.Railcraft;
@@ -41,7 +42,7 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
     @Override
     public void onUpdate() {
         if (ticket != null) {
-            if (PlayerPlugin.isPlayerConnected(CartTools.getCartOwner(this)))
+            if (PlayerPlugin.isPlayerConnected(CartToolsAPI.getCartOwner(this)))
                 ticksSincePlayerLogged = 0;
             else
                 ticksSincePlayerLogged++;
@@ -58,7 +59,7 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
 
     @Override
     protected ForgeChunkManager.Ticket getTicketFromForge() {
-        return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), CartTools.getCartOwner(this).getName(), worldObj, ForgeChunkManager.Type.ENTITY);
+        return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), CartToolsAPI.getCartOwner(this).getName(), worldObj, ForgeChunkManager.Type.ENTITY);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class EntityCartAnchorPersonal extends EntityCartAnchor {
 
     @Override
     protected boolean meetsTicketRequirements() {
-        return PlayerPlugin.isPlayerConnected(CartTools.getCartOwner(this)) && super.meetsTicketRequirements();
+        return PlayerPlugin.isPlayerConnected(CartToolsAPI.getCartOwner(this)) && super.meetsTicketRequirements();
     }
 
     @Override

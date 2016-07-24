@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.core;
 
@@ -37,11 +37,11 @@ public interface IRailcraftObject {
 
     @Nullable
     default ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        checkVariant(variant);
         int meta;
-        if (variant != null)
+        if (variant != null) {
+            checkVariant(variant);
             meta = variant.ordinal();
-        else
+        } else
             meta = 0;
         if (this instanceof Item)
             return new ItemStack((Item) this, qty, meta);

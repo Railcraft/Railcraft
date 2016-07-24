@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ISwitchDevice;
@@ -14,7 +14,7 @@ import mods.railcraft.api.tracks.ISwitchDevice.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackSwitch;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.carts.CartUtils;
+import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.LinkageManager;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
@@ -324,7 +324,7 @@ public abstract class TrackSwitchBase extends TrackBaseRailcraft implements ITra
         // We only set sprung/locked when a cart enters our track, this is
         // mainly for visual purposes as the subclass's getRailDirection()
         // determines which direction the carts actually take.
-        List<UUID> cartsOnTrack = CartUtils.getMinecartUUIDsAt(theWorldAsserted(), getTile().getPos(), 0.3f);
+        List<UUID> cartsOnTrack = CartTools.getMinecartUUIDsAt(theWorldAsserted(), getTile().getPos(), 0.3f);
 
         EntityMinecart bestCart = getBestCartForVisualState(cartsOnTrack);
 

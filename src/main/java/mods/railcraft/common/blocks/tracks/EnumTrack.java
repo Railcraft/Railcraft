@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.core.IRailcraftModule;
@@ -27,13 +28,13 @@ import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
 
 public enum EnumTrack {
 
@@ -88,6 +89,10 @@ public enum EnumTrack {
     public static final EnumTrack[] VALUES = values();
     private static final List<EnumTrack> creativeList = new ArrayList<EnumTrack>(50);
     private static final Set<TrackSpec> trackSpecs = new HashSet<TrackSpec>(50);
+    private static final Function<ItemStack, List<String>> tooltipProvider = stack -> {
+        ToolTip toolTip = ToolTip.buildToolTip(stack.getUnlocalizedName() + ".tip");
+        return toolTip != null ? toolTip.convertToStrings() : Collections.emptyList();
+    };
 
     static {
         trackSpecs.add(TrackRegistry.getDefaultTrackSpec());
@@ -176,9 +181,7 @@ public enum EnumTrack {
 
     public void register() {
         if (trackSpec == null && RailcraftBlocks.track.isLoaded() && RailcraftConfig.isSubBlockEnabled(getTag())) {
-            ToolTip toolTip = ToolTip.buildToolTip("tile.railcraft." + MiscTools.cleanTag(getTag()) + ".tip");
-            List<String> tips = toolTip != null ? toolTip.convertToStrings() : null;
-            trackSpec = new TrackSpec((short) ordinal(), getTag(), /* TODO: create a ModelResourceLocation */ null, trackInstance, tips);
+            trackSpec = new TrackSpec((short) ordinal(), getTag(), /* TODO: create a ModelResourceLocation */ null, trackInstance, tooltipProvider);
             try {
                 TrackRegistry.registerTrackSpec(trackSpec);
                 trackSpecs.add(trackSpec);

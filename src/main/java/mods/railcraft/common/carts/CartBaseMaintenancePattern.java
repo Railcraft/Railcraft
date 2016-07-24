@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
@@ -54,7 +55,7 @@ public abstract class CartBaseMaintenancePattern extends CartBaseMaintenance imp
         ItemStack stackStock = getStackInSlot(slotStock);
 
         if (stackStock != null && !InvTools.isItemEqual(stackReplace, stackStock)) {
-            CartTools.transferHelper.offerOrDropItem(this, stackStock);
+            CartToolsAPI.transferHelper.offerOrDropItem(this, stackStock);
             setInventorySlotContents(slotStock, null);
         }
 
@@ -64,7 +65,7 @@ public abstract class CartBaseMaintenancePattern extends CartBaseMaintenance imp
         stackStock = getStackInSlot(slotStock);
 
         if (stackStock == null)
-            setInventorySlotContents(slotStock, CartTools.transferHelper.pullStack(this, StackFilters.of(stackReplace)));
+            setInventorySlotContents(slotStock, CartToolsAPI.transferHelper.pullStack(this, StackFilters.of(stackReplace)));
     }
 
     @Override

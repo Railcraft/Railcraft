@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import com.google.common.collect.MapMaker;
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -58,7 +59,7 @@ public class LinkageManager implements ILinkageManager {
      * @return LinkageManager
      */
     public static LinkageManager instance() {
-        return (LinkageManager) CartTools.linkageManager;
+        return (LinkageManager) CartToolsAPI.linkageManager;
     }
 
     public static void printDebug(String msg, Object... args) {
@@ -67,7 +68,7 @@ public class LinkageManager implements ILinkageManager {
     }
 
     public static void reset() {
-        CartTools.linkageManager = new LinkageManager();
+        CartToolsAPI.linkageManager = new LinkageManager();
     }
 
     /**

@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IPaintedCart;
 import mods.railcraft.api.carts.IRefuelableCart;
 import mods.railcraft.api.carts.IRoutableCart;
@@ -16,8 +17,8 @@ import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -271,7 +272,7 @@ public class RoutingLogic {
 
         @Override
         public boolean matches(IRoutingTile tile, EntityMinecart cart) {
-            return StringUtils.equalsIgnoreCase(value, CartTools.getCartOwner(cart).getName());
+            return StringUtils.equalsIgnoreCase(value, CartToolsAPI.getCartOwner(cart).getName());
         }
 
     }

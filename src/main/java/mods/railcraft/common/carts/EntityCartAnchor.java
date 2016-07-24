@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.alpha.TileAnchorWorld;
@@ -136,13 +137,13 @@ public class EntityCartAnchor extends CartBaseContainer implements IAnchor, IMin
     private void stockFuel() {
         ItemStack stack = getStackInSlot(0);
         if (stack != null && !getFuelMap().containsKey(stack)) {
-            CartTools.transferHelper.offerOrDropItem(this, stack);
+            CartToolsAPI.transferHelper.offerOrDropItem(this, stack);
             setInventorySlotContents(0, null);
             return;
         }
         stack = getStackInSlot(0);
         if (stack == null) {
-            ItemStack found = CartTools.transferHelper.pullStack(this, getFuelMap().getStackFilter());
+            ItemStack found = CartToolsAPI.transferHelper.pullStack(this, getFuelMap().getStackFilter());
             if (found != null)
                 InvTools.moveItemStack(found, this);
         }

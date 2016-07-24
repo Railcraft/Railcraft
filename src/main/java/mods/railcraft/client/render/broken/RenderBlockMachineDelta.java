@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.broken;
 
 import mods.railcraft.api.electricity.GridTools;
@@ -14,11 +14,11 @@ import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler.ConnectType;
 import mods.railcraft.client.render.tools.MatrixTransformations;
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
-import mods.railcraft.common.blocks.machine.delta.TileWire;
-import mods.railcraft.common.blocks.machine.delta.TileWire.AddonType;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.blocks.wire.BlockFrame;
+import mods.railcraft.common.blocks.wire.TileWire;
+import mods.railcraft.common.blocks.wire.TileWire.AddonType;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;

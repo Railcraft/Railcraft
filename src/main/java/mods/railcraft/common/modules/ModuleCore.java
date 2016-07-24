@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,10 +6,10 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.api.fuel.FuelManager;
@@ -87,7 +87,7 @@ public class ModuleCore extends RailcraftModulePayload {
             @Override
             public void construction() {
                 LinkageManager.reset();
-                CartTools.transferHelper = TrainTransferHelper.INSTANCE;
+                CartToolsAPI.transferHelper = TrainTransferHelper.INSTANCE;
 
                 Railcraft.rootCommand.addChildCommand(new CommandDebug());
                 Railcraft.rootCommand.addChildCommand(new CommandAdmin());
@@ -167,7 +167,7 @@ public class ModuleCore extends RailcraftModulePayload {
                         if (riding instanceof EntityMinecart) {
                             EntityMinecart cart = (EntityMinecart) riding;
                             if (Train.getTrain(cart).size() > 1)
-                                CartUtils.removePassengers(cart, event.player.getPositionVector().addVector(0, 1, 0));
+                                CartTools.removePassengers(cart, event.player.getPositionVector().addVector(0, 1, 0));
                         }
                     }
                 });
@@ -297,8 +297,8 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 Class<? extends Entity> minecartClass = EntityList.NAME_TO_CLASS.remove(minecartType.getName());
 
-                CartUtils.classReplacements.put(minecartClass, cartType);
-                CartUtils.vanillaCartItemMap.put(original, cartType);
+                CartTools.classReplacements.put(minecartClass, cartType);
+                CartTools.vanillaCartItemMap.put(original, cartType);
 
                 EntityList.ID_TO_CLASS.remove(entityId);
                 EntityList.addMapping(cartType.getCartClass(), minecartType.getName(), entityId);

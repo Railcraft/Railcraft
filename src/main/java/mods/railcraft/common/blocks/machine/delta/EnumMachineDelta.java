@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,17 +6,15 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.delta;
 
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.BoundingBoxManager;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MachineProxy;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.modules.ModuleElectricity;
 import mods.railcraft.common.modules.ModuleTransport;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.properties.PropertyEnum;
@@ -33,7 +31,6 @@ import java.util.List;
  */
 public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
 
-    WIRE(ModuleElectricity.class, "wire", TileWire.class, 1, 1),
     CAGE(ModuleTransport.class, "cage", TileCage.class, 4, 1);
     public static final PropertyEnum<EnumMachineDelta> VARIANT = PropertyEnum.create("variant", EnumMachineDelta.class);
     private static final List<EnumMachineDelta> creativeList = new ArrayList<EnumMachineDelta>();
@@ -41,10 +38,7 @@ public enum EnumMachineDelta implements IEnumMachine<EnumMachineDelta> {
     public static final MachineProxy<EnumMachineDelta> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
 
     static {
-        creativeList.add(WIRE);
 //        creativeList.add(SAWMILL);
-
-        BoundingBoxManager.registerBoundingBox(WIRE, new TileWire.WireBoundingBox());
     }
 
     private final Class<? extends IRailcraftModule> module;

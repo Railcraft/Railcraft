@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
@@ -138,7 +138,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         if (nbt.hasKey("whistlePitch"))
             whistlePitch = nbt.getFloat("whistlePitch");
         if (nbt.hasKey("owner")) {
-            CartTools.setCartOwner(this, PlayerPlugin.readOwnerFromNBT(nbt));
+            CartToolsAPI.setCartOwner(this, PlayerPlugin.readOwnerFromNBT(nbt));
             setSecurityState(LocoLockButtonState.LOCKED);
         }
         if (nbt.hasKey("security"))
@@ -161,7 +161,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public GameProfile getOwner() {
-        return CartTools.getCartOwner(this);
+        return CartToolsAPI.getCartOwner(this);
     }
 
     private float getNewWhistlePitch() {
@@ -178,8 +178,8 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     @Override
     public ItemStack getCartItem() {
         ItemStack item = getCartItemBase();
-        if (isSecure() && CartTools.doesCartHaveOwner(this))
-            ItemLocomotive.setOwnerData(item, CartTools.getCartOwner(this));
+        if (isSecure() && CartToolsAPI.doesCartHaveOwner(this))
+            ItemLocomotive.setOwnerData(item, CartToolsAPI.getCartOwner(this));
         ItemLocomotive.setItemColorData(item, getPrimaryColor(), getSecondaryColor());
         ItemLocomotive.setItemWhistleData(item, whistlePitch);
         ItemLocomotive.setModel(item, getModel());
@@ -374,7 +374,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     @Override
     public boolean setDestination(@Nullable ItemStack ticket) {
         if (ticket != null && ticket.getItem() instanceof ItemTicket) {
-            if (isSecure() && !ItemTicket.matchesOwnerOrOp(ticket, CartTools.getCartOwner(this)))
+            if (isSecure() && !ItemTicket.matchesOwnerOrOp(ticket, CartToolsAPI.getCartOwner(this)))
                 return false;
             String dest = ItemTicket.getDestination(ticket);
             if (!dest.equals(getDestination())) {
@@ -413,7 +413,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
                     force = -force;
                     break;
                 case MAX:
-                    boolean highSpeed = getEntityData().getBoolean("HighSpeed");
+                    boolean highSpeed = CartTools.isTravellingHighSpeed(this);
                     if (highSpeed)
                         force *= HS_FORCE_BONUS;
                     break;
@@ -500,7 +500,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         if (Game.isHost(worldObj)) {
             if (!entity.isEntityAlive())
                 return;
-            if (!Train.getTrain(this).isPassenger(entity) && (cartVelocityIsGreaterThan(0.2f) || getEntityData().getBoolean("HighSpeed")) && MiscTools.isKillableEntity(entity)) {
+            if (!Train.getTrain(this).isPassenger(entity) && (cartVelocityIsGreaterThan(0.2f) || CartTools.isTravellingHighSpeed(this)) && MiscTools.isKillableEntity(entity)) {
                 EntityLivingBase living = (EntityLivingBase) entity;
                 if (RailcraftConfig.locomotiveDamageMobs())
                     living.attackEntityFrom(RailcraftDamageSource.TRAIN, getDamageToRoadKill(living));
@@ -547,7 +547,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     protected void explode() {
-        CartUtils.explodeCart(this);
+        CartTools.explodeCart(this);
         setDead();
     }
 

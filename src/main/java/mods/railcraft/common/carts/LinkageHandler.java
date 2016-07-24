@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.ILinkableCart;
@@ -141,7 +142,7 @@ public class LinkageHandler {
 //            stretch *= 2;
 //        }
 
-        boolean highSpeed = cart1.getEntityData().getBoolean("HighSpeed");
+        boolean highSpeed = CartTools.isTravellingHighSpeed(cart1);
 
         double stiffness = highSpeed ? HS_STIFFNESS : STIFFNESS;
         double springX = stiffness * stretch * unit.getX();
@@ -238,15 +239,16 @@ public class LinkageHandler {
             }
         }
 
-        if (linked && RailcraftModuleManager.isModuleEnabled(ModuleLocomotives.class)) {
+        if (linked && RailcraftModuleManager.isModuleEnabled(ModuleLocomotives.class) && !CartTools.isTravellingHighSpeed(cart)) {
             cart.motionX *= LINK_DRAG;
             cart.motionZ *= LINK_DRAG;
         }
 
-        if ((link_A == null && link_B != null) || (link_A != null && link_B == null)) {
-            Train.getTrain(cart).refreshMaxSpeed();
-        } else if (link_A == null)
+        if (link_A == null && link_B == null)
             Train.getTrain(cart).setMaxSpeed(1.2f);
+        else if (link_A == null || link_B == null)
+            Train.getTrain(cart).refreshMaxSpeed();
+
     }
 
 //    /**

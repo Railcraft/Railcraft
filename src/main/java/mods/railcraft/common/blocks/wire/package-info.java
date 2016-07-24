@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.common.plugins.forestry;
+package mods.railcraft.common.blocks.wire;
 
 import mcp.MethodsReturnNonnullByDefault;
 

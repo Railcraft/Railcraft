@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -38,10 +39,11 @@ import java.util.stream.Collectors;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartUtils {
+public class CartTools {
 
     public static Map<Item, ICartType> vanillaCartItemMap = new HashMap<Item, ICartType>();
     public static Map<Class<? extends Entity>, ICartType> classReplacements = new HashMap<Class<? extends Entity>, ICartType>();
+    public static String HIGH_SPEED_TAG = "HighSpeed";
 
     /**
      * Spawns a new cart entity using the provided item.
@@ -68,18 +70,18 @@ public class CartUtils {
         if (vanillaType != null)
             return placeCart(vanillaType, owner, cart, world, pos);
 
-        return CartTools.placeCart(owner, cart, world, pos);
+        return CartToolsAPI.placeCart(owner, cart, world, pos);
     }
 
     @Nullable
     public static EntityMinecart placeCart(ICartType cartType, GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         if (TrackTools.isRailBlock(state))
-            if (!CartTools.isMinecartAt(world, pos, 0)) {
+            if (!CartToolsAPI.isMinecartAt(world, pos, 0)) {
                 EntityMinecart cart = cartType.makeCart(cartStack, world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 if (cartStack.hasDisplayName())
                     cart.setCustomNameTag(cartStack.getDisplayName());
-                CartTools.setCartOwner(cart, owner);
+                CartToolsAPI.setCartOwner(cart, owner);
                 if (world.spawnEntityInWorld(cart))
                     return cart;
             }
@@ -109,7 +111,7 @@ public class CartUtils {
     public static void explodeCart(EntityMinecart cart) {
         if (cart.isDead)
             return;
-        cart.getEntityData().setBoolean("HighSpeed", false);
+        setTravellingHighSpeed(cart, false);
         cart.motionX = 0;
         cart.motionZ = 0;
         if (Game.isClient(cart.worldObj))
@@ -118,6 +120,14 @@ public class CartUtils {
         cart.worldObj.newExplosion(cart, cart.posX, cart.posY, cart.posZ, 3F, true, true);
         if (MiscTools.RANDOM.nextInt(2) == 0)
             cart.setDead();
+    }
+
+    public static void setTravellingHighSpeed(EntityMinecart cart, boolean flag) {
+        cart.getEntityData().setBoolean(HIGH_SPEED_TAG, flag);
+    }
+
+    public static boolean isTravellingHighSpeed(EntityMinecart cart) {
+        return cart.getEntityData().getBoolean(HIGH_SPEED_TAG);
     }
 
     public static boolean cartVelocityIsLessThan(EntityMinecart cart, float vel) {
@@ -139,7 +149,7 @@ public class CartUtils {
         return entities.stream().filter(cart -> !cart.isDead).map(Entity::getPersistentID).collect(Collectors.toList());
     }
 
-    public static void addPassenger(EntityMinecart cart, Entity passenger){
+    public static void addPassenger(EntityMinecart cart, Entity passenger) {
         cart.startRiding(passenger);
     }
 

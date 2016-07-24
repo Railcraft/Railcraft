@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.locking;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.tracks.instances.TrackLocking;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,7 +40,7 @@ public class HoldingLockingProfile extends LockingProfile {
     public void onRelease(EntityMinecart cart) {
         super.onRelease(cart);
         int meta = track.getTile().getBlockMetadata();
-        double speed = CartTools.getCartSpeedUncapped(cart);
+        double speed = CartToolsAPI.getCartSpeedUncapped(cart);
         double boostX = TrackLocking.START_BOOST;
         double boostZ = TrackLocking.START_BOOST;
         if (speed > 0.005D) {
@@ -60,7 +61,7 @@ public class HoldingLockingProfile extends LockingProfile {
 
     protected void setLaunchDirection(EntityMinecart cart) {
         int meta = track.getTile().getBlockMetadata();
-        double speed = CartTools.getCartSpeedUncapped(cart);
+        double speed = CartToolsAPI.getCartSpeedUncapped(cart);
         if (speed > DIR_THRESHOLD) {
             boolean launch = launchForward;
             if (meta == 0 || meta == 4 || meta == 5)

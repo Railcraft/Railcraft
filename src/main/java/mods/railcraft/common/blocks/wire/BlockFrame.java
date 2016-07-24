@@ -1,17 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
-package mods.railcraft.common.blocks.frame;
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+package mods.railcraft.common.blocks.wire;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
-import mods.railcraft.common.blocks.machine.delta.TileWire;
-import mods.railcraft.common.blocks.machine.delta.TileWire.AddonType;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -27,7 +26,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -101,13 +99,9 @@ public class BlockFrame extends Block implements IPostConnection, IRailcraftObje
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (heldItem != null && InvTools.isItemEqualIgnoreNBT(heldItem, EnumMachineDelta.WIRE.getItem()))
-            if (WorldPlugin.setBlockState(worldIn, pos, EnumMachineDelta.WIRE.getState(), 2)) {
-                TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
-                if (tile instanceof TileWire) {
-                    TileWire wire = (TileWire) tile;
-                    wire.setAddon(AddonType.FRAME);
-                }
+        if (RailcraftBlocks.wire.isEqual(heldItem))
+            //noinspection ConstantConditions
+            if (WorldPlugin.setBlockState(worldIn, pos, RailcraftBlocks.wire.getDefaultState().withProperty(BlockWire.ADDON, BlockWire.Addon.FRAME), 2)) {
                 if (!playerIn.capabilities.isCreativeMode)
                     playerIn.setHeldItem(hand, InvTools.depleteItem(heldItem));
                 return true;

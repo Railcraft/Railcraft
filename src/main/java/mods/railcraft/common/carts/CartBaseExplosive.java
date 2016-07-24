@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IExplosiveCart;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -123,7 +124,7 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
 
     @SuppressWarnings("WeakerAccess")
     protected float getBlastRadiusWithSpeedModifier() {
-        double blast = Math.min(CartTools.getCartSpeedUncapped(this), getMaxBlastRadiusBonus());
+        double blast = Math.min(CartToolsAPI.getCartSpeedUncapped(this), getMaxBlastRadiusBonus());
         return (float) (getBlastRadius() + rand.nextDouble() * 1.5 * blast);
     }
 

@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
@@ -119,7 +120,7 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
         List<ItemStack> drops = block.getDrops(worldObj, pos, state, 0);
 
         for (ItemStack stack : drops) {
-            CartTools.transferHelper.offerOrDropItem(this, stack);
+            CartToolsAPI.transferHelper.offerOrDropItem(this, stack);
         }
         BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirectionRaw(state);
         getEntityWorld().setBlockToAir(pos);

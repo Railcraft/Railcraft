@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,12 +6,11 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forestry;
 
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
-import forestry.api.storage.IBackpackFilter;
 import forestry.api.storage.IBackpackFilterConfigurable;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import net.minecraft.block.Block;
@@ -24,8 +23,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -34,15 +31,9 @@ import java.util.function.Predicate;
 @Optional.Interface(iface = "forestry.api.storage.IBackpackDefinition", modid = ForestryPlugin.FORESTRY_ID)
 public abstract class BaseBackpack implements IBackpackDefinition {
     private final String id;
-    protected final List<Predicate<ItemStack>> filters = new ArrayList<>();
     protected final IBackpackFilterConfigurable backpackFilter = BackpackManager.backpackInterface.createBackpackFilter();
-    protected final IBackpackFilter compoundFilter = stack -> {
-        for (Predicate<ItemStack> filter : filters) {
-            if (filter.test(stack))
-                return true;
-        }
-        return backpackFilter.test(stack);
-    };
+    @Nonnull
+    protected Predicate<ItemStack> compoundFilter = backpackFilter;
 
     protected BaseBackpack(String id) {
         this.id = id;
@@ -54,7 +45,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
 
     @Nonnull
     @Override
-    public IBackpackFilter getFilter() {
+    public Predicate<ItemStack> getFilter() {
         return compoundFilter;
     }
 
@@ -78,7 +69,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
     }
 
     public void add(Predicate<ItemStack> filter) {
-        filters.add(filter);
+        compoundFilter = compoundFilter.or(filter);
     }
 
     public void add(String oreTag) {

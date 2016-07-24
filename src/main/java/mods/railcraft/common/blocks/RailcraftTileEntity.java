@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks;
 
 import com.mojang.authlib.GameProfile;
@@ -180,7 +180,9 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     @Nonnull
-    public abstract String getLocalizationTag();
+    public String getLocalizationTag() {
+        return getBlockType().getUnlocalizedName();
+    }
 
     public List<String> getDebugOutput() {
         List<String> debug = new ArrayList<>();
@@ -232,7 +234,9 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return worldObj;
     }
 
-    public abstract short getId();
+    public short getId() {
+        return -1;
+    }
 
     @Override
     public boolean hasCustomName() {

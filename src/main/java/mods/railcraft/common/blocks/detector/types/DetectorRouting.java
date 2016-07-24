@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,10 +6,10 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.detector.types;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.DetectorSecured;
 import mods.railcraft.common.blocks.detector.EnumDetector;
@@ -103,7 +103,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, IRoutin
             return NO_POWER;
         for (EntityMinecart cart : carts) {
             if (routingController.getButtonState() == RoutingButtonState.PRIVATE)
-                if (!getOwner().equals(CartTools.getCartOwner(cart)))
+                if (!getOwner().equals(CartToolsAPI.getCartOwner(cart)))
                     continue;
             if (logic.matches(this, cart))
                 return FULL_POWER;

@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ITrackInstance;
@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerHighSpeed;
-import mods.railcraft.common.carts.CartUtils;
+import mods.railcraft.common.carts.CartTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
@@ -33,7 +33,7 @@ public class TrackSpeed extends TrackBaseRailcraft {
 
     protected static void testSafety(ITrackInstance track, EntityMinecart cart) {
         if (!isTrackSafeForHighSpeed(track, cart)) {
-            CartUtils.explodeCart(cart);
+            CartTools.explodeCart(cart);
         }
     }
 
@@ -69,7 +69,7 @@ public class TrackSpeed extends TrackBaseRailcraft {
     }
 
     protected static void testCartSpeedForBasic(ITrackInstance track, EntityMinecart cart) {
-        boolean highSpeed = cart.getEntityData().getBoolean("HighSpeed");
+        boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
         if (highSpeed) {
             testSafety(track, cart);
         } else {
@@ -79,17 +79,17 @@ public class TrackSpeed extends TrackBaseRailcraft {
     }
 
     protected static void testCartSpeedForBooster(ITrackInstance track, EntityMinecart cart) {
-        boolean highSpeed = cart.getEntityData().getBoolean("HighSpeed");
+        boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
         if (highSpeed) {
             testSafety(track, cart);
         } else if (isTrackSafeForHighSpeed(track, cart)) {
             if (Math.abs(cart.motionX) > SPEED_CUTOFF) {
                 cart.motionX = Math.copySign(0.4f, cart.motionX);
-                cart.getEntityData().setBoolean("HighSpeed", true);
+                CartTools.setTravellingHighSpeed(cart, true);
             }
             if (Math.abs(cart.motionZ) > SPEED_CUTOFF) {
                 cart.motionZ = Math.copySign(0.4f, cart.motionZ);
-                cart.getEntityData().setBoolean("HighSpeed", true);
+                CartTools.setTravellingHighSpeed(cart, true);
             }
         }
     }

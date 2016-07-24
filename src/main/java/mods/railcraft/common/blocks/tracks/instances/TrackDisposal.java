@@ -1,17 +1,17 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.carts.CartUtils;
+import mods.railcraft.common.carts.CartTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -43,7 +43,7 @@ public class TrackDisposal extends TrackSuspended implements ITrackPowered {
     public void onMinecartPass(EntityMinecart cart) {
         if (!isPowered()) {
             if (cart.isBeingRidden()) {
-                CartUtils.removePassengers(cart, cart.getPositionVector().addVector(0, -2, 0));
+                CartTools.removePassengers(cart, cart.getPositionVector().addVector(0, -2, 0));
             }
             cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
         }

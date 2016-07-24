@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IEnergyTransfer;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.electricity.IElectricMinecart;
@@ -140,7 +141,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
             return extra;
 
         try {
-            ILinkageManager lm = CartTools.getLinkageManager(worldObj);
+            ILinkageManager lm = CartToolsAPI.getLinkageManager(worldObj);
 
             EntityMinecart linkedCart = lm.getLinkedCartA(this);
             if (extra > 0 && linkedCart != source && linkedCart instanceof IEnergyTransfer)
@@ -173,7 +174,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
         if (!passAlong)
             return provide;
 
-        ILinkageManager lm = CartTools.getLinkageManager(worldObj);
+        ILinkageManager lm = CartToolsAPI.getLinkageManager(worldObj);
 
         EntityMinecart linkedCart = lm.getLinkedCartA(this);
         if (provide < amount && linkedCart != source && linkedCart instanceof IEnergyTransfer)

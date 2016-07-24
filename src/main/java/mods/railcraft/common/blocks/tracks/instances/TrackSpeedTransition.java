@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,12 +6,13 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.instances;
 
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -59,7 +60,7 @@ public class TrackSpeedTransition extends TrackSpeed implements ITrackPowered, I
             double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
             if (speed > BOOST_THRESHOLD) {
                 int meta = getTile().getBlockMetadata();
-                boolean highSpeed = cart.getEntityData().getBoolean("HighSpeed");
+                boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
                 if (meta == 0 || meta == 4 || meta == 5) {
                     if (reversed ^ cart.motionZ < 0) {
                         boostCartSpeed(cart, speed);

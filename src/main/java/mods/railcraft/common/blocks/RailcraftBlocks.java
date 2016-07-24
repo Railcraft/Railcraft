@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.blocks;
 
@@ -31,7 +31,6 @@ import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.anvil.ItemAnvil;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
-import mods.railcraft.common.blocks.frame.BlockFrame;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
@@ -47,6 +46,8 @@ import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
+import mods.railcraft.common.blocks.wire.BlockFrame;
+import mods.railcraft.common.blocks.wire.BlockWire;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
@@ -100,6 +101,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     track("track", BlockTrack::new, ItemTrack::new),
     trackElevator("track.elevator", BlockTrackElevator::new, ItemBlockRailcraft::new),
     wall("wall", BlockRailcraftWall::new, ItemMaterial::new),
+    wire("wire", BlockWire::new, ItemBlockRailcraft::new),
     worldLogic("worldlogic", BlockWorldLogic::new, ItemBlockRailcraft::new);
     public static final RailcraftBlocks[] VALUES = values();
     private final Supplier<Block> blockSupplier;

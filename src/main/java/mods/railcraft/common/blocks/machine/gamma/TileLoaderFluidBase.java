@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.gamma;
 
-import mods.railcraft.api.carts.CartTools;
-import mods.railcraft.common.carts.CartUtils;
+import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.TankManager;
@@ -87,7 +88,7 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
             return;
         if (isManualMode())
             return;
-        if (CartTools.cartVelocityIsLessThan(cart, STOP_VELOCITY)) {
+        if (CartToolsAPI.cartVelocityIsLessThan(cart, STOP_VELOCITY)) {
             flow = 0;
             setPowered(true);
         }
@@ -109,7 +110,7 @@ public abstract class TileLoaderFluidBase extends TileLoaderBase implements IInv
         ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
         ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
         if (minecartSlot1 != null || minecartSlot2 != null)
-            if (!CartUtils.doesCartMatchFilter(minecartSlot1, cart) && !CartUtils.doesCartMatchFilter(minecartSlot2, cart))
+            if (!CartTools.doesCartMatchFilter(minecartSlot1, cart) && !CartTools.doesCartMatchFilter(minecartSlot2, cart))
                 return false;
         return true;
     }

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.tooltips;
 
 import com.google.common.base.Splitter;
@@ -17,9 +18,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ToolTip extends ForwardingList<ToolTipLine> {
@@ -75,6 +76,12 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
             tips.add(line.text);
         }
         return tips;
+    }
+
+    public static ToolTip buildToolTip(List<String> lines) {
+        ToolTip toolTip = new ToolTip(750);
+        toolTip.addAll(lines.stream().map(ToolTipLine::new).collect(Collectors.toList()));
+        return toolTip;
     }
 
     @Nullable

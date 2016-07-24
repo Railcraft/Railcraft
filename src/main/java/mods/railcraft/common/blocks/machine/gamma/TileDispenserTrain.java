@@ -1,18 +1,19 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.gamma;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.api.core.items.IMinecartItem;
-import mods.railcraft.common.carts.CartUtils;
+import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.ItemCartAnchor;
 import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -88,12 +89,12 @@ public class TileDispenserTrain extends TileDispenserCart {
         }
         BlockPos offset = getPos().offset(direction);
         if ((spawn.getItem() instanceof ItemMinecart || spawn.getItem() instanceof IMinecartItem)
-                && CartTools.getMinecartOnSide(worldObj, getPos(), 0, direction) == null) {
+                && CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, direction) == null) {
             ItemStack cartItem = InvTools.removeOneItem(invStock, filter);
             if (cartItem != null) {
-                EntityMinecart cartPlaced = CartUtils.placeCart(getOwner(), cartItem, (WorldServer) worldObj, offset);
+                EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) worldObj, offset);
                 if (cartPlaced != null) {
-                    CartTools.getLinkageManager(worldObj).createLink(cartPlaced, lastCart);
+                    CartToolsAPI.getLinkageManager(worldObj).createLink(cartPlaced, lastCart);
                     lastCart = cartPlaced;
                     patternIndex++;
                     if (patternIndex >= getPattern().getSizeInventory())
@@ -122,7 +123,7 @@ public class TileDispenserTrain extends TileDispenserCart {
 
     @Override
     public void onPulse() {
-        EntityMinecart cart = CartTools.getMinecartOnSide(worldObj, getPos(), 0, direction);
+        EntityMinecart cart = CartToolsAPI.getMinecartOnSide(worldObj, getPos(), 0, direction);
         if (cart == null)
             if (!spawningTrain && canBuildTrain())
                 if (timeSinceLastSpawn > RailcraftConfig.getCartDispenserMinDelay() * 20)

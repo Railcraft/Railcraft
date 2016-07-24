@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.core.items.ITrackItem;
@@ -14,6 +14,7 @@ import mods.railcraft.api.tracks.*;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -32,6 +33,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Function;
 
 public class ItemTrack extends ItemBlockRailcraft implements ITrackItem {
 
@@ -68,16 +70,17 @@ public class ItemTrack extends ItemBlockRailcraft implements ITrackItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advanced) {
-        super.addInformation(stack, player, list, advanced);
+    @Nullable
+    public ToolTip getToolTip(ItemStack stack, EntityPlayer player, boolean adv) {
         try {
             TrackSpec spec = getTrackSpec(stack);
-            List<String> tips = spec.getItemToolTip();
-            if (tips != null)
-                list.addAll(tips);
+            Function<ItemStack, List<String>> tooltipProvider = spec.getToolTipProvider();
+            if (tooltipProvider != null)
+                return ToolTip.buildToolTip(tooltipProvider.apply(stack));
         } catch (Throwable error) {
             Game.logErrorAPI(Railcraft.NAME, error, TrackSpec.class);
         }
+        return null;
     }
 
     @Override

@@ -1,15 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -40,7 +41,7 @@ public class ItemTunnelBore extends ItemCart implements IMinecartItem {
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         IBlockState existingState = WorldPlugin.getBlockState(world, pos);
         if (TrackTools.isRailBlock(existingState)) {
-            if (Game.isHost(world) && !CartTools.isMinecartAt(world, pos, 0)) {
+            if (Game.isHost(world) && !CartToolsAPI.isMinecartAt(world, pos, 0)) {
                 BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirection(world, pos, existingState);
                 if (TrackShapeHelper.isLevelStraight(trackShape)) {
                     // TODO: test Bore placement
@@ -61,7 +62,7 @@ public class ItemTunnelBore extends ItemCart implements IMinecartItem {
 //					System.out.println("PlayerYaw = " + playerYaw + " Yaw = " + facing + " Meta = " + meta);
 
                     EntityMinecart bore = new EntityTunnelBore(world, (float) pos.getX() + 0.5F, (float) pos.getY(), (float) pos.getZ() + 0.5F, playerFacing);
-                    CartTools.setCartOwner(bore, player);
+                    CartToolsAPI.setCartOwner(bore, player);
                     world.spawnEntityInWorld(bore);
                 }
             }
