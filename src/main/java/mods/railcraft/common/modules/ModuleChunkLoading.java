@@ -99,14 +99,16 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                 RailcraftCarts cart = RailcraftCarts.ANCHOR;
                 if (EnumMachineAlpha.ANCHOR_WORLD.isAvailable() && cart.setup()) {
                     ItemStack anchor = EnumMachineAlpha.ANCHOR_WORLD.getItem();
-                    if (RailcraftConfig.canCraftAnchors()) {
-                        CraftingPlugin.addRecipe(cart.getCartItem(),
-                                "A",
-                                "M",
-                                'A', anchor,
-                                'M', Items.MINECART);
+                    if(anchor != null) {
+                        if (RailcraftConfig.canCraftAnchors()) {
+                            CraftingPlugin.addRecipe(cart.getCartItem(),
+                                    "A",
+                                    "M",
+                                    'A', anchor,
+                                    'M', Items.MINECART);
+                        }
+                        cart.setContents(anchor);
                     }
-                    cart.setContents(anchor);
                 }
 
 
