@@ -1,8 +1,16 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks.machine.epsilon;
 
-import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -16,9 +24,10 @@ import net.minecraft.tileentity.TileEntity;
 
 import java.io.IOException;
 
-public class TileElectricFeederAdmin extends TileMachineBase implements IElectricGrid {
+//TODO: migrate to new charge API
+public class TileElectricFeederAdmin extends TileMachineBase {
 
-    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 0.0);
+    //    private final ChargeHandler chargeHandler = new ChargeHandler(this, IChargeBlock.ConnectType.BLOCK, 0.0);
     private boolean powered;
 
     @Override
@@ -43,31 +52,31 @@ public class TileElectricFeederAdmin extends TileMachineBase implements IElectri
         }
     }
 
-    @Override
-    public void update() {
-        super.update();
+//    @Override
+//    public void update() {
+//        super.update();
+//
+//        if (Game.isClient(getWorld()))
+//            return;
+//
+//        if (powered) {
+//            double capacity = chargeHandler.getCapacity();
+//            try {
+//                chargeHandler.setCharge(capacity);
+//            } catch (Throwable err) {
+//                chargeHandler.addCharge(capacity - chargeHandler.getCharge());
+//                Game.logErrorAPI(Railcraft.NAME, err, IElectricGrid.class);
+//            }
+//        }
+//        chargeHandler.tick();
+//    }
 
-        if (Game.isClient(getWorld()))
-            return;
+//    @Override
+//    public ChargeHandler getChargeHandler() {
+//        return chargeHandler;
+//    }
 
-        if (powered) {
-            double capacity = chargeHandler.getCapacity();
-            try {
-                chargeHandler.setCharge(capacity);
-            } catch (Throwable err) {
-                chargeHandler.addCharge(capacity - chargeHandler.getCharge());
-                Game.logErrorAPI(Railcraft.NAME, err, IElectricGrid.class);
-            }
-        }
-        chargeHandler.tick();
-    }
-
-    @Override
-    public ChargeHandler getChargeHandler() {
-        return chargeHandler;
-    }
-
-    @Override
+    //    @Override
     public TileEntity getTile() {
         return this;
     }
@@ -80,14 +89,14 @@ public class TileElectricFeederAdmin extends TileMachineBase implements IElectri
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        chargeHandler.readFromNBT(data);
+//        chargeHandler.readFromNBT(data);
         powered = data.getBoolean("powered");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        chargeHandler.writeToNBT(data);
+//        chargeHandler.writeToNBT(data);
         data.setBoolean("powered", powered);
         return data;
     }

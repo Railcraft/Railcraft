@@ -1,14 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.epsilon;
 
-import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.ISinkDelegate;
@@ -22,9 +22,10 @@ import net.minecraft.util.EnumFacing;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileElectricFeeder extends TileMachineBase implements IElectricGrid, ISinkDelegate {
+//TODO: migrate to new charge API
+public class TileElectricFeeder extends TileMachineBase implements ISinkDelegate {
 
-    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 1);
+    //    private final ChargeHandler chargeHandler = new ChargeHandler(this, IChargeBlock.ConnectType.BLOCK, 1);
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
 
@@ -45,7 +46,7 @@ public class TileElectricFeeder extends TileMachineBase implements IElectricGrid
             addedToIC2EnergyNet = true;
         }
 
-        chargeHandler.tick();
+//        chargeHandler.tick();
     }
 
     private void dropFromNet() {
@@ -68,20 +69,20 @@ public class TileElectricFeeder extends TileMachineBase implements IElectricGrid
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        chargeHandler.readFromNBT(data);
+//        chargeHandler.readFromNBT(data);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        chargeHandler.writeToNBT(data);
+//        chargeHandler.writeToNBT(data);
         return data;
     }
 
-    @Override
-    public ChargeHandler getChargeHandler() {
-        return chargeHandler;
-    }
+//    @Override
+//    public ChargeHandler getChargeHandler() {
+//        return chargeHandler;
+//    }
 
     @Override
     public TileEntity getTile() {
@@ -90,7 +91,8 @@ public class TileElectricFeeder extends TileMachineBase implements IElectricGrid
 
     @Override
     public double getDemandedEnergy() {
-        double chargeDifference = chargeHandler.getCapacity() - chargeHandler.getCharge();
+//        double chargeDifference = chargeHandler.getCapacity() - chargeHandler.getCharge();
+        double chargeDifference = 0;
         return chargeDifference > 0.0 ? chargeDifference : 0.0;
     }
 
@@ -101,7 +103,7 @@ public class TileElectricFeeder extends TileMachineBase implements IElectricGrid
 
     @Override
     public double injectEnergy(EnumFacing directionFrom, double amount) {
-        getChargeHandler().addCharge(amount);
+//        getChargeHandler().addCharge(amount);
         return 0.0;
     }
 

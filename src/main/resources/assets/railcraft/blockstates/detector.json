@@ -11,7 +11,7 @@
     "inventory": [{"transform": "forge:default-block"}],
     "powered": {
       "true": {
-        "submodel": "railcraft:detector.overlay"
+        "submodel": "railcraft:detector_overlay"
       },
       "false": {}
     },
@@ -20,8 +20,8 @@
       "up": {"x": 270},
       "north": {},
       "south": {"y": 180},
-      "east": {"y": 90},
-      "west": {"y": 270}
+      "west": {"y": 270},
+      "east": {"y": 90}
     },
     "variant": {
       "any": {

@@ -1,14 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.beta.TileBoilerFirebox;
@@ -47,7 +47,8 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDelegate, IFluidHandler, INeedsMaintenance, ISteamUser, IElectricGrid {
+//TODO: migrate to new charge API
+public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDelegate, IFluidHandler, INeedsMaintenance, ISteamUser {
 
     enum Texture {
 
@@ -85,7 +86,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
     public double mainGauge;
     private double energy;
     private TileEntity emitterDelegate;
-    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK);
+//    private final ChargeHandler chargeHandler = new ChargeHandler(this, IChargeBlock.ConnectType.BLOCK);
 
     static {
         char[][][] map1 = {
@@ -161,10 +162,10 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         return EnumMachineAlpha.TURBINE;
     }
 
-    @Override
-    public ChargeHandler getChargeHandler() {
-        return chargeHandler;
-    }
+//    @Override
+//    public ChargeHandler getChargeHandler() {
+//        return chargeHandler;
+//    }
 
     @Override
     public void update() {
@@ -174,18 +175,19 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
             if (isStructureValid()) {
                 if (isMaster())
                     addToNet();
-                chargeHandler.tick();
+//                chargeHandler.tick();
             } else
                 dropFromNet();
 
-            double chargeNeeded = chargeHandler.getCapacity() - chargeHandler.getCharge();
+//            double chargeNeeded = chargeHandler.getCapacity() - chargeHandler.getCharge();
+            double chargeNeeded = 0;
             if (chargeNeeded > 0) {
                 double draw = (chargeNeeded / IC2_OUTPUT) * BC_OUTPUT;
                 double e = getEnergy();
                 if (e < draw)
                     draw = e;
                 removeEnergy(draw);
-                chargeHandler.addCharge((draw / BC_OUTPUT) * IC2_OUTPUT);
+//                chargeHandler.addCharge((draw / BC_OUTPUT) * IC2_OUTPUT);
             }
 
             if (isMaster()) {
@@ -329,7 +331,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         super.writeToNBT(data);
         inv.writeToNBT("rotor", data);
         tankManager.writeTanksToNBT(data);
-        chargeHandler.writeToNBT(data);
+//        chargeHandler.writeToNBT(data);
         data.setFloat("energy", (float) energy);
         data.setFloat("output", output);
         return data;
@@ -340,7 +342,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         super.readFromNBT(data);
         inv.readFromNBT("rotor", data);
         tankManager.readTanksFromNBT(data);
-        chargeHandler.readFromNBT(data);
+//        chargeHandler.readFromNBT(data);
         energy = data.getFloat("energy");
         output = data.getFloat("output");
     }

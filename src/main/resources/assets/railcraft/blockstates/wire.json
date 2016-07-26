@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "cube_all",
+    "model": "railcraft:wire",
     "textures": {"all": "railcraft:blocks/wire"}
   },
   "variants": {
@@ -9,7 +9,95 @@
     "inventory": [{"transform": "forge:default-block"}],
     "addon": {
       "none": {},
-      "frame": {}
+      "frame": {
+        "submodel": {
+          "frame": {
+            "textures": {
+              "up": "railcraft:blocks/frame.top.powered",
+              "side": "railcraft:blocks/frame.side"
+            },
+            "model": "railcraft:frame"
+          }
+        }
+      }
+    },
+    "down": {
+      "none": {},
+      "wire": {
+        "submodel": {
+          "wireD": {"model": "railcraft:wire_wire", "x": 90}
+        }
+      },
+      "plug": {
+        "submodel": {
+          "plugD": {"model": "railcraft:wire_plug", "x": 90}
+        }
+      }
+    },
+    "up": {
+      "none": {},
+      "wire": {
+        "submodel": {
+          "wireU": {"model": "railcraft:wire_wire", "x": 270}
+        }
+      },
+      "plug": {
+        "submodel": {
+          "plugU": {"model": "railcraft:wire_plug", "x": 270}
+        }
+      }
+    },
+    "north": {
+      "none": {},
+      "wire": {
+        "submodel": {
+          "wireN": {"model": "railcraft:wire_wire"}
+        }
+      },
+      "plug": {
+        "submodel": {
+          "plugN": {"model": "railcraft:wire_plug"}
+        }
+      }
+    },
+    "south": {
+      "none": {},
+      "wire": {
+        "submodel": {
+          "wireS": {"model": "railcraft:wire_wire", "y": 180}
+        }
+      },
+      "plug": {
+        "submodel": {
+          "plugS": {"model": "railcraft:wire_plug", "y": 180}
+        }
+      }
+    },
+    "west": {
+      "none": {},
+      "wire": {
+        "submodel": {
+          "wireW": {"model": "railcraft:wire_wire", "y": 270}
+        }
+      },
+      "plug": {
+        "submodel": {
+          "plugW": {"model": "railcraft:wire_plug", "y": 270}
+        }
+      }
+    },
+    "east": {
+      "none": {},
+      "wire": {
+        "submodel": {
+          "wireE": {"model": "railcraft:wire_wire", "y": 90}
+        }
+      },
+      "plug": {
+        "submodel": {
+          "plugE": {"model": "railcraft:wire_plug", "y": 90}
+        }
+      }
     }
   }
 }

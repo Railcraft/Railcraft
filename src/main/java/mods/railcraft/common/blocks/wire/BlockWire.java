@@ -12,26 +12,25 @@ package mods.railcraft.common.blocks.wire;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.RailcraftBlockContainer;
+import mods.railcraft.common.blocks.RailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.EnumTools;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
@@ -42,31 +41,44 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by CovertJaguar on 7/22/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockWire extends RailcraftBlockContainer implements IPostConnection {
+public class BlockWire extends RailcraftBlock implements IPostConnection, IChargeBlock {
 
     public static final PropertyEnum<Addon> ADDON = PropertyEnum.create("addon", Addon.class);
-    public static final PropertyEnum<EnumFacing> CONNECTION = PropertyEnum.create("connection", EnumFacing.class);
-    public static final PropertyEnum<EnumFacing> PLUG = PropertyEnum.create("plug", EnumFacing.class);
+    public static final PropertyEnum<Connection> DOWN = PropertyEnum.create("down", Connection.class);
+    public static final PropertyEnum<Connection> UP = PropertyEnum.create("up", Connection.class);
+    public static final PropertyEnum<Connection> NORTH = PropertyEnum.create("north", Connection.class);
+    public static final PropertyEnum<Connection> SOUTH = PropertyEnum.create("south", Connection.class);
+    public static final PropertyEnum<Connection> WEST = PropertyEnum.create("west", Connection.class);
+    public static final PropertyEnum<Connection> EAST = PropertyEnum.create("east", Connection.class);
+    @SuppressWarnings("unchecked")
+    public static final PropertyEnum<Connection>[] connectionProperties = new PropertyEnum[]{DOWN, UP, NORTH, SOUTH, WEST, EAST};
+    private static EnumMap<EnumFacing, EnumSet<IChargeBlock.ConnectType>> connectionMatcher = new EnumMap<>(EnumFacing.class);
+    private static ChargeDef chargeDef = new ChargeDef(ConnectType.WIRE);
+
+    static {
+        for (EnumFacing side : EnumFacing.VALUES) {
+            connectionMatcher.put(side, EnumSet.of(IChargeBlock.ConnectType.BLOCK, IChargeBlock.ConnectType.WIRE));
+        }
+        connectionMatcher.put(EnumFacing.UP, EnumSet.allOf(IChargeBlock.ConnectType.class));
+    }
 
     public BlockWire() {
         super(Material.CIRCUITS, MapColor.BLUE);
-        setDefaultState(blockState.getBaseState().withProperty(ADDON, Addon.NONE));
+        IBlockState defaultState = blockState.getBaseState().withProperty(ADDON, Addon.NONE);
+        for (PropertyEnum<Connection> connection : connectionProperties) {
+            defaultState = defaultState.withProperty(connection, Connection.NONE);
+        }
+        setDefaultState(defaultState);
         setResistance(1F);
         setHardness(1F);
         setSoundType(SoundType.METAL);
-    }
-
-    @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-        super.getSubBlocks(itemIn, tab, list);
     }
 
     @Override
@@ -79,6 +91,37 @@ public class BlockWire extends RailcraftBlockContainer implements IPostConnectio
                 'C', "blockCopper",
                 'P', Items.PAPER,
                 'L', "ingotLead");
+    }
+
+    @Nullable
+    @Override
+    public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return chargeDef;
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        state = super.getActualState(state, worldIn, pos);
+        Connection[] connections = new Connection[6];
+        Arrays.fill(connections, Connection.NONE);
+        for (EnumFacing side : EnumFacing.VALUES) {
+            BlockPos neighborPos = pos.offset(side);
+            IBlockState neighborState = WorldPlugin.getBlockState(worldIn, pos.offset(side));
+            Block neighborBlock = neighborState.getBlock();
+            if (neighborBlock instanceof IChargeBlock) {
+                IChargeBlock.ChargeDef chargeDef = ((IChargeBlock) neighborBlock).getChargeDef(neighborState, worldIn, neighborPos);
+                if (chargeDef != null) {
+                    IChargeBlock.ConnectType connectType = chargeDef.getConnectType();
+                    if (connectionMatcher.get(side).contains(connectType)) {
+                        connections[side.ordinal()] = connectType == IChargeBlock.ConnectType.WIRE ? Connection.WIRE : Connection.PLUG;
+                    }
+                }
+            }
+        }
+        for (EnumFacing side : EnumFacing.VALUES) {
+            state = state.withProperty(connectionProperties[side.ordinal()], connections[side.ordinal()]);
+        }
+        return state;
     }
 
     /**
@@ -99,12 +142,7 @@ public class BlockWire extends RailcraftBlockContainer implements IPostConnectio
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, ADDON);
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileWire();
+        return new BlockStateContainer(this, ADDON, DOWN, UP, NORTH, SOUTH, WEST, EAST);
     }
 
     public Addon getAddon(IBlockState state) {
@@ -147,6 +185,16 @@ public class BlockWire extends RailcraftBlockContainer implements IPostConnectio
     }
 
     @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return getAddon(base_state) == Addon.FRAME && side == EnumFacing.UP;
     }
@@ -178,17 +226,37 @@ public class BlockWire extends RailcraftBlockContainer implements IPostConnectio
         private final IRailcraftObjectContainer addonObject;
         private final AxisAlignedBB boundingBox;
         private final float hardness, resistance;
+        private final String name;
 
         Addon(float hardness, float resistance, @Nullable IRailcraftObjectContainer addonObject, AxisAlignedBB boundingBox) {
             this.hardness = hardness;
             this.resistance = resistance;
             this.addonObject = addonObject;
             this.boundingBox = boundingBox;
+            name = name().toLowerCase(Locale.ROOT);
         }
 
         @Override
         public String getName() {
-            return name().toLowerCase(Locale.ROOT);
+            return name;
+        }
+    }
+
+    public enum Connection implements IStringSerializable {
+
+        NONE,
+        WIRE,
+        PLUG;
+        public static final Connection[] VALUES = values();
+        private final String name;
+
+        Connection() {
+            name = name().toLowerCase(Locale.ROOT);
+        }
+
+        @Override
+        public String getName() {
+            return name;
         }
     }
 }

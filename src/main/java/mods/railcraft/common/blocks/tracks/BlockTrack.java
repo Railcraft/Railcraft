@@ -1,26 +1,23 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.misc.RailcraftDamageSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.SoundType;
@@ -33,7 +30,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -212,22 +208,23 @@ public class BlockTrack extends BlockRail implements IPostConnection, IRailcraft
         if (!(tile instanceof TileTrack))
             return;
 
-        ITrackInstance track = ((TileTrack) tile).getTrackInstance();
-        if (!(track instanceof IElectricGrid))
-            return;
-
-        IElectricGrid.ChargeHandler chargeHandler = ((IElectricGrid) track).getChargeHandler();
-        if (chargeHandler != null && chargeHandler.getCharge() > 2000)
-            if (entity instanceof EntityPlayer) {
-                EntityPlayer player = ((EntityPlayer) entity);
-                ItemStack pants = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-                if (pants != null && RailcraftItems.overalls.isInstance(pants)
-                        && !((EntityPlayer) entity).capabilities.isCreativeMode
-                        && MiscTools.RANDOM.nextInt(150) == 0) {
-                    player.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(pants, 1));
-                }
-            } else if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
-                chargeHandler.removeCharge(2000);
+//TODO: migrate to new charge API
+//        ITrackInstance track = ((TileTrack) tile).getTrackInstance();
+//        if (!(track instanceof IElectricGrid))
+//            return;
+//
+//        IElectricGrid.ChargeHandler chargeHandler = ((IElectricGrid) track).getChargeHandler();
+//        if (chargeHandler != null && chargeHandler.getCharge() > 2000)
+//            if (entity instanceof EntityPlayer) {
+//                EntityPlayer player = ((EntityPlayer) entity);
+//                ItemStack pants = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+//                if (pants != null && RailcraftItems.overalls.isInstance(pants)
+//                        && !((EntityPlayer) entity).capabilities.isCreativeMode
+//                        && MiscTools.RANDOM.nextInt(150) == 0) {
+//                    player.setItemStackToSlot(EntityEquipmentSlot.LEGS, InvTools.damageItem(pants, 1));
+//                }
+//            } else if (entity.attackEntityFrom(RailcraftDamageSource.TRACK_ELECTRIC, 2))
+//                chargeHandler.removeCharge(2000);
     }
 
     @Override

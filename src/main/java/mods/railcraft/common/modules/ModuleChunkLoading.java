@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
@@ -99,7 +99,7 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                 RailcraftCarts cart = RailcraftCarts.ANCHOR;
                 if (EnumMachineAlpha.ANCHOR_WORLD.isAvailable() && cart.setup()) {
                     ItemStack anchor = EnumMachineAlpha.ANCHOR_WORLD.getItem();
-                    if(anchor != null) {
+                    if (anchor != null) {
                         if (RailcraftConfig.canCraftAnchors()) {
                             CraftingPlugin.addRecipe(cart.getCartItem(),
                                     "A",
@@ -110,7 +110,6 @@ public class ModuleChunkLoading extends RailcraftModulePayload {
                         cart.setContents(anchor);
                     }
                 }
-
 
                 // Define Personal Anchor Cart
                 cart = RailcraftCarts.ANCHOR_PERSONAL;

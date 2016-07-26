@@ -14,7 +14,6 @@ import mods.railcraft.common.blocks.machine.beta.*;
 import mods.railcraft.common.blocks.machine.delta.TileCage;
 import mods.railcraft.common.blocks.machine.epsilon.*;
 import mods.railcraft.common.blocks.machine.gamma.*;
-import mods.railcraft.common.blocks.wire.TileWire;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -76,7 +75,6 @@ public class MachineTileRegistery {
 
         // Delta
         GameRegistry.registerTileEntity(TileCage.class, "RCCageTile");
-        GameRegistry.registerTileEntity(TileWire.class, "RCWireTile");
 
         // Epsilon
         GameRegistry.registerTileEntity(TileElectricFeeder.class, "RCElectricFeederTile");

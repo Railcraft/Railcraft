@@ -1,16 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import com.google.common.base.Optional;
-import mods.railcraft.api.electricity.GridTools;
-import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.electricity.IElectricMinecart;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
@@ -22,9 +20,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -95,16 +93,17 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
             return EnumActionResult.PASS;
         EnumActionResult returnValue = EnumActionResult.PASS;
         try {
-            Optional<IElectricGrid> gridObject = GridTools.getGridObjectAt(world, pos);
-            if (gridObject.isPresent()) {
-                IElectricGrid.ChargeHandler ch = gridObject.get().getChargeHandler();
-                if (ch != null) {
-                    ChatPlugin.sendLocalizedChat(player, "railcraft.gui.electric.meter.charge", ch.getCharge(), ch.getDraw(), ch.getLosses());
-                    returnValue = EnumActionResult.SUCCESS;
-                }
-            }
+//TODO: migrate to new charge API
+//            Optional<IElectricGrid> gridObject = GridTools.getGridObjectAt(world, pos);
+//            if (gridObject.isPresent()) {
+//                IElectricGrid.ChargeHandler ch = gridObject.get().getChargeHandler();
+//                if (ch != null) {
+//                    ChatPlugin.sendLocalizedChat(player, "railcraft.gui.electric.meter.charge", ch.getCharge(), ch.getDraw(), ch.getLosses());
+//                    returnValue = EnumActionResult.SUCCESS;
+//                }
+//            }
         } catch (Throwable er) {
-            Game.logErrorAPI(Railcraft.MOD_ID, er, IElectricGrid.class);
+//            Game.logErrorAPI(Railcraft.MOD_ID, er, IElectricGrid.class);
             ChatPlugin.sendLocalizedChatFromServer(player, "chat.railcraft.api.error");
         }
         return returnValue;

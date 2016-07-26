@@ -80,6 +80,7 @@ public class ChargeNetwork {
                 Set<ChargeNode> currentNodes = newNodes;
                 newNodes = new HashSet<>();
                 for (ChargeNode current : currentNodes) {
+                    // TODO: this is wrong, it assumes 2D world, need to steel old code
                     for (EnumFacing side : EnumFacing.VALUES) {
                         ChargeNode neighbor = chargeNodes.get(current.pos.offset(side));
                         if (neighbor != null && !allTheNodes.contains(neighbor)) {

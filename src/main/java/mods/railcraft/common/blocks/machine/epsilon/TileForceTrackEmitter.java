@@ -1,14 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.epsilon;
 
-import mods.railcraft.api.electricity.IElectricGrid;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackLockdown;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -40,14 +40,15 @@ import java.util.Optional;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileForceTrackEmitter extends TileMachineBase implements IElectricGrid {
+//TODO: migrate to new charge API
+public class TileForceTrackEmitter extends TileMachineBase {
 
     private static final double BASE_DRAW = 22;
     private static final double CHARGE_PER_TRACK = 2;
     private static final int TICKS_PER_ACTION = 4;
     private static final int TICKS_PER_REFRESH = 64;
     public static final int MAX_TRACKS = 64;
-    private final ChargeHandler chargeHandler = new ChargeHandler(this, ChargeHandler.ConnectType.BLOCK, 0.0);
+    //    private final ChargeHandler chargeHandler = new ChargeHandler(this, IChargeBlock.ConnectType.BLOCK, 0.0);
     private boolean powered;
     private EnumFacing facing = EnumFacing.NORTH;
     private int numTracks;
@@ -129,7 +130,9 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
             return;
 
         double draw = getDraw(numTracks);
-        if (powered && chargeHandler.removeCharge(draw) >= draw)
+
+//TODO: migrate to new charge API
+        if (powered /*&& chargeHandler.removeCharge(draw) >= draw*/)
             switch (state) {
                 case RETRACTED:
                 case RETRACTING:
@@ -146,7 +149,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
 
         state.doAction(this);
 
-        chargeHandler.tick();
+//        chargeHandler.tick();
     }
 
     private void spawnParticles(BlockPos pos) {
@@ -220,7 +223,8 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     }
 
     public boolean hasPowerToExtend() {
-        return chargeHandler.getCharge() >= getDraw(numTracks + 1);
+        return true;
+//        return chargeHandler.getCharge() >= getDraw(numTracks + 1);
     }
 
     private void removeTrack(BlockPos pos) {
@@ -231,12 +235,12 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
         numTracks--;
     }
 
-    @Override
-    public ChargeHandler getChargeHandler() {
-        return chargeHandler;
-    }
+//    @Override
+//    public ChargeHandler getChargeHandler() {
+//        return chargeHandler;
+//    }
 
-    @Override
+    //    @Override
     public TileEntity getTile() {
         return this;
     }
@@ -267,7 +271,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        chargeHandler.writeToNBT(data);
+//        chargeHandler.writeToNBT(data);
         data.setBoolean("powered", powered);
         data.setByte("facing", (byte) facing.ordinal());
         data.setInteger("numTracks", numTracks);
@@ -278,7 +282,7 @@ public class TileForceTrackEmitter extends TileMachineBase implements IElectricG
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        chargeHandler.readFromNBT(data);
+//        chargeHandler.readFromNBT(data);
         powered = data.getBoolean("powered");
         facing = EnumFacing.getFront(data.getByte("facing"));
         numTracks = data.getInteger("numTracks");

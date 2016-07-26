@@ -1,0 +1,17 @@
+{
+  "parent": "railcraft:block/cube_backfaces",
+  "textures": {
+    "particle": "#side",
+    "down": "#side",
+    "north": "#side",
+    "east": "#side",
+    "south": "#side",
+    "west": "#side",
+    "down_back": "#side",
+    "up_back": "#up",
+    "north_back": "#side",
+    "east_back": "#side",
+    "south_back": "#side",
+    "west_back": "#side"
+  }
+}
