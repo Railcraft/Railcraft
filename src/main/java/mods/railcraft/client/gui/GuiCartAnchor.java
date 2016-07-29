@@ -15,10 +15,18 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.translation.I18n;
 
-public class GuiCartAnchor extends EntityGui {
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 
+public class GuiCartAnchor extends EntityGui {
+    private static final DecimalFormat timeFormatter = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
     private final EntityCartAnchor cartAnchor;
     private final ContainerAnchor container;
+
+    static {
+        timeFormatter.applyPattern("#,##0.00");
+    }
 
     public GuiCartAnchor(InventoryPlayer playerInv, EntityCartAnchor anchor) {
         super(anchor, new ContainerAnchor(playerInv, anchor), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_single_slot.png");
@@ -35,7 +43,7 @@ public class GuiCartAnchor extends EntityGui {
         int sPos = xSize / 2 - sWidth / 2;
         fontRendererObj.drawString(label, sPos, 6, 0x404040);
         fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.anchor.fuel"), 85, 24, 0x404040);
-        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.anchor.fuel.remaining", (double) container.minutesRemaining / 60), 85, 35, 0x404040);
+        fontRendererObj.drawString(LocalizationPlugin.translate("railcraft.gui.anchor.fuel.remaining", timeFormatter.format((double) container.minutesRemaining / 60.0)), 85, 35, 0x404040);
         fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 

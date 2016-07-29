@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.ItemBrick;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
+import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.ItemBlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.blocks.aesthetics.glass.ItemStrengthGlass;
@@ -23,13 +24,15 @@ import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
 import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.BlockRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.ItemSlab;
-import mods.railcraft.common.blocks.aesthetics.post.BlockPost;
-import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
-import mods.railcraft.common.blocks.aesthetics.post.ItemPost;
-import mods.railcraft.common.blocks.aesthetics.post.ItemPostMetal;
+import mods.railcraft.common.blocks.aesthetics.post.*;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.anvil.ItemAnvil;
+import mods.railcraft.common.blocks.charge.BlockChargeTrap;
+import mods.railcraft.common.blocks.charge.BlockFeeder;
+import mods.railcraft.common.blocks.charge.BlockFrame;
+import mods.railcraft.common.blocks.charge.BlockWire;
 import mods.railcraft.common.blocks.detector.BlockDetector;
+import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
@@ -40,16 +43,15 @@ import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.blocks.ore.BlockOre;
 import mods.railcraft.common.blocks.ore.BlockWorldLogic;
+import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.ore.ItemOre;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
+import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
 import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
-import mods.railcraft.common.blocks.wire.BlockFrame;
-import mods.railcraft.common.blocks.wire.BlockWire;
 import mods.railcraft.common.core.IRailcraftObject;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItem;
@@ -70,7 +72,7 @@ import java.util.function.Supplier;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum RailcraftBlocks implements IRailcraftObjectContainer {
+public enum RailcraftBlocks implements IRailcraftBlockContainer {
     anvilSteel("anvil", BlockRCAnvil::new, ItemAnvil::new),
     brickAbyssal("brick.abyssal", () -> new BlockBrick(BrickTheme.ABYSSAL), ItemBrick::new),
     brickBleachedBone("brick.bleachedbone", () -> new BlockBrick(BrickTheme.BLEACHEDBONE), ItemBrick::new),
@@ -80,22 +82,24 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     brickNether("brick.nether", () -> new BlockBrick(BrickTheme.NETHER), ItemBrick::new),
     brickQuarried("brick.quarried", () -> new BlockBrick(BrickTheme.QUARRIED), ItemBrick::new),
     brickSandy("brick.sandy", () -> new BlockBrick(BrickTheme.SANDY), ItemBrick::new),
-    generic("generic", BlockGeneric::new, ItemBlockGeneric::new),
-    detector("detector", BlockDetector::new, ItemDetector::new),
+    chargeFeeder("charge.feeder", BlockFeeder::new, ItemBlockRailcraftSubtyped::new, BlockFeeder.FeederVariant.class),
+    chargeTrap("charge.trap", BlockChargeTrap::new, ItemBlockRailcraft::new),
+    generic("generic", BlockGeneric::new, ItemBlockGeneric::new, EnumGeneric.class),
+    detector("detector", BlockDetector::new, ItemDetector::new, EnumDetector.class),
     frame("frame", BlockFrame::new, ItemBlockRailcraft::new),
     glass("glass", BlockStrengthGlass::new, ItemStrengthGlass::new),
     lantern("lantern", BlockLantern::new, ItemMaterial::new),
-    machine_alpha("machine.alpha", () -> new BlockMachine<EnumMachineAlpha>(EnumMachineAlpha.PROXY, true), ItemMachine::new),
-    machine_beta("machine.beta", () -> new BlockMachine<EnumMachineBeta>(EnumMachineBeta.PROXY, false), ItemMachine::new),
-    machine_gamma("machine.gamma", () -> new BlockMachine<EnumMachineGamma>(EnumMachineGamma.PROXY, false), ItemMachine::new),
-    machine_delta("machine.delta", () -> new BlockMachine<EnumMachineDelta>(EnumMachineDelta.PROXY, false), ItemMachine::new),
-    machine_epsilon("machine.epsilon", () -> new BlockMachine<EnumMachineEpsilon>(EnumMachineEpsilon.PROXY, true), ItemMachine::new),
-    ore("ore", BlockOre::new, ItemOre::new),
-    post("post", BlockPost::new, ItemPost::new),
+    machine_alpha("machine.alpha", () -> new BlockMachine<EnumMachineAlpha>(EnumMachineAlpha.PROXY, true), ItemMachine::new, EnumMachineAlpha.class),
+    machine_beta("machine.beta", () -> new BlockMachine<EnumMachineBeta>(EnumMachineBeta.PROXY, false), ItemMachine::new, EnumMachineBeta.class),
+    machine_gamma("machine.gamma", () -> new BlockMachine<EnumMachineGamma>(EnumMachineGamma.PROXY, false), ItemMachine::new, EnumMachineGamma.class),
+    machine_delta("machine.delta", () -> new BlockMachine<EnumMachineDelta>(EnumMachineDelta.PROXY, false), ItemMachine::new, EnumMachineDelta.class),
+    machine_epsilon("machine.epsilon", () -> new BlockMachine<EnumMachineEpsilon>(EnumMachineEpsilon.PROXY, true), ItemMachine::new, EnumMachineEpsilon.class),
+    ore("ore", BlockOre::new, ItemOre::new, EnumOre.class),
+    post("post", BlockPost::new, ItemPost::new, EnumPost.class),
     postMetal("post.metal", () -> new BlockPostMetal(false), ItemPostMetal::new),
     postMetalPlatform("post.metal.platform", () -> new BlockPostMetal(true), ItemPostMetal::new),
     ritual("ritual", BlockRitual::new, ItemBlockRailcraft::new),
-    signal("signal", BlockSignalRailcraft::new, ItemSignal::new),
+    signal("signal", BlockSignalRailcraft::new, ItemSignal::new, EnumSignal.class),
     slab("slab", BlockRailcraftSlab::new, ItemSlab::new),
     stair("stair", BlockRailcraftStairs::new, ItemMaterial::new),
     track("track", BlockTrack::new, ItemTrack::new),
@@ -106,15 +110,21 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     public static final RailcraftBlocks[] VALUES = values();
     private final Supplier<Block> blockSupplier;
     private final Function<Block, ItemBlock> itemSupplier;
+    private final Class<? extends IVariantEnum> variantClass;
     private final String tag;
     protected Object altRecipeObject;
     private Block block;
     private ItemBlock item;
 
     RailcraftBlocks(String tag, Supplier<Block> blockSupplier, Function<Block, ItemBlock> itemSupplier) {
+        this(tag, blockSupplier, itemSupplier, null);
+    }
+
+    RailcraftBlocks(String tag, Supplier<Block> blockSupplier, Function<Block, ItemBlock> itemSupplier, @Nullable Class<? extends IVariantEnum> variantClass) {
         this.blockSupplier = blockSupplier;
         this.itemSupplier = itemSupplier;
         this.tag = tag;
+        this.variantClass = variantClass;
     }
 
     public static void finalizeDefinitions() {
@@ -141,9 +151,9 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
 
             RailcraftRegistry.register(block, item);
 
-            if (!(block instanceof IRailcraftObject))
+            if (!(block instanceof IRailcraftBlock))
                 throw new RuntimeException("Railcraft Blocks must implement IRailcraftObject");
-            IRailcraftObject blockObject = (IRailcraftObject) block;
+            IRailcraftBlock blockObject = (IRailcraftBlock) block;
             blockObject.initializeDefinintion();
             blockObject.defineRecipes();
 
@@ -151,7 +161,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
                 throw new RuntimeException("Railcraft ItemBlocks must implement IRailcraftItemBlock");
             if (item instanceof IRailcraftItem)
                 throw new RuntimeException("Railcraft ItemBlocks must not implement IRailcraftItem");
-            IRailcraftObject itemObject = (IRailcraftObject) item;
+            IRailcraftItemBlock itemObject = (IRailcraftItemBlock) item;
             itemObject.initializeDefinintion();
             itemObject.defineRecipes();
         }
@@ -170,11 +180,13 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
         return block != null && this.block == block;
     }
 
+    @Override
     @Nullable
     public Block block() {
         return block;
     }
 
+    @Override
     @Nullable
     public IBlockState getDefaultState() {
         if (block == null)
@@ -182,6 +194,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
         return block.getDefaultState();
     }
 
+    @Override
     @Nullable
     public IBlockState getState(@Nullable IVariantEnum variant) {
         if (block instanceof IRailcraftBlock)
@@ -189,6 +202,7 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
         return getDefaultState();
     }
 
+    @Override
     @Nullable
     public ItemBlock item() {
         return item;
@@ -197,6 +211,11 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     @Override
     public String getBaseTag() {
         return tag;
+    }
+
+    @Nullable
+    public Class<? extends IVariantEnum> getVariantClass() {
+        return variantClass;
     }
 
     private void checkVariantObject(@Nullable IVariantEnum variant) {
@@ -222,8 +241,8 @@ public enum RailcraftBlocks implements IRailcraftObjectContainer {
     }
 
     @Override
-    public IRailcraftObject getObject() {
-        return ((IRailcraftObject) block);
+    public IRailcraftBlock getObject() {
+        return ((IRailcraftBlock) block);
     }
 
     @Override

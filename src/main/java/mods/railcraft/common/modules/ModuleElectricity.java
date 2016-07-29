@@ -11,6 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.charge.ChargeManager;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
@@ -18,6 +19,7 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RotorRepairRecipe;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -29,9 +31,13 @@ public class ModuleElectricity extends RailcraftModulePayload {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
+                MinecraftForge.EVENT_BUS.register(ChargeManager.getEventListener());
+
                 add(
-                        RailcraftItems.electricMeter,
+                        RailcraftItems.chargeMeter,
                         RailcraftBlocks.track,
+                        RailcraftBlocks.chargeFeeder,
+                        RailcraftBlocks.chargeTrap,
                         RailcraftBlocks.frame,
                         RailcraftBlocks.wire,
                         RailcraftBlocks.machine_alpha,
@@ -60,16 +66,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
 //                CraftingPlugin.addShapelessRecipe(rotor, RailcraftPartItems.getTurbineRotor());
                 }
 
-                EnumMachineEpsilon epsilon = EnumMachineEpsilon.ELECTRIC_FEEDER;
-                if (epsilon.isEnabled())
-                    CraftingPlugin.addRecipe(epsilon.getItem(),
-                            "PCP",
-                            "CCC",
-                            "PCP",
-                            'P', RailcraftItems.plate.getRecipeObject(Metal.TIN),
-                            'C', "ingotCopper");
-
-                epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;
+                EnumMachineEpsilon epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;
                 if (epsilon.isEnabled()) {
                     EnumTrack.FORCE.register();
                     CraftingPlugin.addRecipe(epsilon.getItem(),

@@ -7,25 +7,24 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.wire;
+package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.core.IPostConnection;
+import mods.railcraft.common.blocks.RailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -40,18 +39,13 @@ import static net.minecraft.util.EnumFacing.UP;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class BlockFrame extends Block implements IPostConnection, IRailcraftObject {
-
-    public static boolean flipTextures;
-    public static boolean poweredTexture;
+public class BlockFrame extends RailcraftBlock implements IPostConnection {
 
     public BlockFrame() {
-        super(Material.GLASS);
+        super(Material.IRON);
         setResistance(10);
         setHardness(5);
         setSoundType(SoundType.METAL);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
-        setUnlocalizedName("railcraft.frame");
     }
 
     @Override
@@ -73,17 +67,17 @@ public class BlockFrame extends Block implements IPostConnection, IRailcraftObje
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        return flipTextures || super.shouldSideBeRendered(state, worldIn, pos, side);
-    }
-
-    @Override
     public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 

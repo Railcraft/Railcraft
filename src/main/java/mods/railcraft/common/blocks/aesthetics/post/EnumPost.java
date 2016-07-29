@@ -9,13 +9,13 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.aesthetics.post;
 
+import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -93,16 +93,9 @@ public enum EnumPost implements IVariantEnumBlock {
         return null;
     }
 
-    @Nullable
     @Override
-    public Block getBlock() {
-        return RailcraftBlocks.post.block();
+    public IRailcraftBlockContainer getContainer() {
+        return RailcraftBlocks.post;
     }
 
-    @Nullable
-    @Override
-    public IBlockState getState() {
-        if (getBlock() == null) return null;
-        return getBlock().getDefaultState().withProperty(BlockPost.VARIANT, this);
-    }
 }

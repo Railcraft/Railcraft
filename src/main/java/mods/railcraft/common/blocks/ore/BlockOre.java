@@ -8,9 +8,9 @@
  */
 package mods.railcraft.common.blocks.ore;
 
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
@@ -46,7 +46,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockOre extends Block implements IRailcraftObject {
+public class BlockOre extends Block implements IRailcraftBlock {
 
     public static final PropertyEnum<EnumOre> VARIANT = PropertyEnum.create("variant", EnumOre.class);
     //    private static final ParticleHelperCallback callback = new ParticleCallback();

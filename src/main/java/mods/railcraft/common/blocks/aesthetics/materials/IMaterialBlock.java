@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.aesthetics.materials;
 
-import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.util.sounds.IBlockSoundProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.util.math.BlockPos;
@@ -21,7 +21,7 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IMaterialBlock extends IRailcraftObject, IBlockSoundProvider {
+public interface IMaterialBlock extends IRailcraftBlock, IBlockSoundProvider {
     String getUnlocalizedName(Materials mat);
 
     @Override

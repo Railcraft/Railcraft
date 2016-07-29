@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.tracks;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.tracks.*;
 import mods.railcraft.client.particles.ParticleHelper;
-import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -52,7 +52,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BlockTrack extends BlockRail implements IPostConnection, IRailcraftObject {
+public class BlockTrack extends BlockRail implements IPostConnection, IRailcraftBlock {
 
     public static final float HARDNESS = 2F;
 

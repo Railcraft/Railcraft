@@ -28,15 +28,7 @@ public class ItemDetector extends ItemBlockRailcraftSubtyped {
         super(block);
     }
 
-    @Override
-    public IBlockState getState(@Nullable IVariantEnum variant) {
-        IBlockState state = block.getDefaultState();
-        if (variant != null) {
-            checkVariant(variant);
-            state = state.withProperty(BlockDetector.VARIANT, (EnumDetector) variant);
-        }
-        return state;
-    }
+
 
     /**
      * Called to actually place the block, after the location is determined and

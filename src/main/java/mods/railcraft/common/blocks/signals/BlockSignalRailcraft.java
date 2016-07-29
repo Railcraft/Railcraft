@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.signals;
 
-import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemCircuit;
@@ -31,7 +31,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftObject {
+public class BlockSignalRailcraft extends BlockSignalBase implements IRailcraftBlock {
 
     public static final PropertyEnum<EnumSignal> TYPE = PropertyEnum.create("type", EnumSignal.class);
 

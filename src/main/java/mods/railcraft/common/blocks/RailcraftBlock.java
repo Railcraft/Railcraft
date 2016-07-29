@@ -17,6 +17,7 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -35,6 +36,11 @@ public abstract class RailcraftBlock extends Block implements IRailcraftBlock {
 
     {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+    }
+
+    @Override
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return false;
     }
 
     public void markBlockForUpdate(World world, BlockPos pos) {

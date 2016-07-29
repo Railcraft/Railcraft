@@ -29,6 +29,10 @@ public interface IRailcraftBlock extends IRailcraftObject {
         return ((Block) this).getDefaultState();
     }
 
+    default IBlockState getItemRenderState(@Nullable IVariantEnum variant) {
+        return getState(variant);
+    }
+
     default Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(1, 1);
     }

@@ -21,7 +21,7 @@ public class LocalizationPlugin {
     public static final String ENGLISH = "en_US";
 
     public static String translate(String tag) {
-        return I18n.translateToLocal(tag).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
+        return I18n.translateToLocal(tag).replace("\\n", "\n").replace("\\%", "@");
     }
 
     public static String translate(String tag, Object... args) {

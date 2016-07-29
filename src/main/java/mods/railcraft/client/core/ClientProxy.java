@@ -18,7 +18,6 @@ import mods.railcraft.client.render.tools.ModelManager;
 import mods.railcraft.client.util.sounds.RCSoundHandler;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.blocks.IRailcraftBlock;
-import mods.railcraft.common.blocks.IRailcraftItemBlock;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
@@ -40,7 +39,6 @@ import mods.railcraft.common.items.firestone.TileRitual;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityMinecart;
@@ -116,7 +114,7 @@ public class ClientProxy extends CommonProxy {
         for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
             ItemBlock item = blockContainer.item();
             Block block = blockContainer.block();
-            IRailcraftObject object = blockContainer.getObject();
+            IRailcraftBlock object = blockContainer.getObject();
             if (item != null && block != null && object != null) {
                 object.initializeClient();
                 ((IRailcraftObject) item).initializeClient();
@@ -124,14 +122,14 @@ public class ClientProxy extends CommonProxy {
                 if (variants != null) {
                     for (IVariantEnum variant : variants) {
                         ItemStack stack = blockContainer.getStack(variant);
-                        IBlockState variantState = ((IRailcraftItemBlock) item).getState(variant);
                         if (stack != null)
-                            ModelManager.registerBlockItemModel(stack, variantState);
+                            ModelManager.registerBlockItemModel(stack, object.getItemRenderState(variant));
                     }
                 } else {
                     ItemStack stack = blockContainer.getStack();
-                    if (stack != null)
-                        ModelManager.registerBlockItemModel(stack, block.getDefaultState());
+                    if (stack != null) {
+                        ModelManager.registerBlockItemModel(stack, object.getItemRenderState(null));
+                    }
                 }
             }
         }

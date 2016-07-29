@@ -21,7 +21,7 @@ public interface IVariantEnum extends IStringSerializable {
     int ordinal();
 
     default String getResourcePathSuffix() {
-        return getName();
+        return getName().replace("_", ".");
     }
 
     @Nullable

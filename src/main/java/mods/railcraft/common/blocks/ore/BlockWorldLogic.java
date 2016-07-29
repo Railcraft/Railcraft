@@ -8,7 +8,7 @@
  */
 package mods.railcraft.common.blocks.ore;
 
-import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -28,7 +28,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockWorldLogic extends Block implements IRailcraftObject {
+public class BlockWorldLogic extends Block implements IRailcraftBlock {
 
     public BlockWorldLogic() {
         super(Material.ROCK);

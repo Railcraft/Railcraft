@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.modules.RailcraftModuleManager;
@@ -38,7 +37,7 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
      */
     @Override
     default boolean isEnabled() {
-        return RailcraftModuleManager.isModuleEnabled(getModule()) && getBlockContainer().isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag());
+        return RailcraftModuleManager.isModuleEnabled(getModule()) && getContainer().isEnabled() && RailcraftConfig.isSubBlockEnabled(getTag());
     }
 
     boolean isAvailable();
@@ -51,7 +50,7 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
     @Nullable
     @Override
     default IBlockState getState() {
-        IBlockState state = getBlockContainer().getDefaultState();
+        IBlockState state = getContainer().getDefaultState();
         if (state != null)
             return state.withProperty(getVariantProperty(), (M) this);
         return null;
@@ -70,11 +69,9 @@ public interface IEnumMachine<M extends Enum<M> & IEnumMachine<M>> extends Compa
         return new ItemStack(block, qty, ordinal());
     }
 
-    RailcraftBlocks getBlockContainer();
-
     @Override
     default Block getBlock() {
-        return getBlockContainer().block();
+        return getContainer().block();
     }
 
     Class<? extends TileMachineBase> getTileClass();

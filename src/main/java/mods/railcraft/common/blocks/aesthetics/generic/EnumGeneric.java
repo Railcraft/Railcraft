@@ -10,7 +10,9 @@
 package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleFactory;
@@ -18,7 +20,6 @@ import mods.railcraft.common.modules.ModuleStructures;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -102,14 +103,8 @@ public enum EnumGeneric implements IVariantEnumBlock {
     }
 
     @Override
-    public Block getBlock() {
-        return BlockGeneric.getBlock();
-    }
-
-    @Override
-    public IBlockState getState() {
-        if (BlockGeneric.getBlock() == null) return null;
-        return BlockGeneric.getBlock().getState(this);
+    public IRailcraftBlockContainer getContainer() {
+        return RailcraftBlocks.generic;
     }
 
     public float getHardness() {

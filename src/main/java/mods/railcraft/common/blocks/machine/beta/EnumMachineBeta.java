@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.MachineProxy;
@@ -147,7 +148,7 @@ public enum EnumMachineBeta implements IEnumMachine<EnumMachineBeta> {
     }
 
     @Override
-    public RailcraftBlocks getBlockContainer() {
+    public IRailcraftBlockContainer getContainer() {
         return RailcraftBlocks.machine_beta;
     }
 

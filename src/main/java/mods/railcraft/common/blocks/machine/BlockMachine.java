@@ -10,13 +10,13 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.plugins.color.ColorPlugin;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -54,7 +54,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockContainer implements IPostConnection, ColorPlugin.IColoredBlock, IRailcraftObject {
+public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockContainer implements IPostConnection, ColorPlugin.IColoredBlock, IRailcraftBlock {
 
     private final MachineProxy<M> proxy;
     private final BlockStateContainer myBlockState;

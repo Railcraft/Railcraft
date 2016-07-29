@@ -8,13 +8,16 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.wire;
+package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.IVariantEnum;
+import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.AABBFactory;
@@ -60,7 +63,7 @@ public class BlockWire extends RailcraftBlock implements IPostConnection, ICharg
     @SuppressWarnings("unchecked")
     public static final PropertyEnum<Connection>[] connectionProperties = new PropertyEnum[]{DOWN, UP, NORTH, SOUTH, WEST, EAST};
     private static EnumMap<EnumFacing, EnumSet<IChargeBlock.ConnectType>> connectionMatcher = new EnumMap<>(EnumFacing.class);
-    private static ChargeDef chargeDef = new ChargeDef(ConnectType.WIRE);
+    private static ChargeDef chargeDef = new ChargeDef(ConnectType.WIRE, 0.05);
 
     static {
         for (EnumFacing side : EnumFacing.VALUES) {
@@ -79,6 +82,15 @@ public class BlockWire extends RailcraftBlock implements IPostConnection, ICharg
         setResistance(1F);
         setHardness(1F);
         setSoundType(SoundType.METAL);
+        setTickRandomly(true);
+    }
+
+    @Override
+    public void initializeDefinintion() {
+//                HarvestPlugin.setStateHarvestLevel(instance, "crowbar", 0);
+        HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
+
+        ForestryPlugin.addBackpackItem("builder", this);
     }
 
     @Override
@@ -97,6 +109,15 @@ public class BlockWire extends RailcraftBlock implements IPostConnection, ICharg
     @Override
     public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return chargeDef;
+    }
+
+    @Override
+    public IBlockState getItemRenderState(@Nullable IVariantEnum variant) {
+        IBlockState state = getDefaultState();
+        for (PropertyEnum<Connection> connection : connectionProperties) {
+            state = state.withProperty(connection, Connection.WIRE);
+        }
+        return state;
     }
 
     @Override
@@ -190,6 +211,11 @@ public class BlockWire extends RailcraftBlock implements IPostConnection, ICharg
     }
 
     @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
@@ -215,6 +241,24 @@ public class BlockWire extends RailcraftBlock implements IPostConnection, ICharg
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
         IBlockState blockState = WorldPlugin.getBlockState(world, pos);
         return getAddon(blockState).resistance * 0.6F;
+    }
+
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+        registerNode(state, worldIn, pos);
+    }
+
+    @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(worldIn, pos, state);
+        registerNode(state, worldIn, pos);
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        super.breakBlock(worldIn, pos, state);
+        deregisterNode(worldIn, pos);
     }
 
     public enum Addon implements IStringSerializable {

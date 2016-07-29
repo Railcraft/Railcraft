@@ -192,6 +192,16 @@ public class BlockDetector extends RailcraftBlockContainer {
                     'P', Blocks.STONE_PRESSURE_PLATE);
     }
 
+    @Override
+    public IBlockState getState(@Nullable IVariantEnum variant) {
+        IBlockState state = getDefaultState();
+        if (variant != null) {
+            checkVariant(variant);
+            state = state.withProperty(BlockDetector.VARIANT, (EnumDetector) variant);
+        }
+        return state;
+    }
+
     /**
      * Convert the given metadata into a BlockState for this Block
      */

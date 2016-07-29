@@ -1,0 +1,30 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "redstone=false,variant=admin": [
+      {
+        "textures": {"all": "railcraft:blocks/charge.feeder.admin.0"}
+      }
+    ],
+    "redstone=true,variant=admin": [
+      {
+        "textures": {"all": "railcraft:blocks/charge.feeder.admin.1"}
+      }
+    ],
+    "redstone=false,variant=ic2": [
+      {
+        "textures": {"all": "railcraft:blocks/charge.feeder.ic2.0"}
+      }
+    ],
+    "redstone=true,variant=ic2": [
+      {
+        "textures": {"all": "railcraft:blocks/charge.feeder.ic2.1"}
+      }
+    ]
+  }
+}

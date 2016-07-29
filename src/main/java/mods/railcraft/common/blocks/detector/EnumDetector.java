@@ -10,12 +10,12 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.core.IRailcraftModule;
+import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.types.*;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.modules.*;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
@@ -104,8 +104,8 @@ public enum EnumDetector implements IVariantEnumBlock {
     }
 
     @Override
-    public Block getBlock() {
-        return RailcraftBlocks.detector.block();
+    public IRailcraftBlockContainer getContainer() {
+        return RailcraftBlocks.detector;
     }
 
     @Nullable

@@ -10,6 +10,8 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.electricity.IElectricMinecart;
+import mods.railcraft.common.blocks.charge.ChargeManager;
+import mods.railcraft.common.blocks.charge.ChargeNetwork;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -28,11 +30,21 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemElectricMeter extends ItemRailcraft implements IActivationBlockingItem {
-    public ItemElectricMeter() {
+public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockingItem {
+    private static final DecimalFormat chargeFormatter = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
+
+    static {
+        chargeFormatter.applyPattern("#,##0.###");
+    }
+
+    public ItemChargeMeter() {
         setMaxDamage(0);
         setMaxStackSize(1);
         setFull3D();
@@ -42,7 +54,7 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
 
     @Override
     public void initializeDefinintion() {
-        LootPlugin.addLoot(RailcraftItems.electricMeter, 1, 1, LootPlugin.Type.WORKSHOP);
+        LootPlugin.addLoot(RailcraftItems.chargeMeter, 1, 1, LootPlugin.Type.WORKSHOP);
     }
 
     @Override
@@ -65,19 +77,19 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
         Entity entity = event.getTarget();
 
         ItemStack stack = event.getItemStack();
-        if (stack != null && stack.getItem() instanceof ItemElectricMeter)
+        if (stack != null && stack.getItem() instanceof ItemChargeMeter)
             player.swingArm(event.getHand());
 
         if (Game.isClient(player.worldObj))
             return;
 
-        if (stack != null && stack.getItem() instanceof ItemElectricMeter)
+        if (stack != null && stack.getItem() instanceof ItemChargeMeter)
             try {
                 if (entity instanceof IElectricMinecart) {
                     IElectricMinecart cart = (IElectricMinecart) entity;
                     IElectricMinecart.ChargeHandler ch = cart.getChargeHandler();
                     if (ch != null) {
-                        ChatPlugin.sendLocalizedChat(player, "railcraft.gui.electric.meter.charge", ch.getCharge(), ch.getDraw(), ch.getLosses());
+                        sendChat(player, "railcraft.gui.charge.meter.cart", ch.getCharge(), ch.getDraw(), ch.getLosses());
                         event.setCanceled(true);
                     }
                 }
@@ -92,7 +104,7 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
         if (Game.isClient(world))
             return EnumActionResult.PASS;
         EnumActionResult returnValue = EnumActionResult.PASS;
-        try {
+//        try {
 //TODO: migrate to new charge API
 //            Optional<IElectricGrid> gridObject = GridTools.getGridObjectAt(world, pos);
 //            if (gridObject.isPresent()) {
@@ -102,11 +114,30 @@ public class ItemElectricMeter extends ItemRailcraft implements IActivationBlock
 //                    returnValue = EnumActionResult.SUCCESS;
 //                }
 //            }
-        } catch (Throwable er) {
-//            Game.logErrorAPI(Railcraft.MOD_ID, er, IElectricGrid.class);
-            ChatPlugin.sendLocalizedChatFromServer(player, "chat.railcraft.api.error");
+        ChargeNetwork.ChargeGraph graph = ChargeManager.getNetwork(world).getGraph(pos);
+        if (graph.isActive()) {
+            sendChat(player, "railcraft.gui.charge.meter.network", graph.size(), graph.getCharge(), 0.0, 0.0);
+            ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
+            if (node != null) {
+                if (node.getBattery() != null)
+                    sendChat(player, "railcraft.gui.charge.meter.producer", node.getBattery().getCharge(), 0.0);
+                else
+                    sendChat(player, "railcraft.gui.charge.meter.node", 0.0, 0.0);
+            }
+            returnValue = EnumActionResult.SUCCESS;
         }
+//        } catch (Throwable er) {
+//            Game.logErrorAPI(Railcraft.MOD_ID, er, ChargeNetwork.class);
+//            ChatPlugin.sendLocalizedChatFromServer(player, "chat.railcraft.api.error");
+//        }
         return returnValue;
     }
 
+    private void sendChat(EntityPlayer player, String msg, Object... args) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof Double)
+                args[i] = chargeFormatter.format(args[i]);
+        }
+        ChatPlugin.sendLocalizedChatFromServer(player, msg, args);
+    }
 }

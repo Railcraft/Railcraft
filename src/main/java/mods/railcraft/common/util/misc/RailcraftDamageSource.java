@@ -26,6 +26,7 @@ public class RailcraftDamageSource extends DamageSource {
 
     public static final RailcraftDamageSource BORE = new RailcraftDamageSource("bore");
     public static final RailcraftDamageSource CRUSHER = new RailcraftDamageSource("crusher", 8);
+    public static final RailcraftDamageSource ELECTRIC = new RailcraftDamageSource("electric");
     public static final RailcraftDamageSource STEAM = new RailcraftDamageSource("steam");
     public static final RailcraftDamageSource TRACK_ELECTRIC = new RailcraftDamageSource("track.electric");
     public static final RailcraftDamageSource TRAIN = new RailcraftDamageSource("train");

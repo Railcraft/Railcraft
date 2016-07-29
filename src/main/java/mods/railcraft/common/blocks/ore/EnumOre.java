@@ -9,12 +9,13 @@
  ******************************************************************************/
 package mods.railcraft.common.blocks.ore;
 
+import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
@@ -49,10 +50,9 @@ public enum EnumOre implements IVariantEnumBlock {
         this.tag = tag;
     }
 
-    @Nullable
     @Override
-    public Block getBlock() {
-        return BlockOre.getBlock();
+    public IRailcraftBlockContainer getContainer() {
+        return RailcraftBlocks.ore;
     }
 
     @Nullable

@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.common.blocks.wire;
+package mods.railcraft.common.blocks.charge;
 
 import mcp.MethodsReturnNonnullByDefault;
 

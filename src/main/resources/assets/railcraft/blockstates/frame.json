@@ -1,0 +1,14 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:frame",
+    "textures": {
+      "up": "railcraft:blocks/frame.top",
+      "side": "railcraft:blocks/frame.side"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}]
+  }
+}

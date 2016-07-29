@@ -11,16 +11,6 @@ package mods.railcraft.common.core;
 
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
-import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
-import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
-import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.blocks.machine.delta.EnumMachineDelta;
-import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
-import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
-import mods.railcraft.common.blocks.ore.EnumOre;
-import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.carts.RailcraftCarts;
@@ -408,7 +398,7 @@ public class RailcraftConfig {
         loadLootProperty("tool.signal.tuner", 5);
         loadLootProperty("tool.signal.surveyor", 5);
         loadLootProperty("tool.magnifying.glass", 5);
-        loadLootProperty("tool.electric.meter", 5);
+        loadLootProperty("tool.charge.meter", 5);
         loadLootProperty("armor.goggles", 5);
         loadLootProperty("armor.helmet.steel", 5);
         loadLootProperty("armor.chestplate.steel", 5);
@@ -455,33 +445,20 @@ public class RailcraftConfig {
                         + "Changing these will have adverse effects on existing worlds.\n"
                         + "For the list of which sub-blocks are on each ID see the sub-block section below.");
 
-        for (RailcraftBlocks block : RailcraftBlocks.VALUES) {
-            loadBlockProperty(block.getBaseTag());
-        }
-
-        loadBlockProperty("brick.abyssal");
-        loadBlockProperty("brick.bleachedbone");
-        loadBlockProperty("brick.bloodstained");
-        loadBlockProperty("brick.frostbound");
-        loadBlockProperty("brick.infernal");
-        loadBlockProperty("brick.nether");
-        loadBlockProperty("brick.quarried");
-        loadBlockProperty("brick.sandy");
-
-        loadBlockProperty("elevator");
-        loadBlockProperty("firestone.recharge");
-        loadBlockProperty("fluid.creosote");
-        loadBlockProperty("fluid.steam");
-        loadBlockProperty("glass");
-
-        loadBlockProperty("post");
-        loadBlockProperty("post.metal");
-        loadBlockProperty("post.metal.platform");
-
-        loadBlockProperty("worldlogic");
-
         configBlock.addCustomCategoryComment(CAT_SUB_BLOCKS, "Here is were you can enable/disable various sub-blocks.\n"
                 + "Railcraft will attempt to compensate for any missing component by providing alternatives (usually).");
+
+        for (RailcraftBlocks block : RailcraftBlocks.VALUES) {
+            loadBlockProperty(block.getBaseTag());
+            Class<? extends IVariantEnum> variantClass = block.getVariantClass();
+            if (variantClass != null)
+                for (IVariantEnum variant : variantClass.getEnumConstants()) {
+                    loadBlockFeature(block.getBaseTag() + "." + variant.getResourcePathSuffix());
+                }
+        }
+
+        loadBlockProperty("fluid.creosote");
+        loadBlockProperty("fluid.steam");
 
         for (EnumTrack type : EnumTrack.VALUES) {
 //            if (type.isDepreciated())
@@ -489,13 +466,13 @@ public class RailcraftConfig {
             loadBlockFeature(type.getTag());
         }
 
-        for (EnumGeneric type : EnumGeneric.VALUES) {
-            loadBlockFeature(type.getTag());
-        }
-
-        for (EnumPost type : EnumPost.VALUES) {
-            loadBlockFeature(type.getTag());
-        }
+//        for (EnumGeneric type : EnumGeneric.VALUES) {
+//            loadBlockFeature(type.getTag());
+//        }
+//
+//        for (EnumPost type : EnumPost.VALUES) {
+//            loadBlockFeature(type.getTag());
+//        }
 
 //        for (EnumWallAlpha type : EnumWallAlpha.VALUES) {
 //            loadBlockFeature(type.getTag());
@@ -521,26 +498,26 @@ public class RailcraftConfig {
 //            loadBlockFeature(BlockLantern.getTag(mat));
 //        }
 
-        for (EnumOre type : EnumOre.values()) {
-            if (!type.isDepreciated())
-                loadBlockFeature(type.getTag());
-        }
+//        for (EnumOre type : EnumOre.values()) {
+//            if (!type.isDepreciated())
+//                loadBlockFeature(type.getTag());
+//        }
 
-        Set<IEnumMachine<?>> machineVariants = new HashSet<>();
-        machineVariants.addAll(Arrays.asList(EnumMachineAlpha.VALUES));
-        machineVariants.addAll(Arrays.asList(EnumMachineBeta.values()));
-        machineVariants.addAll(Arrays.asList(EnumMachineGamma.values()));
-        machineVariants.addAll(Arrays.asList(EnumMachineDelta.values()));
-        machineVariants.addAll(Arrays.asList(EnumMachineEpsilon.values()));
-
-        for (IEnumMachine<?> type : machineVariants) {
-            loadBlockFeature(type.getTag());
-        }
-
-        for (EnumSignal type : EnumSignal.values()) {
-            if (type.getModule() != null)
-                loadBlockFeature(type.getTag());
-        }
+//        Set<IEnumMachine<?>> machineVariants = new HashSet<>();
+//        machineVariants.addAll(Arrays.asList(EnumMachineAlpha.VALUES));
+//        machineVariants.addAll(Arrays.asList(EnumMachineBeta.values()));
+//        machineVariants.addAll(Arrays.asList(EnumMachineGamma.values()));
+//        machineVariants.addAll(Arrays.asList(EnumMachineDelta.values()));
+//        machineVariants.addAll(Arrays.asList(EnumMachineEpsilon.values()));
+//
+//        for (IEnumMachine<?> type : machineVariants) {
+//            loadBlockFeature(type.getTag());
+//        }
+//
+//        for (EnumSignal type : EnumSignal.values()) {
+//            if (type.getModule() != null)
+//                loadBlockFeature(type.getTag());
+//        }
     }
 
     private static void loadBlockProperty(String tag) {

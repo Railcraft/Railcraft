@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all",
+    "textures": {"all": "railcraft:blocks/charge.trap"}
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "redstone": {
+      "true": {},
+      "false": {}
+    }
+  }
+}
