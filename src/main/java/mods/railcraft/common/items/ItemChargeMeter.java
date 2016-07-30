@@ -116,13 +116,13 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
 //            }
         ChargeNetwork.ChargeGraph graph = ChargeManager.getNetwork(world).getGraph(pos);
         if (graph.isActive()) {
-            sendChat(player, "railcraft.gui.charge.meter.network", graph.size(), graph.getCharge(), 0.0, 0.0);
+            sendChat(player, "railcraft.gui.charge.meter.network", graph.size(), graph.getCharge(), 0.0, graph.getMaintenanceCost());
             ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
             if (node != null) {
                 if (node.getBattery() != null)
                     sendChat(player, "railcraft.gui.charge.meter.producer", node.getBattery().getCharge(), 0.0);
                 else
-                    sendChat(player, "railcraft.gui.charge.meter.node", 0.0, 0.0);
+                    sendChat(player, "railcraft.gui.charge.meter.node", 0.0, node.getChargeDef().getCost());
             }
             returnValue = EnumActionResult.SUCCESS;
         }

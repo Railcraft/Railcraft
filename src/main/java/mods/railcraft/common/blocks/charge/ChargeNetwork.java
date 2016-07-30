@@ -155,6 +155,7 @@ public class ChargeNetwork {
         private final Set<ChargeNode> chargeNodes = new HashSet<>();
         private final Map<ChargeNode, IChargeBlock.ChargeBattery> chargeBatteries = new MapMaker().weakKeys().weakValues().makeMap();
         private boolean invalid;
+        private double totalMaintenanceCost;
 
         @Override
         protected Set<ChargeNode> delegate() {
@@ -165,6 +166,7 @@ public class ChargeNetwork {
         public boolean add(ChargeNode chargeNode) {
             boolean added = super.add(chargeNode);
             if (added) {
+                totalMaintenanceCost += chargeNode.chargeDef.getCost();
                 chargeNode.chargeGraph = this;
                 if (chargeNode.chargeBattery != null)
                     chargeBatteries.put(chargeNode, chargeNode.chargeBattery);
@@ -208,6 +210,7 @@ public class ChargeNetwork {
             if (isActive()) {
                 Game.log(Level.INFO, "Destroying graph: {0}", this);
                 invalid = true;
+                totalMaintenanceCost = 0.0;
                 if (touchNodes)
                     forEach(n -> n.chargeGraph = NULL_GRAPH);
                 chargeBatteries.clear();
@@ -221,13 +224,22 @@ public class ChargeNetwork {
         }
 
         private void tick() {
-            //TODO: apply maintenance cost
+            int numBat = chargeBatteries.size();
             double averageCharge = chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getCharge).average().orElse(0.0);
-            chargeBatteries.values().forEach(b -> b.setCharge(averageCharge));
+            double perBatMaintenanceCost = totalMaintenanceCost / numBat;
+            averageCharge -= perBatMaintenanceCost;
+            if (averageCharge < 0.0)
+                averageCharge = 0.0;
+            double finalCharge = averageCharge;
+            chargeBatteries.values().forEach(b -> b.setCharge(finalCharge));
         }
 
         public double getCharge() {
             return chargeBatteries.values().stream().mapToDouble(IChargeBlock.ChargeBattery::getCharge).sum();
+        }
+
+        public double getMaintenanceCost() {
+            return totalMaintenanceCost;
         }
 
         public boolean isActive() {
