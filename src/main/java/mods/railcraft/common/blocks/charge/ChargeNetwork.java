@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.charge;
 
 import com.google.common.collect.ForwardingSet;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.MapMaker;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -23,6 +24,7 @@ import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * Created by CovertJaguar on 7/23/2016 for Railcraft.
@@ -32,7 +34,7 @@ import java.util.function.Consumer;
 public class ChargeNetwork {
     private static final ChargeGraph NULL_GRAPH = new NullGraph();
     public final Map<BlockPos, ChargeNode> chargeNodes = new HashMap<>();
-    public final Map<BlockPos, ChargeNode> chargeQueue = new HashMap<>();
+    public final Map<BlockPos, ChargeNode> chargeQueue = new LinkedHashMap<>();
     public final Set<ChargeGraph> chargeGraphs = Collections.newSetFromMap(new WeakHashMap<>());
     private final WeakReference<World> world;
 
@@ -41,28 +43,39 @@ public class ChargeNetwork {
     }
 
     public void tick() {
-        Set<ChargeNode> added = new HashSet<>();
+        World worldObj = world.get();
+        if (worldObj == null)
+            return;
+        Map<BlockPos, ChargeNode> added = new LinkedHashMap<>();
         Iterator<Map.Entry<BlockPos, ChargeNode>> iterator = chargeQueue.entrySet().iterator();
-        while (iterator.hasNext()) {
+        int count = 0;
+        while (iterator.hasNext() && count < 500) {
+            count++;
             Map.Entry<BlockPos, ChargeNode> action = iterator.next();
             if (action.getValue() == null) {
                 deleteNode(action.getKey());
-                iterator.remove();
             } else {
                 insertNode(action.getKey(), action.getValue());
-                added.add(action.getValue());
-                iterator.remove();
+                added.put(action.getKey(), action.getValue());
             }
+            iterator.remove();
         }
-        chargeQueue.clear();
 
-        for (ChargeNode chargeNode : added) {
-            if (chargeNode.isGraphNull())
-                chargeNode.constructGraph();
+        Set<BlockPos> newNodes = new HashSet<>();
+        for (Map.Entry<BlockPos, ChargeNode> addedNode : added.entrySet()) {
+            ChargeManager.forConnections(worldObj, addedNode.getKey(), (conPos, conDef) -> {
+                if (registerChargeNode(worldObj, conPos, conDef))
+                    newNodes.add(conPos);
+            });
+            if (addedNode.getValue().isGraphNull())
+                addedNode.getValue().constructGraph();
         }
 
         chargeGraphs.removeIf(g -> g.invalid);
         chargeGraphs.forEach(ChargeGraph::tick);
+
+        if (!newNodes.isEmpty())
+            Game.log(Level.INFO, "Nodes queued: {0}", newNodes.size());
     }
 
     private void insertNode(BlockPos pos, ChargeNode node) {
@@ -80,7 +93,7 @@ public class ChargeNetwork {
     private void deleteNode(BlockPos pos) {
         ChargeNode chargeNode = chargeNodes.remove(pos);
         chargeNode.invalid = true;
-        chargeNode.chargeGraph.destroy();
+        chargeNode.chargeGraph.destroy(true);
     }
 
     public boolean registerChargeNode(World world, BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
@@ -98,7 +111,7 @@ public class ChargeNetwork {
 
     public boolean isUndefined(BlockPos pos) {
         ChargeNode chargeNode = chargeNodes.get(pos);
-        return chargeNode == null || chargeNode.isGraphNull();
+        return chargeNode == null || chargeNode.isGraphNull() || !chargeQueue.containsKey(pos);
     }
 
     public ChargeGraph getGraph(BlockPos pos) {
@@ -166,19 +179,45 @@ public class ChargeNetwork {
             return standardAddAll(collection);
         }
 
-        private void destroy() {
+        @Override
+        public boolean remove(Object object) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> collection) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean removeIf(Predicate<? super ChargeNode> filter) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> collection) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Iterator<ChargeNode> iterator() {
+            return Iterators.unmodifiableIterator(super.iterator());
+        }
+
+        private void destroy(boolean touchNodes) {
             if (isActive()) {
                 Game.log(Level.INFO, "Destroying graph: {0}", this);
                 invalid = true;
-                forEach(n -> n.chargeGraph = NULL_GRAPH);
-                clear();
+                if (touchNodes)
+                    forEach(n -> n.chargeGraph = NULL_GRAPH);
+                chargeBatteries.clear();
+                super.clear();
             }
         }
 
         @Override
         public void clear() {
-            chargeBatteries.clear();
-            super.clear();
+            throw new UnsupportedOperationException();
         }
 
         private void tick() {
@@ -329,12 +368,13 @@ public class ChargeNetwork {
             if (chargeGraph.isNull() && nullNodes.size() > 1)
                 chargeGraph = new ChargeGraph();
             if (chargeGraph.isActive()) {
+                int originalSize = chargeGraph.size();
                 chargeGraph.addAll(nullNodes);
                 for (ChargeGraph graph : graphs) {
                     chargeGraph.addAll(graph);
                 }
-                graphs.forEach(ChargeGraph::clear);
-                Game.log(Level.INFO, "Constructing Graph: {0}->{1}", pos, chargeGraph);
+                graphs.forEach(g -> g.destroy(false));
+                Game.log(Level.INFO, "Constructing Graph: {0}->{1} Added {2} nodes", pos, chargeGraph, chargeGraph.size() - originalSize);
             }
         }
 

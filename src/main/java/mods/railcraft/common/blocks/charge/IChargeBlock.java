@@ -10,20 +10,18 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.BiConsumer;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 /**
@@ -38,51 +36,12 @@ public interface IChargeBlock {
 
     default void registerNode(IBlockState state, World world, BlockPos pos) {
         ChargeDef chargeDef = getChargeDef(state, world, pos);
-        ChargeNetwork chargeNetwork = ChargeManager.getNetwork(world);
-        if (chargeDef != null && !chargeNetwork.nodeMatches(pos, chargeDef)) {
-            chargeNetwork.registerChargeNode(world, pos, chargeDef);
-            Set<BlockPos> visitedNodes = new HashSet<>();
-            visitedNodes.add(pos);
-            Set<BlockPos> registeredNodes = new HashSet<>();
-            registeredNodes.add(pos);
-            Set<BlockPos> newNodes = new HashSet<>();
-            newNodes.add(pos);
-            while (!newNodes.isEmpty() && registeredNodes.size() < 500) {
-                Set<BlockPos> currentNodes = new HashSet<>(newNodes);
-                newNodes.clear();
-                for (BlockPos current : currentNodes) {
-                    IBlockState cState = WorldPlugin.getBlockState(world, current);
-                    if (cState.getBlock() instanceof IChargeBlock) {
-                        ((IChargeBlock) cState.getBlock()).forChargeConnections(world, current, chargeDef, (conPos, conDef) -> {
-                            if (!visitedNodes.contains(conPos) && chargeNetwork.isUndefined(conPos)) {
-                                visitedNodes.add(conPos);
-                                newNodes.add(conPos);
-                                if (chargeNetwork.registerChargeNode(world, conPos, conDef))
-                                    registeredNodes.add(conPos);
-                            }
-                        });
-                    }
-                }
-            }
-            Game.log(Level.INFO, "Nodes registered: {0} Nodes visited: {1}", registeredNodes.size(), visitedNodes.size());
-        }
+        if (chargeDef != null)
+            ChargeManager.getNetwork(world).registerChargeNode(world, pos, chargeDef);
     }
 
     default void deregisterNode(World world, BlockPos pos) {
         ChargeManager.getNetwork(world).deregisterChargeNode(pos);
-    }
-
-    default void forChargeConnections(World world, BlockPos pos, ChargeDef chargeDef, BiConsumer<BlockPos, ChargeDef> action) {
-        Map<BlockPos, EnumSet<IChargeBlock.ConnectType>> possibleConnections = chargeDef.getConnectType().getPossibleConnectionLocations(pos);
-        for (Map.Entry<BlockPos, EnumSet<IChargeBlock.ConnectType>> connection : possibleConnections.entrySet()) {
-            IBlockState otherState = WorldPlugin.getBlockState(world, connection.getKey());
-            if (otherState.getBlock() instanceof IChargeBlock) {
-                ChargeDef other = ((IChargeBlock) otherState.getBlock()).getChargeDef(WorldPlugin.getBlockState(world, connection.getKey()), world, connection.getKey());
-                if (other != null && other.getConnectType().getPossibleConnectionLocations(connection.getKey()).get(pos).contains(chargeDef.getConnectType())) {
-                    action.accept(connection.getKey(), other);
-                }
-            }
-        }
     }
 
     enum ConnectType {
