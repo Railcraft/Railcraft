@@ -60,9 +60,9 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
         }
     }
 
-    private static final int IC2_OUTPUT = 200;
-    private static final int BC_OUTPUT = 64;
-    private static final int STEAM_USAGE = 320;
+    private static final int IC2_OUTPUT = 220;
+    private static final int BC_OUTPUT = 72;
+    private static final int STEAM_USAGE = 360;
     private static final int WATER_OUTPUT = 4;
     private static final List<MultiBlockPattern> patterns = new ArrayList<MultiBlockPattern>();
     private static ItemStack sampleRotor = null;
@@ -75,7 +75,7 @@ public class TileSteamTurbine extends TileMultiBlock implements IMultiEmitterDel
 
     private final StandaloneInventory inv = new StandaloneInventory(1, this);
     public float output;
-    private final FluidStack waterFilter = Fluids.WATER.get(2);
+    private final FluidStack waterFilter = Fluids.WATER.get(3);
     protected final FilteredTank tankSteam = new FilteredTank(FluidHelper.BUCKET_VOLUME * 4, Fluids.STEAM.get(), this);
     protected final FilteredTank tankWater = new FilteredTank(FluidHelper.BUCKET_VOLUME * 4, Fluids.WATER.get(), this);
     protected final TankManager tankManager = new TankManager();
