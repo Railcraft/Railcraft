@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.charge;
 
+import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -138,7 +139,7 @@ public interface IChargeBlock {
 
         private ChargeDef(@Nonnull ConnectType connectType, double cost, @Nullable BiFunction<World, BlockPos, ChargeBattery> batterySupplier) {
             this.connectType = connectType;
-            this.cost = cost;
+            this.cost = cost * RailcraftConfig.chargeMaintenanceCostMultiplier();
             this.batterySupplier = batterySupplier;
         }
 

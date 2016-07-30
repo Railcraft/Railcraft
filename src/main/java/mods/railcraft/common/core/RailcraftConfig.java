@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.core;
 
 import mods.railcraft.api.signals.SignalTools;
@@ -106,11 +106,12 @@ public class RailcraftConfig {
     private static int wreckingID;
     private static int implosionID;
     private static int destructionID;
-    private static float boreMiningSpeedMultiplier = 1;
-    private static float boilerMultiplierFuel = 1;
-    private static float boilerMultiplierBiofuel = 1;
+    private static float boreMiningSpeedMultiplier = 1F;
+    private static float chargeMaintenanceCostMultiplier = 1F;
+    private static float boilerMultiplierFuel = 1F;
+    private static float boilerMultiplierBiofuel = 1F;
     private static float fuelPerSteamMultiplier = Steam.FUEL_PER_BOILER_CYCLE;
-    private static float steamLocomotiveEfficiencyMultiplier = 3;
+    private static float steamLocomotiveEfficiencyMultiplier = 3F;
     private static boolean allowTankStacking;
     private static Configuration configMain;
     private static Configuration configBlock;
@@ -225,8 +226,10 @@ public class RailcraftConfig {
 
         machinesRequirePower = get(CAT_TWEAKS_BLOCKS + ".machines", "requirePower", true, "change to '{t}=false' to disable the Power Requirements for most machines");
 
-        boilerMultiplierFuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "fuelMultiplier", 0.0F, 1.0F, 10F, "adjust the heat value of Fuel in a Boiler");
-        boilerMultiplierBiofuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "biofuelMultiplier", 0.0F, 1.0F, 10F, "adjust the heat value of BioFuel in a Boiler");
+        chargeMaintenanceCostMultiplier = get(CAT_TWEAKS_BLOCKS + ".charge", "maintenanceCostMultiplier", 0.2F, 1.0F, 10F, "adjust the maintenance costs for the Charge network, min=0.2, default=1.0, max=10.0");
+
+        boilerMultiplierFuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "fuelMultiplier", 0.2F, 1.0F, 10F, "adjust the heat value of Fuel in a Boiler, min=0.2, default=1.0, max=10.0");
+        boilerMultiplierBiofuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "biofuelMultiplier", 0.2F, 1.0F, 10F, "adjust the heat value of BioFuel in a Boiler, min=0.2, default=1.0, max=10.0");
 
         fuelPerSteamMultiplier = get(CAT_TWEAKS + ".steam", "fuelPerSteamMultiplier", 0.2F, 1.0F, 6.0F, "adjust the amount of fuel used to create Steam, min=0.2, default=1.0, max=6.0");
     }
@@ -789,6 +792,10 @@ public class RailcraftConfig {
 
     public static boolean machinesRequirePower() {
         return machinesRequirePower;
+    }
+
+    public static float chargeMaintenanceCostMultiplier() {
+        return chargeMaintenanceCostMultiplier;
     }
 
     public static float boilerFuelMultiplier() {
