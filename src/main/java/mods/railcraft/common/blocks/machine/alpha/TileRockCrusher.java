@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.statements.IActionExternal;
@@ -22,7 +23,10 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.iterators.IInvSlot;
+import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -129,7 +133,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         patterns.add(new MultiBlockPattern(map2));
     }
 
-    private final InventoryMapper invInput = new InventoryMapper(this, 0, 9);
+    private final InventoryMapper invInput = new InventoryMapper(this, 0, 9, false);
     private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9, false);
     private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
     private int processTime;
@@ -227,8 +231,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
                 for (EntityItem item : TileEntityHopper.getCaptureItems(getWorld(), x, y + 1, z)) {
                     if (item != null && useMasterEnergy(SUCKING_POWER_COST, false)) {
                         ItemStack stack = item.getEntityItem().copy();
-                        if (InventoryManipulator.get((IInventory) invInput).addStack(stack) != null)
-                            useMasterEnergy(SUCKING_POWER_COST, true);
+                        InventoryManipulator.get((IInventory) invInput).addStack(stack);
+                        useMasterEnergy(SUCKING_POWER_COST, true);
                         item.setDead();
                     }
                 }
@@ -248,12 +252,13 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
                 ItemStack input = null;
                 ICrusherCraftingManager.ICrusherRecipe recipe = null;
-                for (int i = 0; i < 9; i++) {
-                    input = invInput.getStackInSlot(i);
+                for (IInvSlot slot : InventoryIterator.getIterable((IInventory) invInput)) {
+                    input = slot.getStack();
                     if (input != null) {
                         recipe = RailcraftCraftingManager.rockCrusher.getRecipe(input);
-                        if (recipe != null)
-                            break;
+                        if (recipe == null)
+                            recipe = RockCrusherCraftingManager.NULL_RECIPE;
+                        break;
                     }
                 }
 
@@ -311,9 +316,8 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
         return false;
     }
 
-
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("processTime", processTime);
 
@@ -323,7 +327,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         processTime = data.getInteger("processTime");
 
@@ -372,27 +376,26 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
             mBlock.actions.add(action);
     }
 
-
     @Override
-    public int[] getSlotsForFace( EnumFacing side) {
+    public int[] getSlotsForFace(EnumFacing side) {
         if (side == EnumFacing.UP)
             return SLOTS_INPUT;
         return SLOTS_OUTPUT;
     }
 
     @Override
-    public boolean canInsertItem(int index,  ItemStack itemStackIn,  EnumFacing direction) {
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int index,  ItemStack stack,  EnumFacing direction) {
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
         return index >= 9;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean isItemValidForSlot(int slot,  ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         if (slot < 9)

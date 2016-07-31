@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
 import com.google.common.collect.ForwardingCollection;
@@ -14,6 +15,7 @@ import mods.railcraft.api.crafting.ICrusherCraftingManager;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -27,6 +29,22 @@ import java.util.*;
 public class RockCrusherCraftingManager implements ICrusherCraftingManager {
 
     private static final RecipeList recipes = new RecipeList();
+    public static final ICrusherRecipe NULL_RECIPE = new CrusherRecipe(new IInputMatcher() {
+        @Override
+        public ItemStack getDisplayStack() {
+            return new ItemStack(Blocks.SAND);
+        }
+
+        @Override
+        public Priority getPriority() {
+            return Priority.LOW;
+        }
+
+        @Override
+        public boolean apply(@Nullable ItemStack input) {
+            return true;
+        }
+    });
 
     @Nonnull
     @Override
@@ -269,11 +287,9 @@ public class RockCrusherCraftingManager implements ICrusherCraftingManager {
         @Override
         public List<ItemStack> getProcessedOutputs() {
             List<ItemStack> list = new ArrayList<ItemStack>();
-            List<IOutputEntry> outputs = new ArrayList<IOutputEntry>();
             for (IOutputEntry entry : outputs) {
                 if (entry.getGenRule().apply(outputs)) {
                     list.add(entry.getOutput());
-                    outputs.add(entry);
                 }
             }
             return list;
