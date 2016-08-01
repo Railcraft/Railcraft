@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.particles;
 
 import net.minecraft.client.renderer.VertexBuffer;
@@ -23,14 +24,14 @@ public class ParticleFireSpark extends ParticleBase {
 
     private final float lavaParticleScale;
     private final Vec3d end;
-    private final double maxDist;
+    private final double maxHorizontalDist;
 
     public ParticleFireSpark(World world, Vec3d start, Vec3d end) {
         super(world, start, new Vec3d(0, 0, 0));
         this.end = end;
 
-        maxDist = getPos().squareDistanceTo(end);
-        calculateVector(maxDist);
+        maxHorizontalDist = getHorizontalDistSq(end);
+        calculateVector(maxHorizontalDist);
 
         multipleParticleScaleBy(0.5f);
 
@@ -42,15 +43,22 @@ public class ParticleFireSpark extends ParticleBase {
         setParticleTextureIndex(49);
     }
 
+    private double getHorizontalDistSq(Vec3d point) {
+        Vec3d pos = getPos();
+        double xDiff = pos.xCoord - point.xCoord;
+        double zDiff = pos.zCoord - point.zCoord;
+        return xDiff * xDiff + zDiff * zDiff;
+    }
+
     private void calculateVector(double dist) {
         Vec3d vecParticle = getPos();
 
-        Vec3d vel = vecParticle.subtract(end);
+        Vec3d vel = end.subtract(vecParticle);
         vel = vel.normalize();
 
         float velScale = 0.1f;
         this.motionX = vel.xCoord * velScale;
-        this.motionY = vel.yCoord * velScale + 0.2 * (dist / maxDist);
+        this.motionY = vel.yCoord * velScale + 0.4 * (dist / maxHorizontalDist);
         this.motionZ = vel.zCoord * velScale;
     }
 
@@ -98,7 +106,7 @@ public class ParticleFireSpark extends ParticleBase {
             return;
         }
 
-        calculateVector(dist);
+        calculateVector(getHorizontalDistSq(end));
 
         moveEntity(motionX, motionY, motionZ);
     }

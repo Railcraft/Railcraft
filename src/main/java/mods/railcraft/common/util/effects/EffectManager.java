@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.effects;
 
 import net.minecraft.entity.Entity;
@@ -26,7 +27,23 @@ public class EffectManager {
 
         Vec3d getPos();
 
-        boolean isDead();
+        default boolean isDead() {
+            return false;
+        }
+    }
+
+    public static class EffectSourceBlockPos implements IEffectSource {
+
+        private final Vec3d pos;
+
+        private EffectSourceBlockPos(BlockPos pos) {
+            this.pos = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+        }
+
+        @Override
+        public Vec3d getPos() {
+            return pos;
+        }
     }
 
     public static class EffectSourceTile implements IEffectSource {
@@ -73,6 +90,8 @@ public class EffectManager {
             return new EffectSourceTile((TileEntity) source);
         } else if (source instanceof Entity) {
             return new EffectSourceEntity((Entity) source);
+        } else if (source instanceof BlockPos) {
+            return new EffectSourceBlockPos((BlockPos) source);
         }
         throw new RuntimeException("Invalid Effect Source");
     }

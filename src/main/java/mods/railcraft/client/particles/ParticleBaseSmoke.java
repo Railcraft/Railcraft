@@ -1,11 +1,12 @@
-/*
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.particles;
 
 import net.minecraft.util.math.Vec3d;
@@ -14,15 +15,13 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ParticleSimple extends ParticleBase {
+public abstract class ParticleBaseSmoke extends ParticleBase {
 
-    public double gravity = 0.004D;
-
-    public ParticleSimple(World world, Vec3d start) {
+    protected ParticleBaseSmoke(World world, Vec3d start) {
         this(world, start, new Vec3d(0, 0, 0), 3f);
     }
 
-    public ParticleSimple(World world, Vec3d start, Vec3d vel, float scale) {
+    protected ParticleBaseSmoke(World world, Vec3d start, Vec3d vel, float scale) {
         super(world, start, new Vec3d(0, 0, 0));
         this.motionX *= 0.1;
         this.motionY *= 0.1;
@@ -51,7 +50,7 @@ public class ParticleSimple extends ParticleBase {
         this.particleAge++;
 
         setParticleTextureIndex(7 - particleAge * 8 / particleMaxAge);
-        this.motionY += gravity;
+        this.motionY -= 0.04D * particleGravity;
         moveEntity(motionX, motionY, motionZ);
 
         if (posY == prevPosY) {

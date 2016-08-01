@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,10 +6,11 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.core;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
+import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid;
@@ -82,9 +83,10 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new Object() {
             @SubscribeEvent
             public void textureStitch(TextureStitchEvent.Pre event) {
-                CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:cart.redstone.flux")));
-                CartContentRendererRedstoneFlux.instance().setFrameIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:cart.redstone.flux.frame")));
+                CartContentRendererRedstoneFlux.instance().setRedstoneIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:entities/carts/cart_redstone_flux")));
+                CartContentRendererRedstoneFlux.instance().setFrameIcon(event.getMap().registerSprite(new ResourceLocation("railcraft:entities/carts/cart_redstone_flux_frame")));
 
+                ParticleSpark.sprite = event.getMap().registerSprite(new ResourceLocation("railcraft:particle/spark"));
 
                 for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
                     Block block = blockContainer.block();

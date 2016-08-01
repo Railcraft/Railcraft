@@ -1,16 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.effects;
 
 import mods.railcraft.api.signals.IPairEffectRenderer;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.util.network.RailcraftInputStream;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -36,6 +38,8 @@ public interface IEffectManager extends IPairEffectRenderer {
     void steamJetEffect(World world, Object source, Vec3d vel);
 
     void chimneyEffect(World world, double x, double y, double z);
+
+    void sparkEffect(IBlockState stateIn, World worldIn, BlockPos pos);
 
     void teleportEffect(Entity entity, Vec3d destination);
 

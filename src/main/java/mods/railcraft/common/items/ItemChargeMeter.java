@@ -17,6 +17,7 @@ import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -39,6 +40,7 @@ import java.util.Locale;
  */
 public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockingItem {
     private static final DecimalFormat chargeFormatter = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
+    private static final int SECONDS_TO_RECORD = 5;
 
     static {
         chargeFormatter.applyPattern("#,##0.###");
@@ -114,16 +116,19 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
 //                    returnValue = EnumActionResult.SUCCESS;
 //                }
 //            }
-        ChargeNetwork.ChargeGraph graph = ChargeManager.getNetwork(world).getGraph(pos);
-        if (graph.isActive()) {
-            sendChat(player, "railcraft.gui.charge.meter.network", graph.size(), graph.getCharge(), 0.0, graph.getMaintenanceCost());
-            ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
-            if (node != null) {
-                if (node.getBattery() != null)
-                    sendChat(player, "railcraft.gui.charge.meter.producer", node.getBattery().getCharge(), 0.0);
-                else
-                    sendChat(player, "railcraft.gui.charge.meter.node", 0.0, node.getChargeDef().getCost());
-            }
+        ChargeNetwork.ChargeNode node = ChargeManager.getNetwork(world).getNode(pos);
+        if (!node.isNull() && !node.isGraphNull()) {
+            sendChat(player, "railcraft.gui.charge.meter.start", SECONDS_TO_RECORD);
+            node.startRecordingUsage(SECONDS_TO_RECORD * 20, (n, avg) -> {
+                ChargeNetwork.ChargeGraph graph = n.getChargeGraph();
+                sendChat(player, "railcraft.gui.charge.meter.network", graph.size(), graph.isInfinite() ? "INF" : graph.getCharge(), graph.getAverageUsagePerTick(), graph.getMaintenanceCost());
+                if (n.getBattery() == null)
+                    sendChat(player, "railcraft.gui.charge.meter.node", avg, n.getChargeDef().getCost());
+                else {
+                    boolean infiniteBat = n.getBattery().isInfinite();
+                    sendChat(player, "railcraft.gui.charge.meter.producer", infiniteBat ? "INF" : n.getBattery().getCharge(), infiniteBat ? "INF" : 0.0);
+                }
+            });
             returnValue = EnumActionResult.SUCCESS;
         }
 //        } catch (Throwable er) {
@@ -136,7 +141,7 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
     private void sendChat(EntityPlayer player, String msg, Object... args) {
         for (int i = 0; i < args.length; i++) {
             if (args[i] instanceof Double)
-                args[i] = chargeFormatter.format(args[i]);
+                args[i] = HumanReadableNumberFormatter.format((Double) args[i]);
         }
         ChatPlugin.sendLocalizedChatFromServer(player, msg, args);
     }

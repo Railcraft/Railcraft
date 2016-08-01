@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.core.IRailcraftModule;
@@ -95,10 +95,12 @@ public enum EnumDetector implements IVariantEnumBlock {
         return name().toLowerCase(Locale.ENGLISH);
     }
 
+    @Nullable
     public ItemStack getItem() {
         return getItem(1);
     }
 
+    @Nullable
     public ItemStack getItem(int qty) {
         return RailcraftBlocks.detector.getStack(qty, this);
     }

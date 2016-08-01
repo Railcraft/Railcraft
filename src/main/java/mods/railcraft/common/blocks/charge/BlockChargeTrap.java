@@ -15,6 +15,7 @@ import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -32,8 +33,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 /**
  * Created by CovertJaguar on 7/22/2016 for Railcraft.
@@ -53,6 +57,7 @@ public class BlockChargeTrap extends RailcraftBlock implements IChargeBlock {
         setResistance(10F);
         setHardness(5F);
         setSoundType(SoundType.METAL);
+        setTickRandomly(true);
     }
 
     @Override
@@ -105,15 +110,26 @@ public class BlockChargeTrap extends RailcraftBlock implements IChargeBlock {
         return new BlockStateContainer(this, REDSTONE);
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        super.randomDisplayTick(stateIn, worldIn, pos, rand);
+        if (stateIn.getValue(REDSTONE))
+//            worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH,
+//                    pos.getX() + rand.nextDouble(),
+//                    pos.getY() + 0.1F + stateIn.getBoundingBox(worldIn, pos).maxY,
+//                    pos.getZ() + rand.nextDouble(),
+//                    0.0D, 0.0D, 0.0D);
+            EffectManager.instance.sparkEffect(stateIn, worldIn, pos);
+    }
+
     /**
      * Called When an Entity Collided with the Block
      */
     @Override
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-        ChargeManager.getNetwork(worldIn).getGraph(pos).useCharge(ZAP_COST);
-        if (MiscTools.isKillableEntity(entityIn)) {
-            //TODO: increase damage
-            entityIn.attackEntityFrom(RailcraftDamageSource.ELECTRIC, 1);
+        if (MiscTools.isKillableEntity(entityIn) && ChargeManager.getNetwork(worldIn).getNode(pos).useCharge(ZAP_COST)) {
+            entityIn.attackEntityFrom(RailcraftDamageSource.ELECTRIC, 10);
         }
     }
 

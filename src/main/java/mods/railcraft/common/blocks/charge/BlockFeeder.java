@@ -51,7 +51,12 @@ public class BlockFeeder extends RailcraftBlockSubtyped implements IChargeBlock 
 
     public static final PropertyEnum<FeederVariant> VARIANT = PropertyEnum.create("variant", FeederVariant.class);
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
-    private static final ChargeBattery adminBattery = new ChargeBattery() {
+    private static final ChargeBattery infiniteBattery = new ChargeBattery() {
+        @Override
+        public boolean isInfinite() {
+            return true;
+        }
+
         @Override
         public double getCharge() {
             return getCapacity();
@@ -62,7 +67,7 @@ public class BlockFeeder extends RailcraftBlockSubtyped implements IChargeBlock 
             return request;
         }
     };
-    private static final ChargeDef chargeDef = new ChargeDef(ConnectType.BLOCK, (world, pos) -> adminBattery);
+    private static final ChargeDef chargeDef = new ChargeDef(ConnectType.BLOCK, (world, pos) -> infiniteBattery);
 
     public BlockFeeder() {
         super(Material.IRON, FeederVariant.class);

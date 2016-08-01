@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.effects;
 
 import mods.railcraft.common.items.ItemGoggles;
@@ -15,6 +16,7 @@ import mods.railcraft.common.util.network.PacketEffect.Effect;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
@@ -122,5 +124,9 @@ public class CommonEffectProxy implements IEffectManager {
 
     @Override
     public void chimneyEffect(World world, double x, double y, double z) {
+    }
+
+    @Override
+    public void sparkEffect(IBlockState stateIn, World worldIn, BlockPos pos) {
     }
 }

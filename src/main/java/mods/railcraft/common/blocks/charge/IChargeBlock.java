@@ -166,8 +166,12 @@ public interface IChargeBlock {
 
     class ChargeBattery {
         public static final String NBT_CHARGE_TAG = "charge";
-        public static final double MAX_CHARGE = 20000.0;
+        public static final double DEFAULT_MAX_CHARGE = 20000.0;
         private double charge;
+
+        public boolean isInfinite() {
+            return false;
+        }
 
         public double getCharge() {
             return charge;
@@ -178,7 +182,7 @@ public interface IChargeBlock {
         }
 
         public double getCapacity() {
-            return MAX_CHARGE;
+            return DEFAULT_MAX_CHARGE;
         }
 
         public void addCharge(double charge) {

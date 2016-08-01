@@ -1,17 +1,16 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.client.particles;
 
 import net.minecraft.client.particle.Particle;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -32,12 +31,12 @@ public class ParticleBase extends Particle {
         super(par1World, start.xCoord, start.yCoord, start.zCoord, vel.xCoord, vel.yCoord, vel.zCoord);
     }
 
-    public Vec3d getPos() {
-        return new Vec3d(posX, posY, posZ);
+    public void setParticleGravity(float particleGravity) {
+        this.particleGravity = particleGravity;
     }
 
-    public BlockPos getBlockPos() {
-        return new BlockPos(posX, posY + 0.5D, posZ);
+    public Vec3d getPos() {
+        return new Vec3d(posX, posY, posZ);
     }
 
     @Override
