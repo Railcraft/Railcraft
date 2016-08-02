@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import mods.railcraft.api.core.IRailcraftModule;
@@ -33,8 +33,6 @@ import java.util.List;
  */
 public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
 
-    ELECTRIC_FEEDER(ModuleElectricity.class, "electric.feeder", TileElectricFeeder.class, 1, 1),
-    ELECTRIC_FEEDER_ADMIN(ModuleElectricity.class, "electric.feeder.admin", TileElectricFeederAdmin.class, 2, 1),
     ADMIN_STEAM_PRODUCER(ModuleSteam.class, "admin.steam.producer", TileAdminSteamProducer.class, 2, 1),
     FORCE_TRACK_EMITTER(ModuleElectricity.class, "force.track.emitter", TileForceTrackEmitter.class, 1, 1),
     FLUX_TRANSFORMER(ModuleElectricity.class, "flux.transformer", TileFluxTransformer.class, 1, 1),
@@ -45,8 +43,6 @@ public enum EnumMachineEpsilon implements IEnumMachine<EnumMachineEpsilon> {
     public static final MachineProxy<EnumMachineEpsilon> PROXY = MachineProxy.create(VALUES, VARIANT, creativeList);
 
     static {
-        creativeList.add(ELECTRIC_FEEDER);
-        creativeList.add(ELECTRIC_FEEDER_ADMIN);
         creativeList.add(FLUX_TRANSFORMER);
         creativeList.add(FORCE_TRACK_EMITTER);
         creativeList.add(ADMIN_STEAM_PRODUCER);

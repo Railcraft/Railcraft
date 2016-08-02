@@ -27,8 +27,8 @@ import mods.railcraft.common.blocks.aesthetics.materials.slab.ItemSlab;
 import mods.railcraft.common.blocks.aesthetics.post.*;
 import mods.railcraft.common.blocks.anvil.BlockRCAnvil;
 import mods.railcraft.common.blocks.anvil.ItemAnvil;
+import mods.railcraft.common.blocks.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.charge.BlockChargeTrap;
-import mods.railcraft.common.blocks.charge.BlockFeeder;
 import mods.railcraft.common.blocks.charge.BlockFrame;
 import mods.railcraft.common.blocks.charge.BlockWire;
 import mods.railcraft.common.blocks.detector.BlockDetector;
@@ -82,7 +82,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     brickNether("brick.nether", () -> new BlockBrick(BrickTheme.NETHER), ItemBrick::new),
     brickQuarried("brick.quarried", () -> new BlockBrick(BrickTheme.QUARRIED), ItemBrick::new),
     brickSandy("brick.sandy", () -> new BlockBrick(BrickTheme.SANDY), ItemBrick::new),
-    chargeFeeder("charge.feeder", BlockFeeder::new, ItemBlockRailcraftSubtyped::new, BlockFeeder.FeederVariant.class),
+    chargeFeeder("charge.feeder", BlockChargeFeeder::new, ItemBlockRailcraftSubtyped::new, BlockChargeFeeder.FeederVariant.class),
     chargeTrap("charge.trap", BlockChargeTrap::new, ItemBlockRailcraft::new),
     generic("generic", BlockGeneric::new, ItemBlockGeneric::new, EnumGeneric.class),
     detector("detector", BlockDetector::new, ItemDetector::new, EnumDetector.class),

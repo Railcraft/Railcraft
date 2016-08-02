@@ -19,6 +19,7 @@ import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.EnumTools;
@@ -42,6 +43,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -109,6 +112,21 @@ public class BlockWire extends RailcraftBlock implements IPostConnection, ICharg
     @Override
     public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
         return chargeDef;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (rand.nextInt(50) == 25) {
+            IBlockState state = getActualState(stateIn, worldIn, pos);
+            int numConnection = 0;
+            for (PropertyEnum<Connection> connection : connectionProperties) {
+                if (state.getValue(connection) != Connection.NONE)
+                    numConnection++;
+            }
+            if (numConnection > 2)
+                EffectManager.instance.sparkEffectPoint(worldIn, pos);
+        }
     }
 
     @Override

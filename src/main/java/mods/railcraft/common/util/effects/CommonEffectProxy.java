@@ -127,6 +127,10 @@ public class CommonEffectProxy implements IEffectManager {
     }
 
     @Override
-    public void sparkEffect(IBlockState stateIn, World worldIn, BlockPos pos) {
+    public void sparkEffectPoint(World world, Object source) {
+    }
+
+    @Override
+    public void sparkEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos) {
     }
 }

@@ -1,28 +1,28 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
-import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
-import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.carts.ItemLocomotive;
 import mods.railcraft.common.carts.LocomotivePaintingRecipe;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.items.ItemGear.EnumGear;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -100,7 +100,8 @@ public class ModuleLocomotives extends RailcraftModulePayload {
             @Override
             public void init() {
                 if (RailcraftCarts.LOCO_ELECTRIC.isEnabled()) {
-                    Object feederUnit = EnumMachineEpsilon.ELECTRIC_FEEDER.isAvailable() ? EnumMachineEpsilon.ELECTRIC_FEEDER.getItem() : "blockCopper";
+                    Object feederUnit = RailcraftBlocks.chargeFeeder.getStack(BlockChargeFeeder.FeederVariant.IC2);
+                    if (feederUnit == null) feederUnit = "blockCopper";
                     ItemStack cartStack = RailcraftCarts.LOCO_ELECTRIC.getCartItem();
                     ItemLocomotive.setItemColorData(cartStack, EnumColor.YELLOW, EnumColor.BLACK);
                     CraftingPlugin.addRecipe(cartStack,

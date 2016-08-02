@@ -12,16 +12,14 @@ package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
-import mods.railcraft.common.blocks.RailcraftBlockSubtyped;
+import mods.railcraft.common.blocks.RailcraftBlockContainerSubtyped;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.plugins.forge.*;
+import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -32,6 +30,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -47,7 +46,7 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockFeeder extends RailcraftBlockSubtyped implements IChargeBlock {
+public class BlockChargeFeeder extends RailcraftBlockContainerSubtyped implements IChargeBlock {
 
     public static final PropertyEnum<FeederVariant> VARIANT = PropertyEnum.create("variant", FeederVariant.class);
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
@@ -67,9 +66,8 @@ public class BlockFeeder extends RailcraftBlockSubtyped implements IChargeBlock 
             return request;
         }
     };
-    private static final ChargeDef chargeDef = new ChargeDef(ConnectType.BLOCK, (world, pos) -> infiniteBattery);
 
-    public BlockFeeder() {
+    public BlockChargeFeeder() {
         super(Material.IRON, FeederVariant.class);
         IBlockState defaultState = blockState.getBaseState().withProperty(VARIANT, FeederVariant.IC2).withProperty(REDSTONE, false);
         setDefaultState(defaultState);
@@ -77,6 +75,8 @@ public class BlockFeeder extends RailcraftBlockSubtyped implements IChargeBlock 
         setHardness(5F);
         setSoundType(SoundType.METAL);
         setTickRandomly(true);
+
+        RailcraftRegistry.register(TileChargeFeeder.class, "charge.feeder.ic2");
     }
 
     @Override
@@ -100,7 +100,8 @@ public class BlockFeeder extends RailcraftBlockSubtyped implements IChargeBlock 
     @Nullable
     @Override
     public ChargeDef getChargeDef(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return chargeDef;
+        FeederVariant variant = state.getValue(VARIANT);
+        return variant.chargeDef;
     }
 
     @Override
@@ -141,6 +142,19 @@ public class BlockFeeder extends RailcraftBlockSubtyped implements IChargeBlock 
     }
 
     @Override
+    public boolean hasTileEntity(IBlockState state) {
+        return state.getValue(VARIANT) == FeederVariant.IC2;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
+        if (state.getValue(VARIANT) == FeederVariant.IC2)
+            return new TileChargeFeeder();
+        return null;
+    }
+
+    @Override
     public int damageDropped(IBlockState state) {
         return state.getValue(VARIANT).ordinal();
     }
@@ -166,6 +180,12 @@ public class BlockFeeder extends RailcraftBlockSubtyped implements IChargeBlock 
     }
 
     @Override
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (stateIn.getValue(REDSTONE) && rand.nextInt(50) == 25)
+            EffectManager.instance.sparkEffectSurface(stateIn, worldIn, pos);
+    }
+
+    @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         super.updateTick(worldIn, pos, state, rand);
         registerNode(state, worldIn, pos);
@@ -185,13 +205,22 @@ public class BlockFeeder extends RailcraftBlockSubtyped implements IChargeBlock 
 
     public enum FeederVariant implements IVariantEnumBlock {
 
-        IC2,
-        ADMIN;
+        IC2(new ChargeDef(ConnectType.BLOCK, (world, pos) -> {
+            TileEntity tileEntity = WorldPlugin.getBlockTile(world, pos);
+            if (tileEntity instanceof TileChargeFeeder) {
+                return ((TileChargeFeeder) tileEntity).chargeBattery;
+            }
+            //noinspection ConstantConditions
+            return null;
+        })),
+        ADMIN(new ChargeDef(ConnectType.BLOCK, (world, pos) -> infiniteBattery));
         public static final FeederVariant[] VALUES = values();
         private final String name;
+        private final ChargeDef chargeDef;
 
-        FeederVariant() {
+        FeederVariant(ChargeDef chargeDef) {
             name = name().toLowerCase(Locale.ROOT);
+            this.chargeDef = chargeDef;
         }
 
         @Override

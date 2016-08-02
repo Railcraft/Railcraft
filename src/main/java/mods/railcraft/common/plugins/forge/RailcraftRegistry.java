@@ -1,15 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.RailcraftItemStackRegistry;
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -18,6 +20,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Level;
 
@@ -168,5 +171,13 @@ public final class RailcraftRegistry {
         RailcraftItemStackRegistry.register(tag, new ItemStack(block));
         if (Game.IS_DEBUG)
             Game.log(Level.INFO, "Block registered: {0}, {1}", block.getClass(), block.getRegistryName().toString());
+    }
+
+    public static void register(Class<? extends TileEntity> tileEntity, String tag) {
+        GameRegistry.registerTileEntity(tileEntity, RailcraftConstants.RESOURCE_DOMAIN + ":" + tag);
+    }
+
+    public static void register(Class<? extends TileEntity> tileEntity, String tag, String... oldTags) {
+        GameRegistry.registerTileEntityWithAlternatives(tileEntity, RailcraftConstants.RESOURCE_DOMAIN + ":" + tag, oldTags);
     }
 }

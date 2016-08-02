@@ -249,7 +249,19 @@ public class ClientEffectProxy extends CommonEffectProxy {
     }
 
     @Override
-    public void sparkEffect(IBlockState stateIn, World worldIn, BlockPos pos) {
+    public void sparkEffectPoint(World world, Object source) {
+        if (thinParticles(false))
+            return;
+        IEffectSource es = EffectManager.getEffectSource(source);
+        Vec3d vel = new Vec3d(
+                rand.nextDouble() - 0.5D,
+                rand.nextDouble() - 0.5D,
+                rand.nextDouble() - 0.5D);
+        spawnParticle(new ParticleSpark(world, es.getPos(), vel));
+    }
+
+    @Override
+    public void sparkEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos) {
         if (thinParticles(false))
             return;
         for (EnumFacing side : EnumFacing.VALUES) {

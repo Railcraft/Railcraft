@@ -32,12 +32,7 @@ public class ChargeManager {
     private static final Map<World, ChargeNetwork> chargeNetworks = new MapMaker().weakKeys().makeMap();
 
     public static ChargeNetwork getNetwork(World world) {
-        ChargeNetwork chargeNetwork = chargeNetworks.get(world);
-        if (chargeNetwork == null) {
-            chargeNetwork = new ChargeNetwork(world);
-            chargeNetworks.put(world, chargeNetwork);
-        }
-        return chargeNetwork;
+        return chargeNetworks.computeIfAbsent(world, ChargeNetwork::new);
     }
 
     public static ChargeManager getEventListener() {

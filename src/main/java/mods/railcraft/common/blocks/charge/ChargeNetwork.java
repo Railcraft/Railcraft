@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.charge;
 
 import com.google.common.collect.ForwardingSet;
 import com.google.common.collect.Iterators;
-import com.google.common.collect.MapMaker;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
@@ -33,16 +32,18 @@ import java.util.function.Predicate;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ChargeNetwork {
-    private static final ChargeGraph NULL_GRAPH = new NullGraph();
+    private final ChargeGraph NULL_GRAPH = new NullGraph();
     public final Map<BlockPos, ChargeNode> chargeNodes = new HashMap<>();
     public final Map<BlockPos, ChargeNode> chargeQueue = new LinkedHashMap<>();
     public final Set<ChargeNode> tickingNodes = new LinkedHashSet<>();
     public final Set<ChargeGraph> chargeGraphs = Collections.newSetFromMap(new WeakHashMap<>());
     private final ChargeNode NULL_NODE = new NullNode();
     private final WeakReference<World> world;
+    private final BatterySaveData batterySaveData;
 
     public ChargeNetwork(World world) {
         this.world = new WeakReference<World>(world);
+        this.batterySaveData = BatterySaveData.forWorld(world);
     }
 
     public void tick() {
@@ -104,6 +105,7 @@ public class ChargeNetwork {
         ChargeNode chargeNode = chargeNodes.remove(pos);
         chargeNode.invalid = true;
         chargeNode.chargeGraph.destroy(true);
+        batterySaveData.removeBattery(pos);
     }
 
     public boolean registerChargeNode(World world, BlockPos pos, IChargeBlock.ChargeDef chargeDef) {
@@ -159,9 +161,9 @@ public class ChargeNetwork {
         return node != null && !node.isNull() && !node.invalid && node.chargeDef == chargeDef;
     }
 
-    public static class ChargeGraph extends ForwardingSet<ChargeNode> {
+    public class ChargeGraph extends ForwardingSet<ChargeNode> {
         private final Set<ChargeNode> chargeNodes = new HashSet<>();
-        private final Map<ChargeNode, IChargeBlock.ChargeBattery> chargeBatteries = new MapMaker().weakKeys().weakValues().makeMap();
+        private final Map<ChargeNode, IChargeBlock.ChargeBattery> chargeBatteries = new LinkedHashMap<>();
         private boolean invalid;
         private double totalMaintenanceCost;
         private double chargeUsedThisTick;
@@ -180,8 +182,10 @@ public class ChargeNetwork {
                 chargeNode.chargeGraph = this;
                 if (chargeNode.chargeBattery != null)
                     chargeBatteries.put(chargeNode, chargeNode.chargeBattery);
-                else
+                else {
                     chargeBatteries.remove(chargeNode);
+                    batterySaveData.removeBattery(chargeNode.pos);
+                }
             }
             return added;
         }
@@ -225,6 +229,7 @@ public class ChargeNetwork {
                     forEach(n -> n.chargeGraph = NULL_GRAPH);
                 chargeBatteries.clear();
                 super.clear();
+                chargeGraphs.remove(this);
             }
         }
 
@@ -239,7 +244,10 @@ public class ChargeNetwork {
             if (averageCharge < 0.0)
                 averageCharge = 0.0;
             double finalCharge = averageCharge;
-            chargeBatteries.values().forEach(b -> b.setCharge(finalCharge));
+            chargeBatteries.entrySet().forEach(b -> {
+                b.getValue().setCharge(finalCharge);
+                batterySaveData.updateBatteryRecord(b.getKey().pos, b.getValue());
+            });
             averageUsagePerTick = (averageUsagePerTick * 49D + chargeUsedThisTick) / 50D;
             chargeUsedThisTick = 0.0;
         }
@@ -282,8 +290,9 @@ public class ChargeNetwork {
                     break;
             }
             if (searchAmount >= amount) {
-                for (IChargeBlock.ChargeBattery battery : chargeBatteries.values()) {
-                    amount -= battery.removeCharge(amount);
+                for (Map.Entry<ChargeNode, IChargeBlock.ChargeBattery> battery : chargeBatteries.entrySet()) {
+                    amount -= battery.getValue().removeCharge(amount);
+                    batterySaveData.updateBatteryRecord(battery.getKey().pos, battery.getValue());
                     if (amount <= 0.0)
                         break;
                 }
@@ -300,8 +309,9 @@ public class ChargeNetwork {
          */
         public double removeCharge(double desiredAmount) {
             double amountNeeded = desiredAmount;
-            for (IChargeBlock.ChargeBattery battery : chargeBatteries.values()) {
-                amountNeeded -= battery.removeCharge(amountNeeded);
+            for (Map.Entry<ChargeNode, IChargeBlock.ChargeBattery> battery : chargeBatteries.entrySet()) {
+                amountNeeded -= battery.getValue().removeCharge(amountNeeded);
+                batterySaveData.updateBatteryRecord(battery.getKey().pos, battery.getValue());
                 if (amountNeeded <= 0.0)
                     break;
             }
@@ -316,7 +326,7 @@ public class ChargeNetwork {
         }
     }
 
-    private static class NullGraph extends ChargeGraph {
+    private class NullGraph extends ChargeGraph {
         @Override
         protected Set<ChargeNode> delegate() {
             return Collections.emptySet();
@@ -350,6 +360,8 @@ public class ChargeNetwork {
             this.pos = pos;
             this.chargeDef = chargeDef;
             this.chargeBattery = chargeBattery;
+            if (chargeBattery != null)
+                batterySaveData.initBattery(pos, chargeBattery);
         }
 
         public IChargeBlock.ChargeDef getChargeDef() {
@@ -444,8 +456,10 @@ public class ChargeNetwork {
                 }
             }
             chargeGraph = graphs.pollLast();
-            if (chargeGraph.isNull() && nullNodes.size() > 1)
+            if (chargeGraph.isNull() && nullNodes.size() > 1) {
                 chargeGraph = new ChargeGraph();
+                chargeGraphs.add(chargeGraph);
+            }
             if (chargeGraph.isActive()) {
                 int originalSize = chargeGraph.size();
                 chargeGraph.addAll(nullNodes);

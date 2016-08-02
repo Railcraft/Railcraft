@@ -1,15 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
 import com.google.common.collect.ForwardingList;
 import net.minecraft.nbt.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
@@ -65,6 +67,19 @@ public class NBTPlugin {
         return null;
     }
 
+    public static void writeBlockPos(NBTTagCompound data, String tag, BlockPos pos) {
+        data.setIntArray(tag, new int[]{pos.getX(), pos.getY(), pos.getZ()});
+    }
+
+    @Nullable
+    public static BlockPos readBlockPos(NBTTagCompound data, String tag) {
+        if (data.hasKey(tag)) {
+            int[] c = data.getIntArray(tag);
+            return new BlockPos(c[0], c[1], c[2]);
+        }
+        return null;
+    }
+
     public enum EnumNBTType {
 
         END(NBTTagEnd.class),
@@ -106,7 +121,7 @@ public class NBTPlugin {
         private final ArrayList<T> backingList;
 
         public NBTList(NBTTagList nbtList) {
-            backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 0);
+            backingList = ObfuscationReflectionHelper.getPrivateValue(NBTTagList.class, nbtList, 1);
         }
 
         @Override

@@ -207,16 +207,11 @@ public interface IChargeBlock {
             return ret;
         }
 
-        /**
-         * Must be called by the owning object's save function.
-         */
         public void writeToNBT(NBTTagCompound nbt) {
+
             nbt.setDouble(NBT_CHARGE_TAG, charge);
         }
 
-        /**
-         * Must be called by the owning object's load function.
-         */
         public void readFromNBT(NBTTagCompound nbt) {
             charge = nbt.getDouble(NBT_CHARGE_TAG);
         }

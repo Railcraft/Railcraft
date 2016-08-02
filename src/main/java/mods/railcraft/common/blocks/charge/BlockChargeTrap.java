@@ -113,14 +113,8 @@ public class BlockChargeTrap extends RailcraftBlock implements IChargeBlock {
     @SideOnly(Side.CLIENT)
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        super.randomDisplayTick(stateIn, worldIn, pos, rand);
         if (stateIn.getValue(REDSTONE))
-//            worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH,
-//                    pos.getX() + rand.nextDouble(),
-//                    pos.getY() + 0.1F + stateIn.getBoundingBox(worldIn, pos).maxY,
-//                    pos.getZ() + rand.nextDouble(),
-//                    0.0D, 0.0D, 0.0D);
-            EffectManager.instance.sparkEffect(stateIn, worldIn, pos);
+            EffectManager.instance.sparkEffectSurface(stateIn, worldIn, pos);
     }
 
     /**

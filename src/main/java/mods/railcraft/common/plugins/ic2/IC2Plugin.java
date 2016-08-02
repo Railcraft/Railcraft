@@ -1,13 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.ic2;
 
+import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyTile;
@@ -44,13 +46,16 @@ public class IC2Plugin {
         return ITEMS.get(tag);
     }
 
-    public static void addTileToNet(TileEntity tile) {
+    public static boolean addTileToNet(TileEntity tile) {
         try {
-            if (tile instanceof IEnergyTile)
+            if (EnergyNet.instance != null && tile instanceof IEnergyTile) {
                 MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergyTile) tile));
+                return true;
+            }
         } catch (Throwable error) {
             Game.logErrorAPI("IC2", error, EnergyTileLoadEvent.class);
         }
+        return false;
     }
 
     public static void removeTileFromNet(TileEntity tile) {

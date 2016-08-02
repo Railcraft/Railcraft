@@ -7,46 +7,31 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.blocks.machine.epsilon;
+package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.ic2.ISinkDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2MultiEmitterDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2SinkDelegate;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-//TODO: migrate to new charge API
-public class TileElectricFeeder extends TileMachineBase implements ISinkDelegate {
-
-    //    private final ChargeHandler chargeHandler = new ChargeHandler(this, IChargeBlock.ConnectType.BLOCK, 1);
+public class TileChargeFeeder extends RailcraftTickingTileEntity implements ISinkDelegate {
     private TileEntity sinkDelegate;
     private boolean addedToIC2EnergyNet;
-
-    @Override
-    public EnumMachineEpsilon getMachineType() {
-        return EnumMachineEpsilon.ELECTRIC_FEEDER;
-    }
+    public final IChargeBlock.ChargeBattery chargeBattery = new IChargeBlock.ChargeBattery();
 
     @Override
     public void update() {
         super.update();
-
-        if (Game.isClient(getWorld()))
-            return;
-
-        if (!addedToIC2EnergyNet) {
-            IC2Plugin.addTileToNet(getIC2Delegate());
-            addedToIC2EnergyNet = true;
+        if (Game.isHost(getWorld()) && !addedToIC2EnergyNet) {
+            addedToIC2EnergyNet = IC2Plugin.addTileToNet(getIC2Delegate());
         }
-
-//        chargeHandler.tick();
     }
 
     private void dropFromNet() {
@@ -67,32 +52,13 @@ public class TileElectricFeeder extends TileMachineBase implements ISinkDelegate
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-//        chargeHandler.readFromNBT(data);
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-//        chargeHandler.writeToNBT(data);
-        return data;
-    }
-
-//    @Override
-//    public ChargeHandler getChargeHandler() {
-//        return chargeHandler;
-//    }
-
-    @Override
     public TileEntity getTile() {
         return this;
     }
 
     @Override
     public double getDemandedEnergy() {
-//        double chargeDifference = chargeHandler.getCapacity() - chargeHandler.getCharge();
-        double chargeDifference = 0;
+        double chargeDifference = chargeBattery.getCapacity() - chargeBattery.getCharge();
         return chargeDifference > 0.0 ? chargeDifference : 0.0;
     }
 
@@ -103,7 +69,7 @@ public class TileElectricFeeder extends TileMachineBase implements ISinkDelegate
 
     @Override
     public double injectEnergy(EnumFacing directionFrom, double amount) {
-//        getChargeHandler().addCharge(amount);
+        chargeBattery.addCharge(amount);
         return 0.0;
     }
 

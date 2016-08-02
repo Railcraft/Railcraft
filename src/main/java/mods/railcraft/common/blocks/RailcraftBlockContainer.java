@@ -16,6 +16,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -48,6 +49,11 @@ public abstract class RailcraftBlockContainer extends BlockContainer implements 
             IBlockState state = WorldPlugin.getBlockState(world, pos);
             markBlockForUpdate(state, world, pos);
         }
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return null;
     }
 
     public void markBlockForUpdate(IBlockState state, World world, BlockPos pos) {
