@@ -1,14 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
-import buildcraft.api.tools.IToolWrench;
 import cofh.api.energy.IEnergyConnection;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -19,14 +19,10 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -168,24 +164,12 @@ public abstract class TileEngine extends TileMachineBase implements IEnergyConne
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (heldItem != null)
-            if (heldItem.getItem() instanceof IToolWrench) {
-                IToolWrench wrench = (IToolWrench) heldItem.getItem();
-                RayTraceResult rayTraceResult = new RayTraceResult(new Vec3d(hitX + getPos().getX(), hitY + getPos().getY(), hitZ + getPos().getZ()), side, getPos());
-                if (wrench.canWrench(player, hand, heldItem, rayTraceResult))
-                    if (Game.isHost(worldObj) && getEnergyStage() == EnergyStage.OVERHEAT) {
-                        resetEnergyStage();
-                        wrench.wrenchUsed(player, hand, heldItem, rayTraceResult);
-                        return true;
-                    }
-            }
-        return super.blockActivated(player, hand, heldItem, side, hitX, hitY, hitZ);
-    }
-
-    @Override
     public boolean rotateBlock(EnumFacing axis) {
-        return getEnergyStage() != EnergyStage.OVERHEAT && switchOrientation();
+        if (getEnergyStage() == EnergyStage.OVERHEAT) {
+            resetEnergyStage();
+            return true;
+        }
+        return switchOrientation();
     }
 
     @Override

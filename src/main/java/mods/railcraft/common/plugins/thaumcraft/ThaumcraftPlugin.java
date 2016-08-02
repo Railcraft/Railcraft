@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -27,12 +27,14 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.plugins.forestry.ForestryPlugin;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.ItemStackCache;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
@@ -44,8 +46,10 @@ import thaumcraft.api.ThaumcraftMaterials;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.blocks.BlocksTC;
+import thaumcraft.api.crafting.IArcaneRecipe;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
+import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 
 import javax.annotation.Nullable;
@@ -80,6 +84,68 @@ public class ThaumcraftPlugin {
 
     public static void setupResearch() {
         ResearchCategories.registerCategory(RESEARCH_CATEGORY, null, new ResourceLocation("railcraft", "textures/items/tool.crowbar.magic.png"), new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png"));
+
+        // Apothecaries Backpack
+        Item item = ForestryPlugin.apothecariesBackpackT1;
+        if (item != null) {
+            IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe("RC_ApothecariesBackpack", new ItemStack(ForestryPlugin.apothecariesBackpackT1),
+                    new AspectList().add(Aspect.AIR, 16).add(Aspect.ORDER, 16),
+                    "X#X",
+                    "VYV",
+                    "X#X",
+                    '#', Blocks.WOOL,
+                    'V', new ItemStack(Items.POTIONITEM, 1, 8197),
+                    'X', Items.STRING,
+                    'Y', new ItemStack(Blocks.CHEST));
+
+            AspectList aspects = new AspectList();
+            aspects.add(Aspect.VOID, 3).add(Aspect.CRAFT, 3).add(Aspect.MOTION, 2);
+
+            ResearchItem backpack = new ResearchItemRC("RC_ApothecariesBackpack", ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 2, 0, 6, new ItemStack(ForestryPlugin.apothecariesBackpackT1));
+            backpack.setPages(ThaumcraftPlugin.getResearchPage("RC_ApothecariesBackpack"), new ResearchPage(recipe)).setParentsHidden("ENCHFABRIC").registerResearchItem();
+        }
+
+        // Thaumium Crowbar
+        item = RailcraftItems.crowbarThaumium.item();
+        if (item != null) {
+            String researchTag = "RC_Crowbar_Thaumium";
+            IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe(researchTag, new ItemStack(item),
+                    new AspectList().add(Aspect.ORDER, 8),
+                    " RI",
+                    "RIR",
+                    "IR ",
+                    'I', ThaumcraftPlugin.ITEMS.get("ingots", 0),
+                    'R', "dyeRed");
+
+            AspectList aspects = new AspectList();
+            aspects.add(Aspect.TOOL, 1).add(Aspect.MECHANISM, 2).add(Aspect.METAL, 1);
+
+            ResearchItem thaumiumCrowbar = new ResearchItemRC(researchTag, ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 0, 0, 3, new ItemStack(item));
+            thaumiumCrowbar.setPages(ThaumcraftPlugin.getResearchPage(researchTag), new ResearchPage(recipe))
+                    .setParentsHidden("THAUMIUM")
+                    .registerResearchItem();
+        }
+
+        // Void Crowbar
+        item = RailcraftItems.crowbarVoid.item();
+        if (item != null) {
+            String researchTag = "RC_Crowbar_Void";
+            IArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe(researchTag, new ItemStack(item),
+                    new AspectList().add(Aspect.ENTROPY, 50),
+                    " RI",
+                    "RIR",
+                    "IR ",
+                    'I', ThaumcraftPlugin.ITEMS.get("ingots", 1),
+                    'R', "dyeRed");
+
+            AspectList aspects = new AspectList();
+            aspects.add(Aspect.TOOL, 2).add(Aspect.MECHANISM, 4).add(Aspect.METAL, 2);
+
+            ResearchItemRC voidCrowbar = new ResearchItemRC(researchTag, ThaumcraftPlugin.RESEARCH_CATEGORY, aspects, 0, 1, 3, new ItemStack(item));
+            voidCrowbar.setPages(ThaumcraftPlugin.getResearchPage(researchTag), new ResearchPage(recipe))
+                    .setParents(researchTag).setParentsHidden("VOIDMETAL")
+                    .registerResearchItem();
+        }
     }
 
     private static ResearchPage createResearchPage(String key, int pageNum) {

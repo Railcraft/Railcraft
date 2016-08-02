@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
 import buildcraft.api.tools.IToolWrench;
@@ -37,12 +38,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Optional.InterfaceList({
+        @Optional.Interface(iface = "ic2.api.item.IBoxable", modid = "IC2API"),
+        @Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraftAPI|tools")
+})
 public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBoxable, IToolWrench, IRailcraftObject {
 
     private static final byte BOOST_DAMAGE = 3;
@@ -116,6 +122,7 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
 
         if (blockState.getBlock().rotateBlock(world, pos, side)) {
             player.swingArm(hand);
+            stack.damageItem(1, player);
             //TODO: test (was !world.isRemote)
             return EnumActionResult.SUCCESS;
         }
@@ -167,12 +174,12 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     @Override
-    public boolean canWrench(EntityPlayer player,  EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
+    public boolean canWrench(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
         return true;
     }
 
     @Override
-    public void wrenchUsed(EntityPlayer player,  EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
+    public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
         wrench.damageItem(1, player);
         player.swingArm(hand);
     }

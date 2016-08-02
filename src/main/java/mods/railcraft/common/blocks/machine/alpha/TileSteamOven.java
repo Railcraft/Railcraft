@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.statements.IActionExternal;
@@ -40,22 +41,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fml.common.Optional;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 
 import static net.minecraft.util.EnumFacing.*;
 
+@Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public class TileSteamOven extends TileMultiBlockInventory implements IFluidHandler, ISidedInventory, ISteamUser, IHasWork {
 
     public static final int SLOT_INPUT = 0;
@@ -72,7 +74,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     private final StandardTank tank;
     private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 9);
     private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9, false);
-    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
+    private final Set<Object> actions = new HashSet<Object>();
 
     static {
         char[][][] map = {
@@ -252,7 +254,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public void onBlockPlacedBy( IBlockState state,  EntityLivingBase placer,  ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
         facing = MiscTools.getHorizontalSideFacingPlayer(placer);
     }
@@ -288,9 +290,8 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
         return false;
     }
 
-
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         tankManager.writeTanksToNBT(data);
         data.setInteger("cookTime", cookTime);
@@ -299,7 +300,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         tankManager.readTanksFromNBT(data);
         cookTime = data.getInteger("cookTime");
@@ -307,14 +308,14 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     @Override
-    public void writePacketData( RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeByte(facing.ordinal());
         data.writeBoolean(finishedCycle);
     }
 
     @Override
-    public void readPacketData( RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         EnumFacing f = EnumFacing.getFront(data.readByte());
         finishedCycle = data.readBoolean();
@@ -395,11 +396,7 @@ public class TileSteamOven extends TileMultiBlockInventory implements IFluidHand
     }
 
     private void processActions() {
-        paused = false;
-        for (IActionExternal action : actions) {
-            if (action == Actions.PAUSE)
-                paused = true;
-        }
+        paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
         actions.clear();
     }
 

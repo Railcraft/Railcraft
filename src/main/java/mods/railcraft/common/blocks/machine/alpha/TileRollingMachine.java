@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.alpha;
 
 import buildcraft.api.statements.IActionExternal;
@@ -39,6 +40,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+@net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public class TileRollingMachine extends TileMachineBase implements IEnergyReceiver, ISidedInventory, IHasWork {
 
     private static final int PROCESS_TIME = 100;
@@ -51,7 +53,7 @@ public class TileRollingMachine extends TileMachineBase implements IEnergyReceiv
     private final StandaloneInventory invResult = new StandaloneInventory(1, "invResult", (IInventory) this);
     private final IInventory inv = InventoryConcatenator.make().add(invResult).add(craftMatrix);
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
-    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
+    private final Set<Object> actions = new HashSet<Object>();
     public boolean useLast;
     private EnergyStorage energyStorage;
     private boolean isWorking, paused;

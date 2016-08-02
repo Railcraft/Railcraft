@@ -57,6 +57,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyReceiver, IHasWork, ISidedInventory {
 
     public static final int SLOT_INPUT = 0;
@@ -135,7 +136,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyR
 
     private final InventoryMapper invInput = new InventoryMapper(this, 0, 9, false);
     private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9, false);
-    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
+    private final Set<Object> actions = new HashSet<Object>();
     private int processTime;
     @Nullable
     private EnergyStorage energyStorage;

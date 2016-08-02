@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.epsilon;
 
 import buildcraft.api.statements.IActionExternal;
@@ -42,6 +43,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @SuppressWarnings("unused")
+@net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public class TileEngravingBench extends TileMachineItem implements IEnergyReceiver, ISidedInventory, IHasWork, IGuiReturnHandler {
 
     public enum GuiPacketType {
@@ -61,7 +63,7 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     private int progress;
     public boolean paused, startCrafting, isCrafting, flippedAxis;
     public String currentEmblem = "";
-    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
+    private final Set<Object> actions = new HashSet<Object>();
 
     public TileEngravingBench() {
         super(2);
@@ -233,7 +235,6 @@ public class TileEngravingBench extends TileMachineItem implements IEnergyReceiv
     }
 
     private void processActions() {
-        paused = false;
         paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
         actions.clear();
     }

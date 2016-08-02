@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
 import buildcraft.api.statements.IActionExternal;
@@ -17,6 +18,7 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,15 +30,16 @@ import java.util.Set;
 
 import static net.minecraft.util.EnumParticleTypes.FLAME;
 
+@Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public abstract class TileMultiBlockOven extends TileMultiBlockInventory implements INeedsFuel, IHasWork {
 
-    private final Set<IActionExternal> actions = new HashSet<IActionExternal>();
+    private final Set<Object> actions = new HashSet<Object>();
     protected int cookTime;
     private boolean cooking;
     protected boolean paused;
     private boolean wasBurning;
 
-    public TileMultiBlockOven(String name, int invNum, List<? extends MultiBlockPattern> patterns) {
+    protected TileMultiBlockOven(String name, int invNum, List<? extends MultiBlockPattern> patterns) {
         super(name, invNum, patterns);
     }
 
@@ -85,9 +88,8 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
         }
     }
 
-
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setInteger("cookTime", cookTime);
@@ -96,7 +98,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
         cookTime = data.getInteger("cookTime");
@@ -104,7 +106,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     @Override
-    public void writePacketData( RailcraftOutputStream data) throws IOException {
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
         data.writeInt(cookTime);
@@ -112,7 +114,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     @Override
-    public void readPacketData( RailcraftInputStream data) throws IOException {
+    public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
         cookTime = data.readInt();
@@ -171,12 +173,7 @@ public abstract class TileMultiBlockOven extends TileMultiBlockInventory impleme
     }
 
     private void processActions() {
-        paused = false;
-        for (IActionExternal action : actions) {
-            if (action == Actions.PAUSE) {
-                paused = true;
-            }
-        }
+        paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
         actions.clear();
     }
 

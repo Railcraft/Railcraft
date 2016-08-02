@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.core;
 
 import mods.railcraft.common.util.misc.Game;
@@ -24,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
+//TODO: use some maven lib version matcher?
 public class StartupChecks {
 
     private static String latest = Railcraft.getVersion();
@@ -45,7 +47,7 @@ public class StartupChecks {
             try {
                 String location = RELEASE_URL;
 
-                if (!Railcraft.getVersion().endsWith("0")) {
+                if (Game.IS_DEBUG) {
                     location = BETA_URL;
                 }
 

@@ -1,18 +1,18 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.thaumcraft;
 
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
 import mods.railcraft.common.carts.EntityLocomotiveSteam;
-import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.carts.ICartType;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
@@ -36,6 +36,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Optional;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
@@ -47,6 +48,7 @@ import java.util.Map.Entry;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@Optional.Interface(iface = "thaumcraft.api.aspects.IAspectContainer", modid = "Thaumcraft")
 public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements ISidedInventory, IAspectContainer {
 
     private static final int SLOT_BURN = 2;

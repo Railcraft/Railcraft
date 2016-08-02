@@ -1,10 +1,17 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.plugins.buildcraft;
 
-import buildcraft.api.statements.StatementManager;
-import mods.railcraft.common.plugins.buildcraft.actions.ActionProvider;
-import mods.railcraft.common.plugins.buildcraft.triggers.TriggerProvider;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.GameData;
 
@@ -14,11 +21,8 @@ import net.minecraftforge.fml.common.registry.GameData;
 public class BuildcraftPlugin {
 
     public static void init() {
-        try {
-            StatementManager.registerTriggerProvider(new TriggerProvider());
-            StatementManager.registerActionProvider(new ActionProvider());
-        } catch (Throwable error) {
-            Game.logErrorAPI("Buildcraft", error, StatementManager.class);
+        if (Loader.isModLoaded("BuildCraftAPI|statements")) {
+            BCAPIWrapper.init();
         }
     }
 

@@ -23,11 +23,14 @@ import mods.railcraft.common.items.firestone.ItemFirestone;
 import mods.railcraft.common.items.firestone.ItemFirestoneCracked;
 import mods.railcraft.common.items.firestone.ItemFirestoneRefined;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarThaumium;
+import mods.railcraft.common.plugins.thaumcraft.ItemCrowbarVoid;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.Loader;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -50,6 +53,8 @@ public enum RailcraftItems implements IRailcraftObjectContainer {
     coke(ItemCoke::new, "fuel.coke"),
     crowbarIron(ItemCrowbarIron::new, "tool.crowbar.iron"),
     crowbarSteel(ItemCrowbarSteel::new, "tool.crowbar.steel"),
+    crowbarThaumium(ItemCrowbarThaumium::new, "tool.crowbar.thaumium", null, () -> Loader.isModLoaded("Thaumcraft")),
+    crowbarVoid(ItemCrowbarVoid::new, "tool.crowbar.void", null, () -> Loader.isModLoaded("Thaumcraft")),
     dust(ItemDust::new, "dust"),
     gear(ItemGear::new, "part.gear"),
     goggles(ItemGoggles::new, "armor.goggles"),
