@@ -4,6 +4,3 @@
 [submodule "api/railcraft"]
 	path = api/railcraft
 	url = https://github.com/CovertJaguar/Railcraft-API.git
-[submodule "api/buildcraft"]
-	path = api/buildcraft
-	url = https://github.com/BuildCraft/BuildCraftAPI.git
