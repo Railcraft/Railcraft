@@ -400,7 +400,7 @@ public class BlockTrack extends BlockRail implements IPostConnection, IRailcraft
             }
         } catch (StackOverflowError error) {
             Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockTrack.onNeighborBlockChange()");
-            if (Game.IS_DEBUG)
+            if (Game.DEVELOPMENT_ENVIRONMENT)
                 throw error;
         }
     }

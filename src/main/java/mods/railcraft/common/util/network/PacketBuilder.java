@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
 import io.netty.buffer.ByteBuf;
@@ -119,7 +119,7 @@ public class PacketBuilder implements ISignalPacketBuilder {
                 PacketGuiWidget pkt = new PacketGuiWidget(windowId, widget, byteBuf.array());
                 PacketDispatcher.sendToPlayer(pkt, (EntityPlayerMP) listener);
             } catch (IOException ex) {
-                if (Game.IS_DEBUG)
+                if (Game.DEVELOPMENT_ENVIRONMENT)
                     throw new RuntimeException(ex);
             }
         }

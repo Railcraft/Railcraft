@@ -64,7 +64,7 @@ public class ThaumcraftPlugin {
         try {
             return new ItemStack((Item) ItemsTC.class.getField(tag).get(null));
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            if (Game.IS_DEBUG)
+            if (Game.DEVELOPMENT_ENVIRONMENT)
                 throw new RuntimeException(e);
             return null;
         }
@@ -73,7 +73,7 @@ public class ThaumcraftPlugin {
         try {
             return new ItemStack((Block) BlocksTC.class.getField(tag).get(null));
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            if (Game.IS_DEBUG)
+            if (Game.DEVELOPMENT_ENVIRONMENT)
                 throw new RuntimeException(e);
             return null;
         }

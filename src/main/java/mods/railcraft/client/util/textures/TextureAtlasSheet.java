@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.util.textures;
 
 import mods.railcraft.common.util.misc.Game;
@@ -41,7 +41,7 @@ public class TextureAtlasSheet extends TextureAtlasSprite {
         if (columns <= 1 && rows <= 1)
             return;
 
-        if (Game.IS_DEBUG)
+        if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Unstitching texture sheet: {0} {1}x{2}", textureResource, columns, rows);
 
         int numIcons = rows * columns;

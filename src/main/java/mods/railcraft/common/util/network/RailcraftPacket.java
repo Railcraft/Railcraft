@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
 import io.netty.buffer.ByteBuf;
@@ -49,7 +50,7 @@ public abstract class RailcraftPacket {
             return new FMLProxyPacket(new PacketBuffer(byteBuf), CHANNEL_NAME);
         } catch (IOException e) {
             Game.logThrowable("Error constructing packet: {0}", e, getClass());
-            if (Game.IS_DEBUG)
+            if (Game.DEVELOPMENT_ENVIRONMENT)
                 throw new RuntimeException(e);
         }
         PacketBuffer buffer = new PacketBuffer(byteBuf);

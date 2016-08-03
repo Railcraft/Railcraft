@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
 import com.google.common.collect.Lists;
@@ -210,7 +210,7 @@ public class RailcraftModuleManager {
             IRailcraftModule module = classToInstanceMapping.get(moduleClass);
             boolean enabled = enabledModules.contains(moduleClass);
             try {
-                if (Game.IS_DEBUG)
+                if (Game.DEVELOPMENT_ENVIRONMENT)
                     Game.log(Level.INFO, "Module performing stage {0}: {1} {2}", stage.name(), getModuleName(module), enabled ? "+" : "-");
                 stage.passToModule(module.getModuleEventHandler(enabled));
             } catch (Throwable th) {

@@ -91,7 +91,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
             writePacketData(data);
         } catch (IOException e) {
             Game.logThrowable("Error constructing tile packet: {0}", e, getClass());
-            if (Game.IS_DEBUG)
+            if (Game.DEVELOPMENT_ENVIRONMENT)
                 throw new RuntimeException(e);
         }
         nbt.setByteArray("sync", byteBuf.array());
@@ -106,7 +106,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
             readPacketData(data);
         } catch (IOException e) {
             Game.logThrowable("Error decoding tile packet: {0}", e, getClass());
-            if (Game.IS_DEBUG)
+            if (Game.DEVELOPMENT_ENVIRONMENT)
                 throw new RuntimeException(e);
         }
     }

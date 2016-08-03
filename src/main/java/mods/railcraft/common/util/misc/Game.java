@@ -27,9 +27,9 @@ import org.apache.logging.log4j.message.SimpleMessage;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class Game {
-    public static final boolean IS_OBFUSCATED = !World.class.getSimpleName().equals("World");
-    public static final boolean IS_DEBUG = !Railcraft.getVersion().matches(".*(alpha|beta).*");
-    public static final boolean IS_BUKKIT;
+    public static final boolean OBFUSCATED = !World.class.getSimpleName().equals("World");
+    public static final boolean DEVELOPMENT_ENVIRONMENT = !Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
+    public static final boolean BUKKIT;
 
     static {
         boolean foundBukkit = false;
@@ -37,8 +37,8 @@ public class Game {
             foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
         } catch (ClassNotFoundException ignored) {
         }
-        IS_BUKKIT = foundBukkit;
-        if (IS_BUKKIT)
+        BUKKIT = foundBukkit;
+        if (BUKKIT)
             log(Level.INFO, "Bukkit detected, disabling Tile Entity caching because Bukkit doesn't seem to invalid Tile Entities properly!");
     }
 
@@ -64,7 +64,7 @@ public class Game {
 
     @SuppressWarnings("SameReturnValue")
     public static boolean isObfuscated() {
-        return IS_OBFUSCATED;
+        return OBFUSCATED;
     }
 
     private static Message getMessage(String msg, Object... args) {
@@ -118,7 +118,7 @@ public class Game {
     }
 
     public static void logDebug(String msg, Object... args) {
-        if (!IS_DEBUG)
+        if (!DEVELOPMENT_ENVIRONMENT)
             return;
         log(Level.DEBUG, msg, args);
     }

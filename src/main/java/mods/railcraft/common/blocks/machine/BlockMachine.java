@@ -1,12 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.api.core.IPostConnection;
@@ -270,7 +270,7 @@ public class BlockMachine<M extends Enum<M> & IEnumMachine<M>> extends BlockCont
                 ((TileMachineBase) tile).onNeighborBlockChange(state, neighborBlock);
         } catch (StackOverflowError error) {
             Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()");
-            if (Game.IS_DEBUG)
+            if (Game.DEVELOPMENT_ENVIRONMENT)
                 throw error;
         }
     }

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -98,7 +99,7 @@ public final class AdjacentTileCache {
 
     @Nullable
     public TileEntity getTileOnSide(EnumFacing side) {
-        if (Game.IS_BUKKIT || !isInSameChunk(side)) {
+        if (Game.BUKKIT || !isInSameChunk(side)) {
             changed(side);
             return searchSide(side);
         }

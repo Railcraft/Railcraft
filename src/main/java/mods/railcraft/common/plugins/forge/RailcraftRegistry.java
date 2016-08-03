@@ -127,7 +127,7 @@ public final class RailcraftRegistry {
 //        TagList.addTag(tag);
         GameRegistry.register(item);
         RailcraftItemStackRegistry.register(tag, new ItemStack(item));
-        if (Game.IS_DEBUG)
+        if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Item registered: {0}, {1}", item.getClass(), item.getRegistryName().toString());
     }
 
@@ -148,7 +148,7 @@ public final class RailcraftRegistry {
 //        TagList.addTag(tag);
         GameRegistry.registerBlock(block, itemBlock);
         RailcraftItemStackRegistry.register(tag, new ItemStack(block));
-        if (Game.IS_DEBUG)
+        if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Block registered: {0}, {1}", block.getClass(), block.getRegistryName().toString());
     }
 
@@ -169,7 +169,7 @@ public final class RailcraftRegistry {
         GameRegistry.register(block);
         GameRegistry.register(item);
         RailcraftItemStackRegistry.register(tag, new ItemStack(block));
-        if (Game.IS_DEBUG)
+        if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Block registered: {0}, {1}", block.getClass(), block.getRegistryName().toString());
     }
 

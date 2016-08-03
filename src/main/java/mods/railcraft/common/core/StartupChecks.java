@@ -47,7 +47,7 @@ public class StartupChecks {
             try {
                 String location = RELEASE_URL;
 
-                if (Game.IS_DEBUG) {
+                if (Game.DEVELOPMENT_ENVIRONMENT) {
                     location = BETA_URL;
                 }
 

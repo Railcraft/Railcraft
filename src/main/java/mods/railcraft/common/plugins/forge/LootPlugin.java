@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.common.core.IVariantEnum;
@@ -47,7 +48,7 @@ public class LootPlugin {
 
     private static void addLoot(@Nullable ItemStack loot, int minStack, int maxStack, String tag, ResourceLocation... locations) {
         if (loot == null) {
-            if (Game.IS_DEBUG)
+            if (Game.DEVELOPMENT_ENVIRONMENT)
                 throw new RuntimeException("Invalid Loot");
             return;
         }

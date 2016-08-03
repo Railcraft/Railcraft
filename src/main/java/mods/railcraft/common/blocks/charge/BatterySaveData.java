@@ -50,7 +50,7 @@ public class BatterySaveData extends WorldSavedData {
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        if (Game.IS_DEBUG)
+        if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Saving Charge Battery data...");
         NBTTagList list = new NBTTagList();
         for (Map.Entry<BlockPos, Double> entry : chargeLevels.entrySet()) {
@@ -65,7 +65,7 @@ public class BatterySaveData extends WorldSavedData {
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
-        if (Game.IS_DEBUG)
+        if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Loading Charge Battery data...");
         List<NBTTagCompound> list = NBTPlugin.getNBTList(nbt, "batteries", NBTPlugin.EnumNBTType.COMPOUND);
         for (NBTTagCompound entry : list) {
