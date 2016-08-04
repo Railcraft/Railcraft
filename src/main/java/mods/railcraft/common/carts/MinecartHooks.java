@@ -13,8 +13,8 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.tracks.HighSpeedTools;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.instances.TrackSpeed;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -283,10 +283,11 @@ public final class MinecartHooks implements IMinecartCollisionHandler {
         }
 
         if (data.getBoolean(CartTools.HIGH_SPEED_TAG))
-            if (CartTools.cartVelocityIsLessThan(cart, TrackSpeed.SPEED_CUTOFF))
+            if (CartTools.cartVelocityIsLessThan(cart, HighSpeedTools.SPEED_CUTOFF))
                 data.setBoolean(CartTools.HIGH_SPEED_TAG, false);
-            else if (!TrackSpeed.isTrackHighSpeedCapable(cart.worldObj, event.getPos()))
-                CartTools.explodeCart(cart);
+            else
+                HighSpeedTools.checkSafetyAndExplode(cart.worldObj, event.getPos(), cart);
+
 
         cart.motionX = Math.copySign(Math.min(Math.abs(cart.motionX), 9.5), cart.motionX);
         cart.motionY = Math.copySign(Math.min(Math.abs(cart.motionY), 9.5), cart.motionY);

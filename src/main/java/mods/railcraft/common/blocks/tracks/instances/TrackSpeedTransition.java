@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.tracks.instances;
 import mods.railcraft.api.tracks.ITrackPowered;
 import mods.railcraft.api.tracks.ITrackReversible;
 import mods.railcraft.common.blocks.tracks.EnumTrack;
+import mods.railcraft.common.blocks.tracks.HighSpeedTools;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.block.state.IBlockState;
@@ -55,7 +56,7 @@ public class TrackSpeedTransition extends TrackSpeed implements ITrackPowered, I
 
     @Override
     public void onMinecartPass(EntityMinecart cart) {
-        testCartSpeedForBooster(this, cart);
+        HighSpeedTools.performBoosterHighSpeedChecks(theWorldAsserted(), getPos(), cart);
         if (powered) {
             double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
             if (speed > BOOST_THRESHOLD) {

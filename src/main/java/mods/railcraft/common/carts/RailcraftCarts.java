@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import com.google.common.collect.Lists;
@@ -15,10 +16,7 @@ import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.*;
 import mods.railcraft.common.modules.*;
 import mods.railcraft.common.plugins.color.EnumColor;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.thaumcraft.EntityLocomotiveSteamMagic;
-import mods.railcraft.common.util.crafting.CartUncraftingRecipe;
 import mods.railcraft.common.util.misc.EntityIDs;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -333,22 +331,23 @@ public enum RailcraftCarts implements ICartType, IRailcraftObjectContainer {
     public boolean setup() {
         String tag = getTag();
         if (!isSetup && isEnabled()) {
-            isSetup = true;
-            registerEntity();
-            item = defineItem();
-            item.setRegistryName("cart." + getBaseTag());
-            item.setUnlocalizedName(tag);
-            item.setRarity(rarity);
-            RailcraftRegistry.register(item);
-
-            item.initializeDefinintion();
-            item.defineRecipes();
-
-            ItemStack cartItem = new ItemStack(item);
-            setCartItem(cartItem);
-            if (canBeUncrafted)
-                CraftingPlugin.addRecipe(new CartUncraftingRecipe.RailcraftCartUncraftingRecipe(this));
-            return true;
+            //TODO: uncomment this to restore carts
+//            isSetup = true;
+//            registerEntity();
+//            item = defineItem();
+//            item.setRegistryName("cart." + getBaseTag());
+//            item.setUnlocalizedName(tag);
+//            item.setRarity(rarity);
+//            RailcraftRegistry.register(item);
+//
+//            item.initializeDefinintion();
+//            item.defineRecipes();
+//
+//            ItemStack cartItem = new ItemStack(item);
+//            setCartItem(cartItem);
+//            if (canBeUncrafted)
+//                CraftingPlugin.addRecipe(new CartUncraftingRecipe.RailcraftCartUncraftingRecipe(this));
+//            return true;
         }
         return isSetup;
     }

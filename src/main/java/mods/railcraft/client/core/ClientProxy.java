@@ -91,8 +91,9 @@ public class ClientProxy extends CommonProxy {
                 for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
                     Block block = blockContainer.block();
                     if (block instanceof IRailcraftBlock) {
-                        TextureAtlasSheet.unstitchIcons(event.getMap(), block.getRegistryName(), ((IRailcraftBlock) block).getTextureDimensions());
-                        IVariantEnum[] variants = ((IRailcraftBlock) block).getVariants();
+                        IRailcraftBlock railcraftBlock = (IRailcraftBlock) block;
+                        TextureAtlasSheet.unstitchIcons(event.getMap(), railcraftBlock.getBlockTexture(), railcraftBlock.getTextureDimensions());
+                        IVariantEnum[] variants = railcraftBlock.getVariants();
                         if (variants != null) {
                             for (IVariantEnum variant : variants) {
                                 if (variant instanceof IVariantEnumBlock)
@@ -115,22 +116,22 @@ public class ClientProxy extends CommonProxy {
 
         for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
             ItemBlock item = blockContainer.item();
-            Block block = blockContainer.block();
-            IRailcraftBlock object = blockContainer.getObject();
-            if (item != null && block != null && object != null) {
-                object.initializeClient();
-                ((IRailcraftObject) item).initializeClient();
-                IVariantEnum[] variants = object.getVariants();
-                if (variants != null) {
-                    for (IVariantEnum variant : variants) {
-                        ItemStack stack = blockContainer.getStack(variant);
+            IRailcraftBlock block = blockContainer.getObject();
+            if (block != null) {
+                block.initializeClient();
+                if (item != null) {
+                    ((IRailcraftObject) item).initializeClient();
+                    IVariantEnum[] variants = block.getVariants();
+                    if (variants != null) {
+                        for (IVariantEnum variant : variants) {
+                            ItemStack stack = blockContainer.getStack(variant);
+                            if (stack != null)
+                                block.registerItemModel(stack, variant);
+                        }
+                    } else {
+                        ItemStack stack = blockContainer.getStack();
                         if (stack != null)
-                            ModelManager.registerBlockItemModel(stack, object.getItemRenderState(variant));
-                    }
-                } else {
-                    ItemStack stack = blockContainer.getStack();
-                    if (stack != null) {
-                        ModelManager.registerBlockItemModel(stack, object.getItemRenderState(null));
+                            block.registerItemModel(stack, null);
                     }
                 }
             }
@@ -238,11 +239,13 @@ public class ClientProxy extends CommonProxy {
     }
 
     private <T extends TileEntity> void bindTESR(IEnumMachine<?> machineType, Supplier<TileEntitySpecialRenderer<? super T>> factory) {
-        ClientRegistry.bindTileEntitySpecialRenderer(machineType.getTileClass().asSubclass(TileEntity.class), factory.get());
+        if (machineType.isAvailable())
+            ClientRegistry.bindTileEntitySpecialRenderer(machineType.getTileClass().asSubclass(TileEntity.class), factory.get());
     }
 
     private <T extends TileEntity> void bindTESR(IEnumMachine<?> machineType, Function<IEnumMachine<?>, TileEntitySpecialRenderer<? super T>> factory) {
-        ClientRegistry.bindTileEntitySpecialRenderer(machineType.getTileClass().asSubclass(TileEntity.class), factory.apply(machineType));
+        if (machineType.isAvailable())
+            ClientRegistry.bindTileEntitySpecialRenderer(machineType.getTileClass().asSubclass(TileEntity.class), factory.apply(machineType));
     }
 
 //    private void registerBlockRenderer(BlockRenderer renderer) {

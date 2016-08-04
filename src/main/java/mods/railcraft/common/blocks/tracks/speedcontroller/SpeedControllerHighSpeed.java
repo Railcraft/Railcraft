@@ -1,16 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.speedcontroller;
 
-import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.blocks.tracks.instances.TrackSpeed;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -34,24 +33,11 @@ public class SpeedControllerHighSpeed extends SpeedController {
     }
 
     @Override
-    public float getMaxSpeed(ITrackInstance track, EntityMinecart cart) {
-        Float speed = null;
-        if (track instanceof TrackSpeed)
-            speed = ((TrackSpeed) track).maxSpeed;
-        if (speed == null)
-            speed = speedForCurrentTrack(track, cart);
-        if (track instanceof TrackSpeed)
-            ((TrackSpeed) track).maxSpeed = speed;
-        return speed;
-    }
-
-    public static float speedForCurrentTrack(ITrackInstance track, EntityMinecart cart) {
-        World world = track.theWorld();
-        assert world != null;
-        BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, track.getPos(), cart);
-        if (dir != null && dir.isAscending())
+    public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+        BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, pos, cart);
+        if (dir.isAscending())
             return SPEED_SLOPE;
-        return speedForNextTrack(world, track.getPos(), 0, cart);
+        return speedForNextTrack(world, pos, 0, cart);
     }
 
     private static float speedForNextTrack(World world, BlockPos pos, int dist, EntityMinecart cart) {

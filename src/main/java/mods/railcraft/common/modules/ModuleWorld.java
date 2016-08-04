@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
@@ -43,7 +43,7 @@ public class ModuleWorld extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftBlocks.ore,
+//                        RailcraftBlocks.ore,
                         RailcraftBlocks.worldLogic
                 );
                 if (RailcraftConfig.isWorldGenEnabled("workshop")) {

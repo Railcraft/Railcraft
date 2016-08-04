@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,12 +6,13 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.core.IRailcraftObject;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,5 +27,10 @@ public interface IRailcraftItemBlock extends IRailcraftObject {
     @SideOnly(Side.CLIENT)
     default String getPropertyString(IBlockState state) {
         return new DefaultStateMapper().getPropertyString(state.getProperties());
+    }
+
+    @SideOnly(Side.CLIENT)
+    default ModelResourceLocation getModelLocation(IBlockState state) {
+        return new ModelResourceLocation(state.getBlock().getRegistryName(), getPropertyString(state));
     }
 }

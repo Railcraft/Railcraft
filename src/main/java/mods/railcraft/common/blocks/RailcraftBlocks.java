@@ -48,9 +48,8 @@ import mods.railcraft.common.blocks.ore.ItemOre;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.EnumSignal;
 import mods.railcraft.common.blocks.signals.ItemSignal;
-import mods.railcraft.common.blocks.tracks.BlockTrack;
-import mods.railcraft.common.blocks.tracks.BlockTrackElevator;
-import mods.railcraft.common.blocks.tracks.ItemTrack;
+import mods.railcraft.common.blocks.tracks.*;
+import mods.railcraft.common.blocks.tracks.speedcontroller.SpeedControllerStrapIron;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -98,11 +97,14 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     post("post", BlockPost::new, ItemPost::new, EnumPost.class),
     postMetal("post.metal", () -> new BlockPostMetal(false), ItemPostMetal::new),
     postMetalPlatform("post.metal.platform", () -> new BlockPostMetal(true), ItemPostMetal::new),
-    ritual("ritual", BlockRitual::new, ItemBlockRailcraft::new),
+    ritual("ritual", BlockRitual::new, null),
     signal("signal", BlockSignalRailcraft::new, ItemSignal::new, EnumSignal.class),
     slab("slab", BlockRailcraftSlab::new, ItemSlab::new),
     stair("stair", BlockRailcraftStairs::new, ItemMaterial::new),
     track("track", BlockTrack::new, ItemTrack::new),
+    trackHighSpeed("track.speedy", BlockTrackHighSpeed::new, ItemTrackFlex::new),
+    //    trackReinforced("track.reinforced", () -> new BlockTrackFlex(new SpeedControllerReinforced()).setResistance(80F), ItemTrackFlex::new),
+    trackStrapIron("track.strap.iron", () -> new BlockTrackFlex(new SpeedControllerStrapIron()), ItemTrackFlex::new),
     trackElevator("track.elevator", BlockTrackElevator::new, ItemBlockRailcraft::new),
     wall("wall", BlockRailcraftWall::new, ItemMaterial::new),
     wire("wire", BlockWire::new, ItemBlockRailcraft::new),
@@ -116,11 +118,11 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     private Block block;
     private ItemBlock item;
 
-    RailcraftBlocks(String tag, Supplier<Block> blockSupplier, Function<Block, ItemBlock> itemSupplier) {
+    RailcraftBlocks(String tag, Supplier<Block> blockSupplier, @Nullable Function<Block, ItemBlock> itemSupplier) {
         this(tag, blockSupplier, itemSupplier, null);
     }
 
-    RailcraftBlocks(String tag, Supplier<Block> blockSupplier, Function<Block, ItemBlock> itemSupplier, @Nullable Class<? extends IVariantEnum> variantClass) {
+    RailcraftBlocks(String tag, Supplier<Block> blockSupplier, @Nullable Function<Block, ItemBlock> itemSupplier, @Nullable Class<? extends IVariantEnum> variantClass) {
         this.blockSupplier = blockSupplier;
         this.itemSupplier = itemSupplier;
         this.tag = tag;
@@ -146,8 +148,10 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
             block.setRegistryName(tag);
             block.setUnlocalizedName("railcraft." + tag);
 
-            item = itemSupplier.apply(block);
-            item.setRegistryName(tag);
+            if (itemSupplier != null) {
+                item = itemSupplier.apply(block);
+                item.setRegistryName(tag);
+            }
 
             RailcraftRegistry.register(block, item);
 
@@ -157,13 +161,15 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
             blockObject.initializeDefinintion();
             blockObject.defineRecipes();
 
-            if (!(item instanceof IRailcraftItemBlock))
-                throw new RuntimeException("Railcraft ItemBlocks must implement IRailcraftItemBlock");
-            if (item instanceof IRailcraftItem)
-                throw new RuntimeException("Railcraft ItemBlocks must not implement IRailcraftItem");
-            IRailcraftItemBlock itemObject = (IRailcraftItemBlock) item;
-            itemObject.initializeDefinintion();
-            itemObject.defineRecipes();
+            if (item != null) {
+                if (!(item instanceof IRailcraftItemBlock))
+                    throw new RuntimeException("Railcraft ItemBlocks must implement IRailcraftItemBlock");
+                if (item instanceof IRailcraftItem)
+                    throw new RuntimeException("Railcraft ItemBlocks must not implement IRailcraftItem");
+                IRailcraftItemBlock itemObject = (IRailcraftItemBlock) item;
+                itemObject.initializeDefinintion();
+                itemObject.defineRecipes();
+            }
         }
     }
 
@@ -178,6 +184,10 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
     public boolean isEqual(@Nullable Block block) {
         return block != null && this.block == block;
+    }
+
+    public boolean isEqual(IBlockState state) {
+        return block != null && block == state.getBlock();
     }
 
     @Override

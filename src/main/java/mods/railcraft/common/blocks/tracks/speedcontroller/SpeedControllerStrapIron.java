@@ -16,18 +16,19 @@ import net.minecraft.world.World;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SpeedController {
+public class SpeedControllerStrapIron extends SpeedController {
 
-    private static SpeedController instance;
+    private static final float MAX_SPEED = 0.12f;
+    private static SpeedControllerStrapIron instance;
 
-    public static SpeedController instance() {
-        if (instance == null) {
-            instance = new SpeedController();
-        }
+    public static SpeedControllerStrapIron instance() {
+        if (instance == null)
+            instance = new SpeedControllerStrapIron();
         return instance;
     }
 
+    @Override
     public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
-        return 0.4f;
+        return MAX_SPEED;
     }
 }

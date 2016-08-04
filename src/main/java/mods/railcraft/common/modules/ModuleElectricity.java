@@ -35,21 +35,21 @@ public class ModuleElectricity extends RailcraftModulePayload {
 
                 add(
                         RailcraftItems.chargeMeter,
-                        RailcraftBlocks.track,
+//                        RailcraftBlocks.track,
                         RailcraftBlocks.chargeFeeder,
                         RailcraftBlocks.chargeTrap,
                         RailcraftBlocks.frame,
-                        RailcraftBlocks.wire,
-                        RailcraftBlocks.machine_alpha,
-                        RailcraftBlocks.machine_delta,
-                        RailcraftBlocks.machine_epsilon
+                        RailcraftBlocks.wire
+//                        RailcraftBlocks.machine_alpha,
+//                        RailcraftBlocks.machine_delta,
+//                        RailcraftBlocks.machine_epsilon
                 );
             }
 
             @Override
             public void preInit() {
                 EnumMachineAlpha alpha = EnumMachineAlpha.TURBINE;
-                if (alpha.isEnabled()) {
+                if (alpha.isAvailable()) {
                     CraftingPlugin.addRecipe(alpha.getItem(3),
                             "BPB",
                             "P P",
@@ -67,7 +67,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                 }
 
                 EnumMachineEpsilon epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;
-                if (epsilon.isEnabled()) {
+                if (epsilon.isAvailable()) {
                     EnumTrack.FORCE.register();
                     CraftingPlugin.addRecipe(epsilon.getItem(),
                             "PCP",
@@ -79,7 +79,7 @@ public class ModuleElectricity extends RailcraftModulePayload {
                 }
 
                 epsilon = EnumMachineEpsilon.FLUX_TRANSFORMER;
-                if (epsilon.isEnabled())
+                if (epsilon.isAvailable())
                     CraftingPlugin.addRecipe(epsilon.getItem(2),
                             "PGP",
                             "GRG",

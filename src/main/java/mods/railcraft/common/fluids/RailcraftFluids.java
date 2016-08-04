@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
@@ -80,7 +81,8 @@ public enum RailcraftFluids {
 
     private void init() {
         initFluid();
-        initBlock();
+        //TODO: re-enable and fix
+//        initBlock();
         checkStandardFluidBlock();
         if (standardFluid.get() != null)
             defineContainers();

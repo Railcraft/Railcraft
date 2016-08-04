@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
@@ -22,8 +22,11 @@ import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.items.*;
+import mods.railcraft.common.items.ItemDust;
+import mods.railcraft.common.items.ItemGear;
 import mods.railcraft.common.items.ItemTie.EnumTie;
+import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
@@ -53,8 +56,8 @@ public class ModuleFactory extends RailcraftModulePayload {
                 add(
                         RailcraftBlocks.anvilSteel,
                         RailcraftBlocks.generic,
-                        RailcraftBlocks.machine_alpha,
-                        RailcraftBlocks.machine_beta,
+//                        RailcraftBlocks.machine_alpha,
+//                        RailcraftBlocks.machine_beta,
                         RailcraftItems.coke
                 );
             }
@@ -162,7 +165,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                         addOutput(recipe, RailcraftItems.dust.getStack(ItemDust.EnumDust.OBSIDIAN), 0.25f);
                     }
 
-                    if (EnumMachineAlpha.COKE_OVEN.isEnabled()) {
+                    if (EnumMachineAlpha.COKE_OVEN.isAvailable()) {
                         recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.COKE_OVEN.getItem(), true, false);
                         addOutput(recipe, new ItemStack(Items.BRICK, 3), 1.0f);
                         addOutput(recipe, new ItemStack(Items.BRICK), 0.5f);
@@ -173,26 +176,26 @@ public class ModuleFactory extends RailcraftModulePayload {
                         addOutput(recipe, new ItemStack(Blocks.SAND), 0.25f);
                     }
 
-                    if (EnumMachineAlpha.BLAST_FURNACE.isEnabled()) {
+                    if (EnumMachineAlpha.BLAST_FURNACE.isAvailable()) {
                         recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.BLAST_FURNACE.getItem(), true, false);
                         addOutput(recipe, new ItemStack(Blocks.NETHER_BRICK), 0.75f);
                         addOutput(recipe, new ItemStack(Blocks.SOUL_SAND), 0.75f);
                         addOutput(recipe, new ItemStack(Items.BLAZE_POWDER), 0.05f);
                     }
 
-                    if (EnumMachineAlpha.ANCHOR_WORLD.isEnabled()) {
+                    if (EnumMachineAlpha.ANCHOR_WORLD.isAvailable()) {
                         recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.ANCHOR_WORLD.getItem(), true, false);
                         addOutput(recipe, new ItemStack(Items.DIAMOND), 0.5f);
                         addAnchorOutputs(recipe);
                     }
 
-                    if (EnumMachineAlpha.ANCHOR_PERSONAL.isEnabled()) {
+                    if (EnumMachineAlpha.ANCHOR_PERSONAL.isAvailable()) {
                         recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.ANCHOR_PERSONAL.getItem(), true, false);
                         addOutput(recipe, new ItemStack(Items.EMERALD), 0.5f);
                         addAnchorOutputs(recipe);
                     }
 
-                    if (EnumMachineAlpha.ANCHOR_PASSIVE.isEnabled()) {
+                    if (EnumMachineAlpha.ANCHOR_PASSIVE.isAvailable()) {
                         recipe = RailcraftCraftingManager.rockCrusher.createAndAddRecipe(EnumMachineAlpha.ANCHOR_PASSIVE.getItem(), true, false);
 //                addOutput(recipe, new ItemStack(Items.EMERALD), 0.5f);
                         addAnchorOutputs(recipe);

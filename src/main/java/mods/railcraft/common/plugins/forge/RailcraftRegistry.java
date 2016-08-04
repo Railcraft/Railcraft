@@ -160,14 +160,15 @@ public final class RailcraftRegistry {
      *
      * @param block The block
      */
-    public static void register(Block block, ItemBlock item) {
+    public static void register(Block block, @Nullable ItemBlock item) {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
             throw new RuntimeException("Blocks must be initialized in PreInit or InitFirst!");
         String tag = block.getUnlocalizedName();
         tag = MiscTools.cleanTag(tag);
 //        TagList.addTag(tag);
         GameRegistry.register(block);
-        GameRegistry.register(item);
+        if (item != null)
+            GameRegistry.register(item);
         RailcraftItemStackRegistry.register(tag, new ItemStack(block));
         if (Game.DEVELOPMENT_ENVIRONMENT)
             Game.log(Level.INFO, "Block registered: {0}, {1}", block.getClass(), block.getRegistryName().toString());

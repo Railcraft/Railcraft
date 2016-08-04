@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
@@ -45,16 +45,16 @@ public class ModuleStructures extends RailcraftModulePayload {
                 }
                 add(
                         RailcraftItems.stoneCarver, // TODO: this can probably be removed once recipes are working right
-                        RailcraftBlocks.glass,
-                        RailcraftBlocks.post,
-                        RailcraftBlocks.postMetal,
-                        RailcraftBlocks.postMetalPlatform,
+                        RailcraftBlocks.glass
+//                        RailcraftBlocks.post,
+//                        RailcraftBlocks.postMetal,
+//                        RailcraftBlocks.postMetalPlatform,
 //                        RailcraftBlocks.signal, why??
-                        RailcraftBlocks.slab,
-                        RailcraftBlocks.stair,
-                        RailcraftBlocks.lantern,
-                        RailcraftBlocks.wall,
-                        RailcraftBlocks.machine_alpha
+//                        RailcraftBlocks.slab,
+//                        RailcraftBlocks.stair,
+//                        RailcraftBlocks.lantern,
+//                        RailcraftBlocks.wall,
+//                        RailcraftBlocks.machine_alpha
                 );
             }
 

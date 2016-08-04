@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,15 +6,20 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.client.render.tools.ModelManager;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IVariantEnum;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
@@ -31,6 +36,15 @@ public interface IRailcraftBlock extends IRailcraftObject {
 
     default IBlockState getItemRenderState(@Nullable IVariantEnum variant) {
         return getState(variant);
+    }
+
+    @SideOnly(Side.CLIENT)
+    default void registerItemModel(ItemStack stack, @Nullable IVariantEnum variant) {
+        ModelManager.registerBlockItemModel(stack, getItemRenderState(variant));
+    }
+
+    default ResourceLocation getBlockTexture() {
+        return ((Block) this).getRegistryName();
     }
 
     default Tuple<Integer, Integer> getTextureDimensions() {

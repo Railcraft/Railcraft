@@ -1,18 +1,20 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.tracks.speedcontroller;
 
-import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.blocks.tracks.TrackTools;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -31,8 +33,8 @@ public class SpeedControllerReinforced extends SpeedController {
     }
 
     @Override
-    public float getMaxSpeed(ITrackInstance track, EntityMinecart cart) {
-        BlockRailBase.EnumRailDirection dir = track.getRailDirection(WorldPlugin.getBlockState(track.theWorld(), track.getPos()), cart);
+    public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+        BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirection(world, pos, cart);
         if (TrackShapeHelper.isTurn(dir))
             return CORNER_SPEED;
         return MAX_SPEED;

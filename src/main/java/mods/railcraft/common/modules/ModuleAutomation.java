@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,7 +6,7 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
@@ -36,8 +36,8 @@ public class ModuleAutomation extends RailcraftModulePayload {
                 add(
                         RailcraftBlocks.detector,
                         RailcraftBlocks.generic,
-                        RailcraftBlocks.machine_alpha,
-                        RailcraftBlocks.machine_gamma,
+//                        RailcraftBlocks.machine_alpha,
+//                        RailcraftBlocks.machine_gamma,
 
                         RailcraftItems.boreHeadIron,
                         RailcraftItems.boreHeadSteel,

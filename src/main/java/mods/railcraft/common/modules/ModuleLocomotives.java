@@ -39,8 +39,8 @@ public class ModuleLocomotives extends RailcraftModulePayload {
             @Override
             public void construction() {
                 add(
-                        RailcraftItems.whistleTuner,
-                        RailcraftBlocks.track
+                        RailcraftItems.whistleTuner
+//                        RailcraftBlocks.track
                 );
             }
 
@@ -99,7 +99,7 @@ public class ModuleLocomotives extends RailcraftModulePayload {
 
             @Override
             public void init() {
-                if (RailcraftCarts.LOCO_ELECTRIC.isEnabled()) {
+                if (RailcraftCarts.LOCO_ELECTRIC.isLoaded()) {
                     Object feederUnit = RailcraftBlocks.chargeFeeder.getStack(BlockChargeFeeder.FeederVariant.IC2);
                     if (feederUnit == null) feederUnit = "blockCopper";
                     ItemStack cartStack = RailcraftCarts.LOCO_ELECTRIC.getCartItem();

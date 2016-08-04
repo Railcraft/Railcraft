@@ -281,7 +281,7 @@ public class BlockTrack extends BlockRail implements IPostConnection, IRailcraft
     public float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
         if (tile instanceof TileTrack)
-            return ((TileTrack) tile).getTrackInstance().getRailMaxSpeed(cart);
+            return ((TileTrack) tile).getTrackInstance().getRailMaxSpeed(world, cart, pos);
         return 0.4f;
     }
 
