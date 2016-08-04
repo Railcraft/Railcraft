@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*------------------------------------------------------------------------------
  Copyright (c) CovertJaguar, 2011-2016
  http://railcraft.info
 
@@ -6,12 +6,11 @@
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.ore.EnumOre;
@@ -25,6 +24,7 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -69,9 +69,9 @@ public enum Metal implements IVariantEnum {
         blockMap.put(LEAD, EnumGeneric.BLOCK_LEAD);
     }
 
-    public final IStackFilter nuggetFilter;
-    public final IStackFilter ingotFilter;
-    public final IStackFilter blockFilter;
+    public final Predicate<ItemStack> nuggetFilter;
+    public final Predicate<ItemStack> ingotFilter;
+    public final Predicate<ItemStack> blockFilter;
     private final String oreSuffix;
     private final String tag;
 

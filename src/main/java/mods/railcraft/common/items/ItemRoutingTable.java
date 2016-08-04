@@ -1,14 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.client.gui.GuiRoutingTable;
 import mods.railcraft.common.blocks.signals.RoutingLogic;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -35,10 +35,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -48,14 +50,14 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
 
     public static final int LINE_LENGTH = 37;
     public static final int LINES_PER_PAGE = 13;
-    public static final StackFilter FILTER = StackFilters.of(ItemRoutingTable.class);
+    public static final Predicate<ItemStack> FILTER = StackFilters.of(ItemRoutingTable.class);
 
     public ItemRoutingTable() {
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
     }
 
     public static boolean isRoutingTable(ItemStack stack) {
-        return FILTER.apply(stack);
+        return FILTER.test(stack);
     }
 
     @Override
@@ -68,16 +70,14 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
             return false;
         else if (nbt.hasKey("title")) {
             String s = nbt.getString("title");
-            return (s != null && s.length() <= 16) && nbt.hasKey("author");
+            return s.length() <= 16 && nbt.hasKey("author");
         }
         return true;
     }
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     public static boolean validBookTagPages(NBTTagCompound nbt) {
-        if (nbt == null)
-            return false;
-        else if (!nbt.hasKey("pages"))
+        if (!nbt.hasKey("pages"))
             return false;
         else {
             NBTList<NBTTagList> pages = NBTPlugin.getNBTList(nbt, "pages", NBTPlugin.EnumNBTType.LIST);
@@ -105,6 +105,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
     }
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    @Nullable
     public static Deque<String> getContents(ItemStack routingTable) {
         if (routingTable == null || !isRoutingTable(routingTable))
             return null;
@@ -125,6 +126,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
     }
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    @Nullable
     public static LinkedList<LinkedList<String>> getPages(ItemStack routingTable) {
         if (routingTable == null || !isRoutingTable(routingTable))
             return null;
@@ -176,7 +178,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
     }
 
     @SuppressWarnings("unused")
-    public static String getOwner(ItemStack ticket) {
+    public static String getOwner(@Nullable ItemStack ticket) {
         if (ticket == null || !(ticket.getItem() instanceof ItemTicket))
             return "";
         NBTTagCompound nbt = ticket.getTagCompound();
@@ -192,8 +194,8 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        if (stack.hasTagCompound()) {
-            NBTTagCompound nbt = stack.getTagCompound();
+        NBTTagCompound nbt = stack.getTagCompound();
+        if (nbt != null) {
             NBTTagString title = (NBTTagString) nbt.getTag("title");
 
             if (title != null)
@@ -210,8 +212,8 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List<String> list, boolean par4) {
-        if (stack.hasTagCompound()) {
-            NBTTagCompound nbt = stack.getTagCompound();
+        NBTTagCompound nbt = stack.getTagCompound();
+        if (nbt != null) {
             NBTTagString author = (NBTTagString) nbt.getTag("author");
 
             if (author != null)

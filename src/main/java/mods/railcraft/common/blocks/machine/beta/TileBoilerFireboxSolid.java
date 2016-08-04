@@ -1,14 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.common.blocks.machine.MultiBlockPattern;
 import mods.railcraft.common.blocks.machine.TileMultiBlock;
 import mods.railcraft.common.blocks.machine.alpha.TileCokeOven;
@@ -36,6 +36,7 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -47,7 +48,7 @@ public class TileBoilerFireboxSolid extends TileBoilerFirebox implements INeedsF
     private static final int SLOT_FUEL_B = 4;
     private static final int SLOT_FUEL_C = 5;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 6);
-    private static final IStackFilter NOT_FUEL = StandardStackFilters.FUEL.negate();
+    private static final Predicate<ItemStack> NOT_FUEL = StandardStackFilters.FUEL.negate();
     private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> {
         if (tile instanceof TileSteamOven)
             return true;

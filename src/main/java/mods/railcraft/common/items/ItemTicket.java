@@ -1,16 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
 import com.mojang.authlib.GameProfile;
-import mods.railcraft.api.core.IStackFilter;
-import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -23,19 +22,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemTicket extends ItemRailcraft {
 
-    public static final IStackFilter FILTER = new StackFilter() {
-        @Override
-        public boolean apply(ItemStack stack) {
-            return stack != null && stack.getItem() instanceof ItemTicket;
-        }
-
-    };
+    public static final Predicate<ItemStack> FILTER = stack -> stack != null && stack.getItem() instanceof ItemTicket;
     public static final int LINE_LENGTH = 32;
 
     public static boolean isNBTValid(NBTTagCompound nbt) {

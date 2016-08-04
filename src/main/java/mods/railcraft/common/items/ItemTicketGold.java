@@ -1,19 +1,19 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
 import com.mojang.authlib.GameProfile;
-import mods.railcraft.api.core.IStackFilter;
-import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IEditableItem;
 import mods.railcraft.common.util.network.PacketBuilder;
@@ -26,18 +26,14 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
+import java.util.function.Predicate;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemTicketGold extends ItemTicket implements IEditableItem {
 
-    public static final IStackFilter FILTER = new StackFilter() {
-        @Override
-        public boolean apply(ItemStack stack) {
-            return stack != null && stack.getItem() instanceof ItemTicketGold;
-        }
-
-    };
+    public static final Predicate<ItemStack> FILTER = StackFilters.of(ItemTicketGold.class);
 
     @Override
     public void initializeDefinintion() {

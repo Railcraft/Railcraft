@@ -1,17 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.manipulators;
 
-import mods.railcraft.api.core.IStackFilter;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -19,6 +19,7 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -72,7 +73,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
      * Returns true if an item matching the filter can be removed from the
      * inventory.
      */
-    public boolean canRemoveItem(IStackFilter filter) {
+    public boolean canRemoveItem(Predicate<ItemStack> filter) {
         return tryRemoveItem(filter) == null;
     }
 
@@ -81,10 +82,10 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
      * was removed. Does not modify the inventory.
      */
     @Nullable
-    public ItemStack tryRemoveItem(IStackFilter filter) {
+    public ItemStack tryRemoveItem(Predicate<ItemStack> filter) {
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack)) {
+            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
                 ItemStack output = stack.copy();
                 output.stackSize = 1;
                 return output;
@@ -97,16 +98,16 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
      * Removed an item matching the filter.
      */
     @Nullable
-    public ItemStack removeItem(IStackFilter filter) {
+    public ItemStack removeItem(Predicate<ItemStack> filter) {
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack))
+            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.test(stack))
                 return slot.decreaseStack();
         }
         return null;
     }
 
-    public boolean canRemoveItems(IStackFilter filter, int maxAmount) {
+    public boolean canRemoveItems(Predicate<ItemStack> filter, int maxAmount) {
         List<ItemStack> outputList = removeItem(filter, maxAmount, false);
         int found = 0;
         for (ItemStack stack : outputList) {
@@ -116,19 +117,19 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
     }
 
     @Nonnull
-    public List<ItemStack> removeItems(IStackFilter filter, int maxAmount) {
+    public List<ItemStack> removeItems(Predicate<ItemStack> filter, int maxAmount) {
         return removeItem(filter, maxAmount, true);
     }
 
     @Nonnull
-    protected abstract List<ItemStack> removeItem(IStackFilter filter, int maxAmount, boolean doRemove);
+    protected abstract List<ItemStack> removeItem(Predicate<ItemStack> filter, int maxAmount, boolean doRemove);
 
     @Nullable
-    public ItemStack moveItem(IInventoryObject dest, IStackFilter filter) {
+    public ItemStack moveItem(IInventoryObject dest, Predicate<ItemStack> filter) {
         InventoryManipulator imDest = InventoryManipulator.get(dest);
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack)) {
+            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
                 stack = stack.copy();
                 stack.stackSize = 1;
                 stack = imDest.addStack(stack);

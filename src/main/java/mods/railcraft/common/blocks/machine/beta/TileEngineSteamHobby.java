@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
@@ -129,7 +130,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
 
         boiler.tick(1);
 
-        if (StandardStackFilters.EMPTY_BUCKET.apply(getStackInSlot(SLOT_FUEL)))
+        if (StandardStackFilters.EMPTY_BUCKET.test(getStackInSlot(SLOT_FUEL)))
             InvTools.moveOneItem(invFuel, invOutput, StandardStackFilters.EMPTY_BUCKET);
     }
 

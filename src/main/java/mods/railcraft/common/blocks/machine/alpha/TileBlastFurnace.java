@@ -1,15 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.alpha;
 
-import mods.railcraft.api.core.IStackFilter;
-import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -41,22 +40,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
 
-    public static final IStackFilter INPUT_FILTER = new StackFilter() {
-        @Override
-        public boolean apply(@Nullable ItemStack stack) {
-            return stack != null && RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
-        }
-    };
-    public static final IStackFilter FUEL_FILTER = StackFilters.anyOf(RailcraftCraftingManager.blastFurnace.getFuels());
+    public static final Predicate<ItemStack> INPUT_FILTER = stack -> stack != null && RailcraftCraftingManager.blastFurnace.getRecipe(stack) != null;
+    public static final Predicate<ItemStack> FUEL_FILTER = StackFilters.anyOf(RailcraftCraftingManager.blastFurnace.getFuels());
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_OUTPUT = 2;
@@ -265,7 +259,7 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
 
                     if (burnTime <= FUEL_PER_TICK * 2) {
                         ItemStack fuel = getStackInSlot(SLOT_FUEL);
-                        if (fuel != null && FUEL_FILTER.apply(fuel)) {
+                        if (fuel != null && FUEL_FILTER.test(fuel)) {
                             int itemBurnTime = FuelPlugin.getBurnTime(fuel);
                             if (itemBurnTime > 0) {
                                 currentItemBurnTime = itemBurnTime + burnTime;
@@ -368,9 +362,9 @@ public class TileBlastFurnace extends TileMultiBlockOven implements ISidedInvent
             case SLOT_OUTPUT:
                 return false;
             case SLOT_FUEL:
-                return FUEL_FILTER.apply(stack);
+                return FUEL_FILTER.test(stack);
             case SLOT_INPUT:
-                return INPUT_FILTER.apply(stack);
+                return INPUT_FILTER.test(stack);
         }
         return false;
     }

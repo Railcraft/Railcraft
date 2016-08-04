@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.gamma;
 
-import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -33,6 +32,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import java.io.IOException;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -41,7 +41,7 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
 
     protected static final int[] SLOTS = InvTools.buildSlotArray(0, 9);
     private final PhantomInventory invFilters = new PhantomInventory(9, this);
-    private final StackFilter filters = StackFilters.containedIn(invFilters);
+    private final Predicate<ItemStack> filters = StackFilters.containedIn(invFilters);
     private final MultiButtonController<EnumTransferMode> transferModeController = MultiButtonController.create(EnumTransferMode.ALL.ordinal(), EnumTransferMode.values());
     private final MultiButtonController<EnumRedstoneMode> redstoneModeController = MultiButtonController.create(0, getValidRedstoneModes());
     protected boolean movedItemCart;
@@ -62,7 +62,7 @@ public abstract class TileLoaderItemBase extends TileLoaderBase implements IGuiR
         return invFilters;
     }
 
-    public final StackFilter getFilters() {
+    public final Predicate<ItemStack> getFilters() {
         return filters;
     }
 

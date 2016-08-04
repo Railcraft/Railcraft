@@ -1,20 +1,20 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.collections;
 
-import mods.railcraft.api.core.IStackFilter;
-import mods.railcraft.api.core.StackFilter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -44,23 +44,14 @@ public class ItemMap<V> extends HashMap<ItemKey, V> {
     }
 
     public boolean containsKey(Item item, int meta) {
-        if (containsKey(new ItemKey(item, meta)))
-            return true;
-        return containsKey(new ItemKey(item));
+        return containsKey(new ItemKey(item, meta)) || containsKey(new ItemKey(item));
     }
 
     public boolean containsKey(@Nullable ItemStack stack) {
-        if (stack == null)
-            return false;
-        return containsKey(stack.getItem(), stack.getItemDamage());
+        return stack != null && containsKey(stack.getItem(), stack.getItemDamage());
     }
 
-    public IStackFilter getStackFilter() {
-        return new StackFilter() {
-            @Override
-            public boolean apply(@Nullable ItemStack stack) {
-                return containsKey(stack);
-            }
-        };
+    public Predicate<ItemStack> getStackFilter() {
+        return stack -> containsKey(stack);
     }
 }

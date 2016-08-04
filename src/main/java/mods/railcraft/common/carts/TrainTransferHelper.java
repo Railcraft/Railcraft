@@ -1,17 +1,17 @@
-/*
- * Copyright (c) CovertJaguar, 2015 http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.api.carts.ITrainTransferHelper;
-import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Utility class for simplifying moving items and fluids through a train.
@@ -79,7 +80,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     }
 
     @Override
-    public ItemStack pullStack(EntityMinecart requester, IStackFilter filter) {
+    public ItemStack pullStack(EntityMinecart requester, Predicate<ItemStack> filter) {
         Iterable<EntityMinecart> carts = LinkageManager.instance().linkIterator(requester, LinkageManager.LinkType.LINK_A);
         ItemStack stack = _pullStack(requester, carts, filter);
         if (stack != null)
@@ -89,7 +90,7 @@ public class TrainTransferHelper implements mods.railcraft.api.carts.ITrainTrans
     }
 
     @Nullable
-    private ItemStack _pullStack(EntityMinecart requester, Iterable<EntityMinecart> carts, IStackFilter filter) {
+    private ItemStack _pullStack(EntityMinecart requester, Iterable<EntityMinecart> carts, Predicate<ItemStack> filter) {
         for (EntityMinecart cart : carts) {
             IInventoryObject inv = InvTools.getInventory(cart);
             if (inv != null) {

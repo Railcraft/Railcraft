@@ -182,7 +182,7 @@ public class EntityLocomotiveSteamMagic extends EntityLocomotiveSteam implements
             case SLOT_LIQUID_INPUT:
                 return FluidItemHelper.containsFluid(stack, Fluids.WATER.get(1));
             case SLOT_TICKET:
-                return ItemTicket.FILTER.apply(stack);
+                return ItemTicket.FILTER.test(stack);
             default:
                 return false;
         }

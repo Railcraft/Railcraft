@@ -1,14 +1,14 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.beta;
 
-import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -26,9 +27,9 @@ import java.util.Map;
 public class TileChestMetals extends TileChestRailcraft {
 
     private static final int TICK_PER_CONDENSE = 16;
-    private static final Map<Metal, IStackFilter> nuggetFilters = new EnumMap<Metal, IStackFilter>(Metal.class);
-    private static final Map<Metal, IStackFilter> ingotFilters = new EnumMap<Metal, IStackFilter>(Metal.class);
-    private static final Map<Metal, IStackFilter> blockFilters = new EnumMap<Metal, IStackFilter>(Metal.class);
+    private static final Map<Metal, Predicate<ItemStack>> nuggetFilters = new EnumMap<Metal, Predicate<ItemStack>>(Metal.class);
+    private static final Map<Metal, Predicate<ItemStack>> ingotFilters = new EnumMap<Metal, Predicate<ItemStack>>(Metal.class);
+    private static final Map<Metal, Predicate<ItemStack>> blockFilters = new EnumMap<Metal, Predicate<ItemStack>>(Metal.class);
 
     static {
         for (Metal m : Metal.VALUES) {
@@ -93,7 +94,7 @@ public class TileChestMetals extends TileChestRailcraft {
             public boolean evaluate(IInventory inv) {
                 InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
-                    IStackFilter filter = nuggetFilters.get(metal);
+                    Predicate<ItemStack> filter = nuggetFilters.get(metal);
                     ItemStack nuggetStack = metal.getStack(Metal.Form.NUGGET);
                     if (nuggetStack != null && im.canRemoveItems(filter, 1) && im.canAddStack(nuggetStack)) {
                         im.removeItems(filter, 1);
@@ -110,7 +111,7 @@ public class TileChestMetals extends TileChestRailcraft {
             public boolean evaluate(IInventory inv) {
                 InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
-                    IStackFilter filter = ingotFilters.get(metal);
+                    Predicate<ItemStack> filter = ingotFilters.get(metal);
                     ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
                     if (ingotStack != null && im.canRemoveItems(filter, 1) && im.canAddStack(ingotStack)) {
                         im.removeItems(filter, 1);
@@ -127,7 +128,7 @@ public class TileChestMetals extends TileChestRailcraft {
             public boolean evaluate(IInventory inv) {
                 InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
-                    IStackFilter filter = blockFilters.get(metal);
+                    Predicate<ItemStack> filter = blockFilters.get(metal);
                     ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
                     if (blockStack != null && im.canRemoveItems(filter, 1) && im.canAddStack(blockStack)) {
                         im.removeItems(filter, 1);

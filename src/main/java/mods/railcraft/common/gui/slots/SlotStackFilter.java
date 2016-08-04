@@ -1,16 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.slots;
 
-import mods.railcraft.api.core.IStackFilter;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+
+import java.util.function.Predicate;
 
 /**
  *
@@ -18,9 +20,9 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotStackFilter extends SlotRailcraft {
 
-    private final IStackFilter filter;
+    private final Predicate<ItemStack> filter;
 
-    public SlotStackFilter(IStackFilter filter, IInventory iinventory, int slotIndex, int posX, int posY) {
+    public SlotStackFilter(Predicate<ItemStack> filter, IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
         this.filter = filter;
     }
@@ -32,6 +34,6 @@ public class SlotStackFilter extends SlotRailcraft {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return filter.apply(stack);
+        return filter.test(stack);
     }
 }

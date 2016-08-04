@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nullable;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -42,7 +43,7 @@ public class RoutingLogic {
     private Deque<Condition> conditions;
     private RoutingLogicException error;
 
-    private RoutingLogic(Deque<String> data) {
+    private RoutingLogic(@Nullable Deque<String> data) {
         try {
             if (data != null)
                 parseTable(data);
@@ -53,7 +54,7 @@ public class RoutingLogic {
         }
     }
 
-    public static RoutingLogic buildLogic(Deque<String> data) {
+    public static RoutingLogic buildLogic(@Nullable Deque<String> data) {
         return new RoutingLogic(data);
     }
 

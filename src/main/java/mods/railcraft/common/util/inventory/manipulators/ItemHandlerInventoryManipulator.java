@@ -1,23 +1,24 @@
-/******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016                                      *
- * http://railcraft.info                                                      *
- * *
- * This code is the property of CovertJaguar                                  *
- * and may only be used with explicit written                                 *
- * permission unless otherwise specified on the                               *
- * license page at http://railcraft.info/wiki/info:license.                   *
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.manipulators;
 
-import mods.railcraft.api.core.IStackFilter;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -77,15 +78,16 @@ public class ItemHandlerInventoryManipulator extends InventoryManipulator<IInvSl
         return injected;
     }
 
+    @Nonnull
     @Override
-    protected List<ItemStack> removeItem(IStackFilter filter, int maxAmount, boolean doRemove) {
+    protected List<ItemStack> removeItem(Predicate<ItemStack> filter, int maxAmount, boolean doRemove) {
         int amountNeeded = maxAmount;
         List<ItemStack> outputList = new ArrayList<ItemStack>();
         for (IInvSlot slot : this) {
             if (amountNeeded <= 0)
                 break;
             ItemStack stack = slot.getStack();
-            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.apply(stack)) {
+            if (stack != null && stack.stackSize > 0 && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
                 ItemStack removed = inv.extractItem(slot.getIndex(), amountNeeded, !doRemove);
                 if (removed != null) {
                     amountNeeded -= removed.stackSize;

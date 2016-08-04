@@ -10,8 +10,6 @@
 package mods.railcraft.common.blocks.machine.gamma;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.core.IStackFilter;
-import mods.railcraft.api.core.StackFilter;
 import mods.railcraft.api.core.items.IMinecartItem;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.ItemCartAnchor;
@@ -31,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class TileDispenserTrain extends TileDispenserCart {
 
@@ -39,11 +38,10 @@ public class TileDispenserTrain extends TileDispenserCart {
     private final PhantomInventory invPattern = new PhantomInventory(PATTERN_SIZE, this);
     private final InventoryMapper invStock;
     private byte patternIndex;
-    private boolean spawningTrain = false;
+    private boolean spawningTrain;
     private EntityMinecart lastCart;
 
     public TileDispenserTrain() {
-        super();
         setInventorySize(BUFFER_SIZE);
         invStock = new InventoryMapper(this);
     }
@@ -82,7 +80,7 @@ public class TileDispenserTrain extends TileDispenserCart {
             resetSpawnSequence();
             return false;
         }
-        IStackFilter filter = new MinecartItemType(spawn);
+        Predicate<ItemStack> filter = new MinecartItemType(spawn);
         if (InvTools.countItems(invStock, filter) == 0) {
             resetSpawnSequence();
             return false;
@@ -166,7 +164,7 @@ public class TileDispenserTrain extends TileDispenserCart {
             getPattern().readFromNBT("invPattern", data);
     }
 
-    private static class MinecartItemType extends StackFilter {
+    private static class MinecartItemType implements Predicate<ItemStack> {
 
         private final ItemStack original;
 
@@ -175,7 +173,7 @@ public class TileDispenserTrain extends TileDispenserCart {
         }
 
         @Override
-        public boolean apply(ItemStack stack) {
+        public boolean test(ItemStack stack) {
             if (stack == null)
                 return false;
             if (InvTools.isItemEqual(stack, original))

@@ -159,14 +159,14 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             case SLOT_FUEL_A:
             case SLOT_FUEL_B:
             case SLOT_FUEL_C:
-                return StandardStackFilters.FUEL.apply(stack);
+                return StandardStackFilters.FUEL.test(stack);
             case SLOT_LIQUID_INPUT:
                 FluidStack fluidStack = FluidItemHelper.getFluidStackInContainer(stack);
                 if (fluidStack != null && fluidStack.amount > FluidHelper.BUCKET_VOLUME)
                     return false;
                 return FluidItemHelper.containsFluid(stack, Fluids.WATER.get(1));
             case SLOT_TICKET:
-                return ItemTicket.FILTER.apply(stack);
+                return ItemTicket.FILTER.test(stack);
             default:
                 return false;
         }
@@ -174,7 +174,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
     @Override
     public boolean canAcceptPushedItem(EntityMinecart requester, ItemStack stack) {
-        return StandardStackFilters.FUEL.apply(stack);
+        return StandardStackFilters.FUEL.test(stack);
     }
 
     @Override

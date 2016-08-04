@@ -787,7 +787,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         List<ItemStack> items = targetState.getBlock().getDrops(worldObj, targetPos, targetState, 0);
 
         for (ItemStack stack : items) {
-            if (StandardStackFilters.FUEL.apply(stack))
+            if (StandardStackFilters.FUEL.test(stack))
                 stack = InvTools.moveItemStack(stack, invFuel);
 
             if (stack != null && stack.stackSize > 0 && InvTools.isStackEqualToBlock(stack, Blocks.GRAVEL))
