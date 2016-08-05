@@ -355,11 +355,11 @@ public class ChargeNetwork {
         private ChargeGraph chargeGraph = NULL_GRAPH;
         private boolean invalid;
         private boolean recording;
-        private double chargeUsedMonitoring;
         private double chargeUsedRecorded;
         private int ticksToRecord;
         private int ticksRecorded;
         private BiConsumer<ChargeNode, Double> usageConsumer;
+        private Collection<Consumer<Double>> listeners = new LinkedHashSet<>();
 
         private ChargeNode(BlockPos pos, IChargeBlock.ChargeDef chargeDef, @Nullable IChargeBlock.ChargeBattery chargeBattery) {
             this.pos = pos;
@@ -391,19 +391,12 @@ public class ChargeNetwork {
             return chargeGraph;
         }
 
-        /**
-         * Called every tick by anything that wishes to monitor usage of this node.
-         * If monitoring is disabled, it will
-         *
-         * @return usage since that last time monitor was called
-         */
-        public double monitor() {
-            if (chargeUsedMonitoring < 0F || Double.isInfinite(chargeUsedMonitoring)) {
-                chargeUsedMonitoring = 0.0;
-            }
-            double usage = chargeUsedMonitoring;
-            chargeUsedMonitoring = 0.0;
-            return usage;
+        public void addListener(Consumer<Double> listener) {
+            listeners.add(listener);
+        }
+
+        public void removeListener(Consumer<Double> listener) {
+            listeners.remove(listener);
         }
 
         public void startRecordingUsage(int ticksToRecord, BiConsumer<ChargeNode, Double> usageConsumer) {
@@ -432,7 +425,7 @@ public class ChargeNetwork {
         public boolean useCharge(double amount) {
             boolean removed = chargeGraph.useCharge(amount);
             if (removed) {
-                chargeUsedMonitoring += amount;
+                listeners.forEach(c -> c.accept(amount));
                 if (recording)
                     chargeUsedRecorded += amount;
             }
@@ -441,7 +434,7 @@ public class ChargeNetwork {
 
         public double removeCharge(double desiredAmount) {
             double removed = chargeGraph.removeCharge(desiredAmount);
-            chargeUsedMonitoring += removed;
+            listeners.forEach(c -> c.accept(removed));
             if (recording)
                 chargeUsedRecorded += removed;
             return removed;
